@@ -1,0 +1,31 @@
+{
+    "display": {
+        "icon": {
+            "id": "inventorypets:pet_wolf"
+        },
+        "title": {
+            "translate": "advancement.ip.petach_wolf"
+        },
+        "description": {
+            "translate": "advancement.ip.petach_wolf.desc"
+        },
+        "show_toast": true,
+        "announce_to_chat": true
+    },
+    "parent": "inventorypets:torch",
+    "criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                        	"inventorypets:pet_wolf"
+                    	]
+                    }
+                    
+                ]
+            }
+        }
+    }
+}

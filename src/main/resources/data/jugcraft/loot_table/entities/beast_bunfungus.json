@@ -1,0 +1,40 @@
+{
+  "pools": [
+    {
+      "name": "bunfungus",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:red_mushroom",
+          "weight": 1,
+          "modifier": [
+            {
+              "count": {
+                "min": 0,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "jugcraft_source_beast_mungal_spores",
+      "rolls": 1,
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.5
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:beast_mungal_spores"
+        }
+      ]
+    }
+  ],
+  "type": "minecraft:entity"
+}

@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": [
+      "jugcraft:landscape_black_sandstone",
+      "jugcraft:landscape_chiseled_black_sandstone",
+      "jugcraft:landscape_cut_black_sandstone"
+    ]
+  },
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "result": {
+    "count": 4,
+    "id": "jugcraft:landscape_black_sandstone_stairs"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

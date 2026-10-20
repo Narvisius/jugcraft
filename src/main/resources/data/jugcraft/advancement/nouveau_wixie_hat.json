@@ -1,0 +1,32 @@
+{
+  "parent": "jugcraft:nouveau_starby_charm",
+  "criteria": {
+    "has_wixie_hat": {
+      "conditions": {
+        "items": [
+          {
+            "items": "jugcraft:nouveau_wixie_hat"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "jugcraft.nouveau_adv.desc.wixie_hat"
+    },
+    "icon": {
+      "count": 1,
+      "id": "jugcraft:nouveau_wixie_hat"
+    },
+    "title": {
+      "translate": "jugcraft.nouveau_adv.title.wixie_hat"
+    }
+  },
+  "requirements": [
+    [
+      "has_wixie_hat"
+    ]
+  ]
+}

@@ -1,0 +1,165 @@
+{
+  "textureSize": [
+    32,
+    32
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "main",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -1.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.0,
+            -1.0,
+            2.0,
+            2.0,
+            2.0
+          ],
+          "uv": [
+            11.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -0.5,
+            -0.5,
+            -5.0,
+            1.0,
+            1.0,
+            4.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "feathers",
+      "parent": "main",
+      "pose": [
+        0.0,
+        1.0,
+        1.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "cube_r1",
+      "parent": "feathers",
+      "pose": [
+        0.0,
+        -1.0,
+        0.5,
+        0.0,
+        0.0,
+        0.7854
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -1.5,
+            -0.5,
+            0.0,
+            3.0,
+            3.0
+          ],
+          "uv": [
+            0.0,
+            6.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r2",
+      "parent": "feathers",
+      "pose": [
+        0.0,
+        -1.0,
+        0.5,
+        0.0,
+        0.0,
+        -0.7854
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -1.5,
+            -0.5,
+            0.0,
+            3.0,
+            3.0
+          ],
+          "uv": [
+            7.0,
+            6.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelAncientDart.java",
+  "sourceSha256": "73ebd563fd0ec5c301da6b8ef5dc597133971e184fc9c1fb878d26ee34e3e9e2",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

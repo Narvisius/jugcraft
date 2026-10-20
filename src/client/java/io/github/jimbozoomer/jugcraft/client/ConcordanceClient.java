@@ -73,6 +73,8 @@ final class ConcordanceClient {
 		VigilClient.register();
 		CastPoses.register();
 		WorkerClient.register();
+		JugNouveauClient.register();
+		MenagerieClient.register();
 		JournalClient.register();
 		ComposerClient.register();
 		SignClient.register();
@@ -98,7 +100,7 @@ final class ConcordanceClient {
 		}
 		int focus = ConcordanceProgress.currentFocus(player);
 		Font font = client.font;
-		String text = Component.translatable("screen.jugcraft.concordance.focus.hud", focus, FocusPool.MAX).getString();
+		String text = Component.translatable("screen.jugcraft.concordance.focus.hud", focus, ConcordanceProgress.focus(player).capacity()).getString();
 		graphics.text(font, text, graphics.guiWidth() - font.width(text) - 4, graphics.guiHeight() - 12,
 				focus > 0 ? FOCUS_COLOR : LOW_COLOR);
 	}

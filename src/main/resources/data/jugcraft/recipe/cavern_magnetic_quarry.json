@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SDS",
+    "NHN",
+    "SDS"
+  ],
+  "key": {
+    "N": "jugcraft:cavern_azure_neodymium_ingot",
+    "S": "jugcraft:cavern_scrap_metal_plate",
+    "D": "minecraft:diamond",
+    "H": "jugcraft:cavern_heart_of_iron"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:cavern_quarry"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

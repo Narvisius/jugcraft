@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:herbal_white_cloth",
+    "minecraft:blue_dye"
+  ],
+  "result": {
+    "id": "jugcraft:herbal_blue_cloth"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

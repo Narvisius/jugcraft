@@ -1,0 +1,188 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "head",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        13.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6.0,
+            1.0,
+            -6.0,
+            12.0,
+            5.0,
+            12.0
+          ],
+          "uv": [
+            0.0,
+            27.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -11.0,
+            6.0,
+            -11.0,
+            22.0,
+            5.0,
+            22.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "bump1",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -1.5,
+        0.0,
+        0.0,
+        -0.7854,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -2.5,
+            0.0,
+            8.0,
+            5.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "bump2",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -1.5,
+        0.0,
+        0.0,
+        0.7854,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -2.5,
+            0.0,
+            8.0,
+            5.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/BoundroidModel.java",
+  "sourceSha256": "647d6fbd93a846d5e19341b5b33374409915aeaa006f096d51ad106499a3be8a",
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "head",
+      "kind": "walk",
+      "speed": 0.15,
+      "degree": 0.2,
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        1.0
+      ],
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "*",
+        "ground",
+        1
+      ],
+      "when": 1
+    },
+    {
+      "bone": "head",
+      "kind": "flap",
+      "speed": 0.15,
+      "degree": 0.2,
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "*",
+        "ground",
+        1
+      ],
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [],
+  "expressions": [
+    {
+      "bone": "head",
+      "target": "yRot",
+      "op": "+=",
+      "value": [
+        "/",
+        "yaw",
+        57.295776
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

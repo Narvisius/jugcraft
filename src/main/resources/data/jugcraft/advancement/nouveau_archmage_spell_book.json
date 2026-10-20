@@ -1,0 +1,32 @@
+{
+  "parent": "jugcraft:nouveau_wilden_tribute",
+  "criteria": {
+    "has_archmage_spell_book": {
+      "conditions": {
+        "items": [
+          {
+            "items": "jugcraft:nouveau_archmage_spell_book"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "jugcraft.nouveau_adv.desc.archmage_spell_book"
+    },
+    "icon": {
+      "count": 1,
+      "id": "jugcraft:nouveau_archmage_spell_book"
+    },
+    "title": {
+      "translate": "jugcraft.nouveau_adv.title.archmage_spell_book"
+    }
+  },
+  "requirements": [
+    [
+      "has_archmage_spell_book"
+    ]
+  ]
+}

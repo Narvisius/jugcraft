@@ -1,0 +1,18 @@
+{
+  "type": "jugcraft:household_construction",
+  "ingredients": [
+    {
+      "count": 2,
+      "ingredient": "minecraft:pale_oak_planks"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:household_pale_oak_cutting_board"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

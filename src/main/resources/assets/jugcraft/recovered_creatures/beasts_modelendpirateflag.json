@@ -1,0 +1,132 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "rod",
+      "parent": "root",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -16.0,
+            -1.0,
+            2.0,
+            16.0,
+            2.0
+          ],
+          "uv": [
+            29.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "flag1",
+      "parent": "rod",
+      "pose": [
+        0.0,
+        -8.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            1.0,
+            -8.0,
+            0.0,
+            14.0,
+            16.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            17.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "flag2",
+      "parent": "flag1",
+      "pose": [
+        15.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -8.0,
+            0.0,
+            14.0,
+            16.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelEndPirateFlag.java",
+  "sourceSha256": "6a9704dfa90131927e62d35326852ce58c0a1c575f37516a42e906193922d98e",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

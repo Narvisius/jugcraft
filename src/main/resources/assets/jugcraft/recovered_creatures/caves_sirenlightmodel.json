@@ -1,0 +1,110 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "main",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -10.0,
+            -4.0,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            12.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -5.0,
+            -2.0,
+            -5.0,
+            10.0,
+            2.0,
+            10.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "siren",
+      "parent": "main",
+      "pose": [
+        0.0,
+        -2.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -6.0,
+            -2.0,
+            4.0,
+            6.0,
+            4.0
+          ],
+          "uv": [
+            0.0,
+            28.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/SirenLightModel.java",
+  "sourceSha256": "dcd57c000f90f4ae99f037e0776e4dee8660fe3732c3320ea2cd152270d4af94",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.siren.rotateAngleY = (float)((double)this.siren.rotateAngleY + Math.toRadians(limbSwing));",
+      "reason": "Unsupported expression (this.siren.rotateAngleY + radians(limbSwing))"
+    }
+  ],
+  "expressions": [],
+  "poses": []
+}

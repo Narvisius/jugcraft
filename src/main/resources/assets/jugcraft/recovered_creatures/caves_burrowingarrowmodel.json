@@ -1,0 +1,258 @@
+{
+  "textureSize": [
+    32,
+    32
+  ],
+  "parts": [
+    {
+      "name": "main",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "arrow",
+      "parent": "main",
+      "pose": [
+        0.0,
+        -2.5,
+        2.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -2.5,
+            -6.0,
+            0.0,
+            5.0,
+            12.0
+          ],
+          "uv": [
+            0.0,
+            5.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r1",
+      "parent": "arrow",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.5708
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -2.5,
+            -6.0,
+            0.0,
+            5.0,
+            12.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "arrow_head",
+      "parent": "arrow",
+      "pose": [
+        0.0,
+        0.0,
+        -6.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "ljaw",
+      "parent": "arrow_head",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "tjaw",
+      "parent": "arrow_head",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "cube_r2",
+      "parent": "ljaw",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        -0.6981,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            0.0,
+            0.5,
+            4.0,
+            3.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            7.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -2.0,
+            0.0,
+            -3.5,
+            4.0,
+            3.0,
+            4.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r3",
+      "parent": "tjaw",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.6981,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -3.0,
+            -3.5,
+            4.0,
+            3.0,
+            4.0
+          ],
+          "uv": [
+            12.0,
+            3.0
+          ],
+          "inflate": [
+            0.01,
+            0.01,
+            0.01
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -2.0,
+            -3.0,
+            0.5,
+            4.0,
+            3.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            22.0
+          ],
+          "inflate": [
+            0.01,
+            0.01,
+            0.01
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/BurrowingArrowModel.java",
+  "sourceSha256": "b5312422e7078dd385ae48baa3174a1c5c0b4694dc3acf99da20ba31659d8f01",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.walk(this.tjaw, 1.0f, 0.6f, false, 1.0f, -0.6f, ageInTicks, burrow);",
+      "reason": "Unbound expression variable burrow"
+    },
+    {
+      "call": "this.walk(this.ljaw, 1.0f, 0.6f, true, 1.0f, -0.6f, ageInTicks, burrow);",
+      "reason": "Unbound expression variable burrow"
+    },
+    {
+      "call": "this.main.rotationPointZ += Math.abs((float)(Math.cos(ageInTicks * 0.5f) * 3.0 * (double)burrow));",
+      "reason": "Unbound expression variable burrow"
+    }
+  ],
+  "expressions": [],
+  "poses": []
+}

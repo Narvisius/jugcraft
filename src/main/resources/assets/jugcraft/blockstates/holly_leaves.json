@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "clipped=false,season=green": [
+      {
+        "model": "jugcraft:block/holly_leaves",
+        "weight": 2
+      },
+      {
+        "model": "jugcraft:block/holly_leaves_berries",
+        "weight": 1
+      }
+    ],
+    "clipped=true,season=green": {
+      "model": "jugcraft:block/holly_leaves"
+    },
+    "clipped=false,season=gold": {
+      "model": "jugcraft:block/holly_leaves_berries"
+    },
+    "clipped=true,season=gold": {
+      "model": "jugcraft:block/holly_leaves"
+    },
+    "clipped=false,season=bare": {
+      "model": "jugcraft:block/holly_leaves_berries"
+    },
+    "clipped=true,season=bare": {
+      "model": "jugcraft:block/holly_leaves"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+	"display": {
+		"icon": {
+			"id": "inventorypets:pet_pufferfish"
+		},
+		"title": {
+			"translate": "advancement.ip.petachPetrifyPuffer"
+		},
+		"description": {
+			"translate": "advancement.ip.petachPetrifyPuffer.desc"
+		},
+		"show_toast": true,
+		"announce_to_chat": true,
+		"frame": "challenge",
+		"hidden": true
+	},
+	"parent": "inventorypets:petrify_wither",
+    "criteria": {
+        "example": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PGP",
+    "MCM",
+    "BKB"
+  ],
+  "key": {
+    "B": "minecraft:bricks",
+    "C": "jugcraft:basic_circuit",
+    "G": "jugcraft:steel_gear",
+    "K": "jugcraft:machine_casing",
+    "M": "jugcraft:electric_motor",
+    "P": "#c:plates/steel"
+  },
+  "result": {
+    "id": "jugcraft:precision_finisher",
+    "count": 1
+  }
+}

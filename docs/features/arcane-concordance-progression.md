@@ -87,9 +87,9 @@ a stage needs. This table is the graph's (`tools/check_mod_data.py` fails if it 
 |---|---|---|---|---|---|
 | Initiate | `jugcraft:first_light` encountered | `#jugcraft:luminous_specimens` | nothing new | nothing new | nothing new |
 | Practitioner | `jugcraft:first_light` observed, `jugcraft:first_light` understood | nothing new | nothing new | nothing new | nothing new |
-| Adept | nothing new | `jugcraft:lampwright_bench`, `minecraft:copper_ingot`, `minecraft:stick`, `#jugcraft:concordance/luminous_matter`, `#minecraft:planks` | nothing new | nothing new | nothing new |
+| Adept | nothing new | `minecraft:copper_ingot`, `minecraft:stick`, `#jugcraft:concordance/luminous_matter` | nothing new | nothing new | nothing new |
 | Master | nothing new | nothing new | nothing new | nothing new | nothing new |
-| Architect | nothing new | nothing new | nothing new | nothing new | nothing new |
+| Architect | nothing new | `jugcraft:lampwright_bench`, `#minecraft:planks` | nothing new | nothing new | nothing new |
 <!-- mandatory: end -->
 
 Everything else has an alternative: another specimen, another tradition, another route.

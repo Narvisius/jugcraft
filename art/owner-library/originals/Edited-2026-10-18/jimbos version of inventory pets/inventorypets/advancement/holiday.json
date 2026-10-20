@@ -1,0 +1,51 @@
+{
+	"display": {
+		"icon": {
+			"id": "inventorypets:pet_politically_correct"
+		},
+		"title": {
+			"translate": "advancement.ip.petachieveHoliday"
+		},
+		"description": {
+			"translate": "advancement.ip.petachieveHoliday.desc"
+		},
+		"show_toast": true,
+		"announce_to_chat": true,
+		"frame": "goal"
+	},
+	"parent": "inventorypets:root",
+	"criteria": {
+		"crafting_table": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": [
+							"inventorypets:pet_christmas_tree"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_menorah"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_mishumaa_saba"
+						]
+					},
+					{
+                        "items": [
+                        	"inventorypets:pet_politically_correct"
+                    	]
+                    },
+                    {
+                        "items": [
+                        	"inventorypets:pet_april_fool"
+                    	]
+                    }
+				]
+			}
+		}
+	}
+}

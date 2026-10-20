@@ -1,0 +1,46 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:nouveau_wilden_horn",
+          "modifier": [
+            {
+              "add": false,
+              "count": 1.0,
+              "type": "minecraft:set_count"
+            },
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.0
+              },
+              "enchantment": "minecraft:looting",
+              "type": "minecraft:enchanted_count_increase"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "name": "jugcraft_source_nouveau_music_disc_firel_the_wild_hunt",
+      "rolls": 1,
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.02
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:nouveau_music_disc_firel_the_wild_hunt"
+        }
+      ]
+    }
+  ],
+  "random_sequence": "jugcraft:entities/nouveau_wilden_hunter"
+}

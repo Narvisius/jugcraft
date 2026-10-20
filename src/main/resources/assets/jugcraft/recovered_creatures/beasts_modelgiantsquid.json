@@ -1,0 +1,2598 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "head",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -5.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -9.0,
+            -5.0,
+            10.0,
+            14.0,
+            10.0
+          ],
+          "uv": [
+            43.0,
+            35.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "beak",
+      "parent": "head",
+      "pose": [
+        0.0,
+        5.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            0.0,
+            -2.0,
+            3.0,
+            2.0,
+            4.0
+          ],
+          "uv": [
+            41.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_FrontTentacle",
+      "parent": "head",
+      "pose": [
+        1.5,
+        5.0,
+        -4.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            20.0,
+            2.0
+          ],
+          "uv": [
+            18.0,
+            70.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_FrontMidTentacle",
+      "parent": "head",
+      "pose": [
+        4.0,
+        5.0,
+        -2.0,
+        0.0,
+        -1.5708,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            20.0,
+            2.0
+          ],
+          "uv": [
+            18.0,
+            70.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_FrontMidTentacle",
+      "parent": "head",
+      "pose": [
+        -4.0,
+        5.0,
+        -2.0,
+        0.0,
+        1.5708,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            20.0,
+            2.0
+          ],
+          "uv": [
+            18.0,
+            70.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_BackMidTentacle",
+      "parent": "head",
+      "pose": [
+        4.0,
+        5.0,
+        2.0,
+        0.0,
+        -1.3963,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            20.0,
+            2.0
+          ],
+          "uv": [
+            18.0,
+            70.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_BackMidTentacle",
+      "parent": "head",
+      "pose": [
+        -4.0,
+        5.0,
+        2.0,
+        0.0,
+        1.3963,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            20.0,
+            2.0
+          ],
+          "uv": [
+            18.0,
+            70.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_BackTentacle",
+      "parent": "head",
+      "pose": [
+        2.0,
+        5.0,
+        4.0,
+        0.0,
+        3.1416,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            20.0,
+            2.0
+          ],
+          "uv": [
+            18.0,
+            70.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_BackTentacle",
+      "parent": "head",
+      "pose": [
+        -2.0,
+        5.0,
+        4.0,
+        0.0,
+        -3.1416,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            20.0,
+            2.0
+          ],
+          "uv": [
+            18.0,
+            70.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "right_FrontTentacle",
+      "parent": "head",
+      "pose": [
+        -1.5,
+        5.0,
+        -4.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            20.0,
+            2.0
+          ],
+          "uv": [
+            18.0,
+            70.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_arm",
+      "parent": "head",
+      "pose": [
+        3.0,
+        5.0,
+        0.0,
+        0.0,
+        -1.5708,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            20.0,
+            2.0
+          ],
+          "uv": [
+            32.0,
+            66.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_arm",
+      "parent": "head",
+      "pose": [
+        -3.0,
+        5.0,
+        0.0,
+        0.0,
+        1.5708,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            20.0,
+            2.0
+          ],
+          "uv": [
+            32.0,
+            66.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_eye",
+      "parent": "head",
+      "pose": [
+        5.9,
+        0.5,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -3.5,
+            -3.5,
+            3.0,
+            7.0,
+            7.0
+          ],
+          "uv": [
+            53.0,
+            19.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_eye",
+      "parent": "head",
+      "pose": [
+        -5.9,
+        0.5,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -3.5,
+            -3.5,
+            3.0,
+            7.0,
+            7.0
+          ],
+          "uv": [
+            53.0,
+            19.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "mantle",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -5.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -7.0,
+            -31.0,
+            -6.0,
+            14.0,
+            32.0,
+            12.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_FrontTentacleEnd",
+      "parent": "left_FrontTentacle",
+      "pose": [
+        0.0,
+        20.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            20.0,
+            2.0
+          ],
+          "uv": [
+            18.0,
+            70.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_FrontMidTentacleEnd",
+      "parent": "left_FrontMidTentacle",
+      "pose": [
+        0.0,
+        20.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            20.0,
+            2.0
+          ],
+          "uv": [
+            18.0,
+            70.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_FrontMidTentacleEnd",
+      "parent": "right_FrontMidTentacle",
+      "pose": [
+        0.0,
+        20.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            20.0,
+            2.0
+          ],
+          "uv": [
+            18.0,
+            70.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_BackMidTentacleEnd",
+      "parent": "left_BackMidTentacle",
+      "pose": [
+        0.0,
+        20.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            20.0,
+            2.0
+          ],
+          "uv": [
+            18.0,
+            70.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_BackMidTentacleEnd",
+      "parent": "right_BackMidTentacle",
+      "pose": [
+        0.0,
+        20.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            20.0,
+            2.0
+          ],
+          "uv": [
+            18.0,
+            70.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_BackTentacleEnd",
+      "parent": "left_BackTentacle",
+      "pose": [
+        0.0,
+        20.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            20.0,
+            2.0
+          ],
+          "uv": [
+            18.0,
+            70.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_BackTentacleEnd",
+      "parent": "right_BackTentacle",
+      "pose": [
+        0.0,
+        20.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            20.0,
+            2.0
+          ],
+          "uv": [
+            18.0,
+            70.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "right_tentacleEnd",
+      "parent": "right_FrontTentacle",
+      "pose": [
+        0.0,
+        20.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            20.0,
+            2.0
+          ],
+          "uv": [
+            18.0,
+            70.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_arm2",
+      "parent": "left_arm",
+      "pose": [
+        0.0,
+        20.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            35.0,
+            2.0
+          ],
+          "uv": [
+            45.0,
+            60.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_arm2",
+      "parent": "right_arm",
+      "pose": [
+        0.0,
+        20.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            35.0,
+            2.0
+          ],
+          "uv": [
+            45.0,
+            60.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_pupil_pivot",
+      "parent": "left_eye",
+      "pose": [
+        1.55,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "right_pupil_pivot",
+      "parent": "right_eye",
+      "pose": [
+        -1.55,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "mantle_end",
+      "parent": "mantle",
+      "pose": [
+        0.0,
+        -31.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -7.0,
+            -4.0,
+            8.0,
+            10.0,
+            8.0
+          ],
+          "uv": [
+            53.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_arm3",
+      "parent": "left_arm2",
+      "pose": [
+        0.0,
+        35.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            35.0,
+            2.0
+          ],
+          "uv": [
+            45.0,
+            60.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_arm3",
+      "parent": "right_arm2",
+      "pose": [
+        0.0,
+        35.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            35.0,
+            2.0
+          ],
+          "uv": [
+            45.0,
+            60.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_pupil",
+      "parent": "left_pupil_pivot",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -2.5,
+            -2.5,
+            0.0,
+            5.0,
+            5.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_pupil",
+      "parent": "right_pupil_pivot",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -2.5,
+            -2.5,
+            0.0,
+            5.0,
+            5.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_membrane",
+      "parent": "mantle_end",
+      "pose": [
+        0.0,
+        -2.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -12.0,
+            0.0,
+            17.0,
+            24.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            45.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_membrane",
+      "parent": "mantle_end",
+      "pose": [
+        0.0,
+        -2.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -17.0,
+            -12.0,
+            0.0,
+            17.0,
+            24.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            45.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_arm4",
+      "parent": "left_arm3",
+      "pose": [
+        0.0,
+        35.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            35.0,
+            2.0
+          ],
+          "uv": [
+            45.0,
+            60.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_arm4",
+      "parent": "right_arm3",
+      "pose": [
+        0.0,
+        35.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            35.0,
+            2.0
+          ],
+          "uv": [
+            45.0,
+            60.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_hand",
+      "parent": "left_arm4",
+      "pose": [
+        0.0,
+        35.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            0.0,
+            -1.3,
+            6.0,
+            14.0,
+            3.0
+          ],
+          "uv": [
+            54.0,
+            60.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_hand",
+      "parent": "right_arm4",
+      "pose": [
+        0.0,
+        35.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            0.0,
+            -1.3,
+            6.0,
+            14.0,
+            3.0
+          ],
+          "uv": [
+            54.0,
+            60.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelGiantSquid.java",
+  "sourceSha256": "70dbfa90943dc17ab93bd259f05af9d65342225ff972c325a396ab6ddfc7a89d",
+  "animationRoot": "root",
+  "headLook": "head",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "right_membrane",
+      "kind": "swing",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": false,
+      "phase": 2.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "left_membrane",
+      "kind": "swing",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": true,
+      "phase": 2.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "left_FrontTentacle",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.5,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "left_FrontTentacle",
+      "kind": "flap",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.35,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "right_FrontTentacle",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.5,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "right_FrontTentacle",
+      "kind": "flap",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.35,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "left_BackTentacle",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.5,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "left_BackTentacle",
+      "kind": "flap",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.35,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "right_BackTentacle",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.5,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "right_BackTentacle",
+      "kind": "flap",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.35,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "right_BackMidTentacle",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.5,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "right_BackMidTentacle",
+      "kind": "swing",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": true,
+      "phase": 0.0,
+      "bias": [
+        "*",
+        -1,
+        0.75
+      ],
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "right_FrontMidTentacle",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.5,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "right_FrontMidTentacle",
+      "kind": "swing",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": false,
+      "phase": 0.0,
+      "bias": [
+        "*",
+        -1,
+        0.75
+      ],
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "left_BackMidTentacle",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.5,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "left_BackMidTentacle",
+      "kind": "swing",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": false,
+      "phase": 0.0,
+      "bias": [
+        "*",
+        -1,
+        0.75
+      ],
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "left_FrontMidTentacle",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.5,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "left_FrontMidTentacle",
+      "kind": "swing",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": true,
+      "phase": 0.0,
+      "bias": [
+        "*",
+        -1,
+        0.75
+      ],
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "left_FrontTentacleEnd",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        2.0
+      ],
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "right_tentacleEnd",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        2.0
+      ],
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "left_BackTentacleEnd",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        2.0
+      ],
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "right_BackTentacleEnd",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        2.0
+      ],
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "right_BackMidTentacleEnd",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        2.0
+      ],
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "left_BackMidTentacleEnd",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        2.0
+      ],
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "right_FrontMidTentacleEnd",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        2.0
+      ],
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "left_FrontMidTentacleEnd",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        2.0
+      ],
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "left_arm",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": [
+        "*",
+        0.4,
+        0.1
+      ],
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.1,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "right_arm",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": [
+        "*",
+        0.4,
+        0.1
+      ],
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.1,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "left_arm2",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": [
+        "*",
+        0.4,
+        0.1
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        2.0
+      ],
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "right_arm2",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": [
+        "*",
+        0.4,
+        0.1
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        2.0
+      ],
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "left_arm3",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": [
+        "*",
+        0.4,
+        0.1
+      ],
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        4.0
+      ],
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "right_arm3",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": [
+        "*",
+        0.4,
+        0.1
+      ],
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        4.0
+      ],
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "left_arm4",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": [
+        "*",
+        0.4,
+        0.2
+      ],
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        6.0
+      ],
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "right_arm4",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": [
+        "*",
+        0.4,
+        0.2
+      ],
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        6.0
+      ],
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "left_FrontTentacle",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": 0.02,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.05,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "left_FrontTentacle",
+      "kind": "flap",
+      "speed": 0.05,
+      "degree": 0.02,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.035,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "right_FrontTentacle",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": 0.02,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.05,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "right_FrontTentacle",
+      "kind": "flap",
+      "speed": 0.05,
+      "degree": 0.02,
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.035,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "left_BackTentacle",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": 0.02,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.05,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "left_BackTentacle",
+      "kind": "flap",
+      "speed": 0.05,
+      "degree": 0.02,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.035,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "right_BackTentacle",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": 0.02,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.05,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "right_BackTentacle",
+      "kind": "flap",
+      "speed": 0.05,
+      "degree": 0.02,
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.035,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "right_BackMidTentacle",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": 0.02,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.05,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "right_BackMidTentacle",
+      "kind": "swing",
+      "speed": 0.05,
+      "degree": 0.02,
+      "invert": true,
+      "phase": 0.0,
+      "bias": [
+        "*",
+        -1,
+        0.075
+      ],
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "right_FrontMidTentacle",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": 0.02,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.05,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "right_FrontMidTentacle",
+      "kind": "swing",
+      "speed": 0.05,
+      "degree": 0.02,
+      "invert": false,
+      "phase": 0.0,
+      "bias": [
+        "*",
+        -1,
+        0.075
+      ],
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "left_BackMidTentacle",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": 0.02,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.05,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "left_BackMidTentacle",
+      "kind": "swing",
+      "speed": 0.05,
+      "degree": 0.02,
+      "invert": false,
+      "phase": 0.0,
+      "bias": [
+        "*",
+        -1,
+        0.075
+      ],
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "left_FrontMidTentacle",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": 0.02,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.05,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "left_FrontMidTentacle",
+      "kind": "swing",
+      "speed": 0.05,
+      "degree": 0.02,
+      "invert": true,
+      "phase": 0.0,
+      "bias": [
+        "*",
+        -1,
+        0.075
+      ],
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "left_FrontTentacleEnd",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": 0.02,
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        2.0
+      ],
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "right_tentacleEnd",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": 0.02,
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        2.0
+      ],
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "left_BackTentacleEnd",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": 0.02,
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        2.0
+      ],
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "right_BackTentacleEnd",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": 0.02,
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        2.0
+      ],
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "right_BackMidTentacleEnd",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": 0.02,
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        2.0
+      ],
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "left_BackMidTentacleEnd",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": 0.02,
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        2.0
+      ],
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "right_FrontMidTentacleEnd",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": 0.02,
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        2.0
+      ],
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "left_FrontMidTentacleEnd",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": 0.02,
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        2.0
+      ],
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "left_arm",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": [
+        "*",
+        0.02,
+        0.1
+      ],
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.01,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "right_arm",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": [
+        "*",
+        0.02,
+        0.1
+      ],
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.01,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "left_arm2",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": [
+        "*",
+        0.02,
+        0.1
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        2.0
+      ],
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "right_arm2",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": [
+        "*",
+        0.02,
+        0.1
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        2.0
+      ],
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "left_arm3",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": [
+        "*",
+        0.02,
+        0.1
+      ],
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        4.0
+      ],
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "right_arm3",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": [
+        "*",
+        0.02,
+        0.1
+      ],
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        4.0
+      ],
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "left_arm4",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": [
+        "*",
+        0.02,
+        0.2
+      ],
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        6.0
+      ],
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "right_arm4",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": [
+        "*",
+        0.02,
+        0.2
+      ],
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        6.0
+      ],
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.walk(this.left_arm, flailSpeed, flailDegree, true, 2.0f, 0.7f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.swing(this.left_arm, flailSpeed, flailDegree, true, 6.0f, 0.7f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.walk(this.right_arm, flailSpeed, flailDegree, false, 2.0f, -0.7f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.swing(this.right_arm, flailSpeed, flailDegree, false, 6.0f, -0.7f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.walk(this.left_arm2, flailSpeed, flailDegree, true, 0.0f, 0.7f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.walk(this.right_arm2, flailSpeed, flailDegree, false, 0.0f, -0.7f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.walk(this.left_arm3, flailSpeed, flailDegree, true, 0.0f, 0.7f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.walk(this.right_arm3, flailSpeed, flailDegree, false, 0.0f, -0.7f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.walk(this.left_arm4, flailSpeed, flailDegree, true, 0.0f, 0.2f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.walk(this.right_arm4, flailSpeed, flailDegree, false, 0.0f, -0.2f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.walk(this.left_hand, flailSpeed, flailDegree, true, 0.0f, 0.2f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.walk(this.right_hand, flailSpeed, flailDegree, false, 0.0f, -0.2f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.walk(this.left_FrontTentacle, flailSpeed, flailDegree * 0.5f, false, 0.0f, -0.5f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.flap(this.left_FrontTentacle, flailSpeed, flailDegree * 0.5f, false, 0.0f, -0.15f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.walk(this.left_FrontTentacleEnd, flailSpeed, flailDegree * 0.5f, false, 0.0f, -0.85f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.walk(this.right_FrontTentacle, flailSpeed, flailDegree * 0.5f, false, 2.0f, -0.5f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.flap(this.right_FrontTentacle, flailSpeed, flailDegree * 0.5f, true, 2.0f, -0.15f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.walk(this.right_tentacleEnd, flailSpeed, flailDegree * 0.5f, false, 2.0f, -0.85f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.walk(this.left_BackTentacle, flailSpeed, flailDegree * 0.5f, false, 4.0f, -0.5f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.flap(this.left_BackTentacle, flailSpeed, flailDegree * 0.5f, false, 4.0f, -0.15f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.walk(this.left_BackTentacleEnd, flailSpeed, flailDegree * 0.5f, false, 4.0f, -0.85f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.walk(this.right_BackTentacle, flailSpeed, flailDegree * 0.5f, false, 8.0f, -0.5f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.flap(this.right_BackTentacle, flailSpeed, flailDegree * 0.5f, true, 8.0f, -0.15f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.walk(this.right_BackTentacleEnd, flailSpeed, flailDegree * 0.5f, false, 8.0f, -0.85f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.walk(this.left_BackMidTentacle, flailSpeed, flailDegree * 0.5f, false, 10.0f, -0.5f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.flap(this.left_BackMidTentacle, flailSpeed, flailDegree * 0.5f, false, 10.0f, -0.15f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.walk(this.left_BackMidTentacleEnd, flailSpeed, flailDegree * 0.5f, false, 10.0f, -0.85f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.walk(this.right_BackMidTentacle, flailSpeed, flailDegree * 0.5f, false, 12.0f, -0.5f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.flap(this.right_BackMidTentacle, flailSpeed, flailDegree * 0.5f, true, 12.0f, -0.15f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.walk(this.right_BackMidTentacleEnd, flailSpeed, flailDegree * 0.5f, false, 12.0f, -0.85f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.walk(this.left_FrontMidTentacle, flailSpeed, flailDegree * 0.5f, false, 14.0f, -0.5f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.flap(this.left_FrontMidTentacle, flailSpeed, flailDegree * 0.5f, false, 14.0f, -0.15f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.walk(this.left_FrontMidTentacleEnd, flailSpeed, flailDegree * 0.5f, false, 14.0f, -0.85f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.walk(this.right_FrontMidTentacle, flailSpeed, flailDegree * 0.5f, false, 16.0f, -0.5f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.flap(this.right_FrontMidTentacle, flailSpeed, flailDegree * 0.5f, true, 16.0f, -0.15f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.walk(this.right_FrontMidTentacleEnd, flailSpeed, flailDegree * 0.5f, false, 16.0f, -0.85f, ageInTicks, flailAmount);",
+      "reason": "Unbound expression variable flailAmount"
+    },
+    {
+      "call": "this.walk(this.beak, 0.7f, 0.35f, true, 0.0f, 0.0f, ageInTicks, 1.0f);",
+      "reason": "Unbound source condition [{'unsupported': 'grabProgress >= 5.0f'}]"
+    },
+    {
+      "call": "this.bob(this.beak, 0.7f, 0.35f, true, ageInTicks, 1.0f);",
+      "reason": "Unbound source condition [{'unsupported': 'grabProgress >= 5.0f'}]"
+    },
+    {
+      "call": "this.mantle.setScale(stretchyXZ, stretchy, stretchyXZ - dryProgress * 0.05f);",
+      "reason": "Unbound expression variable dryProgress"
+    },
+    {
+      "call": "this.right_arm2.rotateAngleX -= contractFromGrab * this.getArmRot(entity, 2, partialTick, false);",
+      "reason": "Unbound expression variable contractFromGrab"
+    },
+    {
+      "call": "this.left_arm2.rotateAngleX += contractFromGrab * this.getArmRot(entity, 2, partialTick, false);",
+      "reason": "Unbound expression variable contractFromGrab"
+    },
+    {
+      "call": "this.right_arm2.rotateAngleX -= contractFromGrab * this.getArmRot(entity, 4, partialTick, false);",
+      "reason": "Unbound expression variable contractFromGrab"
+    },
+    {
+      "call": "this.left_arm2.rotateAngleX += contractFromGrab * this.getArmRot(entity, 4, partialTick, false);",
+      "reason": "Unbound expression variable contractFromGrab"
+    },
+    {
+      "call": "this.right_arm3.rotateAngleX -= contractFromGrab * this.getArmRot(entity, 8, partialTick, false);",
+      "reason": "Unbound expression variable contractFromGrab"
+    },
+    {
+      "call": "this.left_arm3.rotateAngleX += contractFromGrab * this.getArmRot(entity, 8, partialTick, false);",
+      "reason": "Unbound expression variable contractFromGrab"
+    },
+    {
+      "call": "this.right_arm4.rotateAngleX -= contractFromGrab * this.getArmRot(entity, 12, partialTick, false);",
+      "reason": "Unbound expression variable contractFromGrab"
+    },
+    {
+      "call": "this.left_arm4.rotateAngleX += contractFromGrab * this.getArmRot(entity, 12, partialTick, false);",
+      "reason": "Unbound expression variable contractFromGrab"
+    },
+    {
+      "call": "this.right_arm2.rotateAngleZ += contractFromGrab * this.getArmRot(entity, 2, partialTick, true);",
+      "reason": "Unbound expression variable contractFromGrab"
+    },
+    {
+      "call": "this.left_arm2.rotateAngleZ -= contractFromGrab * this.getArmRot(entity, 2, partialTick, true);",
+      "reason": "Unbound expression variable contractFromGrab"
+    },
+    {
+      "call": "this.right_arm2.rotateAngleZ += contractFromGrab * this.getArmRot(entity, 4, partialTick, true);",
+      "reason": "Unbound expression variable contractFromGrab"
+    },
+    {
+      "call": "this.left_arm2.rotateAngleZ -= contractFromGrab * this.getArmRot(entity, 4, partialTick, true);",
+      "reason": "Unbound expression variable contractFromGrab"
+    },
+    {
+      "call": "this.right_arm3.rotateAngleZ += contractFromGrab * this.getArmRot(entity, 6, partialTick, true);",
+      "reason": "Unbound expression variable contractFromGrab"
+    },
+    {
+      "call": "this.left_arm3.rotateAngleZ -= contractFromGrab * this.getArmRot(entity, 6, partialTick, true);",
+      "reason": "Unbound expression variable contractFromGrab"
+    },
+    {
+      "call": "this.right_arm4.rotateAngleZ += contractFromGrab * this.getArmRot(entity, 8, partialTick, true);",
+      "reason": "Unbound expression variable contractFromGrab"
+    },
+    {
+      "call": "this.left_arm4.rotateAngleZ -= contractFromGrab * this.getArmRot(entity, 8, partialTick, true);",
+      "reason": "Unbound expression variable contractFromGrab"
+    }
+  ],
+  "expressions": [
+    {
+      "bone": "head",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "-",
+          "pitch",
+          90.0
+        ],
+        [
+          "/",
+          3.141592653589793,
+          180
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "right_pupil_pivot",
+      "target": "xRot",
+      "op": "-=",
+      "value": [
+        "*",
+        [
+          "-",
+          "pitch",
+          90.0
+        ],
+        [
+          "/",
+          3.141592653589793,
+          180
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "left_pupil_pivot",
+      "target": "xRot",
+      "op": "-=",
+      "value": [
+        "*",
+        [
+          "-",
+          "pitch",
+          90.0
+        ],
+        [
+          "/",
+          3.141592653589793,
+          180
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "left_pupil",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "-",
+          "pitch",
+          90.0
+        ],
+        [
+          "/",
+          3.141592653589793,
+          180
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "right_pupil",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "-",
+          "pitch",
+          90.0
+        ],
+        [
+          "/",
+          3.141592653589793,
+          180
+        ]
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

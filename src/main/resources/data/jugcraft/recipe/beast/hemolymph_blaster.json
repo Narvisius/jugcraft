@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "CBP",
+    "M  "
+  ],
+  "key": {
+    "S": "jugcraft:beast_hemolymph_sac",
+    "P": "jugcraft:beast_mosquito_proboscis",
+    "M": "jugcraft:beast_warped_muscle",
+    "C": "jugcraft:beast_mimicream",
+    "B": "jugcraft:beast_blood_sprayer"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:beast_hemolymph_blaster"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

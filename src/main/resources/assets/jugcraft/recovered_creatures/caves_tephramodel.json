@@ -1,0 +1,74 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "main",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -7.0,
+            -7.0,
+            -7.0,
+            14.0,
+            14.0,
+            14.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/TephraModel.java",
+  "sourceSha256": "602c62c3133b7867abfbdc5392dda0032f7538d9490f33d0021abcca9ada80d9",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [
+    {
+      "bone": "main",
+      "target": "zRot",
+      "op": "+=",
+      "value": [
+        "*",
+        "age",
+        0.2
+      ],
+      "when": 1
+    },
+    {
+      "bone": "main",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        "age",
+        0.4
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

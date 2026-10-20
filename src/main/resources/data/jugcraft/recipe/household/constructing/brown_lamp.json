@@ -1,0 +1,34 @@
+{
+  "type": "jugcraft:household_construction",
+  "ingredients": [
+    {
+      "count": 2,
+      "ingredient": "#minecraft:planks"
+    },
+    {
+      "count": 4,
+      "ingredient": "minecraft:redstone"
+    },
+    {
+      "count": 4,
+      "ingredient": "minecraft:glowstone_dust"
+    },
+    {
+      "count": 1,
+      "ingredient": "minecraft:white_wool"
+    },
+    {
+      "count": 1,
+      "ingredient": "minecraft:brown_dye"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:household_brown_lamp"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

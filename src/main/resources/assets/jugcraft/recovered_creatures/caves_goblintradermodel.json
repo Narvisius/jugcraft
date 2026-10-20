@@ -1,0 +1,461 @@
+{
+  "textureSize": [
+    46,
+    46
+  ],
+  "parts": [
+    {
+      "name": "body",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        16.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            0.0,
+            -2.0,
+            4.0,
+            4.0,
+            4.0
+          ],
+          "uv": [
+            12.0,
+            12.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "head",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        16.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -6.0,
+            -3.0,
+            8.0,
+            6.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_arm",
+      "parent": "body",
+      "pose": [
+        -3.0,
+        1.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.0,
+            -1.0,
+            2.0,
+            5.0,
+            2.0
+          ],
+          "uv": [
+            30.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_arm",
+      "parent": "body",
+      "pose": [
+        3.0,
+        1.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.0,
+            -1.0,
+            2.0,
+            5.0,
+            2.0
+          ],
+          "uv": [
+            38.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_leg",
+      "parent": "body",
+      "pose": [
+        -1.0,
+        4.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.5,
+            2.0,
+            4.0,
+            3.0
+          ],
+          "uv": [
+            26.0,
+            9.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_leg",
+      "parent": "body",
+      "pose": [
+        1.0,
+        4.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.5,
+            2.0,
+            4.0,
+            3.0
+          ],
+          "uv": [
+            36.0,
+            9.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "bag",
+      "parent": "body",
+      "pose": [
+        0.0,
+        1.0,
+        2.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.5,
+            -3.0,
+            0.0,
+            5.0,
+            7.0,
+            3.0
+          ],
+          "uv": [
+            0.0,
+            20.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "nose",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -3.0,
+        -3.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -2.0,
+            2.0,
+            4.0,
+            2.0
+          ],
+          "uv": [
+            22.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_ear",
+      "parent": "head",
+      "pose": [
+        -4.0,
+        -3.0,
+        1.0,
+        0.0,
+        -0.7854,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -2.0,
+            0.0,
+            0.0,
+            4.0,
+            4.0
+          ],
+          "uv": [
+            0.0,
+            8.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_ear",
+      "parent": "head",
+      "pose": [
+        4.0,
+        -3.0,
+        1.0,
+        0.0,
+        0.7854,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -2.0,
+            0.0,
+            0.0,
+            4.0,
+            4.0
+          ],
+          "uv": [
+            8.0,
+            8.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "hood",
+      "parent": "head",
+      "pose": [
+        0.0,
+        8.0,
+        6.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -14.0,
+            -9.0,
+            8.0,
+            8.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            32.0
+          ],
+          "inflate": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/mrcrayfish/goblintraders/client/renderer/entity/model/GoblinTraderModel.java",
+  "sourceSha256": "8ca79827fca3cbd3348b8fd63ad2c3bbc8c2dac0137b8238f711f9c832d2611c",
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.rightArm.xRot -= (float)Math.toRadians(state.armAngle);",
+      "reason": "Unsupported expression radians(state.armAngle)"
+    },
+    {
+      "call": "this.leftArm.xRot -= (float)Math.toRadians(state.armAngle);",
+      "reason": "Unsupported expression radians(state.armAngle)"
+    },
+    {
+      "call": "this.head.xRot = euler.x;",
+      "reason": "Unsupported expression euler.x"
+    },
+    {
+      "call": "this.head.yRot = euler.y;",
+      "reason": "Unsupported expression euler.y"
+    },
+    {
+      "call": "this.head.zRot = euler.z;",
+      "reason": "Unsupported expression euler.z"
+    }
+  ],
+  "expressions": [
+    {
+      "bone": "right_leg",
+      "target": "xRot",
+      "op": "=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "cos",
+            [
+              "*",
+              "walk",
+              0.6662
+            ]
+          ],
+          1.4
+        ],
+        "move"
+      ],
+      "when": 1
+    },
+    {
+      "bone": "left_leg",
+      "target": "xRot",
+      "op": "=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "cos",
+            [
+              "+",
+              [
+                "*",
+                "walk",
+                0.6662
+              ],
+              3.141592653589793
+            ]
+          ],
+          1.4
+        ],
+        "move"
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

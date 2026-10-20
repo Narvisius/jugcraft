@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:process_recovery",
+  "items": [
+    {
+      "ingredient": "minecraft:clay_ball",
+      "count": 1
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:recovery_concentrate",
+      "amount": 1000
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:stabilized_process_residue",
+      "count": 4
+    }
+  ],
+  "energy_per_tick": 64,
+  "time": 320
+}

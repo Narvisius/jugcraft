@@ -1,0 +1,111 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "idle": {
+      "loop": true,
+      "animation_length": 1,
+      "bones": {}
+    },
+    "walk": {
+      "loop": true,
+      "animation_length": 1,
+      "bones": {}
+    },
+    "fly": {
+      "loop": true,
+      "animation_length": 1,
+      "bones": {}
+    },
+    "swim": {
+      "loop": true,
+      "animation_length": 1,
+      "bones": {
+        "segment_0": {
+          "rotation": [
+            0,
+            "math.sin(query.anim_time * 240 + 25) * 18",
+            0
+          ]
+        },
+        "segment_1": {
+          "rotation": [
+            0,
+            "math.sin(query.anim_time * 240 + 50) * 18",
+            0
+          ]
+        },
+        "segment_2": {
+          "rotation": [
+            0,
+            "math.sin(query.anim_time * 240 + 75) * 18",
+            0
+          ]
+        },
+        "segment_3": {
+          "rotation": [
+            0,
+            "math.sin(query.anim_time * 240 + 100) * 18",
+            0
+          ]
+        },
+        "segment_4": {
+          "rotation": [
+            0,
+            "math.sin(query.anim_time * 240 + 125) * 18",
+            0
+          ]
+        },
+        "segment_5": {
+          "rotation": [
+            0,
+            "math.sin(query.anim_time * 240 + 150) * 18",
+            0
+          ]
+        }
+      }
+    },
+    "sit": {
+      "loop": true,
+      "animation_length": 1,
+      "bones": {
+        "root": {
+          "position": [
+            0,
+            -1.2800000000000002,
+            0
+          ]
+        }
+      }
+    },
+    "attack": {
+      "animation_length": 0.7,
+      "loop": false,
+      "bones": {
+        "root": {
+          "rotation": {
+            "0": [
+              0,
+              0,
+              0
+            ],
+            ".2": [
+              -15,
+              0,
+              0
+            ],
+            ".4": [
+              20,
+              0,
+              0
+            ],
+            ".7": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}

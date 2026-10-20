@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:mul",
+  "left": 20.0,
+  "right": {
+    "type": "minecraft:cube",
+    "input": {
+      "type": "minecraft:blend_density",
+      "input": {
+        "type": "minecraft:noise",
+        "noise": "jugcraft:math/spike/landscape_height",
+        "xz_scale": 0.5,
+        "y_scale": 2
+      }
+    }
+  }
+}

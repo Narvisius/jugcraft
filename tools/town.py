@@ -30,6 +30,7 @@ import town_buildings as tb  # noqa: E402
 import town_decor  # noqa: E402
 import town_shops  # noqa: E402
 import town_skins  # noqa: E402
+import town_wayfinding
 from town_voxels import S, Voxels, connections, stair_shapes, parse, vanilla_states, check_state  # noqa: E402
 
 SEED = 1907
@@ -114,6 +115,8 @@ class Town:
         self.sites = []
         self.spots = []
         self.atms = []
+        self.signs = []
+        self.map_boards = []
         self.points = outline(self.rng)
         self.sd = signed_distance(self.points)
         self.used = np.zeros((SIZE, SIZE), dtype=np.int8)   # [z, x]: 1 street/square, 2 building, 3 wall
@@ -153,6 +156,7 @@ class Town:
                     spot["role"] = "baker" if piece_purpose(piece) == "bakery" else "vendor"
             self.spots.append(spot)
         self.atms += atms
+        town_wayfinding.add_piece(self, piece, ox, y, oz, turns, purpose)
 
     @staticmethod
     def size_after(piece, turns):
@@ -605,6 +609,7 @@ class Town:
         self.gardens()
         self.townsfolk()
         self.name_everyone()
+        town_wayfinding.boards(self)
         for x, y, z, facing in self.atms:
             self.v.set(x, y, z, S("jugcraft:atm", facing=facing))
         stair_shapes(self.v)
@@ -742,6 +747,8 @@ def export(town, path=OUT):
         "sites": sites,
         "spots": town.spots,
         "atms": town.atms,
+        "signs": town.signs,
+        "map_boards": town.map_boards,
         "decor": town_decor.data(),
     }
     path.parent.mkdir(parents=True, exist_ok=True)

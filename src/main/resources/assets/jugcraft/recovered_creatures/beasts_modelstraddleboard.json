@@ -1,0 +1,234 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "body",
+      "parent": "root",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6.0,
+            -2.0,
+            -10.0,
+            12.0,
+            2.0,
+            26.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "hair_left",
+      "parent": "body",
+      "pose": [
+        6.0,
+        -2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.8727
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -10.0,
+            -2.0,
+            0.0,
+            10.0,
+            24.0
+          ],
+          "uv": [
+            0.0,
+            29.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "hair_right",
+      "parent": "body",
+      "pose": [
+        -6.0,
+        -2.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.8727
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -10.0,
+            -2.0,
+            0.0,
+            10.0,
+            24.0
+          ],
+          "uv": [
+            0.0,
+            29.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "spikes",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -1.5,
+        13.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -5.5,
+            -3.5,
+            8.0,
+            11.0,
+            7.0
+          ],
+          "uv": [
+            25.0,
+            29.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "front",
+      "parent": "body",
+      "pose": [
+        0.0,
+        0.0,
+        -10.0,
+        -0.1309,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -2.0,
+            -8.0,
+            10.0,
+            2.0,
+            8.0
+          ],
+          "uv": [
+            48.0,
+            40.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "spikes_front",
+      "parent": "front",
+      "pose": [
+        0.0,
+        -4.0,
+        -3.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -2.0,
+            -2.5,
+            4.0,
+            4.0,
+            5.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelStraddleboard.java",
+  "sourceSha256": "6a068db37aed060d825ea40a5fa19230aea68f5df9ee5e25fcbacf5e927ca660",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

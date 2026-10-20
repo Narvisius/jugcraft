@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_ceiling_fan": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#refurbished_furniture:wooden_toilets"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_dye": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:magenta_dye"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "refurbished_furniture:magenta_toilet"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_ceiling_fan",
+      "has_dye"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "refurbished_furniture:magenta_toilet"
+    ]
+  }
+}

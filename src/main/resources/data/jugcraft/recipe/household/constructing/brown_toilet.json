@@ -1,0 +1,22 @@
+{
+  "type": "jugcraft:household_construction",
+  "ingredients": [
+    {
+      "count": 1,
+      "ingredient": "#jugcraft:household/wooden_toilets"
+    },
+    {
+      "count": 1,
+      "ingredient": "minecraft:brown_dye"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:household_brown_toilet"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

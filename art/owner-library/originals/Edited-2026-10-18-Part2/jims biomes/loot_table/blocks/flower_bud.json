@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": "minecraft:tool/can_shear",
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "biomesoplenty:flower_bud"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "biomesoplenty:blocks/flower_bud"
+}

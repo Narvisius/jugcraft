@@ -1,0 +1,24 @@
+{
+  "result": {
+    "id": "jugcraft:pocket_pet_pixie"
+  },
+  "pattern": [
+    "OFO",
+    "EDE",
+    "OGO"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "D": "minecraft:diamond",
+    "E": "minecraft:emerald",
+    "F": "jugcraft:pocket_nugget_emerald",
+    "G": "minecraft:gold_ingot",
+    "O": "minecraft:gold_ingot"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

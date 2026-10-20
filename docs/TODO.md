@@ -1,4 +1,135 @@
-# Jugcraft TODO list
+# Jugcraft TODO
+
+**19 October publication authorization:** the owner approved publishing the current local content and merging ready PRs. Earlier local-only checkpoints are historical; remaining behavioral parity and independent multiplayer work stay open.
+
+## Supplied creature models, animations and systems — October 19, local
+
+- [x] Preserve all six newly supplied collections with source hashes; recover 278 source model classes without geometry-parser failures and bind 167 species to original geometry/UVs and unchanged supplied skins.
+- [x] Restore native multipart bodies with shared parent health, original locomotion/keyframe declarations, held items and selected source render layers. Add the ferrouslime gel/head-count/merge implementation and 12-species Rotten family with native encounter adapters.
+- [ ] Complete the remaining specialized source-animation helpers, state machines, accessory renderers and encounter systems. The [recovery catalog](../art/owner-library/catalog/creature-recovery-2026-10-19/README.md) distinguishes implemented adapters from outstanding parity; [model coverage](../art/owner-library/catalog/creature-recovery-2026-10-19/model-coverage.csv) lists exact known gaps. Do not mark this as a complete port of every source behavior.
+- [x] Finish the local validation pass and package a preview: 2,004/2,005 broad server tests passed, then the corrected skylight fixture passed in the seven-test focused build; ten Python checks, offline data audit, final 269-image client gallery and 48 in-game audio lookups pass. Exact evidence and checksum are in the [validation record](../art/owner-library/catalog/creature-recovery-2026-10-19/VALIDATION.md) and [artifact report](../art/owner-library/catalog/creature-recovery-2026-10-19/local-validation.json). The full server suite was not repeated after the fixture correction.
+- [ ] Owner-controlled playtest and visual acceptance before pushing. Keep the build local and preserve all existing owner saves.
+- [ ] Locate the original camel, coconut-crab, penguin and squirrel geometry for the four `jimbologics` species; these supplied folders do not contain those models.
+
+## Original wildlife model recovery — October 19, local
+
+- [x] Recover the newly supplied Naturalist model data: 73 native layers, 441 animation clips, 47 existing wildlife species. Preserve source files/hashes and original texture pixels. Replace palette-patch wildlife rendering with authored geometry/UVs, baby layers and separate dye overlays.
+- [x] Verify all runtime base/overlay atlas pairings, preserved snail shell/eye geometry, part hierarchy and bounded declarative extraction with focused offline tests.
+- [x] Complete the new rendered wildlife gallery: all 47 renderer bindings pass, with 49 captured views reviewed for original anatomy and skin placement.
+- [ ] Owner-playtest and accept the recovered animal appearance before publishing. Automated screenshot completion does not establish owner acceptance.
+- [ ] Obtain missing baby-bird skins and compatible missing baby dye overlays. Current safe display uses scaled original adult birds and normal infant skins where an overlay is incompatible.
+- [x] Recover newly supplied model data for the other collections; see the October 19 recovery section above. Specialized behavioral animation and remaining original-model gaps are tracked there.
+- Source and limitations: [wildlife recovery catalog](../art/owner-library/catalog/naturalist-models-2026-10-19/README.md).
+
+## Vehicle assembly bays — local, awaiting playtest
+
+- [x] Implement 6x6x6 Mecha and 6x6x3 Tank workbenches, existing-vehicle construction/refit, shared power, exact input previews and durable chassis options. See [vehicle assembly bays](features/vehicle-assembly-bays.md).
+- [x] Add grounded animated gantries, attached robot arms, control cabinets and visible power sockets.
+- [x] Pass all 1,999 server tests, the rendered client/menu gallery, full offline data/model checks and the updated 5,759-item acquisition audit. See the feature record for evidence.
+- [ ] Owner visual/gameplay playtest and two-human-client interaction checks before release. Keep this milestone local until the owner approves pushing.
+- [ ] Consider live-vehicle docking, cosmetic palettes and chassis-specific weapon modules after this local milestone.
+
+## Survival recipes and acquisition chains — 19 October 2026
+
+- [x] Audit all 5,757 registered items, with recipe prerequisites, stations, tags, fluids and documented harvesting/loot routes. Keep boss rewards and other intentional loot noncraftable. See the [chain report](features/survival-acquisition-audit-oct19.md) and [sortable inventory](audits/survival-recipes.csv).
+- [x] Add 43 confirmed recipes covering kitchen/storage/garden utilities, insect habitats, food processing, End carpentry/boat fittings, cave equipment and building materials. Reuse existing stations and add recipe-book unlocks.
+- [x] Restore six ordinary-animal material drops; fix the Capsid music-disc tag and all 12 insect habitat capture outputs. Preserve existing creature ownership protections.
+- [x] Validate all 43 recipe grids/outputs in the game, the Capsid and actual item registry (3 tests); run all 20 menagerie regressions and 5 Python graph tests; assemble the local JAR and check repository structure/documentation.
+- [x] Resolve the remaining active acquisition-review queue through native-interaction evidence and real source repairs: 81 more explicit recipes (124 total), 44 additional source pools, breeding eggs, variant starfish capture, Firebird feathers, occupied ant colonies and a Candy Cavity soda source. Keep boss/loot acquisition intact.
+- [x] Connect 77 runtime structure containers to real loot tables, including custom barrels and outdated keep/camp table paths; preserve filled inventories and original supplied files. Make unopened cabinet loot persist and roll only once.
+- [x] Audit base resources and process prerequisites, with zero invalid ingredients or unresolved active chains in the current graph. Publish the [source/consumer catalog](audits/survival-base-sources.csv); exclude unused chest tables from evidence.
+- [ ] Design survival acquisition for the 72 armor pieces and six matching weapons explicitly deferred earlier. These 78 entries remain labeled as deferred, not counted as obtainable.
+- [x] Finish the combined acquisition validation: all 1,990 server tests pass, including all 124 recipes, 44 source pools, 77 container links, collectible soda, breeding eggs, all starfish captures/releases and Firebird production. Five graph regressions, offline data/model checks and repository documentation checks also pass. Evidence is in the feature report.
+- [ ] Owner survival/balance playtest of the completed chains, including quantities, station progression and encounter availability. Current graph reachability is qualitative.
+- **Local only:** no push, merge or owner-profile installation in this pass.
+
+## October 18 owner collections — native gameplay implemented locally
+
+- [x] Finish the remaining native household, ecology/fauna, mutant, creature, landscape/cave, equipment and resource-loop implementations before combined testing. The full roster now contains 265 species.
+- [x] Run the full server suite (1,980 passing tests), then focused menagerie regressions (19 passing tests) after final metadata/plant corrections. Combined rendered client/armor/UI galleries pass; exact final evidence is in [the validation record](../art/owner-library/catalog/edited-2026-10-18-part2/local-validation-oct19.json).
+- [x] Repair worldgen ordering, runtime registrations/loot formats, sided generator APIs, unloaded-chunk equipment access, petal behavior, connected/powered block states, bucket/particle atlases, wearable/audio metadata, pie models and overlapping UI captions.
+- [x] Refine 206 reconstructed species and all 498 wildlife adult/baby mappings; repair hollow furniture, legacy item models and retained geometry diagnostics. The latest block/item audit checks 11,666 models with zero diagnostics. Supplied pixels and 59 supplied creature rigs remain intact.
+- [ ] Owner visual acceptance of the reconstructed models and all skin variants. Automated checks and sampled galleries do not replace this review.
+- [ ] Owner-controlled survival/balance playtest, including biomes/structures on representative new terrain and the machinery/resource loops.
+- [x] Run two independent client JVMs against a disposable loopback server: ownership rejection, capture synchronization and reconnect persistence pass. Record synthetic 0/64/192 live-AI population timings; 192 animals averaged 2.57 ms/tick with 3.04 ms p95 on this PC.
+- [ ] Longer multiplayer/restart soak and representative hosting-capacity validation before release. The short local animal benchmark does not establish a player limit.
+- Latest follow-up evidence: [local polish validation](../art/owner-library/catalog/edited-2026-10-18-part2/local-polish-validation-oct19.json).
+- **Local only:** no push, merge, deployment or automated control of an owner Modrinth profile. Use the existing pinned dependencies with the local JAR. See [the implementation record](features/owner-menagerie-oct18.md#october-19-combined-native-implementation) for native adaptations and remaining scope.
+
+## Owner-edited collection, part two — 18 October 2026
+
+- [x] Preserve and SHA-256 verify all 26,765 files from the nine newly supplied collections. Record direct-use authorization, legacy namespace provenance, model coverage and existing-name overlaps in the [part-two catalog](../art/owner-library/catalog/edited-2026-10-18-part2/README.md).
+- [ ] Owner-playtest the locally implemented nine cnb creatures, variants, equipment and interactions. Combined server testing passed 1,980 cases, followed by focused regressions and client/armor galleries. Full variant/balance acceptance remains.
+- [x] Implement native furniture through shared inventories, seating, utilities and machine interfaces, including construction, appliances, fans, switches, remotes and mats. Owner visual/balance acceptance remains separate.
+- [x] Implement jimbologics and jug_fauna ecology, wildlife, materials, wood families, boats, sap/fruit loops and six supplied ruins.
+- [x] Implement native landscape/cave generation, structures, progression and hazards with stable saved IDs; deterministic biome reachability and a normal-world client load are included in final validation.
+- [ ] Owner-playtest the locally implemented 20 legendary creatures and 16 complete companions inside jims mobs. Combined server tests and the client gallery pass; full variant/balance acceptance remains. The additional 90-species roster, equipment and resource loops now have native implementations; the reconstructed anatomy/skin mapping pass is complete locally, with owner visual acceptance still pending.
+- [x] Implement seven native mutant encounters/minions, Chemical X, equipment, combat and survival acquisition.
+- [x] Reconcile native registrations/resources and validate behavior through server tests and rendered galleries. Full variant/balance and art acceptance remains above.
+
+## Owner-edited animals, mounts, inventory pets and structures — 18 October 2026
+
+- [x] Preserve and checksum-verify all 3,502 supplied files, including the added 501 animal data records. Record the owner's declaration, legacy metadata, animation pairs and missing references in the [collection audit](../art/owner-library/catalog/edited-2026-10-18/README.md).
+- [x] Owner authorized new native Jugcraft gameplay and reconstructed animal geometry/buildings using the supplied resources on 18 October. No further source-project approval is needed; originals remain preserved.
+- [x] Implement the 70 inventory-pet abilities, food/costs, storage interfaces, recipes, persistence and shared protections through native Jugcraft systems.
+- [x] Implement the animal roster, variants, ecology, farming/hunting products, capture/transport and breeding locally, with supplied or reconstructed models.
+- [x] Refine reconstructed wildlife anatomy and all 498 adult/baby UV mappings; verify bounded UVs and rendered adult/baby views.
+- [ ] Obtain owner acceptance of the reconstructed wildlife and every skin variant; unavailable original geometry is not claimed as recovered.
+- [x] Implement all fourteen supplied mount model/animation pairs with taming, riding, movement, ownership, saves and acquisition.
+- [x] Implement supplied ghost/pumpkin/decorative/gear assets, all six supplied pocket-dungeon templates and thirteen reconstructed structure concepts. Missing original templates are not claimed as recovered.
+- [x] Validate native gameplay, extend the encyclopedia and preserve provenance/notices. Art acceptance and owner playtesting remain above. See [the feature record](features/owner-menagerie-oct18.md).
+
+- [x] Resolve Nouveau client-loader warnings about unused `#all` aliases, obsolete entity parents and legacy spawn eggs. Preserve Gecko item renderers, restore the ordinary notebook icon and verify all 425 Nouveau sprite bindings. The corrected client load has no missing-model/texture errors for this group.
+
+## Diorama default map — 18 October 2026
+
+- [x] Add the verified Fabric 26.3 release to the shared pack lock: automatic client installation, excluded from dedicated servers, optional for standalone Jugcraft.
+- [x] Reserve B for the encyclopedia, N for the backpack and comma for Diorama's new waypoint. Preserve saved custom controls.
+- [x] Full build and 1,960 server tests passed; map, encyclopedia and gun client tests passed, plus optional-absent assembly/gun startup. Generated the updated local pack. See [Diorama integration](features/diorama-pack.md).
+- [ ] Owner-controlled Modrinth import/playtest and representative exploration performance check.
+
+## Existing validation follow-up — 18 October 2026
+
+- [ ] Reconcile the new Jug Nouveau item registrations with the universal alchemy-value catalogue: the Python coverage check currently first reports `jugcraft:bookwyrm_charm`. Do not assign arbitrary values just to satisfy coverage; validate recipes and conversion conservation.
+
+## Gun controls and crash repair — 18 October 2026
+
+- [x] Repair invalid Nouveau unbound keys, including saved profiles, and reserve R for gun reload. Move shader reload to F8, JEI recipes to Y and encyclopedia/journal refresh to F6.
+- [x] Remove gun inventory/hotbar ammunition bars while retaining the held-gun counter.
+- [x] Targeted gun client validation passed with and without optional integrations; Encyclopedia F6 refresh regression passed. Prepared the local repaired pack and replacement JAR; owner playtest remains.
+- Evidence and migration details: [Gun controls repair](features/gun-controls-oct18.md).
+
+## Jug Nouveau owner-library port — 18 October 2026
+
+**Owner scope update:** implement the entire core `ars_jimbaux` collection before
+testing. This complete implementation pass is finished locally; combined
+validation began afterward. The full build, all 1,960 required server game tests
+and all three relevant client suites passed. The client suites also passed with
+optional integrations disabled. See the full implementation and validation
+record for scope, evidence and remaining human playtesting.
+Keep this work local. A copied asset or registered item without its intended
+behavior does not complete its checklist entry.
+
+- [x] Inventory all 3,607 core `ars_jimbaux` source files and preserve their original paths/hashes. These resources are already in the owner library; no gameplay source code was supplied.
+- [x] Cross-check both compiled owner archives: all 4,847 resource entries accounted for, including 28 elemental shared-path variants now preserved separately. Keep original loader metadata/notices; no old archive code executed or bundled.
+- [x] Local Book Wyrm/Storage Lectern implementation: supplied six colors, geometry and animations, craftable charm/wand/lectern, linked real chest inventories, ownership/party access and saved bindings.
+- [x] First storage integration validated: all 1,937 server tests, rendered six-color models/lectern/menu, page synchronization, GUI scales, data/recipe checks and unchanged-owner-art checks passed.
+- [ ] Owner-controlled Book Wyrm storage playtest before publishing; independent multiplayer/restart field testing and larger-network performance remain to do.
+- [x] Author the full storage/familiar integration locally: aggregate catalog, real crafting, named groups, remote terminals and redstone-controlled imports.
+- [x] Local Starbuncle delivery: supplied model, idle/run animations and all 16 dye colors, charm, Dominion Wand setup, real saved cargo, owner/party controls and recovery; reuse shared workers/navigation/authority.
+- [x] Starbuncle validation: all 1,945 server tests, actual client walking/two delivery trips, sixteen-color gallery, Book Wyrm storage regression and data/art audits passed locally.
+- [ ] Owner-controlled combined Jug Nouveau playtest and independent survival/multiplayer feedback before publication.
+- [x] Author extended Starbuncles: wild token acquisition, gathering, filters/routes, preferred paths, stacked cargo, beds, accessories/special appearances and familiar effects; restore apparatus charm recipe.
+- [x] Implement locally: port remaining helper jobs: Drygmy, Whirlisprig, Wixie and Amethyst Golem, reusing worker/logistics systems where suitable.
+- [x] Implement locally: port enchanting, imbuement, alteration, glyph and potion workshops with real recipes, input/output previews and usable interfaces.
+- [x] Implement locally: port source transport and spell devices through existing magical power/compiler/authority systems.
+- [x] Implement locally: port archwood, magical crops/fruit, sourcestone and decorative building families with complete survival routes and compatible generation.
+- [x] Implement locally: port missing gear/familiar behavior and creature/encounter families, including Weald creatures, Wilden and Alakarkinos.
+- [x] Author full glyph/ritual adapters and resource-family mapping; copied resources are distinguished from native behavior.
+- [x] Author all fifty preset tomes and their Scribe’s Table acquisition; connect archaeological weights, scrying tags, bat summons, dispels, potted plants and invisible redstone pulses. Resolve starter Source Gem progression and add acquisition guidance.
+- [x] Complete the combined post-implementation validation: full generation/build, 1,960 server tests, three client suites with and without optional integrations, final data/art audit and pack verification. Fixed combined-run failures and prepared the local Modrinth playtest; owner playtesting remains separate.
+- [ ] Audit the elemental/companion resource namespaces after the core port and record overlap with existing Jugcraft content.
+- Scope, limits, source manifest and evidence: [Jug Nouveau integration](features/jug-nouveau.md).
 
 ## Alchemical equipment — 16 October 2026
 
@@ -31,8 +162,142 @@
 - [x] Local implementation: replace spell text entry with an animated, keyboard-accessible constellation editor over the existing compiler.
 - [x] Local implementation: illustrated two-page encyclopedia, simple contents, topic directories and focused detail/recipe pages.
 - [x] Rendered interaction/scale checks, full server regression and optional-library absence checks passed locally.
-- [ ] Expand the bestiary beyond encountered-lair dossiers and consider optional search/favorites. Field notes are built: every Jugcraft creature a player has fought, with its own numbers and their tally ([bestiary field notes](features/bestiary-field-notes.md)); search and favorites wait for the owner's approval of the chapter organisation.
+- [ ] Owner visual review and manual playtest before pushing this redesign.
+- [ ] After UI acceptance, expand the bestiary beyond encountered-lair dossiers and consider optional search/favorites.
 - Evidence and scope: [constellation and field-guide record](features/constellation-and-field-guide.md).
+
+## Spawn-city refinement — 16 October 2026
+
+- [x] Local architectural pass: repair church roof/rear enclosure, refine facade
+  and interior, fix house flue collisions, coordinate timber palettes, furnish
+  upper floors, and refine the bank and town hall. See the
+  [city refinement record](features/town-architecture-refinement.md).
+- [ ] Owner visual walkthrough of the new city before publication; existing
+  generated towns are not automatically rebuilt.
+- [x] Local town NPC/wayfinding slice: Nordic-inspired 18-skin town roster,
+  13 readable shop/civic/directory signs, a framed north-up town plan and free
+  portable copies from guards (crouch + use), and conversation pauses.
+  See [town NPCs and wayfinding](features/town-npcs-and-wayfinding.md).
+- [ ] Owner review of NPC appearances, sign readability and map navigation.
+- [ ] NPC quality: daytime work, evening tavern gatherings and night rest, with
+  posted shop hours and an always-available essential-trade fallback.
+- [ ] NPC quality: role-specific idle/work animations (baker kneading, florist
+  tending, guards watching gates), prioritizing readable actions over constant motion.
+- [ ] NPC quality: local dialogue about their work, directions and recent events;
+  make bakery/tavern services real before advertising them as functional shops.
+- [ ] NPC quality: small civic commissions using Jugs and the existing contribution
+  systems; rewards should introduce farming, technology and magic without gating them.
+- [ ] NPC quality: give repeated residents individual hairstyle/accessory variants
+  and relationships; preserve names, persistent identities and the approved Styx likeness.
+- [ ] NPC quality: branch mentors with short, practical lessons using existing
+  research and encyclopedia routes. Let Styx demonstrate botany/astronomy and a
+  public workshop demonstrate electrical power charging a Ley Pylon; avoid a
+  second mandatory quest gate or a duplicate magic progression system.
+- [ ] Proposed next slice: one public workshop demonstrating connected technology
+  and magic using existing machines, benches and encyclopedia guidance.
+- [ ] Design civic commissions, NPC routines and an outer player workshop/shop
+  district using existing currency and protection hooks. Plot ownership still
+  needs a design or compatible claim integration. These are proposals,
+  not implemented systems.
+
+## Selected technology completion queue — 14 October 2026
+
+**16 October owner instruction:** finish and reconcile packages 1–7 with main and overlapping drafts, run local validation and prepare a separate owner-controlled playtest. Do not push or merge this work to main before owner review. Current evidence and draft decisions are recorded in [the local integration record](features/tech-seven-local-integration.md).
+
+| Package | Implementation status | Remaining work |
+|---|---|---|
+| 1. Advanced ceramics and precision components | Integrated locally; automated checks passed | Owner playtest / release checklist; see [feature record](features/advanced-ceramics-and-precision.md) |
+| 2. Stainless steel and structural alloys | Integrated locally; automated checks passed | Owner playtest / release checklist; see [feature record](features/stainless-steel-and-structural-alloys.md) |
+| 3. Batteries and power management | Integrated locally; automated checks passed | Owner playtest / release checklist; see [feature record](features/batteries-and-power-management.md) |
+| 4. Advanced electronics and automation | Integrated locally; automated checks passed | Owner playtest / release checklist; see [feature record](features/advanced-electronics-and-automation.md) |
+| 5. Phosphate processing and fertilizers | Integrated locally; automated checks passed | Owner playtest / release checklist; see [feature record](features/phosphate-processing-and-fertilizers.md) |
+| 6. Synthetic fuels and recovery | Integrated locally; automated checks passed | Owner playtest / release checklist; see [feature record](features/synthetic-fuels-and-recovery.md) |
+| 7. Cryogenics and rocket fuels | Integrated locally; automated checks passed | Owner playtest / release checklist; see [feature record](features/cryogenics-and-rocket-fuels.md) |
+
+- [x] Package 1: reuse Pulverizer, Conditioner, Metal Press and Industrial Oven; add
+  one shared Precision Finisher for ceramics, shafts and lenses, with working-head
+  animation, real connection points, recipe previews and persistent locks through
+  the existing machinery systems.
+- [x] Add reachable porcelain/alumina/zirconia routes, reusable finishing heads,
+  finished components and immediate motor/upgrade/cable/optics/polymer-tool consumers.
+  Preserve old recipes, machine IDs, inventories and port layouts.
+- [x] Add the Ceramics and Precision Handbook/Encyclopedia chapter and component art.
+- [x] Package 2: regional chromite, concentrate and ferrochromium feed stainless
+  steel; existing aluminum and magnesium feed structural alloy. Reuse the Mineral
+  Conditioner, Arc Furnace, Alloy Smelter, Metal Press and Precision Finisher.
+- [x] Add stainless fittings, ceramic-lined vessels, finished valves, lightweight
+  frames and panels with alternate chemical equipment, pipe/tank, rocket casing,
+  Zeppelin and Howitzer recipes. Preserve all original construction routes.
+- [x] Add alloy material/storage forms, component art and the Stainless and
+  Structural Alloys Handbook/Encyclopedia chapter. See the combined integration record for current validation.
+- [x] Package 3: lead-acid buffering; spodumene/LiPF6/formulated-electrolyte/LFP cells;
+  mineral vanadyl-sulfate electrolyte; bounded paired flow tank modules and a separate
+  cell-stack rate upgrade. Reuse existing processors and preserve old battery recipes.
+- [x] Add local battery modes, charge priority, output limits and minimum-charge
+  reserves, shared transactional tick budgets, module status and battery guide pages.
+  Local implementation only; compatibility and playability remain unverified.
+- [x] Package 4: high-purity silicon, shared crystal pulling/slicing/polishing,
+  sulfuric/peroxide cleaning, Novolac-DNQ resist, TMAH development and HF etching.
+  One new Wet-processing Bench; reuse Conditioner, Bulk/compact Reactors,
+  Electrolytic Separator, Arc Furnace, Precision Finisher, Lithography and Assembler.
+- [x] Add reusable pattern tooling, advanced chips and useful speed/efficiency/card
+  assemblies. Existing circuits, recipes, machine slots and ports stay compatible;
+  Lithography appends one retained pattern slot. Compatibility is still unverified.
+- [x] Add server-authoritative local recipe priorities and stock targets to formed
+  machines, eight saved rules, card gating, reset and in-flight output accounting.
+  Add icons, connected bench geometry/animation and Handbook/Encyclopedia pages.
+- [ ] Package 4 follow-up after 1–7: old lithography saves, tool/slot isolation,
+  blocked reagent/waste handling, multi-lane targets, priority/lock interaction,
+  card removal/reload, two-player controls and UI/visual playtest. Remote warehouse
+  controls and silane/deposition remain later; spent-wafer water recovery is locally implemented in 6.
+- [x] Package 5: phosphate grinding, dissolution, slurry filtration and industrial
+  phosphoric acid; reuse Pulverizer, Dissolution Chamber, Filter Press, Conditioner,
+  Bulk/compact Reactors and Industrial Oven. No new machines.
+- [x] Add crop-group nitrogen and triple-superphosphate fertilizers, mixed-farm blend,
+  compost/digestate carriers, typed sprinkler loads and existing hydroponic nutrient
+  and battery precursor consumers. Preserve ordinary fertilizer and compost routes.
+- [x] Add paid gypsum-residue preparation, plaster/plasterboard with slabs/stairs,
+  native icons and Handbook/Encyclopedia integration. Implementation only, unverified.
+- [ ] Package 5 follow-up after 1–7: tag membership and farm balance, tall-crop
+  deduplication, protection boundaries, typed/legacy sprinkler saves, hopper and
+  companion insertion, unload/drop duplication, blocked outputs and gypsum recovery.
+- [x] Package 6: separate primary cobaltite ore, survey discovery, shared mineral
+  preparation and reusable cobalt/ceramic catalyst; clean CO/H2 synthesis and
+  optional gas balancing in the existing Chemical Infuser. No new machines.
+- [x] Refine Synthetic Crude through the existing tower into standard fuel fractions;
+  retain existing finishing, vehicle/generator fuel IDs and upstream cleaning routes.
+- [x] Treat wafer mixture, recover process water and stabilize its concentrate using
+  Conditioner/Distillation Station; explicit clay/lye/calcite inputs and construction
+  consumer. Add native resources, owner cobalt art and Handbook/Encyclopedia pages.
+- [ ] Package 6 follow-up after 1–7: cobalt terrain/startup, tool retention, output
+  backpressure and Infuser water drain, refinery balances, waste recovery specificity,
+  complete upgraded energy/material economy, saves and owner-led visual playtest.
+- [x] Package 7: reuse the Cryogenic Liquefier with retained methane and advanced
+  hydrogen cooling modules; keep the original untooled LOX recipe. Reuse the
+  Distillation Station for powered, volume-matched gas recovery. No new processors.
+- [x] Add shared 32/64-bucket insulated tank variants with centered connectors and
+  retained fluid drops; preserve existing tanks and avoid boil-off maintenance.
+- [x] Add hydrazine/N2O4 through the Bulk Reactor, residue recovery through the
+  Conditioner, sealed propellant ingredients through the compact Reactor, and four
+  loaded motor assemblies through the Rocket Workshop. Extend existing survey,
+  weather, delivery and line payload recipes while preserving ordinary motors.
+- [x] Add native item art, silver/olive tank models and Cryogenics and Rocket Fuels
+  Handbook/Encyclopedia guidance. All seven packages remain local; automated results are in the integration record.
+- [ ] Package 7 follow-up when authorized: old liquefier saves, tool insertion/removal
+  and hopper isolation, tier gating, energy/volume round trips, blocked outputs,
+  mixed-capacity tank groups, break/place/save preservation, motor substitutions,
+  incorrect propellant pairs, recipe-view/tool previews and owner-led visual review.
+- [x] Owner-authorized local compilation, full data/icon audits, shared recipe ledgers,
+  battery/automation/cooling regressions, and server tests with optional mods present
+  and absent. Focused client rendering and a separate 19-station showroom.
+- [ ] Manual survival progression, full factory economy, representative performance
+  and broader release cases in the feature checklists. Automated coverage does not
+  mark every manual scenario in those checklists complete.
+- [ ] Owner-led local review followed by two-player manual verification before release.
+- [x] Reconcile current main and overlapping draft proposals locally. Main
+  `2804ba015` is included; canonical chains and the separate deferred power-plant,
+  ruthenium and boron/solar drafts are listed in the integration record. No draft
+  was remotely merged, rewritten or closed as part of this local playtest work.
 
 ## Howitzer-Walker (owner request, 13 October 2026)
 
@@ -164,7 +429,7 @@ Owner-requested 7 October 2026. Independent briefs: [industrial chemistry and fu
 - [x] Record all eight A selections in the [eleventh polymer/electronics batch](features/industrial-chemistry-and-fuels-plan.md#polymer-and-advanced-electronics-decisions-eleventh-batch): later renewable ethylene, compatible ordinary PE/PVC products, clean same-grade offcut recycling, distinct high-purity silicon, shared precision cutting, reusable pattern plates, function-related module parts and one initial spent mixture. Planning only.
 - [ ] Specify renewable ethylene feed/byproduct/energy receipts, product compatibility tags, conserved product/offcut allocation and recycling losses; high-purity silicon preparation, cutting and pattern-tooling entry; module bills/caps; and spent-mixture composition/output handling and future recovery. Preserve independent startup and current consumer routes.
 - [x] Record all ten A selections in the [twelfth storage/fuel/cryogenic batch](features/industrial-chemistry-and-fuels-plan.md#grid-storage-synthetic-fuels-and-cryogenics-decisions-twelfth-batch): steel-era lead-acid, staged lithium electrolyte, mineral vanadium, attached paired flow modules, local priorities/reserves, reusable cobalt tooling, synthetic-crude refining, methane before hydrogen cooling, shared insulated tanks and hydrazine first. Planning only.
-- [ ] Specify lead/electrode entry and bank statistics; LiPF6 precursors/formulation and cell components; mineral vanadium refining and paired module/control accounting; cobalt supply/tooling; synthetic-crude yields/refining; cryogenic tiers/conversions/tank compatibility; and hydrazine/oxidizer/engine receipts before implementation. Preserve current reachable routes and audit complete energy/material costs.
+- [x] Implement cryogenic tiers/conversions, shared insulated tanks and hydrazine/oxidizer/motor recipes locally in [package 7](features/cryogenics-and-rocket-fuels.md). Cobalt supply/tooling and synthetic-crude refining are local in [package 6](features/synthetic-fuels-and-recovery.md); battery preparation/control is in [package 3](features/batteries-and-power-management.md). Full energy/material and compatibility validation remains deferred; this is not a tested-complete claim.
 - [x] Record **A, A, B, A, A, A, A, A** in the [thirteenth resource/reagent/residue batch](features/industrial-chemistry-and-fuels-plan.md#resource-reagent-and-residue-decisions-thirteenth-batch): galena, spodumene first, **separate primary cobalt ore (3 B)**, chromite concentrate, vanadium-bearing iron concentrates, electrochemical peroxide, novolac/DNQ and prepared gypsum-rich residue ingredients. Planning only.
 - [ ] Specify source identities where still unnamed, regional IDs/tags/discovery, galena/lithium/chromite refining, independent cobalt preparation, earlier non-sulfuric vanadium contact-bed preparation and later electrolyte refining. Preserve current feed/stock IDs and consumer entry; ordinary iron/nickel is not an unaccounted coproduct source.
   - Spodumene deposits implemented and visually accepted by the owner: [PR #351](https://github.com/jimbozoomer-byte/jugcraft/pull/351), branch `speedygroyper:codex/spodumene-deposits`; [scope, tests and combined mineral preview](features/spodumene-deposits.md). Expanded lithium refining remains separate.
@@ -195,16 +460,18 @@ Owner-requested 7 October 2026. Independent briefs: [industrial chemistry and fu
 - [ ] Implement ceramic powders -> blanks -> firing -> shared grinding/polishing where needed: clay foundation, porcelain-style insulators and alumina, then specialist zirconia; shared finishing also serves metals/optics and clay-based first steel casting remains reachable.
 - [ ] Develop selected **chromium/nickel stainless steel** for advanced chemical vessels/fittings/components and **aluminum-magnesium structural alloy** for frames/panels/vehicles on compatible shared alloy/forming equipment. Regional chromium-bearing ore deposits feed named chromite concentrate and shared refining; define regions, exact grades/ratios and independent producer receipts. Titanium alloys follow later.
 - [ ] Begin refining with compact functional stations and optional larger bulk plants. Larger chemical machines gain **higher throughput and lower energy per unit**; upgraded small machines remain useful for smaller production lines. Balance complete process chains and retain the separately selected substantial first Anaerobic Digester.
-- [ ] Develop general storage first, including requested lead-acid, later LiPF6 lithium-ion and major vanadium redox-flow chemistry; defer portable packs and specialty high-output banks.
+- [x] Locally implement general storage: lead-acid, expanded LiPF6 lithium cells and modular vanadium flow storage; preserve all earlier routes. See [package 3](features/batteries-and-power-management.md). **Unbuilt, untested and unmerged.** Portable packs and specialty high-output banks stay later.
+- [ ] After packages 1–7, validate all battery recipes, old saves, shared tick budgets, reserve/priority controls and module detach/unload/pickup accounting. Review lossless transfer compatibility and old/new recipe balance before release.
 - [ ] Map the requested Electrolytic Separator, Chemical Infuser, Chemical Oxidizer, Chemical Dissolution Chamber and Rotary Condensator roles onto existing shared systems; preserve current IDs and automatic gas-pipe pressure. Develop **both installed upgrade chips/modules and larger advanced physical versions**, with explicit compatible capabilities and independently reachable first controls.
 - [ ] Make sulfuric acid a central industrial supply with reachable sulfur oxidation/conversion/absorption and useful fertilizer/battery/mineral/petroleum consumers. Implement selected **ordinary, concentrated and electronic-grade supplies**, distinguishing concentration from purity and accounting for water/impurities/losses. Avoid first-acid catalyst dependency cycles.
-- [ ] Map the selected **shared reagent purification station** with specific electronic-grade sulfuric-acid and other demanding reagent recipes. Account for **water conditioning inside those recipes**, including water/energy/loss costs, without requiring a separate produced/stored purified-water fluid. Define earlier construction/controls and actual per-product capabilities; no self-output purifier gate or universal pure-fluid conversion.
+- [x] Locally map electronic-grade sulfuric purification to the existing Mineral Conditioner: paid water/acid conversion with accounted spent mixture, no new pure-water currency or self-output construction gate. See [package 4](features/advanced-electronics-and-automation.md). **Unbuilt and untested.** Additional electronic-grade reagents remain later.
 - [ ] Design **substantial underground fluorite deposits in snow biomes with occasional surface outcrops**, with eligible biome IDs/tags, abundance/depth, discovery and existing-world behavior explicitly reviewed. Add independently reachable fluorite CaF2 -> heated concentrated-sulfuric processing -> HF plus accounted calcium sulfate; define gas/aqueous recovery and compatible starter hardware before HF/PTFE exists.
   - Deposit/worldgen slice implemented and locally tested, including the owner's follow-up stone-outcrop improvement: [PR #343](https://github.com/jimbozoomer-byte/jugcraft/pull/343), branch `speedygroyper:codex/fluorite-deposits`; [scope, validation and inspection-world coordinates](features/fluorite-deposits.md). HF/PTFE processing remains separate.
 - [x] Local implementation: **snow-biome fluorite deposits and upper exposed veins**, explicit biome tags, depth/abundance defaults, Ore Survey support and new-chunks-only placement. Independent concentrated-acid/dissolution machines supply HF gas and accounted calcium sulfate; optional powered preparation makes gypsum construction binder. See [fluorochemistry](features/fluorochemistry-playtest.md). Owner terrain/balance playtest and publication remain; aqueous/electronic-grade HF belongs to the later wafer chain.
 - [ ] Add phosphate-rock wet/hydrometallurgical dissolution, slurry filtration and phosphoric-acid recovery, with triple-superphosphate fertilizer and advanced technology consumers. Add the selected optional paid gypsum-rich residue preparation into plaster/board ingredients, with explicit inputs/losses/energy/yields rather than raw-residue placement.
 - [ ] Extend nitric/ammonia chemistry for ammonium-nitrate fertilizer and compatible finished game ammunition/rocketry products; review owner-requested aged pine/maple finishes separately. Ammonium nitrate is built: a three-dose fertilizer and the filling of grenades and HE rockets ([ammonium nitrate](features/industrial-ammonium-nitrate.md)).
-- [ ] Define selected **named nitrogen/phosphate fertilizers, broad crop-group applications and optional mixed-farm blends**, including ammonium-nitrate/triple-superphosphate consumers. Balance group/tag membership, benefits, application/blend costs and feedback loops with agriculture; retain ordinary compost/fertilizer and optional farm specialization.
+- [x] Locally implement **named nitrogen/phosphate fertilizers, crop-group tags and mixed-farm blends**, with ammonium-nitrate/triple-superphosphate, compost and digestate inputs. Hand use and typed sprinkler loads retain optional farm specialization; ordinary compost/fertilizer remain available. See [package 5](features/phosphate-processing-and-fertilizers.md).
+- [ ] After 1–7, verify fertilizer crop groups, costs, benefits and agriculture feedback loops in survival and automated farms; implementation is not balance approval.
 - [ ] Connect HCl-assisted corn-starch hydrolysis to finished glucose syrup; acetic acid/vinegar to acetate monomers and PVAc adhesives/appropriate fibre applications; citrus/citric acid to preservation, sour candy and drinks; food-grade phosphoric acid to cola.
 - [ ] Plan acetylsalicylic-acid medicine with independently reachable precursors and defined game effects; keep pharmacy optional to industrial progression.
 - [ ] Implement the selected first advanced-chip core: **sulfuric/peroxide cleaner, TMAH developer and selective HF oxide etching**, with **novolac resin + DNQ photoactive additive -> one initial photoresist**, and a dedicated powered oxygen/water peroxide recipe on compatible shared electrochemical equipment. Connect separate shared wet-processing and lithography stations to wafer finishing/assembly; add silane/deposition later. Specify exact upstream precursors, formulation/developer compatibility, ancillary reagents/capabilities and earlier controls without self-output chip gates.

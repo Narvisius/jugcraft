@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:cavern_candy_cane"
+  ],
+  "result": {
+    "count": 2,
+    "id": "jugcraft:cavern_peppermint_powder"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

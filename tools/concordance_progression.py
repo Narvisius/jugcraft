@@ -292,7 +292,7 @@ def load_at_hand(data):
     #tag or a list of alternatives; Jugcraft's item and block tags; the ritual structures."""
     import json
     recipes = {}
-    for path in sorted((data / MOD / "recipe").glob("*.json")):
+    for path in sorted((data / MOD / "recipe").rglob("*.json")):
         recipe = json.loads(path.read_text(encoding="utf-8"))
         if recipe.get("type") not in RECIPE_TYPES:
             continue
@@ -307,12 +307,19 @@ def load_at_hand(data):
         else:
             ingredients = [recipe[key] for key in ("ingredient", "template", "base", "addition") if key in recipe]
         recipes.setdefault(result, []).append(ingredients)
+    from nouveau_progression import add_recipes
+    add_recipes(data, recipes)
     tags = {}
     for kind in ("item", "block"):
         folder = data / MOD / "tags" / kind
         for path in sorted(folder.rglob("*.json")):
             tag = f"{MOD}:" + path.relative_to(folder).with_suffix("").as_posix()
             tags[(kind, tag)] = json.loads(path.read_text(encoding="utf-8")).get("values", [])
+    for namespace in ("c","minecraft"):
+        for kind in ("item","block"):
+            folder=data/namespace/"tags"/kind
+            for path in folder.rglob("*.json"):
+                tags[(kind,namespace+":"+path.relative_to(folder).with_suffix("").as_posix())]=json.loads(path.read_text(encoding="utf-8")).get("values",[])
     def folder(name):
         return {path.stem: json.loads(path.read_text(encoding="utf-8"))
                 for path in sorted((data / MOD / "concordance" / name).glob("*.json"))}
@@ -379,6 +386,10 @@ class _Items:
                 self.nodes[key] = node("", kind="anyof")
                 self.nodes[key]["any"] = [[self.ingredient(choice)] for choice in ingredient]
             return key
+        if isinstance(ingredient, dict):
+            if "id" in ingredient: return self.ingredient(ingredient["id"])
+            if "item" in ingredient: return self.item(ingredient["item"])
+            if "tag" in ingredient: return self.tag(ingredient["tag"],"item")
         if ingredient.startswith("#"):
             return self.tag(ingredient[1:], "item")
         return self.item(ingredient)
@@ -387,7 +398,7 @@ class _Items:
         key = f"tag:{tag}" + (f"*{at_least}" if at_least > 1 else "")
         if key in self.nodes:
             return key
-        if not tag.startswith(f"{MOD}:"):
+        if not tag.startswith(f"{MOD}:") and (tag in VANILLA_TAGS or (kind, tag) not in self.at_hand["tags"]):
             source = VANILLA_TAGS.get(tag)
             if source is None:
                 self.problems.append(f"#{tag} is needed by a step but is not in VANILLA_TAGS")
@@ -401,7 +412,7 @@ class _Items:
             self.problems.append(f"#{tag} ({kind} tag) is needed by a step but does not exist")
             self.nodes[key]["all"] = ["missing:#" + tag]
             return key
-        self.nodes[key]["any"] = [[self.ingredient(member)] for member in members]
+        self.nodes[key]["any"] = [[self.ingredient(member)] for member in members if member != "jugcraft:nouveau_creative_spell_book"]
         return key
 
     def specimens(self, specimens, distinct=1):
@@ -835,3 +846,41 @@ def write_data(write, data):
         write(data / "concordance" / "practice" / f"{key}.json", practice_json(key))
     for key in MILESTONES:
         write(data / "concordance" / "practice" / f"{key}.json", milestone_json(key))
+
+# Supplied Nouveau branches use vanilla recipes and renewable encounter drops.
+VANILLA_SOURCES.update({
+ "minecraft:wheat":("renewable","wheat crops grown from grass seeds","",""),
+ "minecraft:iron_shovel":("craftable","iron and sticks","",""),
+ "minecraft:iron_pickaxe":("craftable","iron and sticks","",""),
+ "minecraft:iron_axe":("craftable","iron and sticks","",""),
+ "minecraft:quartz_block":("craftable","four quartz; bartered quartz renews it","",""),
+ "minecraft:nether_star":("renewable","summoned Withers; renewable wither skeleton skulls","","nether"),
+ "minecraft:fishing_rod":("craftable","sticks and string","",""),
+ "minecraft:stone_button":("craftable","smelted stone","",""),
+ "minecraft:shield":("craftable","planks and an iron ingot","",""),
+ "minecraft:diamond_sword":("craftable","diamonds and a stick; weaponsmiths also sell it","",""),
+ "minecraft:bow":("craftable","sticks and string","",""),
+ "minecraft:crossbow":("craftable","sticks, string, iron and a tripwire hook","",""),
+})
+VANILLA_TAGS.update({
+ "c:glass_blocks":("craftable","glass from smelted sand"),
+ "c:gems/lapis":("renewable","lapis from clerics"),
+ "c:dyes":("renewable","flowers, bone meal and farmed dye plants"),
+ "c:nuggets/gold":("renewable","zombified piglin drops"),
+ "c:obsidians":("renewable","lava over water; lava from dripstone cauldrons"),
+ "c:gems/diamond":("gathered","diamond ore; diamonds are also paid by Conclave commissions"),
+ "c:rods/blaze":("renewable","blaze rods from fortress blazes"),
+ "c:ender_pearls":("renewable","endermen and clerics"),
+ "c:gems/emerald":("renewable","villager trading"),
+ "c:stones":("renewable","cobblestone generators and smelting"),
+ "c:storage_blocks/gold":("craftable","nine renewable gold ingots"),
+ "c:leathers":("renewable","cows and hoglins"),
+ "c:seeds":("renewable","wheat seeds from grass and crops"),
+ "minecraft:arrows":("craftable","sticks, flint and feathers"),
+})
+JUGCRAFT_SOURCES.update({
+ **{"jugcraft:nouveau_"+color+"_archwood_log":("renewable","Archwood trees regrow from their saplings","","") for color in ("blue","red","green","purple")},
+ **{"jugcraft:nouveau_wilden_"+part:("renewable","Wilden creatures spawn naturally and drop trophies","","") for part in ("horn","wing","spike")}
+})
+
+VANILLA_SOURCES.update({"minecraft:lapis_block":("craftable","nine lapis lazuli","",""),"minecraft:emerald_block":("craftable","nine emeralds","",""),"minecraft:arrow":("craftable","flint, stick and feather","","")})

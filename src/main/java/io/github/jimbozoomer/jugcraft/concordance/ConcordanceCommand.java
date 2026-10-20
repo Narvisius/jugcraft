@@ -122,7 +122,7 @@ public final class ConcordanceCommand {
 	private static int status(CommandSourceStack source, ServerPlayer player) {
 		Knowledge knowledge = ConcordanceProgress.knowledge(player);
 		source.sendSuccess(() -> Component.translatable("message.jugcraft.concordance.focus",
-				ConcordanceProgress.currentFocus(player), FocusPool.MAX), false);
+				ConcordanceProgress.currentFocus(player), ConcordanceProgress.focus(player).capacity()), false);
 		// The Concordance Journal's research report: names and states in words, the exact figures after them.
 		Journal.research(player, (text, exact) -> source.sendSuccess(() -> exact == null ? text
 				: text.copy().append(" ").append(exact.copy().withStyle(ChatFormatting.GRAY)), false));

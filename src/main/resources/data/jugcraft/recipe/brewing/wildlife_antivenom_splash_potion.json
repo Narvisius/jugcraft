@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:brewing",
+  "input": {
+    "item": "minecraft:potion",
+    "potion_contents": {
+      "potions": "jugcraft:wildlife_antivenom"
+    }
+  },
+  "reagent": {
+    "item": "minecraft:gunpowder"
+  },
+  "output": {
+    "id": "minecraft:splash_potion",
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "jugcraft:wildlife_antivenom"
+      }
+    }
+  }
+}

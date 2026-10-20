@@ -64,6 +64,8 @@ public final class JugcraftClient implements ClientModInitializer {
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.StorageTanks.GATE_ENTITY, RailingGateRenderer::new);
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.StorageTanks.HATCH_ENTITY, StorageTankHatchRenderer::new);
 		MenuScreens.register(io.github.jimbozoomer.jugcraft.machine.form.JugcraftForms.MENU, FormMachineScreen::new);
+		MenuScreens.register(io.github.jimbozoomer.jugcraft.vehiclebay.VehicleBays.MENU, VehicleBayScreen::new);
+		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.vehiclebay.VehicleBays.ENTITY, VehicleBayRenderer::new);
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.machine.form.IndustrialForms.ENTITY, FormMachineRenderer::new);
 		MenuScreens.register(JugcraftAgriculture.COOKING_POT_MENU, CookingPotScreen::new);
 		MenuScreens.register(io.github.jimbozoomer.jugcraft.rocketry.JugcraftRocketry.ROCKET_PAD_MENU, RocketPadScreen::new);
@@ -185,6 +187,7 @@ public final class JugcraftClient implements ClientModInitializer {
 		PartyClient.register();
 		ConcordanceClient.register();
 		GunsClient.register();
+		JugcraftKeyBindings.register();
 		// The Jugcraft Encyclopedia: its key, its inventory button and its screen (Concordance Chunk A, A-04).
 		EncyclopediaClient.register();
 		ClientPlayNetworking.registerGlobalReceiver(SurveyPayload.TYPE,
@@ -314,6 +317,7 @@ public final class JugcraftClient implements ClientModInitializer {
 		EntityRendererRegistry.register(JugcraftAgriculture.FLYING_PUMPKIN, context -> new ThrownItemRenderer<>(context, 1.5F, false));
 		EntityRendererRegistry.register(JugcraftAgriculture.FLAMING_PUMPKIN, context -> new ThrownItemRenderer<>(context, 1.5F, true));
 		EntityRendererRegistry.register(JugcraftAgriculture.BOWLING_PUMPKIN, BowlingPumpkinRenderer::new);
+		EntityRendererRegistry.register(JugcraftAgriculture.DOOR_WREATH, DoorWreathRenderer::new);
 		EntityRendererRegistry.register(JugcraftAgriculture.TOILET_PAPER_ROLL, ThrownItemRenderer::new);
 		EntityRendererRegistry.register(JugcraftAgriculture.TOSS_RING, ThrownItemRenderer::new);
 		EntityRendererRegistry.register(JugcraftAgriculture.ROTTEN_TOMATO, ThrownItemRenderer::new);

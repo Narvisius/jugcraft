@@ -1,0 +1,289 @@
+{
+  "textureSize": [
+    64,
+    32
+  ],
+  "parts": [
+    {
+      "name": "RightArm",
+      "parent": "$mesh",
+      "pose": [
+        5.0,
+        20.0,
+        2.0,
+        -1.1798,
+        -0.4691,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -1.0,
+            -1.5,
+            2.0,
+            9.0,
+            3.0
+          ],
+          "uv": [
+            41.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "LeftLeg",
+      "parent": "$mesh",
+      "pose": [
+        -2.5,
+        20.0,
+        -5.0,
+        -0.9453,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            0.0,
+            -1.5,
+            3.0,
+            4.0,
+            3.0
+          ],
+          "uv": [
+            29.0,
+            13.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "LeftArm",
+      "parent": "$mesh",
+      "pose": [
+        -5.0,
+        20.0,
+        2.0,
+        -1.1798,
+        0.4691,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -1.0,
+            -1.5,
+            2.0,
+            9.0,
+            3.0
+          ],
+          "uv": [
+            41.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "RightLeg",
+      "parent": "$mesh",
+      "pose": [
+        2.5,
+        20.0,
+        -5.0,
+        -0.9453,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            0.0,
+            -1.5,
+            3.0,
+            4.0,
+            3.0
+          ],
+          "uv": [
+            29.0,
+            13.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "Body",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        20.0,
+        5.0,
+        -1.5708,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            0.0,
+            -4.5,
+            10.0,
+            10.0,
+            9.0
+          ],
+          "uv": [
+            0.0,
+            11.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "Head",
+      "parent": "Body",
+      "pose": [
+        0.0,
+        0.0,
+        4.5,
+        -0.2346,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -2.0,
+            -9.0,
+            10.0,
+            2.0,
+            9.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "RightEar",
+      "parent": "Head",
+      "pose": [
+        5.0,
+        0.0,
+        -1.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -4.0,
+            -1.0,
+            5.0,
+            4.0,
+            1.0
+          ],
+          "uv": [
+            29.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "LeftEar",
+      "parent": "Head",
+      "pose": [
+        -5.0,
+        0.0,
+        -1.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -4.0,
+            -1.0,
+            5.0,
+            4.0,
+            1.0
+          ],
+          "uv": [
+            29.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/superlord/goblinsanddungeons/client/model/SleepingGobloModel.java",
+  "sourceSha256": "4bfdfee3dc62a5865216c5dfc1474c80a9d9c3baa3c7010eac4850063b359692",
+  "animationRoot": "$mesh",
+  "headLook": "Head",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

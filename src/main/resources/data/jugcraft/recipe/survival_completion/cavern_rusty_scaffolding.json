@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "R R",
+    "R R"
+  ],
+  "key": {
+    "S": "minecraft:string",
+    "R": "jugcraft:cavern_rusty_rebar"
+  },
+  "result": {
+    "id": "jugcraft:cavern_rusty_scaffolding",
+    "count": 6
+  }
+}

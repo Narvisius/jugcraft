@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "name": "capsid",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:beast_capsid",
+          "modifier": [
+            {
+              "count": 1,
+              "type": "minecraft:set_count"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "jugcraft_source_beast_ender_residue",
+      "rolls": 1,
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.5
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:beast_ender_residue"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:sugar_cane",
+    "minecraft:wheat"
+  ],
+  "result": {
+    "id": "jugcraft:wildlife_cattail",
+    "count": 2
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

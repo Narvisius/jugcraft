@@ -1,0 +1,229 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "body",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -3.0,
+        -7.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -3.0,
+            0.0,
+            8.0,
+            6.0,
+            15.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "head",
+      "parent": "body",
+      "pose": [
+        0.0,
+        0.9,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.5,
+            -3.0,
+            -3.0,
+            7.0,
+            5.0,
+            3.0
+          ],
+          "uv": [
+            0.0,
+            22.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelTarantulaHawkBaby.java",
+  "sourceSha256": "78e12315e8c75e45beb79f2f84267dcda88821e3ecc8e85b7fae3a804419f610",
+  "animationRoot": "root",
+  "headLook": "head",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "head",
+      "kind": "walk",
+      "speed": 0.25,
+      "degree": 0.075,
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        1.0
+      ],
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "head",
+      "kind": "walk",
+      "speed": 1.0,
+      "degree": [
+        "*",
+        0.75,
+        0.1
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        1.0
+      ],
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [],
+  "expressions": [
+    {
+      "bone": "body",
+      "target": "xScale",
+      "op": "=",
+      "value": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "target": "yScale",
+      "op": "=",
+      "value": [
+        "-",
+        1.0,
+        [
+          "*",
+          [
+            "+",
+            [
+              "*",
+              [
+                "sin",
+                [
+                  "*",
+                  "walk",
+                  0.25
+                ]
+              ],
+              "move"
+            ],
+            "move"
+          ],
+          0.05
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "target": "zScale",
+      "op": "=",
+      "value": [
+        "+",
+        1.0,
+        [
+          "*",
+          [
+            "+",
+            [
+              "*",
+              [
+                "sin",
+                [
+                  "*",
+                  "walk",
+                  0.25
+                ]
+              ],
+              "move"
+            ],
+            "move"
+          ],
+          0.5
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "target": "z",
+      "op": "-=",
+      "value": [
+        "*",
+        [
+          "+",
+          [
+            "*",
+            [
+              "sin",
+              [
+                "*",
+                "walk",
+                0.25
+              ]
+            ],
+            "move"
+          ],
+          "move"
+        ],
+        4.0
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

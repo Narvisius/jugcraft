@@ -201,6 +201,12 @@ public final class PetroFluids {
 	public static Gas CHLORODIFLUOROMETHANE;
 	public static Gas TETRAFLUOROETHYLENE;
 
+	public static Entry OXYGENATED_PROCESS_WATER;
+	public static Entry HYDROGEN_PEROXIDE;
+	public static Entry ELECTRONIC_SULFURIC_ACID;
+	public static Entry TMAH_DEVELOPER;
+	public static Entry SEMICONDUCTOR_PHOTORESIST;
+	public static Entry SPENT_WAFER_MIXTURE;
 	public static void register() {
 
 		CRUDE_OIL = fluid("crude_oil", 20, 2, 2, 0xFF1E1711, MapColor.COLOR_BLACK);
@@ -271,6 +277,24 @@ public final class PetroFluids {
 		CHLORODIFLUOROMETHANE = gas("chlorodifluoromethane", 0xFF59708D);
 		TETRAFLUOROETHYLENE = gas("tetrafluoroethylene", 0xFF69808A);
 
+		OXYGENATED_PROCESS_WATER = fluid("oxygenated_process_water", 8, 3, 1, 0xFF4C6E77, MapColor.COLOR_LIGHT_GRAY);
+		HYDROGEN_PEROXIDE = fluid("hydrogen_peroxide", 8, 3, 1, 0xFF5C7B8B, MapColor.COLOR_LIGHT_GRAY);
+		ELECTRONIC_SULFURIC_ACID = fluid("electronic_sulfuric_acid", 8, 3, 1, 0xFF757B51, MapColor.COLOR_LIGHT_GRAY);
+		TMAH_DEVELOPER = fluid("tmah_developer", 8, 3, 1, 0xFF537763, MapColor.COLOR_LIGHT_GRAY);
+		SEMICONDUCTOR_PHOTORESIST = fluid("semiconductor_photoresist", 8, 3, 1, 0xFF7D4C2C, MapColor.COLOR_LIGHT_GRAY);
+		SPENT_WAFER_MIXTURE = fluid("spent_wafer_mixture", 8, 3, 1, 0xFF534E67, MapColor.COLOR_LIGHT_GRAY);
+
+		PHOSPHATE_SLURRY = fluid("phosphate_slurry", 8, 3, 1, 0xFF5B573E, MapColor.COLOR_LIGHT_GRAY);
+		PHOSPHORIC_ACID = fluid("phosphoric_acid", 8, 3, 1, 0xFF60786C, MapColor.COLOR_LIGHT_GRAY);
+
+		SYNTHETIC_CRUDE = fluid("synthetic_crude", 8, 3, 1, 0xFF423927, MapColor.COLOR_LIGHT_GRAY);
+		TREATED_PROCESS_WATER = fluid("treated_process_water", 8, 3, 1, 0xFF4C655F, MapColor.COLOR_LIGHT_GRAY);
+		RECOVERY_CONCENTRATE = fluid("recovery_concentrate", 8, 3, 1, 0xFF524656, MapColor.COLOR_LIGHT_GRAY);
+		LIQUID_METHANE = fluid("liquid_methane", 8, 3, 1, 0xFF48656D, MapColor.COLOR_LIGHT_GRAY);
+		LIQUID_HYDROGEN = fluid("liquid_hydrogen", 8, 3, 1, 0xFF51607C, MapColor.COLOR_LIGHT_GRAY);
+		HYDRAZINE = fluid("hydrazine", 8, 3, 1, 0xFF606749, MapColor.COLOR_LIGHT_GRAY);
+		DINITROGEN_TETROXIDE = fluid("dinitrogen_tetroxide", 8, 3, 1, 0xFF734830, MapColor.COLOR_LIGHT_GRAY);
+
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(output -> {
 			for (Entry entry : FLUIDS.values()) {
 				output.accept(entry.bucket());
@@ -278,6 +302,15 @@ public final class PetroFluids {
 		});
 	}
 
+	public static Entry LIQUID_METHANE;
+	public static Entry LIQUID_HYDROGEN;
+	public static Entry HYDRAZINE;
+	public static Entry DINITROGEN_TETROXIDE;
+	public static Entry SYNTHETIC_CRUDE;
+	public static Entry TREATED_PROCESS_WATER;
+	public static Entry RECOVERY_CONCENTRATE;
+	public static Entry PHOSPHATE_SLURRY;
+	public static Entry PHOSPHORIC_ACID;
 	public static Entry SEAWATER;
 	public static Entry MAGNESIUM_BRINE;
 	public static Entry MAGNESIUM_CHLORIDE_SOLUTION;
@@ -291,6 +324,12 @@ public final class PetroFluids {
 		Gas gas = new Gas(id, Registry.register(BuiltInRegistries.FLUID, Jugcraft.id(id), new GasFluid()), color);
 		GASES.put(id, gas);
 		return gas;
+	}
+
+	/** Register an additional native liquid through the same pump, pipe, bucket and gauge implementation. */
+	public static Entry registerOwnerLiquid(String id, int gauge) {
+		if (FLUIDS.containsKey(id)) throw new IllegalStateException("Duplicate liquid " + id);
+		return fluid(id, 5, 4, 1, gauge, MapColor.WATER);
 	}
 
 	private static Entry fluid(String id, int tickDelay, int slope, int dropOff, int gauge, MapColor color) {

@@ -1,0 +1,148 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "moss": "jugcraft:menagerie/landscape/block/glowing_moss_block",
+    "emissive": "jugcraft:menagerie/landscape/block/glowing_moss_block_emissive",
+    "particle": "#moss"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        -0.1
+      ],
+      "to": [
+        16,
+        16,
+        16.1
+      ],
+      "light_emission": 1,
+      "faces": {
+        "down": {
+          "texture": "#moss",
+          "cullface": "down",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#moss",
+          "cullface": "up",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "north": {
+          "texture": "#moss",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#moss",
+          "cullface": "south"
+        },
+        "west": {
+          "texture": "#moss",
+          "cullface": "west",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "east": {
+          "texture": "#moss",
+          "cullface": "east",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        -0.1,
+        -0.1,
+        0
+      ],
+      "to": [
+        16.1,
+        16.1,
+        16
+      ],
+      "light_emission": 8,
+      "faces": {
+        "down": {
+          "texture": "#emissive",
+          "cullface": "down",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#emissive",
+          "cullface": "up",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "north": {
+          "texture": "#emissive",
+          "cullface": "north",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#emissive",
+          "cullface": "south",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "west": {
+          "texture": "#emissive",
+          "cullface": "west",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "east": {
+          "texture": "#emissive",
+          "cullface": "east",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        }
+      }
+    }
+  ]
+}

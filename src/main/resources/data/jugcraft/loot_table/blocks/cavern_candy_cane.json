@@ -1,0 +1,98 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:alternatives",
+              "children": [
+                {
+                  "type": "minecraft:item",
+                  "name": "jugcraft:cavern_candy_cane",
+                  "modifier": [
+                    {
+                      "add": false,
+                      "count": 1.0,
+                      "type": "minecraft:set_count"
+                    }
+                  ],
+                  "condition": {
+                    "type": "minecraft:match_block",
+                    "blocks": "jugcraft:cavern_candy_cane",
+                    "state": {
+                      "amount": "1"
+                    }
+                  }
+                },
+                {
+                  "type": "minecraft:item",
+                  "name": "jugcraft:cavern_candy_cane",
+                  "modifier": [
+                    {
+                      "add": false,
+                      "count": 2.0,
+                      "type": "minecraft:set_count"
+                    }
+                  ],
+                  "condition": {
+                    "type": "minecraft:match_block",
+                    "blocks": "jugcraft:cavern_candy_cane",
+                    "state": {
+                      "amount": "2"
+                    }
+                  }
+                },
+                {
+                  "type": "minecraft:item",
+                  "name": "jugcraft:cavern_candy_cane",
+                  "modifier": [
+                    {
+                      "add": false,
+                      "count": 3.0,
+                      "type": "minecraft:set_count"
+                    }
+                  ],
+                  "condition": {
+                    "type": "minecraft:match_block",
+                    "blocks": "jugcraft:cavern_candy_cane",
+                    "state": {
+                      "amount": "3"
+                    }
+                  }
+                },
+                {
+                  "type": "minecraft:item",
+                  "name": "jugcraft:cavern_candy_cane",
+                  "modifier": [
+                    {
+                      "add": false,
+                      "count": 4.0,
+                      "type": "minecraft:set_count"
+                    }
+                  ],
+                  "condition": {
+                    "type": "minecraft:match_block",
+                    "blocks": "jugcraft:cavern_candy_cane",
+                    "state": {
+                      "amount": "4"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0,
+      "condition": {
+        "entity": "this",
+        "predicate": {},
+        "type": "minecraft:entity_properties"
+      }
+    }
+  ]
+}

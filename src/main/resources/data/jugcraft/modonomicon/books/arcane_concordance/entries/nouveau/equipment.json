@@ -1,0 +1,34 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:nouveau/equipment",
+  "category": "jugcraft:nouveau",
+  "x": 0,
+  "y": 3,
+  "name": "book.jugcraft.arcane_concordance.nouveau.equipment.name",
+  "description": "book.jugcraft.arcane_concordance.nouveau.equipment.description",
+  "icon": "jugcraft:nouveau_enchanters_sword",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/square_gray",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "id": "p0",
+      "title": "book.jugcraft.arcane_concordance.nouveau.equipment.p0.title",
+      "text": "book.jugcraft.arcane_concordance.nouveau.equipment.p0.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p1",
+      "title": "book.jugcraft.arcane_concordance.nouveau.equipment.p1.title",
+      "text": "book.jugcraft.arcane_concordance.nouveau.equipment.p1.text",
+      "show_title_separator": true
+    }
+  ]
+}

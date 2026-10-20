@@ -1,0 +1,53 @@
+{
+  "feature": "jugcraft:birch/landscape_flowers",
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 2
+    },
+    {
+      "type": "minecraft:count",
+      "count": 16
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "minecraft:offset",
+      "x": {
+        "type": "minecraft:trapezoid",
+        "plateau": 0,
+        "min": -8,
+        "max": 8
+      },
+      "y": {
+        "type": "minecraft:trapezoid",
+        "plateau": 0,
+        "min": -3,
+        "max": 3
+      },
+      "z": {
+        "type": "minecraft:trapezoid",
+        "plateau": 0,
+        "min": -8,
+        "max": 8
+      }
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:matching_blocks",
+        "blocks": [
+          "minecraft:air"
+        ]
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

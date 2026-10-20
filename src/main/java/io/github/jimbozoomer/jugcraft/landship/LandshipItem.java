@@ -36,6 +36,8 @@ public class LandshipItem extends Item {
 			}
 			return InteractionResult.FAIL;
 		}
+		landship.fitout = io.github.jimbozoomer.jugcraft.vehiclebay.VehicleFitout.read(context.getItemInHand());
+		landship.setFuel(io.github.jimbozoomer.jugcraft.vehiclebay.VehicleFitout.fuel(context.getItemInHand()));
 		level.addFreshEntity(landship);
 		if (player == null || !player.getAbilities().instabuild) {
 			context.getItemInHand().shrink(1);
@@ -46,6 +48,9 @@ public class LandshipItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip,
 			TooltipFlag flag) {
+		var fitout = io.github.jimbozoomer.jugcraft.vehiclebay.VehicleFitout.read(stack);
+		if (fitout.armor() != 0 || fitout.drive() != 0) tooltip.accept(Component.translatable("tooltip.jugcraft.bay.fitout",
+			Component.translatable("screen.jugcraft.bay.armor." + fitout.armor()), Component.translatable("screen.jugcraft.bay.drive." + fitout.drive())).withStyle(ChatFormatting.AQUA));
 		tooltip.accept(Component.translatable("tooltip.jugcraft.landship").withStyle(ChatFormatting.GRAY));
 	}
 }

@@ -1,0 +1,22 @@
+{
+	"display": {
+		"icon": {
+			"id": "inventorypets:pet_illuminati"
+		},
+		"title": {
+			"translate": "advancement.ip.petachieveIlluminati"
+		},
+		"description": {
+			"translate": "advancement.ip.petachieveIlluminati.desc"
+		},
+		"show_toast": true,
+		"announce_to_chat": true,
+		"frame": "challenge"
+	},
+	"parent": "inventorypets:illuminati",
+	"criteria": {
+		"example": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

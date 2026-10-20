@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "III",
+    "RER",
+    "ICI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone",
+    "E": "minecraft:emerald",
+    "C": "jugcraft:basic_circuit"
+  },
+  "result": {
+    "id": "jugcraft:atm",
+    "count": 1
+  }
+}

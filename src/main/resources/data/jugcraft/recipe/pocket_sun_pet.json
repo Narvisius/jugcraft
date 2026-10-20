@@ -1,0 +1,23 @@
+{
+  "result": {
+    "id": "jugcraft:pocket_pet_sun"
+  },
+  "pattern": [
+    "OFO",
+    "ODO",
+    "OGO"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "D": "minecraft:nether_star",
+    "F": "minecraft:gold_ingot",
+    "G": "minecraft:diamond",
+    "O": "minecraft:gold_ingot"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": "jugcraft:cavern_unrefined_waste",
+  "result": {
+    "id": "jugcraft:cavern_uranium_shard"
+  },
+  "experience": 1.0,
+  "cookingtime": 100,
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

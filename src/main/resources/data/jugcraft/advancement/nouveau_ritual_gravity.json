@@ -1,0 +1,31 @@
+{
+  "parent": "jugcraft:nouveau_ritual_brazier",
+  "criteria": {
+    "gravity_effect": {
+      "conditions": {
+        "effects": {
+          "jugcraft:nouveau_gravity": {}
+        }
+      },
+      "trigger": "minecraft:effects_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "jugcraft.nouveau_adv.desc.ritual_gravity"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "jugcraft:nouveau_ritual_gravity"
+    },
+    "title": {
+      "translate": "jugcraft.nouveau_adv.title.ritual_gravity"
+    }
+  },
+  "requirements": [
+    [
+      "gravity_effect"
+    ]
+  ]
+}

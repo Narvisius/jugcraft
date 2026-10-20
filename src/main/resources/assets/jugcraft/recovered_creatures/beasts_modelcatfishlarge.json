@@ -1,0 +1,729 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "body",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -8.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -10.0,
+            -7.0,
+            -14.0,
+            20.0,
+            15.0,
+            26.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_fin",
+      "parent": "body",
+      "pose": [
+        10.0,
+        5.0,
+        -5.0,
+        0.0,
+        0.0,
+        0.6981
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            -2.0,
+            5.0,
+            0.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_fin",
+      "parent": "body",
+      "pose": [
+        -10.0,
+        5.0,
+        -5.0,
+        0.0,
+        0.0,
+        -0.6981
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            0.0,
+            -2.0,
+            5.0,
+            0.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "dorsal_fin",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -7.0,
+        -5.0,
+        -0.0873,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -7.0,
+            0.0,
+            0.0,
+            7.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "tail",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -2.0,
+        13.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6.0,
+            -5.0,
+            -1.0,
+            12.0,
+            11.0,
+            20.0
+          ],
+          "uv": [
+            0.0,
+            41.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            0.0,
+            6.0,
+            -1.0,
+            0.0,
+            4.0,
+            16.0
+          ],
+          "uv": [
+            0.0,
+            56.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            0.0,
+            -7.0,
+            4.0,
+            0.0,
+            2.0,
+            5.0
+          ],
+          "uv": [
+            16.0,
+            18.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "head",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -5.0,
+        -15.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -9.5,
+            -2.0,
+            -7.0,
+            19.0,
+            13.0,
+            8.0
+          ],
+          "uv": [
+            56.0,
+            64.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "tail_fin",
+      "parent": "tail",
+      "pose": [
+        0.0,
+        0.0,
+        17.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -10.0,
+            -5.0,
+            0.0,
+            17.0,
+            23.0
+          ],
+          "uv": [
+            44.0,
+            18.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_BigWhisker",
+      "parent": "head",
+      "pose": [
+        9.5,
+        6.0,
+        -5.0,
+        0.0,
+        -0.4363,
+        0.2618
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            0.0,
+            15.0,
+            8.0,
+            0.0
+          ],
+          "uv": [
+            66.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_BigWhisker",
+      "parent": "head",
+      "pose": [
+        -9.5,
+        6.0,
+        -5.0,
+        0.0,
+        0.4363,
+        -0.2618
+      ],
+      "cubes": [
+        {
+          "box": [
+            -15.0,
+            0.0,
+            0.0,
+            15.0,
+            8.0,
+            0.0
+          ],
+          "uv": [
+            66.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_SmallWhisker",
+      "parent": "head",
+      "pose": [
+        9.5,
+        8.0,
+        -6.0,
+        0.0,
+        0.0436,
+        0.3054
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            0.0,
+            7.0,
+            6.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            15.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_SmallWhisker",
+      "parent": "head",
+      "pose": [
+        -9.5,
+        8.0,
+        -6.0,
+        0.0,
+        -0.0436,
+        -0.3054
+      ],
+      "cubes": [
+        {
+          "box": [
+            -7.0,
+            0.0,
+            0.0,
+            7.0,
+            6.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            15.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelCatfishLarge.java",
+  "sourceSha256": "b38687bf562669045362c22ad5b585c8a216cbbc9fd25417a4d40d0e00e314fe",
+  "animationRoot": "root",
+  "headLook": "head",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "head",
+      "kind": "swing",
+      "speed": 0.55,
+      "degree": [
+        "*",
+        0.75,
+        0.2
+      ],
+      "invert": true,
+      "phase": 2.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "left_fin",
+      "kind": "flap",
+      "speed": 0.55,
+      "degree": 0.75,
+      "invert": false,
+      "phase": 4.0,
+      "bias": [
+        "*",
+        -1,
+        0.6
+      ],
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "right_fin",
+      "kind": "flap",
+      "speed": 0.55,
+      "degree": 0.75,
+      "invert": true,
+      "phase": 4.0,
+      "bias": [
+        "*",
+        -1,
+        0.6
+      ],
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "kind": "bob",
+      "speed": 0.2,
+      "degree": 0.25,
+      "invert": false,
+      "phase": 0,
+      "bias": 0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "left_fin",
+      "kind": "flap",
+      "speed": 0.2,
+      "degree": 0.25,
+      "invert": false,
+      "phase": 4.0,
+      "bias": [
+        "*",
+        -1,
+        0.1
+      ],
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "right_fin",
+      "kind": "flap",
+      "speed": 0.2,
+      "degree": 0.25,
+      "invert": true,
+      "phase": 4.0,
+      "bias": [
+        "*",
+        -1,
+        0.1
+      ],
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "left_BigWhisker",
+      "kind": "swing",
+      "speed": 0.2,
+      "degree": 0.25,
+      "invert": false,
+      "phase": 2.0,
+      "bias": 0.1,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "right_BigWhisker",
+      "kind": "swing",
+      "speed": 0.2,
+      "degree": 0.25,
+      "invert": true,
+      "phase": 2.0,
+      "bias": 0.1,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "left_SmallWhisker",
+      "kind": "swing",
+      "speed": 0.2,
+      "degree": 0.25,
+      "invert": false,
+      "phase": 3.0,
+      "bias": 0.1,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "right_SmallWhisker",
+      "kind": "swing",
+      "speed": 0.2,
+      "degree": 0.25,
+      "invert": true,
+      "phase": 3.0,
+      "bias": 0.1,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "kind": "swing",
+      "speed": 0.55,
+      "degree": [
+        "*",
+        0.75,
+        0.9
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "*",
+          -1,
+          2.5
+        ],
+        0.0
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "tail",
+      "kind": "swing",
+      "speed": 0.55,
+      "degree": [
+        "*",
+        0.75,
+        0.9
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "*",
+          -1,
+          2.5
+        ],
+        0.5235987755982988
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "tail_fin",
+      "kind": "swing",
+      "speed": 0.55,
+      "degree": [
+        "*",
+        0.75,
+        0.9
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "*",
+          -1,
+          2.5
+        ],
+        1.0471975511965976
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "kind": "swing",
+      "speed": 0.2,
+      "degree": [
+        "*",
+        0.25,
+        0.1
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "*",
+          -1,
+          2.5
+        ],
+        0.0
+      ],
+      "bias": 0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "tail",
+      "kind": "swing",
+      "speed": 0.2,
+      "degree": [
+        "*",
+        0.25,
+        0.1
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "*",
+          -1,
+          2.5
+        ],
+        0.5235987755982988
+      ],
+      "bias": 0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "tail_fin",
+      "kind": "swing",
+      "speed": 0.2,
+      "degree": [
+        "*",
+        0.25,
+        0.1
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "*",
+          -1,
+          2.5
+        ],
+        1.0471975511965976
+      ],
+      "bias": 0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

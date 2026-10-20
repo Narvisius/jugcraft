@@ -1,0 +1,105 @@
+{
+  "textureSize": [
+    96,
+    64
+  ],
+  "parts": [
+    {
+      "name": "head",
+      "parent": "$mesh",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -8.0,
+            -4.0,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -4.0,
+            0.0,
+            -4.0,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            64.0,
+            0.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "overlay",
+      "parent": "head",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -8.0,
+            -4.0,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            32.0,
+            0.0
+          ],
+          "inflate": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "rotten/com/github/teamfusion/rottencreatures/client/level/blockentities/model/FrostbittenSkullModel.java",
+  "sourceSha256": "5fb31ecc39b553a64d569d6755c9462fda71e97bed40eae31f4fb2daaef1ef72",
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

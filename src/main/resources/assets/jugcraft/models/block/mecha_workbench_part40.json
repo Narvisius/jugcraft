@@ -1,0 +1,91 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "dp_gunmetal": "jugcraft:block/dp_gunmetal",
+    "dp_rubber": "jugcraft:block/dp_rubber",
+    "dr_amber": "jugcraft:block/dr_amber",
+    "dw_steel_plate": "jugcraft:block/dw_steel_plate",
+    "el_screen_cyan_on": "jugcraft:block/el_screen_cyan_on",
+    "particle": "jugcraft:block/dp_gunmetal"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        16,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_gunmetal"
+        },
+        "south": {
+          "texture": "#dp_gunmetal"
+        },
+        "east": {
+          "texture": "#dp_gunmetal"
+        },
+        "west": {
+          "texture": "#dp_gunmetal"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        0,
+        3
+      ],
+      "to": [
+        5,
+        16,
+        5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dw_steel_plate"
+        },
+        "south": {
+          "texture": "#dw_steel_plate"
+        },
+        "east": {
+          "texture": "#dw_steel_plate"
+        },
+        "west": {
+          "texture": "#dw_steel_plate"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        0,
+        3
+      ],
+      "to": [
+        10,
+        16,
+        4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dp_rubber"
+        },
+        "south": {
+          "texture": "#dp_rubber"
+        },
+        "east": {
+          "texture": "#dp_rubber"
+        },
+        "west": {
+          "texture": "#dp_rubber"
+        }
+      }
+    }
+  ]
+}

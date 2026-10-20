@@ -1,0 +1,132 @@
+{
+  "textureSize": [
+    32,
+    32
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "hook",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -4.0,
+        5.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.0,
+            -1.0,
+            2.0,
+            2.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r1",
+      "parent": "hook",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.7854
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -5.0,
+            -13.0,
+            0.0,
+            10.0,
+            14.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r2",
+      "parent": "hook",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.7854
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -5.0,
+            -13.0,
+            0.0,
+            10.0,
+            14.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/CandyCaneHookModel.java",
+  "sourceSha256": "e6a2969e91e7fcc0009f1430817b44be929262b6b7cf53cc6d85b61b579002cd",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "mossy_cobblestone",
+  "ingredients": [
+    "minecraft:cobblestone",
+    "jugcraft:landscape_willow_vine"
+  ],
+  "result": {
+    "id": "minecraft:mossy_cobblestone"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

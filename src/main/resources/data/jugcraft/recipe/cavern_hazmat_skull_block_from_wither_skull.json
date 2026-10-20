@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "HHH",
+    "HSH",
+    "HHH"
+  ],
+  "key": {
+    "H": "jugcraft:cavern_hazmat_block",
+    "S": "minecraft:wither_skeleton_skull"
+  },
+  "result": {
+    "count": 8,
+    "id": "jugcraft:cavern_hazmat_skull_block"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

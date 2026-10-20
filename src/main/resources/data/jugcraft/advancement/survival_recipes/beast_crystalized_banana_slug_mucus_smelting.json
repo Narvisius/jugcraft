@@ -1,0 +1,24 @@
+{
+  "criteria": {
+    "ingredient_0": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "jugcraft:beast_banana_slug_slime"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "ingredient_0"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "jugcraft:survival_completion/beast_crystalized_banana_slug_mucus_smelting"
+    ]
+  }
+}

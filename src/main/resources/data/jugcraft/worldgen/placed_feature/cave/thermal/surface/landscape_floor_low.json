@@ -1,0 +1,66 @@
+{
+  "feature": {
+    "type": "minecraft:vegetation_patch",
+    "depth": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 7,
+      "max_inclusive": 9
+    },
+    "extra_bottom_block_chance": 0.5,
+    "extra_edge_column_chance": 0.65,
+    "ground_state": {
+      "type": "minecraft:noise",
+      "noise": {
+        "base_octave": -5,
+        "octave_count": 6,
+        "amplitude_modifiers": [
+          1.2,
+          0.9,
+          1.1,
+          2.0,
+          0,
+          4.0
+        ],
+        "normalize": "legacy"
+      },
+      "scale": 1,
+      "seed": 111,
+      "states": [
+        "minecraft:granite",
+        "minecraft:diorite",
+        "minecraft:andesite",
+        "minecraft:deepslate",
+        "minecraft:deepslate",
+        "minecraft:deepslate",
+        "minecraft:tuff",
+        "minecraft:smooth_basalt",
+        "minecraft:blackstone",
+        "minecraft:blackstone",
+        "minecraft:blackstone",
+        "minecraft:blackstone",
+        "minecraft:blackstone",
+        "minecraft:blackstone",
+        "minecraft:blackstone"
+      ]
+    },
+    "replaceable": "#jugcraft:landscape_deepslate",
+    "surface": "floor",
+    "vegetation_chance": 0,
+    "vegetation_feature": "jugcraft:landscape_nothing",
+    "vertical_range": 5,
+    "xz_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 4,
+      "max_inclusive": 5
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:count_on_every_layer",
+      "count": 10
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

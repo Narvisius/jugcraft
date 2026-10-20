@@ -1,0 +1,44 @@
+{
+  "type": "minecraft:block_column",
+  "direction": "down",
+  "allowed_placement": {
+    "type": "minecraft:matching_blocks",
+    "offset": [
+      0,
+      1,
+      0
+    ],
+    "blocks": "#minecraft:substrate_overworld"
+  },
+  "prioritize_tip": false,
+  "layers": [
+    {
+      "height": 6,
+      "provider": {
+        "type": "minecraft:noise",
+        "noise": {
+          "base_octave": -8,
+          "octave_count": 8,
+          "amplitude_modifiers": [
+            1,
+            1,
+            2,
+            3,
+            0,
+            0,
+            2,
+            4
+          ],
+          "normalize": "legacy"
+        },
+        "scale": 1,
+        "seed": 0,
+        "states": [
+          "minecraft:stone",
+          "minecraft:stone",
+          "minecraft:andesite"
+        ]
+      }
+    }
+  ]
+}

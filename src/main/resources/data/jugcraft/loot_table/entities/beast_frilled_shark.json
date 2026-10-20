@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "name": "jugcraft_survival_serrated_shark_tooth",
+      "rolls": 1,
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.5
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:beast_serrated_shark_tooth"
+        }
+      ]
+    }
+  ]
+}

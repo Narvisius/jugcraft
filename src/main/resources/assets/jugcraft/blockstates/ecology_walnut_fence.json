@@ -1,0 +1,87 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "jugcraft:menagerie/ecology/block/walnut_fence_post"
+      }
+    },
+    {
+      "when": {
+        "north": "true"
+      },
+      "apply": {
+        "model": "jugcraft:menagerie/ecology/block/walnut_fence_side",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "south": "true"
+      },
+      "apply": {
+        "model": "jugcraft:menagerie/ecology/block/walnut_fence_side",
+        "y": 180,
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "jugcraft:menagerie/ecology/block/walnut_fence_side",
+        "y": 270,
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "east": "true"
+      },
+      "apply": {
+        "model": "jugcraft:menagerie/ecology/block/walnut_fence_side",
+        "y": 90,
+        "uvlock": true
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/ecology_walnut_fence",
+        "uvlock": true
+      },
+      "when": {
+        "north_east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/ecology_walnut_fence",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "south_east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/ecology_walnut_fence",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "south_west": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/ecology_walnut_fence",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "north_west": "true"
+      }
+    }
+  ]
+}

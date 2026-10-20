@@ -93,7 +93,8 @@ public enum Sign {
 			case MOVEMENT -> SHOVE;
 			case ILLUMINATION, DETECTION -> LIGHT;
 			case STATUS -> CHARM;
-			case INTERACTION, HARVESTING -> TOUCH;
+			case INTERACTION, HARVESTING, NOUVEAU_BLOCK -> TOUCH;
+            case NOUVEAU_CREATURE, NOUVEAU -> CHARM;
 			case ALTERATION -> UNMAKE;
 		};
 	}

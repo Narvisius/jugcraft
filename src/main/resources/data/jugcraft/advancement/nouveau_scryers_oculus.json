@@ -1,0 +1,32 @@
+{
+  "parent": "jugcraft:nouveau_enchanting_apparatus",
+  "criteria": {
+    "has_scryers_oculus": {
+      "conditions": {
+        "items": [
+          {
+            "items": "jugcraft:nouveau_scryers_oculus"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "jugcraft.nouveau_adv.desc.scryers_oculus"
+    },
+    "icon": {
+      "count": 1,
+      "id": "jugcraft:nouveau_scryers_oculus"
+    },
+    "title": {
+      "translate": "jugcraft.nouveau_adv.title.scryers_oculus"
+    }
+  },
+  "requirements": [
+    [
+      "has_scryers_oculus"
+    ]
+  ]
+}

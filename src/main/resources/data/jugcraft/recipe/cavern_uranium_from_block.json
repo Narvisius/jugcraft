@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:cavern_block_of_uranium"
+  ],
+  "result": {
+    "count": 9,
+    "id": "jugcraft:cavern_uranium"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "name": "jugcraft_source_beast_leafcutter_ant_pupa",
+      "rolls": 1,
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.25
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:beast_leafcutter_ant_pupa"
+        }
+      ]
+    }
+  ]
+}

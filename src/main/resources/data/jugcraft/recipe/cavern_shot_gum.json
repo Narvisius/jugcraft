@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SPP",
+    "III",
+    "IN "
+  ],
+  "key": {
+    "S": "jugcraft:cavern_sugar_glass",
+    "P": "jugcraft:cavern_gumball_pile",
+    "I": "minecraft:iron_ingot",
+    "N": "minecraft:iron_nugget"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:cavern_shot_gum"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

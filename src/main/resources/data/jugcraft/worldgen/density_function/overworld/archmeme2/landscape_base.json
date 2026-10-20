@@ -1,0 +1,86 @@
+{
+  "type": "minecraft:mul",
+  "left": {
+    "type": "minecraft:max",
+    "left": {
+      "type": "minecraft:add",
+      "left": {
+        "type": "minecraft:abs",
+        "input": {
+          "type": "minecraft:cache",
+          "input": {
+            "type": "minecraft:noise",
+            "noise": "jugcraft:math/arch/landscape_shape",
+            "xz_scale": 1.0,
+            "y_scale": 0.0
+          }
+        }
+      },
+      "right": {
+        "type": "minecraft:mul",
+        "left": {
+          "type": "minecraft:add",
+          "left": 0.05,
+          "right": {
+            "type": "minecraft:mul",
+            "left": "overworld/depth",
+            "right": 0.0275
+          }
+        },
+        "right": "jugcraft:overworld/arch/landscape_thickness"
+      }
+    },
+    "right": {
+      "type": "minecraft:cube",
+      "input": {
+        "type": "minecraft:add",
+        "left": {
+          "type": "minecraft:abs",
+          "input": {
+            "type": "minecraft:add",
+            "left": {
+              "type": "minecraft:add",
+              "left": "jugcraft:overworld/arch/landscape_height_spline",
+              "right": {
+                "type": "minecraft:mul",
+                "left": 9.0,
+                "right": {
+                  "type": "minecraft:noise",
+                  "noise": "jugcraft:math/arch/landscape_height",
+                  "xz_scale": 2.0,
+                  "y_scale": 0.25
+                }
+              }
+            },
+            "right": {
+              "type": "minecraft:add",
+              "left": {
+                "type": "minecraft:gradient",
+                "from_value": 6.5,
+                "to_value": -13.5,
+                "axis": "y",
+                "from_coordinate": -64,
+                "to_coordinate": 320
+              },
+              "right": {
+                "type": "minecraft:mul",
+                "left": "overworld/depth",
+                "right": 1e-05
+              }
+            }
+          }
+        },
+        "right": {
+          "type": "minecraft:add",
+          "left": -1.3,
+          "right": {
+            "type": "minecraft:mul",
+            "left": "overworld/depth",
+            "right": -0.4
+          }
+        }
+      }
+    }
+  },
+  "right": -1
+}

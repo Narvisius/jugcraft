@@ -105,3 +105,7 @@ Results are recorded under "Results" below after CI runs.
 - Seasons: see above.
 
 Tree roster batch 4b replaces Webwood birches and part of its vine-oak share with 15% bald cypress attempts on dry ground: willow 57%, dead tree 20%, vine oak 8%. Existing density and cobweb decoration remain unchanged. See [the implementation record](trees-batch-4bc.md).
+
+## Tree batches 8–8c update
+
+Tree batch 8 makes Gilded Shrubland 70% wattle bushes and 30% small wattle trees, replacing the oak bushes at the same 3–4 planting attempts/chunk. See [implementation and verification](trees-batch-8abc.md).

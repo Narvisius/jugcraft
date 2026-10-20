@@ -1,0 +1,31 @@
+{
+    "display": {
+        "icon": {
+            "id": "inventorypets:pet_dingot"
+        },
+        "title": {
+            "translate": "advancement.ip.petach_dingot"
+        },
+        "description": {
+            "translate": "advancement.ip.petach_dingot.desc"
+        },
+        "show_toast": true,
+        "announce_to_chat": true
+    },
+    "parent": "inventorypets:flyingsaddle",
+    "criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                        	"inventorypets:pet_dingot"
+                    	]
+                    }
+                    
+                ]
+            }
+        }
+    }
+}

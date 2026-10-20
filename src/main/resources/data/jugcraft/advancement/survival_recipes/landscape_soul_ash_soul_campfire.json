@@ -1,0 +1,35 @@
+{
+  "criteria": {
+    "ingredient_0": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:soul_campfire"
+          }
+        ]
+      }
+    },
+    "ingredient_1": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "jugcraft:landscape_ashed_soul_sand"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "ingredient_0",
+      "ingredient_1"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "jugcraft:survival_completion/landscape_soul_ash_soul_campfire"
+    ]
+  }
+}

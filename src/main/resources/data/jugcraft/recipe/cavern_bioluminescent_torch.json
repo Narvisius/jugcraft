@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "B",
+    "S"
+  ],
+  "key": {
+    "B": "jugcraft:cavern_bioluminesscence",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "count": 4,
+    "id": "jugcraft:cavern_bioluminescent_torch"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

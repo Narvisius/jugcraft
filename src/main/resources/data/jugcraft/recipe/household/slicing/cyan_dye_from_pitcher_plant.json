@@ -1,0 +1,17 @@
+{
+  "type": "jugcraft:cutting",
+  "ingredient": "minecraft:pitcher_plant",
+  "tool": "#jugcraft:knives",
+  "results": [
+    {
+      "count": 3,
+      "id": "minecraft:cyan_dye"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": "jugcraft:mutant_mutant_skeleton_arms",
+    "R": "jugcraft:mutant_mutant_skeleton_rib_cage"
+  },
+  "pattern": [
+    "A",
+    "R"
+  ],
+  "result": {
+    "id": "jugcraft:mutant_mutant_skeleton_chestplate"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

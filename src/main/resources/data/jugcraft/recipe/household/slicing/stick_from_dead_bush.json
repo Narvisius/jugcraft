@@ -1,0 +1,17 @@
+{
+  "type": "jugcraft:cutting",
+  "ingredient": "minecraft:dead_bush",
+  "tool": "#jugcraft:knives",
+  "results": [
+    {
+      "count": 2,
+      "id": "minecraft:stick"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

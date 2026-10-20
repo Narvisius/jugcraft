@@ -1,0 +1,51 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:ecology_spile"
+        }
+      ],
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "jugcraft:ecology_maple_sap_bucket",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:ecology_spile",
+                "state": {
+                  "fullness": "3"
+                }
+              }
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:bucket"
+            }
+          ]
+        }
+      ],
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "jugcraft:ecology_spile",
+        "state": {
+          "has_bucket": "true"
+        }
+      }
+    }
+  ]
+}

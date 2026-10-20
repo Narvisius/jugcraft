@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_basins": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#refurbished_furniture:wooden_basins"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_minecraft:light_blue_dye": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:light_blue_dye"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "refurbished_furniture:constructing/light_blue_basin"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_basins",
+      "has_minecraft:light_blue_dye"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "refurbished_furniture:constructing/light_blue_basin"
+    ]
+  }
+}

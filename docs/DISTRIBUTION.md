@@ -7,6 +7,27 @@ Jugcraft has two artifacts:
 
 Opening a website alone does not install software. Fabric dependency metadata checks requirements but does not download them. Jugcraft never downloads mods at game startup.
 
+Complete also supplies the approved [Traveler's Backpack progression and Back slot settings](features/travelers-backpack.md). Its `defaultconfigs/travelersbackpack-server.toml` seeds the missing global server config; an existing world's `serverconfig` override takes priority. Existing configs need an owner-managed settings merge. Standalone users installing Traveler's Backpack separately must copy the supplied configuration templates to receive the Complete balance settings.
+
+### Diorama map included by default
+
+From the October 18 Diorama pack update, every newly generated Complete pack installs
+[Diorama 0.1.1 for 26.3](https://modrinth.com/mod/diorama-map/version/kWas7LpC)
+from its official Modrinth download, with a pinned size, SHA-1 and SHA-512. It is
+required for the pack's client installation and excluded from server installation.
+Standalone Jugcraft still loads without it. The existing Fabric API dependency
+already satisfies Diorama's requirements; no additional platform upgrade is needed.
+
+Pack controls: **M** opens the map, **N** creates a waypoint, **U** opens the waypoint
+list, and **B** remains the Jugcraft encyclopedia. The new-waypoint default differs
+from upstream's B to avoid opening two screens with one key. Saved custom bindings
+are preserved; if Diorama was installed previously with B, change its New Waypoint
+binding to N in Controls (or reset that binding).
+
+Existing exported packs and already installed profiles are not changed retroactively.
+Import the new pack or explicitly update an existing profile. See the
+[integration and validation record](features/diorama-pack.md).
+
 ## Current delivery status
 
 The Build workflow produces a downloadable **jugcraft-installers** artifact containing the mod, the complete pack, a SHA-512 checksum, and standalone Modrinth dependency metadata. This is a build artifact, not an automatic Modrinth publication. There is no Modrinth project ID or publishing credential configured in this repository yet.

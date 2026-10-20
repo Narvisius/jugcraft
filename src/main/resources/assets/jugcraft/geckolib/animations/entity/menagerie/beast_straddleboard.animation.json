@@ -1,0 +1,23 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "idle": {
+      "loop": true,
+      "animation_length": 2,
+      "bones": {}
+    },
+    "drive": {
+      "loop": true,
+      "animation_length": 2,
+      "bones": {
+        "board": {
+          "rotation": [
+            0,
+            0,
+            "math.sin(query.anim_time * 180) * 3"
+          ]
+        }
+      }
+    }
+  }
+}

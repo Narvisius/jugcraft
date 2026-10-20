@@ -1,0 +1,21 @@
+{
+	"display": {
+		"icon": {
+			"id": "inventorypets:pet_cobblestone"
+		},
+		"title": {
+			"translate": "advancement.ip.petachievekill_cobble"
+		},
+		"description": {
+			"translate": "advancement.ip.petachievekill_cobble.desc"
+		},
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"parent": "inventorypets:dirt",
+	"criteria": {
+		"example": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

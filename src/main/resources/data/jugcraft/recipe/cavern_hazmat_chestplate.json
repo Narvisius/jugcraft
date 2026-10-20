@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "P P",
+    "PPP",
+    "PPP"
+  ],
+  "key": {
+    "P": "jugcraft:cavern_polymer_plate"
+  },
+  "result": {
+    "id": "jugcraft:cavern_hazmat_chestplate"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

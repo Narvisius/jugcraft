@@ -1,0 +1,62 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:wildlife_crab_meat",
+          "modifier": [
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1.0,
+                "max": 2.0
+              },
+              "type": "minecraft:set_count"
+            },
+            {
+              "type": "minecraft:furnace_smelt",
+              "condition": {
+                "entity": "this",
+                "predicate": {
+                  "minecraft:flags": {
+                    "is_on_fire": true
+                  }
+                },
+                "type": "minecraft:entity_properties"
+              }
+            },
+            {
+              "enchantment": "minecraft:looting",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 0.0,
+                "max": 1.0
+              },
+              "type": "minecraft:enchanted_count_increase"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:nautilus_shell",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 95
+        }
+      ]
+    }
+  ],
+  "random_sequence": "jugcraft:entities/wildlife_crab"
+}

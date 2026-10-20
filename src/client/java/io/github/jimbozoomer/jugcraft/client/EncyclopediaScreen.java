@@ -177,7 +177,7 @@ public class EncyclopediaScreen extends Screen {
     private String sectionIcon(Section section) {
         for (var row : section.rows()) if (!row.icons().isEmpty())
             return net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(row.icons().getFirst()).toString();
-        return switch (page()) { case "spellcraft" -> "jugcraft:initiate_wand"; case "expedition" -> "minecraft:bone"; case "keys" -> "minecraft:compass"; default -> "minecraft:book"; };
+        return switch (page()) { case "spellcraft" -> "jugcraft:initiate_wand"; case "expedition" -> "minecraft:bone"; case "keys" -> "minecraft:compass"; case "household" -> "jugcraft:household_workbench"; case "habitats" -> "minecraft:oak_sapling"; case "beasts" -> "jugcraft:beast_animal_dictionary"; case "caverns" -> "jugcraft:cavern_cave_book"; default -> "minecraft:book"; };
     }
 
 	/**
@@ -367,8 +367,7 @@ public class EncyclopediaScreen extends Screen {
 			body.setScrollAmount(body.scrollAmount() - body.getHeight() + ROW);
 		} else if (key == InputConstants.KEY_PAGEDOWN && body != null) {
 			body.setScrollAmount(body.scrollAmount() + body.getHeight() - ROW);
-		} else if (event.shortcutKey() == InputConstants.KEYCODE_R) {
-			// The letters as the keyboard's layout names them, as vanilla's own shortcuts are.
+		} else if (key == InputConstants.KEY_F6) {
 			EncyclopediaClient.request();
 		} else if (event.shortcutKey() == InputConstants.KEYCODE_X) {
 			toggleExact();

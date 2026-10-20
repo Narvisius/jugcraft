@@ -1,0 +1,61 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "jugcraft:cavern_mussel",
+              "condition": {
+                "predicate": {
+                  "predicates": {
+                    "minecraft:enchantments": [
+                      {
+                        "levels": {
+                          "min": 1
+                        },
+                        "enchantments": "minecraft:silk_touch"
+                      }
+                    ]
+                  }
+                },
+                "type": "minecraft:match_tool"
+              }
+            },
+            {
+              "type": "minecraft:alternatives",
+              "children": [
+                {
+                  "type": "minecraft:item",
+                  "name": "jugcraft:cavern_pearl",
+                  "condition": {
+                    "chances": [
+                      0.1,
+                      0.15,
+                      0.2,
+                      0.3
+                    ],
+                    "enchantment": "minecraft:fortune",
+                    "type": "minecraft:table_bonus"
+                  }
+                },
+                {
+                  "type": "minecraft:item",
+                  "name": "jugcraft:cavern_mussel"
+                }
+              ],
+              "condition": {
+                "type": "minecraft:survives_explosion"
+              }
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    }
+  ]
+}

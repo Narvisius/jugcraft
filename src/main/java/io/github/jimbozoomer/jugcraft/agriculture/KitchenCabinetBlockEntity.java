@@ -15,7 +15,7 @@ import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
@@ -26,7 +26,7 @@ import net.minecraft.world.level.storage.ValueOutput;
  * creak open and click shut); like a chest, it is re-checked when an opener walks away. Hoppers and pipes reach it like
  * a chest; breaking it spills what is inside.
  */
-public class KitchenCabinetBlockEntity extends BaseContainerBlockEntity {
+public class KitchenCabinetBlockEntity extends RandomizableContainerBlockEntity {
 	public static final int SLOTS = 27;
 
 	private NonNullList<ItemStack> items = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
@@ -43,7 +43,7 @@ public class KitchenCabinetBlockEntity extends BaseContainerBlockEntity {
 
 		@Override
 		protected void openerCountChanged(Level level, BlockPos pos, BlockState state, int before, int now) {
-			if (state.getBlock() instanceof KitchenCabinetBlock && state.getValue(KitchenCabinetBlock.OPEN) != now > 0) {
+			if (state.hasProperty(KitchenCabinetBlock.OPEN) && state.getValue(KitchenCabinetBlock.OPEN) != now > 0) {
 				level.setBlock(pos, state.setValue(KitchenCabinetBlock.OPEN, now > 0), Block.UPDATE_ALL);
 			}
 		}
@@ -85,7 +85,7 @@ public class KitchenCabinetBlockEntity extends BaseContainerBlockEntity {
 
 	@Override
 	protected Component getDefaultName() {
-		return Component.translatable("container.jugcraft.kitchen_cabinet");
+		return Component.translatable(getBlockState().getBlock().getDescriptionId());
 	}
 
 	@Override
@@ -112,12 +112,12 @@ public class KitchenCabinetBlockEntity extends BaseContainerBlockEntity {
 	protected void loadAdditional(ValueInput input) {
 		super.loadAdditional(input);
 		items = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
-		ContainerHelper.loadAllItems(input, items);
+        if (!tryLoadLootTable(input)) ContainerHelper.loadAllItems(input, items);
 	}
 
 	@Override
 	protected void saveAdditional(ValueOutput output) {
 		super.saveAdditional(output);
-		ContainerHelper.saveAllItems(output, items);
+        if (!trySaveLootTable(output)) ContainerHelper.saveAllItems(output, items);
 	}
 }

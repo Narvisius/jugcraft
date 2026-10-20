@@ -1,0 +1,65 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_minecraft:glowstone_dust": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:glowstone_dust"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_minecraft:iron_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:iron_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_minecraft:redstone": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:redstone"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_minecraft:spruce_planks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:spruce_planks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "refurbished_furniture:constructing/spruce_light_ceiling_fan"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_minecraft:iron_ingot",
+      "has_minecraft:spruce_planks",
+      "has_minecraft:redstone",
+      "has_minecraft:glowstone_dust"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "refurbished_furniture:constructing/spruce_light_ceiling_fan"
+    ]
+  }
+}

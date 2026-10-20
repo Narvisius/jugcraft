@@ -1,0 +1,2870 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "head",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        23.0,
+        -5.75,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -1.0,
+            -5.25,
+            8.0,
+            2.0,
+            5.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -8.0,
+            0.0,
+            -13.25,
+            16.0,
+            0.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            44.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "antennae",
+      "parent": "head",
+      "pose": [
+        4.0,
+        0.0,
+        -4.25,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            0.0,
+            -1.0,
+            21.0,
+            0.0,
+            30.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "antennae2",
+      "parent": "head",
+      "pose": [
+        -4.0,
+        0.0,
+        -4.25,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -19.0,
+            0.0,
+            -1.0,
+            21.0,
+            0.0,
+            30.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "segment",
+      "parent": "head",
+      "pose": [
+        0.0,
+        0.0,
+        -0.75,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -1.0,
+            0.5,
+            4.0,
+            2.0,
+            14.0
+          ],
+          "uv": [
+            58.0,
+            70.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rflipperFront",
+      "parent": "segment",
+      "pose": [
+        2.0,
+        0.0,
+        4.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            -3.0,
+            17.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            74.0,
+            68.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rflipperBack",
+      "parent": "segment",
+      "pose": [
+        2.0,
+        0.0,
+        11.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            -3.0,
+            17.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            68.0,
+            48.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lflipperFront",
+      "parent": "segment",
+      "pose": [
+        -2.0,
+        0.0,
+        4.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -17.0,
+            0.0,
+            -3.0,
+            17.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            68.0,
+            42.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lflipperBack",
+      "parent": "segment",
+      "pose": [
+        -2.0,
+        0.0,
+        11.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -17.0,
+            0.0,
+            -3.0,
+            17.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            66.0,
+            24.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "segment2",
+      "parent": "segment",
+      "pose": [
+        0.0,
+        0.0,
+        14.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -1.0,
+            0.5,
+            4.0,
+            2.0,
+            14.0
+          ],
+          "uv": [
+            58.0,
+            70.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rflipperFront2",
+      "parent": "segment2",
+      "pose": [
+        2.0,
+        0.0,
+        4.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            -3.0,
+            17.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            66.0,
+            18.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rflipperBack2",
+      "parent": "segment2",
+      "pose": [
+        2.0,
+        0.0,
+        11.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            -3.0,
+            17.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            66.0,
+            18.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lflipperFront2",
+      "parent": "segment2",
+      "pose": [
+        -2.0,
+        0.0,
+        4.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -17.0,
+            0.0,
+            -3.0,
+            17.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            66.0,
+            6.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lflipperBack2",
+      "parent": "segment2",
+      "pose": [
+        -2.0,
+        0.0,
+        11.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -17.0,
+            0.0,
+            -3.0,
+            17.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            66.0,
+            6.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "segment3",
+      "parent": "segment2",
+      "pose": [
+        0.0,
+        0.0,
+        14.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -1.0,
+            0.5,
+            4.0,
+            2.0,
+            14.0
+          ],
+          "uv": [
+            58.0,
+            70.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rflipperFront3",
+      "parent": "segment3",
+      "pose": [
+        2.0,
+        0.0,
+        4.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            -3.0,
+            17.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            66.0,
+            18.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rflipperBack3",
+      "parent": "segment3",
+      "pose": [
+        2.0,
+        0.0,
+        11.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            -3.0,
+            17.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            66.0,
+            18.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lflipperFront3",
+      "parent": "segment3",
+      "pose": [
+        -2.0,
+        0.0,
+        4.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -17.0,
+            0.0,
+            -3.0,
+            17.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            66.0,
+            6.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lflipperBack3",
+      "parent": "segment3",
+      "pose": [
+        -2.0,
+        0.0,
+        11.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -17.0,
+            0.0,
+            -3.0,
+            17.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            66.0,
+            6.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "segment4",
+      "parent": "segment3",
+      "pose": [
+        0.0,
+        0.0,
+        14.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -1.0,
+            0.5,
+            4.0,
+            2.0,
+            14.0
+          ],
+          "uv": [
+            58.0,
+            70.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rflipperFront4",
+      "parent": "segment4",
+      "pose": [
+        2.0,
+        0.0,
+        4.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            -3.0,
+            17.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            68.0,
+            48.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rflipperBack4",
+      "parent": "segment4",
+      "pose": [
+        2.0,
+        0.0,
+        11.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            -3.0,
+            17.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            68.0,
+            48.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lflipperFront4",
+      "parent": "segment4",
+      "pose": [
+        -2.0,
+        0.0,
+        4.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -17.0,
+            0.0,
+            -3.0,
+            17.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            66.0,
+            24.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lflipperBack4",
+      "parent": "segment4",
+      "pose": [
+        -2.0,
+        0.0,
+        11.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -17.0,
+            0.0,
+            -3.0,
+            17.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            66.0,
+            24.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "segment5",
+      "parent": "segment4",
+      "pose": [
+        0.0,
+        0.0,
+        14.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -0.5,
+            0.5,
+            2.0,
+            1.0,
+            14.0
+          ],
+          "uv": [
+            88.0,
+            86.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rflipperBack5",
+      "parent": "segment5",
+      "pose": [
+        1.0,
+        0.0,
+        11.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.25,
+            0.0,
+            -3.0,
+            16.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            74.0,
+            68.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lflipperBack5",
+      "parent": "segment5",
+      "pose": [
+        -1.0,
+        0.0,
+        11.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -15.75,
+            0.0,
+            -3.0,
+            16.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            69.0,
+            42.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rflipperFront5",
+      "parent": "segment5",
+      "pose": [
+        1.0,
+        0.0,
+        4.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.25,
+            0.0,
+            -3.0,
+            16.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            74.0,
+            68.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lflipperFront5",
+      "parent": "segment5",
+      "pose": [
+        -1.0,
+        0.0,
+        4.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -15.75,
+            0.0,
+            -3.0,
+            16.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            69.0,
+            42.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "segment6",
+      "parent": "segment5",
+      "pose": [
+        0.0,
+        0.0,
+        14.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -0.5,
+            0.5,
+            2.0,
+            1.0,
+            14.0
+          ],
+          "uv": [
+            88.0,
+            86.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rflipperBack6",
+      "parent": "segment6",
+      "pose": [
+        1.0,
+        0.0,
+        10.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.25,
+            0.0,
+            -1.5,
+            16.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            88.0,
+            80.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lflipperBack6",
+      "parent": "segment6",
+      "pose": [
+        -1.0,
+        0.0,
+        10.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -15.75,
+            0.0,
+            -1.5,
+            16.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            64.0,
+            86.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rflipperFront6",
+      "parent": "segment6",
+      "pose": [
+        1.0,
+        0.0,
+        3.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.25,
+            0.0,
+            -1.5,
+            16.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            32.0,
+            86.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lflipperFront6",
+      "parent": "segment6",
+      "pose": [
+        -1.0,
+        0.0,
+        3.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -15.75,
+            0.0,
+            -2.0,
+            16.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            84.0,
+            54.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "segment7",
+      "parent": "segment6",
+      "pose": [
+        0.0,
+        0.0,
+        14.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -0.5,
+            0.5,
+            2.0,
+            1.0,
+            14.0
+          ],
+          "uv": [
+            88.0,
+            86.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rflipperBack7",
+      "parent": "segment7",
+      "pose": [
+        1.0,
+        0.0,
+        10.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.25,
+            0.0,
+            -1.5,
+            16.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            84.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lflipperBack7",
+      "parent": "segment7",
+      "pose": [
+        -1.0,
+        0.0,
+        10.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -15.75,
+            0.0,
+            -1.5,
+            16.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            82.0,
+            36.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rflipperFront7",
+      "parent": "segment7",
+      "pose": [
+        1.0,
+        0.0,
+        3.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.25,
+            0.0,
+            -2.0,
+            16.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            82.0,
+            30.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lflipperFront7",
+      "parent": "segment7",
+      "pose": [
+        -1.0,
+        0.0,
+        3.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -15.75,
+            0.0,
+            -2.0,
+            16.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            74.0,
+            74.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "segment8",
+      "parent": "segment7",
+      "pose": [
+        0.0,
+        0.0,
+        14.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            0.0,
+            0.5,
+            10.0,
+            0.0,
+            14.0
+          ],
+          "uv": [
+            20.0,
+            30.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "segment9",
+      "parent": "segment8",
+      "pose": [
+        0.0,
+        0.0,
+        14.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            0.0,
+            0.5,
+            10.0,
+            0.0,
+            14.0
+          ],
+          "uv": [
+            0.0,
+            30.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/GossamerWormModel.java",
+  "sourceSha256": "231947ae4ca2f06aea4e69a8e5d3f08f5c7be1defb78b423fe48f409fd4601d5",
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "head",
+      "kind": "walk",
+      "speed": 0.1,
+      "degree": 0.15,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "segment",
+      "kind": "walk",
+      "speed": 0.1,
+      "degree": 0.15,
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "segment2",
+      "kind": "walk",
+      "speed": 0.1,
+      "degree": 0.05,
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "segment3",
+      "kind": "walk",
+      "speed": 0.1,
+      "degree": 0.05,
+      "invert": true,
+      "phase": 2.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "segment4",
+      "kind": "walk",
+      "speed": 0.1,
+      "degree": 0.05,
+      "invert": false,
+      "phase": 3.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "segment5",
+      "kind": "walk",
+      "speed": 0.1,
+      "degree": 0.05,
+      "invert": true,
+      "phase": 4.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "segment6",
+      "kind": "walk",
+      "speed": 0.1,
+      "degree": 0.05,
+      "invert": false,
+      "phase": 5.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "segment7",
+      "kind": "walk",
+      "speed": 0.1,
+      "degree": 0.05,
+      "invert": true,
+      "phase": 6.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "antennae",
+      "kind": "swing",
+      "speed": 0.1,
+      "degree": 0.15,
+      "invert": true,
+      "phase": 1.0,
+      "bias": [
+        "*",
+        -1,
+        0.1
+      ],
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "antennae2",
+      "kind": "swing",
+      "speed": 0.1,
+      "degree": 0.15,
+      "invert": false,
+      "phase": 1.0,
+      "bias": [
+        "*",
+        -1,
+        0.1
+      ],
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "segment",
+      "kind": "walk",
+      "speed": 0.8,
+      "degree": 0.05,
+      "invert": false,
+      "phase": 3.0,
+      "bias": 0.05,
+      "clock": "age",
+      "amount": [
+        "*",
+        "squish",
+        1
+      ],
+      "when": 1
+    },
+    {
+      "bone": "segment3",
+      "kind": "walk",
+      "speed": 0.8,
+      "degree": 0.15,
+      "invert": false,
+      "phase": 2.0,
+      "bias": 0.05,
+      "clock": "age",
+      "amount": [
+        "*",
+        "squish",
+        1
+      ],
+      "when": 1
+    },
+    {
+      "bone": "segment5",
+      "kind": "walk",
+      "speed": 0.8,
+      "degree": 0.05,
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.05,
+      "clock": "age",
+      "amount": [
+        "*",
+        "squish",
+        1
+      ],
+      "when": 1
+    },
+    {
+      "bone": "segment7",
+      "kind": "walk",
+      "speed": 0.8,
+      "degree": 0.05,
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.05,
+      "clock": "age",
+      "amount": [
+        "*",
+        "squish",
+        1
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperFront",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperFront",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperBack",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperBack",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperFront2",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 2.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperFront2",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 2.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperBack2",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 3.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperBack2",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 3.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperFront3",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 4.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperFront3",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 4.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperBack3",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 5.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperBack3",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 5.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperFront4",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 6.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperFront4",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 6.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperBack4",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 7.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperBack4",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 7.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperFront5",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 7.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperFront5",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 7.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperBack5",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 8.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperBack5",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 8.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperFront6",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 9.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperFront6",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 9.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperBack6",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 10.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperBack6",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 10.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperFront7",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 11.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperFront7",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 11.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperBack7",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 12.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperBack7",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": true,
+      "phase": 12.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperFront",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperFront",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperBack",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperBack",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperFront2",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 2.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperFront2",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 2.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperBack2",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 3.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperBack2",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 3.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperFront3",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 4.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperFront3",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 4.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperBack3",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 5.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperBack3",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 5.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperFront4",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 6.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperFront4",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 6.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperBack4",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 7.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperBack4",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 7.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperFront5",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 7.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperFront5",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 7.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperBack5",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 8.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperBack5",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 8.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperFront6",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 9.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperFront6",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 9.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperBack6",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 10.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperBack6",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 10.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperFront7",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 11.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperFront7",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 11.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rflipperBack7",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 12.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lflipperBack7",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 12.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "squish",
+          1
+        ]
+      ],
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:wildlife_blobfish",
+          "modifier": [
+            {
+              "type": "minecraft:furnace_smelt",
+              "condition": {
+                "entity": "this",
+                "predicate": {
+                  "minecraft:flags": {
+                    "is_on_fire": true
+                  }
+                },
+                "type": "minecraft:entity_properties"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "random_sequence": "jugcraft:entities/wildlife_blobfish"
+}

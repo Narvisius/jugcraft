@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  C",
+    " C ",
+    "B  "
+  ],
+  "key": {
+    "B": "jugcraft:cavern_heavy_bone",
+    "C": "jugcraft:cavern_cycad"
+  },
+  "result": {
+    "id": "jugcraft:cavern_primitive_club"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "x": "#c:nuggets/gold",
+    "y": "#c:gems/source"
+  },
+  "pattern": [
+    "   ",
+    "xyx",
+    " x "
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_magelight_torch"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "pools": [
+    {
+      "name": "bison_meat",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:beef",
+          "weight": 1,
+          "modifier": [
+            {
+              "count": {
+                "min": 6,
+                "max": 8,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            },
+            {
+              "count": {
+                "min": 0,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:enchanted_count_increase",
+              "enchantment": "minecraft:looting"
+            },
+            {
+              "type": "minecraft:furnace_smelt",
+              "condition": {
+                "predicate": {
+                  "flags": {
+                    "is_on_fire": true
+                  }
+                },
+                "entity": "this",
+                "type": "minecraft:entity_properties"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "bison",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:beast_bison_fur",
+          "weight": 1,
+          "modifier": [
+            {
+              "count": {
+                "min": 0,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            },
+            {
+              "count": {
+                "min": 0,
+                "max": 1,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:enchanted_count_increase",
+              "enchantment": "minecraft:looting"
+            },
+            {
+              "type": "minecraft:furnace_smelt",
+              "condition": {
+                "predicate": {
+                  "flags": {
+                    "is_on_fire": true
+                  }
+                },
+                "entity": "this",
+                "type": "minecraft:entity_properties"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "type": "minecraft:entity"
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "jugcraft:nouveau_poof_mob",
+  "criteria": {
+    "has_drygmy_charm": {
+      "conditions": {
+        "items": [
+          {
+            "items": "jugcraft:nouveau_drygmy_charm"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "jugcraft.nouveau_adv.desc.drygmy_charm"
+    },
+    "icon": {
+      "count": 1,
+      "id": "jugcraft:nouveau_drygmy_charm"
+    },
+    "title": {
+      "translate": "jugcraft.nouveau_adv.title.drygmy_charm"
+    }
+  },
+  "requirements": [
+    [
+      "has_drygmy_charm"
+    ]
+  ]
+}

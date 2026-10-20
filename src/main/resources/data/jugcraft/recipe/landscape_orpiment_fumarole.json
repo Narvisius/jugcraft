@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": "jugcraft:landscape_orpiment",
+    "F": "minecraft:fire_charge"
+  },
+  "pattern": [
+    " # ",
+    "#F#",
+    "###"
+  ],
+  "result": {
+    "id": "jugcraft:landscape_orpiment_fumarole"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

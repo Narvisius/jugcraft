@@ -1,0 +1,31 @@
+{
+    "display": {
+        "icon": {
+            "id": "inventorypets:pet_dirt"
+        },
+        "title": {
+            "translate": "advancement.ip.petach_dirt"
+        },
+        "description": {
+            "translate": "advancement.ip.petach_dirt.desc"
+        },
+        "show_toast": true,
+        "announce_to_chat": true
+    },
+    "parent": "inventorypets:cobblestone",
+    "criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                        	"inventorypets:pet_dirt"
+                    	]
+                    }
+                    
+                ]
+            }
+        }
+    }
+}

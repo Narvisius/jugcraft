@@ -1,0 +1,41 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:nouveau/nouveau_source_gem",
+  "category": "jugcraft:nouveau",
+  "x": 75,
+  "y": 45,
+  "name": "book.jugcraft.arcane_concordance.nouveau.nouveau_source_gem.name",
+  "description": "book.jugcraft.arcane_concordance.nouveau.nouveau_source_gem.description",
+  "icon": "jugcraft:nouveau_source_gem",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/square_gray",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "id": "p0",
+      "title": "book.jugcraft.arcane_concordance.nouveau.nouveau_source_gem.p0.title",
+      "text": "book.jugcraft.arcane_concordance.nouveau.nouveau_source_gem.p0.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p1",
+      "title": "book.jugcraft.arcane_concordance.nouveau.nouveau_source_gem.p1.title",
+      "text": "book.jugcraft.arcane_concordance.nouveau.nouveau_source_gem.p1.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p2",
+      "title1": "book.jugcraft.arcane_concordance.nouveau.nouveau_source_gem.p2.title",
+      "recipe_id_1": "jugcraft:nouveau/source_gem_block_2",
+      "text": "book.jugcraft.arcane_concordance.nouveau.nouveau_source_gem.p2.text"
+    }
+  ]
+}

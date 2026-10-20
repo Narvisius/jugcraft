@@ -1,0 +1,5465 @@
+{
+  "species": [
+    {
+      "source": "alligator",
+      "id": "wildlife_alligator",
+      "name": "Alligator",
+      "shape": "reptile",
+      "movement": "amphibious",
+      "habitat": "swamp",
+      "mood": "predator",
+      "width": 1.5,
+      "height": 0.7,
+      "health": 30,
+      "feed": "minecraft:cod",
+      "mount": false,
+      "model": "wildlife_alligator",
+      "variants": [
+        {
+          "name": "alligator",
+          "texture": "menagerie/wildlife/entity/alligator/alligator",
+          "babyTexture": "menagerie/wildlife/entity/alligator/alligator_baby",
+          "weight": 1,
+          "model": "wildlife/alligator/alligator_model",
+          "babyModel": "wildlife/alligator/alligator_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "anglerfish",
+      "id": "wildlife_anglerfish",
+      "name": "Anglerfish",
+      "shape": "fish",
+      "movement": "water",
+      "habitat": "ocean",
+      "mood": "passive",
+      "width": 0.5,
+      "height": 0.5,
+      "health": 6,
+      "feed": "minecraft:kelp",
+      "mount": false,
+      "model": "wildlife_anglerfish",
+      "variants": [
+        {
+          "name": "glow",
+          "texture": "menagerie/wildlife/entity/anglerfish/glow",
+          "babyTexture": "menagerie/wildlife/entity/anglerfish/glow",
+          "weight": 0,
+          "model": "wildlife/anglerfish/glow_model",
+          "babyModel": "wildlife/anglerfish/glow_babyModel"
+        },
+        {
+          "name": "red",
+          "texture": "menagerie/wildlife/entity/anglerfish/red",
+          "babyTexture": "menagerie/wildlife/entity/anglerfish/red",
+          "weight": 1,
+          "model": "wildlife/anglerfish/red_model",
+          "babyModel": "wildlife/anglerfish/red_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "ant",
+      "id": "wildlife_ant",
+      "name": "Ant",
+      "shape": "insect",
+      "movement": "land",
+      "habitat": "forest",
+      "mood": "passive",
+      "width": 0.25,
+      "height": 0.18,
+      "health": 4,
+      "feed": "minecraft:sugar",
+      "mount": false,
+      "model": "wildlife_ant",
+      "variants": [
+        {
+          "name": "ant",
+          "texture": "menagerie/wildlife/entity/ant",
+          "babyTexture": "menagerie/wildlife/entity/ant",
+          "weight": 1,
+          "model": "wildlife/ant/ant_model",
+          "babyModel": "wildlife/ant/ant_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "bass",
+      "id": "wildlife_bass",
+      "name": "Bass",
+      "shape": "fish",
+      "movement": "water",
+      "habitat": "river",
+      "mood": "passive",
+      "width": 0.55,
+      "height": 0.4,
+      "health": 6,
+      "feed": "minecraft:wheat_seeds",
+      "mount": false,
+      "model": "wildlife_bass",
+      "variants": [
+        {
+          "name": "bass",
+          "texture": "menagerie/wildlife/entity/bass",
+          "babyTexture": "menagerie/wildlife/entity/bass",
+          "weight": 10,
+          "model": "wildlife/bass/bass_model",
+          "babyModel": "wildlife/bass/bass_babyModel"
+        },
+        {
+          "name": "bass_large",
+          "texture": "menagerie/wildlife/entity/bass_large",
+          "babyTexture": "menagerie/wildlife/entity/bass_large",
+          "weight": 1,
+          "model": "wildlife/bass/bass_large_model",
+          "babyModel": "wildlife/bass/bass_large_babyModel"
+        },
+        {
+          "name": "bass_medium",
+          "texture": "menagerie/wildlife/entity/bass_medium",
+          "babyTexture": "menagerie/wildlife/entity/bass_medium",
+          "weight": 3,
+          "model": "wildlife/bass/bass_medium_model",
+          "babyModel": "wildlife/bass/bass_medium_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "bear",
+      "id": "wildlife_bear",
+      "name": "Bear",
+      "shape": "bear",
+      "movement": "land",
+      "habitat": "forest",
+      "mood": "neutral",
+      "width": 1.4,
+      "height": 1.5,
+      "health": 30,
+      "feed": "minecraft:honey_bottle",
+      "mount": false,
+      "model": "wildlife_bear",
+      "variants": [
+        {
+          "name": "bear",
+          "texture": "menagerie/wildlife/entity/bear/bear",
+          "babyTexture": "menagerie/wildlife/entity/bear/bear_baby",
+          "weight": 1,
+          "model": "wildlife/bear/bear_model",
+          "babyModel": "wildlife/bear/bear_babyModel"
+        },
+        {
+          "name": "dye_black",
+          "texture": "menagerie/wildlife/entity/bear/dye/black",
+          "babyTexture": "menagerie/wildlife/entity/bear/dye/black",
+          "weight": 0,
+          "model": "wildlife/bear/dye_black_model",
+          "babyModel": "wildlife/bear/dye_black_babyModel"
+        },
+        {
+          "name": "dye_blue",
+          "texture": "menagerie/wildlife/entity/bear/dye/blue",
+          "babyTexture": "menagerie/wildlife/entity/bear/dye/blue",
+          "weight": 0,
+          "model": "wildlife/bear/dye_blue_model",
+          "babyModel": "wildlife/bear/dye_blue_babyModel"
+        },
+        {
+          "name": "dye_brown",
+          "texture": "menagerie/wildlife/entity/bear/dye/brown",
+          "babyTexture": "menagerie/wildlife/entity/bear/dye/brown",
+          "weight": 0,
+          "model": "wildlife/bear/dye_brown_model",
+          "babyModel": "wildlife/bear/dye_brown_babyModel"
+        },
+        {
+          "name": "dye_cyan",
+          "texture": "menagerie/wildlife/entity/bear/dye/cyan",
+          "babyTexture": "menagerie/wildlife/entity/bear/dye/cyan",
+          "weight": 0,
+          "model": "wildlife/bear/dye_cyan_model",
+          "babyModel": "wildlife/bear/dye_cyan_babyModel"
+        },
+        {
+          "name": "dye_gray",
+          "texture": "menagerie/wildlife/entity/bear/dye/gray",
+          "babyTexture": "menagerie/wildlife/entity/bear/dye/gray",
+          "weight": 0,
+          "model": "wildlife/bear/dye_gray_model",
+          "babyModel": "wildlife/bear/dye_gray_babyModel"
+        },
+        {
+          "name": "dye_green",
+          "texture": "menagerie/wildlife/entity/bear/dye/green",
+          "babyTexture": "menagerie/wildlife/entity/bear/dye/green",
+          "weight": 0,
+          "model": "wildlife/bear/dye_green_model",
+          "babyModel": "wildlife/bear/dye_green_babyModel"
+        },
+        {
+          "name": "dye_light_blue",
+          "texture": "menagerie/wildlife/entity/bear/dye/light_blue",
+          "babyTexture": "menagerie/wildlife/entity/bear/dye/light_blue",
+          "weight": 0,
+          "model": "wildlife/bear/dye_light_blue_model",
+          "babyModel": "wildlife/bear/dye_light_blue_babyModel"
+        },
+        {
+          "name": "dye_light_gray",
+          "texture": "menagerie/wildlife/entity/bear/dye/light_gray",
+          "babyTexture": "menagerie/wildlife/entity/bear/dye/light_gray",
+          "weight": 0,
+          "model": "wildlife/bear/dye_light_gray_model",
+          "babyModel": "wildlife/bear/dye_light_gray_babyModel"
+        },
+        {
+          "name": "dye_lime",
+          "texture": "menagerie/wildlife/entity/bear/dye/lime",
+          "babyTexture": "menagerie/wildlife/entity/bear/dye/lime",
+          "weight": 0,
+          "model": "wildlife/bear/dye_lime_model",
+          "babyModel": "wildlife/bear/dye_lime_babyModel"
+        },
+        {
+          "name": "dye_magenta",
+          "texture": "menagerie/wildlife/entity/bear/dye/magenta",
+          "babyTexture": "menagerie/wildlife/entity/bear/dye/magenta",
+          "weight": 0,
+          "model": "wildlife/bear/dye_magenta_model",
+          "babyModel": "wildlife/bear/dye_magenta_babyModel"
+        },
+        {
+          "name": "dye_orange",
+          "texture": "menagerie/wildlife/entity/bear/dye/orange",
+          "babyTexture": "menagerie/wildlife/entity/bear/dye/orange",
+          "weight": 0,
+          "model": "wildlife/bear/dye_orange_model",
+          "babyModel": "wildlife/bear/dye_orange_babyModel"
+        },
+        {
+          "name": "dye_pink",
+          "texture": "menagerie/wildlife/entity/bear/dye/pink",
+          "babyTexture": "menagerie/wildlife/entity/bear/dye/pink",
+          "weight": 0,
+          "model": "wildlife/bear/dye_pink_model",
+          "babyModel": "wildlife/bear/dye_pink_babyModel"
+        },
+        {
+          "name": "dye_purple",
+          "texture": "menagerie/wildlife/entity/bear/dye/purple",
+          "babyTexture": "menagerie/wildlife/entity/bear/dye/purple",
+          "weight": 0,
+          "model": "wildlife/bear/dye_purple_model",
+          "babyModel": "wildlife/bear/dye_purple_babyModel"
+        },
+        {
+          "name": "dye_red",
+          "texture": "menagerie/wildlife/entity/bear/dye/red",
+          "babyTexture": "menagerie/wildlife/entity/bear/dye/red",
+          "weight": 0,
+          "model": "wildlife/bear/dye_red_model",
+          "babyModel": "wildlife/bear/dye_red_babyModel"
+        },
+        {
+          "name": "dye_white",
+          "texture": "menagerie/wildlife/entity/bear/dye/white",
+          "babyTexture": "menagerie/wildlife/entity/bear/dye/white",
+          "weight": 0,
+          "model": "wildlife/bear/dye_white_model",
+          "babyModel": "wildlife/bear/dye_white_babyModel"
+        },
+        {
+          "name": "dye_yellow",
+          "texture": "menagerie/wildlife/entity/bear/dye/yellow",
+          "babyTexture": "menagerie/wildlife/entity/bear/dye/yellow",
+          "weight": 0,
+          "model": "wildlife/bear/dye_yellow_model",
+          "babyModel": "wildlife/bear/dye_yellow_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "bird",
+      "id": "wildlife_bird",
+      "name": "Bird",
+      "shape": "bird",
+      "movement": "air",
+      "habitat": "forest",
+      "mood": "passive",
+      "width": 0.35,
+      "height": 0.45,
+      "health": 6,
+      "feed": "minecraft:wheat_seeds",
+      "mount": false,
+      "model": "wildlife_bird",
+      "variants": [
+        {
+          "name": "american_robin",
+          "texture": "menagerie/wildlife/entity/bird/american_robin",
+          "babyTexture": "menagerie/wildlife/entity/bird/american_robin",
+          "weight": 3,
+          "model": "wildlife/bird/american_robin_model",
+          "babyModel": "wildlife/bird/american_robin_babyModel"
+        },
+        {
+          "name": "blue_jay",
+          "texture": "menagerie/wildlife/entity/bird/blue_jay",
+          "babyTexture": "menagerie/wildlife/entity/bird/blue_jay",
+          "weight": 3,
+          "model": "wildlife/bird/blue_jay_model",
+          "babyModel": "wildlife/bird/blue_jay_babyModel"
+        },
+        {
+          "name": "carolina_chickadee",
+          "texture": "menagerie/wildlife/entity/bird/carolina_chickadee",
+          "babyTexture": "menagerie/wildlife/entity/bird/carolina_chickadee",
+          "weight": 1,
+          "model": "wildlife/bird/carolina_chickadee_model",
+          "babyModel": "wildlife/bird/carolina_chickadee_babyModel"
+        },
+        {
+          "name": "northern_cardinal",
+          "texture": "menagerie/wildlife/entity/bird/northern_cardinal",
+          "babyTexture": "menagerie/wildlife/entity/bird/northern_cardinal",
+          "weight": 3,
+          "model": "wildlife/bird/northern_cardinal_model",
+          "babyModel": "wildlife/bird/northern_cardinal_babyModel"
+        },
+        {
+          "name": "red_winged_blackbird",
+          "texture": "menagerie/wildlife/entity/bird/red_winged_blackbird",
+          "babyTexture": "menagerie/wildlife/entity/bird/red_winged_blackbird",
+          "weight": 3,
+          "model": "wildlife/bird/red_winged_blackbird_model",
+          "babyModel": "wildlife/bird/red_winged_blackbird_babyModel"
+        },
+        {
+          "name": "stellers_jay",
+          "texture": "menagerie/wildlife/entity/bird/stellers_jay",
+          "babyTexture": "menagerie/wildlife/entity/bird/stellers_jay",
+          "weight": 1,
+          "model": "wildlife/bird/stellers_jay_model",
+          "babyModel": "wildlife/bird/stellers_jay_babyModel"
+        },
+        {
+          "name": "tufted_titmouse",
+          "texture": "menagerie/wildlife/entity/bird/tufted_titmouse",
+          "babyTexture": "menagerie/wildlife/entity/bird/tufted_titmouse",
+          "weight": 1,
+          "model": "wildlife/bird/tufted_titmouse_model",
+          "babyModel": "wildlife/bird/tufted_titmouse_babyModel"
+        },
+        {
+          "name": "white_throated_sparrow",
+          "texture": "menagerie/wildlife/entity/bird/white_throated_sparrow",
+          "babyTexture": "menagerie/wildlife/entity/bird/white_throated_sparrow",
+          "weight": 1,
+          "model": "wildlife/bird/white_throated_sparrow_model",
+          "babyModel": "wildlife/bird/white_throated_sparrow_babyModel"
+        },
+        {
+          "name": "dye_black",
+          "texture": "menagerie/wildlife/entity/bird/dye/black",
+          "babyTexture": "menagerie/wildlife/entity/bird/dye/black",
+          "weight": 0,
+          "model": "wildlife/bird/dye_black_model",
+          "babyModel": "wildlife/bird/dye_black_babyModel"
+        },
+        {
+          "name": "dye_blue",
+          "texture": "menagerie/wildlife/entity/bird/dye/blue",
+          "babyTexture": "menagerie/wildlife/entity/bird/dye/blue",
+          "weight": 0,
+          "model": "wildlife/bird/dye_blue_model",
+          "babyModel": "wildlife/bird/dye_blue_babyModel"
+        },
+        {
+          "name": "dye_brown",
+          "texture": "menagerie/wildlife/entity/bird/dye/brown",
+          "babyTexture": "menagerie/wildlife/entity/bird/dye/brown",
+          "weight": 0,
+          "model": "wildlife/bird/dye_brown_model",
+          "babyModel": "wildlife/bird/dye_brown_babyModel"
+        },
+        {
+          "name": "dye_cyan",
+          "texture": "menagerie/wildlife/entity/bird/dye/cyan",
+          "babyTexture": "menagerie/wildlife/entity/bird/dye/cyan",
+          "weight": 0,
+          "model": "wildlife/bird/dye_cyan_model",
+          "babyModel": "wildlife/bird/dye_cyan_babyModel"
+        },
+        {
+          "name": "dye_gray",
+          "texture": "menagerie/wildlife/entity/bird/dye/gray",
+          "babyTexture": "menagerie/wildlife/entity/bird/dye/gray",
+          "weight": 0,
+          "model": "wildlife/bird/dye_gray_model",
+          "babyModel": "wildlife/bird/dye_gray_babyModel"
+        },
+        {
+          "name": "dye_green",
+          "texture": "menagerie/wildlife/entity/bird/dye/green",
+          "babyTexture": "menagerie/wildlife/entity/bird/dye/green",
+          "weight": 0,
+          "model": "wildlife/bird/dye_green_model",
+          "babyModel": "wildlife/bird/dye_green_babyModel"
+        },
+        {
+          "name": "dye_light_blue",
+          "texture": "menagerie/wildlife/entity/bird/dye/light_blue",
+          "babyTexture": "menagerie/wildlife/entity/bird/dye/light_blue",
+          "weight": 0,
+          "model": "wildlife/bird/dye_light_blue_model",
+          "babyModel": "wildlife/bird/dye_light_blue_babyModel"
+        },
+        {
+          "name": "dye_light_gray",
+          "texture": "menagerie/wildlife/entity/bird/dye/light_gray",
+          "babyTexture": "menagerie/wildlife/entity/bird/dye/light_gray",
+          "weight": 0,
+          "model": "wildlife/bird/dye_light_gray_model",
+          "babyModel": "wildlife/bird/dye_light_gray_babyModel"
+        },
+        {
+          "name": "dye_lime",
+          "texture": "menagerie/wildlife/entity/bird/dye/lime",
+          "babyTexture": "menagerie/wildlife/entity/bird/dye/lime",
+          "weight": 0,
+          "model": "wildlife/bird/dye_lime_model",
+          "babyModel": "wildlife/bird/dye_lime_babyModel"
+        },
+        {
+          "name": "dye_magenta",
+          "texture": "menagerie/wildlife/entity/bird/dye/magenta",
+          "babyTexture": "menagerie/wildlife/entity/bird/dye/magenta",
+          "weight": 0,
+          "model": "wildlife/bird/dye_magenta_model",
+          "babyModel": "wildlife/bird/dye_magenta_babyModel"
+        },
+        {
+          "name": "dye_orange",
+          "texture": "menagerie/wildlife/entity/bird/dye/orange",
+          "babyTexture": "menagerie/wildlife/entity/bird/dye/orange",
+          "weight": 0,
+          "model": "wildlife/bird/dye_orange_model",
+          "babyModel": "wildlife/bird/dye_orange_babyModel"
+        },
+        {
+          "name": "dye_pink",
+          "texture": "menagerie/wildlife/entity/bird/dye/pink",
+          "babyTexture": "menagerie/wildlife/entity/bird/dye/pink",
+          "weight": 0,
+          "model": "wildlife/bird/dye_pink_model",
+          "babyModel": "wildlife/bird/dye_pink_babyModel"
+        },
+        {
+          "name": "dye_purple",
+          "texture": "menagerie/wildlife/entity/bird/dye/purple",
+          "babyTexture": "menagerie/wildlife/entity/bird/dye/purple",
+          "weight": 0,
+          "model": "wildlife/bird/dye_purple_model",
+          "babyModel": "wildlife/bird/dye_purple_babyModel"
+        },
+        {
+          "name": "dye_red",
+          "texture": "menagerie/wildlife/entity/bird/dye/red",
+          "babyTexture": "menagerie/wildlife/entity/bird/dye/red",
+          "weight": 0,
+          "model": "wildlife/bird/dye_red_model",
+          "babyModel": "wildlife/bird/dye_red_babyModel"
+        },
+        {
+          "name": "dye_white",
+          "texture": "menagerie/wildlife/entity/bird/dye/white",
+          "babyTexture": "menagerie/wildlife/entity/bird/dye/white",
+          "weight": 0,
+          "model": "wildlife/bird/dye_white_model",
+          "babyModel": "wildlife/bird/dye_white_babyModel"
+        },
+        {
+          "name": "dye_yellow",
+          "texture": "menagerie/wildlife/entity/bird/dye/yellow",
+          "babyTexture": "menagerie/wildlife/entity/bird/dye/yellow",
+          "weight": 0,
+          "model": "wildlife/bird/dye_yellow_model",
+          "babyModel": "wildlife/bird/dye_yellow_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "black_bear",
+      "id": "wildlife_black_bear",
+      "name": "Black Bear",
+      "shape": "bear",
+      "movement": "land",
+      "habitat": "forest",
+      "mood": "neutral",
+      "width": 1.3,
+      "height": 1.4,
+      "health": 28,
+      "feed": "minecraft:sweet_berries",
+      "mount": false,
+      "model": "wildlife_black_bear",
+      "variants": [
+        {
+          "name": "black_bear",
+          "texture": "menagerie/wildlife/entity/black_bear/black_bear",
+          "babyTexture": "menagerie/wildlife/entity/black_bear/black_bear_baby",
+          "weight": 1,
+          "model": "wildlife/black_bear/black_bear_model",
+          "babyModel": "wildlife/black_bear/black_bear_babyModel"
+        },
+        {
+          "name": "dye_black",
+          "texture": "menagerie/wildlife/entity/black_bear/dye/black",
+          "babyTexture": "menagerie/wildlife/entity/black_bear/dye/black",
+          "weight": 0,
+          "model": "wildlife/black_bear/dye_black_model",
+          "babyModel": "wildlife/black_bear/dye_black_babyModel"
+        },
+        {
+          "name": "dye_blue",
+          "texture": "menagerie/wildlife/entity/black_bear/dye/blue",
+          "babyTexture": "menagerie/wildlife/entity/black_bear/dye/blue",
+          "weight": 0,
+          "model": "wildlife/black_bear/dye_blue_model",
+          "babyModel": "wildlife/black_bear/dye_blue_babyModel"
+        },
+        {
+          "name": "dye_brown",
+          "texture": "menagerie/wildlife/entity/black_bear/dye/brown",
+          "babyTexture": "menagerie/wildlife/entity/black_bear/dye/brown",
+          "weight": 0,
+          "model": "wildlife/black_bear/dye_brown_model",
+          "babyModel": "wildlife/black_bear/dye_brown_babyModel"
+        },
+        {
+          "name": "dye_cyan",
+          "texture": "menagerie/wildlife/entity/black_bear/dye/cyan",
+          "babyTexture": "menagerie/wildlife/entity/black_bear/dye/cyan",
+          "weight": 0,
+          "model": "wildlife/black_bear/dye_cyan_model",
+          "babyModel": "wildlife/black_bear/dye_cyan_babyModel"
+        },
+        {
+          "name": "dye_gray",
+          "texture": "menagerie/wildlife/entity/black_bear/dye/gray",
+          "babyTexture": "menagerie/wildlife/entity/black_bear/dye/gray",
+          "weight": 0,
+          "model": "wildlife/black_bear/dye_gray_model",
+          "babyModel": "wildlife/black_bear/dye_gray_babyModel"
+        },
+        {
+          "name": "dye_green",
+          "texture": "menagerie/wildlife/entity/black_bear/dye/green",
+          "babyTexture": "menagerie/wildlife/entity/black_bear/dye/green",
+          "weight": 0,
+          "model": "wildlife/black_bear/dye_green_model",
+          "babyModel": "wildlife/black_bear/dye_green_babyModel"
+        },
+        {
+          "name": "dye_light_blue",
+          "texture": "menagerie/wildlife/entity/black_bear/dye/light_blue",
+          "babyTexture": "menagerie/wildlife/entity/black_bear/dye/light_blue",
+          "weight": 0,
+          "model": "wildlife/black_bear/dye_light_blue_model",
+          "babyModel": "wildlife/black_bear/dye_light_blue_babyModel"
+        },
+        {
+          "name": "dye_light_gray",
+          "texture": "menagerie/wildlife/entity/black_bear/dye/light_gray",
+          "babyTexture": "menagerie/wildlife/entity/black_bear/dye/light_gray",
+          "weight": 0,
+          "model": "wildlife/black_bear/dye_light_gray_model",
+          "babyModel": "wildlife/black_bear/dye_light_gray_babyModel"
+        },
+        {
+          "name": "dye_lime",
+          "texture": "menagerie/wildlife/entity/black_bear/dye/lime",
+          "babyTexture": "menagerie/wildlife/entity/black_bear/dye/lime",
+          "weight": 0,
+          "model": "wildlife/black_bear/dye_lime_model",
+          "babyModel": "wildlife/black_bear/dye_lime_babyModel"
+        },
+        {
+          "name": "dye_magenta",
+          "texture": "menagerie/wildlife/entity/black_bear/dye/magenta",
+          "babyTexture": "menagerie/wildlife/entity/black_bear/dye/magenta",
+          "weight": 0,
+          "model": "wildlife/black_bear/dye_magenta_model",
+          "babyModel": "wildlife/black_bear/dye_magenta_babyModel"
+        },
+        {
+          "name": "dye_orange",
+          "texture": "menagerie/wildlife/entity/black_bear/dye/orange",
+          "babyTexture": "menagerie/wildlife/entity/black_bear/dye/orange",
+          "weight": 0,
+          "model": "wildlife/black_bear/dye_orange_model",
+          "babyModel": "wildlife/black_bear/dye_orange_babyModel"
+        },
+        {
+          "name": "dye_pink",
+          "texture": "menagerie/wildlife/entity/black_bear/dye/pink",
+          "babyTexture": "menagerie/wildlife/entity/black_bear/dye/pink",
+          "weight": 0,
+          "model": "wildlife/black_bear/dye_pink_model",
+          "babyModel": "wildlife/black_bear/dye_pink_babyModel"
+        },
+        {
+          "name": "dye_purple",
+          "texture": "menagerie/wildlife/entity/black_bear/dye/purple",
+          "babyTexture": "menagerie/wildlife/entity/black_bear/dye/purple",
+          "weight": 0,
+          "model": "wildlife/black_bear/dye_purple_model",
+          "babyModel": "wildlife/black_bear/dye_purple_babyModel"
+        },
+        {
+          "name": "dye_red",
+          "texture": "menagerie/wildlife/entity/black_bear/dye/red",
+          "babyTexture": "menagerie/wildlife/entity/black_bear/dye/red",
+          "weight": 0,
+          "model": "wildlife/black_bear/dye_red_model",
+          "babyModel": "wildlife/black_bear/dye_red_babyModel"
+        },
+        {
+          "name": "dye_white",
+          "texture": "menagerie/wildlife/entity/black_bear/dye/white",
+          "babyTexture": "menagerie/wildlife/entity/black_bear/dye/white",
+          "weight": 0,
+          "model": "wildlife/black_bear/dye_white_model",
+          "babyModel": "wildlife/black_bear/dye_white_babyModel"
+        },
+        {
+          "name": "dye_yellow",
+          "texture": "menagerie/wildlife/entity/black_bear/dye/yellow",
+          "babyTexture": "menagerie/wildlife/entity/black_bear/dye/yellow",
+          "weight": 0,
+          "model": "wildlife/black_bear/dye_yellow_model",
+          "babyModel": "wildlife/black_bear/dye_yellow_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "blobfish",
+      "id": "wildlife_blobfish",
+      "name": "Blobfish",
+      "shape": "fish",
+      "movement": "water",
+      "habitat": "deep_ocean",
+      "mood": "passive",
+      "width": 0.65,
+      "height": 0.5,
+      "health": 8,
+      "feed": "minecraft:kelp",
+      "mount": false,
+      "model": "wildlife_blobfish",
+      "variants": [
+        {
+          "name": "blobfish",
+          "texture": "menagerie/wildlife/entity/blobfish/pink",
+          "babyTexture": "menagerie/wildlife/entity/blobfish/pink",
+          "weight": 1,
+          "model": "wildlife/blobfish/blobfish_model",
+          "babyModel": "wildlife/blobfish/blobfish_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "boar",
+      "id": "wildlife_boar",
+      "name": "Boar",
+      "shape": "boar",
+      "movement": "land",
+      "habitat": "forest",
+      "mood": "neutral",
+      "width": 0.9,
+      "height": 0.9,
+      "health": 16,
+      "feed": "minecraft:carrot",
+      "mount": false,
+      "model": "wildlife_boar",
+      "variants": [
+        {
+          "name": "boar",
+          "texture": "menagerie/wildlife/entity/boar",
+          "babyTexture": "menagerie/wildlife/entity/boar_baby",
+          "weight": 1,
+          "model": "wildlife/boar/boar_model",
+          "babyModel": "wildlife/boar/boar_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "butterfly",
+      "id": "wildlife_butterfly",
+      "name": "Butterfly",
+      "shape": "butterfly",
+      "movement": "air",
+      "habitat": "meadow",
+      "mood": "passive",
+      "width": 0.4,
+      "height": 0.35,
+      "health": 4,
+      "feed": "minecraft:dandelion",
+      "mount": false,
+      "model": "wildlife_butterfly",
+      "variants": [
+        {
+          "name": "blue_morpho",
+          "texture": "menagerie/wildlife/entity/butterfly/blue_morpho",
+          "babyTexture": "menagerie/wildlife/entity/butterfly/blue_morpho",
+          "weight": 1,
+          "model": "wildlife/butterfly/blue_morpho_model",
+          "babyModel": "wildlife/butterfly/blue_morpho_babyModel"
+        },
+        {
+          "name": "clouded_yellow",
+          "texture": "menagerie/wildlife/entity/butterfly/clouded_yellow",
+          "babyTexture": "menagerie/wildlife/entity/butterfly/clouded_yellow",
+          "weight": 1,
+          "model": "wildlife/butterfly/clouded_yellow_model",
+          "babyModel": "wildlife/butterfly/clouded_yellow_babyModel"
+        },
+        {
+          "name": "jade_green_swallowtail",
+          "texture": "menagerie/wildlife/entity/butterfly/jade_green_swallowtail",
+          "babyTexture": "menagerie/wildlife/entity/butterfly/jade_green_swallowtail",
+          "weight": 1,
+          "model": "wildlife/butterfly/jade_green_swallowtail_model",
+          "babyModel": "wildlife/butterfly/jade_green_swallowtail_babyModel"
+        },
+        {
+          "name": "monarch",
+          "texture": "menagerie/wildlife/entity/butterfly/monarch",
+          "babyTexture": "menagerie/wildlife/entity/butterfly/monarch",
+          "weight": 1,
+          "model": "wildlife/butterfly/monarch_model",
+          "babyModel": "wildlife/butterfly/monarch_babyModel"
+        },
+        {
+          "name": "purple_emperor",
+          "texture": "menagerie/wildlife/entity/butterfly/purple_emperor",
+          "babyTexture": "menagerie/wildlife/entity/butterfly/purple_emperor",
+          "weight": 1,
+          "model": "wildlife/butterfly/purple_emperor_model",
+          "babyModel": "wildlife/butterfly/purple_emperor_babyModel"
+        },
+        {
+          "name": "red_admiral",
+          "texture": "menagerie/wildlife/entity/butterfly/red_admiral",
+          "babyTexture": "menagerie/wildlife/entity/butterfly/red_admiral",
+          "weight": 1,
+          "model": "wildlife/butterfly/red_admiral_model",
+          "babyModel": "wildlife/butterfly/red_admiral_babyModel"
+        },
+        {
+          "name": "swallowtail",
+          "texture": "menagerie/wildlife/entity/butterfly/green_swallowtail",
+          "babyTexture": "menagerie/wildlife/entity/butterfly/green_swallowtail",
+          "weight": 1,
+          "model": "wildlife/butterfly/swallowtail_model",
+          "babyModel": "wildlife/butterfly/swallowtail_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "capybara",
+      "id": "wildlife_capybara",
+      "name": "Capybara",
+      "shape": "rodent",
+      "movement": "amphibious",
+      "habitat": "swamp",
+      "mood": "passive",
+      "width": 0.8,
+      "height": 0.8,
+      "health": 16,
+      "feed": "minecraft:melon_slice",
+      "mount": false,
+      "model": "wildlife_capybara",
+      "variants": [
+        {
+          "name": "capybara",
+          "texture": "menagerie/wildlife/entity/capybara/capybara",
+          "babyTexture": "menagerie/wildlife/entity/capybara/capybara_baby",
+          "weight": 1,
+          "model": "wildlife/capybara/capybara_model",
+          "babyModel": "wildlife/capybara/capybara_babyModel"
+        },
+        {
+          "name": "dye_black",
+          "texture": "menagerie/wildlife/entity/capybara/dye/black",
+          "babyTexture": "menagerie/wildlife/entity/capybara/dye/black_baby",
+          "weight": 0,
+          "model": "wildlife/capybara/dye_black_model",
+          "babyModel": "wildlife/capybara/dye_black_babyModel"
+        },
+        {
+          "name": "dye_black_baby",
+          "texture": "menagerie/wildlife/entity/capybara/dye/black_baby",
+          "babyTexture": "menagerie/wildlife/entity/capybara/dye/black_baby",
+          "weight": 0,
+          "model": "wildlife/capybara/dye_black_baby_model",
+          "babyModel": "wildlife/capybara/dye_black_baby_babyModel"
+        },
+        {
+          "name": "dye_blue",
+          "texture": "menagerie/wildlife/entity/capybara/dye/blue",
+          "babyTexture": "menagerie/wildlife/entity/capybara/dye/blue_baby",
+          "weight": 0,
+          "model": "wildlife/capybara/dye_blue_model",
+          "babyModel": "wildlife/capybara/dye_blue_babyModel"
+        },
+        {
+          "name": "dye_blue_baby",
+          "texture": "menagerie/wildlife/entity/capybara/dye/blue_baby",
+          "babyTexture": "menagerie/wildlife/entity/capybara/dye/blue_baby",
+          "weight": 0,
+          "model": "wildlife/capybara/dye_blue_baby_model",
+          "babyModel": "wildlife/capybara/dye_blue_baby_babyModel"
+        },
+        {
+          "name": "dye_brown",
+          "texture": "menagerie/wildlife/entity/capybara/dye/brown",
+          "babyTexture": "menagerie/wildlife/entity/capybara/dye/brown_baby",
+          "weight": 0,
+          "model": "wildlife/capybara/dye_brown_model",
+          "babyModel": "wildlife/capybara/dye_brown_babyModel"
+        },
+        {
+          "name": "dye_brown_baby",
+          "texture": "menagerie/wildlife/entity/capybara/dye/brown_baby",
+          "babyTexture": "menagerie/wildlife/entity/capybara/dye/brown_baby",
+          "weight": 0,
+          "model": "wildlife/capybara/dye_brown_baby_model",
+          "babyModel": "wildlife/capybara/dye_brown_baby_babyModel"
+        },
+        {
+          "name": "dye_cyan",
+          "texture": "menagerie/wildlife/entity/capybara/dye/cyan",
+          "babyTexture": "menagerie/wildlife/entity/capybara/dye/cyan",
+          "weight": 0,
+          "model": "wildlife/capybara/dye_cyan_model",
+          "babyModel": "wildlife/capybara/dye_cyan_babyModel"
+        },
+        {
+          "name": "dye_gray",
+          "texture": "menagerie/wildlife/entity/capybara/dye/gray",
+          "babyTexture": "menagerie/wildlife/entity/capybara/dye/gray_baby",
+          "weight": 0,
+          "model": "wildlife/capybara/dye_gray_model",
+          "babyModel": "wildlife/capybara/dye_gray_babyModel"
+        },
+        {
+          "name": "dye_gray_baby",
+          "texture": "menagerie/wildlife/entity/capybara/dye/gray_baby",
+          "babyTexture": "menagerie/wildlife/entity/capybara/dye/gray_baby",
+          "weight": 0,
+          "model": "wildlife/capybara/dye_gray_baby_model",
+          "babyModel": "wildlife/capybara/dye_gray_baby_babyModel"
+        },
+        {
+          "name": "dye_green",
+          "texture": "menagerie/wildlife/entity/capybara/dye/green",
+          "babyTexture": "menagerie/wildlife/entity/capybara/dye/green_baby",
+          "weight": 0,
+          "model": "wildlife/capybara/dye_green_model",
+          "babyModel": "wildlife/capybara/dye_green_babyModel"
+        },
+        {
+          "name": "dye_green_baby",
+          "texture": "menagerie/wildlife/entity/capybara/dye/green_baby",
+          "babyTexture": "menagerie/wildlife/entity/capybara/dye/green_baby",
+          "weight": 0,
+          "model": "wildlife/capybara/dye_green_baby_model",
+          "babyModel": "wildlife/capybara/dye_green_baby_babyModel"
+        },
+        {
+          "name": "dye_light_blue",
+          "texture": "menagerie/wildlife/entity/capybara/dye/light_blue",
+          "babyTexture": "menagerie/wildlife/entity/capybara/dye/light_blue_baby",
+          "weight": 0,
+          "model": "wildlife/capybara/dye_light_blue_model",
+          "babyModel": "wildlife/capybara/dye_light_blue_babyModel"
+        },
+        {
+          "name": "dye_light_blue_baby",
+          "texture": "menagerie/wildlife/entity/capybara/dye/light_blue_baby",
+          "babyTexture": "menagerie/wildlife/entity/capybara/dye/light_blue_baby",
+          "weight": 0,
+          "model": "wildlife/capybara/dye_light_blue_baby_model",
+          "babyModel": "wildlife/capybara/dye_light_blue_baby_babyModel"
+        },
+        {
+          "name": "dye_light_gray",
+          "texture": "menagerie/wildlife/entity/capybara/dye/light_gray",
+          "babyTexture": "menagerie/wildlife/entity/capybara/dye/light_gray",
+          "weight": 0,
+          "model": "wildlife/capybara/dye_light_gray_model",
+          "babyModel": "wildlife/capybara/dye_light_gray_babyModel"
+        },
+        {
+          "name": "dye_lime",
+          "texture": "menagerie/wildlife/entity/capybara/dye/lime",
+          "babyTexture": "menagerie/wildlife/entity/capybara/dye/lime_baby",
+          "weight": 0,
+          "model": "wildlife/capybara/dye_lime_model",
+          "babyModel": "wildlife/capybara/dye_lime_babyModel"
+        },
+        {
+          "name": "dye_lime_baby",
+          "texture": "menagerie/wildlife/entity/capybara/dye/lime_baby",
+          "babyTexture": "menagerie/wildlife/entity/capybara/dye/lime_baby",
+          "weight": 0,
+          "model": "wildlife/capybara/dye_lime_baby_model",
+          "babyModel": "wildlife/capybara/dye_lime_baby_babyModel"
+        },
+        {
+          "name": "dye_magenta",
+          "texture": "menagerie/wildlife/entity/capybara/dye/magenta",
+          "babyTexture": "menagerie/wildlife/entity/capybara/dye/magenta_baby",
+          "weight": 0,
+          "model": "wildlife/capybara/dye_magenta_model",
+          "babyModel": "wildlife/capybara/dye_magenta_babyModel"
+        },
+        {
+          "name": "dye_magenta_baby",
+          "texture": "menagerie/wildlife/entity/capybara/dye/magenta_baby",
+          "babyTexture": "menagerie/wildlife/entity/capybara/dye/magenta_baby",
+          "weight": 0,
+          "model": "wildlife/capybara/dye_magenta_baby_model",
+          "babyModel": "wildlife/capybara/dye_magenta_baby_babyModel"
+        },
+        {
+          "name": "dye_orange",
+          "texture": "menagerie/wildlife/entity/capybara/dye/orange",
+          "babyTexture": "menagerie/wildlife/entity/capybara/dye/orange",
+          "weight": 0,
+          "model": "wildlife/capybara/dye_orange_model",
+          "babyModel": "wildlife/capybara/dye_orange_babyModel"
+        },
+        {
+          "name": "dye_pink",
+          "texture": "menagerie/wildlife/entity/capybara/dye/pink",
+          "babyTexture": "menagerie/wildlife/entity/capybara/dye/pink",
+          "weight": 0,
+          "model": "wildlife/capybara/dye_pink_model",
+          "babyModel": "wildlife/capybara/dye_pink_babyModel"
+        },
+        {
+          "name": "dye_purple",
+          "texture": "menagerie/wildlife/entity/capybara/dye/purple",
+          "babyTexture": "menagerie/wildlife/entity/capybara/dye/purple",
+          "weight": 0,
+          "model": "wildlife/capybara/dye_purple_model",
+          "babyModel": "wildlife/capybara/dye_purple_babyModel"
+        },
+        {
+          "name": "dye_red",
+          "texture": "menagerie/wildlife/entity/capybara/dye/red",
+          "babyTexture": "menagerie/wildlife/entity/capybara/dye/red_baby",
+          "weight": 0,
+          "model": "wildlife/capybara/dye_red_model",
+          "babyModel": "wildlife/capybara/dye_red_babyModel"
+        },
+        {
+          "name": "dye_red_baby",
+          "texture": "menagerie/wildlife/entity/capybara/dye/red_baby",
+          "babyTexture": "menagerie/wildlife/entity/capybara/dye/red_baby",
+          "weight": 0,
+          "model": "wildlife/capybara/dye_red_baby_model",
+          "babyModel": "wildlife/capybara/dye_red_baby_babyModel"
+        },
+        {
+          "name": "dye_white",
+          "texture": "menagerie/wildlife/entity/capybara/dye/white",
+          "babyTexture": "menagerie/wildlife/entity/capybara/dye/white_baby",
+          "weight": 0,
+          "model": "wildlife/capybara/dye_white_model",
+          "babyModel": "wildlife/capybara/dye_white_babyModel"
+        },
+        {
+          "name": "dye_white_baby",
+          "texture": "menagerie/wildlife/entity/capybara/dye/white_baby",
+          "babyTexture": "menagerie/wildlife/entity/capybara/dye/white_baby",
+          "weight": 0,
+          "model": "wildlife/capybara/dye_white_baby_model",
+          "babyModel": "wildlife/capybara/dye_white_baby_babyModel"
+        },
+        {
+          "name": "dye_yellow",
+          "texture": "menagerie/wildlife/entity/capybara/dye/yellow",
+          "babyTexture": "menagerie/wildlife/entity/capybara/dye/yellow",
+          "weight": 0,
+          "model": "wildlife/capybara/dye_yellow_model",
+          "babyModel": "wildlife/capybara/dye_yellow_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "caterpillar",
+      "id": "wildlife_caterpillar",
+      "name": "Caterpillar",
+      "shape": "worm",
+      "movement": "land",
+      "habitat": "forest",
+      "mood": "passive",
+      "width": 0.3,
+      "height": 0.2,
+      "health": 4,
+      "feed": "minecraft:oak_leaves",
+      "mount": false,
+      "model": "wildlife_caterpillar",
+      "variants": [
+        {
+          "name": "caterpillar",
+          "texture": "menagerie/wildlife/entity/caterpillar",
+          "babyTexture": "menagerie/wildlife/entity/caterpillar",
+          "weight": 1,
+          "model": "wildlife/caterpillar/caterpillar_model",
+          "babyModel": "wildlife/caterpillar/caterpillar_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "catfish",
+      "id": "wildlife_catfish",
+      "name": "Catfish",
+      "shape": "fish",
+      "movement": "water",
+      "habitat": "river",
+      "mood": "passive",
+      "width": 0.9,
+      "height": 0.5,
+      "health": 10,
+      "feed": "minecraft:cod",
+      "mount": false,
+      "model": "wildlife_catfish",
+      "variants": [
+        {
+          "name": "catfish",
+          "texture": "menagerie/wildlife/entity/catfish",
+          "babyTexture": "menagerie/wildlife/entity/catfish",
+          "weight": 1,
+          "model": "wildlife/catfish/catfish_model",
+          "babyModel": "wildlife/catfish/catfish_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "clam",
+      "id": "wildlife_clam",
+      "name": "Clam",
+      "shape": "shell",
+      "movement": "water",
+      "habitat": "beach",
+      "mood": "passive",
+      "width": 0.5,
+      "height": 0.3,
+      "health": 8,
+      "feed": "minecraft:kelp",
+      "mount": false,
+      "model": "wildlife_clam",
+      "variants": [
+        {
+          "name": "brown",
+          "texture": "menagerie/wildlife/entity/clam/brown_clam",
+          "babyTexture": "menagerie/wildlife/entity/clam/brown_clam",
+          "weight": 1,
+          "model": "wildlife/clam/brown_model",
+          "babyModel": "wildlife/clam/brown_babyModel"
+        },
+        {
+          "name": "white",
+          "texture": "menagerie/wildlife/entity/clam/white_clam",
+          "babyTexture": "menagerie/wildlife/entity/clam/white_clam",
+          "weight": 1,
+          "model": "wildlife/clam/white_model",
+          "babyModel": "wildlife/clam/white_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "crab",
+      "id": "wildlife_crab",
+      "name": "Crab",
+      "shape": "crab",
+      "movement": "amphibious",
+      "habitat": "beach",
+      "mood": "neutral",
+      "width": 0.55,
+      "height": 0.3,
+      "health": 8,
+      "feed": "minecraft:kelp",
+      "mount": false,
+      "model": "wildlife_crab",
+      "variants": [
+        {
+          "name": "blue",
+          "texture": "menagerie/wildlife/entity/crab/blue_crab",
+          "babyTexture": "menagerie/wildlife/entity/crab/blue_crab_baby",
+          "weight": 1,
+          "model": "wildlife/crab/blue_model",
+          "babyModel": "wildlife/crab/blue_babyModel"
+        },
+        {
+          "name": "brown",
+          "texture": "menagerie/wildlife/entity/crab/brown_crab",
+          "babyTexture": "menagerie/wildlife/entity/crab/brown_crab_baby",
+          "weight": 1,
+          "model": "wildlife/crab/brown_model",
+          "babyModel": "wildlife/crab/brown_babyModel"
+        },
+        {
+          "name": "orange",
+          "texture": "menagerie/wildlife/entity/crab/orange_crab",
+          "babyTexture": "menagerie/wildlife/entity/crab/orange_crab_baby",
+          "weight": 1,
+          "model": "wildlife/crab/orange_model",
+          "babyModel": "wildlife/crab/orange_babyModel"
+        },
+        {
+          "name": "red",
+          "texture": "menagerie/wildlife/entity/crab/red_crab",
+          "babyTexture": "menagerie/wildlife/entity/crab/red_crab_baby",
+          "weight": 1,
+          "model": "wildlife/crab/red_model",
+          "babyModel": "wildlife/crab/red_babyModel"
+        },
+        {
+          "name": "yellow",
+          "texture": "menagerie/wildlife/entity/crab/yellow_crab",
+          "babyTexture": "menagerie/wildlife/entity/crab/yellow_crab_baby",
+          "weight": 1,
+          "model": "wildlife/crab/yellow_model",
+          "babyModel": "wildlife/crab/yellow_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "deer",
+      "id": "wildlife_deer",
+      "name": "Deer",
+      "shape": "deer",
+      "movement": "land",
+      "habitat": "forest",
+      "mood": "passive",
+      "width": 0.8,
+      "height": 1.5,
+      "health": 18,
+      "feed": "minecraft:wheat",
+      "mount": false,
+      "model": "wildlife_deer",
+      "variants": [
+        {
+          "name": "deer",
+          "texture": "menagerie/wildlife/entity/deer/deer",
+          "babyTexture": "menagerie/wildlife/entity/deer/deer_baby",
+          "weight": 1,
+          "model": "wildlife/deer/deer_model",
+          "babyModel": "wildlife/deer/deer_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "desert_scorpion",
+      "id": "wildlife_desert_scorpion",
+      "name": "Desert Scorpion",
+      "shape": "scorpion",
+      "movement": "land",
+      "habitat": "desert",
+      "mood": "neutral",
+      "width": 0.5,
+      "height": 0.35,
+      "health": 10,
+      "feed": "minecraft:spider_eye",
+      "mount": false,
+      "model": "wildlife_desert_scorpion",
+      "variants": [
+        {
+          "name": "desert_scorpion",
+          "texture": "menagerie/wildlife/entity/scorpion/desert_scorpion",
+          "babyTexture": "menagerie/wildlife/entity/scorpion/desert_scorpion",
+          "weight": 1,
+          "model": "wildlife/desert_scorpion/desert_scorpion_model",
+          "babyModel": "wildlife/desert_scorpion/desert_scorpion_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "dragonfly",
+      "id": "wildlife_dragonfly",
+      "name": "Dragonfly",
+      "shape": "butterfly",
+      "movement": "air",
+      "habitat": "swamp",
+      "mood": "passive",
+      "width": 0.4,
+      "height": 0.3,
+      "health": 4,
+      "feed": "minecraft:sugar",
+      "mount": false,
+      "model": "wildlife_dragonfly",
+      "variants": [
+        {
+          "name": "blue",
+          "texture": "menagerie/wildlife/entity/dragonfly/blue_dragonfly",
+          "babyTexture": "menagerie/wildlife/entity/dragonfly/blue_dragonfly",
+          "weight": 1,
+          "model": "wildlife/dragonfly/blue_model",
+          "babyModel": "wildlife/dragonfly/blue_babyModel"
+        },
+        {
+          "name": "green",
+          "texture": "menagerie/wildlife/entity/dragonfly/green_dragonfly",
+          "babyTexture": "menagerie/wildlife/entity/dragonfly/green_dragonfly",
+          "weight": 1,
+          "model": "wildlife/dragonfly/green_model",
+          "babyModel": "wildlife/dragonfly/green_babyModel"
+        },
+        {
+          "name": "red",
+          "texture": "menagerie/wildlife/entity/dragonfly/red_dragonfly",
+          "babyTexture": "menagerie/wildlife/entity/dragonfly/red_dragonfly",
+          "weight": 1,
+          "model": "wildlife/dragonfly/red_model",
+          "babyModel": "wildlife/dragonfly/red_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "duck",
+      "id": "wildlife_duck",
+      "name": "Duck",
+      "shape": "bird",
+      "movement": "amphibious",
+      "habitat": "river",
+      "mood": "passive",
+      "width": 0.55,
+      "height": 0.65,
+      "health": 10,
+      "feed": "minecraft:wheat_seeds",
+      "mount": false,
+      "model": "wildlife_duck",
+      "variants": [
+        {
+          "name": "duck",
+          "texture": "menagerie/wildlife/entity/duck/duck",
+          "babyTexture": "menagerie/wildlife/entity/duck/duck_baby",
+          "weight": 1,
+          "model": "wildlife/duck/duck_model",
+          "babyModel": "wildlife/duck/duck_babyModel"
+        },
+        {
+          "name": "dye_black",
+          "texture": "menagerie/wildlife/entity/duck/dye/black",
+          "babyTexture": "menagerie/wildlife/entity/duck/dye/black",
+          "weight": 0,
+          "model": "wildlife/duck/dye_black_model",
+          "babyModel": "wildlife/duck/dye_black_babyModel"
+        },
+        {
+          "name": "dye_blue",
+          "texture": "menagerie/wildlife/entity/duck/dye/blue",
+          "babyTexture": "menagerie/wildlife/entity/duck/dye/blue",
+          "weight": 0,
+          "model": "wildlife/duck/dye_blue_model",
+          "babyModel": "wildlife/duck/dye_blue_babyModel"
+        },
+        {
+          "name": "dye_brown",
+          "texture": "menagerie/wildlife/entity/duck/dye/brown",
+          "babyTexture": "menagerie/wildlife/entity/duck/dye/brown",
+          "weight": 0,
+          "model": "wildlife/duck/dye_brown_model",
+          "babyModel": "wildlife/duck/dye_brown_babyModel"
+        },
+        {
+          "name": "dye_cyan",
+          "texture": "menagerie/wildlife/entity/duck/dye/cyan",
+          "babyTexture": "menagerie/wildlife/entity/duck/dye/cyan",
+          "weight": 0,
+          "model": "wildlife/duck/dye_cyan_model",
+          "babyModel": "wildlife/duck/dye_cyan_babyModel"
+        },
+        {
+          "name": "dye_gray",
+          "texture": "menagerie/wildlife/entity/duck/dye/gray",
+          "babyTexture": "menagerie/wildlife/entity/duck/dye/gray",
+          "weight": 0,
+          "model": "wildlife/duck/dye_gray_model",
+          "babyModel": "wildlife/duck/dye_gray_babyModel"
+        },
+        {
+          "name": "dye_green",
+          "texture": "menagerie/wildlife/entity/duck/dye/green",
+          "babyTexture": "menagerie/wildlife/entity/duck/dye/green",
+          "weight": 0,
+          "model": "wildlife/duck/dye_green_model",
+          "babyModel": "wildlife/duck/dye_green_babyModel"
+        },
+        {
+          "name": "dye_light_blue",
+          "texture": "menagerie/wildlife/entity/duck/dye/light_blue",
+          "babyTexture": "menagerie/wildlife/entity/duck/dye/light_blue",
+          "weight": 0,
+          "model": "wildlife/duck/dye_light_blue_model",
+          "babyModel": "wildlife/duck/dye_light_blue_babyModel"
+        },
+        {
+          "name": "dye_light_gray",
+          "texture": "menagerie/wildlife/entity/duck/dye/light_gray",
+          "babyTexture": "menagerie/wildlife/entity/duck/dye/light_gray",
+          "weight": 0,
+          "model": "wildlife/duck/dye_light_gray_model",
+          "babyModel": "wildlife/duck/dye_light_gray_babyModel"
+        },
+        {
+          "name": "dye_lime",
+          "texture": "menagerie/wildlife/entity/duck/dye/lime",
+          "babyTexture": "menagerie/wildlife/entity/duck/dye/lime",
+          "weight": 0,
+          "model": "wildlife/duck/dye_lime_model",
+          "babyModel": "wildlife/duck/dye_lime_babyModel"
+        },
+        {
+          "name": "dye_magenta",
+          "texture": "menagerie/wildlife/entity/duck/dye/magenta",
+          "babyTexture": "menagerie/wildlife/entity/duck/dye/magenta",
+          "weight": 0,
+          "model": "wildlife/duck/dye_magenta_model",
+          "babyModel": "wildlife/duck/dye_magenta_babyModel"
+        },
+        {
+          "name": "dye_orange",
+          "texture": "menagerie/wildlife/entity/duck/dye/orange",
+          "babyTexture": "menagerie/wildlife/entity/duck/dye/orange",
+          "weight": 0,
+          "model": "wildlife/duck/dye_orange_model",
+          "babyModel": "wildlife/duck/dye_orange_babyModel"
+        },
+        {
+          "name": "dye_pink",
+          "texture": "menagerie/wildlife/entity/duck/dye/pink",
+          "babyTexture": "menagerie/wildlife/entity/duck/dye/pink",
+          "weight": 0,
+          "model": "wildlife/duck/dye_pink_model",
+          "babyModel": "wildlife/duck/dye_pink_babyModel"
+        },
+        {
+          "name": "dye_purple",
+          "texture": "menagerie/wildlife/entity/duck/dye/purple",
+          "babyTexture": "menagerie/wildlife/entity/duck/dye/purple",
+          "weight": 0,
+          "model": "wildlife/duck/dye_purple_model",
+          "babyModel": "wildlife/duck/dye_purple_babyModel"
+        },
+        {
+          "name": "dye_red",
+          "texture": "menagerie/wildlife/entity/duck/dye/red",
+          "babyTexture": "menagerie/wildlife/entity/duck/dye/red",
+          "weight": 0,
+          "model": "wildlife/duck/dye_red_model",
+          "babyModel": "wildlife/duck/dye_red_babyModel"
+        },
+        {
+          "name": "dye_white",
+          "texture": "menagerie/wildlife/entity/duck/dye/white",
+          "babyTexture": "menagerie/wildlife/entity/duck/dye/white",
+          "weight": 0,
+          "model": "wildlife/duck/dye_white_model",
+          "babyModel": "wildlife/duck/dye_white_babyModel"
+        },
+        {
+          "name": "dye_yellow",
+          "texture": "menagerie/wildlife/entity/duck/dye/yellow",
+          "babyTexture": "menagerie/wildlife/entity/duck/dye/yellow",
+          "weight": 0,
+          "model": "wildlife/duck/dye_yellow_model",
+          "babyModel": "wildlife/duck/dye_yellow_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "elephant",
+      "id": "wildlife_elephant",
+      "name": "Elephant",
+      "shape": "elephant",
+      "movement": "land",
+      "habitat": "savanna",
+      "mood": "neutral",
+      "width": 2.6,
+      "height": 3.1,
+      "health": 70,
+      "feed": "minecraft:melon_slice",
+      "mount": false,
+      "model": "wildlife_elephant",
+      "variants": [
+        {
+          "name": "elephant",
+          "texture": "menagerie/wildlife/entity/elephant/elephant",
+          "babyTexture": "menagerie/wildlife/entity/elephant/elephant_baby",
+          "weight": 1,
+          "model": "wildlife/elephant/elephant_model",
+          "babyModel": "wildlife/elephant/elephant_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "firefly",
+      "id": "wildlife_firefly",
+      "name": "Firefly",
+      "shape": "insect",
+      "movement": "air",
+      "habitat": "swamp",
+      "mood": "passive",
+      "width": 0.25,
+      "height": 0.2,
+      "health": 4,
+      "feed": "minecraft:sugar",
+      "mount": false,
+      "model": "wildlife_firefly",
+      "variants": [
+        {
+          "name": "firefly",
+          "texture": "menagerie/wildlife/entity/firefly",
+          "babyTexture": "menagerie/wildlife/entity/firefly_baby",
+          "weight": 1,
+          "model": "wildlife/firefly/firefly_model",
+          "babyModel": "wildlife/firefly/firefly_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "giant_isopod",
+      "id": "wildlife_giant_isopod",
+      "name": "Giant Isopod",
+      "shape": "insect",
+      "movement": "water",
+      "habitat": "deep_ocean",
+      "mood": "passive",
+      "width": 0.8,
+      "height": 0.4,
+      "health": 14,
+      "feed": "minecraft:kelp",
+      "mount": false,
+      "model": "wildlife_giant_isopod",
+      "variants": [
+        {
+          "name": "blue",
+          "texture": "menagerie/wildlife/entity/giant_isopod/blue",
+          "babyTexture": "menagerie/wildlife/entity/giant_isopod/blue",
+          "weight": 1,
+          "model": "wildlife/giant_isopod/blue_model",
+          "babyModel": "wildlife/giant_isopod/blue_babyModel"
+        },
+        {
+          "name": "brown",
+          "texture": "menagerie/wildlife/entity/giant_isopod/brown",
+          "babyTexture": "menagerie/wildlife/entity/giant_isopod/brown",
+          "weight": 1,
+          "model": "wildlife/giant_isopod/brown_model",
+          "babyModel": "wildlife/giant_isopod/brown_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "giraffe",
+      "id": "wildlife_giraffe",
+      "name": "Giraffe",
+      "shape": "giraffe",
+      "movement": "land",
+      "habitat": "savanna",
+      "mood": "passive",
+      "width": 1.4,
+      "height": 3.5,
+      "health": 32,
+      "feed": "minecraft:acacia_leaves",
+      "mount": false,
+      "model": "wildlife_giraffe",
+      "variants": [
+        {
+          "name": "giraffe",
+          "texture": "menagerie/wildlife/entity/giraffe/giraffe",
+          "babyTexture": "menagerie/wildlife/entity/giraffe/giraffe_baby",
+          "weight": 1,
+          "model": "wildlife/giraffe/giraffe_model",
+          "babyModel": "wildlife/giraffe/giraffe_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "great_white_shark",
+      "id": "wildlife_great_white_shark",
+      "name": "Great White Shark",
+      "shape": "shark",
+      "movement": "water",
+      "habitat": "ocean",
+      "mood": "predator",
+      "width": 1.6,
+      "height": 0.9,
+      "health": 40,
+      "feed": "minecraft:cod",
+      "mount": false,
+      "model": "wildlife_great_white_shark",
+      "variants": [
+        {
+          "name": "great_white_shark",
+          "texture": "menagerie/wildlife/entity/great_white_shark",
+          "babyTexture": "menagerie/wildlife/entity/great_white_shark",
+          "weight": 1,
+          "model": "wildlife/great_white_shark/great_white_shark_model",
+          "babyModel": "wildlife/great_white_shark/great_white_shark_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "hedgehog",
+      "id": "wildlife_hedgehog",
+      "name": "Hedgehog",
+      "shape": "rodent",
+      "movement": "land",
+      "habitat": "forest",
+      "mood": "neutral",
+      "width": 0.45,
+      "height": 0.4,
+      "health": 8,
+      "feed": "minecraft:sweet_berries",
+      "mount": false,
+      "model": "wildlife_hedgehog",
+      "variants": [
+        {
+          "name": "brown",
+          "texture": "menagerie/wildlife/entity/hedgehog/brown",
+          "babyTexture": "menagerie/wildlife/entity/hedgehog/brown",
+          "weight": 1,
+          "model": "wildlife/hedgehog/brown_model",
+          "babyModel": "wildlife/hedgehog/brown_babyModel"
+        },
+        {
+          "name": "dark",
+          "texture": "menagerie/wildlife/entity/hedgehog/dark",
+          "babyTexture": "menagerie/wildlife/entity/hedgehog/dark",
+          "weight": 1,
+          "model": "wildlife/hedgehog/dark_model",
+          "babyModel": "wildlife/hedgehog/dark_babyModel"
+        },
+        {
+          "name": "white",
+          "texture": "menagerie/wildlife/entity/hedgehog/white",
+          "babyTexture": "menagerie/wildlife/entity/hedgehog/white",
+          "weight": 1,
+          "model": "wildlife/hedgehog/white_model",
+          "babyModel": "wildlife/hedgehog/white_babyModel"
+        },
+        {
+          "name": "dye_black",
+          "texture": "menagerie/wildlife/entity/hedgehog/dye/black",
+          "babyTexture": "menagerie/wildlife/entity/hedgehog/dye/black",
+          "weight": 0,
+          "model": "wildlife/hedgehog/dye_black_model",
+          "babyModel": "wildlife/hedgehog/dye_black_babyModel"
+        },
+        {
+          "name": "dye_blue",
+          "texture": "menagerie/wildlife/entity/hedgehog/dye/blue",
+          "babyTexture": "menagerie/wildlife/entity/hedgehog/dye/blue",
+          "weight": 0,
+          "model": "wildlife/hedgehog/dye_blue_model",
+          "babyModel": "wildlife/hedgehog/dye_blue_babyModel"
+        },
+        {
+          "name": "dye_brown",
+          "texture": "menagerie/wildlife/entity/hedgehog/dye/brown",
+          "babyTexture": "menagerie/wildlife/entity/hedgehog/dye/brown",
+          "weight": 0,
+          "model": "wildlife/hedgehog/dye_brown_model",
+          "babyModel": "wildlife/hedgehog/dye_brown_babyModel"
+        },
+        {
+          "name": "dye_cyan",
+          "texture": "menagerie/wildlife/entity/hedgehog/dye/cyan",
+          "babyTexture": "menagerie/wildlife/entity/hedgehog/dye/cyan",
+          "weight": 0,
+          "model": "wildlife/hedgehog/dye_cyan_model",
+          "babyModel": "wildlife/hedgehog/dye_cyan_babyModel"
+        },
+        {
+          "name": "dye_gray",
+          "texture": "menagerie/wildlife/entity/hedgehog/dye/gray",
+          "babyTexture": "menagerie/wildlife/entity/hedgehog/dye/gray",
+          "weight": 0,
+          "model": "wildlife/hedgehog/dye_gray_model",
+          "babyModel": "wildlife/hedgehog/dye_gray_babyModel"
+        },
+        {
+          "name": "dye_green",
+          "texture": "menagerie/wildlife/entity/hedgehog/dye/green",
+          "babyTexture": "menagerie/wildlife/entity/hedgehog/dye/green",
+          "weight": 0,
+          "model": "wildlife/hedgehog/dye_green_model",
+          "babyModel": "wildlife/hedgehog/dye_green_babyModel"
+        },
+        {
+          "name": "dye_light_blue",
+          "texture": "menagerie/wildlife/entity/hedgehog/dye/light_blue",
+          "babyTexture": "menagerie/wildlife/entity/hedgehog/dye/light_blue",
+          "weight": 0,
+          "model": "wildlife/hedgehog/dye_light_blue_model",
+          "babyModel": "wildlife/hedgehog/dye_light_blue_babyModel"
+        },
+        {
+          "name": "dye_light_gray",
+          "texture": "menagerie/wildlife/entity/hedgehog/dye/light_gray",
+          "babyTexture": "menagerie/wildlife/entity/hedgehog/dye/light_gray",
+          "weight": 0,
+          "model": "wildlife/hedgehog/dye_light_gray_model",
+          "babyModel": "wildlife/hedgehog/dye_light_gray_babyModel"
+        },
+        {
+          "name": "dye_lime",
+          "texture": "menagerie/wildlife/entity/hedgehog/dye/lime",
+          "babyTexture": "menagerie/wildlife/entity/hedgehog/dye/lime",
+          "weight": 0,
+          "model": "wildlife/hedgehog/dye_lime_model",
+          "babyModel": "wildlife/hedgehog/dye_lime_babyModel"
+        },
+        {
+          "name": "dye_magenta",
+          "texture": "menagerie/wildlife/entity/hedgehog/dye/magenta",
+          "babyTexture": "menagerie/wildlife/entity/hedgehog/dye/magenta",
+          "weight": 0,
+          "model": "wildlife/hedgehog/dye_magenta_model",
+          "babyModel": "wildlife/hedgehog/dye_magenta_babyModel"
+        },
+        {
+          "name": "dye_orange",
+          "texture": "menagerie/wildlife/entity/hedgehog/dye/orange",
+          "babyTexture": "menagerie/wildlife/entity/hedgehog/dye/orange",
+          "weight": 0,
+          "model": "wildlife/hedgehog/dye_orange_model",
+          "babyModel": "wildlife/hedgehog/dye_orange_babyModel"
+        },
+        {
+          "name": "dye_pink",
+          "texture": "menagerie/wildlife/entity/hedgehog/dye/pink",
+          "babyTexture": "menagerie/wildlife/entity/hedgehog/dye/pink",
+          "weight": 0,
+          "model": "wildlife/hedgehog/dye_pink_model",
+          "babyModel": "wildlife/hedgehog/dye_pink_babyModel"
+        },
+        {
+          "name": "dye_purple",
+          "texture": "menagerie/wildlife/entity/hedgehog/dye/purple",
+          "babyTexture": "menagerie/wildlife/entity/hedgehog/dye/purple",
+          "weight": 0,
+          "model": "wildlife/hedgehog/dye_purple_model",
+          "babyModel": "wildlife/hedgehog/dye_purple_babyModel"
+        },
+        {
+          "name": "dye_red",
+          "texture": "menagerie/wildlife/entity/hedgehog/dye/red",
+          "babyTexture": "menagerie/wildlife/entity/hedgehog/dye/red",
+          "weight": 0,
+          "model": "wildlife/hedgehog/dye_red_model",
+          "babyModel": "wildlife/hedgehog/dye_red_babyModel"
+        },
+        {
+          "name": "dye_white",
+          "texture": "menagerie/wildlife/entity/hedgehog/dye/white",
+          "babyTexture": "menagerie/wildlife/entity/hedgehog/dye/white",
+          "weight": 0,
+          "model": "wildlife/hedgehog/dye_white_model",
+          "babyModel": "wildlife/hedgehog/dye_white_babyModel"
+        },
+        {
+          "name": "dye_yellow",
+          "texture": "menagerie/wildlife/entity/hedgehog/dye/yellow",
+          "babyTexture": "menagerie/wildlife/entity/hedgehog/dye/yellow",
+          "weight": 0,
+          "model": "wildlife/hedgehog/dye_yellow_model",
+          "babyModel": "wildlife/hedgehog/dye_yellow_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "hippo",
+      "id": "wildlife_hippo",
+      "name": "Hippo",
+      "shape": "hippo",
+      "movement": "amphibious",
+      "habitat": "river",
+      "mood": "neutral",
+      "width": 1.7,
+      "height": 1.5,
+      "health": 40,
+      "feed": "minecraft:melon_slice",
+      "mount": false,
+      "model": "wildlife_hippo",
+      "variants": [
+        {
+          "name": "hippo",
+          "texture": "menagerie/wildlife/entity/hippo/hippo",
+          "babyTexture": "menagerie/wildlife/entity/hippo/hippo_baby",
+          "weight": 1,
+          "model": "wildlife/hippo/hippo_model",
+          "babyModel": "wildlife/hippo/hippo_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "jellyfish",
+      "id": "wildlife_jellyfish",
+      "name": "Jellyfish",
+      "shape": "jellyfish",
+      "movement": "water",
+      "habitat": "ocean",
+      "mood": "neutral",
+      "width": 0.8,
+      "height": 1.0,
+      "health": 10,
+      "feed": "minecraft:kelp",
+      "mount": false,
+      "model": "wildlife_jellyfish",
+      "variants": [
+        {
+          "name": "blue",
+          "texture": "menagerie/wildlife/entity/jellyfish/blue",
+          "babyTexture": "menagerie/wildlife/entity/jellyfish/blue",
+          "weight": 1,
+          "model": "wildlife/jellyfish/blue_model",
+          "babyModel": "wildlife/jellyfish/blue_babyModel"
+        },
+        {
+          "name": "green",
+          "texture": "menagerie/wildlife/entity/jellyfish/green",
+          "babyTexture": "menagerie/wildlife/entity/jellyfish/green",
+          "weight": 1,
+          "model": "wildlife/jellyfish/green_model",
+          "babyModel": "wildlife/jellyfish/green_babyModel"
+        },
+        {
+          "name": "orange",
+          "texture": "menagerie/wildlife/entity/jellyfish/orange",
+          "babyTexture": "menagerie/wildlife/entity/jellyfish/orange",
+          "weight": 1,
+          "model": "wildlife/jellyfish/orange_model",
+          "babyModel": "wildlife/jellyfish/orange_babyModel"
+        },
+        {
+          "name": "pink",
+          "texture": "menagerie/wildlife/entity/jellyfish/pink",
+          "babyTexture": "menagerie/wildlife/entity/jellyfish/pink",
+          "weight": 1,
+          "model": "wildlife/jellyfish/pink_model",
+          "babyModel": "wildlife/jellyfish/pink_babyModel"
+        },
+        {
+          "name": "white",
+          "texture": "menagerie/wildlife/entity/jellyfish/white",
+          "babyTexture": "menagerie/wildlife/entity/jellyfish/white",
+          "weight": 1,
+          "model": "wildlife/jellyfish/white_model",
+          "babyModel": "wildlife/jellyfish/white_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "jungle_scorpion",
+      "id": "wildlife_jungle_scorpion",
+      "name": "Jungle Scorpion",
+      "shape": "scorpion",
+      "movement": "land",
+      "habitat": "jungle",
+      "mood": "neutral",
+      "width": 0.9,
+      "height": 0.5,
+      "health": 18,
+      "feed": "minecraft:spider_eye",
+      "mount": false,
+      "model": "wildlife_jungle_scorpion",
+      "variants": [
+        {
+          "name": "black",
+          "texture": "menagerie/wildlife/entity/scorpion/black_jungle_scorpion",
+          "babyTexture": "menagerie/wildlife/entity/scorpion/black_jungle_scorpion",
+          "weight": 1,
+          "model": "wildlife/jungle_scorpion/black_model",
+          "babyModel": "wildlife/jungle_scorpion/black_babyModel"
+        },
+        {
+          "name": "green",
+          "texture": "menagerie/wildlife/entity/scorpion/green_jungle_scorpion",
+          "babyTexture": "menagerie/wildlife/entity/scorpion/green_jungle_scorpion",
+          "weight": 1,
+          "model": "wildlife/jungle_scorpion/green_model",
+          "babyModel": "wildlife/jungle_scorpion/green_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "komodo_dragon",
+      "id": "wildlife_komodo_dragon",
+      "name": "Komodo Dragon",
+      "shape": "reptile",
+      "movement": "land",
+      "habitat": "jungle",
+      "mood": "predator",
+      "width": 1.1,
+      "height": 0.6,
+      "health": 24,
+      "feed": "minecraft:chicken",
+      "mount": false,
+      "model": "wildlife_komodo_dragon",
+      "variants": [
+        {
+          "name": "komodo_dragon",
+          "texture": "menagerie/wildlife/entity/komodo_dragon",
+          "babyTexture": "menagerie/wildlife/entity/komodo_dragon",
+          "weight": 1,
+          "model": "wildlife/komodo_dragon/komodo_dragon_model",
+          "babyModel": "wildlife/komodo_dragon/komodo_dragon_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "lion",
+      "id": "wildlife_lion",
+      "name": "Lion",
+      "shape": "cat",
+      "movement": "land",
+      "habitat": "savanna",
+      "mood": "predator",
+      "width": 1.2,
+      "height": 1.2,
+      "health": 30,
+      "feed": "minecraft:beef",
+      "mount": false,
+      "model": "wildlife_lion",
+      "variants": [
+        {
+          "name": "lion",
+          "texture": "menagerie/wildlife/entity/lion/lion",
+          "babyTexture": "menagerie/wildlife/entity/lion/lion_baby",
+          "weight": 1,
+          "model": "wildlife/lion/lion_model",
+          "babyModel": "wildlife/lion/lion_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "lizard",
+      "id": "wildlife_lizard",
+      "name": "Lizard",
+      "shape": "reptile",
+      "movement": "land",
+      "habitat": "desert",
+      "mood": "passive",
+      "width": 0.4,
+      "height": 0.25,
+      "health": 6,
+      "feed": "minecraft:spider_eye",
+      "mount": false,
+      "model": "wildlife_lizard",
+      "variants": [
+        {
+          "name": "beardie",
+          "texture": "menagerie/wildlife/entity/lizard/beardie",
+          "babyTexture": "menagerie/wildlife/entity/lizard/beardie",
+          "weight": 1,
+          "model": "wildlife/lizard/beardie_model",
+          "babyModel": "wildlife/lizard/beardie_babyModel"
+        },
+        {
+          "name": "brown",
+          "texture": "menagerie/wildlife/entity/lizard/brown",
+          "babyTexture": "menagerie/wildlife/entity/lizard/brown",
+          "weight": 1,
+          "model": "wildlife/lizard/brown_model",
+          "babyModel": "wildlife/lizard/brown_babyModel"
+        },
+        {
+          "name": "green",
+          "texture": "menagerie/wildlife/entity/lizard/green",
+          "babyTexture": "menagerie/wildlife/entity/lizard/green",
+          "weight": 1,
+          "model": "wildlife/lizard/green_model",
+          "babyModel": "wildlife/lizard/green_babyModel"
+        },
+        {
+          "name": "leopard_gecko",
+          "texture": "menagerie/wildlife/entity/lizard/leopard_gecko",
+          "babyTexture": "menagerie/wildlife/entity/lizard/leopard_gecko",
+          "weight": 1,
+          "model": "wildlife/lizard/leopard_gecko_model",
+          "babyModel": "wildlife/lizard/leopard_gecko_babyModel"
+        },
+        {
+          "name": "dye_black",
+          "texture": "menagerie/wildlife/entity/lizard/dye/black",
+          "babyTexture": "menagerie/wildlife/entity/lizard/dye/black",
+          "weight": 0,
+          "model": "wildlife/lizard/dye_black_model",
+          "babyModel": "wildlife/lizard/dye_black_babyModel"
+        },
+        {
+          "name": "dye_blue",
+          "texture": "menagerie/wildlife/entity/lizard/dye/blue",
+          "babyTexture": "menagerie/wildlife/entity/lizard/dye/blue",
+          "weight": 0,
+          "model": "wildlife/lizard/dye_blue_model",
+          "babyModel": "wildlife/lizard/dye_blue_babyModel"
+        },
+        {
+          "name": "dye_brown",
+          "texture": "menagerie/wildlife/entity/lizard/dye/brown",
+          "babyTexture": "menagerie/wildlife/entity/lizard/dye/brown",
+          "weight": 0,
+          "model": "wildlife/lizard/dye_brown_model",
+          "babyModel": "wildlife/lizard/dye_brown_babyModel"
+        },
+        {
+          "name": "dye_cyan",
+          "texture": "menagerie/wildlife/entity/lizard/dye/cyan",
+          "babyTexture": "menagerie/wildlife/entity/lizard/dye/cyan",
+          "weight": 0,
+          "model": "wildlife/lizard/dye_cyan_model",
+          "babyModel": "wildlife/lizard/dye_cyan_babyModel"
+        },
+        {
+          "name": "dye_gray",
+          "texture": "menagerie/wildlife/entity/lizard/dye/gray",
+          "babyTexture": "menagerie/wildlife/entity/lizard/dye/gray",
+          "weight": 0,
+          "model": "wildlife/lizard/dye_gray_model",
+          "babyModel": "wildlife/lizard/dye_gray_babyModel"
+        },
+        {
+          "name": "dye_green",
+          "texture": "menagerie/wildlife/entity/lizard/dye/green",
+          "babyTexture": "menagerie/wildlife/entity/lizard/dye/green",
+          "weight": 0,
+          "model": "wildlife/lizard/dye_green_model",
+          "babyModel": "wildlife/lizard/dye_green_babyModel"
+        },
+        {
+          "name": "dye_light_blue",
+          "texture": "menagerie/wildlife/entity/lizard/dye/light_blue",
+          "babyTexture": "menagerie/wildlife/entity/lizard/dye/light_blue",
+          "weight": 0,
+          "model": "wildlife/lizard/dye_light_blue_model",
+          "babyModel": "wildlife/lizard/dye_light_blue_babyModel"
+        },
+        {
+          "name": "dye_light_gray",
+          "texture": "menagerie/wildlife/entity/lizard/dye/light_gray",
+          "babyTexture": "menagerie/wildlife/entity/lizard/dye/light_gray",
+          "weight": 0,
+          "model": "wildlife/lizard/dye_light_gray_model",
+          "babyModel": "wildlife/lizard/dye_light_gray_babyModel"
+        },
+        {
+          "name": "dye_lime",
+          "texture": "menagerie/wildlife/entity/lizard/dye/lime",
+          "babyTexture": "menagerie/wildlife/entity/lizard/dye/lime",
+          "weight": 0,
+          "model": "wildlife/lizard/dye_lime_model",
+          "babyModel": "wildlife/lizard/dye_lime_babyModel"
+        },
+        {
+          "name": "dye_magenta",
+          "texture": "menagerie/wildlife/entity/lizard/dye/magenta",
+          "babyTexture": "menagerie/wildlife/entity/lizard/dye/magenta",
+          "weight": 0,
+          "model": "wildlife/lizard/dye_magenta_model",
+          "babyModel": "wildlife/lizard/dye_magenta_babyModel"
+        },
+        {
+          "name": "dye_orange",
+          "texture": "menagerie/wildlife/entity/lizard/dye/orange",
+          "babyTexture": "menagerie/wildlife/entity/lizard/dye/orange",
+          "weight": 0,
+          "model": "wildlife/lizard/dye_orange_model",
+          "babyModel": "wildlife/lizard/dye_orange_babyModel"
+        },
+        {
+          "name": "dye_pink",
+          "texture": "menagerie/wildlife/entity/lizard/dye/pink",
+          "babyTexture": "menagerie/wildlife/entity/lizard/dye/pink",
+          "weight": 0,
+          "model": "wildlife/lizard/dye_pink_model",
+          "babyModel": "wildlife/lizard/dye_pink_babyModel"
+        },
+        {
+          "name": "dye_purple",
+          "texture": "menagerie/wildlife/entity/lizard/dye/purple",
+          "babyTexture": "menagerie/wildlife/entity/lizard/dye/purple",
+          "weight": 0,
+          "model": "wildlife/lizard/dye_purple_model",
+          "babyModel": "wildlife/lizard/dye_purple_babyModel"
+        },
+        {
+          "name": "dye_red",
+          "texture": "menagerie/wildlife/entity/lizard/dye/red",
+          "babyTexture": "menagerie/wildlife/entity/lizard/dye/red",
+          "weight": 0,
+          "model": "wildlife/lizard/dye_red_model",
+          "babyModel": "wildlife/lizard/dye_red_babyModel"
+        },
+        {
+          "name": "dye_white",
+          "texture": "menagerie/wildlife/entity/lizard/dye/white",
+          "babyTexture": "menagerie/wildlife/entity/lizard/dye/white",
+          "weight": 0,
+          "model": "wildlife/lizard/dye_white_model",
+          "babyModel": "wildlife/lizard/dye_white_babyModel"
+        },
+        {
+          "name": "dye_yellow",
+          "texture": "menagerie/wildlife/entity/lizard/dye/yellow",
+          "babyTexture": "menagerie/wildlife/entity/lizard/dye/yellow",
+          "weight": 0,
+          "model": "wildlife/lizard/dye_yellow_model",
+          "babyModel": "wildlife/lizard/dye_yellow_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "mammoth",
+      "id": "wildlife_mammoth",
+      "name": "Mammoth",
+      "shape": "elephant",
+      "movement": "land",
+      "habitat": "snowy",
+      "mood": "neutral",
+      "width": 2.8,
+      "height": 3.3,
+      "health": 80,
+      "feed": "minecraft:wheat",
+      "mount": false,
+      "model": "wildlife_mammoth",
+      "variants": [
+        {
+          "name": "mammoth",
+          "texture": "menagerie/wildlife/entity/mammoth/mammoth",
+          "babyTexture": "menagerie/wildlife/entity/mammoth/mammoth_baby",
+          "weight": 1,
+          "model": "wildlife/mammoth/mammoth_model",
+          "babyModel": "wildlife/mammoth/mammoth_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "mole",
+      "id": "wildlife_mole",
+      "name": "Mole",
+      "shape": "rodent",
+      "movement": "land",
+      "habitat": "forest",
+      "mood": "passive",
+      "width": 0.45,
+      "height": 0.35,
+      "health": 8,
+      "feed": "minecraft:carrot",
+      "mount": false,
+      "model": "wildlife_mole",
+      "variants": [
+        {
+          "name": "mole",
+          "texture": "menagerie/wildlife/entity/mole",
+          "babyTexture": "menagerie/wildlife/entity/mole",
+          "weight": 1,
+          "model": "wildlife/mole/mole_model",
+          "babyModel": "wildlife/mole/mole_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "ostrich",
+      "id": "wildlife_ostrich",
+      "name": "Ostrich",
+      "shape": "ostrich",
+      "movement": "land",
+      "habitat": "savanna",
+      "mood": "neutral",
+      "width": 0.9,
+      "height": 1.8,
+      "health": 22,
+      "feed": "minecraft:wheat_seeds",
+      "mount": false,
+      "model": "wildlife_ostrich",
+      "variants": [
+        {
+          "name": "ostrich",
+          "texture": "menagerie/wildlife/entity/ostrich/ostrich",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/ostrich_baby",
+          "weight": 1,
+          "model": "wildlife/ostrich/ostrich_model",
+          "babyModel": "wildlife/ostrich/ostrich_babyModel"
+        },
+        {
+          "name": "dye_black",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/black",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/black_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_black_model",
+          "babyModel": "wildlife/ostrich/dye_black_babyModel"
+        },
+        {
+          "name": "dye_black_baby",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/black_baby",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/black_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_black_baby_model",
+          "babyModel": "wildlife/ostrich/dye_black_baby_babyModel"
+        },
+        {
+          "name": "dye_blue",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/blue",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/blue_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_blue_model",
+          "babyModel": "wildlife/ostrich/dye_blue_babyModel"
+        },
+        {
+          "name": "dye_blue_baby",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/blue_baby",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/blue_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_blue_baby_model",
+          "babyModel": "wildlife/ostrich/dye_blue_baby_babyModel"
+        },
+        {
+          "name": "dye_brown",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/brown",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/brown_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_brown_model",
+          "babyModel": "wildlife/ostrich/dye_brown_babyModel"
+        },
+        {
+          "name": "dye_brown_baby",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/brown_baby",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/brown_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_brown_baby_model",
+          "babyModel": "wildlife/ostrich/dye_brown_baby_babyModel"
+        },
+        {
+          "name": "dye_cyan",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/cyan",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/cyan_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_cyan_model",
+          "babyModel": "wildlife/ostrich/dye_cyan_babyModel"
+        },
+        {
+          "name": "dye_cyan_baby",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/cyan_baby",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/cyan_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_cyan_baby_model",
+          "babyModel": "wildlife/ostrich/dye_cyan_baby_babyModel"
+        },
+        {
+          "name": "dye_gray",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/gray",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/gray_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_gray_model",
+          "babyModel": "wildlife/ostrich/dye_gray_babyModel"
+        },
+        {
+          "name": "dye_gray_baby",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/gray_baby",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/gray_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_gray_baby_model",
+          "babyModel": "wildlife/ostrich/dye_gray_baby_babyModel"
+        },
+        {
+          "name": "dye_green",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/green",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/green_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_green_model",
+          "babyModel": "wildlife/ostrich/dye_green_babyModel"
+        },
+        {
+          "name": "dye_green_baby",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/green_baby",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/green_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_green_baby_model",
+          "babyModel": "wildlife/ostrich/dye_green_baby_babyModel"
+        },
+        {
+          "name": "dye_light_blue",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/light_blue",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/light_blue_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_light_blue_model",
+          "babyModel": "wildlife/ostrich/dye_light_blue_babyModel"
+        },
+        {
+          "name": "dye_light_blue_baby",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/light_blue_baby",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/light_blue_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_light_blue_baby_model",
+          "babyModel": "wildlife/ostrich/dye_light_blue_baby_babyModel"
+        },
+        {
+          "name": "dye_light_gray",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/light_gray",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/light_gray_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_light_gray_model",
+          "babyModel": "wildlife/ostrich/dye_light_gray_babyModel"
+        },
+        {
+          "name": "dye_light_gray_baby",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/light_gray_baby",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/light_gray_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_light_gray_baby_model",
+          "babyModel": "wildlife/ostrich/dye_light_gray_baby_babyModel"
+        },
+        {
+          "name": "dye_lime",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/lime",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/lime_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_lime_model",
+          "babyModel": "wildlife/ostrich/dye_lime_babyModel"
+        },
+        {
+          "name": "dye_lime_baby",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/lime_baby",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/lime_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_lime_baby_model",
+          "babyModel": "wildlife/ostrich/dye_lime_baby_babyModel"
+        },
+        {
+          "name": "dye_magenta",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/magenta",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/magenta_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_magenta_model",
+          "babyModel": "wildlife/ostrich/dye_magenta_babyModel"
+        },
+        {
+          "name": "dye_magenta_baby",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/magenta_baby",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/magenta_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_magenta_baby_model",
+          "babyModel": "wildlife/ostrich/dye_magenta_baby_babyModel"
+        },
+        {
+          "name": "dye_orange",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/orange",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/orange_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_orange_model",
+          "babyModel": "wildlife/ostrich/dye_orange_babyModel"
+        },
+        {
+          "name": "dye_orange_baby",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/orange_baby",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/orange_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_orange_baby_model",
+          "babyModel": "wildlife/ostrich/dye_orange_baby_babyModel"
+        },
+        {
+          "name": "dye_pink",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/pink",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/pink_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_pink_model",
+          "babyModel": "wildlife/ostrich/dye_pink_babyModel"
+        },
+        {
+          "name": "dye_pink_baby",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/pink_baby",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/pink_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_pink_baby_model",
+          "babyModel": "wildlife/ostrich/dye_pink_baby_babyModel"
+        },
+        {
+          "name": "dye_purple",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/purple",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/purple_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_purple_model",
+          "babyModel": "wildlife/ostrich/dye_purple_babyModel"
+        },
+        {
+          "name": "dye_purple_baby",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/purple_baby",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/purple_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_purple_baby_model",
+          "babyModel": "wildlife/ostrich/dye_purple_baby_babyModel"
+        },
+        {
+          "name": "dye_red",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/red",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/red_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_red_model",
+          "babyModel": "wildlife/ostrich/dye_red_babyModel"
+        },
+        {
+          "name": "dye_red_baby",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/red_baby",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/red_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_red_baby_model",
+          "babyModel": "wildlife/ostrich/dye_red_baby_babyModel"
+        },
+        {
+          "name": "dye_white",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/white",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/white_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_white_model",
+          "babyModel": "wildlife/ostrich/dye_white_babyModel"
+        },
+        {
+          "name": "dye_white_baby",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/white_baby",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/white_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_white_baby_model",
+          "babyModel": "wildlife/ostrich/dye_white_baby_babyModel"
+        },
+        {
+          "name": "dye_yellow",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/yellow",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/yellow_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_yellow_model",
+          "babyModel": "wildlife/ostrich/dye_yellow_babyModel"
+        },
+        {
+          "name": "dye_yellow_baby",
+          "texture": "menagerie/wildlife/entity/ostrich/dye/yellow_baby",
+          "babyTexture": "menagerie/wildlife/entity/ostrich/dye/yellow_baby",
+          "weight": 0,
+          "model": "wildlife/ostrich/dye_yellow_baby_model",
+          "babyModel": "wildlife/ostrich/dye_yellow_baby_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "piranha",
+      "id": "wildlife_piranha",
+      "name": "Piranha",
+      "shape": "fish",
+      "movement": "water",
+      "habitat": "jungle",
+      "mood": "predator",
+      "width": 0.4,
+      "height": 0.4,
+      "health": 8,
+      "feed": "minecraft:beef",
+      "mount": false,
+      "model": "wildlife_piranha",
+      "variants": [
+        {
+          "name": "piranha",
+          "texture": "menagerie/wildlife/entity/piranha",
+          "babyTexture": "menagerie/wildlife/entity/piranha",
+          "weight": 1,
+          "model": "wildlife/piranha/piranha_model",
+          "babyModel": "wildlife/piranha/piranha_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "rat",
+      "id": "wildlife_rat",
+      "name": "Rat",
+      "shape": "rodent",
+      "movement": "land",
+      "habitat": "plains",
+      "mood": "passive",
+      "width": 0.4,
+      "height": 0.3,
+      "health": 6,
+      "feed": "minecraft:wheat",
+      "mount": false,
+      "model": "wildlife_rat",
+      "variants": [
+        {
+          "name": "black",
+          "texture": "menagerie/wildlife/entity/rat/black",
+          "babyTexture": "menagerie/wildlife/entity/rat/black",
+          "weight": 1,
+          "model": "wildlife/rat/black_model",
+          "babyModel": "wildlife/rat/black_babyModel"
+        },
+        {
+          "name": "brown",
+          "texture": "menagerie/wildlife/entity/rat/brown",
+          "babyTexture": "menagerie/wildlife/entity/rat/brown",
+          "weight": 1,
+          "model": "wildlife/rat/brown_model",
+          "babyModel": "wildlife/rat/brown_babyModel"
+        },
+        {
+          "name": "white",
+          "texture": "menagerie/wildlife/entity/rat/white",
+          "babyTexture": "menagerie/wildlife/entity/rat/white",
+          "weight": 1,
+          "model": "wildlife/rat/white_model",
+          "babyModel": "wildlife/rat/white_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "ray",
+      "id": "wildlife_ray",
+      "name": "Ray",
+      "shape": "ray",
+      "movement": "water",
+      "habitat": "ocean",
+      "mood": "neutral",
+      "width": 1.2,
+      "height": 0.4,
+      "health": 16,
+      "feed": "minecraft:cod",
+      "mount": false,
+      "model": "wildlife_ray",
+      "variants": [
+        {
+          "name": "eagle_ray",
+          "texture": "menagerie/wildlife/entity/ray/eagle_ray",
+          "babyTexture": "menagerie/wildlife/entity/ray/eagle_ray",
+          "weight": 1,
+          "model": "wildlife/ray/eagle_ray_model",
+          "babyModel": "wildlife/ray/eagle_ray_babyModel"
+        },
+        {
+          "name": "mobula_ray",
+          "texture": "menagerie/wildlife/entity/ray/mobula_ray",
+          "babyTexture": "menagerie/wildlife/entity/ray/mobula_ray",
+          "weight": 0,
+          "model": "wildlife/ray/mobula_ray_model",
+          "babyModel": "wildlife/ray/mobula_ray_babyModel"
+        },
+        {
+          "name": "stingray",
+          "texture": "menagerie/wildlife/entity/ray/stingray",
+          "babyTexture": "menagerie/wildlife/entity/ray/stingray",
+          "weight": 0,
+          "model": "wildlife/ray/stingray_model",
+          "babyModel": "wildlife/ray/stingray_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "rhino",
+      "id": "wildlife_rhino",
+      "name": "Rhino",
+      "shape": "rhino",
+      "movement": "land",
+      "habitat": "savanna",
+      "mood": "neutral",
+      "width": 1.7,
+      "height": 1.8,
+      "health": 45,
+      "feed": "minecraft:wheat",
+      "mount": false,
+      "model": "wildlife_rhino",
+      "variants": [
+        {
+          "name": "rhino",
+          "texture": "menagerie/wildlife/entity/rhino",
+          "babyTexture": "menagerie/wildlife/entity/rhino",
+          "weight": 1,
+          "model": "wildlife/rhino/rhino_model",
+          "babyModel": "wildlife/rhino/rhino_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "snail",
+      "id": "wildlife_snail",
+      "name": "Snail",
+      "shape": "shell",
+      "movement": "land",
+      "habitat": "forest",
+      "mood": "passive",
+      "width": 0.35,
+      "height": 0.35,
+      "health": 6,
+      "feed": "minecraft:red_mushroom",
+      "mount": false,
+      "model": "wildlife_snail",
+      "variants": [
+        {
+          "name": "snail",
+          "texture": "menagerie/wildlife/entity/snail/brown",
+          "babyTexture": "menagerie/wildlife/entity/snail/brown",
+          "weight": 1,
+          "model": "wildlife/snail/snail_model",
+          "babyModel": "wildlife/snail/snail_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "snake",
+      "id": "wildlife_snake",
+      "name": "Snake",
+      "shape": "snake",
+      "movement": "land",
+      "habitat": "desert",
+      "mood": "neutral",
+      "width": 0.6,
+      "height": 0.25,
+      "health": 10,
+      "feed": "minecraft:rabbit",
+      "mount": false,
+      "model": "wildlife_snake",
+      "variants": [
+        {
+          "name": "coral_snake",
+          "texture": "menagerie/wildlife/entity/snake/coral_snake",
+          "babyTexture": "menagerie/wildlife/entity/snake/coral_snake",
+          "weight": 1,
+          "model": "wildlife/snake/coral_snake_model",
+          "babyModel": "wildlife/snake/coral_snake_babyModel"
+        },
+        {
+          "name": "rattlesnake",
+          "texture": "menagerie/wildlife/entity/snake/rattle_snake",
+          "babyTexture": "menagerie/wildlife/entity/snake/rattle_snake",
+          "weight": 1,
+          "model": "wildlife/snake/rattlesnake_model",
+          "babyModel": "wildlife/snake/rattlesnake_babyModel"
+        },
+        {
+          "name": "snake",
+          "texture": "menagerie/wildlife/entity/snake/green_snake",
+          "babyTexture": "menagerie/wildlife/entity/snake/green_snake",
+          "weight": 1,
+          "model": "wildlife/snake/snake_model",
+          "babyModel": "wildlife/snake/snake_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "starfish",
+      "id": "wildlife_starfish",
+      "name": "Starfish",
+      "shape": "star",
+      "movement": "water",
+      "habitat": "beach",
+      "mood": "passive",
+      "width": 0.4,
+      "height": 0.18,
+      "health": 6,
+      "feed": "minecraft:kelp",
+      "mount": false,
+      "model": "wildlife_starfish",
+      "variants": [
+        {
+          "name": "blue",
+          "texture": "menagerie/wildlife/entity/starfish/blue",
+          "babyTexture": "menagerie/wildlife/entity/starfish/blue",
+          "weight": 1,
+          "model": "wildlife/starfish/blue_model",
+          "babyModel": "wildlife/starfish/blue_babyModel"
+        },
+        {
+          "name": "orange",
+          "texture": "menagerie/wildlife/entity/starfish/orange",
+          "babyTexture": "menagerie/wildlife/entity/starfish/orange",
+          "weight": 1,
+          "model": "wildlife/starfish/orange_model",
+          "babyModel": "wildlife/starfish/orange_babyModel"
+        },
+        {
+          "name": "purple",
+          "texture": "menagerie/wildlife/entity/starfish/purple",
+          "babyTexture": "menagerie/wildlife/entity/starfish/purple",
+          "weight": 1,
+          "model": "wildlife/starfish/purple_model",
+          "babyModel": "wildlife/starfish/purple_babyModel"
+        },
+        {
+          "name": "red",
+          "texture": "menagerie/wildlife/entity/starfish/red",
+          "babyTexture": "menagerie/wildlife/entity/starfish/red",
+          "weight": 1,
+          "model": "wildlife/starfish/red_model",
+          "babyModel": "wildlife/starfish/red_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "tiger",
+      "id": "wildlife_tiger",
+      "name": "Tiger",
+      "shape": "cat",
+      "movement": "land",
+      "habitat": "jungle",
+      "mood": "predator",
+      "width": 1.2,
+      "height": 1.2,
+      "health": 32,
+      "feed": "minecraft:beef",
+      "mount": false,
+      "model": "wildlife_tiger",
+      "variants": [
+        {
+          "name": "black_panther",
+          "texture": "menagerie/wildlife/entity/tiger/black_panther",
+          "babyTexture": "menagerie/wildlife/entity/tiger/black_panther_baby",
+          "weight": 1,
+          "model": "wildlife/tiger/black_panther_model",
+          "babyModel": "wildlife/tiger/black_panther_babyModel"
+        },
+        {
+          "name": "leopard",
+          "texture": "menagerie/wildlife/entity/tiger/leopard",
+          "babyTexture": "menagerie/wildlife/entity/tiger/leopard_baby",
+          "weight": 1,
+          "model": "wildlife/tiger/leopard_model",
+          "babyModel": "wildlife/tiger/leopard_babyModel"
+        },
+        {
+          "name": "tiger",
+          "texture": "menagerie/wildlife/entity/tiger/tiger",
+          "babyTexture": "menagerie/wildlife/entity/tiger/tiger_baby",
+          "weight": 1,
+          "model": "wildlife/tiger/tiger_model",
+          "babyModel": "wildlife/tiger/tiger_babyModel"
+        },
+        {
+          "name": "white_tiger",
+          "texture": "menagerie/wildlife/entity/tiger/white_tiger",
+          "babyTexture": "menagerie/wildlife/entity/tiger/white_tiger_baby",
+          "weight": 1,
+          "model": "wildlife/tiger/white_tiger_model",
+          "babyModel": "wildlife/tiger/white_tiger_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "tortoise",
+      "id": "wildlife_tortoise",
+      "name": "Tortoise",
+      "shape": "shell",
+      "movement": "land",
+      "habitat": "savanna",
+      "mood": "passive",
+      "width": 0.8,
+      "height": 0.55,
+      "health": 18,
+      "feed": "minecraft:cactus",
+      "mount": false,
+      "model": "wildlife_tortoise",
+      "variants": [
+        {
+          "name": "black",
+          "texture": "menagerie/wildlife/entity/tortoise/black",
+          "babyTexture": "menagerie/wildlife/entity/tortoise/black_baby",
+          "weight": 1,
+          "model": "wildlife/tortoise/black_model",
+          "babyModel": "wildlife/tortoise/black_babyModel"
+        },
+        {
+          "name": "brown",
+          "texture": "menagerie/wildlife/entity/tortoise/brown",
+          "babyTexture": "menagerie/wildlife/entity/tortoise/brown_baby",
+          "weight": 1,
+          "model": "wildlife/tortoise/brown_model",
+          "babyModel": "wildlife/tortoise/brown_babyModel"
+        },
+        {
+          "name": "green",
+          "texture": "menagerie/wildlife/entity/tortoise/green",
+          "babyTexture": "menagerie/wildlife/entity/tortoise/green_baby",
+          "weight": 1,
+          "model": "wildlife/tortoise/green_model",
+          "babyModel": "wildlife/tortoise/green_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "turkey",
+      "id": "wildlife_turkey",
+      "name": "Turkey",
+      "shape": "bird",
+      "movement": "land",
+      "habitat": "forest",
+      "mood": "passive",
+      "width": 0.65,
+      "height": 0.8,
+      "health": 12,
+      "feed": "minecraft:wheat_seeds",
+      "mount": false,
+      "model": "wildlife_turkey",
+      "variants": [
+        {
+          "name": "turkey",
+          "texture": "menagerie/wildlife/entity/turkey",
+          "babyTexture": "menagerie/wildlife/entity/turkey",
+          "weight": 1,
+          "model": "wildlife/turkey/turkey_model",
+          "babyModel": "wildlife/turkey/turkey_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "vulture",
+      "id": "wildlife_vulture",
+      "name": "Vulture",
+      "shape": "bird",
+      "movement": "air",
+      "habitat": "badlands",
+      "mood": "neutral",
+      "width": 0.85,
+      "height": 0.9,
+      "health": 16,
+      "feed": "minecraft:rotten_flesh",
+      "mount": false,
+      "model": "wildlife_vulture",
+      "variants": [
+        {
+          "name": "vulture",
+          "texture": "menagerie/wildlife/entity/vulture",
+          "babyTexture": "menagerie/wildlife/entity/vulture/vulture_baby",
+          "weight": 1,
+          "model": "wildlife/vulture/vulture_model",
+          "babyModel": "wildlife/vulture/vulture_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "whale",
+      "id": "wildlife_whale",
+      "name": "Whale",
+      "shape": "whale",
+      "movement": "water",
+      "habitat": "deep_ocean",
+      "mood": "passive",
+      "width": 3.5,
+      "height": 2.2,
+      "health": 100,
+      "feed": "minecraft:cod",
+      "mount": false,
+      "model": "wildlife_whale",
+      "variants": [
+        {
+          "name": "whale",
+          "texture": "menagerie/wildlife/entity/whale/whale",
+          "babyTexture": "menagerie/wildlife/entity/whale/whale_baby",
+          "weight": 1,
+          "model": "wildlife/whale/whale_model",
+          "babyModel": "wildlife/whale/whale_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "zebra",
+      "id": "wildlife_zebra",
+      "name": "Zebra",
+      "shape": "horse",
+      "movement": "land",
+      "habitat": "savanna",
+      "mood": "passive",
+      "width": 1.1,
+      "height": 1.6,
+      "health": 24,
+      "feed": "minecraft:wheat",
+      "mount": false,
+      "model": "wildlife_zebra",
+      "variants": [
+        {
+          "name": "zebra",
+          "texture": "menagerie/wildlife/entity/zebra",
+          "babyTexture": "menagerie/wildlife/entity/zebra_baby",
+          "weight": 1,
+          "model": "wildlife/zebra/zebra_model",
+          "babyModel": "wildlife/zebra/zebra_babyModel"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "acencia",
+      "id": "mount_acencia",
+      "name": "Acencia",
+      "shape": "acenciamount",
+      "movement": "land",
+      "habitat": "forest",
+      "mood": "neutral",
+      "width": 1.3,
+      "height": 1.7,
+      "health": 40,
+      "feed": "minecraft:golden_carrot",
+      "mount": true,
+      "model": "mount_acencia",
+      "variants": [
+        {
+          "name": "acencia_mount1",
+          "texture": "menagerie/mount/model/entity/acencia_mount1",
+          "babyTexture": "menagerie/mount/model/entity/acencia_mount1",
+          "weight": 1
+        },
+        {
+          "name": "acencia_mount2",
+          "texture": "menagerie/mount/model/entity/acencia_mount2",
+          "babyTexture": "menagerie/mount/model/entity/acencia_mount2",
+          "weight": 1
+        },
+        {
+          "name": "acencia_mount3",
+          "texture": "menagerie/mount/model/entity/acencia_mount3",
+          "babyTexture": "menagerie/mount/model/entity/acencia_mount3",
+          "weight": 1
+        },
+        {
+          "name": "acencia_mount4",
+          "texture": "menagerie/mount/model/entity/acencia_mount4",
+          "babyTexture": "menagerie/mount/model/entity/acencia_mount4",
+          "weight": 1
+        },
+        {
+          "name": "acencia_mount5",
+          "texture": "menagerie/mount/model/entity/acencia_mount5",
+          "babyTexture": "menagerie/mount/model/entity/acencia_mount5",
+          "weight": 1
+        }
+      ],
+      "clips": [
+        "animation.mount.none",
+        "animation.mount.body",
+        "animation.mount.neutral",
+        "animation.mount.blink",
+        "animation.mount.walk",
+        "animation.mount.sprint2",
+        "animation.mount.fly",
+        "animation.mount.sit",
+        "animation.mount.sleep",
+        "animation.mount.attack",
+        "animation.mount.sitdown",
+        "animation.mount.standup",
+        "animation.mount.gotosleep",
+        "animation.mount.wakeup",
+        "animation.mount.idle",
+        "animation.mount.idle2",
+        "animation.mount.idle3",
+        "animation.mount.idle4",
+        "animation.mount.idle5",
+        "animation.mount.idle6",
+        "animation.mount.screenshot",
+        "animation.mount.sprint",
+        "animation.mount.climb"
+      ],
+      "armorTextures": {
+        "diamond": "menagerie/mount/model/entity/armor/acencia_armor_diamond",
+        "golden": "menagerie/mount/model/entity/armor/acencia_armor_gold",
+        "iron": "menagerie/mount/model/entity/armor/acencia_armor_iron",
+        "leather": "menagerie/mount/model/entity/armor/acencia_armor_leather",
+        "other": "menagerie/mount/model/entity/armor/acencia_armor_other"
+      }
+    },
+    {
+      "source": "netherbat",
+      "id": "mount_netherbat",
+      "name": "Netherbat",
+      "shape": "batmount",
+      "movement": "air",
+      "habitat": "nether",
+      "mood": "neutral",
+      "width": 1.4,
+      "height": 1.2,
+      "health": 48,
+      "feed": "minecraft:golden_carrot",
+      "mount": true,
+      "model": "mount_netherbat",
+      "variants": [
+        {
+          "name": "bat_mount",
+          "texture": "menagerie/mount/model/entity/bat_mount",
+          "babyTexture": "menagerie/mount/model/entity/bat_mount",
+          "weight": 1
+        },
+        {
+          "name": "bat_mount2",
+          "texture": "menagerie/mount/model/entity/bat_mount2",
+          "babyTexture": "menagerie/mount/model/entity/bat_mount2",
+          "weight": 1
+        },
+        {
+          "name": "bat_mount3",
+          "texture": "menagerie/mount/model/entity/bat_mount3",
+          "babyTexture": "menagerie/mount/model/entity/bat_mount3",
+          "weight": 1
+        }
+      ],
+      "clips": [
+        "animation.mount.none",
+        "animation.mount.neutral",
+        "animation.mount.blink",
+        "animation.mount.walk",
+        "animation.mount.sprint",
+        "animation.mount.fly",
+        "animation.mount.sit",
+        "animation.mount.sleep",
+        "animation.mount.attack",
+        "animation.mount.sitdown",
+        "animation.mount.standup",
+        "animation.mount.gotosleep",
+        "animation.mount.wakeup",
+        "animation.mount.idle",
+        "animation.mount.idle2",
+        "animation.mount.idle3",
+        "animation.mount.idle4",
+        "animation.mount.idle5",
+        "animation.mount.foldwings"
+      ],
+      "armorTextures": {
+        "diamond": "menagerie/mount/model/entity/armor/bat_armor_diamond",
+        "golden": "menagerie/mount/model/entity/armor/bat_armor_gold",
+        "iron": "menagerie/mount/model/entity/armor/bat_armor_iron",
+        "leather": "menagerie/mount/model/entity/armor/bat_armor_leather",
+        "other": "menagerie/mount/model/entity/armor/bat_armor_other"
+      }
+    },
+    {
+      "source": "colelytra",
+      "id": "mount_colelytra",
+      "name": "Colelytra",
+      "shape": "colelytramount",
+      "movement": "air",
+      "habitat": "forest",
+      "mood": "neutral",
+      "width": 1.4,
+      "height": 1.1,
+      "health": 48,
+      "feed": "minecraft:golden_carrot",
+      "mount": true,
+      "model": "mount_colelytra",
+      "variants": [
+        {
+          "name": "colelytra_mount1",
+          "texture": "menagerie/mount/model/entity/colelytra_mount1",
+          "babyTexture": "menagerie/mount/model/entity/colelytra_mount1",
+          "weight": 1
+        },
+        {
+          "name": "colelytra_mount2",
+          "texture": "menagerie/mount/model/entity/colelytra_mount2",
+          "babyTexture": "menagerie/mount/model/entity/colelytra_mount2",
+          "weight": 1
+        },
+        {
+          "name": "colelytra_mount3",
+          "texture": "menagerie/mount/model/entity/colelytra_mount3",
+          "babyTexture": "menagerie/mount/model/entity/colelytra_mount3",
+          "weight": 1
+        },
+        {
+          "name": "colelytra_mount4",
+          "texture": "menagerie/mount/model/entity/colelytra_mount4",
+          "babyTexture": "menagerie/mount/model/entity/colelytra_mount4",
+          "weight": 1
+        },
+        {
+          "name": "colelytra_mount_black",
+          "texture": "menagerie/mount/model/entity/colelytra_mount_black",
+          "babyTexture": "menagerie/mount/model/entity/colelytra_mount_black",
+          "weight": 1
+        },
+        {
+          "name": "colelytra_mount_blue",
+          "texture": "menagerie/mount/model/entity/colelytra_mount_blue",
+          "babyTexture": "menagerie/mount/model/entity/colelytra_mount_blue",
+          "weight": 1
+        },
+        {
+          "name": "colelytra_mount_brown",
+          "texture": "menagerie/mount/model/entity/colelytra_mount_brown",
+          "babyTexture": "menagerie/mount/model/entity/colelytra_mount_brown",
+          "weight": 1
+        },
+        {
+          "name": "colelytra_mount_cyan",
+          "texture": "menagerie/mount/model/entity/colelytra_mount_cyan",
+          "babyTexture": "menagerie/mount/model/entity/colelytra_mount_cyan",
+          "weight": 1
+        },
+        {
+          "name": "colelytra_mount_gray",
+          "texture": "menagerie/mount/model/entity/colelytra_mount_gray",
+          "babyTexture": "menagerie/mount/model/entity/colelytra_mount_gray",
+          "weight": 1
+        },
+        {
+          "name": "colelytra_mount_green",
+          "texture": "menagerie/mount/model/entity/colelytra_mount_green",
+          "babyTexture": "menagerie/mount/model/entity/colelytra_mount_green",
+          "weight": 1
+        },
+        {
+          "name": "colelytra_mount_light_blue",
+          "texture": "menagerie/mount/model/entity/colelytra_mount_light_blue",
+          "babyTexture": "menagerie/mount/model/entity/colelytra_mount_light_blue",
+          "weight": 1
+        },
+        {
+          "name": "colelytra_mount_light_gray",
+          "texture": "menagerie/mount/model/entity/colelytra_mount_light_gray",
+          "babyTexture": "menagerie/mount/model/entity/colelytra_mount_light_gray",
+          "weight": 1
+        },
+        {
+          "name": "colelytra_mount_lime",
+          "texture": "menagerie/mount/model/entity/colelytra_mount_lime",
+          "babyTexture": "menagerie/mount/model/entity/colelytra_mount_lime",
+          "weight": 1
+        },
+        {
+          "name": "colelytra_mount_magenta",
+          "texture": "menagerie/mount/model/entity/colelytra_mount_magenta",
+          "babyTexture": "menagerie/mount/model/entity/colelytra_mount_magenta",
+          "weight": 1
+        },
+        {
+          "name": "colelytra_mount_orange",
+          "texture": "menagerie/mount/model/entity/colelytra_mount_orange",
+          "babyTexture": "menagerie/mount/model/entity/colelytra_mount_orange",
+          "weight": 1
+        },
+        {
+          "name": "colelytra_mount_pink",
+          "texture": "menagerie/mount/model/entity/colelytra_mount_pink",
+          "babyTexture": "menagerie/mount/model/entity/colelytra_mount_pink",
+          "weight": 1
+        },
+        {
+          "name": "colelytra_mount_purple",
+          "texture": "menagerie/mount/model/entity/colelytra_mount_purple",
+          "babyTexture": "menagerie/mount/model/entity/colelytra_mount_purple",
+          "weight": 1
+        },
+        {
+          "name": "colelytra_mount_red",
+          "texture": "menagerie/mount/model/entity/colelytra_mount_red",
+          "babyTexture": "menagerie/mount/model/entity/colelytra_mount_red",
+          "weight": 1
+        },
+        {
+          "name": "colelytra_mount_white",
+          "texture": "menagerie/mount/model/entity/colelytra_mount_white",
+          "babyTexture": "menagerie/mount/model/entity/colelytra_mount_white",
+          "weight": 1
+        },
+        {
+          "name": "colelytra_mount_yellow",
+          "texture": "menagerie/mount/model/entity/colelytra_mount_yellow",
+          "babyTexture": "menagerie/mount/model/entity/colelytra_mount_yellow",
+          "weight": 1
+        }
+      ],
+      "clips": [
+        "animation.mount.none",
+        "animation.mount.neutral",
+        "animation.mount.blink",
+        "animation.mount.walk",
+        "animation.mount.sprint",
+        "animation.mount.fly",
+        "animation.mount.fly2",
+        "animation.mount.sit",
+        "animation.mount.sleep",
+        "animation.mount.sitdown",
+        "animation.mount.standup",
+        "animation.mount.gotosleep",
+        "animation.mount.wakeup",
+        "animation.mount.idle",
+        "animation.mount.idle2",
+        "animation.mount.idle3",
+        "animation.mount.idle4",
+        "animation.mount.idle5",
+        "animation.mount.idle6",
+        "animation.mount.idle7"
+      ],
+      "armorTextures": {
+        "diamond": "menagerie/mount/model/entity/armor/colelytra_armor_diamond",
+        "golden": "menagerie/mount/model/entity/armor/colelytra_armor_gold",
+        "iron": "menagerie/mount/model/entity/armor/colelytra_armor_iron",
+        "leather": "menagerie/mount/model/entity/armor/colelytra_armor_leather",
+        "other": "menagerie/mount/model/entity/armor/colelytra_armor_other"
+      }
+    },
+    {
+      "source": "courierbird",
+      "id": "mount_courierbird",
+      "name": "Courierbird",
+      "shape": "courierbirdmount",
+      "movement": "air",
+      "habitat": "meadow",
+      "mood": "neutral",
+      "width": 1.2,
+      "height": 1.8,
+      "health": 48,
+      "feed": "minecraft:golden_carrot",
+      "mount": true,
+      "model": "mount_courierbird",
+      "variants": [
+        {
+          "name": "courierbird_mount",
+          "texture": "menagerie/mount/model/entity/courierbird_mount",
+          "babyTexture": "menagerie/mount/model/entity/courierbird_mount",
+          "weight": 1
+        },
+        {
+          "name": "courierbird_mount2",
+          "texture": "menagerie/mount/model/entity/courierbird_mount2",
+          "babyTexture": "menagerie/mount/model/entity/courierbird_mount2",
+          "weight": 1
+        },
+        {
+          "name": "courierbird_mount3",
+          "texture": "menagerie/mount/model/entity/courierbird_mount3",
+          "babyTexture": "menagerie/mount/model/entity/courierbird_mount3",
+          "weight": 1
+        },
+        {
+          "name": "courierbird_mount4",
+          "texture": "menagerie/mount/model/entity/courierbird_mount4",
+          "babyTexture": "menagerie/mount/model/entity/courierbird_mount4",
+          "weight": 1
+        },
+        {
+          "name": "courierbird_mount5",
+          "texture": "menagerie/mount/model/entity/courierbird_mount5",
+          "babyTexture": "menagerie/mount/model/entity/courierbird_mount5",
+          "weight": 1
+        },
+        {
+          "name": "courierbird_mount6",
+          "texture": "menagerie/mount/model/entity/courierbird_mount6",
+          "babyTexture": "menagerie/mount/model/entity/courierbird_mount6",
+          "weight": 1
+        },
+        {
+          "name": "courierbird_mount7",
+          "texture": "menagerie/mount/model/entity/courierbird_mount7",
+          "babyTexture": "menagerie/mount/model/entity/courierbird_mount7",
+          "weight": 1
+        }
+      ],
+      "clips": [
+        "animation.mount.none",
+        "animation.mount.neutral",
+        "animation.mount.blink",
+        "animation.mount.walk",
+        "animation.mount.sprint",
+        "animation.mount.fly",
+        "animation.mount.sit",
+        "animation.mount.sleep",
+        "animation.mount.attack",
+        "animation.mount.sitdown",
+        "animation.mount.standup",
+        "animation.mount.gotosleep",
+        "animation.mount.wakeup",
+        "animation.mount.idle",
+        "animation.mount.idle2",
+        "animation.mount.idle3",
+        "animation.mount.idle4",
+        "animation.mount.idle5"
+      ],
+      "armorTextures": {
+        "diamond": "menagerie/mount/model/entity/armor/courierbird_armor_diamond",
+        "golden": "menagerie/mount/model/entity/armor/courierbird_armor_gold",
+        "iron": "menagerie/mount/model/entity/armor/courierbird_armor_iron",
+        "leather": "menagerie/mount/model/entity/armor/courierbird_armor_leather",
+        "other": "menagerie/mount/model/entity/armor/courierbird_armor_other"
+      }
+    },
+    {
+      "source": "dragon",
+      "id": "mount_dragon",
+      "name": "Dragon",
+      "shape": "dragonmount",
+      "movement": "air",
+      "habitat": "mountain",
+      "mood": "neutral",
+      "width": 1.8,
+      "height": 2,
+      "health": 48,
+      "feed": "minecraft:golden_carrot",
+      "mount": true,
+      "model": "mount_dragon",
+      "variants": [
+        {
+          "name": "dragon_mount",
+          "texture": "menagerie/mount/model/entity/dragon_mount",
+          "babyTexture": "menagerie/mount/model/entity/dragon_mount",
+          "weight": 1
+        },
+        {
+          "name": "dragon_mount2",
+          "texture": "menagerie/mount/model/entity/dragon_mount2",
+          "babyTexture": "menagerie/mount/model/entity/dragon_mount2",
+          "weight": 1
+        },
+        {
+          "name": "dragon_mount3",
+          "texture": "menagerie/mount/model/entity/dragon_mount3",
+          "babyTexture": "menagerie/mount/model/entity/dragon_mount3",
+          "weight": 1
+        },
+        {
+          "name": "dragon_mount4",
+          "texture": "menagerie/mount/model/entity/dragon_mount4",
+          "babyTexture": "menagerie/mount/model/entity/dragon_mount4",
+          "weight": 1
+        },
+        {
+          "name": "dragon_mount5",
+          "texture": "menagerie/mount/model/entity/dragon_mount5",
+          "babyTexture": "menagerie/mount/model/entity/dragon_mount5",
+          "weight": 1
+        },
+        {
+          "name": "dragon_mount6",
+          "texture": "menagerie/mount/model/entity/dragon_mount6",
+          "babyTexture": "menagerie/mount/model/entity/dragon_mount6",
+          "weight": 1
+        },
+        {
+          "name": "dragon_mount7",
+          "texture": "menagerie/mount/model/entity/dragon_mount7",
+          "babyTexture": "menagerie/mount/model/entity/dragon_mount7",
+          "weight": 1
+        }
+      ],
+      "clips": [
+        "animation.mount.none",
+        "animation.mount.neutral",
+        "animation.mount.blink",
+        "animation.mount.walk",
+        "animation.mount.sprint",
+        "animation.mount.fly",
+        "animation.mount.sit",
+        "animation.mount.sleep",
+        "animation.mount.attack",
+        "animation.mount.sitdown",
+        "animation.mount.standup",
+        "animation.mount.gotosleep",
+        "animation.mount.wakeup",
+        "animation.mount.idle",
+        "animation.mount.idle2",
+        "animation.mount.idle3",
+        "animation.mount.idle4",
+        "animation.mount.idle5",
+        "animation.mount.sleepidle1",
+        "animation.mount.sleepidle2",
+        "animation.mount.sleepidle3",
+        "animation.mount.sleepidle4"
+      ],
+      "armorTextures": {
+        "diamond": "menagerie/mount/model/entity/armor/dragon_armor_diamond",
+        "golden": "menagerie/mount/model/entity/armor/dragon_armor_gold",
+        "iron": "menagerie/mount/model/entity/armor/dragon_armor_iron",
+        "leather": "menagerie/mount/model/entity/armor/dragon_armor_leather",
+        "other": "menagerie/mount/model/entity/armor/dragon_armor_other"
+      }
+    },
+    {
+      "source": "firebird",
+      "id": "mount_firebird",
+      "name": "Firebird",
+      "shape": "firebirdmount",
+      "movement": "air",
+      "habitat": "nether",
+      "mood": "neutral",
+      "width": 1.3,
+      "height": 1.8,
+      "health": 48,
+      "feed": "minecraft:golden_carrot",
+      "mount": true,
+      "model": "mount_firebird",
+      "variants": [
+        {
+          "name": "firebird_mount",
+          "texture": "menagerie/mount/model/entity/firebird_mount",
+          "babyTexture": "menagerie/mount/model/entity/firebird_mount",
+          "weight": 1
+        },
+        {
+          "name": "firebird_mount2",
+          "texture": "menagerie/mount/model/entity/firebird_mount2",
+          "babyTexture": "menagerie/mount/model/entity/firebird_mount2",
+          "weight": 1
+        },
+        {
+          "name": "firebird_mount3",
+          "texture": "menagerie/mount/model/entity/firebird_mount3",
+          "babyTexture": "menagerie/mount/model/entity/firebird_mount3",
+          "weight": 1
+        },
+        {
+          "name": "firebird_mount4",
+          "texture": "menagerie/mount/model/entity/firebird_mount4",
+          "babyTexture": "menagerie/mount/model/entity/firebird_mount4",
+          "weight": 1
+        }
+      ],
+      "clips": [
+        "animation.mount.none",
+        "animation.mount.neutral",
+        "animation.mount.blink",
+        "animation.mount.walk",
+        "animation.mount.sprint",
+        "animation.mount.fly",
+        "animation.mount.sit",
+        "animation.mount.sleep",
+        "animation.mount.attack",
+        "animation.mount.sitdown",
+        "animation.mount.standup",
+        "animation.mount.gotosleep",
+        "animation.mount.wakeup",
+        "animation.mount.idle",
+        "animation.mount.idle2",
+        "animation.mount.idle3",
+        "animation.mount.idle4",
+        "animation.mount.idle5",
+        "animation.mount.foldwings"
+      ],
+      "armorTextures": {
+        "diamond": "menagerie/mount/model/entity/armor/firebird_armor_diamond",
+        "golden": "menagerie/mount/model/entity/armor/firebird_armor_gold",
+        "iron": "menagerie/mount/model/entity/armor/firebird_armor_iron",
+        "leather": "menagerie/mount/model/entity/armor/firebird_armor_leather",
+        "other": "menagerie/mount/model/entity/armor/firebird_armor_other"
+      }
+    },
+    {
+      "source": "griffon",
+      "id": "mount_griffon",
+      "name": "Griffon",
+      "shape": "griffonmount",
+      "movement": "air",
+      "habitat": "mountain",
+      "mood": "neutral",
+      "width": 1.5,
+      "height": 1.8,
+      "health": 48,
+      "feed": "minecraft:golden_carrot",
+      "mount": true,
+      "model": "mount_griffon",
+      "variants": [
+        {
+          "name": "griffon_mount",
+          "texture": "menagerie/mount/model/entity/griffon_mount",
+          "babyTexture": "menagerie/mount/model/entity/griffon_mount",
+          "weight": 1
+        },
+        {
+          "name": "griffon_mount2",
+          "texture": "menagerie/mount/model/entity/griffon_mount2",
+          "babyTexture": "menagerie/mount/model/entity/griffon_mount2",
+          "weight": 1
+        },
+        {
+          "name": "griffon_mount3",
+          "texture": "menagerie/mount/model/entity/griffon_mount3",
+          "babyTexture": "menagerie/mount/model/entity/griffon_mount3",
+          "weight": 1
+        },
+        {
+          "name": "griffon_mount4",
+          "texture": "menagerie/mount/model/entity/griffon_mount4",
+          "babyTexture": "menagerie/mount/model/entity/griffon_mount4",
+          "weight": 1
+        },
+        {
+          "name": "griffon_mount5",
+          "texture": "menagerie/mount/model/entity/griffon_mount5",
+          "babyTexture": "menagerie/mount/model/entity/griffon_mount5",
+          "weight": 1
+        },
+        {
+          "name": "griffon_mount6",
+          "texture": "menagerie/mount/model/entity/griffon_mount6",
+          "babyTexture": "menagerie/mount/model/entity/griffon_mount6",
+          "weight": 1
+        }
+      ],
+      "clips": [
+        "animation.mount.none",
+        "animation.mount.blink",
+        "animation.mount.neutral",
+        "animation.mount.walk",
+        "animation.mount.sprint",
+        "animation.mount.fly",
+        "animation.mount.sit",
+        "animation.mount.sleep",
+        "animation.mount.attack",
+        "animation.mount.sitdown",
+        "animation.mount.standup",
+        "animation.mount.gotosleep",
+        "animation.mount.wakeup",
+        "animation.mount.idle",
+        "animation.mount.idle2",
+        "animation.mount.idle3",
+        "animation.mount.idle4",
+        "animation.mount.idle5",
+        "animation.mount.wingup",
+        "animation.mount.logo"
+      ],
+      "armorTextures": {
+        "diamond": "menagerie/mount/model/entity/armor/griffon_armor_diamond",
+        "golden": "menagerie/mount/model/entity/armor/griffon_armor_gold",
+        "iron": "menagerie/mount/model/entity/armor/griffon_armor_iron",
+        "leather - Copy": "menagerie/mount/model/entity/armor/griffon_armor_leather - Copy",
+        "leather": "menagerie/mount/model/entity/armor/griffon_armor_leather",
+        "other": "menagerie/mount/model/entity/armor/griffon_armor_other"
+      }
+    },
+    {
+      "source": "geckotoalizard",
+      "id": "mount_geckotoalizard",
+      "name": "Geckotoalizard",
+      "shape": "groundlizardmount",
+      "movement": "land",
+      "habitat": "desert",
+      "mood": "neutral",
+      "width": 1.3,
+      "height": 0.9,
+      "health": 40,
+      "feed": "minecraft:golden_carrot",
+      "mount": true,
+      "model": "mount_geckotoalizard",
+      "variants": [
+        {
+          "name": "groundlizard_mount",
+          "texture": "menagerie/mount/model/entity/groundlizard_mount",
+          "babyTexture": "menagerie/mount/model/entity/groundlizard_mount",
+          "weight": 1
+        },
+        {
+          "name": "groundlizard_mount2",
+          "texture": "menagerie/mount/model/entity/groundlizard_mount2",
+          "babyTexture": "menagerie/mount/model/entity/groundlizard_mount2",
+          "weight": 1
+        },
+        {
+          "name": "groundlizard_mount3",
+          "texture": "menagerie/mount/model/entity/groundlizard_mount3",
+          "babyTexture": "menagerie/mount/model/entity/groundlizard_mount3",
+          "weight": 1
+        }
+      ],
+      "clips": [
+        "animation.mount.none",
+        "animation.mount.neutral",
+        "animation.mount.blink",
+        "animation.mount.walk",
+        "animation.mount.sprint",
+        "animation.mount.fly",
+        "animation.mount.sit",
+        "animation.mount.sleep",
+        "animation.mount.attack",
+        "animation.mount.sitdown",
+        "animation.mount.standup",
+        "animation.mount.gotosleep",
+        "animation.mount.wakeup",
+        "animation.mount.idle",
+        "animation.mount.idle2",
+        "animation.mount.idle3",
+        "animation.mount.idle4"
+      ],
+      "armorTextures": {
+        "diamond": "menagerie/mount/model/entity/armor/groundlizard_armor_diamond",
+        "golden": "menagerie/mount/model/entity/armor/groundlizard_armor_gold",
+        "iron": "menagerie/mount/model/entity/armor/groundlizard_armor_iron",
+        "leather": "menagerie/mount/model/entity/armor/groundlizard_armor_leather",
+        "other": "menagerie/mount/model/entity/armor/groundlizard_armor_other"
+      }
+    },
+    {
+      "source": "moth",
+      "id": "mount_moth",
+      "name": "Moth",
+      "shape": "mothmount",
+      "movement": "air",
+      "habitat": "forest",
+      "mood": "neutral",
+      "width": 1.2,
+      "height": 1.2,
+      "health": 48,
+      "feed": "minecraft:golden_carrot",
+      "mount": true,
+      "model": "mount_moth",
+      "variants": [
+        {
+          "name": "moth_mount1",
+          "texture": "menagerie/mount/model/entity/moth_mount1",
+          "babyTexture": "menagerie/mount/model/entity/moth_mount1",
+          "weight": 1
+        },
+        {
+          "name": "moth_mount2",
+          "texture": "menagerie/mount/model/entity/moth_mount2",
+          "babyTexture": "menagerie/mount/model/entity/moth_mount2",
+          "weight": 1
+        },
+        {
+          "name": "moth_mount3",
+          "texture": "menagerie/mount/model/entity/moth_mount3",
+          "babyTexture": "menagerie/mount/model/entity/moth_mount3",
+          "weight": 1
+        },
+        {
+          "name": "moth_mount4",
+          "texture": "menagerie/mount/model/entity/moth_mount4",
+          "babyTexture": "menagerie/mount/model/entity/moth_mount4",
+          "weight": 1
+        },
+        {
+          "name": "moth_mount5",
+          "texture": "menagerie/mount/model/entity/moth_mount5",
+          "babyTexture": "menagerie/mount/model/entity/moth_mount5",
+          "weight": 1
+        }
+      ],
+      "clips": [
+        "animation.mount.none",
+        "animation.mount.neutral",
+        "animation.mount.blink",
+        "animation.mount.walk",
+        "animation.mount.sprint",
+        "animation.mount.fly",
+        "animation.mount.sit",
+        "animation.mount.sleep",
+        "animation.mount.attack",
+        "animation.mount.sitdown",
+        "animation.mount.standup",
+        "animation.mount.gotosleep",
+        "animation.mount.wakeup",
+        "animation.mount.idle",
+        "animation.mount.idle2",
+        "animation.mount.idle3",
+        "animation.mount.idle4",
+        "animation.mount.idle5"
+      ],
+      "armorTextures": {
+        "diamond": "menagerie/mount/model/entity/armor/moth_armor_diamond",
+        "golden": "menagerie/mount/model/entity/armor/moth_armor_gold",
+        "iron": "menagerie/mount/model/entity/armor/moth_armor_iron",
+        "leather": "menagerie/mount/model/entity/armor/moth_armor_leather",
+        "other": "menagerie/mount/model/entity/armor/moth_armor_other"
+      }
+    },
+    {
+      "source": "nightmare",
+      "id": "mount_nightmare",
+      "name": "Nightmare",
+      "shape": "nightmaremount",
+      "movement": "land",
+      "habitat": "nether",
+      "mood": "neutral",
+      "width": 1.2,
+      "height": 1.7,
+      "health": 40,
+      "feed": "minecraft:golden_carrot",
+      "mount": true,
+      "model": "mount_nightmare",
+      "variants": [
+        {
+          "name": "nightmare_mount1_frame1",
+          "texture": "menagerie/mount/model/entity/nightmare_mount1_frame1",
+          "babyTexture": "menagerie/mount/model/entity/nightmare_mount1_frame1",
+          "weight": 1
+        },
+        {
+          "name": "nightmare_mount2_frame1",
+          "texture": "menagerie/mount/model/entity/nightmare_mount2_frame1",
+          "babyTexture": "menagerie/mount/model/entity/nightmare_mount2_frame1",
+          "weight": 1
+        },
+        {
+          "name": "nightmare_mount3_frame1",
+          "texture": "menagerie/mount/model/entity/nightmare_mount3_frame1",
+          "babyTexture": "menagerie/mount/model/entity/nightmare_mount3_frame1",
+          "weight": 1
+        },
+        {
+          "name": "nightmare_mount4_frame1",
+          "texture": "menagerie/mount/model/entity/nightmare_mount4_frame1",
+          "babyTexture": "menagerie/mount/model/entity/nightmare_mount4_frame1",
+          "weight": 1
+        },
+        {
+          "name": "nightmare_mount5_frame1",
+          "texture": "menagerie/mount/model/entity/nightmare_mount5_frame1",
+          "babyTexture": "menagerie/mount/model/entity/nightmare_mount5_frame1",
+          "weight": 1
+        },
+        {
+          "name": "nightmare_mount6_frame1",
+          "texture": "menagerie/mount/model/entity/nightmare_mount6_frame1",
+          "babyTexture": "menagerie/mount/model/entity/nightmare_mount6_frame1",
+          "weight": 1
+        }
+      ],
+      "clips": [
+        "animation.mount.none",
+        "animation.mount.neutral",
+        "animation.mount.blink",
+        "animation.mount.walk",
+        "animation.mount.sprint",
+        "animation.mount.fly",
+        "animation.mount.sit",
+        "animation.mount.lay",
+        "animation.mount.sleep",
+        "animation.mount.attack",
+        "animation.mount.sitdown",
+        "animation.mount.standup",
+        "animation.mount.gotosleep",
+        "animation.mount.wakeup",
+        "animation.mount.idle",
+        "animation.mount.idle2",
+        "animation.mount.idle3",
+        "animation.mount.idle4",
+        "animation.mount.idle5",
+        "animation.mount.idle6",
+        "animation.mount.idle7",
+        "animation.mount.idle8"
+      ],
+      "armorTextures": {
+        "diamond": "menagerie/mount/model/entity/armor/nightmare_armor_diamond",
+        "golden": "menagerie/mount/model/entity/armor/nightmare_armor_gold",
+        "iron": "menagerie/mount/model/entity/armor/nightmare_armor_iron",
+        "leather": "menagerie/mount/model/entity/armor/nightmare_armor_leather",
+        "other": "menagerie/mount/model/entity/armor/nightmare_armor_other"
+      }
+    },
+    {
+      "source": "nudibranch",
+      "id": "mount_nudibranch",
+      "name": "Nudibranch",
+      "shape": "nudibranchmount",
+      "movement": "water",
+      "habitat": "ocean",
+      "mood": "neutral",
+      "width": 1.4,
+      "height": 0.8,
+      "health": 40,
+      "feed": "minecraft:golden_carrot",
+      "mount": true,
+      "model": "mount_nudibranch",
+      "variants": [
+        {
+          "name": "nudibranch_mount",
+          "texture": "menagerie/mount/model/entity/nudibranch_mount",
+          "babyTexture": "menagerie/mount/model/entity/nudibranch_mount",
+          "weight": 1
+        },
+        {
+          "name": "nudibranch_mount2",
+          "texture": "menagerie/mount/model/entity/nudibranch_mount2",
+          "babyTexture": "menagerie/mount/model/entity/nudibranch_mount2",
+          "weight": 1
+        },
+        {
+          "name": "nudibranch_mount3",
+          "texture": "menagerie/mount/model/entity/nudibranch_mount3",
+          "babyTexture": "menagerie/mount/model/entity/nudibranch_mount3",
+          "weight": 1
+        },
+        {
+          "name": "nudibranch_mount4",
+          "texture": "menagerie/mount/model/entity/nudibranch_mount4",
+          "babyTexture": "menagerie/mount/model/entity/nudibranch_mount4",
+          "weight": 1
+        },
+        {
+          "name": "nudibranch_mount5",
+          "texture": "menagerie/mount/model/entity/nudibranch_mount5",
+          "babyTexture": "menagerie/mount/model/entity/nudibranch_mount5",
+          "weight": 1
+        }
+      ],
+      "clips": [
+        "animation.mount.none",
+        "animation.mount.neutral",
+        "animation.mount.blink",
+        "animation.mount.walk",
+        "animation.mount.sprint",
+        "animation.mount.fly",
+        "animation.mount.sit",
+        "animation.mount.sleep",
+        "animation.mount.attack",
+        "animation.mount.sitdown",
+        "animation.mount.standup",
+        "animation.mount.gotosleep",
+        "animation.mount.wakeup",
+        "animation.mount.idle",
+        "animation.mount.idle2",
+        "animation.mount.idle3",
+        "animation.mount.idle4",
+        "animation.mount.idle5"
+      ],
+      "armorTextures": {
+        "diamond": "menagerie/mount/model/entity/armor/nudibranch_armor_diamond",
+        "golden": "menagerie/mount/model/entity/armor/nudibranch_armor_gold",
+        "iron": "menagerie/mount/model/entity/armor/nudibranch_armor_iron",
+        "leather": "menagerie/mount/model/entity/armor/nudibranch_armor_leather",
+        "other": "menagerie/mount/model/entity/armor/nudibranch_armor_other"
+      }
+    },
+    {
+      "source": "ridinglizard",
+      "id": "mount_ridinglizard",
+      "name": "Ridinglizard",
+      "shape": "ridinglizardmount",
+      "movement": "land",
+      "habitat": "jungle",
+      "mood": "neutral",
+      "width": 1.2,
+      "height": 1.5,
+      "health": 40,
+      "feed": "minecraft:golden_carrot",
+      "mount": true,
+      "model": "mount_ridinglizard",
+      "variants": [
+        {
+          "name": "ridinglizard_mount1",
+          "texture": "menagerie/mount/model/entity/ridinglizard_mount1",
+          "babyTexture": "menagerie/mount/model/entity/ridinglizard_mount1",
+          "weight": 1
+        },
+        {
+          "name": "ridinglizard_mount2",
+          "texture": "menagerie/mount/model/entity/ridinglizard_mount2",
+          "babyTexture": "menagerie/mount/model/entity/ridinglizard_mount2",
+          "weight": 1
+        },
+        {
+          "name": "ridinglizard_mount3",
+          "texture": "menagerie/mount/model/entity/ridinglizard_mount3",
+          "babyTexture": "menagerie/mount/model/entity/ridinglizard_mount3",
+          "weight": 1
+        },
+        {
+          "name": "ridinglizard_mount4",
+          "texture": "menagerie/mount/model/entity/ridinglizard_mount4",
+          "babyTexture": "menagerie/mount/model/entity/ridinglizard_mount4",
+          "weight": 1
+        }
+      ],
+      "clips": [
+        "animation.mount.none",
+        "animation.mount.neutral",
+        "animation.mount.blink",
+        "animation.mount.walk",
+        "animation.mount.fly",
+        "animation.mount.sprint",
+        "animation.mount.sit",
+        "animation.mount.sleep",
+        "animation.mount.attack",
+        "animation.mount.sitdown",
+        "animation.mount.standup",
+        "animation.mount.gotosleep",
+        "animation.mount.wakeup",
+        "animation.mount.idle",
+        "animation.mount.idle2",
+        "animation.mount.idle3",
+        "animation.mount.idle4",
+        "animation.mount.idle5",
+        "animation.mount.idle6",
+        "animation.mount.idle7"
+      ],
+      "armorTextures": {
+        "diamond": "menagerie/mount/model/entity/armor/ridinglizard_armor_diamond",
+        "golden": "menagerie/mount/model/entity/armor/ridinglizard_armor_gold",
+        "iron": "menagerie/mount/model/entity/armor/ridinglizard_armor_iron",
+        "leather": "menagerie/mount/model/entity/armor/ridinglizard_armor_leather",
+        "other": "menagerie/mount/model/entity/armor/ridinglizard_armor_other"
+      }
+    },
+    {
+      "source": "archelon",
+      "id": "mount_archelon",
+      "name": "Archelon",
+      "shape": "seaturtlemount",
+      "movement": "water",
+      "habitat": "ocean",
+      "mood": "neutral",
+      "width": 1.8,
+      "height": 0.8,
+      "health": 40,
+      "feed": "minecraft:golden_carrot",
+      "mount": true,
+      "model": "mount_archelon",
+      "variants": [
+        {
+          "name": "archelon_mount",
+          "texture": "menagerie/mount/model/entity/archelon_mount",
+          "babyTexture": "menagerie/mount/model/entity/archelon_mount",
+          "weight": 1
+        },
+        {
+          "name": "archelon_mount2",
+          "texture": "menagerie/mount/model/entity/archelon_mount2",
+          "babyTexture": "menagerie/mount/model/entity/archelon_mount2",
+          "weight": 1
+        },
+        {
+          "name": "archelon_mount3",
+          "texture": "menagerie/mount/model/entity/archelon_mount3",
+          "babyTexture": "menagerie/mount/model/entity/archelon_mount3",
+          "weight": 1
+        },
+        {
+          "name": "archelon_mount4",
+          "texture": "menagerie/mount/model/entity/archelon_mount4",
+          "babyTexture": "menagerie/mount/model/entity/archelon_mount4",
+          "weight": 1
+        }
+      ],
+      "clips": [
+        "animation.mount.none",
+        "animation.mount.blink",
+        "animation.mount.neutral",
+        "animation.mount.walk",
+        "animation.mount.sprint",
+        "animation.mount.swim",
+        "animation.mount.fly",
+        "animation.mount.sleep",
+        "animation.mount.gotosleep",
+        "animation.mount.wakeup",
+        "animation.mount.sit",
+        "animation.mount.sitdown",
+        "animation.mount.standup",
+        "animation.mount.idle",
+        "animation.mount.idle2",
+        "animation.mount.idle3",
+        "animation.mount.idle4",
+        "animation.mount.idle5"
+      ],
+      "armorTextures": {
+        "diamond": "menagerie/mount/model/entity/armor/archelon_armor_diamond",
+        "golden": "menagerie/mount/model/entity/armor/archelon_armor_gold",
+        "iron": "menagerie/mount/model/entity/armor/archelon_armor_iron",
+        "leather": "menagerie/mount/model/entity/armor/archelon_armor_leather",
+        "other": "menagerie/mount/model/entity/armor/archelon_armor_other"
+      }
+    },
+    {
+      "source": "direwolf",
+      "id": "mount_direwolf",
+      "name": "Direwolf",
+      "shape": "wolfmount",
+      "movement": "land",
+      "habitat": "snowy",
+      "mood": "neutral",
+      "width": 1.2,
+      "height": 1.4,
+      "health": 40,
+      "feed": "minecraft:golden_carrot",
+      "mount": true,
+      "model": "mount_direwolf",
+      "variants": [
+        {
+          "name": "direwolf_mount",
+          "texture": "menagerie/mount/model/entity/direwolf_mount",
+          "babyTexture": "menagerie/mount/model/entity/direwolf_mount",
+          "weight": 1
+        },
+        {
+          "name": "direwolf_mount2",
+          "texture": "menagerie/mount/model/entity/direwolf_mount2",
+          "babyTexture": "menagerie/mount/model/entity/direwolf_mount2",
+          "weight": 1
+        },
+        {
+          "name": "direwolf_mount3",
+          "texture": "menagerie/mount/model/entity/direwolf_mount3",
+          "babyTexture": "menagerie/mount/model/entity/direwolf_mount3",
+          "weight": 1
+        },
+        {
+          "name": "direwolf_mount4",
+          "texture": "menagerie/mount/model/entity/direwolf_mount4",
+          "babyTexture": "menagerie/mount/model/entity/direwolf_mount4",
+          "weight": 1
+        }
+      ],
+      "clips": [
+        "animation.mount.lay",
+        "animation.mount.none",
+        "animation.mount.body",
+        "animation.mount.neutral",
+        "animation.mount.blink",
+        "animation.mount.walk",
+        "animation.mount.sprint",
+        "animation.mount.fly",
+        "animation.mount.sit",
+        "animation.mount.sleep",
+        "animation.mount.attack",
+        "animation.mount.sitdown",
+        "animation.mount.standup",
+        "animation.mount.gotosleep",
+        "animation.mount.wakeup",
+        "animation.mount.idle",
+        "animation.mount.idle2",
+        "animation.mount.idle3",
+        "animation.mount.idle4",
+        "animation.mount.idle5",
+        "animation.mount.idle6",
+        "animation.mount.screenshot"
+      ],
+      "armorTextures": {
+        "diamond": "menagerie/mount/model/entity/armor/direwolf_armor_diamond",
+        "golden": "menagerie/mount/model/entity/armor/direwolf_armor_gold",
+        "iron": "menagerie/mount/model/entity/armor/direwolf_armor_iron",
+        "leather": "menagerie/mount/model/entity/armor/direwolf_armor_leather",
+        "other": "menagerie/mount/model/entity/armor/direwolf_armor_other"
+      }
+    }
+  ],
+  "items": {
+    "wildlife_alligator_spawn_egg": {
+      "name": "Alligator Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_alligator"
+    },
+    "wildlife_anglerfish_spawn_egg": {
+      "name": "Anglerfish Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_anglerfish"
+    },
+    "wildlife_ant_spawn_egg": {
+      "name": "Ant Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_ant"
+    },
+    "wildlife_bass_spawn_egg": {
+      "name": "Bass Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_bass"
+    },
+    "wildlife_bear_spawn_egg": {
+      "name": "Bear Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_bear"
+    },
+    "wildlife_bird_spawn_egg": {
+      "name": "Bird Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_bird"
+    },
+    "wildlife_black_bear_spawn_egg": {
+      "name": "Black Bear Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_black_bear"
+    },
+    "wildlife_blobfish_spawn_egg": {
+      "name": "Blobfish Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_blobfish"
+    },
+    "wildlife_boar_spawn_egg": {
+      "name": "Boar Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_boar"
+    },
+    "wildlife_butterfly_spawn_egg": {
+      "name": "Butterfly Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_butterfly"
+    },
+    "wildlife_capybara_spawn_egg": {
+      "name": "Capybara Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_capybara"
+    },
+    "wildlife_caterpillar_spawn_egg": {
+      "name": "Caterpillar Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_caterpillar"
+    },
+    "wildlife_catfish_spawn_egg": {
+      "name": "Catfish Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_catfish"
+    },
+    "wildlife_clam_spawn_egg": {
+      "name": "Clam Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_clam"
+    },
+    "wildlife_crab_spawn_egg": {
+      "name": "Crab Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_crab"
+    },
+    "wildlife_deer_spawn_egg": {
+      "name": "Deer Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_deer"
+    },
+    "wildlife_desert_scorpion_spawn_egg": {
+      "name": "Desert Scorpion Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_desert_scorpion"
+    },
+    "wildlife_dragonfly_spawn_egg": {
+      "name": "Dragonfly Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_dragonfly"
+    },
+    "wildlife_duck_spawn_egg": {
+      "name": "Duck Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_duck"
+    },
+    "wildlife_elephant_spawn_egg": {
+      "name": "Elephant Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_elephant"
+    },
+    "wildlife_firefly_spawn_egg": {
+      "name": "Firefly Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_firefly"
+    },
+    "wildlife_giant_isopod_spawn_egg": {
+      "name": "Giant Isopod Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_giant_isopod"
+    },
+    "wildlife_giraffe_spawn_egg": {
+      "name": "Giraffe Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_giraffe"
+    },
+    "wildlife_great_white_shark_spawn_egg": {
+      "name": "Great White Shark Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_great_white_shark"
+    },
+    "wildlife_hedgehog_spawn_egg": {
+      "name": "Hedgehog Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_hedgehog"
+    },
+    "wildlife_hippo_spawn_egg": {
+      "name": "Hippo Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_hippo"
+    },
+    "wildlife_jellyfish_spawn_egg": {
+      "name": "Jellyfish Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_jellyfish"
+    },
+    "wildlife_jungle_scorpion_spawn_egg": {
+      "name": "Jungle Scorpion Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_jungle_scorpion"
+    },
+    "wildlife_komodo_dragon_spawn_egg": {
+      "name": "Komodo Dragon Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_komodo_dragon"
+    },
+    "wildlife_lion_spawn_egg": {
+      "name": "Lion Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_lion"
+    },
+    "wildlife_lizard_spawn_egg": {
+      "name": "Lizard Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_lizard"
+    },
+    "wildlife_mammoth_spawn_egg": {
+      "name": "Mammoth Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_mammoth"
+    },
+    "wildlife_mole_spawn_egg": {
+      "name": "Mole Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_mole"
+    },
+    "wildlife_ostrich_spawn_egg": {
+      "name": "Ostrich Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_ostrich"
+    },
+    "wildlife_piranha_spawn_egg": {
+      "name": "Piranha Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_piranha"
+    },
+    "wildlife_rat_spawn_egg": {
+      "name": "Rat Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_rat"
+    },
+    "wildlife_ray_spawn_egg": {
+      "name": "Ray Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_ray"
+    },
+    "wildlife_rhino_spawn_egg": {
+      "name": "Rhino Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_rhino"
+    },
+    "wildlife_snail_spawn_egg": {
+      "name": "Snail Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_snail"
+    },
+    "wildlife_snake_spawn_egg": {
+      "name": "Snake Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_snake"
+    },
+    "wildlife_starfish_spawn_egg": {
+      "name": "Starfish Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_starfish"
+    },
+    "wildlife_tiger_spawn_egg": {
+      "name": "Tiger Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_tiger"
+    },
+    "wildlife_tortoise_spawn_egg": {
+      "name": "Tortoise Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_tortoise"
+    },
+    "wildlife_turkey_spawn_egg": {
+      "name": "Turkey Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_turkey"
+    },
+    "wildlife_vulture_spawn_egg": {
+      "name": "Vulture Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_vulture"
+    },
+    "wildlife_whale_spawn_egg": {
+      "name": "Whale Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_whale"
+    },
+    "wildlife_zebra_spawn_egg": {
+      "name": "Zebra Spawn Egg",
+      "kind": "spawn",
+      "species": "wildlife_zebra"
+    },
+    "mount_acencia_spawn_egg": {
+      "name": "Acencia Spawn Egg",
+      "kind": "spawn",
+      "species": "mount_acencia"
+    },
+    "mount_netherbat_spawn_egg": {
+      "name": "Netherbat Spawn Egg",
+      "kind": "spawn",
+      "species": "mount_netherbat"
+    },
+    "mount_colelytra_spawn_egg": {
+      "name": "Colelytra Spawn Egg",
+      "kind": "spawn",
+      "species": "mount_colelytra"
+    },
+    "mount_courierbird_spawn_egg": {
+      "name": "Courierbird Spawn Egg",
+      "kind": "spawn",
+      "species": "mount_courierbird"
+    },
+    "mount_dragon_spawn_egg": {
+      "name": "Dragon Spawn Egg",
+      "kind": "spawn",
+      "species": "mount_dragon"
+    },
+    "mount_firebird_spawn_egg": {
+      "name": "Firebird Spawn Egg",
+      "kind": "spawn",
+      "species": "mount_firebird"
+    },
+    "mount_griffon_spawn_egg": {
+      "name": "Griffon Spawn Egg",
+      "kind": "spawn",
+      "species": "mount_griffon"
+    },
+    "mount_geckotoalizard_spawn_egg": {
+      "name": "Geckotoalizard Spawn Egg",
+      "kind": "spawn",
+      "species": "mount_geckotoalizard"
+    },
+    "mount_moth_spawn_egg": {
+      "name": "Moth Spawn Egg",
+      "kind": "spawn",
+      "species": "mount_moth"
+    },
+    "mount_nightmare_spawn_egg": {
+      "name": "Nightmare Spawn Egg",
+      "kind": "spawn",
+      "species": "mount_nightmare"
+    },
+    "mount_nudibranch_spawn_egg": {
+      "name": "Nudibranch Spawn Egg",
+      "kind": "spawn",
+      "species": "mount_nudibranch"
+    },
+    "mount_ridinglizard_spawn_egg": {
+      "name": "Ridinglizard Spawn Egg",
+      "kind": "spawn",
+      "species": "mount_ridinglizard"
+    },
+    "mount_archelon_spawn_egg": {
+      "name": "Archelon Spawn Egg",
+      "kind": "spawn",
+      "species": "mount_archelon"
+    },
+    "mount_direwolf_spawn_egg": {
+      "name": "Direwolf Spawn Egg",
+      "kind": "spawn",
+      "species": "mount_direwolf"
+    },
+    "wildlife_anglerfish": {
+      "name": "Anglerfish",
+      "kind": "item",
+      "source": "anglerfish"
+    },
+    "wildlife_anglerfish_bucket": {
+      "name": "Bucket of Anglerfish",
+      "kind": "item",
+      "source": "anglerfish_bucket"
+    },
+    "wildlife_ant": {
+      "name": "Ant",
+      "kind": "item",
+      "source": "ant"
+    },
+    "wildlife_antler": {
+      "name": "Antler",
+      "kind": "item",
+      "source": "antler"
+    },
+    "wildlife_bass": {
+      "name": "Raw Bass",
+      "kind": "item",
+      "source": "bass"
+    },
+    "wildlife_bass_bucket": {
+      "name": "Bucket of Bass",
+      "kind": "item",
+      "source": "bass_bucket"
+    },
+    "wildlife_blobfish": {
+      "name": "Blobfish",
+      "kind": "item",
+      "source": "blobfish"
+    },
+    "wildlife_blobfish_bucket": {
+      "name": "Bucket of Blobfish",
+      "kind": "item",
+      "source": "blobfish_bucket"
+    },
+    "wildlife_bushmeat": {
+      "name": "Bushmeat",
+      "kind": "item",
+      "source": "bushmeat"
+    },
+    "wildlife_butterfly": {
+      "name": "Butterfly",
+      "kind": "item",
+      "source": "butterfly"
+    },
+    "wildlife_capture_net": {
+      "name": "Capture Net",
+      "kind": "item",
+      "source": "capture_net"
+    },
+    "wildlife_caterpillar": {
+      "name": "Caterpillar",
+      "kind": "item",
+      "source": "caterpillar"
+    },
+    "wildlife_dragonfly": {
+      "name": "Dragonfly",
+      "kind": "item",
+      "source": "dragonfly"
+    },
+    "wildlife_firefly": {
+      "name": "Firefly",
+      "kind": "item",
+      "source": "firefly"
+    },
+    "wildlife_bee": {
+      "name": "Bee",
+      "kind": "item",
+      "source": "bee"
+    },
+    "wildlife_silverfish": {
+      "name": "Silverfish",
+      "kind": "item",
+      "source": "silverfish"
+    },
+    "wildlife_endermite": {
+      "name": "Endermite",
+      "kind": "item",
+      "source": "endermite"
+    },
+    "wildlife_catfish": {
+      "name": "Raw Catfish",
+      "kind": "item",
+      "source": "catfish"
+    },
+    "wildlife_catfish_bucket": {
+      "name": "Bucket of Catfish",
+      "kind": "item",
+      "source": "catfish_bucket"
+    },
+    "wildlife_cattail_fluff": {
+      "name": "Cattail Fluff",
+      "kind": "item",
+      "source": "cattail_fluff"
+    },
+    "wildlife_clam_meat": {
+      "name": "Clam Meat",
+      "kind": "item",
+      "source": "clam_meat"
+    },
+    "wildlife_cooked_anglerfish": {
+      "name": "Cooked Anglerfish",
+      "kind": "item",
+      "source": "cooked_anglerfish"
+    },
+    "wildlife_cooked_bass": {
+      "name": "Cooked Bass",
+      "kind": "item",
+      "source": "cooked_bass"
+    },
+    "wildlife_cooked_blobfish": {
+      "name": "Cooked Blobfish",
+      "kind": "item",
+      "source": "cooked_blobfish"
+    },
+    "wildlife_cooked_bushmeat": {
+      "name": "Cooked Bushmeat",
+      "kind": "item",
+      "source": "cooked_bushmeat"
+    },
+    "wildlife_cooked_catfish": {
+      "name": "Cooked Catfish",
+      "kind": "item",
+      "source": "cooked_catfish"
+    },
+    "wildlife_cooked_clam_meat": {
+      "name": "Cooked Clam Meat",
+      "kind": "item",
+      "source": "cooked_clam_meat"
+    },
+    "wildlife_cooked_crab_meat": {
+      "name": "Cooked Crab Meat",
+      "kind": "item",
+      "source": "cooked_crab_meat"
+    },
+    "wildlife_cooked_drumstick": {
+      "name": "Cooked Drumstick",
+      "kind": "item",
+      "source": "cooked_drumstick"
+    },
+    "wildlife_cooked_duck": {
+      "name": "Cooked Duck",
+      "kind": "item",
+      "source": "cooked_duck"
+    },
+    "wildlife_cooked_egg": {
+      "name": "Cooked Egg",
+      "kind": "item",
+      "source": "cooked_egg"
+    },
+    "wildlife_cooked_fish_fillet": {
+      "name": "Cooked Fish Fillet",
+      "kind": "item",
+      "source": "cooked_fish_fillet"
+    },
+    "wildlife_cooked_lizard_tail": {
+      "name": "Cooked Lizard Tail",
+      "kind": "item",
+      "source": "cooked_lizard_tail"
+    },
+    "wildlife_cooked_mammoth_meat": {
+      "name": "Cooked Mammoth Meat",
+      "kind": "item",
+      "source": "cooked_mammoth_meat"
+    },
+    "wildlife_cooked_piranha": {
+      "name": "Cooked Piranha",
+      "kind": "item",
+      "source": "cooked_piranha"
+    },
+    "wildlife_cooked_venison": {
+      "name": "Cooked Venison",
+      "kind": "item",
+      "source": "cooked_venison"
+    },
+    "wildlife_crab": {
+      "name": "Crab",
+      "kind": "item",
+      "source": "crab"
+    },
+    "wildlife_crab_meat": {
+      "name": "Crab Meat",
+      "kind": "item",
+      "source": "crab_meat"
+    },
+    "wildlife_drumstick": {
+      "name": "Drumstick",
+      "kind": "item",
+      "source": "drumstick"
+    },
+    "wildlife_duck": {
+      "name": "Raw Duck",
+      "kind": "item",
+      "source": "duck"
+    },
+    "wildlife_duck_bucket": {
+      "name": "Bucket of Duckling",
+      "kind": "item",
+      "source": "duck_bucket"
+    },
+    "wildlife_duck_egg": {
+      "name": "Duck Egg",
+      "kind": "item",
+      "source": "duck_egg"
+    },
+    "wildlife_fat": {
+      "name": "Fat",
+      "kind": "item",
+      "source": "fat"
+    },
+    "wildlife_fur": {
+      "name": "Fur",
+      "kind": "item",
+      "source": "fur"
+    },
+    "wildlife_giant_isopod_bucket": {
+      "name": "Bucket of Giant Isopod",
+      "kind": "item",
+      "source": "giant_isopod_bucket"
+    },
+    "wildlife_hide": {
+      "name": "Hide",
+      "kind": "item",
+      "source": "hide"
+    },
+    "wildlife_hedgehog": {
+      "name": "Hedgehog",
+      "kind": "item",
+      "source": "hedgehog"
+    },
+    "wildlife_jellyfish_bucket": {
+      "name": "Bucket of Jellyfish",
+      "kind": "item",
+      "source": "jellyfish_bucket"
+    },
+    "wildlife_knapsack": {
+      "name": "Knapsack",
+      "kind": "item",
+      "source": "knapsack"
+    },
+    "wildlife_lizard_tail": {
+      "name": "Lizard Tail",
+      "kind": "item",
+      "source": "lizard_tail"
+    },
+    "wildlife_mammoth_meat": {
+      "name": "Raw Mammoth Meat",
+      "kind": "item",
+      "source": "mammoth_meat"
+    },
+    "wildlife_morsel": {
+      "name": "Morsel",
+      "kind": "item",
+      "source": "morsel"
+    },
+    "wildlife_music_disc_death_by_hogs": {
+      "name": "Music Disc",
+      "kind": "item",
+      "source": "music_disc_death_by_hogs"
+    },
+    "wildlife_music_disc_wild_ones": {
+      "name": "Music Disc",
+      "kind": "item",
+      "source": "music_disc_wild_ones"
+    },
+    "wildlife_piranha": {
+      "name": "Piranha",
+      "kind": "item",
+      "source": "piranha"
+    },
+    "wildlife_piranha_bucket": {
+      "name": "Bucket of Piranha",
+      "kind": "item",
+      "source": "piranha_bucket"
+    },
+    "wildlife_queen_ant": {
+      "name": "Queen Ant",
+      "kind": "item",
+      "source": "queen_ant"
+    },
+    "wildlife_rat": {
+      "name": "Rat",
+      "kind": "item",
+      "source": "rat"
+    },
+    "wildlife_ray_bucket": {
+      "name": "Bucket of Ray",
+      "kind": "item",
+      "source": "ray_bucket"
+    },
+    "wildlife_scorpion": {
+      "name": "Scorpion",
+      "kind": "item",
+      "source": "scorpion"
+    },
+    "wildlife_scorpion_poison_gland": {
+      "name": "Scorpion Poison Gland",
+      "kind": "item",
+      "source": "scorpion_poison_gland"
+    },
+    "wildlife_snail": {
+      "name": "Snail",
+      "kind": "item",
+      "source": "snail"
+    },
+    "wildlife_starfish_bucket": {
+      "name": "Bucket of Starfish",
+      "kind": "item",
+      "source": "starfish_bucket"
+    },
+    "wildlife_tooth": {
+      "name": "Tooth",
+      "kind": "item",
+      "source": "tooth"
+    },
+    "wildlife_venison": {
+      "name": "Venison",
+      "kind": "item",
+      "source": "venison"
+    },
+    "wildlife_whistle": {
+      "name": "Whistle",
+      "kind": "item",
+      "source": "whistle"
+    }
+  },
+  "blocks": {
+    "wildlife_alligator_egg": {
+      "name": "Alligator Egg",
+      "source": "alligator_egg"
+    },
+    "wildlife_ant_hill": {
+      "name": "Ant Hill",
+      "source": "ant_hill"
+    },
+    "wildlife_azure_froglass": {
+      "name": "Azure Froglass",
+      "source": "azure_froglass"
+    },
+    "wildlife_azure_froglass_pane": {
+      "name": "Azure Froglass Pane",
+      "source": "azure_froglass_pane"
+    },
+    "wildlife_blue_starfish": {
+      "name": "Blue Starfish",
+      "source": "blue_starfish"
+    },
+    "wildlife_cattail": {
+      "name": "Cattail",
+      "source": "cattail"
+    },
+    "wildlife_chrysalis": {
+      "name": "Chrysalis",
+      "source": "chrysalis"
+    },
+    "wildlife_crimson_froglass": {
+      "name": "Crimson Froglass",
+      "source": "crimson_froglass"
+    },
+    "wildlife_crimson_froglass_pane": {
+      "name": "Crimson Froglass Pane",
+      "source": "crimson_froglass_pane"
+    },
+    "wildlife_cut_shellstone": {
+      "name": "Cut Shellstone",
+      "source": "cut_shellstone"
+    },
+    "wildlife_cut_shellstone_slab": {
+      "name": "Cut Shellstone Slab",
+      "source": "cut_shellstone_slab"
+    },
+    "wildlife_cut_shellstone_stairs": {
+      "name": "Cut Shellstone Stairs",
+      "source": "cut_shellstone_stairs"
+    },
+    "wildlife_cut_shellstone_wall": {
+      "name": "Cut Shellstone Wall",
+      "source": "cut_shellstone_wall"
+    },
+    "wildlife_duckweed": {
+      "name": "Duckweed",
+      "source": "duckweed"
+    },
+    "wildlife_orange_starfish": {
+      "name": "Orange Starfish",
+      "source": "orange_starfish"
+    },
+    "wildlife_ostrich_egg": {
+      "name": "Ostrich Egg",
+      "source": "ostrich_egg"
+    },
+    "wildlife_plush_bear": {
+      "name": "Bear Plush",
+      "source": "plush_bear"
+    },
+    "wildlife_purple_starfish": {
+      "name": "Purple Starfish",
+      "source": "purple_starfish"
+    },
+    "wildlife_red_starfish": {
+      "name": "Red Starfish",
+      "source": "red_starfish"
+    },
+    "wildlife_shellstone": {
+      "name": "Shellstone",
+      "source": "shellstone"
+    },
+    "wildlife_shellstone_brick_slab": {
+      "name": "Shellstone Brick Slab",
+      "source": "shellstone_brick_slab"
+    },
+    "wildlife_shellstone_brick_stairs": {
+      "name": "Shellstone Brick Stairs",
+      "source": "shellstone_brick_stairs"
+    },
+    "wildlife_shellstone_brick_wall": {
+      "name": "Shellstone Brick Wall",
+      "source": "shellstone_brick_wall"
+    },
+    "wildlife_shellstone_bricks": {
+      "name": "Shellstone Bricks",
+      "source": "shellstone_bricks"
+    },
+    "wildlife_shellstone_slab": {
+      "name": "Shellstone Slab",
+      "source": "shellstone_slab"
+    },
+    "wildlife_shellstone_stairs": {
+      "name": "Shellstone Stairs",
+      "source": "shellstone_stairs"
+    },
+    "wildlife_shellstone_wall": {
+      "name": "Shellstone Wall",
+      "source": "shellstone_wall"
+    },
+    "wildlife_smooth_shellstone": {
+      "name": "Smooth Shellstone",
+      "source": "smooth_shellstone"
+    },
+    "wildlife_smooth_shellstone_slab": {
+      "name": "Smooth Shellstone Slab",
+      "source": "smooth_shellstone_slab"
+    },
+    "wildlife_smooth_shellstone_stairs": {
+      "name": "Smooth Shellstone Stairs",
+      "source": "smooth_shellstone_stairs"
+    },
+    "wildlife_smooth_shellstone_wall": {
+      "name": "Smooth Shellstone Wall",
+      "source": "smooth_shellstone_wall"
+    },
+    "wildlife_snail_eggs": {
+      "name": "Snail Eggs",
+      "source": "snail_eggs"
+    },
+    "wildlife_snail_shell": {
+      "name": "Snail Shell",
+      "source": "snail_shell"
+    },
+    "wildlife_tortoise_egg": {
+      "name": "Tortoise Egg",
+      "source": "tortoise_egg"
+    },
+    "wildlife_verdant_froglass": {
+      "name": "Verdant Froglass",
+      "source": "verdant_froglass"
+    },
+    "wildlife_verdant_froglass_pane": {
+      "name": "Verdant Froglass Pane",
+      "source": "verdant_froglass_pane"
+    },
+    "wildlife_glow_goop": {
+      "name": "Glow Goop",
+      "source": "glow_goop"
+    }
+  },
+  "sounds": [
+    "wildlife_entity.giant_isopod.roll",
+    "wildlife_entity.jellyfish.idle",
+    "wildlife_entity.jellyfish.swim",
+    "wildlife_entity.jellyfish.hurt",
+    "wildlife_entity.jellyfish.death",
+    "wildlife_entity.anglerfish.idle",
+    "wildlife_entity.anglerfish.swim",
+    "wildlife_entity.anglerfish.hurt",
+    "wildlife_entity.anglerfish.death",
+    "wildlife_entity.whale.ambient",
+    "wildlife_entity.whale.hurt",
+    "wildlife_entity.whale.death",
+    "wildlife_entity.whale.blowhole",
+    "wildlife_entity.ant.ambient",
+    "wildlife_entity.ant.hurt",
+    "wildlife_entity.ant.death",
+    "wildlife_entity.ant.step",
+    "wildlife_entity.mole.ambient",
+    "wildlife_entity.mole.hurt",
+    "wildlife_entity.mole.death",
+    "wildlife_entity.mole.dig_down",
+    "wildlife_entity.mole.dig_up",
+    "wildlife_entity.mole.peek",
+    "wildlife_entity.mole.step",
+    "wildlife_entity.rat.ambient",
+    "wildlife_entity.rat.hurt",
+    "wildlife_entity.rat.death",
+    "wildlife_entity.rat.swim",
+    "wildlife_entity.rat.step",
+    "wildlife_entity.black_bear.ambient",
+    "wildlife_entity.black_bear.hurt",
+    "wildlife_entity.black_bear.death",
+    "wildlife_entity.black_bear.sleep",
+    "wildlife_entity.black_bear.eat",
+    "wildlife_entity.black_bear.sniff",
+    "wildlife_entity.black_bear.attack",
+    "wildlife_entity.tiger.ambient",
+    "wildlife_entity.tiger.hurt",
+    "wildlife_entity.tiger.death",
+    "wildlife_entity.tiger.attack",
+    "wildlife_entity.tiger.sleep",
+    "wildlife_entity.tiger.prey",
+    "wildlife_entity.tiger.step",
+    "wildlife_entity.komodo_dragon.ambient",
+    "wildlife_entity.komodo_dragon.hurt",
+    "wildlife_entity.komodo_dragon.death",
+    "wildlife_entity.komodo_dragon.attack",
+    "wildlife_entity.komodo_dragon.step",
+    "wildlife_entity.ostrich.ambient",
+    "wildlife_entity.ostrich.hurt",
+    "wildlife_entity.ostrich.death",
+    "wildlife_entity.ostrich.attack",
+    "wildlife_entity.ostrich.bury",
+    "wildlife_entity.ostrich.ambient_baby",
+    "wildlife_entity.ostrich.hurt_baby",
+    "wildlife_entity.ostrich.death_baby",
+    "wildlife_entity.ostrich.step",
+    "wildlife_entity.ostrich.egg_break",
+    "wildlife_entity.ostrich.egg_crack",
+    "wildlife_entity.ostrich.egg_hatch",
+    "wildlife_entity.scorpion.ambient",
+    "wildlife_entity.scorpion.hurt",
+    "wildlife_entity.scorpion.death",
+    "wildlife_entity.scorpion.attack",
+    "wildlife_entity.scorpion.step",
+    "wildlife_entity.great_white_shark.ambient",
+    "wildlife_entity.great_white_shark.hurt",
+    "wildlife_entity.great_white_shark.death",
+    "wildlife_entity.great_white_shark.attack",
+    "wildlife_entity.great_white_shark.flop",
+    "wildlife_entity.great_white_shark.swim",
+    "wildlife_entity.great_white_shark.swim_fast",
+    "wildlife_entity.turkey.ambient",
+    "wildlife_entity.turkey.hurt",
+    "wildlife_entity.turkey.death",
+    "wildlife_entity.turkey.step",
+    "wildlife_entity.turkey.peck",
+    "wildlife_entity.ray.idle",
+    "wildlife_entity.ray.swim",
+    "wildlife_entity.ray.hurt",
+    "wildlife_entity.ray.death",
+    "wildlife_entity.blobfish.flop",
+    "wildlife_entity.blobfish.swim",
+    "wildlife_entity.blobfish.hurt",
+    "wildlife_entity.blobfish.death",
+    "wildlife_entity.piranha.flop",
+    "wildlife_entity.piranha.idle",
+    "wildlife_entity.piranha.hurt",
+    "wildlife_entity.piranha.death",
+    "wildlife_entity.clam.ambient",
+    "wildlife_entity.clam.hurt",
+    "wildlife_entity.clam.death",
+    "wildlife_entity.clam.launch",
+    "wildlife_entity.crab.ambient",
+    "wildlife_entity.crab.hurt",
+    "wildlife_entity.crab.death",
+    "wildlife_entity.crab.step",
+    "wildlife_entity.crab.pincer",
+    "wildlife_entity.tortoise.hide",
+    "wildlife_entity.tortoise.thud",
+    "wildlife_entity.tortoise.shell_block",
+    "wildlife_entity.tortoise.egg_break",
+    "wildlife_entity.tortoise.egg_crack",
+    "wildlife_entity.tortoise.egg_hatch",
+    "wildlife_entity.tortoise.hurt",
+    "wildlife_entity.tortoise.death",
+    "wildlife_entity.tortoise.ambient",
+    "wildlife_entity.tortoise.ambient_baby",
+    "wildlife_entity.tortoise.hurt_baby",
+    "wildlife_entity.tortoise.death_baby",
+    "wildlife_entity.alligator.egg_break",
+    "wildlife_entity.alligator.egg_crack",
+    "wildlife_entity.alligator.egg_hatch",
+    "wildlife_entity.snake.hiss",
+    "wildlife_entity.snake.hurt",
+    "wildlife_entity.snake.death",
+    "wildlife_entity.snake.ambient",
+    "wildlife_entity.snake.rattle",
+    "wildlife_entity.snail.ambient",
+    "wildlife_entity.snail.hurt",
+    "wildlife_entity.snail.crush",
+    "wildlife_entity.snail.forward",
+    "wildlife_entity.snail.back",
+    "wildlife_entity.bear.hurt",
+    "wildlife_entity.bear.death",
+    "wildlife_entity.bear.ambient",
+    "wildlife_entity.bear.ambient_baby",
+    "wildlife_entity.bear.hurt_baby",
+    "wildlife_entity.bear.death_baby",
+    "wildlife_entity.bear.sleep",
+    "wildlife_entity.bear.sniff",
+    "wildlife_item.whistle",
+    "wildlife_item.knapsack.pickup",
+    "wildlife_item.knapsack.place",
+    "wildlife_entity.bear.spit",
+    "wildlife_entity.bear.eat",
+    "wildlife_entity.bird.hurt",
+    "wildlife_entity.bird.death",
+    "wildlife_entity.bird.eat",
+    "wildlife_entity.bird.fly",
+    "wildlife_entity.bird.ambient_bluejay",
+    "wildlife_entity.bird.ambient_canary",
+    "wildlife_entity.bird.ambient_robin",
+    "wildlife_entity.bird.ambient_finch",
+    "wildlife_entity.bird.ambient_sparrow",
+    "wildlife_entity.bird.ambient_cardinal",
+    "wildlife_entity.firefly.ambient",
+    "wildlife_entity.firefly.hurt",
+    "wildlife_entity.firefly.death",
+    "wildlife_entity.firefly.hide",
+    "wildlife_entity.rhino.scrape",
+    "wildlife_entity.rhino.ambient",
+    "wildlife_entity.rhino.ambient_baby",
+    "wildlife_entity.rhino.hurt",
+    "wildlife_entity.rhino.death",
+    "wildlife_entity.lion.hurt",
+    "wildlife_entity.lion.ambient",
+    "wildlife_entity.lion.roar",
+    "wildlife_entity.lion.ambient_baby",
+    "wildlife_entity.lion.hurt_baby",
+    "wildlife_entity.lion.death_baby",
+    "wildlife_entity.lion.death",
+    "wildlife_entity.elephant.ambient",
+    "wildlife_entity.elephant.ambient_baby",
+    "wildlife_entity.elephant.hurt_baby",
+    "wildlife_entity.elephant.death_baby",
+    "wildlife_entity.elephant.hurt",
+    "wildlife_entity.elephant.death",
+    "wildlife_entity.mammoth.ambient",
+    "wildlife_entity.mammoth.ambient_baby",
+    "wildlife_entity.mammoth.hurt_baby",
+    "wildlife_entity.mammoth.death_baby",
+    "wildlife_entity.mammoth.hurt",
+    "wildlife_entity.mammoth.death",
+    "wildlife_entity.deer.ambient",
+    "wildlife_entity.deer.hurt",
+    "wildlife_entity.deer.ambient_baby",
+    "wildlife_entity.deer.hurt_baby",
+    "wildlife_entity.deer.death_baby",
+    "wildlife_entity.deer.death",
+    "wildlife_entity.zebra.ambient",
+    "wildlife_entity.zebra.hurt",
+    "wildlife_entity.zebra.death",
+    "wildlife_entity.zebra.eat",
+    "wildlife_entity.zebra.breathe",
+    "wildlife_entity.zebra.angry",
+    "wildlife_entity.zebra.jump",
+    "wildlife_entity.vulture.ambient",
+    "wildlife_entity.vulture.hurt",
+    "wildlife_entity.vulture.death",
+    "wildlife_entity.giraffe.ambient",
+    "wildlife_entity.giraffe.ambient_baby",
+    "wildlife_entity.giraffe.hurt_baby",
+    "wildlife_entity.giraffe.death_baby",
+    "wildlife_entity.giraffe.hurt",
+    "wildlife_entity.giraffe.death",
+    "wildlife_entity.hippo.ambient",
+    "wildlife_entity.hippo.hurt",
+    "wildlife_entity.hippo.death",
+    "wildlife_entity.alligator.hurt",
+    "wildlife_entity.alligator.death",
+    "wildlife_entity.alligator.ambient",
+    "wildlife_entity.alligator.ambient_baby",
+    "wildlife_entity.alligator.hurt_baby",
+    "wildlife_entity.alligator.death_baby",
+    "wildlife_entity.boar.ambient",
+    "wildlife_entity.boar.hurt",
+    "wildlife_entity.boar.ambient_baby",
+    "wildlife_entity.boar.hurt_baby",
+    "wildlife_entity.boar.death_baby",
+    "wildlife_entity.boar.death",
+    "wildlife_entity.boar.step",
+    "wildlife_entity.catfish.flop",
+    "wildlife_entity.bass.flop",
+    "wildlife_entity.dragonfly.loop",
+    "wildlife_entity.duck.ambient",
+    "wildlife_entity.duck.hurt",
+    "wildlife_entity.duck.death",
+    "wildlife_entity.duck.ambient_baby",
+    "wildlife_entity.duck.hurt_baby",
+    "wildlife_entity.duck.death_baby",
+    "wildlife_entity.duck.step",
+    "wildlife_entity.rubber_ducky.ambient",
+    "wildlife_entity.rubber_ducky.hurt",
+    "wildlife_entity.rubber_ducky.death",
+    "wildlife_entity.lizard.ambient",
+    "wildlife_entity.lizard.hurt",
+    "wildlife_entity.lizard.death",
+    "wildlife_entity.butterfly.ambient",
+    "wildlife_entity.butterfly.hurt",
+    "wildlife_entity.dragonfly.hurt",
+    "wildlife_entity.dragonfly.death",
+    "wildlife_entity.capybara.ambient",
+    "wildlife_entity.capybara.hurt",
+    "wildlife_entity.capybara.death",
+    "wildlife_entity.capybara.sleep",
+    "wildlife_entity.hedgehog.ambient",
+    "wildlife_entity.hedgehog.hurt",
+    "wildlife_entity.hedgehog.death",
+    "wildlife_entity.hedgehog.hide",
+    "wildlife_entity.hedgehog.unhide",
+    "wildlife_music_disc.death_by_hogs",
+    "wildlife_music_disc.wild_ones",
+    "mount_acencia_ambient1",
+    "mount_acencia_ambient2",
+    "mount_acencia_ambient3",
+    "mount_acencia_ambient4",
+    "mount_acencia_angry1",
+    "mount_acencia_angry2",
+    "mount_acencia_death1",
+    "mount_acencia_hurt1",
+    "mount_acencia_hurt2",
+    "mount_archelon_ambient1",
+    "mount_archelon_ambient2",
+    "mount_archelon_ambient3",
+    "mount_archelon_ambient4",
+    "mount_archelon_ambient5",
+    "mount_archelon_ambient6",
+    "mount_archelon_angry1",
+    "mount_archelon_angry2",
+    "mount_archelon_death",
+    "mount_archelon_hurt1",
+    "mount_archelon_hurt2",
+    "mount_bat_ambient1",
+    "mount_bat_ambient2",
+    "mount_bat_ambient3",
+    "mount_bat_ambient4",
+    "mount_bat_ambient5",
+    "mount_bat_death",
+    "mount_bat_hurt",
+    "mount_bat_hurt2",
+    "mount_bat_hurt24",
+    "mount_colelytra_ambient1",
+    "mount_colelytra_ambient10",
+    "mount_colelytra_ambient11",
+    "mount_colelytra_ambient2",
+    "mount_colelytra_ambient3",
+    "mount_colelytra_ambient4",
+    "mount_colelytra_ambient5",
+    "mount_colelytra_ambient6",
+    "mount_colelytra_ambient7",
+    "mount_colelytra_ambient8",
+    "mount_colelytra_ambient9",
+    "mount_colelytra_angry1",
+    "mount_colelytra_angry2",
+    "mount_colelytra_death1",
+    "mount_colelytra_death2",
+    "mount_colelytra_hurt1",
+    "mount_colelytra_hurt2",
+    "mount_colelytra_hurt3",
+    "mount_courierbird_ambient1",
+    "mount_courierbird_ambient2",
+    "mount_courierbird_ambient3",
+    "mount_courierbird_anoyed",
+    "mount_courierbird_death",
+    "mount_courierbird_hurt",
+    "mount_direwolf_ambient1",
+    "mount_direwolf_ambient2",
+    "mount_direwolf_ambient3",
+    "mount_direwolf_ambient4",
+    "mount_direwolf_anoyed",
+    "mount_dragon_ambient1",
+    "mount_dragon_ambient2",
+    "mount_dragon_ambient3",
+    "mount_dragon_ambient4",
+    "mount_dragon_ambient5",
+    "mount_dragon_anoyed",
+    "mount_dragon_anoyed2",
+    "mount_dragon_death",
+    "mount_dragon_hurt",
+    "mount_firebird_ambient1",
+    "mount_firebird_ambient2",
+    "mount_firebird_ambient3",
+    "mount_firebird_ambient4",
+    "mount_firebird_angry1",
+    "mount_firebird_angry2",
+    "mount_firebird_death",
+    "mount_firebird_death2",
+    "mount_firebird_hurt1",
+    "mount_firebird_hurt2",
+    "mount_firebird_hurt3",
+    "mount_firebird_hurt4",
+    "mount_griffon_ambient1",
+    "mount_griffon_ambient2",
+    "mount_griffon_ambient3",
+    "mount_griffon_ambient4",
+    "mount_griffon_angry",
+    "mount_griffon_anoyed",
+    "mount_griffon_death",
+    "mount_griffon_hurt1",
+    "mount_griffon_hurt2",
+    "mount_groundlizard_ambient1",
+    "mount_groundlizard_ambient2",
+    "mount_groundlizard_ambient3",
+    "mount_groundlizard_anoyed",
+    "mount_groundlizard_anoyed2",
+    "mount_groundlizard_death",
+    "mount_groundlizard_death2",
+    "mount_groundlizard_hurt",
+    "mount_groundlizard_hurt2",
+    "mount_moth_ambient1",
+    "mount_moth_ambient2",
+    "mount_moth_ambient3",
+    "mount_moth_ambient4",
+    "mount_moth_ambient5",
+    "mount_moth_angry",
+    "mount_moth_angry2",
+    "mount_moth_death",
+    "mount_moth_hurt",
+    "mount_moth_hurt2",
+    "mount_nudibranch_ambient1",
+    "mount_nudibranch_ambient2",
+    "mount_nudibranch_ambient3",
+    "mount_nudibranch_angry1",
+    "mount_nudibranch_death",
+    "mount_nudibranch_hurt1",
+    "mount_nudibranch_hurt2",
+    "mount_ridinglizard_ambient1",
+    "mount_ridinglizard_ambient2",
+    "mount_ridinglizard_ambient3",
+    "mount_ridinglizard_anoyed",
+    "mount_ridinglizard_anoyed2",
+    "mount_ridinglizard_anoyed3",
+    "mount_ridinglizard_death",
+    "mount_ridinglizard_hurt1",
+    "mount_whir_short"
+  ]
+}

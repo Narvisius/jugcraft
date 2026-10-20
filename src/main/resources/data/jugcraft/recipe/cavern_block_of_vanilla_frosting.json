@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FFF",
+    "FCF",
+    "FFF"
+  ],
+  "key": {
+    "F": "jugcraft:cavern_block_of_frosting",
+    "C": "minecraft:sugar"
+  },
+  "result": {
+    "count": 8,
+    "id": "jugcraft:cavern_block_of_vanilla_frosting"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

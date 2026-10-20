@@ -1,0 +1,38 @@
+{
+  "type": "caster_tome",
+  "color": {
+    "b": 180,
+    "g": 25,
+    "id": "jugcraft:nouveau_constant",
+    "r": 255
+  },
+  "flavour_text": "Launches the caster into the air and grants temporary elytra flight!",
+  "name": "Takeoff!",
+  "sound": {},
+  "spell": [
+    "jugcraft:nouveau_glyph_self",
+    "jugcraft:nouveau_glyph_launch",
+    "jugcraft:nouveau_glyph_launch",
+    "jugcraft:nouveau_glyph_glide",
+    "jugcraft:nouveau_glyph_duration_down"
+  ],
+  "spellData": {
+    "color": {
+      "b": 180,
+      "g": 25,
+      "id": "jugcraft:nouveau_constant",
+      "r": 255
+    },
+    "name": "Takeoff!",
+    "particleTimeline": {},
+    "recipe": [
+      "jugcraft:nouveau_glyph_self",
+      "jugcraft:nouveau_glyph_launch",
+      "jugcraft:nouveau_glyph_launch",
+      "jugcraft:nouveau_glyph_glide",
+      "jugcraft:nouveau_glyph_duration_down"
+    ],
+    "sound": {}
+  },
+  "tome_type": "jugcraft:nouveau_caster_tome"
+}

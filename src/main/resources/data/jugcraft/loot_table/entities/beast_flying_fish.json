@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "name": "blobfish",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:beast_flying_fish",
+          "modifier": [
+            {
+              "count": 1,
+              "type": "minecraft:set_count"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "blobfish_bm",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:bone_meal"
+        }
+      ],
+      "condition": {
+        "chance": 0.05,
+        "type": "minecraft:random_chance"
+      }
+    }
+  ]
+}

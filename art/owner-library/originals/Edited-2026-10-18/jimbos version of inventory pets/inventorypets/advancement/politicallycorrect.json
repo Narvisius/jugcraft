@@ -1,0 +1,31 @@
+{
+    "display": {
+        "icon": {
+            "id": "inventorypets:pet_politically_correct"
+        },
+        "title": {
+            "translate": "advancement.ip.petach_politically_correct"
+        },
+        "description": {
+            "translate": "advancement.ip.petach_politically_correct.desc"
+        },
+        "show_toast": true,
+        "announce_to_chat": true
+    },
+    "parent": "inventorypets:mishumaasaba",
+    "criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                        	"inventorypets:pet_politically_correct"
+                    	]
+                    }
+                    
+                ]
+            }
+        }
+    }
+}

@@ -62,7 +62,9 @@ public final class ConcordanceProgress {
 	}
 
 	public static FocusPool focus(Player player) {
-		return player.getAttachedOrElse(JugcraftConcordance.FOCUS, FocusPool.FULL);
+        var pool=player.getAttachedOrElse(JugcraftConcordance.FOCUS, FocusPool.FULL);
+        if(player instanceof ServerPlayer server){int maximum=io.github.jimbozoomer.jugcraft.nouveau.NouveauThreads.focusCapacity(player);if(pool.capacity()!=maximum){pool=pool.withCapacity(now(player.level()),maximum);server.setAttached(JugcraftConcordance.FOCUS,pool);}}
+        return pool;
 	}
 
 	/** The clock Focus and lanterns count by: the level's game time, which only moves forward. */
@@ -89,7 +91,7 @@ public final class ConcordanceProgress {
 
 	/** Operators and tests: sets the player's Focus now. */
 	public static void setFocus(ServerPlayer player, int amount) {
-		player.setAttached(JugcraftConcordance.FOCUS, new FocusPool(amount, now(player.level())));
+		player.setAttached(JugcraftConcordance.FOCUS, new FocusPool(amount, now(player.level()),focus(player).capacity()));
 	}
 
 	/**

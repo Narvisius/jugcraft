@@ -587,6 +587,110 @@
         }
       ],
       "embeddedProjects": {}
+    },
+    {
+      "key": "diorama",
+      "name": "Diorama",
+      "purpose": "Default client minimap, angled world map and waypoints",
+      "modId": "diorama",
+      "modVersion": "0.1.1+26.3",
+      "side": "client",
+      "requiredByJugcraft": false,
+      "maven": "maven.modrinth:kwpTgbCk:kWas7LpC",
+      "modrinthProject": "kwpTgbCk",
+      "modrinthVersion": "kWas7LpC",
+      "releaseType": "release",
+      "projectUrl": "https://modrinth.com/mod/diorama-map",
+      "sourceUrl": "https://github.com/SunkenInTime/minecraft-orthogonal-map",
+      "license": "MIT",
+      "artifactLicense": "MIT",
+      "filename": "diorama-0.1.1+26.3.jar",
+      "downloads": [
+        "https://cdn.modrinth.com/data/kwpTgbCk/versions/kWas7LpC/diorama-0.1.1%2B26.3.jar"
+      ],
+      "hashes": {
+        "sha512": "897f456acfb33057e7462c88fad254eaae6c4f97a5841c1cbabfe2e03f6885b0238209984e3e24a1a5b63558ec82e943842706f4961c2523f0795f369a347d87",
+        "sha1": "713c68f99d6566807f63d68a52f1dbc1016f1c2b"
+      },
+      "size": 247101,
+      "requiredProjects": [
+        {
+          "project": "P7dR8mSH",
+          "version": null
+        }
+      ],
+      "embeddedProjects": {},
+      "verifiedDate": "2026-10-18"
+    },
+    {
+      "key": "travelers-backpack",
+      "name": "Traveler's Backpack",
+      "purpose": "Upgradeable portable storage with Jugcraft recipes and Trinkets Back slot",
+      "modId": "travelersbackpack",
+      "modVersion": "11.4.1",
+      "side": "both",
+      "requiredByJugcraft": false,
+      "maven": "maven.modrinth:rlloIFEV:SmhjfeWr",
+      "modrinthProject": "rlloIFEV",
+      "modrinthVersion": "SmhjfeWr",
+      "releaseType": "release",
+      "projectUrl": "https://modrinth.com/mod/travelersbackpack",
+      "sourceUrl": "https://github.com/Tiviacz1337/Travelers-Backpack",
+      "license": "LGPL-3.0-only",
+      "artifactLicense": "GNU LESSER GENERAL PUBLIC LICENSE",
+      "filename": "travelersbackpack-fabric-26.3-11.4.1.jar",
+      "downloads": [
+        "https://cdn.modrinth.com/data/rlloIFEV/versions/SmhjfeWr/travelersbackpack-fabric-26.3-11.4.1.jar"
+      ],
+      "hashes": {
+        "sha1": "47c1f44461eafff9a3d7998c79bcdfa612931584",
+        "sha512": "ccac2fe425d2de2bd2c3d15fc5c214962027863c16456bbb56f8a9f0eff93798ec543622732d45a2f269d96a28dee0ec5a13713e1df982cd54c4dd638a64dd12"
+      },
+      "size": 1511186,
+      "requiredProjects": [
+        {
+          "project": "ohNO6lps",
+          "version": null
+        },
+        {
+          "project": "P7dR8mSH",
+          "version": null
+        }
+      ],
+      "embeddedProjects": {}
+    },
+    {
+      "key": "forge-config-api-port",
+      "name": "Forge Config API Port",
+      "purpose": "Required configuration runtime for Travelers Backpack",
+      "modId": "forgeconfigapiport",
+      "modVersion": "26.3.1",
+      "side": "both",
+      "requiredByJugcraft": false,
+      "maven": "maven.modrinth:ohNO6lps:JpKvrr9J",
+      "modrinthProject": "ohNO6lps",
+      "modrinthVersion": "JpKvrr9J",
+      "releaseType": "release",
+      "projectUrl": "https://modrinth.com/mod/forge-config-api-port",
+      "sourceUrl": "https://github.com/Fuzss/forgeconfigapiport",
+      "license": "MPL-2.0",
+      "artifactLicense": "MPL-2.0",
+      "filename": "ForgeConfigAPIPort-v26.3.1-mc26.3.x-Fabric.jar",
+      "downloads": [
+        "https://cdn.modrinth.com/data/ohNO6lps/versions/JpKvrr9J/ForgeConfigAPIPort-v26.3.1-mc26.3.x-Fabric.jar"
+      ],
+      "hashes": {
+        "sha512": "b9339c21e14beec2eae0ca215317284bcaacef72e1d1dee8b3dfbe2de0eefaa758a172446df85419b6534557c479abe972d7d21f4ec194f2d436f9ed4329cb9f",
+        "sha1": "a0d802d2cb010a5054c72f1ccf248433b6e0bafb"
+      },
+      "size": 609574,
+      "requiredProjects": [
+        {
+          "project": "P7dR8mSH",
+          "version": null
+        }
+      ],
+      "embeddedProjects": {}
     }
   ]
 }

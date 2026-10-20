@@ -1,0 +1,53 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:wildlife_azure_froglass",
+          "condition": {
+            "entity": "this",
+            "predicate": {
+              "minecraft:nbt": "{Variant:\"naturalist:blue\"}"
+            },
+            "type": "minecraft:entity_properties"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:wildlife_verdant_froglass",
+          "condition": {
+            "entity": "this",
+            "predicate": {
+              "minecraft:nbt": "{Variant:\"naturalist:green\"}"
+            },
+            "type": "minecraft:entity_properties"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:wildlife_crimson_froglass",
+          "condition": {
+            "entity": "this",
+            "predicate": {
+              "minecraft:nbt": "{Variant:\"naturalist:red\"}"
+            },
+            "type": "minecraft:entity_properties"
+          }
+        }
+      ],
+      "rolls": 1.0,
+      "condition": {
+        "predicate": {
+          "source_entity": {
+            "minecraft:entity_type": "minecraft:frog"
+          }
+        },
+        "type": "minecraft:damage_source_properties"
+      }
+    }
+  ],
+  "random_sequence": "jugcraft:entities/wildlife_dragonfly"
+}

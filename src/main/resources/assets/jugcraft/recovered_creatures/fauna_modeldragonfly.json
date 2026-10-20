@@ -1,0 +1,202 @@
+{
+  "textureSize": [
+    64,
+    32
+  ],
+  "parts": [
+    {
+      "name": "body",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        21.0,
+        2.0,
+        1.570796,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -3.0,
+            -1.0,
+            1.0,
+            10.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightwing",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        21.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -7.0,
+            0.0,
+            -4.0,
+            7.0,
+            1.0,
+            7.0
+          ],
+          "uv": [
+            0.0,
+            6.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leftwing",
+      "parent": "$mesh",
+      "pose": [
+        1.0,
+        21.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            -4.0,
+            7.0,
+            1.0,
+            7.0
+          ],
+          "uv": [
+            0.0,
+            16.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "head",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        21.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -4.0,
+            3.0,
+            1.0,
+            1.0
+          ],
+          "uv": [
+            4.0,
+            0.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "fauna/familiarfauna/entities/model/ModelDragonfly.java",
+  "sourceSha256": "dde22f94d5540d401b56259dca2f0b09f8cf6cd615f673894b015d1564d4047f",
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [
+    {
+      "bone": "rightwing",
+      "target": "zRot",
+      "op": "=",
+      "value": [
+        "*",
+        -1,
+        [
+          "*",
+          [
+            "*",
+            [
+              "cos",
+              [
+                "*",
+                "age",
+                5.0
+              ]
+            ],
+            3.141592653589793
+          ],
+          0.15
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "leftwing",
+      "target": "zRot",
+      "op": "=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "cos",
+            [
+              "*",
+              "age",
+              5.0
+            ]
+          ],
+          3.141592653589793
+        ],
+        0.15
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

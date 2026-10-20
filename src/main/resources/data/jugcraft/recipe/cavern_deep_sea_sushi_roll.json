@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:cavern_tripodfish",
+    "jugcraft:cavern_sea_pig",
+    "jugcraft:cavern_lanternfish",
+    "minecraft:dried_kelp"
+  ],
+  "result": {
+    "count": 2,
+    "id": "jugcraft:cavern_deep_sea_sushi_roll"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

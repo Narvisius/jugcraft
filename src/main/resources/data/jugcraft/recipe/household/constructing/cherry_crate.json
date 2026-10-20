@@ -1,0 +1,18 @@
+{
+  "type": "jugcraft:household_construction",
+  "ingredients": [
+    {
+      "count": 8,
+      "ingredient": "minecraft:cherry_planks"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:household_cherry_crate"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

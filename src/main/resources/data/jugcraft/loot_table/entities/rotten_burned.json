@@ -1,0 +1,73 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:rotten_magma_rotten_flesh",
+          "modifier": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": 0.0
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0,
+      "modifier": [
+        {
+          "count": {
+            "type": "minecraft:uniform",
+            "max": 1.0,
+            "min": 0.0
+          },
+          "enchantment": "minecraft:looting",
+          "type": "minecraft:enchanted_count_increase"
+        }
+      ]
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:magma_block"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:magma_cream",
+          "condition": {
+            "chance": 0.25,
+            "type": "minecraft:random_chance"
+          }
+        }
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 2.0,
+        "min": 0.0
+      },
+      "modifier": [
+        {
+          "count": {
+            "type": "minecraft:uniform",
+            "max": 1.0,
+            "min": 0.0
+          },
+          "enchantment": "minecraft:looting",
+          "type": "minecraft:enchanted_count_increase"
+        }
+      ],
+      "condition": {
+        "type": "minecraft:killed_by_player"
+      }
+    }
+  ]
+}

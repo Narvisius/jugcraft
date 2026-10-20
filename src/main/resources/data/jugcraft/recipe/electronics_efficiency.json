@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AWA",
+    " C "
+  ],
+  "key": {
+    "A": "jugcraft:alumina_plate",
+    "W": "jugcraft:copper_wire",
+    "C": "jugcraft:advanced_chip"
+  },
+  "result": {
+    "id": "jugcraft:efficiency_upgrade",
+    "count": 2
+  }
+}

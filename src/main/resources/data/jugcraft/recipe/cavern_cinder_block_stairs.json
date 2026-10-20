@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "G  ",
+    "GG ",
+    "GGG"
+  ],
+  "key": {
+    "G": "jugcraft:cavern_cinder_block"
+  },
+  "result": {
+    "count": 4,
+    "id": "jugcraft:cavern_cinder_block_stairs"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

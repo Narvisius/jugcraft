@@ -8,20 +8,22 @@ Primary specialty and supported player role: exploration, farming and building; 
 
 Tree-generation update (15 October 2026): [batch 2](trees-batch-2.md) adds the approved warm and mountain shapes and adjusts existing tree picks without changing biome placement or per-chunk attempt budgets. Its feature record holds the current mixes, measurements and fresh validation; older evidence below remains historical.
 
+Tree-generation update (16 October 2026): [batch 6](trees-batch-6.md) adds juniper, gorse and sagebrush, with current placement shares and validation in its feature record. Existing biome placement and attempt budgets are retained except for Steppe's new low shrubs and Cold Desert's rare coarse-dirt juniper. Earlier test results below remain historical.
+
 ## Player experience
 Nine open biomes grow in the **meadow** layout of Jugcraft regions (a quarter of them), each in place of the vanilla biome with the same climate:
 
 | Biome | Replaces (meadow layout) | What grows |
 | --- | --- | --- |
-| **Field** | cool forest | flat land with teal grass, small spruces and clumps of oak bush, sunflowers and many flowers; foxes; villages |
+| **Field** | cool forest | flat land with teal grass, column junipers, hawthorn trees and clumps of hawthorn and oak bush, sunflowers and many flowers; foxes; villages |
 | **Flower Meadow** | flower forest | no trees; vanilla flowers and wildflowers on almost every block |
 | **Grassland** | cool plains (moister) | no trees; blue-green grass carpeted with clover |
-| **Heathland** | savanna (moister) | brown-tinged grass, heather and wildflowers, pines and oak bushes; wild horses |
+| **Heathland** | savanna (moister) | brown-tinged grass, heather and wildflowers, flowering gorse, juniper bushes and pines; wild horses |
 | **Lavender Field** | sunflower plains | lavender and tall lavender everywhere, jacarandas in bloom, oaks with bees and a few cypresses |
 | **Lush Grassland** | sparse jungle, warm plains | small palms, small jungle trees and oak bushes among orange cosmos and oxeye daisies; parrots; villages |
-| **Prairie** | temperate plains (one weirdness half) | tall grass and goldenrod, oak bushes, scattered cottonwoods and the odd big oak; villages |
-| **Shrubland** | temperate plains (the other half) | dense oak bushes and bushes, alliums, no trees; wild horses |
-| **Steppe** | dry cool plains | tan, dry grass and dead bushes, nothing taller; horses, donkeys and llamas |
+| **Prairie** | temperate plains (one weirdness half) | tall grass and goldenrod, oak bushes, column junipers, scattered cottonwoods and the odd big oak; villages |
+| **Shrubland** | temperate plains (the other half) | dense hawthorn, gorse, juniper and oak bushes, alliums, no tall tree layer; wild horses |
+| **Steppe** | dry cool plains | tan, dry grass, sagebrush and juniper bushes no taller than two blocks, dead bushes; horses, donkeys and llamas |
 
 - Biomes O' Plenty's Forested Field and old Field merge into the Field, and its Thicket into the Shrubland.
 - Seasons: all nine change grass and leaf colours with the seasons ([seasons.md](seasons.md)). Seven take winter snow when `seasons.snow` is on; the Heathland and Lush Grassland have mild winters and do not.
@@ -30,7 +32,7 @@ Nine open biomes grow in the **meadow** layout of Jugcraft regions (a quarter of
   - Goldenrod (yellow dye), Heather (magenta dye) and Orange Cosmos (orange dye).
   - Clover: a flowerbed of up to four clumps, like pink petals; no dye.
 - **New tree: the jacaranda**, a forked trunk under a wide, flat crown of violet blossom that flowers all year. It has a full wood set (grey bark, rosy planks) and drops saplings.
-- Oak bushes (one oak log in a ball of oak leaves) dot the Field, Heathland, Prairie, Shrubland and Lush Grassland.
+- Oak bushes remain in the Field, Prairie, Shrubland and Lush Grassland. Heathland now has gorse and juniper bushes. Steppe excludes independent wild apple and peach patches while keeping its plains crop and animal tags.
 
 ## Connections
 - Input producer: world generation (Jugcraft regions, meadow layout).
@@ -75,3 +77,7 @@ Results are recorded under "Results" below after CI runs.
 ## World and event applicability
 - Biome fit: each biome takes the climate of the vanilla biome it replaces, so it borders what that biome bordered.
 - Seasons: see above.
+
+## Tree batches 8–8c update
+
+Tree batch 8 replaces Heathland's 25% vanilla pine with umbrella pine, retaining gorse 60%, juniper bush 15%, and 2–3 planting attempts/chunk. See [implementation and verification](trees-batch-8abc.md).

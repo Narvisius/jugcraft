@@ -1,0 +1,339 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "main",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "caramel_Core",
+      "parent": "main",
+      "pose": [
+        0.0,
+        -5.5,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -4.0,
+            -4.0,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            32.0,
+            12.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_Eye",
+      "parent": "caramel_Core",
+      "pose": [
+        3.0,
+        -0.5,
+        -4.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            -0.5,
+            -0.5,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "uv": [
+            60.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_Eye",
+      "parent": "caramel_Core",
+      "pose": [
+        -2.0,
+        0.5,
+        -4.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            -0.5,
+            -0.5,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "uv": [
+            60.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "Caramel_Layer",
+      "parent": "caramel_Core",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -5.0,
+            -5.0,
+            10.0,
+            10.0,
+            10.0
+          ],
+          "uv": [
+            0.0,
+            20.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "wrapper",
+      "parent": "caramel_Core",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -5.0,
+            -5.0,
+            10.0,
+            10.0,
+            10.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_wrapperTie",
+      "parent": "wrapper",
+      "pose": [
+        5.0,
+        0.0,
+        -0.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "right_wrapperTie",
+      "parent": "wrapper",
+      "pose": [
+        -5.0,
+        0.0,
+        -0.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "cube_r1",
+      "parent": "left_wrapperTie",
+      "pose": [
+        2.0,
+        2.5,
+        8.0,
+        1.5708,
+        -1.5708,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -8.0,
+            -8.0,
+            -2.0,
+            0.0,
+            10.0,
+            10.0
+          ],
+          "uv": [
+            0.0,
+            30.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r2",
+      "parent": "right_wrapperTie",
+      "pose": [
+        -2.0,
+        2.5,
+        8.0,
+        1.5708,
+        1.5708,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            8.0,
+            -8.0,
+            -2.0,
+            0.0,
+            10.0,
+            10.0
+          ],
+          "uv": [
+            0.0,
+            30.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/CaramelCubeModel.java",
+  "sourceSha256": "b2de746b5a42a5712162e4284408a990a3fe8a7edd3ac0a86fee02602b4aca66",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.caramel_Core.setScale(xzScale, yScale, xzScale);",
+      "reason": "Unbound expression variable xzScale"
+    },
+    {
+      "call": "this.wrapper.setScale(1.0f, invYScale, 1.0f);",
+      "reason": "Unbound expression variable invYScale"
+    },
+    {
+      "call": "this.left_wrapperTie.setScale(invXzScale, 1.0f, invXzScale);",
+      "reason": "Unbound expression variable invXzScale"
+    },
+    {
+      "call": "this.right_wrapperTie.setScale(invXzScale, 1.0f, invXzScale);",
+      "reason": "Unbound expression variable invXzScale"
+    },
+    {
+      "call": "this.wrapper.setScale(1.0f, invYScale, 1.0f);",
+      "reason": "Unbound expression variable invYScale"
+    },
+    {
+      "call": "this.right_Eye.setScale(invXzScale, invYScale, invXzScale);",
+      "reason": "Unbound expression variable invXzScale"
+    },
+    {
+      "call": "this.left_Eye.setScale(invXzScale, invYScale, invXzScale);",
+      "reason": "Unbound expression variable invXzScale"
+    },
+    {
+      "call": "this.caramel_Core.rotationPointY += jumpProgress * -5.0f - squishJiggle;",
+      "reason": "Unbound expression variable jumpProgress"
+    },
+    {
+      "call": "this.wrapper.rotationPointY += (yScale - 1.0f) * -2.5f;",
+      "reason": "Unbound expression variable yScale"
+    },
+    {
+      "call": "this.right_Eye.rotationPointY += (yScale - 1.0f) * -0.75f;",
+      "reason": "Unbound expression variable yScale"
+    },
+    {
+      "call": "this.left_Eye.rotationPointY += (yScale - 1.0f) * -0.75f;",
+      "reason": "Unbound expression variable yScale"
+    }
+  ],
+  "expressions": [],
+  "poses": []
+}

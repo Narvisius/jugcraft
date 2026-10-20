@@ -1,0 +1,38 @@
+{
+  "type": "minecraft:add",
+  "left": "jugcraft:overworld/dune/landscape_dune_height",
+  "right": {
+    "type": "minecraft:add",
+    "left": {
+      "type": "minecraft:add",
+      "left": {
+        "type": "minecraft:gradient",
+        "from_value": 1,
+        "to_value": 0,
+        "axis": "y",
+        "from_coordinate": 40,
+        "to_coordinate": 57
+      },
+      "right": {
+        "type": "minecraft:gradient",
+        "from_value": 0,
+        "to_value": -5,
+        "axis": "y",
+        "from_coordinate": 57,
+        "to_coordinate": 320
+      }
+    },
+    "right": {
+      "type": "minecraft:cache",
+      "input": {
+        "type": "minecraft:add",
+        "left": {
+          "type": "minecraft:mul",
+          "left": 1.0,
+          "right": "jugcraft:overworld/dune/landscape_size_spline"
+        },
+        "right": -1.75
+      }
+    }
+  }
+}

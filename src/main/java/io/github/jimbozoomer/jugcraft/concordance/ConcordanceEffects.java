@@ -155,7 +155,7 @@ public final class ConcordanceEffects {
 
 	/** Applies a creature operation to {@code target}. */
 	public static Result apply(Context context, EffectSpec spec, LivingEntity target) {
-		if (spec.kind().on != EffectKind.On.CREATURE) {
+		if (spec.kind().on != EffectKind.On.CREATURE && spec.kind().on != EffectKind.On.ANY) {
 			return Result.WRONG_TARGET;
 		}
 		if (!target.isAlive() || target.isRemoved()) {
@@ -164,6 +164,9 @@ public final class ConcordanceEffects {
 		EffectSpec effect = spec;
 		// The multiplayer rules judge the person behind it (roadmap step 28): its actor, or whoever its cause names.
 		ServerPlayer person = person(context);
+		if (person == target && spec.kind() == EffectKind.NOUVEAU && java.util.Set.of("jugcraft:nouveau/fangs", "jugcraft:nouveau/explosion", "jugcraft:nouveau/wind_burst").contains(spec.status())) {
+			return apply(context, spec, target.blockPosition());
+		}
 		Entity harmer = context.actor() instanceof Player || person == null ? context.actor() : person;
 		boolean unanswered = target instanceof Player && absent(context);
 		// A push moves another player whatever it is meant for, so it faces the rule a harmful effect would (step 28).
@@ -199,8 +202,11 @@ public final class ConcordanceEffects {
 			return Result.LIMIT;
 		}
 		ServerLevel level = context.level();
+		effect=io.github.jimbozoomer.jugcraft.nouveau.NouveauThreads.beforeSpell(context,effect,target);
+		float healthBefore=target.getHealth();
 		float gained = 0.0F;
 		Result result = switch (effect.kind()) {
+			case NOUVEAU_CREATURE, NOUVEAU -> io.github.jimbozoomer.jugcraft.nouveau.NouveauGlyphs.creature(context, effect, target);
 			case DAMAGE -> target.hurtServer(level, damageSource(level, effect, context.actor()), effect.magnitude()) ? Result.APPLIED
 					: Result.NOTHING;
 			case RESTORATION -> {
@@ -219,6 +225,7 @@ public final class ConcordanceEffects {
 			default -> Result.WRONG_TARGET;
 		};
 		if (result.applied()) {
+			io.github.jimbozoomer.jugcraft.nouveau.NouveauThreads.afterSpell(context,effect,target,healthBefore);
 			show(level, effect.kind(), target.getX(), target.getY() + target.getBbHeight() * 0.6, target.getZ());
 			if (effect.kind() == EffectKind.RESTORATION || effect.kind() == EffectKind.PROTECTION) {
 				float amount = effect.kind() == EffectKind.RESTORATION ? gained : 4.0F * (effect.protectionAmplifier() + 1);
@@ -232,7 +239,7 @@ public final class ConcordanceEffects {
 
 	/** Applies a block operation at {@code pos}. */
 	public static Result apply(Context context, EffectSpec spec, BlockPos pos) {
-		if (spec.kind().on != EffectKind.On.BLOCK) {
+		if (spec.kind().on != EffectKind.On.BLOCK && spec.kind().on != EffectKind.On.ANY) {
 			return Result.WRONG_TARGET;
 		}
 		ServerLevel level = context.level();
@@ -253,6 +260,7 @@ public final class ConcordanceEffects {
 			return Result.LIMIT;
 		}
 		Result result = switch (spec.kind()) {
+			case NOUVEAU_BLOCK, NOUVEAU -> io.github.jimbozoomer.jugcraft.nouveau.NouveauGlyphs.block(context, spec, pos);
 			case ILLUMINATION -> {
 				int steps = Math.clamp((spec.duration() + LumenMoteBlock.STEP_TICKS - 1) / LumenMoteBlock.STEP_TICKS, 1, LumenMoteBlock.MAX_STEPS);
 				yield Illumination.kindle(level, answering, pos, steps).lit() ? Result.APPLIED : Result.NOTHING;
@@ -291,6 +299,7 @@ public final class ConcordanceEffects {
 	public static boolean accepts(ServerLevel level, EffectSpec spec, BlockPos pos) {
 		BlockState state = level.getBlockState(pos);
 		return switch (spec.kind()) {
+			case NOUVEAU_BLOCK, NOUVEAU -> io.github.jimbozoomer.jugcraft.nouveau.NouveauGlyphs.accepts(level, spec, pos);
 			case ILLUMINATION -> Illumination.open(state);
 			case INTERACTION -> state.is(INTERACTABLE);
 			case HARVESTING -> state.getBlock() instanceof CropBlock crop ? crop.isMaxAge(state) : state.is(HARVESTABLE);

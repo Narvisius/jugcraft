@@ -51,7 +51,7 @@ class TreeBatchFourBCTests(unittest.TestCase):
         self.assertEqual(cypress["trunk_placer"]["can_grow_through"], "#minecraft:mangrove_logs_can_grow_through")
         self.assertEqual(cypress["trunk_placer"]["place_branch_per_log_probability"], .15)
         for path, data in generated.items():
-            if "/feature/" in path and path.endswith(".json") and "bald_cypress" not in path:
+            if "/feature/" in path and path.endswith(".json") and Path(path).stem not in ("bald_cypress", "banyan"):
                 self.assertNotIn("root_placer", data)
 
     def test_each_species_has_renewable_wood_and_matching_seasonal_art(self):

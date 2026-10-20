@@ -61,7 +61,7 @@ jobs:
       - name: Build and run server tests without optional integrations
         run: ./gradlew build --no-daemon -PjugcraftOptionalIntegrations=false
 
-  # Which client game test classes to run, shared out between eight client jobs (tools/select_client_tests.py).
+  # Which client game test classes to run, shared out between sixteen client jobs (tools/select_client_tests.py).
   # A pull request runs the classes that show what it changed; main and a manual run of this workflow run them all.
   plan:
     name: choose client tests
@@ -76,6 +76,14 @@ jobs:
       shard5: ${{ steps.choose.outputs.shard5 }}
       shard6: ${{ steps.choose.outputs.shard6 }}
       shard7: ${{ steps.choose.outputs.shard7 }}
+      shard8: ${{ steps.choose.outputs.shard8 }}
+      shard9: ${{ steps.choose.outputs.shard9 }}
+      shard10: ${{ steps.choose.outputs.shard10 }}
+      shard11: ${{ steps.choose.outputs.shard11 }}
+      shard12: ${{ steps.choose.outputs.shard12 }}
+      shard13: ${{ steps.choose.outputs.shard13 }}
+      shard14: ${{ steps.choose.outputs.shard14 }}
+      shard15: ${{ steps.choose.outputs.shard15 }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -88,17 +96,17 @@ jobs:
         run: |
           if [ "$EVENT" = pull_request ]; then
             # The pull request's merge commit against its first parent, the base branch.
-            python3 tools/select_client_tests.py --base HEAD^1 --shards 8 --github-output "$GITHUB_OUTPUT"
+            python3 tools/select_client_tests.py --base HEAD^1 --shards 16 --github-output "$GITHUB_OUTPUT"
           else
-            python3 tools/select_client_tests.py --all --shards 8 --github-output "$GITHUB_OUTPUT"
+            python3 tools/select_client_tests.py --all --shards 16 --github-output "$GITHUB_OUTPUT"
           fi
 
   # A real game client with software rendering (Mesa): runs the chosen client game tests in src/gametest
-  # (JugcraftClientGameTests and the rest), which build showrooms and worlds and take screenshots. Five jobs share
+  # (JugcraftClientGameTests and the rest), which build showrooms and worlds and take screenshots. Sixteen jobs share
   # them out (the plan job above), so every chosen class runs once; the "client" job below passes only when the plan
-  # and all eight do. A job with no classes passes at once.
+  # and all sixteen do. A job with no classes passes at once.
   client-shard:
-    name: client (shard ${{ matrix.shard }} of 8)
+    name: client (shard ${{ matrix.shard }} of 16)
     needs: plan
     runs-on: ubuntu-24.04
     # Keep the 60-minute limit; the expanded gun gallery has its own measured weight.
@@ -106,7 +114,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        shard: [0, 1, 2, 3, 4, 5, 6, 7]
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
     env:
       CLASSES: ${{ needs.plan.outputs[format('shard{0}', matrix.shard)] }}
       LIBGL_ALWAYS_SOFTWARE: 'true'
@@ -136,7 +144,7 @@ jobs:
           # Test options are written by runClientGameTest after Loom cleans its run directory.
           mkdir -p run
           echo "eula=true" > run/eula.txt
-      - name: Run client game tests (shard ${{ matrix.shard }} of 8)
+      - name: Run client game tests (shard ${{ matrix.shard }} of 16)
         if: env.CLASSES != ''
         run: |
           ./gradlew runClientGameTest --no-daemon "-PclientTests=$CLASSES" &
@@ -175,7 +183,9 @@ jobs:
         if: always() && env.CLASSES != ''
         with:
           name: client-screenshots-${{ matrix.shard }}
-          path: '**/screenshots/*.png'
+          path: |
+            **/screenshots/*.png
+            **/owner-network-evidence/**/peer.log
 
   # The client game tests' result: green only when the plan and every shard ran and passed.
   client:

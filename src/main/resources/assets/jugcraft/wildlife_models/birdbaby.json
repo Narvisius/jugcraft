@@ -1,0 +1,801 @@
+{
+  "textureSize": [
+    32,
+    16
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "neck",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -0.75,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -2.25,
+            -1.25,
+            3.0,
+            3.0,
+            3.0
+          ],
+          "uv": [
+            4.0,
+            10.0
+          ],
+          "inflate": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            0.0,
+            -5.25,
+            -1.25,
+            0.0,
+            4.0,
+            4.0
+          ],
+          "uv": [
+            0.0,
+            2.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "mouthOpen",
+      "parent": "neck",
+      "pose": [
+        0.5,
+        -1.25,
+        0.75,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -1.0,
+            -2.0,
+            3.0,
+            3.0,
+            3.0
+          ],
+          "uv": [
+            13.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "mouthClosed",
+      "parent": "neck",
+      "pose": [
+        0.5,
+        -1.25,
+        0.75,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -1.0,
+            -2.0,
+            3.0,
+            3.0,
+            3.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "beak",
+      "parent": "neck",
+      "pose": [
+        0.5,
+        -1.25,
+        -2.25,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "uv": [
+            10.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leftWing",
+      "parent": "neck",
+      "pose": [
+        1.5,
+        -0.25,
+        -0.25,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            2.0
+          ],
+          "uv": [
+            -1.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightWing",
+      "parent": "neck",
+      "pose": [
+        -1.5,
+        -0.25,
+        -0.25,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            2.0
+          ],
+          "uv": [
+            -1.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "model/animal/bird/BirdBabyModel.java",
+  "sourceSha256": "d351b6812d1aa59e0781e4e38a542738a8d9a5b0de420834bfd67121ab8cbb58",
+  "headLook": "",
+  "animationRoot": "root",
+  "actions": {
+    "idle": {
+      "loop": true,
+      "channels": [
+        {
+          "bone": "root",
+          "target": "SCALE",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5417,
+              "vector": [
+                0.985,
+                1.0301,
+                0.985
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0417,
+              "vector": [
+                0.98,
+                1.0399,
+                0.98
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.5833,
+              "vector": [
+                0.9878,
+                1.0244,
+                0.9878
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.6667,
+              "vector": [
+                1.0173,
+                0.9654,
+                1.0173
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.1667,
+              "vector": [
+                1.0193,
+                0.9614,
+                1.0193
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "mouthOpen",
+          "target": "SCALE",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "beakOpen",
+          "target": "SCALE",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leftWing",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                3.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                0.0,
+                -3.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.0,
+              "vector": [
+                0.0,
+                0.0,
+                3.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.0,
+              "vector": [
+                0.0,
+                0.0,
+                -3.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                0.0,
+                0.0,
+                3.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "rightWing",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                -3.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                0.0,
+                3.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.0,
+              "vector": [
+                0.0,
+                0.0,
+                -3.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.0,
+              "vector": [
+                0.0,
+                0.0,
+                3.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                0.0,
+                0.0,
+                -3.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ],
+      "length": 4.0
+    },
+    "walk": {
+      "loop": true,
+      "channels": [
+        {
+          "bone": "root",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                -1.82,
+                0.27,
+                -1.36
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.0833,
+              "vector": [
+                -0.25,
+                -0.11,
+                1.05
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                -2.61,
+                -0.45,
+                2.57
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.375,
+              "vector": [
+                -0.25,
+                0.11,
+                -1.05
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5417,
+              "vector": [
+                -2.61,
+                0.45,
+                -2.57
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5833,
+              "vector": [
+                -1.82,
+                0.27,
+                -1.36
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "mouthOpen",
+          "target": "SCALE",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "beakOpen",
+          "target": "SCALE",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leftWing",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                2.5
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.0417,
+              "vector": [
+                0.0,
+                0.0,
+                2.1
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2083,
+              "vector": [
+                0.0,
+                0.0,
+                -4.5
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                0.0,
+                0.0,
+                -5.5
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2917,
+              "vector": [
+                0.0,
+                0.0,
+                -5.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4583,
+              "vector": [
+                0.0,
+                0.0,
+                2.5
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                0.0,
+                3.5
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5833,
+              "vector": [
+                0.0,
+                0.0,
+                2.5
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "rightWing",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                -2.5
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.0417,
+              "vector": [
+                0.0,
+                0.0,
+                -2.1
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2083,
+              "vector": [
+                0.0,
+                0.0,
+                4.5
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                0.0,
+                0.0,
+                5.5
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2917,
+              "vector": [
+                0.0,
+                0.0,
+                5.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4583,
+              "vector": [
+                0.0,
+                0.0,
+                -2.5
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                0.0,
+                -3.5
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5833,
+              "vector": [
+                0.0,
+                0.0,
+                -2.5
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "neck",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                1.9,
+                0.0,
+                2.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.0833,
+              "vector": [
+                2.6,
+                0.0,
+                -1.14
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.1667,
+              "vector": [
+                4.9,
+                0.0,
+                -2.49
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                3.9,
+                0.0,
+                -3.83
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2917,
+              "vector": [
+                3.9,
+                0.0,
+                -2.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.375,
+              "vector": [
+                1.9,
+                0.0,
+                1.14
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4583,
+              "vector": [
+                3.9,
+                0.0,
+                2.48
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5417,
+              "vector": [
+                2.9,
+                0.0,
+                3.83
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5833,
+              "vector": [
+                1.9,
+                0.0,
+                2.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ],
+      "length": 0.5833
+    }
+  },
+  "availableClips": [
+    "BirdBabyAnimation.BIRD_IDLE",
+    "BirdBabyAnimation.BIRD_WALK"
+  ]
+}

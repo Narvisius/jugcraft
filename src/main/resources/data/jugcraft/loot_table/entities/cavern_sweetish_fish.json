@@ -1,0 +1,32 @@
+{
+  "pools": [
+    {
+      "name": "sweetish_fish",
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_sweetish_fish_red",
+          "modifier": [
+            {
+              "type": "jugcraft:cavern_gummy_colors"
+            },
+            {
+              "type": "minecraft:furnace_smelt",
+              "condition": {
+                "entity": "this",
+                "predicate": {
+                  "flags": {
+                    "is_on_fire": true
+                  }
+                },
+                "type": "minecraft:entity_properties"
+              }
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    }
+  ]
+}

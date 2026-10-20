@@ -1,0 +1,32 @@
+{
+  "parent": "jugcraft:nouveau_potion_jar",
+  "criteria": {
+    "has_potion_diffuser": {
+      "conditions": {
+        "items": [
+          {
+            "items": "jugcraft:nouveau_potion_diffuser"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "jugcraft.nouveau_adv.desc.potion_diffuser"
+    },
+    "icon": {
+      "count": 1,
+      "id": "jugcraft:nouveau_potion_diffuser"
+    },
+    "title": {
+      "translate": "jugcraft.nouveau_adv.title.potion_diffuser"
+    }
+  },
+  "requirements": [
+    [
+      "has_potion_diffuser"
+    ]
+  ]
+}

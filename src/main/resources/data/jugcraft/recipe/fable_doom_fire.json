@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:blaze_powder",
+    "minecraft:coal",
+    "jugcraft:fable_hound_tooth"
+  ],
+  "result": {
+    "id": "jugcraft:fable_doom_fire",
+    "count": 2
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

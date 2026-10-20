@@ -1,0 +1,17 @@
+{
+  "type": "jugcraft:cutting",
+  "ingredient": "minecraft:melon",
+  "tool": "#jugcraft:knives",
+  "results": [
+    {
+      "count": 9,
+      "id": "minecraft:melon_slice"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

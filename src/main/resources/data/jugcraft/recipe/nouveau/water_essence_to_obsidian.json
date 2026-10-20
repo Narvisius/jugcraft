@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:lava_bucket",
+    "jugcraft:nouveau_water_essence"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:obsidian"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

@@ -101,7 +101,9 @@ public class BiomeGameTests {
 			}
 			LOGGER.info("Jugcraft layout {}: {} entries; Jugcraft biomes {}", layout, layouts.get(layout).size(), counts);
 		}
-		for (ResourceKey<Biome> biome : JugcraftRegions.biomes()) {
+		// Climate-layout rules and seeded owner-biome choices are separate placement paths.
+		// The latter has its own exhaustive reachability test below.
+		for (ResourceKey<Biome> biome : JugcraftRegions.rules().stream().map(JugcraftRegions.Rule::biome).distinct().toList()) {
 			helper.assertTrue(placed.getOrDefault(biome.identifier().getPath(), 0) > 0, "No climate entry became " + biome.identifier());
 		}
 		List<Pair<Climate.ParameterPoint, Holder<Biome>>> vanilla = overworldPreset(helper.getLevel()).value().parameters().values();
@@ -139,6 +141,38 @@ public class BiomeGameTests {
 			helper.assertTrue(listed.size() == 1 && listed.get(0).getFirst().equals(JugcraftRegions.UNREACHABLE),
 					biome.identifier() + " is listed in vanilla's table " + listed.size() + " times, not once at the unreachable climate");
 		}
+		helper.succeed();
+	}
+
+	/** Every added Overworld biome is reachable from a genuine base holder, with stable choices for a seed. */
+	@GameTest(maxTicks = 200)
+	public void ownerBiomeChoicesAreReachableAndRepeatable(GameTestHelper helper) {
+		var registry = helper.getLevel().registryAccess().lookupOrThrow(Registries.BIOME);
+		var possible = new java.util.HashSet<Holder<Biome>>();
+		for (var entry : overworldPreset(helper.getLevel()).value().parameters().values()) {
+			possible.add(entry.getSecond());
+		}
+		var choices = new io.github.jimbozoomer.jugcraft.menagerie.LandscapeBiomes.Choices(possible);
+		var fallbacks = new java.util.LinkedHashSet<ResourceKey<Biome>>();
+		for (var layout : JugcraftRegions.layouts()) for (var entry : layout) fallbacks.add(entry.getSecond());
+		var missing = new java.util.LinkedHashSet<>(io.github.jimbozoomer.jugcraft.menagerie.LandscapeBiomes.overworld());
+		// Use genuine pre-overlay holders: feeding an owner biome back to itself would hide unreachable choices.
+		fallbacks.removeAll(missing);
+		long seed = JugcraftRegions.fingerprint(0x123456789ABCL);
+		for (var key : fallbacks) {
+			var fallback = registry.getOrThrow(key);
+			for (float depth : new float[] {0, .4F, .8F}) for (float humidity : new float[] {-1, -.5F, 0, .5F, 1}) {
+				var target = Climate.target(0, humidity, 0, 0, depth, 0);
+				for (int cell = 0; cell < 512; cell++) {
+					int x = (cell - 256) * 192;
+					var picked = choices.pick(fallback, seed, x, -192, target);
+					missing.remove(picked.unwrapKey().orElseThrow());
+					if (cell < 8) helper.assertTrue(picked.equals(choices.pick(fallback, seed, x, -192, target)),
+							"Owner biome choice changed for the same seed and climate");
+				}
+			}
+		}
+		helper.assertTrue(missing.isEmpty(), "Owner biomes unreachable through seeded climate choices: " + missing);
 		helper.succeed();
 	}
 

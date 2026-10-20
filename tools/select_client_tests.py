@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Choose which client game test classes a change needs, and share them out between CI's client jobs.
 
-The client game tests start a real game and photograph showrooms, distributed across eight CI jobs.
+The client game tests start a real game and photograph showrooms, distributed across sixteen CI jobs.
 Most pull requests change a few blocks, so a pull request runs only the classes that
 show what it changed; main and a manual run of the Build workflow run them all (docs/TESTING.md).
 
@@ -330,7 +330,7 @@ def main():
     parser.add_argument("--base", help="compare against this revision (a pull request's base)")
     parser.add_argument("--head", default="HEAD")
     parser.add_argument("--all", action="store_true", help="run every class")
-    parser.add_argument("--shards", type=int, default=8)
+    parser.add_argument("--shards", type=int, default=16)
     parser.add_argument("--github-output", help="append shard0..shardN-1 (comma-separated classes) to this file")
     args = parser.parse_args()
 

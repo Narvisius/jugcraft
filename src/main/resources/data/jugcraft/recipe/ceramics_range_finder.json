@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "L L",
+    " BC"
+  ],
+  "key": {
+    "L": "jugcraft:polished_lens",
+    "B": "#c:plates/brass",
+    "C": "minecraft:compass"
+  },
+  "result": {
+    "id": "jugcraft:range_finder",
+    "count": 1
+  }
+}

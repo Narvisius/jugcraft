@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:nouveau_source_jar",
+    "jugcraft:nouveau_abjuration_essence"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_potion_jar"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

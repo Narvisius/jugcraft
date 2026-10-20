@@ -4,6 +4,7 @@
   "package": "io.github.jimbozoomer.jugcraft.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "RottenLightningMixin",
     "AttackStrengthAccessor",
     "AlchemicalItemAccess",
     "CompanionGateMixin",
@@ -35,7 +36,25 @@
     "CompanionCampfireMixin",
     "CompanionVanillaDropMixin",
     "CompanionCrafterMixin",
-    "AlchemyExperienceAccess"
+    "AlchemyExperienceAccess",
+    "NouveauBreedingMixin",
+    "NouveauBrewingMixin",
+    "NouveauSanctuaryMixin",
+    "NouveauThreadMixin",
+    "NouveauLootingMixin",
+    "NouveauRepairMixin",
+    "NouveauArrowMixin",
+    "NouveauMeleeMixin",
+    "NouveauScryChunksMixin",
+    "NouveauScryTrackingMixin",
+    "NouveauScryInputMixin",
+    "NouveauReactiveMixin",
+    "NouveauBowAmmoMixin",
+    "NouveauZombieAccess",
+    "NouveauGrowthMixin",
+    "NouveauFireworkMixin",
+    "NouveauContainerNameAccess",
+    "NouveauPickupMixin"
   ],
   "injectors": {
     "defaultRequire": 1

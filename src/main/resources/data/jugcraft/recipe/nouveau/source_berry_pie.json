@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:egg",
+    "minecraft:sugar",
+    "jugcraft:nouveau_magebloom",
+    "jugcraft:nouveau_sourceberry_bush",
+    "jugcraft:nouveau_sourceberry_bush",
+    "jugcraft:nouveau_sourceberry_bush"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_source_berry_pie"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

@@ -154,6 +154,7 @@ public final class JugcraftRegions {
 	/** The Jugcraft biomes the rules place, in rule order. */
 	public static Set<ResourceKey<Biome>> biomes() {
 		Set<ResourceKey<Biome>> out = new LinkedHashSet<>();
+		out.addAll(io.github.jimbozoomer.jugcraft.menagerie.LandscapeBiomes.overworld());
 		for (Rule rule : RULES) {
 			out.add(rule.biome());
 		}
@@ -354,6 +355,7 @@ public final class JugcraftRegions {
 	/** One biome source's region state: its layouts, built once (held by the mixin). */
 	public static final class Source {
 		private volatile List<Climate.ParameterList<Holder<Biome>>> regional;
+		private io.github.jimbozoomer.jugcraft.menagerie.LandscapeBiomes.Choices landscape;
 		private volatile boolean checked;
 
 		/**
@@ -370,10 +372,11 @@ public final class JugcraftRegions {
 			}
 			if (!checked) {
 				regional = layoutsFor(source.possibleBiomes());
+				landscape = new io.github.jimbozoomer.jugcraft.menagerie.LandscapeBiomes.Choices(source.possibleBiomes());
 				checked = true;
 			}
 			List<Climate.ParameterList<Holder<Biome>>> lists = regional;
-			return lists == null ? null : lists.get(layout).findValue(target);
+			return lists == null ? null : landscape.pick(lists.get(layout).findValue(target),seedPrint,x,z,target);
 		}
 	}
 }

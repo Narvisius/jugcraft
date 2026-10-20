@@ -1,0 +1,171 @@
+{
+  "textureSize": [
+    32,
+    32
+  ],
+  "parts": [
+    {
+      "name": "main",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        21.5,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "head",
+      "parent": "main",
+      "pose": [
+        0.0,
+        0.0,
+        -4.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -2.5,
+            -3.5,
+            0.0,
+            5.0,
+            7.0
+          ],
+          "uv": [
+            0.0,
+            -2.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "stick",
+      "parent": "main",
+      "pose": [
+        0.0,
+        0.0,
+        -2.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -2.5,
+            0.0,
+            0.0,
+            5.0,
+            10.0
+          ],
+          "uv": [
+            2.0,
+            2.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r1",
+      "parent": "head",
+      "pose": [
+        0.0,
+        0.0,
+        3.75,
+        0.0,
+        0.0,
+        1.5708
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -2.5,
+            -7.25,
+            0.0,
+            5.0,
+            7.0
+          ],
+          "uv": [
+            0.0,
+            -2.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r2",
+      "parent": "stick",
+      "pose": [
+        0.0,
+        0.0,
+        1.25,
+        0.0,
+        0.0,
+        1.5708
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -2.5,
+            -1.25,
+            0.0,
+            5.0,
+            10.0
+          ],
+          "uv": [
+            2.0,
+            2.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/DarkArrowModel.java",
+  "sourceSha256": "a64df7a4dd6106c913e143a184a172af600bf9231a19dd475e14cf456f2cac3a",
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.stick.setScale(1.0f, 1.0f, 1.0f + tickModifier);",
+      "reason": "Unbound expression variable tickModifier"
+    }
+  ],
+  "expressions": [],
+  "poses": []
+}

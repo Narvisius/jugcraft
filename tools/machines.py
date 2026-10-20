@@ -185,7 +185,7 @@ TOOL_BLOCKS = {"charging_station": {"display": "Charging Station"}}
 STORAGE_BLOCKS = {"item_crate": {"display": "Item Crate"}}
 # Machine upgrades (docs/TECH_TREE.md#machine-control): go in a powered processor's two upgrade slots.
 # At most 4 of each kind count. Numbers are in machine/MachineUpgrades.java.
-UPGRADES = {"speed_upgrade": "Speed Upgrade", "efficiency_upgrade": "Efficiency Upgrade"}
+UPGRADES = {"speed_upgrade": "Speed Upgrade", "efficiency_upgrade": "Efficiency Upgrade", "automation_upgrade": "Automation Upgrade"}
 
 # Fluid logistics (physical branch; see docs/TECH_TREE.md). Amounts are millibuckets (mB);
 # 1 bucket = 1000 mB = 81000 Fabric droplets. Pipes are passive: pumps push through them.
@@ -198,11 +198,15 @@ PIPES = {"bronze_fluid_pipe": {"display": "Bronze Fluid Pipe", "rate": 250},
          "fluid_filter": {"display": "Fluid Filter", "rate": 1_000, "texture": "steel_fluid_pipe"}}
 # Fluid blocks with their own block entities. top/side/bottom name the textures.
 FLUID_BLOCKS = {
+    "insulated_fluid_tank": {"display": "Insulated Fluid Tank"},
+    "vacuum_insulated_tank": {"display": "Vacuum-insulated Fluid Tank"},
     "fluid_tank": {"display": "Tinplate Tank"},
     "electric_pump": {"display": "Electric Pump"},
     "heavy_pump": {"display": "Heavy Pump"},
 }
 FLUID_STATS = {
+    "insulated_fluid_tank": {"capacity_mb": 32_000},
+    "vacuum_insulated_tank": {"capacity_mb": 64_000},
     # Holds 16 buckets of one fluid; filled and emptied with buckets or by pumps.
     "fluid_tank": {"capacity_mb": 16_000},
     # Draws a water/lava source (or the tank) below it and pushes into pipes/storages on its other sides.
@@ -571,7 +575,7 @@ CRAFTING = {
     "gas_turbine": (["PBP", "DCD", "PGP"], {"P": "#c:plates/steel", "B": "minecraft:iron_bars",
                                             "D": "jugcraft:diesel_generator", "C": "jugcraft:advanced_circuit",
                                             "G": "#c:gears/steel"}, 1),
-    "electrolytic_cell": (["PWP", "TCT", "PMP"], {"P": "#c:plates/steel", "W": "jugcraft:aluminum_cable",
+    "electrolytic_cell": (["PWP", "TCT", "PMP"], {"P": "#c:plates/steel", "W": "jugcraft:copper_cable",
                                                   "T": "jugcraft:steel_tank", "C": "jugcraft:advanced_circuit",
                                                   "M": "jugcraft:machine_casing"}, 1),
     "air_separation_unit": (["SPS", "TMT", "ECE"], {"S": "#c:plates/steel", "P": "jugcraft:steel_fluid_pipe",
@@ -839,6 +843,8 @@ def _sawmill():
     # Electronics (batch 7): a wire saw slices a silicon boule into wafers.
     recipes.append({"input": "jugcraft:silicon_boule", "output": "jugcraft:silicon_wafer", "count": 8, "ticks": 200,
                     "features": [FEATURE, "silicon"]})
+    recipes.append({"input": "jugcraft:rubber_log", "output": "minecraft:jungle_planks", "count": 6, "ticks": 100,
+                    "features": [FEATURE, ["biomes", "agriculture"]], "byproducts": [["jugcraft:sawdust", 1, 0.5, None]]})
     return recipes
 
 
@@ -888,14 +894,13 @@ TREES = {"oak": ("oak_sapling", "minecraft:apple"), "spruce": ("spruce_sapling",
 # so it has none), with sticks as their extra.
 def _own_trees():
     from agriculture import TREES, sapling
-    return {tree: (sapling(tree), "minecraft:stick") for tree in TREES}
+    return {tree: (sapling(tree), "minecraft:stick") for tree in TREES if tree != "tree_fern"}
 
 
 def _tree_farm():
-    from agriculture import TREES as own, timber
+    from agriculture import TREES as own, trunk_block
     def log(ns, tree):
-        wood = timber(tree) if ns == "jugcraft" else f"minecraft:{tree}"
-        return f"{wood if ':' in wood else 'jugcraft:' + wood}_log"
+        return trunk_block(tree) if ns == "jugcraft" else f"minecraft:{tree}_log"
     return [{"input": f"{ns}:{sapling}", "output": log(ns, wood), "count": own[wood].get("farm_yield", 6) if ns == "jugcraft" else 6, "ticks": 400,
              "features": [FEATURE], "renewable": True,
              "byproducts": [[f"{ns}:{sapling}", 1, 1.0, None], [extra, 1, 0.1, None]]}
@@ -903,13 +908,35 @@ def _tree_farm():
 
 
 def machine_recipes():
-    return {"crusher": _crusher(), "arc_furnace": _arc_furnace(), "alloy_smelter": ALLOY_SMELTER,
+    recipes = {"crusher": _crusher(), "arc_furnace": _arc_furnace(), "alloy_smelter": ALLOY_SMELTER,
             "metal_press": _metal_press(), "wire_drawer": _wire_drawer(), "circuit_assembler": CIRCUIT_ASSEMBLER,
             "pulverizer": _pulverizer(), "ore_washer": _ore_washer(), "sieve": SIEVE, "sawmill": _sawmill(),
             "coke_oven": COKE_OVEN, "steel_foundry": STEEL_FOUNDRY, "tree_farm": _tree_farm(),
             "hydroponic_bay": __import__("hydroponics").recipes(),
             "rocket_workshop": __import__("rocketry").workshop_recipes(),
             "gas_centrifuge_cascade": GAS_CENTRIFUGE_CASCADE, "fuel_fabricator": FUEL_FABRICATOR}
+    import ceramics
+    for machine, additions in ceramics.MACHINE_RECIPES.items():
+        recipes[machine] = recipes[machine] + additions
+    import structural_alloys
+    for machine, additions in structural_alloys.MACHINE_RECIPES.items():
+        recipes[machine] = recipes[machine] + additions
+    import battery_expansion
+    for machine, additions in battery_expansion.MACHINE_RECIPES.items():
+        recipes[machine] = recipes[machine] + additions
+    import cryogenic_fuels
+    for machine, additions in cryogenic_fuels.MACHINE_RECIPES.items():
+        recipes[machine] = recipes[machine] + additions
+    import synthetic_fuels
+    for machine, additions in synthetic_fuels.MACHINE_RECIPES.items():
+        recipes[machine] = recipes[machine] + additions
+    import phosphate_processing
+    for machine, additions in phosphate_processing.MACHINE_RECIPES.items():
+        recipes[machine] = recipes[machine] + additions
+    import advanced_electronics
+    for machine, additions in advanced_electronics.MACHINE_RECIPES.items():
+        recipes[machine] = recipes[machine] + additions
+    return recipes
 
 
 def _arc_furnace():
@@ -947,3 +974,9 @@ def machine_items():
             + [info[key] for info in CROPS.values() for key in ("seeds", "product")]
             + drone_items() + tower_items() + list(__import__('blueprints').ITEMS) + list(__import__('nuclear').ITEMS) + list(__import__('plant_interior').UNIFORMS)
             + list(__import__('storage_tank').ITEMS))
+
+import battery_expansion
+MACHINES.update({name:dict(display=label, lit=False) for name,label in battery_expansion.BLOCKS.items()})
+STATS['lead_acid_battery_bank'] = dict(capacity=2_000_000, io_per_tick=1_024)
+STATS['flow_tank_module'] = dict(capacity=0, io_per_tick=0)
+STATS['flow_stack_module'] = dict(capacity=0, io_per_tick=0)

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LTL",
+    "G G",
+    "GGG"
+  ],
+  "key": {
+    "G": "#jugcraft:cavern_gelatins",
+    "L": "jugcraft:cavern_licoroot_vine",
+    "T": "jugcraft:cavern_sweet_tooth"
+  },
+  "result": {
+    "id": "jugcraft:cavern_sack_of_sating"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

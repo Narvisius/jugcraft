@@ -1,0 +1,17 @@
+{
+  "result": {
+    "id": "jugcraft:pocket_nugget_lapis",
+    "count": 9
+  },
+  "ingredients": [
+    "minecraft:lapis_lazuli",
+    "minecraft:dirt"
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

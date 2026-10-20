@@ -36,8 +36,6 @@ import org.jspecify.annotations.Nullable;
  * numbers: everything that fires, loads or shows the gun reads them through {@link #spec(ItemStack)}.
  */
 public class GunItem extends Item implements GeoItem {
-	/** The ammunition gauge's colour: brass. */
-	private static final int BAR_COLOR = 0xFFD8A848;
 	private final String name;
 	private final GunSpec spec;
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -243,19 +241,10 @@ public class GunItem extends Item implements GeoItem {
 		return !(oldStack.is(this) && newStack.is(this));
 	}
 
+	/** Ammunition is shown by the held-gun HUD, never as item durability. */
 	@Override
 	public boolean isBarVisible(ItemStack stack) {
-		return true;
-	}
-
-	@Override
-	public int getBarWidth(ItemStack stack) {
-		return Math.min(13, Math.round(13.0F * loaded(stack) / spec(stack).capacity()));
-	}
-
-	@Override
-	public int getBarColor(ItemStack stack) {
-		return BAR_COLOR;
+		return false;
 	}
 
 	@Override

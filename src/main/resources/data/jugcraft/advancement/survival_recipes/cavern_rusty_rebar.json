@@ -1,0 +1,24 @@
+{
+  "criteria": {
+    "ingredient_0": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "jugcraft:cavern_rusty_scrap_metal"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "ingredient_0"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "jugcraft:survival_completion/cavern_rusty_rebar"
+    ]
+  }
+}

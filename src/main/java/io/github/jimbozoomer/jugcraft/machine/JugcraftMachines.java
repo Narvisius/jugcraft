@@ -72,22 +72,7 @@ public final class JugcraftMachines {
 
 		MACHINE_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("machine"),
 				FabricBlockEntityTypeBuilder.create(MachineBlockEntity::new, MACHINES.values().toArray(Block[]::new)).build());
-		// One observed, sided inventory on every loaded part of the same controller.
-		net.fabricmc.fabric.api.transfer.v1.item.ItemStorage.SIDED.registerForBlocks((level, pos, state, entity, side) -> {
-			BlockPos controller = ((MachineBlock) state.getBlock()).masterPos(pos, state);
-			if (!level.hasChunkAt(controller)) return null;
-			MachineBlockEntity machine = MachineBlock.machineAt(level, pos, state);
-			return machine == null ? null : machine.itemAutomation.port(side);
-		}, MACHINES.values().toArray(Block[]::new));
-		// Registered per block, not per block entity, so the dummy parts of multi-block machines answer too.
-		EnergyStorage.SIDED.registerForBlocks((level, pos, state, entity, side) -> {
-			MachineBlockEntity machine = MachineBlock.machineAt(level, pos, state);
-			// Machines with a power port only answer on that face, so cables only connect there.
-			if (machine == null || !((MachineBlock) state.getBlock()).acceptsPower(state, side)) {
-				return null;
-			}
-			return machine.energyFor(side);
-		}, MACHINES.values().toArray(Block[]::new));
+		registerAutomation(MACHINES.values().toArray(Block[]::new));
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output -> {
 			output.accept(COPPER_CABLE);
@@ -97,6 +82,26 @@ public final class JugcraftMachines {
 			MACHINES.values().forEach(output::accept);
 			output.accept(ARC_FURNACE_CASING);
 		});
+	}
+
+	/** Attach the same sided ports to native machine variants registered by later content families. */
+	public static void registerAutomation(Block... blocks) {
+		// One observed, sided inventory on every loaded part of the same controller.
+		net.fabricmc.fabric.api.transfer.v1.item.ItemStorage.SIDED.registerForBlocks((level, pos, state, entity, side) -> {
+			BlockPos controller = ((MachineBlock) state.getBlock()).masterPos(pos, state);
+			if (!level.hasChunkAt(controller)) return null;
+			MachineBlockEntity machine = MachineBlock.machineAt(level, pos, state);
+			return machine == null ? null : machine.itemAutomation.port(side);
+		}, blocks);
+		// Registered per block, not per block entity, so the dummy parts of multi-block machines answer too.
+		EnergyStorage.SIDED.registerForBlocks((level, pos, state, entity, side) -> {
+			MachineBlockEntity machine = MachineBlock.machineAt(level, pos, state);
+			// Machines with a power port only answer on that face, so cables only connect there.
+			if (machine == null || !((MachineBlock) state.getBlock()).acceptsPower(state, side)) {
+				return null;
+			}
+			return machine.energyFor(side);
+		}, blocks);
 	}
 
 	private static Block cable(String path, MapColor color, long rate) {

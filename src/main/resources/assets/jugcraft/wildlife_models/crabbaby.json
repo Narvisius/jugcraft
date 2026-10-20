@@ -1,0 +1,1974 @@
+{
+  "textureSize": [
+    32,
+    32
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "crabBody",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -1.5,
+        -0.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "crabTorso",
+      "parent": "crabBody",
+      "pose": [
+        0.0,
+        -0.5,
+        0.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -2.0,
+            2.0,
+            1.0,
+            3.0
+          ],
+          "uv": [
+            0.0,
+            3.0
+          ],
+          "inflate": [
+            0.026,
+            0.026,
+            0.026
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "shell",
+      "parent": "crabBody",
+      "pose": [
+        0.0,
+        0.0,
+        -0.25,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -4.0,
+            -0.5,
+            3.0,
+            4.0,
+            4.0
+          ],
+          "uv": [
+            0.0,
+            12.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leftClaw",
+      "parent": "crabBody",
+      "pose": [
+        1.0,
+        0.5,
+        -1.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -0.5,
+            -0.5,
+            1.0,
+            1.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            12.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            0.0,
+            -0.5,
+            -1.5,
+            1.0,
+            1.0,
+            2.0
+          ],
+          "uv": [
+            6.0,
+            7.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightClaw",
+      "parent": "crabBody",
+      "pose": [
+        -1.0,
+        0.5,
+        -1.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -0.5,
+            -0.5,
+            1.0,
+            1.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            12.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            -1.0,
+            -0.5,
+            -1.5,
+            1.0,
+            1.0,
+            2.0
+          ],
+          "uv": [
+            6.0,
+            7.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "leftEye",
+      "parent": "crabBody",
+      "pose": [
+        0.0,
+        -0.5,
+        -1.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -3.0,
+            0.0,
+            3.0,
+            3.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            7.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "legs",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -1.5,
+        -0.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "crabLeftArm",
+      "parent": "legs",
+      "pose": [
+        1.0,
+        0.5,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "crabLeftArm_r1",
+      "parent": "crabLeftArm",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.5236
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            -0.5,
+            2.0,
+            0.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            10.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "crabRightArm",
+      "parent": "legs",
+      "pose": [
+        -1.0,
+        0.5,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "crabRightArm_r1",
+      "parent": "crabRightArm",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.5236
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            0.0,
+            -0.5,
+            2.0,
+            0.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            10.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "crabLeftLeg",
+      "parent": "legs",
+      "pose": [
+        1.0,
+        0.5,
+        1.0,
+        0.0,
+        -0.7854,
+        0.0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "crabLeftLeg_r1",
+      "parent": "crabLeftLeg",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.5236
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            -0.5,
+            2.0,
+            0.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            10.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "crabRightLeg",
+      "parent": "legs",
+      "pose": [
+        -1.0,
+        0.5,
+        1.0,
+        0.0,
+        0.7854,
+        0.0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "crabRightLeg_r1",
+      "parent": "crabRightLeg",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.5236
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            0.0,
+            -0.5,
+            2.0,
+            0.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            10.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "model/animal/crab/CrabBabyModel.java",
+  "sourceSha256": "13767da6115d9f6c98c115676c93df5903e0fd625cad8681ae292146197c266f",
+  "headLook": "",
+  "animationRoot": "root",
+  "actions": {
+    "idle": {
+      "loop": true,
+      "channels": [
+        {
+          "bone": "crabBody",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.68,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.2917,
+              "vector": [
+                -1.99,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.9583,
+              "vector": [
+                1.83,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                0.68,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabBody",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0.1667,
+              "vector": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.4583,
+              "vector": [
+                0.0,
+                -0.18,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leftClaw",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                -3.46
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5833,
+              "vector": [
+                -5.55,
+                0.0,
+                -0.52
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0833,
+              "vector": [
+                -6.94,
+                0.0,
+                2.44
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.5833,
+              "vector": [
+                -4.26,
+                0.0,
+                3.97
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.3333,
+              "vector": [
+                3.5,
+                0.0,
+                2.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.8333,
+              "vector": [
+                6.76,
+                0.0,
+                -1.04
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.2917,
+              "vector": [
+                6.28,
+                0.0,
+                -3.33
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                0.0,
+                0.0,
+                -3.46
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leftClaw",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0.125,
+              "vector": [
+                0.0,
+                0.2,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.125,
+              "vector": [
+                0.0,
+                -0.2,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                0.0,
+                0.2,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "rightClaw",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                4.5,
+                0.0,
+                3.46
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0833,
+              "vector": [
+                -5.9,
+                0.0,
+                -2.44
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.5833,
+              "vector": [
+                -6.83,
+                0.0,
+                -3.97
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.125,
+              "vector": [
+                -3.37,
+                0.0,
+                -3.01
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.0,
+              "vector": [
+                5.36,
+                0.0,
+                2.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.5,
+              "vector": [
+                6.97,
+                0.0,
+                3.86
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                4.5,
+                0.0,
+                3.46
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "rightClaw",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.15,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.125,
+              "vector": [
+                0.0,
+                0.1,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.5833,
+              "vector": [
+                0.0,
+                -0.2,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                0.0,
+                0.15,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabLeftArm",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                1.93
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.2083,
+              "vector": [
+                0.0,
+                0.0,
+                -2.8
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.8333,
+              "vector": [
+                0.0,
+                0.0,
+                -2.46
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.25,
+              "vector": [
+                0.0,
+                0.0,
+                2.86
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                0.0,
+                0.0,
+                1.93
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabLeftArm",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0.0417,
+              "vector": [
+                0.0,
+                0.06,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.125,
+              "vector": [
+                0.0,
+                -0.05,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                0.0,
+                0.06,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabRightArm",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                -1.93
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.2083,
+              "vector": [
+                0.0,
+                0.0,
+                2.8
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.8333,
+              "vector": [
+                0.0,
+                0.0,
+                2.46
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.25,
+              "vector": [
+                0.0,
+                0.0,
+                -2.86
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                0.0,
+                0.0,
+                -1.93
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabRightArm",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0.0417,
+              "vector": [
+                0.0,
+                0.06,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.125,
+              "vector": [
+                0.0,
+                -0.05,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                0.0,
+                0.06,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabLeftLeg",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                1.93
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.2083,
+              "vector": [
+                0.0,
+                0.0,
+                -2.8
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.8333,
+              "vector": [
+                0.0,
+                0.0,
+                -2.46
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.25,
+              "vector": [
+                0.0,
+                0.0,
+                2.86
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                0.0,
+                0.0,
+                1.93
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabLeftLeg",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0.0417,
+              "vector": [
+                0.0,
+                0.06,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.125,
+              "vector": [
+                0.0,
+                -0.05,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                0.0,
+                0.06,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabRightLeg",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                -1.93
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.2083,
+              "vector": [
+                0.0,
+                0.0,
+                2.8
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.8333,
+              "vector": [
+                0.0,
+                0.0,
+                2.46
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.25,
+              "vector": [
+                0.0,
+                0.0,
+                -2.86
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                0.0,
+                0.0,
+                -1.93
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabRightLeg",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0.0417,
+              "vector": [
+                0.0,
+                0.06,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.125,
+              "vector": [
+                0.0,
+                -0.05,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                0.0,
+                0.06,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ],
+      "length": 4.0
+    },
+    "walk": {
+      "loop": true,
+      "channels": [
+        {
+          "bone": "crabLeftArm",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                15.86
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.125,
+              "vector": [
+                0.0,
+                0.0,
+                1.8
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                0.0,
+                0.0,
+                -13.31
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.375,
+              "vector": [
+                0.0,
+                0.0,
+                -20.62
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                0.0,
+                -15.86
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.625,
+              "vector": [
+                0.0,
+                0.0,
+                -1.8
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.0,
+                13.31
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.875,
+              "vector": [
+                0.0,
+                0.0,
+                20.62
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                0.0,
+                15.86
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabLeftArm",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.89,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                0.0,
+                0.79,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                0.36,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.34,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                0.89,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabLeftLeg",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                -15.86
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.125,
+              "vector": [
+                0.0,
+                0.0,
+                -1.8
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                0.0,
+                0.0,
+                13.31
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.375,
+              "vector": [
+                0.0,
+                0.0,
+                20.62
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                0.0,
+                15.86
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.625,
+              "vector": [
+                0.0,
+                0.0,
+                1.8
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.0,
+                -13.31
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.875,
+              "vector": [
+                0.0,
+                0.0,
+                -20.62
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                0.0,
+                -15.86
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabLeftLeg",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.36,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                0.0,
+                0.34,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                0.89,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.79,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                0.36,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabRightLeg",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                4.5
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.125,
+              "vector": [
+                0.0,
+                0.0,
+                -0.48
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.375,
+              "vector": [
+                0.0,
+                0.0,
+                -24.52
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                0.0,
+                -29.5
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.625,
+              "vector": [
+                0.0,
+                0.0,
+                -24.52
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.875,
+              "vector": [
+                0.0,
+                0.0,
+                -0.48
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                0.0,
+                4.5
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabRightLeg",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.25,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                0.0,
+                1.04,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                0.84,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.21,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                0.25,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabRightArm",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                -29.5
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.125,
+              "vector": [
+                0.0,
+                0.0,
+                -24.52
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.375,
+              "vector": [
+                0.0,
+                0.0,
+                -0.48
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                0.0,
+                4.5
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.625,
+              "vector": [
+                0.0,
+                0.0,
+                -0.48
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.875,
+              "vector": [
+                0.0,
+                0.0,
+                -24.52
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                0.0,
+                -29.5
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabRightArm",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.84,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                0.0,
+                0.21,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                0.25,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                1.04,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                0.84,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabBody",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.375,
+              "vector": [
+                0.0,
+                0.0,
+                -0.71
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.8333,
+              "vector": [
+                0.0,
+                0.0,
+                0.87
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabBody",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.15,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2917,
+              "vector": [
+                0.0,
+                -0.04,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5417,
+              "vector": [
+                0.0,
+                0.14,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.7917,
+              "vector": [
+                0.0,
+                -0.04,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                0.15,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "shell",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                0.49
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5417,
+              "vector": [
+                0.0,
+                0.0,
+                -0.45
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                0.0,
+                0.49
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ],
+      "length": 1.0
+    },
+    "sit": {
+      "loop": true,
+      "channels": [
+        {
+          "bone": "crabBody",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                -18.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabBody",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                -0.2,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leftClaw",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                36.9495,
+                12.0866,
+                8.9504
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leftClaw",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                -0.2,
+                0.6
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "rightClaw",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                36.9495,
+                -12.0866,
+                -8.9504
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "rightClaw",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.3,
+                -0.2,
+                0.6
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leftEye",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                15.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabLeftArm",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                21.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabLeftArm",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.6,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabRightArm",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                -21.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabRightArm",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.6,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabLeftLeg",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                22.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabLeftLeg",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.4,
+                -0.3
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabRightLeg",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                -22.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "crabRightLeg",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.4,
+                -0.3
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ],
+      "length": 0.0
+    }
+  },
+  "availableClips": [
+    "CrabBabyAnimation.CRAB_BABY_IDLE",
+    "CrabBabyAnimation.CRAB_BABY_SIT_IDLE",
+    "CrabBabyAnimation.CRAB_BABY_WALK"
+  ]
+}

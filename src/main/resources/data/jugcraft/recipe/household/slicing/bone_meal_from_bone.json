@@ -1,0 +1,17 @@
+{
+  "type": "jugcraft:cutting",
+  "ingredient": "minecraft:bone",
+  "tool": "#jugcraft:knives",
+  "results": [
+    {
+      "count": 4,
+      "id": "minecraft:bone_meal"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "type": "jugcraft:cutting",
+  "ingredient": "minecraft:honeycomb_block",
+  "tool": "#jugcraft:knives",
+  "results": [
+    {
+      "count": 4,
+      "id": "minecraft:honeycomb"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

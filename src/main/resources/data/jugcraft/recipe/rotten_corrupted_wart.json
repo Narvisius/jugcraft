@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "F": "jugcraft:rotten_frozen_rotten_flesh",
+    "W": "minecraft:nether_wart"
+  },
+  "pattern": [
+    " W ",
+    "WFW",
+    " W "
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:rotten_corrupted_wart"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

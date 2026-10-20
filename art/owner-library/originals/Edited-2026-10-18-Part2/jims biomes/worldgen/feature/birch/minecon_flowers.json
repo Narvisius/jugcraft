@@ -1,0 +1,138 @@
+{
+  "type": "minecraft:simple_random_selector",
+  "features": [
+    {
+      "feature": {
+        "type": "minecraft:simple_block",
+        "to_place": {
+          "type": "minecraft:noise",
+          "noise": {
+            "base_octave": -5,
+            "octave_count": 3,
+            "amplitude_modifiers": [
+              0.5,
+              2,
+              1
+            ],
+            "normalize": "legacy"
+          },
+          "scale": 1,
+          "seed": 0,
+          "states": [
+            "minecraft:cornflower",
+            "minecraft:pink_tulip",
+            "minecraft:white_tulip"
+          ]
+        }
+      },
+      "placement": [
+        {
+          "type": "minecraft:count",
+          "count": 11
+        },
+        {
+          "type": "minecraft:offset",
+          "x": {
+            "type": "minecraft:trapezoid",
+            "plateau": 0,
+            "min": -7,
+            "max": 7
+          },
+          "y": {
+            "type": "minecraft:trapezoid",
+            "plateau": 0,
+            "min": -3,
+            "max": 3
+          },
+          "z": {
+            "type": "minecraft:trapezoid",
+            "plateau": 0,
+            "min": -7,
+            "max": 7
+          }
+        },
+        {
+          "type": "minecraft:block_predicate_filter",
+          "predicate": {
+            "type": "minecraft:matching_blocks",
+            "blocks": [
+              "minecraft:air"
+            ],
+            "offset": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "feature": {
+        "type": "minecraft:simple_block",
+        "to_place": {
+          "type": "minecraft:noise",
+          "noise": {
+            "base_octave": -4,
+            "octave_count": 2,
+            "amplitude_modifiers": [
+              1,
+              1
+            ],
+            "normalize": "legacy"
+          },
+          "scale": 1,
+          "seed": 0,
+          "states": [
+            "minecraft:lilac",
+            "minecraft:lilac",
+            "minecraft:lilac",
+            "minecraft:lilac",
+            "minecraft:peony"
+          ]
+        }
+      },
+      "placement": [
+        {
+          "type": "minecraft:count",
+          "count": 7
+        },
+        {
+          "type": "minecraft:offset",
+          "x": {
+            "type": "minecraft:trapezoid",
+            "plateau": 0,
+            "min": -7,
+            "max": 7
+          },
+          "y": {
+            "type": "minecraft:trapezoid",
+            "plateau": 0,
+            "min": -3,
+            "max": 3
+          },
+          "z": {
+            "type": "minecraft:trapezoid",
+            "plateau": 0,
+            "min": -7,
+            "max": 7
+          }
+        },
+        {
+          "type": "minecraft:block_predicate_filter",
+          "predicate": {
+            "type": "minecraft:matching_blocks",
+            "blocks": [
+              "minecraft:air"
+            ],
+            "offset": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

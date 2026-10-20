@@ -1,0 +1,187 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "head",
+      "parent": "$mesh",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -8.0,
+            -4.0,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "head_r1",
+      "parent": "head",
+      "pose": [
+        4.0,
+        -4.5,
+        -1.0,
+        0.0,
+        -0.7854,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -3.5,
+            0.0,
+            2.0,
+            8.0,
+            0.0
+          ],
+          "uv": [
+            59.0,
+            40.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "head_r2",
+      "parent": "head",
+      "pose": [
+        -4.0,
+        -3.5,
+        -1.0,
+        0.0,
+        0.7854,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -4.5,
+            0.0,
+            2.0,
+            8.0,
+            0.0
+          ],
+          "uv": [
+            43.0,
+            40.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "head_r3",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -8.0,
+        -1.0,
+        -0.7854,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -2.0,
+            0.0,
+            8.0,
+            2.0,
+            0.0
+          ],
+          "uv": [
+            48.0,
+            35.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "overlay",
+      "parent": "head",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -8.0,
+            -4.0,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            32.0,
+            0.0
+          ],
+          "inflate": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "rotten/com/github/teamfusion/rottencreatures/client/level/blockentities/model/ImmortalSkullModel.java",
+  "sourceSha256": "21f657040c976759c088f822e6aafe86462a5416fbb8084f25f814299ca4e764",
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

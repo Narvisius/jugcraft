@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " P ",
+    "PAP",
+    " P "
+  ],
+  "key": {
+    "A": "jugcraft:beast_echolocator",
+    "P": "minecraft:ender_pearl"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:beast_endolocator"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

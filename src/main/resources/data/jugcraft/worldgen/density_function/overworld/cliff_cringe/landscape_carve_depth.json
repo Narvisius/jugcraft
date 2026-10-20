@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:cache",
+  "input": {
+    "type": "minecraft:mul",
+    "left": {
+      "type": "minecraft:add",
+      "left": -2.325,
+      "right": {
+        "type": "minecraft:cache",
+        "input": {
+          "type": "minecraft:noise",
+          "noise": "jugcraft:math/cliff/landscape_slope",
+          "xz_scale": 1.0,
+          "y_scale": 0.0
+        }
+      }
+    },
+    "right": "jugcraft:overworld/cliff/landscape_cliff_depth"
+  }
+}

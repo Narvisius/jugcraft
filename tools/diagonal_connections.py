@@ -23,6 +23,12 @@ generators wrote, so this runs last in generate_material_data.assets().
 """
 import json
 import math
+import menagerie_registry as menagerie
+
+OWNER_CATALOGS=(menagerie.ECOLOGY,menagerie.BEAST,menagerie.LANDSCAPE,menagerie.CAVERN)
+OWNER_WALLS={k for c in OWNER_CATALOGS for k,v in c["blocks"].items() if v.get("kind")=="wall"}
+OWNER_WALLS.add("beast_purpur_planks_wall")
+OWNER_FENCES={k for c in OWNER_CATALOGS for k,v in c["blocks"].items() if v.get("kind")=="fence"}
 
 MOD = "jugcraft"
 TAG = f"{MOD}:connects_diagonally"
@@ -53,7 +59,9 @@ STONES = ["andesite", "blackstone", "brick", "cinnabar_brick", "cinnabar", "cobb
           "red_sandstone", "resin_brick", "sandstone", "stone_brick", "sulfur_brick", "sulfur", "tuff_brick", "tuff"]
 VANILLA_WALLS = [f"{stone}_wall" for stone in STONES]
 # Jugcraft's own walls (batch 55's bastion concrete wall): each gets a diagonal wall exactly as vanilla's do.
-JUGCRAFT_WALLS = ["bastion_concrete_wall"]
+JUGCRAFT_WALLS = ["bastion_concrete_wall", "wildlife_shellstone_wall", "wildlife_cut_shellstone_wall", "wildlife_smooth_shellstone_wall", "wildlife_shellstone_brick_wall"]
+JUGCRAFT_WALLS += sorted(OWNER_WALLS)
+JUGCRAFT_PANES = [f"wildlife_{color}_froglass_pane" for color in ["azure", "crimson", "verdant"]]
 # The block each wall becomes while it joins diagonally.
 DIAGONAL_WALL = "diagonal_{}"
 
@@ -66,13 +74,13 @@ def all_walls():
 def jugcraft_fences():
     """Jugcraft's own fences: every wood set's and the wrought-iron cemetery fence."""
     import agriculture
-    return [f"{wood}_fence" for wood in agriculture.WOOD_SETS] + [agriculture.CEMETERY_FENCE["fence"]]
+    return [f"{wood}_fence" for wood in agriculture.WOOD_SETS] + [agriculture.CEMETERY_FENCE["fence"], "nouveau_archwood_fence"] + sorted(OWNER_FENCES)
 
 
 def blocks():
     """Every block in #jugcraft:connects_diagonally, as IDs."""
     return ([f"minecraft:{name}" for name in VANILLA_FENCES + VANILLA_PANES + list(VANILLA_BARS) + VANILLA_WALLS]
-            + [f"{MOD}:{name}" for name in jugcraft_fences() + JUGCRAFT_WALLS])
+            + [f"{MOD}:{name}" for name in jugcraft_fences() + JUGCRAFT_WALLS + JUGCRAFT_PANES])
 
 
 # ---------------------------------------------------------------- arm geometry (the north-east arm)
@@ -284,6 +292,25 @@ def _load(path):
 
 
 def write_all(write, assets_dir, minecraft_assets_dir):
+    # Runtime walls use the supplied model family; aliases let the shared diagonal
+    # generator inherit exactly those textures and standard wall geometry.
+    for name in JUGCRAFT_WALLS:
+        if name in OWNER_WALLS:
+            group,source=name.split('_',1)
+            for suffix in ('post','side','side_tall'):
+                alias={'parent':f'jugcraft:menagerie/{group}/block/{source}_{suffix}'}
+                if name=='cavern_cinder_block_wall':
+                    alias['textures']={'wall':'jugcraft:menagerie/cavern/block/cinder_block'}
+                write(assets_dir/'models/block'/f'{name}_{suffix}.json',alias)
+        if name.startswith("wildlife_"):
+            for suffix in ["post", "side", "side_tall"]:
+                write(assets_dir / "models" / "block" / f"{name}_{suffix}.json", {"parent": f"jugcraft:menagerie/wildlife/block/{name[9:]}_{suffix}"})
+    for name in JUGCRAFT_PANES:
+        path=assets_dir / "blockstates" / f"{name}.json"
+        state=_load(path);side,_=_north_side(state['multipart']);arm=f"{MOD}:block/diagonal/{name}"
+        write(assets_dir / "models" / "block" / "diagonal" / f"{name}.json", {'parent':side,'elements':pane_arm()})
+        state['multipart']=[p for p in state['multipart'] if not set(p.get('when',{})) & set(DIAGONAL_NAMES)] + diagonal_parts(arm)
+        write(path,state)
     """The diagonal arm models, vanilla's rebuilt blockstates and Jugcraft's fences' diagonal parts."""
     models = assets_dir / "models" / "block" / "diagonal"
     for name, (parts, side, kind) in vanilla_blockstates().items():
@@ -304,7 +331,7 @@ def write_all(write, assets_dir, minecraft_assets_dir):
         side, uvlock = _north_side(state["multipart"])
         if side is None:
             raise ValueError(f"{name}: no north side part to turn diagonal")
-        side_model = _load(assets_dir / "models" / "block" / f"{side.split(':', 1)[1].removeprefix('block/')}.json")
+        side_model = _load(assets_dir / "models" / f"{side.split(':', 1)[1]}.json")
         elements = turned(side_model["elements"]) if "elements" in side_model else fence_arm()
         arm = f"{MOD}:block/diagonal/{name}"
         write(models / f"{name}.json", {"parent": side, "elements": elements})

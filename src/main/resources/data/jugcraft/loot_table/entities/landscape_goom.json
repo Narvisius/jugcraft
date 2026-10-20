@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:leather",
+          "condition": {
+            "chance": 0.5,
+            "type": "minecraft:random_chance"
+          }
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:gunpowder",
+          "modifier": [
+            {
+              "count": {
+                "min": 0,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "doorRightHinge",
+      "parent": "root",
+      "pose": [
+        7.0,
+        -24.0,
+        -7.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -15.0,
+            -24.0,
+            -1.0,
+            16.0,
+            48.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "doorLeftHinge",
+      "parent": "root",
+      "pose": [
+        -7.0,
+        -24.0,
+        -7.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -24.0,
+            -1.0,
+            16.0,
+            48.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelEndPirateDoor.java",
+  "sourceSha256": "024a3ef6ee4512b5a497b78eb74b56df5253313a943e4a257e99ebfcaaccbcdc",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "jugcraft:nouveau_magebloom_crop",
+  "criteria": {
+    "has_alteration_table": {
+      "conditions": {
+        "items": [
+          {
+            "items": "jugcraft:nouveau_alteration_table"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "jugcraft.nouveau_adv.desc.alteration_table"
+    },
+    "icon": {
+      "count": 1,
+      "id": "jugcraft:nouveau_alteration_table"
+    },
+    "title": {
+      "translate": "jugcraft.nouveau_adv.title.alteration_table"
+    }
+  },
+  "requirements": [
+    [
+      "has_alteration_table"
+    ]
+  ]
+}

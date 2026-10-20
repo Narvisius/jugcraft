@@ -1,0 +1,154 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "jugcraft:cavern_pewen_pines",
+              "condition": {
+                "terms": [
+                  {
+                    "predicate": {
+                      "items": [
+                        "minecraft:shears"
+                      ]
+                    },
+                    "type": "minecraft:match_tool"
+                  },
+                  {
+                    "predicate": {
+                      "predicates": {
+                        "minecraft:enchantments": [
+                          {
+                            "levels": {
+                              "min": 1
+                            },
+                            "enchantments": "minecraft:silk_touch"
+                          }
+                        ]
+                      }
+                    },
+                    "type": "minecraft:match_tool"
+                  }
+                ],
+                "type": "minecraft:any_of"
+              }
+            },
+            {
+              "type": "minecraft:item",
+              "name": "jugcraft:cavern_pewen_sapling",
+              "condition": {
+                "type": "minecraft:all_of",
+                "terms": [
+                  {
+                    "type": "minecraft:survives_explosion"
+                  },
+                  {
+                    "chances": [
+                      0.05,
+                      0.0625,
+                      0.083333336,
+                      0.1
+                    ],
+                    "enchantment": "minecraft:fortune",
+                    "type": "minecraft:table_bonus"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:stick",
+          "modifier": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": 1.0
+              },
+              "type": "minecraft:set_count"
+            },
+            {
+              "type": "minecraft:explosion_decay"
+            }
+          ],
+          "condition": {
+            "chances": [
+              0.05,
+              0.1,
+              0.15,
+              0.2
+            ],
+            "enchantment": "minecraft:fortune",
+            "type": "minecraft:table_bonus"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_pine_nuts",
+          "modifier": [
+            {
+              "type": "minecraft:explosion_decay"
+            }
+          ],
+          "condition": {
+            "chances": [
+              0.075,
+              0.15,
+              0.25,
+              0.3
+            ],
+            "enchantment": "minecraft:fortune",
+            "type": "minecraft:table_bonus"
+          }
+        }
+      ],
+      "rolls": 1.0,
+      "condition": {
+        "term": {
+          "terms": [
+            {
+              "predicate": {
+                "items": [
+                  "minecraft:shears"
+                ]
+              },
+              "type": "minecraft:match_tool"
+            },
+            {
+              "predicate": {
+                "predicates": {
+                  "minecraft:enchantments": [
+                    {
+                      "levels": {
+                        "min": 1
+                      },
+                      "enchantments": "minecraft:silk_touch"
+                    }
+                  ]
+                }
+              },
+              "type": "minecraft:match_tool"
+            }
+          ],
+          "type": "minecraft:any_of"
+        },
+        "type": "minecraft:inverted"
+      }
+    }
+  ]
+}

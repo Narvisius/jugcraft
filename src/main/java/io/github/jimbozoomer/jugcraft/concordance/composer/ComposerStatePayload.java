@@ -33,7 +33,7 @@ public record ComposerStatePayload(int revision, int status, Optional<Instrument
 	public static final int DISABLED = 1;
 	/** No composing instrument is in the main hand. */
 	public static final int NO_INSTRUMENT = 2;
-	public static final int MAX_WORDS = 64;
+	public static final int MAX_WORDS = 256;
 	public static final int MAX_ID = 256;
 	public static final Type<ComposerStatePayload> TYPE = new Type<>(Jugcraft.id("concordance_composer_state"));
 

@@ -1,0 +1,313 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "base",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -8.0,
+            -8.0,
+            -8.0,
+            16.0,
+            8.0,
+            16.0
+          ],
+          "uv": [
+            0.0,
+            28.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "highSplash",
+      "parent": "base",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -16.0,
+            -5.0,
+            10.0,
+            16.0,
+            10.0
+          ],
+          "uv": [
+            0.0,
+            52.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "ripple",
+      "parent": "base",
+      "pose": [
+        0.0,
+        -0.25,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -14.0,
+            0.0,
+            -14.0,
+            28.0,
+            0.0,
+            28.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/SplashModel.java",
+  "sourceSha256": "62fbd9884625fbeabae51a427f6bfd595811488989161fbc9f8c55da9148b453",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [
+    {
+      "bone": "base",
+      "target": "xScale",
+      "op": "=",
+      "value": [
+        "+",
+        1.0,
+        [
+          "*",
+          [
+            "min",
+            [
+              "/",
+              "age",
+              "move"
+            ],
+            1.0
+          ],
+          0.35
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "base",
+      "target": "yScale",
+      "op": "=",
+      "value": [
+        "sin",
+        [
+          "*",
+          [
+            "*",
+            [
+              "min",
+              [
+                "/",
+                "age",
+                "move"
+              ],
+              1.0
+            ],
+            3.141592653589793
+          ],
+          1.0
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "base",
+      "target": "zScale",
+      "op": "=",
+      "value": [
+        "+",
+        1.0,
+        [
+          "*",
+          [
+            "min",
+            [
+              "/",
+              "age",
+              "move"
+            ],
+            1.0
+          ],
+          0.35
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "highSplash",
+      "target": "xScale",
+      "op": "=",
+      "value": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "highSplash",
+      "target": "yScale",
+      "op": "=",
+      "value": [
+        "max",
+        [
+          "*",
+          [
+            "sin",
+            [
+              "-",
+              [
+                "*",
+                [
+                  "*",
+                  [
+                    "min",
+                    [
+                      "/",
+                      "age",
+                      "move"
+                    ],
+                    1.0
+                  ],
+                  3.141592653589793
+                ],
+                1.0
+              ],
+              0.5
+            ]
+          ],
+          1.3
+        ],
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "highSplash",
+      "target": "zScale",
+      "op": "=",
+      "value": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "ripple",
+      "target": "xScale",
+      "op": "=",
+      "value": [
+        "+",
+        1.0,
+        [
+          "*",
+          [
+            "min",
+            [
+              "/",
+              "age",
+              "move"
+            ],
+            1.0
+          ],
+          [
+            "min",
+            [
+              "/",
+              "age",
+              "move"
+            ],
+            1.0
+          ]
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "ripple",
+      "target": "yScale",
+      "op": "=",
+      "value": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "ripple",
+      "target": "zScale",
+      "op": "=",
+      "value": [
+        "+",
+        1.0,
+        [
+          "*",
+          [
+            "min",
+            [
+              "/",
+              "age",
+              "move"
+            ],
+            1.0
+          ],
+          [
+            "min",
+            [
+              "/",
+              "age",
+              "move"
+            ],
+            1.0
+          ]
+        ]
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

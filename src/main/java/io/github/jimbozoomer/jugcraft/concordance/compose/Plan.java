@@ -171,7 +171,7 @@ public record Plan(String text, Node root, int focus, int cooldown, int capacity
 			case STATUS -> Text.of(key, name, new Text.Ref("status", effect.status() == null ? "" : effect.status()),
 					effect.magnitude() + 1, Text.seconds(effect.duration()));
 			case PROTECTION -> Text.of(key, name, 4 * (effect.protectionAmplifier() + 1), Text.seconds(effect.duration()));
-			case INTERACTION, HARVESTING, ALTERATION -> Text.of(key, name);
+			case INTERACTION, HARVESTING, ALTERATION, NOUVEAU_BLOCK, NOUVEAU_CREATURE, NOUVEAU -> Text.of(key, name);
 		};
 	}
 }

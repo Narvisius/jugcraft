@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "L": "jugcraft:mutant_mutant_skeleton_limb"
+  },
+  "pattern": [
+    "L L"
+  ],
+  "result": {
+    "id": "jugcraft:mutant_mutant_skeleton_boots"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

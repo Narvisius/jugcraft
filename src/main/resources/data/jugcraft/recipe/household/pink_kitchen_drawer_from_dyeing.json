@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "D": "minecraft:pink_dye",
+    "K": "#jugcraft:household/coloured_kitchen_drawers"
+  },
+  "pattern": [
+    "D",
+    "K"
+  ],
+  "result": {
+    "id": "jugcraft:household_pink_kitchen_drawer"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

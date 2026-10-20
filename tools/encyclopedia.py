@@ -25,9 +25,16 @@ PAGES = {
     "spellcraft": "Spellcraft",
     "expedition": "Expeditions",
     "inspect": "Inspect",
+    "nouveau": "Jug Nouveau",
+    "menagerie": "Wildlife & Companions",
+    "woodland": "Woodland & Fable Creatures",
+    "household": "Furniture & Kitchens",
+    "habitats": "Habitats & Mutations",
+    "beasts": "Creature Equipment",
+    "caverns": "Cave Exploration",
     "keys": "Keys",
 }
-SERVER_PAGES = ["discover", "spellcraft", "expedition", "inspect"]
+SERVER_PAGES = ["discover", "spellcraft", "expedition", "inspect", "nouveau", "menagerie", "woodland", "household", "habitats", "beasts", "caverns"]
 
 # Where a step of a route stands for a player (EncyclopediaPayload.StepState, NONE aside), in words.
 STATES = {
@@ -104,6 +111,10 @@ DOSSIERS = {
 
 # What each Jugcraft key does, for the Keys page (key.jugcraft.<name>; every key the client registers).
 KEY_HELP = {
+    "nouveau_familiar": "Choose an owned familiar (not bound at first)",
+    "nouveau_crown": "Use the worn Alchemist’s Crown (not bound at first)",
+    "nouveau_spell_style": "Set the held spell instrument’s colors, particles and sound",
+    "nouveau_familiar_collection": "Toggle your familiar’s collection of drops",
     "encyclopedia": "Opens this encyclopedia from the game",
     "concordance_journal": "Opens your Concordance Journal: research, stage, and Compose",
     "concordance_composer": "Opens the Spell Composer straight away (not bound at first)",
@@ -308,7 +319,7 @@ CLIENT = {
     "screen.jugcraft.encyclopedia.empty": "Nothing to show yet",
     "screen.jugcraft.encyclopedia.unavailable": "This server sends no encyclopedia pages: only your keys are shown",
     "screen.jugcraft.encyclopedia.help": "Left and Right change page; Tab moves between controls; Page Up and Page Down "
-                                         "scroll; Backspace goes back a page; R asks again; X shows exact figures; Esc "
+                                         "scroll; Backspace goes back a page; F6 asks again; X shows exact figures; Esc "
                                          "or %s closes.",
     "screen.jugcraft.encyclopedia.page": "%s (%s of %s)",
     "screen.jugcraft.encyclopedia.open": "Jugcraft Encyclopedia",

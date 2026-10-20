@@ -1,0 +1,225 @@
+{
+  "attributes": {
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawns_by_category": {
+          "creature": [
+            {
+              "type": "jugcraft:cavern_deep_one_mage",
+              "weight": 2,
+              "count": 1
+            },
+            {
+              "type": "jugcraft:cavern_deep_one_knight",
+              "weight": 4,
+              "count": 1
+            },
+            {
+              "type": "jugcraft:cavern_deep_one",
+              "weight": 8,
+              "count": 1
+            }
+          ],
+          "monster": [
+            {
+              "type": "minecraft:spider",
+              "weight": 100,
+              "count": 4
+            },
+            {
+              "type": "minecraft:zombie",
+              "weight": 95,
+              "count": 4
+            },
+            {
+              "type": "minecraft:zombie_villager",
+              "weight": 5,
+              "count": 1
+            },
+            {
+              "type": "minecraft:skeleton",
+              "weight": 100,
+              "count": 4
+            },
+            {
+              "type": "minecraft:creeper",
+              "weight": 100,
+              "count": 4
+            },
+            {
+              "type": "minecraft:slime",
+              "weight": 100,
+              "count": 4
+            },
+            {
+              "type": "minecraft:witch",
+              "weight": 5,
+              "count": 1
+            },
+            {
+              "type": "minecraft:drowned",
+              "weight": 2,
+              "count": 1
+            },
+            {
+              "type": "jugcraft:cavern_hullbreaker",
+              "weight": 20,
+              "count": 1
+            }
+          ],
+          "underground_water_creature": [
+            {
+              "type": "minecraft:glow_squid",
+              "weight": 100,
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 4,
+                "max_inclusive": 6
+              }
+            }
+          ],
+          "water_creature": [
+            {
+              "type": "jugcraft:cavern_lanternfish",
+              "weight": 100,
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 15,
+                "max_inclusive": 20
+              }
+            },
+            {
+              "type": "minecraft:squid",
+              "weight": 1,
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 1,
+                "max_inclusive": 4
+              }
+            },
+            {
+              "type": "minecraft:dolphin",
+              "weight": 1,
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 1,
+                "max_inclusive": 2
+              }
+            },
+            {
+              "type": "jugcraft:cavern_tripodfish",
+              "weight": 40,
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 1,
+                "max_inclusive": 2
+              }
+            },
+            {
+              "type": "jugcraft:cavern_sea_pig",
+              "weight": 50,
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 3,
+                "max_inclusive": 4
+              }
+            },
+            {
+              "type": "jugcraft:cavern_gossamer_worm",
+              "weight": 20,
+              "count": 1
+            }
+          ]
+        },
+        "spawn_costs": {}
+      },
+      "modifier": "overlay"
+    },
+    "minecraft:visual/sky_color": "#7ba4ff",
+    "minecraft:visual/fog_color": "#000f2c",
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "sound": "jugcraft:cavern.abyssal_chasm_music"
+      }
+    },
+    "minecraft:audio/ambient_sounds": {
+      "loop": "jugcraft:cavern.abyssal_chasm_ambience"
+    }
+  },
+  "has_precipitation": false,
+  "temperature": 0.5,
+  "downfall": 0.5,
+  "effects": {
+    "water_color": "#00154b"
+  },
+  "carvers": [],
+  "features": [
+    [
+      "jugcraft:cavern_chamber_abyssal_chasm"
+    ],
+    [],
+    [
+      "jugcraft:cavern_abyssal_boulder"
+    ],
+    [
+      "jugcraft:cavern_black_vent",
+      "jugcraft:cavern_whalefall"
+    ],
+    [
+      "jugcraft:cavern_deep_one_ruins"
+    ],
+    [],
+    [
+      "minecraft:ore_dirt",
+      "minecraft:ore_gravel",
+      "minecraft:ore_granite_upper",
+      "minecraft:ore_granite_lower",
+      "minecraft:ore_diorite_upper",
+      "minecraft:ore_diorite_lower",
+      "minecraft:ore_andesite_upper",
+      "minecraft:ore_andesite_lower",
+      "minecraft:ore_tuff",
+      "minecraft:ore_coal_upper",
+      "minecraft:ore_coal_lower",
+      "minecraft:ore_iron_upper",
+      "minecraft:ore_iron_middle",
+      "minecraft:ore_iron_small",
+      "minecraft:ore_gold",
+      "minecraft:ore_gold_lower",
+      "minecraft:ore_redstone",
+      "minecraft:ore_redstone_lower",
+      "minecraft:ore_diamond",
+      "minecraft:ore_diamond_large",
+      "minecraft:ore_diamond_buried",
+      "minecraft:ore_lapis",
+      "minecraft:ore_lapis_buried",
+      "minecraft:ore_copper",
+      "minecraft:underwater_magma",
+      "minecraft:disk_sand",
+      "minecraft:disk_clay",
+      "minecraft:disk_gravel"
+    ],
+    [],
+    [],
+    [
+      "minecraft:flower_default",
+      "minecraft:patch_grass_badlands",
+      "minecraft:brown_mushroom_normal",
+      "minecraft:red_mushroom_normal",
+      "minecraft:patch_pumpkin",
+      "minecraft:patch_sugar_cane",
+      "jugcraft:cavern_dusk_anemone",
+      "jugcraft:cavern_midnight_anemone",
+      "jugcraft:cavern_mussel",
+      "jugcraft:cavern_ping_pong_sponge",
+      "jugcraft:cavern_tube_worm",
+      "jugcraft:cavern_twilight_anemone"
+    ],
+    [
+      "minecraft:freeze_top_layer",
+      "jugcraft:cavern_fill_in_bubbles_with_water"
+    ]
+  ]
+}

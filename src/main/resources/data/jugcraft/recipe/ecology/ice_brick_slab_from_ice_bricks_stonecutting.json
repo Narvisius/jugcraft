@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "jugcraft:ecology_ice_bricks",
+  "result": {
+    "count": 2,
+    "id": "jugcraft:ecology_ice_brick_slab"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

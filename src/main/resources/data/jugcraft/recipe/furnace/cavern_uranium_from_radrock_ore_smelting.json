@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": "jugcraft:cavern_radrock_uranium_ore",
+  "result": {
+    "id": "jugcraft:cavern_uranium"
+  },
+  "experience": 1.0,
+  "cookingtime": 200,
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

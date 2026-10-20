@@ -1,0 +1,64 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "chains",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -8.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -8.0,
+            -5.0,
+            -5.0,
+            16.0,
+            10.0,
+            10.0
+          ],
+          "uv": [
+            0.0,
+            33.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelEndPirateAnchorWinch.java",
+  "sourceSha256": "4c2be76da0a32e0e35591c6ccbe998953852addaf8dcbfdaf30f41be683580c2",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

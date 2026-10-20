@@ -1,0 +1,323 @@
+{
+  "textureSize": [
+    64,
+    32
+  ],
+  "parts": [
+    {
+      "name": "head",
+      "parent": "$mesh",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4,
+            -8,
+            -4,
+            8,
+            8,
+            8
+          ],
+          "uv": [
+            0,
+            0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "hat",
+      "parent": "$mesh",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4,
+            -8,
+            -4,
+            8,
+            8,
+            8
+          ],
+          "uv": [
+            32,
+            0
+          ],
+          "inflate": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "body",
+      "parent": "$mesh",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4,
+            0,
+            -2,
+            8,
+            12,
+            4
+          ],
+          "uv": [
+            16,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_arm",
+      "parent": "$mesh",
+      "pose": [
+        -5,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3,
+            -2,
+            -2,
+            4,
+            12,
+            4
+          ],
+          "uv": [
+            40,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_arm",
+      "parent": "$mesh",
+      "pose": [
+        5,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1,
+            -2,
+            -2,
+            4,
+            12,
+            4
+          ],
+          "uv": [
+            40,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "right_leg",
+      "parent": "$mesh",
+      "pose": [
+        -1.9,
+        12,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2,
+            0,
+            -2,
+            4,
+            12,
+            4
+          ],
+          "uv": [
+            0,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_leg",
+      "parent": "$mesh",
+      "pose": [
+        1.9,
+        12,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2,
+            0,
+            -2,
+            4,
+            12,
+            4
+          ],
+          "uv": [
+            0,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "hornL",
+      "parent": "head",
+      "pose": [
+        5.0,
+        -8.0,
+        1.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -5.5,
+            -4.0,
+            10.0,
+            6.0,
+            8.0
+          ],
+          "uv": [
+            3.0,
+            17.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "hornR",
+      "parent": "head",
+      "pose": [
+        -5.0,
+        -8.0,
+        1.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -10.0,
+            -5.5,
+            -4.0,
+            10.0,
+            6.0,
+            8.0
+          ],
+          "uv": [
+            3.0,
+            17.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/layered/ModelMooseHeadgear.java",
+  "sourceSha256": "3850434a79660cffd170c29229a2a878fdc581723d30293336cd0e91736b78ce",
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

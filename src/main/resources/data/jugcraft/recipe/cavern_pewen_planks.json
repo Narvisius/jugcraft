@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "planks",
+  "ingredients": [
+    "#jugcraft:cavern_pewen_logs"
+  ],
+  "result": {
+    "count": 4,
+    "id": "jugcraft:cavern_pewen_planks"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

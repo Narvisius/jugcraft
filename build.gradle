@@ -128,14 +128,35 @@ tasks.named("deleteGameTestRunDir", Delete) {
 	delete(layout.buildDirectory.dir("run/gameTest"))
 }
 
+// Match the Complete pack in development and disposable test worlds. Never replace
+// an owner's existing settings; defaultconfigs seeds missing native config files.
+tasks.matching { it.name in ["runClient", "runServer", "runGameTest", "runClientGameTest"] }.configureEach {
+	doFirst {
+		// Loom assigns JavaExec.workingDir during its task action, after doFirst.
+		String runName = name.substring(3, 4).toLowerCase() + name.substring(4)
+		File runDirectory = file(loom.runs.getByName(runName).runDir)
+		def defaults = ["config/travelersbackpack-common.toml", "defaultconfigs/travelersbackpack-server.toml"]
+		if (name in ["runClient", "runClientGameTest"]) defaults += "options.txt"
+		defaults.each { relative ->
+			File destination = new File(runDirectory, relative)
+			if (!destination.exists()) {
+				destination.parentFile.mkdirs()
+				destination.bytes = file("distribution/overrides/${relative}").bytes
+			}
+		}
+	}
+}
+
 // CI chooses and shares out the client game tests (tools/select_client_tests.py, docs/TESTING.md):
 // Loom deletes build/run/clientGameTest before each run, so CI must write these AFTER that dependency.
 // Restrict this to CI: never overwrite a local developer's client settings.
 tasks.named("runClientGameTest") {
 	doFirst {
 		if (System.getenv("CI") == "true") {
-			workingDir.mkdirs()
-			new File(workingDir, "options.txt").text = 'preferredGraphicsBackend:"opengl"\nfullscreen:false\nlang:en_us\n'
+			File runDirectory = file(loom.runs.getByName("clientGameTest").runDir)
+			runDirectory.mkdirs()
+			new File(runDirectory, "options.txt").text = file("distribution/overrides/options.txt").text +
+					'preferredGraphicsBackend:"opengl"\nfullscreen:false\nlang:en_us\n'
 		}
 	}
 }
@@ -144,6 +165,12 @@ tasks.named("runClientGameTest") {
 // -PclientTestShard=<n> -PclientTestShards=<count> keeps the classes at positions n, n + count, n + 2 * count ... of
 // it. Without them every class runs. Server game tests are never split.
 def clientTests = providers.gradleProperty("clientTests").getOrElse("")
+// The complete content/biome suite needs the same practical heap floor as a modded client.
+// Fail immediately on exhaustion so CI retains the cause instead of hanging for an hour.
+tasks.matching { it.name == "runClientGameTest" }.configureEach {
+	maxHeapSize = "4G"
+	jvmArgs "-XX:+ExitOnOutOfMemoryError"
+}
 def clientTestShard = providers.gradleProperty("clientTestShard").getOrElse("")
 def clientTestShards = providers.gradleProperty("clientTestShards").getOrElse("")
 tasks.named("processGametestResources", ProcessResources) {
@@ -179,6 +206,12 @@ tasks.named("processGametestResources", ProcessResources) {
 			}
 			mine = (0..<all.size()).findAll { it % shards == shard }.collect { all[it] }
 		}
+		// Exercise integrated startup/controls and long natural-world discovery first,
+		// so their failures surface before unrelated screenshot galleries. Keep every selected test.
+		def early = ["OwnerCollectionsNetworkTests", "MineralSandClientGameTests", "BackpackClientGameTests", "DioramaClientGameTests",
+			"DryCountryTreeClientGameTests", "RainforestClientGameTests", "TropicalTreeClientGameTests", "HangingFruitClientGameTests"]
+		def simpleName = { String name -> name.substring(name.lastIndexOf('.') + 1) }
+		mine = early.collectMany { name -> mine.findAll { simpleName(it) == name } } + mine.findAll { !early.contains(simpleName(it)) }
 		json.entrypoints["fabric-client-gametest"] = mine
 		manifest.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json))
 		task.logger.lifecycle("Client game tests: ${mine.size()} of ${all.size()} classes: ${mine}")
@@ -187,6 +220,12 @@ tasks.named("processGametestResources", ProcessResources) {
 
 tasks.withType(JavaCompile).configureEach {
 	it.options.release = 25
+}
+
+// The combined owner collections exceed classic ZIP's 65,535-entry limit.
+// Java's JAR reader supports ZIP64; apply it to both playable and sources JARs.
+tasks.withType(Jar).configureEach {
+	zip64 = true
 }
 
 java {

@@ -16,7 +16,10 @@ import org.jspecify.annotations.Nullable;
  * @param school the Spell Power school whose damage type carries {@link EffectKind#DAMAGE} (null: generic magic)
  */
 public record EffectSpec(EffectKind kind, Intent intent, int magnitude, int duration, @Nullable String status, Stacking stacking,
-		@Nullable String school) {
+		@Nullable String school, java.util.Map<String,Integer> augments) {
+	public EffectSpec(EffectKind kind,Intent intent,int magnitude,int duration,@Nullable String status,Stacking stacking,@Nullable String school){this(kind,intent,magnitude,duration,status,stacking,school,java.util.Map.of());}
+	public int augment(String name){return augments.getOrDefault(name,0);}
+	public EffectSpec withAugment(String name,int value){var copy=new java.util.HashMap<>(augments);copy.put(name,Math.clamp(value,0,4));return new EffectSpec(kind,intent,magnitude,duration,status,stacking,school,copy);}
 	/** The strongest any effect may be, whatever its source: 20 hearts, a 4-blocks-a-tick push, amplifier 40. */
 	public static final int MAX_MAGNITUDE = 40;
 	/** The longest any effect may last: two minutes. */
@@ -27,13 +30,14 @@ public record EffectSpec(EffectKind kind, Intent intent, int magnitude, int dura
 	public static final int MAX_PUSH = 20;
 
 	public EffectSpec {
+		augments=java.util.Map.copyOf(augments);
 		if (magnitude < 0 || magnitude > MAX_MAGNITUDE) {
 			throw new IllegalArgumentException(kind.id + ": magnitude " + magnitude + " outside 0.." + MAX_MAGNITUDE);
 		}
 		if (duration < 0 || duration > MAX_DURATION) {
 			throw new IllegalArgumentException(kind.id + ": duration " + duration + " outside 0.." + MAX_DURATION);
 		}
-		if ((kind == EffectKind.STATUS) != (status != null)) {
+		if ((kind == EffectKind.STATUS || kind == EffectKind.NOUVEAU_BLOCK || kind == EffectKind.NOUVEAU_CREATURE || kind == EffectKind.NOUVEAU) != (status != null)) {
 			throw new IllegalArgumentException(kind.id + ": a status id goes with a status effect, and only there");
 		}
 	}
@@ -43,11 +47,11 @@ public record EffectSpec(EffectKind kind, Intent intent, int magnitude, int dura
 	}
 
 	public EffectSpec withMagnitude(int value) {
-		return new EffectSpec(kind, intent, Math.clamp(value, 0, MAX_MAGNITUDE), duration, status, stacking, school);
+		return new EffectSpec(kind, intent, Math.clamp(value, 0, MAX_MAGNITUDE), duration, status, stacking, school,augments);
 	}
 
 	public EffectSpec withDuration(int value) {
-		return new EffectSpec(kind, intent, magnitude, Math.clamp(value, 0, MAX_DURATION), status, stacking, school);
+		return new EffectSpec(kind, intent, magnitude, Math.clamp(value, 0, MAX_DURATION), status, stacking, school,augments);
 	}
 
 	/** Absorption amplifier for protection: four points a level, at least level I. */

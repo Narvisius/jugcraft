@@ -17,16 +17,22 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
 /**
- * The tinplate or glass tank's block entity. Holds up to 16 buckets of a single fluid. It does no ticking: buckets and pumps fill and empty it. Broken, it drops
+ * Shared tank block entity. Tinplate/glass hold 16 buckets; insulated variants hold 32 or 64. It does no ticking: buckets and pumps fill and empty it. Broken, it drops
  * with its fluid ({@link StoredFluid}), and placed again it holds the same.
  */
 public class FluidTankBlockEntity extends BlockEntity {
 	public static final long CAPACITY = 16 * FluidConstants.BUCKET;
 
-	public final SingleFluidStorage storage = SingleFluidStorage.withFixedCapacity(CAPACITY, this::fluidChanged);
+	public static final long INSULATED_CAPACITY = 32 * FluidConstants.BUCKET;
+    public static final long VACUUM_CAPACITY = 64 * FluidConstants.BUCKET;
+
+	public final SingleFluidStorage storage;
 
 	public FluidTankBlockEntity(BlockPos pos, BlockState state) {
 		super(JugcraftFluids.TANK_ENTITY, pos, state);
+        long capacity = state.is(JugcraftFluids.VACUUM_INSULATED_TANK) ? VACUUM_CAPACITY
+                : state.is(JugcraftFluids.INSULATED_FLUID_TANK) ? INSULATED_CAPACITY : CAPACITY;
+        storage = SingleFluidStorage.withFixedCapacity(capacity, this::fluidChanged);
 	}
 
 	/** Saved; a glass tank also sends its fluid to clients, which draw it (client/GlassTankRenderer). */

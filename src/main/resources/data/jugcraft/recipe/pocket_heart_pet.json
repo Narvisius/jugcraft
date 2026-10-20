@@ -1,0 +1,23 @@
+{
+  "result": {
+    "id": "jugcraft:pocket_pet_heart"
+  },
+  "pattern": [
+    "OFO",
+    "ODO",
+    "OGO"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "D": "minecraft:emerald",
+    "F": "minecraft:red_tulip",
+    "G": "minecraft:diamond",
+    "O": "minecraft:redstone"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

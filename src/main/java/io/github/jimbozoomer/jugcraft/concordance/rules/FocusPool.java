@@ -11,8 +11,9 @@ import org.jspecify.annotations.Nullable;
  * Immutable; {@link #spend} returns the new pool, or null when there is not enough, so a failed spend changes nothing.
  * Keep the two numbers equal to FOCUS_MAX and FOCUS_REGEN_TICKS in tools/concordance.py.
  */
-public record FocusPool(int stored, long stamp) {
+public record FocusPool(int stored, long stamp, int capacity) {
 	public static final int MAX = 20;
+    public static final int HARD_MAX = 120;
 	public static final int REGEN_TICKS = 40;
 	/** The save format version. */
 	public static final int SCHEMA = 1;
@@ -20,21 +21,24 @@ public record FocusPool(int stored, long stamp) {
 	public static final FocusPool FULL = new FocusPool(MAX, 0L);
 
 	public FocusPool {
-		stored = Math.clamp(stored, 0, MAX);
+        capacity=Math.clamp(capacity,MAX,HARD_MAX);
+		stored = Math.clamp(stored, 0, capacity);
 	}
+    public FocusPool(int stored,long stamp){this(stored,stamp,MAX);}
+    public FocusPool withCapacity(long now,int maximum){return new FocusPool(current(now),now,maximum);}
 
 	/** The points available at game time {@code now}. */
 	public int current(long now) {
-		if (now <= stamp || stored >= MAX) {
+		if (now <= stamp || stored >= capacity) {
 			return stored;
 		}
 		long gained = (now - stamp) / REGEN_TICKS;
-		return (int) Math.min(MAX, stored + gained);
+		return (int) Math.min(capacity, stored + gained);
 	}
 
 	/** Ticks until the next point returns at {@code now}, or 0 when full. */
 	public int ticksToNext(long now) {
-		if (current(now) >= MAX) {
+		if (current(now) >= capacity) {
 			return 0;
 		}
 		long since = Math.max(0L, now - stamp);
@@ -47,8 +51,8 @@ public record FocusPool(int stored, long stamp) {
 	 */
 	public FocusPool gain(long now, int amount) {
 		int available = current(now);
-		long newStamp = available >= MAX || now <= stamp ? Math.max(now, stamp) : stamp + (now - stamp) / REGEN_TICKS * REGEN_TICKS;
-		return new FocusPool(available + Math.max(0, amount), newStamp);
+		long newStamp = available >= capacity || now <= stamp ? Math.max(now, stamp) : stamp + (now - stamp) / REGEN_TICKS * REGEN_TICKS;
+		return new FocusPool(available + Math.max(0, amount), newStamp,capacity);
 	}
 
 	/**
@@ -61,12 +65,12 @@ public record FocusPool(int stored, long stamp) {
 			return null;
 		}
 		long newStamp;
-		if (available >= MAX || now <= stamp) {
+		if (available >= capacity || now <= stamp) {
 			newStamp = Math.max(now, stamp);
 		} else {
 			long gained = (now - stamp) / REGEN_TICKS;
 			newStamp = stamp + gained * REGEN_TICKS;
 		}
-		return new FocusPool(available - cost, newStamp);
+		return new FocusPool(available - cost, newStamp,capacity);
 	}
 }

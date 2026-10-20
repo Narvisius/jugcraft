@@ -1,0 +1,35 @@
+{
+  "criteria": {
+    "ingredient_0": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:string"
+          }
+        ]
+      }
+    },
+    "ingredient_1": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "jugcraft:cavern_rusty_rebar"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "ingredient_0",
+      "ingredient_1"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "jugcraft:survival_completion/cavern_rusty_scaffolding"
+    ]
+  }
+}

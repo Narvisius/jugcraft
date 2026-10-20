@@ -1,0 +1,1032 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "body",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -9.5,
+        -0.25,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -3.5,
+            -3.75,
+            6.0,
+            6.0,
+            6.0
+          ],
+          "uv": [
+            31.0,
+            65.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "wingL",
+      "parent": "body",
+      "pose": [
+        2.7,
+        -3.2,
+        -0.75,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            -1.0,
+            18.0,
+            0.0,
+            5.0
+          ],
+          "uv": [
+            37.0,
+            59.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "wingR",
+      "parent": "body",
+      "pose": [
+        -2.7,
+        -3.2,
+        -0.75,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -18.0,
+            0.0,
+            -1.0,
+            18.0,
+            0.0,
+            5.0
+          ],
+          "uv": [
+            37.0,
+            53.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "legsL",
+      "parent": "body",
+      "pose": [
+        3.0,
+        2.5,
+        -2.75,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "legsR",
+      "parent": "body",
+      "pose": [
+        -3.0,
+        2.5,
+        -2.75,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "tail",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -1.5,
+        2.25,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -1.4,
+            0.0,
+            4.0,
+            4.0,
+            16.0
+          ],
+          "uv": [
+            48.0,
+            83.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "head",
+      "parent": "body",
+      "pose": [
+        0.0,
+        0.5,
+        -3.75,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -2.0,
+            -4.0,
+            4.0,
+            4.0,
+            4.0
+          ],
+          "uv": [
+            56.0,
+            65.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "legL1",
+      "parent": "legsL",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.5236,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -8.0,
+            0.0,
+            18.0,
+            15.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            51.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "legL2",
+      "parent": "legsL",
+      "pose": [
+        0.0,
+        0.0,
+        0.4,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -8.0,
+            0.0,
+            18.0,
+            15.0,
+            0.0
+          ],
+          "uv": [
+            37.0,
+            16.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "legL3",
+      "parent": "legsL",
+      "pose": [
+        0.0,
+        0.0,
+        0.9,
+        0.0,
+        -0.8727,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -8.0,
+            0.0,
+            18.0,
+            15.0,
+            0.0
+          ],
+          "uv": [
+            37.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "legR1",
+      "parent": "legsR",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.5236,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -18.0,
+            -8.0,
+            0.0,
+            18.0,
+            15.0,
+            0.0
+          ],
+          "uv": [
+            37.0,
+            37.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "legR2",
+      "parent": "legsR",
+      "pose": [
+        0.0,
+        0.0,
+        0.4,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -18.0,
+            -8.0,
+            0.0,
+            18.0,
+            15.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            35.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "legR3",
+      "parent": "legsR",
+      "pose": [
+        0.0,
+        0.0,
+        0.9,
+        0.0,
+        0.8727,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -18.0,
+            -8.0,
+            0.0,
+            18.0,
+            15.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            19.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "antennaL",
+      "parent": "head",
+      "pose": [
+        1.0,
+        -0.1,
+        -4.0,
+        1.2217,
+        -0.48,
+        0.0436
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -8.0,
+            0.0,
+            0.0,
+            8.0,
+            2.0
+          ],
+          "uv": [
+            5.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "antennaR",
+      "parent": "head",
+      "pose": [
+        -1.0,
+        -0.1,
+        -4.0,
+        1.2217,
+        0.48,
+        -0.0436
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -8.0,
+            0.0,
+            0.0,
+            8.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "mouth",
+      "parent": "head",
+      "pose": [
+        0.0,
+        2.0,
+        -3.5,
+        -1.0036,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0.0,
+            -1.0,
+            1.0,
+            8.0,
+            1.0
+          ],
+          "uv": [
+            23.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelCrimsonMosquito.java",
+  "sourceSha256": "c20216e1ed6fa9ef7d98c4e6a6be9326e7581d282ad53792104cab355ed19f23",
+  "animationRoot": "root",
+  "headLook": "head",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "antennaR",
+      "kind": "walk",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.15
+      ],
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.1,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "antennaL",
+      "kind": "walk",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.15
+      ],
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.1,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "kind": "bob",
+      "speed": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "degree": [
+        "*",
+        0.5,
+        5.0
+      ],
+      "invert": false,
+      "phase": 0,
+      "bias": 0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": [
+        "&&",
+        1,
+        [
+          ">",
+          [
+            "*",
+            "fly",
+            5.0
+          ],
+          0.0
+        ]
+      ]
+    },
+    {
+      "bone": "legL1",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 1.0,
+      "bias": 0.1,
+      "clock": "age",
+      "amount": 1.0,
+      "when": [
+        "&&",
+        1,
+        [
+          ">",
+          [
+            "*",
+            "fly",
+            5.0
+          ],
+          0.0
+        ]
+      ]
+    },
+    {
+      "bone": "legR1",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.1,
+      "clock": "age",
+      "amount": 1.0,
+      "when": [
+        "&&",
+        1,
+        [
+          ">",
+          [
+            "*",
+            "fly",
+            5.0
+          ],
+          0.0
+        ]
+      ]
+    },
+    {
+      "bone": "legL2",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 2.0,
+      "bias": 0.1,
+      "clock": "age",
+      "amount": 1.0,
+      "when": [
+        "&&",
+        1,
+        [
+          ">",
+          [
+            "*",
+            "fly",
+            5.0
+          ],
+          0.0
+        ]
+      ]
+    },
+    {
+      "bone": "legR2",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": false,
+      "phase": 2.0,
+      "bias": 0.1,
+      "clock": "age",
+      "amount": 1.0,
+      "when": [
+        "&&",
+        1,
+        [
+          ">",
+          [
+            "*",
+            "fly",
+            5.0
+          ],
+          0.0
+        ]
+      ]
+    },
+    {
+      "bone": "legL3",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": true,
+      "phase": 2.0,
+      "bias": 0.1,
+      "clock": "age",
+      "amount": 1.0,
+      "when": [
+        "&&",
+        1,
+        [
+          ">",
+          [
+            "*",
+            "fly",
+            5.0
+          ],
+          0.0
+        ]
+      ]
+    },
+    {
+      "bone": "legR3",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": false,
+      "phase": 2.0,
+      "bias": 0.1,
+      "clock": "age",
+      "amount": 1.0,
+      "when": [
+        "&&",
+        1,
+        [
+          ">",
+          [
+            "*",
+            "fly",
+            5.0
+          ],
+          0.0
+        ]
+      ]
+    },
+    {
+      "bone": "tail",
+      "kind": "walk",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.15
+      ],
+      "invert": false,
+      "phase": 0.0,
+      "bias": [
+        "*",
+        -1,
+        0.1
+      ],
+      "clock": "age",
+      "amount": 1.0,
+      "when": [
+        "&&",
+        1,
+        [
+          ">",
+          [
+            "*",
+            "fly",
+            5.0
+          ],
+          0.0
+        ]
+      ]
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.flap(this.wingL, flySpeed * 3.3f, flyDegree, true, 0.0f, 0.2f, ageInTicks, 1.0f);",
+      "reason": "Unbound source condition [{'unsupported': 'flappingWings'}]"
+    },
+    {
+      "call": "this.flap(this.wingR, flySpeed * 3.3f, flyDegree, false, 0.0f, 0.2f, ageInTicks, 1.0f);",
+      "reason": "Unbound source condition [{'unsupported': 'flappingWings'}]"
+    },
+    {
+      "call": "this.tail.rotateAngleX -= (float)entityIn.getBloodLevel() * 0.05f;",
+      "reason": "Unsupported expression entityIn.getBloodLevel() * 0.05"
+    },
+    {
+      "call": "this.tail.setScale(bloatScale, bloatScale, bloatScale);",
+      "reason": "Unbound expression variable bloatScale"
+    }
+  ],
+  "expressions": [],
+  "poses": [
+    {
+      "bone": "body",
+      "weight": [
+        "/",
+        [
+          "*",
+          "fly",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "position",
+      "value": [
+        0.0,
+        -10.0,
+        0.0
+      ],
+      "when": [
+        "&&",
+        1,
+        [
+          ">",
+          [
+            "*",
+            "fly",
+            5.0
+          ],
+          0.0
+        ]
+      ]
+    },
+    {
+      "bone": "legL1",
+      "weight": [
+        "/",
+        [
+          "*",
+          "fly",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.0,
+        -0.5235987755982988,
+        1.0471975511965976
+      ],
+      "when": [
+        "&&",
+        1,
+        [
+          ">",
+          [
+            "*",
+            "fly",
+            5.0
+          ],
+          0.0
+        ]
+      ]
+    },
+    {
+      "bone": "legR1",
+      "weight": [
+        "/",
+        [
+          "*",
+          "fly",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.0,
+        0.5235987755982988,
+        -1.0471975511965976
+      ],
+      "when": [
+        "&&",
+        1,
+        [
+          ">",
+          [
+            "*",
+            "fly",
+            5.0
+          ],
+          0.0
+        ]
+      ]
+    },
+    {
+      "bone": "legL2",
+      "weight": [
+        "/",
+        [
+          "*",
+          "fly",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.0,
+        -0.3490658503988659,
+        1.0471975511965976
+      ],
+      "when": [
+        "&&",
+        1,
+        [
+          ">",
+          [
+            "*",
+            "fly",
+            5.0
+          ],
+          0.0
+        ]
+      ]
+    },
+    {
+      "bone": "legR2",
+      "weight": [
+        "/",
+        [
+          "*",
+          "fly",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.0,
+        0.3490658503988659,
+        -1.0471975511965976
+      ],
+      "when": [
+        "&&",
+        1,
+        [
+          ">",
+          [
+            "*",
+            "fly",
+            5.0
+          ],
+          0.0
+        ]
+      ]
+    },
+    {
+      "bone": "legL3",
+      "weight": [
+        "/",
+        [
+          "*",
+          "fly",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.0,
+        -0.08726646259971647,
+        1.0471975511965976
+      ],
+      "when": [
+        "&&",
+        1,
+        [
+          ">",
+          [
+            "*",
+            "fly",
+            5.0
+          ],
+          0.0
+        ]
+      ]
+    },
+    {
+      "bone": "legR3",
+      "weight": [
+        "/",
+        [
+          "*",
+          "fly",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.0,
+        0.08726646259971647,
+        -1.0471975511965976
+      ],
+      "when": [
+        "&&",
+        1,
+        [
+          ">",
+          [
+            "*",
+            "fly",
+            5.0
+          ],
+          0.0
+        ]
+      ]
+    }
+  ]
+}

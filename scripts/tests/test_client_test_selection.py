@@ -31,7 +31,7 @@ class ClientTestSelectionTests(unittest.TestCase):
         self.assertIn("PeepoDeliveryClientTests", shown)
 
     def test_full_run_assigns_every_class_exactly_once(self):
-        jobs = selection.share(set(self.tests), self.tests, 8)
+        jobs = selection.share(set(self.tests), self.tests, 16)
         assigned = [name for _, names in jobs for name in names]
         self.assertCountEqual(assigned, self.tests)
         self.assertEqual(len(assigned), len(set(assigned)))
@@ -61,7 +61,7 @@ class ClientTestSelectionTests(unittest.TestCase):
         matrix = re.search(r"shard: \[([\d, ]+)\]", workflow)
         self.assertIsNotNone(matrix)
         indices = [int(value) for value in matrix.group(1).split(",")]
-        self.assertEqual(indices, list(range(8)))
+        self.assertEqual(indices, list(range(16)))
         outputs = {int(value) for value in re.findall(r"^\s+shard(\d+):", workflow, re.MULTILINE)}
         self.assertEqual(outputs, set(indices))
         self.assertEqual(re.findall(r"--shards (\d+)", workflow), [str(len(indices))] * 2)

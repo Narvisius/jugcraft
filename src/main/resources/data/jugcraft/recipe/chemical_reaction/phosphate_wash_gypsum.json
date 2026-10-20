@@ -1,0 +1,41 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "phosphate"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:phosphate_preparation",
+  "items": [
+    {
+      "ingredient": "jugcraft:gypsum_rich_residue",
+      "count": 2
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 500
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:spent_mineral_wash",
+      "amount": 500,
+      "tank": 0
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:washed_gypsum",
+      "count": 1
+    }
+  ],
+  "energy_per_tick": 48,
+  "time": 240
+}

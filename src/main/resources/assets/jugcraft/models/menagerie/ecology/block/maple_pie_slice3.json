@@ -1,0 +1,80 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "bottom": "jugcraft:menagerie/ecology/block/pie_bottom",
+    "inner": "jugcraft:menagerie/ecology/block/maple_pie_inner",
+    "side": "jugcraft:menagerie/ecology/block/pie_side",
+    "top": "jugcraft:menagerie/ecology/block/maple_pie_top",
+    "particle": "#side"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        8
+      ],
+      "to": [
+        8,
+        4,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            12,
+            8,
+            16
+          ],
+          "texture": "#inner"
+        },
+        "south": {
+          "uv": [
+            1,
+            12,
+            8,
+            16
+          ],
+          "texture": "#side"
+        },
+        "east": {
+          "uv": [
+            8,
+            12,
+            15,
+            16
+          ],
+          "texture": "#inner"
+        },
+        "west": {
+          "uv": [
+            8,
+            12,
+            15,
+            16
+          ],
+          "texture": "#side"
+        },
+        "up": {
+          "uv": [
+            1,
+            8,
+            8,
+            15
+          ],
+          "texture": "#top"
+        },
+        "down": {
+          "uv": [
+            1,
+            8,
+            8,
+            15
+          ],
+          "texture": "#bottom"
+        }
+      }
+    }
+  ]
+}

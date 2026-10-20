@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#c:gems/source",
+    "jugcraft:nouveau_sourcestone",
+    "jugcraft:nouveau_sourcestone"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_sourcestone_sconce"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

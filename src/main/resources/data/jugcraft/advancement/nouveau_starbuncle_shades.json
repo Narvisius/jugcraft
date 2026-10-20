@@ -1,0 +1,32 @@
+{
+  "parent": "jugcraft:nouveau_starby_charm",
+  "criteria": {
+    "has_starbuncle_shades": {
+      "conditions": {
+        "items": [
+          {
+            "items": "jugcraft:nouveau_starbuncle_shades"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "jugcraft.nouveau_adv.desc.starbuncle_shades"
+    },
+    "icon": {
+      "count": 1,
+      "id": "jugcraft:nouveau_starbuncle_shades"
+    },
+    "title": {
+      "translate": "jugcraft.nouveau_adv.title.starbuncle_shades"
+    }
+  },
+  "requirements": [
+    [
+      "has_starbuncle_shades"
+    ]
+  ]
+}

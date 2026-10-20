@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "T",
+    "S",
+    "K"
+  ],
+  "key": {
+    "T": "jugcraft:beast_shark_tooth",
+    "S": "minecraft:stick",
+    "K": "minecraft:kelp"
+  },
+  "result": {
+    "count": 6,
+    "id": "jugcraft:beast_shark_tooth_arrow"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

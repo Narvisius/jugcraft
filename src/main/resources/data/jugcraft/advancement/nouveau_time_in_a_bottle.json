@@ -1,0 +1,27 @@
+{
+  "parent": "jugcraft:nouveau_mob_jar",
+  "criteria": {
+    "time_in_a_bottle": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "jugcraft.nouveau_adv.desc.time_in_a_bottle"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "minecraft:clock"
+    },
+    "title": {
+      "translate": "jugcraft.nouveau_adv.title.time_in_a_bottle"
+    }
+  },
+  "requirements": [
+    [
+      "time_in_a_bottle"
+    ]
+  ]
+}

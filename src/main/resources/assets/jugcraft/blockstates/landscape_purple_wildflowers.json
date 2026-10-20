@@ -1,0 +1,236 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "jugcraft:menagerie/landscape/block/purple_wildflowers_1"
+      },
+      "when": {
+        "facing": "north"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:menagerie/landscape/block/purple_wildflowers_1",
+        "y": 90
+      },
+      "when": {
+        "facing": "east"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:menagerie/landscape/block/purple_wildflowers_1",
+        "y": 180
+      },
+      "when": {
+        "facing": "south"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:menagerie/landscape/block/purple_wildflowers_1",
+        "y": 270
+      },
+      "when": {
+        "facing": "west"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:menagerie/landscape/block/purple_wildflowers_2"
+      },
+      "when": {
+        "OR": [
+          {
+            "facing": "north",
+            "flower_amount": "2"
+          },
+          {
+            "facing": "north",
+            "flower_amount": "3"
+          },
+          {
+            "facing": "north",
+            "flower_amount": "4"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:menagerie/landscape/block/purple_wildflowers_2",
+        "y": 90
+      },
+      "when": {
+        "OR": [
+          {
+            "facing": "east",
+            "flower_amount": "2"
+          },
+          {
+            "facing": "east",
+            "flower_amount": "3"
+          },
+          {
+            "facing": "east",
+            "flower_amount": "4"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:menagerie/landscape/block/purple_wildflowers_2",
+        "y": 180
+      },
+      "when": {
+        "OR": [
+          {
+            "facing": "south",
+            "flower_amount": "2"
+          },
+          {
+            "facing": "south",
+            "flower_amount": "3"
+          },
+          {
+            "facing": "south",
+            "flower_amount": "4"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:menagerie/landscape/block/purple_wildflowers_2",
+        "y": 270
+      },
+      "when": {
+        "OR": [
+          {
+            "facing": "west",
+            "flower_amount": "2"
+          },
+          {
+            "facing": "west",
+            "flower_amount": "3"
+          },
+          {
+            "facing": "west",
+            "flower_amount": "4"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:menagerie/landscape/block/purple_wildflowers_3"
+      },
+      "when": {
+        "OR": [
+          {
+            "facing": "north",
+            "flower_amount": "3"
+          },
+          {
+            "facing": "north",
+            "flower_amount": "4"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:menagerie/landscape/block/purple_wildflowers_3",
+        "y": 90
+      },
+      "when": {
+        "OR": [
+          {
+            "facing": "east",
+            "flower_amount": "3"
+          },
+          {
+            "facing": "east",
+            "flower_amount": "4"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:menagerie/landscape/block/purple_wildflowers_3",
+        "y": 180
+      },
+      "when": {
+        "OR": [
+          {
+            "facing": "south",
+            "flower_amount": "3"
+          },
+          {
+            "facing": "south",
+            "flower_amount": "4"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:menagerie/landscape/block/purple_wildflowers_3",
+        "y": 270
+      },
+      "when": {
+        "OR": [
+          {
+            "facing": "west",
+            "flower_amount": "3"
+          },
+          {
+            "facing": "west",
+            "flower_amount": "4"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:menagerie/landscape/block/purple_wildflowers_4"
+      },
+      "when": {
+        "facing": "north",
+        "flower_amount": "4"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:menagerie/landscape/block/purple_wildflowers_4",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "flower_amount": "4"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:menagerie/landscape/block/purple_wildflowers_4",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "flower_amount": "4"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:menagerie/landscape/block/purple_wildflowers_4",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "flower_amount": "4"
+      }
+    }
+  ]
+}

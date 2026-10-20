@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "x": "minecraft:paper",
+    "y": "jugcraft:nouveau_magebloom_fiber"
+  },
+  "pattern": [
+    "yyy",
+    "yxy",
+    "yyy"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_blank_parchment"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

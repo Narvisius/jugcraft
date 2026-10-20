@@ -1,0 +1,266 @@
+{
+  "textureSize": [
+    32,
+    32
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "body",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -3.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -2.0,
+            -3.0,
+            4.0,
+            4.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "legs",
+      "parent": "body",
+      "pose": [
+        0.0,
+        2.0,
+        -2.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            0.0,
+            0.0,
+            3.0,
+            1.0,
+            5.0
+          ],
+          "uv": [
+            0.0,
+            11.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_wing",
+      "parent": "body",
+      "pose": [
+        1.0,
+        -2.0,
+        -1.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            -1.0,
+            4.0,
+            0.0,
+            3.0
+          ],
+          "uv": [
+            12.0,
+            11.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_wing",
+      "parent": "body",
+      "pose": [
+        -1.0,
+        -2.0,
+        -1.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            0.0,
+            -1.0,
+            4.0,
+            0.0,
+            3.0
+          ],
+          "uv": [
+            12.0,
+            11.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "mouth",
+      "parent": "body",
+      "pose": [
+        0.0,
+        0.0,
+        -3.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            -1.0,
+            0.0,
+            4.0,
+            2.0
+          ],
+          "uv": [
+            15.0,
+            16.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelFly.java",
+  "sourceSha256": "459dc93b19d9602ce8eff8c40f09c442061212231caac9dcbb99425d4ecd1521",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "mouth",
+      "kind": "walk",
+      "speed": [
+        "*",
+        1.4,
+        0.2
+      ],
+      "degree": [
+        "*",
+        0.8,
+        0.1
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        1.0
+      ],
+      "bias": 0.2,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "mouth",
+      "kind": "flap",
+      "speed": [
+        "*",
+        1.4,
+        0.2
+      ],
+      "degree": [
+        "*",
+        0.8,
+        0.05
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        2.0
+      ],
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.swing(this.legs, flySpeed * 0.6f, flyDegree * 0.2f, false, 1.0f, 0.0f, limbSwing, limbSwingAmount);",
+      "reason": "Unbound source condition [{'unsupported': 'flag'}]"
+    },
+    {
+      "call": "this.flap(this.left_wing, flySpeed * 1.3f, flyDegree, true, 0.0f, 0.2f, ageInTicks, 1.0f);",
+      "reason": "Unbound source condition [['!', {'unsupported': 'flag'}]]"
+    },
+    {
+      "call": "this.flap(this.right_wing, flySpeed * 1.3f, flyDegree, false, 0.0f, 0.2f, ageInTicks, 1.0f);",
+      "reason": "Unbound source condition [['!', {'unsupported': 'flag'}]]"
+    },
+    {
+      "call": "this.walk(this.legs, flySpeed * 0.2f, flyDegree * 0.2f, false, 1.0f, 0.2f, ageInTicks, 1.0f);",
+      "reason": "Unbound source condition [['!', {'unsupported': 'flag'}]]"
+    }
+  ],
+  "expressions": [],
+  "poses": []
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "jugcraft:nouveau_basic_spell_turret",
+  "criteria": {
+    "has_spell_prism": {
+      "conditions": {
+        "items": [
+          {
+            "items": "jugcraft:nouveau_spell_prism"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "jugcraft.nouveau_adv.desc.spell_prism"
+    },
+    "icon": {
+      "count": 1,
+      "id": "jugcraft:nouveau_spell_prism"
+    },
+    "title": {
+      "translate": "jugcraft.nouveau_adv.title.spell_prism"
+    }
+  },
+  "requirements": [
+    [
+      "has_spell_prism"
+    ]
+  ]
+}

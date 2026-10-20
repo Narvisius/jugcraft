@@ -1,0 +1,29 @@
+{
+  "pools": [
+    {
+      "name": "tripodfish",
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_tripodfish",
+          "modifier": [
+            {
+              "type": "minecraft:furnace_smelt",
+              "condition": {
+                "entity": "this",
+                "predicate": {
+                  "flags": {
+                    "is_on_fire": true
+                  }
+                },
+                "type": "minecraft:entity_properties"
+              }
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    }
+  ]
+}

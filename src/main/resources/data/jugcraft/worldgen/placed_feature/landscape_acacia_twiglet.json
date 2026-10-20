@@ -1,0 +1,22 @@
+{
+  "feature": "jugcraft:landscape_acacia_twiglet",
+  "placement": [
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:any_of",
+        "predicates": [
+          {
+            "type": "minecraft:matching_blocks",
+            "blocks": "jugcraft:landscape_orange_sand",
+            "offset": [
+              0,
+              -1,
+              0
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

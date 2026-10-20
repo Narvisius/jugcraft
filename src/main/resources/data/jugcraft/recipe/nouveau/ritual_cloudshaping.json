@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:nouveau_blue_archwood_log",
+    "minecraft:feather",
+    "#c:storage_blocks/source"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_ritual_cloudshaping"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

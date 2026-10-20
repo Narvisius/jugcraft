@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GGG",
+    "G G",
+    "GGG"
+  ],
+  "key": {
+    "G": "jugcraft:cavern_gelatin_pink"
+  },
+  "result": {
+    "count": 3,
+    "id": "jugcraft:cavern_gummy_ring_pink"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

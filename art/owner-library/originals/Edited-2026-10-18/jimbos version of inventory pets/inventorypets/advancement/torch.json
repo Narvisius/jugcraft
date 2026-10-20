@@ -1,0 +1,31 @@
+{
+    "display": {
+        "icon": {
+            "id": "inventorypets:pet_torch"
+        },
+        "title": {
+            "translate": "advancement.ip.petach_torch"
+        },
+        "description": {
+            "translate": "advancement.ip.petach_torch.desc"
+        },
+        "show_toast": true,
+        "announce_to_chat": true
+    },
+    "parent": "inventorypets:silverfish",
+    "criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                        	"inventorypets:pet_torch"
+                    	]
+                    }
+                    
+                ]
+            }
+        }
+    }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "jugcraft:household_construction",
+  "ingredients": [
+    {
+      "count": 1,
+      "ingredient": "minecraft:blue_dye"
+    },
+    {
+      "count": 1,
+      "ingredient": "#jugcraft:household/wooden_kitchen_sinks"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:household_blue_kitchen_sink"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

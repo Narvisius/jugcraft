@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AWA",
+    "PCP",
+    "AWA"
+  ],
+  "key": {
+    "A": "jugcraft:alumina_plate",
+    "W": "#c:wires/copper",
+    "P": "#c:plates/steel",
+    "C": "jugcraft:basic_circuit"
+  },
+  "result": {
+    "id": "jugcraft:efficiency_upgrade",
+    "count": 1
+  }
+}

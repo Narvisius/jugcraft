@@ -1,0 +1,82 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "jugcraft:landscape_urn",
+              "condition": {
+                "predicate": {
+                  "predicates": {
+                    "minecraft:enchantments": [
+                      {
+                        "levels": {
+                          "min": 1
+                        },
+                        "enchantments": "minecraft:silk_touch"
+                      }
+                    ]
+                  }
+                },
+                "type": "minecraft:match_tool"
+              }
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:iron_nugget",
+              "condition": {
+                "chance": 0.07,
+                "type": "minecraft:random_chance"
+              }
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:emerald",
+              "condition": {
+                "chance": 0.1,
+                "type": "minecraft:random_chance"
+              }
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:string",
+              "condition": {
+                "chance": 0.4,
+                "type": "minecraft:random_chance"
+              }
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:bread",
+              "condition": {
+                "chance": 0.3,
+                "type": "minecraft:random_chance"
+              }
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:bone",
+              "condition": {
+                "chance": 0.25,
+                "type": "minecraft:random_chance"
+              }
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:rotten_flesh",
+              "condition": {
+                "chance": 0.5,
+                "type": "minecraft:random_chance"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

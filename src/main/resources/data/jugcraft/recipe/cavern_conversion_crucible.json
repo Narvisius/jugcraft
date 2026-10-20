@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GCG",
+    "GEG",
+    "GGG"
+  ],
+  "key": {
+    "E": "jugcraft:cavern_radiant_essence",
+    "C": "minecraft:cauldron",
+    "G": "minecraft:gold_block"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:cavern_conversion_crucible"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

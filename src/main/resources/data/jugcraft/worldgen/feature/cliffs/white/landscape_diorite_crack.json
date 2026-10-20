@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:ore",
+  "discard_chance_on_air_exposure": 0,
+  "size": 38,
+  "targets": [
+    {
+      "state": "minecraft:diorite",
+      "target": {
+        "block": "minecraft:calcite",
+        "predicate_type": "minecraft:random_block_match",
+        "probability": 0.65
+      }
+    }
+  ]
+}

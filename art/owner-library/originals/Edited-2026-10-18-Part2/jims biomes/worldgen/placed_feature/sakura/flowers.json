@@ -1,0 +1,69 @@
+{
+  "feature": "terralith:sakura/flowers",
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 190
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "minecraft:offset",
+      "x": {
+        "type": "minecraft:trapezoid",
+        "plateau": 0,
+        "min": -7,
+        "max": 7
+      },
+      "y": {
+        "type": "minecraft:trapezoid",
+        "plateau": 0,
+        "min": -3,
+        "max": 3
+      },
+      "z": {
+        "type": "minecraft:trapezoid",
+        "plateau": 0,
+        "min": -7,
+        "max": 7
+      }
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:all_of",
+        "predicates": [
+          {
+            "type": "minecraft:not",
+            "predicate": {
+              "type": "minecraft:matching_fluids",
+              "fluids": [
+                "minecraft:water"
+              ],
+              "offset": [
+                0,
+                0,
+                0
+              ]
+            }
+          },
+          {
+            "type": "minecraft:replaceable"
+          },
+          {
+            "type": "minecraft:would_survive",
+            "state": "minecraft:fern"
+          }
+        ]
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

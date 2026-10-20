@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:rocket_assembly",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:hydrazine_tank",
+      "count": 1
+    },
+    {
+      "ingredient": "jugcraft:rocket_nozzle",
+      "count": 1
+    },
+    {
+      "ingredient": "jugcraft:porcelain_insulator",
+      "count": 1
+    }
+  ],
+  "result": {
+    "id": "jugcraft:hydrazine_thruster",
+    "count": 1
+  },
+  "time": 240
+}

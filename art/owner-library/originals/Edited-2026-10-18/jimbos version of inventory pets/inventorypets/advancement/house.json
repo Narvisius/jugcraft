@@ -1,0 +1,31 @@
+{
+    "display": {
+        "icon": {
+            "id": "inventorypets:pet_house"
+        },
+        "title": {
+            "translate": "advancement.ip.petach_house"
+        },
+        "description": {
+            "translate": "advancement.ip.petach_house.desc"
+        },
+        "show_toast": true,
+        "announce_to_chat": true
+    },
+    "parent": "inventorypets:cheetah",
+    "criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                        	"inventorypets:pet_house"
+                   		]
+                    }
+                    
+                ]
+            }
+        }
+    }
+}

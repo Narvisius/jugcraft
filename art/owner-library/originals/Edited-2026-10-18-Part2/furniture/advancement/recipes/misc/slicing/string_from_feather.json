@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_feather": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:feather"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "refurbished_furniture:slicing/string_from_feather"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_feather"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "refurbished_furniture:slicing/string_from_feather"
+    ]
+  }
+}

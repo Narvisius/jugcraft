@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GGG",
+    "NNN",
+    "III"
+  ],
+  "key": {
+    "N": "jugcraft:cavern_notor_gizmo",
+    "G": "minecraft:glass",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:cavern_hologram_projector"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

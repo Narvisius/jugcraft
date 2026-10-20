@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SIS",
+    "VLV",
+    "SIS"
+  ],
+  "key": {
+    "S": "jugcraft:stainless_steel_plate",
+    "I": "jugcraft:cryogenic_insulation",
+    "V": "jugcraft:precision_stainless_valve",
+    "L": "jugcraft:stainless_vessel"
+  },
+  "result": {
+    "id": "jugcraft:vacuum_insulated_tank",
+    "count": 1
+  }
+}

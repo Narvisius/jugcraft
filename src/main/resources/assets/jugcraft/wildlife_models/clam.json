@@ -1,0 +1,275 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        21.0,
+        10.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "top",
+      "parent": "root",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -12.5,
+            -5.0,
+            -20.0,
+            25.0,
+            5.0,
+            20.0
+          ],
+          "uv": [
+            0.0,
+            26.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -9.5,
+            -5.0,
+            -25.0,
+            19.0,
+            5.0,
+            5.0
+          ],
+          "uv": [
+            8.0,
+            53.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "bottom",
+      "parent": "root",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -12.5,
+            0.0,
+            -20.0,
+            25.0,
+            3.0,
+            20.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -9.5,
+            0.0,
+            -25.0,
+            19.0,
+            3.0,
+            5.0
+          ],
+          "uv": [
+            72.0,
+            10.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -6.5,
+            -2.0,
+            -15.0,
+            13.0,
+            2.0,
+            12.0
+          ],
+          "uv": [
+            76.0,
+            29.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightArm",
+      "parent": "bottom",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "rightItem",
+      "parent": "rightArm",
+      "pose": [
+        0.0,
+        -2.0,
+        -10.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "hinge",
+      "parent": "root",
+      "pose": [
+        0.0,
+        0.0,
+        0.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6.5,
+            -2.0,
+            -0.5,
+            13.0,
+            4.0,
+            5.0
+          ],
+          "uv": [
+            59.0,
+            53.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "model/animal/clam/ClamModel.java",
+  "sourceSha256": "44fc5559a6829e1806ac8ff02cbf2ecc185f65fa9654403e6d7694e06fed16e8",
+  "headLook": "",
+  "animationRoot": "root",
+  "actions": {
+    "idle": {
+      "loop": true,
+      "channels": [
+        {
+          "bone": "top",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                -79.6,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.125,
+              "vector": [
+                -81.33,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.0,
+              "vector": [
+                -79.6,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "hinge",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                -17.5,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ],
+      "length": 2.0
+    }
+  },
+  "availableClips": [
+    "ClamAnimation.CLAM_CLOSE",
+    "ClamAnimation.CLAM_IDLE_CLOSED",
+    "ClamAnimation.CLAM_IDLE_OPEN",
+    "ClamAnimation.CLAM_OPEN"
+  ]
+}

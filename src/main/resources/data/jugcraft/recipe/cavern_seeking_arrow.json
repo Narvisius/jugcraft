@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AAA",
+    "ANA",
+    "AAA"
+  ],
+  "key": {
+    "A": "minecraft:arrow",
+    "N": "jugcraft:cavern_scarlet_neodymium_ingot"
+  },
+  "result": {
+    "count": 8,
+    "id": "jugcraft:cavern_seeking_arrow"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

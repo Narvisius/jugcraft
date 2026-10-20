@@ -44,9 +44,12 @@ public final class Assay {
 		List<Transmutation> scale = new ArrayList<>();
 		for (Material material : catalog.materials().values()) {
 			if (material.dissolvable()) {
-				long batch = material.value().denominator();
-				scale.add(new Transmutation("scale/dissolve/" + material.item(), Transmutation.Kind.RECIPE, "scale",
-						Map.of(material.item(), (int) Math.min(Integer.MAX_VALUE, batch)), Map.of(PRIMA, (int) Math.min(Integer.MAX_VALUE, dissolve(material, batch))),
+				// Audit a realizable batch. Independently clamping huge denominators and payouts
+				// invents a profitable conversion which the real scale never performs.
+				long batch = Math.min(MAX_BATCH, material.value().denominator());
+				long payout = dissolve(material, batch);
+				if (payout > 0) scale.add(new Transmutation("scale/dissolve/" + material.item(), Transmutation.Kind.RECIPE, "scale",
+						Map.of(material.item(), (int) batch), Map.of(PRIMA, (int) Math.min(Integer.MAX_VALUE, payout)),
 						Map.of(), Map.of(), Map.of(), List.of(), Map.of()));
 			}
 			if (material.formable()) {

@@ -1,0 +1,323 @@
+{
+  "textureSize": [
+    64,
+    32
+  ],
+  "parts": [
+    {
+      "name": "head",
+      "parent": "$mesh",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4,
+            -8,
+            -4,
+            8,
+            8,
+            8
+          ],
+          "uv": [
+            0,
+            0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "hat",
+      "parent": "$mesh",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4,
+            -8,
+            -4,
+            8,
+            8,
+            8
+          ],
+          "uv": [
+            32,
+            0
+          ],
+          "inflate": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "body",
+      "parent": "$mesh",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4,
+            0,
+            -2,
+            8,
+            12,
+            4
+          ],
+          "uv": [
+            16,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_arm",
+      "parent": "$mesh",
+      "pose": [
+        -5,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3,
+            -2,
+            -2,
+            4,
+            12,
+            4
+          ],
+          "uv": [
+            40,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_arm",
+      "parent": "$mesh",
+      "pose": [
+        5,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1,
+            -2,
+            -2,
+            4,
+            12,
+            4
+          ],
+          "uv": [
+            40,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "right_leg",
+      "parent": "$mesh",
+      "pose": [
+        -1.9,
+        12,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2,
+            0,
+            -2,
+            4,
+            12,
+            4
+          ],
+          "uv": [
+            0,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_leg",
+      "parent": "$mesh",
+      "pose": [
+        1.9,
+        12,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2,
+            0,
+            -2,
+            4,
+            12,
+            4
+          ],
+          "uv": [
+            0,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "spikes1",
+      "parent": "head",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -33.0,
+            -4.5,
+            4.0,
+            1.0,
+            9.0
+          ],
+          "uv": [
+            34.0,
+            15.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "spikes2",
+      "parent": "head",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -33.0,
+            -4.5,
+            4.0,
+            1.0,
+            9.0
+          ],
+          "uv": [
+            34.0,
+            15.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/layered/ModelSpikedTurtleShell.java",
+  "sourceSha256": "fd4e39434493b0b83a053ee6ab0745d4f4d79b9b20739d0440f0cc086a5f2a05",
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

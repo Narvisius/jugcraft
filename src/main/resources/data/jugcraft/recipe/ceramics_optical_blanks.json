@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:borosilicate_glass",
+    "jugcraft:borosilicate_glass"
+  ],
+  "result": {
+    "id": "jugcraft:optical_blank",
+    "count": 2
+  }
+}

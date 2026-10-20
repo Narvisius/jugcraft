@@ -1,0 +1,47 @@
+{
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:honeycomb",
+          "modifier": {
+            "count": {
+              "max": 15,
+              "min": 11,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:honey_bottle",
+          "modifier": {
+            "count": {
+              "max": 7,
+              "min": 4,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "terralith:royal_jelly"
+        }
+      ],
+      "rolls": 1
+    }
+  ]
+}

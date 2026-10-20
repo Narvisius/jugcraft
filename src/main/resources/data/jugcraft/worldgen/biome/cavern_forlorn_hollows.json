@@ -1,0 +1,147 @@
+{
+  "attributes": {
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawns_by_category": {
+          "ambient": [
+            {
+              "type": "jugcraft:cavern_gloomoth",
+              "weight": 20,
+              "count": 4
+            },
+            {
+              "type": "minecraft:bat",
+              "weight": 10,
+              "count": 8
+            }
+          ],
+          "monster": [
+            {
+              "type": "jugcraft:cavern_underzealot",
+              "weight": 100,
+              "count": 1
+            },
+            {
+              "type": "jugcraft:cavern_corrodent",
+              "weight": 90,
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 3,
+                "max_inclusive": 4
+              }
+            },
+            {
+              "type": "jugcraft:cavern_vesper",
+              "weight": 60,
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 2,
+                "max_inclusive": 3
+              }
+            }
+          ]
+        },
+        "spawn_costs": {}
+      },
+      "modifier": "overlay"
+    },
+    "minecraft:visual/sky_color": "#28211a",
+    "minecraft:visual/fog_color": "#201a15",
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "sound": "jugcraft:cavern.forlorn_hollows_music"
+      }
+    },
+    "minecraft:audio/ambient_sounds": {
+      "loop": "jugcraft:cavern.forlorn_hollows_ambience"
+    }
+  },
+  "has_precipitation": false,
+  "temperature": 0.7,
+  "downfall": 0.2,
+  "effects": {
+    "water_color": "#5d6a84"
+  },
+  "carvers": [],
+  "features": [
+    [
+      "jugcraft:cavern_chamber_forlorn_hollows"
+    ],
+    [
+      "minecraft:lake_lava_underground",
+      "minecraft:lake_lava_surface"
+    ],
+    [
+      "jugcraft:cavern_forlorn_posts"
+    ],
+    [
+      "minecraft:monster_room",
+      "minecraft:monster_room_deep"
+    ],
+    [],
+    [
+      "jugcraft:cavern_thornwood_tree_with_branches"
+    ],
+    [
+      "minecraft:ore_dirt",
+      "minecraft:ore_gravel",
+      "minecraft:ore_granite_upper",
+      "minecraft:ore_granite_lower",
+      "minecraft:ore_diorite_upper",
+      "minecraft:ore_diorite_lower",
+      "minecraft:ore_andesite_upper",
+      "minecraft:ore_andesite_lower",
+      "minecraft:ore_tuff",
+      "minecraft:ore_coal_upper",
+      "minecraft:ore_coal_lower",
+      "minecraft:ore_iron_upper",
+      "minecraft:ore_iron_middle",
+      "minecraft:ore_iron_small",
+      "minecraft:ore_gold",
+      "minecraft:ore_gold_lower",
+      "minecraft:ore_redstone",
+      "minecraft:ore_redstone_lower",
+      "minecraft:ore_diamond",
+      "minecraft:ore_diamond_large",
+      "minecraft:ore_diamond_buried",
+      "minecraft:ore_lapis",
+      "minecraft:ore_lapis_buried",
+      "minecraft:ore_copper_large",
+      "minecraft:underwater_magma",
+      "minecraft:disk_sand",
+      "minecraft:disk_clay",
+      "minecraft:disk_gravel",
+      "jugcraft:cavern_coprolith_coal_ore",
+      "jugcraft:cavern_dirt_replace_packed_mud",
+      "jugcraft:cavern_guanostone_redstone_ore",
+      "jugcraft:cavern_peering_coprolith"
+    ],
+    [
+      "jugcraft:cavern_forlorn_ruins",
+      "jugcraft:cavern_guano_pile"
+    ],
+    [
+      "minecraft:spring_water",
+      "minecraft:spring_lava"
+    ],
+    [
+      "minecraft:glow_lichen",
+      "minecraft:patch_tall_grass_2",
+      "minecraft:trees_plains",
+      "minecraft:flower_plains",
+      "minecraft:patch_grass_plain",
+      "minecraft:brown_mushroom_normal",
+      "minecraft:red_mushroom_normal",
+      "minecraft:patch_pumpkin",
+      "minecraft:patch_sugar_cane",
+      "jugcraft:cavern_forlorn_hollows_brown_mushroom",
+      "jugcraft:cavern_thornwood_roots",
+      "jugcraft:cavern_underweed"
+    ],
+    [
+      "minecraft:freeze_top_layer"
+    ]
+  ]
+}

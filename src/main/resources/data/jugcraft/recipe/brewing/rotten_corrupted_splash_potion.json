@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:brewing",
+  "input": {
+    "item": "minecraft:splash_potion",
+    "potion_contents": {
+      "potions": "minecraft:water"
+    }
+  },
+  "output": {
+    "id": "minecraft:splash_potion",
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "jugcraft:rotten_corrupted"
+      }
+    }
+  },
+  "reagent": {
+    "item": "jugcraft:rotten_corrupted_wart"
+  }
+}

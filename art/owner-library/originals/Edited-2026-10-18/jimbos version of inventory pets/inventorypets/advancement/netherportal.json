@@ -1,0 +1,31 @@
+{
+    "display": {
+        "icon": {
+            "id": "inventorypets:pet_nether_portal"
+        },
+        "title": {
+            "translate": "advancement.ip.petach_nether_portal"
+        },
+        "description": {
+            "translate": "advancement.ip.petach_nether_portal.desc"
+        },
+        "show_toast": true,
+        "announce_to_chat": true
+    },
+    "parent": "inventorypets:lead",
+    "criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                        	"inventorypets:pet_nether_portal"
+                    	]
+                    }
+                    
+                ]
+            }
+        }
+    }
+}

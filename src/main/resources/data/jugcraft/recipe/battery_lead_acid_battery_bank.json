@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PCP",
+    "BBB",
+    "WBW"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "C": "jugcraft:basic_circuit",
+    "B": "jugcraft:lead_acid_cell",
+    "W": "jugcraft:copper_wire"
+  },
+  "result": {
+    "id": "jugcraft:lead_acid_battery_bank",
+    "count": 1
+  }
+}

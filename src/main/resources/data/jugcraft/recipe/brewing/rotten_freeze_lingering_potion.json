@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:brewing",
+  "input": {
+    "item": "minecraft:lingering_potion",
+    "potion_contents": {
+      "potions": "jugcraft:rotten_corrupted"
+    }
+  },
+  "output": {
+    "id": "minecraft:lingering_potion",
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "jugcraft:rotten_freeze"
+      }
+    }
+  },
+  "reagent": {
+    "item": "jugcraft:rotten_frozen_rotten_flesh"
+  }
+}

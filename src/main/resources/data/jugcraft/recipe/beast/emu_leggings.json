@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FKF",
+    "K K",
+    "F F"
+  ],
+  "key": {
+    "F": "jugcraft:beast_emu_feather",
+    "K": "jugcraft:beast_kangaroo_hide"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:beast_emu_leggings"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

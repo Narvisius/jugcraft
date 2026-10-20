@@ -1,0 +1,191 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.beast_void_worm",
+        "texture_width": 256,
+        "texture_height": 256,
+        "visible_bounds_width": 7.199999999999999,
+        "visible_bounds_height": 4.8,
+        "visible_bounds_offset": [
+          0,
+          1.2,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "segment_0",
+          "parent": "root",
+          "pivot": [
+            0.0,
+            38.4,
+            -29.183999999999997
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -13.44,
+                0,
+                -38.4
+              ],
+              "size": [
+                26.88,
+                38.4,
+                18.432
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "segment_1",
+          "parent": "segment_0",
+          "pivot": [
+            0.0,
+            38.4,
+            -13.824
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -13.44,
+                0,
+                -23.04
+              ],
+              "size": [
+                26.88,
+                38.4,
+                18.432
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "segment_2",
+          "parent": "segment_1",
+          "pivot": [
+            0.0,
+            38.4,
+            1.5359999999999996
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -13.44,
+                0,
+                -7.68
+              ],
+              "size": [
+                26.88,
+                38.4,
+                18.432
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "segment_3",
+          "parent": "segment_2",
+          "pivot": [
+            0.0,
+            38.4,
+            16.896
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -13.44,
+                0,
+                7.68
+              ],
+              "size": [
+                26.88,
+                38.4,
+                18.432
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "segment_4",
+          "parent": "segment_3",
+          "pivot": [
+            0.0,
+            38.4,
+            32.256
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -13.44,
+                0,
+                23.04
+              ],
+              "size": [
+                26.88,
+                38.4,
+                18.432
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "segment_5",
+          "parent": "segment_4",
+          "pivot": [
+            0.0,
+            38.4,
+            47.616000000000014
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -13.44,
+                0,
+                38.40000000000001
+              ],
+              "size": [
+                26.88,
+                38.4,
+                18.432
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#c:gems/source",
+    "#c:nuggets/gold",
+    "#c:nuggets/gold"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_sconce"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

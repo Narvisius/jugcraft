@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BEB",
+    " B "
+  ],
+  "key": {
+    "B": "jugcraft:cavern_thornwood_branch",
+    "E": "jugcraft:cavern_occult_gem"
+  },
+  "result": {
+    "id": "jugcraft:cavern_beholder"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

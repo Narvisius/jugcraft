@@ -1,0 +1,450 @@
+{
+  "textureSize": [
+    64,
+    48
+  ],
+  "parts": [
+    {
+      "name": "Body",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        10.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            0.0,
+            -3.0,
+            8.0,
+            13.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            16.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "Head",
+      "parent": "Body",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -6.0,
+            -5.0,
+            10.0,
+            6.0,
+            10.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "RightArm",
+      "parent": "Body",
+      "pose": [
+        4.0,
+        2.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -1.0,
+            -2.0,
+            2.0,
+            9.0,
+            4.0
+          ],
+          "uv": [
+            28.0,
+            16.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "LeftArm",
+      "parent": "Body",
+      "pose": [
+        -4.0,
+        2.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -1.0,
+            -2.0,
+            2.0,
+            9.0,
+            4.0
+          ],
+          "uv": [
+            40.0,
+            11.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "RightLeg",
+      "parent": "Body",
+      "pose": [
+        2.0,
+        9.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            5.0,
+            2.0
+          ],
+          "uv": [
+            52.0,
+            11.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "LeftLeg",
+      "parent": "Body",
+      "pose": [
+        -2.0,
+        9.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            5.0,
+            2.0
+          ],
+          "uv": [
+            52.0,
+            11.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "LeftEar",
+      "parent": "Head",
+      "pose": [
+        -5.0,
+        -4.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            0.0,
+            0.0,
+            4.0,
+            3.0,
+            0.0
+          ],
+          "uv": [
+            30.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "RightEar",
+      "parent": "Head",
+      "pose": [
+        5.0,
+        -4.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            0.0,
+            4.0,
+            3.0,
+            0.0
+          ],
+          "uv": [
+            30.0,
+            3.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "Crown",
+      "parent": "Head",
+      "pose": [
+        0.0,
+        -6.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.5,
+            -6.0,
+            -2.5,
+            5.0,
+            6.0,
+            5.0
+          ],
+          "uv": [
+            40.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/superlord/goblinsanddungeons/client/model/GoblinKingModel.java",
+  "sourceSha256": "2a538973f49b6a1bfc1868d0e5e4bbadf63406880e515179e2dd209277e59c75",
+  "animationRoot": "$mesh",
+  "headLook": "Head",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [
+    {
+      "bone": "RightLeg",
+      "target": "xRot",
+      "op": "=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "cos",
+            [
+              "*",
+              "walk",
+              0.6662
+            ]
+          ],
+          1.4
+        ],
+        "move"
+      ],
+      "when": 1
+    },
+    {
+      "bone": "LeftLeg",
+      "target": "xRot",
+      "op": "=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "cos",
+            [
+              "+",
+              [
+                "*",
+                "walk",
+                0.6662
+              ],
+              3.141592653589793
+            ]
+          ],
+          1.4
+        ],
+        "move"
+      ],
+      "when": 1
+    },
+    {
+      "bone": "RightArm",
+      "target": "xRot",
+      "op": "=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "cos",
+            [
+              "+",
+              [
+                "*",
+                "walk",
+                0.6662
+              ],
+              3.141592653589793
+            ]
+          ],
+          1.4
+        ],
+        "move"
+      ],
+      "when": 1
+    },
+    {
+      "bone": "LeftArm",
+      "target": "xRot",
+      "op": "=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "cos",
+            [
+              "*",
+              "walk",
+              0.6662
+            ]
+          ],
+          1.4
+        ],
+        "move"
+      ],
+      "when": 1
+    },
+    {
+      "bone": "Head",
+      "target": "xRot",
+      "op": "=",
+      "value": [
+        "*",
+        "pitch",
+        [
+          "/",
+          3.141592653589793,
+          180
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "Head",
+      "target": "yRot",
+      "op": "=",
+      "value": [
+        "*",
+        "yaw",
+        [
+          "/",
+          3.141592653589793,
+          180
+        ]
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:glass_bottle",
+    "jugcraft:beast_blobfish",
+    "jugcraft:beast_blobfish",
+    "jugcraft:beast_blobfish",
+    "jugcraft:beast_blobfish"
+  ],
+  "result": {
+    "id": "jugcraft:beast_fish_oil"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

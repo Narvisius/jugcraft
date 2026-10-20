@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:cavern_gingerbread_block",
+    "jugcraft:cavern_block_of_vanilla_frosting"
+  ],
+  "result": {
+    "id": "jugcraft:cavern_frosted_gingerbread_block"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

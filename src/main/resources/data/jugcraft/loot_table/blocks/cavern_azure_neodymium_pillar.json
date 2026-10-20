@@ -1,0 +1,79 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "jugcraft:cavern_azure_neodymium_pillar",
+              "condition": {
+                "predicate": {
+                  "predicates": {
+                    "minecraft:enchantments": [
+                      {
+                        "levels": {
+                          "min": 1
+                        },
+                        "enchantments": "minecraft:silk_touch"
+                      }
+                    ]
+                  }
+                },
+                "type": "minecraft:match_tool"
+              }
+            },
+            {
+              "type": "minecraft:alternatives",
+              "children": [
+                {
+                  "type": "minecraft:item",
+                  "name": "jugcraft:cavern_raw_azure_neodymium",
+                  "modifier": [
+                    {
+                      "add": false,
+                      "count": {
+                        "type": "minecraft:uniform",
+                        "max": 2.0,
+                        "min": 1.0
+                      },
+                      "type": "minecraft:set_count"
+                    },
+                    {
+                      "limit": {
+                        "max": 3.0,
+                        "min": 1.0
+                      },
+                      "type": "minecraft:limit_count"
+                    }
+                  ],
+                  "condition": {
+                    "chances": [
+                      0.1,
+                      0.14285715,
+                      0.25,
+                      1.0
+                    ],
+                    "enchantment": "minecraft:fortune",
+                    "type": "minecraft:table_bonus"
+                  }
+                },
+                {
+                  "type": "minecraft:item",
+                  "name": "jugcraft:cavern_azure_neodymium_pillar"
+                }
+              ],
+              "condition": {
+                "type": "minecraft:survives_explosion"
+              }
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    }
+  ]
+}

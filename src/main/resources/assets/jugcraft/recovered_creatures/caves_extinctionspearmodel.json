@@ -1,0 +1,250 @@
+{
+  "textureSize": [
+    32,
+    32
+  ],
+  "parts": [
+    {
+      "name": "spear",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        15.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            -20.0,
+            -0.5,
+            1.0,
+            29.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -1.0,
+            -18.0,
+            -1.0,
+            2.0,
+            2.0,
+            2.0
+          ],
+          "uv": [
+            12.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -1.0,
+            -15.0,
+            -1.0,
+            2.0,
+            2.0,
+            2.0
+          ],
+          "uv": [
+            4.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -0.5,
+            -5.0,
+            -0.5,
+            1.0,
+            12.0,
+            1.0
+          ],
+          "uv": [
+            4.0,
+            19.0
+          ],
+          "inflate": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            0.0,
+            -18.0,
+            -5.5,
+            0.0,
+            2.0,
+            5.0
+          ],
+          "uv": [
+            8.0,
+            10.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            0.0,
+            -15.0,
+            -3.5,
+            0.0,
+            2.0,
+            3.0
+          ],
+          "uv": [
+            14.0,
+            1.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            0.0,
+            -18.0,
+            0.5,
+            0.0,
+            2.0,
+            5.0
+          ],
+          "uv": [
+            4.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            0.0,
+            -15.0,
+            0.5,
+            0.0,
+            2.0,
+            3.0
+          ],
+          "uv": [
+            8.0,
+            14.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            0.0,
+            -35.0,
+            -3.5,
+            0.0,
+            16.0,
+            7.0
+          ],
+          "uv": [
+            18.0,
+            9.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "spear2",
+      "parent": "spear",
+      "pose": [
+        0.0,
+        -23.0,
+        0.0,
+        0.0,
+        -1.5708,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -12.0,
+            -3.5,
+            0.0,
+            16.0,
+            7.0
+          ],
+          "uv": [
+            18.0,
+            9.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/ExtinctionSpearModel.java",
+  "sourceSha256": "9170e0bb3709e3d8106ffa9bc6d0ffe0a0099bea02ec6b6f6b5f1e03c2d1dfe6",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.swing(this.spear, 2.0f, 0.2f, false, -1.5f, 0.0f, ageInTicks, 1.0f);",
+      "reason": "Unbound source condition [{'unsupported': 'entity.isWiggling()'}]"
+    }
+  ],
+  "expressions": [],
+  "poses": []
+}

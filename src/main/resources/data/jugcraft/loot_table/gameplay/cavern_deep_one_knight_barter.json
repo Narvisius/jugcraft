@@ -1,0 +1,192 @@
+{
+  "pools": [
+    {
+      "name": "sea_pig_digestion",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:trident",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_ortholance",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_magic_conch",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:nautilus_shell",
+          "weight": 6
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:turtle_scute",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_hollow_bone",
+          "weight": 4,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 3,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:prismarine_crystals",
+          "weight": 80,
+          "modifier": [
+            {
+              "count": {
+                "min": 6,
+                "max": 12,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_boots",
+          "weight": 1,
+          "modifier": [
+            {
+              "enchantments": [
+                "minecraft:depth_strider"
+              ],
+              "type": "minecraft:enchant_randomly"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:leather_boots",
+          "weight": 1,
+          "modifier": [
+            {
+              "enchantments": [
+                "minecraft:depth_strider"
+              ],
+              "type": "minecraft:enchant_randomly"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:leather_helmet",
+          "weight": 1,
+          "modifier": [
+            {
+              "enchantments": [
+                "minecraft:respiration"
+              ],
+              "type": "minecraft:enchant_randomly"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_helmet",
+          "weight": 1,
+          "modifier": [
+            {
+              "enchantments": [
+                "minecraft:respiration"
+              ],
+              "type": "minecraft:enchant_randomly"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:prismarine_shard",
+          "weight": 70,
+          "modifier": [
+            {
+              "count": {
+                "min": 6,
+                "max": 12,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:bone",
+          "weight": 20,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 3,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:gold_nugget",
+          "weight": 6,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 5,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_ink_bomb",
+          "weight": 10,
+          "modifier": [
+            {
+              "count": {
+                "min": 2,
+                "max": 5,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_sea_glass_shards",
+          "weight": 14,
+          "modifier": [
+            {
+              "count": {
+                "min": 4,
+                "max": 8,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

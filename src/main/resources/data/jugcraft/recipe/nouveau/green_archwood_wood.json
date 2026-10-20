@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "x": "jugcraft:nouveau_green_archwood_log"
+  },
+  "pattern": [
+    "xx ",
+    "xx "
+  ],
+  "result": {
+    "count": 3,
+    "id": "jugcraft:nouveau_green_archwood_wood"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

@@ -1,0 +1,588 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "body",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        19.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -4.0,
+            -6.0,
+            6.0,
+            9.0,
+            11.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -1.5,
+            -6.0,
+            -5.0,
+            3.0,
+            3.0,
+            3.0
+          ],
+          "uv": [
+            38.0,
+            40.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            1.75,
+            -5.0,
+            -5.99,
+            3.0,
+            3.0,
+            3.0
+          ],
+          "uv": [
+            26.0,
+            40.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -4.75,
+            -5.0,
+            -5.99,
+            3.0,
+            3.0,
+            3.0
+          ],
+          "uv": [
+            34.0,
+            17.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -3.0,
+            -4.0,
+            -11.0,
+            6.0,
+            4.0,
+            5.0
+          ],
+          "uv": [
+            23.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "tail",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -1.0,
+        4.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -3.0,
+            0.5,
+            4.0,
+            6.0,
+            8.0
+          ],
+          "uv": [
+            18.0,
+            20.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "dorsal",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -4.0,
+        -0.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -6.0,
+            -0.5,
+            0.0,
+            6.0,
+            6.0
+          ],
+          "uv": [
+            32.0,
+            28.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "bottom_fin",
+      "parent": "body",
+      "pose": [
+        0.0,
+        4.0,
+        3.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -1.0,
+            -1.0,
+            0.0,
+            6.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            22.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lfin",
+      "parent": "body",
+      "pose": [
+        3.0,
+        2.5,
+        -1.0,
+        0.0,
+        -0.7854,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -2.5,
+            0.0,
+            6.0,
+            8.0,
+            0.0
+          ],
+          "uv": [
+            34.0,
+            9.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rfin",
+      "parent": "body",
+      "pose": [
+        -3.0,
+        2.5,
+        -1.0,
+        0.0,
+        0.7854,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6.0,
+            -2.5,
+            0.0,
+            6.0,
+            8.0,
+            0.0
+          ],
+          "uv": [
+            34.0,
+            9.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "jaw",
+      "parent": "body",
+      "pose": [
+        0.0,
+        5.0,
+        -6.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.5,
+            -6.0,
+            -5.0,
+            7.0,
+            6.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            34.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "dorsal2",
+      "parent": "tail",
+      "pose": [
+        0.0,
+        -3.0,
+        3.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -6.0,
+            -0.5,
+            0.0,
+            6.0,
+            6.0
+          ],
+          "uv": [
+            20.0,
+            28.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "tailfin",
+      "parent": "tail",
+      "pose": [
+        0.0,
+        0.0,
+        8.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -4.0,
+            -4.0,
+            0.0,
+            10.0,
+            14.0
+          ],
+          "uv": [
+            5.0,
+            34.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/RadgillModel.java",
+  "sourceSha256": "0551d14cd04af90e2dd277f20ee9bc41fb77477ef92f65ccaf85234f1ec1a821",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "jaw",
+      "kind": "walk",
+      "speed": 0.1,
+      "degree": 0.2,
+      "invert": false,
+      "phase": 1.0,
+      "bias": [
+        "*",
+        -1,
+        0.2
+      ],
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "kind": "walk",
+      "speed": 0.1,
+      "degree": 0.1,
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "lfin",
+      "kind": "swing",
+      "speed": 0.1,
+      "degree": 0.2,
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        1.0
+      ],
+      "bias": [
+        "*",
+        -1,
+        0.2
+      ],
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "rfin",
+      "kind": "swing",
+      "speed": 0.1,
+      "degree": 0.2,
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        1.0
+      ],
+      "bias": [
+        "*",
+        -1,
+        0.2
+      ],
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "kind": "bob",
+      "speed": 0.1,
+      "degree": 1.0,
+      "invert": false,
+      "phase": 0,
+      "bias": 0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.2
+      ],
+      "invert": false,
+      "phase": 3.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "tail",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": false,
+      "phase": 2.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "tailfin",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "rfin",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.9
+      ],
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.2,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "lfin",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        0.9
+      ],
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.2,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [],
+  "expressions": [
+    {
+      "bone": "body",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "/",
+        "pitch",
+        57.295776
+      ],
+      "when": 1
+    }
+  ],
+  "poses": [
+    {
+      "bone": "body",
+      "weight": [
+        "/",
+        [
+          "*",
+          "land",
+          1
+        ],
+        1.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.0,
+        0.0,
+        -1.5707963267948966
+      ],
+      "when": 1
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "date": "2026-10-19T11:31:47.299171-04:00",
+  "implementation": "OpenAI Codex (GPT-6)",
+  "scope": "October 18 owner collections: remaining native visual/geometry and local multiplayer validation TODOs",
+  "localOnly": true,
+  "committed": false,
+  "pushed": false,
+  "ownerProfilesModified": false,
+  "baseCommit": "b418263b1c0bb3c88aafc63ae1c4d0ce08214d3e",
+  "originalPixelsChanged": false,
+  "refinedReconstructedSpecies": 206,
+  "preservedSuppliedCreatureRigs": 59,
+  "wildlifeAdultBabyMappings": 498,
+  "uvModelsAudited": 1223,
+  "validation": {
+    "fullServerSuite": {
+      "passed": 1980,
+      "log": "../owner-polish-build-oct19-2.log",
+      "note": "Before final metadata and spear recipe correction; no subsequent main Java changes."
+    },
+    "focusedServerSuite": {
+      "passed": 19,
+      "log": "../owner-polish-server-final-oct19-2.log",
+      "includes": "Actual assembly and maximum-stack checks for both spear recipes."
+    },
+    "geometry": {
+      "models": 11666,
+      "diagnostics": 0,
+      "log": "../owner-polish-models-complete-oct19.log",
+      "note": "Full quad/assembly audit also passed earlier; the final follow-up only changed block/item models."
+    },
+    "resourceClosure": {
+      "missingReferences": 0,
+      "nouveauSpriteBindings": 425,
+      "log": "../owner-polish-resources-final2-oct19.log"
+    },
+    "unitRegressions": {
+      "passed": 4,
+      "log": "../owner-polish-unit-final-oct19.log"
+    },
+    "clientGallery": {
+      "passed": true,
+      "log": "../owner-polish-client-final-oct19.log",
+      "screenshots": "../owner-polish-review-oct19-final",
+      "invalidInitialRun": "Initial gallery had a falling survival camera and incorrect fixture IDs. Corrected spectator/full-furniture rerun passed."
+    },
+    "legacyItemGallery": {
+      "passed": true,
+      "log": "../owner-polish-network4-oct19.log",
+      "screenshots": "../owner-polish-legacy-review-oct19-final",
+      "note": "Legacy item test completed; later network test in that invocation failed at its disposable whitelist."
+    },
+    "multiplayer": {
+      "passed": true,
+      "log": "../owner-polish-network8-oct19.log",
+      "evidence": "../owner-polish-network-evidence-oct19",
+      "clients": 2,
+      "checks": [
+        "Replicated owner/sitting/baby state",
+        "Foreign-owner capture rejected",
+        "Owner capture accepted",
+        "Entity removal replicated to peer",
+        "Exactly one captured pet retained after reconnect"
+      ],
+      "peerExitCode": 0,
+      "timingClientCount": 1,
+      "populationTiming": [
+        {
+          "maxMs": 0.6262,
+          "samples": 100,
+          "animals": 0,
+          "p95Ms": 0.5647,
+          "meanMs": 0.396304
+        },
+        {
+          "maxMs": 2.5475,
+          "samples": 100,
+          "animals": 64,
+          "p95Ms": 2.003,
+          "meanMs": 1.260619
+        },
+        {
+          "maxMs": 5.8661,
+          "samples": 100,
+          "animals": 192,
+          "p95Ms": 3.0418,
+          "meanMs": 2.565952
+        }
+      ],
+      "limits": "Synthetic disposable flat world, 100 recent tick samples per 0/64/192 live-AI population after 240 settling ticks; one connected client during timing. Not a hosting capacity, long soak or server restart certification.",
+      "reproduction": "./gradlew runClientGameTest -PclientTests=OwnerCollectionsNetworkTests -I scripts/owner-network.init.gradle",
+      "harnessCorrections": [
+        "Preserve peer test resources and isolate its entrypoint",
+        "Bound JVM memory/worker counts; use default Java process-reaper stack",
+        "Allow the second test identity and set the disposable server to two players",
+        "Return peer to the title screen after disconnect"
+      ]
+    },
+    "clientResourceLoad": {
+      "missingModelOrTextureDiagnostics": 0,
+      "log": "../owner-polish-network8-oct19.log"
+    }
+  },
+  "remaining": [
+    "Owner art acceptance for all skin variants",
+    "Owner-controlled survival/balance playtest and representative generated terrain",
+    "Long-running multiplayer/restart and hosting-capacity validation; local synthetic checks do not certify capacity"
+  ],
+  "completedAt": "2026-10-19T11:42:28.535933-04:00",
+  "artifact": {
+    "path": "C:/Users/james/Documents/Codex/2026-09-29/i-wa/work/jugcraft-owner-polish-oct19/jugcraft-0.1.0-alpha.jar",
+    "sha256": "8203c2bf8d75c67d667926c779cfed506dd8c0617c98d43e357348b6c5340c86",
+    "bytes": 221503929,
+    "version": "0.1.0-alpha",
+    "assemblyLog": "../owner-polish-assemble-oct19.log",
+    "jarInspection": "Fabric metadata, native wheel, notebook and both corrected spear recipe results verified in assembled JAR."
+  }
+}

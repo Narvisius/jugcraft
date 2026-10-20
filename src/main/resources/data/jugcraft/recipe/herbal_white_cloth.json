@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "YY",
+    "YY"
+  ],
+  "key": {
+    "Y": "jugcraft:yarn"
+  },
+  "result": {
+    "id": "jugcraft:herbal_white_cloth"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

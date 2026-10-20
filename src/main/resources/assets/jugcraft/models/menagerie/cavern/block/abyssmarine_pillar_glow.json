@@ -1,0 +1,150 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "particle": "jugcraft:menagerie/cavern/block/abyssmarine_pillar",
+    "side": "jugcraft:menagerie/cavern/block/abyssmarine_pillar",
+    "top": "jugcraft:menagerie/cavern/block/abyssmarine_pillar_top",
+    "side_glow": "jugcraft:menagerie/cavern/block/abyssmarine_pillar_glow",
+    "top_glow": "jugcraft:menagerie/cavern/block/abyssmarine_pillar_top_glow"
+  },
+  "ambientocclusion": false,
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        -0.1
+      ],
+      "to": [
+        16,
+        16,
+        16.1
+      ],
+      "faces": {
+        "down": {
+          "texture": "#top",
+          "cullface": "down",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#top",
+          "cullface": "up",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "north": {
+          "texture": "#side",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#side",
+          "cullface": "south"
+        },
+        "west": {
+          "texture": "#side",
+          "cullface": "west",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "east": {
+          "texture": "#side",
+          "cullface": "east",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        -0.1,
+        -0.1,
+        0
+      ],
+      "to": [
+        16.1,
+        16.1,
+        16
+      ],
+      "shade": false,
+      "faces": {
+        "down": {
+          "texture": "#top_glow",
+          "cullface": "down",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#top_glow",
+          "cullface": "up",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "north": {
+          "texture": "#side_glow",
+          "cullface": "north",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#side_glow",
+          "cullface": "south",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "west": {
+          "texture": "#side_glow",
+          "cullface": "west",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "east": {
+          "texture": "#side_glow",
+          "cullface": "east",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        }
+      }
+    }
+  ]
+}

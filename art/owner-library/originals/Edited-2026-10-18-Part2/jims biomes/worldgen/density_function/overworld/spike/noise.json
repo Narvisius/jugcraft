@@ -1,0 +1,44 @@
+{
+  "type": "minecraft:mul",
+  "left": {
+    "type": "minecraft:add",
+    "left": {
+      "type": "minecraft:add",
+      "left": "terralith:overworld/spike/dune_height",
+      "right": {
+        "type": "minecraft:add",
+        "left": {
+          "type": "minecraft:add",
+          "left": 0,
+          "right": {
+            "type": "minecraft:gradient",
+            "from_value": 3,
+            "to_value": -20,
+            "axis": "y",
+            "from_coordinate": 30,
+            "to_coordinate": 320
+          }
+        },
+        "right": {
+          "type": "minecraft:add",
+          "left": {
+            "type": "minecraft:mul",
+            "left": 1.0,
+            "right": "terralith:overworld/dune/size_spline"
+          },
+          "right": 0
+        }
+      }
+    },
+    "right": {
+      "type": "minecraft:add",
+      "left": 1.0,
+      "right": {
+        "type": "minecraft:mul",
+        "left": "overworld/depth",
+        "right": 0.0
+      }
+    }
+  },
+  "right": 1
+}

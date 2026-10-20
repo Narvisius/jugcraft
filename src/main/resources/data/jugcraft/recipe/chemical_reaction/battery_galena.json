@@ -1,0 +1,34 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "lead"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:battery_mineral_conditioner",
+  "items": [
+    {
+      "ingredient": "jugcraft:raw_lead",
+      "count": 2
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 250
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:galena_concentrate",
+      "count": 2
+    }
+  ],
+  "energy_per_tick": 64,
+  "time": 200
+}

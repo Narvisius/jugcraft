@@ -1,0 +1,437 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "head",
+      "parent": "$mesh",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4,
+            -8,
+            -4,
+            8,
+            8,
+            8
+          ],
+          "uv": [
+            0,
+            0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "hat",
+      "parent": "$mesh",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4,
+            -8,
+            -4,
+            8,
+            8,
+            8
+          ],
+          "uv": [
+            32,
+            0
+          ],
+          "inflate": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "body",
+      "parent": "$mesh",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4,
+            0,
+            -2,
+            8,
+            12,
+            4
+          ],
+          "uv": [
+            16,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_arm",
+      "parent": "$mesh",
+      "pose": [
+        -5,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3,
+            -2,
+            -2,
+            4,
+            12,
+            4
+          ],
+          "uv": [
+            40,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_arm",
+      "parent": "$mesh",
+      "pose": [
+        5,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1,
+            -2,
+            -2,
+            4,
+            12,
+            4
+          ],
+          "uv": [
+            40,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "right_leg",
+      "parent": "$mesh",
+      "pose": [
+        -1.9,
+        12,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2,
+            0,
+            -2,
+            4,
+            12,
+            4
+          ],
+          "uv": [
+            0,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_leg",
+      "parent": "$mesh",
+      "pose": [
+        1.9,
+        12,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2,
+            0,
+            -2,
+            4,
+            12,
+            4
+          ],
+          "uv": [
+            0,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "BodyRocky",
+      "parent": "body",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -0.5,
+            -2.0,
+            10.0,
+            13.0,
+            9.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -4.0,
+            0.5,
+            6.0,
+            8.0,
+            11.0,
+            4.0
+          ],
+          "uv": [
+            0.0,
+            23.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -2.0,
+            -0.5,
+            6.0,
+            4.0,
+            13.0,
+            4.0
+          ],
+          "uv": [
+            25.0,
+            34.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "LeftArmRocky",
+      "parent": "left_arm",
+      "pose": [
+        -1.0,
+        2.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -5.0,
+            -2.1,
+            6.0,
+            4.0,
+            6.0
+          ],
+          "uv": [
+            25.0,
+            23.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            0.0,
+            -7.1,
+            -1.1,
+            7.0,
+            6.0,
+            4.0
+          ],
+          "uv": [
+            0.0,
+            39.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "RightArmRocky",
+      "parent": "right_arm",
+      "pose": [
+        1.0,
+        2.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -5.0,
+            -2.1,
+            6.0,
+            4.0,
+            6.0
+          ],
+          "uv": [
+            25.0,
+            23.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            -7.0,
+            -7.1,
+            -1.1,
+            7.0,
+            6.0,
+            4.0
+          ],
+          "uv": [
+            0.0,
+            39.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/layered/ModelRockyChestplate.java",
+  "sourceSha256": "d594e285d4f6144a0b1ca8d9c455e6fb41d93b1c6f3375db2b83ab4414ee08c4",
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

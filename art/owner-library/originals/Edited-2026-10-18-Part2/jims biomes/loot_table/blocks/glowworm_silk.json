@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": "minecraft:tool/can_shear",
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "biomesoplenty:glowworm_silk"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "biomesoplenty:blocks/glowworm_silk"
+}

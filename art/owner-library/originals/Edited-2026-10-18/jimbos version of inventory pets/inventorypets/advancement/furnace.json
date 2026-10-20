@@ -1,0 +1,31 @@
+{
+    "display": {
+        "icon": {
+            "id": "inventorypets:pet_furnace"
+        },
+        "title": {
+            "translate": "advancement.ip.petach_furnace"
+        },
+        "description": {
+            "translate": "advancement.ip.petach_furnace.desc"
+        },
+        "show_toast": true,
+        "announce_to_chat": true
+    },
+    "parent": "inventorypets:enderchest",
+    "criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                        	"inventorypets:pet_furnace"
+                    	]
+                    }
+                    
+                ]
+            }
+        }
+    }
+}

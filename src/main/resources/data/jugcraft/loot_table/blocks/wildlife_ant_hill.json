@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:wildlife_ant_hill"
+        }
+      ],
+      "rolls": 1.0,
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:wildlife_queen_ant"
+        }
+      ],
+      "rolls": 1.0,
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "jugcraft:wildlife_ant_hill",
+        "state": {
+          "has_queen": "true"
+        }
+      }
+    }
+  ],
+  "random_sequence": "jugcraft:blocks/wildlife_ant_hill"
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CUC",
+    " I ",
+    " I "
+  ],
+  "key": {
+    "C": "jugcraft:cavern_charred_remnant",
+    "U": "jugcraft:cavern_uranium",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "id": "jugcraft:cavern_nuclear_siren"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -1,0 +1,323 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "head",
+      "parent": "$mesh",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4,
+            -8,
+            -4,
+            8,
+            8,
+            8
+          ],
+          "uv": [
+            0,
+            0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "hat",
+      "parent": "$mesh",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4,
+            -8,
+            -4,
+            8,
+            8,
+            8
+          ],
+          "uv": [
+            32,
+            0
+          ],
+          "inflate": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "body",
+      "parent": "$mesh",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4,
+            0,
+            -2,
+            8,
+            12,
+            4
+          ],
+          "uv": [
+            16,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_arm",
+      "parent": "$mesh",
+      "pose": [
+        -5,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3,
+            -2,
+            -2,
+            4,
+            12,
+            4
+          ],
+          "uv": [
+            40,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_arm",
+      "parent": "$mesh",
+      "pose": [
+        5,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1,
+            -2,
+            -2,
+            4,
+            12,
+            4
+          ],
+          "uv": [
+            40,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "right_leg",
+      "parent": "$mesh",
+      "pose": [
+        -1.9,
+        12,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2,
+            0,
+            -2,
+            4,
+            12,
+            4
+          ],
+          "uv": [
+            0,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_leg",
+      "parent": "$mesh",
+      "pose": [
+        1.9,
+        12,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2,
+            0,
+            -2,
+            4,
+            12,
+            4
+          ],
+          "uv": [
+            0,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "fedora",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -8.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -3.55,
+            -3.0,
+            6.0,
+            4.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            44.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "fedora_shade",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -8.05,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -0.5,
+            -5.0,
+            10.0,
+            1.0,
+            10.0
+          ],
+          "uv": [
+            0.0,
+            32.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/layered/ModelFedora.java",
+  "sourceSha256": "dc0bbfd232d2c4bbc5a9b45d41257b80d3f86f5518ec27d28e68014e95d776b9",
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

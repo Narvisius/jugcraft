@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BBB",
+    "BAB",
+    "BBB"
+  ],
+  "key": {
+    "A": "jugcraft:cavern_amber_curiosity",
+    "B": "jugcraft:cavern_heavy_bone"
+  },
+  "result": {
+    "id": "jugcraft:cavern_ominous_catalyst"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

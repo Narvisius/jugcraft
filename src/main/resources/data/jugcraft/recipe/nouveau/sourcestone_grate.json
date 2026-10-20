@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "M": "jugcraft:nouveau_sourcestone",
+    "g": "minecraft:iron_bars"
+  },
+  "pattern": [
+    " g ",
+    "gMg",
+    " g "
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_sourcestone_grate"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

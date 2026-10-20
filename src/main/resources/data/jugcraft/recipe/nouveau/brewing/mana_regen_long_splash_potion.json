@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:brewing",
+  "input": {
+    "item": "minecraft:potion",
+    "potion_contents": {
+      "potions": "jugcraft:nouveau_mana_regen_long"
+    }
+  },
+  "output": {
+    "id": "minecraft:splash_potion",
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "jugcraft:nouveau_mana_regen_long"
+      }
+    }
+  },
+  "reagent": {
+    "item": "minecraft:gunpowder"
+  }
+}

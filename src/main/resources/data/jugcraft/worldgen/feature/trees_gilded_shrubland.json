@@ -1,5 +1,10 @@
 {
   "type": "minecraft:random_selector",
-  "default": "jugcraft:oak_bush_checked",
-  "features": []
+  "default": "jugcraft:wattle_bush_checked",
+  "features": [
+    {
+      "chance": 0.3,
+      "feature": "jugcraft:wattle_checked"
+    }
+  ]
 }

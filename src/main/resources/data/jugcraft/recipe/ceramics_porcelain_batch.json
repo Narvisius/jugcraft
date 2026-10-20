@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:clay_powder",
+    "jugcraft:clay_powder",
+    "jugcraft:clay_powder",
+    "jugcraft:clay_powder",
+    "minecraft:quartz",
+    "minecraft:quartz",
+    "jugcraft:borax"
+  ],
+  "result": {
+    "id": "jugcraft:porcelain_batch",
+    "count": 4
+  }
+}

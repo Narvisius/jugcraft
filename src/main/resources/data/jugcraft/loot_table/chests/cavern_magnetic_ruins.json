@@ -1,0 +1,291 @@
+{
+  "pools": [
+    {
+      "name": "magnetic_ruins",
+      "rolls": {
+        "min": 8,
+        "max": 10,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_cave_tablet",
+          "weight": 10,
+          "modifier": [
+            {
+              "type": "minecraft:set_custom_data",
+              "tag": "{BoundBiome:\"jugcraft:cavern_magnetic_caves\"}"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:book",
+          "weight": 20,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 3,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_ingot",
+          "weight": 11,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_boots",
+          "weight": 1,
+          "modifier": [
+            {
+              "add": false,
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.8
+              },
+              "type": "minecraft:set_damage"
+            },
+            {
+              "type": "minecraft:enchant_randomly"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:name_tag",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_azure_neodymium_ingot",
+          "weight": 6,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_scarlet_neodymium_ingot",
+          "weight": 6,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_raw_azure_neodymium",
+          "weight": 20,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_raw_scarlet_neodymium",
+          "weight": 20,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_scrap_metal",
+          "weight": 12,
+          "modifier": [
+            {
+              "count": {
+                "min": 2,
+                "max": 6,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_notor_gizmo",
+          "weight": 7,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_metal_swarf",
+          "weight": 10,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:raw_iron",
+          "weight": 10,
+          "modifier": [
+            {
+              "count": {
+                "min": 3,
+                "max": 4,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:arrow",
+          "weight": 4,
+          "modifier": [
+            {
+              "count": {
+                "min": 4,
+                "max": 6,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_seeking_arrow",
+          "weight": 10,
+          "modifier": [
+            {
+              "count": {
+                "min": 3,
+                "max": 9,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:tnt",
+          "weight": 9,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:book",
+          "weight": 3,
+          "modifier": [
+            {
+              "levels": 30.0,
+              "treasure": true,
+              "type": "minecraft:enchant_with_levels"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_telecore",
+          "weight": 10,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_notor_gizmo",
+          "weight": 30,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 3,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_polarity_armor_trim_smithing_template",
+          "weight": 5
+        }
+      ]
+    }
+  ]
+}

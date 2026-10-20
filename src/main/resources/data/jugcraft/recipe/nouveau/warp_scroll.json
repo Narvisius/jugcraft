@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#c:gems/lapis",
+    "#c:gems/lapis",
+    "#c:gems/lapis",
+    "#c:gems/lapis",
+    "jugcraft:nouveau_blank_parchment",
+    "#c:gems/source",
+    "#c:gems/source",
+    "#c:gems/source",
+    "#c:gems/source"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_warp_scroll"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

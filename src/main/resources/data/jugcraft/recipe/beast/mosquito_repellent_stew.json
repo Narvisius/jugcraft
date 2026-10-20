@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:bowl",
+    "jugcraft:beast_triops_eggs",
+    "jugcraft:beast_stink_bottle",
+    "jugcraft:beast_triops_eggs"
+  ],
+  "result": {
+    "id": "jugcraft:beast_mosquito_repellent_stew"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

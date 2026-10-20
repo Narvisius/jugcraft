@@ -1,0 +1,947 @@
+{
+  "textureSize": [
+    128,
+    64
+  ],
+  "parts": [
+    {
+      "name": "pelvis",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        13.5,
+        5.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "abdomen",
+      "parent": "pelvis",
+      "pose": [
+        0,
+        0,
+        0,
+        0.1308997,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -8.0,
+            -4.0,
+            10.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            32.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_leg",
+      "parent": "pelvis",
+      "pose": [
+        -4.0,
+        -1.0,
+        -3.0,
+        -0.62831855,
+        0.0,
+        0.0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "left_leg",
+      "parent": "pelvis",
+      "pose": [
+        4.0,
+        -1.0,
+        -3.0,
+        -0.62831855,
+        0.0,
+        0.0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "chest",
+      "parent": "abdomen",
+      "pose": [
+        0.0,
+        -6.0,
+        0.0,
+        0.1308997,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -8.0,
+            -12.0,
+            -6.0,
+            16.0,
+            12.0,
+            12.0
+          ],
+          "uv": [
+            24.0,
+            36.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_leg_inner",
+      "parent": "right_leg",
+      "pose": [
+        0,
+        0,
+        0,
+        0.0,
+        0.0,
+        0.5235988
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            0.0,
+            -3.0,
+            6.0,
+            8.0,
+            6.0
+          ],
+          "uv": [
+            88.0,
+            18.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_leg_inner",
+      "parent": "left_leg",
+      "pose": [
+        0,
+        0,
+        0,
+        0.0,
+        0.0,
+        -0.5235988
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            0.0,
+            -3.0,
+            6.0,
+            8.0,
+            6.0
+          ],
+          "uv": [
+            88.0,
+            18.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "head",
+      "parent": "chest",
+      "pose": [
+        0.0,
+        -12.0,
+        -2.0,
+        -0.2617994,
+        0.0,
+        0.0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "right_arm",
+      "parent": "chest",
+      "pose": [
+        -9.0,
+        -11.0,
+        0.0,
+        -0.31415927,
+        0.0,
+        0.0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "left_arm",
+      "parent": "chest",
+      "pose": [
+        9.0,
+        -11.0,
+        0.0,
+        -0.31415927,
+        0.0,
+        0.0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "right_leg_lower",
+      "parent": "right_leg_inner",
+      "pose": [
+        -1.0,
+        6.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.5235988
+      ],
+      "cubes": []
+    },
+    {
+      "name": "left_leg_lower",
+      "parent": "left_leg_inner",
+      "pose": [
+        1.0,
+        6.0,
+        0.0,
+        0.0,
+        0.0,
+        0.5235988
+      ],
+      "cubes": []
+    },
+    {
+      "name": "inner_head",
+      "parent": "head",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -8.0,
+            -4.0,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_arm_inner",
+      "parent": "right_arm",
+      "pose": [
+        0,
+        0,
+        0,
+        0.0,
+        0.5235988,
+        0.5235988
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.5,
+            0.0,
+            -2.5,
+            5.0,
+            10.0,
+            5.0
+          ],
+          "uv": [
+            68.0,
+            16.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_arm_inner",
+      "parent": "left_arm",
+      "pose": [
+        0,
+        0,
+        0,
+        0.0,
+        -0.5235988,
+        -0.5235988
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.5,
+            0.0,
+            -2.5,
+            5.0,
+            10.0,
+            5.0
+          ],
+          "uv": [
+            68.0,
+            16.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_leg_lower_inner",
+      "parent": "right_leg_lower",
+      "pose": [
+        0,
+        0,
+        0,
+        0.69813174,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            0.0,
+            -3.0,
+            6.0,
+            8.0,
+            6.0
+          ],
+          "uv": [
+            88.0,
+            32.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_leg_lower_inner",
+      "parent": "left_leg_lower",
+      "pose": [
+        0,
+        0,
+        0,
+        0.69813174,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            0.0,
+            -3.0,
+            6.0,
+            8.0,
+            6.0
+          ],
+          "uv": [
+            88.0,
+            32.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "head_core",
+      "parent": "inner_head",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -8.0,
+            -4.0,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            64.0,
+            0.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -4.0,
+            -8.0,
+            -4.0,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            80.0,
+            46.0
+          ],
+          "inflate": [
+            -0.5,
+            -0.5,
+            -0.5
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_arm_lower",
+      "parent": "right_arm_inner",
+      "pose": [
+        0.0,
+        10.0,
+        0.0,
+        0.0,
+        -0.5235988,
+        -0.2617994
+      ],
+      "cubes": []
+    },
+    {
+      "name": "left_arm_lower",
+      "parent": "left_arm_inner",
+      "pose": [
+        0.0,
+        10.0,
+        0.0,
+        0.0,
+        0.5235988,
+        0.2617994
+      ],
+      "cubes": []
+    },
+    {
+      "name": "right_arm_lower_inner",
+      "parent": "right_arm_lower",
+      "pose": [
+        0,
+        0,
+        0,
+        -0.5235988,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            0.0,
+            -3.0,
+            6.0,
+            12.0,
+            6.0
+          ],
+          "uv": [
+            96.0,
+            0.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_arm_lower_inner",
+      "parent": "left_arm_lower",
+      "pose": [
+        0,
+        0,
+        0,
+        -0.5235988,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            0.0,
+            -3.0,
+            6.0,
+            12.0,
+            6.0
+          ],
+          "uv": [
+            96.0,
+            0.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "mutants/fuzs/mutantmonsters/common/client/model/MutantSnowGolemModel.java",
+  "sourceSha256": "b8184ec86e0bb0ad876a667da60324ee88993ad115b303d1c66861a2937f955f",
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [
+    {
+      "bone": "inner_head",
+      "target": "xRot",
+      "op": "-=",
+      "value": [
+        "*",
+        [
+          "sin",
+          [
+            "*",
+            "age",
+            0.11
+          ]
+        ],
+        0.01
+      ],
+      "when": 1
+    },
+    {
+      "bone": "chest",
+      "target": "xRot",
+      "op": "-=",
+      "value": [
+        "*",
+        [
+          "sin",
+          [
+            "*",
+            "age",
+            0.11
+          ]
+        ],
+        0.01
+      ],
+      "when": 1
+    },
+    {
+      "bone": "right_arm",
+      "target": "zRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "sin",
+          [
+            "*",
+            "age",
+            0.11
+          ]
+        ],
+        0.03
+      ],
+      "when": 1
+    },
+    {
+      "bone": "left_arm",
+      "target": "zRot",
+      "op": "-=",
+      "value": [
+        "*",
+        [
+          "sin",
+          [
+            "*",
+            "age",
+            0.11
+          ]
+        ],
+        0.03
+      ],
+      "when": 1
+    },
+    {
+      "bone": "inner_head",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "/",
+        [
+          "*",
+          "pitch",
+          3.141592653589793
+        ],
+        180.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "inner_head",
+      "target": "yRot",
+      "op": "+=",
+      "value": [
+        "/",
+        [
+          "*",
+          "yaw",
+          3.141592653589793
+        ],
+        180.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "pelvis",
+      "target": "y",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "abs",
+          [
+            "*",
+            [
+              "sin",
+              [
+                "*",
+                "walk",
+                0.45
+              ]
+            ],
+            "move"
+          ]
+        ],
+        1.5
+      ],
+      "when": 1
+    },
+    {
+      "bone": "abdomen",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        "move",
+        0.2
+      ],
+      "when": 1
+    },
+    {
+      "bone": "chest",
+      "target": "yRot",
+      "op": "-=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "sin",
+            [
+              "*",
+              "walk",
+              0.45
+            ]
+          ],
+          "move"
+        ],
+        0.1
+      ],
+      "when": 1
+    },
+    {
+      "bone": "head",
+      "target": "xRot",
+      "op": "-=",
+      "value": [
+        "*",
+        "move",
+        0.2
+      ],
+      "when": 1
+    },
+    {
+      "bone": "right_arm",
+      "target": "xRot",
+      "op": "-=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "sin",
+            [
+              "*",
+              "walk",
+              0.45
+            ]
+          ],
+          "move"
+        ],
+        0.6
+      ],
+      "when": 1
+    },
+    {
+      "bone": "left_arm",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "sin",
+            [
+              "*",
+              "walk",
+              0.45
+            ]
+          ],
+          "move"
+        ],
+        0.6
+      ],
+      "when": 1
+    },
+    {
+      "bone": "right_arm_lower_inner",
+      "target": "xRot",
+      "op": "-=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "sin",
+            [
+              "*",
+              "walk",
+              0.45
+            ]
+          ],
+          "move"
+        ],
+        0.2
+      ],
+      "when": 1
+    },
+    {
+      "bone": "left_arm_lower_inner",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "sin",
+            [
+              "*",
+              "walk",
+              0.45
+            ]
+          ],
+          "move"
+        ],
+        0.2
+      ],
+      "when": 1
+    },
+    {
+      "bone": "right_leg",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "+",
+            [
+              "cos",
+              [
+                "*",
+                [
+                  "-",
+                  "walk",
+                  0.5
+                ],
+                0.45
+              ]
+            ],
+            0.5
+          ],
+          "move"
+        ],
+        1.1
+      ],
+      "when": 1
+    },
+    {
+      "bone": "left_leg",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "+",
+            [
+              "cos",
+              [
+                "*",
+                [
+                  "+",
+                  [
+                    "-",
+                    "walk",
+                    0.5
+                  ],
+                  [
+                    "*",
+                    3.141592653589793,
+                    2
+                  ]
+                ],
+                0.45
+              ]
+            ],
+            0.5
+          ],
+          "move"
+        ],
+        1.1
+      ],
+      "when": 1
+    },
+    {
+      "bone": "right_leg_lower_inner",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "sin",
+            [
+              "*",
+              "walk",
+              0.45
+            ]
+          ],
+          "move"
+        ],
+        0.2
+      ],
+      "when": 1
+    },
+    {
+      "bone": "left_leg_lower_inner",
+      "target": "xRot",
+      "op": "-=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "sin",
+            [
+              "*",
+              "walk",
+              0.45
+            ]
+          ],
+          "move"
+        ],
+        0.2
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "x": "jugcraft:nouveau_sourcestone",
+    "y": "#c:ingots/gold",
+    "z": "#c:gems/source"
+  },
+  "pattern": [
+    "xxx",
+    "yzy",
+    "xxx"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_arcane_core"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

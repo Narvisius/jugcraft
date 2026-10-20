@@ -78,6 +78,7 @@ public final class IndustrialForms {
 			.outputTank("hydrogen")
 			.outputTank("lye")
 			.capability("jugcraft:aqueous_electrolysis")
+			.capability("jugcraft:electronics_peroxide")
 			.companionAssistance()
 			.upgrades()
 			.warmup(40)
@@ -130,6 +131,8 @@ public final class IndustrialForms {
 			.capability("jugcraft:nickel_methanation")
 			.capability("jugcraft:contact_conversion")
 			.capability("jugcraft:starter_gas_infusing")
+			.capability("jugcraft:cobalt_synthesis")
+			.capability("jugcraft:syngas_balancing")
 			.alias("reagent_a", "hydrogen")
 			.alias("reagent_b", "reactant")
 			.alias("product_gas", "product")
@@ -229,6 +232,10 @@ public final class IndustrialForms {
 			.port("product_out", FormPort.Kind.FLUID_OUT, 0, 2, 0, 0, FormSide.FRONT)
 			.port("items_out", FormPort.Kind.ITEM_OUT, FormPort.ALL, 1, 0, 0, FormSide.FRONT)
 			.port("power", FormPort.Kind.ENERGY_IN, 0, 3, 3, 0, FormSide.RIGHT)
+			.capability("jugcraft:battery_bulk_chemical_reactor")
+            .capability("jugcraft:electronics_reagents")
+			.capability("jugcraft:phosphate_formulation")
+			.capability("jugcraft:storable_propellants")
 			.build();
 
 	/**
@@ -439,6 +446,8 @@ public final class IndustrialForms {
 			.outputTank("distilled_ethanol")
 			.outputTank("stillage")
 			.capability("jugcraft:chemical_distillation")
+			.capability("jugcraft:process_distillation")
+            .capability("jugcraft:cryogenic_vaporization")
 			.upgrades()
 			.warmup(40)
 			.port("power", FormPort.Kind.ENERGY_IN, 0, 0, 0, 0, FormSide.FRONT)
@@ -479,6 +488,7 @@ public final class IndustrialForms {
 			.items(0, 2)
 			.capability("jugcraft:aluminate_recovery")
 			.capability("jugcraft:digestate_separation")
+			.capability("jugcraft:phosphate_filtration")
 			.upgrades()
 			.warmup(40)
 			.port("power", FormPort.Kind.ENERGY_IN, 0, 0, 0, 0, FormSide.FRONT)
@@ -508,6 +518,9 @@ public final class IndustrialForms {
 			.port("solid_in_0", FormPort.Kind.ITEM_IN, 0, 2, 0, 1, FormSide.FRONT)
 			.port("solid_out_0", FormPort.Kind.ITEM_OUT, 0, 2, 3, 1, FormSide.BACK)
 			.port("solution_in", FormPort.Kind.FLUID_IN, 0, 1, 3, 0, FormSide.BACK)
+			.capability("jugcraft:ceramic_firing")
+			.capability("jugcraft:battery_alumina_calciner")
+			.capability("jugcraft:phosphate_drying")
 			.build();
 	public static FormMachineBlock ALUMINA_CALCINER;
 
@@ -581,6 +594,12 @@ public final class IndustrialForms {
 			.port("product_1", FormPort.Kind.FLUID_OUT, 1, 1, 2, 0, FormSide.BACK)
 			.port("solid_in_0", FormPort.Kind.ITEM_IN, 0, 2, 0, 1, FormSide.FRONT)
 			.port("solid_out_0", FormPort.Kind.ITEM_OUT, 0, 2, 2, 1, FormSide.BACK)
+			.capability("jugcraft:battery_mineral_conditioner")
+			.capability("jugcraft:electronics_conditioning")
+			.capability("jugcraft:phosphate_preparation")
+			.capability("jugcraft:synthetic_preparation")
+			.capability("jugcraft:process_recovery")
+            .capability("jugcraft:propellant_recovery")
 			.build();
 	public static FormMachineBlock MINERAL_CONDITIONER;
 
@@ -774,6 +793,7 @@ public final class IndustrialForms {
 			.outputTank("fluoride_gas")
 			.items(1, 1)
 			.capability("jugcraft:fluoride_dissolution")
+			.capability("jugcraft:phosphate_dissolution")
 			.upgrades()
 			.warmup(40)
 			.port("power", FormPort.Kind.ENERGY_IN, 0, 0, 0, 0, FormSide.FRONT)
@@ -860,6 +880,47 @@ public final class IndustrialForms {
 			.build();
 	public static FormMachineBlock LINED_FLUOROCHEMICAL_REACTOR;
 
+	public static final MachineForm PRECISION_FINISHER_FORM = MachineForm.builder(Jugcraft.id("precision_finisher"), MachineKind.CHEMICAL_REACTOR)
+			.layer("C##", "###", "###")
+			.layer("###", "###", "###")
+			.layer("###", "###", "###")
+			.profile(OperatingProfile.ENTRY)
+			.inputTank("finishing_water")
+			.outputTank("finishing_return")
+			.items(1, 1)
+			.socket("finishing_head", TagKey.create(Registries.ITEM, Jugcraft.id("finishing_heads")))
+			.capability("jugcraft:precision_finishing")
+			.upgrades()
+			.warmup(40)
+			.port("power", FormPort.Kind.ENERGY_IN, 0, 0, 0, 0, FormSide.FRONT)
+			.port("feed_0", FormPort.Kind.FLUID_IN, 0, 0, 2, 1, FormSide.BACK)
+			.port("product_0", FormPort.Kind.FLUID_OUT, 0, 0, 2, 0, FormSide.BACK)
+			.port("solid_in_0", FormPort.Kind.ITEM_IN, 0, 2, 0, 1, FormSide.FRONT)
+			.port("solid_out_0", FormPort.Kind.ITEM_OUT, 0, 2, 2, 1, FormSide.BACK)
+			.build();
+	public static FormMachineBlock PRECISION_FINISHER;
+
+	public static final MachineForm WET_PROCESSING_BENCH_FORM = MachineForm.builder(Jugcraft.id("wet_processing_bench"), MachineKind.CHEMICAL_REACTOR)
+			.layer("C##", "###", "###")
+			.layer("###", "###", "###")
+			.layer("###", "###", "###")
+			.profile(OperatingProfile.ENTRY)
+			.inputTank("wafer_reagent")
+			.inputTank("wafer_rinse")
+			.outputTank("wafer_waste")
+			.items(1, 1)
+			.capability("jugcraft:wafer_processing")
+			.upgrades()
+			.warmup(40)
+			.port("power", FormPort.Kind.ENERGY_IN, 0, 0, 0, 0, FormSide.FRONT)
+			.port("feed_0", FormPort.Kind.FLUID_IN, 0, 0, 2, 1, FormSide.BACK)
+			.port("feed_1", FormPort.Kind.FLUID_IN, 1, 1, 2, 1, FormSide.BACK)
+			.port("product_0", FormPort.Kind.FLUID_OUT, 0, 0, 2, 0, FormSide.BACK)
+			.port("solid_in_0", FormPort.Kind.ITEM_IN, 0, 2, 0, 1, FormSide.FRONT)
+			.port("solid_out_0", FormPort.Kind.ITEM_OUT, 0, 2, 2, 1, FormSide.BACK)
+			.build();
+	public static FormMachineBlock WET_PROCESSING_BENCH;
+
 	private IndustrialForms() {
 	}
 
@@ -901,7 +962,9 @@ public final class IndustrialForms {
 		FLUOROMONOMER_CRACKER = block("fluoromonomer_cracker", FLUOROMONOMER_CRACKER_FORM);
 		PTFE_SINTERING_OVEN = block("ptfe_sintering_oven", PTFE_SINTERING_OVEN_FORM);
 		LINED_FLUOROCHEMICAL_REACTOR = block("lined_fluorochemical_reactor", LINED_FLUOROCHEMICAL_REACTOR_FORM);
-		List<FormMachineBlock> blocks = List.of(ELECTROLYTIC_SEPARATOR, GAS_BURNING_GENERATOR, CHEMICAL_INFUSER, CHEMICAL_OXIDIZER, INDUSTRIAL_FERMENTER, BULK_CHEMICAL_REACTOR, ANAEROBIC_DIGESTER, COAL_GASIFIER, GAS_CLEANUP_RACK, BIO_GENERATOR, GAS_CLEANING_RACK, BIOGAS_CLEANER, DIGESTATE_SEPARATOR, MASHING_STATION, CHEMICAL_DISTILLATION_STATION, BAUXITE_DIGESTER, ALUMINATE_FILTER_PRESS, ALUMINA_CALCINER, ALUMINUM_REDUCTION_CELL, COASTAL_SEAWATER_INTAKE, BRINE_CONCENTRATOR, MINERAL_CONDITIONER, CHLORIDE_DRYER, MAGNESIUM_ELECTROLYSIS_CELL, TITANIUM_CHLORINATOR, TITANIUM_REDUCTION_RETORT, POLYMER_MOLDING_PRESS, MONOMER_PREPARATION_UNIT, POLYMERIZATION_KETTLE, POLYMER_EXTRUDER, POLYMER_RECLAIMER, ACID_CONCENTRATOR, CHEMICAL_DISSOLUTION_CHAMBER, FLUOROCARBON_REACTOR, FLUOROMONOMER_CRACKER, PTFE_SINTERING_OVEN, LINED_FLUOROCHEMICAL_REACTOR);
+		PRECISION_FINISHER = block("precision_finisher", PRECISION_FINISHER_FORM);
+		WET_PROCESSING_BENCH = block("wet_processing_bench", WET_PROCESSING_BENCH_FORM);
+		List<FormMachineBlock> blocks = List.of(ELECTROLYTIC_SEPARATOR, GAS_BURNING_GENERATOR, CHEMICAL_INFUSER, CHEMICAL_OXIDIZER, INDUSTRIAL_FERMENTER, BULK_CHEMICAL_REACTOR, ANAEROBIC_DIGESTER, COAL_GASIFIER, GAS_CLEANUP_RACK, BIO_GENERATOR, GAS_CLEANING_RACK, BIOGAS_CLEANER, DIGESTATE_SEPARATOR, MASHING_STATION, CHEMICAL_DISTILLATION_STATION, BAUXITE_DIGESTER, ALUMINATE_FILTER_PRESS, ALUMINA_CALCINER, ALUMINUM_REDUCTION_CELL, COASTAL_SEAWATER_INTAKE, BRINE_CONCENTRATOR, MINERAL_CONDITIONER, CHLORIDE_DRYER, MAGNESIUM_ELECTROLYSIS_CELL, TITANIUM_CHLORINATOR, TITANIUM_REDUCTION_RETORT, POLYMER_MOLDING_PRESS, MONOMER_PREPARATION_UNIT, POLYMERIZATION_KETTLE, POLYMER_EXTRUDER, POLYMER_RECLAIMER, ACID_CONCENTRATOR, CHEMICAL_DISSOLUTION_CHAMBER, FLUOROCARBON_REACTOR, FLUOROMONOMER_CRACKER, PTFE_SINTERING_OVEN, LINED_FLUOROCHEMICAL_REACTOR, PRECISION_FINISHER, WET_PROCESSING_BENCH);
 		ENTITY = JugcraftForms.registerBlocks(Jugcraft.id("machine_form"), blocks.toArray(FormMachineBlock[]::new));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output -> blocks.stream().filter(block -> !isSpecialist(block.form())).forEach(output::accept));
 	}

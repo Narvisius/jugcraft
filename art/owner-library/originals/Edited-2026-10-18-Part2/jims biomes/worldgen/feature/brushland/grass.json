@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:simple_block",
+  "to_place": {
+    "type": "minecraft:weighted",
+    "entries": [
+      {
+        "data": "minecraft:short_grass",
+        "weight": 50
+      },
+      {
+        "data": "minecraft:fern",
+        "weight": 17
+      },
+      {
+        "data": "minecraft:dead_bush",
+        "weight": 8
+      },
+      {
+        "data": "minecraft:moss_carpet",
+        "weight": 3
+      },
+      {
+        "data": "minecraft:azalea",
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "minecraft:tall_grass",
+          "properties": {
+            "half": "lower"
+          }
+        },
+        "weight": 1
+      }
+    ]
+  }
+}

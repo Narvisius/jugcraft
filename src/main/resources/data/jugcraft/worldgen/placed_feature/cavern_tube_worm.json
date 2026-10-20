@@ -1,0 +1,23 @@
+{
+  "feature": "jugcraft:cavern_tube_worm",
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": {
+        "max_inclusive": 16,
+        "min_inclusive": 5,
+        "type": "minecraft:uniform"
+      }
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR_WG"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

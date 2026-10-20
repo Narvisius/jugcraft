@@ -1,0 +1,45 @@
+{
+  "pools": [
+    {
+      "name": "sea_pig_digestion",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_muck",
+          "weight": 2,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_pearl",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_marine_snow",
+          "weight": 15,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

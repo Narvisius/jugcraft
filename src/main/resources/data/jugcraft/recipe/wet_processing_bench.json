@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PTP",
+    "MCM",
+    "WKW"
+  ],
+  "key": {
+    "C": "jugcraft:basic_circuit",
+    "K": "jugcraft:machine_casing",
+    "M": "jugcraft:electric_motor",
+    "P": "#c:plates/steel",
+    "T": "jugcraft:steel_tank",
+    "W": "jugcraft:copper_cable"
+  },
+  "result": {
+    "id": "jugcraft:wet_processing_bench",
+    "count": 1
+  }
+}

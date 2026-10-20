@@ -1,0 +1,124 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "middle_section",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -7.75,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -9.25,
+            -8.0,
+            4.0,
+            2.0,
+            16.0
+          ],
+          "uv": [
+            2.0,
+            50.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -9.0,
+            -7.25,
+            -8.0,
+            18.0,
+            15.0,
+            16.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelBoneSerpentBody.java",
+  "sourceSha256": "944761a2a660501de59fc025a79e852850981a58d9b05b8275588496d742e482",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.middle_section.rotationPointY += (float)(Math.sin((double)(limbSwing * walkSpeed) - walkOffset) * (double)limbSwingAmount * (double)walkDegree - (double)(limbSwingAmount * walkDegree));",
+      "reason": "Unbound expression variable walkOffset"
+    },
+    {
+      "call": "this.middle_section.rotationPointY += (float)(Math.sin((double)(ageInTicks * idleSpeed) - walkOffset) * 1.0 * (double)idleDegree - (double)(1.0f * idleDegree));",
+      "reason": "Unbound expression variable walkOffset"
+    }
+  ],
+  "expressions": [
+    {
+      "bone": "middle_section",
+      "target": "xRot",
+      "op": "=",
+      "value": [
+        "*",
+        "pitch",
+        [
+          "/",
+          3.141592653589793,
+          180
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "middle_section",
+      "target": "yRot",
+      "op": "=",
+      "value": [
+        "*",
+        "yaw",
+        [
+          "/",
+          3.141592653589793,
+          180
+        ]
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:distillation",
+  "capability": "jugcraft:process_distillation",
+  "fluids": [
+    {
+      "fluid": "jugcraft:treated_process_water",
+      "amount": 1000
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 750,
+      "tank": 0
+    },
+    {
+      "fluid": "jugcraft:recovery_concentrate",
+      "amount": 250,
+      "tank": 1
+    }
+  ],
+  "energy_per_tick": 64,
+  "time": 320
+}

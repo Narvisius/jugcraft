@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CSC",
+    " C ",
+    " C "
+  ],
+  "key": {
+    "S": "jugcraft:cavern_scrap_metal",
+    "C": "minecraft:copper_ingot"
+  },
+  "result": {
+    "id": "jugcraft:cavern_copper_valve"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

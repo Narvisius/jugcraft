@@ -125,4 +125,11 @@ def lang():
         for theme, lines in themes.items():
             for i, line in enumerate(lines):
                 out[f"message.jugcraft.townsfolk.{role}.{theme}.{i}"] = line
+    out.update({
+        "filled_map.jugcraft.town": "Town Map - 1 Church / 2 Bank / 3 Hall / 4 Store",
+        "message.jugcraft.town.map_hint": "Need directions? Crouch and use a guard for a free town map. The directory is south-west of the square.",
+        "message.jugcraft.town.map_given": "Here is your town map. North is up: 1 Church, 2 Bank, 3 Town Hall, 4 General Store. The market surrounds the square.",
+        "message.jugcraft.town.have_map": "You already carry our town map. North is up: 1 Church, 2 Bank, 3 Hall, 4 Store.",
+        "message.jugcraft.town.map_full": "Make one empty inventory slot and ask me again for a free map.",
+    })
     return out

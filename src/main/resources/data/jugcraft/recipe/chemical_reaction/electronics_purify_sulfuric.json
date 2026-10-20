@@ -1,0 +1,38 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:electronics_conditioning",
+  "fluids": [
+    {
+      "fluid": "jugcraft:concentrated_sulfuric_acid",
+      "amount": 1000
+    },
+    {
+      "fluid": "minecraft:water",
+      "amount": 250
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:electronic_sulfuric_acid",
+      "amount": 750,
+      "tank": 0
+    },
+    {
+      "fluid": "jugcraft:spent_wafer_mixture",
+      "amount": 500,
+      "tank": 1
+    }
+  ],
+  "energy_per_tick": 64,
+  "time": 280
+}

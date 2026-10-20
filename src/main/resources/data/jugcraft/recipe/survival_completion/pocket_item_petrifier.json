@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "OEO",
+    "RDR",
+    "OEO"
+  ],
+  "key": {
+    "O": "minecraft:obsidian",
+    "E": "minecraft:ender_pearl",
+    "R": "minecraft:redstone",
+    "D": "minecraft:diamond"
+  },
+  "result": {
+    "id": "jugcraft:pocket_item_petrifier",
+    "count": 1
+  }
+}

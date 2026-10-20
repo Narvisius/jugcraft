@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " B ",
+    "BBB",
+    "PPP"
+  ],
+  "key": {
+    "B": "jugcraft:cavern_bioluminesscence",
+    "P": "jugcraft:cavern_ping_pong_sponge"
+  },
+  "result": {
+    "id": "jugcraft:cavern_floater"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

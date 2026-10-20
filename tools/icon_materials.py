@@ -102,6 +102,13 @@ TERRACOTTA = Material((52, 24, 14), (86, 40, 24), (130, 62, 38), (172, 90, 56), 
 DEW = Material((30, 60, 90), (60, 100, 140), (90, 140, 190), (126, 192, 232), (206, 238, 255), (240, 250, 255))
 
 MATERIALS = {
+    "tech_clay": Material((48, 22, 22), (78, 38, 38), (124, 57, 57), (168, 83, 83), (201, 116, 111), (228, 158, 146),
+                      shine=False),
+    "tech_glass": Material((25, 44, 61), (45, 72, 101), (60, 105, 150), (100, 164, 210), (172, 216, 241), (226, 246, 255)),
+    # Package 2: the same satin alloy ramps used by the canonical metal-set renderer.
+    "chemical_stainless": Material((32, 52, 57), (62, 90, 96), (86, 122, 128), (141, 173, 174), (190, 207, 203), (233, 242, 232)),
+    "structural_alloy": IRON,  # silvery structural metal uses vanilla iron tones
+    "chromite": Material((28, 24, 32), (48, 40, 55), (66, 56, 72), (101, 83, 108), (144, 122, 150), (197, 182, 200)),
     # the Greenwardens' garden
     "leaf": LEAF, "moss": MOSS, "gloam": GLOAM, "stem": STEM, "petal": PETAL, "straw": STRAW, "terracotta": TERRACOTTA,
     "dew": DEW,

@@ -1,0 +1,41 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:storable_propellants",
+  "items": [
+    {
+      "ingredient": "minecraft:redstone",
+      "count": 1
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:ammonia",
+      "amount": 500
+    },
+    {
+      "fluid": "jugcraft:nitrogen",
+      "amount": 250
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:hydrazine",
+      "amount": 250,
+      "tank": 0
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:propellant_residue",
+      "count": 1
+    }
+  ],
+  "energy_per_tick": 96,
+  "time": 400
+}

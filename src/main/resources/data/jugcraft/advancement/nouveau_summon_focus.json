@@ -1,0 +1,32 @@
+{
+  "parent": "jugcraft:nouveau_wilden_tribute",
+  "criteria": {
+    "has_summon_focus": {
+      "conditions": {
+        "items": [
+          {
+            "items": "jugcraft:nouveau_summon_focus"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "jugcraft.nouveau_adv.desc.summon_focus"
+    },
+    "icon": {
+      "count": 1,
+      "id": "jugcraft:nouveau_summon_focus"
+    },
+    "title": {
+      "translate": "jugcraft.nouveau_adv.title.summon_focus"
+    }
+  },
+  "requirements": [
+    [
+      "has_summon_focus"
+    ]
+  ]
+}

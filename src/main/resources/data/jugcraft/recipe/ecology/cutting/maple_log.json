@@ -1,0 +1,19 @@
+{
+  "type": "jugcraft:cutting",
+  "ingredient": "jugcraft:ecology_maple_log",
+  "tool": "#minecraft:axes",
+  "results": [
+    {
+      "id": "jugcraft:ecology_stripped_maple_log"
+    },
+    {
+      "id": "jugcraft:sawdust"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.beast_giant_squid",
+        "texture_width": 128,
+        "texture_height": 128,
+        "visible_bounds_width": 7.199999999999999,
+        "visible_bounds_height": 4,
+        "visible_bounds_offset": [
+          0,
+          1.0,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "body",
+          "parent": "root",
+          "pivot": [
+            0.0,
+            32.0,
+            0.0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -19.2,
+                19.2,
+                -19.2
+              ],
+              "size": [
+                38.4,
+                12.8,
+                38.4
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "tentacle_0",
+          "parent": "root",
+          "pivot": [
+            -9.216,
+            20.8,
+            -9.216
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -11.52,
+                1.6,
+                -11.52
+              ],
+              "size": [
+                4.608,
+                19.2,
+                4.608
+              ],
+              "uv": [
+                0,
+                64.0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "tentacle_1",
+          "parent": "root",
+          "pivot": [
+            13.824,
+            20.8,
+            -9.216
+          ],
+          "cubes": [
+            {
+              "origin": [
+                11.52,
+                1.6,
+                -11.52
+              ],
+              "size": [
+                4.608,
+                19.2,
+                4.608
+              ],
+              "uv": [
+                0,
+                64.0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "tentacle_2",
+          "parent": "root",
+          "pivot": [
+            -9.216,
+            20.8,
+            13.824
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -11.52,
+                1.6,
+                11.52
+              ],
+              "size": [
+                4.608,
+                19.2,
+                4.608
+              ],
+              "uv": [
+                0,
+                64.0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "tentacle_3",
+          "parent": "root",
+          "pivot": [
+            13.824,
+            20.8,
+            13.824
+          ],
+          "cubes": [
+            {
+              "origin": [
+                11.52,
+                1.6,
+                11.52
+              ],
+              "size": [
+                4.608,
+                19.2,
+                4.608
+              ],
+              "uv": [
+                0,
+                64.0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

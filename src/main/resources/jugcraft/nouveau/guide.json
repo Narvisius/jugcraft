@@ -1,0 +1,114 @@
+[
+  {
+    "id": "start",
+    "title": "Start a magical workshop",
+    "icon": "nouveau_novice_spell_book",
+    "summary": "Craft a spellbook, an Imbuement Chamber, Source Gems and a Dominion Wand. Owning an instrument is enough to use it; the constellation editor presents its glyphs without a research prerequisite.",
+    "detail": "Sneak-use a spell instrument to compose. Choose delivery, effects and augments, then save. Casting spends Focus; workshop recipes spend shared Ley Charge. Source values from the original library are converted at 100 Source to one Ley Charge."
+  },
+  {
+    "id": "source",
+    "title": "Source and Ley networks",
+    "icon": "nouveau_source_jar",
+    "summary": "Place a Sourcelink near its resource and Source Jars nearby. Agronomic, Vitalic, Volcanic, Alchemical and Mycelial links turn different activity or consumables into charge.",
+    "detail": "Use the Dominion Wand on a sender, then receivers. Collector relays gather, deposit relays distribute, splitters divide output and warp relays bridge long loaded distances with transfer loss. No relay keeps chunks loaded."
+  },
+  {
+    "id": "recipes",
+    "title": "Imbuement and enchanting",
+    "icon": "nouveau_enchanting_apparatus",
+    "summary": "The Imbuement Chamber makes Source Gems and essences slowly without power; Ley Charge accelerates it. The Enchanting Apparatus consumes a central reagent and matching ingredients; nearby Arcane Pedestals also supply ingredients.",
+    "detail": "Open a station to browse input and output previews, select a recipe and lock it. Keep output space free and connect charge. The Scribe\u2019s Table produces glyphs; the Alteration Table upgrades books, armor, threads and equipment."
+  },
+  {
+    "id": "glyphs",
+    "title": "Glyphs and spell delivery",
+    "icon": "nouveau_glyph_projectile",
+    "summary": "Self, Touch and Projectile begin simple spells. Orbit, Runes, Wall, Linger, Underfoot and Pantomime add different delivery patterns.",
+    "detail": "Add multiple effects and attach augments to the effect they should change. Delay pauses a sequence; Reset returns to the original target; Rewind returns a creature to its recorded state. All delayed effects share the original cast\u2019s limits and permissions."
+  },
+  {
+    "id": "equipment",
+    "title": "Enchanter equipment and threads",
+    "icon": "nouveau_enchanters_sword",
+    "summary": "The sword, bow, crossbow, shield, rod, gauntlet, mirror and eye integrate spells with their normal equipment actions. Sneak-use to edit an inscription.",
+    "detail": "Thread armor at the Alteration Table. Tiers provide more sockets; the strongest equipped copy of each thread supplies its level. Shaper\u2019s Focus follows transformed or moving blocks; Summoning Focus strengthens summons and echoes Self and Orbit spells to them."
+  },
+  {
+    "id": "helpers",
+    "title": "Helpers and familiars",
+    "icon": "nouveau_drygmy_charm",
+    "summary": "Drygmys gather creature loot, Whirlisprigs tend gardens, Wixies craft and brew, Amethyst Golems grow crystals, and Alakarkinos handles archaeology and sorting.",
+    "detail": "Use each charm on its home block. Dominion Wand links select accessible work and storage; item-frame filters apply to deliveries. Binding rituals create familiar scripts without destroying a working helper. Use the script and familiar menu to choose a companion."
+  },
+  {
+    "id": "storage",
+    "title": "Storage and couriers",
+    "icon": "bookwyrm_lectern",
+    "summary": "Bind Book Wyrms to a Storage Lectern and connect nearby real containers. Search the combined item catalog, withdraw real stacks, craft in the adjacent grid and cycle named inventory groups. Repositories expand storage through their controller.",
+    "detail": "Starbuncles carry actual items along walkable routes. Set pickup and delivery with the Dominion Wand; apply shades for dedicated transport or a Wixie hat for Potion Jar routes. Extra charms let a courier carry up to four separate stacks; packing returns its cargo and charms. Empty lecterns can link to another within 30 blocks (up to 16 hops). An unlinked adjacent chest imports automatically unless the lectern receives redstone power."
+  },
+  {
+    "id": "potions",
+    "title": "Potions and infusion",
+    "icon": "nouveau_potion_jar",
+    "summary": "Potion Jars store doses, Melders combine effects, Diffusers affect a nearby area, and refillable flasks carry several doses. Splash and lingering cannons use filled flasks.",
+    "detail": "The Alchemist\u2019s Crown selects a stored dose. Infuse draws from an inventory bottle or flask, or adjacent jars for a turret. AOE splashes at the target; Extend Time leaves a bounded lingering cloud. Harmful effects still respect claims and PvP."
+  },
+  {
+    "id": "rituals",
+    "title": "Braziers and rituals",
+    "icon": "nouveau_ritual_brazier",
+    "summary": "Place a ritual tablet in a Ritual Brazier and add augment ingredients before starting it. The brazier uses charge only when work occurs; pause it to stop continuous rituals.",
+    "detail": "Link a brazier to a Brazier Relay within 15 blocks to move its effect area. Augments can widen plant rituals, change weather, strengthen challenges, or select island terrain. Islands also change local biomes where the owner has permission."
+  },
+  {
+    "id": "nature",
+    "title": "Archwood and farming",
+    "icon": "nouveau_green_archwood_sapling",
+    "summary": "Explore Archwood forests for four tree colors, their pods, Sourceberries, decorative flora and magical wildlife. Grow Magebloom for fiber and magical agriculture.",
+    "detail": "Logs, wood, leaves, signs, doors, trapdoors, fences, boats and building variants use native Minecraft block behavior. Plant pods on supported faces. Mature crops can be harvested directly, by helpers, or through rituals."
+  },
+  {
+    "id": "wilds",
+    "title": "Wilden and Weald Walkers",
+    "icon": "nouveau_wilden_tribute",
+    "summary": "Wilden Hunters, Stalkers and Guardians inhabit the wilds. Use the summoning ritual with their three trophies to challenge the Chimera.",
+    "detail": "Awaken Archwood into a Weald Walker that guards its area. Elemental variants have distinct attacks; Waddlers provide smaller companions. Summoned creatures have finite leases and do not duplicate their equipment as loot."
+  },
+  {
+    "id": "automation",
+    "title": "Spell automation and redstone",
+    "icon": "nouveau_timer_spell_turret",
+    "summary": "Inscribed parchments configure spell turrets. Timer Turrets expose their interval; Item Detectors expose a threshold and sample filter; Spell Sensors distinguish casts from impacts.",
+    "detail": "Prisms redirect projectiles in six directions and Void Prisms absorb them. Redstone Relays transmit to linked receivers with a bounded pulse. Devices draw actual inputs, charge and output capacity; they do not use an imaginary inventory."
+  },
+  {
+    "id": "travel",
+    "title": "Warps, portals and scrying",
+    "icon": "nouveau_stable_warp_scroll",
+    "summary": "Sneak-use a Warp Scroll to save a destination. A stable scroll is reusable. Drop a bound regular scroll inside an enclosed sourcestone or illusion-block frame near a full Source Jar to open a portal.",
+    "detail": "Scrying Crystals, Oculi and bound parchment provide remote views. The Enchanter\u2019s Eye casts from a permitted linked crystal. The server validates the destination, collision, ownership and range before transporting or changing anything."
+  },
+  {
+    "id": "planarium",
+    "title": "Build inside a Planarium",
+    "icon": "nouveau_planarium",
+    "summary": "Name a Planarium using an anvil or the Name glyph, then sneak-use it to enter its private building cell. Members of the owner\u2019s party can enter.",
+    "detail": "Touch or strike a boundary to leave. Use the Dominion Wand to set an arrival point. The jar displays a bounded miniature of exposed blocks in its loaded cell; separate owners may reuse a name without sharing a dimension cell."
+  },
+  {
+    "id": "illusions",
+    "title": "Illusions and decoration",
+    "icon": "nouveau_mirrorweave",
+    "summary": "Use a block on Mirrorweave to set its appearance, collision and light. Falseweave can be walked through. Ghostweave becomes hidden with Invisibility and visible again with Dispel.",
+    "detail": "Sense Magic reveals illusions. Light makes an illusion emit light. Skyweave presents a dimension-colored sky view and Dispel switches to its facade. Native signs, paintings, discs, lamps, torches, plushes and ornaments complete a workshop."
+  },
+  {
+    "id": "containment",
+    "title": "Containment jars",
+    "icon": "nouveau_mob_jar",
+    "summary": "The Containment ritual stores an eligible nearby creature in a jar with its real saved data. Sneak-use empty-handed to release it where there is room.",
+    "detail": "Milk cows and mooshrooms through the jar, shear stored sheep, and let chickens produce eggs. Drygmys can study captured specimens. Bosses, players and another owner\u2019s workers cannot be captured. A clock can be displayed inside an empty jar."
+  }
+]

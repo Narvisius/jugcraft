@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GOS"
+  ],
+  "key": {
+    "G": "jugcraft:lead_electrode",
+    "O": "jugcraft:lead_oxide_electrode",
+    "S": "jugcraft:battery_separator"
+  },
+  "result": {
+    "id": "jugcraft:dry_lead_cell",
+    "count": 1
+  }
+}

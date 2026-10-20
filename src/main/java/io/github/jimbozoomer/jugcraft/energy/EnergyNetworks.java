@@ -60,7 +60,7 @@ public final class EnergyNetworks {
 
 	/** Moves up to {@code maxAmount} between two storages; either the whole move commits or nothing changes. */
 	public static long move(EnergyStorage from, EnergyStorage to, long maxAmount) {
-		if (!from.supportsExtraction() || !to.supportsInsertion() || maxAmount <= 0) {
+		if (from.transferIdentity() == to.transferIdentity() || !from.supportsExtraction() || !to.supportsInsertion() || maxAmount <= 0) {
 			return 0;
 		}
 		// Simulate both sides (transactions are aborted when not committed), then move the exact amount.
@@ -142,26 +142,31 @@ public final class EnergyNetworks {
 		/** Splits energy evenly across every storage that can accept it (each counted once), except the source. */
 		long distribute(Level level, BlockPos sourcePos, EnergyStorage source, long budget) {
 			List<EnergyStorage> receivers = new ArrayList<>();
+			Set<Object> identities = java.util.Collections.newSetFromMap(new java.util.IdentityHashMap<>());
 			for (Endpoint endpoint : endpoints) {
 				if (endpoint.pos.equals(sourcePos)) {
 					continue;
 				}
 				EnergyStorage storage = EnergyStorage.SIDED.find(level, endpoint.pos, endpoint.side);
-				if (storage != null && storage.supportsInsertion() && storage != source
-						&& !receivers.contains(storage)) {
+				if (storage != null && storage.supportsInsertion() && storage.transferIdentity() != source.transferIdentity()
+						&& identities.add(storage.transferIdentity())) {
 					receivers.add(storage);
 				}
 			}
 
 			long moved = 0;
-			// Two passes: an even share first, then leftovers to whoever still has room.
-			for (int pass = 0; pass < 2 && moved < budget && !receivers.isEmpty(); pass++) {
-				long share = Math.max(1, (budget - moved) / receivers.size());
+			// Stable priority groups, each retaining the existing fair-share then spill pass.
+			for (int priority = 1; priority >= -1 && moved < budget; priority--) {
+				List<EnergyStorage> group = new ArrayList<>();
 				for (EnergyStorage receiver : receivers) {
-					if (moved >= budget) {
-						break;
+					if (Math.clamp(receiver.chargePriority(), -1, 1) == priority) group.add(receiver);
+				}
+				for (int pass = 0; pass < 2 && moved < budget && !group.isEmpty(); pass++) {
+					long share = Math.max(1, (budget - moved) / group.size());
+					for (EnergyStorage receiver : group) {
+						if (moved >= budget) break;
+						moved += move(source, receiver, Math.min(share, budget - moved));
 					}
-					moved += move(source, receiver, Math.min(share, budget - moved));
 				}
 			}
 			return moved;

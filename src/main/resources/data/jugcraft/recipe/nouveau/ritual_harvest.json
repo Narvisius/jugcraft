@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:nouveau_green_archwood_log",
+    "jugcraft:nouveau_earth_essence",
+    "minecraft:iron_hoe"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_ritual_harvest"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

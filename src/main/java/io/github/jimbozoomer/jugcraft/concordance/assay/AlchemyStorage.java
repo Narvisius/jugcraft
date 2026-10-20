@@ -69,7 +69,7 @@ public final class AlchemyStorage {
         if(name.equals("mind_stone")) props.component(EXPERIENCE,0);
         ITEMS.put(name,Registry.register(BuiltInRegistries.ITEM,key,new StorageItem(props,name,bag)));
     }
-    public static boolean bag(ItemStack stack) { return stack.getItem() instanceof StorageItem item && item.bag; }
+    public static boolean bag(ItemStack stack) { return stack.getItem() instanceof StorageItem item && item.bag || stack.getItem() instanceof io.github.jimbozoomer.jugcraft.menagerie.MenagerieItems.Pouch; }
     /** Portable inventories cannot nest; ordinary empty container blocks remain normal building supplies. */
     public static boolean canStore(ItemStack stack) {
         // Vanilla chest/barrel items carry an EMPTY container component by default in 26.3.

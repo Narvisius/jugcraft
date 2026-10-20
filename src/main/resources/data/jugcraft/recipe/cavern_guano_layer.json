@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "NNN"
+  ],
+  "key": {
+    "N": "jugcraft:cavern_guano_block"
+  },
+  "result": {
+    "count": 6,
+    "id": "jugcraft:cavern_guano_layer"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

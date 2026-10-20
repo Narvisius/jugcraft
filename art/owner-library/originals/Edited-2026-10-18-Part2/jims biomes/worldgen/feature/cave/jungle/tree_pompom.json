@@ -1,0 +1,88 @@
+{
+  "type": "minecraft:tree",
+  "minimum_size": {
+    "type": "minecraft:two_layers_feature_size"
+  },
+  "below_trunk_provider": {
+    "type": "minecraft:rule_based",
+    "rules": [
+      {
+        "if_true": {
+          "type": "minecraft:not",
+          "predicate": {
+            "type": "minecraft:matching_block_tag",
+            "tag": "minecraft:cannot_replace_below_tree_trunk"
+          }
+        },
+        "then": {
+          "id": "minecraft:mud"
+        }
+      }
+    ]
+  },
+  "trunk_provider": {
+    "type": "minecraft:simple",
+    "state": {
+      "id": "minecraft:mangrove_log",
+      "properties": {
+        "axis": "y"
+      }
+    }
+  },
+  "foliage_provider": {
+    "type": "minecraft:weighted",
+    "entries": [
+      {
+        "weight": 3,
+        "data": {
+          "id": "minecraft:azalea_leaves",
+          "properties": {
+            "distance": "7",
+            "persistent": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      {
+        "weight": 1,
+        "data": {
+          "id": "minecraft:flowering_azalea_leaves",
+          "properties": {
+            "distance": "7",
+            "persistent": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      {
+        "weight": 2,
+        "data": {
+          "id": "minecraft:jungle_leaves",
+          "properties": {
+            "distance": "7",
+            "persistent": "false",
+            "waterlogged": "false"
+          }
+        }
+      }
+    ]
+  },
+  "trunk_placer": {
+    "type": "minecraft:upwards_branching_trunk_placer",
+    "base_height": 6,
+    "height_rand_a": 2,
+    "height_rand_b": 0,
+    "extra_branch_steps": 2,
+    "extra_branch_length": 1,
+    "place_branch_per_log_probability": 0.5,
+    "can_grow_through": "#minecraft:leaves"
+  },
+  "foliage_placer": {
+    "type": "minecraft:random_spread_foliage_placer",
+    "radius": 3,
+    "offset": 1,
+    "foliage_height": 3,
+    "leaf_placement_attempts": 250
+  },
+  "decorators": []
+}

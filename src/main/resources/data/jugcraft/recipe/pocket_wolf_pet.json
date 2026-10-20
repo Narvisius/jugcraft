@@ -1,0 +1,23 @@
+{
+  "result": {
+    "id": "jugcraft:pocket_pet_wolf"
+  },
+  "pattern": [
+    "OFO",
+    "ODO",
+    "OGO"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "D": "minecraft:diamond",
+    "F": "minecraft:beef",
+    "G": "minecraft:gold_ingot",
+    "O": "minecraft:iron_nugget"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

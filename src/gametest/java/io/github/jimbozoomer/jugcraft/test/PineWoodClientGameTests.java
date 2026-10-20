@@ -147,7 +147,10 @@ public class PineWoodClientGameTests implements FabricClientGameTest {
 			String namespace = wood.substring(0, wood.indexOf(':') + 1);
 			String name = wood.substring(namespace.length());
 			String stripped = namespace + "stripped_" + name;
-			String[] blocks = {wood + "_log", stripped + "_log", wood + "_planks", wood + "_wood", stripped + "_wood"};
+			// Nether timber is also a useful native colour reference (batch 6's juniper).
+			boolean fungus = namespace.equals("minecraft:") && (name.equals("crimson") || name.equals("warped"));
+			String trunk = fungus ? "_stem" : "_log", bark = fungus ? "_hyphae" : "_wood";
+			String[] blocks = {wood + trunk, stripped + trunk, wood + "_planks", wood + bark, stripped + bark};
 			for (int column = 0; column < blocks.length; column++) for (int y = 1; y <= 3; y++) {
 				BlockState block = state(blocks[column]);
 				if (block.hasProperty(BlockStateProperties.AXIS)) block = block.setValue(BlockStateProperties.AXIS,

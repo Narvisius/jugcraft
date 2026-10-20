@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:cavern_sulfur_dust",
+    "jugcraft:cavern_sulfur_dust",
+    "minecraft:porkchop",
+    "minecraft:bone_meal"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:cavern_slam"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

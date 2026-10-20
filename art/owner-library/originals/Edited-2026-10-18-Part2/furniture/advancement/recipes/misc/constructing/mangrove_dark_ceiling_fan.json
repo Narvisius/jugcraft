@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_minecraft:black_dye": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:black_dye"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_refurbished_furniture:mangrove_light_ceiling_fan": {
+      "conditions": {
+        "items": [
+          {
+            "items": "refurbished_furniture:mangrove_light_ceiling_fan"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "refurbished_furniture:constructing/mangrove_dark_ceiling_fan"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_refurbished_furniture:mangrove_light_ceiling_fan",
+      "has_minecraft:black_dye"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "refurbished_furniture:constructing/mangrove_dark_ceiling_fan"
+    ]
+  }
+}

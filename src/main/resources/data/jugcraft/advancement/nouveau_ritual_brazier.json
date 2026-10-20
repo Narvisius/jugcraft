@@ -1,0 +1,32 @@
+{
+  "parent": "jugcraft:nouveau_root",
+  "criteria": {
+    "has_ritual_brazier": {
+      "conditions": {
+        "items": [
+          {
+            "items": "jugcraft:nouveau_ritual_brazier"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "jugcraft.nouveau_adv.desc.ritual_brazier"
+    },
+    "icon": {
+      "count": 1,
+      "id": "jugcraft:nouveau_ritual_brazier"
+    },
+    "title": {
+      "translate": "jugcraft.nouveau_adv.title.ritual_brazier"
+    }
+  },
+  "requirements": [
+    [
+      "has_ritual_brazier"
+    ]
+  ]
+}

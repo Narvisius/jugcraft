@@ -31,12 +31,17 @@ public enum EffectKind {
 	 * A limited, listed change to the world: putting out fire; or, in Ember's school ({@code spell_power:fire}),
 	 * kindling an unlit campfire, candle or candle cake (concordance/ember/Ember.java). It never places fire.
 	 */
-	ALTERATION("alteration", On.BLOCK, 3);
+	ALTERATION("alteration", On.BLOCK, 3),
+	/** Owner-library operations use the same authority, budgets and composition grammar. */
+	NOUVEAU_BLOCK("nouveau_block", On.BLOCK, 3),
+	NOUVEAU_CREATURE("nouveau_creature", On.CREATURE, 3),
+	NOUVEAU("nouveau", On.ANY, 3);
 
 	/** What an operation acts on. */
 	public enum On {
 		CREATURE,
-		BLOCK
+		BLOCK,
+		ANY
 	}
 
 	public final String id;

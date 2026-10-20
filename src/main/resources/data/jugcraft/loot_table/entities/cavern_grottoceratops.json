@@ -1,0 +1,76 @@
+{
+  "pools": [
+    {
+      "name": "grottoceratops_meat",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_dinosaur_chop",
+          "weight": 1,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            },
+            {
+              "type": "minecraft:furnace_smelt",
+              "condition": {
+                "entity": "this",
+                "predicate": {
+                  "flags": {
+                    "is_on_fire": true
+                  }
+                },
+                "type": "minecraft:entity_properties"
+              }
+            },
+            {
+              "count": {
+                "min": 0,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:enchanted_count_increase",
+              "enchantment": "minecraft:looting"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "grottoceratops_hide",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_tough_hide",
+          "weight": 1,
+          "modifier": [
+            {
+              "count": {
+                "min": 0,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            },
+            {
+              "count": {
+                "min": 0,
+                "max": 1,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:enchanted_count_increase",
+              "enchantment": "minecraft:looting"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

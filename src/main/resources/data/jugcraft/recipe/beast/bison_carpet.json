@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FF"
+  ],
+  "key": {
+    "F": "jugcraft:beast_bison_fur_block"
+  },
+  "result": {
+    "count": 3,
+    "id": "jugcraft:beast_bison_carpet"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

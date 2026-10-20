@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "M": "#c:storage_blocks/source",
+    "g": "#c:ingots/gold"
+  },
+  "pattern": [
+    "g g",
+    "gMg",
+    "g g"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_relay"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

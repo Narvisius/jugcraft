@@ -1,0 +1,35 @@
+{
+  "criteria": {
+    "ingredient_0": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:pink_petals"
+          }
+        ]
+      }
+    },
+    "ingredient_1": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:light_gray_dye"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "ingredient_0",
+      "ingredient_1"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "jugcraft:survival_completion/landscape_light_gray_flower_petal_block"
+    ]
+  }
+}

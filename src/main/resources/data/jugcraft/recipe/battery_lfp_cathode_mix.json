@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "LIP"
+  ],
+  "key": {
+    "L": "jugcraft:lithium_carbonate",
+    "I": "minecraft:iron_ingot",
+    "P": "jugcraft:phosphate"
+  },
+  "result": {
+    "id": "jugcraft:lfp_cathode_mix",
+    "count": 1
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:concordance_nouveau_arcana_understood",
+  "display": {
+    "icon": {
+      "id": "jugcraft:nouveau_source_gem"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.concordance_nouveau_arcana_mastered.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.concordance_nouveau_arcana_mastered.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

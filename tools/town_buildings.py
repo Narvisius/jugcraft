@@ -10,6 +10,7 @@ import math
 import random
 
 from town_voxels import S, Voxels, turn_xz, turn_facing
+import town_refinement
 
 
 class Piece:
@@ -70,6 +71,9 @@ def style(rng, **force):
         "shutter": rng.choice(["spruce", "dark_oak", "oak", "jungle"]),
         "stone_ground": rng.random() < 0.6,
     }
+    # Timber, shutters, doors and floor belong to the same joinery palette.
+    # Keep the draws above: changing their count reshuffles the entire town.
+    s.update(door=wood, shutter=wood, floor=f"{wood}_planks")
     s.update(force)
     return s
 
@@ -187,6 +191,7 @@ def house(rng, w, d, storeys=2, purpose="home", gable_front=None, st=None):
     if storeys > 1:
         bx = 1 if door_x > 2 else w - 2
         p.site("banner", "north", [(bx, 8, -2, 0)])
+    town_refinement.house(p, st, storeys, purpose)
     return p
 
 
@@ -340,16 +345,18 @@ def roof(p, rng, st, w, zf, zb, y0, gable_front):
 
 def chimney(p, rng, st, w, d, zf, zb, roof_y, gable_front):
     v = p.v
-    cx = 1 if rng.random() < 0.5 else w - 2
+    # Consume the original style draw so town layout/resident ordering stays stable.
+    rng.random()
+    cx = 0  # an exterior flue cannot collide with the bed or the rear ladder
     cz = d - 2
     material = "bricks" if rng.random() < 0.5 else "cobblestone"
-    top = roof_y + (max(w, zb - zf) // 2) + 2
+    top = max(y for (x, y, z) in v.b if x == cx and z == cz) + 2
     for y in range(1, top + 1):
         v.set(cx, y, cz, S(material))
     v.set(cx, top + 1, cz, S("campfire", facing="north", lit="true", signal_fire="false", waterlogged="false"))
-    # A fireplace below.
-    v.set(cx, 1, cz - 1, S("air"))
-    v.set(cx, 0, cz - 1, S("netherrack") if False else S(material))
+    v.set(cx, top, cz, S("stone_brick_wall"))
+    # The flue is part of the exterior wall; don't cut a ground-level hole in
+    # the neighbouring wall column as the old interior fireplace did.
 
 
 def furnish(p, rng, st, w, d, purpose, door_x):
@@ -699,6 +706,7 @@ def church(rng):
     p.site("banner", "north", [(mid - 4, 9, -1, 0)])
     p.site("banner", "north", [(mid + 4, 9, -1, 0)])
     p.door = (mid, -1)
+    town_refinement.church(p)
     return p
 
 
@@ -913,6 +921,7 @@ def bank(rng):
     p.site("banner", "north", [(1, 6, -2, 0)])
     p.site("banner", "north", [(W - 2, 6, -2, 0)])
     p.door = (mid, -2)
+    town_refinement.bank(p)
     return p
 
 
@@ -937,4 +946,5 @@ def town_hall(rng):
     v.set(mid, 18, -4, S("bell", attachment="floor", facing="north", powered="false")) if False else None
     spire_rect(v, mid - 2, -4, mid + 2, 0, top + 1, "deepslate_tile")
     p.spot("mayor", mid, 1, 5)
+    town_refinement.hall(p)
     return p

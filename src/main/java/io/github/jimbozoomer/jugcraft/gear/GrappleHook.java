@@ -68,7 +68,7 @@ public class GrappleHook extends ThrowableItemProjectile {
 		return hook != null && !hook.isRemoved() ? hook : null;
 	}
 
-	static void track(Player player, GrappleHook hook) {
+	public static void track(Player player, GrappleHook hook) {
 		ACTIVE.put(player.getUUID(), hook);
 	}
 
@@ -125,7 +125,9 @@ public class GrappleHook extends ThrowableItemProjectile {
 				|| distanceToSqr(owner) > (JugcraftGrapple.RANGE + 8.0) * (JugcraftGrapple.RANGE + 8.0)) {
 			return false;
 		}
-		return owner.getMainHandItem().is(JugcraftGrapple.PNEUMATIC_GRAPPLE) || owner.getOffhandItem().is(JugcraftGrapple.PNEUMATIC_GRAPPLE);
+		return owner.getMainHandItem().is(JugcraftGrapple.PNEUMATIC_GRAPPLE) || owner.getOffhandItem().is(JugcraftGrapple.PNEUMATIC_GRAPPLE)
+                || owner.getMainHandItem().getItem() instanceof io.github.jimbozoomer.jugcraft.menagerie.CompanionCreatures.SilkGrapple
+                || owner.getOffhandItem().getItem() instanceof io.github.jimbozoomer.jugcraft.menagerie.CompanionCreatures.SilkGrapple;
 	}
 
 	/** Pulls the owner along the line; on arrival (or after a while) gives a little hop and lets go. */

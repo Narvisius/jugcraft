@@ -1,0 +1,322 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        21.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "part",
+      "parent": "root",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.5,
+            -3.0,
+            -9.0,
+            7.0,
+            3.0,
+            10.0
+          ],
+          "uv": [
+            62.0,
+            32.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -3.5,
+            -1.0,
+            -9.0,
+            7.0,
+            0.0,
+            10.0
+          ],
+          "uv": [
+            67.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "jaw",
+      "parent": "part",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.5,
+            -1.0,
+            -9.0,
+            7.0,
+            4.0,
+            10.0
+          ],
+          "uv": [
+            52.0,
+            55.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -3.5,
+            0.0,
+            -9.0,
+            7.0,
+            0.0,
+            10.0
+          ],
+          "uv": [
+            66.0,
+            11.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelAnaconda.java",
+  "sourceSha256": "b043fc09a17d66f518ea23eab0ed629ba958c8a86bfbb24a9ef8ac7dda7f2121",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "part",
+      "kind": "walk",
+      "speed": 0.7,
+      "degree": 0.2,
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.05,
+      "clock": "age",
+      "amount": [
+        "*",
+        0.0,
+        0.2
+      ],
+      "when": [
+        "&&",
+        1,
+        1
+      ]
+    },
+    {
+      "bone": "jaw",
+      "kind": "walk",
+      "speed": 0.7,
+      "degree": 0.4,
+      "invert": true,
+      "phase": 1.0,
+      "bias": [
+        "*",
+        -1,
+        0.05
+      ],
+      "clock": "age",
+      "amount": [
+        "*",
+        0.0,
+        0.2
+      ],
+      "when": [
+        "&&",
+        1,
+        1
+      ]
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.part.setScale(f + swell, f + swell, f);",
+      "reason": "Unbound expression variable swell"
+    }
+  ],
+  "expressions": [
+    {
+      "bone": "part",
+      "target": "yRot",
+      "op": "+=",
+      "value": [
+        "/",
+        "yaw",
+        57.295776
+      ],
+      "when": [
+        "&&",
+        1,
+        1
+      ]
+    },
+    {
+      "bone": "part",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "min",
+        0.0,
+        [
+          "/",
+          "pitch",
+          57.295776
+        ]
+      ],
+      "when": [
+        "&&",
+        1,
+        1
+      ]
+    },
+    {
+      "bone": "part",
+      "target": "x",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "sin",
+            "walk"
+          ],
+          2.0
+        ],
+        "move"
+      ],
+      "when": [
+        "&&",
+        1,
+        1
+      ]
+    }
+  ],
+  "poses": [
+    {
+      "bone": "part",
+      "weight": [
+        "/",
+        0.0,
+        5.0
+      ],
+      "target": "position",
+      "value": [
+        0.0,
+        4.0,
+        0.0
+      ],
+      "when": [
+        "&&",
+        1,
+        1
+      ]
+    },
+    {
+      "bone": "jaw",
+      "weight": [
+        "/",
+        0.0,
+        5.0
+      ],
+      "target": "position",
+      "value": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "when": [
+        "&&",
+        1,
+        1
+      ]
+    },
+    {
+      "bone": "part",
+      "weight": [
+        "/",
+        0.0,
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.17453292519943295,
+        0.0,
+        0.0
+      ],
+      "when": [
+        "&&",
+        1,
+        1
+      ]
+    },
+    {
+      "bone": "jaw",
+      "weight": [
+        "/",
+        0.0,
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        2.792526803190927,
+        0.0,
+        0.0
+      ],
+      "when": [
+        "&&",
+        1,
+        1
+      ]
+    }
+  ]
+}

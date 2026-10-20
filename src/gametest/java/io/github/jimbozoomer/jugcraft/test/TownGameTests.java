@@ -11,6 +11,11 @@ import io.github.jimbozoomer.jugcraft.town.TownShops;
 import io.github.jimbozoomer.jugcraft.town.TownState;
 import io.github.jimbozoomer.jugcraft.town.Townsfolk;
 import io.github.jimbozoomer.jugcraft.town.TownsfolkCare;
+import io.github.jimbozoomer.jugcraft.town.TownWayfinding;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.MapItem;
+import net.minecraft.world.level.block.entity.SignBlockEntity;
+import net.minecraft.world.level.block.entity.SignTextSlot;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -262,6 +267,27 @@ public class TownGameTests {
 		// A survival player can't break or place, or pour water.
 		ServerPlayer player = helper.makeMockServerPlayerInLevel();
 		player.setGameMode(GameType.SURVIVAL);
+		ItemStack townMap = TownWayfinding.map(level);
+		var mapId = townMap.get(DataComponents.MAP_ID);
+		var mapData = MapItem.getSavedData(townMap, level);
+		helper.assertTrue(mapData != null && mapData.locked && mapData.centerX == origin.getX() + 96
+				&& mapData.centerZ == origin.getZ() + 96, "Town plan is locked and centred on its real coordinates");
+		TownWayfinding.giveMap(player);
+		TownWayfinding.giveMap(player);
+		helper.assertTrue(player.getInventory().countItem(Items.FILLED_MAP) == 1, "Guard gives one carried copy");
+		helper.assertTrue(mapId.equals(TownWayfinding.map(level).get(DataComponents.MAP_ID)), "Copies reuse the saved map ID");
+		var encodedTown = TownState.CODEC.encodeStart(com.mojang.serialization.JsonOps.INSTANCE, state).getOrThrow();
+		helper.assertTrue(TownState.CODEC.parse(com.mojang.serialization.JsonOps.INSTANCE, encodedTown).getOrThrow().townMap()
+				== state.townMap(), "Map ID survives saved-state round trip");
+		for (var entry : data.signs) {
+			BlockPos signPos = origin.offset(entry.pos());
+			if (!chunks.contains(ChunkPos.containing(signPos))) continue;
+			helper.assertTrue(level.getBlockEntity(signPos) instanceof SignBlockEntity, "Sign exists at " + signPos);
+			var sign = (SignBlockEntity)level.getBlockEntity(signPos);
+			helper.assertTrue(sign.isWaxed() && sign.getText(SignTextSlot.FRONT).getMessages(false).getFirst().getString()
+					.equals(entry.lines().get(0)), "Sign is labelled and waxed");
+		}
+
 		BlockPos paving = origin.offset(96, 0, 100);
 		BlockState pavingState = level.getBlockState(paving);
 		player.snapTo(paving.getX() + 0.5, paving.getY() + 1, paving.getZ() + 0.5, 0.0F, 0.0F);

@@ -1,0 +1,127 @@
+{
+  "feature": {
+    "type": "minecraft:block_column",
+    "allowed_placement": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+        "minecraft:air"
+      ]
+    },
+    "direction": "up",
+    "layers": [
+      {
+        "height": {
+          "type": "minecraft:biased_to_bottom",
+          "min_inclusive": 1,
+          "max_inclusive": 5
+        },
+        "provider": {
+          "type": "minecraft:noise",
+          "noise": {
+            "base_octave": -3,
+            "octave_count": 2,
+            "amplitude_modifiers": [
+              1,
+              1
+            ],
+            "normalize": "legacy"
+          },
+          "scale": 1,
+          "seed": 0,
+          "states": [
+            {
+              "id": "minecraft:cactus",
+              "properties": {
+                "age": "13"
+              }
+            },
+            {
+              "id": "minecraft:cactus",
+              "properties": {
+                "age": "11"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "height": {
+          "type": "minecraft:weighted_list",
+          "distribution": [
+            {
+              "data": 0,
+              "weight": 3
+            },
+            {
+              "data": 1,
+              "weight": 1
+            }
+          ]
+        },
+        "provider": {
+          "id": "minecraft:cactus_flower"
+        }
+      }
+    ],
+    "prioritize_tip": true
+  },
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 256
+    },
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 2
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE"
+    },
+    {
+      "type": "minecraft:offset",
+      "x": {
+        "type": "minecraft:trapezoid",
+        "plateau": 0,
+        "min": -5,
+        "max": 5
+      },
+      "y": {
+        "type": "minecraft:trapezoid",
+        "plateau": 0,
+        "min": -2,
+        "max": 2
+      },
+      "z": {
+        "type": "minecraft:trapezoid",
+        "plateau": 0,
+        "min": -5,
+        "max": 5
+      }
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:all_of",
+        "predicates": [
+          {
+            "type": "minecraft:would_survive",
+            "state": {
+              "id": "minecraft:cactus",
+              "properties": {}
+            }
+          },
+          {
+            "type": "minecraft:replaceable"
+          }
+        ]
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

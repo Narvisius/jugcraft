@@ -1,0 +1,31 @@
+{
+    "display": {
+        "icon": {
+            "id": "inventorypets:pet_ender_chest"
+        },
+        "title": {
+            "translate": "advancement.ip.petach_ender_chest"
+        },
+        "description": {
+            "translate": "advancement.ip.petach_ender_chest.desc"
+        },
+        "show_toast": true,
+        "announce_to_chat": true
+    },
+    "parent": "inventorypets:enchantingtable",
+    "criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                        	"inventorypets:pet_ender_chest"
+                    	]
+                    }
+                    
+                ]
+            }
+        }
+    }
+}

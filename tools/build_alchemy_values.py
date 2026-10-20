@@ -46,6 +46,10 @@ def build(jar):
                        'milk_bucket':832,'cod_bucket':832,'salmon_bucket':832,'pufferfish_bucket':832,
                        'tropical_fish_bucket':832,'axolotl_bucket':1024,'tadpole_bucket':832}.items():
         values['minecraft:'+item]=Fraction(price);origins['minecraft:'+item]='local container accounting'
+    # Natural rubber shares the existing one-essence material. A filled latex bottle
+    # must include its recoverable shell, and pot output must not count returned bottles twice.
+    for item, price in {'jugcraft:latex_bottle': 2, 'jugcraft:rubber': 1}.items():
+        values[item] = Fraction(price); origins[item] = 'local natural rubber/container accounting'
     locked=set(values)
     edges=[]
     for rid,r in recipes.items():

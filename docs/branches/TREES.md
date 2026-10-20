@@ -41,7 +41,7 @@ changed and why. Leaf and bark colours were worked out by script from the ramps 
 checked against every other wood, vanilla's and Jugcraft's, by CIE76 ΔE and by CIEDE2000, and each leaf and bark against
 the trees it grows beside.
 
-**Batches 4b and 4c are implemented and owner-approved (16 October 2026)** on `codex/tree-generation-batch-4bc` in [PR #395](https://github.com/jimbozoomer-byte/jugcraft/pull/395), following the owner-approved batch 4. The owner requested both together; [the feature record](../features/trees-batch-4bc.md) records the shared scope and actual verification. PR #395 is ready for review. Batch 5 (rowan, elder and seasonal fruit) is implemented and owner-approved on its own public branch in [PR #396](https://github.com/jimbozoomer-byte/jugcraft/pull/396); [implementation record](../features/trees-batch-5.md). PR #396 is ready for review. Batches 5b and 5c are implemented together in [draft PR #397](https://github.com/jimbozoomer-byte/jugcraft/pull/397), awaiting owner inspection; [record](../features/trees-batch-5bc.md). Batch 6 and later remain unstarted.
+**Batches 4b and 4c are implemented and owner-approved (16 October 2026)** in [PR #395](https://github.com/jimbozoomer-byte/jugcraft/pull/395); [feature record](../features/trees-batch-4bc.md). Batch 5 (rowan, elder and seasonal fruit) is owner-approved in [PR #396](https://github.com/jimbozoomer-byte/jugcraft/pull/396); [implementation record](../features/trees-batch-5.md). Batches 5b and 5c are owner-approved after the hawthorn harvest correction in [PR #397](https://github.com/jimbozoomer-byte/jugcraft/pull/397); [record](../features/trees-batch-5bc.md). These earlier batches were incorporated into main by [integration PR #398](https://github.com/jimbozoomer-byte/jugcraft/pull/398). Batch 6 is implemented and owner-approved on `codex/tree-generation-batch-6` in [PR #399](https://github.com/jimbozoomer-byte/jugcraft/pull/399), reapplied unchanged onto the merged main branch; [scope and verification](../features/trees-batch-6.md). Batch 6b holly is implemented and owner-approved in [PR #404](https://github.com/jimbozoomer-byte/jugcraft/pull/404). Batch 7 olive is implemented and locally tested, awaiting owner visual approval in [draft PR #408](https://github.com/jimbozoomer-byte/jugcraft/pull/408); [scope and verification](../features/trees-batch-7.md). Later batches remain unstarted.
 
 ## How to read this
 
@@ -246,7 +246,7 @@ own records, and gives the conifer forests an understory. Two shapes cost nothin
     Forest 10%.
   - bog_fir: Muskeg 30%, replacing the full-size fir; Fen 50%, as its default ("short firs"); Bog 15%.
 - **Shape:**
-  - stunted_fir: straight trunk 4 (+3) under spruce foliage (radius [1, 2], offset [0, 1], trunk_height [0, 1]). A
+  - stunted_fir: straight trunk 4 (+3) under spruce foliage (radius [1, 2], offset 0, trunk_height 0). A
     squat cone 5-8 blocks tall with needles nearly to the ground.
   - bog_fir: the same trunk under spruce foliage (radius [0, 1], offset [0, 1], trunk_height [2, 3]). A pencil-thin,
     ragged spire with a tuft at the top, like black spruce's "club top".
@@ -883,9 +883,9 @@ with a drought-hardy survivor.
   | Alpine Spawn | juniper_bush 10%, in batch 8 with Alpine Spawn's picks list |
 - **Shape:** all three forms survive as a dead bush would, so they stand on sand, red sand, coarse dirt and
   terracotta as well as grass.
-  - juniper: forking trunk 2 (+2, +1) under random_spread foliage (radius 2, offset 0, foliage_height 3, 40
-    attempts). Short, crooked and ragged, 4-6 blocks.
-  - juniper_column: straight trunk 4 (+2) under spruce foliage (radius [1, 2], offset [0, 1], trunk_height [0, 1]). A
+  - juniper: forking trunk 3 (+1, +1) under connected fancy foliage (radius 1, offset 0, height 3).
+    Short and crooked, 4-6 blocks; connected crown lobes avoid floating leaf islands.
+  - juniper_column: straight trunk 4 (+2) under spruce foliage (radius [1, 2], offset 0, trunk_height 0). A
     shaggy flame, leafy from the ground up, 5-7 blocks.
   - juniper_bush: one log under bush foliage (radius 2, offset 0, height 1). A low mat 5 wide and 1-2 high.
 - **Bark and wood:** its own wood, **juniper** (rule 9). The junipers (*Juniperus*) are one of about 30 genera of the
@@ -942,14 +942,18 @@ keeping it open and low.
 
 ### Batch 6b: the holly
 
+**Implemented and owner-approved** on `codex/tree-generation-batch-6b` in [PR #404](https://github.com/jimbozoomer-byte/jugcraft/pull/404). [Scope, balance and verification](../features/trees-batch-6b.md). This follows approved batch 6; batch 7 is recorded below.
+
 Its berries use batch 5's season state, so it follows batch 5.
 
 #### holly
 European holly (*Ilex aquifolium*). **Medium.** It keeps the oak woods green under winter snow and ties world
 generation to the planned December content.
-- **Grows in:** Woodland 4%; Dense Forest 5%, from the oak bush's share.
-- **Shape:** straight trunk 3 (+2) under blob foliage (radius 2, offset 0, height 4). An upright broadleaf oval 5-7
-  blocks tall. It is not a spruce-placer cone, which would read as a small fir.
+- **Grows in:** Woodland 4%, from ordinary oak; Dense Forest 5%, from the oak bush's share. Existing hawthorn,
+  elder and remaining Woodland oak bushes keep their shares; total tree counts stay unchanged.
+- **Shape:** straight trunk 4 (+2) under native fancy foliage (radius 2, offset 0, height 4). Sampled trees are 5-7
+  blocks tall and 5 wide. The implemented placer preserves the intended upright broadleaf oval; the original
+  height-four blob suggestion spread too far sideways.
 - **Bark and wood:** its own wood, **holly** (rule 9). Holly (*Ilex*) is not an oak; vanilla pale oak was a
   look-alike. Its timber is famous: the whitest wood, for inlay, chess pieces, turnery and engraving.
   - Bark: smooth grey with a faint green cast, in low, flat plates: #5e655a #717a6c #858e7f #99a094 #acb2a9 (plated, at
@@ -974,6 +978,8 @@ generation to the planned December content.
   - They are decoration only and never gate anything.
 
 ### Batch 7: the olive
+
+**Implementation in progress** on `codex/tree-generation-batch-7`, [draft PR #408](https://github.com/jimbozoomer-byte/jugcraft/pull/408). [Approved scope and verification](../features/trees-batch-7.md). Later batches are excluded.
 
 #### olive
 Olive (*Olea europaea*), wild and cultivated. **High.** The defining tree of the Mediterranean. It fills the biggest
@@ -1276,6 +1282,8 @@ stone.
 
 ### Batch 10: hanging fruit
 
+Implementation: [tree batch 10](../features/trees-batch-10.md), [PR #417](https://github.com/jimbozoomer-byte/jugcraft/pull/417). Owner-approved and ready for review. Includes baobabs, date palms and renewable hanging fruit. The implementation record documents the 26.3 foliage constraints and preserves the established tamarisk shares and biome attempt budgets.
+
 #### baobab
 African baobab and Australian boab (*Adansonia digitata*, *A. gregorii*). **High.** The outback's icon, a silhouette no
 vanilla tree has. Today the Outback's only tree is a generic acacia.
@@ -1323,6 +1331,8 @@ food and a reason to visit.
   in `TreeGrower`.
 
 ### Batch 11: tropics, subtropics and coasts
+
+Implementation of batches 11, 11b and 11c: [feature record](../features/trees-batch-11.md), [PR #418](https://github.com/jimbozoomer-byte/jugcraft/pull/418). Owner requested all three together and approved the final inspection world on 18 October 2026, including the olive/fig bark detail and spreading banyan limbs. Pandanus is omitted as recommended. The record explains current biome weights, renewable harvests and native placement adjustments. Batch 12 and later remain future work.
 
 #### flame_tree
 Flame tree, or royal poinciana (*Delonix regia*). **Medium.** A flowering tree of the tropics. In the Jacaranda Glade
@@ -1479,7 +1489,13 @@ and its villages, a tree of their own and a warm-climate fruit.
 
 ### Batch 12: rainforest
 
-This batch follows agriculture slice 5, which already plans the rubber tree and its tapping.
+**Implementation update, 18 October 2026:** active in [draft PR #420](https://github.com/jimbozoomer-byte/jugcraft/pull/420).
+The owner explicitly included the missing rubber tree, tapping and latex-processing prerequisite.
+The [Batch 12 feature record](../features/trees-batch-12.md) records the current biome shares,
+existing banana integration and soil-supported emergent mahogany fallback. Batch 13 is not started.
+The original proposals below remain planning context where superseded by that record.
+
+This batch originally followed agriculture slice 5, which planned the rubber tree and its tapping.
 
 #### rubber_tree
 Pará rubber tree (*Hevea brasiliensis*). **High.** `docs/features/rubber.md` names natural rubber trees as a planned
@@ -2174,3 +2190,11 @@ Prepared on 5 October 2026 with Claude Opus 5.5, revised on 6 October 2026 with 
 update, and finalized the same day with Claude Opus 5.5 after that revision's review. Colour ramps and distances were
 computed by script from `tools/wood_style.py`, and current shares from `tools/biomes.py`. Batch 1 has since been built
 (not played); nothing else in this plan has been built, run in game or play-tested.
+
+## Batches 8, 8b and 8c implementation, 17 October 2026
+
+Owner-authorized together on `codex/tree-generation-batch-8abc`, [draft PR #411](https://github.com/jimbozoomer-byte/jugcraft/pull/411). [Scope and verification](../features/trees-batch-8abc.md). Based on the owner-approved batches 6, 6b and 7, still separate PR dependencies. Batch 8 retains Eucalyptus Forest's existing 20% understory share as wattle, and keeps Mediterranean citrus at 5% each with cypress 35%, olive 25%, olive bush 15% and umbrella pine 15%. Dry River reserves 60% empty for future date palms. Tamarisk uses connected foliage sprays; Joshua arms are face-connected. No batch 9 work is included. Actual implementation tool/model: OpenAI Codex (GPT-6).
+
+### Batches 9 and 9b implementation (17 October 2026)
+
+Owner-authorized together on `codex/tree-generation-batch-9-9b`, [draft PR #413](https://github.com/jimbozoomer-byte/jugcraft/pull/413). See the [scope, balance, provenance and verification record](../features/trees-batch-9-9b.md). Adds bounded giant fungi, renewable Nether brambles and the dragonblood wood/tree set while preserving the existing biome attempt budgets. Based on approved PR #411; earlier open tree PRs remain dependencies. No batch 10 or later work is included. Actual tool/model: OpenAI Codex (GPT-6).

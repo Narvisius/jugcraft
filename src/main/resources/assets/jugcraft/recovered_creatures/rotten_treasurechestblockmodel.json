@@ -1,0 +1,105 @@
+{
+  "textureSize": [
+    48,
+    32
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -5.0,
+            -4.0,
+            10.0,
+            5.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            19.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lid",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -4.0,
+        4.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -3.0,
+            -8.0,
+            10.0,
+            3.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            5.0
+          ],
+          "inflate": [
+            0.025,
+            0.025,
+            0.025
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -1.0,
+            -1.0,
+            -9.0,
+            2.0,
+            2.0,
+            1.0
+          ],
+          "uv": [
+            1.0,
+            7.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "rotten/com/github/teamfusion/rottencreatures/client/level/blockentities/model/TreasureChestBlockModel.java",
+  "sourceSha256": "9e423c47e6f4d7edd6a39ca2f51e50f862396a24632157f04f613f5a2ec2db48",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:nouveau_red_archwood_log",
+    "minecraft:sand",
+    "jugcraft:nouveau_earth_essence"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_ritual_conjure_island_desert"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

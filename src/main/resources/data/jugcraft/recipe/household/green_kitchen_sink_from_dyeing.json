@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "D": "minecraft:green_dye",
+    "K": "#jugcraft:household/coloured_kitchen_sinks"
+  },
+  "pattern": [
+    "D",
+    "K"
+  ],
+  "result": {
+    "id": "jugcraft:household_green_kitchen_sink"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -33,7 +33,8 @@ public final class TownState extends SavedData {
 			UUIDUtil.STRING_CODEC.listOf().optionalFieldOf("welcomed", List.of()).forGetter(s -> List.copyOf(s.welcomed)),
 			Codec.STRING.optionalFieldOf("theme", "").forGetter(s -> s.theme),
 			Codec.LONG.optionalFieldOf("theme_since", 0L).forGetter(s -> s.themeSince),
-			Codec.BOOL.optionalFieldOf("styx_district", false).forGetter(s -> s.styxDistrict))
+			Codec.BOOL.optionalFieldOf("styx_district", false).forGetter(s -> s.styxDistrict),
+			Codec.INT.optionalFieldOf("town_map", -1).forGetter(s -> s.townMap))
 			.apply(i, TownState::new));
 	static final SavedDataType<TownState> TYPE = new SavedDataType<>(Jugcraft.id("town"), TownState::new, CODEC, null);
 
@@ -45,13 +46,17 @@ public final class TownState extends SavedData {
 	private String theme;
 	private long themeSince;
 	private boolean styxDistrict;
+	private int townMap;
+	public int townMap() { return townMap; }
+	public void setTownMap(int id) { townMap = id; setDirty(); }
 
 	TownState() {
-		this(Optional.empty(), List.of(), List.of(), Map.of(), List.of(), "", 0L, false);
+		this(Optional.empty(), List.of(), List.of(), Map.of(), List.of(), "", 0L, false, -1);
 	}
 
 	TownState(Optional<BlockPos> origin, List<Long> built, List<String> siteThemes, Map<String, UUID> townsfolk,
-			List<UUID> welcomed, String theme, long themeSince, boolean styxDistrict) {
+			List<UUID> welcomed, String theme, long themeSince, boolean styxDistrict, int townMap) {
+		this.townMap = townMap;
 		this.styxDistrict = styxDistrict;
 		this.origin = origin.orElse(null);
 		this.built.addAll(built);
@@ -93,6 +98,7 @@ public final class TownState extends SavedData {
 
 	/** Only newly planned towns reserve the east district; missing fields in old saves stay false. */
 	public void place(BlockPos origin, boolean styxDistrict) {
+		townMap = -1;
 		this.styxDistrict = styxDistrict;
 		this.origin = origin.immutable();
 		built.clear();
@@ -103,6 +109,7 @@ public final class TownState extends SavedData {
 
 	/** Forgets the town (for tests and `/jugcraft town forget`): its blocks stay, its protection and NPC care end. */
 	public void forget() {
+		townMap = -1;
 		styxDistrict = false;
 		origin = null;
 		built.clear();

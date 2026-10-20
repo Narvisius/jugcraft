@@ -1,0 +1,320 @@
+{
+  "textureSize": [
+    64,
+    32
+  ],
+  "parts": [
+    {
+      "name": "head",
+      "parent": "$mesh",
+      "pose": [
+        0,
+        6,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4,
+            -8,
+            -4,
+            8,
+            8,
+            8
+          ],
+          "uv": [
+            0,
+            0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "body",
+      "parent": "$mesh",
+      "pose": [
+        0,
+        6,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4,
+            0,
+            -2,
+            8,
+            12,
+            4
+          ],
+          "uv": [
+            16,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_hind_leg",
+      "parent": "$mesh",
+      "pose": [
+        -2,
+        18,
+        4,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2,
+            0,
+            -2,
+            4,
+            6,
+            4
+          ],
+          "uv": [
+            0,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_hind_leg",
+      "parent": "$mesh",
+      "pose": [
+        2,
+        18,
+        4,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2,
+            0,
+            -2,
+            4,
+            6,
+            4
+          ],
+          "uv": [
+            0,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_front_leg",
+      "parent": "$mesh",
+      "pose": [
+        -2,
+        18,
+        -4,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2,
+            0,
+            -2,
+            4,
+            6,
+            4
+          ],
+          "uv": [
+            0,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_front_leg",
+      "parent": "$mesh",
+      "pose": [
+        2,
+        18,
+        -4,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2,
+            0,
+            -2,
+            4,
+            6,
+            4
+          ],
+          "uv": [
+            0,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {},
+  "motions": [],
+  "expressions": [
+    {
+      "bone": "right_hind_leg",
+      "target": "xRot",
+      "op": "=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "cos",
+            [
+              "+",
+              [
+                "*",
+                "walk",
+                0.6662
+              ],
+              0
+            ]
+          ],
+          1.4
+        ],
+        "move"
+      ]
+    },
+    {
+      "bone": "left_hind_leg",
+      "target": "xRot",
+      "op": "=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "cos",
+            [
+              "+",
+              [
+                "*",
+                "walk",
+                0.6662
+              ],
+              3.141592653589793
+            ]
+          ],
+          1.4
+        ],
+        "move"
+      ]
+    },
+    {
+      "bone": "right_front_leg",
+      "target": "xRot",
+      "op": "=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "cos",
+            [
+              "+",
+              [
+                "*",
+                "walk",
+                0.6662
+              ],
+              3.141592653589793
+            ]
+          ],
+          1.4
+        ],
+        "move"
+      ]
+    },
+    {
+      "bone": "left_front_leg",
+      "target": "xRot",
+      "op": "=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "cos",
+            [
+              "+",
+              [
+                "*",
+                "walk",
+                0.6662
+              ],
+              0
+            ]
+          ],
+          1.4
+        ],
+        "move"
+      ]
+    }
+  ],
+  "vanillaCreeperMinion": true,
+  "source": "CreeperMinionModel extends vanilla CreeperModel"
+}

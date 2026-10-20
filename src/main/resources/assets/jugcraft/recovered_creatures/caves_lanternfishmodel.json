@@ -1,0 +1,314 @@
+{
+  "textureSize": [
+    16,
+    16
+  ],
+  "parts": [
+    {
+      "name": "body",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        22.0,
+        -1.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.0,
+            -2.5,
+            2.0,
+            2.0,
+            5.0
+          ],
+          "uv": [
+            2.0,
+            9.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            0.0,
+            1.0,
+            -1.25,
+            0.0,
+            2.0,
+            4.0
+          ],
+          "uv": [
+            8.0,
+            3.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            0.0,
+            -2.5,
+            -1.0,
+            0.0,
+            2.0,
+            3.0
+          ],
+          "uv": [
+            7.0,
+            -1.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "tail",
+      "parent": "body",
+      "pose": [
+        0.0,
+        0.0,
+        2.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -1.5,
+            0.0,
+            0.0,
+            3.0,
+            3.0
+          ],
+          "uv": [
+            0.0,
+            3.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightfin",
+      "parent": "body",
+      "pose": [
+        1.0,
+        0.5,
+        -0.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -0.5,
+            0.0,
+            1.0,
+            1.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leftfin",
+      "parent": "body",
+      "pose": [
+        -1.0,
+        0.5,
+        -0.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -0.5,
+            0.0,
+            1.0,
+            1.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/LanternfishModel.java",
+  "sourceSha256": "8f680f6cd47bed6d916f160611529c880bffd628ec3d68ab7d87180e61457a83",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "body",
+      "kind": "walk",
+      "speed": 0.1,
+      "degree": 0.05,
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "kind": "bob",
+      "speed": 0.1,
+      "degree": 0.3,
+      "invert": false,
+      "phase": 0,
+      "bias": 0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "kind": "swing",
+      "speed": 0.9,
+      "degree": [
+        "*",
+        0.9,
+        0.4
+      ],
+      "invert": false,
+      "phase": 3.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "tail",
+      "kind": "swing",
+      "speed": 0.9,
+      "degree": [
+        "*",
+        0.9,
+        0.8
+      ],
+      "invert": false,
+      "phase": 2.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "rightfin",
+      "kind": "swing",
+      "speed": 0.9,
+      "degree": [
+        "*",
+        0.9,
+        1.1
+      ],
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.4,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "leftfin",
+      "kind": "swing",
+      "speed": 0.9,
+      "degree": [
+        "*",
+        0.9,
+        1.1
+      ],
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.4,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [],
+  "expressions": [
+    {
+      "bone": "body",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "/",
+        "pitch",
+        57.295776
+      ],
+      "when": 1
+    }
+  ],
+  "poses": [
+    {
+      "bone": "body",
+      "weight": [
+        "/",
+        [
+          "*",
+          "land",
+          1
+        ],
+        1.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.0,
+        0.0,
+        -1.5707963267948966
+      ],
+      "when": 1
+    }
+  ]
+}

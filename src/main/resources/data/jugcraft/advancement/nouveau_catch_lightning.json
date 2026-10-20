@@ -1,0 +1,27 @@
+{
+  "parent": "jugcraft:nouveau_mob_jar",
+  "criteria": {
+    "catch_lightning": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "jugcraft.nouveau_adv.desc.catch_lightning"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "minecraft:lightning_rod"
+    },
+    "title": {
+      "translate": "jugcraft.nouveau_adv.title.catch_lightning"
+    }
+  },
+  "requirements": [
+    [
+      "catch_lightning"
+    ]
+  ]
+}

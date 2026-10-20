@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " A ",
+    " T ",
+    " T "
+  ],
+  "key": {
+    "A": "minecraft:amethyst_shard",
+    "T": "jugcraft:landscape_ogre_tusk"
+  },
+  "result": {
+    "id": "jugcraft:landscape_staff_amethyst",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "jugcraft:nouveau_enchanting_apparatus",
+  "criteria": {
+    "has_potion_jar": {
+      "conditions": {
+        "items": [
+          {
+            "items": "jugcraft:nouveau_potion_jar"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "jugcraft.nouveau_adv.desc.potion_jar"
+    },
+    "icon": {
+      "count": 1,
+      "id": "jugcraft:nouveau_potion_jar"
+    },
+    "title": {
+      "translate": "jugcraft.nouveau_adv.title.potion_jar"
+    }
+  },
+  "requirements": [
+    [
+      "has_potion_jar"
+    ]
+  ]
+}

@@ -1,0 +1,874 @@
+{
+  "textureSize": [
+    256,
+    256
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "body",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -1.3333,
+        -0.0833,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -9.0,
+            -14.6667,
+            -16.9167,
+            18.0,
+            16.0,
+            33.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "fintop",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -14.6667,
+        -2.4167,
+        -0.2182,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -16.0,
+            -1.5,
+            2.0,
+            18.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "fin_left",
+      "parent": "body",
+      "pose": [
+        8.5,
+        -0.1667,
+        -8.9167,
+        -0.6109,
+        1.2217,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -7.5,
+            -1.5,
+            -3.0,
+            12.0,
+            2.0,
+            17.0
+          ],
+          "uv": [
+            0.0,
+            92.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "fin_right",
+      "parent": "body",
+      "pose": [
+        -8.5,
+        -0.1667,
+        -8.9167,
+        -0.6109,
+        -1.2217,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.5,
+            -1.5,
+            -3.0,
+            12.0,
+            2.0,
+            17.0
+          ],
+          "uv": [
+            0.0,
+            92.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "tail1",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -5.9167,
+        15.5833,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -7.0,
+            -6.75,
+            0.5,
+            14.0,
+            13.0,
+            18.0
+          ],
+          "uv": [
+            70.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "head",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -5.6667,
+        -16.9167,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -8.0,
+            -8.0,
+            -17.0,
+            16.0,
+            8.0,
+            17.0
+          ],
+          "uv": [
+            71.0,
+            71.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -7.0,
+            0.0,
+            -15.0,
+            14.0,
+            1.0,
+            15.0
+          ],
+          "uv": [
+            96.0,
+            97.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "tail2",
+      "parent": "tail1",
+      "pose": [
+        0.0,
+        0.25,
+        16.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -4.0,
+            2.0,
+            10.0,
+            9.0,
+            16.0
+          ],
+          "uv": [
+            43.0,
+            97.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "jaw",
+      "parent": "head",
+      "pose": [
+        0.0,
+        1.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -7.0,
+            -2.0,
+            -15.0,
+            14.0,
+            1.0,
+            18.0
+          ],
+          "uv": [
+            73.0,
+            50.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -8.0,
+            -1.0,
+            -16.0,
+            16.0,
+            6.0,
+            19.0
+          ],
+          "uv": [
+            0.0,
+            66.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "tailend",
+      "parent": "tail2",
+      "pose": [
+        0.0,
+        0.5,
+        16.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -16.0,
+            -1.0,
+            -2.5,
+            32.0,
+            2.0,
+            13.0
+          ],
+          "uv": [
+            0.0,
+            50.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelOrca.java",
+  "sourceSha256": "6dc950302cd6be14e0a44089704adf215e8c9dd306377eff7eff60c0c69c2ed2",
+  "animationRoot": "root",
+  "headLook": "head",
+  "actions": {
+    "bite": {
+      "length": 0.4,
+      "loop": false,
+      "channels": [
+        {
+          "bone": "body",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                0.0,
+                0.0,
+                -5.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "head",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                -25.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "jaw",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                59.99999999999999,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ]
+    },
+    "tailswing": {
+      "length": 1.0,
+      "loop": false,
+      "channels": [
+        {
+          "bone": "body",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                0.0,
+                6.0,
+                15.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                0.0,
+                6.0,
+                15.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "tailend",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                -25.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                -25.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "tail2",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                -35.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                -35.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "tail1",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                -35.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                -35.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "body",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                -140.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                -140.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "motions": [
+    {
+      "bone": "body",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": [
+        "*",
+        0.4,
+        0.2
+      ],
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "kind": "bob",
+      "speed": 0.2,
+      "degree": [
+        "*",
+        0.4,
+        5.0
+      ],
+      "invert": false,
+      "phase": 0,
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "fin_left",
+      "kind": "swing",
+      "speed": 0.2,
+      "degree": [
+        "*",
+        0.4,
+        0.2
+      ],
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "fin_right",
+      "kind": "swing",
+      "speed": 0.2,
+      "degree": [
+        "*",
+        0.4,
+        0.2
+      ],
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "fin_left",
+      "kind": "flap",
+      "speed": 0.2,
+      "degree": [
+        "*",
+        0.4,
+        1.4
+      ],
+      "invert": true,
+      "phase": 3.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "fin_right",
+      "kind": "flap",
+      "speed": 0.2,
+      "degree": [
+        "*",
+        0.4,
+        1.4
+      ],
+      "invert": false,
+      "phase": 3.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "tail1",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": false,
+      "phase": [
+        "*",
+        0.2,
+        0.0
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "tail2",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": false,
+      "phase": [
+        "*",
+        0.2,
+        0.5235987755982988
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "tailend",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.4,
+      "invert": false,
+      "phase": [
+        "*",
+        0.2,
+        1.0471975511965976
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [],
+  "expressions": [
+    {
+      "bone": "body",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        "pitch",
+        [
+          "/",
+          3.141592653589793,
+          180
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "target": "yRot",
+      "op": "+=",
+      "value": [
+        "*",
+        "yaw",
+        [
+          "/",
+          3.141592653589793,
+          180
+        ]
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

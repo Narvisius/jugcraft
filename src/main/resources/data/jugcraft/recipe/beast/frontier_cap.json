@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "HHH",
+    "HCH",
+    "  T"
+  ],
+  "key": {
+    "H": "jugcraft:beast_bear_fur",
+    "T": "jugcraft:beast_raccoon_tail",
+    "C": "minecraft:leather_helmet"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:beast_frontier_cap"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

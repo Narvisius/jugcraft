@@ -1,0 +1,64 @@
+{
+  "pools": [
+    {
+      "name": "nucleeper_core",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_fissile_core",
+          "weight": 1,
+          "modifier": [
+            {
+              "count": {
+                "min": 0,
+                "max": 1,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            },
+            {
+              "count": {
+                "min": 0,
+                "max": 1,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:enchanted_count_increase",
+              "enchantment": "minecraft:looting"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "nucleeper_gunpowder",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:gunpowder",
+          "weight": 1,
+          "modifier": [
+            {
+              "count": {
+                "min": 0,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            },
+            {
+              "count": {
+                "min": 0,
+                "max": 1,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:enchanted_count_increase",
+              "enchantment": "minecraft:looting"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

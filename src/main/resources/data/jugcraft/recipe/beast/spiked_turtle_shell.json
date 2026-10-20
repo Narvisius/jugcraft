@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "HHH",
+    "HCH"
+  ],
+  "key": {
+    "H": "jugcraft:beast_spiked_scute",
+    "C": "minecraft:turtle_helmet"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:beast_spiked_turtle_shell"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

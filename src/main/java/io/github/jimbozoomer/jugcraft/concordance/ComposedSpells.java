@@ -176,14 +176,34 @@ public final class ComposedSpells {
 
 	/** As {@link #cast(ServerLevel, ServerPlayer, Plan, Cause, Ledger)}, reporting why nothing took effect. */
 	public static Outcome perform(ServerLevel level, ServerPlayer caster, Plan plan, Cause cause, Ledger ledger) {
+        io.github.jimbozoomer.jugcraft.nouveau.NouveauSignals.spell(level,caster,caster.position(),plan.text(),plan.capacity(),false);
+        var delivery=io.github.jimbozoomer.jugcraft.nouveau.NouveauSpellDelivery.start(level,caster,plan,cause,ledger);if(delivery!=null){if(delivery.applied())io.github.jimbozoomer.jugcraft.nouveau.NouveauSpellDelivery.echoSummons(level,caster,plan,cause,ledger);return delivery;}
 		Set<ConcordanceEffects.Result> seen = EnumSet.noneOf(ConcordanceEffects.Result.class);
 		boolean applied = run(level, caster, plan.root(), null, cause, ledger, seen);
+        if(applied)io.github.jimbozoomer.jugcraft.nouveau.NouveauSpellDelivery.echoSummons(level,caster,plan,cause,ledger);
 		return new Outcome(applied, seen.contains(ConcordanceEffects.Result.NOT_ALLOWED));
+	}
+
+	/** A device or projectile supplies its server-traced impact; all selections, pulses and branches remain shared. */
+	public static Outcome performAt(ServerLevel level,ServerPlayer caster,Plan plan,Cause cause,Ledger ledger,Impact impact){
+        io.github.jimbozoomer.jugcraft.nouveau.NouveauSignals.spell(level,caster,impact.point(),plan.text(),plan.capacity(),true);
+        if(io.github.jimbozoomer.jugcraft.nouveau.NouveauTomes.preset(cause)&&plan.root().steps().isEmpty())return new Outcome(io.github.jimbozoomer.jugcraft.nouveau.NouveauTomes.next(level,caster,plan.root(),cause,ledger,impact),false);
+        if(io.github.jimbozoomer.jugcraft.nouveau.NouveauSpellDelivery.sequential(plan.root()))return io.github.jimbozoomer.jugcraft.nouveau.NouveauSpellDelivery.sequential(level,caster,plan,cause,ledger,impact);
+		Set<ConcordanceEffects.Result> seen=EnumSet.noneOf(ConcordanceEffects.Result.class);
+		boolean applied=pulse(level,caster,plan.root(),impact,cause,ledger,0,seen);
+		if(applied){
+			if(plan.root().pulses()>1)linger(caster,level,plan.root(),impact,cause,ledger);
+			if(io.github.jimbozoomer.jugcraft.nouveau.NouveauTomes.preset(cause)){io.github.jimbozoomer.jugcraft.nouveau.NouveauTomes.next(level,caster,plan.root(),cause,ledger,impact);return new Outcome(applied,seen.contains(ConcordanceEffects.Result.NOT_ALLOWED));}
+            var triggered=cause.triggered();if(plan.root().then()!=null&&triggered!=null&&ledger.branch())run(level,caster,plan.root().then(),impact,triggered,ledger,seen);
+		}
+		return new Outcome(applied,seen.contains(ConcordanceEffects.Result.NOT_ALLOWED));
 	}
 
 	private static boolean run(ServerLevel level, ServerPlayer caster, Plan.Node node, @Nullable Impact parent, Cause cause, Ledger ledger,
 			Set<ConcordanceEffects.Result> seen) {
 		Impact impact = deliver(level, caster, node, parent);
+        if(io.github.jimbozoomer.jugcraft.nouveau.NouveauTomes.preset(cause))return performAt(level,caster,new Plan("",node,0,0,0,ledger.limits(),0),cause,ledger,impact).applied();
+        if(io.github.jimbozoomer.jugcraft.nouveau.NouveauSpellDelivery.sequential(node))return io.github.jimbozoomer.jugcraft.nouveau.NouveauSpellDelivery.sequential(level,caster,new Plan("",node,0,0,0,ledger.limits(),0),cause,ledger,impact).applied();
 		boolean applied = pulse(level, caster, node, impact, cause, ledger, 0, seen);
 		if (!applied) {
 			return false;
@@ -216,7 +236,7 @@ public final class ComposedSpells {
 		EntityHitResult creature = ProjectileUtil.getEntityHitResult(caster, eye, stop, search,
 				entity -> entity instanceof LivingEntity && entity.isAlive() && !entity.isSpectator() && entity.isPickable(),
 				eye.distanceToSqr(stop));
-		if (creature != null) {
+        if (creature != null&&!node.delivery().equals("jugcraft:nouveau_pantomime")) {
 			BlockPos at = creature.getEntity().blockPosition();
 			return new Impact(creature.getLocation(), creature.getEntity().getUUID(), at, at, eye);
 		}
@@ -235,16 +255,18 @@ public final class ComposedSpells {
 			Set<ConcordanceEffects.Result> seen) {
 		boolean applied = false;
 		for (Plan.Step step : node.steps()) {
+            Plan.Node selection=node;
+            if(step.effect().augment("radius")>0&&!step.component().equals("jugcraft:nouveau_infuse")){int radius=Math.min(6,step.effect().augment("radius"));var pick=step.effect().kind().on==EffectKind.On.BLOCK||step.effect().kind().on==EffectKind.On.ANY&&impact.struck()==null?Component.Pick.BLOCKS:Component.Pick.CREATURES;selection=new Plan.Node(node.depth(),node.delivery(),node.form(),node.range(),node.selection(),pick,radius,node.targets(),node.steps(),node.termination(),node.pulses(),node.interval(),node.then());}
 			ConcordanceEffects.Context context = new ConcordanceEffects.Context(level, cause, caster, ledger,
 					node.depth() + "/" + pulse + "/" + step.index(), impact.origin());
-			if (step.effect().kind().on == EffectKind.On.CREATURE) {
-				for (LivingEntity target : creatures(level, caster, node, impact, step.effect().intent())) {
+            if (step.effect().kind().on == EffectKind.On.CREATURE || step.effect().kind().on == EffectKind.On.ANY && (selection.pick() == Component.Pick.CREATURES || selection.pick() == Component.Pick.ALLIES || selection.pick() == Component.Pick.STRUCK && impact.struck() != null)) {
+                for (LivingEntity target : creatures(level, caster, selection, impact, step.effect().intent())) {
 					ConcordanceEffects.Result result = ConcordanceEffects.apply(context, step.effect(), target);
 					seen.add(result);
 					applied |= result.applied();
 				}
 			} else {
-				for (BlockPos pos : blocks(level, node, impact, step.effect())) {
+                for (BlockPos pos : blocks(level, selection, impact, step.effect())) {
 					ConcordanceEffects.Result result = ConcordanceEffects.apply(context, step.effect(), pos);
 					seen.add(result);
 					applied |= result.applied();

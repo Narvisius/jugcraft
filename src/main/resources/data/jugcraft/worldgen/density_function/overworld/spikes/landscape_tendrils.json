@@ -1,0 +1,49 @@
+{
+  "type": "minecraft:range_choice",
+  "input": "jugcraft:overworld/spike/landscape_size_spline",
+  "min_inclusive": -2,
+  "max_exclusive": 1000000,
+  "when_in_range": {
+    "type": "minecraft:add",
+    "left": {
+      "type": "minecraft:add",
+      "left": {
+        "type": "minecraft:square",
+        "input": {
+          "type": "minecraft:abs",
+          "input": {
+            "type": "minecraft:noise",
+            "noise": "jugcraft:math/spikes/landscape_noise",
+            "shift_x": {
+              "type": "minecraft:mul",
+              "left": 110,
+              "right": "jugcraft:overworld/spikes/landscape_spike_x"
+            },
+            "shift_y": 8,
+            "shift_z": {
+              "type": "minecraft:mul",
+              "left": 110,
+              "right": "jugcraft:overworld/spikes/landscape_spike_z"
+            },
+            "xz_scale": 1.0,
+            "y_scale": 0.0
+          }
+        }
+      },
+      "right": {
+        "type": "minecraft:add",
+        "left": {
+          "type": "minecraft:gradient",
+          "from_value": -0.2675,
+          "to_value": -3.0,
+          "axis": "y",
+          "from_coordinate": 0,
+          "to_coordinate": 320
+        },
+        "right": "jugcraft:overworld/spikes/landscape_base_height"
+      }
+    },
+    "right": "jugcraft:overworld/spike/landscape_size_spline"
+  },
+  "when_out_of_range": -64
+}

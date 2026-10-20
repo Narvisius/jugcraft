@@ -1,0 +1,38 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:ecology_crab_claw",
+          "modifier": [
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 0.0,
+                "max": 2.0
+              },
+              "add": false,
+              "type": "minecraft:set_count"
+            },
+            {
+              "type": "minecraft:furnace_smelt",
+              "condition": {
+                "predicate": {
+                  "flags": {
+                    "is_on_fire": true
+                  }
+                },
+                "entity": "this",
+                "type": "minecraft:entity_properties"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

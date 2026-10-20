@@ -1,0 +1,199 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "anchor",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        -1.75,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6.0,
+            -4.0,
+            0.0,
+            12.0,
+            14.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -2.0,
+            4.0,
+            -2.0,
+            4.0,
+            16.0,
+            4.0
+          ],
+          "uv": [
+            0.0,
+            14.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r1",
+      "parent": "anchor",
+      "pose": [
+        0.0,
+        23.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.7854
+      ],
+      "cubes": [
+        {
+          "box": [
+            1.0,
+            -15.0,
+            -2.0,
+            3.0,
+            3.0,
+            4.0
+          ],
+          "uv": [
+            24.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            -2.0,
+            -15.0,
+            -2.0,
+            3.0,
+            11.0,
+            4.0
+          ],
+          "uv": [
+            16.0,
+            26.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "cube_r2",
+      "parent": "anchor",
+      "pose": [
+        0.0,
+        23.0,
+        0.0,
+        0.0,
+        0.0,
+        0.7854
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -15.0,
+            -2.0,
+            3.0,
+            3.0,
+            4.0
+          ],
+          "uv": [
+            24.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -1.0,
+            -15.0,
+            -2.0,
+            3.0,
+            11.0,
+            4.0
+          ],
+          "uv": [
+            16.0,
+            26.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -4.0,
+            -4.0,
+            -3.0,
+            6.0,
+            6.0,
+            6.0
+          ],
+          "uv": [
+            16.0,
+            14.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/MineGuardianAnchorModel.java",
+  "sourceSha256": "50c9f6335d38693ff8777f5626bfc3ae1cc45853deb17c08427c1130b4382aa4",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

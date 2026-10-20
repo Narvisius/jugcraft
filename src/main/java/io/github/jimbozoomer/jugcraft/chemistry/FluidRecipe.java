@@ -37,8 +37,9 @@ import net.minecraft.world.level.material.Fluid;
  *
  * <p>Industrial machine forms (docs/features/industrial-machine-foundation.md) add two optional fields: a
  * {@code "capability"} the form running it must declare, and a reusable {@code "tool"} (an ingredient) one of the
- * form's tool sockets must hold, which the work never uses up. A recipe with either runs only in machine forms; the
- * original one-model machines keep exactly the recipes they always had.
+ * form's tool sockets must hold, which the work never uses up. The compact Lithography Station also supports
+ * a retained pattern tool, and the Cryogenic Liquefier supports retained cooling modules. Other tool recipes run
+ * only in forms; original machine recipes remain available.
  */
 public class FluidRecipe implements Recipe<MachineInput> {
 	/** An item ingredient and how many are used per operation. */
@@ -172,9 +173,9 @@ public class FluidRecipe implements Recipe<MachineInput> {
 		return tool;
 	}
 
-	/** Whether the original one-model machine of its kind runs it: no capability and no tool. */
+	/** Compact machines may use retained tools only when their kind has a dedicated socket. */
 	public boolean legacy() {
-		return capability.isEmpty() && tool.isEmpty();
+		return capability.isEmpty() && (tool.isEmpty() || machine.hasProcessTool());
 	}
 
 	/** Whether the item inputs hold this recipe's ingredients, each in its own slot, in order. */

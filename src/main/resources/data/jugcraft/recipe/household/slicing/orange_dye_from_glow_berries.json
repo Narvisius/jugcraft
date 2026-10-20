@@ -1,0 +1,16 @@
+{
+  "type": "jugcraft:cutting",
+  "ingredient": "minecraft:glow_berries",
+  "tool": "#jugcraft:knives",
+  "results": [
+    {
+      "id": "minecraft:orange_dye"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

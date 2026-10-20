@@ -67,6 +67,9 @@ public class TownClientGameTests implements FabricClientGameTest {
 			// 37076304887, waiting over the south edge, built only 96 of 144); then over the town from the south.
 			fly(context, server, origin, 96, 60, 96, 180, 90);
 			int size = TownData.get().size;
+			if (TownData.get().unknownStates() != 0) {
+				throw new AssertionError("The town contains an unknown block state");
+			}
 			int chunks = (size / 16) * (size / 16);
 			int built = 0;
 			for (int wait = 0; wait < 90; wait++) {
@@ -77,6 +80,9 @@ public class TownClientGameTests implements FabricClientGameTest {
 				}
 			}
 			LOGGER.info("Town, seed {}: {} of {} chunks built", SEED, built, chunks);
+			if (built < chunks) {
+				throw new AssertionError("Only " + built + " of " + chunks + " town chunks built");
+			}
 			// Up to 90 blocks over the town's floor but under the clouds (about y 192; run 37078631445's town in Alpine Spawn,
 			// floor at y 106, was shot from above them), looking down at the square.
 			int up = Math.max(20, Math.min(90, 180 - origin.getY()));
@@ -145,15 +151,72 @@ public class TownClientGameTests implements FabricClientGameTest {
 			if (!shop || !atm) {
 				throw new AssertionError("The town's seasonal stall keeper or its ATM is missing (shop " + shop + ", ATM " + atm + ")");
 			}
+			// Architectural review in a disposable world, not the owner's manual save.
+			server.runCommand("time set noon");
+			server.runCommand("gamerule minecraft:advance_time false");
+			setHudHidden(context, true);
+			int[][] views = {{96, 8, 119, 180, -18}, {96, 2, 77, 180, -8},
+					{116, 23, 62, 90, 15}, {96, 19, 30, 0, 10},
+					{98, 13, 107, 270, 5}, {90, 12, 107, 90, 12}, {152, 5, 96, 90, -7}};
+			String[] names = {"church_front", "church_nave", "church_side", "church_rear",
+					"town_hall", "bank", "houses"};
+			for (int i = 0; i < views.length; i++) {
+				int[] view = views[i];
+				fly(context, server, origin, view[0], view[1], view[2], view[3], view[4]);
+				singleplayer.getConnection().waitForChunksRender();
+				context.takeScreenshot("jugcraft_refined_" + names[i]);
+			}
+			server.runOnServer(minecraft -> {
+				var level = minecraft.overworld();
+				for (var entry : TownData.get().signs) {
+					var be = level.getBlockEntity(origin.offset(entry.pos()));
+					if (!(be instanceof net.minecraft.world.level.block.entity.SignBlockEntity sign)
+							|| !sign.isWaxed() || !sign.getText(net.minecraft.world.level.block.entity.SignTextSlot.FRONT)
+							.getMessages(false).getFirst().getString().equals(entry.lines().get(0))) {
+						throw new AssertionError("Town sign missing or changed after seasonal updates: " + entry.pos());
+					}
+				}
+				var frames = level.getEntitiesOfClass(net.minecraft.world.entity.decoration.ItemFrame.class,
+						new AABB(origin.offset(88, 2, 112)).inflate(1));
+				if (frames.size() != 1 || !frames.getFirst().hasFramedMap()) throw new AssertionError("Town map frame missing");
+				var player = minecraft.getPlayerList().getPlayers().getFirst();
+				io.github.jimbozoomer.jugcraft.town.TownWayfinding.giveMap(player);
+				LOGGER.info("Wayfinding: {} waxed signs, framed map and personal map ready", TownData.get().signs.size());
+			});
+			context.runOnClient(client -> {
+				for (var entry : TownData.get().signs) for (String line : entry.lines()) {
+					if (client.font.width(line) > 90) throw new AssertionError("Sign text would clip: " + line);
+				}
+			});
+			fly(context, server, origin, 88, 1, 109, 0, 0);
+			singleplayer.getConnection().waitForChunksRender();
+			context.takeScreenshot("jugcraft_town_directory");
+			fly(context, server, origin, 80, 1, 101, 90, 0);
+			singleplayer.getConnection().waitForChunksRender();
+			context.takeScreenshot("jugcraft_town_keeper_skin");
+			// Leave the exported copy at the square, ready for owner-controlled play.
+			setHudHidden(context, false);
+			fly(context, server, origin, 96, 1, 89, 180, -12);
+			server.runCommand("save-all flush");
 		}
 	}
 
-	/** Puts the player at a town position (x, floor + up, z) looking along `yaw`, `pitch`, on a barrier if in the air. */
+	private static void setHudHidden(ClientGameTestContext context, boolean hidden) {
+		context.runOnClient(client -> {
+			if (client.gui.hud.isHidden() != hidden) {
+				client.gui.hud.toggle();
+			}
+		});
+	}
+
+	/** Flies the disposable test camera without leaving invisible barriers in the saved town. */
 	private static void fly(ClientGameTestContext context, TestServerContext server, BlockPos origin, int x, int up, int z, int yaw, int pitch) {
 		BlockPos at = origin.offset(x, up, z);
-		// Something to stand on when in the air (only where there is nothing: never over a block of the world).
-		server.runCommand("execute if block %d %d %d minecraft:air run setblock %d %d %d minecraft:barrier".formatted(
-				at.getX(), at.getY() - 1, at.getZ(), at.getX(), at.getY() - 1, at.getZ()));
+		server.runOnServer(minecraft -> {
+			ServerPlayer player = minecraft.getPlayerList().getPlayers().get(0);
+			player.getAbilities().flying = true;
+			player.onUpdateAbilities();
+		});
 		server.runCommand(String.format(Locale.ROOT, "tp @p %d.5 %d %d.5 %d %d", at.getX(), at.getY(), at.getZ(), yaw, pitch));
 		context.waitTicks(40);
 	}

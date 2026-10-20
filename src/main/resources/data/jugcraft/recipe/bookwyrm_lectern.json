@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " B ",
+    "ALA",
+    " G "
+  ],
+  "key": {
+    "B": "minecraft:book",
+    "A": "minecraft:amethyst_shard",
+    "L": "minecraft:lectern",
+    "G": "minecraft:gold_ingot"
+  },
+  "result": {
+    "id": "jugcraft:bookwyrm_lectern",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

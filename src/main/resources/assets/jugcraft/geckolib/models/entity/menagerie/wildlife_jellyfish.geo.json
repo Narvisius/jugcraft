@@ -1,0 +1,164 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.wildlife_jellyfish",
+        "texture_width": 64,
+        "texture_height": 64,
+        "visible_bounds_width": 4,
+        "visible_bounds_height": 4,
+        "visible_bounds_offset": [
+          0,
+          0.5,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "body",
+          "parent": "root",
+          "pivot": [
+            0.0,
+            16.0,
+            0.0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -6.4,
+                9.6,
+                -6.4
+              ],
+              "size": [
+                12.8,
+                6.4,
+                12.8
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "tentacle_0",
+          "parent": "root",
+          "pivot": [
+            -3.072,
+            10.4,
+            -3.072
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -3.84,
+                0.8,
+                -3.84
+              ],
+              "size": [
+                1.536,
+                9.6,
+                1.536
+              ],
+              "uv": [
+                0,
+                32.0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "tentacle_1",
+          "parent": "root",
+          "pivot": [
+            4.608,
+            10.4,
+            -3.072
+          ],
+          "cubes": [
+            {
+              "origin": [
+                3.84,
+                0.8,
+                -3.84
+              ],
+              "size": [
+                1.536,
+                9.6,
+                1.536
+              ],
+              "uv": [
+                0,
+                32.0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "tentacle_2",
+          "parent": "root",
+          "pivot": [
+            -3.072,
+            10.4,
+            4.608
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -3.84,
+                0.8,
+                3.84
+              ],
+              "size": [
+                1.536,
+                9.6,
+                1.536
+              ],
+              "uv": [
+                0,
+                32.0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "tentacle_3",
+          "parent": "root",
+          "pivot": [
+            4.608,
+            10.4,
+            4.608
+          ],
+          "cubes": [
+            {
+              "origin": [
+                3.84,
+                0.8,
+                3.84
+              ],
+              "size": [
+                1.536,
+                9.6,
+                1.536
+              ],
+              "uv": [
+                0,
+                32.0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

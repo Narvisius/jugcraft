@@ -1,0 +1,195 @@
+{
+  "type": "minecraft:simple_block",
+  "to_place": {
+    "type": "minecraft:rule_based",
+    "fallback": {
+      "type": "minecraft:noise_threshold",
+      "seed": 23456,
+      "noise": {
+        "base_octave": -7,
+        "octave_count": 2,
+        "amplitude_modifiers": [
+          1,
+          1
+        ],
+        "normalize": "legacy"
+      },
+      "scale": 1,
+      "threshold": 0,
+      "high_chance": 1,
+      "default_state": "minecraft:stone",
+      "low_states": [
+        "minecraft:red_mushroom",
+        "minecraft:red_mushroom",
+        "minecraft:brown_mushroom",
+        "minecraft:brown_mushroom",
+        "minecraft:brown_mushroom"
+      ],
+      "high_states": [
+        "minecraft:dead_bush",
+        {
+          "id": "minecraft:large_fern",
+          "properties": {
+            "half": "lower"
+          }
+        },
+        {
+          "id": "minecraft:large_fern",
+          "properties": {
+            "half": "lower"
+          }
+        },
+        "minecraft:fern",
+        "minecraft:fern",
+        "minecraft:short_grass",
+        "minecraft:short_grass",
+        "minecraft:short_grass",
+        "minecraft:air",
+        "minecraft:air",
+        "minecraft:air"
+      ]
+    },
+    "rules": [
+      {
+        "if_true": {
+          "type": "minecraft:matching_blocks",
+          "offset": [
+            1,
+            0,
+            0
+          ],
+          "blocks": "minecraft:moss_block"
+        },
+        "then": {
+          "id": "minecraft:shelf_mushroom",
+          "properties": {
+            "facing": "west"
+          }
+        }
+      },
+      {
+        "if_true": {
+          "type": "minecraft:matching_blocks",
+          "offset": [
+            -1,
+            0,
+            0
+          ],
+          "blocks": "minecraft:moss_block"
+        },
+        "then": {
+          "id": "minecraft:shelf_mushroom",
+          "properties": {
+            "facing": "east"
+          }
+        }
+      },
+      {
+        "if_true": {
+          "type": "minecraft:matching_blocks",
+          "offset": [
+            0,
+            0,
+            1
+          ],
+          "blocks": "minecraft:moss_block"
+        },
+        "then": {
+          "id": "minecraft:shelf_mushroom",
+          "properties": {
+            "facing": "north"
+          }
+        }
+      },
+      {
+        "if_true": {
+          "type": "minecraft:matching_blocks",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "blocks": "minecraft:moss_block"
+        },
+        "then": {
+          "id": "minecraft:shelf_mushroom",
+          "properties": {
+            "facing": "south"
+          }
+        }
+      },
+      {
+        "if_true": {
+          "type": "minecraft:matching_blocks",
+          "offset": [
+            1,
+            0,
+            0
+          ],
+          "blocks": "#minecraft:dirt"
+        },
+        "then": {
+          "id": "minecraft:shelf_mushroom",
+          "properties": {
+            "age": "1",
+            "facing": "west"
+          }
+        }
+      },
+      {
+        "if_true": {
+          "type": "minecraft:matching_blocks",
+          "offset": [
+            -1,
+            0,
+            0
+          ],
+          "blocks": "#minecraft:dirt"
+        },
+        "then": {
+          "id": "minecraft:shelf_mushroom",
+          "properties": {
+            "age": "1",
+            "facing": "east"
+          }
+        }
+      },
+      {
+        "if_true": {
+          "type": "minecraft:matching_blocks",
+          "offset": [
+            0,
+            0,
+            1
+          ],
+          "blocks": "#minecraft:dirt"
+        },
+        "then": {
+          "id": "minecraft:shelf_mushroom",
+          "properties": {
+            "age": "1",
+            "facing": "north"
+          }
+        }
+      },
+      {
+        "if_true": {
+          "type": "minecraft:matching_blocks",
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "blocks": "#minecraft:dirt"
+        },
+        "then": {
+          "id": "minecraft:shelf_mushroom",
+          "properties": {
+            "age": "1",
+            "facing": "south"
+          }
+        }
+      }
+    ]
+  }
+}

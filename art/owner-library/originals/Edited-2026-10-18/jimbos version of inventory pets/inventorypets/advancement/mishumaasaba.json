@@ -1,0 +1,31 @@
+{
+    "display": {
+        "icon": {
+            "id": "inventorypets:pet_mishumaa_saba"
+        },
+        "title": {
+            "translate": "advancement.ip.petach_mishumaa_saba"
+        },
+        "description": {
+            "translate": "advancement.ip.petach_mishumaa_saba.desc"
+        },
+        "show_toast": true,
+        "announce_to_chat": true
+    },
+    "parent": "inventorypets:menorah",
+    "criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                        	"inventorypets:pet_mishumaa_saba"
+                    	]
+                    }
+                    
+                ]
+            }
+        }
+    }
+}

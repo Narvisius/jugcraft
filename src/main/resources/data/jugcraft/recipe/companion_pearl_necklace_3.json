@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:companion_pearl_necklace_2",
+    "jugcraft:companion_pearl",
+    "jugcraft:companion_pearl",
+    "jugcraft:companion_pearl"
+  ],
+  "result": {
+    "id": "jugcraft:companion_pearl_necklace_3",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WWW",
+    "WGW",
+    "WDW"
+  ],
+  "key": {
+    "W": "minecraft:gold_nugget",
+    "G": "minecraft:diamond",
+    "D": "minecraft:emerald"
+  },
+  "result": {
+    "id": "jugcraft:pocket_pet_cheetah"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

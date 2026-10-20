@@ -51,6 +51,11 @@ public final class TownData {
 	public record Spot(int index, String role, @Nullable String shop, String name, String skin, BlockPos pos) {
 	}
 
+	public record Sign(BlockPos pos, List<String> lines) {}
+	public record MapBoard(BlockPos pos, Direction facing) {}
+	public final List<Sign> signs;
+	public final List<MapBoard> mapBoards;
+
 	private static @Nullable TownData instance;
 
 	public final int size;
@@ -118,6 +123,21 @@ public final class TownData {
 			atms.add(new BlockPos(a.get(0).getAsInt(), a.get(1).getAsInt(), a.get(2).getAsInt()));
 		}
 		this.atms = List.copyOf(atms);
+		List<Sign> signs = new ArrayList<>();
+		for (JsonElement e : root.has("signs") ? root.getAsJsonArray("signs") : new JsonArray()) {
+			JsonObject o = e.getAsJsonObject();
+			List<String> lines = new ArrayList<>();
+			for (JsonElement line : o.getAsJsonArray("lines")) lines.add(line.getAsString());
+			if (lines.size() != 4) throw new IllegalStateException("Town sign needs four lines");
+			signs.add(new Sign(position(o), List.copyOf(lines)));
+		}
+		this.signs = List.copyOf(signs);
+		List<MapBoard> boards = new ArrayList<>();
+		for (JsonElement e : root.has("map_boards") ? root.getAsJsonArray("map_boards") : new JsonArray()) {
+			JsonObject o = e.getAsJsonObject();
+			boards.add(new MapBoard(position(o), direction(o.get("facing").getAsString())));
+		}
+		this.mapBoards = List.copyOf(boards);
 		JsonObject decorRoot = root.getAsJsonObject("decor");
 		List<String> themes = new ArrayList<>();
 		for (JsonElement e : decorRoot.getAsJsonArray("themes")) {
@@ -231,6 +251,11 @@ public final class TownData {
 	private static Direction direction(String name) {
 		Direction d = Direction.byName(name);
 		return d == null ? Direction.NORTH : d;
+	}
+
+	private static BlockPos position(JsonObject o) {
+		JsonArray a = o.getAsJsonArray("pos");
+		return new BlockPos(a.get(0).getAsInt(), a.get(1).getAsInt(), a.get(2).getAsInt());
 	}
 
 	private static short[] shorts(String base64, int expected) {

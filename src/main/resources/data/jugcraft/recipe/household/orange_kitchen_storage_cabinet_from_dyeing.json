@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "D": "minecraft:orange_dye",
+    "K": "#jugcraft:household/coloured_kitchen_storage_cabinets"
+  },
+  "pattern": [
+    "KD"
+  ],
+  "result": {
+    "id": "jugcraft:household_orange_kitchen_storage_cabinet"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

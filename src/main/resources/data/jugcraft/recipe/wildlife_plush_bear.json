@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " F ",
+    "FWF",
+    " F "
+  ],
+  "key": {
+    "F": "minecraft:string",
+    "W": "#minecraft:wool"
+  },
+  "result": {
+    "id": "jugcraft:wildlife_plush_bear"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

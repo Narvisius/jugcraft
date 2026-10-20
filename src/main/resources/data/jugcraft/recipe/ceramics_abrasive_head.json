@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " D ",
+    "AIA",
+    " A "
+  ],
+  "key": {
+    "D": "minecraft:diamond",
+    "A": "jugcraft:alumina",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "id": "jugcraft:abrasive_head",
+    "count": 1
+  }
+}

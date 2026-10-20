@@ -1,0 +1,52 @@
+{
+  "attributes": {
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawn_costs": {},
+        "spawns_by_category": {}
+      },
+      "modifier": "overlay"
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "biomesoplenty:wisp_bubble"
+        },
+        "probability": 0.001
+      }
+    ],
+    "minecraft:visual/water_fog_color": "#434949"
+  },
+  "carvers": [],
+  "downfall": 0.5,
+  "effects": {
+    "foliage_color": "#e5fffc",
+    "grass_color": "#e5fffc",
+    "water_color": "#e5fffc"
+  },
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [
+      "minecraft:end_gateway_return"
+    ],
+    [],
+    [],
+    [
+      "biomesoplenty:jagged_sandstone",
+      "biomesoplenty:tidepool"
+    ],
+    [],
+    [
+      "biomesoplenty:dead_coral",
+      "biomesoplenty:dead_coral_patch",
+      "biomesoplenty:barnacles",
+      "biomesoplenty:wispjelly",
+      "biomesoplenty:patch_dead_grass"
+    ]
+  ],
+  "has_precipitation": false,
+  "temperature": 0.5
+}

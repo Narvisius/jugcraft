@@ -1,0 +1,17 @@
+{
+  "pack": {
+    "description": "Jugcraft: industrial backpack progression",
+    "pack_format": 71,
+    "supported_formats": [71, 81],
+    "min_format": 71,
+    "max_format": 2048
+  },
+  "filter": {
+    "block": [
+      {
+        "namespace": "travelersbackpack",
+        "path": "(recipe|advancement/recipes/misc)/(standard_no_sleeping_bag|standard_no_tanks|standard_no_tanks_sleeping_bag|void_upgrade|blast_furnace_upgrade)\\.json"
+      }
+    ]
+  }
+}

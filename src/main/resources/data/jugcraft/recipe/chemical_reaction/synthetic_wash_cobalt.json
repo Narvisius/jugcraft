@@ -1,0 +1,37 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:synthetic_preparation",
+  "items": [
+    {
+      "ingredient": "jugcraft:cobaltite",
+      "count": 2
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 500
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:spent_mineral_wash",
+      "amount": 500,
+      "tank": 0
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:cobalt_concentrate",
+      "count": 2
+    }
+  ],
+  "energy_per_tick": 48,
+  "time": 240
+}

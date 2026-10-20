@@ -1,0 +1,248 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "body",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -4.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -4.0,
+            -4.0,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "hair_left",
+      "parent": "body",
+      "pose": [
+        4.0,
+        -4.0,
+        0.0,
+        0.0,
+        0.0,
+        1.1345
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            -3.0,
+            9.0,
+            0.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            17.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "hair_right",
+      "parent": "body",
+      "pose": [
+        -4.0,
+        -4.0,
+        0.0,
+        0.0,
+        0.0,
+        -1.1345
+      ],
+      "cubes": [
+        {
+          "box": [
+            -9.0,
+            0.0,
+            -3.0,
+            9.0,
+            0.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            17.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "tail",
+      "parent": "body",
+      "pose": [
+        0.0,
+        0.0,
+        4.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -4.0,
+            0.0,
+            0.0,
+            8.0,
+            14.0
+          ],
+          "uv": [
+            24.0,
+            24.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelStradpole.java",
+  "sourceSha256": "236b448df7c66a4c549abefb826ef14a44c3957a55e4473b892b86f5415d4606",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "hair_right",
+      "kind": "flap",
+      "speed": 0.1,
+      "degree": 0.25,
+      "invert": true,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "hair_left",
+      "kind": "flap",
+      "speed": 0.1,
+      "degree": 0.25,
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "kind": "flap",
+      "speed": 1.0,
+      "degree": [
+        "*",
+        0.4,
+        0.2
+      ],
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "kind": "swing",
+      "speed": 1.0,
+      "degree": [
+        "*",
+        0.4,
+        0.4
+      ],
+      "invert": true,
+      "phase": 2.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "tail",
+      "kind": "swing",
+      "speed": [
+        "*",
+        1.0,
+        1.4
+      ],
+      "degree": [
+        "*",
+        0.4,
+        2.0
+      ],
+      "invert": false,
+      "phase": 2.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.body.rotateAngleX += birdPitch * ((float)Math.PI / 180);",
+      "reason": "Unbound expression variable birdPitch"
+    }
+  ],
+  "expressions": [],
+  "poses": []
+}

@@ -1,0 +1,180 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "main",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "stand",
+      "parent": "main",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -4.0,
+            -2.0,
+            4.0,
+            4.0,
+            4.0
+          ],
+          "uv": [
+            20.0,
+            8.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            0.0,
+            -16.0,
+            -8.0,
+            0.0,
+            14.0,
+            16.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r1",
+      "parent": "stand",
+      "pose": [
+        0.0,
+        -10.0,
+        0.0,
+        0.0,
+        -1.5708,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -6.0,
+            -8.0,
+            0.0,
+            14.0,
+            16.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "eye",
+      "parent": "stand",
+      "pose": [
+        0.0,
+        -9.5,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.5,
+            -2.5,
+            -2.5,
+            5.0,
+            5.0,
+            5.0
+          ],
+          "uv": [
+            1.0,
+            1.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/BeholderModel.java",
+  "sourceSha256": "8e88af687762f3e3185f7590f38e5d4e7b684de91065278d38a537a776972291",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.eye.rotationPointY = (float)((double)this.eye.rotationPointY + Math.sin(ageInTicks * 0.2f) * 0.5);",
+      "reason": "Unsupported expression (this.eye.rotationPointY + sin(ageInTicks * 0.2) * 0.5)"
+    }
+  ],
+  "expressions": [
+    {
+      "bone": "eye",
+      "target": "yRot",
+      "op": "=",
+      "value": [
+        "*",
+        "move",
+        0.017453292519943295
+      ],
+      "when": 1
+    },
+    {
+      "bone": "eye",
+      "target": "xRot",
+      "op": "=",
+      "value": [
+        "*",
+        "walk",
+        0.017453292519943295
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

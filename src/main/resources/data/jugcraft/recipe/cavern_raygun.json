@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PPP",
+    "FUU",
+    "P  "
+  ],
+  "key": {
+    "P": "jugcraft:cavern_polymer_plate",
+    "U": "jugcraft:cavern_uranium_rod",
+    "F": "jugcraft:cavern_fissile_core"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:cavern_raygun"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -39,6 +39,8 @@ public final class JugcraftWorldgen {
 				// The feature itself checks the surface biome. An underground biome filter would reject cave biomes.
 				{"fluorite", "fluorite"},
 				{"spodumene", "lithium"},
+				{"chromite", "machines"},
+				{"cobaltite", "machines"},
 				{"titanium_sand", "mineral_sands"}, {"zircon_sand", "mineral_sands"},
 				{"rare_earth_sand", "mineral_sands"}, {"garnet_sand", "mineral_sands"},
 				{"vanadium_iron", "vanadium"}, {"vanadium_iron_rich", "vanadium"},

@@ -1,0 +1,47 @@
+{
+  "feature": "terralith:flower/lavender/flowers",
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 40
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "MOTION_BLOCKING"
+    },
+    {
+      "type": "minecraft:offset",
+      "x": {
+        "type": "minecraft:trapezoid",
+        "plateau": 0,
+        "min": -6,
+        "max": 6
+      },
+      "y": {
+        "type": "minecraft:trapezoid",
+        "plateau": 0,
+        "min": -2,
+        "max": 2
+      },
+      "z": {
+        "type": "minecraft:trapezoid",
+        "plateau": 0,
+        "min": -6,
+        "max": 6
+      }
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:matching_blocks",
+        "blocks": "minecraft:air"
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

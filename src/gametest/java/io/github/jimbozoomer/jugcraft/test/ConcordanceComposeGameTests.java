@@ -477,8 +477,8 @@ public class ConcordanceComposeGameTests {
 				&& state.instrument().map(ComposerStatePayload.InstrumentView::capacity).orElse(0) == 8 && state.inscribed().isEmpty(),
 				"It opens on the wand: " + state);
 		List<String> words = state.words().stream().map(ComposerStatePayload.Word::id).toList();
-		helper.assertTrue(words.size() == 7 && state.locked() == 10 && words.contains("jugcraft:touch") && !words.contains("jugcraft:ray")
-				&& !words.contains("jugcraft:mend"), "Only the seven words First Light understood teaches are sent; ten more are counted, "
+		helper.assertTrue(words.size() == 7 && state.locked() == 10 + io.github.jimbozoomer.jugcraft.nouveau.NouveauCatalog.ITEM_ENTRIES.values().stream().filter(e -> e.kind().equals("glyph")).count() && words.contains("jugcraft:touch") && !words.contains("jugcraft:ray")
+				&& !words.contains("jugcraft:mend"), "Only the seven words First Light understood teaches are sent; the ten other core words and all Nouveau glyphs are counted, "
 						+ "not named, and no invocation's own word: " + words + " and " + state.locked());
 		ComposerStatePayload.Word touch = learned(state, "jugcraft:touch");
 		ComposerStatePayload.Word light = learned(state, "jugcraft:light");

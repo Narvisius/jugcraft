@@ -1,0 +1,17 @@
+{
+  "type": "jugcraft:cutting",
+  "ingredient": "minecraft:mangrove_roots",
+  "tool": "#jugcraft:knives",
+  "results": [
+    {
+      "count": 8,
+      "id": "minecraft:stick"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

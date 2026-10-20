@@ -1,0 +1,24 @@
+{
+  "result": {
+    "id": "jugcraft:pocket_pet_purplicious_cow"
+  },
+  "pattern": [
+    "OFB",
+    "ODB",
+    "OGB"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "minecraft:iron_nugget",
+    "D": "minecraft:diamond",
+    "F": "jugcraft:pocket_nugget_diamond",
+    "G": "minecraft:gold_ingot",
+    "O": "jugcraft:pocket_nugget_lapis"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

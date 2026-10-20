@@ -1,0 +1,35 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "phosphate"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:phosphate_dissolution",
+  "items": [
+    {
+      "ingredient": "jugcraft:ground_phosphate",
+      "count": 2
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:sulfuric_acid",
+      "amount": 1000
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:phosphate_slurry",
+      "amount": 1000,
+      "tank": 0
+    }
+  ],
+  "energy_per_tick": 48,
+  "time": 320
+}

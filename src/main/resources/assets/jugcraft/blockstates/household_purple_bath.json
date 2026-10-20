@@ -1,0 +1,106 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "east",
+        "type": "bottom"
+      },
+      "apply": {
+        "model": "jugcraft:household/block/purple_bath_bottom",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "type": "head"
+      },
+      "apply": {
+        "model": "jugcraft:household/block/purple_bath_head",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "type": "bottom"
+      },
+      "apply": {
+        "model": "jugcraft:household/block/purple_bath_bottom"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "type": "head"
+      },
+      "apply": {
+        "model": "jugcraft:household/block/purple_bath_head"
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "type": "bottom"
+      },
+      "apply": {
+        "model": "jugcraft:household/block/purple_bath_bottom",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "type": "head"
+      },
+      "apply": {
+        "model": "jugcraft:household/block/purple_bath_head",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "type": "bottom"
+      },
+      "apply": {
+        "model": "jugcraft:household/block/purple_bath_bottom",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "type": "head"
+      },
+      "apply": {
+        "model": "jugcraft:household/block/purple_bath_head",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "water_level": "1"
+      },
+      "apply": {
+        "model": "jugcraft:household/block/water_1"
+      }
+    },
+    {
+      "when": {
+        "water_level": "2"
+      },
+      "apply": {
+        "model": "jugcraft:household/block/water_2"
+      }
+    },
+    {
+      "when": {
+        "water_level": "3"
+      },
+      "apply": {
+        "model": "jugcraft:household/block/water_3"
+      }
+    }
+  ]
+}

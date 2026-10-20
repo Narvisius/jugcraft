@@ -1,0 +1,668 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "body",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -14.0,
+        0.0,
+        -0.3927,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -5.0,
+            -1.5,
+            6.0,
+            6.0,
+            3.0
+          ],
+          "uv": [
+            0.0,
+            26.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "head",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -5.0,
+        -1.0,
+        0.5236,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -7.0,
+            -4.2,
+            10.0,
+            7.0,
+            5.0
+          ],
+          "uv": [
+            0.0,
+            13.0
+          ],
+          "inflate": [
+            -0.1,
+            -0.1,
+            -0.1
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leftLeg",
+      "parent": "body",
+      "pose": [
+        2.0,
+        2.0,
+        0.0,
+        0.0,
+        -0.3054,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -1.0,
+            -5.0,
+            0.0,
+            6.0,
+            7.0
+          ],
+          "uv": [
+            27.0,
+            25.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightLeg",
+      "parent": "body",
+      "pose": [
+        -2.0,
+        2.0,
+        0.0,
+        0.0,
+        0.3054,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -1.0,
+            -5.0,
+            0.0,
+            6.0,
+            7.0
+          ],
+          "uv": [
+            27.0,
+            25.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "leftArmPivot",
+      "parent": "body",
+      "pose": [
+        4.0,
+        -3.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "rightArmPivot",
+      "parent": "body",
+      "pose": [
+        -4.0,
+        -3.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "upperJaw",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -7.0,
+        0.8,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6.0,
+            0.0,
+            -4.8,
+            12.0,
+            7.0,
+            5.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leftFoot",
+      "parent": "leftLeg",
+      "pose": [
+        0.0,
+        2.0,
+        -4.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -4.0,
+            1.0,
+            6.0,
+            6.0
+          ],
+          "uv": [
+            1.0,
+            48.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightFoot",
+      "parent": "rightLeg",
+      "pose": [
+        0.0,
+        2.0,
+        -4.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            -4.0,
+            1.0,
+            6.0,
+            6.0
+          ],
+          "uv": [
+            1.0,
+            48.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "leftArm",
+      "parent": "leftArmPivot",
+      "pose": [
+        0,
+        0,
+        0,
+        1.5708,
+        -1.1781,
+        -1.5708
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.0,
+            -1.0,
+            2.0,
+            16.0,
+            2.0
+          ],
+          "uv": [
+            17.0,
+            34.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightArm",
+      "parent": "rightArmPivot",
+      "pose": [
+        0,
+        0,
+        0,
+        1.5708,
+        1.1781,
+        1.5708
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.0,
+            -1.0,
+            2.0,
+            16.0,
+            2.0
+          ],
+          "uv": [
+            17.0,
+            34.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "leftEye",
+      "parent": "upperJaw",
+      "pose": [
+        3.0,
+        1.6,
+        -3.8,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -2.0,
+            -3.0,
+            4.0,
+            4.0,
+            4.0
+          ],
+          "uv": [
+            34.0,
+            16.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightEye",
+      "parent": "upperJaw",
+      "pose": [
+        -3.0,
+        1.6,
+        -3.8,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -2.0,
+            -3.0,
+            4.0,
+            4.0,
+            4.0
+          ],
+          "uv": [
+            34.0,
+            16.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "leftHand",
+      "parent": "leftArm",
+      "pose": [
+        0.0,
+        15.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -0.1,
+            -2.0,
+            8.0,
+            3.0,
+            4.0
+          ],
+          "uv": [
+            31.0,
+            9.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightHand",
+      "parent": "rightArm",
+      "pose": [
+        0.0,
+        15.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -0.1,
+            -2.0,
+            8.0,
+            3.0,
+            4.0
+          ],
+          "uv": [
+            31.0,
+            9.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelSkreecher.java",
+  "sourceSha256": "24c0d4662a2b2fee09ed519aa1098062a2cbb1042e4748a9fd37f7075243d65a",
+  "animationRoot": "root",
+  "headLook": "head",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "body",
+      "kind": "walk",
+      "speed": 0.1,
+      "degree": 0.1,
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "leftArmPivot",
+      "kind": "walk",
+      "speed": 0.1,
+      "degree": 0.1,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "rightArmPivot",
+      "kind": "walk",
+      "speed": 0.1,
+      "degree": 0.1,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "head",
+      "kind": "bob",
+      "speed": 0.1,
+      "degree": [
+        "*",
+        [
+          "*",
+          -1,
+          0.1
+        ],
+        2.0
+      ],
+      "invert": false,
+      "phase": 0,
+      "bias": 0,
+      "clock": "walk",
+      "amount": 1.0,
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.walk(this.rightLeg, idleSpeed, idleDegree, false, -1.0f, 0.0f, ageInTicks, feetStill);",
+      "reason": "Unbound expression variable feetStill"
+    },
+    {
+      "call": "this.walk(this.leftLeg, idleSpeed, idleDegree, false, -1.0f, 0.0f, ageInTicks, feetStill);",
+      "reason": "Unbound expression variable feetStill"
+    },
+    {
+      "call": "this.walk(this.body, walkSpeed, walkDegree, false, 0.0f, 0.3f, limbSwing, limbSwingAmount * groundSpeed);",
+      "reason": "Unbound expression variable groundSpeed"
+    },
+    {
+      "call": "this.walk(this.head, walkSpeed, walkDegree * 0.5f, true, 0.3f, 0.3f, limbSwing, limbSwingAmount * groundSpeed);",
+      "reason": "Unbound expression variable groundSpeed"
+    },
+    {
+      "call": "this.swing(this.leftArm, walkSpeed, walkDegree, true, 0.0f, 0.0f, limbSwing, limbSwingAmount * groundSpeed);",
+      "reason": "Unbound expression variable groundSpeed"
+    },
+    {
+      "call": "this.swing(this.rightArm, walkSpeed, walkDegree, false, 0.0f, 0.0f, limbSwing, limbSwingAmount * groundSpeed);",
+      "reason": "Unbound expression variable groundSpeed"
+    },
+    {
+      "call": "this.walk(this.rightLeg, walkSpeed, walkDegree, false, 1.0f, 0.3f, limbSwing, limbSwingAmount * groundSpeed * feetStill);",
+      "reason": "Unbound expression variable groundSpeed"
+    },
+    {
+      "call": "this.walk(this.leftLeg, walkSpeed, walkDegree, false, 1.0f, 0.3f, limbSwing, limbSwingAmount * groundSpeed * feetStill);",
+      "reason": "Unbound expression variable groundSpeed"
+    },
+    {
+      "call": "this.swing(this.leftArm, walkSpeed, walkDegree, false, -2.0f, -0.2f, limbSwing, limbSwingAmount * groundSpeed);",
+      "reason": "Unbound expression variable groundSpeed"
+    },
+    {
+      "call": "this.swing(this.rightArm, walkSpeed, walkDegree, false, -2.0f, 0.2f, limbSwing, limbSwingAmount * groundSpeed);",
+      "reason": "Unbound expression variable groundSpeed"
+    },
+    {
+      "call": "this.swing(this.leftArm, walkSpeed, armDegree * walkDegree, false, 0.0f, 0.0f, limbSwing, limbSwingAmount * clingSpeed);",
+      "reason": "Unbound expression variable armDegree"
+    },
+    {
+      "call": "this.swing(this.rightArm, walkSpeed, armDegree * walkDegree, false, 0.0f, 0.0f, limbSwing, limbSwingAmount * clingSpeed);",
+      "reason": "Unbound expression variable armDegree"
+    },
+    {
+      "call": "this.walk(this.leftArm, walkSpeed, armDegree * walkDegree * 0.2f, true, 1.0f, 0.0f, limbSwing, limbSwingAmount * clingSpeed);",
+      "reason": "Unbound expression variable armDegree"
+    },
+    {
+      "call": "this.walk(this.rightArm, walkSpeed, armDegree * walkDegree * 0.2f, false, 1.0f, 0.0f, limbSwing, limbSwingAmount * clingSpeed);",
+      "reason": "Unbound expression variable armDegree"
+    },
+    {
+      "call": "this.walk(this.rightLeg, walkSpeed, walkDegree, false, 2.0f, 0.4f, limbSwing, limbSwingAmount * clingSpeed * feetStill);",
+      "reason": "Unbound expression variable clingSpeed"
+    },
+    {
+      "call": "this.walk(this.leftLeg, walkSpeed, walkDegree, true, 2.0f, -0.4f, limbSwing, limbSwingAmount * clingSpeed * feetStill);",
+      "reason": "Unbound expression variable clingSpeed"
+    },
+    {
+      "call": "this.swing(this.body, walkSpeed, walkDegree * 0.2f, false, 0.0f, 0.0f, limbSwing, limbSwingAmount * clingSpeed);",
+      "reason": "Unbound expression variable clingSpeed"
+    },
+    {
+      "call": "this.swing(this.head, walkSpeed, walkDegree * 0.2f, true, 0.0f, 0.0f, limbSwing, limbSwingAmount * clingSpeed);",
+      "reason": "Unbound expression variable clingSpeed"
+    },
+    {
+      "call": "this.swing(this.head, 10.0f, 0.05f, false, 0.0f, 0.0f, ageInTicks, clapProgress * 0.2f);",
+      "reason": "Unbound expression variable clapProgress"
+    },
+    {
+      "call": "this.flap(this.leftLeg, 0.8f, 0.5f, false, 0.0f, -0.45f, ageInTicks, clapProgress * 0.2f);",
+      "reason": "Unbound expression variable clapProgress"
+    },
+    {
+      "call": "this.flap(this.rightLeg, 0.8f, 0.5f, true, 0.0f, -0.45f, ageInTicks, clapProgress * 0.2f);",
+      "reason": "Unbound expression variable clapProgress"
+    },
+    {
+      "call": "this.swing(this.leftLeg, 0.8f, 0.35f, false, 0.0f, -0.15f, ageInTicks, clapProgress * 0.2f);",
+      "reason": "Unbound expression variable clapProgress"
+    },
+    {
+      "call": "this.swing(this.rightLeg, 0.8f, 0.35f, true, 0.0f, -0.15f, ageInTicks, clapProgress * 0.2f);",
+      "reason": "Unbound expression variable clapProgress"
+    },
+    {
+      "call": "this.bob(this.body, idleSpeed * 3.0f, -idleDegree * 5.0f, false, ageInTicks, clingSpeed);",
+      "reason": "Unbound expression variable clingSpeed"
+    },
+    {
+      "call": "this.bob(this.rightArmPivot, idleSpeed * 3.0f, idleDegree * 8.0f, false, ageInTicks, clingSpeed);",
+      "reason": "Unbound expression variable clingSpeed"
+    },
+    {
+      "call": "this.bob(this.leftArmPivot, idleSpeed * 3.0f, idleDegree * 8.0f, false, ageInTicks, clingSpeed);",
+      "reason": "Unbound expression variable clingSpeed"
+    },
+    {
+      "call": "this.rightArm.setScale(1.0f, armScale, 1.0f);",
+      "reason": "Unbound expression variable armScale"
+    },
+    {
+      "call": "this.leftArm.setScale(1.0f, armScale, 1.0f);",
+      "reason": "Unbound expression variable armScale"
+    }
+  ],
+  "expressions": [],
+  "poses": []
+}

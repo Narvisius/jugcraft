@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:cavern_moth_dust",
+    "jugcraft:cavern_guano",
+    "minecraft:string",
+    "minecraft:string"
+  ],
+  "result": {
+    "id": "jugcraft:cavern_moth_ball"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

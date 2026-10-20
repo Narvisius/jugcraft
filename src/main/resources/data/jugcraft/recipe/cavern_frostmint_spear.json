@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " F ",
+    "FCF",
+    " C "
+  ],
+  "key": {
+    "F": "jugcraft:cavern_frostmint",
+    "C": "jugcraft:cavern_candy_cane"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:cavern_frostmint_spear"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

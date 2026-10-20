@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "biomes",
+      "or": [
+        "alpine_spawn"
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "planks",
+  "ingredients": [
+    "#jugcraft:juniper_logs"
+  ],
+  "result": {
+    "id": "jugcraft:juniper_planks",
+    "count": 4
+  }
+}

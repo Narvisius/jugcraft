@@ -1,0 +1,16 @@
+{
+  "type": "jugcraft:household_pan",
+  "ingredient": "jugcraft:household_cheese_sandwich",
+  "result": {
+    "id": "jugcraft:household_cheese_toastie"
+  },
+  "cookingtime": 400,
+  "experience": 0.1,
+  "category": "food",
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

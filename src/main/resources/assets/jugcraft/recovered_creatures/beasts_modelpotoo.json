@@ -1,0 +1,791 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "body",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -5.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.5,
+            -4.0,
+            -3.0,
+            7.0,
+            8.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "tail",
+      "parent": "body",
+      "pose": [
+        0.0,
+        4.0,
+        2.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.5,
+            0.0,
+            -1.0,
+            5.0,
+            8.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            26.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_wing",
+      "parent": "body",
+      "pose": [
+        3.5,
+        -2.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -1.0,
+            -2.0,
+            1.0,
+            8.0,
+            5.0
+          ],
+          "uv": [
+            22.0,
+            21.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_wing",
+      "parent": "body",
+      "pose": [
+        -3.5,
+        -2.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.0,
+            -2.0,
+            1.0,
+            8.0,
+            5.0
+          ],
+          "uv": [
+            22.0,
+            21.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_foot",
+      "parent": "body",
+      "pose": [
+        2.5,
+        3.9,
+        -2.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            0.0,
+            -2.0,
+            3.0,
+            2.0,
+            3.0
+          ],
+          "uv": [
+            21.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_foot",
+      "parent": "body",
+      "pose": [
+        -2.5,
+        3.9,
+        -2.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            0.0,
+            -2.0,
+            3.0,
+            2.0,
+            3.0
+          ],
+          "uv": [
+            21.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "head",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -4.0,
+        3.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.5,
+            -4.0,
+            -6.0,
+            7.0,
+            4.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            15.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -3.5,
+            -0.7,
+            -6.0,
+            7.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            21.0,
+            9.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -0.5,
+            -1.0,
+            -7.0,
+            1.0,
+            2.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_eye",
+      "parent": "head",
+      "pose": [
+        4.0,
+        -2.4,
+        -4.4,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.5,
+            -1.5,
+            2.0,
+            3.0,
+            3.0
+          ],
+          "uv": [
+            30.0,
+            16.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_eye",
+      "parent": "head",
+      "pose": [
+        -4.0,
+        -2.4,
+        -4.4,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.5,
+            -1.5,
+            2.0,
+            3.0,
+            3.0
+          ],
+          "uv": [
+            30.0,
+            16.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_pupil",
+      "parent": "left_eye",
+      "pose": [
+        0.1,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.08,
+            -0.5,
+            -0.5,
+            2.0,
+            1.0,
+            1.0
+          ],
+          "uv": [
+            21.0,
+            16.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_pupil",
+      "parent": "right_eye",
+      "pose": [
+        -0.1,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.92,
+            -0.5,
+            -0.5,
+            2.0,
+            1.0,
+            1.0
+          ],
+          "uv": [
+            21.0,
+            16.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelPotoo.java",
+  "sourceSha256": "8e6bdfd7bdb60ce321d86f62e1cb5e6c5e593db50be511fcdf2dbbfb366837e0",
+  "animationRoot": "root",
+  "headLook": "head",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "body",
+      "kind": "flap",
+      "speed": 1.6,
+      "degree": [
+        "*",
+        0.8,
+        0.2
+      ],
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": [
+        "*",
+        "move",
+        [
+          "*",
+          [
+            "-",
+            5.0,
+            [
+              "*",
+              "fly",
+              5.0
+            ]
+          ],
+          0.2
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "kind": "bob",
+      "speed": [
+        "*",
+        0.8,
+        0.5
+      ],
+      "degree": [
+        "*",
+        0.2,
+        4.0
+      ],
+      "invert": true,
+      "phase": 0,
+      "bias": 0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": [
+        "&&",
+        1,
+        [
+          ">",
+          [
+            "*",
+            "fly",
+            5.0
+          ],
+          0.0
+        ]
+      ]
+    },
+    {
+      "bone": "right_wing",
+      "kind": "swing",
+      "speed": 0.8,
+      "degree": [
+        "*",
+        0.2,
+        5.0
+      ],
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": [
+        "&&",
+        1,
+        [
+          ">",
+          [
+            "*",
+            "fly",
+            5.0
+          ],
+          0.0
+        ]
+      ]
+    },
+    {
+      "bone": "left_wing",
+      "kind": "swing",
+      "speed": 0.8,
+      "degree": [
+        "*",
+        0.2,
+        5.0
+      ],
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": [
+        "&&",
+        1,
+        [
+          ">",
+          [
+            "*",
+            "fly",
+            5.0
+          ],
+          0.0
+        ]
+      ]
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.left_pupil.setScale(0.5f, 1.0f + eyeScale * 2.1f, 1.0f + eyeScale * 2.1f);",
+      "reason": "Unbound expression variable eyeScale"
+    },
+    {
+      "call": "this.right_pupil.setScale(0.5f, 1.0f + eyeScale * 2.1f, 1.0f + eyeScale * 2.1f);",
+      "reason": "Unbound expression variable eyeScale"
+    },
+    {
+      "call": "this.left_foot.rotationPointZ += 2.0f * (float)(Math.sin((double)(limbSwing * walkSpeed) - 2.5) * (double)walkSwingAmount * (double)walkDegree - (double)(walkSwingAmount * walkDegree));",
+      "reason": "Unbound expression variable walkSwingAmount"
+    },
+    {
+      "call": "this.right_foot.rotationPointZ += 2.0f * (float)(Math.sin(-((double)(limbSwing * walkSpeed)) + 2.5) * (double)walkSwingAmount * (double)walkDegree - (double)(walkSwingAmount * walkDegree));",
+      "reason": "Unbound expression variable walkSwingAmount"
+    },
+    {
+      "call": "this.left_foot.rotationPointY += (float)(Math.sin((double)(limbSwing * walkSpeed) - 2.5) * (double)walkSwingAmount * (double)walkDegree - (double)(walkSwingAmount * walkDegree));",
+      "reason": "Unbound expression variable walkSwingAmount"
+    },
+    {
+      "call": "this.right_foot.rotationPointY += (float)(Math.sin(-((double)(limbSwing * walkSpeed)) + 2.5) * (double)walkSwingAmount * (double)walkDegree - (double)(walkSwingAmount * walkDegree));",
+      "reason": "Unbound expression variable walkSwingAmount"
+    }
+  ],
+  "expressions": [
+    {
+      "bone": "left_pupil",
+      "target": "x",
+      "op": "+=",
+      "value": 0.5,
+      "when": 1
+    },
+    {
+      "bone": "right_pupil",
+      "target": "x",
+      "op": "-=",
+      "value": 0.5,
+      "when": 1
+    }
+  ],
+  "poses": [
+    {
+      "bone": "body",
+      "weight": [
+        "/",
+        [
+          "min",
+          [
+            "*",
+            "move",
+            [
+              "*",
+              [
+                "-",
+                5.0,
+                [
+                  "*",
+                  "fly",
+                  5.0
+                ]
+              ],
+              0.2
+            ]
+          ],
+          0.5
+        ],
+        0.5
+      ],
+      "target": "rotation",
+      "value": [
+        0.3490658503988659,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "left_foot",
+      "weight": [
+        "/",
+        [
+          "min",
+          [
+            "*",
+            "move",
+            [
+              "*",
+              [
+                "-",
+                5.0,
+                [
+                  "*",
+                  "fly",
+                  5.0
+                ]
+              ],
+              0.2
+            ]
+          ],
+          0.5
+        ],
+        0.5
+      ],
+      "target": "rotation",
+      "value": [
+        -0.3490658503988659,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "right_foot",
+      "weight": [
+        "/",
+        [
+          "min",
+          [
+            "*",
+            "move",
+            [
+              "*",
+              [
+                "-",
+                5.0,
+                [
+                  "*",
+                  "fly",
+                  5.0
+                ]
+              ],
+              0.2
+            ]
+          ],
+          0.5
+        ],
+        0.5
+      ],
+      "target": "rotation",
+      "value": [
+        -0.3490658503988659,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "weight": [
+        "/",
+        [
+          "*",
+          [
+            "*",
+            "fly",
+            5.0
+          ],
+          "move"
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        1.3962634015954636,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "right_wing",
+      "weight": [
+        "/",
+        [
+          "*",
+          "fly",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        -1.5707963267948966,
+        1.5707963267948966,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "left_wing",
+      "weight": [
+        "/",
+        [
+          "*",
+          "fly",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        -1.5707963267948966,
+        -1.5707963267948966,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "tail",
+      "weight": [
+        "/",
+        [
+          "*",
+          "fly",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        -1.0471975511965976,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    }
+  ]
+}

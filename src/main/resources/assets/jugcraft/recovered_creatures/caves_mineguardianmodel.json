@@ -1,0 +1,837 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "head",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6.0,
+            -14.0,
+            -8.0,
+            12.0,
+            12.0,
+            16.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -8.0,
+            -14.0,
+            -6.0,
+            2.0,
+            12.0,
+            12.0
+          ],
+          "uv": [
+            0.0,
+            28.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            6.0,
+            -14.0,
+            -6.0,
+            2.0,
+            12.0,
+            12.0
+          ],
+          "uv": [
+            0.0,
+            28.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            -6.0,
+            -16.0,
+            -6.0,
+            12.0,
+            2.0,
+            12.0
+          ],
+          "uv": [
+            16.0,
+            40.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "head_r1",
+      "parent": "head",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -3.1416
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -2.0,
+            0.0,
+            3.0,
+            2.0,
+            0.0
+          ],
+          "uv": [
+            16.0,
+            38.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            -6.0,
+            0.0,
+            -6.0,
+            12.0,
+            2.0,
+            12.0
+          ],
+          "uv": [
+            16.0,
+            40.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "eye",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            15.0,
+            -8.25,
+            2.0,
+            2.0,
+            1.0
+          ],
+          "uv": [
+            8.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "spikepart0",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -24.0,
+        0.0,
+        0.0,
+        0.0,
+        0.7854
+      ],
+      "cubes": []
+    },
+    {
+      "name": "spikepart1",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -24.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.7854
+      ],
+      "cubes": []
+    },
+    {
+      "name": "spikepart2",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -24.0,
+        0.0,
+        0.7854,
+        0.0,
+        0.0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "spikepart3",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -24.0,
+        0.0,
+        -0.7854,
+        0.0,
+        0.0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "spikepart4",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -24.0,
+        0.0,
+        0.0,
+        0.0,
+        2.3562
+      ],
+      "cubes": []
+    },
+    {
+      "name": "spikepart5",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -24.0,
+        0.0,
+        0.0,
+        0.0,
+        -2.3562
+      ],
+      "cubes": []
+    },
+    {
+      "name": "spikepart6",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -24.0,
+        0.0,
+        2.3562,
+        0.0,
+        0.0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "spikepart7",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -24.0,
+        0.0,
+        -2.3562,
+        0.0,
+        0.0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "spikepart8",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -24.0,
+        0.0,
+        1.5708,
+        -0.7854,
+        0.0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "spikepart9",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -24.0,
+        0.0,
+        1.5708,
+        0.7854,
+        0.0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "spikepart10",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -24.0,
+        0.0,
+        1.5708,
+        -2.3562,
+        0.0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "spikepart11",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -24.0,
+        0.0,
+        1.5708,
+        2.3562,
+        0.0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "spike0",
+      "parent": "spikepart0",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            10.25,
+            -4.5,
+            -1.0,
+            2.0,
+            9.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "spike1",
+      "parent": "spikepart1",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -12.25,
+            -4.5,
+            -1.0,
+            2.0,
+            9.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "spike2",
+      "parent": "spikepart2",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -4.5,
+            -12.25,
+            2.0,
+            9.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "spike3",
+      "parent": "spikepart3",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -4.5,
+            10.5,
+            2.0,
+            9.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "spike4",
+      "parent": "spikepart4",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            10.25,
+            -27.5,
+            -1.0,
+            2.0,
+            9.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "spike5",
+      "parent": "spikepart5",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -12.25,
+            -27.5,
+            -1.0,
+            2.0,
+            9.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "spike6",
+      "parent": "spikepart6",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -28.5,
+            -12.25,
+            2.0,
+            9.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "spike7",
+      "parent": "spikepart7",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -27.5,
+            10.25,
+            2.0,
+            9.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "spike8",
+      "parent": "spikepart8",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -17.5,
+            -17.0,
+            2.0,
+            9.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "spike9",
+      "parent": "spikepart9",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -17.5,
+            -17.0,
+            2.0,
+            9.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "spike10",
+      "parent": "spikepart10",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -17.5,
+            -17.0,
+            2.0,
+            9.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "spike11",
+      "parent": "spikepart11",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -17.5,
+            -17.0,
+            2.0,
+            9.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/MineGuardianModel.java",
+  "sourceSha256": "089925f02bf7172f76c5487947aa0432b3076aaca62e3c9e276b7a0b4ba4ab02",
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "head",
+      "kind": "flap",
+      "speed": 3.0,
+      "degree": 0.3,
+      "invert": true,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "*",
+        "charge",
+        1
+      ],
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.head.setScale(1.0f + explodeProgress * 0.15f, 1.0f + explodeProgress * 0.15f, 1.0f + explodeProgress * 0.15f);",
+      "reason": "Unbound expression variable explodeProgress"
+    },
+    {
+      "call": "this.spike0.rotationPointY += ACMath.walkValue(ageInTicks, 1.0f, 0.1f + explodeProgress, 0.0f, 1.0f, false) + 2.0f;",
+      "reason": "Unbound expression variable explodeProgress"
+    },
+    {
+      "call": "this.spike1.rotationPointY += ACMath.walkValue(ageInTicks, 1.0f, 0.1f + explodeProgress, 1.0f, 1.0f, false) + 2.0f;",
+      "reason": "Unbound expression variable explodeProgress"
+    },
+    {
+      "call": "this.spike2.rotationPointY += ACMath.walkValue(ageInTicks, 1.0f, 0.1f + explodeProgress, 2.0f, 1.0f, false) + 2.0f;",
+      "reason": "Unbound expression variable explodeProgress"
+    },
+    {
+      "call": "this.spike3.rotationPointY += ACMath.walkValue(ageInTicks, 1.0f, 0.1f + explodeProgress, 3.0f, 1.0f, false) + 2.0f;",
+      "reason": "Unbound expression variable explodeProgress"
+    },
+    {
+      "call": "this.spike4.rotationPointY += ACMath.walkValue(ageInTicks, 1.0f, 0.1f + explodeProgress, 4.0f, 1.0f, false) + 2.0f;",
+      "reason": "Unbound expression variable explodeProgress"
+    },
+    {
+      "call": "this.spike5.rotationPointY += ACMath.walkValue(ageInTicks, 1.0f, 0.1f + explodeProgress, 5.0f, 1.0f, false) + 2.0f;",
+      "reason": "Unbound expression variable explodeProgress"
+    },
+    {
+      "call": "this.spike6.rotationPointY += ACMath.walkValue(ageInTicks, 1.0f, 0.1f + explodeProgress, 6.0f, 1.0f, false) + 2.0f;",
+      "reason": "Unbound expression variable explodeProgress"
+    },
+    {
+      "call": "this.spike7.rotationPointY += ACMath.walkValue(ageInTicks, 1.0f, 0.1f + explodeProgress, 7.0f, 1.0f, false) + 2.0f;",
+      "reason": "Unbound expression variable explodeProgress"
+    },
+    {
+      "call": "this.spike8.rotationPointY += ACMath.walkValue(ageInTicks, 1.0f, 0.1f + explodeProgress, 8.0f, 1.0f, false) + 2.0f;",
+      "reason": "Unbound expression variable explodeProgress"
+    },
+    {
+      "call": "this.spike9.rotationPointY += ACMath.walkValue(ageInTicks, 1.0f, 0.1f + explodeProgress, 9.0f, 1.0f, false) + 2.0f;",
+      "reason": "Unbound expression variable explodeProgress"
+    },
+    {
+      "call": "this.spike10.rotationPointY += ACMath.walkValue(ageInTicks, 1.0f, 0.1f + explodeProgress, 10.0f, 1.0f, false) + 2.0f;",
+      "reason": "Unbound expression variable explodeProgress"
+    },
+    {
+      "call": "this.spike11.rotationPointY += ACMath.walkValue(ageInTicks, 1.0f, 0.1f + explodeProgress, 11.0f, 1.0f, false) + 2.0f;",
+      "reason": "Unbound expression variable explodeProgress"
+    },
+    {
+      "call": "this.eye.rotationPointX = (float)((double)this.eye.rotationPointX + (double)scanProgress * (Math.sin(ageInTicks * 0.1f) * 3.0));",
+      "reason": "Unsupported expression (this.eye.rotationPointX + scanProgress * (sin(ageInTicks * 0.1) * 3.0))"
+    }
+  ],
+  "expressions": [],
+  "poses": []
+}

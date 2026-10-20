@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "max": 48,
+              "min": 32
+            }
+          },
+          "name": "minecraft:snowball"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "mutantmonsters:entities/mutant_snow_golem"
+}

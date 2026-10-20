@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ISI",
+    "SSS",
+    "ISI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "S": "jugcraft:cavern_sea_glass_shards"
+  },
+  "result": {
+    "count": 8,
+    "id": "jugcraft:cavern_depth_glass"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

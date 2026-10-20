@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:ceramic_firing",
+  "items": [
+    {
+      "ingredient": "jugcraft:porcelain_blank",
+      "count": 1
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:fired_porcelain_blank",
+      "count": 1
+    }
+  ],
+  "energy_per_tick": 48,
+  "time": 240
+}

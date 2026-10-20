@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#"
+  ],
+  "key": {
+    "#": "jugcraft:landscape_scoria_brick_vertical_slab"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:landscape_scoria_brick_slab"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

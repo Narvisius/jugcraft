@@ -304,6 +304,9 @@ public class FestivityGameTests {
 		Mob plain = helper.spawnWithNoFreeWill(vanilla("zombie"), new BlockPos(6, 2, 6));
 		CostumedMobs.dressNow(dressed, "jugcraft:witch_hat");
 		plain.addTag(CostumedMobs.ROLLED);
+		// October's entity-load hook may already have dressed this control mob.
+		plain.removeTag(CostumedMobs.COSTUMED);
+		plain.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
 		dressed.hurtServer(level, level.damageSources().playerAttack(hunter), 1000.0F);
 		plain.hurtServer(level, level.damageSources().playerAttack(hunter), 1000.0F);
 		helper.assertTrue(dressed.isDeadOrDying() && plain.isDeadOrDying(), "Both zombies fell");

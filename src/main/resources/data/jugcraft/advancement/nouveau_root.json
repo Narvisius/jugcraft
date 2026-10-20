@@ -1,0 +1,34 @@
+{
+  "criteria": {
+    "jugcraft:nouveau_worn_notebook": {
+      "conditions": {
+        "items": [
+          {
+            "items": "jugcraft:nouveau_worn_notebook"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "jugcraft:nouveau/textures/gui/advancements/backgrounds/sourcestone",
+    "description": {
+      "translate": "jugcraft.nouveau_advancement.desc.root"
+    },
+    "icon": {
+      "count": 1,
+      "id": "jugcraft:nouveau_worn_notebook"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "jugcraft.nouveau_advancement.title.root"
+    }
+  },
+  "requirements": [
+    [
+      "jugcraft:nouveau_worn_notebook"
+    ]
+  ]
+}

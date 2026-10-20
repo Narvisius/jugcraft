@@ -1,0 +1,22 @@
+{
+  "type": "jugcraft:household_construction",
+  "ingredients": [
+    {
+      "count": 2,
+      "ingredient": "minecraft:cherry_planks"
+    },
+    {
+      "count": 1,
+      "ingredient": "minecraft:glass"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:household_cherry_storage_jar"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

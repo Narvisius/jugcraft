@@ -83,8 +83,8 @@ def worldgen(data, write):
     write(folder / "biome" / f"{al.BIOME}.json", biome())
     trees = al.TREES
     write(folder / "feature" / f"{trees['feature']}.json", {
-        "type": "minecraft:random_selector", "default": trees["spruce"],
-        "features": [{"chance": trees["larch_chance"], "feature": trees["larch"]}]})
+        "type": "minecraft:random_selector", "default": trees["default"],
+        "features": [{"chance": chance, "feature": feature} for feature, chance in trees["picks"]]})
     write(folder / "placed_feature" / "trees_alpine_spawn.json", {"feature": rid(trees["feature"]), "placement": [
         {"type": "minecraft:count", "count": {"type": "minecraft:weighted_list", "distribution": [
             {"data": trees["count"] - 1, "weight": 1}, {"data": trees["count"], "weight": 1},

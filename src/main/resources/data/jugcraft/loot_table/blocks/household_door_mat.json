@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:household_door_mat",
+          "modifier": [
+            {
+              "source": "block_entity",
+              "include": [
+                "minecraft:custom_name"
+              ],
+              "type": "minecraft:copy_components"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

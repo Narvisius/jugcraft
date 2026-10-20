@@ -77,6 +77,18 @@ def wreath_model(flowers):
                                "mum": f"autumn_wreath_mum_{flowers}"}, leaves + corn + mums, "autumn_wreath_leaves"))
 
 
+def holly_wreath_model():
+    """The existing wall wreath's leaf ring, with small raised scarlet clusters instead of corn and mums."""
+    model = wreath_model("red")
+    model["elements"] = model["elements"][:8]
+    model["textures"] = {"leaves": rid("block/holly_wreath_leaves"), "berry": rid("block/holly_wreath_berries"),
+                         "particle": rid("block/holly_wreath_leaves")}
+    for x, y in ((4, 12), (12, 10), (11, 3), (3, 6)):
+        for dx, dy in ((0, 0), (1.2, 0.3), (0.6, -1)):
+            model["elements"].append(box((x + dx, y + dy, 11.5), (x + dx + 1, y + dy + 1, 13), "#berry"))
+    return model
+
+
 # ---------------------------------------------------------------- the leaf piles
 
 def pile_model(colour, layers):
@@ -126,6 +138,13 @@ def assets(root, write, lang):
         "fallback": {"type": "minecraft:model", "model": rid(f"block/{wreath}_{AUTUMN_WREATH['default']}")}}})
     lang[f"block.{MOD}.{wreath}"] = AUTUMN_WREATH["display"]
 
+    holly = "holly_wreath"
+    write(models / f"{holly}.json", holly_wreath_model())
+    write(states / f"{holly}.json", {"variants": {f"facing={f}": turned(rid(f"block/{holly}"), f) for f in HORIZONTAL}})
+    write(root / "items" / f"{holly}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{holly}")}})
+    lang[f"block.{MOD}.{holly}"] = "Holly Wreath"
+    lang[f"entity.{MOD}.door_wreath"] = "Door Wreath"
+
     for colour, display in LEAF_PILES["colours"].items():
         pile = f"{colour}_leaf_pile"
         for layers in range(1, LEAF_PILES["max_layers"] + 1):
@@ -155,6 +174,7 @@ def loot(out, write):
     write(out / f"{tub}.json", tub_loot)
     for block in (PUMPKIN_CRATE["block"], HAY_BALE_SEAT["block"]):
         write(out / f"{block}.json", self_drop(block))
+    write(out / "holly_wreath.json", self_drop("holly_wreath"))
     wreath = AUTUMN_WREATH["block"]
     write(out / f"{wreath}.json", {"type": "minecraft:block", "pools": [{
         "condition": {"type": "minecraft:survives_explosion"},
@@ -171,5 +191,5 @@ def tags(tags):
         tags.add("item", PUMPKIN_CRATE["produce_tag"], value)
     for block in (BOBBING_TUB["block"], PUMPKIN_CRATE["block"]):
         tags.add("block", "minecraft:mineable/axe", rid(block))
-    for block in [HAY_BALE_SEAT["block"], AUTUMN_WREATH["block"]] + leaf_piles():
+    for block in [HAY_BALE_SEAT["block"], AUTUMN_WREATH["block"], "holly_wreath"] + leaf_piles():
         tags.add("block", "minecraft:mineable/hoe", rid(block))

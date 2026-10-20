@@ -1,0 +1,35 @@
+{
+  "pools": [
+    {
+      "name": "dropbear",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:beast_dropbear_claw",
+          "weight": 1,
+          "modifier": [
+            {
+              "count": {
+                "min": 0,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            },
+            {
+              "count": {
+                "min": 0,
+                "max": 1,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:enchanted_count_increase",
+              "enchantment": "minecraft:looting"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "type": "minecraft:entity"
+}

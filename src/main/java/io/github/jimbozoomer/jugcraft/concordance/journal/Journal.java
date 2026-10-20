@@ -151,7 +151,7 @@ public final class Journal {
 
 	/** Focus, the stage reached, and how much of the Concordance is still unknown. */
 	private static void overview(ServerPlayer player, Report out) {
-		out.line(Component.translatable("journal.jugcraft.overview.focus", ConcordanceProgress.currentFocus(player), FocusPool.MAX));
+		out.line(Component.translatable("journal.jugcraft.overview.focus", ConcordanceProgress.currentFocus(player), ConcordanceProgress.focus(player).capacity()));
 		StageDefinition stage = StageProgress.stage(player);
 		out.line(stage == null ? Component.translatable("journal.jugcraft.overview.no_stage")
 				: Component.translatable("journal.jugcraft.overview.stage", StageProgress.name(stage.id())));

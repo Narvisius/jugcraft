@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PAP",
+    " I "
+  ],
+  "key": {
+    "P": "jugcraft:ptfe_liner",
+    "A": "jugcraft:alumina_plate",
+    "I": "jugcraft:porcelain_insulator"
+  },
+  "result": {
+    "id": "jugcraft:cryogenic_insulation",
+    "count": 4
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-19",
+  "tool": "OpenAI Codex (GPT-6)",
+  "species": 47,
+  "nativeLayers": 73,
+  "preservedAnimationClips": 441,
+  "offlineTests": {
+    "passed": 4
+  },
+  "renderedClient": {
+    "class": "RecoveredWildlifeClientTests",
+    "result": "passed",
+    "screenshots": 49,
+    "reviewed": 49,
+    "world": "disposable flat world, no owner save"
+  },
+  "serverTests": "not rerun; presentation-only change",
+  "jarSha256": "d5bedd1bffd282a93d724fb1c092d242ee0ed65eb306d5dfe16499b4f6c438c0",
+  "packSha256": "d1d2053093053600b3edd2131fed6c0176461da6142726fc2bf5c1e23495051e",
+  "packFile": "Jugcraft-Animal-Fixes-Oct19.mrpack",
+  "lockedDependencies": 19,
+  "packImport": "not performed",
+  "published": false,
+  "limitations": [
+    "Baby birds use the supplied adult rig at infant scale because matching baby skins were not supplied.",
+    "22 incompatible infant dye pairings retain their normal base skin.",
+    "Other reconstructed collections still need their original model files.",
+    "Specialized behavior beyond existing Jugcraft state is not implemented by the model recovery."
+  ]
+}

@@ -1,0 +1,137 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "main",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "segment",
+      "parent": "main",
+      "pose": [
+        0.0,
+        -16.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -16.0,
+            -16.0,
+            -16.0,
+            32.0,
+            32.0,
+            32.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "gum_back",
+      "parent": "segment",
+      "pose": [
+        0.0,
+        0.0,
+        16.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -16.0,
+            -16.0,
+            0.0,
+            32.0,
+            32.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            64.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "gum_front",
+      "parent": "segment",
+      "pose": [
+        0.0,
+        0.0,
+        -16.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -16.0,
+            -16.0,
+            0.0,
+            32.0,
+            32.0,
+            0.0
+          ],
+          "uv": [
+            64.0,
+            64.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/GumWormSegmentModel.java",
+  "sourceSha256": "6f0951bf4a429027fd290169febbda2a05b2b6d88c10462f0a1ba68827e3da98",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.segment.rotateAngleZ += (float)Math.toRadians(entity.getBodyZRot(partialTicks));",
+      "reason": "Unsupported expression radians(entity.getBodyZRot(partialTicks))"
+    }
+  ],
+  "expressions": [],
+  "poses": []
+}

@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WIW"
+  ],
+  "key": {
+    "W": "#c:wires/copper",
+    "I": "jugcraft:porcelain_insulator"
+  },
+  "result": {
+    "id": "jugcraft:copper_cable",
+    "count": 2
+  }
+}

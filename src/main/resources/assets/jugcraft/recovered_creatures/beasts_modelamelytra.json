@@ -1,0 +1,336 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "head",
+      "parent": "$mesh",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4,
+            -8,
+            -4,
+            8,
+            8,
+            8
+          ],
+          "uv": [
+            0,
+            0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "hat",
+      "parent": "$mesh",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4,
+            -8,
+            -4,
+            8,
+            8,
+            8
+          ],
+          "uv": [
+            32,
+            0
+          ],
+          "inflate": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "body",
+      "parent": "$mesh",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4,
+            0,
+            -2,
+            8,
+            12,
+            4
+          ],
+          "uv": [
+            16,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_arm",
+      "parent": "$mesh",
+      "pose": [
+        -5,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3,
+            -2,
+            -2,
+            4,
+            12,
+            4
+          ],
+          "uv": [
+            40,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_arm",
+      "parent": "$mesh",
+      "pose": [
+        5,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1,
+            -2,
+            -2,
+            4,
+            12,
+            4
+          ],
+          "uv": [
+            40,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "right_leg",
+      "parent": "$mesh",
+      "pose": [
+        -1.9,
+        12,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2,
+            0,
+            -2,
+            4,
+            12,
+            4
+          ],
+          "uv": [
+            0,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_leg",
+      "parent": "$mesh",
+      "pose": [
+        1.9,
+        12,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2,
+            0,
+            -2,
+            4,
+            12,
+            4
+          ],
+          "uv": [
+            0,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_wing",
+      "parent": "body",
+      "pose": [
+        5.0,
+        0.0,
+        0.0,
+        0.2617994,
+        0.0,
+        -0.2617994
+      ],
+      "cubes": [
+        {
+          "box": [
+            -10.0,
+            0.0,
+            0.0,
+            10.0,
+            20.0,
+            2.0
+          ],
+          "uv": [
+            32.0,
+            32.0
+          ],
+          "inflate": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_wing",
+      "parent": "body",
+      "pose": [
+        -5.0,
+        0.0,
+        0.0,
+        0.2617994,
+        0.0,
+        0.2617994
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            0.0,
+            10.0,
+            20.0,
+            2.0
+          ],
+          "uv": [
+            32.0,
+            32.0
+          ],
+          "inflate": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/layered/ModelAMElytra.java",
+  "sourceSha256": "2fe083140aa0d6ce45c86563f642e22820a01be899bd1ea5b15b17f9e366ecf0",
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.rightWing.f_104204_ = -this.leftWing.f_104204_;",
+      "reason": "Unsupported expression -this.leftWing.f_104204_"
+    },
+    {
+      "call": "this.rightWing.f_104203_ = this.leftWing.f_104203_;",
+      "reason": "Unsupported expression this.leftWing.f_104203_"
+    },
+    {
+      "call": "this.rightWing.f_104205_ = -this.leftWing.f_104205_;",
+      "reason": "Unsupported expression -this.leftWing.f_104205_"
+    }
+  ],
+  "expressions": [],
+  "poses": []
+}

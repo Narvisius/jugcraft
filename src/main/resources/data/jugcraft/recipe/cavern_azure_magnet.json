@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "I I",
+    "N N",
+    "NNN"
+  ],
+  "key": {
+    "N": "jugcraft:cavern_azure_neodymium_ingot",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:cavern_azure_magnet"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

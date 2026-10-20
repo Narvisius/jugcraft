@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": "minecraft:iron_ingot",
+    "B": "minecraft:iron_nugget"
+  },
+  "pattern": [
+    " B",
+    "A "
+  ],
+  "result": {
+    "id": "jugcraft:ecology_spile"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

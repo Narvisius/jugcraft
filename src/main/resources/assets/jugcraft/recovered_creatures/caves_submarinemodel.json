@@ -1,0 +1,706 @@
+{
+  "textureSize": [
+    512,
+    512
+  ],
+  "parts": [
+    {
+      "name": "hull",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        -10.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -8.0,
+            -26.0,
+            7.0,
+            16.0,
+            6.0,
+            16.0
+          ],
+          "uv": [
+            103.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -20.0,
+            -22.0,
+            -7.0,
+            40.0,
+            46.0,
+            32.0
+          ],
+          "uv": [
+            0.0,
+            66.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            13.0,
+            8.0,
+            -30.0,
+            7.0,
+            16.0,
+            23.0
+          ],
+          "uv": [
+            152.0,
+            161.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -20.0,
+            8.0,
+            -30.0,
+            7.0,
+            16.0,
+            23.0
+          ],
+          "uv": [
+            92.0,
+            161.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -18.0,
+            -20.0,
+            -35.0,
+            36.0,
+            28.0,
+            28.0
+          ],
+          "uv": [
+            154.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -20.0,
+            8.0,
+            -37.0,
+            40.0,
+            16.0,
+            7.0
+          ],
+          "uv": [
+            112.0,
+            66.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -6.0,
+            8.0,
+            -30.0,
+            12.0,
+            16.0,
+            6.0
+          ],
+          "uv": [
+            251.0,
+            189.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -13.0,
+            15.0,
+            -30.0,
+            26.0,
+            15.0,
+            51.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rarm",
+      "parent": "hull",
+      "pose": [
+        22.5,
+        25.5,
+        -7.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -9.5,
+            -9.5,
+            -43.5,
+            19.0,
+            19.0,
+            51.0
+          ],
+          "uv": [
+            255.0,
+            91.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "larm",
+      "parent": "hull",
+      "pose": [
+        -22.5,
+        25.5,
+        -25.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -9.5,
+            -9.5,
+            -25.5,
+            19.0,
+            19.0,
+            51.0
+          ],
+          "uv": [
+            255.0,
+            91.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "llever",
+      "parent": "hull",
+      "pose": [
+        -7.0,
+        15.25,
+        -16.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -11.25,
+            -1.0,
+            2.0,
+            16.0,
+            2.0
+          ],
+          "uv": [
+            265.0,
+            72.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "rlever",
+      "parent": "hull",
+      "pose": [
+        7.0,
+        15.0,
+        -16.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -11.0,
+            -1.0,
+            2.0,
+            16.0,
+            2.0
+          ],
+          "uv": [
+            265.0,
+            72.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "watermask",
+      "parent": "hull",
+      "pose": [
+        0.0,
+        5.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -18.0,
+            0.0,
+            -35.0,
+            36.0,
+            52.0,
+            28.0
+          ],
+          "uv": [
+            0.0,
+            214.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "motor",
+      "parent": "hull",
+      "pose": [
+        0.0,
+        1.0,
+        25.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -9.0,
+            -8.0,
+            0.0,
+            18.0,
+            18.0,
+            7.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -14.0,
+            -13.0,
+            7.0,
+            28.0,
+            28.0,
+            18.0
+          ],
+          "uv": [
+            153.0,
+            211.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "periscope",
+      "parent": "hull",
+      "pose": [
+        0.0,
+        -22.0,
+        3.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -20.0,
+            -3.0,
+            6.0,
+            20.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            66.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -3.0,
+            -20.0,
+            -10.0,
+            6.0,
+            6.0,
+            7.0
+          ],
+          "uv": [
+            199.0,
+            59.0
+          ],
+          "inflate": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -3.0,
+            -20.0,
+            -10.0,
+            6.0,
+            6.0,
+            7.0
+          ],
+          "uv": [
+            103.0,
+            35.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "seat",
+      "parent": "hull",
+      "pose": [
+        0.0,
+        13.5,
+        -11.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -1.5,
+            -4.0,
+            8.0,
+            3.0,
+            8.0
+          ],
+          "uv": [
+            165.0,
+            93.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leftpropeller",
+      "parent": "rarm",
+      "pose": [
+        0.0,
+        0.0,
+        -43.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -9.5,
+            -9.5,
+            -3.0,
+            19.0,
+            19.0,
+            0.0
+          ],
+          "uv": [
+            189.0,
+            165.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -2.5,
+            -2.5,
+            -6.0,
+            5.0,
+            5.0,
+            6.0
+          ],
+          "uv": [
+            103.0,
+            22.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightpropeller",
+      "parent": "larm",
+      "pose": [
+        0.0,
+        0.0,
+        -25.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -9.5,
+            -9.5,
+            -3.0,
+            19.0,
+            19.0,
+            0.0
+          ],
+          "uv": [
+            189.0,
+            165.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -2.5,
+            -2.5,
+            -6.0,
+            5.0,
+            5.0,
+            6.0
+          ],
+          "uv": [
+            103.0,
+            22.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "backpropeller",
+      "parent": "motor",
+      "pose": [
+        0.0,
+        1.0,
+        7.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -4.0,
+            0.0,
+            8.0,
+            8.0,
+            12.0
+          ],
+          "uv": [
+            0.0,
+            25.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -13.0,
+            -13.0,
+            9.0,
+            26.0,
+            26.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            188.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/SubmarineModel.java",
+  "sourceSha256": "a9af7da6a3a50eb17fffa1cc7996decbbc16e96b547a5200c858d1e7dcdc7636",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.rightpropeller.rotateAngleZ = (float)((double)this.rightpropeller.rotateAngleZ + Math.toRadians(leftPropellerRot));",
+      "reason": "Unsupported expression (this.rightpropeller.rotateAngleZ + radians(leftPropellerRot))"
+    },
+    {
+      "call": "this.leftpropeller.rotateAngleZ = (float)((double)this.leftpropeller.rotateAngleZ + Math.toRadians(rightPropellerRot));",
+      "reason": "Unsupported expression (this.leftpropeller.rotateAngleZ + radians(rightPropellerRot))"
+    },
+    {
+      "call": "this.backpropeller.rotateAngleZ = (float)((double)this.backpropeller.rotateAngleZ + Math.toRadians(backPropellerRot));",
+      "reason": "Unsupported expression (this.backpropeller.rotateAngleZ + radians(backPropellerRot))"
+    },
+    {
+      "call": "this.hull.rotateAngleX = (float)((double)this.hull.rotateAngleX + Math.sin(ageInTicks * 0.7f + 1.0f) * (double)shake * (double)0.05f);",
+      "reason": "Unsupported expression (this.hull.rotateAngleX + sin(ageInTicks * 0.7 + 1.0) * shake * 0.05)"
+    },
+    {
+      "call": "this.hull.rotateAngleZ = (float)((double)this.hull.rotateAngleZ + Math.sin(ageInTicks * 0.7f) * (double)shake * (double)0.1f);",
+      "reason": "Unsupported expression (this.hull.rotateAngleZ + sin(ageInTicks * 0.7) * shake * 0.1)"
+    }
+  ],
+  "expressions": [],
+  "poses": []
+}

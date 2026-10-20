@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "group": "fd_cabinet",
+  "key": {
+    "D": "jugcraft:ecology_flowering_azalea_trapdoor",
+    "_": "jugcraft:ecology_flowering_azalea_slab"
+  },
+  "pattern": [
+    "___",
+    "D D",
+    "___"
+  ],
+  "result": {
+    "id": "jugcraft:ecology_flowering_azalea_cabinet"
+  }
+}

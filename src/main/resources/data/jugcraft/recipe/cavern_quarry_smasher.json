@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AAA",
+    "CCC",
+    "SHS"
+  ],
+  "key": {
+    "C": "minecraft:iron_chain",
+    "A": "jugcraft:cavern_azure_neodymium_ingot",
+    "S": "jugcraft:cavern_scarlet_neodymium_ingot",
+    "H": "jugcraft:cavern_heavyweight"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:cavern_quarry_smasher"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

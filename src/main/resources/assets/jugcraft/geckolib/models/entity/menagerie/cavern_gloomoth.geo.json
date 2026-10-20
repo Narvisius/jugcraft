@@ -1,0 +1,137 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.cavern_gloomoth",
+        "texture_width": 64,
+        "texture_height": 64,
+        "visible_bounds_width": 4,
+        "visible_bounds_height": 4,
+        "visible_bounds_offset": [
+          0,
+          0.225,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "body",
+          "parent": "root",
+          "pivot": [
+            0.0,
+            3.6,
+            0.0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -3.08,
+                0,
+                -4.4
+              ],
+              "size": [
+                6.16,
+                3.6,
+                8.8
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "head",
+          "parent": "root",
+          "pivot": [
+            0.0,
+            5.040000000000001,
+            -3.96
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -2.2,
+                2.8800000000000003,
+                -6.16
+              ],
+              "size": [
+                4.4,
+                2.16,
+                4.4
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "wing_-1",
+          "parent": "root",
+          "pivot": [
+            -2.64,
+            1.8,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -9.680000000000001,
+                1.8,
+                -3.08
+              ],
+              "size": [
+                7.040000000000001,
+                0.432,
+                7.040000000000001
+              ],
+              "uv": [
+                0,
+                32.0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "wing_1",
+          "parent": "root",
+          "pivot": [
+            2.64,
+            1.8,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                2.64,
+                1.8,
+                -3.08
+              ],
+              "size": [
+                7.040000000000001,
+                0.432,
+                7.040000000000001
+              ],
+              "uv": [
+                0,
+                32.0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

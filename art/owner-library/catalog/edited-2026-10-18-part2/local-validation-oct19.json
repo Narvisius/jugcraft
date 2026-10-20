@@ -1,0 +1,109 @@
+{
+  "date": "2026-10-19",
+  "tool": "OpenAI Codex (GPT-6)",
+  "branch": "local/jug-nouveau-oct18",
+  "scope": "Native integration of both owner October 18 collections; 265 species",
+  "species": 265,
+  "originalFiles": {
+    "firstBatch": 3502,
+    "partTwo": 26765
+  },
+  "published": false,
+  "ownerProfileControlled": false,
+  "serverTests": [
+    {
+      "scope": "Full suite before final resource/UI and workbench-recipe metadata corrections",
+      "passed": 1980,
+      "log": "../owner-collections-build-oct19-19.log"
+    },
+    {
+      "scope": "Final menagerie regressions, including paid construction, glass/powered walls and native petal bonemeal growth",
+      "passed": 19,
+      "log": "../owner-collections-server-oct19-22.log"
+    }
+  ],
+  "clientChecks": [
+    {
+      "tests": [
+        "MenagerieClientGameTests",
+        "MenagerieWearablesClientGameTests",
+        "OwnerCollectionsClientGameTests"
+      ],
+      "result": "passed",
+      "screenshots": 253,
+      "log": "../owner-collections-client-oct19-3.log",
+      "gallery": "../owner-collections-review-oct19-3"
+    },
+    {
+      "tests": [
+        "MenagerieWearablesClientGameTests",
+        "OwnerCollectionsClientGameTests"
+      ],
+      "result": "passed",
+      "screenshots": 87,
+      "log": "../owner-collections-client-oct19-5.log",
+      "gallery": "../owner-collections-review-oct19-5"
+    },
+    {
+      "tests": [
+        "OwnerCollectionsClientGameTests"
+      ],
+      "result": "passed",
+      "log": "../owner-collections-client-oct19-6.log",
+      "screenshots": 80,
+      "gallery": "../owner-collections-review-oct19-6"
+    },
+    {
+      "tests": [
+        "OwnerCollectionsClientGameTests"
+      ],
+      "result": "passed",
+      "log": "../owner-collections-client-oct19-7.log",
+      "scope": "Final particle-atlas resource repair and rebuilt runtime artifact",
+      "screenshots": 80,
+      "gallery": "../owner-collections-review-oct19-7",
+      "missingParticleWarnings": 0
+    }
+  ],
+  "staticChecks": {
+    "resourceModelHierarchyAudioEquipmentErrors": 0,
+    "assetRecipeTagWorldgenDiagonalErrors": 0,
+    "migrationTestsPassed": 4,
+    "nativePieModelDiagnostics": 0,
+    "fullArtAudit": {
+      "result": "not clean",
+      "diagnostics": 768,
+      "byRule": {
+        "O1": 376,
+        "I1": 282,
+        "Z1": 65,
+        "N1": 45
+      },
+      "log": "../owner-collections-data-oct19-final.log",
+      "note": "Snapshot before four native pie models were completed; those four subsequently passed a focused geometry check. Many retained meshes use hollow/inverted interiors; no blanket allow-list or source normalization was applied."
+    },
+    "assetRecipeTagWorldgenDiagonalLog": "../owner-collections-targeted-data-oct19-final.log",
+    "resourceAuditIncludesParticleAtlasMembership": true,
+    "repositoryDocumentation": "passed"
+  },
+  "runtimeJar": {
+    "path": "build/libs/jugcraft-0.1.0-alpha.jar",
+    "sha256": "6cecb870100d90523ad699ccad4d74a35f87cabaf1d10a32fffe450fc7bba9f2",
+    "bytes": 221341637,
+    "verifiedCurrentEntries": 19
+  },
+  "remaining": [
+    "Owner-controlled survival/balance and representative terrain playtest",
+    "Individual reconstructed anatomy and accurate texture-pattern placement",
+    "Review remaining hollow/inverted legacy meshes and possible depth-fighting diagnostics",
+    "Independent two-client multiplayer and population-scale performance testing",
+    "Separate pre-existing Nouveau model-parent/texture-alias warnings"
+  ],
+  "nativeAdaptations": [
+    "Missing source geometry is newly constructed, not recovered original models.",
+    "Ship wheel is a nearby occupied-boat dock control, not a block-built flying ship.",
+    "Game Controller commands a bound companion without transferring the player camera/body.",
+    "Missing original structure templates have bounded native replacements; existing owner chunks are untouched."
+  ],
+  "evidencePathsRelativeTo": "repository root"
+}

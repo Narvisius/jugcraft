@@ -1,0 +1,111 @@
+{
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "additions": {
+        "sound": "minecraft:ambient.nether_wastes.additions",
+        "tick_chance": 0.0111
+      },
+      "loop": "minecraft:ambient.warped_forest.loop",
+      "mood": {
+        "block_search_extent": 8,
+        "offset": 2.0,
+        "sound": "minecraft:ambient.crimson_forest.mood",
+        "tick_delay": 6000
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "sound": "jugcraft:landscape.music.nether.undergrowth"
+      }
+    },
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawn_costs": {},
+        "spawns_by_category": {
+          "creature": [
+            {
+              "type": "minecraft:strider",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              },
+              "weight": 60
+            }
+          ],
+          "monster": [
+            {
+              "type": "minecraft:ghast",
+              "count": 4,
+              "weight": 50
+            },
+            {
+              "type": "minecraft:magma_cube",
+              "count": 4,
+              "weight": 2
+            },
+            {
+              "type": "minecraft:hoglin",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 4,
+                "min_inclusive": 3
+              },
+              "weight": 9
+            }
+          ]
+        }
+      },
+      "modifier": "overlay"
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:spore_blossom_air"
+        },
+        "probability": 0.00357
+      }
+    ],
+    "minecraft:visual/fog_color": "#1c2109"
+  },
+  "carvers": "minecraft:nether_cave",
+  "downfall": 0.0,
+  "effects": {
+    "water_color": "#3f76e4"
+  },
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "minecraft:spring_open",
+      "minecraft:patch_fire",
+      "minecraft:glowstone_extra",
+      "minecraft:glowstone",
+      "minecraft:brown_mushroom_nether",
+      "minecraft:red_mushroom_nether",
+      "minecraft:ore_magma",
+      "minecraft:spring_closed",
+      "minecraft:ore_gravel_nether",
+      "minecraft:ore_blackstone",
+      "minecraft:ore_gold_nether",
+      "minecraft:ore_quartz_nether",
+      "minecraft:ore_ancient_debris_large",
+      "minecraft:ore_debris_small",
+      "jugcraft:landscape_dead_grass_45",
+      "jugcraft:landscape_flower_undergrowth",
+      "jugcraft:landscape_nether_bramble",
+      "jugcraft:landscape_nether_vines",
+      "jugcraft:landscape_sprouts_undergrowth",
+      "jugcraft:landscape_trees_undergrowth"
+    ]
+  ],
+  "has_precipitation": false,
+  "temperature": 2.0
+}

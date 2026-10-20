@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "NNN",
+    "NPN",
+    "NNN"
+  ],
+  "key": {
+    "N": "minecraft:cobblestone",
+    "P": "jugcraft:cavern_toxic_paste"
+  },
+  "result": {
+    "count": 8,
+    "id": "jugcraft:cavern_radrock"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -16,7 +16,8 @@ class TreeBatchFiveBCTests(unittest.TestCase):
     def test_selector_shares_keep_open_land_and_existing_density(self):
         expected = {
             "field": ([2,3], {"hawthorn_bush_checked":.55, "hawthorn_checked":.10, "oak_bush_checked":.015}),
-            "shrubland": ([4,6], {"hawthorn_bush_checked":.60, "oak_bush_checked":.10, "open_scrub":.30}),
+            # Batch 6 fills the reserved 30% while preserving both approved batch-5c shares.
+            "shrubland": ([4,6], {"hawthorn_bush_checked":.60, "oak_bush_checked":.10, "gorse_checked":.20, "juniper_bush_checked":.10}),
             "woodland": ([9,10], {"hawthorn_bush_checked":.04, "oak_bush_checked":.035, "elder_checked":.04}),
             "seasonal_forest": ([10,11], {"persimmon_checked":.10})}
         for biome, (density, expected_shares) in expected.items():

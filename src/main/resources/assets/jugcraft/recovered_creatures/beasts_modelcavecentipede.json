@@ -1,0 +1,400 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        21.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "head",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -7.875,
+        -20.625,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -7.0,
+            -3.125,
+            -5.375,
+            14.0,
+            7.0,
+            13.0
+          ],
+          "uv": [
+            0.0,
+            62.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "head2",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -2.125,
+        -6.375,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -1.0,
+            -1.0,
+            4.0,
+            2.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "antenna_left",
+      "parent": "head",
+      "pose": [
+        1.2,
+        -2.125,
+        -5.775,
+        -0.2618,
+        0.48,
+        -0.2618
+      ],
+      "cubes": []
+    },
+    {
+      "name": "antenna_right",
+      "parent": "head",
+      "pose": [
+        -1.2,
+        -2.125,
+        -5.775,
+        -0.2618,
+        -0.48,
+        0.2618
+      ],
+      "cubes": []
+    },
+    {
+      "name": "fangs",
+      "parent": "head",
+      "pose": [
+        0.0,
+        1.875,
+        -6.375,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -7.0,
+            0.0,
+            -5.0,
+            14.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            62.0,
+            28.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "antenna_left_r1",
+      "parent": "antenna_left",
+      "pose": [
+        0.5,
+        0.0,
+        0.0,
+        0.1309,
+        0.0,
+        0.0873
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            23.0,
+            0.0,
+            10.0
+          ],
+          "uv": [
+            55.0,
+            17.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "antenna_right_r1",
+      "parent": "antenna_right",
+      "pose": [
+        -0.5,
+        0.0,
+        0.0,
+        0.1309,
+        0.0,
+        -0.0873
+      ],
+      "cubes": [
+        {
+          "box": [
+            -22.0,
+            0.0,
+            -1.0,
+            23.0,
+            0.0,
+            10.0
+          ],
+          "uv": [
+            55.0,
+            17.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelCaveCentipede.java",
+  "sourceSha256": "17809a720316d01bad489894d1c2fb178b1b5101d906d45ebeac60ed4f9278be",
+  "animationRoot": "root",
+  "headLook": "head",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "antenna_left",
+      "kind": "swing",
+      "speed": 0.25,
+      "degree": 0.35,
+      "invert": true,
+      "phase": 1.0,
+      "bias": [
+        "*",
+        -1,
+        0.1
+      ],
+      "clock": "age",
+      "amount": 1.0,
+      "when": [
+        "&&",
+        1,
+        [
+          "==",
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "bone": "antenna_right",
+      "kind": "swing",
+      "speed": 0.25,
+      "degree": 0.35,
+      "invert": false,
+      "phase": 1.0,
+      "bias": [
+        "*",
+        -1,
+        0.1
+      ],
+      "clock": "age",
+      "amount": 1.0,
+      "when": [
+        "&&",
+        1,
+        [
+          "==",
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "bone": "fangs",
+      "kind": "swing",
+      "speed": 0.25,
+      "degree": [
+        "*",
+        0.35,
+        0.1
+      ],
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": [
+        "&&",
+        1,
+        [
+          "==",
+          0,
+          0
+        ]
+      ]
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.swing(this.leftLegBodyF, walkSpeed, walkDegree, true, offset, 0.0f, limbSwing, limbSwingAmount);",
+      "reason": "Unbound source condition [['&&', ['!', ['==', 0, 0]], ['==', 0, 1]], {'unsupported': 'entity instanceof EntityCentipedeBody'}]"
+    },
+    {
+      "call": "this.flap(this.leftLeg2BodyF, walkSpeed, walkDegree * 0.5f, true, offset, 0.1f, limbSwing, limbSwingAmount);",
+      "reason": "Unbound source condition [['&&', ['!', ['==', 0, 0]], ['==', 0, 1]], {'unsupported': 'entity instanceof EntityCentipedeBody'}]"
+    },
+    {
+      "call": "this.swing(this.leftLegBodyB, walkSpeed, walkDegree, true, offset + 0.5f, 0.0f, limbSwing, limbSwingAmount);",
+      "reason": "Unbound source condition [['&&', ['!', ['==', 0, 0]], ['==', 0, 1]], {'unsupported': 'entity instanceof EntityCentipedeBody'}]"
+    },
+    {
+      "call": "this.flap(this.leftLeg2BodyB, walkSpeed, walkDegree * 0.5f, true, offset + 0.5f, 0.1f, limbSwing, limbSwingAmount);",
+      "reason": "Unbound source condition [['&&', ['!', ['==', 0, 0]], ['==', 0, 1]], {'unsupported': 'entity instanceof EntityCentipedeBody'}]"
+    },
+    {
+      "call": "this.swing(this.rightLegBodyF, walkSpeed, walkDegree, false, offset, 0.0f, limbSwing, limbSwingAmount);",
+      "reason": "Unbound source condition [['&&', ['!', ['==', 0, 0]], ['==', 0, 1]], {'unsupported': 'entity instanceof EntityCentipedeBody'}]"
+    },
+    {
+      "call": "this.flap(this.rightLegBodyF2, walkSpeed, walkDegree * 0.5f, false, offset, 0.1f, limbSwing, limbSwingAmount);",
+      "reason": "Unbound source condition [['&&', ['!', ['==', 0, 0]], ['==', 0, 1]], {'unsupported': 'entity instanceof EntityCentipedeBody'}]"
+    },
+    {
+      "call": "this.swing(this.rightLegBodyB, walkSpeed, walkDegree, false, offset + 0.5f, 0.0f, limbSwing, limbSwingAmount);",
+      "reason": "Unbound source condition [['&&', ['!', ['==', 0, 0]], ['==', 0, 1]], {'unsupported': 'entity instanceof EntityCentipedeBody'}]"
+    },
+    {
+      "call": "this.flap(this.rightLegBodyB2, walkSpeed, walkDegree * 0.5f, false, offset + 0.5f, 0.1f, limbSwing, limbSwingAmount);",
+      "reason": "Unbound source condition [['&&', ['!', ['==', 0, 0]], ['==', 0, 1]], {'unsupported': 'entity instanceof EntityCentipedeBody'}]"
+    },
+    {
+      "call": "this.swing(this.leftLegTailF, walkSpeed, walkDegree, true, offset, 0.0f, limbSwing, limbSwingAmount);",
+      "reason": "Unbound source condition [['&&', ['!', ['||', ['==', 0, 0], ['==', 0, 1]]], {'unsupported': 'entity instanceof EntityCentipedeBody'}]]"
+    },
+    {
+      "call": "this.flap(this.leftLeg2TailF, walkSpeed, walkDegree * 0.5f, true, offset, 0.1f, limbSwing, limbSwingAmount);",
+      "reason": "Unbound source condition [['&&', ['!', ['||', ['==', 0, 0], ['==', 0, 1]]], {'unsupported': 'entity instanceof EntityCentipedeBody'}]]"
+    },
+    {
+      "call": "this.swing(this.leftLegTailB, walkSpeed, walkDegree, true, offset + 0.5f, 0.0f, limbSwing, limbSwingAmount);",
+      "reason": "Unbound source condition [['&&', ['!', ['||', ['==', 0, 0], ['==', 0, 1]]], {'unsupported': 'entity instanceof EntityCentipedeBody'}]]"
+    },
+    {
+      "call": "this.flap(this.leftLegTailB2, walkSpeed, walkDegree * 0.5f, true, offset + 0.5f, 0.1f, limbSwing, limbSwingAmount);",
+      "reason": "Unbound source condition [['&&', ['!', ['||', ['==', 0, 0], ['==', 0, 1]]], {'unsupported': 'entity instanceof EntityCentipedeBody'}]]"
+    },
+    {
+      "call": "this.swing(this.rightLegTailF, walkSpeed, walkDegree, false, offset, 0.0f, limbSwing, limbSwingAmount);",
+      "reason": "Unbound source condition [['&&', ['!', ['||', ['==', 0, 0], ['==', 0, 1]]], {'unsupported': 'entity instanceof EntityCentipedeBody'}]]"
+    },
+    {
+      "call": "this.flap(this.rightLeg2TailF, walkSpeed, walkDegree * 0.5f, false, offset, 0.1f, limbSwing, limbSwingAmount);",
+      "reason": "Unbound source condition [['&&', ['!', ['||', ['==', 0, 0], ['==', 0, 1]]], {'unsupported': 'entity instanceof EntityCentipedeBody'}]]"
+    },
+    {
+      "call": "this.swing(this.rightLegTailB, walkSpeed, walkDegree, false, offset + 0.5f, 0.0f, limbSwing, limbSwingAmount);",
+      "reason": "Unbound source condition [['&&', ['!', ['||', ['==', 0, 0], ['==', 0, 1]]], {'unsupported': 'entity instanceof EntityCentipedeBody'}]]"
+    },
+    {
+      "call": "this.flap(this.rightLegTailB2, walkSpeed, walkDegree * 0.5f, false, offset + 0.5f, 0.1f, limbSwing, limbSwingAmount);",
+      "reason": "Unbound source condition [['&&', ['!', ['||', ['==', 0, 0], ['==', 0, 1]]], {'unsupported': 'entity instanceof EntityCentipedeBody'}]]"
+    },
+    {
+      "call": "this.swing(this.leftTail, walkSpeed, walkDegree * 0.2f, true, offset + 1.0f, 0.0f, limbSwing, limbSwingAmount);",
+      "reason": "Unbound source condition [['&&', ['!', ['||', ['==', 0, 0], ['==', 0, 1]]], {'unsupported': 'entity instanceof EntityCentipedeBody'}]]"
+    },
+    {
+      "call": "this.swing(this.rightTail, walkSpeed, walkDegree * 0.2f, false, offset + 1.0f, 0.0f, limbSwing, limbSwingAmount);",
+      "reason": "Unbound source condition [['&&', ['!', ['||', ['==', 0, 0], ['==', 0, 1]]], {'unsupported': 'entity instanceof EntityCentipedeBody'}]]"
+    },
+    {
+      "call": "this.walk(this.leftTail, idleSpeed, idleDegree, true, offset + 1.5f, -0.5f, ageInTicks, 1.0f);",
+      "reason": "Unbound source condition [['&&', ['!', ['||', ['==', 0, 0], ['==', 0, 1]]], {'unsupported': 'entity instanceof EntityCentipedeBody'}]]"
+    },
+    {
+      "call": "this.walk(this.rightTail, idleSpeed, idleDegree, false, offset + 1.5f, 0.5f, ageInTicks, 1.0f);",
+      "reason": "Unbound source condition [['&&', ['!', ['||', ['==', 0, 0], ['==', 0, 1]]], {'unsupported': 'entity instanceof EntityCentipedeBody'}]]"
+    }
+  ],
+  "expressions": [
+    {
+      "bone": "fangs",
+      "target": "z",
+      "op": "=",
+      "value": [
+        "*",
+        -1,
+        6.2
+      ],
+      "when": [
+        "&&",
+        1,
+        [
+          "==",
+          0,
+          0
+        ]
+      ]
+    }
+  ],
+  "poses": []
+}

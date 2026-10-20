@@ -1,0 +1,410 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "body",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        12.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -10.0,
+            -3.0,
+            10.0,
+            11.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            36.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "head",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -10.02,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -8.0,
+            -5.0,
+            10.0,
+            8.0,
+            9.0
+          ],
+          "uv": [
+            30.0,
+            24.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -5.0,
+            -8.0,
+            -5.0,
+            10.0,
+            8.0,
+            9.0
+          ],
+          "uv": [
+            0.0,
+            15.0
+          ],
+          "inflate": [
+            0.1,
+            0.1,
+            0.1
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leftArm",
+      "parent": "body",
+      "pose": [
+        7.0,
+        -9.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -1.0,
+            -2.5,
+            4.0,
+            13.0,
+            5.0
+          ],
+          "uv": [
+            45.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightArm",
+      "parent": "body",
+      "pose": [
+        -7.0,
+        -9.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -1.0,
+            -2.5,
+            4.0,
+            13.0,
+            5.0
+          ],
+          "uv": [
+            45.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "leftLeg",
+      "parent": "body",
+      "pose": [
+        2.0,
+        2.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -1.0,
+            -3.0,
+            5.0,
+            11.0,
+            6.0
+          ],
+          "uv": [
+            33.0,
+            42.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightLeg",
+      "parent": "body",
+      "pose": [
+        -2.0,
+        2.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -1.0,
+            -3.0,
+            5.0,
+            11.0,
+            6.0
+          ],
+          "uv": [
+            33.0,
+            42.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "helmet",
+      "parent": "head",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6.0,
+            -10.0,
+            -5.5,
+            12.0,
+            4.0,
+            10.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.1,
+            0.1,
+            0.1
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "beard",
+      "parent": "head",
+      "pose": [
+        0.0,
+        0.1,
+        -4.1,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            0.0,
+            -1.0,
+            10.0,
+            9.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            54.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelUnderminerDwarf.java",
+  "sourceSha256": "46991745209faf20c7635f35bc942010bc6daa12e34dad8ed6cad22d3c11c0e0",
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [
+    {
+      "bone": "rightLeg",
+      "target": "xRot",
+      "op": "=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "cos",
+            [
+              "+",
+              [
+                "*",
+                "walk",
+                0.6662
+              ],
+              0
+            ]
+          ],
+          1.4
+        ],
+        "move"
+      ]
+    },
+    {
+      "bone": "leftLeg",
+      "target": "xRot",
+      "op": "=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "cos",
+            [
+              "+",
+              [
+                "*",
+                "walk",
+                0.6662
+              ],
+              3.141592653589793
+            ]
+          ],
+          1.4
+        ],
+        "move"
+      ]
+    },
+    {
+      "bone": "rightArm",
+      "target": "xRot",
+      "op": "=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "cos",
+            [
+              "+",
+              [
+                "*",
+                "walk",
+                0.6662
+              ],
+              3.141592653589793
+            ]
+          ],
+          1
+        ],
+        "move"
+      ]
+    },
+    {
+      "bone": "leftArm",
+      "target": "xRot",
+      "op": "=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "cos",
+            [
+              "+",
+              [
+                "*",
+                "walk",
+                0.6662
+              ],
+              0
+            ]
+          ],
+          1
+        ],
+        "move"
+      ]
+    }
+  ],
+  "poses": []
+}

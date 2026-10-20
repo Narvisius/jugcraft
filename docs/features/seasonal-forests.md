@@ -6,6 +6,8 @@ Owner: @jimbozoomer-byte
 Target milestone and tier: world generation and building (Discovery).
 Primary specialty and supported player role: exploration and building; every player meets them.
 
+Tree-generation update (16 October 2026): [batch 6](trees-batch-6.md) adds juniper, gorse and sagebrush, with current placement shares and validation in its feature record. Existing biome placement and attempt budgets are retained except for Steppe's new low shrubs and Cold Desert's rare coarse-dirt juniper. Earlier test results below remain historical.
+
 ## Player experience
 Nine biomes grow in Jugcraft regions, each in place of the vanilla biome with the same climate. They grow in every layout of Jugcraft regions except where a later batch takes their climate (the meadows take the cool forests and plains, the wetlands the temperate forests and cool plains; [biome-regions.md](biome-regions.md)):
 
@@ -16,8 +18,8 @@ Nine biomes grow in Jugcraft regions, each in place of the vanilla biome with th
 | **Maple Woods** | cool forest | maples (and big maples), some firs |
 | **Seasonal Forest** | temperate forest | oaks, maples and aspens mixed, a few firs, with leaf litter and dense pumpkin patches |
 | **Aspen Glade** | birch forests | tall, slender aspens and young aspens, a few maples and dark subalpine firs |
-| **Dead Forest** | dry cool plains | grey dead trees and broken snags, a few spruces and oaks, fallen logs, dead bushes, sparse brown grass; rabbits and wolves only |
-| **Tundra** | cool plains | no trees: maple, willow and fir scrub, mossy boulders, dead bushes, ferns; rabbits, foxes and wolves |
+| **Dead Forest** | dry cool plains | grey dead trees and broken snags, a few spruces and drought-hardy junipers, fallen logs, dead bushes, sparse brown grass; rabbits and wolves only |
+| **Tundra** | cool plains | no tall trees: maple, willow, fir and juniper scrub, mossy boulders, dead bushes, ferns; rabbits, foxes and wolves |
 | **Snowy Forest** | snowy plains (moister) | snow-covered rowans, firs, aspens and maples |
 | **Muskeg** | snowy plains | tamaracks, thin bog firs and grey snags, a few dead trees and fallen logs in wet, snowy flats; rabbits only |
 
@@ -41,7 +43,7 @@ Nine biomes grow in Jugcraft regions, each in place of the vanilla biome with th
 
 ## Balance and automation
 - The new woods are ordinary wood: 4 planks per log by hand, 6 in the sawmill, a sapling in gives 6 logs and the sapling back in the tree farm, as for vanilla trees. No new conversions, no loops.
-- Dead wood has no sapling: it comes only from generated dead trees, dead snags and fallen dead logs, in the Dead Forest, the Muskeg and the other dead, burnt and wet biomes that grow them ([trees-batch-1.md](trees-batch-1.md)).
+- Dead wood has no dedicated tree sapling. Generated dead trees, snags and fallen logs still supply it; batch 6 also makes it renewable through sagebrush: one hidden dead log per shrub, and one log plus the returned sapling from the tree farm.
 - The leaves' look is cosmetic; drops, decay and fire are vanilla's in every season.
 
 ## Multiplayer and persistence

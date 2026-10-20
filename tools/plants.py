@@ -46,6 +46,7 @@ PLANTS = {
     # Batch 6: mountains, coasts and volcanoes.
     "sea_oats": {"kind": "dune_plant", "display": "Sea Oats"},
     # Batch 7: wonders and caves.
+    "blight_fungus": {"kind": "floor_plant", "display": "Blight Fungus"},
     "glowcap": {"kind": "floor_plant", "display": "Glowcap", "light": 10},
     "glimmerbloom": {"kind": "flower", "display": "Glimmerbloom", "dye": "magenta", "effect": "minecraft:glowing", "seconds": 8.0,
                      "light": 7},

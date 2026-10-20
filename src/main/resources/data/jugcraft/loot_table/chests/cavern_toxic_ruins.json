@@ -1,0 +1,195 @@
+{
+  "pools": [
+    {
+      "name": "toxic_ruins",
+      "rolls": {
+        "min": 8,
+        "max": 10,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_cave_tablet",
+          "weight": 10,
+          "modifier": [
+            {
+              "type": "minecraft:set_custom_data",
+              "tag": "{BoundBiome:\"jugcraft:cavern_toxic_caves\"}"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:bone",
+          "weight": 30,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 3,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_spelunkie",
+          "weight": 25,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 3,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_slam",
+          "weight": 30,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_green_soylent",
+          "weight": 8,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_cinder_brick",
+          "weight": 50,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 12,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:poisonous_potato",
+          "weight": 20,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 3,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:rotten_flesh",
+          "weight": 15,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_waste_drum",
+          "weight": 7
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:music_disc_11",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_uranium_rod",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_radon_bottle",
+          "weight": 10,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 3,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_cinder_block",
+          "weight": 20,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_hazmat_mask",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_hazmat_chestplate",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_hazmat_leggings",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_hazmat_boots",
+          "weight": 2
+        }
+      ]
+    }
+  ]
+}

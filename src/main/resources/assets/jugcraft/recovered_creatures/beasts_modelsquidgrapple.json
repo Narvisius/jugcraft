@@ -1,0 +1,64 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "tentacle",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -1.7,
+        0.0,
+        -1.5708,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -7.0,
+            -1.3,
+            6.0,
+            14.0,
+            3.0
+          ],
+          "uv": [
+            54.0,
+            60.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelSquidGrapple.java",
+  "sourceSha256": "bfb7b05d8069eb8ed7d96917f2287a1be9b837c474977b60af799a750f1d2161",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

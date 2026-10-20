@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:brewing",
+  "input": {
+    "item": "minecraft:splash_potion",
+    "potion_contents": {
+      "potions": "minecraft:thick"
+    }
+  },
+  "output": {
+    "id": "jugcraft:mutant_chemical_x"
+  },
+  "reagent": {
+    "item": "jugcraft:mutant_mutant_skeleton_skull"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

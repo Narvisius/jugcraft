@@ -1,0 +1,16 @@
+{
+  "type": "jugcraft:household_pan",
+  "ingredient": "minecraft:sweet_berries",
+  "result": {
+    "id": "jugcraft:sweet_berry_jam"
+  },
+  "cookingtime": 400,
+  "experience": 0.1,
+  "category": "food",
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

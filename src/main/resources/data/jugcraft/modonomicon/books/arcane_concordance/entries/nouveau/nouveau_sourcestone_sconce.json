@@ -1,0 +1,34 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:nouveau/nouveau_sourcestone_sconce",
+  "category": "jugcraft:nouveau",
+  "x": 99,
+  "y": 51,
+  "name": "book.jugcraft.arcane_concordance.nouveau.nouveau_sourcestone_sconce.name",
+  "description": "book.jugcraft.arcane_concordance.nouveau.nouveau_sourcestone_sconce.description",
+  "icon": "jugcraft:nouveau_sourcestone_sconce",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/square_gray",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "pages": [
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p0",
+      "title1": "book.jugcraft.arcane_concordance.nouveau.nouveau_sourcestone_sconce.p0.title",
+      "recipe_id_1": "jugcraft:nouveau/polished_source_sconce",
+      "text": "book.jugcraft.arcane_concordance.nouveau.nouveau_sourcestone_sconce.p0.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p1",
+      "title1": "book.jugcraft.arcane_concordance.nouveau.nouveau_sourcestone_sconce.p1.title",
+      "recipe_id_1": "jugcraft:nouveau/sourcestone_sconce",
+      "text": "book.jugcraft.arcane_concordance.nouveau.nouveau_sourcestone_sconce.p1.text"
+    }
+  ]
+}

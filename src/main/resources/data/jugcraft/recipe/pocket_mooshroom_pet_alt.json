@@ -1,0 +1,24 @@
+{
+  "result": {
+    "id": "jugcraft:pocket_pet_mooshroom"
+  },
+  "pattern": [
+    "OFB",
+    "ODB",
+    "OGB"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "minecraft:iron_nugget",
+    "D": "minecraft:diamond",
+    "F": "minecraft:brown_mushroom",
+    "G": "minecraft:gold_ingot",
+    "O": "minecraft:redstone"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

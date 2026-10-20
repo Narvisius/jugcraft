@@ -1,0 +1,23 @@
+{
+	"display": {
+		"icon": {
+			"id": "inventorypets:petachieve_general"
+		},
+		"title": {
+			"translate": "advancement.ip.petachieveGeneralist"
+		},
+		"description": {
+			"translate": "advancement.ip.petachieveGeneralist.desc"
+		},
+		"show_toast": true,
+		"announce_to_chat": true,
+		"frame": "challenge",
+		"hidden": true
+	},
+	"parent": "inventorypets:root",
+    "criteria": {
+        "example": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

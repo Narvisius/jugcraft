@@ -1,0 +1,30 @@
+{
+  "type": "jugcraft:household_construction",
+  "ingredients": [
+    {
+      "count": 10,
+      "ingredient": "minecraft:birch_planks"
+    },
+    {
+      "count": 1,
+      "ingredient": "minecraft:copper_ingot"
+    },
+    {
+      "count": 1,
+      "ingredient": "minecraft:quartz_block"
+    },
+    {
+      "count": 1,
+      "ingredient": "minecraft:white_dye"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:household_birch_kitchen_sink"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "type": "jugcraft:household_construction",
+  "ingredients": [
+    {
+      "count": 4,
+      "ingredient": "minecraft:iron_ingot"
+    },
+    {
+      "count": 8,
+      "ingredient": "minecraft:string"
+    },
+    {
+      "count": 1,
+      "ingredient": "minecraft:gray_dye"
+    },
+    {
+      "count": 1,
+      "ingredient": "minecraft:slime_ball"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:household_gray_trampoline"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

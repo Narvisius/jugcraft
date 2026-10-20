@@ -1,0 +1,22 @@
+{
+  "type": "jugcraft:household_construction",
+  "ingredients": [
+    {
+      "count": 1,
+      "ingredient": "#jugcraft:household/wooden_baths"
+    },
+    {
+      "count": 1,
+      "ingredient": "minecraft:light_gray_dye"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:household_light_gray_bath"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

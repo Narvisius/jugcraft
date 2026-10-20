@@ -1,0 +1,22 @@
+{
+  "type": "jugcraft:household_construction",
+  "ingredients": [
+    {
+      "count": 2,
+      "ingredient": "minecraft:mangrove_planks"
+    },
+    {
+      "count": 4,
+      "ingredient": "minecraft:stick"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:household_mangrove_lattice_fence_gate"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

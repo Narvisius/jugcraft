@@ -1,0 +1,952 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "base",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        15.5,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -7.0,
+            -36.5,
+            -5.0,
+            14.0,
+            38.0,
+            10.0
+          ],
+          "uv": [
+            80.0,
+            21.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "coreTop",
+      "parent": "base",
+      "pose": [
+        0.0,
+        -62.5,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -8.0,
+            3.0,
+            -8.0,
+            16.0,
+            8.0,
+            16.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "head",
+      "parent": "base",
+      "pose": [
+        0.0,
+        -37.5,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -7.0,
+            -14.0,
+            -7.0,
+            14.0,
+            14.0,
+            14.0
+          ],
+          "uv": [
+            0.0,
+            48.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -6.0,
+            -13.5,
+            -6.0,
+            12.0,
+            12.0,
+            12.0
+          ],
+          "uv": [
+            26.0,
+            86.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rleg2",
+      "parent": "base",
+      "pose": [
+        -7.0,
+        -1.0,
+        3.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -2.5,
+            -3.5,
+            6.0,
+            5.0,
+            12.0
+          ],
+          "uv": [
+            80.0,
+            69.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lleg2",
+      "parent": "base",
+      "pose": [
+        7.0,
+        -1.0,
+        3.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -2.5,
+            -3.5,
+            6.0,
+            5.0,
+            12.0
+          ],
+          "uv": [
+            80.0,
+            69.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "lleg",
+      "parent": "base",
+      "pose": [
+        7.0,
+        -1.0,
+        -3.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -2.5,
+            -8.5,
+            6.0,
+            5.0,
+            12.0
+          ],
+          "uv": [
+            44.0,
+            69.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "rleg",
+      "parent": "base",
+      "pose": [
+        -7.0,
+        -1.0,
+        -3.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -2.5,
+            -8.5,
+            6.0,
+            5.0,
+            12.0
+          ],
+          "uv": [
+            44.0,
+            69.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "coreBottom",
+      "parent": "base",
+      "pose": [
+        0.0,
+        -27.5,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -8.0,
+            -11.0,
+            -8.0,
+            16.0,
+            8.0,
+            16.0
+          ],
+          "uv": [
+            0.0,
+            24.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rpupil",
+      "parent": "head",
+      "pose": [
+        -3.5,
+        -9.0,
+        -5.6,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            -0.5,
+            -0.5,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "uv": [
+            26.0,
+            86.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lpupil",
+      "parent": "head",
+      "pose": [
+        3.5,
+        -9.0,
+        -5.6,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            -0.5,
+            -0.5,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "uv": [
+            26.0,
+            86.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "rfoot2",
+      "parent": "rleg2",
+      "pose": [
+        1.0,
+        -2.5,
+        4.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            0.0,
+            0.0,
+            8.0,
+            12.0,
+            5.0
+          ],
+          "uv": [
+            0.0,
+            93.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            0.0,
+            0.0,
+            5.0,
+            0.0,
+            6.0,
+            3.0
+          ],
+          "uv": [
+            1.0,
+            28.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lfoot2",
+      "parent": "lleg2",
+      "pose": [
+        -1.0,
+        -2.5,
+        4.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            0.0,
+            0.0,
+            8.0,
+            12.0,
+            5.0
+          ],
+          "uv": [
+            0.0,
+            93.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            0.0,
+            0.0,
+            5.0,
+            0.0,
+            6.0,
+            3.0
+          ],
+          "uv": [
+            1.0,
+            28.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "lfoot1",
+      "parent": "lleg",
+      "pose": [
+        -1.0,
+        -2.5,
+        -4.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            0.0,
+            -5.0,
+            8.0,
+            12.0,
+            5.0
+          ],
+          "uv": [
+            0.0,
+            76.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            0.0,
+            0.0,
+            -8.0,
+            0.0,
+            6.0,
+            5.0
+          ],
+          "uv": [
+            0.0,
+            46.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "rfoot",
+      "parent": "rleg",
+      "pose": [
+        1.0,
+        -2.5,
+        -4.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            0.0,
+            -5.0,
+            8.0,
+            12.0,
+            5.0
+          ],
+          "uv": [
+            0.0,
+            76.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            0.0,
+            0.0,
+            -8.0,
+            0.0,
+            6.0,
+            5.0
+          ],
+          "uv": [
+            0.0,
+            46.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/NucleeperModel.java",
+  "sourceSha256": "93a64ba1f98d113e69f61249cd0bd7d51a2c043f1a7e401f1078b2c1308bf6e4",
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "base",
+      "kind": "flap",
+      "speed": 0.8,
+      "degree": [
+        "*",
+        1.2,
+        0.1
+      ],
+      "invert": true,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "lleg",
+      "kind": "flap",
+      "speed": 0.8,
+      "degree": [
+        "*",
+        1.2,
+        0.1
+      ],
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "rleg",
+      "kind": "flap",
+      "speed": 0.8,
+      "degree": [
+        "*",
+        1.2,
+        0.1
+      ],
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "lleg2",
+      "kind": "flap",
+      "speed": 0.8,
+      "degree": [
+        "*",
+        1.2,
+        0.1
+      ],
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "rleg2",
+      "kind": "flap",
+      "speed": 0.8,
+      "degree": [
+        "*",
+        1.2,
+        0.1
+      ],
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "lleg",
+      "kind": "walk",
+      "speed": 0.8,
+      "degree": [
+        "*",
+        1.2,
+        0.3
+      ],
+      "invert": false,
+      "phase": 1.0,
+      "bias": [
+        "*",
+        -1,
+        0.2
+      ],
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "lfoot1",
+      "kind": "walk",
+      "speed": 0.8,
+      "degree": [
+        "*",
+        1.2,
+        0.2
+      ],
+      "invert": false,
+      "phase": 3.0,
+      "bias": 0.2,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "rleg",
+      "kind": "walk",
+      "speed": 0.8,
+      "degree": [
+        "*",
+        1.2,
+        0.3
+      ],
+      "invert": true,
+      "phase": 1.0,
+      "bias": 0.2,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "rfoot",
+      "kind": "walk",
+      "speed": 0.8,
+      "degree": [
+        "*",
+        1.2,
+        0.2
+      ],
+      "invert": true,
+      "phase": 3.0,
+      "bias": [
+        "*",
+        -1,
+        0.2
+      ],
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "rleg2",
+      "kind": "walk",
+      "speed": 0.8,
+      "degree": [
+        "*",
+        1.2,
+        0.3
+      ],
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.2,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "rfoot2",
+      "kind": "walk",
+      "speed": 0.8,
+      "degree": [
+        "*",
+        1.2,
+        0.2
+      ],
+      "invert": false,
+      "phase": 2.0,
+      "bias": [
+        "*",
+        -1,
+        0.2
+      ],
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "lleg2",
+      "kind": "walk",
+      "speed": 0.8,
+      "degree": [
+        "*",
+        1.2,
+        0.3
+      ],
+      "invert": true,
+      "phase": 0.0,
+      "bias": [
+        "*",
+        -1,
+        0.2
+      ],
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "lfoot2",
+      "kind": "walk",
+      "speed": 0.8,
+      "degree": [
+        "*",
+        1.2,
+        0.2
+      ],
+      "invert": true,
+      "phase": 2.0,
+      "bias": 0.2,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "base",
+      "kind": "flap",
+      "speed": 3.0,
+      "degree": 0.3,
+      "invert": true,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "*",
+        "charge",
+        1
+      ],
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.base.setScale(1.0f - explodeProgress * 0.15f, 1.0f - explodeProgress * 0.65f, 1.0f - explodeProgress * 0.15f);",
+      "reason": "Unbound expression variable explodeProgress"
+    },
+    {
+      "call": "this.base.rotationPointY += bodyBob;",
+      "reason": "Unbound expression variable bodyBob"
+    },
+    {
+      "call": "this.lleg.rotationPointY += Math.min(0.0f, this.walkValue(limbSwing, limbSwingAmount, walkSpeed, -0.5f, 5.0f, true)) - bodyBob;",
+      "reason": "Unsupported expression min(0.0, this.walkValue(limbSwing, limbSwingAmount, walkSpeed, -0.5, 5.0, true)) - bodyBob"
+    },
+    {
+      "call": "this.lleg.rotationPointZ += this.walkValue(limbSwing, limbSwingAmount, walkSpeed, -0.5f, 2.5f, true);",
+      "reason": "Unsupported expression this.walkValue(limbSwing, limbSwingAmount, walkSpeed, -0.5, 2.5, true)"
+    },
+    {
+      "call": "this.rleg.rotationPointY += Math.min(0.0f, this.walkValue(limbSwing, limbSwingAmount, walkSpeed, -0.5f, 5.0f, false)) - bodyBob;",
+      "reason": "Unsupported expression min(0.0, this.walkValue(limbSwing, limbSwingAmount, walkSpeed, -0.5, 5.0, false)) - bodyBob"
+    },
+    {
+      "call": "this.rleg.rotationPointZ += this.walkValue(limbSwing, limbSwingAmount, walkSpeed, -0.5f, 2.5f, false);",
+      "reason": "Unsupported expression this.walkValue(limbSwing, limbSwingAmount, walkSpeed, -0.5, 2.5, false)"
+    },
+    {
+      "call": "this.rleg2.rotationPointY += Math.min(0.0f, this.walkValue(limbSwing, limbSwingAmount, walkSpeed, -0.5f, 5.0f, true)) - bodyBob;",
+      "reason": "Unsupported expression min(0.0, this.walkValue(limbSwing, limbSwingAmount, walkSpeed, -0.5, 5.0, true)) - bodyBob"
+    },
+    {
+      "call": "this.rleg2.rotationPointZ += this.walkValue(limbSwing, limbSwingAmount, walkSpeed, -1.5f, 2.5f, true);",
+      "reason": "Unsupported expression this.walkValue(limbSwing, limbSwingAmount, walkSpeed, -1.5, 2.5, true)"
+    },
+    {
+      "call": "this.lleg2.rotationPointY += Math.min(0.0f, this.walkValue(limbSwing, limbSwingAmount, walkSpeed, -0.5f, 5.0f, false)) - bodyBob;",
+      "reason": "Unsupported expression min(0.0, this.walkValue(limbSwing, limbSwingAmount, walkSpeed, -0.5, 5.0, false)) - bodyBob"
+    },
+    {
+      "call": "this.lleg2.rotationPointZ += this.walkValue(limbSwing, limbSwingAmount, walkSpeed, -1.5f, 2.5f, false);",
+      "reason": "Unsupported expression this.walkValue(limbSwing, limbSwingAmount, walkSpeed, -1.5, 2.5, false)"
+    }
+  ],
+  "expressions": [],
+  "poses": [
+    {
+      "bone": "lleg",
+      "weight": [
+        "/",
+        [
+          "-",
+          1.0,
+          "move"
+        ],
+        1.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.0,
+        -0.4363323129985824,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lleg2",
+      "weight": [
+        "/",
+        [
+          "-",
+          1.0,
+          "move"
+        ],
+        1.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.0,
+        0.4363323129985824,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rleg",
+      "weight": [
+        "/",
+        [
+          "-",
+          1.0,
+          "move"
+        ],
+        1.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.0,
+        0.4363323129985824,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rleg2",
+      "weight": [
+        "/",
+        [
+          "-",
+          1.0,
+          "move"
+        ],
+        1.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.0,
+        -0.4363323129985824,
+        0.0
+      ],
+      "when": 1
+    }
+  ]
+}

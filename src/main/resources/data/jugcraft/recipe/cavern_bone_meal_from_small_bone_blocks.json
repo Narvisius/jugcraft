@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "#jugcraft:cavern_small_bone_blocks"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:bone_meal"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

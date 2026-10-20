@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " T ",
+    "TIT",
+    "TET"
+  ],
+  "key": {
+    "T": "jugcraft:cavern_tectonic_shard",
+    "I": "jugcraft:cavern_immortal_embryo",
+    "E": "jugcraft:cavern_tremorsaurus_egg"
+  },
+  "result": {
+    "id": "jugcraft:cavern_tremorzilla_egg"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

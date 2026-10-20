@@ -1,0 +1,177 @@
+{
+  "attributes": {
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawns_by_category": {
+          "water_creature": [
+            {
+              "type": "jugcraft:cavern_trilocaris",
+              "weight": 15,
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 1,
+                "max_inclusive": 2
+              }
+            }
+          ],
+          "creature": [
+            {
+              "type": "jugcraft:cavern_subterranodon",
+              "weight": 6,
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 3,
+                "max_inclusive": 5
+              }
+            },
+            {
+              "type": "jugcraft:cavern_vallumraptor",
+              "weight": 6,
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 6,
+                "max_inclusive": 7
+              }
+            },
+            {
+              "type": "jugcraft:cavern_grottoceratops",
+              "weight": 27,
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 2,
+                "max_inclusive": 4
+              }
+            },
+            {
+              "type": "jugcraft:cavern_tremorsaurus",
+              "weight": 5,
+              "count": 1
+            },
+            {
+              "type": "jugcraft:cavern_relicheirus",
+              "weight": 13,
+              "count": 1
+            },
+            {
+              "type": "minecraft:frog",
+              "weight": 7,
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 1,
+                "max_inclusive": 2
+              }
+            },
+            {
+              "type": "jugcraft:cavern_atlatitan",
+              "weight": 10,
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 2,
+                "max_inclusive": 3
+              }
+            }
+          ]
+        },
+        "spawn_costs": {}
+      },
+      "modifier": "overlay"
+    },
+    "minecraft:visual/sky_color": "#f1c973",
+    "minecraft:visual/fog_color": "#f2d860",
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "sound": "jugcraft:cavern.primordial_caves_music"
+      }
+    },
+    "minecraft:audio/ambient_sounds": {
+      "loop": "jugcraft:cavern.primordial_caves_ambience"
+    }
+  },
+  "has_precipitation": false,
+  "temperature": 0.95,
+  "downfall": 0.4,
+  "effects": {
+    "water_color": "#05a599"
+  },
+  "carvers": [],
+  "features": [
+    [
+      "jugcraft:cavern_chamber_primordial_caves"
+    ],
+    [],
+    [],
+    [
+      "minecraft:monster_room",
+      "minecraft:monster_room_deep"
+    ],
+    [
+      "jugcraft:cavern_subterranodon_roost"
+    ],
+    [
+      "jugcraft:cavern_caveman_house",
+      "jugcraft:cavern_primordial_caves_lake"
+    ],
+    [
+      "minecraft:ore_dirt",
+      "minecraft:ore_gravel",
+      "minecraft:ore_granite_upper",
+      "minecraft:ore_granite_lower",
+      "minecraft:ore_diorite_upper",
+      "minecraft:ore_diorite_lower",
+      "minecraft:ore_andesite_upper",
+      "minecraft:ore_andesite_lower",
+      "minecraft:ore_tuff",
+      "minecraft:ore_coal_upper",
+      "minecraft:ore_coal_lower",
+      "minecraft:ore_iron_upper",
+      "minecraft:ore_iron_middle",
+      "minecraft:ore_iron_small",
+      "minecraft:ore_gold",
+      "minecraft:ore_gold_lower",
+      "minecraft:ore_redstone",
+      "minecraft:ore_redstone_lower",
+      "minecraft:ore_diamond",
+      "minecraft:ore_diamond_large",
+      "minecraft:ore_diamond_buried",
+      "minecraft:ore_lapis",
+      "minecraft:ore_lapis_buried",
+      "minecraft:ore_copper_large",
+      "minecraft:underwater_magma",
+      "minecraft:disk_sand",
+      "minecraft:disk_clay",
+      "minecraft:disk_gravel",
+      "jugcraft:cavern_ambersol",
+      "jugcraft:cavern_cycad",
+      "jugcraft:cavern_flytrap",
+      "jugcraft:cavern_moss_replace_grass",
+      "jugcraft:cavern_packed_mud_replace_dirt",
+      "jugcraft:cavern_primordial_caves_grass",
+      "jugcraft:cavern_primordial_forest_rock",
+      "jugcraft:cavern_volcano_boulder"
+    ],
+    [],
+    [
+      "jugcraft:cavern_amber_monolith"
+    ],
+    [
+      "minecraft:glow_lichen",
+      "minecraft:patch_tall_grass_2",
+      "minecraft:trees_plains",
+      "minecraft:flower_plains",
+      "minecraft:patch_grass_plain",
+      "minecraft:brown_mushroom_normal",
+      "minecraft:red_mushroom_normal",
+      "minecraft:patch_pumpkin",
+      "minecraft:patch_sugar_cane",
+      "jugcraft:cavern_ancient_tree",
+      "jugcraft:cavern_archaic_vine",
+      "jugcraft:cavern_giant_ancient_tree",
+      "jugcraft:cavern_pewen_tree"
+    ],
+    [
+      "minecraft:freeze_top_layer"
+    ]
+  ]
+}

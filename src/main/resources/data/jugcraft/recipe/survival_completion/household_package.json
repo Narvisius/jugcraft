@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PPP",
+    "PSP",
+    "PPP"
+  ],
+  "key": {
+    "P": "minecraft:paper",
+    "S": "minecraft:string"
+  },
+  "result": {
+    "id": "jugcraft:household_package",
+    "count": 1
+  }
+}

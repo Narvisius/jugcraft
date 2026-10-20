@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "phosphate"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "items": [
+    {
+      "ingredient": "jugcraft:ammonium_nitrate",
+      "count": 1
+    },
+    {
+      "ingredient": "jugcraft:organic_fertilizer_carrier",
+      "count": 1
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:nitrogen_fertilizer",
+      "count": 2
+    }
+  ],
+  "time": 160
+}

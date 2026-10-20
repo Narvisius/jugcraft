@@ -42,6 +42,8 @@ public final class ConstructionChemistry {
 	public static final int CANISTER_FOAM = 32;
 
 	public static Block CONSTRUCTION_FOAM;
+	public static Block PLASTER;
+	public static Block PLASTERBOARD;
 	public static Block CONCRETE;
 	public static Block BLASTPROOF_CONCRETE;
 	public static Item CEMENT_MIX;
@@ -62,6 +64,8 @@ public final class ConstructionChemistry {
 				.strength(2.5F, 9.0F).requiresCorrectToolForDrops());
 		BLASTPROOF_CONCRETE = family("blastproof_concrete", BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
 				.mapColor(MapColor.COLOR_GRAY).strength(15.0F, 1200.0F).requiresCorrectToolForDrops());
+		PLASTER = family("plaster", BlockBehaviour.Properties.ofFullCopy(Blocks.CALCITE).strength(1.5F, 3.0F));
+		PLASTERBOARD = family("plasterboard", BlockBehaviour.Properties.ofFullCopy(Blocks.CALCITE).strength(0.8F, 1.5F));
 		CEMENT_MIX = item("cement_mix", Item::new);
 		CEMENT = item("cement", CementItem::new);
 		REBAR = item("rebar", Item::new);

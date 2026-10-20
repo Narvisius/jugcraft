@@ -38,6 +38,8 @@ public final class JugcraftFluids {
 	public static Block FLUID_FILTER;
 	public static Block HEAVY_PUMP;
 	public static Block FLUID_TANK;
+	public static Block INSULATED_FLUID_TANK;
+	public static Block VACUUM_INSULATED_TANK;
 	public static Block ELECTRIC_PUMP;
 	/** Batch 20: a borosilicate glass tank (it shows what it holds) and the tank gauge. */
 	public static Block GLASS_TANK;
@@ -71,6 +73,10 @@ public final class JugcraftFluids {
 				FluidPipeBlock.STEEL_RATE_MB));
 		FLUID_TANK = block("fluid_tank", new FluidTankBlock(properties("fluid_tank",
 				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(2.0F).noOcclusion())));
+        INSULATED_FLUID_TANK = block("insulated_fluid_tank", new FluidTankBlock(properties("insulated_fluid_tank",
+                BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(3.0F).noOcclusion())));
+        VACUUM_INSULATED_TANK = block("vacuum_insulated_tank", new FluidTankBlock(properties("vacuum_insulated_tank",
+                BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(3.0F).noOcclusion())));
 		GLASS_TANK = block("glass_tank", new FluidTankBlock(properties("glass_tank",
 				BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).strength(1.5F).noOcclusion())));
 		TANK_GAUGE = block("tank_gauge", new TankGaugeBlock(properties("tank_gauge",
@@ -81,7 +87,7 @@ public final class JugcraftFluids {
 				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(4.0F).noOcclusion()), ElectricPumpBlockEntity.Tier.HEAVY));
 
 		TANK_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("fluid_tank"),
-				FabricBlockEntityTypeBuilder.create(FluidTankBlockEntity::new, FLUID_TANK, GLASS_TANK).build());
+				FabricBlockEntityTypeBuilder.create(FluidTankBlockEntity::new, FLUID_TANK, GLASS_TANK, INSULATED_FLUID_TANK, VACUUM_INSULATED_TANK).build());
 		PUMP_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("electric_pump"),
 				FabricBlockEntityTypeBuilder.create(ElectricPumpBlockEntity::new, ELECTRIC_PUMP, HEAVY_PUMP).build());
 
@@ -108,6 +114,8 @@ public final class JugcraftFluids {
 			output.accept(FLUID_VALVE);
 			output.accept(FLUID_FILTER);
 			output.accept(FLUID_TANK);
+			output.accept(INSULATED_FLUID_TANK);
+			output.accept(VACUUM_INSULATED_TANK);
 			output.accept(GLASS_TANK);
 			output.accept(TANK_GAUGE);
 			output.accept(ELECTRIC_PUMP);

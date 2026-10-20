@@ -1,0 +1,374 @@
+{
+  "textureSize": [
+    32,
+    32
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        -2.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "bodySeg1",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -2.5,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -2.5,
+            -6.0,
+            3.0,
+            5.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            0.0,
+            -4.5,
+            -2.0,
+            0.0,
+            2.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "bodySeg2",
+      "parent": "bodySeg1",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -4.5,
+            0.0,
+            0.0,
+            2.0,
+            5.0
+          ],
+          "uv": [
+            12.0,
+            6.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -1.5,
+            -2.5,
+            0.0,
+            3.0,
+            5.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            11.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "tail",
+      "parent": "bodySeg2",
+      "pose": [
+        0.0,
+        0.0,
+        6.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -3.5,
+            0.0,
+            0.0,
+            7.0,
+            4.0
+          ],
+          "uv": [
+            0.0,
+            18.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/SweetishFishModel.java",
+  "sourceSha256": "52c30f40f37c0072cf16cbdcf3006e792ddfa9c40e14133736ab9b20cc9c91e3",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "bodySeg1",
+      "kind": "swing",
+      "speed": 0.8,
+      "degree": [
+        "*",
+        0.3,
+        0.85
+      ],
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": [
+        "*",
+        [
+          "-",
+          1.0,
+          [
+            "*",
+            "land",
+            1
+          ]
+        ],
+        "move"
+      ],
+      "when": 1
+    },
+    {
+      "bone": "bodySeg2",
+      "kind": "swing",
+      "speed": 0.8,
+      "degree": [
+        "*",
+        0.5,
+        0.85
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        1.0
+      ],
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": [
+        "*",
+        [
+          "-",
+          1.0,
+          [
+            "*",
+            "land",
+            1
+          ]
+        ],
+        "move"
+      ],
+      "when": 1
+    },
+    {
+      "bone": "tail",
+      "kind": "swing",
+      "speed": 0.8,
+      "degree": 0.85,
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        1.5
+      ],
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": [
+        "*",
+        [
+          "-",
+          1.0,
+          [
+            "*",
+            "land",
+            1
+          ]
+        ],
+        "move"
+      ],
+      "when": 1
+    },
+    {
+      "bone": "bodySeg1",
+      "kind": "bob",
+      "speed": [
+        "*",
+        0.7,
+        0.5
+      ],
+      "degree": [
+        "*",
+        0.5,
+        2.0
+      ],
+      "invert": true,
+      "phase": 0,
+      "bias": 0,
+      "clock": "age",
+      "amount": [
+        "*",
+        "land",
+        1
+      ],
+      "when": 1
+    },
+    {
+      "bone": "bodySeg1",
+      "kind": "swing",
+      "speed": 0.7,
+      "degree": [
+        "*",
+        0.3,
+        0.5
+      ],
+      "invert": true,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "*",
+        "land",
+        1
+      ],
+      "when": 1
+    },
+    {
+      "bone": "bodySeg2",
+      "kind": "swing",
+      "speed": 0.7,
+      "degree": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        1.0
+      ],
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "*",
+        "land",
+        1
+      ],
+      "when": 1
+    },
+    {
+      "bone": "tail",
+      "kind": "swing",
+      "speed": 0.7,
+      "degree": 0.5,
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        3.0
+      ],
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "*",
+        "land",
+        1
+      ],
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.bodySeg1.rotateAngleX += fishPitchAmount * 0.9f;",
+      "reason": "Unbound expression variable fishPitchAmount"
+    }
+  ],
+  "expressions": [],
+  "poses": [
+    {
+      "bone": "bodySeg1",
+      "weight": [
+        "/",
+        [
+          "*",
+          "land",
+          1
+        ],
+        1.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.0,
+        0.0,
+        -1.4835298641951802
+      ],
+      "when": 1
+    }
+  ]
+}

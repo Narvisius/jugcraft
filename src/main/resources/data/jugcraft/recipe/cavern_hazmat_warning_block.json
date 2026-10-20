@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " H ",
+    "HHH"
+  ],
+  "key": {
+    "H": "jugcraft:cavern_hazmat_block"
+  },
+  "result": {
+    "count": 4,
+    "id": "jugcraft:cavern_hazmat_warning_block"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

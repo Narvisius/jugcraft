@@ -67,7 +67,7 @@ public final class SpellcraftPage {
 		} else {
 			out.fact(Component.translatable("encyclopedia.jugcraft.spellcraft.no_instrument"), null, carried(player));
 		}
-		out.fact(Component.translatable("journal.jugcraft.overview.focus", ConcordanceProgress.currentFocus(player), FocusPool.MAX),
+		out.fact(Component.translatable("journal.jugcraft.overview.focus", ConcordanceProgress.currentFocus(player), ConcordanceProgress.focus(player).capacity()),
 				Component.translatable("encyclopedia.jugcraft.spellcraft.focus_regen", Text.seconds(FocusPool.REGEN_TICKS)), List.of());
 		out.codex("foundations/focus", null, null);
 

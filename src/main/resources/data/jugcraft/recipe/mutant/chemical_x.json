@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GEG",
+    "DBD",
+    "GEG"
+  ],
+  "key": {
+    "G": "minecraft:gunpowder",
+    "E": "minecraft:ender_pearl",
+    "D": "minecraft:diamond",
+    "B": "minecraft:glass_bottle"
+  },
+  "result": {
+    "id": "jugcraft:mutant_chemical_x"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

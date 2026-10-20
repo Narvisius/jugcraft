@@ -1,0 +1,208 @@
+{
+  "pools": [
+    {
+      "name": "sea_pig_digestion",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:raw_gold",
+          "weight": 10,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond",
+          "weight": 6
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:nautilus_shell",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_sea_staff",
+          "weight": 12
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:experience_bottle",
+          "weight": 20,
+          "modifier": [
+            {
+              "count": {
+                "min": 2,
+                "max": 4,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:prismarine_shard",
+          "weight": 50,
+          "modifier": [
+            {
+              "count": {
+                "min": 6,
+                "max": 12,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:prismarine_crystals",
+          "weight": 30,
+          "modifier": [
+            {
+              "count": {
+                "min": 6,
+                "max": 12,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:prismarine",
+          "weight": 60,
+          "modifier": [
+            {
+              "count": {
+                "min": 10,
+                "max": 13,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:dark_prismarine",
+          "weight": 25,
+          "modifier": [
+            {
+              "count": {
+                "min": 5,
+                "max": 10,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:lapis_lazuli",
+          "weight": 15,
+          "modifier": [
+            {
+              "count": {
+                "min": 2,
+                "max": 7,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:book",
+          "weight": 3,
+          "modifier": [
+            {
+              "enchantments": [
+                "minecraft:depth_strider"
+              ],
+              "type": "minecraft:enchant_randomly"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:book",
+          "weight": 3,
+          "modifier": [
+            {
+              "enchantments": [
+                "minecraft:respiration"
+              ],
+              "type": "minecraft:enchant_randomly"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "weight": 20,
+          "modifier": [
+            {
+              "id": "minecraft:water_breathing",
+              "type": "minecraft:set_potion"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "weight": 15,
+          "modifier": [
+            {
+              "id": "minecraft:night_vision",
+              "type": "minecraft:set_potion"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_glow_ink_bomb",
+          "weight": 24,
+          "modifier": [
+            {
+              "count": {
+                "min": 2,
+                "max": 5,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_sea_glass_shards",
+          "weight": 3,
+          "modifier": [
+            {
+              "count": {
+                "min": 4,
+                "max": 8,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

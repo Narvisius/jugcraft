@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:cache",
+  "input": {
+    "type": "minecraft:max",
+    "left": 0,
+    "right": {
+      "type": "minecraft:add",
+      "left": 0.5,
+      "right": {
+        "type": "minecraft:noise",
+        "noise": "jugcraft:math/arch/landscape_noise_multiplier",
+        "xz_scale": 1.0,
+        "y_scale": 0.0
+      }
+    }
+  }
+}

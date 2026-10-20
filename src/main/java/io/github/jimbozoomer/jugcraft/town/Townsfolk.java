@@ -2,6 +2,7 @@ package io.github.jimbozoomer.jugcraft.town;
 
 import java.util.EnumSet;
 import java.util.UUID;
+import org.jspecify.annotations.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -52,6 +53,8 @@ public class Townsfolk extends PathfinderMob {
 	private BlockPos home = BlockPos.ZERO;
 	private int spot = -1;
 	private int lastTalk;
+	private @Nullable Player listener;
+	private int listeningUntil;
 
 	public Townsfolk(EntityType<? extends Townsfolk> type, Level level) {
 		super(type, level);
@@ -72,6 +75,16 @@ public class Townsfolk extends PathfinderMob {
 	@Override
 	protected void registerGoals() {
 		goalSelector.addGoal(0, new FloatGoal(this));
+		goalSelector.addGoal(1, new Goal() {
+			{ setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK)); }
+			@Override public boolean canUse() {
+				return listener != null && listener.isAlive() && tickCount < listeningUntil
+						&& distanceToSqr(listener) < 64 && getTarget() == null;
+			}
+			@Override public void start() { getNavigation().stop(); }
+			@Override public void tick() { if (listener != null) getLookControl().setLookAt(listener, 30, 30); }
+			@Override public void stop() { listener = null; }
+		});
 		goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.2, true) {
 			@Override
 			public boolean canUse() {
@@ -193,6 +206,15 @@ public class Townsfolk extends PathfinderMob {
 			return InteractionResult.SUCCESS;
 		}
 		getLookControl().setLookAt(player);
+		listener = player;
+		listeningUntil = tickCount + 80;
+		if (isGuard() && player.isShiftKeyDown()) {
+			if (tickCount - lastTalk >= 20) {
+				lastTalk = tickCount;
+				TownWayfinding.giveMap(server);
+			}
+			return InteractionResult.SUCCESS;
+		}
 		if (role.equals("shopkeeper") && TownShops.get().shop(shop) != null) {
 			ShopMenu.open(server, this);
 			return InteractionResult.SUCCESS;
@@ -207,6 +229,7 @@ public class Townsfolk extends PathfinderMob {
 				? Component.translatable("message.jugcraft.townsfolk.banker", Jugs.balance(server.level().getServer(), server.getUUID()))
 				: Component.translatable("message.jugcraft.townsfolk." + roleKey() + "." + theme + "." + line);
 		player.sendSystemMessage(Component.translatable("message.jugcraft.townsfolk.says", getDisplayName(), said));
+		if (isGuard()) player.sendSystemMessage(Component.translatable("message.jugcraft.town.map_hint"));
 		level().playSound(null, blockPosition(), SoundEvents.VILLAGER_AMBIENT, SoundSource.NEUTRAL, 0.5F, 1.2F);
 		return InteractionResult.SUCCESS;
 	}

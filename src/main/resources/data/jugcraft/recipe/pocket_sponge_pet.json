@@ -1,0 +1,23 @@
+{
+  "result": {
+    "id": "jugcraft:pocket_pet_sponge"
+  },
+  "pattern": [
+    "OFO",
+    "ODO",
+    "OGO"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "D": "minecraft:diamond",
+    "F": "minecraft:lily_pad",
+    "G": "minecraft:gold_ingot",
+    "O": "minecraft:gold_nugget"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

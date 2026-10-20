@@ -1,0 +1,548 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "bulb",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        20.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "baseRing",
+      "parent": "bulb",
+      "pose": [
+        0.0,
+        4.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -8.0,
+            0.0,
+            -8.0,
+            16.0,
+            0.0,
+            16.0
+          ],
+          "uv": [
+            0.0,
+            32.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "midRing",
+      "parent": "baseRing",
+      "pose": [
+        0.0,
+        -2.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -8.0,
+            0.0,
+            -8.0,
+            16.0,
+            0.0,
+            16.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "topRing",
+      "parent": "midRing",
+      "pose": [
+        0.0,
+        -2.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -8.0,
+            0.0,
+            -8.0,
+            16.0,
+            0.0,
+            16.0
+          ],
+          "uv": [
+            0.0,
+            16.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "outer",
+      "parent": "topRing",
+      "pose": [
+        0.0,
+        -8.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -4.0,
+            -4.0,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            40.0,
+            40.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "center",
+      "parent": "outer",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.0,
+            -1.0,
+            2.0,
+            2.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/TeslaBulbModel.java",
+  "sourceSha256": "e1b5f0c65dce528b0263569ba56b6bc01e60c530386c66a6555508a80d527ac9",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.bulb.rotationPointY = (float)((double)this.bulb.rotationPointY + (-1.0 + Math.sin(ageInTicks * 0.045f * intensity) * 1.0));",
+      "reason": "Unsupported expression (this.bulb.rotationPointY + (-1.0 + sin(ageInTicks * 0.045 * intensity) * 1.0))"
+    },
+    {
+      "call": "this.baseRing.rotationPointY = (float)((double)this.baseRing.rotationPointY - (-1.0 + Math.sin(ageInTicks * 0.045f * intensity) * 1.0));",
+      "reason": "Unsupported expression (this.baseRing.rotationPointY - (-1.0 + sin(ageInTicks * 0.045 * intensity) * 1.0))"
+    },
+    {
+      "call": "this.baseRing.rotationPointY = (float)((double)this.baseRing.rotationPointY + (-2.5 + Math.sin(ageInTicks * 0.045f * intensity + 1.0f) * 0.5));",
+      "reason": "Unsupported expression (this.baseRing.rotationPointY + (-2.5 + sin(ageInTicks * 0.045 * intensity + 1.0) * 0.5))"
+    },
+    {
+      "call": "this.midRing.rotationPointY = (float)((double)this.midRing.rotationPointY + Math.sin(ageInTicks * 0.045f * intensity + 2.0f) * 0.25);",
+      "reason": "Unsupported expression (this.midRing.rotationPointY + sin(ageInTicks * 0.045 * intensity + 2.0) * 0.25)"
+    },
+    {
+      "call": "this.topRing.rotationPointY = (float)((double)this.topRing.rotationPointY - Math.sin(ageInTicks * 0.045f * intensity + 3.0f) * (double)0.15f);",
+      "reason": "Unsupported expression (this.topRing.rotationPointY - sin(ageInTicks * 0.045 * intensity + 3.0) * 0.15)"
+    },
+    {
+      "call": "this.bulb.rotationPointY = (float)((double)this.bulb.rotationPointY + Math.sin(ageInTicks * 0.045f) * 1.0);",
+      "reason": "Unsupported expression (this.bulb.rotationPointY + sin(ageInTicks * 0.045) * 1.0)"
+    },
+    {
+      "call": "this.bulb.rotationPointY = (float)((double)this.bulb.rotationPointY + Math.sin(ageInTicks * 0.045f) * 1.0);",
+      "reason": "Unsupported expression (this.bulb.rotationPointY + sin(ageInTicks * 0.045) * 1.0)"
+    }
+  ],
+  "expressions": [
+    {
+      "bone": "outer",
+      "target": "xScale",
+      "op": "=",
+      "value": [
+        "+",
+        1.0,
+        [
+          "+",
+          [
+            "*",
+            [
+              "*",
+              [
+                "+",
+                [
+                  "sin",
+                  [
+                    "*",
+                    [
+                      "*",
+                      "age",
+                      0.5
+                    ],
+                    [
+                      "+",
+                      1.0,
+                      "move"
+                    ]
+                  ]
+                ],
+                1.0
+              ],
+              0.5
+            ],
+            0.1
+          ],
+          [
+            "sin",
+            [
+              "*",
+              "move",
+              3.141592653589793
+            ]
+          ]
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "outer",
+      "target": "yScale",
+      "op": "=",
+      "value": [
+        "+",
+        1.0,
+        [
+          "+",
+          [
+            "*",
+            [
+              "*",
+              [
+                "+",
+                [
+                  "sin",
+                  [
+                    "*",
+                    [
+                      "*",
+                      "age",
+                      0.5
+                    ],
+                    [
+                      "+",
+                      1.0,
+                      "move"
+                    ]
+                  ]
+                ],
+                1.0
+              ],
+              0.5
+            ],
+            0.1
+          ],
+          [
+            "sin",
+            [
+              "*",
+              "move",
+              3.141592653589793
+            ]
+          ]
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "outer",
+      "target": "zScale",
+      "op": "=",
+      "value": [
+        "+",
+        1.0,
+        [
+          "+",
+          [
+            "*",
+            [
+              "*",
+              [
+                "+",
+                [
+                  "sin",
+                  [
+                    "*",
+                    [
+                      "*",
+                      "age",
+                      0.5
+                    ],
+                    [
+                      "+",
+                      1.0,
+                      "move"
+                    ]
+                  ]
+                ],
+                1.0
+              ],
+              0.5
+            ],
+            0.1
+          ],
+          [
+            "sin",
+            [
+              "*",
+              "move",
+              3.141592653589793
+            ]
+          ]
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "center",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          "age",
+          0.1
+        ],
+        [
+          "+",
+          1.0,
+          "move"
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "center",
+      "target": "yRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          "age",
+          0.2
+        ],
+        [
+          "+",
+          1.0,
+          "move"
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "outer",
+      "target": "zRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          "age",
+          0.05
+        ],
+        [
+          "+",
+          1.0,
+          "move"
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "outer",
+      "target": "xRot",
+      "op": "-=",
+      "value": [
+        "*",
+        [
+          "*",
+          "age",
+          0.1
+        ],
+        [
+          "+",
+          1.0,
+          "move"
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "outer",
+      "target": "yRot",
+      "op": "-=",
+      "value": [
+        "*",
+        [
+          "*",
+          "age",
+          0.2
+        ],
+        [
+          "+",
+          1.0,
+          "move"
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "outer",
+      "target": "zRot",
+      "op": "-=",
+      "value": [
+        "*",
+        [
+          "*",
+          "age",
+          0.05
+        ],
+        [
+          "+",
+          1.0,
+          "move"
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "baseRing",
+      "target": "yRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          "age",
+          0.1
+        ],
+        [
+          "+",
+          1.0,
+          "move"
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "midRing",
+      "target": "yRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          "age",
+          0.1
+        ],
+        [
+          "+",
+          1.0,
+          "move"
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "topRing",
+      "target": "yRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          "age",
+          0.1
+        ],
+        [
+          "+",
+          1.0,
+          "move"
+        ]
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

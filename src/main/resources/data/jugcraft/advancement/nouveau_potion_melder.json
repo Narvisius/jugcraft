@@ -1,0 +1,32 @@
+{
+  "parent": "jugcraft:nouveau_potion_jar",
+  "criteria": {
+    "has_potion_melder": {
+      "conditions": {
+        "items": [
+          {
+            "items": "jugcraft:nouveau_potion_melder"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "jugcraft.nouveau_adv.desc.potion_melder"
+    },
+    "icon": {
+      "count": 1,
+      "id": "jugcraft:nouveau_potion_melder"
+    },
+    "title": {
+      "translate": "jugcraft.nouveau_adv.title.potion_melder"
+    }
+  },
+  "requirements": [
+    [
+      "has_potion_melder"
+    ]
+  ]
+}

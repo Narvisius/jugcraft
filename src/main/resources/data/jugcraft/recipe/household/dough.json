@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:household_wheat_flour",
+    "minecraft:water_bucket"
+  ],
+  "result": {
+    "count": 2,
+    "id": "jugcraft:household_dough"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

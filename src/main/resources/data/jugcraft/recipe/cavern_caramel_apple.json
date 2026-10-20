@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CCC",
+    "CAC",
+    "CCC"
+  ],
+  "key": {
+    "A": "minecraft:apple",
+    "C": "jugcraft:cavern_caramel"
+  },
+  "result": {
+    "id": "jugcraft:cavern_caramel_apple"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

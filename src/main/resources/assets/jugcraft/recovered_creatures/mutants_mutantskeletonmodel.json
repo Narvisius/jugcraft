@@ -1,0 +1,1764 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "base",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        3.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "pelvis",
+      "parent": "base",
+      "pose": [
+        0,
+        0,
+        0,
+        -0.31415927,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -6.0,
+            -3.0,
+            8.0,
+            6.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            16.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "waist",
+      "parent": "pelvis",
+      "pose": [
+        0.0,
+        -5.0,
+        0.0,
+        0.22439948,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.5,
+            -8.0,
+            -2.0,
+            5.0,
+            8.0,
+            4.0
+          ],
+          "uv": [
+            32.0,
+            0.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_leg",
+      "parent": "pelvis",
+      "pose": [
+        -2.5,
+        -2.5,
+        0.0,
+        0.05235988,
+        0.0,
+        0.19634955
+      ],
+      "cubes": []
+    },
+    {
+      "name": "left_leg",
+      "parent": "pelvis",
+      "pose": [
+        2.5,
+        -2.5,
+        0.0,
+        0.05235988,
+        0.0,
+        -0.19634955
+      ],
+      "cubes": []
+    },
+    {
+      "name": "middle1",
+      "parent": "waist",
+      "pose": [
+        0,
+        -7,
+        0,
+        0.17453294,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.5,
+            -4,
+            -2,
+            5,
+            4,
+            4
+          ],
+          "uv": [
+            50,
+            0
+          ],
+          "inflate": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_leg_inner",
+      "parent": "right_leg",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            0.0,
+            -2.0,
+            4.0,
+            12.0,
+            4.0
+          ],
+          "uv": [
+            0.0,
+            28.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_leg_inner",
+      "parent": "left_leg",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            0.0,
+            -2.0,
+            4.0,
+            12.0,
+            4.0
+          ],
+          "uv": [
+            0.0,
+            28.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "side111",
+      "parent": "middle1",
+      "pose": [
+        -3,
+        -1,
+        1.75,
+        0,
+        -0.69813174,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6,
+            -2,
+            -2,
+            6,
+            2,
+            2
+          ],
+          "uv": [
+            32,
+            12
+          ],
+          "inflate": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "side211",
+      "parent": "middle1",
+      "pose": [
+        3,
+        -1,
+        1.75,
+        0,
+        0.69813174,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0,
+            -2,
+            -2,
+            6,
+            2,
+            2
+          ],
+          "uv": [
+            32,
+            12
+          ],
+          "inflate": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "middle2",
+      "parent": "middle1",
+      "pose": [
+        0,
+        -5,
+        0,
+        0.17453294,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.5,
+            -4,
+            -2,
+            5,
+            4,
+            4
+          ],
+          "uv": [
+            50,
+            0
+          ],
+          "inflate": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_leg_lower",
+      "parent": "right_leg_inner",
+      "pose": [
+        0.0,
+        12.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.1308997
+      ],
+      "cubes": []
+    },
+    {
+      "name": "left_leg_lower",
+      "parent": "left_leg_inner",
+      "pose": [
+        0.0,
+        12.0,
+        0.0,
+        0.0,
+        0.0,
+        0.1308997
+      ],
+      "cubes": []
+    },
+    {
+      "name": "side121",
+      "parent": "side111",
+      "pose": [
+        -6.5,
+        0,
+        0,
+        0,
+        -1.0471976,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6,
+            -2,
+            -2,
+            6,
+            2,
+            2
+          ],
+          "uv": [
+            32,
+            12
+          ],
+          "inflate": [
+            0.2,
+            0.2,
+            0.2
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "side221",
+      "parent": "side211",
+      "pose": [
+        6.5,
+        0,
+        0,
+        0,
+        1.0471976,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0,
+            -2,
+            -2,
+            6,
+            2,
+            2
+          ],
+          "uv": [
+            32,
+            12
+          ],
+          "inflate": [
+            0.2,
+            0.2,
+            0.2
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "side112",
+      "parent": "middle2",
+      "pose": [
+        -3,
+        -1,
+        1.75,
+        0,
+        -0.6841691052,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6,
+            -2,
+            -2,
+            6,
+            2,
+            2
+          ],
+          "uv": [
+            32,
+            12
+          ],
+          "inflate": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "side212",
+      "parent": "middle2",
+      "pose": [
+        3,
+        -1,
+        1.75,
+        0,
+        0.6841691052,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0,
+            -2,
+            -2,
+            6,
+            2,
+            2
+          ],
+          "uv": [
+            32,
+            12
+          ],
+          "inflate": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "middle3",
+      "parent": "middle2",
+      "pose": [
+        0,
+        -5,
+        0,
+        0.17453294,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.5,
+            -4,
+            -2,
+            5,
+            4,
+            4
+          ],
+          "uv": [
+            50,
+            0
+          ],
+          "inflate": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_leg_lower_inner",
+      "parent": "right_leg_lower",
+      "pose": [
+        0,
+        0,
+        0,
+        0.31415927,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            0.0,
+            -2.0,
+            4.0,
+            12.0,
+            4.0
+          ],
+          "uv": [
+            32.0,
+            28.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_leg_lower_inner",
+      "parent": "left_leg_lower",
+      "pose": [
+        0,
+        0,
+        0,
+        0.31415927,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            0.0,
+            -2.0,
+            4.0,
+            12.0,
+            4.0
+          ],
+          "uv": [
+            32.0,
+            28.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "side131",
+      "parent": "side121",
+      "pose": [
+        -6.4,
+        0,
+        0,
+        0,
+        -0.8975979,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6,
+            -2,
+            -2,
+            6,
+            2,
+            2
+          ],
+          "uv": [
+            32,
+            12
+          ],
+          "inflate": [
+            0.15,
+            0.15,
+            0.15
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "side231",
+      "parent": "side221",
+      "pose": [
+        6.4,
+        0,
+        0,
+        0,
+        0.8975979,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0,
+            -2,
+            -2,
+            6,
+            2,
+            2
+          ],
+          "uv": [
+            32,
+            12
+          ],
+          "inflate": [
+            0.15,
+            0.15,
+            0.15
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "side122",
+      "parent": "side112",
+      "pose": [
+        -6.5,
+        0,
+        0,
+        0,
+        -1.026253648,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6,
+            -2,
+            -2,
+            6,
+            2,
+            2
+          ],
+          "uv": [
+            32,
+            12
+          ],
+          "inflate": [
+            0.2,
+            0.2,
+            0.2
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "side222",
+      "parent": "side212",
+      "pose": [
+        6.5,
+        0,
+        0,
+        0,
+        1.026253648,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0,
+            -2,
+            -2,
+            6,
+            2,
+            2
+          ],
+          "uv": [
+            32,
+            12
+          ],
+          "inflate": [
+            0.2,
+            0.2,
+            0.2
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "side113",
+      "parent": "middle3",
+      "pose": [
+        -3,
+        -1,
+        1.75,
+        0,
+        -0.69813174,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6,
+            -2,
+            -2,
+            6,
+            2,
+            2
+          ],
+          "uv": [
+            32,
+            12
+          ],
+          "inflate": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "side213",
+      "parent": "middle3",
+      "pose": [
+        3,
+        -1,
+        1.75,
+        0,
+        0.69813174,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0,
+            -2,
+            -2,
+            6,
+            2,
+            2
+          ],
+          "uv": [
+            32,
+            12
+          ],
+          "inflate": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "neck",
+      "parent": "middle3",
+      "pose": [
+        0.0,
+        -4.0,
+        0.0,
+        -0.1308997,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -4.0,
+            -1.5,
+            3.0,
+            4.0,
+            3.0
+          ],
+          "uv": [
+            64.0,
+            0.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_shoulder",
+      "parent": "middle3",
+      "pose": [
+        -7.0,
+        -3.0,
+        -1.0,
+        -0.7853982,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -3.0,
+            -3.0,
+            8.0,
+            3.0,
+            6.0
+          ],
+          "uv": [
+            28.0,
+            16.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_shoulder",
+      "parent": "middle3",
+      "pose": [
+        7.0,
+        -3.0,
+        -1.0,
+        -0.7853982,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -3.0,
+            -3.0,
+            8.0,
+            3.0,
+            6.0
+          ],
+          "uv": [
+            28.0,
+            16.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "side132",
+      "parent": "side122",
+      "pose": [
+        -6.4,
+        0,
+        0,
+        0,
+        -0.8796459419999999,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6,
+            -2,
+            -2,
+            6,
+            2,
+            2
+          ],
+          "uv": [
+            32,
+            12
+          ],
+          "inflate": [
+            0.15,
+            0.15,
+            0.15
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "side232",
+      "parent": "side222",
+      "pose": [
+        6.4,
+        0,
+        0,
+        0,
+        0.8796459419999999,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0,
+            -2,
+            -2,
+            6,
+            2,
+            2
+          ],
+          "uv": [
+            32,
+            12
+          ],
+          "inflate": [
+            0.15,
+            0.15,
+            0.15
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "side123",
+      "parent": "side113",
+      "pose": [
+        -6.5,
+        0,
+        0,
+        0,
+        -1.0471976,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6,
+            -2,
+            -2,
+            6,
+            2,
+            2
+          ],
+          "uv": [
+            32,
+            12
+          ],
+          "inflate": [
+            0.2,
+            0.2,
+            0.2
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "side223",
+      "parent": "side213",
+      "pose": [
+        6.5,
+        0,
+        0,
+        0,
+        1.0471976,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0,
+            -2,
+            -2,
+            6,
+            2,
+            2
+          ],
+          "uv": [
+            32,
+            12
+          ],
+          "inflate": [
+            0.2,
+            0.2,
+            0.2
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "head",
+      "parent": "neck",
+      "pose": [
+        0.0,
+        -4.0,
+        -1.0,
+        -0.1308997,
+        0.0,
+        0.0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "right_arm",
+      "parent": "right_shoulder",
+      "pose": [
+        -1.0,
+        -1.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "left_arm",
+      "parent": "left_shoulder",
+      "pose": [
+        1.0,
+        -1.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "side133",
+      "parent": "side123",
+      "pose": [
+        -6.4,
+        0,
+        0,
+        0,
+        -0.8975979,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6,
+            -2,
+            -2,
+            6,
+            2,
+            2
+          ],
+          "uv": [
+            32,
+            12
+          ],
+          "inflate": [
+            0.15,
+            0.15,
+            0.15
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "side233",
+      "parent": "side223",
+      "pose": [
+        6.4,
+        0,
+        0,
+        0,
+        0.8975979,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0,
+            -2,
+            -2,
+            6,
+            2,
+            2
+          ],
+          "uv": [
+            32,
+            12
+          ],
+          "inflate": [
+            0.15,
+            0.15,
+            0.15
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "inner_head",
+      "parent": "head",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -8.0,
+            -4.0,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_arm_inner",
+      "parent": "right_arm",
+      "pose": [
+        0,
+        0,
+        0,
+        0.5235988,
+        0.0,
+        0.31415927
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            0.0,
+            -2.0,
+            4.0,
+            12.0,
+            4.0
+          ],
+          "uv": [
+            0.0,
+            28.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_arm_inner",
+      "parent": "left_arm",
+      "pose": [
+        0,
+        0,
+        0,
+        0.5235988,
+        0.0,
+        -0.31415927
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            0.0,
+            -2.0,
+            4.0,
+            12.0,
+            4.0
+          ],
+          "uv": [
+            0.0,
+            28.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "jaw",
+      "parent": "inner_head",
+      "pose": [
+        0.0,
+        -0.2,
+        3.5,
+        0.09817477,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -3.0,
+            -8.0,
+            8.0,
+            3.0,
+            8.0
+          ],
+          "uv": [
+            72.0,
+            0.0
+          ],
+          "inflate": [
+            0.7,
+            0.7,
+            0.7
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_arm_lower",
+      "parent": "right_arm_inner",
+      "pose": [
+        0.0,
+        11.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "left_arm_lower",
+      "parent": "left_arm_inner",
+      "pose": [
+        0.0,
+        11.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "right_arm_lower_inner",
+      "parent": "right_arm_lower",
+      "pose": [
+        0,
+        0,
+        0,
+        -0.5235988,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            0.0,
+            -2.0,
+            4.0,
+            14.0,
+            4.0
+          ],
+          "uv": [
+            16.0,
+            28.0
+          ],
+          "inflate": [
+            -0.01,
+            -0.01,
+            -0.01
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_arm_lower_inner",
+      "parent": "left_arm_lower",
+      "pose": [
+        0,
+        0,
+        0,
+        -0.5235988,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            0.0,
+            -2.0,
+            4.0,
+            14.0,
+            4.0
+          ],
+          "uv": [
+            16.0,
+            28.0
+          ],
+          "inflate": [
+            -0.01,
+            -0.01,
+            -0.01
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "mutants/fuzs/mutantmonsters/common/client/model/MutantSkeletonModel.java",
+  "sourceSha256": "eab01405d9fad8cccd3fee386b5a66803860700ce050a5ac12c7d91fcc263e4f",
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.animator.rotate(this.spine[i].side1[0], ribXRot, ribYRot, 0.0f)",
+      "reason": "Unknown number ribXRot"
+    },
+    {
+      "call": "this.animator.rotate(this.spine[i].side1[1], 0.0f, 0.15707964f, 0.0f)",
+      "reason": "Unknown bone spine[i].side1[1]"
+    },
+    {
+      "call": "this.animator.rotate(this.spine[i].side1[2], 0.0f, 0.2617994f, 0.0f)",
+      "reason": "Unknown bone spine[i].side1[2]"
+    },
+    {
+      "call": "this.animator.rotate(this.spine[i].side2[0], ribXRot, -ribYRot, 0.0f)",
+      "reason": "Unknown number ribXRot"
+    },
+    {
+      "call": "this.animator.rotate(this.spine[i].side2[1], 0.0f, -0.15707964f, 0.0f)",
+      "reason": "Unknown bone spine[i].side2[1]"
+    },
+    {
+      "call": "this.animator.rotate(this.spine[i].side2[2], 0.0f, -0.2617994f, 0.0f)",
+      "reason": "Unknown bone spine[i].side2[2]"
+    },
+    {
+      "call": "this.animator.rotate(this.rightArm, 0.0f, 0.0f, 0.8975979f)",
+      "reason": "Unknown bone rightArm"
+    },
+    {
+      "call": "this.animator.rotate(this.leftArm, 0.0f, 0.0f, -0.8975979f)",
+      "reason": "Unknown bone leftArm"
+    },
+    {
+      "call": "this.animator.rotate(this.rightLeg, -0.44879895f, 0.0f, 0.0f)",
+      "reason": "Unknown bone rightLeg"
+    },
+    {
+      "call": "this.animator.rotate(this.leftLeg, -0.44879895f, 0.0f, 0.0f)",
+      "reason": "Unknown bone leftLeg"
+    },
+    {
+      "call": "this.animator.rotate(this.rightLegLowerInner, 0.5235988f, 0.0f, 0.0f)",
+      "reason": "Unknown bone rightLegLowerInner"
+    },
+    {
+      "call": "this.animator.rotate(this.leftLegLowerInner, 0.5235988f, 0.0f, 0.0f)",
+      "reason": "Unknown bone leftLegLowerInner"
+    },
+    {
+      "call": "this.animator.rotate(this.spine[0].middle, 0.2617994f, 0.0f, 0.0f)",
+      "reason": "Unknown bone spine[0].middle"
+    },
+    {
+      "call": "this.animator.rotate(this.spine[i].side1[0], ribXRot - 0.08f, ribYRot, 0.0f)",
+      "reason": "Unknown number ribXRot"
+    },
+    {
+      "call": "this.animator.rotate(this.spine[i].side1[1], 0.0f, 0.15707964f, 0.0f)",
+      "reason": "Unknown bone spine[i].side1[1]"
+    },
+    {
+      "call": "this.animator.rotate(this.spine[i].side1[2], 0.0f, 0.2617994f, 0.0f)",
+      "reason": "Unknown bone spine[i].side1[2]"
+    },
+    {
+      "call": "this.animator.rotate(this.spine[i].side2[0], ribXRot + 0.08f, -ribYRot, 0.0f)",
+      "reason": "Unknown number ribXRot"
+    },
+    {
+      "call": "this.animator.rotate(this.spine[i].side2[1], 0.0f, -0.15707964f, 0.0f)",
+      "reason": "Unknown bone spine[i].side2[1]"
+    },
+    {
+      "call": "this.animator.rotate(this.spine[i].side2[2], 0.0f, -0.2617994f, 0.0f)",
+      "reason": "Unknown bone spine[i].side2[2]"
+    },
+    {
+      "call": "this.animator.rotate(this.rightLeg, -0.44879895f, 0.0f, 0.0f)",
+      "reason": "Unknown bone rightLeg"
+    },
+    {
+      "call": "this.animator.rotate(this.leftLeg, -0.44879895f, 0.0f, 0.0f)",
+      "reason": "Unknown bone leftLeg"
+    },
+    {
+      "call": "this.animator.rotate(this.rightLegLowerInner, 0.5235988f, 0.0f, 0.0f)",
+      "reason": "Unknown bone rightLegLowerInner"
+    },
+    {
+      "call": "this.animator.rotate(this.leftLegLowerInner, 0.5235988f, 0.0f, 0.0f)",
+      "reason": "Unknown bone leftLegLowerInner"
+    }
+  ],
+  "expressions": [
+    {
+      "bone": "base",
+      "target": "y",
+      "op": "-=",
+      "value": [
+        "*",
+        [
+          "+",
+          [
+            "*",
+            -1,
+            0.5
+          ],
+          [
+            "abs",
+            [
+              "sin",
+              [
+                "*",
+                "walk",
+                0.5
+              ]
+            ]
+          ]
+        ],
+        "move"
+      ],
+      "when": 1
+    },
+    {
+      "bone": "right_arm",
+      "target": "xRot",
+      "op": "-=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "sin",
+            [
+              "*",
+              "walk",
+              0.5
+            ]
+          ],
+          0.9
+        ],
+        "move"
+      ],
+      "when": 1
+    },
+    {
+      "bone": "left_arm",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "sin",
+            [
+              "*",
+              "walk",
+              0.5
+            ]
+          ],
+          0.9
+        ],
+        "move"
+      ],
+      "when": 1
+    },
+    {
+      "bone": "right_leg",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "+",
+            0.2,
+            [
+              "sin",
+              [
+                "*",
+                "walk",
+                0.5
+              ]
+            ]
+          ],
+          1.0
+        ],
+        "move"
+      ],
+      "when": 1
+    },
+    {
+      "bone": "left_leg",
+      "target": "xRot",
+      "op": "-=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "+",
+            [
+              "*",
+              -1,
+              0.2
+            ],
+            [
+              "sin",
+              [
+                "*",
+                "walk",
+                0.5
+              ]
+            ]
+          ],
+          1.0
+        ],
+        "move"
+      ],
+      "when": 1
+    },
+    {
+      "bone": "right_leg_lower_inner",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "+",
+            0.6,
+            [
+              "sin",
+              [
+                "-",
+                [
+                  "*",
+                  "walk",
+                  0.5
+                ],
+                1.1
+              ]
+            ]
+          ],
+          0.6
+        ],
+        "move"
+      ],
+      "when": 1
+    },
+    {
+      "bone": "left_leg_lower_inner",
+      "target": "xRot",
+      "op": "-=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "+",
+            [
+              "*",
+              -1,
+              0.6
+            ],
+            [
+              "sin",
+              [
+                "-",
+                [
+                  "*",
+                  "walk",
+                  0.5
+                ],
+                1.1
+              ]
+            ]
+          ],
+          0.6
+        ],
+        "move"
+      ],
+      "when": 1
+    },
+    {
+      "bone": "head",
+      "target": "xRot",
+      "op": "-=",
+      "value": [
+        "*",
+        [
+          "sin",
+          [
+            "*",
+            "age",
+            0.1
+          ]
+        ],
+        0.02
+      ],
+      "when": 1
+    },
+    {
+      "bone": "jaw",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "+",
+        [
+          "*",
+          [
+            "sin",
+            [
+              "*",
+              "age",
+              0.1
+            ]
+          ],
+          0.04
+        ],
+        0.04
+      ],
+      "when": 1
+    },
+    {
+      "bone": "right_arm",
+      "target": "zRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "sin",
+          [
+            "*",
+            "age",
+            0.1
+          ]
+        ],
+        0.025
+      ],
+      "when": 1
+    },
+    {
+      "bone": "left_arm",
+      "target": "zRot",
+      "op": "-=",
+      "value": [
+        "*",
+        [
+          "sin",
+          [
+            "*",
+            "age",
+            0.1
+          ]
+        ],
+        0.025
+      ],
+      "when": 1
+    },
+    {
+      "bone": "inner_head",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "/",
+        [
+          "*",
+          "pitch",
+          3.141592653589793
+        ],
+        180.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "inner_head",
+      "target": "yRot",
+      "op": "+=",
+      "value": [
+        "/",
+        [
+          "*",
+          "yaw",
+          3.141592653589793
+        ],
+        180.0
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

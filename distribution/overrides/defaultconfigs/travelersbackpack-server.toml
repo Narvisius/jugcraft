@@ -1,0 +1,97 @@
+# Jugcraft owner-approved defaults, 2026-10-17. Fabric units: 81,000 = one bucket.
+# tankCapacity is PER ROW, not the total. Both tanks have the same capacity.
+# Seeds config/travelersbackpack-server.toml if missing; an existing world/serverconfig file takes priority.
+# Existing backpacks retain saved slot counts.
+[server.backpackSettings]
+backSlotIntegration = true
+allowOnlyEquippedBackpack = true
+allowOpeningFromSlot = false
+allowToolSwapping = true
+toolSlotsAcceptEverything = false
+allowShulkerBoxes = false
+neverDespawn = true
+fireResistant = true
+explosionResistant = true
+invulnerableBackpack = true
+voidProtection = true
+backpackDeathPlace = true
+backpackForceDeathPlace = false
+quickSleepingBag = true
+enableSleepingBagSpawnPoint = false
+
+[server.backpackSettings.leatherTierBackpack]
+inventorySlotCount = 27
+toolSlotCount = 2
+upgradeSlotCount = 2
+tankCapacity = 54000 # 3 rows: 2 buckets per tank
+
+[server.backpackSettings.ironTierBackpack]
+inventorySlotCount = 45
+toolSlotCount = 3
+upgradeSlotCount = 3
+tankCapacity = 81000 # 5 rows: 5 buckets per tank
+
+[server.backpackSettings.goldTierBackpack]
+inventorySlotCount = 63
+toolSlotCount = 4
+upgradeSlotCount = 4
+tankCapacity = 81000 # 7 rows: 7 buckets per tank
+
+[server.backpackSettings.diamondTierBackpack]
+inventorySlotCount = 81
+toolSlotCount = 5
+upgradeSlotCount = 5
+tankCapacity = 81000 # 9 rows: 9 buckets per tank
+
+[server.backpackSettings.netheriteTierBackpack]
+inventorySlotCount = 99
+toolSlotCount = 6
+upgradeSlotCount = 6
+tankCapacity = 81000 # Extended layout: 9 rows + 2, 11 buckets per tank
+
+[server.backpackUpgrades]
+enableSleepingBag = true
+enableTanksUpgrade = true
+enableCraftingUpgrade = true
+enableFurnaceUpgrade = true
+enableSmokerUpgrade = true
+enableBlastFurnaceUpgrade = false
+enableJukeboxUpgrade = true
+enableLanternUpgrade = true
+
+[server.backpackUpgrades.pickupUpgradeSettings]
+enablePickupUpgrade = true
+filterSlotCount = 9
+slotsInRow = 3
+
+[server.backpackUpgrades.refillUpgradeSettings]
+enableRefillUpgrade = true
+filterSlotCount = 9
+slotsInRow = 3
+tickRate = 5
+
+[server.backpackUpgrades.feedingUpgradeSettings]
+enableFeedingUpgrade = true
+filterSlotCount = 9
+slotsInRow = 3
+tickRate = 100
+
+[server.backpackUpgrades.magnetUpgradeSettings]
+enableMagnetUpgrade = true
+filterSlotCount = 9
+slotsInRow = 3
+pullRange = 3
+tickRate = 10
+
+[server.backpackUpgrades.voidUpgradeSettings]
+enableVoidUpgrade = false
+
+[server.backpackAbilities]
+enableBackpackAbilities = false
+forceAbilityEnabled = false
+
+[server.world]
+spawnEntitiesWithBackpack = false
+
+[server.slownessDebuff]
+tooManyBackpacksSlowness = false

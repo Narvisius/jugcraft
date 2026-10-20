@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " P ",
+    "PGP",
+    "FPF"
+  ],
+  "key": {
+    "G": "minecraft:glass_bottle",
+    "F": "minecraft:sunflower",
+    "P": "minecraft:copper_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:beast_hummingbird_feeder"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

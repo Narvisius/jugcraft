@@ -879,6 +879,8 @@ def check_assemblies(machines=()):
     family O1_ALLOW lists as built from open boxes (never a machine) may leave its seams open too."""
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     from large_machines import FOOTPRINTS
+    from vehicle_bays import footprint as bay_footprint
+    FOOTPRINTS = {**FOOTPRINTS, 'mecha_workbench': bay_footprint(6), 'tank_workbench': bay_footprint(3)}
     errors, count, allowed = [], 0, defaultdict(set)
     for style, roots in (("", (ASSETS,)), ("classic ", (PACK, ASSETS))):
         for machine, footprint in FOOTPRINTS.items():

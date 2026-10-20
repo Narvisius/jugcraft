@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AAA",
+    "ACA",
+    "LDL"
+  ],
+  "key": {
+    "A": "jugcraft:cavern_amber",
+    "C": "jugcraft:cavern_amber_curiosity",
+    "L": "jugcraft:cavern_limestone",
+    "D": "minecraft:diamond"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:cavern_amber_monolith"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

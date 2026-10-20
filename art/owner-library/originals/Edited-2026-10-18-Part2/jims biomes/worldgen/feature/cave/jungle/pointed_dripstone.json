@@ -1,0 +1,125 @@
+{
+  "type": "random_selector",
+  "default": {
+    "feature": {
+      "type": "block_column",
+      "direction": "up",
+      "allowed_placement": {
+        "type": "minecraft:matching_blocks",
+        "blocks": "minecraft:air"
+      },
+      "layers": [
+        {
+          "height": {
+            "type": "constant",
+            "value": 1
+          },
+          "provider": {
+            "id": "minecraft:pointed_dripstone"
+          }
+        }
+      ],
+      "prioritize_tip": true
+    },
+    "placement": []
+  },
+  "features": [
+    {
+      "chance": 0.3,
+      "feature": {
+        "feature": {
+          "type": "block_column",
+          "direction": "up",
+          "allowed_placement": {
+            "type": "minecraft:matching_blocks",
+            "blocks": "minecraft:air"
+          },
+          "layers": [
+            {
+              "height": {
+                "type": "constant",
+                "value": 1
+              },
+              "provider": {
+                "type": "minecraft:simple",
+                "state": {
+                  "id": "minecraft:pointed_dripstone",
+                  "properties": {
+                    "thickness": "frustum"
+                  }
+                }
+              }
+            },
+            {
+              "height": {
+                "type": "constant",
+                "value": 1
+              },
+              "provider": {
+                "id": "minecraft:pointed_dripstone"
+              }
+            }
+          ],
+          "prioritize_tip": true
+        },
+        "placement": []
+      }
+    },
+    {
+      "chance": 0.08,
+      "feature": {
+        "feature": {
+          "type": "block_column",
+          "direction": "up",
+          "allowed_placement": {
+            "type": "minecraft:matching_blocks",
+            "blocks": "minecraft:air"
+          },
+          "layers": [
+            {
+              "height": {
+                "type": "constant",
+                "value": 1
+              },
+              "provider": {
+                "type": "minecraft:simple",
+                "state": {
+                  "id": "minecraft:pointed_dripstone",
+                  "properties": {
+                    "thickness": "middle"
+                  }
+                }
+              }
+            },
+            {
+              "height": {
+                "type": "constant",
+                "value": 1
+              },
+              "provider": {
+                "type": "minecraft:simple",
+                "state": {
+                  "id": "minecraft:pointed_dripstone",
+                  "properties": {
+                    "thickness": "frustum"
+                  }
+                }
+              }
+            },
+            {
+              "height": {
+                "type": "constant",
+                "value": 1
+              },
+              "provider": {
+                "id": "minecraft:pointed_dripstone"
+              }
+            }
+          ],
+          "prioritize_tip": true
+        },
+        "placement": []
+      }
+    }
+  ]
+}

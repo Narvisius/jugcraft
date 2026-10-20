@@ -1,0 +1,23 @@
+{
+  "result": {
+    "id": "jugcraft:pocket_pet_moon"
+  },
+  "pattern": [
+    "OFO",
+    "ODO",
+    "OGO"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "D": "minecraft:emerald",
+    "F": "jugcraft:pocket_nugget_diamond",
+    "G": "minecraft:diamond",
+    "O": "minecraft:quartz"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

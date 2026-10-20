@@ -1,0 +1,38 @@
+{
+  "type": "minecraft:add",
+  "left": "terralith:overworld/dune/dune_height",
+  "right": {
+    "type": "minecraft:add",
+    "left": {
+      "type": "minecraft:add",
+      "left": {
+        "type": "minecraft:gradient",
+        "from_value": 1,
+        "to_value": 0,
+        "axis": "y",
+        "from_coordinate": 37,
+        "to_coordinate": 54
+      },
+      "right": {
+        "type": "minecraft:gradient",
+        "from_value": 0,
+        "to_value": -6,
+        "axis": "y",
+        "from_coordinate": 54,
+        "to_coordinate": 320
+      }
+    },
+    "right": {
+      "type": "minecraft:cache",
+      "input": {
+        "type": "minecraft:add",
+        "left": {
+          "type": "minecraft:mul",
+          "left": 1.0,
+          "right": "terralith:overworld/dune/size_spline"
+        },
+        "right": -1.75
+      }
+    }
+  }
+}

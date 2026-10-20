@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LLL",
+    "LDL",
+    "LLL"
+  ],
+  "key": {
+    "L": "#jugcraft:cavern_radon_lamps",
+    "D": "minecraft:black_dye"
+  },
+  "result": {
+    "count": 8,
+    "id": "jugcraft:cavern_radon_lamp_black"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

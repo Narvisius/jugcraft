@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:nouveau_purple_archwood_log",
+    "#jugcraft:nouveau_wilden_drop",
+    "#jugcraft:nouveau_wilden_drop",
+    "#jugcraft:nouveau_wilden_drop",
+    "minecraft:lapis_block"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_ritual_wilden_summon"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

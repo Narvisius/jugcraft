@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "HHH",
+    "HEH",
+    "FCF"
+  ],
+  "key": {
+    "H": "jugcraft:hydrogen_lift_cell",
+    "E": "jugcraft:diesel_engine",
+    "F": "jugcraft:lightweight_frame",
+    "C": "minecraft:chest"
+  },
+  "result": {
+    "id": "jugcraft:zeppelin",
+    "count": 1
+  }
+}

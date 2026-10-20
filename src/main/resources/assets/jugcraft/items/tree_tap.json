@@ -1,0 +1,20 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:block_state",
+    "block_state_property": "upgraded",
+    "cases": [
+      {
+        "when": "true",
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:block/tree_tap_bucket_0"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "jugcraft:block/tree_tap_0"
+    }
+  }
+}

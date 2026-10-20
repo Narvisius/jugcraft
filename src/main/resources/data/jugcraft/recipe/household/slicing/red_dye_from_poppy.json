@@ -1,0 +1,17 @@
+{
+  "type": "jugcraft:cutting",
+  "ingredient": "minecraft:poppy",
+  "tool": "#jugcraft:knives",
+  "results": [
+    {
+      "count": 2,
+      "id": "minecraft:red_dye"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

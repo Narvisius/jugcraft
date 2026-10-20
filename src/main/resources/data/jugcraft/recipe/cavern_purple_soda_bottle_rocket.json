@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:cavern_purple_soda_bottle",
+    "jugcraft:cavern_purple_soda_bottle",
+    "jugcraft:cavern_purple_soda_bottle",
+    "jugcraft:cavern_frostmint"
+  ],
+  "result": {
+    "count": 3,
+    "id": "jugcraft:cavern_purple_soda_bottle_rocket"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

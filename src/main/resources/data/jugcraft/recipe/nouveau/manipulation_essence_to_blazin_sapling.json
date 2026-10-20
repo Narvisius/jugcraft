@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:nouveau_manipulation_essence",
+    "jugcraft:nouveau_purple_archwood_sapling"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_red_archwood_sapling"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

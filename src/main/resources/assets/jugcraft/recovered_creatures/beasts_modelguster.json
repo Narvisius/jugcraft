@@ -1,0 +1,528 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "tornado",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -4.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -4.0,
+            -4.0,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            65.0,
+            72.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "eyes",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -18.0,
+        -15.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "tornado2",
+      "parent": "tornado",
+      "pose": [
+        0.0,
+        -8.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -8.0,
+            -4.0,
+            -8.0,
+            16.0,
+            8.0,
+            16.0
+          ],
+          "uv": [
+            0.0,
+            72.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "eye_left",
+      "parent": "eyes",
+      "pose": [
+        4.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -4.0,
+            0.0,
+            6.0,
+            8.0,
+            0.0
+          ],
+          "uv": [
+            8.0,
+            13.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "eye_right",
+      "parent": "eyes",
+      "pose": [
+        -4.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -4.0,
+            0.0,
+            6.0,
+            8.0,
+            0.0
+          ],
+          "uv": [
+            8.0,
+            13.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "tornadomid",
+      "parent": "tornado2",
+      "pose": [
+        0.0,
+        6.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -14.0,
+            -4.0,
+            -14.0,
+            28.0,
+            4.0,
+            28.0
+          ],
+          "uv": [
+            16.0,
+            96.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "tornado3",
+      "parent": "tornado2",
+      "pose": [
+        0.0,
+        -8.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -12.0,
+            -4.0,
+            -12.0,
+            24.0,
+            8.0,
+            24.0
+          ],
+          "uv": [
+            0.0,
+            39.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "tornado4",
+      "parent": "tornado3",
+      "pose": [
+        0.0,
+        -8.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -15.0,
+            -4.0,
+            -15.0,
+            30.0,
+            8.0,
+            30.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelGuster.java",
+  "sourceSha256": "57a13c68375e97f6ce6565bafc64dc887ba5ea218f52a13bff29481cb5f9e761",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "root",
+      "kind": "bob",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        1.0,
+        3.0
+      ],
+      "invert": false,
+      "phase": 0,
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "root",
+      "kind": "bob",
+      "speed": 0.1,
+      "degree": [
+        "*",
+        1.0,
+        3.0
+      ],
+      "invert": false,
+      "phase": 0,
+      "bias": 0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "eyes",
+      "kind": "bob",
+      "speed": 0.1,
+      "degree": [
+        "*",
+        1.0,
+        [
+          "*",
+          -1,
+          3.2
+        ]
+      ],
+      "invert": false,
+      "phase": 0,
+      "bias": 0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "tornado",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        1.0,
+        0.1
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "*",
+          -1,
+          2.0
+        ],
+        0.0
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "tornado2",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        1.0,
+        0.1
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "*",
+          -1,
+          2.0
+        ],
+        0.39269908169872414
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "tornado3",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        1.0,
+        0.1
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "*",
+          -1,
+          2.0
+        ],
+        0.7853981633974483
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "tornado4",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        1.0,
+        0.1
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "*",
+          -1,
+          2.0
+        ],
+        1.1780972450961724
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.tornado.rotationPointX = (float)((double)this.tornado.rotationPointX + Math.cos(ageInTicks * 0.7f) * 4.0);",
+      "reason": "Unsupported expression (this.tornado.rotationPointX + cos(ageInTicks * 0.7) * 4.0)"
+    },
+    {
+      "call": "this.tornado.rotationPointZ = (float)((double)this.tornado.rotationPointZ + Math.sin(ageInTicks * 0.7f) * 4.0);",
+      "reason": "Unsupported expression (this.tornado.rotationPointZ + sin(ageInTicks * 0.7) * 4.0)"
+    },
+    {
+      "call": "this.tornado.rotationPointX = (float)((double)this.tornado.rotationPointX + (Math.cos(ageInTicks * 0.3f) * 2.0 - (double)this.tornado.rotationPointX));",
+      "reason": "Unsupported expression (this.tornado.rotationPointX + (cos(ageInTicks * 0.3) * 2.0 - this.tornado.rotationPointX))"
+    },
+    {
+      "call": "this.tornado.rotationPointZ = (float)((double)this.tornado.rotationPointZ + (Math.sin(ageInTicks * 0.3f) * 2.0 - (double)this.tornado.rotationPointZ));",
+      "reason": "Unsupported expression (this.tornado.rotationPointZ + (sin(ageInTicks * 0.3) * 2.0 - this.tornado.rotationPointZ))"
+    },
+    {
+      "call": "this.tornadomid.rotateAngleZ = (float)((double)this.tornadomid.rotateAngleZ + Math.sin(ageInTicks * 0.2f) * 0.1);",
+      "reason": "Unsupported expression (this.tornadomid.rotateAngleZ + sin(ageInTicks * 0.2) * 0.1)"
+    },
+    {
+      "call": "this.tornado2.rotateAngleY -= this.tornado.rotateAngleY + ageInTicks * 0.3f;",
+      "reason": "Unsupported expression this.tornado.rotateAngleY + ageInTicks * 0.3"
+    },
+    {
+      "call": "this.tornado3.rotateAngleY -= this.tornado.rotateAngleY + this.tornado2.rotateAngleY + ageInTicks * 0.2f;",
+      "reason": "Unsupported expression this.tornado.rotateAngleY + this.tornado2.rotateAngleY + ageInTicks * 0.2"
+    },
+    {
+      "call": "this.tornado4.rotateAngleY -= this.tornado.rotateAngleY + this.tornado2.rotateAngleY + this.tornado3.rotateAngleY + ageInTicks * 0.34f;",
+      "reason": "Unsupported expression this.tornado.rotateAngleY + this.tornado2.rotateAngleY + this.tornado3.rotateAngleY + ageInTicks * 0.34"
+    },
+    {
+      "call": "this.eyes.rotationPointZ = (float)((double)this.eyes.rotationPointZ - (2.0 + Math.cos(this.tornado3.rotateAngleY)));",
+      "reason": "Unsupported expression (this.eyes.rotationPointZ - (2.0 + cos(this.tornado3.rotateAngleY)))"
+    }
+  ],
+  "expressions": [
+    {
+      "bone": "eyes",
+      "target": "yRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          "yaw",
+          0.5
+        ],
+        [
+          "/",
+          3.141592653589793,
+          180
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "eyes",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          "pitch",
+          0.8
+        ],
+        [
+          "/",
+          3.141592653589793,
+          180
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "tornado",
+      "target": "yRot",
+      "op": "-=",
+      "value": [
+        "*",
+        "age",
+        1.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "tornadomid",
+      "target": "yRot",
+      "op": "+=",
+      "value": [
+        "*",
+        "age",
+        0.5
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

@@ -1,0 +1,34 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IAI",
+    "CBC",
+    "SSS"
+  ],
+  "key": {
+    "I": "jugcraft:porcelain_insulator",
+    "A": "jugcraft:aluminum_cable",
+    "C": "minecraft:copper_block",
+    "B": "#c:storage_blocks/steel",
+    "S": "#c:plates/steel"
+  },
+  "result": {
+    "id": "jugcraft:main_transformer",
+    "count": 1
+  }
+}

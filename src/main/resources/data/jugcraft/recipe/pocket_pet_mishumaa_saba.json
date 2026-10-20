@@ -1,0 +1,25 @@
+{
+  "result": {
+    "id": "jugcraft:pocket_pet_mishumaa_saba"
+  },
+  "pattern": [
+    "TFT",
+    "ODO",
+    "UGU"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "T": "jugcraft:pocket_nugget_emerald",
+    "D": "minecraft:diamond",
+    "U": "minecraft:redstone",
+    "F": "minecraft:gold_nugget",
+    "G": "minecraft:gold_ingot",
+    "O": "jugcraft:pocket_nugget_coal"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

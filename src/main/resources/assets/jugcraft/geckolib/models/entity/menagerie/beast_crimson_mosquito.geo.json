@@ -1,0 +1,137 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.beast_crimson_mosquito",
+        "texture_width": 128,
+        "texture_height": 128,
+        "visible_bounds_width": 4,
+        "visible_bounds_height": 4,
+        "visible_bounds_offset": [
+          0,
+          0.55,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "body",
+          "parent": "root",
+          "pivot": [
+            0.0,
+            8.8,
+            0.0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -5.04,
+                0,
+                -7.2
+              ],
+              "size": [
+                10.08,
+                8.8,
+                14.4
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "head",
+          "parent": "root",
+          "pivot": [
+            0.0,
+            12.32,
+            -6.48
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -3.6,
+                7.040000000000001,
+                -10.08
+              ],
+              "size": [
+                7.2,
+                5.28,
+                7.2
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "wing_-1",
+          "parent": "root",
+          "pivot": [
+            -4.32,
+            4.4,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -15.840000000000002,
+                4.4,
+                -5.04
+              ],
+              "size": [
+                11.520000000000001,
+                1.056,
+                11.520000000000001
+              ],
+              "uv": [
+                0,
+                64.0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "wing_1",
+          "parent": "root",
+          "pivot": [
+            4.32,
+            4.4,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                4.32,
+                4.4,
+                -5.04
+              ],
+              "size": [
+                11.520000000000001,
+                1.056,
+                11.520000000000001
+              ],
+              "uv": [
+                0,
+                64.0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

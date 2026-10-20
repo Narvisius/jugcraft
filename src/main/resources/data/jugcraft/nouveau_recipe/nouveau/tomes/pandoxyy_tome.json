@@ -1,0 +1,95 @@
+{
+  "type": "caster_tome",
+  "color": {
+    "b": 239,
+    "g": 220,
+    "id": "jugcraft:nouveau_constant",
+    "r": 178
+  },
+  "flavour_text": "First you're airborne. Then you're dizzy. Then you're somewhere else. By the time you figure out what happened, it's already happening again.",
+  "name": "Pandoxyy's Spin Cycle",
+  "sound": {
+    "pitch": 1.2,
+    "sound": {
+      "id": "jugcraft:nouveau_puffer_fish_blow_up"
+    }
+  },
+  "spell": [
+    "jugcraft:nouveau_glyph_self",
+    "jugcraft:nouveau_glyph_orbit",
+    "jugcraft:nouveau_glyph_wind_burst",
+    "jugcraft:nouveau_glyph_orbit",
+    "jugcraft:nouveau_glyph_split",
+    "jugcraft:nouveau_glyph_split",
+    "jugcraft:nouveau_glyph_orbit",
+    "jugcraft:nouveau_glyph_rotate",
+    "jugcraft:nouveau_glyph_sensitive",
+    "jugcraft:nouveau_glyph_exchange"
+  ],
+  "spellData": {
+    "color": {
+      "b": 239,
+      "g": 220,
+      "id": "jugcraft:nouveau_constant",
+      "r": 178
+    },
+    "name": "Pandoxyy's Spin Cycle",
+    "particleTimeline": {
+      "jugcraft:nouveau_self": {
+        "type": "jugcraft:nouveau_self",
+        "onResolvingEffect": {
+          "motion": {
+            "type": "jugcraft:nouveau_burst",
+            "propMap": {}
+          },
+          "particleOptions": {
+            "type": "jugcraft:nouveau_new_glow",
+            "properties": {
+              "jugcraft:nouveau_density": {
+                "density": 5,
+                "radius": 0.10000000149011612,
+                "spawnType": "SPHERE"
+              },
+              "jugcraft:nouveau_particle_type": {
+                "particleType": "jugcraft:nouveau_new_glow",
+                "subProperties": {
+                  "jugcraft:nouveau_color": {
+                    "particleColor": {
+                      "b": 239,
+                      "g": 220,
+                      "id": "jugcraft:nouveau_constant",
+                      "r": 178
+                    },
+                    "tintDisabled": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "resolveSound": {
+          "sound": {}
+        }
+      }
+    },
+    "recipe": [
+      "jugcraft:nouveau_glyph_self",
+      "jugcraft:nouveau_glyph_orbit",
+      "jugcraft:nouveau_glyph_wind_burst",
+      "jugcraft:nouveau_glyph_orbit",
+      "jugcraft:nouveau_glyph_split",
+      "jugcraft:nouveau_glyph_split",
+      "jugcraft:nouveau_glyph_orbit",
+      "jugcraft:nouveau_glyph_rotate",
+      "jugcraft:nouveau_glyph_sensitive",
+      "jugcraft:nouveau_glyph_exchange"
+    ],
+    "sound": {
+      "pitch": 1.2,
+      "sound": {
+        "id": "jugcraft:nouveau_puffer_fish_blow_up"
+      }
+    }
+  },
+  "tome_type": "jugcraft:nouveau_caster_tome"
+}

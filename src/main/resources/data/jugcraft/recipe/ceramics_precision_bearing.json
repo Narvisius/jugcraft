@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:precision_shaft",
+    "#c:plates/steel",
+    "jugcraft:ceramic_bearing_set"
+  ],
+  "result": {
+    "id": "jugcraft:precision_bearing",
+    "count": 1
+  }
+}

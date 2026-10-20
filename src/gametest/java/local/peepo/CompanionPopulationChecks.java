@@ -74,8 +74,11 @@ final class CompanionPopulationChecks {
             ticks(server,3);
             server.runOnServer(s->{var job=new CompanionHusbandry(npc,npc.assignments.get(1)).slaughter;check.accept(job.find() && job.claim(npc),"first worker reserves one surplus adult");reserved=job;});
             ticks(server,2);
-            server.runOnServer(s->{var job=new CompanionHusbandry(other,other.assignments.get(1)).slaughter;check.accept(!job.find(),"other worker cannot reduce adults below the retention limit");reserved.release(npc);reserved=null;other.discard();
-                clearAnimals(s.overworld());tasks(npc,AnimalCareZone.BREED);npc.assignments.population(1,COW,3,2,false);supply.setItem(0,new ItemStack(Items.WHEAT,4));
+            server.runOnServer(s->{var job=new CompanionHusbandry(other,other.assignments.get(1)).slaughter;check.accept(!job.find(),"other worker cannot reduce adults below the retention limit");reserved.release(npc);reserved=null;other.discard();});
+            preciseTurkeyApproach(server);
+            server.runOnServer(s->{
+                clearAnimals(s.overworld());tasks(npc,AnimalCareZone.BREED);npc.assignments.population(1,TURKEY,3,2,true);npc.assignments.population(1,COW,3,2,false);supply.setItem(0,new ItemStack(Items.WHEAT,4));
+                for(int i=0;i<8;i++)npc.belongings.setItem(i,ItemStack.EMPTY);
                 add(s.overworld(),EntityTypes.COW.create(s.overworld(),EntitySpawnReason.COMMAND),3.5,2.5);add(s.overworld(),EntityTypes.COW.create(s.overworld(),EntitySpawnReason.COMMAND),5.5,3.5);npc.setNoAi(false);
             });
             try{server.waitFor(s->animals(s.overworld(),COW).stream().anyMatch(Animal::isBaby),1400);}catch(AssertionError e){diagnostic(server,"cow breeding");throw e;}
@@ -115,5 +118,56 @@ final class CompanionPopulationChecks {
             server.runOnServer(s->{var p=s.getPlayerList().getPlayers().getFirst();var m=(CompanionMenu)p.containerMenu;check.accept(!m.editPopulation(p,new PopulationEditPayload(m.containerId+1,1,base.below(),2,COW)),"forged menu cannot remove a species");check.accept(npc.assignments.get(1).zone().population(COW).target()==11,"population controls synchronize through the open menu");p.closeContainer();p.setGameMode(GameType.SPECTATOR);});
         }finally{server.runOnServer(s->{if(reserved!=null)reserved.release(npc);if(npc!=null)clearAnimals(s.overworld());for(var e:created){if(e instanceof PeepoEntity p){p.resetCompanionRoutine();p.transport.stop();}e.discard();}var p=s.getPlayerList().getPlayers().getFirst();p.closeContainer();p.setGameMode(GameType.SPECTATOR);});}
     }
-    void diagnostic(TestServerContext server,String phase){server.runOnServer(s->org.slf4j.LoggerFactory.getLogger("peepo-population-test").error("{}: routine={}, transport={}, status={}, pos={}, hand={}, food={}, seeds={}, supply={}, animals={}, beef={}, wear={}",phase,npc.routineStatus(),npc.transport.activity(),CompanionStatus.from(npc.report.row(1)),npc.position(),npc.assignedHand(),count(npc.belongings,Items.WHEAT),count(npc.belongings,Items.WHEAT_SEEDS),count(supply,Items.WHEAT)+count(supply,Items.WHEAT_SEEDS),animals(s.overworld(),COW).stream().map(a->a.getHealth()+":"+a.position()+":age="+a.getAge()+(a.isInLove()?":in love":"")).toList(),count(output,Items.BEEF),npc.assignedHand().getDamageValue()));}
+    void preciseTurkeyApproach(TestServerContext server){
+        server.runOnServer(s->{
+            clearAnimals(s.overworld());npc.resetCompanionRoutine();tasks(npc,AnimalCareZone.BREED);
+            npc.assignments.population(1,COW,3,2,true);npc.assignments.population(1,TURKEY,3,2,false);
+            supply.clearContent();npc.belongings.setItem(0,new ItemStack(Items.WHEAT_SEEDS,4));
+            // Keep the parents still until fed so the fractional-block arrival gap is deterministic.
+            // Their normal mating AI is restored below; the original free-roaming test still follows.
+            var first=add(s.overworld(),JugcraftAgriculture.TURKEY.create(s.overworld(),EntitySpawnReason.COMMAND),2.5,3.1);first.setNoAi(true);
+            var second=add(s.overworld(),JugcraftAgriculture.TURKEY.create(s.overworld(),EntitySpawnReason.COMMAND),1.5,5.5);second.setNoAi(true);
+            npc.snapTo(base.getX()+4.04,base.getY(),base.getZ()+3.2,0,0);
+            var approach=CompanionLivestock.standing(npc,npc.assignments.get(1),first);
+            check.accept(approach!=null && npc.position().distanceToSqr(approach)>.64,"fractional turkey approach starts outside interaction arrival range");
+            var center=net.minecraft.world.phys.Vec3.atBottomCenterOf(BlockPos.containing(approach));
+            check.accept(Math.abs(npc.getX()-center.x)<.555 && Math.abs(npc.getZ()-center.z)<.555,"vanilla waypoint tolerance already considers the approach block reached");
+            // This synthetic pose is placed directly on the stone floor; establish its contact state too.
+            npc.setOnGround(false);
+            check.accept(!CompanionNavigation.canFinishApproach(npc,approach),"final approach requires ground contact");
+            npc.setOnGround(true);
+            check.accept(CompanionNavigation.canFinishApproach(npc,approach),"clear supported final approach is allowed: pos="+npc.position()+", target="+approach+", collision="+!s.overworld().noCollision(npc,npc.getBoundingBox().expandTowards(approach.subtract(npc.position())).deflate(1.0e-5)));
+            var obstacle=BlockPos.containing(approach);
+            s.overworld().setBlockAndUpdate(obstacle,Blocks.STONE.defaultBlockState());
+            check.accept(!CompanionNavigation.canFinishApproach(npc,approach),"final approach cannot pass through solid blocks");
+            s.overworld().setBlockAndUpdate(obstacle,Blocks.OAK_FENCE_GATE.defaultBlockState());
+            check.accept(!CompanionNavigation.canFinishApproach(npc,approach),"final approach cannot bypass a closed gate");
+            s.overworld().setBlockAndUpdate(obstacle,Blocks.AIR.defaultBlockState());
+            s.overworld().setBlockAndUpdate(obstacle.below(),Blocks.AIR.defaultBlockState());
+            check.accept(!CompanionNavigation.canFinishApproach(npc,approach),"final approach cannot cross missing footing");
+            s.overworld().setBlockAndUpdate(obstacle.below(),Blocks.MAGMA_BLOCK.defaultBlockState());
+            check.accept(!CompanionNavigation.canFinishApproach(npc,approach),"final approach cannot cross a harmful floor");
+            s.overworld().setBlockAndUpdate(obstacle.below(),Blocks.STONE.defaultBlockState());
+            check.accept(!CompanionNavigation.canFinishApproach(npc,approach.add(-3,0,0))
+                && !CompanionNavigation.canFinishApproach(npc,approach.add(0,1,0)),"final approach is limited to a short level step");
+            npc.setNoAi(false);
+        });
+        try{server.waitFor(s->animals(s.overworld(),TURKEY).stream().filter(Animal::isInLove).count()==2,400);}catch(AssertionError e){diagnostic(server,"fractional turkey approach");throw e;}
+        server.runOnServer(s->{
+            check.accept(count(npc.belongings,Items.WHEAT_SEEDS)==2,"precise approach feeds both parents using exactly two seeds");
+            for(var a:animals(s.overworld(),TURKEY))a.setNoAi(false);
+        });
+        server.waitFor(s->animals(s.overworld(),TURKEY).stream().anyMatch(Animal::isBaby),300);
+        server.runOnServer(s->{
+            check.accept(animals(s.overworld(),TURKEY).size()==3,"precise approach still produces a normal turkey offspring");
+            npc.setNoAi(true);npc.resetCompanionRoutine();
+        });
+    }
+    void diagnostic(TestServerContext server,String phase){server.runOnServer(s->{
+        var job=npc.livestock.job(base.below());
+        var path=npc.getNavigation().getPath();
+        org.slf4j.LoggerFactory.getLogger("peepo-population-test").error("path={}, next={}, workAnimal={}",path,path==null||path.isDone()?null:path.getNextEntityPos(npc),npc.workAnimal());
+        org.slf4j.LoggerFactory.getLogger("peepo-population-test").error("{}: routine={}, transport={}, status={}, pos={}, approach={}, navigationDone={}, hand={}, food={}, seeds={}, supply={}, animals={}, beef={}, wear={}",phase,npc.routineStatus(),npc.transport.activity(),CompanionStatus.from(npc.report.row(1)),npc.position(),job==null?null:job.approachPosition(),npc.getNavigation().isDone(),npc.assignedHand(),count(npc.belongings,Items.WHEAT),count(npc.belongings,Items.WHEAT_SEEDS),count(supply,Items.WHEAT)+count(supply,Items.WHEAT_SEEDS),
+            s.overworld().getEntitiesOfClass(Animal.class,npc.assignments.get(1).animalBox()).stream().map(a->BuiltInRegistries.ENTITY_TYPE.getKey(a.getType())+":"+a.getHealth()+":"+a.position()+":age="+a.getAge()+(a.isInLove()?":in love":"")).toList(),count(output,Items.BEEF),npc.assignedHand().getDamageValue());
+    });}
 }

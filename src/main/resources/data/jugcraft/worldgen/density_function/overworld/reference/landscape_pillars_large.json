@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:range_choice",
+  "input": "jugcraft:overworld/reference/landscape_pillars_large_base",
+  "min_inclusive": -1000000,
+  "max_exclusive": 0.01,
+  "when_in_range": 0.0,
+  "when_out_of_range": {
+    "type": "minecraft:mul",
+    "left": 1.0,
+    "right": "jugcraft:overworld/reference/landscape_pillars_large_base"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "nickel"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SFL",
+    "VCQ",
+    "MKM"
+  ],
+  "key": {
+    "S": "jugcraft:ptfe_seal",
+    "F": "jugcraft:ptfe_fitting",
+    "L": "jugcraft:ptfe_liner",
+    "V": "jugcraft:stainless_vessel",
+    "C": "jugcraft:basic_circuit",
+    "Q": "jugcraft:precision_stainless_valve",
+    "M": "jugcraft:electric_motor",
+    "K": "jugcraft:machine_casing"
+  },
+  "result": {
+    "id": "jugcraft:lined_fluorochemical_reactor",
+    "count": 1
+  }
+}

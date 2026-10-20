@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "nickel"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PAP",
+    "PAP"
+  ],
+  "key": {
+    "P": "#c:plates/stainless_steel",
+    "A": "jugcraft:alumina_plate"
+  },
+  "result": {
+    "id": "jugcraft:stainless_vessel",
+    "count": 1
+  }
+}

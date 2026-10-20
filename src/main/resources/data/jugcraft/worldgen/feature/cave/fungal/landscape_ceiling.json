@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:vegetation_patch",
+  "surface": "ceiling",
+  "depth": {
+    "type": "minecraft:biased_to_bottom",
+    "min_inclusive": 2,
+    "max_inclusive": 4
+  },
+  "vertical_range": 3,
+  "extra_bottom_block_chance": 0.01,
+  "extra_edge_column_chance": 0.5,
+  "vegetation_chance": 0.01,
+  "xz_radius": 5,
+  "replaceable": "#minecraft:lush_ground_replaceable",
+  "ground_state": "jugcraft:landscape_fungal_cave_patch",
+  "vegetation_feature": {
+    "feature": "jugcraft:cave/fungal/landscape_hanging_roots",
+    "placement": []
+  }
+}

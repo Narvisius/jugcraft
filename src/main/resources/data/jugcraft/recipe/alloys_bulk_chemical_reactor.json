@@ -1,0 +1,35 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "nickel"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "VFV",
+    "MCM",
+    "PKP"
+  ],
+  "key": {
+    "V": "jugcraft:stainless_vessel",
+    "F": "jugcraft:precision_stainless_valve",
+    "M": "jugcraft:electric_motor",
+    "C": "jugcraft:basic_circuit",
+    "P": "#c:plates/steel",
+    "K": "jugcraft:machine_casing"
+  },
+  "result": {
+    "id": "jugcraft:bulk_chemical_reactor",
+    "count": 1
+  }
+}

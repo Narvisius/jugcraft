@@ -1,0 +1,19 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "phosphate"
+    }
+  ],
+  "type": "jugcraft:pulverizing",
+  "ingredient": "jugcraft:phosphate",
+  "result": {
+    "id": "jugcraft:ground_phosphate",
+    "count": 1
+  },
+  "time": 160
+}

@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "name": "cosmic_cod",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:beast_cosmic_cod",
+          "modifier": [
+            {
+              "count": 1,
+              "type": "minecraft:set_count"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "cosmic_cod_bm",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:bone_meal"
+        }
+      ],
+      "condition": {
+        "chance": 0.05,
+        "type": "minecraft:random_chance"
+      }
+    }
+  ]
+}

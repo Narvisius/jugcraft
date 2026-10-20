@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    " H ",
+    "AAA"
+  ],
+  "key": {
+    "A": "jugcraft:cavern_azure_neodymium_ingot",
+    "H": "jugcraft:cavern_heart_of_iron",
+    "S": "jugcraft:cavern_scarlet_neodymium_ingot"
+  },
+  "result": {
+    "id": "jugcraft:cavern_resistor_shield"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

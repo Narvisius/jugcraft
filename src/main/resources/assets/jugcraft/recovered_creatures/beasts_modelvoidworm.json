@@ -1,0 +1,489 @@
+{
+  "textureSize": [
+    256,
+    256
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "neck",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -10.0,
+        20.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -10.0,
+            -10.0,
+            -28.0,
+            20.0,
+            20.0,
+            28.0
+          ],
+          "uv": [
+            0.0,
+            53.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "topfrills_left",
+      "parent": "neck",
+      "pose": [
+        10.0,
+        -10.0,
+        -20.0,
+        0.0,
+        0.0,
+        0.7854
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -9.0,
+            -7.0,
+            0.0,
+            9.0,
+            26.0
+          ],
+          "uv": [
+            71.0,
+            76.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "topfrills_right",
+      "parent": "neck",
+      "pose": [
+        -10.0,
+        -10.0,
+        -20.0,
+        0.0,
+        0.0,
+        -0.7854
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -9.0,
+            -7.0,
+            0.0,
+            9.0,
+            26.0
+          ],
+          "uv": [
+            71.0,
+            76.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "bottomfrills_left",
+      "parent": "neck",
+      "pose": [
+        10.0,
+        10.0,
+        -20.0,
+        0.0,
+        0.0,
+        2.3562
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -9.0,
+            -7.0,
+            0.0,
+            9.0,
+            26.0
+          ],
+          "uv": [
+            71.0,
+            76.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "bottomfrills_right",
+      "parent": "neck",
+      "pose": [
+        -10.0,
+        10.0,
+        -20.0,
+        0.0,
+        0.0,
+        -2.3562
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -9.0,
+            -7.0,
+            0.0,
+            9.0,
+            26.0
+          ],
+          "uv": [
+            71.0,
+            76.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "head",
+      "parent": "neck",
+      "pose": [
+        0.0,
+        0.0,
+        -28.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -17.0,
+            -17.0,
+            -18.0,
+            34.0,
+            34.0,
+            18.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            17.0,
+            -5.0,
+            -14.0,
+            2.0,
+            10.0,
+            10.0
+          ],
+          "uv": [
+            25.0,
+            102.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -19.0,
+            -5.0,
+            -14.0,
+            2.0,
+            10.0,
+            10.0
+          ],
+          "uv": [
+            0.0,
+            102.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "eye_bottom_r1",
+      "parent": "head",
+      "pose": [
+        0.0,
+        18.0,
+        -9.0,
+        0.0,
+        0.0,
+        1.5708
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -5.0,
+            -5.0,
+            2.0,
+            10.0,
+            10.0
+          ],
+          "uv": [
+            0.0,
+            53.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "eye_top_r1",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -18.0,
+        -9.0,
+        0.0,
+        0.0,
+        1.5708
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -5.0,
+            -5.0,
+            2.0,
+            10.0,
+            10.0
+          ],
+          "uv": [
+            69.0,
+            54.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "topjaw",
+      "parent": "head",
+      "pose": [
+        0.0,
+        3.0,
+        -18.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -10.0,
+            -16.0,
+            10.0,
+            10.0,
+            16.0
+          ],
+          "uv": [
+            98.0,
+            64.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "bottomjaw",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -3.0,
+        -17.9,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            0.0,
+            -16.0,
+            10.0,
+            10.0,
+            16.0
+          ],
+          "uv": [
+            89.0,
+            37.0
+          ],
+          "inflate": [
+            -0.1,
+            -0.1,
+            -0.1
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelVoidWorm.java",
+  "sourceSha256": "c2b1f738c270ab4181ad22838a3f0e4f3a00efadbbce5855d122233b1446dfea",
+  "animationRoot": "root",
+  "headLook": "head",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.neck.rotateAngleZ += yawAmount;",
+      "reason": "Unbound expression variable yawAmount"
+    }
+  ],
+  "expressions": [
+    {
+      "bone": "root",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        "pitch",
+        [
+          "/",
+          3.141592653589793,
+          180
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "root",
+      "target": "y",
+      "op": "+=",
+      "value": [
+        "-",
+        [
+          "*",
+          -1,
+          3.0
+        ],
+        [
+          "*",
+          [
+            "max",
+            [
+              "*",
+              -1,
+              10.0
+            ],
+            [
+              "min",
+              [
+                "*",
+                "pitch",
+                [
+                  "*",
+                  -1,
+                  0.125
+                ]
+              ],
+              10.0
+            ]
+          ],
+          0.3
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "root",
+      "target": "z",
+      "op": "+=",
+      "value": [
+        "+",
+        [
+          "*",
+          -1,
+          15.0
+        ],
+        [
+          "*",
+          "move",
+          10.0
+        ]
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

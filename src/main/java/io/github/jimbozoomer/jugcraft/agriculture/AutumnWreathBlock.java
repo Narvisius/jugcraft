@@ -4,6 +4,7 @@ import java.util.Locale;
 import java.util.Map;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
@@ -20,6 +21,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
@@ -102,7 +104,31 @@ public class AutumnWreathBlock extends Block {
 	@Override
 	protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction direction,
 			BlockPos neighborPos, BlockState neighbor, RandomSource random) {
-		return direction == state.getValue(FACING).getOpposite() && !state.canSurvive(level, pos) ? Blocks.AIR.defaultBlockState() : state;
+		if (direction == state.getValue(FACING).getOpposite()) {
+			if (!state.canSurvive(level, pos)) return Blocks.AIR.defaultBlockState();
+			if (neighbor.getBlock() instanceof DoorBlock) ticks.scheduleTick(pos, this, 1);
+		}
+		return state;
+	}
+
+	@Override
+	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+		super.onPlace(state, level, pos, oldState, movedByPiston);
+		if (!level.isClientSide() && level.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).getBlock() instanceof DoorBlock)
+			level.scheduleTick(pos, this, 1);
+	}
+
+	/** Convert a previously saved block attachment without moving it through or replacing other blocks. */
+	@Override
+	protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+		Direction face = state.getValue(FACING);
+		BlockPos support = pos.relative(face.getOpposite());
+		BlockState door = level.getBlockState(support);
+		if (!(door.getBlock() instanceof DoorBlock)) return;
+		// A door update may have arrived before migration: infer the old physical face from the old axis.
+		BlockState before = DoorWreath.frontFace(door).getAxis() == face.getAxis() ? door : door.cycle(DoorBlock.OPEN);
+		if (DoorWreath.attach(level, support, face == DoorWreath.frontFace(before), state) != null) level.removeBlock(pos, false);
+		else level.destroyBlock(pos, true);
 	}
 
 	/** A mum of another colour swaps the wreath's flowers for its own. */

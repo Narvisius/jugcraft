@@ -1,0 +1,26 @@
+{
+  "type": "jugcraft:household_construction",
+  "ingredients": [
+    {
+      "count": 2,
+      "ingredient": "minecraft:iron_ingot"
+    },
+    {
+      "count": 3,
+      "ingredient": "minecraft:redstone"
+    },
+    {
+      "count": 4,
+      "ingredient": "minecraft:glowstone_dust"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:household_light_ceiling_light"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

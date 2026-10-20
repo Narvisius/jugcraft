@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:household_construction",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:pale_oak_leaves",
+      "count": 4
+    },
+    {
+      "ingredient": "minecraft:stick",
+      "count": 2
+    }
+  ],
+  "result": {
+    "id": "jugcraft:household_pale_oak_hedge"
+  }
+}

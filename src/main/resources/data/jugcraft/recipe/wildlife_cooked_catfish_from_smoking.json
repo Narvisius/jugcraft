@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smoking",
+  "ingredient": "jugcraft:wildlife_catfish",
+  "result": {
+    "id": "jugcraft:wildlife_cooked_catfish"
+  },
+  "experience": 0.35,
+  "cookingtime": 100,
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

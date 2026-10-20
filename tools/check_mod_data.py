@@ -8,6 +8,7 @@ import hashlib
 import json
 import re
 import sys
+from functools import cache
 from pathlib import Path
 
 from PIL import Image
@@ -93,6 +94,7 @@ import styx
 import town_assets
 import graveyard as gy
 import diagonal_connections as dg
+import menagerie_registry as menagerie
 
 ROOT = Path(__file__).resolve().parents[1]
 RES = ROOT / "src" / "main" / "resources"
@@ -110,7 +112,7 @@ WORLD_JAVA = JAVA_ROOT / "world"
 STYLE_PACK = RES / "resourcepacks" / "alternate_machines"
 
 # Tags that Jugcraft reads but that vanilla/Fabric API define.
-EXTERNAL_TAGS = ({"c:ingots/copper", "c:ingots/iron", "minecraft:stone_ore_replaceables",
+EXTERNAL_TAGS = ({"minecraft:substrate_overworld","minecraft:boat","c:ingots/copper", "c:ingots/iron", "minecraft:stone_ore_replaceables",
                   "minecraft:deepslate_ore_replaceables", "minecraft:planks", "minecraft:campfires", "minecraft:mineable/axe",
                   "minecraft:mineable/shovel", "minecraft:leaves", "minecraft:eggs", "minecraft:dirt", "minecraft:mud",
                   "minecraft:grass_blocks", "minecraft:sand", "minecraft:wool", "minecraft:logs", "minecraft:candles",
@@ -126,6 +128,10 @@ EXTERNAL_TAGS = ({"c:ingots/copper", "c:ingots/iron", "minecraft:stone_ore_repla
                   # ground (tools/gear.py EARTHEN_GROUND).
                   "minecraft:base_stone_overworld", "minecraft:base_stone_nether", "minecraft:nylium"}
                  | {f"minecraft:{tag}" for tag in WOODS.values()})
+
+# Verified against the pinned 26.3 vanilla registry data.
+EXTERNAL_TAGS |= {'minecraft:'+tag for tag in ('terracotta','beehives','coral_blocks','ice',
+    'soul_fire_base_blocks','anvil','supports_vegetation','air','skeletons','zombies','illager','fishes')}
 
 errors = []
 
@@ -152,6 +158,7 @@ def tag_exists(registry, ref):
     return ref in EXTERNAL_TAGS or (DATA / ns / "tags" / registry / f"{path}.json").is_file()
 
 
+@cache
 def texture(ref):
     ns, path = split(ref)
     if ns == "minecraft":
@@ -160,7 +167,8 @@ def texture(ref):
     if not png.is_file():
         err(f"Missing texture {ref}")
         return
-    animated = png.with_name(png.name + ".mcmeta").is_file()
+    meta = png.with_name(png.name + ".mcmeta")
+    animated = meta.is_file() and "animation" in (load(meta) or {})
     with Image.open(png) as img:
         # Square: 16x16, or 32x32, 48x48 or 64x64 for high-resolution art, or 128x128 for a sculpted prop's packed texture
         # (docs/ART_DIRECTION.md, "High resolution"). New item icons are 16x16 (docs/ITEM_ICONS.md): 32, 48 and 64 remain
@@ -169,9 +177,13 @@ def texture(ref):
         # Animated textures are a vertical strip of square frames of 16x16, 32x32, 48x48 or 64x64 with an .mcmeta beside
         # them.
         width, height = img.size
+        if not animated and ref == "jugcraft:menagerie/rotten/block/treasure_chest" and img.size == (48, 32):
+            return  # Supplied chest atlas; its original block-model UVs are normalized to 0..16.
+        if not animated and ref.startswith(("jugcraft:household/", "jugcraft:menagerie/")) and all(v > 0 and v <= 1024 and v & (v-1) == 0 for v in img.size):
+            return  # supplied model atlases use rectangular UV sheets
         if animated and not (width in (16, 32, 48, 64) and height % width == 0 and height > width):
             err(f"Animated texture {ref} is {img.size}, expected a strip of 16x16, 32x32, 48x48 or 64x64 frames")
-        elif not animated and img.size not in ((16, 16), (32, 32), (48, 48), (64, 64), (128, 128)) \
+        elif not animated and not (ref in {"jugcraft:nouveau/entity/signs/archwood", "jugcraft:nouveau/entity/signs/hanging/archwood"} and img.size == (64,32)) and img.size not in ((16, 16), (32, 32), (48, 48), (64, 64), (128, 128)) \
                 and not (img.size in ((256, 256), (512, 512), (1024, 1024)) and _sharp(png.stem)):
             err(f"Texture {ref} is {img.size}, expected 16x16, 32x32, 48x48, 64x64 or 128x128")
 
@@ -181,8 +193,9 @@ def texture(ref):
 SPECIAL_ITEM_RENDERERS = {f"{MOD}:equipment", f"{MOD}:power_line", f"{MOD}:drone", "geckolib:geckolib"}
 
 
+@cache
 def model(ref):
-    ns, path = split(ref)
+    ns, path = split(ref if ":" in ref else "minecraft:" + ref)
     if ns == "minecraft":
         return
     data = load(RES / "assets" / ns / "models" / f"{path}.json")
@@ -190,7 +203,9 @@ def model(ref):
         return
     for tex in data.get("textures", {}).values():
         # A texture is a reference, or {"sprite": reference, "force_translucent": ...}.
-        texture(tex["sprite"] if isinstance(tex, dict) else tex)
+        ref = tex["sprite"] if isinstance(tex, dict) else tex
+        if not ref.startswith("#"):
+            texture(ref if ":" in ref else "minecraft:" + ref)
 
 
 def _sharp(name):
@@ -230,18 +245,21 @@ def item_models(definition):
 
 
 def check_assets(registered):
+    import vehicle_bays
     lang = load(ASSETS / "lang" / "en_us.json") or {}
     for block in (all_blocks() + machine_blocks() + ag.all_blocks() + petro.petro_blocks() + list(deposits.DEPOSITS)
                   + list(tank_display.BLOCKS) + plastic.blocks() + ph.blocks() + (town_assets.blocks() + styx.blocks()) + seasons.BLOCKS
                   + construction.blocks() + control_electronics.blocks() + rocketry.blocks() + dieselworks.blocks() + kaiserworks.blocks() + trenchworks.blocks() + fortifications.blocks() + bunkerworks.blocks() + fire_control.blocks()
-                  + concordance.blocks() + guns.blocks() + industrial_forms.blocks()):
+                  + concordance.blocks() + guns.blocks() + industrial_forms.blocks() + list(vehicle_bays.BLOCKS) + menagerie.blocks()):
         state = load(ASSETS / "blockstates" / f"{block}.json")
         if state:
             for variant in state.get("variants", {}).values():
                 for choice in variant if isinstance(variant, list) else [variant]:  # a list: weighted, picked by position
                     model(choice["model"])
             for part in state.get("multipart", []):
-                model(part["apply"]["model"])
+                applies = part["apply"]
+                for choice in applies if isinstance(applies, list) else [applies]:
+                    model(choice["model"])
         if f"block.{MOD}.{block}" not in lang:
             err(f"Missing name for block {block}")
         if not (DATA / MOD / "loot_table" / "blocks" / f"{block}.json").is_file():
@@ -249,7 +267,7 @@ def check_assets(registered):
     # Crops, stems, the cranberry bush and the chestnut sapling have no item of their own: what plants them stands in.
     import plant_interior
     for item in registered:
-        if item in CROPS or item in ag.itemless_blocks() or item in plant_interior.NO_ITEM:
+        if item in CROPS or item in ag.itemless_blocks() or item in plant_interior.NO_ITEM or item in menagerie.itemless_blocks():
             continue
         definition = load(ASSETS / "items" / f"{item}.json")
         if definition:
@@ -257,7 +275,7 @@ def check_assets(registered):
         if item not in (all_blocks() + machine_blocks() + ag.all_blocks() + petro.petro_blocks() + list(deposits.DEPOSITS)
                         + list(tank_display.BLOCKS) + plastic.blocks() + ph.blocks() + (town_assets.blocks() + styx.blocks())
                         + construction.blocks() + control_electronics.blocks() + rocketry.blocks() + dieselworks.blocks() + kaiserworks.blocks() + trenchworks.blocks() + fortifications.blocks() + bunkerworks.blocks() + fire_control.blocks()
-                        + concordance.blocks() + guns.blocks() + industrial_forms.blocks()) and f"item.{MOD}.{item}" not in lang:
+                        + concordance.blocks() + guns.blocks() + industrial_forms.blocks() + list(vehicle_bays.BLOCKS) + menagerie.blocks()) and f"item.{MOD}.{item}" not in lang:
             err(f"Missing name for item {item}")
 
 
@@ -268,7 +286,7 @@ def check_petro():
     expected = [(f, str(i["tick_delay"]), str(i["slope"]), str(i["drop_off"])) for f, i in petro.FLUIDS.items()]
     if declared != expected:
         err(f"PetroFluids.java fluids {declared} != tools/petro.py {expected}")
-    items_java = re.findall(r'JugcraftRegistry\.item\("([a-z_]+)"[,)]',
+    items_java = re.findall(r'JugcraftRegistry\.item\("([a-z0-9_]+)"[,)]',
                             (JAVA_ROOT / "chemistry" / "PetroItems.java").read_text(encoding="utf-8"))
     if items_java != list(petro.ITEMS):
         err(f"PetroItems.java items {items_java} != tools/petro.py {list(petro.ITEMS)}")
@@ -323,8 +341,19 @@ def old_loot_keys(node):
 
 
 def check_loot(registered):
+    def check_condition_type(node, label):
+        if isinstance(node, dict):
+            condition = node.get("condition")
+            if isinstance(condition, dict) and "type" not in condition:
+                err(f"{label}: loot condition object needs the 26.3 type discriminator")
+            for value in node.values():
+                check_condition_type(value, label)
+        elif isinstance(node, list):
+            for value in node:
+                check_condition_type(value, label)
     for path in sorted((DATA / MOD / "loot_table").rglob("*.json")):
         text = path.read_text(encoding="utf-8")
+        check_condition_type(load(path), path.name)
         stale = old_loot_keys(load(path))
         if stale:
             err(f"{path.name}: uses the pre-26.x loot keys {sorted(stale)}; use \"condition\" and \"modifier\"")
@@ -346,13 +375,26 @@ NON_METAL = set(guide_books.BOOKS) | {"sawdust"} | set(MINERALS) | set(ITEMS) | 
 
 def item_units(ref):
     """Returns {metal: units} for an item or tag reference."""
+    import vehicle_bays
     ns, path = split(ref.lstrip("#"))
+    if ns == MOD and path in vehicle_bays.BLOCKS:
+        return {}  # Like other assembled machines, bays have no ingot-recovery recipe.
+    # Animal products, cloth, stone, pet tokens and crafted equipment have no
+    # metal-recovery recipe. Acquiring them consumes inputs; none yields ingots.
+    if ns == MOD and path in menagerie.entries() or ref == '#c:eggs':
+        return {}
+    if ref.startswith('#') and ns == MOD and path.startswith(('cavern_','beast_','household_','ecology_','fauna_','mutant_','landscape_')):
+        tag = load(DATA / MOD / 'tags' / 'item' / (path+'.json')) or {}
+        values = [v if isinstance(v,str) else v['id'] for v in tag.get('values',[])]
+        # Ingredients select one member. Conservatively use the least valuable
+        # member; the tag/reference audit independently checks every member.
+        return min((item_units(v) for v in values),key=lambda units:sum(units.values()),default={})
     if ref.startswith("#") and (ns == "minecraft" or ref[1:] in (*ag.WOOD_TAGS.values(), ag.HEIRLOOM_TAG)):
         return {}  # vanilla tags used here (logs, planks), Jugcraft logs and heirloom pumpkins hold no metal
     if ref.startswith("#"):
         form, _, metal = path.partition("/")
         if metal in MINERALS or path in {info["tag"] for info in ITEMS.values()} \
-                or path in ("fermentable", "grave_flowers", "mourning_flowers", "werewolf_pelts") \
+                or path in ("fermentable", "grave_flowers", "mourning_flowers", "werewolf_pelts", "atmospheric_rocket_motors") \
                 or ns == MOD and form == "concordance":
             return {}  # ... and the Concordance's own item tags (luminous matter) and the werewolves' pelts hold no metal
         if form not in UNITS or not metal:
@@ -383,6 +425,8 @@ def item_units(ref):
         for metal in metals:
             if path == f"{metal}_{form}":
                 return {metal: PART_UNITS[form]}
+    if path in {"chromite_concentrate", "galena_concentrate", "magnesium_ingot", "cobalt_concentrate", "cobalt_ingot"}:
+        return {{"chromite_concentrate":"ferrochromium", "galena_concentrate":"lead", "magnesium_ingot":"magnesium", "cobalt_concentrate":"cobalt", "cobalt_ingot":"cobalt"}[path]:9}
     if path == "bauxite":
         # One bauxite holds two ingots of aluminum (it is about half alumina): the Bayer route (chemical reactor and
         # electrolytic cell) recovers all of it, the arc furnace stand-in half, the blast-furnace stand-in a nugget.
@@ -427,7 +471,18 @@ def item_units(ref):
 
 
 # Special recipes, which make their result from what is in the grid: their type, registered by Java.
-SPECIAL_RECIPES = {f"{MOD}:{decor18.KEY['recipe']}", f"{MOD}:gun_attachment", f"{MOD}:gun_attachment_removal"}
+SPECIAL_RECIPES = {f"{MOD}:{decor18.KEY['recipe']}", f"{MOD}:gun_attachment", f"{MOD}:gun_attachment_removal",
+                   f"{MOD}:household_door_mat_copy", f"{MOD}:beast_bison_upgrade", f"{MOD}:beast_mimicream_repair"}
+
+
+def ingredient_choices(value):
+    """26.3 ingredients may be one item/tag or a nonempty alternative list."""
+    if isinstance(value, str):
+        return [value]
+    if isinstance(value, list) and value and all(isinstance(v, str) for v in value):
+        return value
+    err(f"Invalid ingredient: {value!r}")
+    return []
 
 
 def check_recipes(registered):
@@ -475,7 +530,8 @@ def check_recipes(registered):
         else:
             inputs = [recipe["ingredient"]]
 
-        for ref in inputs:
+        choices = [ingredient_choices(value) for value in inputs]
+        for ref in (ref for options in choices for ref in options):
             if ref.startswith("#"):
                 if not tag_exists("item", ref[1:]):
                     err(f"{name}: unknown tag {ref}")
@@ -487,11 +543,14 @@ def check_recipes(registered):
             err(f"{name}: unknown result {result}")
         count = recipe["result"].get("count", 1)
 
-        total_in = sum(sum(item_units(ref).values()) for ref in inputs)
+        # Each slot consumes ONE alternative. Check its cheapest option so a
+        # richer alternate cannot conceal an ingot-duplication recipe.
+        total_in = sum(min((sum(item_units(ref).values()) for ref in options), default=0)
+                       for options in choices)
         out = {metal: units * count for metal, units in item_units(result).items()}
         if sum(out.values()) > total_in:
             err(f"{name}: creates metal ({total_in} units in, {sum(out.values())} out)")
-        if any(item_units(ref).keys() == {"bronze"} for ref in inputs) and set(out) - {"bronze"}:
+        if any(item_units(ref).keys() == {"bronze"} for options in choices for ref in options) and set(out) - {"bronze"}:
             err(f"{name}: turns bronze back into its ingredients")
 
 
@@ -539,7 +598,7 @@ def check_machine_recipe_files(registered):
 
 # Jugcraft entries of registries other than blocks and items that tags may name.
 # Vanilla 26.3's damage types that Jugcraft's damage type tags name (the electric harm the Grounding Strap halves).
-VANILLA_DAMAGE_TYPES = {"minecraft:lightning_bolt"}
+VANILLA_DAMAGE_TYPES = {"minecraft:lightning_bolt", "minecraft:thorns"}
 OTHER_ENTRIES = {"worldgen": {"pixel_hollows", al.BIOME, al.VILLAGE} | set(bm.BIOMES), "point_of_interest_type": {"arcade_cabinet"},
                  "villager_trade": {f"retro_trader/{name}" for name in ph.TRADES},
                  "spell": set(concordance.INVOCATIONS) | {"composed"}}
@@ -637,6 +696,7 @@ DIAGONAL_WALLS = {dg.DIAGONAL_WALL.format(name) for _, name in dg.all_walls()}
 
 
 def check_tags():
+    import vehicle_bays
     # Shared generation must retain both kitchen tools and combat equipment.
     from kitchen import KNIVES
     for tag in ("enchantable/melee_weapon", "enchantable/durability"):
@@ -655,6 +715,20 @@ def check_tags():
                                                     + field_chemistry.items() + construction.items() + construction.blocks() + gas_storage.items() + control_electronics.blocks() + control_electronics.items() + rocketry.items() + rocketry.blocks() + dieselworks.blocks() + kaiserworks.blocks() + trenchworks.blocks() + fortifications.blocks() + bunkerworks.blocks() + fire_control.blocks() + fire_control.items() + list(raiders.ITEMS) + list(raiders.BLOCKS) + list(armoured_walker.ITEMS) + list(howitzer_walker.ITEMS) + list(zeppelin.ITEMS) + list(mech.ITEMS) + list(landship.ITEMS) + list(artillery.ITEMS) + tower_guns.items()
                                                     + ag.all_blocks() + ag.all_items() + (town_assets.blocks() + styx.blocks())
                                                     + guns.items() + guns.blocks() + concordance.items() + concordance.blocks() + concordance.itemless_blocks())
+        import nouveau_content
+        known = set(known)
+        if registry in {'item', 'block'}: known.update(vehicle_bays.BLOCKS)
+        if registry in {'item','block'}:known.update(menagerie.entries())
+        if registry == 'entity_type':known.update(menagerie.entities())
+        if registry == 'mob_effect':known.add('wildlife_antivenom')
+        if registry == 'painting_variant':known.add('wildlife_bear_necessities')
+        if registry == 'block': known.update(e['id'] for e in nouveau_content.CATALOG['blocks'].values())
+        if registry in {'enchantment','banner_pattern','point_of_interest_type'} or registry == 'worldgen':
+            registry_path = '/'.join(path.relative_to(DATA).parts[2:4]) if registry == 'worldgen' else registry
+            known.update(p.relative_to(DATA/MOD/registry_path).as_posix().removesuffix('.json') for p in (DATA/MOD/registry_path).rglob('*.json'))
+        if registry == 'point_of_interest_type':known.add('nouveau_arcane_poi')
+        if registry == 'entity_type':known.update(nouveau_content.ENTITY_IDS)
+        if registry == 'mob_effect':known.update(nouveau_content.EFFECT_IDS)
         if registry == "entity_type":
             # These entity IDs have no same-named item. Derive them from actual registrations.
             scary = (JAVA_ROOT / "creatures" / "scary" / "ScaryMod.java").read_text(encoding="utf-8")
@@ -662,6 +736,8 @@ def check_tags():
         # A worldgen tag's registry is two folders deep (worldgen/biome): a tag it names lives beside it there.
         tag_registry = "/".join(path.relative_to(DATA).parts[2:4]) if registry == "worldgen" else registry
         for value in (load(path) or {}).get("values", []):
+            if isinstance(value, dict) and value.get('required') is False:
+                continue  # Compatibility entries are explicitly allowed to be absent.
             value = value["id"] if isinstance(value, dict) else value
             if value.startswith("#"):
                 if not tag_exists(tag_registry, value[1:]):
@@ -671,7 +747,7 @@ def check_tags():
                 if value not in VANILLA_DAMAGE_TYPES and not (DATA / ns / "damage_type" / f"{name}.json").is_file():
                     err(f"{path.relative_to(ROOT)}: unknown damage type {value}")
             elif registry == "fluid":
-                if split(value)[1] not in petro.fluid_ids():
+                if split(value)[1] not in set(petro.fluid_ids()) | menagerie.fluids():
                     err(f"{path.relative_to(ROOT)}: unknown fluid {value}")
             elif registry == "villager_trade":
                 namespace, trade = split(value)
@@ -682,15 +758,16 @@ def check_tags():
 
 
 def check_worldgen():
-    if (DATA / MOD / "worldgen" / "configured_feature").exists():
+    if any((DATA / MOD / "worldgen" / "configured_feature").rglob('*.json')):
         err("worldgen/configured_feature/ is the pre-26.x layout; Minecraft 26.3 reads worldgen/feature/")
     for path in sorted((DATA / MOD / "worldgen" / "feature").glob("*.json")):
         feature = load(path) or {}
         if "config" in feature:
             err(f"{path.name}: 26.x features have no \"config\" wrapper")
         for target in feature.get("targets", []):
-            block = split(target["state"])[1]
-            if block not in all_blocks() + ph.blocks():
+            state = target["state"]
+            namespace, block = split(state.get("id", "") if isinstance(state, dict) else state)
+            if namespace == MOD and block not in all_blocks() + ph.blocks() + menagerie.blocks():
                 err(f"{path.name}: places unknown block {block}")
     check_nested_features()
     for path in sorted((DATA / MOD / "worldgen" / "placed_feature").glob("*.json")):
@@ -2630,7 +2707,7 @@ def check_nested_features():
         elif kind == "minecraft:simple_random_selector" and isinstance(feature.get("features"), list):
             for entry in feature["features"]:
                 check(entry, where)
-        elif kind in ("minecraft:random_patch", "minecraft:root_system") and "feature" in feature:
+        elif kind in ("minecraft:random_patch", "jugcraft:owner_patch", "minecraft:root_system") and "feature" in feature:
             check(feature["feature"], where)
 
     for path in sorted((DATA / MOD / "worldgen" / "feature").glob("*.json")):
@@ -2762,7 +2839,7 @@ def check_biomes():
         tree = info.get("tree", info["wood"])
         if tree in ag.TREES and info["wood"] != ag.timber(tree):
             err(f"Tree shape {shape} timber {info['wood']} differs from {tree}'s {ag.timber(tree)}")
-        if (not vanilla and info["wood"] not in ag.WOOD_SETS) or (info["foliage"] and not tree.startswith("minecraft:") and tree not in ag.TREES):
+        if (not vanilla and info["wood"] not in ag.WOOD_SETS and ag.TREES.get(tree, {}).get("trunk_block", "").removeprefix("jugcraft:") not in ag.TREE_BLOCKS) or (info["foliage"] and not tree.startswith("minecraft:") and tree not in ag.TREES):
             err(f"Tree shape {shape} grows unknown wood or leaves ({info['wood']})")
             continue
         # Generated seasonal leaves need the decorator to start in today's look (world generation skips onPlace).
@@ -2813,8 +2890,8 @@ def check_wood_switches():
         for extra in info.get("extras", []):
             if "feature" in bm.EXTRAS.get(extra, {}):
                 placed_by(bm.EXTRAS[extra]["feature"], bm.FEATURE)
-    for key in ("larch", "spruce"):
-        placed_by(al.TREES[key], al.FEATURE)
+    for ref in [al.TREES["default"]] + [feature for feature, _ in al.TREES["picks"]]:
+        placed_by(ref, al.FEATURE)
     # Agriculture's wild patches (JugcraftAgriculture.registerWorldgen, under the agriculture switch): the wild chestnut
     # trees, and anything else a patch_<name> placed feature places. A patch placed anywhere else has no known switch.
     agriculture = (AGRICULTURE_JAVA / "JugcraftAgriculture.java").read_text(encoding="utf-8")
@@ -2886,8 +2963,8 @@ def check_alpine():
         err("The start search looks for alpine villages less far than for the biome (SPAWN in tools/alpine.py)")
     selector = load(folder / "feature" / f"{al.TREES['feature']}.json") or {}
     picks = {selector.get("default")} | {entry.get("feature") for entry in selector.get("features", [])}
-    if picks != {al.TREES["larch"], al.TREES["spruce"]}:
-        err(f"{al.TREES['feature']}.json should pick larches and spruces, found {sorted(map(str, picks))}")
+    if picks != {al.TREES["default"]} | {feature for feature, _ in al.TREES["picks"]}:
+        err(f"{al.TREES['feature']}.json should match the Alpine tree picks, found {sorted(map(str, picks))}")
     for placed in picks:
         ns, path = split(str(placed))
         if ns == MOD and not (folder / "placed_feature" / f"{path}.json").is_file():
@@ -3088,7 +3165,7 @@ def cheapest_electrolysis(fluid, _seen=None):
 
     A recipe that uses up items (coal, crops, waste) draws its energy partly from them, so it is not an electricity
     route, and neither is one using a fluid only such recipes make: a fuel with no other route is a primary fuel, never
-    an electricity loop. A fluid already being costed further up (a cycle) adds nothing."""
+    an electricity loop. A cyclic candidate is not a free feed: discard that candidate and look for an independently reachable producer."""
     import machines
     seen = (_seen or set()) | {fluid}
 
@@ -3096,7 +3173,9 @@ def cheapest_electrolysis(fluid, _seen=None):
         total = 0.0
         for source, mb in recipe.get("fluids", []):
             # Water and lava are free in the world, whatever else also gives some off.
-            if source not in seen and not source.startswith("minecraft:"):
+            if source in seen:
+                return None
+            if not source.startswith("minecraft:"):
                 cost = cheapest_electrolysis(source, seen)
                 if cost is None:
                     return None
@@ -3226,7 +3305,9 @@ def check_industrial_forms():
             source = recipe.get("source", 0)
             if source < 0 or (source and not recipe.get("items")):
                 err(f"{label}: fluid released from items needs a consumed solid feed")
-            if sum(r[1] for r in recipe.get("fluid_results", [])) > sum(mb for _, mb in recipe.get("fluids", [])) + source:
+            liquid_gases = {"jugcraft:liquid_oxygen", "jugcraft:liquid_methane", "jugcraft:liquid_hydrogen"}
+            volume = lambda fluid, mb: mb * (4 if fluid in liquid_gases else 1)
+            if sum(volume(r[0],r[1]) for r in recipe.get("fluid_results", [])) > sum(volume(f,mb) for f, mb in recipe.get("fluids", [])) + source:
                 err(f"{label}: makes more fluid than it takes")
             if recipe["ticks"] <= 0:
                 err(f"{label}: takes no time")
@@ -3470,8 +3551,17 @@ def check_advancements(registered):
     for path in sorted(folder.glob("*.json")):
         data = load(path)
         text = path.read_text(encoding="utf-8")
+        # Effect predicates are registry references, not inventory items.
+        import nouveau_content
+        effects = {split(effect)[1] for criterion in data.get("criteria", {}).values()
+                   if criterion.get("trigger") == "minecraft:effects_changed"
+                   for effect in criterion.get("conditions", {}).get("effects", {})
+                   if effect.startswith("jugcraft:")}
+        for effect in effects:
+            if effect not in nouveau_content.EFFECT_IDS:
+                err(f"advancement {path.stem}: unknown effect jugcraft:{effect}")
         for name in re.findall(r'"jugcraft:([a-z_]+)"', text):
-            if name not in registered and name not in names and not name.startswith("block/"):
+            if name not in registered and name not in names and name not in effects and not name.startswith("block/"):
                 err(f"advancement {path.stem}: unknown item jugcraft:{name}")
         if data["display"]["title"]["translate"] not in lang:
             err(f"advancement {path.stem}: untranslated title")
@@ -3693,6 +3783,22 @@ def check_agriculture():
         items[name] = ("seeds", int(n), float(sat), compost.lower(), crop)
     for name, compost in re.findall(r'\bplain\("([a-z_]+)", COMPOST_(\w+)\)', main):
         items[name] = ("plain", None, None, compost.lower(), None)
+    # Plain noncompostable ingredients (for example dragonblood resin) must still match the data exactly.
+    for name in re.findall(r'\bregisterItem\("([a-z_]+)", Item::new, new Item\.Properties\(\), \w+_TAB\)', main):
+        if name in ag.ITEMS:
+            items[name] = ("plain", None, None, None, None)
+    # Bottled nonfood ingredients keep their shell without acquiring drink behavior.
+    for name, remainder, limit in re.findall(
+            r'\bregisterItem\("([a-z_]+)", Item::new, new Item\.Properties\(\)\.craftRemainder\(Items\.(\w+)\)\.stacksTo\((\d+)\), \w+_TAB\)', main):
+        if name in ag.ITEMS:
+            items[name] = ("plain", None, None, None, None)
+            if ag.ITEMS[name].get("craft_remainder") != "minecraft:" + remainder.lower() or ag.ITEMS[name].get("stack_size") != int(limit):
+                err(f"JugcraftAgriculture.java {name}: container or stack limit differs from agriculture data")
+    # Decorative ingredients can use a different creative tab while retaining the same plain-item properties.
+    for name, compost in re.findall(
+            r'\bregisterItem\("([a-z_]+)", Item::new, new Item\.Properties\(\)\.compostable\(COMPOST_(\w+)\), \w+_TAB\)', main):
+        if name in ag.ITEMS:
+            items[name] = ("plain", None, None, compost.lower(), None)
     for name, n, sat, compost in re.findall(r'\bcob\("([a-z_]+)", (\d+), ([\d.]+)F, COMPOST_(\w+)\)', main):
         items[name] = ("cob", int(n), float(sat), compost.lower(), None)
     for name, compost in re.findall(r'\bthrown\("([a-z_]+)", COMPOST_(\w+)\)', main):
@@ -3854,7 +3960,7 @@ def check_agriculture():
             err(f"Missing crop texture {texture}")
 
     # Cooking Pot recipes: one file each, known items, room in the pot, and no two with the same ingredients.
-    registered = set(ag.all_items()) | set(all_items()) | set(all_blocks())
+    registered = set(ag.all_items()) | set(all_items()) | set(all_blocks()) | set(petro.petro_items())
     folder = DATA / MOD / "recipe" / "pot_cooking"
     if sorted(path.stem for path in folder.glob("*.json")) != sorted(ag.POT_RECIPES):
         err("recipe/pot_cooking/ files differ from POT_RECIPES in tools/agriculture.py")
@@ -3874,6 +3980,10 @@ def check_agriculture():
         if recipe.get("type") != f"{MOD}:pot_cooking" or not recipe.get("fabric:load_conditions"):
             err(f"pot_cooking/{result}: wrong type or missing feature switch condition")
 
+    check_agriculture_recipe_loops()
+
+
+def check_agriculture_recipe_loops():
     # No recipe loop among agriculture items: every conversion leads away from where it started. Unpacking a storage block
     # (tools/agriculture.py UNPACKING: tools/rice.py's and tools/soil.py's) only gives back what packed it, so it is left out.
     edges = {}
@@ -3886,7 +3996,18 @@ def check_agriculture():
         for ref in recipe["inputs"]:
             edge(ref, recipe["result"])
     for recipe in ag.SHAPED:
+        # This paid, one-for-one upgrade keeps the item ID but sets its bucket state.
+        # Match the complete recipe, not just its ID or the presence of components:
+        # a changed cost, output count or state must go through normal loop detection.
+        tap_upgrade = recipe == {
+            "id": "tree_tap_bucket", "pattern": ["TB"],
+            "key": {"T": "jugcraft:tree_tap", "B": "minecraft:bucket"},
+            "result": "jugcraft:tree_tap", "count": 1, "category": "misc", "switch": "agriculture",
+            "components": {"minecraft:block_state": {"upgraded": "true"}},
+        }
         for ref in recipe["key"].values():
+            if tap_upgrade and ref == "jugcraft:tree_tap":
+                continue  # Retain bucket -> tap, so any route back to buckets still forms a cycle.
             edge(ref, recipe["result"])
     for result, info in ag.POT_RECIPES.items():
         for ref in info["inputs"]:
@@ -4790,7 +4911,7 @@ def check_orchard():
         if bm.PLACED_TREES.get(orchard.checked(tree)) != (f"{MOD}:{orchard.feature(tree)}", f"{MOD}:{sapling}"):
             err(f"tools/biomes.py PLACED_TREES must place {orchard.checked(tree)} where the {tree} sapling could stand")
         for biome, share in info["regions"].items():
-            if [f"{MOD}:{orchard.checked(tree)}", share] not in bm.BIOMES[biome]["trees"]["picks"]:
+            if not (share == 1 and bm.BIOMES[biome]["trees"]["default"] == f"{MOD}:{orchard.checked(tree)}") and not any(ref == f"{MOD}:{orchard.checked(tree)}" and abs(chance - share) < 1e-9 for ref, chance in bm.BIOMES[biome]["trees"]["picks"]):
                 err(f"tools/biomes.py {biome} must pick {orchard.checked(tree)} ({share})")
     # The banana's stem: a pillar block (registered, with its item) that is a log to its fronds and to an axe, but no fuel.
     stem = orchard.BANANA_STEM["block"]
@@ -4856,7 +4977,7 @@ def check_kitchen():
 
     # The knives tag: every kitchen knife and the Carving Knife.
     tag = load(DATA / MOD / "tags" / "item" / f"{kitchen.KNIFE_TAG.split(':')[1]}.json") or {}
-    if set(tag.get("values", [])) != {f"{MOD}:{knife}" for knife in list(kitchen.KNIVES) + ["carving_knife"]}:
+    if set(tag.get("values", [])) != {f"{MOD}:{knife}" for knife in list(kitchen.KNIVES) + ["carving_knife", "household_knife"]}:
         err(f"The item tag {kitchen.KNIFE_TAG} should hold every kitchen knife and the Carving Knife")
 
     # Cutting recipes: one file each, the right type, tool and results, and never more food than the whole.
@@ -4909,7 +5030,7 @@ def check_kitchen():
             err(f"Missing lang key {key}")
     used = "\n".join(java.get(source, "") for source in ("KitchenStoveBlock", "SkilletBlock", "CuttingBoardBlock", "KitchenCabinetBlockEntity"))
     for key in kitchen.TEXT:
-        if f'"{key}"' not in used:
+        if f'"{key}"' not in used and not (key == 'container.jugcraft.kitchen_cabinet' and 'getBlockState().getBlock().getDescriptionId()' in used):
             err(f"tools/kitchen.py TEXT {key} is not used by the kitchen's Java")
 
 
@@ -4940,7 +5061,7 @@ def check_festival(java, main):
             err(f"JugcraftAgriculture.java does not register {block}")
     for tree, info in ag.TREES.items():
         base = info["base"].upper()
-        own_wood = ag.timber(tree) == tree
+        own_wood = ag.timber(tree) == tree and "trunk_block" not in info
         composed = "fruit" in info and info["season"] is not None
         call = "registerTree" if own_wood and not composed else "registerFoliage"
         schedule = (tree.upper() + "_LEAVES" if info["season"] else "null") + ", " if call == "registerTree" else ""
@@ -4978,6 +5099,8 @@ def check_festival(java, main):
     expected_states[ag.CHESTNUT["leaves"]] = {f"fruit={f}" for f in range(3)}
     for tree, info in ag.TREES.items():
         expected_states[info["leaves"]] = {f"season={state}" for state in ag.SEASON_STATES} if info["season"] else {""}
+        if "clip_sprig" in info:
+            expected_states[info["leaves"]] = {f"clipped={clipped},{season}" for season in expected_states[info["leaves"]] for clipped in ("false", "true")}
         if "fruit" in info:
             expected_states[info["leaves"]] = {
                 f"fruit={fruit}" + (f",{season}" if season else "")
@@ -5013,8 +5136,13 @@ def check_seasonal_trees(main, leaves):
             return "gold" if day >= gold_from else "green"
         for mode, day in modes.items():
             seen = {look((day - 1 + shift) % 365 + 1) for shift in range(-ag.JITTER, ag.JITTER + 1)}
-            if seen != {wanted[mode]}:
-                err(f"/jugcraft season set {mode} (day {day}) shows {tree} leaves {sorted(seen)}, not only {wanted[mode]}")
+            # Evergreen holly uses these states for berries, not leaf loss. Its approved late-autumn
+            # berry date and early-spring fade straddle the fixed mode dates within positional jitter.
+            expected_looks = ({"spring": {"green", "bare"}, "summer": {"green"},
+                               "autumn": {"green", "gold"}, "winter": {"bare"}}[mode]
+                              if tree == "holly" else {wanted[mode]})
+            if seen != expected_looks:
+                err(f"/jugcraft season set {mode} (day {day}) shows {tree} leaves {sorted(seen)}, expected {sorted(expected_looks)}")
 
 
 def check_carving(java, main):
@@ -12700,6 +12828,9 @@ def check_diagonal_connections():
         if f"{MOD}:{diagonal}" not in walls:
             err(f"{MOD}:{diagonal} is not in #minecraft:walls, so walls, gates and bars would not join it")
     for path in sorted((ASSETS / "blockstates").glob("*.json")):
+        # Household furniture and candy poles use custom cardinal joining, not FenceBlock/WallBlock.
+        if path.stem.startswith('household_') or path.stem in ('cavern_candy_cane_pole','cavern_stripped_candy_cane_pole'):
+            continue
         if path.stem.startswith(dg.DIAGONAL_WALL.format("")):
             continue
         parts = (load(path) or {}).get("multipart", [])
@@ -13095,7 +13226,7 @@ def check_composition(co, root, lang, registered, research):
                 err(f"{where}: unknown effect, intent or Principle")
             if effect == "damage" and body.get("school") != co.PRINCIPLES[body["principle"]]["school"]:
                 err(f"{where}: damage must use its Principle's Spell Power school")
-            if (effect == "status") != ("status" in body):
+            if (effect in {"status", "nouveau", "nouveau_block", "nouveau_creature"}) != ("status" in body):
                 err(f"{where}: a status effect (and only a status effect) names a status")
             if body.get("magnitude", 0) > co.EFFECT_LIMITS["MAX_MAGNITUDE"] or body.get("duration", 0) > co.EFFECT_LIMITS["MAX_DURATION"]:
                 err(f"{where}: beyond the effect limits")
@@ -13106,7 +13237,7 @@ def check_composition(co, root, lang, registered, research):
                 err(f"{where}: only damage naming its school scales with Spell Power, by 0..{co.INVOCATION_SCALING_MAX}")
         if info.get("authored") and slot == "modifier":
             err(f"{where}: a modifier cannot be authored (tunings are how players change invocations)")
-        if slot == "modifier" and not (body["aspect"] in ("magnitude", "duration", "radius", "range")
+        if slot == "modifier" and not (body["aspect"] in ({"magnitude", "duration", "radius", "range"} | {v[0] for v in __import__("nouveau_spells").MODIFIERS.values()})
                                        and 1 <= body["amount"] <= limits["MAX_MODIFIER_AMOUNT"]):
             err(f"{where}: modifier out of the grammar")
         if slot == "termination" and not (1 <= body["pulses"] <= limits["MAX_PULSES"] and (
@@ -13879,6 +14010,8 @@ def check_wayfaring(co, root, lang):
             expected.update(f"{MOD}:{item}" for item in concordance_elemental_gear.AMULETS)
             import concordance_ee_artifacts
             expected.update(f"{MOD}:{item}" for item in concordance_ee_artifacts.CHARMS)
+        if slot == "legs/belt":
+            expected.update({"jugcraft:nouveau_belt_of_levitation", "jugcraft:nouveau_belt_of_unstable_gifts"})
         if held != expected:
             err(f"data/trinkets/tags/item/{slot}.json holds {sorted(held)}")
     # Two items with one English name cannot be told apart (the kinetic belt is the Drive Belt for this reason).
@@ -15645,6 +15778,12 @@ def check_progression(co, root, lang, registered, research):
                 made = load(DATA / MOD / "recipe" / f"{split(recipe)[1]}.json") or {}
                 result = made.get("result", {})
                 shown.setdefault(result.get("id") if isinstance(result, dict) else result, []).append((entry, page))
+    # Native workshop inputs are shown in generated acquisition entries and in the server recipe picker.
+    import nouveau_guide
+    for (_, name), info in nouveau_guide.acquisition_entries().items():
+        entry=entries.get("nouveau/"+name)
+        if entry and any(page.get("type")=="modonomicon:text" for page in entry.get("pages",[])):
+            shown.setdefault(info["icon"],[]).append((entry,{}))
     for key in sorted(alone):
         item = key[len("item:"):] if key.startswith(f"item:{MOD}:") else None
         if item is None or item in pg.JUGCRAFT_SOURCES:
@@ -15965,7 +16104,8 @@ def KINDLE_MOTE_STEPS_FIT(co):
     return 0 < co.KINDLE_MOTE_STEPS <= 15
 
 
-def main():
+def registered_items():
+    import vehicle_bays
     registered = (set(all_blocks()) | set(all_items()) | set(machine_blocks()) | set(machine_items())
                   | set(ag.all_blocks()) | set(ag.all_items()) | set(petro.petro_items()) | set(petro.petro_blocks())
                   | set(deposits.DEPOSITS) | set(guide_books.BOOKS) | set(tank_display.BLOCKS)
@@ -15974,6 +16114,12 @@ def main():
                   | set(field_chemistry.items()) | set(construction.items()) | set(construction.blocks()) | set(gas_storage.items()) | set(control_electronics.blocks()) | set(control_electronics.items()) | set(rocketry.items()) | set(rocketry.blocks()) | set(dieselworks.blocks()) | set(kaiserworks.blocks()) | set(trenchworks.blocks()) | set(fortifications.blocks()) | set(bunkerworks.blocks()) | set(fire_control.blocks()) | set(fire_control.items()) | set(raiders.ITEMS) | set(armoured_walker.ITEMS) | set(howitzer_walker.ITEMS) | set(zeppelin.ITEMS) | set(mech.ITEMS) | set(landship.ITEMS) | set(artillery.ITEMS) | set(tower_guns.items())
                   | set(ph.blocks()) | set(ph.items()) | set((town_assets.blocks() + styx.blocks()))
                   | set(guns.items()) | set(guns.blocks()) | set(concordance.items()) | set(concordance.blocks()) | set(industrial_forms.blocks()))
+    registered |= menagerie.entries() | set(vehicle_bays.BLOCKS)
+    return registered
+
+
+def main():
+    registered=registered_items()
     check_assets(sorted(registered))
     check_model_textures()
     check_petro()
@@ -16052,6 +16198,8 @@ def main():
     check_milkshakes()
     check_recipe_categories()
     check_advancements(registered)
+    import check_nouveau_resources
+    for problem in check_nouveau_resources.check()[0]:err(problem)
     check_model_uvs()
     check_lairs()
     check_vesperine()

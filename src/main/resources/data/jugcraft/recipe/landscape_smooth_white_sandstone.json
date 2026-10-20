@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smelting",
+  "category": "blocks",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "ingredient": "jugcraft:landscape_white_sandstone",
+  "result": {
+    "id": "jugcraft:landscape_smooth_white_sandstone"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

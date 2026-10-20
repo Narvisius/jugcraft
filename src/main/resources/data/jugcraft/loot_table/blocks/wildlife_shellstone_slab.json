@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:wildlife_shellstone_slab",
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": 2,
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:wildlife_shellstone_slab",
+                "state": {
+                  "type": "double"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0,
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
+    }
+  ],
+  "random_sequence": "jugcraft:blocks/wildlife_shellstone_slab"
+}

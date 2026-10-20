@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:simple_block",
+  "to_place": {
+    "type": "minecraft:weighted",
+    "entries": [
+      {
+        "data": "minecraft:moss_carpet",
+        "weight": 25
+      },
+      {
+        "data": "minecraft:short_grass",
+        "weight": 50
+      },
+      {
+        "data": {
+          "id": "minecraft:tall_grass",
+          "properties": {
+            "half": "lower"
+          }
+        },
+        "weight": 10
+      }
+    ]
+  }
+}

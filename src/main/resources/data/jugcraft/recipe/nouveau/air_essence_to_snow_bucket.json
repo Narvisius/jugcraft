@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:nouveau_air_essence",
+    "minecraft:bucket",
+    "minecraft:snow_block"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:powder_snow_bucket"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

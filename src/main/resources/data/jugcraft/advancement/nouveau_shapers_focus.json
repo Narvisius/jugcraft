@@ -1,0 +1,32 @@
+{
+  "parent": "jugcraft:nouveau_novice_spell_book",
+  "criteria": {
+    "has_shapers_focus": {
+      "conditions": {
+        "items": [
+          {
+            "items": "jugcraft:nouveau_shapers_focus"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "jugcraft.nouveau_adv.desc.shapers_focus"
+    },
+    "icon": {
+      "count": 1,
+      "id": "jugcraft:nouveau_shapers_focus"
+    },
+    "title": {
+      "translate": "jugcraft.nouveau_adv.title.shapers_focus"
+    }
+  },
+  "requirements": [
+    [
+      "has_shapers_focus"
+    ]
+  ]
+}

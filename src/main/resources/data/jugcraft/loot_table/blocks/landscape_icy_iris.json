@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "jugcraft:landscape_icy_iris",
+            "state": {
+              "half": "lower"
+            }
+          },
+          "name": "jugcraft:landscape_icy_iris"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "jugcraft:blocks/landscape_icy_iris"
+}

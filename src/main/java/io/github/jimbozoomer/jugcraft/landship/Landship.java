@@ -76,6 +76,8 @@ public class Landship extends Entity {
 	private static final EntityDataAccessor<Boolean> GUNS = SynchedEntityData.defineId(Landship.class, EntityDataSerializers.BOOLEAN);
 
 	private int fuel;
+	public io.github.jimbozoomer.jugcraft.vehiclebay.VehicleFitout fitout = io.github.jimbozoomer.jugcraft.vehiclebay.VehicleFitout.STANDARD;
+	private int fuelPayments;
 	private int forward;
 	private int turn;
 	private int cannon;
@@ -207,6 +209,7 @@ public class Landship extends Entity {
 		double yaw = Math.toRadians(getYRot());
 		Vec3 heading = new Vec3(-Math.sin(yaw), 0, Math.cos(yaw));
 		double speed = !fuelled ? 0 : f > 0 ? SPEED : f < 0 ? -SPEED / 2 : 0;
+		speed *= fitout.speed();
 		Vec3 motion = getDeltaMovement();
 		double vy = motion.y - 0.08;
 		if (onGround()) {
@@ -243,7 +246,7 @@ public class Landship extends Entity {
 
 		boolean working = speed != 0 || t != 0;
 		if (working && fuelled && tickCount % (20 / FUEL_PER_SECOND) == 0) {
-			fuel--;
+			fuel = Math.max(0, fuel - fitout.fuelCost(++fuelPayments));
 			if (fuel == 0 && driver instanceof Player player) {
 				player.sendOverlayMessage(Component.translatable("message.jugcraft.landship.empty"));
 			}
@@ -380,8 +383,8 @@ public class Landship extends Entity {
 			return true;
 		}
 		damage += amount;
-		if (damage >= HEALTH) {
-			spawnAtLocation(level, new ItemStack(JugcraftLandships.LANDSHIP_ITEM));
+		if (damage >= HEALTH * fitout.toughness()) {
+			spawnAtLocation(level, fitout.write(new ItemStack(JugcraftLandships.LANDSHIP_ITEM), fuel));
 			discard();
 		}
 		return true;
@@ -396,10 +399,13 @@ public class Landship extends Entity {
 	@Override
 	protected void readAdditionalSaveData(ValueInput input) {
 		fuel = Mth.clamp(input.getInt("fuel").orElse(0), 0, FUEL_TANK);
+		fitout = new io.github.jimbozoomer.jugcraft.vehiclebay.VehicleFitout(input.getIntOr("BayArmor", 0), input.getIntOr("BayDrive", 0));
+		fuelPayments = input.getIntOr("BayPayments", 0);
 	}
 
 	@Override
 	protected void addAdditionalSaveData(ValueOutput output) {
 		output.putInt("fuel", fuel);
+		output.putInt("BayArmor", fitout.armor()); output.putInt("BayDrive", fitout.drive()); output.putInt("BayPayments", fuelPayments);
 	}
 }

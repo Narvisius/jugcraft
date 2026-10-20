@@ -1,0 +1,18 @@
+{
+  "type": "jugcraft:household_construction",
+  "ingredients": [
+    {
+      "count": 1,
+      "ingredient": "minecraft:quartz_block"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:plate"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

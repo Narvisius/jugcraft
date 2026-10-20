@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:grove_light_pink_minipad_flower",
+    "minecraft:glowstone_dust"
+  ],
+  "result": {
+    "id": "jugcraft:grove_light_pink_minipad_flower_glow",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

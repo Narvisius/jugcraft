@@ -1,0 +1,31 @@
+{
+    "display": {
+        "icon": {
+            "id": "inventorypets:pet_purplicious_cow"
+        },
+        "title": {
+            "translate": "advancement.ip.petach_purplicious_cow"
+        },
+        "description": {
+            "translate": "advancement.ip.petach_purplicious_cow.desc"
+        },
+        "show_toast": true,
+        "announce_to_chat": true
+    },
+    "parent": "inventorypets:pingot",
+    "criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                        	"inventorypets:pet_purplicious_cow"
+                    	]
+                    }
+                    
+                ]
+            }
+        }
+    }
+}

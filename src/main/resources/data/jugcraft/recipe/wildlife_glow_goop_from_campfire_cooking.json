@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "ingredient": "minecraft:glow_berries",
+  "result": {
+    "id": "jugcraft:wildlife_glow_goop"
+  },
+  "experience": 0.35,
+  "cookingtime": 200,
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

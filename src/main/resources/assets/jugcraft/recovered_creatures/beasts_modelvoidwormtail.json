@@ -1,0 +1,205 @@
+{
+  "textureSize": [
+    256,
+    256
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "body",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -19.0,
+        -16.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -8.0,
+            -19.0,
+            0.0,
+            16.0,
+            38.0,
+            35.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "frillstop_left",
+      "parent": "body",
+      "pose": [
+        8.0,
+        -19.0,
+        16.0,
+        0.0,
+        0.0,
+        0.7854
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -14.0,
+            -16.0,
+            0.0,
+            14.0,
+            38.0
+          ],
+          "uv": [
+            65.0,
+            36.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "frillstop_right",
+      "parent": "body",
+      "pose": [
+        -8.0,
+        -19.0,
+        16.0,
+        0.0,
+        0.0,
+        -0.7854
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -14.0,
+            -16.0,
+            0.0,
+            14.0,
+            38.0
+          ],
+          "uv": [
+            65.0,
+            36.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "frillsbottom_left",
+      "parent": "body",
+      "pose": [
+        8.0,
+        19.0,
+        16.0,
+        0.0,
+        0.0,
+        2.5307
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -14.0,
+            -16.0,
+            0.0,
+            14.0,
+            38.0
+          ],
+          "uv": [
+            65.0,
+            36.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "frillsbottom_right",
+      "parent": "body",
+      "pose": [
+        -8.0,
+        19.0,
+        16.0,
+        0.0,
+        0.0,
+        -2.5307
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -14.0,
+            -16.0,
+            0.0,
+            14.0,
+            38.0
+          ],
+          "uv": [
+            65.0,
+            36.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelVoidWormTail.java",
+  "sourceSha256": "788df3e1ce9a0809684261c7bcc090e47e85dd747db29f52aa6244145496f087",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.body.rotateAngleZ += yawAmount;",
+      "reason": "Unbound expression variable yawAmount"
+    }
+  ],
+  "expressions": [],
+  "poses": []
+}

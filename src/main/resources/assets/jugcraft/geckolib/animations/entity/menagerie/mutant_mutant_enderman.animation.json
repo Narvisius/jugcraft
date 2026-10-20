@@ -1,0 +1,108 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "idle": {
+      "loop": true,
+      "bones": {}
+    },
+    "walk": {
+      "loop": true,
+      "bones": {
+        "leg_-1": {
+          "rotation": [
+            "math.sin(query.anim_time * 260) * 20",
+            0,
+            0
+          ]
+        },
+        "arm_-1": {
+          "rotation": [
+            "math.sin(query.anim_time * 260) * -20",
+            0,
+            0
+          ]
+        },
+        "leg_1": {
+          "rotation": [
+            "math.sin(query.anim_time * 260) * -20",
+            0,
+            0
+          ]
+        },
+        "arm_1": {
+          "rotation": [
+            "math.sin(query.anim_time * 260) * 20",
+            0,
+            0
+          ]
+        }
+      }
+    },
+    "sit": {
+      "loop": true,
+      "bones": {
+        "root": {
+          "position": [
+            0,
+            -9.12,
+            0
+          ]
+        }
+      }
+    },
+    "attack": {
+      "loop": false,
+      "animation_length": 0.8,
+      "bones": {
+        "arm_-1": {
+          "rotation": {
+            "0": [
+              0,
+              0,
+              0
+            ],
+            ".25": [
+              -95,
+              0,
+              0
+            ],
+            ".5": [
+              25,
+              0,
+              0
+            ],
+            ".8": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "arm_1": {
+          "rotation": {
+            "0": [
+              0,
+              0,
+              0
+            ],
+            ".25": [
+              -95,
+              0,
+              0
+            ],
+            ".5": [
+              25,
+              0,
+              0
+            ],
+            ".8": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}

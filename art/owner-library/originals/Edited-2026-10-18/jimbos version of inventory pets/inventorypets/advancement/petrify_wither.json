@@ -1,0 +1,23 @@
+{
+	"display": {
+		"icon": {
+			"id": "inventorypets:pet_wither"
+		},
+		"title": {
+			"translate": "advancement.ip.petachPetrifyWither"
+		},
+		"description": {
+			"translate": "advancement.ip.petachPetrifyWither.desc"
+		},
+		"show_toast": true,
+		"announce_to_chat": true,
+		"frame": "challenge",
+		"hidden": true
+	},
+	"parent": "inventorypets:petrify_ghast",
+    "criteria": {
+        "example": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

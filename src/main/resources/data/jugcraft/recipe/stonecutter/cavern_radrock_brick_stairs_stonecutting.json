@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": "jugcraft:cavern_radrock_bricks",
+  "result": {
+    "id": "jugcraft:cavern_radrock_brick_stairs"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

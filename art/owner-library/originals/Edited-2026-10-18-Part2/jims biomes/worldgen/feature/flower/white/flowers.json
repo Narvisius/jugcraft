@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:simple_block",
+  "to_place": {
+    "type": "minecraft:noise",
+    "noise": {
+      "base_octave": -6,
+      "octave_count": 6,
+      "amplitude_modifiers": [
+        1,
+        1.2,
+        0.5,
+        0.85,
+        2,
+        4.5
+      ],
+      "normalize": "legacy"
+    },
+    "scale": 1,
+    "seed": 4,
+    "states": [
+      "minecraft:white_tulip",
+      "minecraft:lily_of_the_valley",
+      "minecraft:azure_bluet",
+      "minecraft:oxeye_daisy"
+    ]
+  }
+}

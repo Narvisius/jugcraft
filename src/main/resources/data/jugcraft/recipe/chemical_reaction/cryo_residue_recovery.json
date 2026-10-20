@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:propellant_recovery",
+  "items": [
+    {
+      "ingredient": "jugcraft:propellant_residue",
+      "count": 2
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 500
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:recovery_concentrate",
+      "amount": 500,
+      "tank": 0
+    }
+  ],
+  "energy_per_tick": 64,
+  "time": 240
+}

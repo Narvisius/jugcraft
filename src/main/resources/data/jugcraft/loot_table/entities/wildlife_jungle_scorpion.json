@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:wildlife_scorpion_poison_gland",
+          "modifier": [
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.0
+              },
+              "enchantment": "minecraft:looting",
+              "type": "minecraft:enchanted_count_increase"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0,
+      "condition": {
+        "chance": 0.12,
+        "type": "minecraft:random_chance"
+      }
+    }
+  ],
+  "random_sequence": "jugcraft:entities/wildlife_jungle_scorpion"
+}

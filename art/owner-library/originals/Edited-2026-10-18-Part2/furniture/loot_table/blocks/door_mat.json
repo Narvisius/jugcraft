@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_components",
+              "include": [
+                "refurbished_furniture:palette_image"
+              ],
+              "source": "block_entity"
+            }
+          ],
+          "name": "refurbished_furniture:door_mat"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "refurbished_furniture:blocks/door_mat"
+}

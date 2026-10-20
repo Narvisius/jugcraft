@@ -1,5 +1,9 @@
 # The walled town
 
+Local 16 October architectural changes and fresh-world testing guidance are in
+[the city refinement record](town-architecture-refinement.md). The original
+implementation and historical verification below describe the existing systems.
+
 Status: implemented, green in CI (server and real-world client tests); **not yet played** by a person. Results are under Verification.
 Proposal issue: none. The owner asked for the town on 2 October 2026 and chose its size, place and currency (see "Owner approval" below).
 Owner: @jimbozoomer-byte

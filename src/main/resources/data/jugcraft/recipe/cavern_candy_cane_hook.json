@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "L S",
+    " L ",
+    "P L"
+  ],
+  "key": {
+    "S": "jugcraft:cavern_sharpened_candy_cane",
+    "L": "jugcraft:cavern_licoroot_vine",
+    "P": "jugcraft:cavern_candy_cane_pole"
+  },
+  "result": {
+    "id": "jugcraft:cavern_candy_cane_hook"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -1,0 +1,3342 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "body",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -19.625,
+        -0.125,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6.0,
+            -4.375,
+            -10.875,
+            12.0,
+            11.0,
+            21.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leg_left",
+      "parent": "body",
+      "pose": [
+        3.0,
+        6.625,
+        0.125,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            11.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            55.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leg_right",
+      "parent": "body",
+      "pose": [
+        -3.0,
+        6.625,
+        0.125,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            11.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            55.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "neck1",
+      "parent": "body",
+      "pose": [
+        0.0,
+        0.625,
+        -9.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -9.0,
+            -6.0,
+            6.0,
+            12.0,
+            6.0
+          ],
+          "uv": [
+            41.0,
+            41.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "tail",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -0.875,
+        9.125,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -0.5,
+            -5.0,
+            10.0,
+            11.0,
+            10.0
+          ],
+          "uv": [
+            0.0,
+            33.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "legfur_left",
+      "parent": "leg_left",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            0.0,
+            -2.0,
+            4.0,
+            3.0,
+            4.0
+          ],
+          "uv": [
+            31.0,
+            33.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "foot_left",
+      "parent": "leg_left",
+      "pose": [
+        0.0,
+        11.0,
+        -1.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            0.0,
+            -4.0,
+            3.0,
+            2.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            10.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "legfur_right",
+      "parent": "leg_right",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            0.0,
+            -2.0,
+            4.0,
+            3.0,
+            4.0
+          ],
+          "uv": [
+            31.0,
+            33.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "foot_right",
+      "parent": "leg_right",
+      "pose": [
+        0.0,
+        11.0,
+        -1.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            0.0,
+            -4.0,
+            3.0,
+            2.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            10.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "neck2",
+      "parent": "neck1",
+      "pose": [
+        0.0,
+        -8.5,
+        -2.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -7.0,
+            -2.0,
+            4.0,
+            7.0,
+            4.0
+          ],
+          "uv": [
+            46.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "headPivot",
+      "parent": "neck2",
+      "pose": [
+        -0.5,
+        -6.5,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "head",
+      "parent": "headPivot",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -4.0,
+            -3.0,
+            5.0,
+            4.0,
+            5.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            0.5,
+            -6.0,
+            -3.0,
+            0.0,
+            6.0,
+            7.0
+          ],
+          "uv": [
+            71.0,
+            54.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "beak",
+      "parent": "head",
+      "pose": [
+        0.5,
+        -1.0,
+        -3.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -1.0,
+            -3.0,
+            4.0,
+            2.0,
+            3.0
+          ],
+          "uv": [
+            46.0,
+            12.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelEmu.java",
+  "sourceSha256": "fa5fcd62b32f4fff21bbd11383bdfe184b0a91537d78a91a87f984beab670b07",
+  "animationRoot": "root",
+  "headLook": "head",
+  "actions": {
+    "dodge_right": {
+      "length": 0.5,
+      "loop": false,
+      "channels": [
+        {
+          "bone": "body",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                0.0,
+                5.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                0.0,
+                5.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "foot_left",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                14.999999999999998,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                14.999999999999998,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "neck2",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                -14.999999999999998,
+                0.0,
+                10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                -14.999999999999998,
+                0.0,
+                10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "headPivot",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                -45.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                -45.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg_right",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                0.0,
+                0.0,
+                -45.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                0.0,
+                0.0,
+                -45.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg_left",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                0.0,
+                0.0,
+                -59.99999999999999
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                0.0,
+                0.0,
+                -59.99999999999999
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "foot_right",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                14.999999999999998,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                14.999999999999998,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "neck1",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                -14.999999999999998,
+                0.0,
+                20.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                -14.999999999999998,
+                0.0,
+                20.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "body",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                0.0,
+                0.0,
+                25.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                0.0,
+                0.0,
+                25.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ]
+    },
+    "dodge_left": {
+      "length": 0.5,
+      "loop": false,
+      "channels": [
+        {
+          "bone": "body",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                0.0,
+                5.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                0.0,
+                5.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "foot_left",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                14.999999999999998,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                14.999999999999998,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "neck2",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                -14.999999999999998,
+                0.0,
+                -10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                -14.999999999999998,
+                0.0,
+                -10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "headPivot",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                -45.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                -45.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg_right",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                0.0,
+                0.0,
+                45.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                0.0,
+                0.0,
+                45.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg_left",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                0.0,
+                0.0,
+                59.99999999999999
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                0.0,
+                0.0,
+                59.99999999999999
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "foot_right",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                14.999999999999998,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                14.999999999999998,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "neck1",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                -14.999999999999998,
+                0.0,
+                -20.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                -14.999999999999998,
+                0.0,
+                -20.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "body",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                0.0,
+                0.0,
+                -25.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                0.0,
+                0.0,
+                -25.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ]
+    },
+    "puzzled": {
+      "length": 1.45,
+      "loop": false,
+      "channels": [
+        {
+          "bone": "neck2",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.15,
+              "vector": [
+                14.999999999999998,
+                0.0,
+                -10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                0.0,
+                0.0,
+                10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.44999999999999996,
+              "vector": [
+                0.0,
+                0.0,
+                10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6,
+              "vector": [
+                14.999999999999998,
+                0.0,
+                -10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                14.999999999999998,
+                0.0,
+                -10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                0.0,
+                0.0,
+                10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                0.0,
+                0.0,
+                10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.2,
+              "vector": [
+                14.999999999999998,
+                0.0,
+                -10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.45,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "headPivot",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.15,
+              "vector": [
+                -10.0,
+                -10.0,
+                -35.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                -10.0,
+                10.0,
+                35.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.44999999999999996,
+              "vector": [
+                -10.0,
+                10.0,
+                35.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6,
+              "vector": [
+                -10.0,
+                -10.0,
+                -35.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                -10.0,
+                -10.0,
+                -35.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                -10.0,
+                10.0,
+                35.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                -10.0,
+                10.0,
+                35.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.2,
+              "vector": [
+                -10.0,
+                -10.0,
+                -35.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.45,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg_right",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.15,
+              "vector": [
+                10.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                10.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.44999999999999996,
+              "vector": [
+                10.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6,
+              "vector": [
+                -10.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                -10.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                -10.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                -10.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.2,
+              "vector": [
+                2.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.45,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg_left",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.15,
+              "vector": [
+                10.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                10.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.44999999999999996,
+              "vector": [
+                10.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6,
+              "vector": [
+                -10.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                -10.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                -10.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                -10.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.2,
+              "vector": [
+                2.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.45,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "neck1",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.15,
+              "vector": [
+                14.999999999999998,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                14.999999999999998,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.44999999999999996,
+              "vector": [
+                14.999999999999998,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6,
+              "vector": [
+                -14.999999999999998,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                -14.999999999999998,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                14.999999999999998,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                14.999999999999998,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.2,
+              "vector": [
+                -14.999999999999998,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.45,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "body",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.15,
+              "vector": [
+                -10.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                -10.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.44999999999999996,
+              "vector": [
+                -10.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6,
+              "vector": [
+                10.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                10.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                10.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                10.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.2,
+              "vector": [
+                -2.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.45,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ]
+    },
+    "peck_ground": {
+      "length": 1.25,
+      "loop": false,
+      "channels": [
+        {
+          "bone": "neck2",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                14.999999999999998,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                14.999999999999998,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                14.999999999999998,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "neck1",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                145.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                135.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                145.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "headPivot",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                -59.99999999999999,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                -59.99999999999999,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                -59.99999999999999,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "neck1",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                0.2,
+                -0.2
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.2,
+                -0.2
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                1.0,
+                -0.2
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ]
+    },
+    "scratch": {
+      "length": 1.0,
+      "loop": false,
+      "channels": [
+        {
+          "bone": "neck2",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                -20.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                -20.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4000000000000001,
+              "vector": [
+                -20.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6000000000000001,
+              "vector": [
+                -20.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.7500000000000001,
+              "vector": [
+                -20.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "headPivot",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                24.000000000000004,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                24.000000000000004,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4000000000000001,
+              "vector": [
+                24.000000000000004,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6000000000000001,
+              "vector": [
+                24.000000000000004,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.7500000000000001,
+              "vector": [
+                24.000000000000004,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg_right",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                20.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                40.0,
+                0.0,
+                29.999999999999996
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4000000000000001,
+              "vector": [
+                40.0,
+                0.0,
+                29.999999999999996
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6000000000000001,
+              "vector": [
+                20.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.7500000000000001,
+              "vector": [
+                -70.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg_right",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                0.0,
+                0.5,
+                2.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                0.0,
+                0.5,
+                2.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4000000000000001,
+              "vector": [
+                0.0,
+                0.5,
+                2.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6000000000000001,
+              "vector": [
+                0.0,
+                0.5,
+                2.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.7500000000000001,
+              "vector": [
+                0.0,
+                0.5,
+                2.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg_left",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                20.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                -70.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4000000000000001,
+              "vector": [
+                -70.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6000000000000001,
+              "vector": [
+                20.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.7500000000000001,
+              "vector": [
+                40.0,
+                0.0,
+                29.999999999999996
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg_left",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                0.0,
+                0.5,
+                2.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4000000000000001,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6000000000000001,
+              "vector": [
+                0.0,
+                0.5,
+                2.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.7500000000000001,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "neck1",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                10.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                10.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4000000000000001,
+              "vector": [
+                10.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6000000000000001,
+              "vector": [
+                10.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.7500000000000001,
+              "vector": [
+                10.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "body",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                -20.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                -40.0,
+                0.0,
+                -10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4000000000000001,
+              "vector": [
+                -40.0,
+                0.0,
+                -10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6000000000000001,
+              "vector": [
+                -20.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.7500000000000001,
+              "vector": [
+                -40.0,
+                0.0,
+                10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "foot_left",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                70.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4000000000000001,
+              "vector": [
+                70.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6000000000000001,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "foot_right",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6000000000000001,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.7500000000000001,
+              "vector": [
+                70.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "motions": [
+    {
+      "bone": "neck1",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": 0.1,
+      "invert": false,
+      "phase": 0.0,
+      "bias": [
+        "*",
+        -1,
+        0.1
+      ],
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "neck2",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": 0.1,
+      "invert": true,
+      "phase": 1.0,
+      "bias": 0.15,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "head",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": 0.1,
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.25,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "tail",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": 0.1,
+      "invert": false,
+      "phase": 2.0,
+      "bias": [
+        "*",
+        -1,
+        0.05
+      ],
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "leg_right",
+      "kind": "walk",
+      "speed": 0.4,
+      "degree": [
+        "*",
+        0.4,
+        2.0
+      ],
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        1
+      ]
+    },
+    {
+      "bone": "leg_left",
+      "kind": "walk",
+      "speed": 0.4,
+      "degree": [
+        "*",
+        0.4,
+        2.0
+      ],
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        1
+      ]
+    },
+    {
+      "bone": "foot_right",
+      "kind": "walk",
+      "speed": 0.4,
+      "degree": [
+        "*",
+        0.4,
+        1.5
+      ],
+      "invert": false,
+      "phase": 2.0,
+      "bias": 0.2,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        1
+      ]
+    },
+    {
+      "bone": "foot_left",
+      "kind": "walk",
+      "speed": 0.4,
+      "degree": [
+        "*",
+        0.4,
+        1.5
+      ],
+      "invert": true,
+      "phase": 2.0,
+      "bias": 0.2,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        1
+      ]
+    },
+    {
+      "bone": "neck1",
+      "kind": "walk",
+      "speed": 0.4,
+      "degree": [
+        "*",
+        0.4,
+        1.0
+      ],
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        1
+      ]
+    },
+    {
+      "bone": "neck2",
+      "kind": "walk",
+      "speed": 0.4,
+      "degree": [
+        "*",
+        0.4,
+        0.8
+      ],
+      "invert": true,
+      "phase": 1.3,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        1
+      ]
+    },
+    {
+      "bone": "head",
+      "kind": "walk",
+      "speed": 0.4,
+      "degree": [
+        "*",
+        0.4,
+        0.25
+      ],
+      "invert": true,
+      "phase": 1.3,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        1
+      ]
+    },
+    {
+      "bone": "tail",
+      "kind": "walk",
+      "speed": 0.4,
+      "degree": [
+        "*",
+        0.4,
+        0.4
+      ],
+      "invert": true,
+      "phase": 1.3,
+      "bias": [
+        "*",
+        -1,
+        0.4
+      ],
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        1
+      ]
+    },
+    {
+      "bone": "body",
+      "kind": "bob",
+      "speed": 0.4,
+      "degree": [
+        "*",
+        0.4,
+        14.0
+      ],
+      "invert": true,
+      "phase": 0,
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        1
+      ]
+    },
+    {
+      "bone": "body",
+      "kind": "flap",
+      "speed": 0.4,
+      "degree": [
+        "*",
+        0.4,
+        0.7
+      ],
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        1
+      ]
+    },
+    {
+      "bone": "leg_left",
+      "kind": "flap",
+      "speed": 0.4,
+      "degree": [
+        "*",
+        0.4,
+        0.7
+      ],
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        1
+      ]
+    },
+    {
+      "bone": "leg_right",
+      "kind": "flap",
+      "speed": 0.4,
+      "degree": [
+        "*",
+        0.4,
+        0.7
+      ],
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        1
+      ]
+    },
+    {
+      "bone": "neck1",
+      "kind": "flap",
+      "speed": 0.4,
+      "degree": [
+        "*",
+        0.4,
+        0.8
+      ],
+      "invert": true,
+      "phase": 3.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        1
+      ]
+    },
+    {
+      "bone": "neck2",
+      "kind": "flap",
+      "speed": 0.4,
+      "degree": [
+        "*",
+        0.4,
+        0.4
+      ],
+      "invert": true,
+      "phase": 3.2,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        1
+      ]
+    },
+    {
+      "bone": "tail",
+      "kind": "swing",
+      "speed": 0.4,
+      "degree": [
+        "*",
+        0.4,
+        0.8
+      ],
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        1
+      ]
+    },
+    {
+      "bone": "leg_right",
+      "kind": "walk",
+      "speed": 0.4,
+      "degree": [
+        "*",
+        0.4,
+        1.85
+      ],
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          1
+        ]
+      ]
+    },
+    {
+      "bone": "leg_left",
+      "kind": "walk",
+      "speed": 0.4,
+      "degree": [
+        "*",
+        0.4,
+        1.85
+      ],
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          1
+        ]
+      ]
+    },
+    {
+      "bone": "foot_right",
+      "kind": "walk",
+      "speed": 0.4,
+      "degree": [
+        "*",
+        0.4,
+        1.5
+      ],
+      "invert": false,
+      "phase": 1.95,
+      "bias": 0.2,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          1
+        ]
+      ]
+    },
+    {
+      "bone": "foot_left",
+      "kind": "walk",
+      "speed": 0.4,
+      "degree": [
+        "*",
+        0.4,
+        1.5
+      ],
+      "invert": true,
+      "phase": 1.95,
+      "bias": 0.2,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          1
+        ]
+      ]
+    },
+    {
+      "bone": "neck1",
+      "kind": "walk",
+      "speed": 0.4,
+      "degree": [
+        "*",
+        0.4,
+        0.6
+      ],
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          1
+        ]
+      ]
+    },
+    {
+      "bone": "neck2",
+      "kind": "walk",
+      "speed": 0.4,
+      "degree": [
+        "*",
+        0.4,
+        0.5
+      ],
+      "invert": true,
+      "phase": 1.3,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          1
+        ]
+      ]
+    },
+    {
+      "bone": "head",
+      "kind": "walk",
+      "speed": 0.4,
+      "degree": [
+        "*",
+        0.4,
+        0.15
+      ],
+      "invert": true,
+      "phase": 1.3,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          1
+        ]
+      ]
+    },
+    {
+      "bone": "tail",
+      "kind": "walk",
+      "speed": 0.4,
+      "degree": [
+        "*",
+        0.4,
+        0.4
+      ],
+      "invert": true,
+      "phase": 1.3,
+      "bias": [
+        "*",
+        -1,
+        0.4
+      ],
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          1
+        ]
+      ]
+    },
+    {
+      "bone": "body",
+      "kind": "bob",
+      "speed": 0.4,
+      "degree": [
+        "*",
+        0.4,
+        5.0
+      ],
+      "invert": true,
+      "phase": 0,
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          1
+        ]
+      ]
+    }
+  ],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": [
+    {
+      "bone": "neck2",
+      "weight": [
+        "/",
+        [
+          "*",
+          5.0,
+          "move"
+        ],
+        5.0
+      ],
+      "target": "position",
+      "value": [
+        0.0,
+        0.5,
+        -1.5
+      ],
+      "when": 1
+    },
+    {
+      "bone": "headPivot",
+      "weight": [
+        "/",
+        [
+          "*",
+          5.0,
+          "move"
+        ],
+        5.0
+      ],
+      "target": "position",
+      "value": [
+        0.0,
+        0.5,
+        -0.5
+      ],
+      "when": 1
+    },
+    {
+      "bone": "neck1",
+      "weight": [
+        "/",
+        [
+          "*",
+          5.0,
+          "move"
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        2.0943951023931953,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "neck2",
+      "weight": [
+        "/",
+        [
+          "*",
+          5.0,
+          "move"
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        -1.0471975511965976,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "headPivot",
+      "weight": [
+        "/",
+        [
+          "*",
+          5.0,
+          "move"
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        -0.8726646259971648,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    }
+  ]
+}

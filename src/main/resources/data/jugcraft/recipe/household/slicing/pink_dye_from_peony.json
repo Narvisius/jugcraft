@@ -1,0 +1,17 @@
+{
+  "type": "jugcraft:cutting",
+  "ingredient": "minecraft:peony",
+  "tool": "#jugcraft:knives",
+  "results": [
+    {
+      "count": 3,
+      "id": "minecraft:pink_dye"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

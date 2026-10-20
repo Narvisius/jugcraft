@@ -1,0 +1,96 @@
+{
+	"display": {
+		"icon": {
+			"id": "inventorypets:pet_chest"
+		},
+		"title": {
+			"translate": "advancement.ip.petachieveUtilitarian"
+		},
+		"description": {
+			"translate": "advancement.ip.petachieveUtilitarian.desc"
+		},
+		"show_toast": true,
+		"announce_to_chat": true,
+		"frame": "goal"
+	},
+	"parent": "inventorypets:root",
+	"criteria": {
+		"crafting_table": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": [
+							"inventorypets:pet_bed"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_chest"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_double_chest"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_end_portal"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_ender_chest"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_furnace"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_crafting_table"
+						]
+					},
+					{
+                        "items": [
+                        	"inventorypets:pet_enchanting_table"
+                    	]
+                    },
+                    {
+                        "items": [
+                        	"inventorypets:pet_jukebox"
+                    	]
+                    },
+					{
+                        "items": [
+                        	"inventorypets:pet_anvil"
+                    	]
+                    },
+                    {
+                        "items": [
+                        	"inventorypets:pet_lead"
+                    	]
+                    },
+                     {
+                        "items": [
+                        	"inventorypets:pet_saddle"
+                    	]
+                    },
+                    {
+                        "items": [
+                        	"inventorypets:pet_brewing_stand"
+                    	]
+                    },
+                    {
+                        "items": [
+                        	"inventorypets:pet_nether_portal"
+                    	]
+                    }
+				]
+			}
+		}
+	}
+}

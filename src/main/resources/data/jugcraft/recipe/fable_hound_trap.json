@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "XXX",
+    "Y Y",
+    "XXX"
+  ],
+  "key": {
+    "X": "jugcraft:fable_hound_tooth",
+    "Y": "minecraft:iron_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:fable_hound_trap"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+	"display": {
+		"icon": {
+			"id": "inventorypets:pet_pacman"
+		},
+		"title": {
+			"translate": "advancement.ip.petachieveFan"
+		},
+		"description": {
+			"translate": "advancement.ip.petachieveFan.desc"
+		},
+		"show_toast": true,
+		"announce_to_chat": true,
+		"frame": "goal"
+	},
+	"parent": "inventorypets:root",
+	"criteria": {
+		"crafting_table": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": [
+							"inventorypets:pet_pacman"
+						]
+					},
+					{
+						"items": [
+						 	"inventorypets:pet_cheetah"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_house"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_silverfish"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_wolf"
+						]
+					},
+					{
+                        "items": [
+                        	"inventorypets:pet_pixie"
+                    	]
+                    },
+                    {
+                        "items": [
+                        	"inventorypets:pet_torch"
+                    	]
+                    },
+					{
+						"items": [
+							"inventorypets:pet_apple"
+						]
+					}
+				]
+			}
+		}
+	}
+}

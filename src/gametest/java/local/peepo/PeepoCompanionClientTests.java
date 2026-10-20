@@ -85,6 +85,7 @@ public final class PeepoCompanionClientTests implements FabricClientGameTest {
             group("automatic cooking approach and animation synchronization", () -> automaticCooking(context, server));
             group("automatic ground food pickup and eating", () -> groundFood(server));
             group("habitat groups and local spawn caps", () -> spawns(server));
+            group("airborne seat approach retains its route", () -> server.runOnServer(s->seatingNavigationReadiness(s.overworld())));
             group("seated unload defers movement safely", () -> seatedUnload(server));
             new CompanionAutomationChecks(this::check, this::group, origin.offset(0,0,30)).run(context, server);
             new CompanionPerformanceChecks(this::check,this::group,origin.offset(0,0,30)).run(context,server);
@@ -462,19 +463,45 @@ public final class PeepoCompanionClientTests implements FabricClientGameTest {
             }finally{mobs.forEach(PeepoEntity::discard);}
         });
     }
+    private void seatingNavigationReadiness(ServerLevel level){
+        var p=npc(level,false);var stool=origin.offset(8,0,0);
+        p.snapTo(stool.getX()+.5,stool.getY(),stool.getZ()-1.5,0,0);
+        p.preferences.schedule=2;p.setNoGravity(false);p.setOnGround(true);
+        var probe=new CompanionRoutine(p);probe.resetOrders();
+        try{
+            check(probe.canUse() && probe.status(stool)==CompanionStatus.TRAVELLING,"stool approach acquired while grounded");
+            // A new short approach can lose its grounded flag for the first physics tick.
+            // Ground navigation returns null here; that does not make the seat unreachable.
+            p.setOnGround(false);probe.tick();
+            check(probe.status(stool)==CompanionStatus.TRAVELLING,"airborne approach must retain its seat instead of blacklisting it");
+            p.setOnGround(true);probe.tick();
+            check(probe.status(stool)==CompanionStatus.TRAVELLING,"landing resumes the retained stool approach");
+        }finally{probe.stop();p.discard();}
+    }
     private void seatedUnload(TestServerContext server){
         seatedNpc=server.computeOnServer(s->{
             var p=npc(s.overworld(),false);p.snapTo(origin.getX()+8.5,origin.getY(),origin.getZ()-1.5,0,0);
             p.orders.tame(s.getPlayerList().getPlayers().getFirst());p.preferences.schedule=2;p.setOnGround(true);p.setNoAi(false);p.setNoGravity(false);return p.getUUID();
         });
-        server.waitFor(s->((PeepoEntity)s.overworld().getEntity(seatedNpc)).getRestMode()==CompanionEnergy.Rest.SITTING,400);
+        awaitSeated(server);
         server.runOnServer(s->{
-            var p=(PeepoEntity)s.overworld().getEntity(seatedNpc);var before=p.position();p.setNoAi(true);p.unloadCompanionRoutine();
+            var p=(PeepoEntity)s.overworld().getEntity(seatedNpc);var before=p.position();
+            check(BlockPos.containing(before).equals(origin.offset(8,0,0)),"initial approach must reach the nearby stool");
+            p.setNoAi(true);p.unloadCompanionRoutine();
             check(p.position().equals(before),"unload moved companion during section removal");
             check(p.getRestMode()==CompanionEnergy.Rest.NONE && !p.isNoGravity(),"unload retained rest state");
             p.tick();check(p.getY()==origin.getY(),"deferred safe exit failed");p.setOnGround(true);p.setNoAi(false);
         });
-        server.waitFor(s->((PeepoEntity)s.overworld().getEntity(seatedNpc)).getRestMode()==CompanionEnergy.Rest.SITTING,400);
+        awaitSeated(server);
+    }
+    private void awaitSeated(TestServerContext server){
+        try{server.waitFor(s->((PeepoEntity)s.overworld().getEntity(seatedNpc)).getRestMode()==CompanionEnergy.Rest.SITTING,400);}
+        catch(AssertionError e){throw new AssertionError(server.computeOnServer(s->{
+            var p=(PeepoEntity)s.overworld().getEntity(seatedNpc);
+            return "seat: pos="+p.position()+", routine="+p.routineStatus()+", rest="+p.getRestMode()
+                +", onShift="+p.preferences.onShift()+", grounded="+p.onGround()+", navigationDone="+p.getNavigation().isDone()
+                +", stool="+s.overworld().getBlockState(origin.offset(8,0,0))+", reserved="+CompanionSeats.isReserved(s.overworld(),origin.offset(8,0,0));
+        }),e);}
     }
     private void dedicated(ClientGameTestContext context){
         try(var server=context.worldBuilder().adjustSettings(creator->{
@@ -491,6 +518,7 @@ public final class PeepoCompanionClientTests implements FabricClientGameTest {
                 });
                 cookingGui(context,server);companionGui(context,server);
             }
+            io.github.jimbozoomer.jugcraft.test.InProcessServerConfigs.beforeReconnect(server);
             try(var connection=server.connect()){
                 connection.waitForChunksRender();
                 server.waitFor(s->s.overworld().getEntity(savedNpc) instanceof PeepoEntity,200);

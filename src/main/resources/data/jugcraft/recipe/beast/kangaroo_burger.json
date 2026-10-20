@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "B",
+    "K",
+    "B"
+  ],
+  "key": {
+    "B": "minecraft:bread",
+    "K": "jugcraft:beast_cooked_kangaroo_meat"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:beast_kangaroo_burger"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

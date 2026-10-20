@@ -1,0 +1,125 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "shield",
+      "parent": "$mesh",
+      "pose": [
+        -2.0,
+        16.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -4.0,
+            -6.0,
+            1.0,
+            12.0,
+            12.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -3.0,
+            -3.0,
+            -5.0,
+            2.0,
+            10.0,
+            10.0
+          ],
+          "uv": [
+            17.0,
+            15.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -4.0,
+            -1.0,
+            -3.0,
+            3.0,
+            6.0,
+            6.0
+          ],
+          "uv": [
+            27.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "parent": "shield",
+      "pose": [
+        8.0,
+        8.0,
+        -8.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -8.0,
+            -8.5,
+            7.0,
+            5.0,
+            5.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            25.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelShieldOfTheDeep.java",
+  "sourceSha256": "31e71efcd7cb08cc33e89c79abcebd2040c5005ebd945243524eed392909979b",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

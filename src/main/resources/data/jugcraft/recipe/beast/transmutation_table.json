@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " N ",
+    "S S",
+    "OOO"
+  ],
+  "key": {
+    "N": "minecraft:nether_star",
+    "S": "jugcraft:beast_farseer_arm",
+    "O": "minecraft:obsidian"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:beast_transmutation_table"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

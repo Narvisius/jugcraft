@@ -1,0 +1,218 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.beast_hummingbird",
+        "texture_width": 32,
+        "texture_height": 32,
+        "visible_bounds_width": 4,
+        "visible_bounds_height": 4,
+        "visible_bounds_offset": [
+          0,
+          0.15,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "body",
+          "parent": "root",
+          "pivot": [
+            0.0,
+            3.5999999999999996,
+            0.0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1.68,
+                1.2,
+                -2.4
+              ],
+              "size": [
+                3.36,
+                2.4,
+                4.8
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "head",
+          "parent": "root",
+          "pivot": [
+            0.0,
+            4.5600000000000005,
+            -2.16
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1.2,
+                3.12,
+                -3.36
+              ],
+              "size": [
+                2.4,
+                1.44,
+                2.4
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "wing_-1",
+          "parent": "root",
+          "pivot": [
+            -1.44,
+            2.4,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -5.279999999999999,
+                2.4,
+                -1.68
+              ],
+              "size": [
+                3.84,
+                0.288,
+                3.84
+              ],
+              "uv": [
+                0,
+                16.0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_-1",
+          "parent": "root",
+          "pivot": [
+            -0.96,
+            1.2,
+            0.12
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1.2,
+                0,
+                -0.24
+              ],
+              "size": [
+                0.48,
+                1.2,
+                0.72
+              ],
+              "uv": [
+                16.0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "wing_1",
+          "parent": "root",
+          "pivot": [
+            1.44,
+            2.4,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                1.44,
+                2.4,
+                -1.68
+              ],
+              "size": [
+                3.84,
+                0.288,
+                3.84
+              ],
+              "uv": [
+                0,
+                16.0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_1",
+          "parent": "root",
+          "pivot": [
+            0.96,
+            1.2,
+            0.12
+          ],
+          "cubes": [
+            {
+              "origin": [
+                0.72,
+                0,
+                -0.24
+              ],
+              "size": [
+                0.48,
+                1.2,
+                0.72
+              ],
+              "uv": [
+                16.0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "beak",
+          "parent": "root",
+          "pivot": [
+            0.0,
+            4.175999999999999,
+            -3.84
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -0.624,
+                3.5999999999999996,
+                -4.56
+              ],
+              "size": [
+                1.248,
+                0.576,
+                1.44
+              ],
+              "uv": [
+                16.0,
+                16.0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

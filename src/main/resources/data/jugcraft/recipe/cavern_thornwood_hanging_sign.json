@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "wooden_sign",
+  "key": {
+    "C": "minecraft:iron_chain",
+    "#": "jugcraft:cavern_stripped_thornwood_log"
+  },
+  "pattern": [
+    "C C",
+    "###",
+    "###"
+  ],
+  "result": {
+    "count": 3,
+    "id": "jugcraft:cavern_thornwood_hanging_sign"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

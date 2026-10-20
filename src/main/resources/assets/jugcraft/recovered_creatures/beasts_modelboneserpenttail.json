@@ -1,0 +1,124 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "tail",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -4.75,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -5.25,
+            -8.0,
+            10.0,
+            10.0,
+            16.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -1.0,
+            -6.25,
+            -8.0,
+            2.0,
+            1.0,
+            16.0
+          ],
+          "uv": [
+            0.0,
+            27.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelBoneSerpentTail.java",
+  "sourceSha256": "5bbed1ed93f4848e7879f8031994cd28b78af3f4eb7dd2cfa8c64ba421b0f662",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.tail.rotationPointY += (float)(Math.sin((double)(limbSwing * walkSpeed) - walkOffset) * (double)limbSwingAmount * (double)walkDegree - (double)(limbSwingAmount * walkDegree));",
+      "reason": "Unbound expression variable walkOffset"
+    },
+    {
+      "call": "this.tail.rotationPointY += (float)(Math.sin((double)(ageInTicks * idleSpeed) - walkOffset) * 1.0 * (double)idleDegree - (double)(1.0f * idleDegree));",
+      "reason": "Unbound expression variable walkOffset"
+    }
+  ],
+  "expressions": [
+    {
+      "bone": "tail",
+      "target": "xRot",
+      "op": "=",
+      "value": [
+        "*",
+        "pitch",
+        [
+          "/",
+          3.141592653589793,
+          180
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "tail",
+      "target": "yRot",
+      "op": "=",
+      "value": [
+        "*",
+        "yaw",
+        [
+          "/",
+          3.141592653589793,
+          180
+        ]
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

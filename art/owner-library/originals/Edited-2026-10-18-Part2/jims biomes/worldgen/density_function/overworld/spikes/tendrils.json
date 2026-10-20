@@ -1,0 +1,49 @@
+{
+  "type": "minecraft:range_choice",
+  "input": "terralith:overworld/spike/size_spline",
+  "min_inclusive": -2,
+  "max_exclusive": 1000000,
+  "when_in_range": {
+    "type": "minecraft:add",
+    "left": {
+      "type": "minecraft:add",
+      "left": {
+        "type": "minecraft:square",
+        "input": {
+          "type": "minecraft:abs",
+          "input": {
+            "type": "minecraft:noise",
+            "noise": "terralith:math/spikes/noise",
+            "shift_x": {
+              "type": "minecraft:mul",
+              "left": 110,
+              "right": "terralith:overworld/spikes/spike_x"
+            },
+            "shift_y": 8,
+            "shift_z": {
+              "type": "minecraft:mul",
+              "left": 110,
+              "right": "terralith:overworld/spikes/spike_z"
+            },
+            "xz_scale": 1.0,
+            "y_scale": 0.0
+          }
+        }
+      },
+      "right": {
+        "type": "minecraft:add",
+        "left": {
+          "type": "minecraft:gradient",
+          "from_value": -0.2675,
+          "to_value": -3.0,
+          "axis": "y",
+          "from_coordinate": 0,
+          "to_coordinate": 320
+        },
+        "right": "terralith:overworld/spikes/base_height"
+      }
+    },
+    "right": "terralith:overworld/spike/size_spline"
+  },
+  "when_out_of_range": -64
+}

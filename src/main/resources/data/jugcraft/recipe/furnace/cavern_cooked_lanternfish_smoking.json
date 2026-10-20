@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smoking",
+  "ingredient": "jugcraft:cavern_lanternfish",
+  "result": {
+    "id": "jugcraft:cavern_cooked_lanternfish"
+  },
+  "experience": 0.15,
+  "cookingtime": 100,
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

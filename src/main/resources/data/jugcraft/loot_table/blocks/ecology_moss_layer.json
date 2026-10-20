@@ -1,0 +1,149 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:alternatives",
+              "children": [
+                {
+                  "type": "minecraft:item",
+                  "name": "minecraft:moss_carpet",
+                  "condition": {
+                    "type": "minecraft:match_block",
+                    "blocks": "jugcraft:ecology_moss_layer",
+                    "state": {
+                      "layers": "1"
+                    }
+                  }
+                },
+                {
+                  "type": "minecraft:item",
+                  "name": "minecraft:moss_carpet",
+                  "modifier": [
+                    {
+                      "count": 2.0,
+                      "add": false,
+                      "type": "minecraft:set_count"
+                    }
+                  ],
+                  "condition": {
+                    "type": "minecraft:match_block",
+                    "blocks": "jugcraft:ecology_moss_layer",
+                    "state": {
+                      "layers": "2"
+                    }
+                  }
+                },
+                {
+                  "type": "minecraft:item",
+                  "name": "minecraft:moss_carpet",
+                  "modifier": [
+                    {
+                      "count": 3.0,
+                      "add": false,
+                      "type": "minecraft:set_count"
+                    }
+                  ],
+                  "condition": {
+                    "type": "minecraft:match_block",
+                    "blocks": "jugcraft:ecology_moss_layer",
+                    "state": {
+                      "layers": "3"
+                    }
+                  }
+                },
+                {
+                  "type": "minecraft:item",
+                  "name": "minecraft:moss_carpet",
+                  "modifier": [
+                    {
+                      "count": 4.0,
+                      "add": false,
+                      "type": "minecraft:set_count"
+                    }
+                  ],
+                  "condition": {
+                    "type": "minecraft:match_block",
+                    "blocks": "jugcraft:ecology_moss_layer",
+                    "state": {
+                      "layers": "4"
+                    }
+                  }
+                },
+                {
+                  "type": "minecraft:item",
+                  "name": "minecraft:moss_carpet",
+                  "modifier": [
+                    {
+                      "count": 5.0,
+                      "add": false,
+                      "type": "minecraft:set_count"
+                    }
+                  ],
+                  "condition": {
+                    "type": "minecraft:match_block",
+                    "blocks": "jugcraft:ecology_moss_layer",
+                    "state": {
+                      "layers": "5"
+                    }
+                  }
+                },
+                {
+                  "type": "minecraft:item",
+                  "name": "minecraft:moss_carpet",
+                  "modifier": [
+                    {
+                      "count": 6.0,
+                      "add": false,
+                      "type": "minecraft:set_count"
+                    }
+                  ],
+                  "condition": {
+                    "type": "minecraft:match_block",
+                    "blocks": "jugcraft:ecology_moss_layer",
+                    "state": {
+                      "layers": "6"
+                    }
+                  }
+                },
+                {
+                  "type": "minecraft:item",
+                  "name": "minecraft:moss_carpet",
+                  "modifier": [
+                    {
+                      "count": 7.0,
+                      "add": false,
+                      "type": "minecraft:set_count"
+                    }
+                  ],
+                  "condition": {
+                    "type": "minecraft:match_block",
+                    "blocks": "jugcraft:ecology_moss_layer",
+                    "state": {
+                      "layers": "7"
+                    }
+                  }
+                },
+                {
+                  "type": "minecraft:item",
+                  "name": "minecraft:moss_block"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "condition": {
+        "predicate": {},
+        "entity": "this",
+        "type": "minecraft:entity_properties"
+      }
+    }
+  ]
+}

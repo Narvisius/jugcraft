@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:ecology_coconut_husk",
+    "minecraft:beetroot",
+    "minecraft:beetroot",
+    "minecraft:beetroot",
+    "minecraft:beetroot",
+    "minecraft:beetroot",
+    "minecraft:beetroot"
+  ],
+  "result": {
+    "id": "minecraft:beetroot_soup"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

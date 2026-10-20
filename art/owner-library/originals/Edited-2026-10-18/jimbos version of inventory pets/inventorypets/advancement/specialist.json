@@ -1,0 +1,81 @@
+{
+	"display": {
+		"icon": {
+			"id": "inventorypets:pet_mickerson"
+		},
+		"title": {
+			"translate": "advancement.ip.petachieveSpecialist"
+		},
+		"description": {
+			"translate": "advancement.ip.petachieveSpecialist.desc"
+		},
+		"show_toast": true,
+		"announce_to_chat": true,
+		"frame": "goal"
+	},
+	"parent": "inventorypets:root",
+	"criteria": {
+		"crafting_table": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": [
+							"inventorypets:pet_sponge"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_purplicious_cow"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_mickerson"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_pingot"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_qcm"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_banana"
+						]
+					},
+					{
+            			"items": [
+            				"inventorypets:pet_loot"
+          				]
+          			},
+         			{
+           				"items": [
+           					"inventorypets:pet_meta"
+         				]
+         			},
+          			{
+           				"items": [
+           					"inventorypets:pet_dingot"
+          				]
+          			},
+          			{
+           				"items": [
+           					"inventorypets:pet_flying_saddle"
+          				]
+          			},
+         			{
+           				"items": [
+           					"inventorypets:pet_quiver"
+         				]
+         			}
+				]
+			}
+		}
+	}
+}

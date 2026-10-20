@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " P ",
+    "PRP",
+    " S "
+  ],
+  "key": {
+    "P": "#minecraft:planks",
+    "R": "jugcraft:beast_rattlesnake_rattle",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:beast_maraca"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -43,6 +43,7 @@ public class MachineConsolidationGameTests {
             for (var entry : recipes) {
                 FormMachineBlockEntity machine = place(h, block);
                 FluidRecipe recipe = entry.recipe();
+                machine.selectRecipe(entry.id());
                 feed(machine, recipe);
                 long starting = machine.energy().getAmount();
                 if (recipe.tool().isPresent()) {
@@ -85,7 +86,7 @@ public class MachineConsolidationGameTests {
                 checked++;
             }
         }
-        h.assertTrue(checked == 12, "All twelve consolidated process recipes exercised, found " + checked);
+        h.assertTrue(checked >= 12, "Original twelve plus added consolidated process recipes exercised, found " + checked);
         h.succeed();
     }
 

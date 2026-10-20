@@ -1,0 +1,158 @@
+{
+  "parent": "block/thin_block",
+  "textures": {
+    "moss": "jugcraft:menagerie/landscape/block/glowing_moss_block",
+    "emissive": "jugcraft:menagerie/landscape/block/glowing_moss_block_emissive",
+    "particle": "#moss"
+  },
+  "elements": [
+    {
+      "from": [
+        -0.1,
+        0,
+        -0.1
+      ],
+      "to": [
+        16.1,
+        1,
+        16.1
+      ],
+      "light_emission": 1,
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#moss",
+          "cullface": "down"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#moss"
+        },
+        "north": {
+          "uv": [
+            0,
+            15,
+            16,
+            16
+          ],
+          "texture": "#moss",
+          "cullface": "north"
+        },
+        "south": {
+          "uv": [
+            0,
+            15,
+            16,
+            16
+          ],
+          "texture": "#moss",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            0,
+            15,
+            16,
+            16
+          ],
+          "texture": "#moss",
+          "cullface": "west"
+        },
+        "east": {
+          "uv": [
+            0,
+            15,
+            16,
+            16
+          ],
+          "texture": "#moss",
+          "cullface": "east"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        -0.1,
+        0
+      ],
+      "to": [
+        16,
+        1.1,
+        16
+      ],
+      "light_emission": 8,
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#emissive",
+          "cullface": "down"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#emissive"
+        },
+        "north": {
+          "uv": [
+            0,
+            15,
+            16,
+            16
+          ],
+          "texture": "#emissive",
+          "cullface": "north"
+        },
+        "south": {
+          "uv": [
+            0,
+            15,
+            16,
+            16
+          ],
+          "texture": "#emissive",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            0,
+            15,
+            16,
+            16
+          ],
+          "texture": "#emissive",
+          "cullface": "west"
+        },
+        "east": {
+          "uv": [
+            0,
+            15,
+            16,
+            16
+          ],
+          "texture": "#emissive",
+          "cullface": "east"
+        }
+      }
+    }
+  ]
+}

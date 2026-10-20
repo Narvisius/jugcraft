@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": "minecraft:sand",
+    "B": "jugcraft:ecology_seashell",
+    "C": "minecraft:stick"
+  },
+  "pattern": [
+    " C ",
+    "ABA",
+    "AAA"
+  ],
+  "result": {
+    "id": "jugcraft:ecology_sandcastle"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

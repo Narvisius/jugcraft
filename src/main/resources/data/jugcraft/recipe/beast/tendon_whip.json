@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " CC",
+    "TTC",
+    "ST "
+  ],
+  "key": {
+    "C": "jugcraft:beast_dropbear_claw",
+    "T": "jugcraft:beast_elastic_tendon",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:beast_tendon_whip"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

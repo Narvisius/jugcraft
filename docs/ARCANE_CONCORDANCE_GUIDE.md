@@ -57,6 +57,7 @@ your server actually has.
 | Research | Tradition | Begin | Understand | Master |
 |---|---|---|---|---|
 | First Light | Lampwrights | Examine a luminous specimen | Understand Radiance: study at a bench, or examine three specimens in the dark | Master First Light: Kindle light in 8 different chunks |
+| Jug Nouveau Arcana | Lampwrights | Use a spell instrument or glyph; its workings are available immediately. | Use a spell instrument or glyph; its workings are available immediately. | Use a spell instrument or glyph; its workings are available immediately. |
 | Alembic Arts | Alembists | Examine an alchemical ingredient | Understand alchemy: study an ingredient at a Lampwright's Bench | Bottle 3 different outcomes |
 | Assay | Balancewrights | Examine an unworked ore or clay | Understand Assay: study raw matter at a Lampwright's Bench | Dissolve five different materials at an Assayer's Scale |
 | Binding Arts | Spiritbinders | Examine something that binds | Understand the Binding Arts: study something that binds at a Lampwright's Bench | Be served by a familiar, a spirit and a construct |

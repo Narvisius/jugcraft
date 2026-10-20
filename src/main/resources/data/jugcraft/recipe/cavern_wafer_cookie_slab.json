@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WWW"
+  ],
+  "key": {
+    "W": "jugcraft:cavern_wafer_cookie_block"
+  },
+  "result": {
+    "count": 6,
+    "id": "jugcraft:cavern_wafer_cookie_slab"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

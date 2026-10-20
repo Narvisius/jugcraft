@@ -46,7 +46,7 @@ VILLAGE_STRUCTURES = "jugcraft:alpine_villages"
 BIOME_TAGS = ["minecraft:is_overworld", "minecraft:is_mountain", "minecraft:stronghold_biased_to",
               "minecraft:has_structure/trial_chambers", "minecraft:has_structure/abandoned_camp_meadow"]
 
-# Trees: scattered larches (agriculture.LARCH, gold in autumn and bare in winter) among vanilla spruces. Each
-# chunk gets count - 1, count or count + 1 tree tries, evenly; larch_chance of them are larches.
-TREES = {"feature": "alpine_spawn_trees", "count": 1, "larch_chance": 0.6, "larch": "jugcraft:larch_checked",
-         "spruce": "minecraft:spruce_checked"}
+# Scattered trees: 50% larch, 20% stone pine, 20% spruce, 10% juniper bush. Keep 0–2 tries per chunk.
+TREES = {"feature": "alpine_spawn_trees", "count": 1, "default": "minecraft:spruce_checked",
+         "picks": [["jugcraft:larch_checked", 0.5], ["jugcraft:stone_pine_checked", 0.2 / 0.5],
+                   ["jugcraft:juniper_bush_checked", 0.1 / 0.3]]}

@@ -1,0 +1,216 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        8.0,
+        24.0,
+        -8.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -9.0,
+            -12.0,
+            7.0,
+            2.0,
+            12.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            18.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "wheel",
+      "parent": "root",
+      "pose": [
+        -8.0,
+        -10.1683,
+        8.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -1.8417,
+            -2.0,
+            4.0,
+            2.0,
+            4.0
+          ],
+          "uv": [
+            8.0,
+            26.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -7.0,
+            0.1683,
+            -7.0,
+            14.0,
+            0.0,
+            14.0
+          ],
+          "uv": [
+            -11.0,
+            1.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -5.0,
+            -0.8317,
+            -7.0,
+            10.0,
+            2.0,
+            2.0
+          ],
+          "uv": [
+            32.0,
+            36.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            -5.0,
+            -0.8317,
+            5.0,
+            10.0,
+            2.0,
+            2.0
+          ],
+          "uv": [
+            32.0,
+            36.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "cube_r1",
+      "parent": "wheel",
+      "pose": [
+        8.0,
+        10.1683,
+        -8.0,
+        0.0,
+        1.5708,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -15.0,
+            -11.0,
+            -15.0,
+            14.0,
+            2.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            32.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -15.0,
+            -11.0,
+            -3.0,
+            14.0,
+            2.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            32.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/CopperValveModel.java",
+  "sourceSha256": "3f86e186962a227d9e137f5f8d97c4315c77359216f62238f967699de8e6ec72",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.wheel.rotateAngleY = (float)((double)this.wheel.rotateAngleY + Math.toRadians(ageInTicks * 360.0f));",
+      "reason": "Unsupported expression (this.wheel.rotateAngleY + radians(ageInTicks * 360.0))"
+    }
+  ],
+  "expressions": [
+    {
+      "bone": "wheel",
+      "target": "y",
+      "op": "+=",
+      "value": [
+        "*",
+        4.0,
+        "age"
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-18",
+  "scope": "Local owner menagerie and second-batch woodland/fable/companion subset",
+  "species": 106,
+  "secondBatchSpecies": 45,
+  "reconstructedWildlifeModels": 498,
+  "serverTests": {
+    "passed": 1971,
+    "log": "../menagerie-validated-build.log",
+    "note": "Full server suite passed before the final equipment-asset binding and wildlife visual refinements; those final changes compiled and passed focused client checks."
+  },
+  "clientChecks": [
+    {
+      "test": "MenagerieClientGameTests",
+      "result": "passed",
+      "screenshots": 56,
+      "log": "../menagerie-gallery-checked.log"
+    },
+    {
+      "test": "MenagerieWearablesClientGameTests",
+      "result": "passed",
+      "screenshots": 8,
+      "log": "../menagerie-wearables-final.log"
+    }
+  ],
+  "staticChecks": {
+    "modelAuditErrors": 0,
+    "blockItemModelsChecked": 8673,
+    "resourceAndHierarchyAuditErrors": 0
+  },
+  "visualSamplesReviewed": [
+    "bear",
+    "giraffe",
+    "snail",
+    "yeti",
+    "ferret",
+    "armored dragonfly",
+    "Roly Poly cargo",
+    "baby snail",
+    "acorn hat front",
+    "flower crown front",
+    "backpack front/back"
+  ],
+  "runtimeJar": {
+    "path": "build\\libs\\jugcraft-0.1.0-alpha.jar",
+    "sha256": "c706a72de86729d528341cf2545abee2ec75b18f9bfdec0e2507f6b951b8b5b8"
+  },
+  "remaining": [
+    "Owner playtest and population/balance testing",
+    "Individual reconstructed wildlife anatomy and texture-pattern refinement",
+    "Furniture, jimbologics, jug_fauna, biomes, caves, mutations and remaining mixed mob content",
+    "Separate Nouveau unresolved texture aliases/legacy model parents"
+  ],
+  "published": false,
+  "ownerProfileControlled": false
+}

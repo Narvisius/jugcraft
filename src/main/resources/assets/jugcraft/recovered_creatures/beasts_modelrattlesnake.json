@@ -1,0 +1,591 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "body",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -3.0,
+            -4.0,
+            4.0,
+            3.0,
+            7.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "tail1",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -1.75,
+        2.95,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -1.25,
+            0.05,
+            3.0,
+            3.0,
+            7.0
+          ],
+          "uv": [
+            0.0,
+            11.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "neck1",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -1.5,
+        -4.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -1.5,
+            -5.0,
+            3.0,
+            3.0,
+            5.0
+          ],
+          "uv": [
+            18.0,
+            6.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "tail2",
+      "parent": "tail1",
+      "pose": [
+        0.0,
+        0.45,
+        7.05,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.0,
+            0.0,
+            2.0,
+            2.0,
+            6.0
+          ],
+          "uv": [
+            15.0,
+            16.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "neck2",
+      "parent": "neck1",
+      "pose": [
+        0.0,
+        0.0,
+        -4.9,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.5,
+            -5.1,
+            2.0,
+            3.0,
+            5.0
+          ],
+          "uv": [
+            12.0,
+            25.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "head",
+      "parent": "neck2",
+      "pose": [
+        0.0,
+        0.0,
+        -5.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -1.0,
+            -3.8,
+            4.0,
+            2.0,
+            4.0
+          ],
+          "uv": [
+            0.0,
+            22.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "tongue",
+      "parent": "head",
+      "pose": [
+        0.0,
+        0.0,
+        -3.8,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0.0,
+            -2.0,
+            1.0,
+            0.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelRattlesnake.java",
+  "sourceSha256": "c8c347c962fe6a9bfdfaf0c66836e7b6a6a46fbab9561b4e1e4bccac3cfd6fcd",
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {
+    "bite": {
+      "length": 0.75,
+      "loop": false,
+      "channels": [
+        {
+          "bone": "body",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.35,
+              "vector": [
+                0.0,
+                0.0,
+                2.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6,
+              "vector": [
+                0.0,
+                0.0,
+                -2.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "neck2",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.35,
+              "vector": [
+                14.999999999999998,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "tail1",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.35,
+              "vector": [
+                0.0,
+                14.999999999999998,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "tail2",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.35,
+              "vector": [
+                0.0,
+                -14.999999999999998,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "neck1",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.35,
+              "vector": [
+                -45.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "head",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.35,
+              "vector": [
+                20.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "motions": [
+    {
+      "bone": "tongue",
+      "kind": "walk",
+      "speed": 1.0,
+      "degree": 0.5,
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "neck1",
+      "kind": "swing",
+      "speed": 1.0,
+      "degree": 0.4,
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "*",
+          -1,
+          5.0
+        ],
+        0.0
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "neck2",
+      "kind": "swing",
+      "speed": 1.0,
+      "degree": 0.4,
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "*",
+          -1,
+          5.0
+        ],
+        0.3141592653589793
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "kind": "swing",
+      "speed": 1.0,
+      "degree": 0.4,
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "*",
+          -1,
+          5.0
+        ],
+        0.6283185307179586
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "tail1",
+      "kind": "swing",
+      "speed": 1.0,
+      "degree": 0.4,
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "*",
+          -1,
+          5.0
+        ],
+        0.9424777960769379
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "tail2",
+      "kind": "swing",
+      "speed": 1.0,
+      "degree": 0.4,
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "*",
+          -1,
+          5.0
+        ],
+        1.2566370614359172
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.walk(this.tail2, 18.0f, 0.1f, false, 1.0f, 0.2f, ageInTicks, 1.0f);",
+      "reason": "Unbound source condition [{'unsupported': 'entity.isRattling()'}]"
+    },
+    {
+      "call": "this.swing(this.tail2, 18.0f, 0.1f, false, 0.0f, 0.0f, ageInTicks, 1.0f);",
+      "reason": "Unbound source condition [{'unsupported': 'entity.isRattling()'}]"
+    }
+  ],
+  "expressions": [],
+  "poses": []
+}

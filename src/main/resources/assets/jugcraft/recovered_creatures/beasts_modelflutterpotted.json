@@ -1,0 +1,1327 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        23.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "pot",
+      "parent": "root",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -6.0,
+            -3.0,
+            6.0,
+            6.0,
+            6.0
+          ],
+          "uv": [
+            24.0,
+            43.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -3.0,
+            -5.8,
+            -3.0,
+            6.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            3.0,
+            42.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_foot",
+      "parent": "pot",
+      "pose": [
+        1.6,
+        0.0,
+        0.8,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -2.0,
+            2.0,
+            1.0,
+            2.0
+          ],
+          "uv": [
+            1.0,
+            50.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_foot",
+      "parent": "pot",
+      "pose": [
+        -1.6,
+        0.0,
+        0.8,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -2.0,
+            2.0,
+            1.0,
+            2.0
+          ],
+          "uv": [
+            1.0,
+            50.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "body",
+      "parent": "pot",
+      "pose": [
+        0.0,
+        -7.9,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.5,
+            -3.0,
+            -3.5,
+            7.0,
+            5.0,
+            7.0
+          ],
+          "uv": [
+            0.0,
+            13.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -3.5,
+            -3.0,
+            -3.5,
+            7.0,
+            5.0,
+            7.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            -0.2,
+            -0.2,
+            -0.2
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "eyes",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -1.0,
+        -3.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -0.5,
+            0.0,
+            3.0,
+            1.0,
+            0.0
+          ],
+          "uv": [
+            23.0,
+            30.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "petals",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -3.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "front_petal",
+      "parent": "petals",
+      "pose": [
+        0.0,
+        0.0,
+        -1.5,
+        1.1781,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.5,
+            -7.0,
+            0.0,
+            7.0,
+            7.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            26.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_petal",
+      "parent": "petals",
+      "pose": [
+        1.5,
+        0.0,
+        0.0,
+        1.1781,
+        -1.5708,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.5,
+            -7.0,
+            0.0,
+            7.0,
+            7.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            26.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_petal",
+      "parent": "petals",
+      "pose": [
+        -1.5,
+        0.0,
+        0.0,
+        1.1781,
+        1.5708,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.5,
+            -7.0,
+            0.0,
+            7.0,
+            7.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            26.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "back_petal",
+      "parent": "petals",
+      "pose": [
+        0.0,
+        0.0,
+        1.5,
+        1.1781,
+        3.1416,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.5,
+            -7.0,
+            0.0,
+            7.0,
+            7.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            26.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelFlutterPotted.java",
+  "sourceSha256": "466ed10e295973d815ce929a71a2eaf830cfcbc9bb3e60517fda8fa24ec5e574",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "left_foot",
+      "kind": "walk",
+      "speed": 1.6,
+      "degree": 1.2,
+      "invert": false,
+      "phase": 1.0,
+      "bias": [
+        "*",
+        -1,
+        0.1
+      ],
+      "clock": "walk",
+      "amount": [
+        "*",
+        "move",
+        [
+          "*",
+          [
+            "-",
+            5.0,
+            [
+              "*",
+              "fly",
+              5.0
+            ]
+          ],
+          0.2
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "right_foot",
+      "kind": "walk",
+      "speed": 1.6,
+      "degree": 1.2,
+      "invert": false,
+      "phase": 1.0,
+      "bias": [
+        "*",
+        -1,
+        0.1
+      ],
+      "clock": "walk",
+      "amount": [
+        "*",
+        "move",
+        [
+          "*",
+          [
+            "-",
+            5.0,
+            [
+              "*",
+              "fly",
+              5.0
+            ]
+          ],
+          0.2
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "root",
+      "kind": "walk",
+      "speed": 1.6,
+      "degree": [
+        "*",
+        1.2,
+        0.2
+      ],
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.1,
+      "clock": "walk",
+      "amount": [
+        "*",
+        "move",
+        [
+          "*",
+          [
+            "-",
+            5.0,
+            [
+              "*",
+              "fly",
+              5.0
+            ]
+          ],
+          0.2
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "root",
+      "kind": "flap",
+      "speed": [
+        "*",
+        1.6,
+        0.5
+      ],
+      "degree": [
+        "*",
+        1.2,
+        0.2
+      ],
+      "invert": false,
+      "phase": 2.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": [
+        "*",
+        "move",
+        [
+          "*",
+          [
+            "-",
+            5.0,
+            [
+              "*",
+              "fly",
+              5.0
+            ]
+          ],
+          0.2
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "root",
+      "kind": "bob",
+      "speed": [
+        "*",
+        1.6,
+        0.5
+      ],
+      "degree": [
+        "*",
+        1.2,
+        6.0
+      ],
+      "invert": true,
+      "phase": 0,
+      "bias": 0,
+      "clock": "walk",
+      "amount": [
+        "*",
+        "move",
+        [
+          "*",
+          [
+            "-",
+            5.0,
+            [
+              "*",
+              "fly",
+              5.0
+            ]
+          ],
+          0.2
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "front_petal",
+      "kind": "walk",
+      "speed": 0.25,
+      "degree": 0.1,
+      "invert": true,
+      "phase": 1.0,
+      "bias": 0.1,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "back_petal",
+      "kind": "walk",
+      "speed": 0.25,
+      "degree": 0.1,
+      "invert": true,
+      "phase": 1.0,
+      "bias": 0.1,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "right_petal",
+      "kind": "flap",
+      "speed": 0.25,
+      "degree": 0.1,
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.1,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "left_petal",
+      "kind": "flap",
+      "speed": 0.25,
+      "degree": 0.1,
+      "invert": true,
+      "phase": 1.0,
+      "bias": 0.1,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "kind": "flap",
+      "speed": 0.4,
+      "degree": 0.2,
+      "invert": false,
+      "phase": 2.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": [
+        "*",
+        [
+          "*",
+          "move",
+          [
+            "*",
+            "fly",
+            5.0
+          ]
+        ],
+        0.2
+      ],
+      "when": 1
+    },
+    {
+      "bone": "pot",
+      "kind": "flap",
+      "speed": 0.4,
+      "degree": 0.2,
+      "invert": true,
+      "phase": 2.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": [
+        "*",
+        [
+          "*",
+          "move",
+          [
+            "*",
+            "fly",
+            5.0
+          ]
+        ],
+        0.2
+      ],
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.root.rotateAngleX -= flutterPitch * flyProgress * 0.1f;",
+      "reason": "Unbound expression variable flutterPitch"
+    },
+    {
+      "call": "this.body.rotateAngleY = (float)((double)this.body.rotateAngleY + Math.toRadians(Mth.m_14177_((float)(shootProgress * 360.0f * 0.2f))));",
+      "reason": "Unsupported expression (this.body.rotateAngleY + radians(Mth.m_14177_((shootProgress * 360.0 * 0.2))))"
+    },
+    {
+      "call": "this.front_petal.setScale(1.0f, petalScale, 1.0f);",
+      "reason": "Unbound expression variable petalScale"
+    },
+    {
+      "call": "this.back_petal.setScale(1.0f, petalScale, 1.0f);",
+      "reason": "Unbound expression variable petalScale"
+    },
+    {
+      "call": "this.left_petal.setScale(1.0f, petalScale, 1.0f);",
+      "reason": "Unbound expression variable petalScale"
+    },
+    {
+      "call": "this.right_petal.setScale(1.0f, petalScale, 1.0f);",
+      "reason": "Unbound expression variable petalScale"
+    }
+  ],
+  "expressions": [
+    {
+      "bone": "pot",
+      "target": "xScale",
+      "op": "=",
+      "value": 1.0,
+      "when": [
+        "&&",
+        1,
+        "baby"
+      ]
+    },
+    {
+      "bone": "pot",
+      "target": "yScale",
+      "op": "=",
+      "value": 1.0,
+      "when": [
+        "&&",
+        1,
+        "baby"
+      ]
+    },
+    {
+      "bone": "pot",
+      "target": "zScale",
+      "op": "=",
+      "value": 1.0,
+      "when": [
+        "&&",
+        1,
+        "baby"
+      ]
+    },
+    {
+      "bone": "body",
+      "target": "y",
+      "op": "+=",
+      "value": 1.5,
+      "when": [
+        "&&",
+        1,
+        "baby"
+      ]
+    },
+    {
+      "bone": "pot",
+      "target": "y",
+      "op": "+=",
+      "value": 0.5,
+      "when": [
+        "&&",
+        1,
+        "baby"
+      ]
+    },
+    {
+      "bone": "body",
+      "target": "xScale",
+      "op": "=",
+      "value": 0.5,
+      "when": [
+        "&&",
+        1,
+        "baby"
+      ]
+    },
+    {
+      "bone": "body",
+      "target": "yScale",
+      "op": "=",
+      "value": 0.5,
+      "when": [
+        "&&",
+        1,
+        "baby"
+      ]
+    },
+    {
+      "bone": "body",
+      "target": "zScale",
+      "op": "=",
+      "value": 0.5,
+      "when": [
+        "&&",
+        1,
+        "baby"
+      ]
+    },
+    {
+      "bone": "left_foot",
+      "target": "xScale",
+      "op": "=",
+      "value": 0.5,
+      "when": [
+        "&&",
+        1,
+        "baby"
+      ]
+    },
+    {
+      "bone": "left_foot",
+      "target": "yScale",
+      "op": "=",
+      "value": 0.5,
+      "when": [
+        "&&",
+        1,
+        "baby"
+      ]
+    },
+    {
+      "bone": "left_foot",
+      "target": "zScale",
+      "op": "=",
+      "value": 0.5,
+      "when": [
+        "&&",
+        1,
+        "baby"
+      ]
+    },
+    {
+      "bone": "right_foot",
+      "target": "xScale",
+      "op": "=",
+      "value": 0.5,
+      "when": [
+        "&&",
+        1,
+        "baby"
+      ]
+    },
+    {
+      "bone": "right_foot",
+      "target": "yScale",
+      "op": "=",
+      "value": 0.5,
+      "when": [
+        "&&",
+        1,
+        "baby"
+      ]
+    },
+    {
+      "bone": "right_foot",
+      "target": "zScale",
+      "op": "=",
+      "value": 0.5,
+      "when": [
+        "&&",
+        1,
+        "baby"
+      ]
+    },
+    {
+      "bone": "pot",
+      "target": "xScale",
+      "op": "=",
+      "value": 1.0,
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          "baby"
+        ]
+      ]
+    },
+    {
+      "bone": "pot",
+      "target": "yScale",
+      "op": "=",
+      "value": 1.0,
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          "baby"
+        ]
+      ]
+    },
+    {
+      "bone": "pot",
+      "target": "zScale",
+      "op": "=",
+      "value": 1.0,
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          "baby"
+        ]
+      ]
+    },
+    {
+      "bone": "body",
+      "target": "xScale",
+      "op": "=",
+      "value": 1.0,
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          "baby"
+        ]
+      ]
+    },
+    {
+      "bone": "body",
+      "target": "yScale",
+      "op": "=",
+      "value": 1.0,
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          "baby"
+        ]
+      ]
+    },
+    {
+      "bone": "body",
+      "target": "zScale",
+      "op": "=",
+      "value": 1.0,
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          "baby"
+        ]
+      ]
+    },
+    {
+      "bone": "left_foot",
+      "target": "xScale",
+      "op": "=",
+      "value": 1.0,
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          "baby"
+        ]
+      ]
+    },
+    {
+      "bone": "left_foot",
+      "target": "yScale",
+      "op": "=",
+      "value": 1.0,
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          "baby"
+        ]
+      ]
+    },
+    {
+      "bone": "left_foot",
+      "target": "zScale",
+      "op": "=",
+      "value": 1.0,
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          "baby"
+        ]
+      ]
+    },
+    {
+      "bone": "right_foot",
+      "target": "xScale",
+      "op": "=",
+      "value": 1.0,
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          "baby"
+        ]
+      ]
+    },
+    {
+      "bone": "right_foot",
+      "target": "yScale",
+      "op": "=",
+      "value": 1.0,
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          "baby"
+        ]
+      ]
+    },
+    {
+      "bone": "right_foot",
+      "target": "zScale",
+      "op": "=",
+      "value": 1.0,
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          "baby"
+        ]
+      ]
+    }
+  ],
+  "poses": [
+    {
+      "bone": "front_petal",
+      "weight": [
+        "/",
+        [
+          "*",
+          "fly",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.2617993877991494,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "back_petal",
+      "weight": [
+        "/",
+        [
+          "*",
+          "fly",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.2617993877991494,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "right_petal",
+      "weight": [
+        "/",
+        [
+          "*",
+          "fly",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.0,
+        0.0,
+        -0.2617993877991494
+      ],
+      "when": 1
+    },
+    {
+      "bone": "left_petal",
+      "weight": [
+        "/",
+        [
+          "*",
+          "fly",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.0,
+        0.0,
+        0.2617993877991494
+      ],
+      "when": 1
+    },
+    {
+      "bone": "root",
+      "weight": [
+        "/",
+        [
+          "*",
+          [
+            "*",
+            [
+              "-",
+              5.0,
+              [
+                "*",
+                "move",
+                5.0
+              ]
+            ],
+            [
+              "*",
+              "fly",
+              5.0
+            ]
+          ],
+          0.2
+        ],
+        5.0
+      ],
+      "target": "position",
+      "value": [
+        0.0,
+        -3.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "front_petal",
+      "weight": [
+        "/",
+        [
+          "*",
+          [
+            "*",
+            [
+              "-",
+              5.0,
+              [
+                "*",
+                "move",
+                5.0
+              ]
+            ],
+            [
+              "*",
+              "fly",
+              5.0
+            ]
+          ],
+          0.2
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.08726646259971647,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "back_petal",
+      "weight": [
+        "/",
+        [
+          "*",
+          [
+            "*",
+            [
+              "-",
+              5.0,
+              [
+                "*",
+                "move",
+                5.0
+              ]
+            ],
+            [
+              "*",
+              "fly",
+              5.0
+            ]
+          ],
+          0.2
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.08726646259971647,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "right_petal",
+      "weight": [
+        "/",
+        [
+          "*",
+          [
+            "*",
+            [
+              "-",
+              5.0,
+              [
+                "*",
+                "move",
+                5.0
+              ]
+            ],
+            [
+              "*",
+              "fly",
+              5.0
+            ]
+          ],
+          0.2
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.08726646259971647,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "left_petal",
+      "weight": [
+        "/",
+        [
+          "*",
+          [
+            "*",
+            [
+              "-",
+              5.0,
+              [
+                "*",
+                "move",
+                5.0
+              ]
+            ],
+            [
+              "*",
+              "fly",
+              5.0
+            ]
+          ],
+          0.2
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.08726646259971647,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "root",
+      "weight": [
+        "/",
+        [
+          "*",
+          "sit",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "position",
+      "value": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "left_foot",
+      "weight": [
+        "/",
+        [
+          "max",
+          [
+            "*",
+            "fly",
+            5.0
+          ],
+          [
+            "*",
+            "sit",
+            5.0
+          ]
+        ],
+        5.0
+      ],
+      "target": "position",
+      "value": [
+        0.0,
+        -1.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "right_foot",
+      "weight": [
+        "/",
+        [
+          "max",
+          [
+            "*",
+            "fly",
+            5.0
+          ],
+          [
+            "*",
+            "sit",
+            5.0
+          ]
+        ],
+        5.0
+      ],
+      "target": "position",
+      "value": [
+        0.0,
+        -1.0,
+        0.0
+      ],
+      "when": 1
+    }
+  ]
+}

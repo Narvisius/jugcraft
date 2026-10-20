@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:nouveau_green_archwood_log",
+    "minecraft:iron_pickaxe",
+    "#c:storage_blocks/coal"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_ritual_burrowing"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

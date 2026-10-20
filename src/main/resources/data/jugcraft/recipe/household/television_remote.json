@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "L": "minecraft:redstone_lamp",
+    "N": "minecraft:iron_nugget",
+    "R": "minecraft:redstone"
+  },
+  "pattern": [
+    "NLN",
+    "NRN",
+    "NCN"
+  ],
+  "result": {
+    "id": "jugcraft:household_television_remote"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

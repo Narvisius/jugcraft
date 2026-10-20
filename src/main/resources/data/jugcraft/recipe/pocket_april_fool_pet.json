@@ -1,0 +1,24 @@
+{
+  "result": {
+    "id": "jugcraft:pocket_pet_april_fool"
+  },
+  "pattern": [
+    "OFR",
+    "ODR",
+    "OGR"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "R": "jugcraft:pocket_nugget_obsidian",
+    "D": "minecraft:diamond",
+    "F": "minecraft:tripwire_hook",
+    "G": "minecraft:gold_ingot",
+    "O": "minecraft:redstone"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

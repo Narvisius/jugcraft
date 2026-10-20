@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:string",
+    "jugcraft:grove_pink_minipad_flower",
+    "jugcraft:grove_yellow_minipad_flower"
+  ],
+  "result": {
+    "id": "jugcraft:grove_flower_crown",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

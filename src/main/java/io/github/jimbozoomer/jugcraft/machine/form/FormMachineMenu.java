@@ -40,6 +40,18 @@ public class FormMachineMenu extends AbstractContainerMenu {
 	private final ContainerData data;
     public static final int BUTTON_AUTO = 10;
     public static final int BUTTON_RECIPE = 100;
+    public static final int BUTTON_CLEAR_RULES = 11;
+    public static final int BUTTON_PRIORITY = 1000;
+    public static final int BUTTON_TARGET = 2000;
+    private static int dataCount(int recipes) { return FormMachineBlockEntity.DATA_COUNT + 4 + 2 * recipes; }
+    public boolean hasAutomation() { return data(FormMachineBlockEntity.DATA_COUNT + 2) != 0; }
+    public int automationRuleCount() { return data(FormMachineBlockEntity.DATA_COUNT + 3); }
+    public int recipePriority(int index) { return data(FormMachineBlockEntity.DATA_COUNT + 4 + index * 2); }
+    public int stockTarget(int index) { return data(FormMachineBlockEntity.DATA_COUNT + 5 + index * 2); }
+    public boolean canEditAutomation(int index) {
+        return hasAutomation() && !catalogStale() && index >= 0 && index < catalog.size()
+            && (automationRuleCount() < RecipeAutomation.MAX_RULES || recipePriority(index) != 0 || stockTarget(index) != 0);
+    }
     private final java.util.List<io.github.jimbozoomer.jugcraft.chemistry.FluidRecipes.Entry> catalog;
     private long lastSelectionTick = Long.MIN_VALUE;
 
@@ -63,7 +75,7 @@ public class FormMachineMenu extends AbstractContainerMenu {
     public FormMachineMenu(int containerId, Inventory inventory, MachineForm form,
             java.util.List<io.github.jimbozoomer.jugcraft.chemistry.FluidRecipes.Entry> catalog) {
         this(containerId, inventory, form, new SimpleContainer(form.containerSize()),
-                new SimpleContainerData(FormMachineBlockEntity.DATA_COUNT + 2), null, catalog);
+                new SimpleContainerData(dataCount(catalog.size())), null, catalog);
 	}
 
 	public FormMachineMenu(int containerId, Inventory inventory, FormMachineBlockEntity machine, ContainerData data) {
@@ -74,7 +86,7 @@ public class FormMachineMenu extends AbstractContainerMenu {
 			@Nullable FormMachineBlockEntity machine, java.util.List<io.github.jimbozoomer.jugcraft.chemistry.FluidRecipes.Entry> catalog) {
 		super(JugcraftForms.MENU, containerId);
 		checkContainerSize(container, form.containerSize());
-		checkContainerDataCount(data, machine == null ? FormMachineBlockEntity.DATA_COUNT + 2 : FormMachineBlockEntity.DATA_COUNT);
+		checkContainerDataCount(data, machine == null ? dataCount(catalog.size()) : FormMachineBlockEntity.DATA_COUNT);
 		this.form = form;
 		this.container = container;
 		this.catalog = catalog;
@@ -87,10 +99,18 @@ public class FormMachineMenu extends AbstractContainerMenu {
                 }
                 if (index == FormMachineBlockEntity.DATA_COUNT + 1)
                     return !form.generator() && machine.recipes(inventory.player.level().getServer()) != catalog ? 1 : 0;
+                if (index == FormMachineBlockEntity.DATA_COUNT + 2) return machine.hasAutomation() ? 1 : 0;
+                if (index == FormMachineBlockEntity.DATA_COUNT + 3) return machine.automationRuleCount();
+                if (index >= FormMachineBlockEntity.DATA_COUNT + 4) {
+                    int at = index - FormMachineBlockEntity.DATA_COUNT - 4;
+                    if (at / 2 >= catalog.size()) return 0;
+                    var id = catalog.get(at / 2).id();
+                    return at % 2 == 0 ? machine.recipePriority(id) : machine.stockTarget(id);
+                }
                 return data.get(index);
             }
             public void set(int index, int value) { }
-            public int getCount() { return FormMachineBlockEntity.DATA_COUNT + 2; }
+            public int getCount() { return dataCount(catalog.size()); }
         };
 		this.machine = machine;
 		FluidMachineSpec spec = form.tanks();
@@ -136,7 +156,7 @@ public class FormMachineMenu extends AbstractContainerMenu {
 			addSlot(new Slot(container, form.firstUpgradeSlot() + upgrade, toolX(place), toolY(place)) {
 				@Override
 				public boolean mayPlace(ItemStack stack) {
-					return MachineUpgrades.isUpgrade(stack);
+					return MachineUpgrades.isFormUpgrade(stack);
 				}
 			});
 		}
@@ -214,6 +234,18 @@ public class FormMachineMenu extends AbstractContainerMenu {
                 || !server.level().mayInteract(player, machine.getBlockPos())
                 || !player.mayUseItemAt(machine.getBlockPos(), net.minecraft.core.Direction.UP, ItemStack.EMPTY)
                 || io.github.jimbozoomer.jugcraft.town.TownProtection.denies(player, server.level(), machine.getBlockPos())) return false;
+        if (id == BUTTON_CLEAR_RULES || id >= BUTTON_PRIORITY) {
+            if (catalogStale() || !machine.hasAutomation()) return false;
+            long now = server.level().getGameTime();
+            if (lastSelectionTick == now) return false;
+            boolean target = id >= BUTTON_TARGET;
+            int index = id - (target ? BUTTON_TARGET : BUTTON_PRIORITY);
+            if (id != BUTTON_CLEAR_RULES && (index < 0 || index >= catalog.size())) return false;
+            boolean accepted = id == BUTTON_CLEAR_RULES ? machine.clearAutomation()
+                : machine.cycleAutomation(catalog.get(index).id(), target);
+            if (accepted) { lastSelectionTick = now; broadcastChanges(); }
+            return accepted;
+        }
         if (id == BUTTON_AUTO || id >= BUTTON_RECIPE) {
             if (catalogStale() || machine.form().generator()) return false;
             long now = server.level().getGameTime();
@@ -263,7 +295,7 @@ public class FormMachineMenu extends AbstractContainerMenu {
 	}
 
 	private boolean moveIntoMachine(ItemStack stack) {
-		if (MachineUpgrades.isUpgrade(stack) && form.upgradeSlots() > 0) {
+		if (MachineUpgrades.isFormUpgrade(stack) && form.upgradeSlots() > 0) {
 			return moveItemStackTo(stack, form.firstUpgradeSlot(), form.containerSize(), false);
 		}
 		for (int socket = 0; socket < form.sockets().size(); socket++) {

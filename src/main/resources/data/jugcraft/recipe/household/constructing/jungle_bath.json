@@ -1,0 +1,30 @@
+{
+  "type": "jugcraft:household_construction",
+  "ingredients": [
+    {
+      "count": 5,
+      "ingredient": "minecraft:jungle_planks"
+    },
+    {
+      "count": 8,
+      "ingredient": "minecraft:quartz_block"
+    },
+    {
+      "count": 2,
+      "ingredient": "minecraft:iron_ingot"
+    },
+    {
+      "count": 1,
+      "ingredient": "minecraft:copper_ingot"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:household_jungle_bath"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

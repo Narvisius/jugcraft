@@ -1,5 +1,10 @@
 # Flow batteries: vanadium electrolyte as grid storage
 
+14 October local checkpoint: [battery package 3](batteries-and-power-management.md)
+extends this controller with mineral/formulated electrolyte, four paired tank modules,
+a separate stack upgrade and local controls. **Unbuilt, untested and unmerged.** The
+older verification below applies only to the historical baseline, not this expansion.
+
 Status: implemented on `feature/chemistry-17` (batch 17). Compiles and tests in CI only; **not yet played**.
 Proposal issue: the owner's chemistry list, item 5 (1 October 2026: "lets do 1-5 of the chemistry list"), from the saved backlog in [MACHINE_ROADMAP.md](../MACHINE_ROADMAP.md).
 Owner: jimbozoomer-byte

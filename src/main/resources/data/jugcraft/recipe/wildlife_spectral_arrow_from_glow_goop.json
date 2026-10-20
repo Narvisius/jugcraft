@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "jugcraft:wildlife_spectral_arrow",
+  "pattern": [
+    "###",
+    "#A#",
+    "###"
+  ],
+  "key": {
+    "#": "jugcraft:wildlife_glow_goop",
+    "A": "minecraft:arrow"
+  },
+  "result": {
+    "id": "minecraft:spectral_arrow",
+    "count": 2
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

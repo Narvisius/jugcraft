@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "x": "jugcraft:nouveau_wilden_spike",
+    "y": "minecraft:stick",
+    "z": "minecraft:feather"
+  },
+  "pattern": [
+    " x ",
+    " y ",
+    " z "
+  ],
+  "result": {
+    "count": 32,
+    "id": "minecraft:arrow"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

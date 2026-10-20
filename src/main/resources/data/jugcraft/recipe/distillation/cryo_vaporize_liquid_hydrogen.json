@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:distillation",
+  "capability": "jugcraft:cryogenic_vaporization",
+  "fluids": [
+    {
+      "fluid": "jugcraft:liquid_hydrogen",
+      "amount": 250
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:hydrogen",
+      "amount": 1000,
+      "tank": 0
+    }
+  ],
+  "energy_per_tick": 32,
+  "time": 160
+}

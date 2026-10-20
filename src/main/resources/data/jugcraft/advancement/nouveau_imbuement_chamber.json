@@ -1,0 +1,32 @@
+{
+  "parent": "jugcraft:nouveau_root",
+  "criteria": {
+    "has_imbuement_chamber": {
+      "conditions": {
+        "items": [
+          {
+            "items": "jugcraft:nouveau_imbuement_chamber"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "jugcraft.nouveau_adv.desc.imbuement_chamber"
+    },
+    "icon": {
+      "count": 1,
+      "id": "jugcraft:nouveau_imbuement_chamber"
+    },
+    "title": {
+      "translate": "jugcraft.nouveau_adv.title.imbuement_chamber"
+    }
+  },
+  "requirements": [
+    [
+      "has_imbuement_chamber"
+    ]
+  ]
+}

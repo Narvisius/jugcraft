@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PPP",
+    " S "
+  ],
+  "key": {
+    "P": "minecraft:paper",
+    "S": "minecraft:string"
+  },
+  "result": {
+    "id": "jugcraft:toilet_paper_streamer",
+    "count": 3
+  }
+}

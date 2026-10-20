@@ -1,0 +1,137 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.wildlife_dragonfly",
+        "texture_width": 32,
+        "texture_height": 32,
+        "visible_bounds_width": 4,
+        "visible_bounds_height": 4,
+        "visible_bounds_offset": [
+          0,
+          0.15,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "body",
+          "parent": "root",
+          "pivot": [
+            0.0,
+            2.4,
+            0.0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -2.2399999999999998,
+                0,
+                -3.2
+              ],
+              "size": [
+                4.4799999999999995,
+                2.4,
+                6.4
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "head",
+          "parent": "root",
+          "pivot": [
+            0.0,
+            3.36,
+            -2.8799999999999994
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1.6,
+                1.92,
+                -4.4799999999999995
+              ],
+              "size": [
+                3.2,
+                1.44,
+                3.2
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "wing_-1",
+          "parent": "root",
+          "pivot": [
+            -1.92,
+            1.2,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -7.040000000000001,
+                1.2,
+                -2.2399999999999998
+              ],
+              "size": [
+                5.120000000000001,
+                0.288,
+                5.120000000000001
+              ],
+              "uv": [
+                0,
+                16.0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "wing_1",
+          "parent": "root",
+          "pivot": [
+            1.92,
+            1.2,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                1.92,
+                1.2,
+                -2.2399999999999998
+              ],
+              "size": [
+                5.120000000000001,
+                0.288,
+                5.120000000000001
+              ],
+              "uv": [
+                0,
+                16.0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

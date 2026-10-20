@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "#jugcraft:household/wooden_toilets",
+    "minecraft:light_blue_dye"
+  ],
+  "result": {
+    "id": "jugcraft:household_light_blue_toilet"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

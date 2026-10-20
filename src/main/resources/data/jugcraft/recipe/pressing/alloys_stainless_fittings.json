@@ -1,0 +1,19 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "nickel"
+    }
+  ],
+  "type": "jugcraft:pressing",
+  "ingredient": "jugcraft:stainless_steel_plate",
+  "result": {
+    "id": "jugcraft:stainless_fitting",
+    "count": 2
+  },
+  "time": 120
+}

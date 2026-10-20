@@ -1,0 +1,34 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "phosphate"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:phosphate_preparation",
+  "items": [
+    {
+      "ingredient": "jugcraft:digestate_fiber",
+      "count": 2
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 250
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:organic_fertilizer_carrier",
+      "count": 1
+    }
+  ],
+  "energy_per_tick": 48,
+  "time": 160
+}

@@ -1,0 +1,483 @@
+{
+  "textureSize": [
+    48,
+    32
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0.0,
+        3.1416,
+        0.0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "body",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -2.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -1.0,
+            -3.0,
+            6.0,
+            3.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "skull",
+      "parent": "body",
+      "pose": [
+        0.0,
+        1.0,
+        3.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "skull_r1",
+      "parent": "skull",
+      "pose": [
+        0.0,
+        1.0,
+        -6.0,
+        0.0,
+        3.1416,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -2.0,
+            -11.0,
+            4.0,
+            2.0,
+            5.0
+          ],
+          "uv": [
+            19.0,
+            5.0
+          ],
+          "inflate": [
+            0.02,
+            0.02,
+            0.02
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "legs",
+      "parent": "root",
+      "pose": [
+        -3.0,
+        0.0,
+        1.25,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "leftArm",
+      "parent": "legs",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "leftArm_r1",
+      "parent": "leftArm",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.9635,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -2.0,
+            -4.5,
+            4.0,
+            2.0,
+            6.0
+          ],
+          "uv": [
+            16.0,
+            13.0
+          ],
+          "inflate": [
+            0.01,
+            0.01,
+            0.01
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "rightArm",
+      "parent": "legs",
+      "pose": [
+        6.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "rightArm_r1",
+      "parent": "rightArm",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -1.9635,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -2.0,
+            -4.5,
+            4.0,
+            2.0,
+            6.0
+          ],
+          "uv": [
+            16.0,
+            13.0
+          ],
+          "inflate": [
+            0.01,
+            0.01,
+            0.01
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leftLeg",
+      "parent": "legs",
+      "pose": [
+        1.0,
+        0.0,
+        -3.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "leftLeg_r1",
+      "parent": "leftLeg",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -2.3562,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -2.0,
+            -0.75,
+            4.0,
+            2.0,
+            6.0
+          ],
+          "uv": [
+            1.0,
+            11.0
+          ],
+          "inflate": [
+            0.02,
+            0.02,
+            0.02
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "rightLeg",
+      "parent": "legs",
+      "pose": [
+        5.0,
+        0.0,
+        -3.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "rightLeg_r1",
+      "parent": "rightLeg",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.3562,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -2.0,
+            -0.75,
+            4.0,
+            2.0,
+            6.0
+          ],
+          "uv": [
+            1.0,
+            11.0
+          ],
+          "inflate": [
+            0.02,
+            0.02,
+            0.02
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "model/animal/starfish/StarfishModel.java",
+  "sourceSha256": "4396ce08bfef0f51241ebbddec6e10a381430c1d079c92faa0970950a6f6987c",
+  "headLook": "",
+  "animationRoot": "root",
+  "actions": {
+    "idle": {
+      "loop": true,
+      "channels": [
+        {
+          "bone": "leftArm",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "CATMULLROM"
+            },
+            {
+              "time": 1.5,
+              "vector": [
+                0.0,
+                0.0,
+                12.5
+              ],
+              "interpolation": "CATMULLROM"
+            },
+            {
+              "time": 3.0,
+              "vector": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "CATMULLROM"
+            }
+          ]
+        },
+        {
+          "bone": "rightArm",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "CATMULLROM"
+            },
+            {
+              "time": 1.5,
+              "vector": [
+                0.0,
+                0.0,
+                -12.5
+              ],
+              "interpolation": "CATMULLROM"
+            },
+            {
+              "time": 3.0,
+              "vector": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "CATMULLROM"
+            }
+          ]
+        },
+        {
+          "bone": "leftLeg",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "CATMULLROM"
+            },
+            {
+              "time": 1.5,
+              "vector": [
+                -4.8413,
+                -1.508,
+                2.6349
+              ],
+              "interpolation": "CATMULLROM"
+            },
+            {
+              "time": 3.0,
+              "vector": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "CATMULLROM"
+            }
+          ]
+        },
+        {
+          "bone": "rightLeg",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "CATMULLROM"
+            },
+            {
+              "time": 1.5,
+              "vector": [
+                -4.8413,
+                1.508,
+                -2.6349
+              ],
+              "interpolation": "CATMULLROM"
+            },
+            {
+              "time": 3.0,
+              "vector": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "CATMULLROM"
+            }
+          ]
+        },
+        {
+          "bone": "skull",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "CATMULLROM"
+            },
+            {
+              "time": 1.5,
+              "vector": [
+                7.5,
+                0.0,
+                0.0
+              ],
+              "interpolation": "CATMULLROM"
+            },
+            {
+              "time": 3.0,
+              "vector": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "CATMULLROM"
+            }
+          ]
+        }
+      ],
+      "length": 3.0
+    }
+  },
+  "availableClips": [
+    "StarfishAnimation.STARFISH_IDLE"
+  ]
+}

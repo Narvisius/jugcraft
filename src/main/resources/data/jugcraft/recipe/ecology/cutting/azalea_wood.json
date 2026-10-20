@@ -1,0 +1,19 @@
+{
+  "type": "jugcraft:cutting",
+  "ingredient": "jugcraft:ecology_azalea_wood",
+  "tool": "#minecraft:axes",
+  "results": [
+    {
+      "id": "jugcraft:ecology_stripped_azalea_wood"
+    },
+    {
+      "id": "jugcraft:sawdust"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

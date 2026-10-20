@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "flowering_azalea_log",
+  "ingredients": [
+    "jugcraft:ecology_azalea_log",
+    "jugcraft:ecology_azalea_flower"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:ecology_flowering_azalea_log"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

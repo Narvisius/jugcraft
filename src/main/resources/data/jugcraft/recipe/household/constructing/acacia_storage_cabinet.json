@@ -1,0 +1,22 @@
+{
+  "type": "jugcraft:household_construction",
+  "ingredients": [
+    {
+      "count": 8,
+      "ingredient": "minecraft:acacia_planks"
+    },
+    {
+      "count": 1,
+      "ingredient": "minecraft:iron_ingot"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:household_acacia_storage_cabinet"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

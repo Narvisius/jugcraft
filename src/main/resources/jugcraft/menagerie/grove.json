@@ -1,0 +1,766 @@
+{
+  "species": [
+    {
+      "source": "little_grebe",
+      "id": "grove_little_grebe",
+      "name": "Little Grebe",
+      "shape": "little_grebe",
+      "movement": "amphibious",
+      "habitat": "river",
+      "mood": "passive",
+      "width": 0.5,
+      "height": 0.6,
+      "health": 10,
+      "feed": "minecraft:wheat_seeds",
+      "mount": false,
+      "model": "grove_little_grebe",
+      "variants": [
+        {
+          "name": "little_grebe",
+          "texture": "menagerie/grove/entity/little_grebe/little_grebe",
+          "babyTexture": "menagerie/grove/entity/little_grebe/little_grebe_chick",
+          "weight": 1,
+          "model": "grove/little_grebe/little_grebe",
+          "babyModel": "grove/little_grebe/little_grebe_chick"
+        }
+      ],
+      "clips": [
+        "little_grebe.walk",
+        "little_grebe_chick.walk",
+        "little_grebe.fall",
+        "little_grebe.swim",
+        "walk",
+        "swim",
+        "baby_walk"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "lizard",
+      "id": "grove_lizard",
+      "name": "Woodland Lizard",
+      "shape": "lizard",
+      "movement": "land",
+      "habitat": "desert",
+      "mood": "passive",
+      "width": 0.5,
+      "height": 0.3,
+      "health": 8,
+      "feed": "minecraft:spider_eye",
+      "mount": false,
+      "model": "grove_lizard",
+      "variants": [
+        {
+          "name": "lizard_desert",
+          "texture": "menagerie/grove/entity/lizard/lizard_desert",
+          "babyTexture": "menagerie/grove/entity/lizard/lizard_desert",
+          "weight": 1,
+          "model": "grove/lizard/lizard",
+          "babyModel": "grove/lizard/lizard"
+        },
+        {
+          "name": "lizard_desert_2",
+          "texture": "menagerie/grove/entity/lizard/lizard_desert_2",
+          "babyTexture": "menagerie/grove/entity/lizard/lizard_desert_2",
+          "weight": 1,
+          "model": "grove/lizard/lizard",
+          "babyModel": "grove/lizard/lizard"
+        },
+        {
+          "name": "lizard_jungle",
+          "texture": "menagerie/grove/entity/lizard/lizard_jungle",
+          "babyTexture": "menagerie/grove/entity/lizard/lizard_jungle",
+          "weight": 1,
+          "model": "grove/lizard/lizard",
+          "babyModel": "grove/lizard/lizard"
+        },
+        {
+          "name": "lizard_jungle_2",
+          "texture": "menagerie/grove/entity/lizard/lizard_jungle_2",
+          "babyTexture": "menagerie/grove/entity/lizard/lizard_jungle_2",
+          "weight": 1,
+          "model": "grove/lizard/lizard",
+          "babyModel": "grove/lizard/lizard"
+        },
+        {
+          "name": "lizard_mushroom",
+          "texture": "menagerie/grove/entity/lizard/lizard_mushroom",
+          "babyTexture": "menagerie/grove/entity/lizard/lizard_mushroom",
+          "weight": 1,
+          "model": "grove/lizard/mushroom_lizard",
+          "babyModel": "grove/lizard/mushroom_lizard"
+        }
+      ],
+      "clips": [
+        "lizard_walk",
+        "lizard_dance",
+        "lizard_dig",
+        "walk",
+        "sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "cindershell",
+      "id": "grove_cindershell",
+      "name": "Cindershell",
+      "shape": "cindershell",
+      "movement": "land",
+      "habitat": "nether",
+      "mood": "neutral",
+      "width": 1.6,
+      "height": 1.7,
+      "health": 40,
+      "feed": "minecraft:coal",
+      "mount": false,
+      "model": "grove_cindershell",
+      "variants": [
+        {
+          "name": "cindershell",
+          "texture": "menagerie/grove/entity/cindershell/cindershell",
+          "babyTexture": "menagerie/grove/entity/cindershell/baby_cindershell",
+          "weight": 1,
+          "model": "grove/cindershell/cindershell",
+          "babyModel": "grove/cindershell/baby_cindershell"
+        }
+      ],
+      "clips": [
+        "cindershell_walk",
+        "baby_cindershell_walk",
+        "cindershell_idle",
+        "cindershell_idle_eat",
+        "cindershell_death",
+        "cindershell_eat",
+        "idle",
+        "walk",
+        "baby_walk",
+        "eat"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "sporeling",
+      "id": "grove_sporeling",
+      "name": "Sporeling",
+      "shape": "sporeling",
+      "movement": "land",
+      "habitat": "forest",
+      "mood": "neutral",
+      "width": 0.5,
+      "height": 0.9,
+      "health": 16,
+      "feed": "minecraft:brown_mushroom",
+      "mount": false,
+      "model": "grove_sporeling",
+      "variants": [
+        {
+          "name": "sporeling_red_overworld",
+          "texture": "menagerie/grove/entity/sporeling/sporeling_red_overworld",
+          "babyTexture": "menagerie/grove/entity/sporeling/sporeling_red_overworld",
+          "weight": 1,
+          "model": "grove/sporeling/sporeling_red_overworld",
+          "babyModel": "grove/sporeling/sporeling_red_overworld"
+        },
+        {
+          "name": "sporeling_brown_overworld",
+          "texture": "menagerie/grove/entity/sporeling/sporeling_brown_overworld",
+          "babyTexture": "menagerie/grove/entity/sporeling/sporeling_brown_overworld",
+          "weight": 1,
+          "model": "grove/sporeling/sporeling_brown_overworld",
+          "babyModel": "grove/sporeling/sporeling_brown_overworld"
+        },
+        {
+          "name": "sporeling_red_nether",
+          "texture": "menagerie/grove/entity/sporeling/sporeling_red_nether",
+          "babyTexture": "menagerie/grove/entity/sporeling/sporeling_red_nether",
+          "weight": 1,
+          "model": "grove/sporeling/sporeling_red_nether",
+          "babyModel": "grove/sporeling/sporeling_red_nether"
+        },
+        {
+          "name": "sporeling_brown_nether",
+          "texture": "menagerie/grove/entity/sporeling/sporeling_brown_nether",
+          "babyTexture": "menagerie/grove/entity/sporeling/sporeling_brown_nether",
+          "weight": 1,
+          "model": "grove/sporeling/sporeling_brown_nether",
+          "babyModel": "grove/sporeling/sporeling_brown_nether"
+        },
+        {
+          "name": "sporeling_crimson_fungus",
+          "texture": "menagerie/grove/entity/sporeling/sporeling_crimson_fungus",
+          "babyTexture": "menagerie/grove/entity/sporeling/sporeling_crimson_fungus",
+          "weight": 1,
+          "model": "grove/sporeling/sporeling_nether",
+          "babyModel": "grove/sporeling/sporeling_nether"
+        },
+        {
+          "name": "sporeling_warped_fungus",
+          "texture": "menagerie/grove/entity/sporeling/sporeling_warped_fungus",
+          "babyTexture": "menagerie/grove/entity/sporeling/sporeling_warped_fungus",
+          "weight": 1,
+          "model": "grove/sporeling/sporeling_nether",
+          "babyModel": "grove/sporeling/sporeling_nether"
+        },
+        {
+          "name": "sporeling_goomy",
+          "texture": "menagerie/grove/entity/sporeling/sporeling_goomy",
+          "babyTexture": "menagerie/grove/entity/sporeling/sporeling_goomy",
+          "weight": 1,
+          "model": "grove/sporeling/sporeling_goomy",
+          "babyModel": "grove/sporeling/sporeling_goomy"
+        },
+        {
+          "name": "sporeling_shrimpsnail",
+          "texture": "menagerie/grove/entity/sporeling/sporeling_shrimpsnail",
+          "babyTexture": "menagerie/grove/entity/sporeling/sporeling_shrimpsnail",
+          "weight": 1,
+          "model": "grove/sporeling/sporeling_shrimpsnail",
+          "babyModel": "grove/sporeling/sporeling_shrimpsnail"
+        },
+        {
+          "name": "sporeling_bit0",
+          "texture": "menagerie/grove/entity/sporeling/sporeling_bit0",
+          "babyTexture": "menagerie/grove/entity/sporeling/sporeling_bit0",
+          "weight": 1,
+          "model": "grove/sporeling/sporeling_red_overworld",
+          "babyModel": "grove/sporeling/sporeling_red_overworld"
+        },
+        {
+          "name": "sporeling_listacalista",
+          "texture": "menagerie/grove/entity/sporeling/sporeling_listacalista",
+          "babyTexture": "menagerie/grove/entity/sporeling/sporeling_listacalista",
+          "weight": 1,
+          "model": "grove/sporeling/sporeling_red_overworld",
+          "babyModel": "grove/sporeling/sporeling_red_overworld"
+        },
+        {
+          "name": "sporeling_yungwilder",
+          "texture": "menagerie/grove/entity/sporeling/sporeling_yungwilder",
+          "babyTexture": "menagerie/grove/entity/sporeling/sporeling_yungwilder",
+          "weight": 1,
+          "model": "grove/sporeling/sporeling_red_overworld",
+          "babyModel": "grove/sporeling/sporeling_red_overworld"
+        }
+      ],
+      "clips": [
+        "sporeling_convert",
+        "sporeling_idle",
+        "sporeling_sit",
+        "sporeling_sitting",
+        "sporeling_stand",
+        "sporeling_walk",
+        "sporeling_run",
+        "sporeling_wave",
+        "sporeling_bite",
+        "sporeling_backpack_idle",
+        "sporeling_backpack_air",
+        "idle",
+        "walk",
+        "sit",
+        "attack"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "yeti",
+      "id": "grove_yeti",
+      "name": "Yeti",
+      "shape": "yeti",
+      "movement": "land",
+      "habitat": "snowy",
+      "mood": "neutral",
+      "width": 1.7,
+      "height": 2.6,
+      "health": 60,
+      "feed": "minecraft:apple",
+      "mount": false,
+      "model": "grove_yeti",
+      "variants": [
+        {
+          "name": "yeti",
+          "texture": "menagerie/grove/entity/yeti/yeti",
+          "babyTexture": "menagerie/grove/entity/yeti/baby_yeti",
+          "weight": 1,
+          "model": "grove/yeti/yeti",
+          "babyModel": "grove/yeti/baby_yeti"
+        }
+      ],
+      "clips": [
+        "yeti_adult_walk",
+        "yeti_baby_walk",
+        "yeti_attack",
+        "yeti_adult_eat",
+        "yeti_baby_eat",
+        "walk",
+        "baby_walk",
+        "attack"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "lilytad",
+      "id": "grove_lilytad",
+      "name": "Lilytad",
+      "shape": "lilytad",
+      "movement": "amphibious",
+      "habitat": "swamp",
+      "mood": "passive",
+      "width": 0.7,
+      "height": 0.7,
+      "health": 12,
+      "feed": "minecraft:seagrass",
+      "mount": false,
+      "model": "grove_lilytad",
+      "variants": [
+        {
+          "name": "lilytad_pink",
+          "texture": "menagerie/grove/entity/lilytad/lilytad_pink",
+          "babyTexture": "menagerie/grove/entity/lilytad/lilytad_pink",
+          "weight": 1,
+          "model": "grove/lilytad/lilytad",
+          "babyModel": "grove/lilytad/lilytad"
+        },
+        {
+          "name": "lilytad_light_pink",
+          "texture": "menagerie/grove/entity/lilytad/lilytad_light_pink",
+          "babyTexture": "menagerie/grove/entity/lilytad/lilytad_light_pink",
+          "weight": 1,
+          "model": "grove/lilytad/lilytad",
+          "babyModel": "grove/lilytad/lilytad"
+        },
+        {
+          "name": "lilytad_yellow",
+          "texture": "menagerie/grove/entity/lilytad/lilytad_yellow",
+          "babyTexture": "menagerie/grove/entity/lilytad/lilytad_yellow",
+          "weight": 1,
+          "model": "grove/lilytad/lilytad",
+          "babyModel": "grove/lilytad/lilytad"
+        },
+        {
+          "name": "lilytad_sheared",
+          "texture": "menagerie/grove/entity/lilytad/lilytad_sheared",
+          "babyTexture": "menagerie/grove/entity/lilytad/lilytad_sheared",
+          "weight": 0,
+          "model": "grove/lilytad/lilytad",
+          "babyModel": "grove/lilytad/lilytad"
+        }
+      ],
+      "clips": [
+        "lilytad.walk",
+        "walk",
+        "swim"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "minipad",
+      "id": "grove_minipad",
+      "name": "Minipad",
+      "shape": "minipad",
+      "movement": "amphibious",
+      "habitat": "swamp",
+      "mood": "passive",
+      "width": 0.5,
+      "height": 0.45,
+      "health": 10,
+      "feed": "minecraft:seagrass",
+      "mount": false,
+      "model": "grove_minipad",
+      "variants": [
+        {
+          "name": "minipad_pink",
+          "texture": "menagerie/grove/entity/minipad/minipad_pink",
+          "babyTexture": "menagerie/grove/entity/minipad/minipad_pink",
+          "weight": 1,
+          "model": "grove/minipad/minipad",
+          "babyModel": "grove/minipad/minipad"
+        },
+        {
+          "name": "minipad_light_pink",
+          "texture": "menagerie/grove/entity/minipad/minipad_light_pink",
+          "babyTexture": "menagerie/grove/entity/minipad/minipad_light_pink",
+          "weight": 1,
+          "model": "grove/minipad/minipad",
+          "babyModel": "grove/minipad/minipad"
+        },
+        {
+          "name": "minipad_yellow",
+          "texture": "menagerie/grove/entity/minipad/minipad_yellow",
+          "babyTexture": "menagerie/grove/entity/minipad/minipad_yellow",
+          "weight": 1,
+          "model": "grove/minipad/minipad",
+          "babyModel": "grove/minipad/minipad"
+        },
+        {
+          "name": "minipad_sheared",
+          "texture": "menagerie/grove/entity/minipad/minipad_sheared",
+          "babyTexture": "menagerie/grove/entity/minipad/minipad_sheared",
+          "weight": 0,
+          "model": "grove/minipad/minipad",
+          "babyModel": "grove/minipad/minipad"
+        }
+      ],
+      "clips": [
+        "minipad_float",
+        "minipad_swim",
+        "minipad_walk",
+        "idle",
+        "walk",
+        "swim"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "end_whale",
+      "id": "grove_end_whale",
+      "name": "End Whale",
+      "shape": "end_whale",
+      "movement": "air",
+      "habitat": "end",
+      "mood": "neutral",
+      "width": 3,
+      "height": 2.4,
+      "health": 80,
+      "feed": "minecraft:chorus_fruit",
+      "mount": true,
+      "model": "grove_end_whale",
+      "variants": [
+        {
+          "name": "end_whale",
+          "texture": "menagerie/grove/entity/end_whale/end_whale",
+          "babyTexture": "menagerie/grove/entity/end_whale/end_whale",
+          "weight": 1,
+          "model": "grove/end_whale/end_whale",
+          "babyModel": "grove/end_whale/end_whale"
+        }
+      ],
+      "clips": [
+        "whale_fly",
+        "idle",
+        "walk",
+        "fly"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "cactem",
+      "id": "grove_cactem",
+      "name": "Cactem",
+      "shape": "cactem",
+      "movement": "land",
+      "habitat": "desert",
+      "mood": "neutral",
+      "width": 0.8,
+      "height": 1.7,
+      "health": 26,
+      "feed": "minecraft:cactus",
+      "mount": false,
+      "model": "grove_cactem",
+      "variants": [
+        {
+          "name": "warrior_cactem",
+          "texture": "menagerie/grove/entity/cactem/warrior_cactem",
+          "babyTexture": "menagerie/grove/entity/cactem/baby_cactem",
+          "weight": 1,
+          "model": "grove/cactem/warrior_cactem",
+          "babyModel": "grove/cactem/baby_cactem"
+        },
+        {
+          "name": "elder_cactem",
+          "texture": "menagerie/grove/entity/cactem/elder_cactem",
+          "babyTexture": "menagerie/grove/entity/cactem/baby_cactem",
+          "weight": 1,
+          "model": "grove/cactem/elder_cactem",
+          "babyModel": "grove/cactem/baby_cactem"
+        }
+      ],
+      "clips": [
+        "cactem_idle",
+        "cactem_idle_2",
+        "cactem_run",
+        "cactem_run_throw",
+        "cactem_elder_walk",
+        "cactem_baby_run",
+        "cactem_admire",
+        "cactem_elder_heal",
+        "cactem_throw",
+        "idle",
+        "walk",
+        "baby_walk",
+        "attack"
+      ],
+      "armorTextures": {}
+    }
+  ],
+  "sounds": [
+    "grove_entity.little_grebe_chick.ambient",
+    "grove_entity.little_grebe.ambient",
+    "grove_entity.little_grebe.hurt",
+    "grove_entity.lizard.egg_hatch",
+    "grove_entity.cindershell.ambient",
+    "grove_entity.cindershell.hurt",
+    "grove_entity.cindershell_adult.eat",
+    "grove_entity.cindershell_baby.eat",
+    "grove_entity.sporeling_overworld.ambient",
+    "grove_entity.sporeling_overworld.hurt",
+    "grove_entity.sporeling_nether.ambient",
+    "grove_entity.sporeling_nether.hurt",
+    "grove_entity.sporeling_warped.ambient",
+    "grove_entity.sporeling_warped.hurt",
+    "grove_entity.sporeling.bite",
+    "grove_entity.lilytad.ambient",
+    "grove_entity.lilytad.hurt",
+    "grove_entity.lilytad.death",
+    "grove_entity.yeti.ambient",
+    "grove_entity.yeti.hurt",
+    "grove_entity.yeti.step",
+    "grove_entity.yeti.hit",
+    "grove_entity.yeti_adult.eat",
+    "grove_entity.yeti_baby.eat",
+    "grove_entity.minipad.hurt",
+    "grove_entity.minipad.step",
+    "grove_entity.minipad.swim",
+    "grove_entity.end_whale.ambient",
+    "grove_entity.cactem.ambient",
+    "grove_entity.cactem.hurt",
+    "grove_entity.cactem.heal",
+    "grove_item.heal_spell_book.player_heal",
+    "grove_item.cactem_spear.throw"
+  ],
+  "items": {
+    "grove_little_grebe_spawn_egg": {
+      "name": "Little Grebe Spawn Egg",
+      "kind": "spawn",
+      "species": "grove_little_grebe"
+    },
+    "grove_lizard_spawn_egg": {
+      "name": "Woodland Lizard Spawn Egg",
+      "kind": "spawn",
+      "species": "grove_lizard"
+    },
+    "grove_cindershell_spawn_egg": {
+      "name": "Cindershell Spawn Egg",
+      "kind": "spawn",
+      "species": "grove_cindershell"
+    },
+    "grove_sporeling_spawn_egg": {
+      "name": "Sporeling Spawn Egg",
+      "kind": "spawn",
+      "species": "grove_sporeling"
+    },
+    "grove_yeti_spawn_egg": {
+      "name": "Yeti Spawn Egg",
+      "kind": "spawn",
+      "species": "grove_yeti"
+    },
+    "grove_lilytad_spawn_egg": {
+      "name": "Lilytad Spawn Egg",
+      "kind": "spawn",
+      "species": "grove_lilytad"
+    },
+    "grove_minipad_spawn_egg": {
+      "name": "Minipad Spawn Egg",
+      "kind": "spawn",
+      "species": "grove_minipad"
+    },
+    "grove_end_whale_spawn_egg": {
+      "name": "End Whale Spawn Egg",
+      "kind": "spawn",
+      "species": "grove_end_whale"
+    },
+    "grove_cactem_spawn_egg": {
+      "name": "Cactem Spawn Egg",
+      "kind": "spawn",
+      "species": "grove_cactem"
+    },
+    "grove_cindershell_shell_shard": {
+      "name": "Cindershell Shell Shard",
+      "source": "cindershell_shell_shard",
+      "kind": "item"
+    },
+    "grove_apple_slice": {
+      "name": "Apple Slices",
+      "source": "apple_slice",
+      "kind": "item"
+    },
+    "grove_lizard_egg": {
+      "name": "Lizard Egg",
+      "source": "lizard_egg",
+      "kind": "item"
+    },
+    "grove_entity_net": {
+      "name": "Net",
+      "source": "entity_net",
+      "kind": "item"
+    },
+    "grove_yeti_antler": {
+      "name": "Yeti Antler",
+      "source": "yeti_antler",
+      "kind": "item"
+    },
+    "grove_yeti_hide": {
+      "name": "Yeti Hide",
+      "source": "yeti_hide",
+      "kind": "item"
+    },
+    "grove_pink_minipad_flower": {
+      "name": "Pink Minipad Flower",
+      "source": "pink_minipad_flower",
+      "kind": "item"
+    },
+    "grove_light_pink_minipad_flower": {
+      "name": "Light Pink Minipad Flower",
+      "source": "light_pink_minipad_flower",
+      "kind": "item"
+    },
+    "grove_yellow_minipad_flower": {
+      "name": "Yellow Minipad Flower",
+      "source": "yellow_minipad_flower",
+      "kind": "item"
+    },
+    "grove_pink_minipad_flower_glow": {
+      "name": "Pink Glowing Minipad Flower",
+      "source": "pink_minipad_flower_glow",
+      "kind": "item"
+    },
+    "grove_light_pink_minipad_flower_glow": {
+      "name": "Light Pink Glowing Minipad Flower",
+      "source": "light_pink_minipad_flower_glow",
+      "kind": "item"
+    },
+    "grove_yellow_minipad_flower_glow": {
+      "name": "Yellow Glowing Minipad Flower",
+      "source": "yellow_minipad_flower_glow",
+      "kind": "item"
+    },
+    "grove_heal_spell_book_1": {
+      "name": "Heal Spell Book",
+      "source": "heal_spell_book_1",
+      "kind": "item"
+    },
+    "grove_heal_spell_book_2": {
+      "name": "Heal Spell Book",
+      "source": "heal_spell_book_2",
+      "kind": "item"
+    },
+    "grove_heal_spell_book_3": {
+      "name": "Heal Spell Book",
+      "source": "heal_spell_book_3",
+      "kind": "item"
+    },
+    "grove_flower_crown": {
+      "name": "Flower Crown",
+      "source": "flower_crown",
+      "kind": "item"
+    },
+    "grove_glowing_flower_crown": {
+      "name": "Glowing Flower Crown",
+      "source": "glowing_flower_crown",
+      "kind": "item"
+    },
+    "grove_sporeling_backpack": {
+      "name": "Sporeling Backpack",
+      "source": "sporeling_backpack",
+      "kind": "item"
+    },
+    "grove_cinder_sword": {
+      "name": "Cinder Sword",
+      "source": "cinder_sword",
+      "kind": "item"
+    },
+    "grove_cactem_spear": {
+      "name": "Cactem Spear",
+      "source": "cactem_spear",
+      "kind": "item"
+    },
+    "grove_pink_waterlily": {
+      "name": "Pink Waterlily",
+      "source": "pink_waterlily",
+      "kind": "item"
+    },
+    "grove_light_pink_waterlily": {
+      "name": "Light Pink Waterlily",
+      "source": "light_pink_waterlily",
+      "kind": "item"
+    },
+    "grove_yellow_waterlily": {
+      "name": "Yellow Waterlily",
+      "source": "yellow_waterlily",
+      "kind": "item"
+    },
+    "grove_lizard_item_desert": {
+      "name": "Lizard",
+      "source": "lizard_item_desert",
+      "kind": "item"
+    },
+    "grove_lizard_item_desert_2": {
+      "name": "Lizard",
+      "source": "lizard_item_desert_2",
+      "kind": "item"
+    },
+    "grove_lizard_item_jungle": {
+      "name": "Lizard",
+      "source": "lizard_item_jungle",
+      "kind": "item"
+    },
+    "grove_lizard_item_jungle_2": {
+      "name": "Lizard",
+      "source": "lizard_item_jungle_2",
+      "kind": "item"
+    },
+    "grove_lizard_item_mushroom": {
+      "name": "Lizard",
+      "source": "lizard_item_mushroom",
+      "kind": "item"
+    },
+    "grove_sporeling_overworld_egg": {
+      "name": "Overworld Sporeling Spawn Egg",
+      "source": "sporeling_overworld_egg",
+      "kind": "item"
+    },
+    "grove_sporeling_nether_egg": {
+      "name": "Nether Sporeling Spawn Egg",
+      "source": "sporeling_nether_egg",
+      "kind": "item"
+    },
+    "grove_cindershell_bucket": {
+      "name": "Cindershell In A Bucket",
+      "source": "cindershell_bucket",
+      "kind": "item"
+    }
+  },
+  "blocks": {
+    "grove_cinder_furnace": {
+      "source": "cinder_furnace",
+      "name": "Cinder Furnace"
+    },
+    "grove_light_pink_waterlily_block": {
+      "source": "light_pink_waterlily_block",
+      "name": "Light Pink Waterlily"
+    },
+    "grove_lizard_egg_block": {
+      "source": "lizard_egg_block",
+      "name": "Lizard Egg Block"
+    },
+    "grove_pink_waterlily_block": {
+      "source": "pink_waterlily_block",
+      "name": "Pink Waterlily"
+    },
+    "grove_potted_light_pink_waterlily": {
+      "source": "potted_light_pink_waterlily",
+      "name": "Potted Light Pink Waterlily"
+    },
+    "grove_potted_pink_waterlily": {
+      "source": "potted_pink_waterlily",
+      "name": "Potted Pink Waterlily"
+    },
+    "grove_potted_yellow_waterlily": {
+      "source": "potted_yellow_waterlily",
+      "name": "Potted Yellow Waterlily"
+    },
+    "grove_yellow_waterlily_block": {
+      "source": "yellow_waterlily_block",
+      "name": "Yellow Waterlily"
+    }
+  }
+}

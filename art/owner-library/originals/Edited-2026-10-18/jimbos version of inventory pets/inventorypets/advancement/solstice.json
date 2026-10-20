@@ -1,0 +1,51 @@
+{
+	"display": {
+		"icon": {
+			"id": "inventorypets:solstice_sword"
+		},
+		"title": {
+			"translate": "advancement.ip.petachieveSolstice"
+		},
+		"description": {
+			"translate": "advancement.ip.petachieveSolstice.desc"
+		},
+		"show_toast": true,
+		"announce_to_chat": true,
+		"frame": "challenge"
+	},
+	"parent": "inventorypets:politicallycorrect",
+	"criteria": {
+		"crafting_table": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": [
+							"inventorypets:solstice_chestplate"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:solstice_helmet"
+						]
+					},
+					{
+                        "items": [
+                        	"inventorypets:solstice_boots"
+                    	]
+                    },
+                    {
+                        "items": [
+                        	"inventorypets:solstice_leggings"
+                    	]
+                    },
+					{
+						"items": [
+							"inventorypets:solstice_sword"
+						]
+					}
+				]
+			}
+		}
+	}
+}

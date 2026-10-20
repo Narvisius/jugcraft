@@ -1,0 +1,31 @@
+{
+    "display": {
+        "icon": {
+            "id": "inventorypets:pet_juggernaut"
+        },
+        "title": {
+            "translate": "advancement.ip.petach_juggernaut"
+        },
+        "description": {
+            "translate": "advancement.ip.petach_juggernaut.desc"
+        },
+        "show_toast": true,
+        "announce_to_chat": true
+    },
+    "parent": "inventorypets:illuminati",
+    "criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                        	"inventorypets:pet_juggernaut"
+                    	]
+                    }
+                    
+                ]
+            }
+        }
+    }
+}

@@ -35,6 +35,7 @@ public class GravestoneRenderer implements BlockEntityRenderer<GravestoneBlockEn
 		List<FormattedCharSequence> lines = List.of();
 		Direction facing = Direction.NORTH;
 		GravestoneBlock.@Nullable Style style;
+        boolean mat;
 	}
 
 	public GravestoneRenderer(BlockEntityRendererProvider.Context context) {
@@ -50,9 +51,12 @@ public class GravestoneRenderer implements BlockEntityRenderer<GravestoneBlockEn
 	public void extractRenderState(GravestoneBlockEntity stone, State state, float partialTick, Vec3 camera,
 			ModelFeatureRenderer.@Nullable CrumblingOverlay crumbling) {
 		BlockEntityRenderState.extractBase(stone, state, crumbling);
-		state.style = null;
+		state.style = null;state.mat=false;state.lines=List.of();
 		BlockState block = stone.getBlockState();
-		if (stone.text().isEmpty() || !(block.getBlock() instanceof GravestoneBlock gravestone)) {
+		if(block.getBlock() instanceof io.github.jimbozoomer.jugcraft.menagerie.HouseholdBlock furniture&&furniture.name.equals("door_mat")){
+            state.mat=true;state.facing=io.github.jimbozoomer.jugcraft.menagerie.HouseholdBlock.facing(block);var lines=font.split(FormattedText.of(stone.text()),76);state.lines=List.copyOf(lines.subList(0,Math.min(3,lines.size())));return;
+        }
+        if (stone.text().isEmpty() || !(block.getBlock() instanceof GravestoneBlock gravestone)) {
 			return;
 		}
 		GravestoneBlock.Style style = gravestone.style();
@@ -66,7 +70,11 @@ public class GravestoneRenderer implements BlockEntityRenderer<GravestoneBlockEn
 	@Override
 	public void submit(State state, PoseStack pose, SubmitNodeCollector collector, CameraRenderState camera) {
 		GravestoneBlock.Style style = state.style;
-		if (style == null || state.lines.isEmpty()) {
+		if(state.mat&&!state.lines.isEmpty()){
+            pose.pushPose();pose.translate(.5,.065,.5);pose.rotateDegrees(Axis.YP,-state.facing.toYRot());pose.rotateDegrees(Axis.XP,-90);pose.scale(1F/96,-1F/96,1F/96);
+            for(int i=0;i<state.lines.size();i++){var line=state.lines.get(i);collector.submitText(pose,-font.width(line)/2F,(i-state.lines.size()/2F)*font.lineHeight,line,false,Font.DisplayMode.POLYGON_OFFSET,state.lightCoords,INK,0,0);}pose.popPose();return;
+        }
+        if (style == null || state.lines.isEmpty()) {
 			return;
 		}
 		pose.pushPose();

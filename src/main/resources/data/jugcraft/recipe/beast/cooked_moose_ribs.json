@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": "jugcraft:beast_moose_ribs",
+  "result": {
+    "id": "jugcraft:beast_cooked_moose_ribs"
+  },
+  "experience": 0.15,
+  "cookingtime": 200,
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

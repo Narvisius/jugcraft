@@ -1,0 +1,140 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "main",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -4.0,
+            -5.0,
+            8.0,
+            8.0,
+            11.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r1",
+      "parent": "main",
+      "pose": [
+        0.0,
+        0.0,
+        0.5,
+        0.0,
+        0.0,
+        -0.7854
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -4.0,
+            -2.5,
+            0.0,
+            8.0,
+            11.0
+          ],
+          "uv": [
+            0.0,
+            20.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "cube_r2",
+      "parent": "main",
+      "pose": [
+        0.0,
+        0.0,
+        0.5,
+        0.0,
+        0.0,
+        0.7854
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -4.0,
+            -2.5,
+            0.0,
+            8.0,
+            11.0
+          ],
+          "uv": [
+            0.0,
+            20.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelFart.java",
+  "sourceSha256": "4d7a8a74e660a9933cd6a84006a49b6353d8ff7830b9800a4082803f5c6c647e",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.main.setScale(expand * 2.0f + 1.0f, expand * 2.0f + 1.0f, 1.0f);",
+      "reason": "Unbound expression variable expand"
+    },
+    {
+      "call": "this.cube_r1.setScale(1.0f, 1.0f, expand * 1.5f + 1.0f);",
+      "reason": "Unbound expression variable expand"
+    },
+    {
+      "call": "this.cube_r2.setScale(1.0f, 1.0f, expand * 1.5f + 1.0f);",
+      "reason": "Unbound expression variable expand"
+    },
+    {
+      "call": "this.cube_r1.rotationPointZ += expand * 3.0f;",
+      "reason": "Unbound expression variable expand"
+    },
+    {
+      "call": "this.cube_r2.rotationPointZ += expand * 3.0f;",
+      "reason": "Unbound expression variable expand"
+    }
+  ],
+  "expressions": [],
+  "poses": []
+}

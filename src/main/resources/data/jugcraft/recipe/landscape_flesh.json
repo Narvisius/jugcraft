@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": "minecraft:rotten_flesh",
+    "B": "jugcraft:landscape_blood_bucket"
+  },
+  "pattern": [
+    " # ",
+    "#B#",
+    " # "
+  ],
+  "result": {
+    "id": "jugcraft:landscape_flesh"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

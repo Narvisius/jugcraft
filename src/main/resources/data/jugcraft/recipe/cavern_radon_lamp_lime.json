@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DRD",
+    "RGR",
+    "DRD"
+  ],
+  "key": {
+    "R": "jugcraft:cavern_radon_bottle",
+    "G": "minecraft:glowstone",
+    "D": "minecraft:lime_dye"
+  },
+  "result": {
+    "count": 4,
+    "id": "jugcraft:cavern_radon_lamp_lime"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

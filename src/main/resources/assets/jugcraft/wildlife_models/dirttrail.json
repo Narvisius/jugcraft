@@ -1,0 +1,280 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "mound",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -3.5,
+            -5.0,
+            10.0,
+            3.5,
+            10.0
+          ],
+          "uv": [
+            4.0,
+            28.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "extra1",
+      "parent": "mound",
+      "pose": [
+        -3.5,
+        -1.9,
+        -4.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "extra1_r1",
+      "parent": "extra1",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -1.1781,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.5,
+            -2.5,
+            -2.0,
+            5.0,
+            4.5,
+            4.0
+          ],
+          "uv": [
+            35.0,
+            29.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "extra1_r2",
+      "parent": "extra1",
+      "pose": [
+        5.0,
+        1.0,
+        -1.5,
+        0.0,
+        0.7854,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -1.5,
+            -1.5,
+            3.0,
+            2.5,
+            3.0
+          ],
+          "uv": [
+            45.0,
+            38.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "extra2",
+      "parent": "mound",
+      "pose": [
+        -5.0,
+        -0.9,
+        1.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "extra2_r1",
+      "parent": "extra2",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.7854,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -1.5,
+            -1.5,
+            3.0,
+            2.5,
+            3.0
+          ],
+          "uv": [
+            45.0,
+            38.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "extra3",
+      "parent": "mound",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            4.0,
+            -2.4,
+            -1.0,
+            3.0,
+            2.5,
+            3.0
+          ],
+          "uv": [
+            45.0,
+            38.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "extra3_r1",
+      "parent": "extra3",
+      "pose": [
+        3.5,
+        -1.9,
+        4.0,
+        0.6155,
+        0.5236,
+        0.9553
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.5,
+            -2.5,
+            -2.0,
+            5.0,
+            4.5,
+            4.0
+          ],
+          "uv": [
+            35.0,
+            29.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "extra3_r2",
+      "parent": "extra3",
+      "pose": [
+        0.5,
+        -0.9,
+        5.5,
+        0.0,
+        -0.3927,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -1.5,
+            -1.5,
+            3.0,
+            2.5,
+            3.0
+          ],
+          "uv": [
+            45.0,
+            38.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "model/animal/mole/DirtTrailModel.java",
+  "sourceSha256": "8765d1f282f8017c8950418672705fa07ebcb84f3e4f5df26113df112abf40d6",
+  "headLook": "",
+  "animationRoot": "mound",
+  "actions": {},
+  "availableClips": [
+    "DirtTrailAnimation.DIRT_TRAIL_SPAWN"
+  ]
+}

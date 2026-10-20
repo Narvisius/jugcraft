@@ -1,0 +1,266 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "anchor",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -47.25,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.5,
+            11.25,
+            -3.5,
+            7.0,
+            36.0,
+            7.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -5.5,
+            2.25,
+            -4.5,
+            11.0,
+            9.0,
+            9.0
+          ],
+          "uv": [
+            29.0,
+            13.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "chain_start",
+      "parent": "anchor",
+      "pose": [
+        1.5,
+        2.25,
+        0.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -5.0,
+            -4.0,
+            3.0,
+            5.0,
+            7.0
+          ],
+          "uv": [
+            23.0,
+            46.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_side",
+      "parent": "anchor",
+      "pose": [
+        16.5,
+        29.9167,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -13.6667,
+            -3.5,
+            10.0,
+            6.0,
+            7.0
+          ],
+          "uv": [
+            29.0,
+            32.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -1.0,
+            -7.6667,
+            -2.5,
+            6.0,
+            15.0,
+            5.0
+          ],
+          "uv": [
+            0.0,
+            44.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -13.0,
+            7.3333,
+            -2.5,
+            18.0,
+            7.0,
+            5.0
+          ],
+          "uv": [
+            29.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_side",
+      "parent": "anchor",
+      "pose": [
+        -16.5,
+        29.9167,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -7.0,
+            -13.6667,
+            -3.5,
+            10.0,
+            6.0,
+            7.0
+          ],
+          "uv": [
+            29.0,
+            32.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            -5.0,
+            -7.6667,
+            -2.5,
+            6.0,
+            15.0,
+            5.0
+          ],
+          "uv": [
+            0.0,
+            44.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            -5.0,
+            7.3333,
+            -2.5,
+            18.0,
+            7.0,
+            5.0
+          ],
+          "uv": [
+            29.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelEndPirateAnchor.java",
+  "sourceSha256": "f54e5a8a204e97b6243dcff4d6d091d0c6342bf8715d383efd7add540f9bcc74",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

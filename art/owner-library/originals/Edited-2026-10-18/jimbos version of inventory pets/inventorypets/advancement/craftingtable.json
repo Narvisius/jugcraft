@@ -1,0 +1,31 @@
+{
+    "display": {
+        "icon": {
+            "id": "inventorypets:pet_crafting_table"
+        },
+        "title": {
+            "translate": "advancement.ip.petach_crafting_table"
+        },
+        "description": {
+            "translate": "advancement.ip.petach_crafting_table.desc"
+        },
+        "show_toast": true,
+        "announce_to_chat": true
+    },
+    "parent": "inventorypets:chest",
+    "criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                        	"inventorypets:pet_crafting_table"
+                    		]
+                    }
+                    
+                ]
+            }
+        }
+    }
+}

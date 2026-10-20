@@ -1,0 +1,31 @@
+{
+    "display": {
+        "icon": {
+            "id": "inventorypets:pet_christmas_tree"
+        },
+        "title": {
+            "translate": "advancement.ip.petach_christmas_tree"
+        },
+        "description": {
+            "translate": "advancement.ip.petach_christmas_tree.desc"
+        },
+        "show_toast": true,
+        "announce_to_chat": true
+    },
+    "parent": "inventorypets:aprilfool",
+    "criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                        	"inventorypets:pet_christmas_tree"
+                    		]
+                    }
+                    
+                ]
+            }
+        }
+    }
+}

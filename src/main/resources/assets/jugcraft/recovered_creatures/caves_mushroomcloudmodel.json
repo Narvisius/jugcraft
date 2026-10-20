@@ -1,0 +1,694 @@
+{
+  "textureSize": [
+    512,
+    512
+  ],
+  "parts": [
+    {
+      "name": "mushroom_cloud",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "lightBall",
+      "parent": "mushroom_cloud",
+      "pose": [
+        0.0,
+        -19.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -16.0,
+            -16.0,
+            -16.0,
+            32.0,
+            32.0,
+            32.0
+          ],
+          "uv": [
+            300.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lowerCloud",
+      "parent": "lightBall",
+      "pose": [
+        0.0,
+        5.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -50.0,
+            -9.0,
+            -50.0,
+            100.0,
+            16.0,
+            100.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "plume",
+      "parent": "lightBall",
+      "pose": [
+        0.0,
+        9.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "lowerCloud_planes",
+      "parent": "lowerCloud",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "cube_r5",
+      "parent": "plume",
+      "pose": [
+        0.0,
+        -44.8333,
+        0.0,
+        0.0,
+        -0.7854,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -32.0,
+            -61.0,
+            0.0,
+            64.0,
+            122.0,
+            0.0
+          ],
+          "uv": [
+            256.0,
+            220.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r6",
+      "parent": "plume",
+      "pose": [
+        0.0,
+        -44.8333,
+        0.0,
+        0.0,
+        0.7854,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -32.0,
+            -61.0,
+            0.0,
+            64.0,
+            122.0,
+            0.0
+          ],
+          "uv": [
+            256.0,
+            220.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "plumeBlast",
+      "parent": "plume",
+      "pose": [
+        0.0,
+        -80.8333,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -18.0,
+            0.0,
+            -18.0,
+            36.0,
+            29.0,
+            36.0
+          ],
+          "uv": [
+            240.0,
+            116.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "plumeRing",
+      "parent": "plume",
+      "pose": [
+        0.0,
+        -35.8333,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -36.0,
+            0.0,
+            -36.0,
+            72.0,
+            0.0,
+            72.0
+          ],
+          "uv": [
+            296.0,
+            440.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "upperCloud",
+      "parent": "plume",
+      "pose": [
+        0.0,
+        -80.8333,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -40.0,
+            -24.0,
+            -40.0,
+            80.0,
+            24.0,
+            80.0
+          ],
+          "uv": [
+            0.0,
+            116.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r1",
+      "parent": "lowerCloud_planes",
+      "pose": [
+        -16.0,
+        -20.0,
+        16.0,
+        0.0,
+        0.7854,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -66.0,
+            -13.0,
+            0.0,
+            66.0,
+            40.0,
+            0.0
+          ],
+          "uv": [
+            142.0,
+            342.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "cube_r2",
+      "parent": "lowerCloud_planes",
+      "pose": [
+        16.0,
+        -20.0,
+        -16.0,
+        0.0,
+        0.7854,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -13.0,
+            0.0,
+            66.0,
+            40.0,
+            0.0
+          ],
+          "uv": [
+            142.0,
+            342.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r3",
+      "parent": "lowerCloud_planes",
+      "pose": [
+        16.0,
+        -20.0,
+        16.0,
+        0.0,
+        -0.7854,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -13.0,
+            0.0,
+            66.0,
+            40.0,
+            0.0
+          ],
+          "uv": [
+            142.0,
+            342.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r4",
+      "parent": "lowerCloud_planes",
+      "pose": [
+        -16.0,
+        -20.0,
+        -16.0,
+        0.0,
+        -0.7854,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -66.0,
+            -13.0,
+            0.0,
+            66.0,
+            40.0,
+            0.0
+          ],
+          "uv": [
+            142.0,
+            342.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "upperCloud1",
+      "parent": "upperCloud",
+      "pose": [
+        0.0,
+        -24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -32.0,
+            -15.0,
+            -32.0,
+            64.0,
+            15.0,
+            64.0
+          ],
+          "uv": [
+            0.0,
+            220.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "upperCloud_planes",
+      "parent": "upperCloud",
+      "pose": [
+        0.0,
+        -12.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "rings",
+      "parent": "upperCloud",
+      "pose": [
+        0.0,
+        -55.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "cube_r7",
+      "parent": "upperCloud_planes",
+      "pose": [
+        16.0,
+        112.0,
+        -16.0,
+        0.0,
+        0.7854,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -23.0,
+            -152.0,
+            0.0,
+            71.0,
+            69.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            299.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r8",
+      "parent": "upperCloud_planes",
+      "pose": [
+        16.0,
+        112.0,
+        16.0,
+        0.0,
+        -0.7854,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -23.0,
+            -152.0,
+            0.0,
+            71.0,
+            69.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            299.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r9",
+      "parent": "upperCloud_planes",
+      "pose": [
+        -16.0,
+        112.0,
+        16.0,
+        0.0,
+        0.7854,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -48.0,
+            -152.0,
+            0.0,
+            71.0,
+            69.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            299.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "cube_r10",
+      "parent": "upperCloud_planes",
+      "pose": [
+        -16.0,
+        112.0,
+        -16.0,
+        0.0,
+        -0.7854,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -48.0,
+            -152.0,
+            0.0,
+            71.0,
+            69.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            299.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "upperRing",
+      "parent": "rings",
+      "pose": [
+        0.0,
+        -4.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -36.0,
+            0.0,
+            -36.0,
+            72.0,
+            0.0,
+            72.0
+          ],
+          "uv": [
+            296.0,
+            440.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lowerRing",
+      "parent": "rings",
+      "pose": [
+        0.0,
+        4.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -36.0,
+            0.0,
+            -36.0,
+            72.0,
+            0.0,
+            72.0
+          ],
+          "uv": [
+            296.0,
+            440.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/MushroomCloudModel.java",
+  "sourceSha256": "0e4792e6967807aec0c247c05d251ecb60f759e4f82d3f1d3296aa840234ffe1",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

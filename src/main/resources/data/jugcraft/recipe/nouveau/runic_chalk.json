@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:nouveau_manipulation_essence",
+    "minecraft:bone_meal",
+    "jugcraft:nouveau_magebloom_fiber"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_runic_chalk"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

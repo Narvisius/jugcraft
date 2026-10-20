@@ -1,0 +1,967 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "mainBody",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        22.0,
+        -2.25,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -3.0,
+            -3.75,
+            3.0,
+            5.0,
+            11.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -1.5,
+            -1.0,
+            -7.75,
+            3.0,
+            3.0,
+            4.0
+          ],
+          "uv": [
+            26.0,
+            24.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "dorsalfin",
+      "parent": "mainBody",
+      "pose": [
+        0.0,
+        -3.0,
+        1.25,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -5.0,
+            -1.0,
+            0.0,
+            6.0,
+            9.0
+          ],
+          "uv": [
+            0.0,
+            7.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "bfin",
+      "parent": "mainBody",
+      "pose": [
+        0.0,
+        2.0,
+        3.75,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -1.0,
+            -1.5,
+            0.0,
+            5.0,
+            6.0
+          ],
+          "uv": [
+            22.0,
+            10.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rpectoralFin",
+      "parent": "mainBody",
+      "pose": [
+        -1.5,
+        -2.0,
+        -0.75,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -7.0,
+            -9.0,
+            0.0,
+            7.0,
+            11.0,
+            0.0
+          ],
+          "uv": [
+            17.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "lpectoralFin",
+      "parent": "mainBody",
+      "pose": [
+        1.5,
+        -2.0,
+        -0.75,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -9.0,
+            0.0,
+            7.0,
+            11.0,
+            0.0
+          ],
+          "uv": [
+            17.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lpelvicFin",
+      "parent": "mainBody",
+      "pose": [
+        1.5,
+        2.0,
+        -0.25,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "rpelvicFin",
+      "parent": "mainBody",
+      "pose": [
+        -1.5,
+        2.0,
+        -0.25,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "tail",
+      "parent": "mainBody",
+      "pose": [
+        0.0,
+        -0.5,
+        6.75,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -2.0,
+            0.5,
+            2.0,
+            4.0,
+            8.0
+          ],
+          "uv": [
+            10.0,
+            16.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r1",
+      "parent": "lpelvicFin",
+      "pose": [
+        0.0,
+        0.0,
+        1.25,
+        0.0,
+        0.0,
+        -0.4363
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -2.0,
+            -1.75,
+            0.0,
+            19.0,
+            4.0
+          ],
+          "uv": [
+            0.0,
+            18.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r2",
+      "parent": "rpelvicFin",
+      "pose": [
+        0.0,
+        0.0,
+        1.25,
+        0.0,
+        0.0,
+        0.4363
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -2.0,
+            -1.75,
+            0.0,
+            19.0,
+            4.0
+          ],
+          "uv": [
+            0.0,
+            18.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "ttailFin",
+      "parent": "tail",
+      "pose": [
+        0.0,
+        -1.5,
+        8.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -10.0,
+            0.0,
+            0.0,
+            12.0,
+            4.0
+          ],
+          "uv": [
+            16.0,
+            24.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "btailFin",
+      "parent": "tail",
+      "pose": [
+        0.0,
+        1.5,
+        8.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.01,
+            -1.0,
+            0.0,
+            0.0,
+            17.0,
+            4.0
+          ],
+          "uv": [
+            8.0,
+            24.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/TripodfishModel.java",
+  "sourceSha256": "94d1989ea02774629b541d172e5eecdcf9967fffa34585a7abdeb9d18dd1489f",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "rpectoralFin",
+      "kind": "walk",
+      "speed": 0.15,
+      "degree": 0.3,
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.1,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "stand",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lpectoralFin",
+      "kind": "walk",
+      "speed": 0.15,
+      "degree": 0.3,
+      "invert": false,
+      "phase": 1.0,
+      "bias": [
+        "*",
+        -1,
+        0.1
+      ],
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "stand",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "mainBody",
+      "kind": "bob",
+      "speed": 0.1,
+      "degree": 0.5,
+      "invert": false,
+      "phase": 0,
+      "bias": 0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "stand",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "mainBody",
+      "kind": "swing",
+      "speed": 0.8,
+      "degree": [
+        "*",
+        0.6,
+        0.5
+      ],
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": [
+        "*",
+        "move",
+        [
+          "-",
+          1.0,
+          [
+            "*",
+            "stand",
+            1
+          ]
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "tail",
+      "kind": "swing",
+      "speed": 0.8,
+      "degree": [
+        "*",
+        0.6,
+        0.75
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        1.0
+      ],
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": [
+        "*",
+        "move",
+        [
+          "-",
+          1.0,
+          [
+            "*",
+            "stand",
+            1
+          ]
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "ttailFin",
+      "kind": "swing",
+      "speed": 0.8,
+      "degree": [
+        "*",
+        0.6,
+        0.75
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        2.0
+      ],
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": [
+        "*",
+        "move",
+        [
+          "-",
+          1.0,
+          [
+            "*",
+            "stand",
+            1
+          ]
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "btailFin",
+      "kind": "swing",
+      "speed": 0.8,
+      "degree": [
+        "*",
+        0.6,
+        0.75
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        2.0
+      ],
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": [
+        "*",
+        "move",
+        [
+          "-",
+          1.0,
+          [
+            "*",
+            "stand",
+            1
+          ]
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rpectoralFin",
+      "kind": "walk",
+      "speed": 0.8,
+      "degree": [
+        "*",
+        0.6,
+        0.4
+      ],
+      "invert": false,
+      "phase": 1.0,
+      "bias": [
+        "*",
+        -1,
+        0.1
+      ],
+      "clock": "walk",
+      "amount": [
+        "*",
+        "move",
+        [
+          "-",
+          1.0,
+          [
+            "*",
+            "stand",
+            1
+          ]
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lpectoralFin",
+      "kind": "walk",
+      "speed": 0.8,
+      "degree": [
+        "*",
+        0.6,
+        0.4
+      ],
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.1,
+      "clock": "walk",
+      "amount": [
+        "*",
+        "move",
+        [
+          "-",
+          1.0,
+          [
+            "*",
+            "stand",
+            1
+          ]
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rpectoralFin",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": 0.1,
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "*",
+        "stand",
+        1
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lpectoralFin",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": 0.1,
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "*",
+        "stand",
+        1
+      ],
+      "when": 1
+    },
+    {
+      "bone": "ttailFin",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": 0.1,
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        1.0
+      ],
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "*",
+        "stand",
+        1
+      ],
+      "when": 1
+    },
+    {
+      "bone": "dorsalfin",
+      "kind": "walk",
+      "speed": 0.05,
+      "degree": 0.1,
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "*",
+        "stand",
+        1
+      ],
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.mainBody.rotateAngleX += fishPitchAmount * 0.9f;",
+      "reason": "Unbound expression variable fishPitchAmount"
+    }
+  ],
+  "expressions": [],
+  "poses": [
+    {
+      "bone": "mainBody",
+      "weight": [
+        "/",
+        [
+          "*",
+          "land",
+          1
+        ],
+        1.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.0,
+        0.0,
+        1.4835298641951802
+      ],
+      "when": 1
+    },
+    {
+      "bone": "mainBody",
+      "weight": [
+        "/",
+        [
+          "*",
+          "stand",
+          1
+        ],
+        1.0
+      ],
+      "target": "position",
+      "value": [
+        0.0,
+        -15.0,
+        -1.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "mainBody",
+      "weight": [
+        "/",
+        [
+          "*",
+          "land",
+          1
+        ],
+        1.0
+      ],
+      "target": "position",
+      "value": [
+        0.0,
+        -1.0,
+        -1.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rpelvicFin",
+      "weight": [
+        "/",
+        [
+          "-",
+          1.0,
+          [
+            "*",
+            "stand",
+            1
+          ]
+        ],
+        1.0
+      ],
+      "target": "position",
+      "value": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lpelvicFin",
+      "weight": [
+        "/",
+        [
+          "-",
+          1.0,
+          [
+            "*",
+            "stand",
+            1
+          ]
+        ],
+        1.0
+      ],
+      "target": "position",
+      "value": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rpelvicFin",
+      "weight": [
+        "/",
+        [
+          "-",
+          1.0,
+          [
+            "*",
+            "stand",
+            1
+          ]
+        ],
+        1.0
+      ],
+      "target": "rotation",
+      "value": [
+        1.2217304763960306,
+        0.0,
+        -0.5235987755982988
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lpelvicFin",
+      "weight": [
+        "/",
+        [
+          "-",
+          1.0,
+          [
+            "*",
+            "stand",
+            1
+          ]
+        ],
+        1.0
+      ],
+      "target": "rotation",
+      "value": [
+        1.2217304763960306,
+        0.0,
+        0.5235987755982988
+      ],
+      "when": 1
+    },
+    {
+      "bone": "ttailFin",
+      "weight": [
+        "/",
+        [
+          "-",
+          1.0,
+          [
+            "*",
+            "stand",
+            1
+          ]
+        ],
+        1.0
+      ],
+      "target": "rotation",
+      "value": [
+        -0.17453292519943295,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "btailFin",
+      "weight": [
+        "/",
+        [
+          "-",
+          1.0,
+          [
+            "*",
+            "stand",
+            1
+          ]
+        ],
+        1.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.6981317007977318,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rpectoralFin",
+      "weight": [
+        "/",
+        [
+          "-",
+          1.0,
+          [
+            "*",
+            "stand",
+            1
+          ]
+        ],
+        1.0
+      ],
+      "target": "rotation",
+      "value": [
+        -0.5235987755982988,
+        -0.17453292519943295,
+        -1.2217304763960306
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lpectoralFin",
+      "weight": [
+        "/",
+        [
+          "-",
+          1.0,
+          [
+            "*",
+            "stand",
+            1
+          ]
+        ],
+        1.0
+      ],
+      "target": "rotation",
+      "value": [
+        -0.5235987755982988,
+        0.17453292519943295,
+        1.2217304763960306
+      ],
+      "when": 1
+    }
+  ]
+}

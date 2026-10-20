@@ -21,8 +21,8 @@ public final class Grammar {
 	public static final int MAX_BRANCHES = 2;
 	public static final int MAX_RANGE = 32;
 	public static final int MAX_RADIUS = 6;
-	public static final int MAX_TARGETS = 16;
-	public static final int MAX_WORK = 256;
+	public static final int MAX_TARGETS = 64;
+	public static final int MAX_WORK = 384;
 	public static final int MAX_CAPACITY = 64;
 	public static final int MAX_PULSES = 5;
 	public static final int MIN_INTERVAL = 10;

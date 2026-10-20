@@ -122,7 +122,11 @@ public enum MachineKind implements StringRepresentable {
 	// Nuclear fuel (docs/features/nuclear.md): a 5x3x2 hall of gas centrifuges enriching uranium (one input, one
 	// output), and a 3x2x2 fuel line making fuel assemblies (two inputs, one output).
 	GAS_CENTRIFUGE_CASCADE("gas_centrifuge_cascade", 400_000, 4_096, 0, 1_024, 2),
-	FUEL_FABRICATOR("fuel_fabricator", 100_000, 1_024, 0, 256, 3);
+	FUEL_FABRICATOR("fuel_fabricator", 100_000, 1_024, 0, 256, 3),
+	// Append storage hardware to preserve existing ordinal-based integrations.
+	LEAD_ACID_BATTERY_BANK("lead_acid_battery_bank", 2_000_000, 1_024, 1_024, 0, 0),
+	FLOW_TANK_MODULE("flow_tank_module", 0, 0, 0, 0, 0),
+	FLOW_STACK_MODULE("flow_stack_module", 0, 0, 0, 0, 0);
 
 	/** JE produced per tick while the coal generator burns. */
 	public static final int GENERATION_PER_TICK = 32;
@@ -335,7 +339,7 @@ public enum MachineKind implements StringRepresentable {
 
 	/** Stores energy and gives it out of its front face only. */
 	public boolean isBattery() {
-		return this == BATTERY_BOX || this == CAPACITOR_BANK || this == LITHIUM_BATTERY_BANK || this == FLOW_BATTERY;
+		return this == LEAD_ACID_BATTERY_BANK || this == BATTERY_BOX || this == CAPACITOR_BANK || this == LITHIUM_BATTERY_BANK || this == FLOW_BATTERY;
 	}
 
 	/** Whether the machine runs on JE at all. Unpowered machines have no battery and cables never connect to them. */
@@ -392,9 +396,23 @@ public enum MachineKind implements StringRepresentable {
 		return isProcessor() && usesPower() ? 2 : 0;
 	}
 
-	/** Size of the machine's inventory: {@link #slots} (inputs, output, byproducts) plus upgrade slots. */
+	/** Manual retained tooling; never exposed through sided item transfer. */
+    public boolean hasProcessTool() {
+        return this == LITHOGRAPHY_STATION || this == CRYOGENIC_LIQUEFIER;
+    }
+
+    public boolean acceptsProcessTool(net.minecraft.world.item.ItemStack stack) {
+        return switch (this) {
+            case LITHOGRAPHY_STATION -> stack.is(io.github.jimbozoomer.jugcraft.chemistry.PetroItems.GENERAL_CHIP_PATTERN);
+            case CRYOGENIC_LIQUEFIER -> stack.is(io.github.jimbozoomer.jugcraft.chemistry.PetroItems.METHANE_COOLING_MODULE)
+                    || stack.is(io.github.jimbozoomer.jugcraft.chemistry.PetroItems.HYDROGEN_COOLING_MODULE);
+            default -> false;
+        };
+    }
+
+	/** Existing process slots plus upgrades or one appended retained tool socket. */
 	public int containerSize() {
-		return slots + upgradeSlots();
+		return slots + upgradeSlots() + (hasProcessTool() ? 1 : 0);
 	}
 
 	/**

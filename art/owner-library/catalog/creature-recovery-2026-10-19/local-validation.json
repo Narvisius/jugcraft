@@ -1,0 +1,85 @@
+{
+  "date": "2026-10-19",
+  "tool": "OpenAI Codex",
+  "baseCommit": "b418263b1c0bb3c88aafc63ae1c4d0ce08214d3e",
+  "workingTree": "uncommitted local snapshot",
+  "published": false,
+  "allSourceSystemsComplete": false,
+  "platform": {
+    "minecraft": "26.3",
+    "loader": "0.19.5",
+    "fabricApi": "0.161.0+26.3",
+    "java": "25"
+  },
+  "artifacts": {
+    "jar": "C:\\Users\\james\\Documents\\Codex\\2026-09-29\\i-wa\\work\\jugcraft-machines-oct13\\build\\libs\\jugcraft-0.1.0-alpha.jar",
+    "jarSha256": "9a65db7fb62cf99ee5616aeea352bbbe03658ff0fd00648d90aca892acec87c8",
+    "pack": "C:\\Users\\james\\Documents\\Codex\\2026-09-29\\i-wa\\work\\creature-recovery-oct19\\jugcraft-complete-0.1.0-creature-recovery-oct19.mrpack",
+    "packSha256": "c1a40f4c723cca7e1a9348c941f08284e14894a9a689cdbecae46bbdb323aba1",
+    "packSha512": "c3046e19da86d097d55cf506f1eed747157f7817824667b5ea3cefa5cbafd647acaef406fef9128af234d145ac4a0b4d14c21d6177e757226cd87a71533478bf",
+    "exactRecoveredJsonFiles": 289,
+    "lockedDependencies": 19
+  },
+  "checks": {
+    "broadServer": {
+      "total": 2005,
+      "passed": 2004,
+      "failed": 1,
+      "failure": "Channelled test checked roof lighting before asynchronous skylight propagation; fixture corrected afterward",
+      "rerunFullSuiteAfterCorrection": false
+    },
+    "correctedFocusedBuild": {
+      "result": "PASS",
+      "requiredTests": 7
+    },
+    "pythonRecoveryTests": {
+      "result": "PASS",
+      "count": 10
+    },
+    "offlineDataAudit": {
+      "result": "PASS",
+      "materialIds": 5990,
+      "blockItemModels": 11687,
+      "quadParts": 3713,
+      "composedAssemblies": 173,
+      "scope": "Before final client animation/sound-reference fixes; subsequent focused tests cover those changes"
+    },
+    "finalClient": {
+      "result": "PASS",
+      "screenshots": 269,
+      "sourceOggLookups": 48,
+      "world": "disposable generated flat world",
+      "ownerWorldUsed": false,
+      "command": "gradlew.bat jar runClientGameTest -PclientTests=RecoveredCreatureClientTests,RecoveredCreatureResourceClientTests -Pkotlin.compiler.execution.strategy=in-process -I scripts/owner-network.init.gradle --offline --console=plain"
+    },
+    "atlasAudit": {
+      "checkedAgeBindings": 780,
+      "explicitVanillaDelegates": 2,
+      "issues": []
+    },
+    "repositoryStructure": "PASS",
+    "packLock": "PASS (19 dependencies)",
+    "packImport": "NOT RUN",
+    "ownerPlaytest": "NOT RUN",
+    "twoHumanClientTest": "NOT RUN"
+  },
+  "evidence": {
+    "client-final.log": {
+      "path": "C:\\Users\\james\\Documents\\Codex\\2026-09-29\\i-wa\\work\\creature-recovery-oct19\\client-final.log",
+      "sha256": "35f7451ac6b59cadc8527bc92f3f8b7626178e2f4966c22a08ea4f2c27a43737"
+    },
+    "focused-server.log": {
+      "path": "C:\\Users\\james\\Documents\\Codex\\2026-09-29\\i-wa\\work\\creature-recovery-oct19\\focused-server.log",
+      "sha256": "bfde2f86c6bea88f3358cc1bd7fca464c4e0d5df191744938bae1af2c0be1c8b"
+    },
+    "build-test.log": {
+      "path": "C:\\Users\\james\\Documents\\Codex\\2026-09-29\\i-wa\\work\\creature-recovery-oct19\\build-test.log",
+      "sha256": "8bc8c9276c055167e0113dc2bea7155c4d780d9334d822d7b570b5362af17711"
+    },
+    "data-final.log": {
+      "path": "C:\\Users\\james\\Documents\\Codex\\2026-09-29\\i-wa\\work\\creature-recovery-oct19\\data-final.log",
+      "sha256": "ca6d1e4da2fdc431c6c3f93f34dae6db6b56eb21af82aa564a45521254ed9703"
+    }
+  },
+  "remaining": "See README.md Still outstanding and animation-coverage.json; four original animal models unavailable, specialized AI/state machines/accessory renderers incomplete."
+}

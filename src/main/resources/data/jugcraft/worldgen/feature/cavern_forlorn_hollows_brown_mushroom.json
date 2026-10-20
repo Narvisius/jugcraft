@@ -1,0 +1,40 @@
+{
+  "feature": {
+    "feature": {
+      "to_place": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:brown_mushroom"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "type": "minecraft:simple_block"
+    },
+    "placement": [
+      {
+        "type": "minecraft:block_predicate_filter",
+        "predicate": {
+          "type": "minecraft:all_of",
+          "predicates": [
+            {
+              "type": "minecraft:matching_blocks",
+              "blocks": [
+                "minecraft:air",
+                "minecraft:cave_air",
+                "minecraft:void_air"
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "tries": 20,
+  "xz_spread": 5,
+  "y_spread": 3,
+  "type": "jugcraft:owner_patch"
+}

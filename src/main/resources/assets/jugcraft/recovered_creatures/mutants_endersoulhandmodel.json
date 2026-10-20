@@ -1,0 +1,268 @@
+{
+  "textureSize": [
+    32,
+    32
+  ],
+  "parts": [
+    {
+      "name": "hand",
+      "parent": "$mesh",
+      "pose": [
+        0,
+        17.5,
+        0,
+        0,
+        -0.3926991,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "finger0",
+      "parent": "hand",
+      "pose": [
+        -0.5,
+        0,
+        -1,
+        -0.2617994,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            5,
+            1
+          ],
+          "uv": [
+            0,
+            0
+          ],
+          "inflate": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "fore_finger0",
+      "parent": "finger0",
+      "pose": [
+        0,
+        5.5,
+        0,
+        0,
+        0,
+        -0.2617994
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            5,
+            1
+          ],
+          "uv": [
+            1,
+            0
+          ],
+          "inflate": [
+            0.59000003,
+            0.59000003,
+            0.59000003
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "finger1",
+      "parent": "hand",
+      "pose": [
+        -0.5,
+        0,
+        0,
+        0.0,
+        0,
+        0.17453294
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            6,
+            1
+          ],
+          "uv": [
+            4,
+            0
+          ],
+          "inflate": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "fore_finger1",
+      "parent": "finger1",
+      "pose": [
+        0,
+        6.5,
+        0,
+        0,
+        0,
+        -0.3926991
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            6,
+            1
+          ],
+          "uv": [
+            6,
+            0
+          ],
+          "inflate": [
+            0.59000003,
+            0.59000003,
+            0.59000003
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "finger2",
+      "parent": "hand",
+      "pose": [
+        -0.5,
+        0,
+        1,
+        0.2617994,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            5,
+            1
+          ],
+          "uv": [
+            8,
+            0
+          ],
+          "inflate": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "fore_finger2",
+      "parent": "finger2",
+      "pose": [
+        0,
+        5.5,
+        0,
+        0,
+        0,
+        -0.2617994
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            5,
+            1
+          ],
+          "uv": [
+            11,
+            0
+          ],
+          "inflate": [
+            0.59000003,
+            0.59000003,
+            0.59000003
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "thumb",
+      "parent": "hand",
+      "pose": [
+        0.5,
+        0,
+        -0.5,
+        -0.62831855,
+        0,
+        -0.3926991
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            5,
+            1
+          ],
+          "uv": [
+            14,
+            0
+          ],
+          "inflate": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "mutants/fuzs/mutantmonsters/common/client/model/EndersoulHandModel.java",
+  "sourceSha256": "c76714b3026527dd513d015f51e50882848968d85f5ea07619f8bbf8f660783c",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

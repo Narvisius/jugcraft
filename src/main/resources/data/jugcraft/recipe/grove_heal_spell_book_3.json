@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:grove_heal_spell_book_2",
+    "minecraft:amethyst_shard",
+    "jugcraft:grove_yellow_minipad_flower_glow"
+  ],
+  "result": {
+    "id": "jugcraft:grove_heal_spell_book_3",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

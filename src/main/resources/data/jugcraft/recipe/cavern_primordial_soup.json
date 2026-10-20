@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:cavern_cooked_trilocaris_tail",
+    "jugcraft:cavern_cooked_trilocaris_tail",
+    "jugcraft:cavern_tree_star",
+    "minecraft:bowl"
+  ],
+  "result": {
+    "id": "jugcraft:cavern_primordial_soup"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

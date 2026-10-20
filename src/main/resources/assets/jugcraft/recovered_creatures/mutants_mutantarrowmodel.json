@@ -1,0 +1,187 @@
+{
+  "textureSize": [
+    64,
+    32
+  ],
+  "parts": [
+    {
+      "name": "stick",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            -0.5,
+            -13.0,
+            1.0,
+            1.0,
+            26.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "point1",
+      "parent": "stick",
+      "pose": [
+        0.0,
+        0.0,
+        -12.0,
+        0.0,
+        0.7853982,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -0.5,
+            0.0,
+            3.0,
+            1.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "point2",
+      "parent": "stick",
+      "pose": [
+        0.0,
+        0.0,
+        -12.0,
+        0.0,
+        -0.7853982,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -0.5,
+            0.0,
+            3.0,
+            1.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.251,
+            0.251,
+            0.251
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "point3",
+      "parent": "stick",
+      "pose": [
+        0.0,
+        0.0,
+        -13.0,
+        -0.7853982,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            -3.0,
+            0.0,
+            1.0,
+            3.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            2.0
+          ],
+          "inflate": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "point4",
+      "parent": "stick",
+      "pose": [
+        0.0,
+        0.0,
+        -13.0,
+        0.7853982,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0.0,
+            0.0,
+            1.0,
+            3.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            2.0
+          ],
+          "inflate": [
+            0.251,
+            0.251,
+            0.251
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "mutants/fuzs/mutantmonsters/common/client/model/MutantArrowModel.java",
+  "sourceSha256": "45637cc8db364aeef8a7f8db3f2b72a83e9a8835803aeaee81691a3910b3f8f5",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

@@ -1,0 +1,22 @@
+{
+  "type": "jugcraft:household_construction",
+  "ingredients": [
+    {
+      "count": 2,
+      "ingredient": "minecraft:iron_ingot"
+    },
+    {
+      "count": 3,
+      "ingredient": "minecraft:redstone"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:household_light_lightswitch"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

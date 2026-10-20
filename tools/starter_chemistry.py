@@ -116,7 +116,7 @@ def write_extras(write, assets, data, lang, condition):
         lang[f"container.jugcraft.reactor.tank.{index}"] = title
     from steampunk_models import box, cyl
     import model_writer
-    write(data / "tags/item/infuser_catalysts.json", {"replace": False, "values": ["jugcraft:nickel_catalyst_bed", "jugcraft:vanadium_contact_bed"]})
+    write(data / "tags/item/infuser_catalysts.json", {"replace": False, "values": ["jugcraft:nickel_catalyst_bed", "jugcraft:vanadium_contact_bed", "jugcraft:cobalt_catalyst_bed"]})
     lang["container.jugcraft.form.socket.catalyst_bed"] = "Reusable catalyst bed"
     lang["container.jugcraft.form.cleaning_title"] = "Gas Scrubber"
     lang["container.jugcraft.form.drain_on"] = "Drain excess"

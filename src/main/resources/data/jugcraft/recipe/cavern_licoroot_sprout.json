@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "V V",
+    " V ",
+    " S "
+  ],
+  "key": {
+    "V": "jugcraft:cavern_licoroot_vine",
+    "S": "minecraft:sugar"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:cavern_licoroot_sprout"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

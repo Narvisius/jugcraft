@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:nouveau_whirlisprig_flower",
+          "modifier": [
+            {
+              "type": "minecraft:copy_components",
+              "source": "block_entity",
+              "include": [
+                "minecraft:custom_name",
+                "minecraft:potion_contents",
+                "jugcraft:nouveau_jar_doses",
+                "jugcraft:ley_charge",
+                "jugcraft:nouveau_captured_entity"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

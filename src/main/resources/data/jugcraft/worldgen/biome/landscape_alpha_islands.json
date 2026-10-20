@@ -1,0 +1,140 @@
+{
+  "attributes": {
+    "minecraft:visual/fog_color": 12047615,
+    "minecraft:visual/fog_start_distance": 16,
+    "minecraft:visual/fog_end_distance": 48,
+    "minecraft:visual/water_fog_color": 329011,
+    "minecraft:visual/sky_color": 12047615,
+    "minecraft:visual/cloud_color": "#00000000",
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "replace_current_music": false,
+        "sound": "minecraft:music.overworld.forest"
+      }
+    },
+    "minecraft:audio/ambient_sounds": {
+      "mood": {
+        "block_search_extent": 8,
+        "offset": 2,
+        "sound": "minecraft:ambient.cave",
+        "tick_delay": 6000
+      }
+    },
+    "minecraft:gameplay/can_start_raid": false,
+    "minecraft:gameplay/nether_portal_spawns_piglin": false,
+    "minecraft:gameplay/can_pillager_patrol_spawn": false,
+    "minecraft:gameplay/natural_mob_spawns": {
+      "spawns_by_category": {
+        "creature": [
+          {
+            "type": "minecraft:sheep",
+            "weight": 12,
+            "count": 2
+          },
+          {
+            "type": "minecraft:pig",
+            "weight": 10,
+            "count": 2
+          },
+          {
+            "type": "minecraft:chicken",
+            "weight": 10,
+            "count": 2
+          },
+          {
+            "type": "minecraft:cow",
+            "weight": 8,
+            "count": 2
+          }
+        ],
+        "monster": [
+          {
+            "type": "minecraft:spider",
+            "weight": 100,
+            "count": 4
+          },
+          {
+            "type": "minecraft:zombie",
+            "weight": 95,
+            "count": 4
+          },
+          {
+            "type": "minecraft:skeleton",
+            "weight": 100,
+            "count": 4
+          },
+          {
+            "type": "minecraft:creeper",
+            "weight": 100,
+            "count": 4
+          },
+          {
+            "type": "minecraft:slime",
+            "weight": 100,
+            "count": 4
+          }
+        ]
+      },
+      "spawn_costs": {}
+    }
+  },
+  "carvers": [
+    "minecraft:cave",
+    "minecraft:cave_extra_underground"
+  ],
+  "downfall": 0.8,
+  "effects": {
+    "foliage_color": 7929657,
+    "grass_color": 11599739,
+    "water_color": 2576383
+  },
+  "features": [
+    [],
+    [],
+    [],
+    [
+      "minecraft:monster_room"
+    ],
+    [],
+    [
+      "jugcraft:alpha/landscape_clay_patch"
+    ],
+    [
+      "minecraft:ore_dirt",
+      "minecraft:ore_gravel",
+      "minecraft:ore_coal_upper",
+      "minecraft:ore_coal_lower",
+      "minecraft:ore_iron_upper",
+      "minecraft:ore_iron_middle",
+      "minecraft:ore_iron_small",
+      "minecraft:ore_gold",
+      "minecraft:ore_redstone",
+      "minecraft:ore_redstone_lower",
+      "minecraft:ore_diamond",
+      "minecraft:ore_diamond_medium",
+      "minecraft:ore_diamond_large"
+    ],
+    [
+      "jugcraft:alpha/landscape_sand_beaches"
+    ],
+    [
+      "minecraft:spring_water",
+      "minecraft:spring_lava"
+    ],
+    [
+      "minecraft:brown_mushroom_normal",
+      "minecraft:red_mushroom_normal",
+      "minecraft:patch_sugar_cane",
+      "jugcraft:alpha/landscape_flowers",
+      "jugcraft:alpha/landscape_flowers_2",
+      "jugcraft:alpha/landscape_trees"
+    ],
+    [
+      "minecraft:freeze_top_layer"
+    ]
+  ],
+  "has_precipitation": true,
+  "temperature": 0.7
+}

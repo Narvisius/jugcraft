@@ -1,0 +1,26 @@
+{
+  "default_block": "minecraft:air",
+  "default_fluid": "minecraft:air",
+  "disable_mob_generation": true,
+  "legacy_random_source": true,
+  "noise": {
+    "height": 128,
+    "min_y": 0
+  },
+  "noise_router": {
+    "continents": 0.0,
+    "depth": 0.0,
+    "erosion": 0.0,
+    "final_density": 0.0,
+    "chunk_surface_level": 0.0,
+    "ridges": 0.0,
+    "temperature": "minecraft:overworld/temperature",
+    "vegetation": "minecraft:overworld/vegetation"
+  },
+  "sea_level": 0,
+  "spawn_target": [],
+  "material_rule": {
+    "type": "minecraft:block",
+    "result_state": "minecraft:air"
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "pools": [
+    {
+      "name": "guster_eye",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:beast_guster_eye",
+          "weight": 1
+        }
+      ],
+      "condition": {
+        "type": "minecraft:random_chance_with_enchanted_bonus",
+        "enchantment": "minecraft:looting",
+        "unenchanted_chance": 0.2,
+        "enchanted_chance": {
+          "type": "minecraft:linear",
+          "base": 0.30000000000000004,
+          "per_level_above_first": 0.1
+        }
+      }
+    },
+    {
+      "name": "guster_sand",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:sand",
+          "weight": 1,
+          "modifier": [
+            {
+              "count": {
+                "min": 0,
+                "max": 3,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            },
+            {
+              "count": {
+                "min": 0,
+                "max": 1,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:enchanted_count_increase",
+              "enchantment": "minecraft:looting"
+            },
+            {
+              "type": "minecraft:furnace_smelt",
+              "condition": {
+                "predicate": {
+                  "flags": {
+                    "is_on_fire": true
+                  }
+                },
+                "entity": "this",
+                "type": "minecraft:entity_properties"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "type": "minecraft:entity"
+}

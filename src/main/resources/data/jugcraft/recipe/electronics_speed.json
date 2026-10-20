@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " BP",
+    "SCS"
+  ],
+  "key": {
+    "B": "jugcraft:precision_bearing",
+    "P": "jugcraft:precision_shaft",
+    "S": "#c:plates/steel",
+    "C": "jugcraft:advanced_chip"
+  },
+  "result": {
+    "id": "jugcraft:speed_upgrade",
+    "count": 2
+  }
+}

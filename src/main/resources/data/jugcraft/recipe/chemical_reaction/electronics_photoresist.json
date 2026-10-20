@@ -1,0 +1,37 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "items": [
+    {
+      "ingredient": "jugcraft:novolac_resin",
+      "count": 1
+    },
+    {
+      "ingredient": "jugcraft:dnq_additive",
+      "count": 1
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:bioethanol",
+      "amount": 500
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:semiconductor_photoresist",
+      "amount": 500,
+      "tank": 0
+    }
+  ],
+  "time": 240
+}

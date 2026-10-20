@@ -1,0 +1,426 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "body",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -7.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6.0,
+            -16.0,
+            -4.0,
+            12.0,
+            16.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "hair",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -16.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -5.0,
+            0.0,
+            10.0,
+            5.0,
+            0.0
+          ],
+          "uv": [
+            33.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "eye",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -11.0,
+        -4.1,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.0,
+            0.0,
+            2.0,
+            2.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leg_left",
+      "parent": "body",
+      "pose": [
+        3.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            0.0,
+            -3.0,
+            5.0,
+            7.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            39.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leg_right",
+      "parent": "body",
+      "pose": [
+        -3.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            0.0,
+            -3.0,
+            5.0,
+            7.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            25.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "nose",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -9.0,
+        -4.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -2.0,
+            2.0,
+            5.0,
+            2.0
+          ],
+          "uv": [
+            35.0,
+            43.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "sack",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -7.0,
+        4.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -8.0,
+            0.0,
+            8.0,
+            10.0,
+            3.0
+          ],
+          "uv": [
+            23.0,
+            25.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelMungus.java",
+  "sourceSha256": "e6236c938e70f0c79c41deaf1d3028b0bfb76c2883f36a48c8d03da9671ea8f9",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "hair",
+      "kind": "walk",
+      "speed": 0.1,
+      "degree": 0.1,
+      "invert": false,
+      "phase": 1.0,
+      "bias": [
+        "*",
+        -1,
+        0.1
+      ],
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "nose",
+      "kind": "flap",
+      "speed": 0.1,
+      "degree": 0.1,
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "leg_right",
+      "kind": "walk",
+      "speed": 0.7,
+      "degree": [
+        "*",
+        0.6,
+        1.1
+      ],
+      "invert": true,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "leg_right",
+      "kind": "bob",
+      "speed": 0.7,
+      "degree": 0.6,
+      "invert": false,
+      "phase": 0,
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "leg_left",
+      "kind": "walk",
+      "speed": 0.7,
+      "degree": [
+        "*",
+        0.6,
+        1.1
+      ],
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "leg_left",
+      "kind": "bob",
+      "speed": 0.7,
+      "degree": 0.6,
+      "invert": false,
+      "phase": 0,
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "kind": "flap",
+      "speed": 0.7,
+      "degree": [
+        "*",
+        0.6,
+        0.4
+      ],
+      "invert": false,
+      "phase": 0.5,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "nose",
+      "kind": "flap",
+      "speed": 0.7,
+      "degree": [
+        "*",
+        0.6,
+        0.2
+      ],
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "kind": "bob",
+      "speed": 0.7,
+      "degree": [
+        "*",
+        0.6,
+        3.0
+      ],
+      "invert": true,
+      "phase": 0,
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.sack.setScale(glowyBob, glowyBob, glowyBob + swell * 0.2f);",
+      "reason": "Unbound expression variable glowyBob"
+    },
+    {
+      "call": "this.sack.rotationPointZ += swell * 0.02f;",
+      "reason": "Unbound expression variable swell"
+    }
+  ],
+  "expressions": [],
+  "poses": [
+    {
+      "bone": "hair",
+      "weight": [
+        "/",
+        "move",
+        1.0
+      ],
+      "target": "rotation",
+      "value": [
+        -0.4014257279586958,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    }
+  ]
+}

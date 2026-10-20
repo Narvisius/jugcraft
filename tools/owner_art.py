@@ -36,6 +36,7 @@ sys.path.insert(0, HERE)
 
 import arms_pixel  # noqa: E402
 import concordance_workshops
+import jug_nouveau
 import concordance_ee_equipment
 import concordance_ee_machines
 import concordance_ee_storage
@@ -66,6 +67,7 @@ def imports():
     out = []
     out.append(("block/transport_crate_wood", "biomes and tree blocks/origin_oak_planks"))
     out.append(("block/fluorite_block", "block_fluorite"))
+    out.append(("block/bramble_bush_leaves", "biomes and tree blocks/bramble_leaves"))
     from mineral_sands import SANDS
     out.extend(("block/" + name, info["texture"]) for name, info in SANDS.items())
     # Owner's 15 October pine correction: use the supplied wood textures unchanged.
@@ -82,7 +84,7 @@ def imports():
 
 def magic_imports():
     """(runtime path under assets/jugcraft, library path under Magic/) for every copied magic-collection file."""
-    return sorted({**concordance_ee_equipment.OWNER_FILES, **concordance_ee_machines.OWNER_FILES, **concordance_ee_storage.OWNER_FILES, **concordance_ee_expansion.OWNER_FILES, **concordance_ee_artifacts.OWNER_FILES, **concordance_workshops.OWNER_FILES, **concordance_elemental_gear.OWNER_FILES, **concordance_dark_matter.OWNER_FILES, **concordance_alchemical_gear.OWNER_FILES, **concordance_ember.OWNER_FILES, **concordance_trinkets.OWNER_FILES, **encyclopedia.OWNER_FILES}.items())
+    return sorted({**jug_nouveau.OWNER_FILES, **concordance_ee_equipment.OWNER_FILES, **concordance_ee_machines.OWNER_FILES, **concordance_ee_storage.OWNER_FILES, **concordance_ee_expansion.OWNER_FILES, **concordance_ee_artifacts.OWNER_FILES, **concordance_workshops.OWNER_FILES, **concordance_elemental_gear.OWNER_FILES, **concordance_dark_matter.OWNER_FILES, **concordance_alchemical_gear.OWNER_FILES, **concordance_ember.OWNER_FILES, **concordance_trinkets.OWNER_FILES, **encyclopedia.OWNER_FILES}.items())
 
 
 def block_asset_imports():

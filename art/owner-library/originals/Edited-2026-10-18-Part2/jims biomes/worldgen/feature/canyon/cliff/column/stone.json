@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:block_column",
+  "direction": "down",
+  "allowed_placement": {
+    "type": "minecraft:matching_blocks",
+    "offset": [
+      0,
+      1,
+      0
+    ],
+    "blocks": "#minecraft:substrate_overworld"
+  },
+  "prioritize_tip": false,
+  "layers": [
+    {
+      "height": 6,
+      "provider": {
+        "id": "minecraft:stone"
+      }
+    }
+  ]
+}

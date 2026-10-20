@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:pumpkin_seeds",
+    "jugcraft:ectoplasm"
+  ],
+  "result": {
+    "id": "jugcraft:herbal_pumpkling_seeds",
+    "count": 2
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

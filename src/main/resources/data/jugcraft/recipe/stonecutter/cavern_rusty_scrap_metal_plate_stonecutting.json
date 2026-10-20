@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 2,
+  "ingredient": "jugcraft:cavern_rusty_scrap_metal",
+  "result": {
+    "id": "jugcraft:cavern_rusty_scrap_metal_plate"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

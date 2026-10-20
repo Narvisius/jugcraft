@@ -22,7 +22,8 @@ public enum Tolerance {
 
 	/** Whether this tolerance concerns the effect at all: harmful control only. */
 	public static boolean governs(EffectSpec spec) {
-		return spec.intent() == Intent.HARMFUL && (spec.kind() == EffectKind.MOVEMENT || spec.kind() == EffectKind.STATUS);
+		return spec.intent() == Intent.HARMFUL && (spec.kind() == EffectKind.MOVEMENT || spec.kind() == EffectKind.STATUS
+				|| spec.kind() == EffectKind.NOUVEAU_CREATURE || spec.kind() == EffectKind.NOUVEAU);
 	}
 
 	/**

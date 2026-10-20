@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "C",
+    "C",
+    "C"
+  ],
+  "key": {
+    "C": "jugcraft:cavern_candy_cane"
+  },
+  "result": {
+    "id": "jugcraft:cavern_candy_cane_pole"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

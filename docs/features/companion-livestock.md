@@ -79,3 +79,49 @@ Validation: working tree based on `66dd5f28`, Windows, Java 25.0.4.1, Minecraft 
 Population coverage includes safe new/old-save defaults, count bounds, concurrent pair/cull reservations, full cargo, real preserved overflow stacks, food demand across work release, actual cow and modded-turkey breeding with food conservation and normal cooldowns, automatic weapon fetching/wear, real death-loot Output, retained adult counts, named/baby/tamed/unselected protections, rule persistence, modded-type discovery/addition through the open menu, synchronized count editing and forged-menu rejection. The final regression deliberately starts a short weapon-fetch trip with only three free cargo slots, and verifies that personal cargo survives the tool swap and loot delivery.
 
 Early runtime checks caught and corrected the unnecessary trip to the zone corner, the final approach/reach ordering, and weapon supply readiness depending on a work-goal scan cooldown. Tool readiness now uses the bounded census separately from that goal, classified at most once per tick and by at most eight species rules. The three-slot loot requirement applies to actual slaughter, after the temporary cargo-held weapon is equipped. GUI tests now wait for companion data/panel synchronization before clicking. No unrelated mod suites, multiplayer load benchmark, dedicated multi-client session or new gate-layout playtest was run.
+
+## Fractional animal approach correction (18 October 2026)
+
+PR #420's client CI timed out while Peepo carried four seeds and remained
+`TRAVELLING` toward turkeys. Vanilla navigation accepts a waypoint near the
+center of its block; an animal's standing point can be closer to a block edge.
+A completed block path can therefore leave Peepo just outside the job's
+0.8-block arrival distance. Rebuilding that same completed path does not close
+the gap.
+
+A fixed-position regression reproduced this before the movement change:
+`navigationDone=true`, four seeds untouched, both parents still adults, and
+Peepo approximately 0.8003 blocks from the approach. The existing free-roaming
+test also passed on a separate diagnostic run, confirming that a single rerun
+could hide the issue.
+
+The shared work routine now finishes a completed path with a short level step
+to the actual approach position. It requires grounded movement within 1.5 blocks,
+a clear swept collision box, loaded/permitted positions, solid footing, and no
+harmful blocks along the segment. Checks use at most eight short segments and
+perform no new path search or chunk loading. Existing arrival/feeding distances,
+claims, costs and breeding behavior remain unchanged.
+
+The population regression holds its two parents still only until feeding, then
+restores their normal AI to require a real offspring. The original free-roaming
+cow/turkey and slaughter scenarios remain. Additional assertions reject walls,
+closed gates, missing footing, magma and long or vertical shortcuts. Timeout
+diagnostics now include the actual species, approach point and navigation state
+instead of showing cows only. Implemented with OpenAI Codex (GPT-6).
+
+Focused validation on Minecraft 26.3 / Java 25 / Fabric Loader 0.19.5:
+
+- The new fixed-position case failed before the movement correction, with a
+  completed path and no feeding (`build/peepo-population-regression-before.log`).
+- `runClientGameTest -PclientTests=PeepoPopulationClientTests,PeepoHarvestClientTests,PeepoSuppliesClientTests`
+  compiled the change and passed **46 supply** and **231 harvest/animal-care**
+  assertions. The new population fixture then needed its grounded state set
+  explicitly after placing the synthetic pose; its airborne rejection is now
+  checked too (`build/peepo-population-fix-relevant.log`).
+- After that fixture-only correction, only `PeepoPopulationClientTests` was
+  rerun: **36 assertions passed**, including normal calf/poult births, precise
+  arrival, food conservation, safety barriers and slaughter/Output
+  (`build/peepo-population-fix-final.log`). Production movement code was unchanged
+  between these two validation runs.
+- Repository/document links and whitespace checks passed. No full local mod,
+  server, Python or client-suite rerun, new preview world, or next tree batch.

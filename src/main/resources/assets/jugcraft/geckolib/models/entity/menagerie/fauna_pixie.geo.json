@@ -1,0 +1,137 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.fauna_pixie",
+        "texture_width": 64,
+        "texture_height": 32,
+        "visible_bounds_width": 4,
+        "visible_bounds_height": 4,
+        "visible_bounds_offset": [
+          0,
+          0.275,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "body",
+          "parent": "root",
+          "pivot": [
+            0.0,
+            4.4,
+            0.0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -2.52,
+                0,
+                -3.6
+              ],
+              "size": [
+                5.04,
+                4.4,
+                7.2
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "head",
+          "parent": "root",
+          "pivot": [
+            0.0,
+            6.16,
+            -3.24
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1.8,
+                3.5200000000000005,
+                -5.04
+              ],
+              "size": [
+                3.6,
+                2.64,
+                3.6
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "wing_-1",
+          "parent": "root",
+          "pivot": [
+            -2.16,
+            2.2,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -7.920000000000001,
+                2.2,
+                -2.52
+              ],
+              "size": [
+                5.760000000000001,
+                0.528,
+                5.760000000000001
+              ],
+              "uv": [
+                0,
+                16.0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "wing_1",
+          "parent": "root",
+          "pivot": [
+            2.16,
+            2.2,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                2.16,
+                2.2,
+                -2.52
+              ],
+              "size": [
+                5.760000000000001,
+                0.528,
+                5.760000000000001
+              ],
+              "uv": [
+                0,
+                16.0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

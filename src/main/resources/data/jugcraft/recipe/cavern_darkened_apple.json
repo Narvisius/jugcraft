@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " D ",
+    "DPD",
+    " D "
+  ],
+  "key": {
+    "P": "minecraft:apple",
+    "D": "jugcraft:cavern_pure_darkness"
+  },
+  "result": {
+    "id": "jugcraft:cavern_darkened_apple"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

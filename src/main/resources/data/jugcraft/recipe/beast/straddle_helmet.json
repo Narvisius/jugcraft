@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " S ",
+    "S S",
+    "L L"
+  ],
+  "key": {
+    "S": "jugcraft:beast_straddlite",
+    "L": "minecraft:string"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:beast_straddle_helmet"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

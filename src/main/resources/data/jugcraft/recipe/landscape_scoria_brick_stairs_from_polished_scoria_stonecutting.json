@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "jugcraft:landscape_polished_scoria",
+  "result": {
+    "id": "jugcraft:landscape_scoria_brick_stairs"
+  },
+  "count": 1,
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

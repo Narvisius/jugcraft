@@ -14,6 +14,11 @@ for development; their presence does not mean every Jugcraft model, spell, or
 screen already uses them. Iris is included without a shader pack. Choose a
 compatible shader pack separately if desired.
 
+Diorama is installed automatically on clients: M opens the map, N creates a
+waypoint, U lists waypoints. B remains the Jugcraft encyclopedia. Older saved
+Diorama bindings are preserved; set New Waypoint to N in Controls if needed.
+Diorama is not needed on dedicated servers.
+
 Use a launcher/server installer that honors the pack's client/server file flags.
 Client-only libraries are not required on a dedicated server. Opening the website
 alone or copying the standalone Jugcraft JAR does not download dependencies.

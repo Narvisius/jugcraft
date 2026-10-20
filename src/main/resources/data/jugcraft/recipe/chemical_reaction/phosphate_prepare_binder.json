@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "phosphate"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:phosphate_drying",
+  "items": [
+    {
+      "ingredient": "jugcraft:washed_gypsum",
+      "count": 1
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:gypsum_binder",
+      "count": 1
+    }
+  ],
+  "energy_per_tick": 48,
+  "time": 320
+}

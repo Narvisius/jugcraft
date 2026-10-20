@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "jugcraft:wildlife_pumpkin_pie",
+  "ingredients": [
+    "minecraft:pumpkin",
+    "minecraft:sugar",
+    "jugcraft:wildlife_duck_egg"
+  ],
+  "result": {
+    "id": "minecraft:pumpkin_pie"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

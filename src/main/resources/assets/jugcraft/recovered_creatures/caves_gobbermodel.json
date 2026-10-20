@@ -1,0 +1,458 @@
+{
+  "textureSize": [
+    64,
+    32
+  ],
+  "parts": [
+    {
+      "name": "Body",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        12.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            0.0,
+            -4.0,
+            10.0,
+            9.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            13.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "Head",
+      "parent": "Body",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -5.0,
+            -3.0,
+            8.0,
+            7.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "RightPauldron",
+      "parent": "Body",
+      "pose": [
+        5.0,
+        2.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -2.0,
+            -2.5,
+            5.0,
+            5.0,
+            5.0
+          ],
+          "uv": [
+            36.0,
+            22.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "LeftPauldron",
+      "parent": "Body",
+      "pose": [
+        -5.0,
+        2.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -2.0,
+            -2.5,
+            5.0,
+            5.0,
+            5.0
+          ],
+          "uv": [
+            36.0,
+            22.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "RightLeg",
+      "parent": "Body",
+      "pose": [
+        3.0,
+        8.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            4.0,
+            2.0
+          ],
+          "uv": [
+            36.0,
+            9.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "LeftLeg",
+      "parent": "Body",
+      "pose": [
+        -3.0,
+        8.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            4.0,
+            2.0
+          ],
+          "uv": [
+            36.0,
+            9.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "LeftEar",
+      "parent": "Head",
+      "pose": [
+        -4.0,
+        -3.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            0.0,
+            0.0,
+            4.0,
+            3.0,
+            0.0
+          ],
+          "uv": [
+            22.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "RightEar",
+      "parent": "Head",
+      "pose": [
+        4.0,
+        -3.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            0.0,
+            4.0,
+            3.0,
+            0.0
+          ],
+          "uv": [
+            22.0,
+            3.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "RightArm",
+      "parent": "RightPauldron",
+      "pose": [
+        1.0,
+        1.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            6.0,
+            2.0
+          ],
+          "uv": [
+            28.0,
+            13.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "LeftArm",
+      "parent": "LeftPauldron",
+      "pose": [
+        -1.0,
+        1.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -1.0,
+            2.0,
+            6.0,
+            2.0
+          ],
+          "uv": [
+            28.0,
+            5.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/superlord/goblinsanddungeons/client/model/GobberModel.java",
+  "sourceSha256": "981c21db4d14a3e7594c746b003f3a4fdd76380f6a32d0e284da2f49286a78c9",
+  "animationRoot": "$mesh",
+  "headLook": "Head",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [
+    {
+      "bone": "RightLeg",
+      "target": "xRot",
+      "op": "=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "cos",
+            [
+              "+",
+              [
+                "*",
+                "walk",
+                0.6662
+              ],
+              0
+            ]
+          ],
+          1.4
+        ],
+        "move"
+      ]
+    },
+    {
+      "bone": "LeftLeg",
+      "target": "xRot",
+      "op": "=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "cos",
+            [
+              "+",
+              [
+                "*",
+                "walk",
+                0.6662
+              ],
+              3.141592653589793
+            ]
+          ],
+          1.4
+        ],
+        "move"
+      ]
+    },
+    {
+      "bone": "RightArm",
+      "target": "xRot",
+      "op": "=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "cos",
+            [
+              "+",
+              [
+                "*",
+                "walk",
+                0.6662
+              ],
+              3.141592653589793
+            ]
+          ],
+          1.4
+        ],
+        "move"
+      ]
+    },
+    {
+      "bone": "LeftArm",
+      "target": "xRot",
+      "op": "=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "cos",
+            [
+              "+",
+              [
+                "*",
+                "walk",
+                0.6662
+              ],
+              0
+            ]
+          ],
+          1.4
+        ],
+        "move"
+      ]
+    }
+  ],
+  "poses": []
+}

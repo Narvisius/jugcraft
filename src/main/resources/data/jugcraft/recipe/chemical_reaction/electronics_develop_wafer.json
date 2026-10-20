@@ -1,0 +1,45 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:wafer_processing",
+  "items": [
+    {
+      "ingredient": "jugcraft:exposed_process_wafer",
+      "count": 1
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:tmah_developer",
+      "amount": 125
+    },
+    {
+      "fluid": "minecraft:water",
+      "amount": 125
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:spent_wafer_mixture",
+      "amount": 250,
+      "tank": 0
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:developed_process_wafer",
+      "count": 1
+    }
+  ],
+  "energy_per_tick": 64,
+  "time": 160
+}

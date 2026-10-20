@@ -1,0 +1,270 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:snow_block",
+          "weight": 5,
+          "modifier": {
+            "count": {
+              "max": 7,
+              "min": 1,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:powder_snow_bucket",
+          "weight": 3,
+          "modifier": {
+            "count": {
+              "max": 2,
+              "min": 1,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:packed_ice",
+          "weight": 3,
+          "modifier": {
+            "count": {
+              "max": 12,
+              "min": 3,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:blue_ice",
+          "weight": 4,
+          "modifier": {
+            "count": {
+              "max": 7,
+              "min": 3,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:snowball",
+          "weight": 5,
+          "modifier": {
+            "count": {
+              "max": 6,
+              "min": 2,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        }
+      ],
+      "rolls": 3
+    },
+    {
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.5
+      },
+      "entries": [
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "items": "#jugcraft:spire/landscape_rare_tools",
+          "modifier": [
+            {
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.65
+              },
+              "levels": {
+                "type": "minecraft:uniform",
+                "max": 22,
+                "min": 10
+              },
+              "options": "#minecraft:on_random_loot",
+              "type": "minecraft:enchant_with_levels"
+            },
+            {
+              "damage": {
+                "max": 1,
+                "min": 0.5,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_damage"
+            }
+          ]
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.2
+          },
+          "name": "minecraft:book",
+          "modifier": {
+            "options": "#minecraft:non_treasure",
+            "type": "minecraft:enchant_randomly"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.2
+          },
+          "name": "minecraft:book",
+          "modifier": {
+            "levels": {
+              "type": "minecraft:uniform",
+              "max": 22,
+              "min": 1
+            },
+            "options": "#minecraft:non_treasure",
+            "type": "minecraft:enchant_with_levels"
+          }
+        }
+      ],
+      "rolls": 3
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond",
+          "weight": 1,
+          "modifier": {
+            "condition": {
+              "type": "minecraft:random_chance",
+              "chance": 0.5
+            },
+            "count": {
+              "max": 3,
+              "min": 1,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:gold_ingot",
+          "weight": 3,
+          "modifier": {
+            "condition": {
+              "type": "minecraft:random_chance",
+              "chance": 0.33
+            },
+            "count": {
+              "max": 11,
+              "min": 7,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_block",
+          "weight": 4,
+          "modifier": {
+            "condition": {
+              "type": "minecraft:random_chance",
+              "chance": 0.2
+            },
+            "count": {
+              "max": 3,
+              "min": 1,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:copper_block",
+          "weight": 1,
+          "modifier": {
+            "condition": {
+              "type": "minecraft:random_chance",
+              "chance": 0.25
+            },
+            "count": {
+              "max": 7,
+              "min": 4,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:weathered_copper",
+          "weight": 1,
+          "modifier": {
+            "condition": {
+              "type": "minecraft:random_chance",
+              "chance": 0.25
+            },
+            "count": {
+              "max": 7,
+              "min": 4,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:exposed_copper",
+          "weight": 1,
+          "modifier": {
+            "condition": {
+              "type": "minecraft:random_chance",
+              "chance": 0.25
+            },
+            "count": {
+              "max": 7,
+              "min": 4,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:oxidized_copper",
+          "weight": 1,
+          "modifier": {
+            "condition": {
+              "type": "minecraft:random_chance",
+              "chance": 0.25
+            },
+            "count": {
+              "max": 7,
+              "min": 4,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        }
+      ],
+      "rolls": 3
+    }
+  ]
+}

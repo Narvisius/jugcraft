@@ -1,0 +1,12 @@
+{
+  "feature": "jugcraft:landscape_dying_tree_wasteland",
+  "placement": [
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:would_survive",
+        "state": "jugcraft:landscape_dead_sapling"
+      }
+    }
+  ]
+}

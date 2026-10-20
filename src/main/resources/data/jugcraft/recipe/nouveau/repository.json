@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "x": "#c:logs/archwood",
+    "y": "#c:nuggets/gold"
+  },
+  "pattern": [
+    "yxy",
+    "x x",
+    "yxy"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_repository"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

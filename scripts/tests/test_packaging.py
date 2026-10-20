@@ -57,6 +57,24 @@ class PackagingTests(unittest.TestCase):
         second = packaging.build_pack(self.lock, jar, self.root / "two", root=self.root)
         self.assertEqual(first.read_bytes(), second.read_bytes())
 
+    def test_complete_pack_ships_backpack_defaults_and_both_server_dependencies(self):
+        import tomllib
+        repository = Path(__file__).resolve().parents[2]
+        pack = packaging.build_pack(self.lock, self.jar(), self.root / "complete", root=repository)
+        with zipfile.ZipFile(pack) as archive:
+            server = tomllib.loads(archive.read("overrides/defaultconfigs/travelersbackpack-server.toml").decode())
+            common = tomllib.loads(archive.read("overrides/config/travelersbackpack-common.toml").decode())
+            self.assertTrue(server["server"]["backpackSettings"]["backSlotIntegration"])
+            self.assertFalse(common["common"]["enableLoot"])
+            self.assertFalse(common["common"]["enableVillagerTrade"])
+            self.assertIn(b"key_key.travelersbackpack.inventory:key.keyboard.n", archive.read("overrides/options.txt"))
+            index = json.loads(archive.read("modrinth.index.json"))
+            for key in ("travelers-backpack", "forge-config-api-port"):
+                dependency = next(x for x in self.lock["dependencies"] if x["key"] == key)
+                self.assertFalse(dependency["requiredByJugcraft"])
+                entry = next(x for x in index["files"] if x["path"] == "mods/" + dependency["filename"])
+                self.assertEqual(entry["env"], {"client": "required", "server": "required"})
+
     def test_missing_transitive_dependency_is_rejected(self):
         self.lock["dependencies"] = [x for x in self.lock["dependencies"] if x["key"] != "spell-power"]
         with self.assertRaisesRegex(ValueError, "needs missing project"):

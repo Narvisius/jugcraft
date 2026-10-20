@@ -1,0 +1,32 @@
+{
+  "parent": "jugcraft:nouveau_novice_spell_book",
+  "criteria": {
+    "has_apprentice_spell_book": {
+      "conditions": {
+        "items": [
+          {
+            "items": "jugcraft:nouveau_apprentice_spell_book"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "jugcraft.nouveau_adv.desc.apprentice_spell_book"
+    },
+    "icon": {
+      "count": 1,
+      "id": "jugcraft:nouveau_apprentice_spell_book"
+    },
+    "title": {
+      "translate": "jugcraft.nouveau_adv.title.apprentice_spell_book"
+    }
+  },
+  "requirements": [
+    [
+      "has_apprentice_spell_book"
+    ]
+  ]
+}

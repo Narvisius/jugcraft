@@ -1,0 +1,32 @@
+{
+  "parent": "jugcraft:nouveau_apprentice_spell_book",
+  "criteria": {
+    "has_wilden_tribute": {
+      "conditions": {
+        "items": [
+          {
+            "items": "jugcraft:nouveau_wilden_tribute"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "jugcraft.nouveau_adv.desc.wilden_tribute"
+    },
+    "icon": {
+      "count": 1,
+      "id": "jugcraft:nouveau_wilden_tribute"
+    },
+    "title": {
+      "translate": "jugcraft.nouveau_adv.title.wilden_tribute"
+    }
+  },
+  "requirements": [
+    [
+      "has_wilden_tribute"
+    ]
+  ]
+}

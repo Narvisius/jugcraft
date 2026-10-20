@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:cutting",
+  "ingredient": "jugcraft:beast_komodo_spit_bottle",
+  "tool": "#jugcraft:knives",
+  "results": [
+    {
+      "id": "jugcraft:beast_komodo_spit",
+      "count": 1
+    },
+    {
+      "id": "minecraft:glass_bottle",
+      "count": 1
+    }
+  ]
+}

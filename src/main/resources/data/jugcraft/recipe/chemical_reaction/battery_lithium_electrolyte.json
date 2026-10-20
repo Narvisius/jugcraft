@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "lithium"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "items": [
+    {
+      "ingredient": "jugcraft:lipf6_salt",
+      "count": 1
+    },
+    {
+      "ingredient": "jugcraft:carbonate_solvent_charge",
+      "count": 2
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:lithium_electrolyte_charge",
+      "count": 2
+    }
+  ],
+  "time": 200
+}

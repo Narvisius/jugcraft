@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:cavern_toxic_paste",
+    "jugcraft:cavern_radon_bottle",
+    "jugcraft:cavern_sulfur_dust",
+    "minecraft:iron_ingot"
+  ],
+  "result": {
+    "count": 4,
+    "id": "jugcraft:cavern_polymer_plate"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

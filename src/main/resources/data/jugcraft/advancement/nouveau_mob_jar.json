@@ -1,0 +1,32 @@
+{
+  "parent": "jugcraft:nouveau_ritual_brazier",
+  "criteria": {
+    "has_mob_jar": {
+      "conditions": {
+        "items": [
+          {
+            "items": "jugcraft:nouveau_mob_jar"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "jugcraft.nouveau_adv.desc.mob_jar"
+    },
+    "icon": {
+      "count": 1,
+      "id": "jugcraft:nouveau_mob_jar"
+    },
+    "title": {
+      "translate": "jugcraft.nouveau_adv.title.mob_jar"
+    }
+  },
+  "requirements": [
+    [
+      "has_mob_jar"
+    ]
+  ]
+}

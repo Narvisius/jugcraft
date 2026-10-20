@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smoking",
+  "category": "food",
+  "cookingtime": 100,
+  "experience": 0.1,
+  "ingredient": "jugcraft:rotten_frozen_rotten_flesh",
+  "result": {
+    "id": "minecraft:rotten_flesh"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

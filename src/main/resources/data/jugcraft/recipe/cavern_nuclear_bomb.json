@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IFI",
+    "UBU",
+    "IFI"
+  ],
+  "key": {
+    "U": "jugcraft:cavern_uranium_rod",
+    "B": "jugcraft:cavern_block_of_uranium",
+    "F": "jugcraft:cavern_fissile_core",
+    "I": "minecraft:iron_block"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:cavern_nuclear_bomb"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

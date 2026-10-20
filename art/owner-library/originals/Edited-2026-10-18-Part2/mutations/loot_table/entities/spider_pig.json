@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "minecraft:entities/pig"
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "minecraft:entities/spider"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "mutantmonsters:entities/spider_pig"
+}

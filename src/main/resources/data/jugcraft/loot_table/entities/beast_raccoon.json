@@ -1,0 +1,26 @@
+{
+  "pools": [
+    {
+      "name": "raccoon",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:beast_raccoon_tail",
+          "weight": 1,
+          "modifier": [
+            {
+              "count": {
+                "min": -1,
+                "max": 1,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "type": "minecraft:entity"
+}

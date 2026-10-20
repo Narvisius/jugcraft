@@ -1,0 +1,32 @@
+{
+  "parent": "jugcraft:nouveau_enchanting_apparatus",
+  "criteria": {
+    "has_basic_spell_turret": {
+      "conditions": {
+        "items": [
+          {
+            "items": "jugcraft:nouveau_basic_spell_turret"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "jugcraft.nouveau_adv.desc.basic_spell_turret"
+    },
+    "icon": {
+      "count": 1,
+      "id": "jugcraft:nouveau_basic_spell_turret"
+    },
+    "title": {
+      "translate": "jugcraft.nouveau_adv.title.basic_spell_turret"
+    }
+  },
+  "requirements": [
+    [
+      "has_basic_spell_turret"
+    ]
+  ]
+}

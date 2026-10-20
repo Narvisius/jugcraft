@@ -1,0 +1,16 @@
+{
+  "type": "jugcraft:household_oven",
+  "ingredient": "minecraft:potato",
+  "result": {
+    "id": "minecraft:baked_potato"
+  },
+  "cookingtime": 200,
+  "experience": 0.1,
+  "category": "food",
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

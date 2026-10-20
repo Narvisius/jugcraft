@@ -1,0 +1,63 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:ecology_surface_moss",
+          "modifier": [
+            {
+              "add": false,
+              "count": 1.0,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:ecology_surface_moss",
+                "state": {
+                  "layers": "1"
+                }
+              }
+            },
+            {
+              "add": false,
+              "count": 2.0,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:ecology_surface_moss",
+                "state": {
+                  "layers": "2"
+                }
+              }
+            },
+            {
+              "add": false,
+              "count": 3.0,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:ecology_surface_moss",
+                "state": {
+                  "layers": "3"
+                }
+              }
+            },
+            {
+              "type": "minecraft:explosion_decay"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0,
+      "condition": {
+        "predicate": {
+          "items": "minecraft:shears"
+        },
+        "type": "minecraft:match_tool"
+      }
+    }
+  ],
+  "random_sequence": "jugcraft:blocks/ecology_surface_moss"
+}

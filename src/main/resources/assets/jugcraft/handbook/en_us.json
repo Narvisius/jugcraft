@@ -745,8 +745,10 @@
             "Lepidolite: Y -48 to 32.",
             "Monazite: Y -64 to 16.",
             "Fluorite: Y -32 to 48. Large pockets below permanently snowy inland biomes; needs an iron pickaxe. Mineral faces in small stone outcrops can point to a pocket below. Seasonal snow, beaches, rivers and oceans do not qualify. The prospector and ore drill work here; nine fluorite make a decorative storage block. Fluorite chemistry is planned separately.",
-            "Spodumene: Y -16 to 64. Large pockets below Shield, Highland, Basin, Windswept Hills, Windswept Gravelly Hills, Windswept Forest and Stony Peaks; most centers are near Y 24. Needs an iron pickaxe. Look for pale-green mineral faces in small stone outcrops, or use the prospector and ore drill. The crusher gives two spodumene per ore; nine compact into a storage block. Expanded lithium refining is planned separately; existing lepidolite processing remains available.",
+            "Spodumene: Y -16 to 64. Large pockets below Shield, Highland, Basin, Windswept Hills, Windswept Gravelly Hills, Windswept Forest and Stony Peaks; most centers are near Y 24. Needs an iron pickaxe. Look for pale-green mineral faces in small stone outcrops, or use the prospector and ore drill. The crusher gives two spodumene per ore; nine compact into a storage block. Fire spodumene in the Industrial Oven, then condition two activated spodumene with 500 mB sulfuric acid into two Lithium Carbonate. See Batteries and Power Management; existing lepidolite processing remains available.",
             "Vanadium-bearing Iron: Y -48 to 32. Vanadiferous magnetite: richest below Shield and Volcano, with smaller, rarer pockets below Highland, Basin, Windswept Hills, Windswept Gravelly Hills, Windswept Forest and Stony Peaks. Centers peak near Y -8. Small stone outcrops sometimes mark pockets, except in Volcano. Needs an iron pickaxe; Fortune cannot increase the one raw feed per block. Crush one raw feed or intact ore into one Vanadium-bearing Iron Concentrate (200 ticks at 16 JE/t), then wash with 500 mB water into one Vanadium Oxide (200 ticks at 16 JE/t). Two bricks and the oxide make a reusable Vanadium Contact Bed, without acid. The prospector and ore drill work here; nine raw feeds compact into a storage block. Deposits never replenish. Ordinary iron shortcuts require the legacy configuration option.",
+            "Chromite: Y -32 to 64.",
+            "Cobaltite: Y -48 to 32.",
             "Titanium-rich Mineral Sand: shallow beds in the Dune Beach, the Overgrown Beach and Beach. Look for surface streaks, then shovel the buried bed or use the prospector and powered Ore Drill. Each mineral-sand block is one finite feed unit; Fortune does not increase it. The Ore Drill leaves ordinary sand. Stockpile this feed for future separation/refining; the Deposit Drill and generic ore-doubling recipes do not process it.",
             "Zircon-rich Mineral Sand: shallow beds in the Outback, the Lush Desert, the Dry River, Desert and Badlands. Look for surface streaks, then shovel the buried bed or use the prospector and powered Ore Drill. Each mineral-sand block is one finite feed unit; Fortune does not increase it. The Ore Drill leaves ordinary sand. Stockpile this feed for future separation/refining; the Deposit Drill and generic ore-doubling recipes do not process it.",
             "Rare-earth-rich Mineral Sand: shallow beds in the Basin, the Lake District, the Lush River and River. Look for surface streaks, then shovel the buried bed or use the prospector and powered Ore Drill. Each mineral-sand block is one finite feed unit; Fortune does not increase it. The Ore Drill leaves ordinary sand. Stockpile this feed for future separation/refining; the Deposit Drill and generic ore-doubling recipes do not process it.",
@@ -836,7 +838,7 @@
           "title": "Parts",
           "icon": "jugcraft:bronze_gear",
           "text": [
-            "Plates (Metal Press): copper, iron, tin, bronze, brass, invar, aluminum, nickel, lead, tungsten, steel, titanium, thallite.",
+            "Plates (Metal Press): copper, iron, tin, bronze, brass, invar, aluminum, nickel, lead, tungsten, steel, titanium, thallite, stainless_steel, aluminum_magnesium.",
             "Gears (four plates): iron, bronze, brass, invar, steel.",
             "Wires (Wire Drawer): copper, silver, aluminum.",
             "Every part works with other mods' parts through c: tags."
@@ -3798,7 +3800,7 @@
           "craft": {
             "grid": [
               "jugcraft:steel_plate",
-              "jugcraft:aluminum_cable",
+              "jugcraft:copper_cable",
               "jugcraft:steel_plate",
               "jugcraft:steel_tank",
               "jugcraft:advanced_circuit",
@@ -3817,7 +3819,8 @@
           "text": [
             "Two wide, two deep and three tall: the first of the big industrial machines, built from steel, copper cable and a basic circuit, before the Electrolytic Cell's aluminum cable and advanced circuit. It is placed from the front; every block it fills must be free, or it says what is in the way and where.",
             "Pipe water or brine into the inlet low at the back. A bucket of water gives 500 mB of hydrogen (the top left collar) and 250 mB of oxygen (top right) in 40 seconds; a bucket of brine gives 250 mB of hydrogen, 250 mB of chlorine (top right) and 500 mB of lye (the return on the right) in 20 seconds. It draws 256 JE/t through the socket at the foot of the right tower.",
-            "It keeps its lye: when the lye tank is full, brine stops until the lye is piped away. Its screen says what it is waiting for, and upgrade cards fit its terminal."
+            "It keeps its lye: when the lye tank is full, brine stops until the lye is piped away. Its screen says what it is waiting for, and upgrade cards fit its terminal.",
+            "Also makes peroxide from Oxygenated Process Water: the first outlet carries peroxide, the second returned water, and the third remains unused. Empty old products before changing jobs; see Advanced Electronics and Automation."
           ],
           "craft": {
             "grid": [
@@ -3915,7 +3918,9 @@
             "Four wide, four deep and four tall: the Chemical Reactor enlarged into a jacketed vessel with a stirring drive on its lid, built from a Chemical Reactor, a Steel Tank, a steel fluid pipe, an electric motor, a basic circuit and steel plates. Every block it fills must be free when it is placed. It runs two batches at once, from 8,000 mB tanks, at 90% of the reactor's draw.",
             "Pipe water into the inlet on its left side and hydrogen chloride from the Chemical Infuser into the short absorption inlet on its lid: 500 mB of the gas dissolves in a bucket of water into a bucket of hydrochloric acid in five seconds, which leaves at the outlet low at the front.",
             "Hydrochloric acid leaches ore like sulfuric acid: drop an ore into the hatch on its lid, pipe 250 mB of the acid into the side inlet, and four washed ores come out of the chute at the front, ready for the furnace.",
-            "Nitric acid in the side inlet and ammonia in the lid inlet neutralize each other: 250 mB of the acid and 125 mB of ammonia give four ammonium nitrate at the chute. It is a strong nitrogen fertilizer, and it packs grenades and high-explosive rockets in place of guncotton."
+            "Nitric acid in the side inlet and ammonia in the lid inlet neutralize each other: 250 mB of the acid and 125 mB of ammonia give four ammonium nitrate at the chute. It is a strong nitrogen fertilizer, and it packs grenades and high-explosive rockets in place of guncotton.",
+            "Also makes Wet Superphosphate from ground phosphate and phosphoric acid, or dissolves Mixed-farm Fertilizer into existing Nutrient Solution. Recipe lock selects the intended job.",
+            "Also prepares storable hydrazine and N2O4 propellants, each with a solid process residue. See Cryogenics and Rocket Fuels for compatible loaded motors and waste recovery."
           ],
           "craft": {
             "grid": [
@@ -4214,7 +4219,8 @@
             "Two wide, three deep and three tall: a stepped reaction chamber with an inlet on each shoulder, a catalyst-bed drawer at its foot and a cooling jacket behind, built from steel plates, two steel fluid pipes, a Tinplate Tank, copper cable and a basic circuit. Every block it fills must be free when it is placed.",
             "Pipe hydrogen into the left inlet and chlorine into the right. 250 mB of each burn together into 500 mB of hydrogen chloride in under four seconds, which leaves at the top collar at the back. It draws 128 JE/t through the socket low on the right side at the back.",
             "With a Nickel Catalyst Bed in its bed socket it makes methane: 400 mB of hydrogen and 100 mB of carbon dioxide (the right inlet) give 100 mB of methane at the top collar and 400 mB of water at the drain below it in ten seconds. The bed is never used up. Its screen says what it is waiting for, and upgrade cards fit its terminal.",
-            "Expanded processing is also available. Open Recipes to inspect each route's exact inputs, outputs and power, then lock a recipe for automation. Empty incompatible fluids before changing processes; old factory connections and recipes remain supported."
+            "Expanded processing is also available. Open Recipes to inspect each route's exact inputs, outputs and power, then lock a recipe for automation. Empty incompatible fluids before changing processes; old factory connections and recipes remain supported.",
+            "Install the reusable Cobalt-Ceramic Catalyst Bed for synthetic crude or CO/water gas balancing. First output carries crude or hydrogen; second carries water or CO2. Drain excess applies only to water. See Synthetic Fuels and Recovery."
           ],
           "craft": {
             "grid": [
@@ -4259,7 +4265,7 @@
           "title": "Cryogenic Liquefier",
           "icon": "jugcraft:cryogenic_liquefier",
           "text": [
-            "A cold box of chrome heat exchangers under frost. Pipe oxygen (from the air separation unit) into its tank: every 4 seconds a bucket of oxygen condenses into 250 mB of liquid oxygen, the oxidizer for liquid rocket motors. 96 JE/t.",
+            "A cold box of chrome heat exchangers under frost. Pipe oxygen (from the air separation unit) into its tank: every 4 seconds a bucket of oxygen condenses into 250 mB of liquid oxygen, the oxidizer for liquid rocket motors. 96 JE/t. Install a Methane Cooling Module for liquid methane, or an advanced Hydrogen Cooling Module for either methane or hydrogen. Tools are retained. See Cryogenics and Rocket Fuels for timings, storage and loaded motor assemblies.",
             "Uses 96 JE/t while working. Holds 40,000 JE."
           ],
           "craft": {
@@ -4482,7 +4488,9 @@
           "text": [
             "Four wide/deep and six tall. Feed 1000 mB fermented broth; collect 500 mB existing Bioethanol and 500 mB Stillage, 200 ticks at 32 JE/t. A heated column, condenser, reboiler, pump and service ladder separate these products. Both outputs must fit.",
             "Ethanol already fuels the Bio-Generator and existing compatible engines. The digester accepts 1000 mB stillage instead of solid farm feed, producing 250 mB raw biogas and 500 mB digestate in 300 ticks at 22 JE/t per expanded lane. Continue through the existing cleaner and separator. Pure water and digestate cannot make ethanol. Dehydration is reserved for a future real consumer; the original direct reactor ethanol recipe remains.",
-            "Power: lower front left socket. Left/right descriptions use the view from the front. Rear: broth midway up toward the right, ethanol midway up at the left, stillage low toward the right. Solid inputs are front-right hatches and solid outputs rear-right hatches. Each pipe is physically routed into its vessel, pump or collection tray. Use existing pipes, tanks, cylinders, cables and conveyors; earlier steel/copper/ceramics supply all crafting bills."
+            "Power: lower front left socket. Left/right descriptions use the view from the front. Rear: broth midway up toward the right, ethanol midway up at the left, stillage low toward the right. Solid inputs are front-right hatches and solid outputs rear-right hatches. Each pipe is physically routed into its vessel, pump or collection tray. Use existing pipes, tanks, cylinders, cables and conveyors; earlier steel/copper/ceramics supply all crafting bills.",
+            "Also recovers water from Treated Process Water: first outlet water, second Process Recovery Concentrate. Use the existing recipe picker, output previews and Lock recipe to separate this from ethanol and titanium jobs.",
+            "Also vaporizes LOX, liquid methane or liquid hydrogen into the matching gas through the first outlet. Each paid batch expands 250 mB liquid to 1000 mB gas; clear old outputs and lock the desired recipe."
           ],
           "craft": {
             "grid": [
@@ -4531,7 +4539,8 @@
             "Open Recipes to search and preview jobs. Lock recipe limits new batches; Automatic restores input-based selection. Locks persist across saves; current batches finish unchanged. Drain incompatible input AND output fluids and remove other feed items before changing jobs. Empty outputs for sustained automation. You can use one machine for different jobs or dedicate identical copies to separate factory lines.",
             "Three wide, four deep and three tall. 1000 mB slurry -> two Aluminum Hydroxide, one Bauxite Residue, 200 mB recovered lye and 500 mB water, 160 ticks at 32 JE/t. Return lye to digestion, adding 50 mB makeup per bauxite. Both liquid and both solid outputs must have room.",
             "One residue + one clay ball + two gravel craft two cobblestone as stabilized game filler. Raw bauxite residue is not fertilizer or digester feed. The press uses visible filter plates, clamping rods, a collection trough and separate output drawers.",
-            "Power: lower front left socket. Left/right descriptions use the view from the front. Rear: slurry midway up in the middle, recovered lye low left and water low middle. Two solid output hatches sit on the right. Solid inputs are front-right hatches and solid outputs rear-right hatches. Each pipe is physically routed into its vessel, pump or collection tray. Use existing pipes, tanks, cylinders, cables and conveyors; earlier steel/copper/ceramics supply all crafting bills."
+            "Power: lower front left socket. Left/right descriptions use the view from the front. Rear: slurry midway up in the middle, recovered lye low left and water low middle. Two solid output hatches sit on the right. Solid inputs are front-right hatches and solid outputs rear-right hatches. Each pipe is physically routed into its vessel, pump or collection tray. Use existing pipes, tanks, cylinders, cables and conveyors; earlier steel/copper/ceramics supply all crafting bills.",
+            "Also filters phosphate slurry: first fluid outlet phosphoric acid, second water, first solid output gypsum-rich residue. See Phosphate Processing and Fertilizers."
           ],
           "craft": {
             "grid": [
@@ -4556,7 +4565,9 @@
             "One Industrial Oven calcines aluminum hydroxide, dries magnesium chloride solution and sinters PTFE blanks. A new lower-rear solution inlet feeds drying; the old solid hatches and condensate outlet stay in place. Solid recipes require the solution tank to be empty. All recipes retain their original costs and products.",
             "Open Recipes to search and preview jobs. Lock recipe limits new batches; Automatic restores input-based selection. Locks persist across saves; current batches finish unchanged. Drain incompatible input AND output fluids and remove other feed items before changing jobs. Empty outputs for sustained automation. You can use one machine for different jobs or dedicate identical copies to separate factory lines.",
             "Three wide, four deep and three tall. Two hydroxide -> two existing Alumina + 250 mB recovered water, 200 ticks at 64 JE/t. Reuse this water with the press water. Enclosed ceramic kiln, guarded drive, insulated service hood and front charge door; all heating is paid electricity. Alumina keeps its existing catalyst and metal consumers.",
-            "Power: lower front left socket. Left/right descriptions use the view from the front. Rear: recovered water midway up at the left, alumina in the right hatch. Solid inputs are front-right hatches and solid outputs rear-right hatches. Each pipe is physically routed into its vessel, pump or collection tray. Use existing pipes, tanks, cylinders, cables and conveyors; earlier steel/copper/ceramics supply all crafting bills."
+            "Power: lower front left socket. Left/right descriptions use the view from the front. Rear: recovered water midway up at the left, alumina in the right hatch. Solid inputs are front-right hatches and solid outputs rear-right hatches. Each pipe is physically routed into its vessel, pump or collection tray. Use existing pipes, tanks, cylinders, cables and conveyors; earlier steel/copper/ceramics supply all crafting bills.",
+            "Also fires porcelain, alumina and zirconia blanks and calcines zirconia precursor. The solution tank must be empty for dry firing. Use Recipes to select a ceramic job; old calcination, drying and PTFE recipes remain supported.",
+            "Also dries Wet Superphosphate, returning water, and prepares Washed Gypsum into the existing Gypsum Binder. Empty incompatible stored outputs before switching jobs."
           ],
           "craft": {
             "grid": [
@@ -4653,7 +4664,11 @@
           "text": [
             "250 mB magnesium brine + 250 mB lye -> one magnesium hydroxide + 500 mB spent mineral wash; 160 ticks at 24 JE/t. Then change feeds: one hydroxide + 500 mB existing hydrochloric acid -> 500 mB prepared chloride solution and 250 mB water; 160 ticks at 32 JE/t.",
             "Drain old tanks before switching recipes. Settle 500 mB spent wash into one existing salt and 250 mB water for 120 ticks at 16 JE/t; the rest is evaporation/loss in game accounting. The same station treats titanium-distillation wash. Neither wash nor ordinary salt brine supplies magnesium.",
-            "Power socket: lower front-left. Solid feed hatches: front-right, bottom to top. Solid outputs: rear-right, bottom to top. Liquid inputs: rear middle height, left to right viewed from the front. Liquid outputs: rear bottom, left to right. Read JEI for exact materials. All tubes terminate at the parts they serve; machines share existing pipes, cables and automation. Game quantities are not real manufacturing instructions."
+            "Power socket: lower front-left. Solid feed hatches: front-right, bottom to top. Solid outputs: rear-right, bottom to top. Liquid inputs: rear middle height, left to right viewed from the front. Liquid outputs: rear bottom, left to right. Read JEI for exact materials. All tubes terminate at the parts they serve; machines share existing pipes, cables and automation. Game quantities are not real manufacturing instructions.",
+            "Also prepares ceramic powder charges with water and recovers trace zircon from sand. See Ceramics and Precision in the Handbook for the whole route. Clear incompatible fluids and lock the desired job when switching.",
+            "Also washes regional chromite: two minerals and 250 mB water make two concentrate. The Arc Furnace reduces two concentrate with one Coke into two Ferrochromium Ingots for stainless alloying.",
+            "Also prepares organic fertilizer carriers from compost or digestate fibre, and washes gypsum-rich residue with water. The gypsum route requires room for Spent Mineral Wash.",
+            "Also prepares primary cobalt stock and treats wafer waste with calcite and lye. Treated water and recovery concentrate require separate outlets; concentrate can be stabilized with clay. No acid or solvent is recovered from the fungible mixture."
           ],
           "craft": {
             "grid": [
@@ -4917,7 +4932,8 @@
           "text": [
             "Mine fluorite in snowy regions, including occasional exposed high mountain veins. The Mineral Conditioning Station washes one fluorite with 250 mB water into concentrate. Concentrate plus 750 mB concentrated sulfuric acid yields 500 mB hydrogen fluoride gas and one calcium sulfate. The washed-out water is consumed; these are game units, not chemical instructions.",
             "Optional residue recovery: two calcium sulfate + 250 mB water in the Conditioner yields one Prepared Gypsum Binder, paying 160 ticks at 48 JE/t with a material loss. One binder + two sand + gravel crafts two white concrete powder as game construction filler. The chamber is ceramic-lined starter equipment and needs no PTFE. Retain the gas in tanks or cylinders; this machine has no gas vent.",
-            "Shared factory controls: Pause, Cancel, progress, energy, tanks and upgrades. Power at lower front-left; solid feed front-right and product rear-right; fluid feeds rear-middle and products rear-bottom. Processing is server-authoritative; no fluid is silently vented. Consult JEI for exact quantities and the encyclopedia for the connected route."
+            "Shared factory controls: Pause, Cancel, progress, energy, tanks and upgrades. Power at lower front-left; solid feed front-right and product rear-right; fluid feeds rear-middle and products rear-bottom. Processing is server-authoritative; no fluid is silently vented. Consult JEI for exact quantities and the encyclopedia for the connected route.",
+            "Also dissolves Ground Phosphate with ordinary sulfuric acid into slurry. Use the recipe picker; empty old fluid from the shared process outlet before switching from HF."
           ],
           "craft": {
             "grid": [
@@ -5027,6 +5043,57 @@
               "jugcraft:electric_motor"
             ],
             "result": "jugcraft:lined_fluorochemical_reactor",
+            "count": 1
+          }
+        },
+        {
+          "title": "Precision Finishing Station",
+          "icon": "jugcraft:precision_finisher",
+          "text": [
+            "Three blocks wide, deep and tall. One shared station grinds ceramic blanks and steel shafts, and polishes optical glass. Build it with ordinary steel, motors and a basic circuit; no precision output is needed to start.",
+            "Fit a Diamond Abrasive Head for insulators, alumina plates, bearing balls, zirconia inserts or shafts; fit a Felt Polishing Head for lenses. Both heads are reusable, manually installed tools. Their recipes use earlier supplies, not this station. They are never consumed by a batch.",
+            "Each job takes one blank and 125 mB water, runs for 200 ticks at 48 JE/t before upgrades, and returns all 125 mB to its separate outlet. Both the product drawer and water outlet must fit. Pipe the return into the feed to reuse coolant; a full outlet pauses production rather than destroying it.",
+            "Front lower left: power. Front right: blank input. Rear left, middle height: water inlet; directly below: returned water. Rear right: finished part. The visible splash tray, drain and coolant line serve those ports.",
+            "Use Recipes to preview costs and required tools, then Lock recipe. Alumina blanks have two jobs: plates or bearing balls. Automatic defaults to the alphabetically first compatible job, so lock the product before automating. A running batch keeps its reserved inputs when you change the next job.",
+            "Finish an assembled Stainless Valve with the Felt Polishing Head: 240 ticks at 48 JE/t, returning the same 125 mB cooling water. Its alternate vessel recipes feed existing chemical equipment."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:steel_gear",
+              "jugcraft:steel_plate",
+              "jugcraft:electric_motor",
+              "jugcraft:basic_circuit",
+              "jugcraft:electric_motor",
+              "minecraft:bricks",
+              "jugcraft:machine_casing",
+              "minecraft:bricks"
+            ],
+            "result": "jugcraft:precision_finisher",
+            "count": 1
+          }
+        },
+        {
+          "title": "Wafer Wet-processing Bench",
+          "icon": "jugcraft:wet_processing_bench",
+          "text": [
+            "One shared 3 x 3 x 3 bench cleans, coats, develops and etches prepared wafers. The separate existing Lithography Station exposes the coated wafer between coating and developing. Use Recipes and Lock recipe to select a stage. Empty unused input tanks when changing jobs.",
+            "Front lower-left power; front-right wafer drawer; rear-left reagent and rear-middle rinse at middle height; rear-left low waste outlet; rear-right finished wafer drawer. All fluid services connect to the contained wash tray and sump. There are no unused decorative pipe ends.",
+            "Every wet job reserves space for its spent mixture before starting. Store and transport this mixture in existing tanks; recovery belongs to package 6. No automatic vent, free drain or recovery loop is introduced."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:steel_tank",
+              "jugcraft:steel_plate",
+              "jugcraft:electric_motor",
+              "jugcraft:basic_circuit",
+              "jugcraft:electric_motor",
+              "jugcraft:copper_cable",
+              "jugcraft:machine_casing",
+              "jugcraft:copper_cable"
+            ],
+            "result": "jugcraft:wet_processing_bench",
             "count": 1
           }
         },
@@ -5954,11 +6021,329 @@
           }
         },
         {
+          "title": "Automation Upgrade",
+          "icon": "jugcraft:automation_upgrade",
+          "text": [
+            "Enables saved recipe priorities and output stock targets in supported machines. Open Recipes to configure up to eight rules. Removing the card suspends the rules without deleting them."
+          ]
+        },
+        {
           "title": "Comparators",
           "icon": "minecraft:comparator",
           "text": [
             "A comparator next to a generator or battery shows how full it is.",
             "Next to a processing machine, it shows how full its slots are, like a chest."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Ceramics and Precision",
+      "icon": "jugcraft:porcelain_insulator",
+      "pages": [
+        {
+          "title": "Ceramics: powder to finished part",
+          "icon": "jugcraft:porcelain_insulator",
+          "text": [
+            "Pulverize clay balls into clay powder. Mix four powder, two quartz and one borax into four Porcelain Powder Blends. The Mineral Conditioner prepares each blend with 125 mB water. The existing Metal Press shapes the charge; the shared Industrial Oven fires it. Finish each fired blank into two porcelain insulators.",
+            "Alumina from the existing bauxite line follows the same conditioning, pressing and firing route. Finish one blank into an Alumina Plate or one set of Ceramic Bearing Balls. Lock the desired recipe; there is no separate ceramic press or kiln to build.",
+            "Before ceramics, the original terracotta insulator, motor and upgrade recipes still work. Ordinary clay bricks still start steel and chemistry. Ceramics are an optional productive specialty, not a retroactive gate."
+          ]
+        },
+        {
+          "title": "Precision parts and their uses",
+          "icon": "jugcraft:precision_bearing",
+          "text": [
+            "Two steel plates hand-assemble two shaft blanks. Finish them with the abrasive head. A shaft, a steel plate and a set of ceramic balls assemble a Precision Bearing. Bearings and shafts make two motors per advanced assembly, or a Speed Upgrade with less gear-making.",
+            "Finished Alumina Plates provide the insulating body of an alternate Efficiency Upgrade. Porcelain insulators make existing placed Ceramic Insulators and an alternate Copper Cable recipe. These are extra recipes: old recipes and saved equipment stay available.",
+            "Two borosilicate glass make two Optical Blanks. The Felt Polishing Head finishes each into a lens; two lenses, a brass plate and a compass make the existing Range Finder. Lenses also make spyglasses. Advanced wafer equipment will use this same finishing specialty in a later package."
+          ]
+        },
+        {
+          "title": "Specialist zirconia tooling",
+          "icon": "jugcraft:zirconia_insert",
+          "text": [
+            "The Conditioner recovers one trace Zircon Concentrate from 16 sand and 1000 mB water. Two concentrate plus 500 mB lye make one precursor; calcine it in the Industrial Oven for zirconia powder. This expensive, deterministic starter route works in existing worlds without new chunks. Regional Zircon-rich Mineral Sand is the efficient route: two sand and 500 mB water produce one concentrate.",
+            "Condition, press and fire zirconia like alumina, then finish one fired blank into two cutting inserts. An insert, steel plate and iron ingot craft a reusable polymer mold or extrusion die in a selected pattern. The original all-metal tool recipes remain available.",
+            "Inputs and costs are simplified game balance. Consumed preparation liquids are spent; only the Finisher returns its cooling water. There is no recycling recipe that turns finished components back into more feedstock."
+          ]
+        },
+        {
+          "title": "Precision Finishing Station",
+          "icon": "jugcraft:precision_finisher",
+          "text": [
+            "Three blocks wide, deep and tall. One shared station grinds ceramic blanks and steel shafts, and polishes optical glass. Build it with ordinary steel, motors and a basic circuit; no precision output is needed to start.",
+            "Fit a Diamond Abrasive Head for insulators, alumina plates, bearing balls, zirconia inserts or shafts; fit a Felt Polishing Head for lenses. Both heads are reusable, manually installed tools. Their recipes use earlier supplies, not this station. They are never consumed by a batch.",
+            "Each job takes one blank and 125 mB water, runs for 200 ticks at 48 JE/t before upgrades, and returns all 125 mB to its separate outlet. Both the product drawer and water outlet must fit. Pipe the return into the feed to reuse coolant; a full outlet pauses production rather than destroying it.",
+            "Front lower left: power. Front right: blank input. Rear left, middle height: water inlet; directly below: returned water. Rear right: finished part. The visible splash tray, drain and coolant line serve those ports.",
+            "Use Recipes to preview costs and required tools, then Lock recipe. Alumina blanks have two jobs: plates or bearing balls. Automatic defaults to the alphabetically first compatible job, so lock the product before automating. A running batch keeps its reserved inputs when you change the next job.",
+            "Finish an assembled Stainless Valve with the Felt Polishing Head: 240 ticks at 48 JE/t, returning the same 125 mB cooling water. Its alternate vessel recipes feed existing chemical equipment."
+          ],
+          "craft": {
+            "grid": [
+              "jugcraft:steel_plate",
+              "jugcraft:steel_gear",
+              "jugcraft:steel_plate",
+              "jugcraft:electric_motor",
+              "jugcraft:basic_circuit",
+              "jugcraft:electric_motor",
+              "minecraft:bricks",
+              "jugcraft:machine_casing",
+              "minecraft:bricks"
+            ],
+            "result": "jugcraft:precision_finisher",
+            "count": 1
+          }
+        }
+      ]
+    },
+    {
+      "title": "Stainless and Structural Alloys",
+      "icon": "jugcraft:stainless_steel_ingot",
+      "pages": [
+        {
+          "title": "Regional chromite to stainless steel",
+          "icon": "jugcraft:chromite",
+          "text": [
+            "Find dark chromite in new chunks beneath windswept hills, windswept forest, stony peaks, stony shores, Shield and Highland. Its host province follows the surface biome even when you enter a cave. Occasional exposed outcrops mark a local source. Mine with an iron pickaxe or better, or trade with another player. Old chunks are not rewritten.",
+            "Condition two chromite with 250 mB water into two concentrate, then reduce both with one Coke in the Arc Furnace into two Ferrochromium Ingots. Preparation water is spent, not free recoverable coolant. Ferrochromium is iron/chromium alloying stock, not pure chromium.",
+            "The existing Alloy Smelter takes six Steel Ingots, two Ferrochromium Ingots and one Nickel Ingot to make nine Stainless Steel Ingots in 400 ticks. Nickel comes from its existing independent ore route. The existing Metal Press makes one plate per ingot. No stainless equipment is required to make the first batch.",
+            "These convenient game ratios conserve input metal units; they do not represent a certified real-world grade. There is no reverse recipe separating alloys into their ingredients."
+          ]
+        },
+        {
+          "title": "Chemical vessels and precision valves",
+          "icon": "jugcraft:stainless_vessel",
+          "text": [
+            "Press one Stainless Steel Plate into two pipe fittings. Four plates and two finished Alumina Plates craft one Ceramic-lined Stainless Vessel. One fitting, a gasket and a Precision Shaft assemble an unfinished valve; finish it using the Felt Polishing Head, 125 mB returned cooling water, 240 ticks and 48 JE/t.",
+            "Use these parts in alternate Steel Fluid Pipe, Steel Tank, Bulk Chemical Reactor and Lined Fluorochemical Reactor recipes. The lined reactor still needs its PTFE liner, seal and fitting. Stainless substitutes for selected construction parts; it does not bypass the first PTFE production route.",
+            "The outputs are the existing machines and transport blocks, with their existing capacities, models and behavior. Stainless recipes offer different material bills; they do not secretly add corrosion resistance, extra throughput or storage. Every older recipe stays available."
+          ]
+        },
+        {
+          "title": "Lightweight structural alloy",
+          "icon": "jugcraft:aluminum_magnesium_ingot",
+          "text": [
+            "Seven Aluminum Ingots and one Magnesium Ingot make eight Aluminum-Magnesium Alloy Ingots in the Alloy Smelter, 240 ticks. Use the existing bauxite and coastal-seawater magnesium routes. This approximate whole-ingot game batch conserves all eight metal units.",
+            "Press each ingot to a plate and each plate to one formed panel. Four alloy plates and one Precision Shaft craft two lightweight frames. Panels feed Rocket Workshop casings; frames support an alternate Zeppelin recipe. Frames and panels also provide an alternate Howitzer Walker assembly, keeping its Diesel Walker core, dispenser and pistons.",
+            "These are manufacturing alternatives, not different vehicle stats or hidden weight bonuses. Existing vehicle construction and worlds remain supported. Titanium alloys and new armor/tool tiers remain separate future work."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Batteries and Power Management",
+      "icon": "jugcraft:lead_acid_battery_bank",
+      "pages": [
+        {
+          "title": "Lead-acid workshop storage",
+          "icon": "jugcraft:lead_acid_battery_bank",
+          "text": [
+            "An early bank stores 2,000,000 JE and transfers up to 1,024 JE/t in each direction. It starts empty. Existing Battery Boxes and Capacitor Banks remain unchanged and all original lithium recipes remain available.",
+            "Existing raw lead represents galena feed. Condition two raw lead with 250 mB water, then reduce two concentrate with one Coke in the Arc Furnace into two Lead Ingots. Old lead refining still works. Press lead plates to grids; oxidize one grid with 250 mB oxygen in the Bulk Chemical Reactor.",
+            "Press one Plastic Sheet into four separators. Craft a lead grid, an oxide electrode and a separator into a dry cell, then fill it with 250 mB sulfuric acid in the Bulk Chemical Reactor. Craft four filled cells with steel plates, copper wire and a basic circuit into a bank. Acid is incorporated once; there is no cycle-aging upkeep."
+          ]
+        },
+        {
+          "title": "Expanded lithium cells",
+          "icon": "jugcraft:lithium_cell",
+          "text": [
+            "Fire Spodumene in the Industrial Oven, then condition two activated mineral with 500 mB sulfuric acid for two Lithium Carbonate. Existing lepidolite and lithium recipes remain available.",
+            "In the Bulk Chemical Reactor prepare Lithium Fluoride from carbonate and HF, and a fluorophosphate precursor from phosphate and HF. Combine both in the two-input Chemical Reactor to LiPF6 salt. Separately make Dry Carbonate Solvent Charges from bioethanol and carbon dioxide in the Bulk Reactor. One salt plus two solvent charges in the Chemical Reactor yields two formulated electrolyte charges. These sealed process doses are abstract game batches, not buckets or real laboratory instructions.",
+            "Craft lithium carbonate, iron and phosphate into a Cathode Mix, then process it in the Bulk Reactor for two Lithium Iron Phosphate Cathodes. Press Coke to Carbon Anodes and plastic sheets to separators. Craft cathode, anode, separator and aluminum plate into a dry cell assembly, then fill it with one electrolyte charge in the Circuit Assembler. It produces the existing Lithium Cell, for the existing 32,000,000 JE / 16,384 JE/t bank."
+          ]
+        },
+        {
+          "title": "Paired flow modules and mineral electrolyte",
+          "icon": "jugcraft:flow_tank_module",
+          "text": [
+            "Existing vanadium-bearing iron concentrate and its roasted Vanadium Oxide now feed Vanadyl Sulfate with Coke and sulfuric acid in the two-input Chemical Reactor; the existing Pentoxide is an alternative. Formulate one sulfate charge with 500 mB acid and 500 mB water in the Bulk Reactor into 1,000 mB of the existing Vanadium Electrolyte. Refinery-residue electrolyte stays available.",
+            "A Flow Battery still begins with two internal sides totaling 64 buckets / 64,000,000 JE. Place up to four paired tank modules in a straight row immediately behind the middle bottom block, facing the same way as the controller. Each paired module adds 64 buckets, equally split between both sides. Maximum: 320 buckets / 320,000,000 JE. Fill through the controller; modules never own a second copy of fluid or energy.",
+            "Place one Cell-stack Module directly above the middle front top block to raise both input and output from 8,192 to 16,384 JE/t. Capacity and rate are separate upgrades. Attached joints align with the module manifolds; modules need no standalone cables or fluid pipes.",
+            "Removing or unloading required tank modules suspends transfers when stored electrolyte exceeds connected capacity, preserving fluid and charge until the modules return. Breaking the controller keeps electrolyte but loses charge, as before. Detached modules are empty. No electrolyte is generated or consumed by charging."
+          ]
+        },
+        {
+          "title": "Local battery controls",
+          "icon": "jugcraft:battery_box",
+          "text": [
+            "Open any battery to select Automatic, Charge only, Discharge only or Off. Reserve changes in 10% steps; discharge stops at that reserve and resumes after charging five percentage points above it. At 0% reserve the original automatic behavior remains.",
+            "Charge priority chooses Low, Normal or High on the local cable network; higher priority is offered power first, with unused power falling through to the next group. This does not schedule generators or remotely command other grids. Output limit cycles 100%, 50% and 25%. Tick budgets are shared across every face and part.",
+            "All controls are server-authoritative, saved with the placed bank, and shown on its screen. Batteries start empty; energy transfer remains lossless for compatibility, subject to finite storage, cable limits, mode, reserve and rate. No charging cycles create energy."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Cryogenics and Rocket Fuels",
+      "icon": "jugcraft:hydrolox_motor",
+      "pages": [
+        {
+          "title": "One liquefier, three cooling stages",
+          "icon": "jugcraft:hydrogen_cooling_module",
+          "text": [
+            "Keep the existing oxygen route: 1000 mB oxygen becomes 250 mB Liquid Oxygen in 80 ticks at base 96 JE/t. No cooling module is needed. Electrolysis and air separation remain the gas supplies.",
+            "Install a retained Methane Cooling Module in the Cryogenic Liquefier tool slot for 1000 mB methane to 250 mB liquid methane, 160 ticks at base 96 JE/t. Existing cleaned biogas and methanation supply methane. The advanced Hydrogen Cooling Module also supports methane.",
+            "The advanced module enables 1000 mB hydrogen to 250 mB liquid hydrogen, 320 ticks at base 96 JE/t. It builds on the methane module, precision bearings, ceramic insulation and an advanced chip. Both modules are manual tooling, never consumed or exposed to hoppers.",
+            "Clear incompatible fluid before changing recipes. Changing a module discards cooling progress, never fluid. Missing tooling pauses production. These compact machines use their existing tank controls; the formed chemistry machines retain their recipe picker, previews and locks."
+          ]
+        },
+        {
+          "title": "Insulated storage and gas recovery",
+          "icon": "jugcraft:vacuum_insulated_tank",
+          "text": [
+            "Craft Cryogenic Insulation from PTFE liners, an alumina plate and a porcelain insulator. The Insulated Fluid Tank holds 32 buckets; the Vacuum-insulated Fluid Tank holds 64. Silver jackets, olive collars and six centered service faces match the factory palette.",
+            "Both use the existing fluid pipes, pumps, tank groups and gauge. Connected compatible tanks share capacity. Break and replace a tank to retain its contents. Craft new tanks from raw parts, never from a filled tank. Existing tanks and cylinders retain their existing fluid compatibility.",
+            "No boil-off timer, hidden pressure system or world damage is introduced. Insulated storage is an optional compact capacity upgrade; old fuel factories keep working.",
+            "The Chemical Distillation Station vaporizes 250 mB LOX, liquid methane or liquid hydrogen into 1000 mB of the matching gas, using 160 ticks at base 32 JE/t. Lock the desired recipe and empty the first output before switching gases. The cooling/vaporization loop returns only its starting gas and consumes power."
+          ]
+        },
+        {
+          "title": "Storable propellants and residue",
+          "icon": "jugcraft:hydrazine_tank",
+          "text": [
+            "These are fictional game recipes. In the Bulk Chemical Reactor, one redstone, 500 mB ammonia and 250 mB nitrogen produce 250 mB hydrazine and one Propellant Process Residue. The N2O4 job uses one redstone and 500 mB nitric acid for 250 mB N2O4 and one residue.",
+            "Both jobs use base 96 JE/t; hydrazine takes 400 ticks and N2O4 takes 320. The process outlet and solid output must both have room. Existing ammonia, nitrogen and acid production supplies this branch.",
+            "Wash two residue with 500 mB water in the Mineral Conditioner to obtain 500 mB Process Recovery Concentrate. The existing clay stabilization and concrete-fill recipe then give it a construction use. Raw propellant residue is not fertilizer or fuel.",
+            "Hydrazine supplies the monopropellant thruster; N2O4 is only paired with hydrazine in the storable bipropellant assembly. MMH, orbital vehicles, destination progression and maneuvering simulation remain future work."
+          ]
+        },
+        {
+          "title": "Loaded motors for rockets you already have",
+          "icon": "jugcraft:hydrolox_motor",
+          "text": [
+            "The compact Chemical Reactor seals 1000 mB of liquid methane, liquid hydrogen, hydrazine or N2O4 into one Rocket Casing. These sealed items are manufacturing ingredients, not refillable fluid containers. Existing kerosene and LOX tank recipes remain available.",
+            "Rocket Workshop: one methane tank, one LOX tank and two nozzles yield three loaded Methalox Motors. Replace methane with hydrogen to yield four Hydrolox Motors. One hydrazine tank, one N2O4 tank and two nozzles yield three Storable Bipropellant Motors.",
+            "One hydrazine tank, one nozzle and one Porcelain Insulator make one Hydrazine Thruster. All four loaded motor options substitute for the ordinary motor in Survey, Cloud-seeding, Clear-sky, Delivery and Line Rocket recipes. Mixing incompatible propellant tank pairs never matches a recipe.",
+            "Payload behavior and range stay the same: the choice changes factory inputs and batch yield. Solid motors and RP-1/LOX remain valid. A loaded motor is consumed when assembling a rocket, including its propellant and casing; it is not an empty engine or a planet-launch unlock."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Synthetic Fuels and Recovery",
+      "icon": "jugcraft:synthetic_crude_bucket",
+      "pages": [
+        {
+          "title": "Independent cobalt supply",
+          "icon": "jugcraft:cobaltite",
+          "text": [
+            "Find Cobaltite beneath windswept hills, windswept forest, stony peaks, Shield or Highland in newly generated Overworld chunks, from Y -48 to 32. Occasional surface outcrops identify the host province. Mine with iron or better, survey or trade; existing terrain is never rewritten. Nickel mining stays separate.",
+            "Wash two Cobaltite with 500 mB water in the Mineral Conditioner into two Cobalt Concentrate and 500 mB Spent Mineral Wash. The existing wash-settling route accepts that waste. The Arc Furnace reduces two concentrate with one Coke into two Cobalt Ingots.",
+            "Craft two cobalt ingots over three fired vanilla bricks into one Cobalt-Ceramic Catalyst Bed. Install it in the Chemical Infuser tool socket. It is retained without wear and cannot be removed during a running batch. No synthetic fuel is required to make the first bed. Nickel methanation and vanadium contact beds keep their separate jobs."
+          ]
+        },
+        {
+          "title": "Clean gases to synthetic crude",
+          "icon": "jugcraft:synthetic_crude_bucket",
+          "text": [
+            "Existing Coal Gasifiers process coal, charcoal or Coke and water into dirty synthesis gas. The existing Gas Scrubber cleans it with wash water, giving separate carbon monoxide, hydrogen and mixed gas-cleaning residue. Keep the existing residue stabilization route; dirty gas cannot enter synthesis directly.",
+            "Use existing electrolysis for extra hydrogen. Alternatively the Chemical Infuser, with the cobalt bed, converts 250 mB carbon monoxide and 500 mB water into 250 mB hydrogen (first outlet) and 250 mB CO2 (second). This trades carbon feed and power for hydrogen, not free fuel. The CO2 can use existing storage and methanation.",
+            "With the cobalt bed, infuse 500 mB clean CO and 1000 mB hydrogen into 500 mB Synthetic Crude and 500 mB water, 400 ticks at base 128 JE/t. These are simplified game batches. Use Recipes and Lock recipe; clear old products before switching jobs. Product outlet is at the rear, with the second outlet below.",
+            "The existing Infuser Drain excess water option applies only to plain water. Switch it off to capture all synthesis water and stop when full. CO2 from gas balancing is never silently drained. Existing gas tanks/cylinders, fluid tanks and pipes carry the supplies and products."
+          ]
+        },
+        {
+          "title": "One refinery, standard finished fuels",
+          "icon": "jugcraft:diesel_bucket",
+          "text": [
+            "Feed 500 mB Synthetic Crude into the existing Distillation Tower. Collect 50 mB Refinery Gas in outlet 0, 150 mB Naphtha in outlet 1, 250 mB Diesel in outlet 2 and 50 mB Heavy Fuel Oil in outlet 3. All four products need space; outlet 4 remains unused. The compact tower uses its existing processing controls.",
+            "Diesel is already usable in compatible engines and vehicles. Existing Catalytic Cracker recipes finish naphtha into gasoline and refinery gas, or crack heavy oil into lighter fractions. Existing vacuum distillation produces lubricant and asphalt binder; existing hydrocracking prepares rocket kerosene.",
+            "Finished products retain the same IDs, energy values and compatibility as oil-derived fuels. The crude mixture itself is not a registered generator fuel. Refinery gas also supplies existing polymer chemistry. Account for gasification, wash, hydrogen, synthesis and refining energy together before judging the line profitable."
+          ]
+        },
+        {
+          "title": "Recover process water, contain residues",
+          "icon": "jugcraft:treated_process_water_bucket",
+          "text": [
+            "Wafer jobs share one Spent Wafer Mixture, so recovery cannot assume that every batch contains recoverable acid, alcohol or metal. No purity upgrade or arbitrary reagent restoration is granted.",
+            "The Mineral Conditioner treats 1000 mB spent mixture with 250 mB lye and one Calcite block into 1000 mB Treated Process Water (outlet 0) plus 250 mB Process Recovery Concentrate (outlet 1). The Chemical Distillation Station processes that treated water into 750 mB water and another 250 mB concentrate.",
+            "Condition 1000 mB concentrate with one clay ball into four Stabilized Process Residue. Craft two residue, two sand and two gravel into four ordinary Gray Concrete Powder. This is fictional paid preparation for game construction, not a real waste-handling procedure. Raw concentrate has no fuel, fertilizer or food use.",
+            "Both recovery stages use 320 ticks at base 64 JE/t. No waste is silently deleted. Fill every required output and the job waits; use shared recipe previews, locks and stock targets. Earlier gas-cleaning, mineral-wash, digestate and gypsum routes remain useful."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Phosphate Processing and Fertilizers",
+      "icon": "jugcraft:triple_superphosphate",
+      "pages": [
+        {
+          "title": "Phosphate into useful supplies",
+          "icon": "jugcraft:ground_phosphate",
+          "text": [
+            "Pulverize one existing Phosphate into one Ground Phosphate. The Chemical Dissolution Chamber combines two ground phosphate and 1000 mB ordinary sulfuric acid into 1000 mB slurry. Its existing process outlet now serves either HF or slurry; empty it when changing recipes.",
+            "The shared Filter Press converts 1000 mB slurry into 750 mB Industrial Phosphoric Acid (first fluid outlet), 250 mB water (second) and two Gypsum-rich Residue (first item output). Nothing is vented: blocked byproducts stop production. Use the recipe picker, previews and persistent Lock recipe.",
+            "The Bulk Chemical Reactor combines one ground phosphate and 250 mB acid into two Wet Superphosphate. The shared Industrial Oven dries each into one Triple Superphosphate, returning 125 mB water. Recipes are abstract game batches, not real manufacturing instructions."
+          ]
+        },
+        {
+          "title": "Choose a fertilizer for your farm",
+          "icon": "jugcraft:mixed_farm_blend",
+          "text": [
+            "Nitrogen Field Fertilizer gives four bone-meal applications to tagged grains, leaves and fibre crops; Triple Superphosphate gives four to tagged roots, legumes and fruiting crops. Either gives one application to other crops. Mixed-farm Fertilizer gives three to every eligible crop. Vanilla growth rules still decide the result; these are growth applications, not guaranteed harvests.",
+            "Use on a crop or ground to reach a 5 x 5 area, one block up or down. Tall plants count once. An item is only consumed if growth succeeds. Decorations and trees are excluded. The tooltip and use message identify the selected specialty.",
+            "The Conditioner makes four Organic Fertilizer Carriers from one Organic Compost and 250 mB water, or one carrier from two Digestate Fiber and 250 mB water. The compact Chemical Reactor blends one ammonium nitrate and one carrier into two Nitrogen Field Fertilizers. Craft one nitrogen fertilizer, one Triple Superphosphate and one carrier into two Mixed-farm Fertilizers.",
+            "Existing bone meal, ordinary fertilizer, ammonium nitrate and rich-soil compost routes stay available. Compost still offers passive soil improvement; the carrier route consumes the unplaced block instead. Crop groups live in fertilizer_nitrogen_crops and fertilizer_phosphate_crops block tags for datapack extensions."
+          ]
+        },
+        {
+          "title": "Sprinklers and hydroponics",
+          "icon": "jugcraft:sprinkler",
+          "text": [
+            "Load one fertilizer type at a time into a sprinkler by hand, hopper or item pipe. It stores up to 16. New blends keep their crop-group effect when the existing water-powered fertilizer pulse runs. Ordinary Fertilizer keeps its previous effect; old saves retain their stored count.",
+            "Use an empty hand to read the loaded fertilizer type and count. Sneak-use with an empty hand retrieves the fertilizer and any stored buckets so you can change the load. Sprinklers do not bypass town protection for the new blends. No background crop scanning or chunk loading is added.",
+            "The Bulk Reactor dissolves one Mixed-farm Fertilizer with 1000 mB water into 1000 mB existing Nutrient Solution for hydroponics. This gives ordinary nutrient solution, without a hidden crop bonus. The earlier ordinary-fertilizer nutrient recipe remains useful."
+          ]
+        },
+        {
+          "title": "Gypsum and battery integration",
+          "icon": "jugcraft:plasterboard",
+          "text": [
+            "Condition two Gypsum-rich Residue with 500 mB water into one Washed Gypsum and 500 mB Spent Mineral Wash. The Industrial Oven prepares one washed gypsum into one existing Gypsum Binder. Keep the wash for the existing settling/recovery route; raw residue cannot be placed as a building block.",
+            "Craft one binder with two sand into two Plaster blocks, or two binder, two paper and one Digestate Fiber into four Plasterboard blocks. Both have matching slabs and stairs. Existing calcium-sulfate binder and concrete recipes remain available.",
+            "The compact Chemical Reactor can also turn 250 mB Industrial Phosphoric Acid and 500 mB HF into one existing Fluorophosphate Precursor for the battery chain. The earlier direct phosphate route remains available. This industrial acid is not a food-grade cola ingredient."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Advanced Electronics and Automation",
+      "icon": "jugcraft:advanced_chip",
+      "pages": [
+        {
+          "title": "From silicon to a polished wafer",
+          "icon": "jugcraft:high_purity_boule",
+          "text": [
+            "Existing silicon, wafer, microchip and circuit routes remain available. For the optional advanced line, condition four Silicon with 500 mB hydrochloric acid and 500 mB water into two High-purity Silicon and 1000 mB spent mixture. Water conditioning is internal; there is no new purified-water currency.",
+            "Pull four high-purity silicon with one Phosphate in the Arc Furnace into one boule. The Precision Finisher slices it into eight process wafers with a reusable Diamond Abrasive Head and 250 mB returned cooling water. Change to the reusable Felt Polishing Head to polish each wafer with 125 mB returned water."
+          ]
+        },
+        {
+          "title": "Wafer reagents and waste",
+          "icon": "jugcraft:semiconductor_photoresist_bucket",
+          "text": [
+            "The Mineral Conditioner purifies sulfuric acid. The Bulk Reactor combines oxygen and water into process feed; the powered Electrolytic Separator turns it into peroxide and returned water. This is its own paid process, separate from ordinary water electrolysis.",
+            "Abstract game recipes use Coke and bioethanol for Novolac Resin, Coke and nitric acid for DNQ Additive, and ammonium nitrate, bioethanol and lye for Developer Charges. Dissolve the charges with water in the Bulk Reactor; blend Novolac and DNQ with bioethanol in the compact Chemical Reactor for photoresist. These doses simplify industrial chemistry for gameplay.",
+            "The bench cleans with electronic-grade sulfuric acid and peroxide, coats with photoresist, develops exposed wafers with TMAH and water, then etches with HF and water. Each step outputs spent mixture. Store it for the later recovery chain; a full waste outlet stops work."
+          ]
+        },
+        {
+          "title": "Exposure and useful chips",
+          "icon": "jugcraft:advanced_chip",
+          "text": [
+            "Craft a General-chip Pattern Plate from earlier glass lenses, gold ingot and a basic circuit. Install it manually in the new upper pattern slot of the existing Lithography Station. It is retained without wear. The station exposes a coated wafer into an exposed wafer; old acid-etch microchip recipes do not need a plate.",
+            "After developing and etching, the Circuit Assembler bonds each etched wafer with two copper wire and one solder ingot into four General-purpose Advanced Chips. Assemble those with precision parts for two Speed Upgrades, ceramic insulation and wire for two Efficiency Upgrades, or a basic circuit and polymer housing for one Automation Card.",
+            "Speed and Efficiency keep their existing four-card caps and effects. Automation works in powered formed machines with upgrade slots; compact machines keep their existing controls. It never remotely operates another machine."
+          ]
+        },
+        {
+          "title": "Recipe priorities and stock targets",
+          "icon": "jugcraft:automation_upgrade",
+          "text": [
+            "Install an Automation Card in a formed machine upgrade slot, open Recipes, select a job and use Priority or Stock. Up to eight jobs per machine may have non-default settings. Priority 0 is normal; 1, 2 and 3 run first when their inputs, tool and output room are available. Recipe Lock still restricts work to the locked job.",
+            "Stock limits count the first item output, or first fluid output for fluid-only recipes, inside this machine plus matching outputs already promised by running lanes. They do not count remote chests or tanks. A batch starts only if its entire matching output fits below the target. Exporting products makes room to resume.",
+            "Item targets cycle Off, 16, 32, 64; fluid targets Off, 250, 500, 1000, 2000 mB. Choose a target at least as large as one batch. Running batches finish unchanged when settings change. Removing the card disables its rules but preserves them for reinsertion and world reload. Reset both settings to release a rule slot."
           ]
         }
       ]

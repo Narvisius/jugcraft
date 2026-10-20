@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "name": "jugcraft_source_grove_sporeling_overworld_egg",
+      "rolls": 1,
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.1
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:grove_sporeling_overworld_egg"
+        }
+      ]
+    },
+    {
+      "name": "jugcraft_source_grove_sporeling_nether_egg",
+      "rolls": 1,
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.1
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:grove_sporeling_nether_egg"
+        }
+      ]
+    }
+  ]
+}

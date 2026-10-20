@@ -1,0 +1,22 @@
+{
+  "type": "jugcraft:household_construction",
+  "ingredients": [
+    {
+      "count": 12,
+      "ingredient": "minecraft:spruce_planks"
+    },
+    {
+      "count": 1,
+      "ingredient": "minecraft:white_dye"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:household_spruce_kitchen_storage_cabinet"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

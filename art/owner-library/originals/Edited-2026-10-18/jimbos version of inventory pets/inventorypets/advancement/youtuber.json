@@ -1,0 +1,51 @@
+{
+	"display": {
+		"icon": {
+			"id": "inventorypets:pet_illuminati"
+		},
+		"title": {
+			"translate": "advancement.ip.petachieveYouTuber"
+		},
+		"description": {
+			"translate": "advancement.ip.petachieveYouTuber.desc"
+		},
+		"show_toast": true,
+		"announce_to_chat": true,
+		"frame": "goal"
+	},
+	"parent": "inventorypets:root",
+	"criteria": {
+		"crafting_table": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": [
+							"inventorypets:pet_cobblestone"
+						]
+					},
+					{
+                        "items": [
+                        	"inventorypets:pet_dirt"
+                    	]
+                    },
+                    {
+                        "items": [
+                        	"inventorypets:pet_illuminati"
+                    	]
+                    },
+					{
+						"items": [
+							"inventorypets:pet_juggernaut"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_siamese"
+						]
+					}
+				]
+			}
+		}
+	}
+}

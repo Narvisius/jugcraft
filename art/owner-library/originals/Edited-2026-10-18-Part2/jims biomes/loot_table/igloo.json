@@ -1,0 +1,161 @@
+{
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:cherry_sapling",
+          "modifier": [
+            {
+              "components": {
+                "minecraft:enchantment_glint_override": true
+              },
+              "type": "minecraft:set_components"
+            },
+            {
+              "entity": "this",
+              "name": {
+                "text": "Wintry Cherry Sapling",
+                "color": "#FFDEFB",
+                "italic": false
+              },
+              "type": "minecraft:set_name"
+            },
+            {
+              "entity": "this",
+              "lore": [
+                {
+                  "text": "\"Snowy Cherry Grove is the best biome.\"",
+                  "color": "gray",
+                  "italic": false
+                },
+                {
+                  "text": "- Apollo",
+                  "color": "gray",
+                  "italic": false
+                },
+                {
+                  "text": "Terralith",
+                  "color": "#115060"
+                }
+              ],
+              "mode": "append",
+              "type": "minecraft:set_lore"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 3,
+        "max": 5,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:snowball",
+          "modifier": {
+            "count": {
+              "min": 4,
+              "max": 8,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:cherry_sapling",
+          "modifier": {
+            "count": {
+              "min": 2,
+              "max": 4,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:baked_potato",
+          "modifier": {
+            "count": {
+              "min": 4,
+              "max": 12,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:sweet_berries",
+          "modifier": {
+            "count": {
+              "min": 6,
+              "max": 12,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:cherry_log",
+          "modifier": {
+            "count": {
+              "min": 4,
+              "max": 12,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:emerald",
+          "modifier": {
+            "count": {
+              "min": 4,
+              "max": 8,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:amethyst_shard",
+          "modifier": {
+            "count": {
+              "min": 4,
+              "max": 8,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:lapis_lazuli",
+          "modifier": {
+            "count": {
+              "min": 4,
+              "max": 8,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:writable_book",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

@@ -24,7 +24,7 @@ import net.minecraft.world.item.Item;
  * nothing a player has not met is named.
  */
 public record EncyclopediaPayload(int sequence, List<Component> notices, List<Page> pages) implements CustomPacketPayload {
-	public static final int MAX_PAGES = 6;
+	public static final int MAX_PAGES = 11;
 	public static final int MAX_NOTICES = 4;
 	public static final Type<EncyclopediaPayload> TYPE = new Type<>(Jugcraft.id("encyclopedia"));
 	public static final StreamCodec<RegistryFriendlyByteBuf, EncyclopediaPayload> CODEC = StreamCodec.composite(
@@ -91,7 +91,8 @@ public record EncyclopediaPayload(int sequence, List<Component> notices, List<Pa
 	/** One page: its id (for the views' tabs and for links), its title and its rows. */
 	public record Page(String id, Component title, List<Row> rows) {
 		public static final int MAX_ID = 32;
-		public static final int MAX_ROWS = 96;
+		/** Bounded for the complete 61-species menagerie directory and its introductory topics. */
+		public static final int MAX_ROWS = 160;
 		public static final StreamCodec<RegistryFriendlyByteBuf, Page> STREAM_CODEC = StreamCodec.composite(
 				ByteBufCodecs.stringUtf8(MAX_ID), Page::id,
 				ComponentSerialization.TRUSTED_STREAM_CODEC, Page::title,

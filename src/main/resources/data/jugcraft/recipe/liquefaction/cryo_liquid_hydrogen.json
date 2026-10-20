@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:liquefaction",
+  "fluids": [
+    {
+      "fluid": "jugcraft:hydrogen",
+      "amount": 1000
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:liquid_hydrogen",
+      "amount": 250
+    }
+  ],
+  "tool": "jugcraft:hydrogen_cooling_module",
+  "time": 320
+}

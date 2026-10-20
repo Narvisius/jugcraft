@@ -1,0 +1,666 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "body",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -1.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -1.4,
+            -7.0,
+            4.0,
+            2.0,
+            7.0
+          ],
+          "uv": [
+            0.0,
+            11.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "antenna_left",
+      "parent": "body",
+      "pose": [
+        1.4,
+        -0.5,
+        -7.0,
+        -0.3054,
+        -0.4363,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -0.9,
+            -5.0,
+            0.0,
+            1.0,
+            5.0
+          ],
+          "uv": [
+            18.0,
+            18.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "antenna_right",
+      "parent": "body",
+      "pose": [
+        -1.4,
+        -0.5,
+        -7.0,
+        -0.3054,
+        0.4363,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -0.9,
+            -5.0,
+            0.0,
+            1.0,
+            5.0
+          ],
+          "uv": [
+            18.0,
+            20.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "arm_left",
+      "parent": "body",
+      "pose": [
+        1.7,
+        -0.4,
+        -5.0,
+        0.0,
+        0.6981,
+        0.3491
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            -0.5,
+            4.0,
+            0.0,
+            1.0
+          ],
+          "uv": [
+            15.0,
+            5.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "arm_right",
+      "parent": "body",
+      "pose": [
+        -1.7,
+        -0.4,
+        -5.0,
+        0.0,
+        -0.6981,
+        -0.3491
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            0.0,
+            -0.5,
+            4.0,
+            0.0,
+            1.0
+          ],
+          "uv": [
+            15.0,
+            6.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "tail",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -0.4,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -1.0,
+            0.0,
+            3.0,
+            2.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "legs_left",
+      "parent": "body",
+      "pose": [
+        2.0,
+        0.1,
+        -1.45,
+        0.0,
+        0.0,
+        0.3054
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            -3.55,
+            3.0,
+            0.0,
+            5.0
+          ],
+          "uv": [
+            16.0,
+            11.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "legs_right",
+      "parent": "body",
+      "pose": [
+        -2.0,
+        0.1,
+        -1.45,
+        0.0,
+        0.0,
+        -0.3054
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            0.0,
+            -3.55,
+            3.0,
+            0.0,
+            5.0
+          ],
+          "uv": [
+            25.0,
+            11.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "hand_left",
+      "parent": "arm_left",
+      "pose": [
+        4.0,
+        0.4,
+        0.4,
+        0.0,
+        0.6981,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -1.0,
+            -1.9,
+            3.0,
+            1.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            21.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "hand_right",
+      "parent": "arm_right",
+      "pose": [
+        -4.0,
+        0.4,
+        0.4,
+        0.0,
+        -0.6981,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -1.0,
+            -1.9,
+            3.0,
+            1.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            25.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "tail2",
+      "parent": "tail",
+      "pose": [
+        0.0,
+        0.0,
+        6.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            0.0,
+            0.0,
+            8.0,
+            0.0,
+            4.0
+          ],
+          "uv": [
+            15.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelLobster.java",
+  "sourceSha256": "25083a12b0822c7567e3896e524ce6c8cc1e72413714b0afba252eb96d300b84",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "antenna_left",
+      "kind": "walk",
+      "speed": [
+        "*",
+        0.1,
+        1.5
+      ],
+      "degree": 0.3,
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "antenna_right",
+      "kind": "walk",
+      "speed": [
+        "*",
+        0.1,
+        1.5
+      ],
+      "degree": 0.3,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "tail",
+      "kind": "walk",
+      "speed": 0.1,
+      "degree": [
+        "*",
+        0.3,
+        0.2
+      ],
+      "invert": false,
+      "phase": 1.0,
+      "bias": [
+        "*",
+        -1,
+        0.1
+      ],
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "tail2",
+      "kind": "walk",
+      "speed": 0.1,
+      "degree": [
+        "*",
+        0.3,
+        0.15
+      ],
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.1,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "legs_left",
+      "kind": "walk",
+      "speed": 3.0,
+      "degree": [
+        "*",
+        0.6,
+        0.8
+      ],
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "legs_left",
+      "kind": "swing",
+      "speed": 3.0,
+      "degree": [
+        "*",
+        0.6,
+        1.0
+      ],
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.1,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "legs_right",
+      "kind": "walk",
+      "speed": 3.0,
+      "degree": [
+        "*",
+        0.6,
+        0.8
+      ],
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "legs_right",
+      "kind": "swing",
+      "speed": 3.0,
+      "degree": [
+        "*",
+        0.6,
+        1.0
+      ],
+      "invert": true,
+      "phase": 1.0,
+      "bias": 0.1,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "kind": "bob",
+      "speed": [
+        "*",
+        3.0,
+        0.5
+      ],
+      "degree": [
+        "*",
+        0.6,
+        4.0
+      ],
+      "invert": true,
+      "phase": 0,
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "arm_left",
+      "kind": "swing",
+      "speed": 3.0,
+      "degree": [
+        "*",
+        0.6,
+        1.0
+      ],
+      "invert": true,
+      "phase": 2.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "arm_right",
+      "kind": "swing",
+      "speed": 3.0,
+      "degree": [
+        "*",
+        0.6,
+        1.0
+      ],
+      "invert": true,
+      "phase": 2.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": [
+    {
+      "bone": "arm_left",
+      "weight": [
+        "/",
+        [
+          "*",
+          "combat",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.0,
+        0.7853981633974483,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "arm_right",
+      "weight": [
+        "/",
+        [
+          "*",
+          "combat",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.0,
+        -0.7853981633974483,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "hand_left",
+      "weight": [
+        "/",
+        [
+          "*",
+          "combat",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.0,
+        -0.5235987755982988,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "hand_right",
+      "weight": [
+        "/",
+        [
+          "*",
+          "combat",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.0,
+        0.5235987755982988,
+        0.0
+      ],
+      "when": 1
+    }
+  ]
+}

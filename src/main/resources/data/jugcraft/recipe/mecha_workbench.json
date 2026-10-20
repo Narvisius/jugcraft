@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PRP",
+    "ECE",
+    "BBB"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "E": "jugcraft:diesel_engine",
+    "C": "jugcraft:basic_circuit",
+    "R": "minecraft:piston",
+    "B": "jugcraft:steel_block"
+  },
+  "result": {
+    "id": "jugcraft:mecha_workbench",
+    "count": 1
+  }
+}

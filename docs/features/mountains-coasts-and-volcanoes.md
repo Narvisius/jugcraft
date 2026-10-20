@@ -8,13 +8,15 @@ Primary specialty and supported player role: exploration; mining (surface coal, 
 
 Tree-generation update (15 October 2026): [batch 2](trees-batch-2.md) adds the approved warm and mountain shapes and adjusts existing tree picks without changing biome placement or per-chunk attempt budgets. Its feature record holds the current mixes, measurements and fresh validation; older evidence below remains historical.
 
+Tree-generation update (16 October 2026): [batch 6](trees-batch-6.md) adds juniper, gorse and sagebrush, with current placement shares and validation in its feature record. Existing biome placement and attempt budgets are retained except for Steppe's new low shrubs and Cold Desert's rare coarse-dirt juniper. Earlier test results below remain historical.
+
 ## Player experience
 Thirteen biomes of mountains, shores and seas. A biome in Minecraft 26.3 does not shape the land: its height and steepness come from the climate. So each of these takes a vanilla biome whose land already has the right shape (peaks, shattered hills, badlands plateaus, beaches, deep seas) and gives it new ground, plants and air. The **wild** layout of Jugcraft regions takes the mountains and hills; the **wetland** layout takes the coasts and islands; both take the frozen and deep seas.
 
 | Biome | Layout: replaces | What it is |
 | --- | --- | --- |
 | **Volcano** | wild: stony peaks, windswept savannas | blackstone and basalt slopes cracked with magma, lava pools banked with blackstone, basalt spires, drifting ash under a grey sky; no animals |
-| **Canyon** | wild: wooded badlands | cliffs banded in terracotta with grassy ledges, pines and spruce scrub, pools of lava |
+| **Canyon** | wild: wooded badlands | cliffs banded in terracotta with grassy ledges, pines, crooked junipers and low juniper scrub, pools of lava |
 | **Highland** | wild: windswept hills | high, open grassland with rare lone rowans: tall grass, coarse dirt, gravel and stone, mossy boulders; sheep, cattle and rabbits |
 | **Basin** | wild: windswept gravelly hills | a barren basin of gravel, stone and andesite with dead bushes; no animals |
 | **Shield** | wild: windswept forests | humps of bare stone and andesite with seams of coal at the surface, firs, windswept Jugcraft pines, spruces, larches and aspens, and lakes |
@@ -88,3 +90,7 @@ Results are recorded under "Results" below after CI runs.
 Tree roster batch 4c makes Flower Isle 55% magnolia, 30% oak bush and 15% apple tree attempts, retaining its sparse 1/2 attempts per chunk and flower decoration. See [the implementation record](trees-batch-4bc.md).
 
 Tree roster batch 5 adds a lone rowan attempt per eight Highland chunks on average, subject to dry ground and sapling survival. It remains open grassland without a forest tree-count layer. See [the implementation and verification record](trees-batch-5.md).
+
+## Tree batches 8–8c update
+
+Tree batch 8 replaces Canyon's 40% vanilla pine with pinyon, retaining juniper 35%, juniper bush 25% and 2–3 attempts/chunk. Dune Beach remains treeless. See [implementation and verification](trees-batch-8abc.md).

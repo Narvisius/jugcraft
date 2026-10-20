@@ -1,0 +1,153 @@
+{
+  "textureSize": [
+    64,
+    32
+  ],
+  "parts": [
+    {
+      "name": "shell",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        14.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -3.0,
+            3.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "body",
+      "parent": "$mesh",
+      "pose": [
+        -1.0,
+        22.0,
+        -6.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            0.0,
+            3.0,
+            2.0,
+            12.0
+          ],
+          "uv": [
+            0.0,
+            16.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lefteye",
+      "parent": "$mesh",
+      "pose": [
+        1.0,
+        19.0,
+        -5.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            3.0,
+            1.0
+          ],
+          "uv": [
+            22.0,
+            12.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "righteye",
+      "parent": "$mesh",
+      "pose": [
+        -1.0,
+        19.0,
+        -5.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            3.0,
+            1.0
+          ],
+          "uv": [
+            22.0,
+            12.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "fauna/familiarfauna/entities/model/ModelSnail.java",
+  "sourceSha256": "b96a4a8f4f8f8a03752486091bc8c97a85fdc8c62dd76cacd44364f886c7636c",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

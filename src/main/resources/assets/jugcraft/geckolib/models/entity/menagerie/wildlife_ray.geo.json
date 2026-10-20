@@ -1,0 +1,137 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.wildlife_ray",
+        "texture_width": 128,
+        "texture_height": 64,
+        "visible_bounds_width": 4,
+        "visible_bounds_height": 4,
+        "visible_bounds_offset": [
+          0,
+          0.2,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "body",
+          "parent": "root",
+          "pivot": [
+            0.0,
+            5.76,
+            0.0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -9.6,
+                1.2800000000000002,
+                -17.28
+              ],
+              "size": [
+                19.2,
+                4.4799999999999995,
+                34.56
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "tail",
+          "parent": "root",
+          "pivot": [
+            0.0,
+            5.12,
+            25.92
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -5.76,
+                1.2800000000000002,
+                17.28
+              ],
+              "size": [
+                11.52,
+                3.84,
+                17.28
+              ],
+              "uv": [
+                0,
+                32.0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "fin_-1",
+          "parent": "root",
+          "pivot": [
+            -16.32,
+            1.7920000000000003,
+            1.92
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -23.04,
+                1.2800000000000002,
+                -3.84
+              ],
+              "size": [
+                13.44,
+                0.512,
+                11.52
+              ],
+              "uv": [
+                0,
+                32.0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "fin_1",
+          "parent": "root",
+          "pivot": [
+            16.32,
+            1.7920000000000003,
+            1.92
+          ],
+          "cubes": [
+            {
+              "origin": [
+                9.6,
+                1.2800000000000002,
+                -3.84
+              ],
+              "size": [
+                13.44,
+                0.512,
+                11.52
+              ],
+              "uv": [
+                0,
+                32.0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

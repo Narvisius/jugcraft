@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:cavern_ferrouslime_ball",
+    "minecraft:raw_iron",
+    "minecraft:gravel",
+    "minecraft:gravel"
+  ],
+  "result": {
+    "count": 2,
+    "id": "jugcraft:cavern_metal_swarf"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

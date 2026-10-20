@@ -1,0 +1,2223 @@
+{
+  "textureSize": [
+    256,
+    256
+  ],
+  "parts": [
+    {
+      "name": "torso",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        3.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.5,
+            -4.0,
+            -4.0,
+            11.0,
+            14.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            68.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -5.5,
+            -3.0,
+            -4.0,
+            11.0,
+            13.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            107.0
+          ],
+          "inflate": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "chest",
+      "parent": "torso",
+      "pose": [
+        0.0,
+        0.0,
+        4.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -8.5,
+            -14.0,
+            -11.0,
+            17.0,
+            14.0,
+            12.0
+          ],
+          "uv": [
+            0.0,
+            42.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lleg",
+      "parent": "torso",
+      "pose": [
+        3.5,
+        9.5,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            0.5,
+            -2.0,
+            4.0,
+            11.0,
+            4.0
+          ],
+          "uv": [
+            26.0,
+            91.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            -2.0,
+            0.5,
+            -2.0,
+            4.0,
+            11.0,
+            4.0
+          ],
+          "uv": [
+            67.0,
+            95.0
+          ],
+          "inflate": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "rleg",
+      "parent": "torso",
+      "pose": [
+        -3.5,
+        9.5,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            0.5,
+            -2.0,
+            4.0,
+            11.0,
+            4.0
+          ],
+          "uv": [
+            26.0,
+            91.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -2.0,
+            0.5,
+            -2.0,
+            4.0,
+            11.0,
+            4.0
+          ],
+          "uv": [
+            67.0,
+            95.0
+          ],
+          "inflate": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "larm",
+      "parent": "chest",
+      "pose": [
+        8.1667,
+        -8.1667,
+        -5.0833,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.3333,
+            -1.8333,
+            -4.1667,
+            8.0,
+            23.0,
+            9.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            1.3333,
+            -2.8333,
+            -6.1667,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            70.0,
+            79.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            1.3333,
+            -2.8333,
+            -6.1667,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            35.0,
+            98.0
+          ],
+          "inflate": [
+            -0.25,
+            -0.25,
+            -0.25
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            1.3333,
+            9.1667,
+            -2.1667,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            35.0,
+            98.0
+          ],
+          "inflate": [
+            -0.25,
+            -0.25,
+            -0.25
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            1.3333,
+            9.1667,
+            -2.1667,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            38.0,
+            79.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rarm",
+      "parent": "chest",
+      "pose": [
+        -7.25,
+        -12.25,
+        -6.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -8.25,
+            -3.75,
+            -3.25,
+            9.0,
+            37.0,
+            9.0
+          ],
+          "uv": [
+            56.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -10.25,
+            15.25,
+            -5.25,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            84.0,
+            38.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -10.25,
+            15.25,
+            -5.25,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            35.0,
+            98.0
+          ],
+          "inflate": [
+            -0.25,
+            -0.25,
+            -0.25
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "head",
+      "parent": "chest",
+      "pose": [
+        0.0,
+        -7.0,
+        -11.25,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.5,
+            -3.0,
+            -6.25,
+            7.0,
+            10.0,
+            7.0
+          ],
+          "uv": [
+            100.0,
+            54.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "handMaw",
+      "parent": "larm",
+      "pose": [
+        8.3333,
+        21.1667,
+        0.3333,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            0.0,
+            -4.5,
+            4.0,
+            8.0,
+            9.0
+          ],
+          "uv": [
+            0.0,
+            90.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "brain",
+      "parent": "head",
+      "pose": [
+        0.0,
+        28.0,
+        7.25,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6.5,
+            -41.0,
+            -15.0,
+            13.0,
+            11.0,
+            12.0
+          ],
+          "uv": [
+            46.0,
+            56.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "tongue",
+      "parent": "head",
+      "pose": [
+        0.0,
+        3.5,
+        -1.75,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.5,
+            -0.5,
+            -21.0,
+            5.0,
+            1.0,
+            21.0
+          ],
+          "uv": [
+            73.0,
+            106.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "handMaw3",
+      "parent": "handMaw",
+      "pose": [
+        -8.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            -4.5,
+            4.0,
+            8.0,
+            9.0
+          ],
+          "uv": [
+            92.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "tongue2",
+      "parent": "tongue",
+      "pose": [
+        0.0,
+        0.0,
+        -21.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.5,
+            -0.5,
+            -21.0,
+            5.0,
+            1.0,
+            21.0
+          ],
+          "uv": [
+            84.0,
+            84.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/BrainiacModel.java",
+  "sourceSha256": "b43086838ea8ea044b5d48b1ac5f8610dd073666bbbbe1ad40bdfe38082a4a70",
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {
+    "throw_barrel": {
+      "length": 1.5,
+      "loop": false,
+      "channels": [
+        {
+          "bone": "handMaw3",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                0.0,
+                40.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.0,
+                40.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                0.0,
+                90.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "larm",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                -270.0,
+                -10.0,
+                -10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                -270.0,
+                -10.0,
+                -10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                -80.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "handMaw3",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                4.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                4.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "torso",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                20.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                20.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "handMaw",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                0.0,
+                20.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.0,
+                20.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                0.0,
+                -90.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ]
+    },
+    "drink_barrel": {
+      "length": 3.2,
+      "loop": false,
+      "channels": [
+        {
+          "bone": "handMaw3",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                0.0,
+                40.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.0,
+                40.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0.0,
+                0.0,
+                90.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.45,
+              "vector": [
+                0.0,
+                0.0,
+                90.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.65,
+              "vector": [
+                0.0,
+                0.0,
+                90.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.8499999999999999,
+              "vector": [
+                0.0,
+                0.0,
+                90.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.05,
+              "vector": [
+                0.0,
+                0.0,
+                90.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.25,
+              "vector": [
+                0.0,
+                0.0,
+                90.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.45,
+              "vector": [
+                0.0,
+                0.0,
+                90.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.7,
+              "vector": [
+                0.0,
+                0.0,
+                90.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.2,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "larm",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                -270.0,
+                -10.0,
+                -10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                -270.0,
+                -10.0,
+                -10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                -80.0,
+                20.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.45,
+              "vector": [
+                -70.0,
+                20.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.65,
+              "vector": [
+                -80.0,
+                20.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.8499999999999999,
+              "vector": [
+                -70.0,
+                20.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.05,
+              "vector": [
+                -80.0,
+                20.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.25,
+              "vector": [
+                -70.0,
+                20.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.45,
+              "vector": [
+                -80.0,
+                20.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.7,
+              "vector": [
+                -80.0,
+                20.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.2,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "handMaw3",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                4.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                4.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "torso",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                20.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                20.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "handMaw",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                0.0,
+                20.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.0,
+                20.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0.0,
+                0.0,
+                -90.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.45,
+              "vector": [
+                0.0,
+                0.0,
+                -90.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.65,
+              "vector": [
+                0.0,
+                0.0,
+                -90.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.8499999999999999,
+              "vector": [
+                0.0,
+                0.0,
+                -90.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.05,
+              "vector": [
+                0.0,
+                0.0,
+                -90.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.25,
+              "vector": [
+                0.0,
+                0.0,
+                -90.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.45,
+              "vector": [
+                0.0,
+                0.0,
+                -90.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.7,
+              "vector": [
+                0.0,
+                0.0,
+                -90.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.2,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "head",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                -20.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.45,
+              "vector": [
+                -20.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.65,
+              "vector": [
+                -20.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.8499999999999999,
+              "vector": [
+                -20.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.05,
+              "vector": [
+                -20.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.25,
+              "vector": [
+                -20.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.45,
+              "vector": [
+                -20.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.7,
+              "vector": [
+                -20.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.2,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "larm",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                1.0,
+                -6.0,
+                10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.45,
+              "vector": [
+                1.0,
+                -5.0,
+                10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.65,
+              "vector": [
+                1.0,
+                -6.0,
+                10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.8499999999999999,
+              "vector": [
+                1.0,
+                -5.0,
+                10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.05,
+              "vector": [
+                1.0,
+                -6.0,
+                10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.25,
+              "vector": [
+                1.0,
+                -5.0,
+                10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.45,
+              "vector": [
+                1.0,
+                -6.0,
+                10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.7,
+              "vector": [
+                1.0,
+                -6.0,
+                10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.2,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ]
+    },
+    "bite": {
+      "length": 1.05,
+      "loop": false,
+      "channels": [
+        {
+          "bone": "torso",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                -10.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.65,
+              "vector": [
+                0.0,
+                10.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.8,
+              "vector": [
+                0.0,
+                10.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "chest",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                -10.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.65,
+              "vector": [
+                0.0,
+                10.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.8,
+              "vector": [
+                0.0,
+                10.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "handMaw3",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.65,
+              "vector": [
+                0.0,
+                0.0,
+                90.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.8,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "larm",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.65,
+              "vector": [
+                -80.0,
+                -20.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.8,
+              "vector": [
+                -70.0,
+                -20.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "handMaw",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.65,
+              "vector": [
+                0.0,
+                0.0,
+                -90.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.8,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ]
+    },
+    "smash": {
+      "length": 1.0,
+      "loop": false,
+      "channels": [
+        {
+          "bone": "handMaw3",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                0.0,
+                20.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "larm",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                -130.0,
+                -20.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                -20.0,
+                20.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "handMaw",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                0.0,
+                -20.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "rarm",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                -130.0,
+                20.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                -20.0,
+                -20.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "chest",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                -29.999999999999996,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                20.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "motions": [
+    {
+      "bone": "head",
+      "kind": "flap",
+      "speed": 0.15,
+      "degree": 0.1,
+      "invert": false,
+      "phase": 2.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "head",
+      "kind": "flap",
+      "speed": 0.55,
+      "degree": 0.1,
+      "invert": false,
+      "phase": 2.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "+",
+        0.5,
+        [
+          "*",
+          0.5,
+          [
+            "sin",
+            [
+              "*",
+              "age",
+              0.5
+            ]
+          ]
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "tongue",
+      "kind": "walk",
+      "speed": 0.4,
+      "degree": 0.1,
+      "invert": false,
+      "phase": 2.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "tongue2",
+      "kind": "walk",
+      "speed": 0.4,
+      "degree": 0.2,
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "chest",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        1.0,
+        0.2
+      ],
+      "invert": false,
+      "phase": 2.5,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "head",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        1.0,
+        [
+          "*",
+          -1,
+          0.1
+        ]
+      ],
+      "invert": false,
+      "phase": 3.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "torso",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        1.0,
+        0.1
+      ],
+      "invert": false,
+      "phase": 3.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "rleg",
+      "kind": "walk",
+      "speed": 0.5,
+      "degree": 1.0,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.1,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "lleg",
+      "kind": "walk",
+      "speed": 0.5,
+      "degree": 1.0,
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.1,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.swing(this.tongue, 1.5f, 0.4f, false, 0.0f, 0.0f, ageInTicks, tongueWiggle);",
+      "reason": "Unbound expression variable tongueWiggle"
+    },
+    {
+      "call": "this.swing(this.tongue2, 1.5f, 0.4f, false, -1.0f, 0.0f, ageInTicks, tongueWiggle);",
+      "reason": "Unbound expression variable tongueWiggle"
+    },
+    {
+      "call": "this.walk(this.rarm, walkSpeed, walkDegree * 1.3f, false, 1.0f, 0.0f, limbSwing, hunchAmount);",
+      "reason": "Unbound expression variable hunchAmount"
+    },
+    {
+      "call": "this.walk(this.larm, walkSpeed, walkDegree * 1.3f, false, -1.0f, 0.0f, limbSwing, hunchLeftAmount);",
+      "reason": "Unbound expression variable hunchLeftAmount"
+    },
+    {
+      "call": "this.walk(this.torso, walkSpeed, walkDegree * 0.1f, false, -1.0f, 0.0f, limbSwing, hunchLeftAmount);",
+      "reason": "Unbound expression variable hunchLeftAmount"
+    },
+    {
+      "call": "this.tongue.setScale(1.0f, 1.0f, tongueLength);",
+      "reason": "Unbound expression variable tongueLength"
+    },
+    {
+      "call": "this.tongue.rotateAngleZ -= this.head.rotateAngleZ;",
+      "reason": "Unsupported expression this.head.rotateAngleZ"
+    },
+    {
+      "call": "this.torso.rotationPointY += bodyBob;",
+      "reason": "Unbound expression variable bodyBob"
+    },
+    {
+      "call": "this.rarm.rotationPointY += Math.min(0.0f, this.walkValue(limbSwing, hunchAmount, walkSpeed, -0.75f, 1.0f, false)) - bodyBob;",
+      "reason": "Unsupported expression min(0.0, this.walkValue(limbSwing, hunchAmount, walkSpeed, -0.75, 1.0, false)) - bodyBob"
+    },
+    {
+      "call": "this.rarm.rotationPointZ += this.walkValue(limbSwing, hunchAmount, walkSpeed, -0.75f, -3.0f, true);",
+      "reason": "Unsupported expression this.walkValue(limbSwing, hunchAmount, walkSpeed, -0.75, -3.0, true)"
+    },
+    {
+      "call": "this.larm.rotationPointY += Math.min(0.0f, this.walkValue(limbSwing, hunchLeftAmount, walkSpeed, 0.75f, 1.0f, false)) - bodyBob;",
+      "reason": "Unsupported expression min(0.0, this.walkValue(limbSwing, hunchLeftAmount, walkSpeed, 0.75, 1.0, false)) - bodyBob"
+    },
+    {
+      "call": "this.larm.rotationPointZ += this.walkValue(limbSwing, hunchLeftAmount, walkSpeed, 0.75f, -3.0f, true);",
+      "reason": "Unsupported expression this.walkValue(limbSwing, hunchLeftAmount, walkSpeed, 0.75, -3.0, true)"
+    },
+    {
+      "call": "this.rarm.rotateAngleZ -= this.torso.rotateAngleZ;",
+      "reason": "Unsupported expression this.torso.rotateAngleZ"
+    },
+    {
+      "call": "this.larm.rotateAngleZ -= this.torso.rotateAngleZ;",
+      "reason": "Unsupported expression this.torso.rotateAngleZ"
+    }
+  ],
+  "expressions": [
+    {
+      "bone": "brain",
+      "target": "xScale",
+      "op": "=",
+      "value": [
+        "+",
+        [
+          "*",
+          [
+            "+",
+            1.0,
+            [
+              "sin",
+              [
+                "+",
+                [
+                  "*",
+                  "age",
+                  0.5
+                ],
+                2.0
+              ]
+            ]
+          ],
+          0.1
+        ],
+        1.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "brain",
+      "target": "yScale",
+      "op": "=",
+      "value": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "brain",
+      "target": "zScale",
+      "op": "=",
+      "value": [
+        "+",
+        [
+          "*",
+          [
+            "+",
+            1.0,
+            [
+              "sin",
+              [
+                "*",
+                "age",
+                0.5
+              ]
+            ]
+          ],
+          0.1
+        ],
+        1.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "head",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "/",
+          "pitch",
+          57.295776
+        ],
+        0.25
+      ],
+      "when": 1
+    },
+    {
+      "bone": "head",
+      "target": "yRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "/",
+          "yaw",
+          57.295776
+        ],
+        0.5
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

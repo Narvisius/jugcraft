@@ -59,6 +59,9 @@ public final class AlchemyArtifacts {
     public static DataComponentType<Integer> MODE;
     public static final List<DataComponentType<Unit>> MODE_FLAGS = new ArrayList<>();
     private static final Map<ServerPlayer, Long> FLIGHT = new WeakHashMap<>();
+    private static final Map<ServerPlayer, Long> EXTERNAL_FLIGHT = new WeakHashMap<>();
+    /** Short paid ritual leases share the existing ability owner, so providers do not revoke one another. */
+    public static void grantRitualFlight(ServerPlayer p,int ticks){EXTERNAL_FLIGHT.put(p,p.level().getGameTime()+Math.clamp(ticks,1,100));}
     private static AttachmentType<Boolean> FLIGHT_LEASE;
     private static final TagKey<Block> ORES = TagKey.create(Registries.BLOCK, net.minecraft.resources.Identifier.parse("c:ores"));
     private AlchemyArtifacts() {}
@@ -115,8 +118,10 @@ public final class AlchemyArtifacts {
     /** Payment renews a short lease; removal, death, disconnect, disable and exhaustion revoke only our lease. */
     public static void pulse(ServerPlayer p) {
         if(!AlchemicalGear.ready(p)){releaseFlight(p);return;}
-        if(flightEquipped(p)&&!p.isCreative()&&!p.isSpectator()&&(!p.getAbilities().mayfly||FLIGHT.containsKey(p))) {
-            if(pay(p,16)) {
+        boolean external=EXTERNAL_FLIGHT.getOrDefault(p,0L)>p.level().getGameTime();
+        if(!external)EXTERNAL_FLIGHT.remove(p);
+        if((flightEquipped(p)||external)&&!p.isCreative()&&!p.isSpectator()&&(!p.getAbilities().mayfly||FLIGHT.containsKey(p))) {
+            if(external||pay(p,16)) {
                 if(!p.getAbilities().mayfly||FLIGHT.containsKey(p)) {
                     FLIGHT.put(p,p.level().getGameTime()+25);p.setAttached(FLIGHT_LEASE,true);p.getAbilities().mayfly=true;p.onUpdateAbilities();
                 }

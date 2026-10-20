@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " P ",
+    "AAA",
+    " A "
+  ],
+  "key": {
+    "A": "jugcraft:cavern_abyssmarine",
+    "P": "jugcraft:cavern_pearl"
+  },
+  "result": {
+    "id": "jugcraft:cavern_abyssal_altar"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

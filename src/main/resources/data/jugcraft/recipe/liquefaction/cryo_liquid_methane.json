@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:liquefaction",
+  "fluids": [
+    {
+      "fluid": "jugcraft:methane",
+      "amount": 1000
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:liquid_methane",
+      "amount": 250
+    }
+  ],
+  "tool": "#jugcraft:methane_cooling_modules",
+  "time": 160
+}

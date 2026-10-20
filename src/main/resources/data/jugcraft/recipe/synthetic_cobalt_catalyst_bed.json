@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "C C",
+    "BBB"
+  ],
+  "key": {
+    "C": "jugcraft:cobalt_ingot",
+    "B": "minecraft:brick"
+  },
+  "result": {
+    "id": "jugcraft:cobalt_catalyst_bed",
+    "count": 1
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "feature": {
+    "type": "minecraft:vegetation_patch",
+    "depth": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 5,
+      "max_inclusive": 7
+    },
+    "extra_bottom_block_chance": 0,
+    "extra_edge_column_chance": 0.65,
+    "ground_state": {
+      "type": "minecraft:noise",
+      "noise": {
+        "base_octave": -6,
+        "octave_count": 5,
+        "amplitude_modifiers": [
+          1,
+          0.5,
+          1.5,
+          1.75,
+          1.25
+        ],
+        "normalize": "legacy"
+      },
+      "scale": 1,
+      "seed": 0,
+      "states": [
+        "minecraft:basalt",
+        "minecraft:basalt",
+        "minecraft:basalt",
+        "minecraft:basalt",
+        "minecraft:basalt",
+        "minecraft:basalt",
+        "minecraft:basalt",
+        "minecraft:basalt",
+        "minecraft:basalt",
+        "minecraft:basalt",
+        "minecraft:smooth_basalt",
+        "minecraft:smooth_basalt",
+        "minecraft:smooth_basalt",
+        "minecraft:blackstone",
+        "minecraft:magma_block",
+        "minecraft:blackstone",
+        "minecraft:smooth_basalt",
+        "minecraft:smooth_basalt",
+        "minecraft:smooth_basalt",
+        "minecraft:basalt",
+        "minecraft:basalt",
+        "minecraft:basalt",
+        "minecraft:basalt",
+        "minecraft:basalt",
+        "minecraft:basalt",
+        "minecraft:basalt",
+        "minecraft:basalt",
+        "minecraft:basalt",
+        "minecraft:basalt"
+      ]
+    },
+    "replaceable": "#terralith:stone",
+    "surface": "floor",
+    "vegetation_chance": 0,
+    "vegetation_feature": "terralith:nothing",
+    "vertical_range": 5,
+    "xz_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2,
+      "max_inclusive": 3
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 2
+    },
+    {
+      "type": "minecraft:count",
+      "count": 256
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR_WG"
+    }
+  ]
+}

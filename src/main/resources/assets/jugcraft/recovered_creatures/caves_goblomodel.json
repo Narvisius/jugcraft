@@ -1,0 +1,391 @@
+{
+  "textureSize": [
+    64,
+    32
+  ],
+  "parts": [
+    {
+      "name": "RightArm",
+      "parent": "$mesh",
+      "pose": [
+        5.0,
+        13.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -1.0,
+            -1.5,
+            2.0,
+            9.0,
+            3.0
+          ],
+          "uv": [
+            41.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "LeftLeg",
+      "parent": "$mesh",
+      "pose": [
+        -2.5,
+        20.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            0.0,
+            -1.5,
+            3.0,
+            4.0,
+            3.0
+          ],
+          "uv": [
+            29.0,
+            13.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "LeftArm",
+      "parent": "$mesh",
+      "pose": [
+        -5.0,
+        13.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -1.0,
+            -1.5,
+            2.0,
+            9.0,
+            3.0
+          ],
+          "uv": [
+            41.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "RightLeg",
+      "parent": "$mesh",
+      "pose": [
+        2.5,
+        20.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            0.0,
+            -1.5,
+            3.0,
+            4.0,
+            3.0
+          ],
+          "uv": [
+            29.0,
+            13.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "Body",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        10.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            0.0,
+            -4.5,
+            10.0,
+            10.0,
+            9.0
+          ],
+          "uv": [
+            0.0,
+            11.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "Head",
+      "parent": "Body",
+      "pose": [
+        0.0,
+        0.0,
+        4.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -2.0,
+            -9.0,
+            10.0,
+            2.0,
+            9.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "LeftEar",
+      "parent": "Head",
+      "pose": [
+        -5.0,
+        0.0,
+        -1.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -4.0,
+            -1.0,
+            5.0,
+            4.0,
+            1.0
+          ],
+          "uv": [
+            29.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "RightEar",
+      "parent": "Head",
+      "pose": [
+        5.0,
+        0.0,
+        -1.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -4.0,
+            -1.0,
+            5.0,
+            4.0,
+            1.0
+          ],
+          "uv": [
+            29.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "caves/superlord/goblinsanddungeons/client/model/GobloModel.java",
+  "sourceSha256": "b7ed0704d630226ac102a21b8bb3867223c7754ea78b5b378bf07411f439e511",
+  "animationRoot": "$mesh",
+  "headLook": "Head",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.Head.f_104203_ = -Mth.m_14154_((float)(Mth.m_14089_((float)(limbSwing * 0.3331f)) * 0.35f * limbSwingAmount));",
+      "reason": "Unsupported expression -Mth.m_14154_((cos((limbSwing * 0.3331)) * 0.35 * limbSwingAmount))"
+    }
+  ],
+  "expressions": [
+    {
+      "bone": "RightLeg",
+      "target": "xRot",
+      "op": "=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "cos",
+            [
+              "*",
+              "walk",
+              0.6662
+            ]
+          ],
+          1.4
+        ],
+        "move"
+      ],
+      "when": 1
+    },
+    {
+      "bone": "LeftLeg",
+      "target": "xRot",
+      "op": "=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "cos",
+            [
+              "+",
+              [
+                "*",
+                "walk",
+                0.6662
+              ],
+              3.141592653589793
+            ]
+          ],
+          1.4
+        ],
+        "move"
+      ],
+      "when": 1
+    },
+    {
+      "bone": "RightArm",
+      "target": "xRot",
+      "op": "=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "cos",
+            [
+              "+",
+              [
+                "*",
+                "walk",
+                0.6662
+              ],
+              3.141592653589793
+            ]
+          ],
+          1.4
+        ],
+        "move"
+      ],
+      "when": 1
+    },
+    {
+      "bone": "LeftArm",
+      "target": "xRot",
+      "op": "=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "cos",
+            [
+              "*",
+              "walk",
+              0.6662
+            ]
+          ],
+          1.4
+        ],
+        "move"
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

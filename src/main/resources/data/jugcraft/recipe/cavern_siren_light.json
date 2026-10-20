@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GGG",
+    "GRG",
+    "IEI"
+  ],
+  "key": {
+    "E": "minecraft:redstone",
+    "R": "jugcraft:cavern_radon_bottle",
+    "G": "minecraft:glass",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:cavern_siren_light"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

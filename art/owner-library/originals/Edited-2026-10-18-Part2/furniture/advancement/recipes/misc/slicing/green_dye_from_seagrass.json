@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_seagrass": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:seagrass"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "refurbished_furniture:slicing/green_dye_from_seagrass"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_seagrass"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "refurbished_furniture:slicing/green_dye_from_seagrass"
+    ]
+  }
+}

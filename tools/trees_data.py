@@ -2,7 +2,7 @@
 blockstates, items, loot and tags) and the tree features biomes and saplings grow. Wood sets are generated with the
 other woods (festival_data.wood_assets); wood and leaf textures are drawn by wood_style.py.
 """
-from agriculture import TREES, SEASON_STATES, SAPLING_CHANCES, sapling, leaf_looks
+from agriculture import TREES, SEASON_STATES, SAPLING_CHANCES, sapling, leaf_looks, trunk_block
 from trees import SHAPES, FALLEN, DECORATOR
 
 MOD = "jugcraft"
@@ -41,6 +41,10 @@ def assets(root, write):
             state = {"variants": {"": variants(looks[None])}}
         else:
             state = {"variants": {f"season={season}": variants(looks[season]) for season in SEASON_STATES}}
+        if "clip_sprig" in info:
+            state = {"variants": {f"clipped={str(clipped).lower()},season={season}":
+                                  variants({leaves: 1} if clipped else choices)
+                                  for season, choices in looks.items() for clipped in (False, True)}}
         if "fruit" in info:
             fruit_variants = {}
             for season, choices in looks.items():
@@ -101,6 +105,13 @@ def loot(out, write):
                     {"type": "minecraft:random_chance", "chance": drop[season]}]},
                     "entries": [{"type": "minecraft:item", "name": rid(drop["item"]),
                                  "modifier": [{"type": "minecraft:explosion_decay"}]}]})
+        if tree == "tree_fern":
+            # Fronds shed propagules, not woody sticks.
+            table["pools"].pop(1)
+        if tree == "dragonblood":
+            table["pools"].append({"rolls": 1, "condition": {"type": "minecraft:all_of", "terms": [not_shears,
+                {"type": "minecraft:random_chance", "chance": 0.01}, {"type": "minecraft:survives_explosion"}]},
+                "entries": [{"type": "minecraft:item", "name": "jugcraft:dragonblood_resin"}]})
         write(out / f"{leaves}.json", table)
         write(out / f"{sapling(tree)}.json", {"type": "minecraft:block", "pools": [{
             "condition": {"type": "minecraft:survives_explosion"}, "entries": [{"type": "minecraft:item", "name": young}], "rolls": 1}],
@@ -112,6 +123,10 @@ def tags(tags):
         for registry in ("block", "item"):
             tags.add(registry, "minecraft:leaves", rid(info["leaves"]))
             tags.add(registry, "minecraft:saplings", rid(sapling(tree)))
+            for tag in info.get("leaf_tags", []):
+                tags.add(registry, tag, rid(info["leaves"]))
+        for tag in info.get("leaf_block_tags", []):
+            tags.add("block", tag, rid(info["leaves"]))
 
 
 def uniform(value):
@@ -121,7 +136,7 @@ def uniform(value):
 
 
 def trunk_placer(trunk):
-    out = {"type": f"minecraft:{trunk['type']}_trunk_placer", "base_height": trunk["base_height"],
+    out = {"type": trunk["type"] if ":" in trunk["type"] else f"minecraft:{trunk['type']}_trunk_placer", "base_height": trunk["base_height"],
            "height_rand_a": trunk["height_rand_a"], "height_rand_b": trunk.get("height_rand_b", 0)}
     # Any other field of vanilla's placer (the bending trunk's bend length, for example), ranges as uniform.
     out.update({key: uniform(value) for key, value in trunk.items() if key not in ("type", "base_height", "height_rand_a", "height_rand_b")})
@@ -144,11 +159,11 @@ def foliage_placer(foliage):
 def tree_blocks(wood, tree=None):
     """A shape's log and leaves: its own (agriculture.TREES) or a vanilla wood's ("minecraft:oak")."""
     if tree is not None:
-        return rid(f"{wood}_log"), rid(TREES[tree]["leaves"]), TREES[tree]["season"]
+        return trunk_block(tree), rid(TREES[tree]["leaves"]), TREES[tree]["season"]
     if wood.startswith("minecraft:"):
         return f"{wood}_log", f"{wood}_leaves", None
     leaves = TREES[wood]["leaves"] if wood in TREES else None
-    return rid(f"{wood}_log"), rid(leaves) if leaves else None, TREES[wood]["season"] if wood in TREES else None
+    return trunk_block(wood) if wood in TREES else rid(f"{wood}_log"), rid(leaves) if leaves else None, TREES[wood]["season"] if wood in TREES else None
 
 
 def minimum_size(info):
@@ -193,12 +208,14 @@ def worldgen(data, write):
             "foliage_placer": foliage, "foliage_provider": provider, "ignore_vines": True,
             "minimum_size": minimum_size(info),
             "trunk_placer": trunk_placer(info["trunk"]),
-            "trunk_provider": {"id": tree_blocks(wood)[0], "properties": {"axis": "y"}},
+            "trunk_provider": {"id": tree_blocks(wood, info.get("tree"))[0], "properties": {"axis": "y", **info.get("trunk_properties", {})}},
             **({"root_placer": info["root_placer"]} if "root_placer" in info else {})})
         tree = info.get("tree", wood)
         survives = info.get("survives_as") or (f"{tree}_sapling" if tree.startswith("minecraft:") else rid(sapling(tree)))
         write(folder / "placed_feature" / f"{shape}_checked.json", {"feature": rid(shape), "placement": [
             {"type": "minecraft:block_predicate_filter", "predicate": {"type": "minecraft:would_survive", "state": survives}}]})
+    write(folder / "feature" / "dry_river_empty.json", {"type": "minecraft:no_op"})
+    write(folder / "placed_feature" / "dry_river_empty.json", {"feature": rid("dry_river_empty"), "placement": []})
     for wood, length in FALLEN.items():
         write(folder / "feature" / f"fallen_{wood}_tree.json", {
             "type": "minecraft:fallen_tree",

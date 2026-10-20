@@ -1,0 +1,207 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "main",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -13.0,
+            -7.2919,
+            0.9497,
+            26.0,
+            6.0,
+            12.0
+          ],
+          "uv": [
+            0.0,
+            28.0
+          ],
+          "inflate": [
+            -0.01,
+            -0.01,
+            -0.01
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "top",
+      "parent": "main",
+      "pose": [
+        0.0,
+        -2.0,
+        -4.0,
+        0.7854,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -13.0,
+            -7.0,
+            3.0,
+            26.0,
+            11.0,
+            17.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/WaveModel.java",
+  "sourceSha256": "f8d3710a825b1c83b96bf92128d50b147f8000df32d3b7dc6ecd43c6dbfd8f83",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.main.setScale(waveScale, waveScale, waveScale + stretch * 4.0f);",
+      "reason": "Unbound expression variable waveScale"
+    },
+    {
+      "call": "this.top.setScale(waveScale, waveScale, waveScale + stretch * 1.0f);",
+      "reason": "Unbound expression variable waveScale"
+    }
+  ],
+  "expressions": [
+    {
+      "bone": "top",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "+",
+          [
+            "sin",
+            [
+              "*",
+              "age",
+              0.1
+            ]
+          ],
+          1.0
+        ],
+        0.2
+      ],
+      "when": 1
+    },
+    {
+      "bone": "top",
+      "target": "y",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "+",
+            [
+              "sin",
+              [
+                "*",
+                "age",
+                0.1
+              ]
+            ],
+            1.0
+          ],
+          0.2
+        ],
+        8.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "top",
+      "target": "z",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "+",
+            [
+              "sin",
+              [
+                "*",
+                "age",
+                0.1
+              ]
+            ],
+            1.0
+          ],
+          0.2
+        ],
+        2.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "top",
+      "target": "y",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "/",
+          [
+            "min",
+            40.0,
+            "age"
+          ],
+          40.0
+        ],
+        2.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "top",
+      "target": "z",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "/",
+          [
+            "min",
+            40.0,
+            "age"
+          ],
+          40.0
+        ],
+        2.0
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

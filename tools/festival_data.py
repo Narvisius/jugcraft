@@ -351,7 +351,8 @@ def tags(tags):
             tags.add(registry, "minecraft:wooden_slabs", rid(f"{wood}_slab"))
             tags.add(registry, "minecraft:wooden_fences", rid(f"{wood}_fence"))
             tags.add(registry, "minecraft:fence_gates", rid(f"{wood}_fence_gate"))
-        tags.add("block", "minecraft:overworld_natural_logs", rid(f"{wood}_log"))
+        if wood != "dragonblood":
+            tags.add("block", "minecraft:overworld_natural_logs", rid(f"{wood}_log"))
     for registry in ("block", "item"):
         tags.add(registry, "minecraft:leaves", rid(CHESTNUT["leaves"]))
     tags.add("block", "minecraft:saplings", rid(CHESTNUT["sapling"]))

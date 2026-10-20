@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "II",
+    "II"
+  ],
+  "key": {
+    "I": "jugcraft:cavern_vanilla_ice_cream_scoop"
+  },
+  "result": {
+    "id": "jugcraft:cavern_vanilla_ice_cream"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

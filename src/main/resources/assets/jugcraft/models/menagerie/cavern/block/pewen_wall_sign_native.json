@@ -1,0 +1,77 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "all": "jugcraft:menagerie/cavern/entity/signs/pewen",
+    "particle": "jugcraft:menagerie/cavern/entity/signs/pewen"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        5.333,
+        13.333
+      ],
+      "to": [
+        16,
+        13.332999999999998,
+        14.667
+      ],
+      "faces": {
+        "west": {
+          "texture": "#all",
+          "uv": [
+            0.0,
+            1.0,
+            0.5,
+            7.0
+          ]
+        },
+        "north": {
+          "texture": "#all",
+          "uv": [
+            0.5,
+            1.0,
+            6.5,
+            7.0
+          ]
+        },
+        "east": {
+          "texture": "#all",
+          "uv": [
+            6.5,
+            1.0,
+            7.0,
+            7.0
+          ]
+        },
+        "south": {
+          "texture": "#all",
+          "uv": [
+            7.0,
+            1.0,
+            13.0,
+            7.0
+          ]
+        },
+        "up": {
+          "texture": "#all",
+          "uv": [
+            0.5,
+            0.0,
+            6.5,
+            1.0
+          ]
+        },
+        "down": {
+          "texture": "#all",
+          "uv": [
+            6.5,
+            0.0,
+            12.5,
+            1.0
+          ]
+        }
+      }
+    }
+  ]
+}

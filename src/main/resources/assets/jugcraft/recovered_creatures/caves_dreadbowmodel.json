@@ -1,0 +1,346 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "main",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "bowstring",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        8.0,
+        3.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "bow",
+      "parent": "main",
+      "pose": [
+        0.0,
+        -16.0,
+        -6.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "bString",
+      "parent": "bowstring",
+      "pose": [
+        0.0,
+        -0.5,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.01,
+            -0.25,
+            -0.5,
+            0.0,
+            14.0,
+            1.0
+          ],
+          "uv": [
+            30.0,
+            18.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "tString",
+      "parent": "bowstring",
+      "pose": [
+        0.0,
+        -0.25,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -13.75,
+            -0.5,
+            0.0,
+            14.0,
+            1.0
+          ],
+          "uv": [
+            30.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r1",
+      "parent": "bow",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        -0.7854,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -2.0,
+            -2.0,
+            2.0,
+            4.0,
+            4.0
+          ],
+          "uv": [
+            16.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "tArm",
+      "parent": "bow",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        -0.7854,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            -18.0,
+            -8.0,
+            1.0,
+            18.0,
+            14.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            0.0,
+            0.0,
+            -8.0,
+            0.0,
+            3.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "bArm",
+      "parent": "bow",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.7854,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0.0,
+            -8.0,
+            1.0,
+            18.0,
+            14.0
+          ],
+          "uv": [
+            0.0,
+            32.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            0.0,
+            -3.0,
+            -8.0,
+            0.0,
+            3.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            -3.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/DreadbowModel.java",
+  "sourceSha256": "d28b0f84ba462c0a959162ff643c12cee32a0c406d67459b134d7ab3b491a527",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [
+    {
+      "bone": "bowstring",
+      "target": "z",
+      "op": "+=",
+      "value": [
+        "*",
+        "walk",
+        9.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "tString",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          "walk",
+          25.0
+        ],
+        0.017453292519943295
+      ],
+      "when": 1
+    },
+    {
+      "bone": "bString",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          "walk",
+          [
+            "*",
+            -1,
+            25.0
+          ]
+        ],
+        0.017453292519943295
+      ],
+      "when": 1
+    },
+    {
+      "bone": "tArm",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          "walk",
+          [
+            "*",
+            -1,
+            20.0
+          ]
+        ],
+        0.017453292519943295
+      ],
+      "when": 1
+    },
+    {
+      "bone": "bArm",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          "walk",
+          20.0
+        ],
+        0.017453292519943295
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

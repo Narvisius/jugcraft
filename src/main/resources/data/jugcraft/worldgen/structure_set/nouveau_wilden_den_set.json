@@ -1,0 +1,26 @@
+{
+  "structures": [
+    {
+      "structure": "jugcraft:nouveau_hunter_wilden_den",
+      "weight": 1
+    },
+    {
+      "structure": "jugcraft:nouveau_guardian_wilden_den",
+      "weight": 25
+    },
+    {
+      "structure": "jugcraft:nouveau_stalker_wilden_den",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1224466880,
+    "spacing": 36,
+    "separation": 10,
+    "exclusion_zone": {
+      "chunk_count": 10,
+      "other_set": "minecraft:villages"
+    }
+  }
+}

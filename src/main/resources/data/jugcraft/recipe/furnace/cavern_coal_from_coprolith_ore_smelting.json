@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": "jugcraft:cavern_coprolith_coal_ore",
+  "result": {
+    "id": "minecraft:coal"
+  },
+  "experience": 0.7,
+  "cookingtime": 200,
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:nouveau_blank_parchment",
+    "minecraft:leather"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_annotated_codex"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

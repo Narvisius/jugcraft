@@ -1,0 +1,86 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "all": "jugcraft:menagerie/mutant/entity/equipment/humanoid/mutant_skeleton",
+    "particle": "jugcraft:menagerie/mutant/entity/equipment/humanoid/mutant_skeleton"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        8,
+        12
+      ],
+      "faces": {
+        "west": {
+          "texture": "#all",
+          "uv": [
+            0.0,
+            4.0,
+            2.0,
+            8.0
+          ]
+        },
+        "north": {
+          "texture": "#all",
+          "uv": [
+            2.0,
+            4.0,
+            4.0,
+            8.0
+          ]
+        },
+        "east": {
+          "texture": "#all",
+          "uv": [
+            4.0,
+            4.0,
+            6.0,
+            8.0
+          ]
+        },
+        "south": {
+          "texture": "#all",
+          "uv": [
+            6.0,
+            4.0,
+            8.0,
+            8.0
+          ]
+        },
+        "up": {
+          "texture": "#all",
+          "uv": [
+            2.0,
+            0.0,
+            4.0,
+            4.0
+          ]
+        },
+        "down": {
+          "texture": "#all",
+          "uv": [
+            4.0,
+            0.0,
+            6.0,
+            4.0
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          0,
+          8
+        ],
+        "axis": "y",
+        "angle": 22.5
+      }
+    }
+  ]
+}

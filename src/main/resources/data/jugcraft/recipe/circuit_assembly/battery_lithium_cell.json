@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "lithium"
+    }
+  ],
+  "type": "jugcraft:circuit_assembly",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:lithium_cell_assembly",
+      "count": 1
+    },
+    {
+      "ingredient": "jugcraft:lithium_electrolyte_charge",
+      "count": 1
+    }
+  ],
+  "result": {
+    "id": "jugcraft:lithium_cell",
+    "count": 1
+  },
+  "time": 240
+}

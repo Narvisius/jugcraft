@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:nouveau_purple_archwood_log",
+    "minecraft:spider_eye",
+    "minecraft:spider_eye",
+    "minecraft:spider_eye",
+    "minecraft:glowstone",
+    "#c:storage_blocks/source"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_ritual_scrying"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

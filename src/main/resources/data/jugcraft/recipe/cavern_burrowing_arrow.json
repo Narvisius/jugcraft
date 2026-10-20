@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "T",
+    "S",
+    "D"
+  ],
+  "key": {
+    "T": "jugcraft:cavern_corrodent_teeth",
+    "S": "minecraft:stick",
+    "D": "jugcraft:cavern_dark_tatters"
+  },
+  "result": {
+    "count": 4,
+    "id": "jugcraft:cavern_burrowing_arrow"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

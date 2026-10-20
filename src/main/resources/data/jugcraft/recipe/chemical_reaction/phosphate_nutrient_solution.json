@@ -1,0 +1,35 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "phosphate"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:phosphate_formulation",
+  "items": [
+    {
+      "ingredient": "jugcraft:mixed_farm_blend",
+      "count": 1
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 1000
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:nutrient_solution",
+      "amount": 1000,
+      "tank": 0
+    }
+  ],
+  "energy_per_tick": 48,
+  "time": 240
+}

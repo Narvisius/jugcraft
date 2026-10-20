@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:beast_komodo_spit",
+    "jugcraft:beast_komodo_spit",
+    "jugcraft:beast_komodo_spit"
+  ],
+  "result": {
+    "id": "minecraft:slime_ball"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

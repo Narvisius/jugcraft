@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "phosphate"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:nitrogen_fertilizer",
+    "jugcraft:triple_superphosphate",
+    "jugcraft:organic_fertilizer_carrier"
+  ],
+  "result": {
+    "id": "jugcraft:mixed_farm_blend",
+    "count": 2
+  }
+}

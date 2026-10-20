@@ -1,0 +1,308 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "body",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -2.5,
+        1.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -3.5,
+            -9.0,
+            8.0,
+            6.0,
+            9.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "nose",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -0.5,
+        -9.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -1.0,
+            -1.0,
+            3.0,
+            2.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "tail",
+      "parent": "body",
+      "pose": [
+        0.0,
+        0.75,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -3.25,
+            0.0,
+            6.0,
+            5.0,
+            4.0
+          ],
+          "uv": [
+            0.0,
+            16.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "fin_left",
+      "parent": "body",
+      "pose": [
+        4.0,
+        2.0,
+        -4.0,
+        -1.5708,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -1.5,
+            0.0,
+            3.0,
+            3.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            4.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "fin_right",
+      "parent": "body",
+      "pose": [
+        -4.0,
+        2.0,
+        -4.0,
+        -1.5708,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -1.5,
+            0.0,
+            3.0,
+            3.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            4.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "tail_fin",
+      "parent": "tail",
+      "pose": [
+        0.0,
+        -0.25,
+        4.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -3.0,
+            0.0,
+            0.0,
+            5.0,
+            5.0
+          ],
+          "uv": [
+            16.0,
+            21.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelBlobfishDepressurized.java",
+  "sourceSha256": "ad7823b5b1edaf58042777b0fee7a41bbd66519ef248329083e976321a47fe48",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "tail",
+      "kind": "swing",
+      "speed": 1.5,
+      "degree": [
+        "*",
+        0.85,
+        0.5
+      ],
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "tail_fin",
+      "kind": "swing",
+      "speed": 1.5,
+      "degree": [
+        "*",
+        0.85,
+        0.5
+      ],
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "fin_left",
+      "kind": "flap",
+      "speed": 1.5,
+      "degree": 0.85,
+      "invert": false,
+      "phase": 3.0,
+      "bias": [
+        "*",
+        -1,
+        0.3
+      ],
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "fin_right",
+      "kind": "flap",
+      "speed": 1.5,
+      "degree": 0.85,
+      "invert": true,
+      "phase": 3.0,
+      "bias": [
+        "*",
+        -1,
+        0.3
+      ],
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.body.setScale(1.0f, squishScale, 1.0f);",
+      "reason": "Unbound expression variable squishScale"
+    },
+    {
+      "call": "this.body.rotationPointY += lvt_6_1_ * -5.0f;",
+      "reason": "Unbound expression variable lvt_6_1_"
+    }
+  ],
+  "expressions": [],
+  "poses": []
+}

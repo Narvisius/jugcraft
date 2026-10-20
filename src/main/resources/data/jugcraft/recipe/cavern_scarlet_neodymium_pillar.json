@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "NN",
+    "NN",
+    "NN"
+  ],
+  "key": {
+    "N": "jugcraft:cavern_raw_scarlet_neodymium"
+  },
+  "result": {
+    "count": 2,
+    "id": "jugcraft:cavern_scarlet_neodymium_pillar"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -331,7 +331,7 @@ public class Decor5GameTests {
 		helper.setBlock(door.above(), Blocks.OAK_DOOR.defaultBlockState().setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER));
 		player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(item("autumn_wreath")));
 		place(helper, player, door.above(), Direction.NORTH);
-		helper.assertTrue(helper.getBlockState(door.above().north()).is(block("autumn_wreath")), "It hangs on a door too");
+		helper.assertTrue(DoorWreathGameTests.at(helper, helper.absolutePos(door.above()), false).wreathState().is(block("autumn_wreath")), "It hangs on a door too");
 
 		level.destroyBlock(helper.absolutePos(wall), false);
 		helper.assertBlockNotPresent(block("autumn_wreath"), pos);

@@ -1,0 +1,603 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "body",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -3.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -3.0,
+            -8.0,
+            8.0,
+            6.0,
+            14.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_barbel",
+      "parent": "body",
+      "pose": [
+        4.0,
+        1.0,
+        -6.0,
+        0.0,
+        -0.6109,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            0.0,
+            6.0,
+            3.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            10.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_barbel",
+      "parent": "body",
+      "pose": [
+        -4.0,
+        1.0,
+        -6.0,
+        0.0,
+        0.6109,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6.0,
+            0.0,
+            0.0,
+            6.0,
+            3.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            10.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "dorsal_fin",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -3.0,
+        -2.0,
+        -0.1309,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -4.0,
+            0.0,
+            0.0,
+            4.0,
+            5.0
+          ],
+          "uv": [
+            0.0,
+            21.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_fin",
+      "parent": "body",
+      "pose": [
+        4.0,
+        2.0,
+        -3.0,
+        0.0,
+        0.0,
+        -0.9163
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            -1.0,
+            0.0,
+            2.0,
+            4.0
+          ],
+          "uv": [
+            19.0,
+            21.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_fin",
+      "parent": "body",
+      "pose": [
+        -4.0,
+        2.0,
+        -3.0,
+        0.0,
+        0.0,
+        0.9163
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            -1.0,
+            0.0,
+            2.0,
+            4.0
+          ],
+          "uv": [
+            19.0,
+            21.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "tail",
+      "parent": "body",
+      "pose": [
+        0.0,
+        0.0,
+        7.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -3.0,
+            -1.0,
+            4.0,
+            5.0,
+            10.0
+          ],
+          "uv": [
+            0.0,
+            21.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            0.0,
+            -4.0,
+            2.0,
+            0.0,
+            1.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            0.0,
+            2.0,
+            -1.0,
+            0.0,
+            2.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "tail_fin",
+      "parent": "tail",
+      "pose": [
+        0.0,
+        2.0,
+        9.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -7.0,
+            -2.0,
+            0.0,
+            9.0,
+            10.0
+          ],
+          "uv": [
+            19.0,
+            27.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelCatfishSmall.java",
+  "sourceSha256": "cba96bb3d48b7b53ac6aa85e7b6b3e0fcaa0be7e6f446ed36618b2ed296e63bc",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "left_fin",
+      "kind": "flap",
+      "speed": 0.55,
+      "degree": 0.75,
+      "invert": false,
+      "phase": 4.0,
+      "bias": [
+        "*",
+        -1,
+        0.6
+      ],
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "right_fin",
+      "kind": "flap",
+      "speed": 0.55,
+      "degree": 0.75,
+      "invert": true,
+      "phase": 4.0,
+      "bias": [
+        "*",
+        -1,
+        0.6
+      ],
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "dorsal_fin",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": [
+        "*",
+        0.25,
+        0.2
+      ],
+      "invert": true,
+      "phase": 2.0,
+      "bias": 0.1,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "kind": "bob",
+      "speed": 0.2,
+      "degree": 0.25,
+      "invert": false,
+      "phase": 0,
+      "bias": 0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "left_fin",
+      "kind": "flap",
+      "speed": 0.2,
+      "degree": 0.25,
+      "invert": false,
+      "phase": 4.0,
+      "bias": [
+        "*",
+        -1,
+        0.1
+      ],
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "right_fin",
+      "kind": "flap",
+      "speed": 0.2,
+      "degree": 0.25,
+      "invert": true,
+      "phase": 4.0,
+      "bias": [
+        "*",
+        -1,
+        0.1
+      ],
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "left_barbel",
+      "kind": "swing",
+      "speed": 0.2,
+      "degree": 0.25,
+      "invert": false,
+      "phase": 2.0,
+      "bias": 0.1,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "right_barbel",
+      "kind": "swing",
+      "speed": 0.2,
+      "degree": 0.25,
+      "invert": true,
+      "phase": 2.0,
+      "bias": 0.1,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "kind": "swing",
+      "speed": 0.55,
+      "degree": [
+        "*",
+        0.75,
+        0.9
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "*",
+          -1,
+          3.0
+        ],
+        0.0
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "tail",
+      "kind": "swing",
+      "speed": 0.55,
+      "degree": [
+        "*",
+        0.75,
+        0.9
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "*",
+          -1,
+          3.0
+        ],
+        0.5235987755982988
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "tail_fin",
+      "kind": "swing",
+      "speed": 0.55,
+      "degree": [
+        "*",
+        0.75,
+        0.9
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "*",
+          -1,
+          3.0
+        ],
+        1.0471975511965976
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "kind": "swing",
+      "speed": 0.2,
+      "degree": [
+        "*",
+        0.25,
+        0.1
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "*",
+          -1,
+          2.5
+        ],
+        0.0
+      ],
+      "bias": 0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "tail",
+      "kind": "swing",
+      "speed": 0.2,
+      "degree": [
+        "*",
+        0.25,
+        0.1
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "*",
+          -1,
+          2.5
+        ],
+        0.5235987755982988
+      ],
+      "bias": 0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "tail_fin",
+      "kind": "swing",
+      "speed": 0.2,
+      "degree": [
+        "*",
+        0.25,
+        0.1
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "*",
+          -1,
+          2.5
+        ],
+        1.0471975511965976
+      ],
+      "bias": 0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "g": "#c:ingots/gold",
+    "n": "#c:storage_blocks/quartz",
+    "x": "jugcraft:nouveau_archwood_planks"
+  },
+  "pattern": [
+    "gxg",
+    "xnx",
+    "gxg"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_spell_prism"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

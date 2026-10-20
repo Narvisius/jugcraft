@@ -1,0 +1,277 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "wheel",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        16.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -8.0,
+            -8.0,
+            6.0,
+            4.0,
+            16.0
+          ],
+          "uv": [
+            28.0,
+            28.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -3.0,
+            -4.0,
+            -8.0,
+            6.0,
+            8.0,
+            4.0
+          ],
+          "uv": [
+            40.0,
+            60.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -3.0,
+            -4.0,
+            4.0,
+            6.0,
+            8.0,
+            4.0
+          ],
+          "uv": [
+            56.0,
+            22.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -3.0,
+            4.0,
+            -8.0,
+            6.0,
+            4.0,
+            16.0
+          ],
+          "uv": [
+            0.0,
+            44.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "headPivot",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        0.0,
+        -2.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "head",
+      "parent": "headPivot",
+      "pose": [
+        0,
+        0,
+        0,
+        0.3927,
+        0.0,
+        0.0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "headExtra",
+      "parent": "head",
+      "pose": [
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        -0.7854,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -5.0,
+            18.0,
+            6.0,
+            6.0,
+            6.0
+          ],
+          "uv": [
+            52.0,
+            48.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -8.0,
+            -5.0,
+            8.0,
+            6.0,
+            6.0,
+            16.0
+          ],
+          "uv": [
+            0.0,
+            22.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            18.0,
+            -5.0,
+            -2.0,
+            6.0,
+            6.0,
+            6.0
+          ],
+          "uv": [
+            28.0,
+            48.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            8.0,
+            -5.0,
+            -8.0,
+            16.0,
+            6.0,
+            6.0
+          ],
+          "uv": [
+            48.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -8.0,
+            -5.0,
+            -8.0,
+            16.0,
+            6.0,
+            16.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/MagnetronModel.java",
+  "sourceSha256": "c43d6b71adb124692ec54311a82631db676b6c94ed150348c980a06f46db4e35",
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "headPivot",
+      "kind": "bob",
+      "speed": 0.15,
+      "degree": 1.5,
+      "invert": false,
+      "phase": 0,
+      "bias": 0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.bob(this.wheel, 1.0f, 10.0f, true, timeRolling, rollProgress);",
+      "reason": "Unbound source condition [['!', {'unsupported': 'entity.isFormed()'}]]"
+    },
+    {
+      "call": "this.bob(this.headPivot, 1.0f, 4.0f, true, timeRolling, rollProgress);",
+      "reason": "Unbound source condition [['!', {'unsupported': 'entity.isFormed()'}]]"
+    },
+    {
+      "call": "this.wheel.rotateAngleY = (float)Math.toRadians(wheelYaw);",
+      "reason": "Unbound expression variable wheelYaw"
+    }
+  ],
+  "expressions": [],
+  "poses": []
+}

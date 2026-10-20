@@ -1,0 +1,227 @@
+{
+  "pools": [
+    {
+      "name": "abyssal_ruins",
+      "rolls": {
+        "min": 8,
+        "max": 10,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_cave_tablet",
+          "weight": 10,
+          "modifier": [
+            {
+              "type": "minecraft:set_custom_data",
+              "tag": "{BoundBiome:\"jugcraft:cavern_abyssal_chasm\"}"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:book",
+          "weight": 25,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 3,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:gunpowder",
+          "weight": 40,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 3,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_pearl",
+          "weight": 12,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_tripodfish",
+          "weight": 8,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_lanternfish",
+          "weight": 12,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_muck",
+          "weight": 10,
+          "modifier": [
+            {
+              "count": {
+                "min": 2,
+                "max": 8,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_marine_snow",
+          "weight": 12,
+          "modifier": [
+            {
+              "count": {
+                "min": 2,
+                "max": 8,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_hero_pottery_sherd",
+          "weight": 6,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_guardian_pottery_sherd",
+          "weight": 6,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_diving_helmet",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_diving_chestplate",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_diving_leggings",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_diving_boots",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_game_controller",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_scrap_metal",
+          "weight": 20,
+          "modifier": [
+            {
+              "count": {
+                "min": 2,
+                "max": 6,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:copper_ingot",
+          "weight": 35,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:book",
+          "weight": 6,
+          "modifier": [
+            {
+              "levels": 30.0,
+              "treasure": true,
+              "type": "minecraft:enchant_with_levels"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

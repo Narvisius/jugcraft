@@ -1,0 +1,30 @@
+{
+  "elements": [
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "jugcraft:mage/landscape_road_crosswalk",
+        "processors": "jugcraft:mage/landscape_road",
+        "projection": "terrain_matching"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "jugcraft:mage/landscape_road_straight",
+        "processors": "jugcraft:mage/landscape_road",
+        "projection": "terrain_matching"
+      },
+      "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "minecraft:empty_pool_element"
+      },
+      "weight": 2
+    }
+  ],
+  "fallback": "minecraft:empty",
+  "name": "mage_roads"
+}

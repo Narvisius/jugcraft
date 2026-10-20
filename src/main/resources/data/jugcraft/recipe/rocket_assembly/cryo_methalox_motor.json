@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:rocket_assembly",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:methane_tank",
+      "count": 1
+    },
+    {
+      "ingredient": "jugcraft:lox_tank",
+      "count": 1
+    },
+    {
+      "ingredient": "jugcraft:rocket_nozzle",
+      "count": 2
+    }
+  ],
+  "result": {
+    "id": "jugcraft:methalox_motor",
+    "count": 3
+  },
+  "time": 240
+}

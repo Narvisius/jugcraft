@@ -1,0 +1,1358 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "chest",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -7.0,
+        5.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -10.0,
+            -7.0,
+            2.0,
+            5.0,
+            14.0
+          ],
+          "uv": [
+            0.0,
+            46.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -4.0,
+            -5.0,
+            -7.0,
+            8.0,
+            9.0,
+            14.0
+          ],
+          "uv": [
+            0.0,
+            23.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "head",
+      "parent": "chest",
+      "pose": [
+        0.0,
+        0.0,
+        -6.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -4.0,
+            -3.5,
+            1.0,
+            1.0,
+            2.0
+          ],
+          "uv": [
+            30.0,
+            28.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            -5.0,
+            -3.0,
+            -7.5,
+            10.0,
+            6.0,
+            7.0
+          ],
+          "uv": [
+            50.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            4.0,
+            -4.0,
+            -3.5,
+            1.0,
+            1.0,
+            2.0
+          ],
+          "uv": [
+            30.0,
+            28.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rarmPivot",
+      "parent": "chest",
+      "pose": [
+        4.0,
+        2.25,
+        -3.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "larmPivot",
+      "parent": "chest",
+      "pose": [
+        -4.0,
+        2.25,
+        -3.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "hipsPivot",
+      "parent": "chest",
+      "pose": [
+        0.0,
+        0.0,
+        7.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "rwhisker_S",
+      "parent": "head",
+      "pose": [
+        4.5,
+        -8.0,
+        -2.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -5.0,
+            -3.0,
+            0.0,
+            10.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            62.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rwhisker",
+      "parent": "head",
+      "pose": [
+        4.0,
+        -3.0,
+        -7.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -10.0,
+            -0.5,
+            0.0,
+            10.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            17.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lwhisker_S",
+      "parent": "head",
+      "pose": [
+        -4.5,
+        -8.0,
+        -2.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -5.0,
+            -3.0,
+            0.0,
+            10.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            62.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "lwhisker",
+      "parent": "head",
+      "pose": [
+        -4.0,
+        -3.0,
+        -7.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -10.0,
+            -0.5,
+            0.0,
+            10.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            17.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "snout",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -3.0,
+        -6.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            3.0,
+            -9.5,
+            4.0,
+            7.0,
+            0.0
+          ],
+          "uv": [
+            30.0,
+            7.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -3.0,
+            -2.0,
+            -9.5,
+            6.0,
+            5.0,
+            10.0
+          ],
+          "uv": [
+            48.0,
+            28.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "jaw",
+      "parent": "head",
+      "pose": [
+        0.0,
+        0.0,
+        -7.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            0.0,
+            -8.0,
+            6.0,
+            3.0,
+            9.0
+          ],
+          "uv": [
+            53.0,
+            43.0
+          ],
+          "inflate": [
+            -0.01,
+            -0.01,
+            -0.01
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -3.0,
+            -2.99,
+            -8.0,
+            6.0,
+            3.0,
+            9.0
+          ],
+          "uv": [
+            32.0,
+            51.0
+          ],
+          "inflate": [
+            -0.01,
+            -0.01,
+            -0.01
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rarm",
+      "parent": "rarmPivot",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.25,
+            -1.5,
+            3.0,
+            6.0,
+            3.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            -1.0,
+            4.75,
+            -5.5,
+            7.0,
+            0.0,
+            7.0
+          ],
+          "uv": [
+            23.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "larm",
+      "parent": "larmPivot",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -1.25,
+            -1.5,
+            3.0,
+            6.0,
+            3.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -6.0,
+            4.75,
+            -5.5,
+            7.0,
+            0.0,
+            7.0
+          ],
+          "uv": [
+            23.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "hips",
+      "parent": "hipsPivot",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -10.0,
+            0.0,
+            2.0,
+            5.0,
+            14.0
+          ],
+          "uv": [
+            30.0,
+            32.0
+          ],
+          "inflate": [
+            -0.01,
+            -0.01,
+            -0.01
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -4.0,
+            -5.0,
+            0.0,
+            8.0,
+            9.0,
+            14.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            -0.01,
+            -0.01,
+            -0.01
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "nose",
+      "parent": "snout",
+      "pose": [
+        0.0,
+        -1.5,
+        -9.25,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -1.0,
+            -1.0,
+            4.0,
+            2.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            9.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "tail",
+      "parent": "hips",
+      "pose": [
+        0.0,
+        -5.0,
+        14.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            0.0,
+            0.0,
+            4.0,
+            5.0,
+            14.0
+          ],
+          "uv": [
+            70.0,
+            8.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rlegPivot",
+      "parent": "hips",
+      "pose": [
+        4.0,
+        2.25,
+        11.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "llegPivot",
+      "parent": "hips",
+      "pose": [
+        -4.0,
+        2.25,
+        11.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "rleg",
+      "parent": "rlegPivot",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.25,
+            -1.5,
+            3.0,
+            6.0,
+            3.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            -1.0,
+            4.75,
+            -5.5,
+            7.0,
+            0.0,
+            7.0
+          ],
+          "uv": [
+            23.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "lleg",
+      "parent": "llegPivot",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -1.25,
+            -1.5,
+            3.0,
+            6.0,
+            3.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -6.0,
+            4.75,
+            -5.5,
+            7.0,
+            0.0,
+            7.0
+          ],
+          "uv": [
+            23.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/CorrodentModel.java",
+  "sourceSha256": "96d1dac00a43221f4be3a893f85fb9304049066d581f411c9855add7284223d8",
+  "animationRoot": "root",
+  "headLook": "head",
+  "actions": {
+    "bite": {
+      "length": 0.75,
+      "loop": false,
+      "channels": [
+        {
+          "bone": "tail",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                25.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                45.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "chest",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                0.0,
+                0.0,
+                4.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                0.0,
+                -2.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "snout",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                -35.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                5.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "head",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                -5.0,
+                0.0,
+                -5.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "jaw",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                45.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                -5.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "head",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                0.0,
+                0.0,
+                4.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "jaw",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                0.0,
+                1.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "motions": [
+    {
+      "bone": "head",
+      "kind": "walk",
+      "speed": 0.1,
+      "degree": 0.05,
+      "invert": true,
+      "phase": 1.0,
+      "bias": 0.1,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "tail",
+      "kind": "swing",
+      "speed": 0.1,
+      "degree": 0.05,
+      "invert": true,
+      "phase": 3.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.walk(this.snout, 1.0f, 0.1f, true, 1.0f, -0.3f, ageInTicks, twitchinessAmount);",
+      "reason": "Unbound expression variable twitchinessAmount"
+    },
+    {
+      "call": "this.walk(this.jaw, 1.0f, 0.1f, true, 1.0f, -0.2f, ageInTicks, twitchinessAmount);",
+      "reason": "Unbound expression variable twitchinessAmount"
+    },
+    {
+      "call": "this.walk(this.nose, 2.5f, 0.1f, true, 1.0f, -0.4f, ageInTicks, twitchinessAmount);",
+      "reason": "Unbound expression variable twitchinessAmount"
+    },
+    {
+      "call": "this.flap(this.lwhisker, 1.5f, 0.3f, false, 1.0f, 1.0f, ageInTicks, twitchinessAmount);",
+      "reason": "Unbound expression variable twitchinessAmount"
+    },
+    {
+      "call": "this.flap(this.rwhisker, 1.5f, 0.3f, true, 1.0f, 1.0f, ageInTicks, twitchinessAmount);",
+      "reason": "Unbound expression variable twitchinessAmount"
+    },
+    {
+      "call": "this.flap(this.head, 0.3f, 0.3f, true, 1.0f, 0.0f, ageInTicks, afraidAmount);",
+      "reason": "Unbound expression variable afraidAmount"
+    },
+    {
+      "call": "this.swing(this.head, 0.3f, 0.2f, true, 2.0f, 0.0f, ageInTicks, afraidAmount);",
+      "reason": "Unbound expression variable afraidAmount"
+    },
+    {
+      "call": "this.flap(this.lwhisker, 0.15f, 0.4f, false, 1.0f, -1.0f, ageInTicks, afraidAmount);",
+      "reason": "Unbound expression variable afraidAmount"
+    },
+    {
+      "call": "this.flap(this.rwhisker, 0.15f, 0.4f, true, 1.0f, -1.0f, ageInTicks, afraidAmount);",
+      "reason": "Unbound expression variable afraidAmount"
+    },
+    {
+      "call": "this.walk(this.head, walkSpeed, walkDegree * 0.05f, true, 1.0f, 0.1f, limbSwing, walkAmount);",
+      "reason": "Unbound expression variable walkAmount"
+    },
+    {
+      "call": "this.flap(this.chest, walkSpeed, walkDegree * 0.1f, true, 1.0f, 0.0f, limbSwing, walkAmount);",
+      "reason": "Unbound expression variable walkAmount"
+    },
+    {
+      "call": "this.flap(this.hips, walkSpeed, walkDegree * 0.1f, true, 2.0f, 0.0f, limbSwing, walkAmount);",
+      "reason": "Unbound expression variable walkAmount"
+    },
+    {
+      "call": "this.flap(this.lleg, walkSpeed, walkDegree * 0.1f, false, 1.0f, 0.0f, limbSwing, walkAmount);",
+      "reason": "Unbound expression variable walkAmount"
+    },
+    {
+      "call": "this.flap(this.rleg, walkSpeed, walkDegree * 0.1f, false, 1.0f, 0.0f, limbSwing, walkAmount);",
+      "reason": "Unbound expression variable walkAmount"
+    },
+    {
+      "call": "this.flap(this.larm, walkSpeed, walkDegree * 0.1f, false, 1.0f, 0.0f, limbSwing, walkAmount);",
+      "reason": "Unbound expression variable walkAmount"
+    },
+    {
+      "call": "this.flap(this.rarm, walkSpeed, walkDegree * 0.1f, false, 1.0f, 0.0f, limbSwing, walkAmount);",
+      "reason": "Unbound expression variable walkAmount"
+    },
+    {
+      "call": "this.flap(this.head, walkSpeed, walkDegree * 0.1f, false, 1.0f, 0.0f, limbSwing, walkAmount);",
+      "reason": "Unbound expression variable walkAmount"
+    },
+    {
+      "call": "this.swing(this.tail, walkSpeed, walkDegree * 0.4f, false, -1.0f, 0.0f, limbSwing, walkAmount);",
+      "reason": "Unbound expression variable walkAmount"
+    },
+    {
+      "call": "this.walk(this.rarm, walkSpeed, walkDegree, false, -1.5f, 0.0f, limbSwing, walkAmount);",
+      "reason": "Unbound expression variable walkAmount"
+    },
+    {
+      "call": "this.walk(this.larm, walkSpeed, walkDegree, true, -1.5f, 0.0f, limbSwing, walkAmount);",
+      "reason": "Unbound expression variable walkAmount"
+    },
+    {
+      "call": "this.walk(this.rleg, walkSpeed, walkDegree, true, -2.5f, 0.0f, limbSwing, walkAmount);",
+      "reason": "Unbound expression variable walkAmount"
+    },
+    {
+      "call": "this.walk(this.lleg, walkSpeed, walkDegree, false, -2.5f, 0.0f, limbSwing, walkAmount);",
+      "reason": "Unbound expression variable walkAmount"
+    },
+    {
+      "call": "this.swing(this.chest, digSpeed * 0.5f, digDegree * 0.1f, false, 2.0f, 0.0f, limbSwing, digLimbAmount);",
+      "reason": "Unbound expression variable digLimbAmount"
+    },
+    {
+      "call": "this.swing(this.hips, digSpeed * 0.5f, digDegree * 0.1f, false, 1.0f, 0.0f, limbSwing, digLimbAmount);",
+      "reason": "Unbound expression variable digLimbAmount"
+    },
+    {
+      "call": "this.swing(this.tail, digSpeed * 0.5f, digDegree * 0.1f, false, 0.0f, 0.0f, limbSwing, digLimbAmount);",
+      "reason": "Unbound expression variable digLimbAmount"
+    },
+    {
+      "call": "this.swing(this.rarmPivot, digSpeed, digDegree, false, 1.0f, -0.3f, limbSwing, digLimbAmount);",
+      "reason": "Unbound expression variable digLimbAmount"
+    },
+    {
+      "call": "this.walk(this.rarmPivot, digSpeed, digDegree * 0.5f, false, 2.0f, 0.0f, limbSwing, digLimbAmount);",
+      "reason": "Unbound expression variable digLimbAmount"
+    },
+    {
+      "call": "this.flap(this.rarmPivot, digSpeed, digDegree, false, 3.0f, 0.0f, limbSwing, digLimbAmount);",
+      "reason": "Unbound expression variable digLimbAmount"
+    },
+    {
+      "call": "this.swing(this.larmPivot, digSpeed, digDegree, false, 1.0f, 0.3f, limbSwing, digLimbAmount);",
+      "reason": "Unbound expression variable digLimbAmount"
+    },
+    {
+      "call": "this.walk(this.larmPivot, digSpeed, digDegree * 0.5f, true, 2.0f, 0.0f, limbSwing, digLimbAmount);",
+      "reason": "Unbound expression variable digLimbAmount"
+    },
+    {
+      "call": "this.flap(this.larmPivot, digSpeed, digDegree, false, 3.0f, 0.0f, limbSwing, digLimbAmount);",
+      "reason": "Unbound expression variable digLimbAmount"
+    },
+    {
+      "call": "this.swing(this.llegPivot, digSpeed, digDegree, false, -1.0f, 0.3f, limbSwing, digLimbAmount);",
+      "reason": "Unbound expression variable digLimbAmount"
+    },
+    {
+      "call": "this.walk(this.llegPivot, digSpeed, digDegree * 0.5f, false, -2.0f, 0.0f, limbSwing, digLimbAmount);",
+      "reason": "Unbound expression variable digLimbAmount"
+    },
+    {
+      "call": "this.flap(this.llegPivot, digSpeed, digDegree, false, -2.0f, 0.0f, limbSwing, digLimbAmount);",
+      "reason": "Unbound expression variable digLimbAmount"
+    },
+    {
+      "call": "this.swing(this.rlegPivot, digSpeed, digDegree, false, -1.0f, -0.3f, limbSwing, digLimbAmount);",
+      "reason": "Unbound expression variable digLimbAmount"
+    },
+    {
+      "call": "this.walk(this.rlegPivot, digSpeed, digDegree * 0.5f, true, -2.0f, 0.0f, limbSwing, digLimbAmount);",
+      "reason": "Unbound expression variable digLimbAmount"
+    },
+    {
+      "call": "this.flap(this.rlegPivot, digSpeed, digDegree, false, 3.0f, 0.0f, limbSwing, digLimbAmount);",
+      "reason": "Unbound expression variable digLimbAmount"
+    },
+    {
+      "call": "this.walk(this.head, digSpeed * 4.0f, digDegree * 0.15f, true, 4.0f, -0.05f, limbSwing, digLimbAmount);",
+      "reason": "Unbound expression variable digLimbAmount"
+    },
+    {
+      "call": "this.walk(this.jaw, digSpeed * 4.0f, digDegree * 0.15f, true, 4.0f, -0.25f, limbSwing, digLimbAmount);",
+      "reason": "Unbound expression variable digLimbAmount"
+    },
+    {
+      "call": "this.chest.rotationPointY += bodyBob;",
+      "reason": "Unbound expression variable bodyBob"
+    },
+    {
+      "call": "this.rarm.rotateAngleZ -= this.chest.rotateAngleZ * walkAmount;",
+      "reason": "Unsupported expression this.chest.rotateAngleZ * walkAmount"
+    },
+    {
+      "call": "this.rarm.rotationPointY -= bodyBob - Math.min(0.0f, ACMath.walkValue(limbSwing, walkAmount, walkSpeed, -1.5f, 4.0f, true)) + walkAmount;",
+      "reason": "Unbound expression variable bodyBob"
+    },
+    {
+      "call": "this.larm.rotateAngleZ -= this.chest.rotateAngleZ * walkAmount;",
+      "reason": "Unsupported expression this.chest.rotateAngleZ * walkAmount"
+    },
+    {
+      "call": "this.larm.rotationPointY -= bodyBob - Math.min(0.0f, ACMath.walkValue(limbSwing, walkAmount, walkSpeed, -1.5f, 4.0f, false)) + walkAmount;",
+      "reason": "Unbound expression variable bodyBob"
+    },
+    {
+      "call": "this.rleg.rotateAngleZ -= (this.chest.rotateAngleZ + this.hips.rotateAngleZ) * walkAmount;",
+      "reason": "Unsupported expression (this.chest.rotateAngleZ + this.hips.rotateAngleZ) * walkAmount"
+    },
+    {
+      "call": "this.rleg.rotationPointY -= bodyBob - Math.min(0.0f, ACMath.walkValue(limbSwing, walkAmount, walkSpeed, -2.5f, 4.0f, false)) + walkAmount;",
+      "reason": "Unbound expression variable bodyBob"
+    },
+    {
+      "call": "this.lleg.rotateAngleZ -= (this.chest.rotateAngleZ + this.hips.rotateAngleZ) * walkAmount;",
+      "reason": "Unsupported expression (this.chest.rotateAngleZ + this.hips.rotateAngleZ) * walkAmount"
+    },
+    {
+      "call": "this.lleg.rotationPointY -= bodyBob - Math.min(0.0f, ACMath.walkValue(limbSwing, walkAmount, walkSpeed, -2.5f, 4.0f, true)) + walkAmount;",
+      "reason": "Unbound expression variable bodyBob"
+    },
+    {
+      "call": "this.chest.rotateAngleX = (float)((double)this.chest.rotateAngleX + Math.toRadians(digPitch));",
+      "reason": "Unsupported expression (this.chest.rotateAngleX + radians(digPitch))"
+    },
+    {
+      "call": "this.hipsPivot.rotateAngleY = (float)((double)this.hipsPivot.rotateAngleY + Math.toRadians(Mth.m_14175_((double)tail1Y)) * (double)(1.0f - afraidAmount));",
+      "reason": "Unsupported expression (this.hipsPivot.rotateAngleY + radians(Mth.m_14175_(tail1Y)) * (1.0 - afraidAmount))"
+    },
+    {
+      "call": "this.tail.rotateAngleY = (float)((double)this.tail.rotateAngleY + Math.toRadians(Mth.m_14175_((double)tail2Y)));",
+      "reason": "Unsupported expression (this.tail.rotateAngleY + radians(Mth.m_14175_(tail2Y)))"
+    },
+    {
+      "call": "this.hipsPivot.rotateAngleX = (float)((double)this.hipsPivot.rotateAngleX + Math.toRadians(Mth.m_14175_((double)tailX)) * (double)(1.0f - afraidAmount));",
+      "reason": "Unsupported expression (this.hipsPivot.rotateAngleX + radians(Mth.m_14175_(tailX)) * (1.0 - afraidAmount))"
+    },
+    {
+      "call": "this.head.rotateAngleY = (float)((double)this.head.rotateAngleY + Math.toRadians((double)Mth.m_14148_((float)((float)defaultY), (float)((float)((double)netHeadYaw + defaultY)), (float)20.0f) - defaultY));",
+      "reason": "Unsupported expression (this.head.rotateAngleY + radians(Mth.m_14148_((defaultY), ((netHeadYaw + defaultY)), 20.0) - defaultY))"
+    }
+  ],
+  "expressions": [
+    {
+      "bone": "head",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "/",
+        "pitch",
+        57.295776
+      ],
+      "when": 1
+    }
+  ],
+  "poses": [
+    {
+      "bone": "tail",
+      "weight": [
+        "/",
+        [
+          "-",
+          1.0,
+          "move"
+        ],
+        1.0
+      ],
+      "target": "rotation",
+      "value": [
+        -0.3490658503988659,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    }
+  ]
+}

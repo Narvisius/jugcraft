@@ -1,0 +1,90 @@
+{
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "property": "jugcraft:nouveau_fill",
+    "potion": false,
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "jugcraft:nouveau/block/source_jar/source_jar0"
+    },
+    "entries": [
+      {
+        "threshold": 0.01,
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:nouveau/block/source_jar/source_jar_sliver"
+        }
+      },
+      {
+        "threshold": 0.1,
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:nouveau/block/source_jar/source_jar10"
+        }
+      },
+      {
+        "threshold": 0.2,
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:nouveau/block/source_jar/source_jar20"
+        }
+      },
+      {
+        "threshold": 0.3,
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:nouveau/block/source_jar/source_jar30"
+        }
+      },
+      {
+        "threshold": 0.4,
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:nouveau/block/source_jar/source_jar40"
+        }
+      },
+      {
+        "threshold": 0.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:nouveau/block/source_jar/source_jar50"
+        }
+      },
+      {
+        "threshold": 0.6,
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:nouveau/block/source_jar/source_jar60"
+        }
+      },
+      {
+        "threshold": 0.7,
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:nouveau/block/source_jar/source_jar70"
+        }
+      },
+      {
+        "threshold": 0.8,
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:nouveau/block/source_jar/source_jar80"
+        }
+      },
+      {
+        "threshold": 0.9,
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:nouveau/block/source_jar/source_jar90"
+        }
+      },
+      {
+        "threshold": 1.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:nouveau/block/source_jar/source_jar100"
+        }
+      }
+    ]
+  }
+}

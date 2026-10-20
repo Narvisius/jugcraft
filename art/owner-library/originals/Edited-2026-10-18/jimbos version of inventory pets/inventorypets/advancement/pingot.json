@@ -1,0 +1,31 @@
+{
+    "display": {
+        "icon": {
+            "id": "inventorypets:pet_pingot"
+        },
+        "title": {
+            "translate": "advancement.ip.petach_pingot"
+        },
+        "description": {
+            "translate": "advancement.ip.petach_pingot.desc"
+        },
+        "show_toast": true,
+        "announce_to_chat": true
+    },
+    "parent": "inventorypets:mickerson",
+    "criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                        	"inventorypets:pet_pingot"
+                    	]
+                    }
+                    
+                ]
+            }
+        }
+    }
+}

@@ -119,7 +119,7 @@ def assets(assets_dir, write, lang):
     tex = assets_dir / "textures" / "block"
     tex.mkdir(parents=True, exist_ok=True)
     for name, img in textures().items():
-        img.save(tex / f"{name}.png", optimize=True)
+        img.save(tex / f"{name}.png", optimize=False, compress_level=0)
     write(assets_dir / "models" / "block" / "atm.json", model())
     rotations = {"north": {}, "east": {"y": 90}, "south": {"y": 180}, "west": {"y": 270}}
     write(assets_dir / "blockstates" / "atm.json", {"variants": {

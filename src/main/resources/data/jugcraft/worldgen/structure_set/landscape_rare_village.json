@@ -1,0 +1,22 @@
+{
+  "structures": [
+    {
+      "structure": "jugcraft:landscape_fortified_village",
+      "weight": 1
+    },
+    {
+      "structure": "jugcraft:landscape_fortified_desert_village",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1798451114,
+    "exclusion_zone": {
+      "other_set": "minecraft:villages",
+      "chunk_count": 8
+    },
+    "spacing": 46,
+    "separation": 18
+  }
+}

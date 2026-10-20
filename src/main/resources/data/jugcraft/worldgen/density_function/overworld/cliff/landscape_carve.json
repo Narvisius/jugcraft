@@ -1,0 +1,49 @@
+{
+  "type": "minecraft:cache",
+  "input": {
+    "type": "minecraft:add",
+    "left": "jugcraft:overworld/cliff/landscape_spline",
+    "right": {
+      "type": "minecraft:max",
+      "left": {
+        "type": "minecraft:add",
+        "left": -1.65,
+        "right": {
+          "type": "minecraft:cache",
+          "input": {
+            "type": "minecraft:noise",
+            "noise": "jugcraft:math/cliff/landscape_max_cut",
+            "xz_scale": 1.0,
+            "y_scale": 0.0
+          }
+        }
+      },
+      "right": {
+        "type": "minecraft:range_choice",
+        "input": "jugcraft:overworld/cliff/landscape_spline",
+        "min_inclusive": -1000000,
+        "max_exclusive": 2.0,
+        "when_in_range": {
+          "type": "minecraft:add",
+          "left": {
+            "type": "minecraft:range_choice",
+            "input": "jugcraft:overworld/cliff/landscape_carve_depth",
+            "min_inclusive": -1000000,
+            "max_exclusive": 0.0,
+            "when_in_range": "jugcraft:overworld/cliff/landscape_carve_depth",
+            "when_out_of_range": 64
+          },
+          "right": {
+            "type": "minecraft:gradient",
+            "from_value": 0.0,
+            "to_value": 7.0,
+            "axis": "y",
+            "from_coordinate": 60,
+            "to_coordinate": 44
+          }
+        },
+        "when_out_of_range": 64
+      }
+    }
+  }
+}

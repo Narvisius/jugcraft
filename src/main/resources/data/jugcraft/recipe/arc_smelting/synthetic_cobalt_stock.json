@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:arc_smelting",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:cobalt_concentrate",
+      "count": 2
+    },
+    {
+      "ingredient": "jugcraft:coke",
+      "count": 1
+    }
+  ],
+  "result": {
+    "id": "jugcraft:cobalt_ingot",
+    "count": 2
+  },
+  "time": 320
+}

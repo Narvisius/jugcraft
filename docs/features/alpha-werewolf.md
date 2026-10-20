@@ -203,6 +203,10 @@ Moonfang, the Howler and `bosses/werewolf_alpha` were already Arms VII's. Nothin
 
 ## Verification
 
+PR #408 turf-test repair (16 October 2026, Codex/GPT-6, owner requested): the test now checks a known moss cell and the dirt-path cell separately instead of assuming the first cell of an unordered trail was moss. It verifies scheduled restoration for both, invokes each restoration tick, then tears both again to retain coverage of their restoration when the Alpha abandons the fight. Gameplay code is unchanged.
+
+Focused validation on `6c4132681` plus this repair: Minecraft 26.3, Fabric Loader 0.19.5, Fabric API 0.161.0+26.3, Java 25.0.4.1+1; fresh GameTest run directories using the `jugcraft-test:moonlit_glade` fixture. Ran `./gradlew runGameTest -I build/focused.gradle -PgameTestFilter=jugcraft-test:alpha_werewolf_game_tests_left_alone_he_goes_back_to_his_stone_and_his_trail_knits` through the local Java/Gradle wrapper and an ignored init script that forwards `gameTestFilter` to the test JVM as `-Dfabric-api.gametest.filter`, once with `-PjugcraftOptionalIntegrations=false` and once with default integrations. Both runs passed exactly one required test (1.654 s and 1.610 s respectively). The full local suite and client tests were not rerun, as requested. GitHub CI for the pushed repair is separate from these focused results.
+
 Original branch CI [run 38667558143](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38667558143): server jobs passed; the Alpha client test failed with `He did not mark the player: NONE`. The test resumed a pose frozen during Rending Howl, whose remaining recovery intentionally pauses the hunt timer. The [October 15 integration](oct15-community-integration.md) waits for the bounded server transition to `MARK` instead of assuming eight client ticks. The repaired local rendered client run passed the entire fight, loot and fresh-instance reset on 15 October 2026 (`ae1adb4fe` runtime source). Both combined server suites passed all 1,734 tests. Combined GitHub CI remains pending; combat timing is unchanged.
 
 Run locally (15 October 2026):

@@ -1,0 +1,46 @@
+{
+	"display": {
+		"icon": {
+			"id": "inventorypets:pet_heart"
+		},
+		"title": {
+			"translate": "advancement.ip.petachieveAOE"
+		},
+		"description": {
+			"translate": "advancement.ip.petachieveAOE.desc"
+		},
+		"show_toast": true,
+		"announce_to_chat": true,
+		"frame": "goal"
+	},
+	"parent": "inventorypets:root",
+	"criteria": {
+		"crafting_table": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": [
+							"inventorypets:pet_heart"
+						]
+					},
+					{
+                        "items": [
+                        	"inventorypets:pet_moon"
+                    	]
+                    },
+					{
+						"items": [
+							"inventorypets:pet_shield"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_dubstep"
+						]
+					}
+				]
+			}
+		}
+	}
+}

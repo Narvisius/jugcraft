@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "category": "food",
+  "cookingtime": 600,
+  "experience": 0.35,
+  "ingredient": "jugcraft:ecology_prickly_pear",
+  "result": {
+    "id": "jugcraft:ecology_cooked_prickly_pear"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

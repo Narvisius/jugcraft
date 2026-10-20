@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "jugcraft:nouveau/item/dowsing_rod_100"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "jugcraft:nouveau/uses": 0.25
+      },
+      "model": "jugcraft:nouveau/item/dowsing_rod_25"
+    },
+    {
+      "predicate": {
+        "jugcraft:nouveau/uses": 0.5
+      },
+      "model": "jugcraft:nouveau/item/dowsing_rod_50"
+    },
+    {
+      "predicate": {
+        "jugcraft:nouveau/uses": 0.75
+      },
+      "model": "jugcraft:nouveau/item/dowsing_rod_75"
+    },
+    {
+      "predicate": {
+        "jugcraft:nouveau/uses": 1.0
+      },
+      "model": "jugcraft:nouveau/item/dowsing_rod_100"
+    }
+  ]
+}

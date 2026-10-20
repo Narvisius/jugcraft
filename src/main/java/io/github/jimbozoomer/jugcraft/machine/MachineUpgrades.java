@@ -24,6 +24,7 @@ public final class MachineUpgrades {
 	public static final int MAX_EFFECTIVE = 4;
 	public static Item SPEED;
 	public static Item EFFICIENCY;
+	public static Item AUTOMATION;
 
 	private MachineUpgrades() {
 	}
@@ -31,9 +32,11 @@ public final class MachineUpgrades {
 	public static void register() {
 		SPEED = item("speed_upgrade");
 		EFFICIENCY = item("efficiency_upgrade");
+		AUTOMATION = item("automation_upgrade");
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS).register(output -> {
 			output.accept(SPEED);
 			output.accept(EFFICIENCY);
+			output.accept(AUTOMATION);
 		});
 	}
 
@@ -45,6 +48,11 @@ public final class MachineUpgrades {
 	public static boolean isUpgrade(ItemStack stack) {
 		return SPEED != null && (stack.is(SPEED) || stack.is(EFFICIENCY));
 	}
+
+	/** Automation is supported by formed processors only; extra cards have no stacking effect. */
+    public static boolean isFormUpgrade(ItemStack stack) {
+        return isUpgrade(stack) || (AUTOMATION != null && stack.is(AUTOMATION));
+    }
 
 	/** What the cards in a machine's upgrade slots do. */
 	public record Effect(int speed, int efficiency) {

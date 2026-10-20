@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:battery_bulk_chemical_reactor",
+  "fluids": [
+    {
+      "fluid": "jugcraft:bioethanol",
+      "amount": 500
+    },
+    {
+      "fluid": "jugcraft:carbon_dioxide",
+      "amount": 250
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:carbonate_solvent_charge",
+      "count": 2
+    }
+  ],
+  "energy_per_tick": 64,
+  "time": 240
+}

@@ -74,6 +74,8 @@ public class DieselWalker extends Entity {
 	private static final EntityDataAccessor<Integer> PUNCHED_AT = SynchedEntityData.defineId(DieselWalker.class, EntityDataSerializers.INT);
 
 	private int fuel;
+	public io.github.jimbozoomer.jugcraft.vehiclebay.VehicleFitout fitout = io.github.jimbozoomer.jugcraft.vehiclebay.VehicleFitout.STANDARD;
+	private int fuelPayments;
 	private int forward;
 	private int turn;
 	private int jump;
@@ -206,6 +208,7 @@ public class DieselWalker extends Entity {
 		double yaw = Math.toRadians(getYRot());
 		Vec3 heading = new Vec3(-Math.sin(yaw), 0, Math.cos(yaw));
 		double speed = !fuelled ? 0 : f > 0 ? WALK_SPEED : f < 0 ? -WALK_SPEED / 2 : 0;
+		speed *= fitout.speed();
 		Vec3 motion = getDeltaMovement();
 		double vy = motion.y - 0.08;
 		if (onGround()) {
@@ -239,7 +242,7 @@ public class DieselWalker extends Entity {
 
 		boolean working = speed != 0 || t != 0 || drilled;
 		if (working && fuelled && tickCount % (20 / FUEL_PER_SECOND) == 0) {
-			fuel--;
+			fuel = Math.max(0, fuel - fitout.fuelCost(++fuelPayments));
 			if (fuel == 0 && pilot instanceof Player player) {
 				player.sendOverlayMessage(Component.translatable("message.jugcraft.walker.empty"));
 			}
@@ -391,8 +394,8 @@ public class DieselWalker extends Entity {
 			return true;
 		}
 		damage += amount;
-		if (damage >= health()) {
-			spawnAtLocation(level, dropStack());
+		if (damage >= health() * fitout.toughness()) {
+			spawnAtLocation(level, fitout.write(dropStack(), fuel));
 			discard();
 		}
 		return true;
@@ -415,10 +418,13 @@ public class DieselWalker extends Entity {
 	@Override
 	protected void readAdditionalSaveData(ValueInput input) {
 		fuel = Mth.clamp(input.getInt("fuel").orElse(0), 0, FUEL_TANK);
+		fitout = new io.github.jimbozoomer.jugcraft.vehiclebay.VehicleFitout(input.getIntOr("BayArmor", 0), input.getIntOr("BayDrive", 0));
+		fuelPayments = input.getIntOr("BayPayments", 0);
 	}
 
 	@Override
 	protected void addAdditionalSaveData(ValueOutput output) {
 		output.putInt("fuel", fuel);
+		output.putInt("BayArmor", fitout.armor()); output.putInt("BayDrive", fitout.drive()); output.putInt("BayPayments", fuelPayments);
 	}
 }

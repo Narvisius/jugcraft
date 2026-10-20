@@ -1,0 +1,62 @@
+{
+	"display": {
+		"icon": {
+			"id": "inventorypets:pet_sheep"
+		},
+		"title": {
+			"translate": "advancement.ip.petachievePacifist"
+		},
+		"description": {
+			"translate": "advancement.ip.petachievePacifist.desc"
+		},
+		"show_toast": true,
+		"announce_to_chat": true,
+		"frame": "goal"
+	},
+	"parent": "inventorypets:root",
+	"criteria": {
+		"crafting_table": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": [
+							"inventorypets:pet_chicken"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_cow"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_ocelot"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_pig"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_sheep"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_squid"
+						]
+					},
+					{
+                        "items": [
+                        	"inventorypets:pet_mooshroom"
+                    	]
+                    }
+				]
+			}
+		}
+	}
+}
+

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:nouveau_green_archwood_log",
+    "jugcraft:nouveau_red_archwood_sapling",
+    "jugcraft:nouveau_blue_archwood_sapling",
+    "jugcraft:nouveau_green_archwood_sapling",
+    "jugcraft:nouveau_purple_archwood_sapling",
+    "#c:gems/source",
+    "#c:gems/source",
+    "#c:gems/source",
+    "#c:gems/source"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_ritual_awakening"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

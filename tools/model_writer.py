@@ -899,10 +899,16 @@ class StyleWriter:
 
 def write_classic(root, machines, parts, fluid_blocks):
     """The original look: textured orientable cubes, plus the large machines in tools/large_machines.py."""
+    # New battery hardware shares its authored electrical cabinet in both packs.
+    import battery_expansion
+    battery_machines = {k:v for k,v in machines.items() if k in battery_expansion.BLOCKS}
+    machines = {k:v for k,v in machines.items() if k not in battery_machines}
     from large_machines import ENLARGED, FOOTPRINTS, MODELS, FRONTS
     from machine_connections import with_sockets, legacy_ports, permanent_ports, write_dynamic_sockets
     out = StyleWriter(root)
     write_dynamic_sockets(root, MODELS, FOOTPRINTS)
+    if battery_machines:
+        write_steampunk(root, battery_machines, {}, {})
     for machine, info in machines.items():
         if machine in ENLARGED:
             # The compact look (copies built before batch 44) is the old orientable cube.
@@ -957,6 +963,12 @@ def write_classic(root, machines, parts, fluid_blocks):
         out.item(part, rid(f"block/{part}"))
 
     for block in fluid_blocks:
+        if block in ("insulated_fluid_tank", "vacuum_insulated_tank"):
+            from cryogenic_models import tank_model
+            out.single_variant(block, rid(f"block/{block}"))
+            out.model(block, tank_model(block == "vacuum_insulated_tank"))
+            out.item(block, rid(f"block/{block}"))
+            continue
         out.single_variant(block, rid(f"block/{block}"))
         out.model(block, {
             "parent": "minecraft:block/cube_bottom_top",
@@ -1033,6 +1045,12 @@ def write_steampunk(root, machines, parts, fluid_blocks):
         out.item(part, rid(f"block/{part}"))
 
     for block in fluid_blocks:
+        if block in ("insulated_fluid_tank", "vacuum_insulated_tank"):
+            from cryogenic_models import tank_model
+            out.single_variant(block, rid(f"block/{block}"))
+            out.model(block, tank_model(block == "vacuum_insulated_tank"))
+            out.item(block, rid(f"block/{block}"))
+            continue
         from machine_connections import exterior_ports
         sockets = legacy_ports(block, [(0, 0, 0)]) or [(p, f, "fluid") for p, f, _ in exterior_ports()]
         elements = with_sockets(MODELS[block], sockets)

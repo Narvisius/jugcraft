@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GGG",
+    "GNG",
+    "GGG"
+  ],
+  "key": {
+    "G": "jugcraft:cavern_galena",
+    "N": "jugcraft:cavern_raw_scarlet_neodymium"
+  },
+  "result": {
+    "count": 8,
+    "id": "jugcraft:cavern_energized_galena_scarlet"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

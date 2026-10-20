@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": "jugcraft:cavern_metal_swarf",
+  "result": {
+    "id": "jugcraft:cavern_scrap_metal"
+  },
+  "experience": 0.1,
+  "cookingtime": 100,
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

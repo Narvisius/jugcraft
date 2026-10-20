@@ -1,0 +1,19 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "lead"
+    }
+  ],
+  "type": "jugcraft:pressing",
+  "ingredient": "jugcraft:lead_plate",
+  "result": {
+    "id": "jugcraft:lead_electrode",
+    "count": 1
+  },
+  "time": 120
+}

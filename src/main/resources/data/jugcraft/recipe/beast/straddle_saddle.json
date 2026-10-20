@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "EE",
+    "SS"
+  ],
+  "key": {
+    "S": "jugcraft:beast_straddlite",
+    "E": "minecraft:saddle"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:beast_straddle_saddle"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

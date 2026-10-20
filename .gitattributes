@@ -5,3 +5,5 @@
 *.jar binary
 *.rar binary
 art/owner-library/originals/** -text
+# Preserve archived source bytes/notices, including their original whitespace.
+art/owner-library/ports/jug-nouveau/ars_*/** -text -whitespace

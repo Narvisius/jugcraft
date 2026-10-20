@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smoking",
+  "ingredient": "jugcraft:cavern_sweetish_fish_green",
+  "result": {
+    "id": "jugcraft:cavern_gelatin_green"
+  },
+  "experience": 0.15,
+  "cookingtime": 100,
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

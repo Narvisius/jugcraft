@@ -2,6 +2,45 @@
 
 Owner requested companion-only automated testing on 7 October 2026, superseding the earlier instruction to skip tests. Implemented and run with OpenAI Codex (GPT-6).
 
+## Seated approach timeout correction (18 October 2026)
+
+OpenAI Codex (GPT-6) investigated [PR #420's failed client shard](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/39181339971/job/117834607166).
+The unload test timed out before its first sitting assertion. A focused diagnostic
+repeat reproduced it: the short approach moved Peepo from Z -1.5 to approximately
+-1.46, then physics briefly cleared `onGround`. Ground navigation returned a null
+path during that tick. The routine incorrectly blacklisted the reachable stool;
+occasional passes depended on a later scan finding a fence just before the deadline.
+
+Routine replanning now waits for the same navigation readiness as initial
+discovery: grounded, in liquid, or riding. It retains the claimed station and
+existing travel deadline while waiting. Landing resumes the normal budgeted
+route; permissions, hazards, lease checks and the deadline still apply each tick.
+
+The regression explicitly acquires the stool, clears the grounded flag, verifies
+the route remains claimed, and restores grounding to resume it. The automatic
+unload test's initial approach must now sit on that stool, so an alternate fence
+cannot mask a rejected route. Reseating may use another valid surface as the
+bounded scan continues. Both original 400-tick waits and the deferred-exit/save-reopen
+assertions remain. Timeout diagnostics report position, routine, rest, schedule,
+grounding, navigation and stool reservation state.
+
+Validation on the pinned Minecraft 26.3 / Fabric Loader 0.19.5 / Fabric API
+0.161.0+26.3 / Java 25 runtime:
+
+- `runClientGameTest -PclientTests=PeepoCompanionClientTests,PeepoWorkSessionClientTests,PeepoPopulationClientTests`
+  passed: **43 companion groups / 727 assertions, 54 work-session assertions,
+  and 36 population assertions**, including real cow/turkey breeding. Gradle
+  succeeded in 8m 6s (`build/peepo-seat-fix-final.log`).
+- Diagnostic repetition reproduced the original rejection and timeout
+  (`build/peepo-seat-trace.log`, `build/peepo-seat-route-diagnosis.log`). An
+  intermediate run exposed an overly strict new assertion requiring the second
+  seat to also be the stool; the final assertion checks the initial approach and
+  permits normal continued scanning after unload.
+- Repository/documentation-link and whitespace checks passed. Only the three
+  named client suites ran locally, in disposable worlds. The original CI run
+  passed all other shards, mod/server tests, optional-integrations-absent and
+  Foundation checks. A new remote run must validate the pushed repair.
+
 ## PR #323 stirring fixture correction, 12 October 2026
 
 Implemented with OpenAI Codex (GPT-6). [Build run 38327903835](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38327903835) failed in client shard 0 at `arms move to stir spoon`; the aggregate `client` failure reported that same error. The other four client shards, normal mod build, optional-integrations-absent build/server tests and Foundation checks passed.

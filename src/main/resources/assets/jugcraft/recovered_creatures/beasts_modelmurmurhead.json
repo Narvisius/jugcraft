@@ -1,0 +1,223 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "head",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -1.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.5,
+            -8.0,
+            -4.5,
+            9.0,
+            9.0,
+            9.0
+          ],
+          "uv": [
+            37.0,
+            41.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -4.5,
+            -8.0,
+            -4.5,
+            9.0,
+            9.0,
+            9.0
+          ],
+          "uv": [
+            0.0,
+            41.0
+          ],
+          "inflate": [
+            0.2,
+            0.2,
+            0.2
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "backHair",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -5.0,
+        5.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.5,
+            -2.0,
+            -1.5,
+            11.0,
+            20.0,
+            3.0
+          ],
+          "uv": [
+            49.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leftHair",
+      "parent": "head",
+      "pose": [
+        4.5,
+        -5.0,
+        1.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -2.0,
+            -2.5,
+            2.0,
+            16.0,
+            5.0
+          ],
+          "uv": [
+            17.0,
+            60.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightHair",
+      "parent": "head",
+      "pose": [
+        -4.5,
+        -5.0,
+        1.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -2.0,
+            -2.5,
+            2.0,
+            16.0,
+            5.0
+          ],
+          "uv": [
+            17.0,
+            60.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelMurmurHead.java",
+  "sourceSha256": "3f928373156468fa96724af55d987419c278cba0f1c2cefe6cbb86d7dd2d2d37",
+  "animationRoot": "root",
+  "headLook": "head",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.backHair.rotateAngleX -= hairX;",
+      "reason": "Unbound expression variable hairX"
+    },
+    {
+      "call": "this.backHair.rotateAngleY -= hairY;",
+      "reason": "Unbound expression variable hairY"
+    },
+    {
+      "call": "this.backHair.rotateAngleZ -= hairZ;",
+      "reason": "Unbound expression variable hairZ"
+    },
+    {
+      "call": "this.rightHair.rotateAngleX -= hairX;",
+      "reason": "Unbound expression variable hairX"
+    },
+    {
+      "call": "this.rightHair.rotateAngleY -= hairY;",
+      "reason": "Unbound expression variable hairY"
+    },
+    {
+      "call": "this.rightHair.rotateAngleZ -= hairZ;",
+      "reason": "Unbound expression variable hairZ"
+    },
+    {
+      "call": "this.leftHair.rotateAngleX -= hairX;",
+      "reason": "Unbound expression variable hairX"
+    },
+    {
+      "call": "this.leftHair.rotateAngleY -= hairY;",
+      "reason": "Unbound expression variable hairY"
+    },
+    {
+      "call": "this.leftHair.rotateAngleZ -= hairZ;",
+      "reason": "Unbound expression variable hairZ"
+    }
+  ],
+  "expressions": [],
+  "poses": []
+}

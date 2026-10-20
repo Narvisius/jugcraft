@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SPS",
+    "PDP",
+    "SPS"
+  ],
+  "key": {
+    "S": "minecraft:sugar",
+    "P": "jugcraft:cavern_peppermint_powder",
+    "D": "minecraft:cyan_dye"
+  },
+  "result": {
+    "count": 4,
+    "id": "jugcraft:cavern_rock_candy_cyan"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

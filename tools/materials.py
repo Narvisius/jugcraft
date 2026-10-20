@@ -59,6 +59,9 @@ METALS = {
     "solder": {"mined": False, "display": "Solder", "feature": "lead"},
     # Iron refined with coke in the steel foundry (tools/machines.py STEEL_FOUNDRY): the second tier.
     "steel": {"mined": False, "display": "Steel", "feature": "machines"},
+    "ferrochromium": {"mined": False, "display": "Ferrochromium", "feature": "machines"},
+    "stainless_steel": {"mined": False, "display": "Stainless Steel", "feature": "nickel"},
+    "aluminum_magnesium": {"mined": False, "display": "Aluminum-Magnesium Alloy", "feature": "aluminum"},
 }
 
 # Non-metal ores: <name>_ore, deepslate_<name>_ore, item <name>, storage block <name>_block.
@@ -92,6 +95,25 @@ MINERALS = {
                      "rich_gen": {"size": 48, "rarity": 12, "min_y": -48, "max_y": 32,
                                   "outcrop_chance": 3, "surface_biomes": ["jugcraft:shield", "jugcraft:volcano"],
                                   "outcrop_surface_biomes": ["jugcraft:shield"]}},
+}
+
+# Chromite's host province is selected at the surface, so cave biomes do not cut holes
+# out of the ore province. Existing chunks are never rewritten.
+MINERALS['chromite'] = {
+    'display': 'Chromite', 'ore_display': 'Chromite', 'feature': 'machines',
+    'drops': [1, 1], 'tool': 'iron',
+    'gen': {'size': 32, 'rarity': 10, 'min_y': -32, 'max_y': 64, 'outcrop_chance': 4,
+            'surface_biomes': ['minecraft:windswept_hills', 'minecraft:windswept_gravelly_hills',
+                              'minecraft:windswept_forest', 'minecraft:stony_peaks',
+                              'minecraft:stony_shore', 'jugcraft:shield', 'jugcraft:highland']},
+}
+
+# Separate primary cobalt feed, available before synthetic fuel. Surface host province, new chunks only.
+MINERALS['cobaltite'] = {
+    'display':'Cobaltite', 'ore_display':'Cobaltite', 'feature':'machines', 'drops':[1,1], 'tool':'iron',
+    'gen':{'size':24,'rarity':12,'min_y':-48,'max_y':32,'outcrop_chance':4,
+           'surface_biomes':['minecraft:windswept_hills','minecraft:windswept_gravelly_hills',
+                             'minecraft:windswept_forest','minecraft:stony_peaks','jugcraft:shield','jugcraft:highland']},
 }
 
 # Surface rocks with their own blocks. copy: vanilla block whose properties are copied.
@@ -137,7 +159,7 @@ EXTRA_NAMES = {"bronze_blend": "Bronze Blend"}
 PART_UNITS = {"plate": 9, "gear": 36, "wire": 3, "dust": 9}
 COMPONENTS = {
     "plate": ["copper", "iron", "tin", "bronze", "brass", "invar", "aluminum", "nickel", "lead", "tungsten", "steel",
-              "titanium", "thallite"],
+              "titanium", "thallite", "stainless_steel", "aluminum_magnesium"],
     "gear": ["iron", "bronze", "brass", "invar", "steel"],
     "wire": ["copper", "silver", "aluminum"],
     # Pulverizer output (see tools/machines.py); one dust smelts back into one ingot.
@@ -249,6 +271,12 @@ def all_items():
 
 def feature_of(entry_id):
     """The feature switch that owns a registered ID."""
+    import vehicle_bays
+    if entry_id in vehicle_bays.BLOCKS:
+        return "machines"
+    import menagerie_registry
+    if entry_id in menagerie_registry.entries():
+        return menagerie_registry.feature()
     for metal, info in METALS.items():
         if entry_id in metal_blocks(metal) + metal_items(metal):
             return info["feature"]

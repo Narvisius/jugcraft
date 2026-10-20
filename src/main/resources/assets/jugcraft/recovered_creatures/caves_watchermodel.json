@@ -1,0 +1,1315 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        -2.0,
+        0.0,
+        0,
+        3.141592653589793,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "body",
+      "parent": "root",
+      "pose": [
+        0.0,
+        5.125,
+        -0.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -5.125,
+            -2.5,
+            8.0,
+            12.0,
+            5.0
+          ],
+          "uv": [
+            67.0,
+            61.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -5.0,
+            -5.875,
+            -3.5,
+            10.0,
+            22.0,
+            7.0
+          ],
+          "uv": [
+            27.0,
+            22.0
+          ],
+          "inflate": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rleg",
+      "parent": "root",
+      "pose": [
+        2.5,
+        11.5,
+        -0.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -0.5,
+            -1.5,
+            3.0,
+            15.0,
+            3.0
+          ],
+          "uv": [
+            61.0,
+            27.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "lleg",
+      "parent": "root",
+      "pose": [
+        -2.5,
+        11.5,
+        -0.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -0.5,
+            -1.5,
+            3.0,
+            15.0,
+            3.0
+          ],
+          "uv": [
+            61.0,
+            27.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "larm",
+      "parent": "body",
+      "pose": [
+        -5.1667,
+        -4.4583,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.3333,
+            -0.6667,
+            -3.0,
+            4.0,
+            5.0,
+            6.0
+          ],
+          "uv": [
+            16.0,
+            61.0
+          ],
+          "inflate": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -3.3333,
+            0.3333,
+            -2.5,
+            3.0,
+            15.0,
+            5.0
+          ],
+          "uv": [
+            56.0,
+            46.0
+          ],
+          "inflate": [
+            0.24,
+            0.24,
+            0.24
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -3.3333,
+            15.3333,
+            -2.5,
+            3.0,
+            4.0,
+            5.0
+          ],
+          "uv": [
+            36.0,
+            65.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rarm",
+      "parent": "body",
+      "pose": [
+        5.1667,
+        -4.4583,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.3333,
+            -0.6667,
+            -3.0,
+            4.0,
+            5.0,
+            6.0
+          ],
+          "uv": [
+            16.0,
+            61.0
+          ],
+          "inflate": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            0.3333,
+            0.3333,
+            -2.5,
+            3.0,
+            15.0,
+            5.0
+          ],
+          "uv": [
+            56.0,
+            46.0
+          ],
+          "inflate": [
+            0.24,
+            0.24,
+            0.24
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            0.3333,
+            15.3333,
+            -2.5,
+            3.0,
+            4.0,
+            5.0
+          ],
+          "uv": [
+            36.0,
+            65.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "head",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -5.125,
+        0.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -9.0,
+            -4.0,
+            8.0,
+            9.0,
+            7.0
+          ],
+          "uv": [
+            72.0,
+            45.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -5.0,
+            -10.0,
+            -4.0,
+            10.0,
+            9.0,
+            7.0
+          ],
+          "uv": [
+            34.0,
+            0.0
+          ],
+          "inflate": [
+            0.26,
+            0.26,
+            0.26
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r1",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -10.25,
+        -4.25,
+        0.7854,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            0.25,
+            -7.25,
+            4.0,
+            4.0,
+            7.0
+          ],
+          "uv": [
+            54.0,
+            16.0
+          ],
+          "inflate": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rwing",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -5.0,
+        3.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "lwing",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -5.0,
+        3.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "lhorn",
+      "parent": "head",
+      "pose": [
+        5.25,
+        -6.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -11.0,
+            0.0,
+            8.0,
+            15.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            61.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "rhorn",
+      "parent": "head",
+      "pose": [
+        -5.25,
+        -6.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -8.0,
+            -11.0,
+            0.0,
+            8.0,
+            15.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            61.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r2",
+      "parent": "rwing",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.1781,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -9.0,
+            0.0,
+            0.0,
+            17.0,
+            11.0
+          ],
+          "uv": [
+            0.0,
+            18.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r3",
+      "parent": "lwing",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -1.1781,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -9.0,
+            0.0,
+            0.0,
+            17.0,
+            11.0
+          ],
+          "uv": [
+            0.0,
+            18.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/WatcherModel.java",
+  "sourceSha256": "e9e4909962759c4f52d7e73b7b759a1621cb90920d0a7c11afcea249d5c5a186",
+  "animationRoot": "root",
+  "headLook": "head",
+  "actions": {
+    "attack_0": {
+      "length": 0.75,
+      "loop": false,
+      "channels": [
+        {
+          "bone": "larm",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                25.0,
+                0.0,
+                40.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                -35.0,
+                59.99999999999999,
+                25.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "body",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                0.0,
+                29.999999999999996,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                -29.999999999999996,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "rarm",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                -35.0,
+                -59.99999999999999,
+                -25.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                25.0,
+                0.0,
+                -40.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ]
+    },
+    "attack_1": {
+      "length": 0.75,
+      "loop": false,
+      "channels": [
+        {
+          "bone": "body",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                0.0,
+                0.0,
+                -5.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "larm",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                -10.0,
+                -75.0,
+                -25.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                45.0,
+                -25.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "body",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                20.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "rarm",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.25,
+              "vector": [
+                -10.0,
+                75.0,
+                25.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                -45.0,
+                25.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "motions": [
+    {
+      "bone": "lwing",
+      "kind": "swing",
+      "speed": 0.2,
+      "degree": 0.25,
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.1,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "rwing",
+      "kind": "swing",
+      "speed": 0.2,
+      "degree": 0.25,
+      "invert": true,
+      "phase": 1.0,
+      "bias": 0.1,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "larm",
+      "kind": "flap",
+      "speed": 0.1,
+      "degree": 0.1,
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        0.5
+      ],
+      "bias": 0.1,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "rarm",
+      "kind": "flap",
+      "speed": 0.1,
+      "degree": 0.1,
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        0.5
+      ],
+      "bias": 0.1,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "larm",
+      "kind": "swing",
+      "speed": 0.1,
+      "degree": 0.1,
+      "invert": true,
+      "phase": 2.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "rarm",
+      "kind": "swing",
+      "speed": 0.1,
+      "degree": 0.1,
+      "invert": false,
+      "phase": 2.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "kind": "walk",
+      "speed": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "degree": [
+        "*",
+        1.0,
+        0.1
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        2.0
+      ],
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": [
+        "*",
+        "move",
+        [
+          "-",
+          1.0,
+          "run"
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "head",
+      "kind": "walk",
+      "speed": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "degree": [
+        "*",
+        1.0,
+        0.1
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        1.0
+      ],
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": [
+        "*",
+        "move",
+        [
+          "-",
+          1.0,
+          "run"
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "larm",
+      "kind": "walk",
+      "speed": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "degree": [
+        "*",
+        1.0,
+        0.25
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        0.5
+      ],
+      "bias": 0.1,
+      "clock": "walk",
+      "amount": [
+        "*",
+        "move",
+        [
+          "-",
+          1.0,
+          "run"
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rarm",
+      "kind": "walk",
+      "speed": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "degree": [
+        "*",
+        1.0,
+        0.25
+      ],
+      "invert": false,
+      "phase": 0.5,
+      "bias": 0.1,
+      "clock": "walk",
+      "amount": [
+        "*",
+        "move",
+        [
+          "-",
+          1.0,
+          "run"
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "head",
+      "kind": "walk",
+      "speed": [
+        "*",
+        0.5,
+        0.5
+      ],
+      "degree": [
+        "*",
+        1.0,
+        0.1
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        1.0
+      ],
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": [
+        "*",
+        "move",
+        "run"
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rarm",
+      "kind": "walk",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        1.0,
+        0.15
+      ],
+      "invert": false,
+      "phase": 2.0,
+      "bias": 0.4,
+      "clock": "walk",
+      "amount": [
+        "*",
+        "move",
+        "run"
+      ],
+      "when": 1
+    },
+    {
+      "bone": "larm",
+      "kind": "walk",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        1.0,
+        0.15
+      ],
+      "invert": true,
+      "phase": 2.0,
+      "bias": [
+        "*",
+        -1,
+        0.4
+      ],
+      "clock": "walk",
+      "amount": [
+        "*",
+        "move",
+        "run"
+      ],
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "kind": "swing",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        1.0,
+        0.25
+      ],
+      "invert": false,
+      "phase": 3.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": [
+        "*",
+        "move",
+        "run"
+      ],
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.flap(this.head, 4.0f, 0.1f, false, 0.0f, 0.0f, ageInTicks, twitchinessAmount);",
+      "reason": "Unbound expression variable twitchinessAmount"
+    },
+    {
+      "call": "this.walk(this.lleg, walkSpeed, walkDegree * 0.5f, false, 1.0f, -0.1f, limbSwing, walkAmount * groundAmount);",
+      "reason": "Unbound expression variable groundAmount"
+    },
+    {
+      "call": "this.walk(this.rleg, walkSpeed, walkDegree * 0.5f, true, 1.0f, 0.1f, limbSwing, walkAmount * groundAmount);",
+      "reason": "Unbound expression variable groundAmount"
+    },
+    {
+      "call": "this.walk(this.lleg, runSpeed, runDegree * 0.5f, false, 4.0f, -0.1f, limbSwing, runAmount * groundAmount);",
+      "reason": "Unbound expression variable groundAmount"
+    },
+    {
+      "call": "this.walk(this.rleg, runSpeed, runDegree * 0.5f, true, 4.0f, 0.1f, limbSwing, runAmount * groundAmount);",
+      "reason": "Unbound expression variable groundAmount"
+    },
+    {
+      "call": "this.swing(this.root, runSpeed, runDegree * 0.35f, true, 3.0f, 0.0f, limbSwing, runAmount * groundAmount);",
+      "reason": "Unbound expression variable groundAmount"
+    },
+    {
+      "call": "this.walk(this.lleg, walkSpeed, walkDegree * 0.3f, false, -1.0f, -0.1f, limbSwing, limbSwingAmount * shadeAmount);",
+      "reason": "Unbound expression variable shadeAmount"
+    },
+    {
+      "call": "this.walk(this.rleg, walkSpeed, walkDegree * 0.3f, false, -2.0f, -0.1f, limbSwing, limbSwingAmount * shadeAmount);",
+      "reason": "Unbound expression variable shadeAmount"
+    },
+    {
+      "call": "this.larm.setScale(1.0f, 1.0f + runAmount * 0.4f, 1.0f);",
+      "reason": "Unbound expression variable runAmount"
+    },
+    {
+      "call": "this.rarm.setScale(1.0f, 1.0f + runAmount * 0.4f, 1.0f);",
+      "reason": "Unbound expression variable runAmount"
+    }
+  ],
+  "expressions": [
+    {
+      "bone": "head",
+      "target": "yRot",
+      "op": "+=",
+      "value": [
+        "/",
+        "yaw",
+        57.295776
+      ],
+      "when": 1
+    },
+    {
+      "bone": "head",
+      "target": "xRot",
+      "op": "-=",
+      "value": [
+        "/",
+        "pitch",
+        57.295776
+      ],
+      "when": 1
+    }
+  ],
+  "poses": [
+    {
+      "bone": "body",
+      "weight": [
+        "/",
+        [
+          "*",
+          "move",
+          [
+            "-",
+            1.0,
+            "run"
+          ]
+        ],
+        1.0
+      ],
+      "target": "rotation",
+      "value": [
+        -0.08726646259971647,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "head",
+      "weight": [
+        "/",
+        [
+          "*",
+          "move",
+          [
+            "-",
+            1.0,
+            "run"
+          ]
+        ],
+        1.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.08726646259971647,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "weight": [
+        "/",
+        [
+          "*",
+          "move",
+          "run"
+        ],
+        1.0
+      ],
+      "target": "rotation",
+      "value": [
+        -0.2617993877991494,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "head",
+      "weight": [
+        "/",
+        [
+          "*",
+          "move",
+          "run"
+        ],
+        1.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.2617993877991494,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rarm",
+      "weight": [
+        "/",
+        "run",
+        1.0
+      ],
+      "target": "rotation",
+      "value": [
+        1.3089969389957472,
+        0.6108652381980153,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "larm",
+      "weight": [
+        "/",
+        "run",
+        1.0
+      ],
+      "target": "rotation",
+      "value": [
+        1.3089969389957472,
+        -0.6108652381980153,
+        0.0
+      ],
+      "when": 1
+    }
+  ]
+}

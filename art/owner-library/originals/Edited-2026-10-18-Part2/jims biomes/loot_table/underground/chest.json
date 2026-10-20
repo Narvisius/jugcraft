@@ -1,0 +1,935 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.085
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:golden_boots",
+          "weight": 4,
+          "modifier": [
+            {
+              "damage": {
+                "max": 0.9,
+                "min": 0.2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_damage"
+            },
+            {
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.7
+              },
+              "levels": {
+                "type": "minecraft:uniform",
+                "max": 22,
+                "min": 5
+              },
+              "options": "#minecraft:on_random_loot",
+              "type": "minecraft:enchant_with_levels"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_boots",
+          "weight": 10,
+          "modifier": [
+            {
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.6
+              },
+              "levels": {
+                "type": "minecraft:uniform",
+                "max": 25,
+                "min": 4
+              },
+              "options": "#minecraft:on_random_loot",
+              "type": "minecraft:enchant_with_levels"
+            },
+            {
+              "damage": {
+                "max": 0.9,
+                "min": 0.3,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_damage"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:golden_leggings",
+          "weight": 4,
+          "modifier": [
+            {
+              "damage": {
+                "max": 0.9,
+                "min": 0.2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_damage"
+            },
+            {
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.7
+              },
+              "levels": {
+                "type": "minecraft:uniform",
+                "max": 22,
+                "min": 5
+              },
+              "options": "#minecraft:on_random_loot",
+              "type": "minecraft:enchant_with_levels"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_leggings",
+          "weight": 10,
+          "modifier": [
+            {
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.6
+              },
+              "levels": {
+                "type": "minecraft:uniform",
+                "max": 25,
+                "min": 4
+              },
+              "options": "#minecraft:on_random_loot",
+              "type": "minecraft:enchant_with_levels"
+            },
+            {
+              "damage": {
+                "max": 0.9,
+                "min": 0.3,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_damage"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:golden_chestplate",
+          "weight": 4,
+          "modifier": [
+            {
+              "damage": {
+                "max": 0.9,
+                "min": 0.2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_damage"
+            },
+            {
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.7
+              },
+              "levels": {
+                "type": "minecraft:uniform",
+                "max": 22,
+                "min": 5
+              },
+              "options": "#minecraft:on_random_loot",
+              "type": "minecraft:enchant_with_levels"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_chestplate",
+          "weight": 10,
+          "modifier": [
+            {
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.6
+              },
+              "levels": {
+                "type": "minecraft:uniform",
+                "max": 25,
+                "min": 4
+              },
+              "options": "#minecraft:on_random_loot",
+              "type": "minecraft:enchant_with_levels"
+            },
+            {
+              "damage": {
+                "max": 0.9,
+                "min": 0.3,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_damage"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:golden_helmet",
+          "weight": 4,
+          "modifier": [
+            {
+              "damage": {
+                "max": 0.9,
+                "min": 0.2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_damage"
+            },
+            {
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.7
+              },
+              "levels": {
+                "type": "minecraft:uniform",
+                "max": 22,
+                "min": 5
+              },
+              "options": "#minecraft:on_random_loot",
+              "type": "minecraft:enchant_with_levels"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_helmet",
+          "weight": 10,
+          "modifier": [
+            {
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.6
+              },
+              "levels": {
+                "type": "minecraft:uniform",
+                "max": 25,
+                "min": 4
+              },
+              "options": "#minecraft:on_random_loot",
+              "type": "minecraft:enchant_with_levels"
+            },
+            {
+              "damage": {
+                "max": 0.9,
+                "min": 0.3,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_damage"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond_helmet",
+          "weight": 10,
+          "modifier": [
+            {
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.4
+              },
+              "levels": {
+                "type": "minecraft:uniform",
+                "max": 15,
+                "min": 4
+              },
+              "options": "#minecraft:on_random_loot",
+              "type": "minecraft:enchant_with_levels"
+            },
+            {
+              "damage": {
+                "max": 0.95,
+                "min": 0.5,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_damage"
+            }
+          ]
+        }
+      ],
+      "rolls": 3
+    },
+    {
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.75
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:golden_pickaxe",
+          "weight": 4,
+          "modifier": [
+            {
+              "damage": {
+                "max": 0.9,
+                "min": 0.2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_damage"
+            },
+            {
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.7
+              },
+              "levels": {
+                "type": "minecraft:uniform",
+                "max": 22,
+                "min": 5
+              },
+              "options": "#minecraft:on_random_loot",
+              "type": "minecraft:enchant_with_levels"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_pickaxe",
+          "weight": 10,
+          "modifier": [
+            {
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.6
+              },
+              "levels": {
+                "type": "minecraft:uniform",
+                "max": 25,
+                "min": 4
+              },
+              "options": "#minecraft:on_random_loot",
+              "type": "minecraft:enchant_with_levels"
+            },
+            {
+              "damage": {
+                "max": 0.9,
+                "min": 0.3,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_damage"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:golden_shovel",
+          "weight": 2,
+          "modifier": [
+            {
+              "damage": {
+                "max": 0.9,
+                "min": 0.2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_damage"
+            },
+            {
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.7
+              },
+              "levels": {
+                "type": "minecraft:uniform",
+                "max": 22,
+                "min": 5
+              },
+              "options": "#minecraft:on_random_loot",
+              "type": "minecraft:enchant_with_levels"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_shovel",
+          "weight": 5,
+          "modifier": [
+            {
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.6
+              },
+              "levels": {
+                "type": "minecraft:uniform",
+                "max": 25,
+                "min": 4
+              },
+              "options": "#minecraft:on_random_loot",
+              "type": "minecraft:enchant_with_levels"
+            },
+            {
+              "damage": {
+                "max": 0.9,
+                "min": 0.3,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_damage"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_sword",
+          "weight": 10,
+          "modifier": [
+            {
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.6
+              },
+              "levels": {
+                "type": "minecraft:uniform",
+                "max": 25,
+                "min": 4
+              },
+              "options": "#minecraft:on_random_loot",
+              "type": "minecraft:enchant_with_levels"
+            },
+            {
+              "damage": {
+                "max": 0.9,
+                "min": 0.3,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_damage"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond_pickaxe",
+          "weight": 2,
+          "modifier": [
+            {
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.3
+              },
+              "levels": {
+                "type": "minecraft:uniform",
+                "max": 12,
+                "min": 4
+              },
+              "options": "#minecraft:on_random_loot",
+              "type": "minecraft:enchant_with_levels"
+            },
+            {
+              "damage": {
+                "max": 0.9,
+                "min": 0.55,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_damage"
+            }
+          ]
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:clay_ball",
+          "weight": 5,
+          "modifier": {
+            "condition": {
+              "type": "minecraft:random_chance",
+              "chance": 0.3
+            },
+            "count": {
+              "max": 20,
+              "min": 8,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:clay",
+          "weight": 4,
+          "modifier": {
+            "condition": {
+              "type": "minecraft:random_chance",
+              "chance": 0.3
+            },
+            "count": {
+              "max": 13,
+              "min": 4,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:moss_block",
+          "weight": 10,
+          "modifier": {
+            "condition": {
+              "type": "minecraft:random_chance",
+              "chance": 0.365
+            },
+            "count": {
+              "max": 9,
+              "min": 3,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:short_grass",
+          "weight": 5,
+          "modifier": {
+            "condition": {
+              "type": "minecraft:random_chance",
+              "chance": 0.175
+            },
+            "count": {
+              "max": 12,
+              "min": 2,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:moss_carpet",
+          "weight": 12,
+          "modifier": {
+            "condition": {
+              "type": "minecraft:random_chance",
+              "chance": 0.3
+            },
+            "count": {
+              "max": 7,
+              "min": 2,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:glow_berries",
+          "weight": 15,
+          "modifier": {
+            "condition": {
+              "type": "minecraft:random_chance",
+              "chance": 0.4
+            },
+            "count": {
+              "max": 15,
+              "min": 4,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.2
+          },
+          "name": "minecraft:vine",
+          "weight": 6,
+          "modifier": {
+            "count": {
+              "max": 6,
+              "min": 1,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        }
+      ],
+      "rolls": 4
+    },
+    {
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.225
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:amethyst_cluster",
+          "weight": 10,
+          "modifier": {
+            "count": {
+              "max": 3,
+              "min": 1,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:small_amethyst_bud",
+          "weight": 20,
+          "modifier": {
+            "count": {
+              "max": 10,
+              "min": 3,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:medium_amethyst_bud",
+          "weight": 15,
+          "modifier": {
+            "count": {
+              "max": 6,
+              "min": 2,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:large_amethyst_bud",
+          "weight": 12,
+          "modifier": {
+            "count": {
+              "max": 5,
+              "min": 2,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:amethyst_shard",
+          "weight": 26,
+          "modifier": {
+            "count": {
+              "max": 10,
+              "min": 4,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:amethyst_block",
+          "weight": 3,
+          "modifier": {
+            "count": {
+              "max": 5,
+              "min": 2,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.4
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:book",
+          "modifier": {
+            "levels": {
+              "type": "minecraft:uniform",
+              "max": {
+                "type": "minecraft:uniform",
+                "max": 30,
+                "min": 10
+              },
+              "min": 7
+            },
+            "options": "#minecraft:on_random_loot",
+            "type": "minecraft:enchant_with_levels"
+          }
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.95
+          },
+          "name": "minecraft:paper",
+          "weight": 10,
+          "modifier": {
+            "count": {
+              "max": 7,
+              "min": 2,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.95
+          },
+          "name": "minecraft:book",
+          "weight": 8,
+          "modifier": {
+            "count": {
+              "max": 5,
+              "min": 2,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.6
+          },
+          "name": "minecraft:bookshelf",
+          "weight": 3,
+          "modifier": {
+            "count": {
+              "max": 2,
+              "min": 1,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.4
+          },
+          "name": "minecraft:iron_ingot",
+          "weight": 4,
+          "modifier": {
+            "count": {
+              "max": 10,
+              "min": 4,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.5
+          },
+          "name": "minecraft:raw_iron",
+          "weight": 10,
+          "modifier": {
+            "count": {
+              "max": 12,
+              "min": 4,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.4
+          },
+          "name": "minecraft:raw_iron_block",
+          "weight": 1,
+          "modifier": {
+            "count": {
+              "max": 2,
+              "min": 1,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.4
+          },
+          "name": "minecraft:gold_ingot",
+          "weight": 4,
+          "modifier": {
+            "count": {
+              "max": 10,
+              "min": 4,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.5
+          },
+          "name": "minecraft:raw_gold",
+          "weight": 10,
+          "modifier": {
+            "count": {
+              "max": 12,
+              "min": 4,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.4
+          },
+          "name": "minecraft:raw_gold_block",
+          "weight": 1,
+          "modifier": {
+            "count": {
+              "max": 2,
+              "min": 1,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.4
+          },
+          "name": "minecraft:copper_ingot",
+          "weight": 4,
+          "modifier": {
+            "count": {
+              "max": 24,
+              "min": 10,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.5
+          },
+          "name": "minecraft:raw_copper",
+          "weight": 10,
+          "modifier": {
+            "count": {
+              "max": 16,
+              "min": 5,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.5
+          },
+          "name": "minecraft:raw_copper_block",
+          "weight": 2,
+          "modifier": {
+            "count": {
+              "max": 4,
+              "min": 2,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        }
+      ],
+      "rolls": 3
+    },
+    {
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.25
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond",
+          "weight": 10,
+          "modifier": {
+            "count": {
+              "max": 3,
+              "min": 1,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:location_check",
+            "predicate": {
+              "position": {
+                "y": {
+                  "max": 319,
+                  "min": 0
+                }
+              }
+            }
+          },
+          "name": "minecraft:diamond_ore",
+          "weight": 3,
+          "modifier": {
+            "count": {
+              "max": 2,
+              "min": 1,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        }
+      ],
+      "rolls": 1
+    }
+  ]
+}

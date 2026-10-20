@@ -109,15 +109,20 @@ public class MineralSandClientGameTests implements FabricClientGameTest {
                     if (found.exposed.isEmpty()) found = sample(server.overworld(), center, 18, family, seed + " expanded");
                     // A small coastal strip need not contain a successful rare attempt. Survey additional
                     // eligible regions without changing production rates or manually placing a deposit.
+                    // Use the production biome tag: garnet is also intentionally found on gravel shores.
+                    // Restricting retries to Highland/Shield can keep returning tiny, steep fragments
+                    // that correctly fail the sediment/footprint checks after regional biome overlays.
+                    Set<net.minecraft.world.level.ChunkPos> surveyed = new HashSet<>();
+                    surveyed.add(new net.minecraft.world.level.ChunkPos(center.getX() >> 4, center.getZ() >> 4));
                     for (int region = 1; found.exposed.isEmpty() && region <= 10; region++) {
-                        var next = server.overworld().findClosestBiome3d(b -> family == 3
-                                        ? b.is(Jugcraft.id("highland")) || b.is(Jugcraft.id("shield"))
-                                        : family == 2 ? b.is(Jugcraft.id("basin")) || b.is(Jugcraft.id("lake_district"))
+                        var next = server.overworld().findClosestBiome3d(b -> family == 2
+                                        ? b.is(Jugcraft.id("basin")) || b.is(Jugcraft.id("lake_district"))
                                         : b.is(feature(server.overworld(), family).surfaceBiomes()),
                                 center.offset(region * 2048, 0, region * -2048), 16384, 32, 64);
-                        if (next != null) found = sample(server.overworld(), next.getFirst(), 14, family, seed + " region " + region);
+                        if (next != null && surveyed.add(new net.minecraft.world.level.ChunkPos(next.getFirst().getX() >> 4, next.getFirst().getZ() >> 4)))
+                            found = sample(server.overworld(), next.getFirst(), 14, family, seed + " region " + region);
                     }
-                    check(!found.reserve.isEmpty() && !found.exposed.isEmpty(), "No visible natural " + targets[family] + " deposit on " + seed);
+                    check(!found.reserve.isEmpty() && !found.exposed.isEmpty(), "No visible natural " + MineralSandGameTests.names().get(family) + " deposit on " + seed);
                     // Include the whole bed when its first visible block lay at a regional survey boundary.
                     return sample(server.overworld(), found.exposed.get(found.exposed.size() / 2), 4, family, seed + " complete inspection bed");
                 });

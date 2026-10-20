@@ -98,8 +98,8 @@ public class BulkChemicalReactorGameTests {
 				helper.assertTrue(hatch.insert(ItemVariant.of(Items.COBBLESTONE), 1, transaction) == 0, facing + ": the hatch refuses cobblestone");
 				helper.assertTrue(liquid.insert(FluidVariant.of(PetroFluids.HYDROGEN.fluid()), FluidConstants.BUCKET, transaction) == 0,
 						facing + ": the side inlet refuses hydrogen");
-				helper.assertTrue(gas.insert(FluidVariant.of(Fluids.WATER), FluidConstants.BUCKET, transaction) == 0,
-						facing + ": the lid inlet refuses water");
+				helper.assertTrue(gas.insert(FluidVariant.of(PetroFluids.ARGON.fluid()), FluidConstants.BUCKET, transaction) == 0,
+						facing + ": the lid inlet refuses argon");
 				helper.assertTrue(port(helper, machine, "product_out").insert(FluidVariant.of(Fluids.WATER), FluidConstants.BUCKET, transaction) == 0,
 						facing + ": nothing goes in at the outlet");
 				transaction.abort();
@@ -265,7 +265,8 @@ public class BulkChemicalReactorGameTests {
 	public void itRunsItsOwnRecipesAndIsBuiltFromItsBill(GameTestHelper helper) {
 		ServerLevel level = helper.getLevel();
 		FormMachineBlockEntity machine = place(helper, new BlockPos(6, 1, 2), Direction.NORTH);
-		List<FluidRecipes.Entry> own = machine.recipes(level.getServer());
+		List<FluidRecipes.Entry> own = machine.recipes(level.getServer()).stream()
+                .filter(e -> e.id().getPath().startsWith("chemical_reaction/bulk_")).toList();
 		List<Identifier> ids = own.stream().map(FluidRecipes.Entry::id).toList();
 		helper.assertTrue(ids.contains(Jugcraft.id("chemical_reaction/bulk_hydrochloric_acid"))
 				&& ids.contains(Jugcraft.id("chemical_reaction/bulk_chloride_iron_ore"))

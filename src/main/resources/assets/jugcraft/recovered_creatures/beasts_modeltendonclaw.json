@@ -1,0 +1,132 @@
+{
+  "textureSize": [
+    16,
+    16
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        12.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "claw1",
+      "parent": "root",
+      "pose": [
+        0.0,
+        0.0,
+        0.7,
+        0.2618,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -8.0,
+            -2.0,
+            3.0,
+            8.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "claw2",
+      "parent": "root",
+      "pose": [
+        0.5,
+        0.0,
+        1.0,
+        0.2618,
+        0.0,
+        2.1817
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -8.0,
+            -2.0,
+            3.0,
+            8.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "claw3",
+      "parent": "root",
+      "pose": [
+        -0.5,
+        0.0,
+        1.0,
+        0.2618,
+        0.0,
+        -2.1817
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -8.0,
+            -2.0,
+            3.0,
+            8.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelTendonClaw.java",
+  "sourceSha256": "c0ebd5219954eda21c6ef79788e8ad263115cc014c8fa6937a60a9ff21fd47a7",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

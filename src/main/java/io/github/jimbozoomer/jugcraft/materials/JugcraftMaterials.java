@@ -30,6 +30,9 @@ public final class JugcraftMaterials {
 	public static MetalFamily INVAR;
 	public static MetalFamily SOLDER;
 	public static MetalFamily STEEL;
+	public static MetalFamily FERROCHROMIUM;
+	public static MetalFamily STAINLESS_STEEL;
+	public static MetalFamily ALUMINUM_MAGNESIUM;
 
 	public static MineralFamily SALT;
 	public static MineralFamily PHOSPHATE;
@@ -37,6 +40,8 @@ public final class JugcraftMaterials {
 	public static MineralFamily MONAZITE;
 	public static MineralFamily FLUORITE;
 	public static MineralFamily SPODUMENE;
+	public static MineralFamily CHROMITE;
+	public static MineralFamily COBALTITE;
 	public static MineralFamily VANADIUM_IRON;
 
 	public static Block BAUXITE;
@@ -75,6 +80,9 @@ public final class JugcraftMaterials {
 		INVAR = MetalFamily.builder("invar").build();
 		SOLDER = MetalFamily.builder("solder").build();
 		STEEL = MetalFamily.builder("steel").build();
+		FERROCHROMIUM = MetalFamily.builder("ferrochromium").build();
+		STAINLESS_STEEL = MetalFamily.builder("stainless_steel").build();
+		ALUMINUM_MAGNESIUM = MetalFamily.builder("aluminum_magnesium").build();
 
 		SALT = MineralFamily.register("salt");
 		PHOSPHATE = MineralFamily.register("phosphate");
@@ -83,6 +91,8 @@ public final class JugcraftMaterials {
 		FLUORITE = MineralFamily.register("fluorite");
 		SPODUMENE = MineralFamily.register("spodumene");
 		VANADIUM_IRON = MineralFamily.register("vanadium_iron");
+		CHROMITE = MineralFamily.register("chromite");
+		COBALTITE = MineralFamily.register("cobaltite");
 
 		BAUXITE = JugcraftRegistry.block("bauxite", Blocks.GRANITE);
 		OIL_SAND = JugcraftRegistry.block("oil_sand", Blocks.SAND);
@@ -107,8 +117,8 @@ public final class JugcraftMaterials {
 	}
 
 	private static void registerCreativeTabs() {
-		MetalFamily[] metals = {TIN, ZINC, LEAD, SILVER, NICKEL, TUNGSTEN, URANIUM, TITANIUM, THALLITE, BRONZE, ALUMINUM, BRASS, INVAR, SOLDER, STEEL};
-		MineralFamily[] minerals = {SALT, PHOSPHATE, LEPIDOLITE, MONAZITE, FLUORITE, SPODUMENE, VANADIUM_IRON};
+		MetalFamily[] metals = {TIN, ZINC, LEAD, SILVER, NICKEL, TUNGSTEN, URANIUM, TITANIUM, THALLITE, BRONZE, ALUMINUM, BRASS, INVAR, SOLDER, STEEL, FERROCHROMIUM, STAINLESS_STEEL, ALUMINUM_MAGNESIUM};
+		MineralFamily[] minerals = {SALT, PHOSPHATE, LEPIDOLITE, MONAZITE, FLUORITE, SPODUMENE, VANADIUM_IRON, CHROMITE, COBALTITE};
 
 		List<ItemLike> natural = new ArrayList<>();
 		List<ItemLike> ingredients = new ArrayList<>();

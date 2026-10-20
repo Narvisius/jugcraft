@@ -1,0 +1,61 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "jugcraft:cavern_thornwood_branch",
+              "condition": {
+                "terms": [
+                  {
+                    "predicate": {
+                      "items": [
+                        "minecraft:shears"
+                      ]
+                    },
+                    "type": "minecraft:match_tool"
+                  },
+                  {
+                    "predicate": {
+                      "predicates": {
+                        "minecraft:enchantments": [
+                          {
+                            "levels": {
+                              "min": 1
+                            },
+                            "enchantments": "minecraft:silk_touch"
+                          }
+                        ]
+                      }
+                    },
+                    "type": "minecraft:match_tool"
+                  }
+                ],
+                "type": "minecraft:any_of"
+              }
+            },
+            {
+              "type": "minecraft:item",
+              "name": "jugcraft:cavern_thornwood_branch",
+              "condition": {
+                "chances": [
+                  0.5,
+                  0.75,
+                  1.0
+                ],
+                "enchantment": "minecraft:fortune",
+                "type": "minecraft:table_bonus"
+              }
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    }
+  ]
+}

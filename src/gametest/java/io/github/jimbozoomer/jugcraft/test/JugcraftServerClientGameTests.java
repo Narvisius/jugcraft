@@ -61,14 +61,18 @@ public class JugcraftServerClientGameTests implements FabricClientGameTest {
 			before = world.getServer().computeOnServer(server -> describe(server.overworld(), origin));
 			save = world.getWorldSave();
 		}
-		try (TestSingleplayerContext world = save.open()) {
-			world.getConnection().waitForChunksRender();
-			// Entities load a little after their chunks.
-			world.getServer().waitFor(server -> !traders(server.overworld()).isEmpty(), 200);
-			String after = world.getServer().computeOnServer(server -> describe(server.overworld(), origin));
-			Jugcraft.LOGGER.info("[server-check] before saving: {}", before);
-			Jugcraft.LOGGER.info("[server-check] after reopening: {}", after);
-			check(after.equals(before), "The world changed across save and reopen:\n  before " + before + "\n  after  " + after);
+		// Exercise repeated native closes: CI exposed a Fabric phase-barrier deadlock on the second close.
+		for (int attempt = 1; attempt <= 3; attempt++) {
+			try (TestSingleplayerContext world = save.open()) {
+				world.getConnection().waitForChunksRender();
+				// Entities load a little after their chunks.
+				world.getServer().waitFor(server -> !traders(server.overworld()).isEmpty(), 200);
+				String after = world.getServer().computeOnServer(server -> describe(server.overworld(), origin));
+				Jugcraft.LOGGER.info("[server-check] before saving: {}", before);
+				Jugcraft.LOGGER.info("[server-check] after reopening {}: {}", attempt, after);
+				check(after.equals(before), "The world changed across save and reopen:\n  before " + before + "\n  after  " + after);
+			}
+			Jugcraft.LOGGER.info("[server-check] saved-world close {} completed", attempt);
 		}
 	}
 
@@ -135,6 +139,7 @@ public class JugcraftServerClientGameTests implements FabricClientGameTest {
 				context.waitTicks(10);
 			}
 			// Leave and join again: the player's inventory and the world are as they were.
+			InProcessServerConfigs.beforeReconnect(server);
 			try (TestDedicatedServerConnection connection = server.connect()) {
 				connection.waitForChunksRender();
 				int shards = context.computeOnClient(client -> count(client.player.getInventory(), PixelHollows.PIXEL_SHARD));

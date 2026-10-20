@@ -1,0 +1,1028 @@
+{
+  "species": [
+    {
+      "source": "desert_mojo",
+      "id": "fable_desert_mojo",
+      "name": "Fable Desert Mojo",
+      "shape": "desert_mojo",
+      "movement": "land",
+      "habitat": "desert",
+      "mood": "neutral",
+      "width": 0.9,
+      "height": 1.5,
+      "health": 28,
+      "feed": "minecraft:cactus",
+      "mount": false,
+      "model": "fable_desert_mojo",
+      "variants": [
+        {
+          "name": "mojo",
+          "texture": "menagerie/fable/entity/mojo",
+          "babyTexture": "menagerie/fable/entity/mojo",
+          "weight": 1,
+          "model": "fable/desert_mojo",
+          "babyModel": "fable/desert_mojo"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "run",
+        "attack",
+        "misc.spawn"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "forest_mojo",
+      "id": "fable_forest_mojo",
+      "name": "Fable Forest Mojo",
+      "shape": "forest_mojo",
+      "movement": "land",
+      "habitat": "forest",
+      "mood": "neutral",
+      "width": 0.9,
+      "height": 1.5,
+      "health": 28,
+      "feed": "minecraft:oak_sapling",
+      "mount": false,
+      "model": "fable_forest_mojo",
+      "variants": [
+        {
+          "name": "mojo",
+          "texture": "menagerie/fable/entity/mojo",
+          "babyTexture": "menagerie/fable/entity/mojo",
+          "weight": 1,
+          "model": "fable/forest_mojo",
+          "babyModel": "fable/forest_mojo"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "run",
+        "attack",
+        "misc.spawn"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "hound",
+      "id": "fable_hound",
+      "name": "Fable Hound",
+      "shape": "hound",
+      "movement": "land",
+      "habitat": "forest",
+      "mood": "hostile",
+      "width": 1.1,
+      "height": 1.1,
+      "health": 32,
+      "feed": "minecraft:beef",
+      "mount": false,
+      "model": "fable_hound",
+      "variants": [
+        {
+          "name": "hound",
+          "texture": "menagerie/fable/entity/hound",
+          "babyTexture": "menagerie/fable/entity/hound",
+          "weight": 1,
+          "model": "fable/hound",
+          "babyModel": "fable/hound"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "run",
+        "bite",
+        "bite_long",
+        "charge",
+        "attack"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "scarecrow",
+      "id": "fable_scarecrow",
+      "name": "Fable Scarecrow",
+      "shape": "scarecrow",
+      "movement": "land",
+      "habitat": "plains",
+      "mood": "hostile",
+      "width": 0.8,
+      "height": 2.1,
+      "health": 34,
+      "feed": "minecraft:wheat",
+      "mount": false,
+      "model": "fable_scarecrow",
+      "variants": [
+        {
+          "name": "scarecrow",
+          "texture": "menagerie/fable/entity/scarecrow",
+          "babyTexture": "menagerie/fable/entity/scarecrow",
+          "weight": 1,
+          "model": "fable/scarecrow",
+          "babyModel": "fable/scarecrow"
+        }
+      ],
+      "clips": [
+        "idle",
+        "attack",
+        "walk",
+        "misc.spawn"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "scorpion",
+      "id": "fable_scorpion",
+      "name": "Fable Scorpion",
+      "shape": "scorpion",
+      "movement": "land",
+      "habitat": "desert",
+      "mood": "neutral",
+      "width": 1,
+      "height": 0.6,
+      "health": 22,
+      "feed": "minecraft:spider_eye",
+      "mount": false,
+      "model": "fable_scorpion",
+      "variants": [
+        {
+          "name": "scorpion",
+          "texture": "menagerie/fable/entity/scorpion",
+          "babyTexture": "menagerie/fable/entity/scorpion_babies",
+          "weight": 1,
+          "model": "fable/scorpion",
+          "babyModel": "fable/scorpion_baby"
+        },
+        {
+          "name": "scorpion_level2",
+          "texture": "menagerie/fable/entity/scorpion_level2",
+          "babyTexture": "menagerie/fable/entity/scorpion_level2_babies",
+          "weight": 1,
+          "model": "fable/scorpion",
+          "babyModel": "fable/scorpion_baby"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "run",
+        "tail",
+        "claws",
+        "baby_walk",
+        "baby_idle",
+        "baby_attack",
+        "attack"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "wisp",
+      "id": "fable_wisp",
+      "name": "Fable Wisp",
+      "shape": "wisp",
+      "movement": "air",
+      "habitat": "forest",
+      "mood": "neutral",
+      "width": 0.5,
+      "height": 0.7,
+      "health": 14,
+      "feed": "minecraft:glowstone_dust",
+      "mount": false,
+      "model": "fable_wisp",
+      "variants": [
+        {
+          "name": "wisp",
+          "texture": "menagerie/fable/entity/wisp",
+          "babyTexture": "menagerie/fable/entity/wisp",
+          "weight": 1,
+          "model": "fable/wisp",
+          "babyModel": "fable/wisp"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "nether_wisp",
+      "id": "fable_nether_wisp",
+      "name": "Fable Nether Wisp",
+      "shape": "nether_wisp",
+      "movement": "air",
+      "habitat": "nether",
+      "mood": "neutral",
+      "width": 0.5,
+      "height": 0.7,
+      "health": 18,
+      "feed": "minecraft:glowstone_dust",
+      "mount": false,
+      "model": "fable_nether_wisp",
+      "variants": [
+        {
+          "name": "nether_wisp",
+          "texture": "menagerie/fable/entity/nether_wisp",
+          "babyTexture": "menagerie/fable/entity/nether_wisp",
+          "weight": 1,
+          "model": "fable/wisp",
+          "babyModel": "fable/wisp"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "ender_wisp",
+      "id": "fable_ender_wisp",
+      "name": "Fable Ender Wisp",
+      "shape": "ender_wisp",
+      "movement": "air",
+      "habitat": "end",
+      "mood": "neutral",
+      "width": 0.5,
+      "height": 0.7,
+      "health": 20,
+      "feed": "minecraft:chorus_fruit",
+      "mount": false,
+      "model": "fable_ender_wisp",
+      "variants": [
+        {
+          "name": "ender_wisp",
+          "texture": "menagerie/fable/entity/ender_wisp",
+          "babyTexture": "menagerie/fable/entity/ender_wisp",
+          "weight": 1,
+          "model": "fable/wisp",
+          "babyModel": "fable/wisp"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "corpse_eater",
+      "id": "fable_corpse_eater",
+      "name": "Fable Corpse Eater",
+      "shape": "corpse_eater",
+      "movement": "land",
+      "habitat": "cave",
+      "mood": "hostile",
+      "width": 0.9,
+      "height": 1.8,
+      "health": 36,
+      "feed": "minecraft:rotten_flesh",
+      "mount": false,
+      "model": "fable_corpse_eater",
+      "variants": [
+        {
+          "name": "corpse_eater",
+          "texture": "menagerie/fable/entity/corpse_eater",
+          "babyTexture": "menagerie/fable/entity/corpse_eater",
+          "weight": 1,
+          "model": "fable/corpse_eater",
+          "babyModel": "fable/corpse_eater"
+        }
+      ],
+      "clips": [
+        "run",
+        "idle",
+        "walk",
+        "misc.spawn",
+        "attack"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "peacock_spider",
+      "id": "fable_peacock_spider",
+      "name": "Fable Peacock Spider",
+      "shape": "peacock_spider",
+      "movement": "land",
+      "habitat": "jungle",
+      "mood": "neutral",
+      "width": 0.8,
+      "height": 0.6,
+      "health": 18,
+      "feed": "minecraft:spider_eye",
+      "mount": false,
+      "model": "fable_peacock_spider",
+      "variants": [
+        {
+          "name": "peacock_spider",
+          "texture": "menagerie/fable/entity/peacock_spider",
+          "babyTexture": "menagerie/fable/entity/peacock_spider",
+          "weight": 1,
+          "model": "fable/peacock_spider",
+          "babyModel": "fable/peacock_spider"
+        },
+        {
+          "name": "peacock_spider_level2",
+          "texture": "menagerie/fable/entity/peacock_spider_level2",
+          "babyTexture": "menagerie/fable/entity/peacock_spider_level2",
+          "weight": 1,
+          "model": "fable/peacock_spider",
+          "babyModel": "fable/peacock_spider"
+        },
+        {
+          "name": "peacock_spider_level3",
+          "texture": "menagerie/fable/entity/peacock_spider_level3",
+          "babyTexture": "menagerie/fable/entity/peacock_spider_level3",
+          "weight": 1,
+          "model": "fable/peacock_spider",
+          "babyModel": "fable/peacock_spider"
+        }
+      ],
+      "clips": [
+        "startle",
+        "idle",
+        "walk",
+        "run",
+        "attack"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "bullfrog",
+      "id": "fable_bullfrog",
+      "name": "Fable Bullfrog",
+      "shape": "bullfrog",
+      "movement": "amphibious",
+      "habitat": "swamp",
+      "mood": "neutral",
+      "width": 0.7,
+      "height": 0.65,
+      "health": 16,
+      "feed": "minecraft:slime_ball",
+      "mount": false,
+      "model": "fable_bullfrog",
+      "variants": [
+        {
+          "name": "bullfrog",
+          "texture": "menagerie/fable/entity/bullfrog",
+          "babyTexture": "menagerie/fable/entity/bullfrog",
+          "weight": 1,
+          "model": "fable/bullfrog",
+          "babyModel": "fable/bullfrog"
+        },
+        {
+          "name": "bullfrog_level2",
+          "texture": "menagerie/fable/entity/bullfrog_level2",
+          "babyTexture": "menagerie/fable/entity/bullfrog_level2",
+          "weight": 1,
+          "model": "fable/bullfrog",
+          "babyModel": "fable/bullfrog"
+        },
+        {
+          "name": "bullfrog_level3",
+          "texture": "menagerie/fable/entity/bullfrog_level3",
+          "babyTexture": "menagerie/fable/entity/bullfrog_level3",
+          "weight": 1,
+          "model": "fable/bullfrog",
+          "babyModel": "fable/bullfrog"
+        }
+      ],
+      "clips": [
+        "idle",
+        "tongue",
+        "tongue2",
+        "tongue3",
+        "walk",
+        "run",
+        "hurt",
+        "attack",
+        "fly",
+        "swim"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "butterfly",
+      "id": "fable_butterfly",
+      "name": "Fable Butterfly",
+      "shape": "butterfly",
+      "movement": "air",
+      "habitat": "meadow",
+      "mood": "passive",
+      "width": 0.4,
+      "height": 0.4,
+      "health": 6,
+      "feed": "minecraft:dandelion",
+      "mount": false,
+      "model": "fable_butterfly",
+      "variants": [
+        {
+          "name": "butterfly",
+          "texture": "menagerie/fable/entity/butterfly",
+          "babyTexture": "menagerie/fable/entity/butterfly",
+          "weight": 1,
+          "model": "fable/butterfly",
+          "babyModel": "fable/butterfly"
+        },
+        {
+          "name": "butterfly2",
+          "texture": "menagerie/fable/entity/butterfly2",
+          "babyTexture": "menagerie/fable/entity/butterfly2",
+          "weight": 1,
+          "model": "fable/butterfly",
+          "babyModel": "fable/butterfly"
+        },
+        {
+          "name": "butterfly3",
+          "texture": "menagerie/fable/entity/butterfly3",
+          "babyTexture": "menagerie/fable/entity/butterfly3",
+          "weight": 1,
+          "model": "fable/butterfly",
+          "babyModel": "fable/butterfly"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "dragonfly",
+      "id": "fable_dragonfly",
+      "name": "Fable Dragonfly",
+      "shape": "dragonfly",
+      "movement": "air",
+      "habitat": "swamp",
+      "mood": "passive",
+      "width": 0.5,
+      "height": 0.4,
+      "health": 6,
+      "feed": "minecraft:sugar",
+      "mount": false,
+      "model": "fable_dragonfly",
+      "variants": [
+        {
+          "name": "dragonfly",
+          "texture": "menagerie/fable/entity/dragonfly",
+          "babyTexture": "menagerie/fable/entity/dragonfly",
+          "weight": 1,
+          "model": "fable/dragonfly",
+          "babyModel": "fable/dragonfly"
+        },
+        {
+          "name": "dragonfly2",
+          "texture": "menagerie/fable/entity/dragonfly2",
+          "babyTexture": "menagerie/fable/entity/dragonfly2",
+          "weight": 1,
+          "model": "fable/dragonfly",
+          "babyModel": "fable/dragonfly"
+        },
+        {
+          "name": "dragonfly3",
+          "texture": "menagerie/fable/entity/dragonfly3",
+          "babyTexture": "menagerie/fable/entity/dragonfly3",
+          "weight": 1,
+          "model": "fable/dragonfly",
+          "babyModel": "fable/dragonfly"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "shroomling",
+      "id": "fable_shroomling",
+      "name": "Fable Shroomling",
+      "shape": "shroomling",
+      "movement": "land",
+      "habitat": "forest",
+      "mood": "passive",
+      "width": 0.5,
+      "height": 0.8,
+      "health": 12,
+      "feed": "minecraft:brown_mushroom",
+      "mount": false,
+      "model": "fable_shroomling",
+      "variants": [
+        {
+          "name": "shroomling",
+          "texture": "menagerie/fable/entity/shroomling",
+          "babyTexture": "menagerie/fable/entity/shroomling",
+          "weight": 1,
+          "model": "fable/shroomling",
+          "babyModel": "fable/shroomling"
+        }
+      ],
+      "clips": [
+        "idle",
+        "atchoo",
+        "walk"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "ladybug",
+      "id": "fable_ladybug",
+      "name": "Fable Ladybug",
+      "shape": "ladybug",
+      "movement": "land",
+      "habitat": "meadow",
+      "mood": "passive",
+      "width": 0.35,
+      "height": 0.3,
+      "health": 6,
+      "feed": "minecraft:sugar",
+      "mount": false,
+      "model": "fable_ladybug",
+      "variants": [
+        {
+          "name": "ladybug",
+          "texture": "menagerie/fable/entity/ladybug",
+          "babyTexture": "menagerie/fable/entity/ladybug",
+          "weight": 1,
+          "model": "fable/ladybug",
+          "babyModel": "fable/ladybug"
+        },
+        {
+          "name": "ladybug2",
+          "texture": "menagerie/fable/entity/ladybug2",
+          "babyTexture": "menagerie/fable/entity/ladybug2",
+          "weight": 1,
+          "model": "fable/ladybug",
+          "babyModel": "fable/ladybug"
+        },
+        {
+          "name": "ladybug3",
+          "texture": "menagerie/fable/entity/ladybug3",
+          "babyTexture": "menagerie/fable/entity/ladybug3",
+          "weight": 1,
+          "model": "fable/ladybug",
+          "babyModel": "fable/ladybug"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "scarab",
+      "id": "fable_scarab",
+      "name": "Fable Scarab",
+      "shape": "scarab",
+      "movement": "land",
+      "habitat": "desert",
+      "mood": "neutral",
+      "width": 0.45,
+      "height": 0.35,
+      "health": 8,
+      "feed": "minecraft:cactus",
+      "mount": false,
+      "model": "fable_scarab",
+      "variants": [
+        {
+          "name": "scarab",
+          "texture": "menagerie/fable/entity/scarab",
+          "babyTexture": "menagerie/fable/entity/scarab",
+          "weight": 1,
+          "model": "fable/scarab",
+          "babyModel": "fable/scarab"
+        },
+        {
+          "name": "scarab2",
+          "texture": "menagerie/fable/entity/scarab2",
+          "babyTexture": "menagerie/fable/entity/scarab2",
+          "weight": 1,
+          "model": "fable/scarab",
+          "babyModel": "fable/scarab"
+        },
+        {
+          "name": "scarab3",
+          "texture": "menagerie/fable/entity/scarab3",
+          "babyTexture": "menagerie/fable/entity/scarab3",
+          "weight": 1,
+          "model": "fable/scarab",
+          "babyModel": "fable/scarab"
+        }
+      ],
+      "clips": [
+        "walk",
+        "idle"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "mantis",
+      "id": "fable_mantis",
+      "name": "Fable Mantis",
+      "shape": "mantis",
+      "movement": "land",
+      "habitat": "jungle",
+      "mood": "neutral",
+      "width": 0.5,
+      "height": 0.9,
+      "health": 12,
+      "feed": "minecraft:spider_eye",
+      "mount": false,
+      "model": "fable_mantis",
+      "variants": [
+        {
+          "name": "mantis",
+          "texture": "menagerie/fable/entity/mantis",
+          "babyTexture": "menagerie/fable/entity/mantis",
+          "weight": 1,
+          "model": "fable/mantis",
+          "babyModel": "fable/mantis"
+        },
+        {
+          "name": "mantis2",
+          "texture": "menagerie/fable/entity/mantis2",
+          "babyTexture": "menagerie/fable/entity/mantis2",
+          "weight": 1,
+          "model": "fable/mantis",
+          "babyModel": "fable/mantis"
+        },
+        {
+          "name": "mantis3",
+          "texture": "menagerie/fable/entity/mantis3",
+          "babyTexture": "menagerie/fable/entity/mantis3",
+          "weight": 1,
+          "model": "fable/mantis",
+          "babyModel": "fable/mantis"
+        }
+      ],
+      "clips": [
+        "walk",
+        "idle"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "hermit_crab",
+      "id": "fable_hermit_crab",
+      "name": "Fable Hermit Crab",
+      "shape": "hermit_crab",
+      "movement": "amphibious",
+      "habitat": "beach",
+      "mood": "passive",
+      "width": 0.55,
+      "height": 0.4,
+      "health": 12,
+      "feed": "minecraft:kelp",
+      "mount": false,
+      "model": "fable_hermit_crab",
+      "variants": [
+        {
+          "name": "hermit_crab",
+          "texture": "menagerie/fable/entity/hermit_crab",
+          "babyTexture": "menagerie/fable/entity/hermit_crab",
+          "weight": 1,
+          "model": "fable/hermit_crab",
+          "babyModel": "fable/hermit_crab"
+        },
+        {
+          "name": "hermit_crab2",
+          "texture": "menagerie/fable/entity/hermit_crab2",
+          "babyTexture": "menagerie/fable/entity/hermit_crab2",
+          "weight": 1,
+          "model": "fable/hermit_crab",
+          "babyModel": "fable/hermit_crab"
+        },
+        {
+          "name": "hermit_crab3",
+          "texture": "menagerie/fable/entity/hermit_crab3",
+          "babyTexture": "menagerie/fable/entity/hermit_crab3",
+          "weight": 1,
+          "model": "fable/hermit_crab",
+          "babyModel": "fable/hermit_crab"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "fly",
+        "swim"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "jinx",
+      "id": "fable_jinx",
+      "name": "Fable Jinx",
+      "shape": "jinx",
+      "movement": "land",
+      "habitat": "jungle",
+      "mood": "neutral",
+      "width": 0.6,
+      "height": 1.2,
+      "health": 22,
+      "feed": "minecraft:melon_slice",
+      "mount": false,
+      "model": "fable_jinx",
+      "variants": [
+        {
+          "name": "jinx",
+          "texture": "menagerie/fable/entity/jinx",
+          "babyTexture": "menagerie/fable/entity/jinx",
+          "weight": 1,
+          "model": "fable/jinx",
+          "babyModel": "fable/jinx"
+        }
+      ],
+      "clips": [
+        "idle",
+        "startle",
+        "shoot",
+        "run",
+        "walk",
+        "laugh",
+        "escape",
+        "idle_alert",
+        "swim",
+        "approach",
+        "dance",
+        "attack"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "frogman",
+      "id": "fable_frogman",
+      "name": "Fable Frogman",
+      "shape": "frogman",
+      "movement": "amphibious",
+      "habitat": "swamp",
+      "mood": "hostile",
+      "width": 0.7,
+      "height": 1.8,
+      "health": 28,
+      "feed": "minecraft:slime_ball",
+      "mount": false,
+      "model": "fable_frogman",
+      "variants": [
+        {
+          "name": "frogman",
+          "texture": "menagerie/fable/entity/frogman",
+          "babyTexture": "menagerie/fable/entity/frogman",
+          "weight": 1,
+          "model": "fable/frogman",
+          "babyModel": "fable/frogman"
+        },
+        {
+          "name": "frogman_level2",
+          "texture": "menagerie/fable/entity/frogman_level2",
+          "babyTexture": "menagerie/fable/entity/frogman_level2",
+          "weight": 1,
+          "model": "fable/frogman",
+          "babyModel": "fable/frogman"
+        },
+        {
+          "name": "frogman_level3",
+          "texture": "menagerie/fable/entity/frogman_level3",
+          "babyTexture": "menagerie/fable/entity/frogman_level3",
+          "weight": 1,
+          "model": "fable/frogman",
+          "babyModel": "fable/frogman"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "hurt",
+        "sleep",
+        "wake_up",
+        "attack",
+        "fly",
+        "swim"
+      ],
+      "armorTextures": {}
+    }
+  ],
+  "sounds": [
+    "fable_mojo_step",
+    "fable_mojo_death",
+    "fable_mojo_spawn",
+    "fable_mojo_idle",
+    "fable_mojo_hurt",
+    "fable_mojo_base_attack_hit",
+    "fable_hound_hurt",
+    "fable_hound_death",
+    "fable_hound_idle",
+    "fable_hound_step",
+    "fable_hound_base_attack_hit",
+    "fable_hound_root_attack",
+    "fable_scarecrow_spawn",
+    "fable_scarecrow_death",
+    "fable_scarecrow_step",
+    "fable_scarecrow_base_attack_hit",
+    "fable_wisp_death",
+    "fable_wisp_idle",
+    "fable_scorpion_death",
+    "fable_scorpion_hurt",
+    "fable_scorpion_idle",
+    "fable_scorpion_step",
+    "fable_scorpion_claws_hit",
+    "fable_scorpion_tail_hit",
+    "fable_corpse_eater_spawn",
+    "fable_corpse_eater_death",
+    "fable_corpse_eater_hurt",
+    "fable_corpse_eater_idle",
+    "fable_corpse_eater_step",
+    "fable_corpse_eater_attack",
+    "fable_corpse_eater_attack_hit",
+    "fable_peacock_spider_step",
+    "fable_peacock_spider_hiss",
+    "fable_peacock_spider_death",
+    "fable_peacock_spider_hurt",
+    "fable_peacock_spider_run",
+    "fable_bullfrog_death",
+    "fable_bullfrog_idle",
+    "fable_bullfrog_step",
+    "fable_bullfrog_tongue_attack",
+    "fable_bullfrog_attack",
+    "fable_dragonfly_idle",
+    "fable_scarab_idle",
+    "fable_jinx_idle",
+    "fable_jinx_hurt",
+    "fable_jinx_flee",
+    "fable_jinx_startle",
+    "fable_jinx_laugh",
+    "fable_jinx_shoot",
+    "fable_jinx_death",
+    "fable_jinx_umbrella",
+    "fable_jinx_fly",
+    "fable_insect_squish",
+    "fable_frogman_idle",
+    "fable_frogman_sleep",
+    "fable_frogman_hurt",
+    "fable_frogman_death",
+    "fable_frogman_step",
+    "fable_frogman_attack",
+    "fable_frogman_leap",
+    "fable_butterfly_heal",
+    "fable_shroomling_idle",
+    "fable_shroomling_death",
+    "fable_shroomling_atchoo",
+    "fable_hound_trap_closed",
+    "fable_hound_trap_opened",
+    "fable_hound_trap_damage"
+  ],
+  "items": {
+    "fable_desert_mojo_spawn_egg": {
+      "kind": "spawn",
+      "species": "fable_desert_mojo",
+      "name": "Fable Desert Mojo Spawn Egg"
+    },
+    "fable_forest_mojo_spawn_egg": {
+      "kind": "spawn",
+      "species": "fable_forest_mojo",
+      "name": "Fable Forest Mojo Spawn Egg"
+    },
+    "fable_hound_spawn_egg": {
+      "kind": "spawn",
+      "species": "fable_hound",
+      "name": "Fable Hound Spawn Egg"
+    },
+    "fable_scarecrow_spawn_egg": {
+      "kind": "spawn",
+      "species": "fable_scarecrow",
+      "name": "Fable Scarecrow Spawn Egg"
+    },
+    "fable_scorpion_spawn_egg": {
+      "kind": "spawn",
+      "species": "fable_scorpion",
+      "name": "Fable Scorpion Spawn Egg"
+    },
+    "fable_wisp_spawn_egg": {
+      "kind": "spawn",
+      "species": "fable_wisp",
+      "name": "Fable Wisp Spawn Egg"
+    },
+    "fable_nether_wisp_spawn_egg": {
+      "kind": "spawn",
+      "species": "fable_nether_wisp",
+      "name": "Fable Nether Wisp Spawn Egg"
+    },
+    "fable_ender_wisp_spawn_egg": {
+      "kind": "spawn",
+      "species": "fable_ender_wisp",
+      "name": "Fable Ender Wisp Spawn Egg"
+    },
+    "fable_corpse_eater_spawn_egg": {
+      "kind": "spawn",
+      "species": "fable_corpse_eater",
+      "name": "Fable Corpse Eater Spawn Egg"
+    },
+    "fable_peacock_spider_spawn_egg": {
+      "kind": "spawn",
+      "species": "fable_peacock_spider",
+      "name": "Fable Peacock Spider Spawn Egg"
+    },
+    "fable_bullfrog_spawn_egg": {
+      "kind": "spawn",
+      "species": "fable_bullfrog",
+      "name": "Fable Bullfrog Spawn Egg"
+    },
+    "fable_butterfly_spawn_egg": {
+      "kind": "spawn",
+      "species": "fable_butterfly",
+      "name": "Fable Butterfly Spawn Egg"
+    },
+    "fable_dragonfly_spawn_egg": {
+      "kind": "spawn",
+      "species": "fable_dragonfly",
+      "name": "Fable Dragonfly Spawn Egg"
+    },
+    "fable_shroomling_spawn_egg": {
+      "kind": "spawn",
+      "species": "fable_shroomling",
+      "name": "Fable Shroomling Spawn Egg"
+    },
+    "fable_ladybug_spawn_egg": {
+      "kind": "spawn",
+      "species": "fable_ladybug",
+      "name": "Fable Ladybug Spawn Egg"
+    },
+    "fable_scarab_spawn_egg": {
+      "kind": "spawn",
+      "species": "fable_scarab",
+      "name": "Fable Scarab Spawn Egg"
+    },
+    "fable_mantis_spawn_egg": {
+      "kind": "spawn",
+      "species": "fable_mantis",
+      "name": "Fable Mantis Spawn Egg"
+    },
+    "fable_hermit_crab_spawn_egg": {
+      "kind": "spawn",
+      "species": "fable_hermit_crab",
+      "name": "Fable Hermit Crab Spawn Egg"
+    },
+    "fable_jinx_spawn_egg": {
+      "kind": "spawn",
+      "species": "fable_jinx",
+      "name": "Fable Jinx Spawn Egg"
+    },
+    "fable_frogman_spawn_egg": {
+      "kind": "spawn",
+      "species": "fable_frogman",
+      "name": "Fable Frogman Spawn Egg"
+    },
+    "fable_scorpion_baby_spawn_egg": {
+      "kind": "spawn",
+      "species": "fable_scorpion",
+      "baby": true,
+      "name": "Fable Baby Scorpion Spawn Egg"
+    },
+    "fable_hound_tooth": {
+      "kind": "item",
+      "source": "hound_tooth",
+      "name": "Hound Tooth"
+    },
+    "fable_fertile_slimeball": {
+      "kind": "item",
+      "source": "fertile_slimeball",
+      "name": "Fertile Slimeball"
+    },
+    "fable_straw_hat": {
+      "kind": "item",
+      "source": "straw_hat",
+      "name": "Straw Hat"
+    },
+    "fable_blowgun": {
+      "kind": "item",
+      "source": "blowgun",
+      "name": "Blowgun"
+    }
+  },
+  "blocks": {
+    "fable_hound_trap": {
+      "source": "hound_trap",
+      "name": "Hound Trap"
+    },
+    "fable_doom_fire": {
+      "source": "doom_fire",
+      "name": "Doom Fire"
+    }
+  }
+}

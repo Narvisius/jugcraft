@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:book",
+    "#jugcraft:beast_animal_dictionary_ingredient",
+    "minecraft:green_dye"
+  ],
+  "result": {
+    "id": "jugcraft:beast_animal_dictionary"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

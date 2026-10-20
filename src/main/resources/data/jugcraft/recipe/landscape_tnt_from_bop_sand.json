@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "#": [
+      "jugcraft:landscape_white_sand",
+      "jugcraft:landscape_orange_sand",
+      "jugcraft:landscape_black_sand"
+    ],
+    "X": "minecraft:gunpowder"
+  },
+  "pattern": [
+    "X#X",
+    "#X#",
+    "X#X"
+  ],
+  "result": {
+    "id": "minecraft:tnt"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

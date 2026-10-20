@@ -45,7 +45,19 @@ public class TreeBatchTwoClientGameTests implements FabricClientGameTest {
 	protected void validateSurvey(String biome, Map<String, Integer> survey) { }
 	protected BlockPos surveySpot(ServerLevel level, BlockPos first, ResourceKey<Biome> biome) { return first; }
 	protected boolean includeSubmergedColumns() { return false; }
+	protected List<BlockPos> surveyAnchors(String biome) {
+		var anchors = new ArrayList<BlockPos>();
+		anchors.add(BlockPos.ZERO);
+		// Dry River has very little exposed bank. It is valid for the closest
+		// occurrences to have no dry placement candidates, even with trees enabled.
+		int[] rings = biome.equals("dry_river") ? new int[] {4096, 8192, 16384, 32768} : new int[] {4096, 8192};
+		for (int reach : rings) for (int[] direction : new int[][] {{1,0},{-1,0},{0,1},{0,-1},{1,1},{-1,-1},{1,-1},{-1,1}})
+			anchors.add(new BlockPos(reach * direction[0], 0, reach * direction[1]));
+		return anchors;
+	}
+
 	protected void validateReopened(ServerLevel level) { }
+	protected void beforeReopenValidation(ClientGameTestContext context, TestSingleplayerContext world) { }
 
 	@Override
 	public void runTest(ClientGameTestContext context) {
@@ -97,15 +109,26 @@ public class TreeBatchTwoClientGameTests implements FabricClientGameTest {
 			int found = 0;
 			for (String name : biomes()) {
 				ResourceKey<Biome> key = ResourceKey.create(Registries.BIOME, Jugcraft.id(name));
-				BlockPos place = server.computeOnServer(minecraft -> {
-					var level = minecraft.overworld();
-					var nearest = level.findClosestBiome3d(holder -> holder.is(key), BlockPos.ZERO, 12800, 64, 64);
-					BlockPos first = nearest == null ? null : BiomeClientGameTests.surfaceSpot(level, nearest.getFirst(), key);
-					return first == null ? null : surveySpot(level, first, key);
-				});
+				BlockPos place = null;
+				var checked = new java.util.HashSet<BlockPos>();
+				// A small surface occurrence need not contain every rare tree. Survey
+				// distinct regions, retaining the actual natural-species assertions.
+				for (BlockPos anchor : surveyAnchors(name)) {
+					place = server.computeOnServer(minecraft -> {
+						var level = minecraft.overworld();
+						var nearest = level.findClosestBiome3d(holder -> holder.is(key), anchor, 12800, 64, 64);
+						if (nearest == null || !checked.add(nearest.getFirst())) return null;
+						BlockPos first = BiomeClientGameTests.surfaceSpot(level, nearest.getFirst(), key);
+						return first == null ? null : surveySpot(level, first, key);
+					});
+					// Permit normal chunk unloading between distant generation surveys.
+					context.waitTicks(5);
+					if (place != null) break;
+				}
+				final BlockPos surveyedPlace = place;
 				if (place == null) { tour.add(name + ": no surface stop found within the survey radius"); continue; }
 				found++;
-				var survey = server.computeOnServer(minecraft -> survey(minecraft.overworld(), place, key, includeSubmergedColumns()));
+				var survey = server.computeOnServer(minecraft -> survey(minecraft.overworld(), surveyedPlace, key, includeSubmergedColumns()));
 				validateSurvey(name, survey);
 				Jugcraft.LOGGER.info("[tree batch 2 survey] {} at {}: {}", name, place, survey);
 				if (name.equals("lush_desert")) {
@@ -135,6 +158,7 @@ public class TreeBatchTwoClientGameTests implements FabricClientGameTest {
 		}
 		try (var reopened = save.open()) {
 			reopened.getConnection().waitForChunksRender();
+			beforeReopenValidation(context, reopened);
 			reopened.getServer().runOnServer(minecraft -> expected.forEach((at, size) ->
 					check(TreeBatchTwoGameTests.measure(minecraft.overworld(), at).equals(size), "Tree changed across save/reopen at " + at)));
 			reopened.getServer().runOnServer(minecraft -> validateReopened(minecraft.overworld()));

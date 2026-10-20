@@ -731,15 +731,24 @@ public class AlphaWerewolfGameTests {
 		helper.assertTrue(level.getBlockState(path).is(JugcraftLairs.RAKED_TURF) && RakedTurfBlock.knitsTo(level.getBlockState(path)).is(Blocks.DIRT_PATH),
 				"A trodden path he ran over is not raked turf that knits back to a path");
 		Set<BlockPos> trail = alpha.raked();
-		// The path cell deliberately restores to DIRT_PATH; select a moss cell for this moss assertion.
-		BlockPos one = trail.stream().filter(cell -> !cell.equals(path)).findFirst().orElseThrow();
-		BlockState turf = level.getBlockState(one);
-		helper.assertTrue(torn >= 20 && turf.is(JugcraftLairs.RAKED_TURF), "His trail tore " + torn + " cells");
-		helper.assertTrue(level.getBlockTicks().hasScheduledTick(one, JugcraftLairs.RAKED_TURF), "Raked turf does not knit by itself");
-		helper.assertTrue(turf.getDestroySpeed(level, one) < 0.0F && JugcraftLairs.RAKED_TURF.asItem() == Items.AIR,
+		BlockPos moss = path.west(2);
+		BlockState rakedMoss = level.getBlockState(moss);
+		BlockState rakedPath = level.getBlockState(path);
+		helper.assertTrue(torn >= 20 && trail.contains(moss) && trail.contains(path), "His trail tore " + torn + " cells");
+		helper.assertTrue(rakedMoss.is(JugcraftLairs.RAKED_TURF) && RakedTurfBlock.knitsTo(rakedMoss).is(Blocks.MOSS_BLOCK),
+				"Moss he ran over is not raked turf that knits back to moss");
+		helper.assertTrue(level.getBlockTicks().hasScheduledTick(moss, JugcraftLairs.RAKED_TURF), "Raked moss does not knit by itself");
+		helper.assertTrue(level.getBlockTicks().hasScheduledTick(path, JugcraftLairs.RAKED_TURF), "A raked path does not knit by itself");
+		helper.assertTrue(rakedMoss.getDestroySpeed(level, moss) < 0.0F && JugcraftLairs.RAKED_TURF.asItem() == Items.AIR,
 				"Raked turf can be broken, or has an item");
-		turf.tick(level, one, level.getRandom());
-		helper.assertTrue(level.getBlockState(one).is(Blocks.MOSS_BLOCK), "Raked turf did not knit back to moss");
+		rakedMoss.tick(level, moss, level.getRandom());
+		helper.assertTrue(level.getBlockState(moss).is(Blocks.MOSS_BLOCK), "Raked moss did not knit back to moss");
+		rakedPath.tick(level, path, level.getRandom());
+		helper.assertTrue(level.getBlockState(path).is(Blocks.DIRT_PATH), "A raked path did not knit back to a dirt path");
+		// Tear both repaired cells again so leaving the fight must also restore both surface types.
+		alpha.tearTurf(level, centre.add(-10.0, 0.0, 6.0), centre.add(10.0, 0.0, 6.0));
+		helper.assertTrue(level.getBlockState(moss).is(JugcraftLairs.RAKED_TURF) && level.getBlockState(path).is(JugcraftLairs.RAKED_TURF),
+				"The repaired moss and path were not torn again before leaving the fight");
 		helper.runAfterDelay(AWAKE, () -> alpha.setHealth(alpha.getMaxHealth() / 2.0F + 10.0F));
 		helper.runAfterDelay(AlphaWerewolfEntity.WAKE_TICKS + AlphaWerewolfEntity.ABANDON_TICKS + 30, () -> {
 			ending(level, alpha, () -> {

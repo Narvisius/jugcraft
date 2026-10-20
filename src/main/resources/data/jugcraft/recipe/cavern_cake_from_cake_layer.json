@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " S ",
+    "FFF",
+    "LLL"
+  ],
+  "key": {
+    "S": "#jugcraft:cavern_sweet_berries",
+    "F": "#jugcraft:cavern_frosting",
+    "L": "jugcraft:cavern_cake_layer"
+  },
+  "result": {
+    "id": "minecraft:cake"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

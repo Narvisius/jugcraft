@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": "jugcraft:cavern_radgill",
+  "result": {
+    "id": "jugcraft:cavern_cooked_radgill"
+  },
+  "experience": 0.15,
+  "cookingtime": 200,
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

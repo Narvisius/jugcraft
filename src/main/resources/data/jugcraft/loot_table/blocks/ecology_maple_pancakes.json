@@ -1,0 +1,210 @@
+{
+  "type": "minecraft:block",
+  "modifier": {
+    "type": "minecraft:explosion_decay"
+  },
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "jugcraft:ecology_maple_pancakes",
+        "state": {
+          "servings": "0"
+        }
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:ecology_maple_pancakes"
+        }
+      ],
+      "rolls": 6
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:ecology_maple_pancake"
+        }
+      ],
+      "rolls": 5,
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "jugcraft:ecology_maple_pancakes",
+        "state": {
+          "servings": "1"
+        }
+      }
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:ecology_maple_pancake"
+        }
+      ],
+      "rolls": 4,
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "jugcraft:ecology_maple_pancakes",
+        "state": {
+          "servings": "2"
+        }
+      }
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:ecology_maple_pancake"
+        }
+      ],
+      "rolls": 3,
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "jugcraft:ecology_maple_pancakes",
+        "state": {
+          "servings": "3"
+        }
+      }
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:ecology_maple_pancake"
+        }
+      ],
+      "rolls": 2,
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "jugcraft:ecology_maple_pancakes",
+        "state": {
+          "servings": "4"
+        }
+      }
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:ecology_maple_pancake"
+        }
+      ],
+      "rolls": 1,
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "jugcraft:ecology_maple_pancakes",
+        "state": {
+          "servings": "5"
+        }
+      }
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:ecology_maple_pancake"
+        }
+      ],
+      "rolls": 6,
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "jugcraft:ecology_maple_pancakes",
+        "state": {
+          "servings": "6"
+        }
+      }
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:ecology_maple_pancake"
+        }
+      ],
+      "rolls": 7,
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "jugcraft:ecology_maple_pancakes",
+        "state": {
+          "servings": "7"
+        }
+      }
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:ecology_maple_pancake"
+        }
+      ],
+      "rolls": 8,
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "jugcraft:ecology_maple_pancakes",
+        "state": {
+          "servings": "8"
+        }
+      }
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:ecology_maple_pancake"
+        }
+      ],
+      "rolls": 9,
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "jugcraft:ecology_maple_pancakes",
+        "state": {
+          "servings": "9"
+        }
+      }
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:ecology_maple_pancake"
+        }
+      ],
+      "rolls": 10,
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "jugcraft:ecology_maple_pancakes",
+        "state": {
+          "servings": "10"
+        }
+      }
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:ecology_maple_pancake"
+        }
+      ],
+      "rolls": 11,
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "jugcraft:ecology_maple_pancakes",
+        "state": {
+          "servings": "11"
+        }
+      }
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:bowl"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "jugcraft:blocks/ecology_maple_pancakes"
+}

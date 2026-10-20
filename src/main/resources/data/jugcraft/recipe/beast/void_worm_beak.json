@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:beast_void_worm_mandible",
+    "jugcraft:beast_void_worm_mandible"
+  ],
+  "result": {
+    "id": "jugcraft:beast_void_worm_beak"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

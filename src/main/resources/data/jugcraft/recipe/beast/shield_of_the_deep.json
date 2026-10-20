@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "PHP",
+    "TPT"
+  ],
+  "key": {
+    "S": "jugcraft:beast_serrated_shark_tooth",
+    "P": "minecraft:prismarine_bricks",
+    "H": "minecraft:heart_of_the_sea",
+    "T": "jugcraft:beast_shark_tooth"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:beast_shield_of_the_deep"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

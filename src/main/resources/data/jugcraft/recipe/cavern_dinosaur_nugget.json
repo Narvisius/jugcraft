@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:cavern_cooked_dinosaur_chop"
+  ],
+  "result": {
+    "count": 12,
+    "id": "jugcraft:cavern_dinosaur_nugget"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "type": "jugcraft:household_construction",
+  "ingredients": [
+    {
+      "count": 8,
+      "ingredient": "minecraft:wheat"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:household_door_mat"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -1,0 +1,4042 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        19.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "body",
+      "parent": "root",
+      "pose": [
+        0.0,
+        0.0,
+        3.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -8.0,
+            -10.0,
+            -14.0,
+            16.0,
+            15.0,
+            24.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leftFin",
+      "parent": "body",
+      "pose": [
+        7.0,
+        0.0,
+        -9.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            1.0,
+            -1.0,
+            -1.0,
+            17.0,
+            2.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            79.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightFin",
+      "parent": "body",
+      "pose": [
+        -7.0,
+        0.0,
+        -9.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -18.0,
+            -1.0,
+            -1.0,
+            17.0,
+            2.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            79.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "skull",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -6.0,
+        -13.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6.0,
+            -4.0,
+            -19.0,
+            12.0,
+            6.0,
+            18.0
+          ],
+          "uv": [
+            58.0,
+            50.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -6.0,
+            2.0,
+            -7.0,
+            12.0,
+            6.0,
+            6.0
+          ],
+          "uv": [
+            80.0,
+            0.0
+          ],
+          "inflate": [
+            0.026,
+            0.026,
+            0.026
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -5.0,
+            0.0,
+            -18.0,
+            10.0,
+            5.0,
+            11.0
+          ],
+          "uv": [
+            0.0,
+            89.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "jaw",
+      "parent": "skull",
+      "pose": [
+        0.0,
+        2.0,
+        -7.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6.0,
+            0.0,
+            -12.0,
+            12.0,
+            6.0,
+            12.0
+          ],
+          "uv": [
+            58.0,
+            74.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "tail",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -3.0,
+        8.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -5.0,
+            1.0,
+            10.0,
+            10.0,
+            19.0
+          ],
+          "uv": [
+            0.0,
+            50.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "flip",
+      "parent": "tail",
+      "pose": [
+        0.0,
+        0.0,
+        19.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -16.0,
+            -1.0,
+            -2.0,
+            32.0,
+            2.0,
+            9.0
+          ],
+          "uv": [
+            0.0,
+            39.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "model/animal/whale/WhaleBabyModel.java",
+  "sourceSha256": "5b8963027b322ff1908be9886267c639809e59e9490f09e43330352d83fcc619",
+  "headLook": "",
+  "animationRoot": "root",
+  "actions": {
+    "idle": {
+      "loop": true,
+      "channels": [
+        {
+          "bone": "root",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.92,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.4583,
+              "vector": [
+                0.0,
+                -1.05,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.4583,
+              "vector": [
+                0.0,
+                -1.16,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.375,
+              "vector": [
+                0.0,
+                -0.66,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 6.4583,
+              "vector": [
+                0.0,
+                1.05,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 7.4583,
+              "vector": [
+                0.0,
+                1.16,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 8.0,
+              "vector": [
+                0.0,
+                0.92,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leftFin",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                -2.3,
+                -5.92,
+                45.71
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.3333,
+              "vector": [
+                0.52,
+                -11.28,
+                40.79
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.75,
+              "vector": [
+                2.88,
+                -18.15,
+                37.53
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.7917,
+              "vector": [
+                2.58,
+                -19.38,
+                38.71
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 5.0,
+              "vector": [
+                0.26,
+                -15.46,
+                42.94
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 6.4583,
+              "vector": [
+                -2.61,
+                -7.94,
+                47.22
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 7.5417,
+              "vector": [
+                -2.83,
+                -5.5,
+                46.86
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 8.0,
+              "vector": [
+                -2.3,
+                -5.92,
+                45.71
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "rightFin",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                7.5,
+                -42.5
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.1667,
+              "vector": [
+                -2.38,
+                9.46,
+                -36.15
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.125,
+              "vector": [
+                -2.99,
+                12.99,
+                -34.54
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.125,
+              "vector": [
+                -1.9,
+                16.37,
+                -37.42
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.3333,
+              "vector": [
+                0.78,
+                17.33,
+                -44.57
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 5.625,
+              "vector": [
+                2.87,
+                13.95,
+                -50.16
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 6.625,
+              "vector": [
+                2.65,
+                10.14,
+                -49.56
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 8.0,
+              "vector": [
+                0.0,
+                7.5,
+                -42.5
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "skull",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                -3.06,
+                0.0,
+                2.3
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.5,
+              "vector": [
+                -3.55,
+                0.0,
+                2.66
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.4167,
+              "vector": [
+                3.73,
+                0.0,
+                -2.8
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 5.7917,
+              "vector": [
+                3.04,
+                0.0,
+                -2.28
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 8.0,
+              "vector": [
+                -3.06,
+                0.0,
+                2.3
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "jaw",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.125,
+              "vector": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.875,
+              "vector": [
+                1.77,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 8.0,
+              "vector": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "tail",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0417,
+              "vector": [
+                4.0,
+                0.0,
+                2.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.375,
+              "vector": [
+                1.89,
+                0.0,
+                0.94
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.5,
+              "vector": [
+                -3.7,
+                0.0,
+                -1.85
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.875,
+              "vector": [
+                -3.09,
+                0.0,
+                -1.55
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 7.5,
+              "vector": [
+                3.7,
+                0.0,
+                1.85
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 8.0,
+              "vector": [
+                4.0,
+                0.0,
+                2.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "flip",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                3.83,
+                0.0,
+                1.29
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.1667,
+              "vector": [
+                4.88,
+                0.0,
+                2.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.2083,
+              "vector": [
+                2.55,
+                0.0,
+                1.3
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.2917,
+              "vector": [
+                -4.46,
+                0.0,
+                -1.6
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 5.5,
+              "vector": [
+                -4.44,
+                0.0,
+                -1.91
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 8.0,
+              "vector": [
+                3.83,
+                0.0,
+                1.29
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ],
+      "length": 8.0
+    },
+    "swim": {
+      "loop": true,
+      "channels": [
+        {
+          "bone": "tail",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                21.14,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.1667,
+              "vector": [
+                14.46,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.625,
+              "vector": [
+                -15.2,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.7917,
+              "vector": [
+                -21.46,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9167,
+              "vector": [
+                -22.41,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0417,
+              "vector": [
+                -19.96,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.2083,
+              "vector": [
+                -12.09,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.625,
+              "vector": [
+                15.2,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.7917,
+              "vector": [
+                21.46,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.9167,
+              "vector": [
+                22.41,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.0417,
+              "vector": [
+                19.96,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.2083,
+              "vector": [
+                12.09,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.625,
+              "vector": [
+                -15.2,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.7917,
+              "vector": [
+                -21.46,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.9167,
+              "vector": [
+                -22.41,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.0417,
+              "vector": [
+                -19.96,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.2083,
+              "vector": [
+                -12.09,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.625,
+              "vector": [
+                15.2,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.7917,
+              "vector": [
+                21.46,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.9167,
+              "vector": [
+                22.41,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                21.14,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "body",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                1.85,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4583,
+              "vector": [
+                -5.42,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.7083,
+              "vector": [
+                -5.66,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4583,
+              "vector": [
+                5.42,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.7083,
+              "vector": [
+                5.66,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.4583,
+              "vector": [
+                -5.42,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.7083,
+              "vector": [
+                -5.66,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.4583,
+              "vector": [
+                5.42,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.7083,
+              "vector": [
+                5.66,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                1.85,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "body",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                -0.77,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2917,
+              "vector": [
+                0.0,
+                -0.98,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5417,
+              "vector": [
+                0.0,
+                -0.54,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0833,
+              "vector": [
+                0.0,
+                0.91,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.375,
+              "vector": [
+                0.0,
+                0.89,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.9583,
+              "vector": [
+                0.0,
+                -0.68,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.25,
+              "vector": [
+                0.0,
+                -1.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.5417,
+              "vector": [
+                0.0,
+                -0.54,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.0833,
+              "vector": [
+                0.0,
+                0.91,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.375,
+              "vector": [
+                0.0,
+                0.89,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                0.0,
+                -0.77,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leftFin",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                -22.5,
+                10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.125,
+              "vector": [
+                1.53,
+                -22.5,
+                10.95
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2917,
+              "vector": [
+                3.17,
+                -22.5,
+                14.89
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5833,
+              "vector": [
+                3.86,
+                -22.5,
+                25.74
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.7917,
+              "vector": [
+                2.44,
+                -22.5,
+                32.42
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                -22.5,
+                35.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.1667,
+              "vector": [
+                -2.0,
+                -22.5,
+                33.33
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4167,
+              "vector": [
+                -3.86,
+                -22.5,
+                25.74
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.7083,
+              "vector": [
+                -3.17,
+                -22.5,
+                14.89
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.875,
+              "vector": [
+                -1.53,
+                -22.5,
+                10.95
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.0833,
+              "vector": [
+                1.04,
+                -22.5,
+                10.43
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.2083,
+              "vector": [
+                2.44,
+                -22.5,
+                12.58
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.5833,
+              "vector": [
+                3.86,
+                -22.5,
+                25.74
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.7917,
+              "vector": [
+                2.44,
+                -22.5,
+                32.42
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.0,
+              "vector": [
+                0.0,
+                -22.5,
+                35.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.1667,
+              "vector": [
+                -2.0,
+                -22.5,
+                33.33
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.4167,
+              "vector": [
+                -3.86,
+                -22.5,
+                25.74
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.7083,
+              "vector": [
+                -3.17,
+                -22.5,
+                14.89
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.9583,
+              "vector": [
+                -0.52,
+                -22.5,
+                10.11
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                0.0,
+                -22.5,
+                10.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "rightFin",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                22.5,
+                -10.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.125,
+              "vector": [
+                1.53,
+                22.5,
+                -10.95
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2917,
+              "vector": [
+                3.17,
+                22.5,
+                -14.89
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5833,
+              "vector": [
+                3.86,
+                22.5,
+                -25.74
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.7917,
+              "vector": [
+                2.44,
+                22.5,
+                -32.42
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                22.5,
+                -35.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.1667,
+              "vector": [
+                -2.0,
+                22.5,
+                -33.33
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4167,
+              "vector": [
+                -3.86,
+                22.5,
+                -25.74
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.7083,
+              "vector": [
+                -3.17,
+                22.5,
+                -14.89
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.875,
+              "vector": [
+                -1.53,
+                22.5,
+                -10.95
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.0833,
+              "vector": [
+                1.04,
+                22.5,
+                -10.43
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.2083,
+              "vector": [
+                2.44,
+                22.5,
+                -12.58
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.5833,
+              "vector": [
+                3.86,
+                22.5,
+                -25.74
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.7917,
+              "vector": [
+                2.44,
+                22.5,
+                -32.42
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.0,
+              "vector": [
+                0.0,
+                22.5,
+                -35.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.1667,
+              "vector": [
+                -2.0,
+                22.5,
+                -33.33
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.4167,
+              "vector": [
+                -3.86,
+                22.5,
+                -25.74
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.7083,
+              "vector": [
+                -3.17,
+                22.5,
+                -14.89
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.9583,
+              "vector": [
+                -0.52,
+                22.5,
+                -10.11
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                0.0,
+                22.5,
+                -10.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "skull",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                -5.71,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2083,
+              "vector": [
+                -5.66,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9583,
+              "vector": [
+                5.42,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.2083,
+              "vector": [
+                5.66,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.9583,
+              "vector": [
+                -5.42,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.2083,
+              "vector": [
+                -5.66,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.9583,
+              "vector": [
+                5.42,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.2083,
+              "vector": [
+                5.66,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.5,
+              "vector": [
+                1.85,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.875,
+              "vector": [
+                -4.56,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                -5.71,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "skull",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                0.1
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "flip",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                -15.39,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2917,
+              "vector": [
+                24.18,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.375,
+              "vector": [
+                33.18,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4583,
+              "vector": [
+                39.92,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5417,
+              "vector": [
+                43.93,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.625,
+              "vector": [
+                44.96,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.7083,
+              "vector": [
+                42.92,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.7917,
+              "vector": [
+                37.95,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.875,
+              "vector": [
+                30.4,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0417,
+              "vector": [
+                9.74,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.2917,
+              "vector": [
+                -24.18,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.375,
+              "vector": [
+                -33.18,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4583,
+              "vector": [
+                -39.92,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.5417,
+              "vector": [
+                -43.93,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.625,
+              "vector": [
+                -44.96,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.7083,
+              "vector": [
+                -42.92,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.7917,
+              "vector": [
+                -37.95,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.875,
+              "vector": [
+                -30.4,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.0417,
+              "vector": [
+                -9.74,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.2917,
+              "vector": [
+                24.18,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.375,
+              "vector": [
+                33.18,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.4583,
+              "vector": [
+                39.92,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.5417,
+              "vector": [
+                43.93,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.625,
+              "vector": [
+                44.96,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.7083,
+              "vector": [
+                42.92,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.7917,
+              "vector": [
+                37.95,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.875,
+              "vector": [
+                30.4,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.0417,
+              "vector": [
+                9.74,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.2917,
+              "vector": [
+                -24.18,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.375,
+              "vector": [
+                -33.18,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.4583,
+              "vector": [
+                -39.92,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.5417,
+              "vector": [
+                -43.93,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.625,
+              "vector": [
+                -44.96,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.7083,
+              "vector": [
+                -42.92,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.7917,
+              "vector": [
+                -37.95,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.875,
+              "vector": [
+                -30.4,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                -15.39,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ],
+      "length": 4.0
+    },
+    "flop": {
+      "loop": true,
+      "channels": [
+        {
+          "bone": "root",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                2.5,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.1,
+              "vector": [
+                0.0,
+                0.15,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                0.0,
+                -0.44,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                0.0,
+                -0.44,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                0.0,
+                0.15,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6,
+              "vector": [
+                0.0,
+                4.85,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.7,
+              "vector": [
+                0.0,
+                5.44,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.8,
+              "vector": [
+                0.0,
+                5.44,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                0.0,
+                4.85,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.1,
+              "vector": [
+                0.0,
+                0.15,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.2,
+              "vector": [
+                0.0,
+                -0.44,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.3,
+              "vector": [
+                0.0,
+                -0.44,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4,
+              "vector": [
+                0.0,
+                0.15,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.6,
+              "vector": [
+                0.0,
+                4.85,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.7,
+              "vector": [
+                0.0,
+                5.44,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.8,
+              "vector": [
+                0.0,
+                5.44,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.9,
+              "vector": [
+                0.0,
+                4.85,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.1,
+              "vector": [
+                0.0,
+                0.15,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.2,
+              "vector": [
+                0.0,
+                -0.44,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.3,
+              "vector": [
+                0.0,
+                -0.44,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.4,
+              "vector": [
+                0.0,
+                0.15,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.6,
+              "vector": [
+                0.0,
+                4.85,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.7,
+              "vector": [
+                0.0,
+                5.44,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.8,
+              "vector": [
+                0.0,
+                5.44,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.9,
+              "vector": [
+                0.0,
+                4.85,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.1,
+              "vector": [
+                0.0,
+                0.15,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.2,
+              "vector": [
+                0.0,
+                -0.44,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.3,
+              "vector": [
+                0.0,
+                -0.44,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.4,
+              "vector": [
+                0.0,
+                0.15,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.6,
+              "vector": [
+                0.0,
+                4.85,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.7,
+              "vector": [
+                0.0,
+                5.44,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.8,
+              "vector": [
+                0.0,
+                5.44,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.9,
+              "vector": [
+                0.0,
+                4.85,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                0.0,
+                2.5,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "root",
+          "target": "SCALE",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.1,
+              "vector": [
+                1.0294,
+                0.8824,
+                1.0294
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                1.0476,
+                0.8098,
+                1.0476
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                1.0476,
+                0.8098,
+                1.0476
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                1.0294,
+                0.8824,
+                1.0294
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.1,
+              "vector": [
+                1.0294,
+                0.8824,
+                1.0294
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.2,
+              "vector": [
+                1.0476,
+                0.8098,
+                1.0476
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.3,
+              "vector": [
+                1.0476,
+                0.8098,
+                1.0476
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4,
+              "vector": [
+                1.0294,
+                0.8824,
+                1.0294
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.5,
+              "vector": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.0,
+              "vector": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.1,
+              "vector": [
+                1.0294,
+                0.8824,
+                1.0294
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.2,
+              "vector": [
+                1.0476,
+                0.8098,
+                1.0476
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.3,
+              "vector": [
+                1.0476,
+                0.8098,
+                1.0476
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.4,
+              "vector": [
+                1.0294,
+                0.8824,
+                1.0294
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.5,
+              "vector": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.0,
+              "vector": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.1,
+              "vector": [
+                1.0294,
+                0.8824,
+                1.0294
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.2,
+              "vector": [
+                1.0476,
+                0.8098,
+                1.0476
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.3,
+              "vector": [
+                1.0476,
+                0.8098,
+                1.0476
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.4,
+              "vector": [
+                1.0294,
+                0.8824,
+                1.0294
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.5,
+              "vector": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "body",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                4.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.1,
+              "vector": [
+                3.24,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                -3.24,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                -4.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6,
+              "vector": [
+                -3.24,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                3.24,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                4.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.1,
+              "vector": [
+                3.24,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4,
+              "vector": [
+                -3.24,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.5,
+              "vector": [
+                -4.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.6,
+              "vector": [
+                -3.24,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.9,
+              "vector": [
+                3.24,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.0,
+              "vector": [
+                4.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.1,
+              "vector": [
+                3.24,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.4,
+              "vector": [
+                -3.24,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.5,
+              "vector": [
+                -4.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.6,
+              "vector": [
+                -3.24,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.9,
+              "vector": [
+                3.24,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.0,
+              "vector": [
+                4.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.1,
+              "vector": [
+                3.24,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.4,
+              "vector": [
+                -3.24,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.5,
+              "vector": [
+                -4.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.6,
+              "vector": [
+                -3.24,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.9,
+              "vector": [
+                3.24,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                4.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "tail",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                12.5,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.1,
+              "vector": [
+                10.11,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                3.86,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                -3.86,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                -10.11,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                -12.5,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6,
+              "vector": [
+                -10.11,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.7,
+              "vector": [
+                -3.86,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.8,
+              "vector": [
+                3.86,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                10.11,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                12.5,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.1,
+              "vector": [
+                10.11,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.2,
+              "vector": [
+                3.86,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.3,
+              "vector": [
+                -3.86,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4,
+              "vector": [
+                -10.11,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.5,
+              "vector": [
+                -12.5,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.6,
+              "vector": [
+                -10.11,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.7,
+              "vector": [
+                -3.86,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.8,
+              "vector": [
+                3.86,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.9,
+              "vector": [
+                10.11,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.0,
+              "vector": [
+                12.5,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.1,
+              "vector": [
+                10.11,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.2,
+              "vector": [
+                3.86,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.3,
+              "vector": [
+                -3.86,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.4,
+              "vector": [
+                -10.11,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.5,
+              "vector": [
+                -12.5,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.6,
+              "vector": [
+                -10.11,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.7,
+              "vector": [
+                -3.86,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.8,
+              "vector": [
+                3.86,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.9,
+              "vector": [
+                10.11,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.0,
+              "vector": [
+                12.5,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.1,
+              "vector": [
+                10.11,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.2,
+              "vector": [
+                3.86,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.3,
+              "vector": [
+                -3.86,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.4,
+              "vector": [
+                -10.11,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.5,
+              "vector": [
+                -12.5,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.6,
+              "vector": [
+                -10.11,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.7,
+              "vector": [
+                -3.86,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.8,
+              "vector": [
+                3.86,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.9,
+              "vector": [
+                10.11,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                12.5,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "rightFin",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                -5.21
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.1,
+              "vector": [
+                0.0,
+                0.0,
+                -2.58
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                0.0,
+                0.0,
+                -3.74
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                0.0,
+                0.0,
+                -8.24
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                0.0,
+                -19.79
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6,
+              "vector": [
+                0.0,
+                0.0,
+                -22.42
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.7,
+              "vector": [
+                0.0,
+                0.0,
+                -21.26
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.8,
+              "vector": [
+                0.0,
+                0.0,
+                -16.76
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                0.0,
+                -5.21
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.1,
+              "vector": [
+                0.0,
+                0.0,
+                -2.58
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.2,
+              "vector": [
+                0.0,
+                0.0,
+                -3.74
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.3,
+              "vector": [
+                0.0,
+                0.0,
+                -8.24
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.5,
+              "vector": [
+                0.0,
+                0.0,
+                -19.79
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.6,
+              "vector": [
+                0.0,
+                0.0,
+                -22.42
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.7,
+              "vector": [
+                0.0,
+                0.0,
+                -21.26
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.8,
+              "vector": [
+                0.0,
+                0.0,
+                -16.76
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.0,
+              "vector": [
+                0.0,
+                0.0,
+                -5.21
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.1,
+              "vector": [
+                0.0,
+                0.0,
+                -2.58
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.2,
+              "vector": [
+                0.0,
+                0.0,
+                -3.74
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.3,
+              "vector": [
+                0.0,
+                0.0,
+                -8.24
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.5,
+              "vector": [
+                0.0,
+                0.0,
+                -19.79
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.6,
+              "vector": [
+                0.0,
+                0.0,
+                -22.42
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.7,
+              "vector": [
+                0.0,
+                0.0,
+                -21.26
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.8,
+              "vector": [
+                0.0,
+                0.0,
+                -16.76
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.0,
+              "vector": [
+                0.0,
+                0.0,
+                -5.21
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.1,
+              "vector": [
+                0.0,
+                0.0,
+                -2.58
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.2,
+              "vector": [
+                0.0,
+                0.0,
+                -3.74
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.3,
+              "vector": [
+                0.0,
+                0.0,
+                -8.24
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.5,
+              "vector": [
+                0.0,
+                0.0,
+                -19.79
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.6,
+              "vector": [
+                0.0,
+                0.0,
+                -22.42
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.7,
+              "vector": [
+                0.0,
+                0.0,
+                -21.26
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.8,
+              "vector": [
+                0.0,
+                0.0,
+                -16.76
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                0.0,
+                0.0,
+                -5.21
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leftFin",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                5.21
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.1,
+              "vector": [
+                0.0,
+                0.0,
+                2.58
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                0.0,
+                0.0,
+                3.74
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                0.0,
+                0.0,
+                8.24
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5,
+              "vector": [
+                0.0,
+                0.0,
+                19.79
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6,
+              "vector": [
+                0.0,
+                0.0,
+                22.42
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.7,
+              "vector": [
+                0.0,
+                0.0,
+                21.26
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.8,
+              "vector": [
+                0.0,
+                0.0,
+                16.76
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                0.0,
+                5.21
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.1,
+              "vector": [
+                0.0,
+                0.0,
+                2.58
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.2,
+              "vector": [
+                0.0,
+                0.0,
+                3.74
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.3,
+              "vector": [
+                0.0,
+                0.0,
+                8.24
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.5,
+              "vector": [
+                0.0,
+                0.0,
+                19.79
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.6,
+              "vector": [
+                0.0,
+                0.0,
+                22.42
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.7,
+              "vector": [
+                0.0,
+                0.0,
+                21.26
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.8,
+              "vector": [
+                0.0,
+                0.0,
+                16.76
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.0,
+              "vector": [
+                0.0,
+                0.0,
+                5.21
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.1,
+              "vector": [
+                0.0,
+                0.0,
+                2.58
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.2,
+              "vector": [
+                0.0,
+                0.0,
+                3.74
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.3,
+              "vector": [
+                0.0,
+                0.0,
+                8.24
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.5,
+              "vector": [
+                0.0,
+                0.0,
+                19.79
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.6,
+              "vector": [
+                0.0,
+                0.0,
+                22.42
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.7,
+              "vector": [
+                0.0,
+                0.0,
+                21.26
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.8,
+              "vector": [
+                0.0,
+                0.0,
+                16.76
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.0,
+              "vector": [
+                0.0,
+                0.0,
+                5.21
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.1,
+              "vector": [
+                0.0,
+                0.0,
+                2.58
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.2,
+              "vector": [
+                0.0,
+                0.0,
+                3.74
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.3,
+              "vector": [
+                0.0,
+                0.0,
+                8.24
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.5,
+              "vector": [
+                0.0,
+                0.0,
+                19.79
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.6,
+              "vector": [
+                0.0,
+                0.0,
+                22.42
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.7,
+              "vector": [
+                0.0,
+                0.0,
+                21.26
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.8,
+              "vector": [
+                0.0,
+                0.0,
+                16.76
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                0.0,
+                0.0,
+                5.21
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "flip",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.1,
+              "vector": [
+                26.45,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                42.8,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                42.8,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                26.45,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6,
+              "vector": [
+                -26.45,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.7,
+              "vector": [
+                -42.8,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.8,
+              "vector": [
+                -42.8,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                -26.45,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.1,
+              "vector": [
+                26.45,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.2,
+              "vector": [
+                42.8,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.3,
+              "vector": [
+                42.8,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4,
+              "vector": [
+                26.45,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.6,
+              "vector": [
+                -26.45,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.7,
+              "vector": [
+                -42.8,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.8,
+              "vector": [
+                -42.8,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.9,
+              "vector": [
+                -26.45,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.1,
+              "vector": [
+                26.45,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.2,
+              "vector": [
+                42.8,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.3,
+              "vector": [
+                42.8,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.4,
+              "vector": [
+                26.45,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.6,
+              "vector": [
+                -26.45,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.7,
+              "vector": [
+                -42.8,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.8,
+              "vector": [
+                -42.8,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.9,
+              "vector": [
+                -26.45,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.1,
+              "vector": [
+                26.45,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.2,
+              "vector": [
+                42.8,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.3,
+              "vector": [
+                42.8,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.4,
+              "vector": [
+                26.45,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.6,
+              "vector": [
+                -26.45,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.7,
+              "vector": [
+                -42.8,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.8,
+              "vector": [
+                -42.8,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.9,
+              "vector": [
+                -26.45,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 4.0,
+              "vector": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ],
+      "length": 4.0
+    }
+  },
+  "availableClips": [
+    "WhaleBabyAnimation.WHALE_BABY_FLOP",
+    "WhaleBabyAnimation.WHALE_BABY_SWIM",
+    "WhaleBabyAnimation.WHALE_BABY_SWIM_IDLE"
+  ]
+}

@@ -1,0 +1,137 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.cavern_tripodfish",
+        "texture_width": 64,
+        "texture_height": 64,
+        "visible_bounds_width": 4,
+        "visible_bounds_height": 4,
+        "visible_bounds_offset": [
+          0,
+          0.45,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "body",
+          "parent": "root",
+          "pivot": [
+            0.0,
+            12.96,
+            0.0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -4.8,
+                2.8800000000000003,
+                -8.64
+              ],
+              "size": [
+                9.6,
+                10.08,
+                17.28
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "tail",
+          "parent": "root",
+          "pivot": [
+            0.0,
+            11.520000000000001,
+            12.96
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -2.88,
+                2.8800000000000003,
+                8.64
+              ],
+              "size": [
+                5.76,
+                8.64,
+                8.64
+              ],
+              "uv": [
+                0,
+                32.0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "fin_-1",
+          "parent": "root",
+          "pivot": [
+            -8.16,
+            4.032,
+            0.96
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -11.52,
+                2.8800000000000003,
+                -1.92
+              ],
+              "size": [
+                6.72,
+                1.1520000000000001,
+                5.76
+              ],
+              "uv": [
+                0,
+                32.0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "fin_1",
+          "parent": "root",
+          "pivot": [
+            8.16,
+            4.032,
+            0.96
+          ],
+          "cubes": [
+            {
+              "origin": [
+                4.8,
+                2.8800000000000003,
+                -1.92
+              ],
+              "size": [
+                6.72,
+                1.1520000000000001,
+                5.76
+              ],
+              "uv": [
+                0,
+                32.0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

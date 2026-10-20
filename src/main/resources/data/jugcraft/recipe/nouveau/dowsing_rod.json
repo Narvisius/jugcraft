@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": "jugcraft:nouveau_archwood_planks",
+    "x": "#c:ingots/gold"
+  },
+  "pattern": [
+    " x ",
+    "a a"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_dowsing_rod"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

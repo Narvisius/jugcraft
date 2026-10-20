@@ -1,0 +1,459 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "base",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        6.75,
+        -0.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.5,
+            0.25,
+            -4.5,
+            9.0,
+            11.0,
+            9.0
+          ],
+          "uv": [
+            27.0,
+            31.0
+          ],
+          "inflate": [
+            0.01,
+            0.01,
+            0.01
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -4.5,
+            0.25,
+            -4.5,
+            9.0,
+            11.0,
+            9.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.26,
+            0.26,
+            0.26
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "fingers",
+      "parent": "base",
+      "pose": [
+        0.0,
+        9.25,
+        0.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "thumb",
+      "parent": "fingers",
+      "pose": [
+        4.0,
+        0.5,
+        2.0,
+        0.0,
+        3.1416,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.5,
+            -1.5,
+            -2.0,
+            5.0,
+            3.0,
+            4.0
+          ],
+          "uv": [
+            27.0,
+            0.0
+          ],
+          "inflate": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -4.5,
+            -1.5,
+            -2.0,
+            5.0,
+            3.0,
+            4.0
+          ],
+          "uv": [
+            36.0,
+            23.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "finger",
+      "parent": "fingers",
+      "pose": [
+        -4.5,
+        0.5,
+        -5.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -1.75,
+            -6.0,
+            4.0,
+            3.0,
+            6.0
+          ],
+          "uv": [
+            30.0,
+            54.0
+          ],
+          "inflate": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            -2.0,
+            -1.75,
+            -6.0,
+            4.0,
+            3.0,
+            6.0
+          ],
+          "uv": [
+            56.0,
+            54.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "finger3",
+      "parent": "fingers",
+      "pose": [
+        4.5,
+        0.25,
+        -5.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -1.5,
+            -6.0,
+            4.0,
+            3.0,
+            6.0
+          ],
+          "uv": [
+            30.0,
+            54.0
+          ],
+          "inflate": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            -2.0,
+            -1.5,
+            -6.0,
+            4.0,
+            3.0,
+            6.0
+          ],
+          "uv": [
+            56.0,
+            54.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "finger2",
+      "parent": "fingers",
+      "pose": [
+        0.0,
+        0.25,
+        -5.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -1.5,
+            -6.0,
+            4.0,
+            3.0,
+            6.0
+          ],
+          "uv": [
+            30.0,
+            54.0
+          ],
+          "inflate": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            -2.0,
+            -1.5,
+            -6.0,
+            4.0,
+            3.0,
+            6.0
+          ],
+          "uv": [
+            56.0,
+            54.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/GalenaGauntletModel.java",
+  "sourceSha256": "3c4a3712b054f0da56930a3c564c43fcfe21f758201ef3d427a5b3a5d739bd4f",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.walk(this.finger, 0.1f, 0.3f, true, 3.0f * leftOff, -0.4f, ageInTicks, limbSwing);",
+      "reason": "Unbound expression variable leftOff"
+    },
+    {
+      "call": "this.swing(this.finger, 0.1f, 0.1f, this.left, 5.0f * leftOff, 0.1f * leftOff, ageInTicks, limbSwing);",
+      "reason": "Dynamic inversion"
+    },
+    {
+      "call": "this.walk(this.finger2, 0.1f, 0.3f, true, 2.0f * leftOff, -0.4f, ageInTicks, limbSwing);",
+      "reason": "Unbound expression variable leftOff"
+    },
+    {
+      "call": "this.walk(this.finger3, 0.1f, 0.3f, true, 1.0f * leftOff, -0.4f, ageInTicks, limbSwing);",
+      "reason": "Unbound expression variable leftOff"
+    },
+    {
+      "call": "this.swing(this.finger3, 0.1f, -0.1f, this.left, 2.0f * leftOff, -0.1f * leftOff, ageInTicks, limbSwing);",
+      "reason": "Dynamic inversion"
+    },
+    {
+      "call": "this.flap(this.thumb, 0.1f, 0.3f * leftOff, true, -1.0f, -0.2f * leftOff, ageInTicks, limbSwing);",
+      "reason": "Unbound expression variable leftOff"
+    }
+  ],
+  "expressions": [],
+  "poses": [
+    {
+      "bone": "finger",
+      "weight": [
+        "/",
+        [
+          "-",
+          1.0,
+          "walk"
+        ],
+        1.0
+      ],
+      "target": "rotation",
+      "value": [
+        3.141592653589793,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "finger2",
+      "weight": [
+        "/",
+        [
+          "-",
+          1.0,
+          "walk"
+        ],
+        1.0
+      ],
+      "target": "rotation",
+      "value": [
+        3.141592653589793,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "finger3",
+      "weight": [
+        "/",
+        [
+          "-",
+          1.0,
+          "walk"
+        ],
+        1.0
+      ],
+      "target": "rotation",
+      "value": [
+        3.141592653589793,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "finger",
+      "weight": [
+        "/",
+        [
+          "-",
+          1.0,
+          "walk"
+        ],
+        1.0
+      ],
+      "target": "position",
+      "value": [
+        1.0,
+        2.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "finger2",
+      "weight": [
+        "/",
+        [
+          "-",
+          1.0,
+          "walk"
+        ],
+        1.0
+      ],
+      "target": "position",
+      "value": [
+        0.0,
+        3.0,
+        -1.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "finger3",
+      "weight": [
+        "/",
+        [
+          "-",
+          1.0,
+          "walk"
+        ],
+        1.0
+      ],
+      "target": "position",
+      "value": [
+        -1.0,
+        2.5,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "thumb",
+      "weight": [
+        "/",
+        [
+          "-",
+          1.0,
+          "walk"
+        ],
+        1.0
+      ],
+      "target": "position",
+      "value": [
+        0.0,
+        -2.5,
+        0.0
+      ],
+      "when": 1
+    }
+  ]
+}

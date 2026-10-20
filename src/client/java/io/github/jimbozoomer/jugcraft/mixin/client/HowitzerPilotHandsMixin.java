@@ -19,7 +19,7 @@ public abstract class HowitzerPilotHandsMixin {
 	private void jugcraft$hideCockpitHands(float partialTick, PoseStack pose, SubmitNodeCollector collector,
 			PlayerRenderState state, FirstPersonHandsAndItemsRenderState hands, CallbackInfo info) {
 		var player = Minecraft.getInstance().player;
-		if (player != null && player.getVehicle() instanceof HowitzerWalker walker && walker.getFirstPassenger() == player) {
+		if (player != null && (player.getVehicle() instanceof HowitzerWalker || player.getVehicle() instanceof io.github.jimbozoomer.jugcraft.menagerie.CavernSubmarine submarine && submarine.hidesPilot()) && player.getVehicle().getFirstPassenger() == player) {
 			info.cancel();
 		}
 	}

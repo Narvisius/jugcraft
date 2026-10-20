@@ -1,0 +1,343 @@
+{
+  "textureSize": [
+    64,
+    32
+  ],
+  "parts": [
+    {
+      "name": "head",
+      "parent": "$mesh",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4,
+            -8,
+            -4,
+            8,
+            8,
+            8
+          ],
+          "uv": [
+            0,
+            0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "hat",
+      "parent": "$mesh",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4,
+            -8,
+            -4,
+            8,
+            8,
+            8
+          ],
+          "uv": [
+            32,
+            0
+          ],
+          "inflate": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_arm",
+      "parent": "$mesh",
+      "pose": [
+        -5,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3,
+            -2,
+            -2,
+            4,
+            12,
+            4
+          ],
+          "uv": [
+            40,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_arm",
+      "parent": "$mesh",
+      "pose": [
+        5,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1,
+            -2,
+            -2,
+            4,
+            12,
+            4
+          ],
+          "uv": [
+            40,
+            16
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "body",
+      "parent": "$mesh",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.5,
+            0.0,
+            -2.5,
+            9.0,
+            10.0,
+            5.0
+          ],
+          "uv": [
+            20.0,
+            17.0
+          ],
+          "inflate": [
+            0.025,
+            0.025,
+            0.025
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -4.5,
+            11.0,
+            2.5,
+            9.0,
+            4.0,
+            0.0
+          ],
+          "uv": [
+            46.0,
+            0.0
+          ],
+          "inflate": [
+            0.025,
+            0.025,
+            0.025
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_leg",
+      "parent": "$mesh",
+      "pose": [
+        -1.9,
+        12.0,
+        0.0,
+        0.0,
+        0.0,
+        0.2618
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            0.0,
+            -2.5,
+            5.0,
+            11.0,
+            5.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_leg",
+      "parent": "$mesh",
+      "pose": [
+        1.9,
+        12.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.2618
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            0.0,
+            -2.5,
+            5.0,
+            11.0,
+            5.0
+          ],
+          "uv": [
+            0.0,
+            16.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_neck",
+      "parent": "body",
+      "pose": [
+        -4.0,
+        0.0,
+        0.0,
+        0.0,
+        1.5708,
+        -0.2618
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -4.0,
+            0.0,
+            8.0,
+            4.0,
+            0.0
+          ],
+          "uv": [
+            48.0,
+            28.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_neck",
+      "parent": "body",
+      "pose": [
+        4.0,
+        0.0,
+        0.0,
+        0.0,
+        -1.5708,
+        0.2618
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -4.0,
+            0.0,
+            8.0,
+            4.0,
+            0.0
+          ],
+          "uv": [
+            48.0,
+            24.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "rotten/com/github/teamfusion/rottencreatures/client/level/entities/model/ImmortalOverlayModel.java",
+  "sourceSha256": "9c15613c64ca5aaab8fab71f0fffd34793a2984a0d1452ebaf10583586af2a60",
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

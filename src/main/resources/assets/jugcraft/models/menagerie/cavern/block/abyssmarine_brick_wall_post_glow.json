@@ -1,0 +1,44 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "wall": "jugcraft:menagerie/cavern/block/abyssmarine_bricks_glow",
+    "particle": "jugcraft:menagerie/cavern/block/abyssmarine_bricks_glow"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        16,
+        12
+      ],
+      "shade": false,
+      "faces": {
+        "down": {
+          "texture": "#wall",
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#wall",
+          "cullface": "up"
+        },
+        "north": {
+          "texture": "#wall"
+        },
+        "south": {
+          "texture": "#wall"
+        },
+        "west": {
+          "texture": "#wall"
+        },
+        "east": {
+          "texture": "#wall"
+        }
+      }
+    }
+  ]
+}

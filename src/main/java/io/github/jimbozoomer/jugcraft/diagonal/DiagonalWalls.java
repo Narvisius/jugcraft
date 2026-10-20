@@ -57,7 +57,9 @@ public final class DiagonalWalls {
 			ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, Jugcraft.id("diagonal_" + BuiltInRegistries.BLOCK.getKey(wall).getPath()));
 			BlockBehaviour.Properties properties = BlockBehaviour.Properties.ofFullCopy(wall).overrideLootTable(wall.getLootTable())
 					.overrideDescription(wall.getDescriptionId()).setId(key);
-			BY_WALL.put(wall, Registry.register(BuiltInRegistries.BLOCK, key, new DiagonalWallBlock(wall, properties)));
+			DiagonalWallBlock diagonal=wall.defaultBlockState().hasProperty(PoweredDiagonalWallBlock.ACTIVE)
+					?new PoweredDiagonalWallBlock(wall,properties):new DiagonalWallBlock(wall,properties);
+			BY_WALL.put(wall, Registry.register(BuiltInRegistries.BLOCK, key, diagonal));
 		}
 	}
 
@@ -91,6 +93,7 @@ public final class DiagonalWalls {
 			return wallState;
 		}
 		BlockState state = diagonal.defaultBlockState().setValue(DiagonalWallBlock.WATERLOGGED, wallState.getValue(WallBlock.WATERLOGGED));
+		if(state.hasProperty(PoweredDiagonalWallBlock.ACTIVE))state=state.setValue(PoweredDiagonalWallBlock.ACTIVE,wallState.getValue(PoweredDiagonalWallBlock.ACTIVE));
 		for (Direction side : HORIZONTAL) {
 			state = state.setValue(DiagonalWallBlock.SIDES.get(side), wallState.getValue(WallBlock.PROPERTY_BY_DIRECTION.get(side)) != WallSide.NONE);
 		}
@@ -134,6 +137,7 @@ public final class DiagonalWalls {
 		DiagonalWallBlock diagonal = (DiagonalWallBlock) state.getBlock();
 		BlockState wall = diagonal.wall().defaultBlockState().setValue(WallBlock.UP, state.getValue(DiagonalWallBlock.UP))
 				.setValue(WallBlock.WATERLOGGED, state.getValue(DiagonalWallBlock.WATERLOGGED));
+		if(wall.hasProperty(PoweredDiagonalWallBlock.ACTIVE))wall=wall.setValue(PoweredDiagonalWallBlock.ACTIVE,state.getValue(PoweredDiagonalWallBlock.ACTIVE));
 		WallSide joined = state.getValue(DiagonalWallBlock.TALL) ? WallSide.TALL : WallSide.LOW;
 		for (Direction side : HORIZONTAL) {
 			wall = wall.setValue(WallBlock.PROPERTY_BY_DIRECTION.get(side), state.getValue(DiagonalWallBlock.SIDES.get(side)) ? joined : WallSide.NONE);

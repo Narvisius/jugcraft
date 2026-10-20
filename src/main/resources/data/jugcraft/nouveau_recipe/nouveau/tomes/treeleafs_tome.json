@@ -1,0 +1,261 @@
+{
+  "type": "caster_tome",
+  "color": {
+    "b": 180,
+    "g": 25,
+    "id": "jugcraft:nouveau_constant",
+    "r": 255
+  },
+  "flavour_text": "Just make sure your somewhere you want to be greener",
+  "name": "Treeleafs gardeners dream",
+  "sound": {},
+  "spell": [
+    "jugcraft:nouveau_glyph_self",
+    "jugcraft:nouveau_glyph_burst",
+    "jugcraft:nouveau_glyph_sensitive",
+    "jugcraft:nouveau_glyph_aoe",
+    "jugcraft:nouveau_glyph_aoe",
+    "jugcraft:nouveau_glyph_aoe",
+    "jugcraft:nouveau_glyph_aoe",
+    "jugcraft:nouveau_glyph_grow",
+    "jugcraft:nouveau_glyph_harvest",
+    "jugcraft:nouveau_glyph_pickup"
+  ],
+  "spellData": {
+    "color": {
+      "b": 180,
+      "g": 25,
+      "id": "jugcraft:nouveau_constant",
+      "r": 255
+    },
+    "name": "Treeleafs gardeners dream",
+    "particleTimeline": {
+      "jugcraft:nouveau_burst": {
+        "type": "jugcraft:nouveau_burst",
+        "onResolvingEffect": {
+          "motion": {
+            "type": "jugcraft:nouveau_burst",
+            "propMap": {}
+          },
+          "particleOptions": {
+            "type": "jugcraft:nouveau_glow_squid",
+            "properties": {
+              "jugcraft:nouveau_density": {
+                "density": 5,
+                "radius": 0.10000000149011612,
+                "spawnType": "SPHERE"
+              },
+              "jugcraft:nouveau_emitter": {
+                "age": 0,
+                "rotation": {
+                  "x": 0.0,
+                  "y": 0.0
+                }
+              },
+              "jugcraft:nouveau_particle_type": {
+                "particleType": "jugcraft:nouveau_glow_squid",
+                "subProperties": {
+                  "jugcraft:nouveau_color": {
+                    "particleColor": {
+                      "b": 187,
+                      "g": 119,
+                      "id": "jugcraft:nouveau_constant",
+                      "r": 1
+                    },
+                    "tintDisabled": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "resolveSound": {
+          "sound": {
+            "pitch": 0.35,
+            "sound": {
+              "id": "jugcraft:nouveau_allay_death"
+            },
+            "volume": 1.6
+          }
+        }
+      },
+      "jugcraft:nouveau_projectile": {
+        "type": "jugcraft:nouveau_projectile",
+        "castSound": {
+          "sound": {}
+        },
+        "flairEffect": {
+          "particleOptions": {
+            "type": "jugcraft:nouveau_new_glow",
+            "properties": {
+              "jugcraft:nouveau_particle_type": {
+                "particleType": "jugcraft:nouveau_new_glow",
+                "subProperties": {
+                  "jugcraft:nouveau_color": {
+                    "particleColor": {
+                      "b": 180,
+                      "g": 25,
+                      "id": "jugcraft:nouveau_constant",
+                      "r": 255
+                    },
+                    "tintDisabled": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "onResolvingEffect": {
+          "motion": {
+            "type": "jugcraft:nouveau_burst",
+            "propMap": {}
+          },
+          "particleOptions": {
+            "type": "jugcraft:nouveau_new_glow",
+            "properties": {
+              "jugcraft:nouveau_density": {
+                "density": 5,
+                "radius": 0.10000000149011612,
+                "spawnType": "SPHERE"
+              },
+              "jugcraft:nouveau_particle_type": {
+                "particleType": "jugcraft:nouveau_new_glow",
+                "subProperties": {
+                  "jugcraft:nouveau_color": {
+                    "particleColor": {
+                      "b": 180,
+                      "g": 25,
+                      "id": "jugcraft:nouveau_constant",
+                      "r": 255
+                    },
+                    "tintDisabled": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "onSpawnEffect": {
+          "particleOptions": {
+            "type": "jugcraft:nouveau_new_glow",
+            "properties": {
+              "jugcraft:nouveau_particle_type": {
+                "particleType": "jugcraft:nouveau_new_glow",
+                "subProperties": {
+                  "jugcraft:nouveau_color": {
+                    "particleColor": {
+                      "b": 180,
+                      "g": 25,
+                      "id": "jugcraft:nouveau_constant",
+                      "r": 255
+                    },
+                    "tintDisabled": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "resolveSound": {
+          "sound": {}
+        },
+        "trailEffect": {
+          "motion": {
+            "type": "jugcraft:nouveau_trail",
+            "propMap": {
+              "jugcraft:nouveau_model": {
+                "resource": "jugcraft:nouveau_empty",
+                "subPropMap": {}
+              }
+            }
+          },
+          "particleOptions": {
+            "type": "jugcraft:nouveau_new_glow",
+            "properties": {
+              "jugcraft:nouveau_density": {
+                "density": 100,
+                "radius": 0.10000000149011612,
+                "spawnType": "SPHERE"
+              },
+              "jugcraft:nouveau_particle_type": {
+                "particleType": "jugcraft:nouveau_new_glow",
+                "subProperties": {
+                  "jugcraft:nouveau_color": {
+                    "particleColor": {
+                      "b": 180,
+                      "g": 25,
+                      "id": "jugcraft:nouveau_constant",
+                      "r": 255
+                    },
+                    "tintDisabled": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "jugcraft:nouveau_self": {
+        "type": "jugcraft:nouveau_self",
+        "onResolvingEffect": {
+          "motion": {
+            "type": "jugcraft:nouveau_burst",
+            "propMap": {}
+          },
+          "particleOptions": {
+            "type": "jugcraft:nouveau_glow_squid",
+            "properties": {
+              "jugcraft:nouveau_density": {
+                "density": 5,
+                "radius": 0.10000000149011612,
+                "spawnType": "SPHERE"
+              },
+              "jugcraft:nouveau_emitter": {
+                "age": 0,
+                "rotation": {
+                  "x": 0.0,
+                  "y": 0.0
+                }
+              },
+              "jugcraft:nouveau_particle_type": {
+                "particleType": "jugcraft:nouveau_glow_squid",
+                "subProperties": {
+                  "jugcraft:nouveau_color": {
+                    "particleColor": {
+                      "b": 187,
+                      "g": 119,
+                      "id": "jugcraft:nouveau_constant",
+                      "r": 1
+                    },
+                    "tintDisabled": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "resolveSound": {
+          "sound": {
+            "sound": {
+              "id": "jugcraft:nouveau_empty"
+            }
+          }
+        }
+      }
+    },
+    "recipe": [
+      "jugcraft:nouveau_glyph_self",
+      "jugcraft:nouveau_glyph_burst",
+      "jugcraft:nouveau_glyph_sensitive",
+      "jugcraft:nouveau_glyph_aoe",
+      "jugcraft:nouveau_glyph_aoe",
+      "jugcraft:nouveau_glyph_aoe",
+      "jugcraft:nouveau_glyph_aoe",
+      "jugcraft:nouveau_glyph_grow",
+      "jugcraft:nouveau_glyph_harvest",
+      "jugcraft:nouveau_glyph_pickup"
+    ],
+    "sound": {}
+  },
+  "tome_type": "jugcraft:nouveau_caster_tome"
+}

@@ -1,0 +1,12 @@
+{
+  "feature": "biomesoplenty:small_dead_tree",
+  "placement": [
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:would_survive",
+        "state": "biomesoplenty:dead_sapling"
+      }
+    }
+  ]
+}

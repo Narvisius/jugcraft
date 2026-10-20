@@ -1,0 +1,17 @@
+{
+  "type": "jugcraft:household_oven",
+  "ingredient": "minecraft:water_bucket",
+  "result": {
+    "count": 4,
+    "id": "jugcraft:household_sea_salt"
+  },
+  "cookingtime": 1200,
+  "experience": 0.1,
+  "category": "food",
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

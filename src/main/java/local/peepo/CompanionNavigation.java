@@ -2,6 +2,7 @@ package local.peepo;
 
 import java.util.*;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
 
 /** Small per-companion route memory. No shared paths, world references or chunk tickets. */
@@ -17,6 +18,23 @@ final class CompanionNavigation {
         failures.put(new Key(station.immutable(),BlockPos.containing(point)),now+200);
     }
     void clear(){failures.clear();}
+
+    /** A completed block path can still leave a small companion outside a fractional work position's reach. */
+    static boolean canFinishApproach(PeepoEntity npc,Vec3 destination){
+        var delta=destination.subtract(npc.position());
+        if(!npc.onGround() || Math.abs(delta.y)>.1 || delta.lengthSqr()>2.25)return false;
+        // Check the entire short swept box, not just the destination: never cut through a wall or gate.
+        if(!npc.level().noCollision(npc,npc.getBoundingBox().expandTowards(delta).deflate(1.0e-5)))return false;
+        int steps=Math.max(1,(int)Math.ceil(delta.length()/.2)); // At most eight segments, no new path search.
+        for(int i=0;i<=steps;i++){
+            var point=npc.position().add(delta.scale((double)i/steps));
+            var floor=BlockPos.containing(point).below();
+            if(!npc.level().hasChunkAt(floor) || !CompanionJobs.permitted(npc,BlockPos.containing(point))
+                || !npc.level().getBlockState(floor).isFaceSturdy(npc.level(),floor,Direction.UP)
+                || !CompanionHazards.safeAt(npc,point))return false;
+        }
+        return true;
+    }
 
     static final class Progress {
         private Vec3 target,position;

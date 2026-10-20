@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "key": {
+    "#": "jugcraft:wildlife_cut_shellstone"
+  },
+  "result": {
+    "id": "jugcraft:wildlife_cut_shellstone_stairs",
+    "count": 4
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

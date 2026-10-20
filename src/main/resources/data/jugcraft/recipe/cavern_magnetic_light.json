@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "R",
+    "I"
+  ],
+  "key": {
+    "R": "jugcraft:cavern_notor_gizmo",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "count": 4,
+    "id": "jugcraft:cavern_magnetic_light"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

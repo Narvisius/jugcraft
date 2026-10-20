@@ -1,0 +1,22 @@
+{
+  "result": {
+    "id": "jugcraft:pocket_pet_anvil"
+  },
+  "pattern": [
+    "OOO",
+    "ODO",
+    "OGO"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "D": "minecraft:diamond",
+    "G": "minecraft:gold_block",
+    "O": "minecraft:iron_ingot"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

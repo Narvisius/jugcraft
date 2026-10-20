@@ -1,0 +1,1213 @@
+{
+  "species": [
+    {
+      "source": "dragonfly",
+      "id": "companion_dragonfly",
+      "name": "Companion Dragonfly",
+      "shape": "dragonfly",
+      "movement": "air",
+      "habitat": "swamp",
+      "mood": "passive",
+      "width": 1.3,
+      "height": 1.0,
+      "health": 28,
+      "feed": "minecraft:sugar",
+      "mount": true,
+      "model": "companion_dragonfly",
+      "variants": [
+        {
+          "name": "dragonfly",
+          "texture": "menagerie/companion/entity/dragonfly",
+          "babyTexture": "menagerie/companion/entity/dragonfly",
+          "weight": 1,
+          "model": "companion_dragonfly",
+          "babyModel": "companion_dragonfly"
+        }
+      ],
+      "clips": [
+        "dragonfly_sit",
+        "dragonfly_fly",
+        "idle",
+        "walk",
+        "fly",
+        "sit"
+      ],
+      "armorTextures": {
+        "iron": "menagerie/companion/entity/dragonfly_armor_iron",
+        "golden": "menagerie/companion/entity/dragonfly_armor_gold",
+        "diamond": "menagerie/companion/entity/dragonfly_armor_diamond",
+        "netherite": "menagerie/companion/entity/dragonfly_armor_netherite"
+      }
+    },
+    {
+      "source": "dumbo_octopus",
+      "id": "companion_dumbo_octopus",
+      "name": "Dumbo Octopus",
+      "shape": "dumbo_octopus",
+      "movement": "water",
+      "habitat": "ocean",
+      "mood": "passive",
+      "width": 0.5,
+      "height": 0.6,
+      "health": 10,
+      "feed": "minecraft:cod",
+      "mount": false,
+      "model": "companion_dumbo_octopus",
+      "variants": [
+        {
+          "name": "dumbo_octopus_1",
+          "texture": "menagerie/companion/entity/dumbo_octopus_1",
+          "babyTexture": "menagerie/companion/entity/dumbo_octopus_1",
+          "weight": 1,
+          "model": "companion_dumbo_octopus",
+          "babyModel": "companion_dumbo_octopus"
+        },
+        {
+          "name": "dumbo_octopus_2",
+          "texture": "menagerie/companion/entity/dumbo_octopus_2",
+          "babyTexture": "menagerie/companion/entity/dumbo_octopus_2",
+          "weight": 1,
+          "model": "companion_dumbo_octopus",
+          "babyModel": "companion_dumbo_octopus"
+        },
+        {
+          "name": "dumbo_octopus_3",
+          "texture": "menagerie/companion/entity/dumbo_octopus_3",
+          "babyTexture": "menagerie/companion/entity/dumbo_octopus_3",
+          "weight": 1,
+          "model": "companion_dumbo_octopus",
+          "babyModel": "companion_dumbo_octopus"
+        },
+        {
+          "name": "dumbo_octopus_4",
+          "texture": "menagerie/companion/entity/dumbo_octopus_4",
+          "babyTexture": "menagerie/companion/entity/dumbo_octopus_4",
+          "weight": 1,
+          "model": "companion_dumbo_octopus",
+          "babyModel": "companion_dumbo_octopus"
+        }
+      ],
+      "clips": [
+        "dumbo_octopus_swim",
+        "dumbo_octopus_idle",
+        "dumbo_octopus_on_land",
+        "swim",
+        "idle"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "ferret",
+      "id": "companion_ferret",
+      "name": "Ferret",
+      "shape": "ferret",
+      "movement": "amphibious",
+      "habitat": "forest",
+      "mood": "passive",
+      "width": 0.6,
+      "height": 0.45,
+      "health": 14,
+      "feed": "minecraft:rabbit",
+      "mount": false,
+      "model": "companion_ferret",
+      "variants": [
+        {
+          "name": "ferret_1",
+          "texture": "menagerie/companion/entity/ferret_1",
+          "babyTexture": "menagerie/companion/entity/baby_ferret_1",
+          "weight": 1,
+          "model": "companion_ferret",
+          "babyModel": "companion/baby_ferret"
+        },
+        {
+          "name": "ferret_2",
+          "texture": "menagerie/companion/entity/ferret_2",
+          "babyTexture": "menagerie/companion/entity/baby_ferret_2",
+          "weight": 1,
+          "model": "companion_ferret",
+          "babyModel": "companion/baby_ferret"
+        }
+      ],
+      "clips": [
+        "idle",
+        "sit",
+        "sleep",
+        "run",
+        "dig",
+        "swim",
+        "walk",
+        "baby_idle",
+        "baby_sleep",
+        "baby_sit",
+        "baby_run",
+        "baby_swim"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "jumping_spider",
+      "id": "companion_jumping_spider",
+      "name": "Jumping Spider",
+      "shape": "jumping_spider",
+      "movement": "land",
+      "habitat": "forest",
+      "mood": "passive",
+      "width": 0.45,
+      "height": 0.4,
+      "health": 10,
+      "feed": "minecraft:spider_eye",
+      "mount": false,
+      "model": "companion_jumping_spider",
+      "variants": [
+        {
+          "name": "jumping_spider_1",
+          "texture": "menagerie/companion/entity/jumping_spider_1",
+          "babyTexture": "menagerie/companion/entity/baby_jumping_spider_1",
+          "weight": 1,
+          "model": "companion_jumping_spider",
+          "babyModel": "companion/baby_jumping_spider"
+        },
+        {
+          "name": "jumping_spider_2",
+          "texture": "menagerie/companion/entity/jumping_spider_2",
+          "babyTexture": "menagerie/companion/entity/baby_jumping_spider_2",
+          "weight": 1,
+          "model": "companion_jumping_spider",
+          "babyModel": "companion/baby_jumping_spider"
+        },
+        {
+          "name": "jumping_spider_3",
+          "texture": "menagerie/companion/entity/jumping_spider_3",
+          "babyTexture": "menagerie/companion/entity/baby_jumping_spider_3",
+          "weight": 1,
+          "model": "companion_jumping_spider",
+          "babyModel": "companion/baby_jumping_spider"
+        },
+        {
+          "name": "jumping_spider_4",
+          "texture": "menagerie/companion/entity/jumping_spider_4",
+          "babyTexture": "menagerie/companion/entity/baby_jumping_spider_4",
+          "weight": 1,
+          "model": "companion_jumping_spider",
+          "babyModel": "companion/baby_jumping_spider"
+        },
+        {
+          "name": "jumping_spider_5",
+          "texture": "menagerie/companion/entity/jumping_spider_5",
+          "babyTexture": "menagerie/companion/entity/baby_jumping_spider_5",
+          "weight": 1,
+          "model": "companion_jumping_spider",
+          "babyModel": "companion/baby_jumping_spider"
+        },
+        {
+          "name": "jumping_spider_6",
+          "texture": "menagerie/companion/entity/jumping_spider_6",
+          "babyTexture": "menagerie/companion/entity/baby_jumping_spider_6",
+          "weight": 1,
+          "model": "companion_jumping_spider",
+          "babyModel": "companion/baby_jumping_spider"
+        },
+        {
+          "name": "jumping_spider_7",
+          "texture": "menagerie/companion/entity/jumping_spider_7",
+          "babyTexture": "menagerie/companion/entity/baby_jumping_spider_7",
+          "weight": 1,
+          "model": "companion_jumping_spider",
+          "babyModel": "companion/baby_jumping_spider"
+        },
+        {
+          "name": "jumping_spider_8",
+          "texture": "menagerie/companion/entity/jumping_spider_8",
+          "babyTexture": "menagerie/companion/entity/baby_jumping_spider_8",
+          "weight": 1,
+          "model": "companion_jumping_spider",
+          "babyModel": "companion/baby_jumping_spider"
+        }
+      ],
+      "clips": [
+        "walk",
+        "idle",
+        "sit",
+        "food",
+        "dance",
+        "baby_walk",
+        "baby_idle",
+        "baby_sit",
+        "baby_food",
+        "baby_dance"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "koi_fish",
+      "id": "companion_koi_fish",
+      "name": "Koi Fish",
+      "shape": "koi_fish",
+      "movement": "water",
+      "habitat": "river",
+      "mood": "passive",
+      "width": 0.5,
+      "height": 0.45,
+      "health": 8,
+      "feed": "minecraft:wheat_seeds",
+      "mount": false,
+      "model": "companion_koi_fish",
+      "variants": [
+        {
+          "name": "koi_fish_1",
+          "texture": "menagerie/companion/entity/koi_fish_1",
+          "babyTexture": "menagerie/companion/entity/koi_fish_1",
+          "weight": 1,
+          "model": "companion_koi_fish",
+          "babyModel": "companion_koi_fish"
+        },
+        {
+          "name": "koi_fish_10",
+          "texture": "menagerie/companion/entity/koi_fish_10",
+          "babyTexture": "menagerie/companion/entity/koi_fish_10",
+          "weight": 1,
+          "model": "companion_koi_fish",
+          "babyModel": "companion_koi_fish"
+        },
+        {
+          "name": "koi_fish_11",
+          "texture": "menagerie/companion/entity/koi_fish_11",
+          "babyTexture": "menagerie/companion/entity/koi_fish_11",
+          "weight": 1,
+          "model": "companion_koi_fish",
+          "babyModel": "companion_koi_fish"
+        },
+        {
+          "name": "koi_fish_12",
+          "texture": "menagerie/companion/entity/koi_fish_12",
+          "babyTexture": "menagerie/companion/entity/koi_fish_12",
+          "weight": 1,
+          "model": "companion_koi_fish",
+          "babyModel": "companion_koi_fish"
+        },
+        {
+          "name": "koi_fish_13",
+          "texture": "menagerie/companion/entity/koi_fish_13",
+          "babyTexture": "menagerie/companion/entity/koi_fish_13",
+          "weight": 1,
+          "model": "companion_koi_fish",
+          "babyModel": "companion_koi_fish"
+        },
+        {
+          "name": "koi_fish_14",
+          "texture": "menagerie/companion/entity/koi_fish_14",
+          "babyTexture": "menagerie/companion/entity/koi_fish_14",
+          "weight": 1,
+          "model": "companion_koi_fish",
+          "babyModel": "companion_koi_fish"
+        },
+        {
+          "name": "koi_fish_15",
+          "texture": "menagerie/companion/entity/koi_fish_15",
+          "babyTexture": "menagerie/companion/entity/koi_fish_15",
+          "weight": 1,
+          "model": "companion_koi_fish",
+          "babyModel": "companion_koi_fish"
+        },
+        {
+          "name": "koi_fish_16",
+          "texture": "menagerie/companion/entity/koi_fish_16",
+          "babyTexture": "menagerie/companion/entity/koi_fish_16",
+          "weight": 1,
+          "model": "companion_koi_fish",
+          "babyModel": "companion_koi_fish"
+        },
+        {
+          "name": "koi_fish_17",
+          "texture": "menagerie/companion/entity/koi_fish_17",
+          "babyTexture": "menagerie/companion/entity/koi_fish_17",
+          "weight": 1,
+          "model": "companion_koi_fish",
+          "babyModel": "companion_koi_fish"
+        },
+        {
+          "name": "koi_fish_18",
+          "texture": "menagerie/companion/entity/koi_fish_18",
+          "babyTexture": "menagerie/companion/entity/koi_fish_18",
+          "weight": 1,
+          "model": "companion_koi_fish",
+          "babyModel": "companion_koi_fish"
+        },
+        {
+          "name": "koi_fish_19",
+          "texture": "menagerie/companion/entity/koi_fish_19",
+          "babyTexture": "menagerie/companion/entity/koi_fish_19",
+          "weight": 1,
+          "model": "companion_koi_fish",
+          "babyModel": "companion_koi_fish"
+        },
+        {
+          "name": "koi_fish_2",
+          "texture": "menagerie/companion/entity/koi_fish_2",
+          "babyTexture": "menagerie/companion/entity/koi_fish_2",
+          "weight": 1,
+          "model": "companion_koi_fish",
+          "babyModel": "companion_koi_fish"
+        },
+        {
+          "name": "koi_fish_20",
+          "texture": "menagerie/companion/entity/koi_fish_20",
+          "babyTexture": "menagerie/companion/entity/koi_fish_20",
+          "weight": 1,
+          "model": "companion_koi_fish",
+          "babyModel": "companion_koi_fish"
+        },
+        {
+          "name": "koi_fish_21",
+          "texture": "menagerie/companion/entity/koi_fish_21",
+          "babyTexture": "menagerie/companion/entity/koi_fish_21",
+          "weight": 1,
+          "model": "companion_koi_fish",
+          "babyModel": "companion_koi_fish"
+        },
+        {
+          "name": "koi_fish_3",
+          "texture": "menagerie/companion/entity/koi_fish_3",
+          "babyTexture": "menagerie/companion/entity/koi_fish_3",
+          "weight": 1,
+          "model": "companion_koi_fish",
+          "babyModel": "companion_koi_fish"
+        },
+        {
+          "name": "koi_fish_4",
+          "texture": "menagerie/companion/entity/koi_fish_4",
+          "babyTexture": "menagerie/companion/entity/koi_fish_4",
+          "weight": 1,
+          "model": "companion_koi_fish",
+          "babyModel": "companion_koi_fish"
+        },
+        {
+          "name": "koi_fish_5",
+          "texture": "menagerie/companion/entity/koi_fish_5",
+          "babyTexture": "menagerie/companion/entity/koi_fish_5",
+          "weight": 1,
+          "model": "companion_koi_fish",
+          "babyModel": "companion_koi_fish"
+        },
+        {
+          "name": "koi_fish_6",
+          "texture": "menagerie/companion/entity/koi_fish_6",
+          "babyTexture": "menagerie/companion/entity/koi_fish_6",
+          "weight": 1,
+          "model": "companion_koi_fish",
+          "babyModel": "companion_koi_fish"
+        },
+        {
+          "name": "koi_fish_7",
+          "texture": "menagerie/companion/entity/koi_fish_7",
+          "babyTexture": "menagerie/companion/entity/koi_fish_7",
+          "weight": 1,
+          "model": "companion_koi_fish",
+          "babyModel": "companion_koi_fish"
+        },
+        {
+          "name": "koi_fish_8",
+          "texture": "menagerie/companion/entity/koi_fish_8",
+          "babyTexture": "menagerie/companion/entity/koi_fish_8",
+          "weight": 1,
+          "model": "companion_koi_fish",
+          "babyModel": "companion_koi_fish"
+        },
+        {
+          "name": "koi_fish_9",
+          "texture": "menagerie/companion/entity/koi_fish_9",
+          "babyTexture": "menagerie/companion/entity/koi_fish_9",
+          "weight": 1,
+          "model": "companion_koi_fish",
+          "babyModel": "companion_koi_fish"
+        }
+      ],
+      "clips": [
+        "koi_fish_swim",
+        "koi_fish_on_land",
+        "swim",
+        "idle"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "ladybug",
+      "id": "companion_ladybug",
+      "name": "Companion Ladybug",
+      "shape": "ladybug",
+      "movement": "air",
+      "habitat": "meadow",
+      "mood": "passive",
+      "width": 0.4,
+      "height": 0.35,
+      "health": 8,
+      "feed": "minecraft:sugar",
+      "mount": false,
+      "model": "companion_ladybug",
+      "variants": [
+        {
+          "name": "ladybug",
+          "texture": "menagerie/companion/entity/ladybug",
+          "babyTexture": "menagerie/companion/entity/baby_ladybug",
+          "weight": 1,
+          "model": "companion_ladybug",
+          "babyModel": "companion/baby_ladybug"
+        }
+      ],
+      "clips": [
+        "fly",
+        "idle",
+        "sit",
+        "walk",
+        "dance",
+        "baby_fly",
+        "baby_idle",
+        "baby_sit",
+        "baby_walk",
+        "baby_dance"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "leaf_insect",
+      "id": "companion_leaf_insect",
+      "name": "Leaf Insect",
+      "shape": "leaf_insect",
+      "movement": "land",
+      "habitat": "jungle",
+      "mood": "passive",
+      "width": 0.4,
+      "height": 0.5,
+      "health": 8,
+      "feed": "minecraft:oak_leaves",
+      "mount": false,
+      "model": "companion_leaf_insect",
+      "variants": [
+        {
+          "name": "leaf_insect_1",
+          "texture": "menagerie/companion/entity/leaf_insect_1",
+          "babyTexture": "menagerie/companion/entity/baby_leaf_insect_1",
+          "weight": 1,
+          "model": "companion_leaf_insect",
+          "babyModel": "companion/baby_leaf_insect"
+        },
+        {
+          "name": "leaf_insect_2",
+          "texture": "menagerie/companion/entity/leaf_insect_2",
+          "babyTexture": "menagerie/companion/entity/baby_leaf_insect_2",
+          "weight": 1,
+          "model": "companion_leaf_insect",
+          "babyModel": "companion/baby_leaf_insect"
+        },
+        {
+          "name": "leaf_insect_3",
+          "texture": "menagerie/companion/entity/leaf_insect_3",
+          "babyTexture": "menagerie/companion/entity/baby_leaf_insect_3",
+          "weight": 1,
+          "model": "companion_leaf_insect",
+          "babyModel": "companion/baby_leaf_insect"
+        }
+      ],
+      "clips": [
+        "walk",
+        "idle",
+        "dance",
+        "eat",
+        "baby_walk",
+        "baby_idle",
+        "baby_dance"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "otter",
+      "id": "companion_otter",
+      "name": "Otter",
+      "shape": "otter",
+      "movement": "amphibious",
+      "habitat": "river",
+      "mood": "passive",
+      "width": 0.7,
+      "height": 0.6,
+      "health": 16,
+      "feed": "minecraft:cod",
+      "mount": false,
+      "model": "companion_otter",
+      "variants": [
+        {
+          "name": "otter",
+          "texture": "menagerie/companion/entity/otter",
+          "babyTexture": "menagerie/companion/entity/baby_otter",
+          "weight": 1,
+          "model": "companion_otter",
+          "babyModel": "companion/baby_otter"
+        }
+      ],
+      "clips": [
+        "floating_eat",
+        "idle",
+        "standing_eat",
+        "standing_eat_clam",
+        "swim",
+        "swim_2",
+        "walk",
+        "run",
+        "baby_floating_eat",
+        "baby_idle",
+        "baby_standing_eat",
+        "baby_swim",
+        "baby_standing_eat_clam",
+        "baby_swim_2",
+        "baby_walk",
+        "baby_run"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "red_panda",
+      "id": "companion_red_panda",
+      "name": "Red Panda",
+      "shape": "red_panda",
+      "movement": "land",
+      "habitat": "jungle",
+      "mood": "passive",
+      "width": 0.7,
+      "height": 0.85,
+      "health": 18,
+      "feed": "minecraft:bamboo",
+      "mount": false,
+      "model": "companion_red_panda",
+      "variants": [
+        {
+          "name": "red_panda",
+          "texture": "menagerie/companion/entity/red_panda",
+          "babyTexture": "menagerie/companion/entity/baby_red_panda",
+          "weight": 1,
+          "model": "companion_red_panda",
+          "babyModel": "companion/baby_red_panda"
+        }
+      ],
+      "clips": [
+        "sleep",
+        "idle",
+        "angry",
+        "walk",
+        "run",
+        "sit",
+        "swim",
+        "baby_angry",
+        "baby_idle",
+        "baby_run",
+        "baby_walk",
+        "baby_sleep",
+        "baby_sit",
+        "baby_swim"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "roly_poly",
+      "id": "companion_roly_poly",
+      "name": "Roly Poly",
+      "shape": "roly_poly",
+      "movement": "land",
+      "habitat": "forest",
+      "mood": "passive",
+      "width": 0.8,
+      "height": 0.6,
+      "health": 18,
+      "feed": "minecraft:brown_mushroom",
+      "mount": false,
+      "model": "companion_roly_poly",
+      "variants": [
+        {
+          "name": "roly_poly_1",
+          "texture": "menagerie/companion/entity/roly_poly_1",
+          "babyTexture": "menagerie/companion/entity/baby_roly_poly",
+          "weight": 1,
+          "model": "companion_roly_poly",
+          "babyModel": "companion/baby_roly_poly"
+        },
+        {
+          "name": "roly_poly_2",
+          "texture": "menagerie/companion/entity/roly_poly_2",
+          "babyTexture": "menagerie/companion/entity/baby_roly_poly",
+          "weight": 1,
+          "model": "companion_roly_poly",
+          "babyModel": "companion/baby_roly_poly"
+        },
+        {
+          "name": "roly_poly_3",
+          "texture": "menagerie/companion/entity/roly_poly_3",
+          "babyTexture": "menagerie/companion/entity/baby_roly_poly",
+          "weight": 1,
+          "model": "companion_roly_poly",
+          "babyModel": "companion/baby_roly_poly"
+        },
+        {
+          "name": "roly_poly_4",
+          "texture": "menagerie/companion/entity/roly_poly_4",
+          "babyTexture": "menagerie/companion/entity/baby_roly_poly",
+          "weight": 1,
+          "model": "companion_roly_poly",
+          "babyModel": "companion/baby_roly_poly"
+        },
+        {
+          "name": "roly_poly_5",
+          "texture": "menagerie/companion/entity/roly_poly_5",
+          "babyTexture": "menagerie/companion/entity/baby_roly_poly",
+          "weight": 1,
+          "model": "companion_roly_poly",
+          "babyModel": "companion/baby_roly_poly"
+        },
+        {
+          "name": "roly_poly_6",
+          "texture": "menagerie/companion/entity/roly_poly_6",
+          "babyTexture": "menagerie/companion/entity/baby_roly_poly",
+          "weight": 1,
+          "model": "companion_roly_poly",
+          "babyModel": "companion/baby_roly_poly"
+        },
+        {
+          "name": "roly_poly_7",
+          "texture": "menagerie/companion/entity/roly_poly_7",
+          "babyTexture": "menagerie/companion/entity/baby_roly_poly",
+          "weight": 1,
+          "model": "companion_roly_poly",
+          "babyModel": "companion/baby_roly_poly"
+        }
+      ],
+      "clips": [
+        "walk",
+        "idle",
+        "dance",
+        "dance_2",
+        "flipped",
+        "hide",
+        "sit",
+        "baby_walk",
+        "baby_idle",
+        "baby_dance",
+        "baby_dance_2",
+        "baby_flipped",
+        "baby_hide"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "sea_bunny",
+      "id": "companion_sea_bunny",
+      "name": "Sea Bunny",
+      "shape": "sea_bunny",
+      "movement": "water",
+      "habitat": "ocean",
+      "mood": "passive",
+      "width": 0.4,
+      "height": 0.35,
+      "health": 8,
+      "feed": "minecraft:kelp",
+      "mount": false,
+      "model": "companion_sea_bunny",
+      "variants": [
+        {
+          "name": "sea_bunny_1",
+          "texture": "menagerie/companion/entity/sea_bunny_1",
+          "babyTexture": "menagerie/companion/entity/baby_sea_bunny_1",
+          "weight": 1,
+          "model": "companion_sea_bunny",
+          "babyModel": "companion/baby_sea_bunny"
+        },
+        {
+          "name": "sea_bunny_2",
+          "texture": "menagerie/companion/entity/sea_bunny_2",
+          "babyTexture": "menagerie/companion/entity/baby_sea_bunny_2",
+          "weight": 1,
+          "model": "companion_sea_bunny",
+          "babyModel": "companion/baby_sea_bunny"
+        },
+        {
+          "name": "sea_bunny_3",
+          "texture": "menagerie/companion/entity/sea_bunny_3",
+          "babyTexture": "menagerie/companion/entity/baby_sea_bunny_3",
+          "weight": 1,
+          "model": "companion_sea_bunny",
+          "babyModel": "companion/baby_sea_bunny"
+        }
+      ],
+      "clips": [
+        "sea_bunny_move",
+        "sea_bunny",
+        "walk",
+        "swim",
+        "idle"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "shima_enaga",
+      "id": "companion_shima_enaga",
+      "name": "Shima Enaga",
+      "shape": "shima_enaga",
+      "movement": "air",
+      "habitat": "snowy",
+      "mood": "passive",
+      "width": 0.35,
+      "height": 0.4,
+      "health": 8,
+      "feed": "minecraft:wheat_seeds",
+      "mount": false,
+      "model": "companion_shima_enaga",
+      "variants": [
+        {
+          "name": "shima_enaga",
+          "texture": "menagerie/companion/entity/shima_enaga",
+          "babyTexture": "menagerie/companion/entity/baby_shima_enaga",
+          "weight": 1,
+          "model": "companion_shima_enaga",
+          "babyModel": "companion/baby_shima_enaga"
+        }
+      ],
+      "clips": [
+        "idle",
+        "fly",
+        "sit",
+        "baby_idle",
+        "baby_fly",
+        "baby_sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "snail",
+      "id": "companion_snail",
+      "name": "Companion Snail",
+      "shape": "snail",
+      "movement": "land",
+      "habitat": "forest",
+      "mood": "passive",
+      "width": 0.5,
+      "height": 0.5,
+      "health": 8,
+      "feed": "minecraft:carrot",
+      "mount": false,
+      "model": "companion_snail",
+      "variants": [
+        {
+          "name": "snail_1",
+          "texture": "menagerie/companion/entity/snail_1",
+          "babyTexture": "menagerie/companion/entity/baby_snail",
+          "weight": 1,
+          "model": "companion_snail",
+          "babyModel": "companion/baby_snail"
+        },
+        {
+          "name": "snail_2",
+          "texture": "menagerie/companion/entity/snail_2",
+          "babyTexture": "menagerie/companion/entity/baby_snail",
+          "weight": 1,
+          "model": "companion_snail",
+          "babyModel": "companion/baby_snail"
+        },
+        {
+          "name": "snail_3",
+          "texture": "menagerie/companion/entity/snail_3",
+          "babyTexture": "menagerie/companion/entity/baby_snail",
+          "weight": 1,
+          "model": "companion_snail",
+          "babyModel": "companion/baby_snail"
+        },
+        {
+          "name": "snail_gary",
+          "texture": "menagerie/companion/entity/snail_gary",
+          "babyTexture": "menagerie/companion/entity/baby_snail_gary",
+          "weight": 1,
+          "model": "companion_snail",
+          "babyModel": "companion/baby_snail"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "dance",
+        "hide",
+        "sit",
+        "wake_up",
+        "baby_idle",
+        "baby_walk",
+        "baby_dance",
+        "baby_hide",
+        "baby_wake_up",
+        "baby_sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "stag_beetle",
+      "id": "companion_stag_beetle",
+      "name": "Stag Beetle",
+      "shape": "stag_beetle",
+      "movement": "land",
+      "habitat": "forest",
+      "mood": "passive",
+      "width": 0.55,
+      "height": 0.45,
+      "health": 12,
+      "feed": "minecraft:apple",
+      "mount": false,
+      "model": "companion_stag_beetle",
+      "variants": [
+        {
+          "name": "stag_beetle_1",
+          "texture": "menagerie/companion/entity/stag_beetle_1",
+          "babyTexture": "menagerie/companion/entity/baby_stag_beetle_1",
+          "weight": 1,
+          "model": "companion_stag_beetle",
+          "babyModel": "companion/baby_stag_beetle"
+        },
+        {
+          "name": "stag_beetle_2",
+          "texture": "menagerie/companion/entity/stag_beetle_2",
+          "babyTexture": "menagerie/companion/entity/baby_stag_beetle_2",
+          "weight": 1,
+          "model": "companion_stag_beetle",
+          "babyModel": "companion/baby_stag_beetle"
+        },
+        {
+          "name": "stag_beetle_3",
+          "texture": "menagerie/companion/entity/stag_beetle_3",
+          "babyTexture": "menagerie/companion/entity/baby_stag_beetle_3",
+          "weight": 1,
+          "model": "companion_stag_beetle",
+          "babyModel": "companion/baby_stag_beetle"
+        },
+        {
+          "name": "stag_beetle_4",
+          "texture": "menagerie/companion/entity/stag_beetle_4",
+          "babyTexture": "menagerie/companion/entity/baby_stag_beetle_4",
+          "weight": 1,
+          "model": "companion_stag_beetle",
+          "babyModel": "companion/baby_stag_beetle"
+        },
+        {
+          "name": "stag_beetle_5",
+          "texture": "menagerie/companion/entity/stag_beetle_5",
+          "babyTexture": "menagerie/companion/entity/baby_stag_beetle_5",
+          "weight": 1,
+          "model": "companion_stag_beetle",
+          "babyModel": "companion/baby_stag_beetle"
+        },
+        {
+          "name": "stag_beetle_6",
+          "texture": "menagerie/companion/entity/stag_beetle_6",
+          "babyTexture": "menagerie/companion/entity/baby_stag_beetle_6",
+          "weight": 1,
+          "model": "companion_stag_beetle",
+          "babyModel": "companion/baby_stag_beetle"
+        }
+      ],
+      "clips": [
+        "walk",
+        "idle",
+        "dance",
+        "sit",
+        "hit",
+        "death",
+        "baby_walk",
+        "baby_idle",
+        "baby_dance",
+        "baby_hit",
+        "baby_death",
+        "baby_sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "stick_bug",
+      "id": "companion_stick_bug",
+      "name": "Stick Bug",
+      "shape": "stick_bug",
+      "movement": "land",
+      "habitat": "jungle",
+      "mood": "passive",
+      "width": 0.35,
+      "height": 0.6,
+      "health": 8,
+      "feed": "minecraft:oak_leaves",
+      "mount": false,
+      "model": "companion_stick_bug",
+      "variants": [
+        {
+          "name": "stick_bug_1",
+          "texture": "menagerie/companion/entity/stick_bug_1",
+          "babyTexture": "menagerie/companion/entity/baby_stick_bug_1",
+          "weight": 1,
+          "model": "companion_stick_bug",
+          "babyModel": "companion/baby_stick_bug"
+        },
+        {
+          "name": "stick_bug_2",
+          "texture": "menagerie/companion/entity/stick_bug_2",
+          "babyTexture": "menagerie/companion/entity/baby_stick_bug_2",
+          "weight": 1,
+          "model": "companion_stick_bug",
+          "babyModel": "companion/baby_stick_bug"
+        },
+        {
+          "name": "stick_bug_3",
+          "texture": "menagerie/companion/entity/stick_bug_3",
+          "babyTexture": "menagerie/companion/entity/baby_stick_bug_3",
+          "weight": 1,
+          "model": "companion_stick_bug",
+          "babyModel": "companion/baby_stick_bug"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "dance",
+        "sit",
+        "baby_idle",
+        "baby_walk",
+        "baby_dance",
+        "baby_sit"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "weevil",
+      "id": "companion_weevil",
+      "name": "Weevil",
+      "shape": "weevil",
+      "movement": "land",
+      "habitat": "forest",
+      "mood": "passive",
+      "width": 0.45,
+      "height": 0.5,
+      "health": 10,
+      "feed": "minecraft:wheat",
+      "mount": false,
+      "model": "companion_weevil",
+      "variants": [
+        {
+          "name": "weevil",
+          "texture": "menagerie/companion/entity/weevil",
+          "babyTexture": "menagerie/companion/entity/baby_weevil",
+          "weight": 1,
+          "model": "companion_weevil",
+          "babyModel": "companion/baby_weevil"
+        }
+      ],
+      "clips": [
+        "dance",
+        "walk",
+        "idle",
+        "throw",
+        "sit",
+        "baby_dance",
+        "baby_walk",
+        "baby_idle",
+        "baby_sit"
+      ],
+      "armorTextures": {}
+    }
+  ],
+  "sounds": [],
+  "items": {
+    "companion_dragonfly_spawn_egg": {
+      "kind": "spawn",
+      "species": "companion_dragonfly",
+      "name": "Companion Dragonfly Spawn Egg"
+    },
+    "companion_dumbo_octopus_spawn_egg": {
+      "kind": "spawn",
+      "species": "companion_dumbo_octopus",
+      "name": "Dumbo Octopus Spawn Egg"
+    },
+    "companion_ferret_spawn_egg": {
+      "kind": "spawn",
+      "species": "companion_ferret",
+      "name": "Ferret Spawn Egg"
+    },
+    "companion_jumping_spider_spawn_egg": {
+      "kind": "spawn",
+      "species": "companion_jumping_spider",
+      "name": "Jumping Spider Spawn Egg"
+    },
+    "companion_koi_fish_spawn_egg": {
+      "kind": "spawn",
+      "species": "companion_koi_fish",
+      "name": "Koi Fish Spawn Egg"
+    },
+    "companion_ladybug_spawn_egg": {
+      "kind": "spawn",
+      "species": "companion_ladybug",
+      "name": "Companion Ladybug Spawn Egg"
+    },
+    "companion_leaf_insect_spawn_egg": {
+      "kind": "spawn",
+      "species": "companion_leaf_insect",
+      "name": "Leaf Insect Spawn Egg"
+    },
+    "companion_otter_spawn_egg": {
+      "kind": "spawn",
+      "species": "companion_otter",
+      "name": "Otter Spawn Egg"
+    },
+    "companion_red_panda_spawn_egg": {
+      "kind": "spawn",
+      "species": "companion_red_panda",
+      "name": "Red Panda Spawn Egg"
+    },
+    "companion_roly_poly_spawn_egg": {
+      "kind": "spawn",
+      "species": "companion_roly_poly",
+      "name": "Roly Poly Spawn Egg"
+    },
+    "companion_sea_bunny_spawn_egg": {
+      "kind": "spawn",
+      "species": "companion_sea_bunny",
+      "name": "Sea Bunny Spawn Egg"
+    },
+    "companion_shima_enaga_spawn_egg": {
+      "kind": "spawn",
+      "species": "companion_shima_enaga",
+      "name": "Shima Enaga Spawn Egg"
+    },
+    "companion_snail_spawn_egg": {
+      "kind": "spawn",
+      "species": "companion_snail",
+      "name": "Companion Snail Spawn Egg"
+    },
+    "companion_stag_beetle_spawn_egg": {
+      "kind": "spawn",
+      "species": "companion_stag_beetle",
+      "name": "Stag Beetle Spawn Egg"
+    },
+    "companion_stick_bug_spawn_egg": {
+      "kind": "spawn",
+      "species": "companion_stick_bug",
+      "name": "Stick Bug Spawn Egg"
+    },
+    "companion_weevil_spawn_egg": {
+      "kind": "spawn",
+      "species": "companion_weevil",
+      "name": "Weevil Spawn Egg"
+    },
+    "companion_acorn": {
+      "kind": "item",
+      "source": "acorn",
+      "name": "Companion Acorn"
+    },
+    "companion_acorn_hat": {
+      "kind": "item",
+      "source": "acorn_hat",
+      "name": "Companion Acorn Hat"
+    },
+    "companion_clam": {
+      "kind": "item",
+      "source": "clam",
+      "name": "Companion Clam"
+    },
+    "companion_pearl": {
+      "kind": "item",
+      "source": "pearl",
+      "name": "Companion Pearl"
+    },
+    "companion_silk": {
+      "kind": "item",
+      "source": "silk",
+      "name": "Companion Silk"
+    },
+    "companion_silk_cocoon": {
+      "kind": "item",
+      "source": "silk_cocoon",
+      "name": "Companion Silk Cocoon"
+    },
+    "companion_silk_lead": {
+      "kind": "item",
+      "source": "silk_lead",
+      "name": "Companion Silk Lead"
+    },
+    "companion_grappling_hook": {
+      "kind": "item",
+      "source": "grappling_hook",
+      "name": "Companion Grappling Hook"
+    },
+    "companion_dragonfly_wing": {
+      "kind": "item",
+      "source": "dragonfly_wing",
+      "name": "Companion Dragonfly Wing"
+    },
+    "companion_iron_dragonfly_armor": {
+      "kind": "item",
+      "source": "iron_dragonfly_armor",
+      "name": "Companion Iron Dragonfly Armor"
+    },
+    "companion_gold_dragonfly_armor": {
+      "kind": "item",
+      "source": "gold_dragonfly_armor",
+      "name": "Companion Gold Dragonfly Armor"
+    },
+    "companion_diamond_dragonfly_armor": {
+      "kind": "item",
+      "source": "diamond_dragonfly_armor",
+      "name": "Companion Diamond Dragonfly Armor"
+    },
+    "companion_netherite_dragonfly_armor": {
+      "kind": "item",
+      "source": "netherite_dragonfly_armor",
+      "name": "Companion Netherite Dragonfly Armor"
+    },
+    "companion_pearl_necklace_1": {
+      "kind": "item",
+      "source": "pearl_necklace_1",
+      "name": "Companion Pearl Necklace 1"
+    },
+    "companion_pearl_necklace_2": {
+      "kind": "item",
+      "source": "pearl_necklace_2",
+      "name": "Companion Pearl Necklace 2"
+    },
+    "companion_pearl_necklace_3": {
+      "kind": "item",
+      "source": "pearl_necklace_3",
+      "name": "Companion Pearl Necklace 3"
+    },
+    "companion_snail_slime_bottle": {
+      "kind": "item",
+      "source": "snail_slime_bottle",
+      "name": "Companion Snail Slime Bottle"
+    },
+    "companion_sea_bunny_slime_bottle": {
+      "kind": "item",
+      "source": "sea_bunny_slime_bottle",
+      "name": "Companion Sea Bunny Slime Bottle"
+    },
+    "companion_koi_fish": {
+      "kind": "item",
+      "source": "koi_fish",
+      "name": "Companion Koi Fish"
+    },
+    "companion_koi_fish_bucket": {
+      "kind": "item",
+      "source": "koi_fish_bucket",
+      "name": "Companion Koi Fish Bucket"
+    },
+    "companion_dumbo_octopus_bucket": {
+      "kind": "item",
+      "source": "dumbo_octopus_bucket",
+      "name": "Companion Dumbo Octopus Bucket"
+    },
+    "companion_sea_bunny_bucket": {
+      "kind": "item",
+      "source": "sea_bunny_bucket",
+      "name": "Companion Sea Bunny Bucket"
+    }
+  },
+  "blocks": {
+    "companion_sea_bunny_slime_block": {
+      "source": "sea_bunny_slime_block",
+      "name": "Sea Bunny Slime Block"
+    }
+  }
+}

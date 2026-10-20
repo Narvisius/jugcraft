@@ -1,0 +1,580 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        21.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "body",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -7.6,
+        -21.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -8.0,
+            -5.4,
+            -8.0,
+            16.0,
+            10.0,
+            16.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leftLegBodyF",
+      "parent": "body",
+      "pose": [
+        7.6,
+        3.6,
+        5.0,
+        0.0,
+        0.0,
+        -0.5672
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -2.0,
+            -1.0,
+            10.0,
+            3.0,
+            2.0
+          ],
+          "uv": [
+            42.0,
+            62.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightLegBodyF",
+      "parent": "body",
+      "pose": [
+        -7.6,
+        3.6,
+        5.0,
+        0.0,
+        0.0,
+        0.5672
+      ],
+      "cubes": [
+        {
+          "box": [
+            -10.0,
+            -2.0,
+            -1.0,
+            10.0,
+            3.0,
+            2.0
+          ],
+          "uv": [
+            42.0,
+            62.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "leftLegBodyB",
+      "parent": "body",
+      "pose": [
+        7.6,
+        3.6,
+        -5.0,
+        0.0,
+        0.0,
+        -0.5672
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -2.0,
+            -1.0,
+            10.0,
+            3.0,
+            2.0
+          ],
+          "uv": [
+            42.0,
+            62.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightLegBodyB",
+      "parent": "body",
+      "pose": [
+        -7.6,
+        3.6,
+        -5.0,
+        0.0,
+        0.0,
+        0.5672
+      ],
+      "cubes": [
+        {
+          "box": [
+            -10.0,
+            -2.0,
+            -1.0,
+            10.0,
+            3.0,
+            2.0
+          ],
+          "uv": [
+            42.0,
+            62.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "leftLeg2BodyF",
+      "parent": "leftLegBodyF",
+      "pose": [
+        9.1,
+        0.5,
+        0.1,
+        0.0,
+        0.0,
+        1.4835
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -4.0,
+            -0.1,
+            15.0,
+            6.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            53.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightLegBodyF2",
+      "parent": "rightLegBodyF",
+      "pose": [
+        -9.1,
+        0.5,
+        0.1,
+        0.0,
+        0.0,
+        -1.4835
+      ],
+      "cubes": [
+        {
+          "box": [
+            -10.0,
+            -4.0,
+            -0.1,
+            15.0,
+            6.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            53.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "leftLeg2BodyB",
+      "parent": "leftLegBodyB",
+      "pose": [
+        9.1,
+        0.5,
+        0.1,
+        0.0,
+        0.0,
+        1.4835
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -4.0,
+            -0.1,
+            15.0,
+            6.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            53.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightLegBodyB2",
+      "parent": "rightLegBodyB",
+      "pose": [
+        -9.1,
+        0.5,
+        0.1,
+        0.0,
+        0.0,
+        -1.4835
+      ],
+      "cubes": [
+        {
+          "box": [
+            -10.0,
+            -4.0,
+            -0.1,
+            15.0,
+            6.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            53.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelCaveCentipede.java",
+  "sourceSha256": "17809a720316d01bad489894d1c2fb178b1b5101d906d45ebeac60ed4f9278be",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "leftLegBodyF",
+      "kind": "swing",
+      "speed": 1.5,
+      "degree": 0.85,
+      "invert": true,
+      "phase": [
+        "*",
+        [
+          "+",
+          "segment",
+          1
+        ],
+        1.5707963267948966
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move"
+    },
+    {
+      "bone": "rightLegBodyF",
+      "kind": "swing",
+      "speed": 1.5,
+      "degree": 0.85,
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "+",
+          "segment",
+          1
+        ],
+        1.5707963267948966
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move"
+    },
+    {
+      "bone": "leftLegBodyB",
+      "kind": "swing",
+      "speed": 1.5,
+      "degree": 0.85,
+      "invert": true,
+      "phase": [
+        "+",
+        [
+          "*",
+          [
+            "+",
+            "segment",
+            1
+          ],
+          1.5707963267948966
+        ],
+        0.5
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move"
+    },
+    {
+      "bone": "rightLegBodyB",
+      "kind": "swing",
+      "speed": 1.5,
+      "degree": 0.85,
+      "invert": false,
+      "phase": [
+        "+",
+        [
+          "*",
+          [
+            "+",
+            "segment",
+            1
+          ],
+          1.5707963267948966
+        ],
+        0.5
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move"
+    },
+    {
+      "bone": "leftLeg2BodyF",
+      "kind": "flap",
+      "speed": 1.5,
+      "degree": 0.425,
+      "invert": true,
+      "phase": [
+        "*",
+        [
+          "+",
+          "segment",
+          1
+        ],
+        1.5707963267948966
+      ],
+      "bias": 0.1,
+      "clock": "walk",
+      "amount": "move"
+    },
+    {
+      "bone": "rightLegBodyF2",
+      "kind": "flap",
+      "speed": 1.5,
+      "degree": 0.425,
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "+",
+          "segment",
+          1
+        ],
+        1.5707963267948966
+      ],
+      "bias": 0.1,
+      "clock": "walk",
+      "amount": "move"
+    },
+    {
+      "bone": "leftLeg2BodyB",
+      "kind": "flap",
+      "speed": 1.5,
+      "degree": 0.425,
+      "invert": true,
+      "phase": [
+        "+",
+        [
+          "*",
+          [
+            "+",
+            "segment",
+            1
+          ],
+          1.5707963267948966
+        ],
+        0.5
+      ],
+      "bias": 0.1,
+      "clock": "walk",
+      "amount": "move"
+    },
+    {
+      "bone": "rightLegBodyB2",
+      "kind": "flap",
+      "speed": 1.5,
+      "degree": 0.425,
+      "invert": false,
+      "phase": [
+        "+",
+        [
+          "*",
+          [
+            "+",
+            "segment",
+            1
+          ],
+          1.5707963267948966
+        ],
+        0.5
+      ],
+      "bias": 0.1,
+      "clock": "walk",
+      "amount": "move"
+    }
+  ],
+  "expressions": [
+    {
+      "bone": "body",
+      "target": "y",
+      "op": "+=",
+      "value": [
+        "+",
+        [
+          "-",
+          [
+            "*",
+            [
+              "*",
+              [
+                "sin",
+                [
+                  "-",
+                  [
+                    "*",
+                    "walk",
+                    1.5
+                  ],
+                  [
+                    "*",
+                    [
+                      "*",
+                      [
+                        "+",
+                        "segment",
+                        1
+                      ],
+                      1.5707963267948966
+                    ],
+                    1.5707963267948966
+                  ]
+                ]
+              ],
+              "move"
+            ],
+            0.85
+          ],
+          [
+            "*",
+            "move",
+            0.85
+          ]
+        ],
+        [
+          "*",
+          [
+            "sin",
+            [
+              "-",
+              [
+                "*",
+                "age",
+                0.1
+              ],
+              [
+                "*",
+                [
+                  "*",
+                  [
+                    "+",
+                    "segment",
+                    1
+                  ],
+                  1.5707963267948966
+                ],
+                1.5707963267948966
+              ]
+            ]
+          ],
+          0.01
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:cavern_gazing_pearl",
+    "jugcraft:cavern_marine_snow"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:cavern_pearl"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

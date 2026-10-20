@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:spinning_wheel",
+    "minecraft:green_dye"
+  ],
+  "result": {
+    "id": "jugcraft:herbal_spinning_wheel"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

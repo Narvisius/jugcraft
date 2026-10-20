@@ -1,0 +1,32 @@
+{
+  "parent": "jugcraft:nouveau_enchanting_apparatus",
+  "criteria": {
+    "has_magebloom_crop": {
+      "conditions": {
+        "items": [
+          {
+            "items": "jugcraft:nouveau_magebloom_crop"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "jugcraft.nouveau_adv.desc.magebloom_crop"
+    },
+    "icon": {
+      "count": 1,
+      "id": "jugcraft:nouveau_magebloom_crop"
+    },
+    "title": {
+      "translate": "jugcraft.nouveau_adv.title.magebloom_crop"
+    }
+  },
+  "requirements": [
+    [
+      "has_magebloom_crop"
+    ]
+  ]
+}

@@ -1,0 +1,218 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.ecology_penguin",
+        "texture_width": 64,
+        "texture_height": 64,
+        "visible_bounds_width": 4,
+        "visible_bounds_height": 4,
+        "visible_bounds_offset": [
+          0,
+          0.45,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "body",
+          "parent": "root",
+          "pivot": [
+            0.0,
+            10.8,
+            0.0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -3.36,
+                3.6,
+                -4.8
+              ],
+              "size": [
+                6.72,
+                7.2,
+                9.6
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "head",
+          "parent": "root",
+          "pivot": [
+            0.0,
+            13.680000000000001,
+            -4.32
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -2.4,
+                9.360000000000001,
+                -6.72
+              ],
+              "size": [
+                4.8,
+                4.32,
+                4.8
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "wing_-1",
+          "parent": "root",
+          "pivot": [
+            -2.88,
+            7.2,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -10.559999999999999,
+                7.2,
+                -3.36
+              ],
+              "size": [
+                7.68,
+                0.864,
+                7.68
+              ],
+              "uv": [
+                0,
+                32.0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_-1",
+          "parent": "root",
+          "pivot": [
+            -1.92,
+            3.6,
+            0.24
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -2.4,
+                0,
+                -0.48
+              ],
+              "size": [
+                0.96,
+                3.6,
+                1.44
+              ],
+              "uv": [
+                32.0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "wing_1",
+          "parent": "root",
+          "pivot": [
+            2.88,
+            7.2,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                2.88,
+                7.2,
+                -3.36
+              ],
+              "size": [
+                7.68,
+                0.864,
+                7.68
+              ],
+              "uv": [
+                0,
+                32.0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_1",
+          "parent": "root",
+          "pivot": [
+            1.92,
+            3.6,
+            0.24
+          ],
+          "cubes": [
+            {
+              "origin": [
+                1.44,
+                0,
+                -0.48
+              ],
+              "size": [
+                0.96,
+                3.6,
+                1.44
+              ],
+              "uv": [
+                32.0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "beak",
+          "parent": "root",
+          "pivot": [
+            0.0,
+            12.528,
+            -7.68
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1.248,
+                10.8,
+                -9.12
+              ],
+              "size": [
+                2.496,
+                1.728,
+                2.88
+              ],
+              "uv": [
+                32.0,
+                32.0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

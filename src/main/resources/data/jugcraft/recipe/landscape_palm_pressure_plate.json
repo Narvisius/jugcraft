@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "wooden_pressure_plate",
+  "key": {
+    "#": "jugcraft:landscape_palm_planks"
+  },
+  "pattern": [
+    "##"
+  ],
+  "result": {
+    "id": "jugcraft:landscape_palm_pressure_plate"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

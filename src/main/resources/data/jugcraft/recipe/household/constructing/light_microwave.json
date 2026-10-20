@@ -1,0 +1,26 @@
+{
+  "type": "jugcraft:household_construction",
+  "ingredients": [
+    {
+      "count": 6,
+      "ingredient": "minecraft:iron_ingot"
+    },
+    {
+      "count": 1,
+      "ingredient": "minecraft:glass"
+    },
+    {
+      "count": 4,
+      "ingredient": "minecraft:redstone"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:household_light_microwave"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

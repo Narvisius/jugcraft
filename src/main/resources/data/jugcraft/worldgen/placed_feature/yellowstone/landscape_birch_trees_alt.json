@@ -1,0 +1,34 @@
+{
+  "feature": "jugcraft:yellowstone/landscape_birch_alt",
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 150
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:height_range",
+      "height": {
+        "type": "minecraft:trapezoid",
+        "min_inclusive": {
+          "absolute": 130
+        },
+        "max_inclusive": {
+          "absolute": 240
+        }
+      }
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:would_survive",
+        "state": "minecraft:fern"
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

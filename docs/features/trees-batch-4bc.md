@@ -67,3 +67,17 @@ The revised delivery uses a separate folder and preserves the original preview. 
 Commands: `./build-local.ps1 -Tasks @('build','runClientGameTest','-PclientTests=TreeBatchFourBCClientGameTests')`; final display-only rerun: `./build-local.ps1 -Tasks @('runClientGameTest','-PclientTests=TreeBatchFourBCClientGameTests')`. Python: `python -m unittest discover -s scripts/tests -v`, `python tools/check_mod_data.py`, `python scripts/check_repository.py`, `python scripts/package_modrinth.py check`. Local Python runs use the existing DejaVu font directory through `JUGCRAFT_FONT_DIR`.
 
 No external launcher import, two-client multiplayer, real-calendar season transition, released-world upgrade or performance capacity claim is made. No merge, release, server deployment or later-batch work is included.
+
+### Bayou natural-survey regression in PR #413, 17 October 2026
+
+Diagnosed and corrected with OpenAI Codex (GPT-6). The original client test failed again locally on PR #413's `3eb5528ff` source: its first 129-by-129 Bayou sample contained 1,628 cypress logs and 5,569 needle blocks, but no cypress logs in a column retaining water. The screenshot-location helper prefers dry ground. Solid cypress roots replace water, so this column statistic can depend on incidental overhanging timber; it is not a direct count of trees rooted in water.
+
+The Bayou test now tries at most nine nearby candidate locations, skips duplicate stops and logs the counts before validation. It retains both the cypress-foliage and wet-cypress-timber assertions and fails if none of the bounded samples satisfies them. The second unique sample, centered at `(1864, 63, -6272)`, contained 21 wet-column cypress logs. Other biome sampling, production worldgen, tree density and root geometry are unchanged. The controlled water-depth tests remain the direct check of shallow-water growth.
+
+Focused verification on Minecraft 26.3 / Fabric Loader 0.19.5 / Java 25.0.4.1:
+
+- `./build-local.ps1 -Tasks @('runClientGameTest','-PclientTests=TreeBatchFourBCClientGameTests')`: passed all five natural biome stops, water/season/wood displays and save/reopen of six comparison trees.
+- `./build-local.ps1 -Tasks @('runGameTest','-I','build/focused.gradle','-PgameTestFilter=jugcraft-test:tree_batch_four_bcgame_tests*')`: all four required tests passed; cypress growth succeeded for all 12 seeds at each water depth 0, 1, 2 and 3. The existing local init script supplies this property as `-Dfabric-api.gametest.filter`; it is not a production change. Two initial filters selected no tests; the successful filter above uses Fabric's actual acronym conversion.
+- `python -m unittest discover -s scripts/tests -p test_tree_batch_four_bc.py -v`: all three passed.
+
+The full local suite was not rerun. No later batch was started.

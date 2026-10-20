@@ -1,0 +1,352 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "body",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        18.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            4.0,
+            -1.5,
+            -3.0,
+            2.0,
+            7.0,
+            6.0
+          ],
+          "uv": [
+            20.0,
+            41.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -6.0,
+            -1.5,
+            -3.0,
+            2.0,
+            7.0,
+            6.0
+          ],
+          "uv": [
+            36.0,
+            41.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -6.0,
+            -10.5,
+            -6.0,
+            12.0,
+            9.0,
+            12.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "coil",
+      "parent": "body",
+      "pose": [
+        0.0,
+        2.5,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.5,
+            -3.5,
+            -3.5,
+            9.0,
+            7.0,
+            7.0
+          ],
+          "uv": [
+            0.0,
+            21.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -4.0,
+            -3.0,
+            -3.0,
+            8.0,
+            6.0,
+            6.0
+          ],
+          "uv": [
+            26.0,
+            29.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lleg",
+      "parent": "body",
+      "pose": [
+        5.0,
+        -7.5,
+        5.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "larm",
+      "parent": "body",
+      "pose": [
+        5.0,
+        -7.5,
+        -5.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -9.0,
+            -4.0,
+            5.0,
+            10.0,
+            5.0
+          ],
+          "uv": [
+            0.0,
+            35.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rleg",
+      "parent": "body",
+      "pose": [
+        -5.0,
+        -7.5,
+        5.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "rarm",
+      "parent": "body",
+      "pose": [
+        -5.0,
+        -7.5,
+        -5.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -9.0,
+            -4.0,
+            5.0,
+            10.0,
+            5.0
+          ],
+          "uv": [
+            0.0,
+            35.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "cube_r1",
+      "parent": "lleg",
+      "pose": [
+        1.5,
+        -4.0,
+        1.5,
+        0.0,
+        -1.5708,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.5,
+            -5.0,
+            -2.5,
+            5.0,
+            10.0,
+            5.0
+          ],
+          "uv": [
+            0.0,
+            35.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r2",
+      "parent": "rleg",
+      "pose": [
+        -1.5,
+        -4.0,
+        1.5,
+        0.0,
+        1.5708,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.5,
+            -5.0,
+            -2.5,
+            5.0,
+            10.0,
+            5.0
+          ],
+          "uv": [
+            0.0,
+            35.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/BoundroidWinchModel.java",
+  "sourceSha256": "34e55f2728603fb4ee9dd96f454f6455734eede3310cc39839664d9b5ba197d1",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.walk(this.larm, walkSpeed, walkDegree, true, 1.0f, 0.0f, ageInTicks, moveForwards);",
+      "reason": "Unbound expression variable moveForwards"
+    },
+    {
+      "call": "this.walk(this.rarm, walkSpeed, walkDegree, false, 1.0f, 0.0f, ageInTicks, moveForwards);",
+      "reason": "Unbound expression variable moveForwards"
+    },
+    {
+      "call": "this.walk(this.lleg, walkSpeed, walkDegree, true, -1.0f, 0.0f, ageInTicks, moveForwards);",
+      "reason": "Unbound expression variable moveForwards"
+    },
+    {
+      "call": "this.walk(this.rleg, walkSpeed, walkDegree, false, -1.0f, 0.0f, ageInTicks, moveForwards);",
+      "reason": "Unbound expression variable moveForwards"
+    },
+    {
+      "call": "this.flap(this.larm, walkSpeed, walkDegree, true, 1.0f, 0.0f, ageInTicks, moveSideways);",
+      "reason": "Unbound expression variable moveSideways"
+    },
+    {
+      "call": "this.flap(this.rarm, walkSpeed, walkDegree, false, 1.0f, 0.0f, ageInTicks, moveSideways);",
+      "reason": "Unbound expression variable moveSideways"
+    },
+    {
+      "call": "this.flap(this.lleg, walkSpeed, walkDegree, true, -1.0f, 0.0f, ageInTicks, moveSideways);",
+      "reason": "Unbound expression variable moveSideways"
+    },
+    {
+      "call": "this.flap(this.rleg, walkSpeed, walkDegree, false, -1.0f, 0.0f, ageInTicks, moveSideways);",
+      "reason": "Unbound expression variable moveSideways"
+    },
+    {
+      "call": "this.coil.rotateAngleX = (float)Math.toRadians(chainLength * 260.0f);",
+      "reason": "Unbound expression variable chainLength"
+    },
+    {
+      "call": "this.body.rotateAngleX = (float)((double)this.body.rotateAngleX + (double)onGroundAmount * Math.PI);",
+      "reason": "Unsupported expression (this.body.rotateAngleX + onGroundAmount * 3.141592653589793)"
+    },
+    {
+      "call": "this.body.rotationPointY -= onGroundAmount * 11.0f;",
+      "reason": "Unbound expression variable onGroundAmount"
+    }
+  ],
+  "expressions": [],
+  "poses": []
+}

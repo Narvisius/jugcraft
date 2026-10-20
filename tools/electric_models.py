@@ -287,3 +287,10 @@ MODELS = {"battery_box": battery_box(), "capacitor_bank": capacitor_bank(), "sol
           "electric_pump": electric_pump(), "fuel_cell": fuel_cell(),
           "lithium_battery_bank": lithium_battery_bank(), "advanced_solar_panel": advanced_solar_panel(),
           "advanced_engine": advanced_engine(), "flow_battery": flow_battery()}
+
+import battery_models
+MODELS.update(battery_models.MODELS)
+# Paired manifold joins at the back-center bottom module socket; no dangling pipe.
+for x in (-12, -5):
+    MODELS['flow_battery'].append(box((x,6,28),(x+1,8,32),'el_frame'))
+MODELS['flow_battery'].append(box((-10,46,6),(-6,48,10),'el_frame'))

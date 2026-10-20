@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "x": "#c:nuggets/iron",
+    "y": "#c:gems/source"
+  },
+  "pattern": [
+    " x ",
+    "xyx",
+    " x "
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_dull_trinket"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

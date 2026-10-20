@@ -125,7 +125,7 @@ SCREENS = {
 WORKSHOP = {"coal_generator", "steam_generator", "water_wheel", "wind_turbine", "crusher", "electric_furnace",
             "alloy_smelter", "metal_press", "wire_drawer", "pulverizer", "ore_washer", "sieve", "sawmill",
             "cobblestone_generator", "tree_farm", "crop_harvester", "auto_crafter", "large_steam_engine"}
-ELECTRIC = {"battery_box", "capacitor_bank", "solar_panel", "advanced_solar_panel", "fuel_cell", "lithium_battery_bank",
+ELECTRIC = {"lead_acid_battery_bank", "flow_tank_module", "flow_stack_module", "battery_box", "capacitor_bank", "solar_panel", "advanced_solar_panel", "fuel_cell", "lithium_battery_bank",
             "flow_battery", "advanced_engine"}
 LAB = {"chemical_reactor", "electrolytic_cell", "air_separation_unit", "synthesis_converter", "polymerization_reactor"}
 ADVANCED = {"circuit_assembler", "lithography_station", "gas_centrifuge_cascade", "fuel_fabricator"}
@@ -133,6 +133,8 @@ ADVANCED = {"circuit_assembler", "lithography_station", "gas_centrifuge_cascade"
 FORM_LOOK = "industrial"
 # What each industrial form is for (tools/industrial_forms.py FORMS), shown in its help box.
 FORM_TAGLINES = {
+    "precision_finisher": "Finishes ceramics, shafts and lenses with reusable heads and coolant.",
+    "wet_processing_bench": "Cleans, coats, develops and etches wafers; collect the spent solution.",
     "electrolytic_separator": "Splits water or brine into gases, and lye from brine.",
     "gas_burning_generator": "Burns hydrogen or methane into power.",
     "chemical_infuser": "Joins gases into hydrogen chloride, methane or sulfur trioxide.",
@@ -175,6 +177,9 @@ FORM_TAGLINES = {
 
 # What each machine is for, in a line the terminal shows.
 TAGLINES = {
+    "lead_acid_battery_bank":"Steel-era storage. Front output; other faces charge.",
+    "flow_tank_module":"Paired capacity. Connect behind the middle bottom block.",
+    "flow_stack_module":"Rate upgrade. Mount above the middle front top block.",
     "coal_generator": "Burns coal and other fuel into power.",
     "battery_box": "Stores power. Gives it out of its front.",
     "electric_furnace": "Smelts anything a furnace can, on power.",
@@ -201,7 +206,7 @@ TAGLINES = {
     "hydroponic_bay": "Grows crops in nutrient solution, anywhere.",
     "electroplating_bath": "Plates and repairs tools, weapons and armor.",
     "ammonia_chiller": "Freezes water into ice, anywhere.",
-    "cryogenic_liquefier": "Condenses oxygen into liquid oxygen.",
+    "cryogenic_liquefier": "Liquefies oxygen, methane and hydrogen. Cooling tools unlock colder gases.",
     "rocket_workshop": "Builds rocket parts and rockets.",
     "water_wheel": "Turns flowing water into power.",
     "auto_crafter": "Crafts the pattern in its grid.",
@@ -224,7 +229,7 @@ TAGLINES = {
     "heat_recovery_unit": "Power from a generator's exhaust heat.",
     "lithium_battery_bank": "Stores 32M JE. Gives it out of its front.",
     "flow_battery": "Stores 1,000 JE per mB of electrolyte.",
-    "lithography_station": "Etches wafers into microchips.",
+    "lithography_station": "Exposes patterned wafers and makes legacy chips.",
     "gas_centrifuge_cascade": "Enriches uranium for reactor fuel.",
     "fuel_fabricator": "Makes reactor fuel assemblies.",
     "gas_holder": "Holds 1,024 buckets of one gas.",

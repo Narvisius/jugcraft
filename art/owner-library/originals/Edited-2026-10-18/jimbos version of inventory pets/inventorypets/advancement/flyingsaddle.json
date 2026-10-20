@@ -1,0 +1,31 @@
+{
+    "display": {
+        "icon": {
+            "id": "inventorypets:pet_flying_saddle"
+        },
+        "title": {
+            "translate": "advancement.ip.petach_flying_saddle"
+        },
+        "description": {
+            "translate": "advancement.ip.petach_flying_saddle.desc"
+        },
+        "show_toast": true,
+        "announce_to_chat": true
+    },
+    "parent": "inventorypets:biome",
+    "criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                        	"inventorypets:pet_flying_saddle"
+                    	]
+                    }
+                    
+                ]
+            }
+        }
+    }
+}

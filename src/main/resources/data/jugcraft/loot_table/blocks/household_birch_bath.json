@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:household_birch_bath"
+        }
+      ],
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "jugcraft:household_birch_bath",
+        "state": {
+          "type": "bottom"
+        }
+      }
+    }
+  ]
+}

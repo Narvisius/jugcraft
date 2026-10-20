@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:blend_density",
+  "input": {
+    "type": "minecraft:add",
+    "left": {
+      "type": "minecraft:noise",
+      "noise": "terralith:math/noise/base",
+      "xz_scale": 1.0,
+      "y_scale": 1.0
+    },
+    "right": 0.0
+  }
+}

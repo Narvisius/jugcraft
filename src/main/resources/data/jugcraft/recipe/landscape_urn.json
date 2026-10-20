@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "B B",
+    "B B",
+    "BBB"
+  ],
+  "key": {
+    "B": "minecraft:brick"
+  },
+  "result": {
+    "id": "jugcraft:landscape_urn"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

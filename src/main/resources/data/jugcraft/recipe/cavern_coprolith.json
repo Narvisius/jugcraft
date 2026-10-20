@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PDP",
+    "DPD",
+    "PDP"
+  ],
+  "key": {
+    "P": "jugcraft:cavern_guanostone",
+    "D": "jugcraft:cavern_guano_block"
+  },
+  "result": {
+    "count": 4,
+    "id": "jugcraft:cavern_coprolith"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

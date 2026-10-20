@@ -1,0 +1,67 @@
+{
+	"display": {
+		"icon": {
+			"id": "inventorypets:pet_creeper"
+		},
+		"title": {
+			"translate": "advancement.ip.petachieveMobster"
+		},
+		"description": {
+			"translate": "advancement.ip.petachieveMobster.desc"
+		},
+		"show_toast": true,
+		"announce_to_chat": true,
+		"frame": "goal"
+	},
+	"parent": "inventorypets:root",
+	"criteria": {
+		"crafting_table": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": [
+							"inventorypets:pet_ghast"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_spider"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_iron_golem"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_snow_golem"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_enderman"
+						]
+					},
+					{
+						"items": [
+							"inventorypets:pet_creeper"
+						]
+					},
+					{
+                        "items": [
+                        	"inventorypets:pet_magma_cube"
+                    	]
+                    },
+                    {
+                        "items": [
+                        	"inventorypets:pet_blaze"
+                    	]
+                    }
+				]
+			}
+		}
+	}
+}
+

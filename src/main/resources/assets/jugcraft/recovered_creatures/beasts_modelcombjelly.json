@@ -1,0 +1,152 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "body",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -13.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -2.0,
+            -5.0,
+            10.0,
+            15.0,
+            10.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "inner_body",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -3.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -1.0,
+            -3.0,
+            6.0,
+            13.0,
+            6.0
+          ],
+          "uv": [
+            40.0,
+            6.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelCombJelly.java",
+  "sourceSha256": "f3db314938908eb66607787d5be773daa83ec6167331e7ccd70953d3067e59bf",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "body",
+      "kind": "bob",
+      "speed": 0.1,
+      "degree": 1.0,
+      "invert": false,
+      "phase": 0,
+      "bias": 0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          [
+            "*",
+            "land",
+            5
+          ],
+          0.2
+        ]
+      ],
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.body.setScale(squishedScale, heightScale, widthScale);",
+      "reason": "Unbound expression variable squishedScale"
+    },
+    {
+      "call": "this.inner_body.setScale(squishedScale, heightScale, widthScale);",
+      "reason": "Unbound expression variable squishedScale"
+    },
+    {
+      "call": "this.body.rotateAngleX = birdPitch * ((float)Math.PI / 180) * (1.0f - landProgress * 0.2f);",
+      "reason": "Unbound expression variable birdPitch"
+    },
+    {
+      "call": "this.body.rotateAngleZ = landProgress * 0.2f * 1.5707964f;",
+      "reason": "Unbound expression variable landProgress"
+    },
+    {
+      "call": "this.body.rotationPointY += landProgress * 1.85f;",
+      "reason": "Unbound expression variable landProgress"
+    },
+    {
+      "call": "this.body.rotationPointY += Math.abs(birdPitch * 0.07f);",
+      "reason": "Unbound expression variable birdPitch"
+    },
+    {
+      "call": "this.body.rotationPointX += landProgress;",
+      "reason": "Unbound expression variable landProgress"
+    }
+  ],
+  "expressions": [],
+  "poses": []
+}

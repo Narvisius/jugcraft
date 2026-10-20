@@ -114,7 +114,7 @@ public final class Compiler {
 		for (int i = 0; i < parts.size(); i++) {
 			Composition.Part written = parts.get(i);
 			Component part = catalog.component(written.component());
-			if (part == null || change.aspect().modifies != part.slot() || !changes(change.aspect(), part)
+			if (part == null || !changes(change.aspect(), part)
 					|| written.modifiers().contains(modifier.id()) || written.modifiers().size() >= Grammar.MAX_MODIFIERS) {
 				continue;
 			}
@@ -142,8 +142,9 @@ public final class Compiler {
 			problems.add(Text.of("problem.work", work, instrument.ref(), instrument.work()));
 		}
 		int cost = Math.max(1, focus);
-		if (cost > FocusPool.MAX) {
-			problems.add(Text.of("problem.focus", cost, FocusPool.MAX));
+        int maximumFocus=instrument.item().startsWith("jugcraft:nouveau_")?FocusPool.HARD_MAX:FocusPool.MAX;
+		if (cost > maximumFocus) {
+			problems.add(Text.of("problem.focus", cost, maximumFocus));
 		}
 		if (root == null || !problems.isEmpty()) {
 			return new Compilation(null, problems);
@@ -208,7 +209,7 @@ public final class Compiler {
 					selectionModifiers = modifiers.get(i);
 				}
 				case OPERATION -> {
-					if (operations.contains(part)) {
+					if (operations.contains(part)&&!part.id().startsWith("jugcraft:nouveau_")) {
 						problems.add(Text.of("problem.duplicate", part.ref()));
 					}
 					operations.add(part);
@@ -234,6 +235,12 @@ public final class Compiler {
 		}
 		Component.Delivery deliveryPart = (Component.Delivery) delivery.part();
 		Component.Selection selectionPart = (Component.Selection) selection.part();
+        Component.Pick effectivePick=selectionPart.pick();
+        if(delivery.id().startsWith("jugcraft:nouveau_")&&added(selectionModifiers,Component.Aspect.SENSITIVE)>0&&effectivePick==Component.Pick.CREATURES)effectivePick=Component.Pick.BLOCKS;
+        boolean field=Set.of("jugcraft:nouveau_orbit","jugcraft:nouveau_linger","jugcraft:nouveau_wall","jugcraft:nouveau_rune").contains(delivery.id());
+        int missiles=delivery.id().equals("jugcraft:nouveau_projectile")?Math.min(5,1+2*added(deliveryModifiers,Component.Aspect.SPLIT))*(1+added(deliveryModifiers,Component.Aspect.PIERCE)):1;
+        int nodeTargets=field?instrument.targets():Math.min(instrument.targets(),selectionPart.targets()*missiles);
+        int nodeWorkBefore=work;
 		if (depth > 0 && deliveryPart.form() != Component.Form.HERE) {
 			problems.add(Text.of("problem.branch_delivery", delivery.ref()));
 		}
@@ -251,12 +258,14 @@ public final class Compiler {
 			Component operation = operations.get(i);
 			Component.Operation part = (Component.Operation) operation.part();
 			EffectSpec effect = part.effect();
-			if (!selectionPart.pick().suits(effect.kind().on)) {
+            for(var modifier:deliveryModifiers){var change=(Component.Modifier)modifier.part();effect=effect.withAugment("delivery_"+change.aspect().id(),effect.augment("delivery_"+change.aspect().id())+1);}
+            for(var modifier:selectionModifiers){var change=(Component.Modifier)modifier.part();effect=effect.withAugment("selection_"+change.aspect().id(),effect.augment("selection_"+change.aspect().id())+1);}
+            if (!effectivePick.suits(effect.kind().on)) {
 				problems.add(Text.of("problem.selection", operation.ref(), new Text.Ref("on", effect.kind().on.name().toLowerCase(Locale.ROOT)),
 						selection.ref()));
 			}
 			if (depth == 0 && deliveryPart.form() == Component.Form.HERE && selectionPart.pick() == Component.Pick.STRUCK
-					&& effect.intent() == Intent.HARMFUL) {
+                    && effect.intent() == Intent.HARMFUL&&!field&&!delivery.id().equals("jugcraft:nouveau_underfoot")) {
 				problems.add(Text.of("problem.harms_caster", operation.ref()));
 			}
 			if (selectionPart.pick() == Component.Pick.ALLIES && effect.intent() == Intent.HARMFUL) {
@@ -268,10 +277,19 @@ public final class Compiler {
 				Component.Modifier change = (Component.Modifier) modifier.part();
 				if (change.aspect() == Component.Aspect.MAGNITUDE) {
 					magnitude += Math.max(1, effect.magnitude() * change.amount() / 100);
+                    effect=effect.withAugment("amplify",effect.augment("amplify")+1);
 				} else if (change.aspect() == Component.Aspect.DURATION) {
 					ticks += effect.duration() * change.amount() / 100;
+				} else if(change.aspect()==Component.Aspect.DAMPEN){
+					magnitude=Math.max(0,magnitude-Math.max(1,effect.magnitude()*change.amount()/100));
+                    effect=effect.withAugment("dampen",effect.augment("dampen")+1);
+				} else if(change.aspect()==Component.Aspect.DURATION_DOWN){
+					ticks=Math.max(1,ticks-effect.duration()*change.amount()/100);
+				} else {
+					effect=effect.withAugment(change.aspect().id(),effect.augment(change.aspect().id())+change.amount());
 				}
 			}
+			if(effect.augment("fortune")>0&&effect.augment("extract")>0)problems.add(Text.of("problem.duplicate",operation.ref()));
 			int strongest = switch (effect.kind()) {
 				case STATUS -> EffectSpec.MAX_AMPLIFIER;
 				case MOVEMENT -> EffectSpec.MAX_PUSH;
@@ -288,10 +306,13 @@ public final class Compiler {
 			}
 			steps.add(new Plan.Step(i, operation.id(), effect.withMagnitude(magnitude).withDuration(ticks), part.principle(), part.scaling()));
 			focus += (operation.focus() + cost(operationModifiers.get(i))) * ending.pulses();
-			work += ending.pulses() * effect.kind().work * selectionPart.targets();
+            int area=effect.augment("radius"),intrinsic=operation.id().equals("jugcraft:nouveau_fell")?32+16*area:Set.of("jugcraft:nouveau_explosion","jugcraft:nouveau_flare","jugcraft:nouveau_cold_snap","jugcraft:nouveau_fangs").contains(operation.id())?8+4*area:1;
+            if(area>0||intrinsic>1)nodeTargets=Math.max(nodeTargets,Math.min(instrument.targets(),Math.max(intrinsic,(1+2*area)*(1+2*area))));
+            work += ending.pulses() * effect.kind().work * Math.max(selectionPart.targets(),area>0||intrinsic>1?nodeTargets:selectionPart.targets()*missiles);
 		}
-		Plan.Node node = new Plan.Node(depth, delivery.id(), deliveryPart.form(), range, selection.id(), selectionPart.pick(), radius,
-				selectionPart.targets(), steps, termination == null ? null : termination.id(), ending.pulses(), ending.interval(), child);
+        if(field)work=nodeWorkBefore+instrument.work()-1;
+        Plan.Node node = new Plan.Node(depth, delivery.id(), deliveryPart.form(), range, selection.id(), effectivePick, radius,
+                Math.max(selectionPart.targets(),nodeTargets), steps, termination == null ? null : termination.id(), ending.pulses(), ending.interval(), child);
 		if (node.lingers() > instrument.duration()) {
 			problems.add(Text.of("problem.duration", termination == null ? delivery.ref() : termination.ref(), Text.seconds(node.lingers()),
 					instrument.ref(), Text.seconds(instrument.duration())));
@@ -299,7 +320,7 @@ public final class Compiler {
 		focus += delivery.focus() + selection.focus() + (termination == null ? 0 : termination.focus()) + cost(deliveryModifiers)
 				+ cost(selectionModifiers);
 		work += deliveryPart.form() == Component.Form.HERE ? 0 : 1;
-		targets += selectionPart.targets();
+        targets += nodeTargets;
 		duration = Math.max(duration, node.lingers());
 		return problems.size() > before ? null : node;
 	}
@@ -336,9 +357,9 @@ public final class Compiler {
 				}
 				use(modifier);
 				Component.Modifier change = (Component.Modifier) modifier.part();
-				if (joined.contains(modifier)) {
+				if (joined.contains(modifier)&&!modifier.id().startsWith("jugcraft:nouveau_")) {
 					problems.add(Text.of("problem.duplicate", modifier.ref()));
-				} else if (change.aspect().modifies != part.slot() || !changes(change.aspect(), part)) {
+				} else if (!changes(change.aspect(), part)) {
 					problems.add(Text.of("problem.modifier", modifier.ref(), change.aspect().ref(), part.ref()));
 				}
 				joined.add(modifier);
@@ -365,13 +386,18 @@ public final class Compiler {
 
 	/** Whether a modifier of this aspect would change this component at all (the composer screen offers only these). */
 	public static boolean changes(Component.Aspect aspect, Component part) {
+        if(part.id().startsWith("jugcraft:nouveau_")){
+            if(part.part() instanceof Component.Delivery)return switch(aspect){case ACCELERATE,DECELERATE,SPLIT,PIERCE,SENSITIVE,DURATION,DURATION_DOWN,MAGNITUDE,DAMPEN,RADIUS,RANGE->true;default->false;};
+            if(part.part() instanceof Component.Selection)return aspect==Component.Aspect.RADIUS||aspect==Component.Aspect.SENSITIVE||aspect==Component.Aspect.DAMPEN;
+        }
 		return switch (part.part()) {
 			case Component.Operation operation -> switch (aspect) {
-				case MAGNITUDE -> switch (operation.effect().kind()) {
-					case DAMAGE, RESTORATION, MOVEMENT, STATUS, PROTECTION -> true;
+				case MAGNITUDE, DAMPEN -> switch (operation.effect().kind()) {
+					case DAMAGE, RESTORATION, MOVEMENT, STATUS, PROTECTION, NOUVEAU_BLOCK, NOUVEAU_CREATURE, NOUVEAU -> true;
 					default -> false;
 				};
-				case DURATION -> operation.effect().duration() > 0;
+				case DURATION, DURATION_DOWN -> operation.effect().duration() > 0;
+                case FORTUNE, EXTRACT, SENSITIVE, RANDOMIZE, PIERCE, RADIUS -> operation.effect().kind()==EffectKind.NOUVEAU_BLOCK||operation.effect().kind()==EffectKind.NOUVEAU_CREATURE||operation.effect().kind()==EffectKind.NOUVEAU;
 				default -> false;
 			};
 			case Component.Selection selection -> aspect == Component.Aspect.RADIUS && selection.radius() > 0;

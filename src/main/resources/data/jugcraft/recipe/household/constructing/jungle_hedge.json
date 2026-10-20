@@ -1,0 +1,18 @@
+{
+  "type": "jugcraft:household_construction",
+  "ingredients": [
+    {
+      "count": 6,
+      "ingredient": "minecraft:jungle_leaves"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:household_jungle_hedge"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

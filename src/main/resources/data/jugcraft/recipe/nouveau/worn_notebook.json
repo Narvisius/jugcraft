@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#c:gems/lapis",
+    "minecraft:book"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_worn_notebook"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

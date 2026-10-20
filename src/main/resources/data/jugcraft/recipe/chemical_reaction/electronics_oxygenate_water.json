@@ -1,0 +1,33 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:electronics_reagents",
+  "fluids": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 750
+    },
+    {
+      "fluid": "jugcraft:oxygen",
+      "amount": 250
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:oxygenated_process_water",
+      "amount": 1000,
+      "tank": 0
+    }
+  ],
+  "energy_per_tick": 64,
+  "time": 200
+}

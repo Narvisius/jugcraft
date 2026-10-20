@@ -1,0 +1,44 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_cave_book"
+        }
+      ],
+      "rolls": {
+        "min": 0,
+        "max": 1,
+        "type": "minecraft:uniform"
+      }
+    },
+    {
+      "name": "underground_cabin_candy_cavity",
+      "rolls": {
+        "min": 12,
+        "max": 22,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "weight": 15,
+          "value": "jugcraft:chests/cavern_underground_cabin"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_cave_tablet",
+          "weight": 10,
+          "modifier": [
+            {
+              "type": "minecraft:set_custom_data",
+              "tag": "{BoundBiome:\"jugcraft:cavern_candy_cavity\"}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

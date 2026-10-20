@@ -10,6 +10,19 @@ Related documents: [Chemistry branch](../branches/CHEMISTRY.md), [steel plan](in
 
 ## Recorded owner choices
 
+October 14 package 6 implementation note: [Synthetic Fuels and Recovery](synthetic-fuels-and-recovery.md)
+now records the local cobaltite supply, reusable cobalt bed, CO/H2 synthesis,
+shared refinery receipts and bounded spent-wafer water recovery. These provisional
+game quantities replace the corresponding open implementation questions below.
+Builds, checks, playtesting, energy/balance validation and publication remain deferred.
+
+October 14 local implementation note: [package 5](phosphate-processing-and-fertilizers.md)
+now supplies phosphate dissolution/filtration, industrial phosphoric acid, crop-group
+fertilizers, sprinkler integration and prepared gypsum construction products using
+existing equipment. Its explicit game receipts supersede the corresponding open
+recipe questions below. Builds, checks and playtesting are deferred until packages
+1–7 are implemented; this is not a validated or published milestone.
+
 The [starter factory construction and balance record](industrial-starter-gas-and-acid-factory.md) now records the eighth batch's ten A selections. It distinguishes the selected entry forms, Separator/nickel costs, automatic heat, acid chain, output behavior and provisional processing/output rates from remaining construction/unit/energy-limit proposals. The ninth batch records all eight acid-catalyst/coal choices. The [tenth batch](#magnesium-aluminum-and-titanium-processing-decisions-tenth-batch) records all ten A selections, including seawater pumping from beach or ocean biomes. The [eleventh batch](#polymer-and-advanced-electronics-decisions-eleventh-batch) records all eight polymer/electronics A selections. The [twelfth batch](#grid-storage-synthetic-fuels-and-cryogenics-decisions-twelfth-batch) records all ten storage/fuel/cryogenic A selections. The [thirteenth batch](#resource-reagent-and-residue-decisions-thirteenth-batch) records seven A selections and **B for question 3: separate primary cobalt ore for the first catalyst**. The [connected production map and proposed stages](#delivery-and-remaining-decisions) organize the selected routes for specification and later implementation.
 
 | # | Owner answer | Selected direction |
@@ -614,3 +627,7 @@ Future implementation needs recipe/unit/energy audits, survival reachability, ge
 Target Minecraft 26.3 + Fabric with existing [platform pins](../PLATFORM.md). No dependency, asset, worldgen, dimension-return, boss/pet or seasonal changes occur here. Original planning prose follows repository MIT; linked primary sources inform the chemistry and are not imported runtime content. Runtime art/sounds should use the existing owner-library workflow when implementation actually needs assets.
 
 AI-assisted planning documentation: OpenAI Codex, GPT-6 family. No gameplay feature implementation is included.
+
+## Local package 7 implementation — 14 October 2026
+
+[Cryogenics and Rocket Fuels](cryogenics-and-rocket-fuels.md) now defines the local implementation: retained methane/hydrogen cooling modules in the existing Liquefier, reversible powered phase conversion, 32/64-bucket shared insulated tanks, hydrazine/N2O4 preparation and residue recovery, sealed ingredients and compatible atmospheric loaded motors. No new processor or destination system. MMH and orbital/station behavior remain later. This supersedes the earlier open construction/rate decisions for this slice; all values and compatibility remain unbuilt and untested. Latest owner instruction keeps builds, tests and pushes deferred even though packages 1–7 are locally implemented.

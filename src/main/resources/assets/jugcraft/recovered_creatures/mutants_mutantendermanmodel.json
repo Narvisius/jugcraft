@@ -1,0 +1,1931 @@
+{
+  "textureSize": [
+    128,
+    64
+  ],
+  "parts": [
+    {
+      "name": "pelvis",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        -15.5,
+        8.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "abdomen",
+      "parent": "pelvis",
+      "pose": [
+        0,
+        0,
+        0,
+        0.31415927,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -10.0,
+            -2.0,
+            8.0,
+            10.0,
+            4.0
+          ],
+          "uv": [
+            32.0,
+            0.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "chest",
+      "parent": "abdomen",
+      "pose": [
+        0.0,
+        -8.0,
+        0.0,
+        0.3926991,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -16.0,
+            -3.0,
+            10.0,
+            16.0,
+            6.0
+          ],
+          "uv": [
+            50.0,
+            8.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_leg_joint",
+      "parent": "abdomen",
+      "pose": [
+        -1.5,
+        0.0,
+        0.75,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "left_leg_joint",
+      "parent": "abdomen",
+      "pose": [
+        1.5,
+        0.0,
+        0.75,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "neck",
+      "parent": "chest",
+      "pose": [
+        0.0,
+        -15.0,
+        0.0,
+        0.19634955,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -4.0,
+            -1.5,
+            3.0,
+            4.0,
+            3.0
+          ],
+          "uv": [
+            32.0,
+            14.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_arm",
+      "parent": "chest",
+      "pose": [
+        -4,
+        -14,
+        0,
+        -0.5235988,
+        0,
+        0.5235988
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            0,
+            -1.5,
+            3,
+            22,
+            3
+          ],
+          "uv": [
+            92,
+            0
+          ],
+          "inflate": [
+            0.1,
+            0.1,
+            0.1
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_arm",
+      "parent": "chest",
+      "pose": [
+        4,
+        -14,
+        0,
+        -0.5235988,
+        0,
+        -0.5235988
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            0,
+            -1.5,
+            3,
+            22,
+            3
+          ],
+          "uv": [
+            92,
+            0
+          ],
+          "inflate": [
+            0.1,
+            0.1,
+            0.1
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_lower_arm",
+      "parent": "chest",
+      "pose": [
+        -4,
+        -8,
+        0,
+        -0.42359880000000005,
+        0,
+        0.3235988
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            0,
+            -1.5,
+            3,
+            22,
+            3
+          ],
+          "uv": [
+            92,
+            0
+          ],
+          "inflate": [
+            0.1,
+            0.1,
+            0.1
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_lower_arm",
+      "parent": "chest",
+      "pose": [
+        4,
+        -8,
+        0,
+        -0.42359880000000005,
+        0,
+        -0.3235988
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            0,
+            -1.5,
+            3,
+            22,
+            3
+          ],
+          "uv": [
+            92,
+            0
+          ],
+          "inflate": [
+            0.1,
+            0.1,
+            0.1
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_leg",
+      "parent": "right_leg_joint",
+      "pose": [
+        0.0,
+        -2.0,
+        0.0,
+        -0.8975979,
+        0.0,
+        0.2617994
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            0.0,
+            -1.5,
+            3.0,
+            24.0,
+            3.0
+          ],
+          "uv": [
+            0.0,
+            34.0
+          ],
+          "inflate": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_leg",
+      "parent": "left_leg_joint",
+      "pose": [
+        0.0,
+        -2.0,
+        0.0,
+        -0.8975979,
+        0.0,
+        -0.2617994
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            0.0,
+            -1.5,
+            3.0,
+            24.0,
+            3.0
+          ],
+          "uv": [
+            0.0,
+            34.0
+          ],
+          "inflate": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "head",
+      "parent": "neck",
+      "pose": [
+        0.0,
+        -5.0,
+        3.0,
+        -0.7853982,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -4.0,
+            -8.0,
+            8.0,
+            6.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -4.0,
+            3.0,
+            -8.0,
+            8.0,
+            2.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            14.0
+          ],
+          "inflate": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_fore_arm",
+      "parent": "right_arm",
+      "pose": [
+        0,
+        21,
+        1,
+        -0.62831855,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            0,
+            -1.5,
+            3,
+            18,
+            3
+          ],
+          "uv": [
+            104,
+            0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_fore_arm",
+      "parent": "left_arm",
+      "pose": [
+        0,
+        21,
+        1,
+        -0.62831855,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            0,
+            -1.5,
+            3,
+            18,
+            3
+          ],
+          "uv": [
+            104,
+            0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_lower_fore_arm",
+      "parent": "right_lower_arm",
+      "pose": [
+        0,
+        21,
+        1,
+        -0.62831855,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            0,
+            -1.5,
+            3,
+            18,
+            3
+          ],
+          "uv": [
+            104,
+            0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_lower_fore_arm",
+      "parent": "left_lower_arm",
+      "pose": [
+        0,
+        21,
+        1,
+        -0.62831855,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            0,
+            -1.5,
+            3,
+            18,
+            3
+          ],
+          "uv": [
+            104,
+            0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_leg_lower",
+      "parent": "right_leg",
+      "pose": [
+        0.0,
+        23.0,
+        0.0,
+        0.7853982,
+        0.0,
+        -0.1308997
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            0.0,
+            -1.5,
+            3.0,
+            24.0,
+            3.0
+          ],
+          "uv": [
+            12.0,
+            34.0
+          ],
+          "inflate": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_leg_lower",
+      "parent": "left_leg",
+      "pose": [
+        0.0,
+        23.0,
+        0.0,
+        0.7853982,
+        0.0,
+        0.1308997
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            0.0,
+            -1.5,
+            3.0,
+            24.0,
+            3.0
+          ],
+          "uv": [
+            12.0,
+            34.0
+          ],
+          "inflate": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "mouth",
+      "parent": "head",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            3.0,
+            -8.0,
+            8.0,
+            2.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            24.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_hand",
+      "parent": "right_fore_arm",
+      "pose": [
+        0,
+        17.5,
+        0,
+        0,
+        -0.3926991,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "left_hand",
+      "parent": "left_fore_arm",
+      "pose": [
+        0,
+        17.5,
+        0,
+        0,
+        0.3926991,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "right_lower_hand",
+      "parent": "right_lower_fore_arm",
+      "pose": [
+        0,
+        17.5,
+        0,
+        0,
+        -0.3926991,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "left_lower_hand",
+      "parent": "left_lower_fore_arm",
+      "pose": [
+        0,
+        17.5,
+        0,
+        0,
+        0.3926991,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "right_finger0",
+      "parent": "right_hand",
+      "pose": [
+        -0.5,
+        0,
+        -1,
+        -0.2617994,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            5,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_finger1",
+      "parent": "right_hand",
+      "pose": [
+        -0.5,
+        0,
+        0,
+        0.0,
+        0,
+        0.17453294
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            6,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_finger2",
+      "parent": "right_hand",
+      "pose": [
+        -0.5,
+        0,
+        1,
+        0.2617994,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            5,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_thumb",
+      "parent": "right_hand",
+      "pose": [
+        0.5,
+        0,
+        -0.5,
+        -0.62831855,
+        0,
+        -0.3926991
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            5,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_finger0",
+      "parent": "left_hand",
+      "pose": [
+        0.5,
+        0,
+        -1,
+        -0.2617994,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            5,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_finger1",
+      "parent": "left_hand",
+      "pose": [
+        0.5,
+        0,
+        0,
+        0.0,
+        0,
+        -0.17453294
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            6,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_finger2",
+      "parent": "left_hand",
+      "pose": [
+        0.5,
+        0,
+        1,
+        0.2617994,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            5,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_thumb",
+      "parent": "left_hand",
+      "pose": [
+        -0.5,
+        0,
+        -0.5,
+        -0.62831855,
+        0,
+        0.3926991
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            5,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_lower_finger0",
+      "parent": "right_lower_hand",
+      "pose": [
+        -0.5,
+        0,
+        -1,
+        -0.2617994,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            5,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_lower_finger1",
+      "parent": "right_lower_hand",
+      "pose": [
+        -0.5,
+        0,
+        0,
+        0.0,
+        0,
+        0.17453294
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            6,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_lower_finger2",
+      "parent": "right_lower_hand",
+      "pose": [
+        -0.5,
+        0,
+        1,
+        0.2617994,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            5,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_lower_thumb",
+      "parent": "right_lower_hand",
+      "pose": [
+        0.5,
+        0,
+        -0.5,
+        -0.62831855,
+        0,
+        -0.3926991
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            5,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_lower_finger0",
+      "parent": "left_lower_hand",
+      "pose": [
+        0.5,
+        0,
+        -1,
+        -0.2617994,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            5,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_lower_finger1",
+      "parent": "left_lower_hand",
+      "pose": [
+        0.5,
+        0,
+        0,
+        0.0,
+        0,
+        -0.17453294
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            6,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_lower_finger2",
+      "parent": "left_lower_hand",
+      "pose": [
+        0.5,
+        0,
+        1,
+        0.2617994,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            5,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_lower_thumb",
+      "parent": "left_lower_hand",
+      "pose": [
+        -0.5,
+        0,
+        -0.5,
+        -0.62831855,
+        0,
+        0.3926991
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            5,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_fore_finger0",
+      "parent": "right_finger0",
+      "pose": [
+        0,
+        5.5,
+        0,
+        0,
+        0,
+        -0.2617994
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            5,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.59000003,
+            0.59000003,
+            0.59000003
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_fore_finger1",
+      "parent": "right_finger1",
+      "pose": [
+        0,
+        6.5,
+        0,
+        0,
+        0,
+        -0.3926991
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            6,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.59000003,
+            0.59000003,
+            0.59000003
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_fore_finger2",
+      "parent": "right_finger2",
+      "pose": [
+        0,
+        5.5,
+        0,
+        0,
+        0,
+        -0.2617994
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            5,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.59000003,
+            0.59000003,
+            0.59000003
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_fore_finger0",
+      "parent": "left_finger0",
+      "pose": [
+        0,
+        5.5,
+        0,
+        0,
+        0,
+        0.2617994
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            5,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.59000003,
+            0.59000003,
+            0.59000003
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_fore_finger1",
+      "parent": "left_finger1",
+      "pose": [
+        0,
+        6.5,
+        0,
+        0,
+        0,
+        0.3926991
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            6,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.59000003,
+            0.59000003,
+            0.59000003
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_fore_finger2",
+      "parent": "left_finger2",
+      "pose": [
+        0,
+        5.5,
+        0,
+        0,
+        0,
+        0.2617994
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            5,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.59000003,
+            0.59000003,
+            0.59000003
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "right_lower_fore_finger0",
+      "parent": "right_lower_finger0",
+      "pose": [
+        0,
+        5.5,
+        0,
+        0,
+        0,
+        -0.2617994
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            5,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.59000003,
+            0.59000003,
+            0.59000003
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_lower_fore_finger1",
+      "parent": "right_lower_finger1",
+      "pose": [
+        0,
+        6.5,
+        0,
+        0,
+        0,
+        -0.3926991
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            6,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.59000003,
+            0.59000003,
+            0.59000003
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_lower_fore_finger2",
+      "parent": "right_lower_finger2",
+      "pose": [
+        0,
+        5.5,
+        0,
+        0,
+        0,
+        -0.2617994
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            5,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.59000003,
+            0.59000003,
+            0.59000003
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_lower_fore_finger0",
+      "parent": "left_lower_finger0",
+      "pose": [
+        0,
+        5.5,
+        0,
+        0,
+        0,
+        0.2617994
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            5,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.59000003,
+            0.59000003,
+            0.59000003
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_lower_fore_finger1",
+      "parent": "left_lower_finger1",
+      "pose": [
+        0,
+        6.5,
+        0,
+        0,
+        0,
+        0.3926991
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            6,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.59000003,
+            0.59000003,
+            0.59000003
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_lower_fore_finger2",
+      "parent": "left_lower_finger2",
+      "pose": [
+        0,
+        5.5,
+        0,
+        0,
+        0,
+        0.2617994
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0,
+            -0.5,
+            1,
+            5,
+            1
+          ],
+          "uv": [
+            76,
+            0
+          ],
+          "inflate": [
+            0.59000003,
+            0.59000003,
+            0.59000003
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "mutants/fuzs/mutantmonsters/common/client/model/MutantEndermanModel.java",
+  "sourceSha256": "afe3852822f42ba0daa2fa51c3978c785e928ccf988e438494d508fd21ce1adf",
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.pelvis.y -= Math.abs(walkAnim[4]);",
+      "reason": "Unsupported expression abs(walkAnim[4])"
+    },
+    {
+      "call": "this.chest.yRot -= walkAnim[4] * 0.06f;",
+      "reason": "Unsupported expression walkAnim[4] * 0.06"
+    }
+  ],
+  "expressions": [
+    {
+      "bone": "head",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "/",
+          [
+            "*",
+            "pitch",
+            3.141592653589793
+          ],
+          180.0
+        ],
+        0.5
+      ],
+      "when": 1
+    },
+    {
+      "bone": "head",
+      "target": "yRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "/",
+          [
+            "*",
+            "yaw",
+            3.141592653589793
+          ],
+          180.0
+        ],
+        0.7
+      ],
+      "when": 1
+    },
+    {
+      "bone": "head",
+      "target": "zRot",
+      "op": "-=",
+      "value": [
+        "*",
+        [
+          "/",
+          [
+            "*",
+            "yaw",
+            3.141592653589793
+          ],
+          180.0
+        ],
+        0.7
+      ],
+      "when": 1
+    },
+    {
+      "bone": "neck",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "/",
+          [
+            "*",
+            "pitch",
+            3.141592653589793
+          ],
+          180.0
+        ],
+        0.3
+      ],
+      "when": 1
+    },
+    {
+      "bone": "chest",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "/",
+          [
+            "*",
+            "pitch",
+            3.141592653589793
+          ],
+          180.0
+        ],
+        0.2
+      ],
+      "when": 1
+    },
+    {
+      "bone": "mouth",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "+",
+        [
+          "*",
+          [
+            "sin",
+            [
+              "*",
+              "age",
+              0.15
+            ]
+          ],
+          0.02
+        ],
+        0.02
+      ],
+      "when": 1
+    },
+    {
+      "bone": "neck",
+      "target": "xRot",
+      "op": "-=",
+      "value": [
+        "*",
+        [
+          "sin",
+          [
+            "*",
+            "age",
+            0.15
+          ]
+        ],
+        0.02
+      ],
+      "when": 1
+    },
+    {
+      "bone": "right_leg_joint",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "+",
+            [
+              "sin",
+              [
+                "*",
+                [
+                  "-",
+                  "walk",
+                  0.8
+                ],
+                0.3
+              ]
+            ],
+            0.8
+          ],
+          "move"
+        ],
+        0.6
+      ],
+      "when": 1
+    },
+    {
+      "bone": "left_leg_joint",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "*",
+            -1,
+            [
+              "-",
+              [
+                "sin",
+                [
+                  "*",
+                  [
+                    "+",
+                    "walk",
+                    0.8
+                  ],
+                  0.3
+                ]
+              ],
+              0.8
+            ]
+          ],
+          "move"
+        ],
+        0.6
+      ],
+      "when": 1
+    },
+    {
+      "bone": "right_leg_lower",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "-",
+            [
+              "sin",
+              [
+                "*",
+                [
+                  "+",
+                  "walk",
+                  0.8
+                ],
+                0.3
+              ]
+            ],
+            0.8
+          ],
+          "move"
+        ],
+        0.3
+      ],
+      "when": 1
+    },
+    {
+      "bone": "left_leg_lower",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "*",
+            -1,
+            [
+              "+",
+              [
+                "sin",
+                [
+                  "*",
+                  [
+                    "-",
+                    "walk",
+                    0.8
+                  ],
+                  0.3
+                ]
+              ],
+              0.8
+            ]
+          ],
+          "move"
+        ],
+        0.3
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

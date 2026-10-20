@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:brewing",
+  "input": {
+    "item": "minecraft:splash_potion",
+    "potion_contents": {
+      "potions": "jugcraft:nouveau_freezing"
+    }
+  },
+  "output": {
+    "id": "minecraft:splash_potion",
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "jugcraft:nouveau_freezing_long"
+      }
+    }
+  },
+  "reagent": {
+    "item": "minecraft:redstone"
+  }
+}

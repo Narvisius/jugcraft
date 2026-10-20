@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "jugcraft:pot_cooking",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:mason_jar"
+    },
+    {
+      "ingredient": "jugcraft:mango",
+      "count": 4
+    },
+    {
+      "ingredient": "jugcraft:cider_vinegar"
+    },
+    {
+      "ingredient": "minecraft:sugar"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:mango_chutney"
+  },
+  "time": 300
+}

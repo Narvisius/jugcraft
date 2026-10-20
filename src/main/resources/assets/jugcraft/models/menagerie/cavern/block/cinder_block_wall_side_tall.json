@@ -1,0 +1,48 @@
+{
+  "textures": {
+    "down": "jugcraft:menagerie/cavern/block/cinder_block_top",
+    "east": "jugcraft:menagerie/cavern/block/cinder_block_side",
+    "north": "jugcraft:menagerie/cavern/block/cinder_block",
+    "particle": "jugcraft:menagerie/cavern/block/cinder_block",
+    "south": "jugcraft:menagerie/cavern/block/cinder_block",
+    "up": "jugcraft:menagerie/cavern/block/cinder_block_top",
+    "west": "jugcraft:menagerie/cavern/block/cinder_block_side"
+  },
+  "elements": [
+    {
+      "from": [
+        5,
+        0,
+        0
+      ],
+      "to": [
+        11,
+        16,
+        8
+      ],
+      "faces": {
+        "down": {
+          "texture": "#down",
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#up",
+          "cullface": "up"
+        },
+        "north": {
+          "texture": "#north",
+          "cullface": "north"
+        },
+        "west": {
+          "texture": "#west"
+        },
+        "east": {
+          "texture": "#east"
+        },
+        "south": {
+          "texture": "#north"
+        }
+      }
+    }
+  ]
+}

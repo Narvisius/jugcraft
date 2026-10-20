@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "phosphate"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:gypsum_binder",
+    "minecraft:sand",
+    "minecraft:sand"
+  ],
+  "result": {
+    "id": "jugcraft:plaster",
+    "count": 2
+  }
+}

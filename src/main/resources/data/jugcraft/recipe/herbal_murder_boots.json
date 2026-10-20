@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "C C",
+    "C C"
+  ],
+  "key": {
+    "C": "jugcraft:herbal_black_cloth"
+  },
+  "result": {
+    "id": "jugcraft:herbal_murder_boots"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

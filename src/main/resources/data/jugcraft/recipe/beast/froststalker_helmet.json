@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " H ",
+    "III",
+    "I I"
+  ],
+  "key": {
+    "H": "jugcraft:beast_froststalker_horn",
+    "I": "minecraft:packed_ice"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:beast_froststalker_helmet"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "type": "jugcraft:household_construction",
+  "ingredients": [
+    {
+      "count": 3,
+      "ingredient": "minecraft:iron_ingot"
+    },
+    {
+      "count": 1,
+      "ingredient": "minecraft:leather"
+    },
+    {
+      "count": 1,
+      "ingredient": "minecraft:black_dye"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:household_frying_pan"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

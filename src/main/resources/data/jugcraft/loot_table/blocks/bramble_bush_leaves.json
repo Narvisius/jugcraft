@@ -1,0 +1,71 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "jugcraft:bramble_bush_leaves",
+              "condition": {
+                "type": "minecraft:any_of",
+                "terms": [
+                  "minecraft:tool/can_shear",
+                  "minecraft:tool/can_silk_touch"
+                ]
+              }
+            },
+            {
+              "type": "minecraft:item",
+              "name": "jugcraft:bramble",
+              "condition": {
+                "type": "minecraft:all_of",
+                "terms": [
+                  {
+                    "type": "minecraft:random_chance",
+                    "chance": 0.06
+                  },
+                  {
+                    "type": "minecraft:survives_explosion"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "condition": {
+        "type": "minecraft:inverted",
+        "term": {
+          "type": "minecraft:any_of",
+          "terms": [
+            "minecraft:tool/can_shear",
+            "minecraft:tool/can_silk_touch"
+          ]
+        }
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:stick",
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.1
+          },
+          "modifier": [
+            {
+              "type": "minecraft:explosion_decay"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "random_sequence": "jugcraft:blocks/bramble_bush_leaves"
+}

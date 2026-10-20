@@ -31,6 +31,8 @@ FRUIT_CHANCE = 10
 # places: the pear tall and pointed, the peach low and wide, the citrus small and round); biomes: the vanilla biome tags
 # (ConventionalBiomeTags) a wild patch grows in, one tree in `rarity` chunks; regions: Jugcraft biomes whose trees include
 # it, and how often (tools/biomes.py "picks").
+# regions records conditional random-selector probabilities, not final biome-wide shares.
+# Mediterranean lemon/orange remain 5% each after the earlier olive and umbrella-pine picks.
 TREES = {
     "pear": {"display": "Pear", "seed": "pear_seeds", "seed_display": "Pear Seeds", "food": [4, 0.3], "pick": [1, 3],
              "trunk": {"base_height": 5, "height_rand_a": 1}, "foliage": {"radius": 2, "height": 4},
@@ -40,21 +42,22 @@ TREES = {
               "biomes": ["IS_PLAINS", "IS_SAVANNA"], "rarity": 16, "regions": {"orchard": 0.2}},
     "lemon": {"display": "Lemon", "seed": "lemon_seeds", "seed_display": "Lemon Seeds", "food": [2, 0.1], "pick": [1, 3],
               "trunk": {"base_height": 3, "height_rand_a": 1}, "foliage": {"radius": 2, "height": 3},
-              "biomes": ["IS_SAVANNA"], "rarity": 16, "regions": {"mediterranean_forest": 0.1, "subtropics": 0.15}},
+              "biomes": ["IS_SAVANNA"], "rarity": 16, "regions": {"mediterranean_forest": 0.05 / 0.45, "subtropics": 0.15}},
     "orange": {"display": "Orange", "seed": "orange_seeds", "seed_display": "Orange Seeds", "food": [4, 0.3], "pick": [1, 3],
                "trunk": {"base_height": 4, "height_rand_a": 1}, "foliage": {"radius": 2, "height": 3},
-               "biomes": ["IS_SAVANNA", "IS_JUNGLE"], "rarity": 16, "regions": {"mediterranean_forest": 0.1, "subtropics": 0.15}},
+               "biomes": ["IS_SAVANNA", "IS_JUNGLE"], "rarity": 16, "regions": {"mediterranean_forest": 0.05 / 0.4, "subtropics": 0.15}},
     # The fruit crops (tools/fruit_crops.py, 8 October 2026): the plum, an oak-trunked tree as the others; and the banana,
     # a soft green-brown stem of its own (`log`, BANANA_STEM below) under a crown of long fronds that droop and hang
     # (vanilla's cherry foliage placer, `foliage` "type"), its fruit hanging in bunches among them.
     "plum": {"display": "Plum", "seed": "plum_pit", "seed_display": "Plum Pit", "food": [4, 0.3], "pick": [1, 3],
              "trunk": {"base_height": 4, "height_rand_a": 1}, "foliage": {"radius": 2, "height": 3},
              "biomes": ["IS_FOREST", "IS_TAIGA"], "rarity": 16, "regions": {"orchard": 0.15}},
+    # Batch 12: regions stores conditional selector chances; 1.0 also represents a default pick.
     "banana": {"display": "Banana", "seed": "banana_pup", "seed_display": "Banana Pup", "food": [4, 0.4], "pick": [2, 4],
                "log": "jugcraft:banana_stem", "trunk": {"base_height": 4, "height_rand_a": 2},
                "foliage": {"type": "cherry", "radius": 3, "height": 4, "wide_bottom_layer_hole_chance": 0.25,
                            "corner_hole_chance": 0.4, "hanging_leaves_chance": 0.7, "hanging_leaves_extension_chance": 0.3},
-               "biomes": ["IS_JUNGLE"], "rarity": 12, "regions": {"tropics": 0.15, "rainforest": 0.1}},
+               "biomes": ["IS_JUNGLE"], "rarity": 12, "regions": {"tropics": .15 / .65, "rainforest": .10 / .60, "lush_grassland": 1.0}},
 }
 # The banana's stem: a log of its own (a pillar, in #minecraft:logs so its fronds count it as their tree, as the TREES.md
 # roster asks; it does not burn as fuel).

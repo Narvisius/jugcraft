@@ -1,0 +1,22 @@
+{
+    "display": {
+        "icon": {
+            "id": "inventorypets:pet_slime"
+        },
+        "title": {
+            "translate": "advancement.ip.petachieveRoot"
+        },
+        "description": {
+            "translate": "advancement.ip.petachieveRoot.desc"
+        },
+        "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+        "show_toast": false,
+        "announce_to_chat": false,
+        "frame": "challenge"
+    },
+    "criteria": {
+        "auto": {
+            "trigger": "minecraft:location"
+        }
+    }
+}

@@ -1,0 +1,140 @@
+{
+  "feature": {
+    "type": "minecraft:block_column",
+    "allowed_placement": {
+      "type": "minecraft:true"
+    },
+    "direction": "up",
+    "layers": [
+      {
+        "height": 1,
+        "provider": {
+          "type": "minecraft:dual_noise",
+          "noise": {
+            "base_octave": -3,
+            "octave_count": 3,
+            "amplitude_modifiers": [
+              1,
+              1.75,
+              2.75
+            ],
+            "normalize": "legacy"
+          },
+          "scale": 1,
+          "seed": 62353,
+          "slow_noise": {
+            "base_octave": -5,
+            "octave_count": 6,
+            "amplitude_modifiers": [
+              1,
+              0.25,
+              0.25,
+              1.875,
+              6.75,
+              14.5
+            ],
+            "normalize": "legacy"
+          },
+          "slow_scale": 1,
+          "states": [
+            "minecraft:short_dry_grass",
+            "minecraft:short_dry_grass",
+            "minecraft:tall_dry_grass",
+            "minecraft:tall_dry_grass",
+            "minecraft:tall_dry_grass",
+            "minecraft:short_dry_grass",
+            "minecraft:short_dry_grass",
+            "minecraft:short_dry_grass",
+            "minecraft:air",
+            "minecraft:dead_bush",
+            "minecraft:air",
+            "minecraft:air",
+            "minecraft:air",
+            "minecraft:dead_bush",
+            "minecraft:air",
+            "minecraft:air",
+            "minecraft:short_dry_grass",
+            "minecraft:tall_dry_grass",
+            "minecraft:short_dry_grass"
+          ],
+          "variety": {
+            "min_inclusive": 1,
+            "max_inclusive": 19
+          }
+        }
+      }
+    ],
+    "prioritize_tip": false
+  },
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 150
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "minecraft:offset",
+      "x": {
+        "type": "minecraft:trapezoid",
+        "plateau": 0,
+        "min": -6,
+        "max": 6
+      },
+      "y": {
+        "type": "minecraft:trapezoid",
+        "plateau": 0,
+        "min": -2,
+        "max": 2
+      },
+      "z": {
+        "type": "minecraft:trapezoid",
+        "plateau": 0,
+        "min": -6,
+        "max": 6
+      }
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:all_of",
+        "predicates": [
+          {
+            "type": "minecraft:matching_blocks",
+            "blocks": [
+              "minecraft:air"
+            ],
+            "offset": [
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "type": "minecraft:matching_blocks",
+            "blocks": [
+              "minecraft:sand"
+            ],
+            "offset": [
+              0,
+              -1,
+              0
+            ]
+          },
+          {
+            "type": "minecraft:would_survive",
+            "state": "minecraft:tall_dry_grass"
+          }
+        ]
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

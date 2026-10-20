@@ -20,7 +20,7 @@ Implementation follows [the roster](../branches/TREES.md) in dependency order. E
 | 9-9b | Giant fungi, bramble, dragonblood | Pending |
 | 10 | Baobab and date palm with hanging fruit | Pending |
 | 11-11c | Warm/coastal trees, driftwood, banyan, mango | Pending |
-| 12 | Existing banana/rubber integration, tree fern, buttressed mahogany | Pending |
+| 12 | Banana integration, tree fern, emergent mahogany, rubber trees/tapping/latex | Implemented; owner inspection pending in draft PR #420; [record](trees-batch-12.md) |
 | 13-14 | Walnut, bristlecone, existing orchard wood/biome updates | Pending |
 
 Publish short shared-system notes before the tree/wood split and seasonal-fruit changes. Test growth, soil, obstacles, drops/replanting, seasons/fruit where relevant, and real new-world distribution. Keep inspection-world evidence distinct from artificial sample plots. Record any deliberate differences from the planning document and actual test limits.

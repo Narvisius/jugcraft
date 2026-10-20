@@ -101,6 +101,8 @@ public class BiomeClientGameTests implements FabricClientGameTest {
 			server.runCommand("gamerule minecraft:send_command_feedback false");
 			server.runCommand("time set noon");
 			server.runCommand("weather clear");
+			// Keep the generation-time foliage assertion independent of time spent unloading samples.
+			server.runCommand("gamerule minecraft:random_tick_speed 0");
 			BlockPos start = context.computeOnClient(client -> BlockPos.containing(client.player.position()));
 			List<String> found = new ArrayList<>();
 			List<BlockPos> places = new ArrayList<>();
@@ -158,6 +160,9 @@ public class BiomeClientGameTests implements FabricClientGameTest {
 						+ " blocks of where it was found; using that place" : "at " + spot.getX() + " " + spot.getY() + " " + spot.getZ()
 						+ " (the camera looks at " + view + ")");
 				spots.add(spot == null ? place : spot);
+				// These forced, distant samples have no player tickets. Let temporary
+				// chunk tickets expire and normal unloading run between regions.
+				context.waitTicks(5);
 			}
 			// The chunks around each biome found are generated now, far from the player, so no random tick has turned
 			// their leaves: the seasonal_leaves tree decorator must have generated them in today's look.
@@ -170,6 +175,7 @@ public class BiomeClientGameTests implements FabricClientGameTest {
 						SEED, found.get(i), counts[0], counts[1], counts[2], counts[3], JugcraftSeasons.today());
 				leaves += counts[0] + counts[1] + counts[2];
 				stale += counts[3];
+				context.waitTicks(5);
 			}
 			for (String shot : SHOTS) {
 				int index = found.indexOf(shot);

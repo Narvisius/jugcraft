@@ -20,6 +20,8 @@ CANISTER_FOAM = 32
 
 # Blocks: display name, hardness, blast resistance, and whether they come as slabs and stairs too.
 BLOCKS = {
+    "plaster": ("Plaster", 1.5, 3.0, True),
+    "plasterboard": ("Plasterboard", 0.8, 1.5, True),
     "construction_foam": ("Construction Foam", 0.3, 0.5, False),
     "concrete": ("Concrete", 2.5, 9.0, True),
     "blastproof_concrete": ("Blast-Proof Concrete", 15.0, 1200.0, True),
@@ -308,3 +310,23 @@ def draw_all(save):
     import construction_art
     for item in ITEMS:
         save(construction_art.ITEMS[item](), "item", item)
+
+
+def plaster():
+    """Quiet warm mineral surface: a few broad pixels, no noise or blurry overlay."""
+    img=Image.new('RGBA',(16,16),(196,191,175,255))
+    from PIL import ImageDraw
+    pen=ImageDraw.Draw(img)
+    for box in [(2,3,5,3),(10,8,13,8),(4,12,7,12)]: pen.rectangle(box,fill=(208,203,188,255))
+    for box in [(1,10,3,10),(9,2,11,2)]: pen.rectangle(box,fill=(182,177,161,255))
+    return img
+
+def plasterboard():
+    img=Image.new('RGBA',(16,16),(179,177,163,255))
+    from PIL import ImageDraw
+    pen=ImageDraw.Draw(img)
+    pen.rectangle((0,0,15,15),outline=(116,115,105,255))
+    pen.line((1,1,14,1),fill=(201,198,183,255))
+    pen.line((1,1,1,14),fill=(201,198,183,255))
+    for at in [(2,2),(13,2),(2,13),(13,13)]: pen.point(at,fill=(103,108,107,255))
+    return img

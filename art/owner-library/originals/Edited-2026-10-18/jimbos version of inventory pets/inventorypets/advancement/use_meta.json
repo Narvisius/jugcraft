@@ -1,0 +1,21 @@
+{
+	"display": {
+		"icon": {
+			"id": "inventorypets:pet_meta"
+		},
+		"title": {
+			"translate": "advancement.ip.petachieveUseMeta"
+		},
+		"description": {
+			"translate": "advancement.ip.petachieveUseMeta.desc"
+		},
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"parent": "inventorypets:meta",
+	"criteria": {
+		"example": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

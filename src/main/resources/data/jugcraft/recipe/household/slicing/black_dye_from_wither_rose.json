@@ -1,0 +1,17 @@
+{
+  "type": "jugcraft:cutting",
+  "ingredient": "minecraft:wither_rose",
+  "tool": "#jugcraft:knives",
+  "results": [
+    {
+      "count": 2,
+      "id": "minecraft:black_dye"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -1,0 +1,357 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "arm_wear",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        8.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -3.0,
+            -2.0,
+            4.0,
+            6.0,
+            4.0
+          ],
+          "uv": [
+            0.0,
+            64.0
+          ],
+          "inflate": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "middle",
+      "parent": "arm_wear",
+      "pose": [
+        -3.5,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -2.0,
+            -3.0,
+            4.0,
+            4.0,
+            6.0
+          ],
+          "uv": [
+            16.0,
+            64.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "middle1",
+      "parent": "middle",
+      "pose": [
+        0.0,
+        0.6,
+        -4.0,
+        0.3926991,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -1.5,
+            -3.0,
+            3.0,
+            3.0,
+            6.0
+          ],
+          "uv": [
+            36.0,
+            64.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "middle2",
+      "parent": "middle",
+      "pose": [
+        0.0,
+        0.6,
+        4.0,
+        -0.3926991,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -1.5,
+            -3.0,
+            3.0,
+            3.0,
+            6.0
+          ],
+          "uv": [
+            36.0,
+            64.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "side1",
+      "parent": "middle1",
+      "pose": [
+        0.0,
+        0.0,
+        -2.0,
+        -0.62831855,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.0,
+            -8.0,
+            2.0,
+            2.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            74.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "side2",
+      "parent": "middle2",
+      "pose": [
+        0.0,
+        0.0,
+        2.0,
+        0.62831855,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.0,
+            0.0,
+            2.0,
+            2.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            74.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "side3",
+      "parent": "side1",
+      "pose": [
+        0.0,
+        0.0,
+        -5.0,
+        -0.7853982,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            -0.5,
+            -8.0,
+            1.0,
+            1.0,
+            8.0
+          ],
+          "uv": [
+            20.0,
+            74.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "side4",
+      "parent": "side2",
+      "pose": [
+        0.0,
+        0.0,
+        5.0,
+        0.7853982,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            -0.5,
+            0.0,
+            1.0,
+            1.0,
+            8.0
+          ],
+          "uv": [
+            20.0,
+            74.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rope1",
+      "parent": "side3",
+      "pose": [
+        0.0,
+        0.0,
+        -6.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            -0.5,
+            0.0,
+            1.0,
+            1.0,
+            15.0
+          ],
+          "uv": [
+            0.0,
+            84.0
+          ],
+          "inflate": [
+            -0.4,
+            -0.4,
+            -0.4
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rope2",
+      "parent": "side4",
+      "pose": [
+        0.0,
+        0.0,
+        6.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            -0.5,
+            -15.0,
+            1.0,
+            1.0,
+            15.0
+          ],
+          "uv": [
+            0.0,
+            84.0
+          ],
+          "inflate": [
+            -0.4,
+            -0.4,
+            -0.4
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "mutants/fuzs/mutantmonsters/common/client/model/MutantCrossbowModel.java",
+  "sourceSha256": "edde5571d14e51a23ce78d84cc68b7e7de8a31b0e7aad7cdef8cccf4f019b0f5",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

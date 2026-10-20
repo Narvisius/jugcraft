@@ -1,0 +1,105 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "idle": {
+      "loop": true,
+      "animation_length": 1,
+      "bones": {}
+    },
+    "walk": {
+      "loop": true,
+      "animation_length": 1,
+      "bones": {
+        "leg_0": {
+          "rotation": [
+            "math.sin(query.anim_time * 360) * 22",
+            0,
+            0
+          ]
+        },
+        "leg_1": {
+          "rotation": [
+            "math.sin(query.anim_time * 360) * -22",
+            0,
+            0
+          ]
+        },
+        "leg_2": {
+          "rotation": [
+            "math.sin(query.anim_time * 360) * 22",
+            0,
+            0
+          ]
+        },
+        "leg_3": {
+          "rotation": [
+            "math.sin(query.anim_time * 360) * -22",
+            0,
+            0
+          ]
+        }
+      }
+    },
+    "fly": {
+      "loop": true,
+      "animation_length": 1,
+      "bones": {}
+    },
+    "swim": {
+      "loop": true,
+      "animation_length": 1,
+      "bones": {
+        "tail": {
+          "rotation": [
+            0,
+            "math.sin(query.anim_time * 240 + 175) * 18",
+            0
+          ]
+        }
+      }
+    },
+    "sit": {
+      "loop": true,
+      "animation_length": 1,
+      "bones": {
+        "root": {
+          "position": [
+            0,
+            -3.84,
+            0
+          ]
+        }
+      }
+    },
+    "attack": {
+      "animation_length": 0.7,
+      "loop": false,
+      "bones": {
+        "root": {
+          "rotation": {
+            "0": [
+              0,
+              0,
+              0
+            ],
+            ".2": [
+              -15,
+              0,
+              0
+            ],
+            ".4": [
+              20,
+              0,
+              0
+            ],
+            ".7": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}

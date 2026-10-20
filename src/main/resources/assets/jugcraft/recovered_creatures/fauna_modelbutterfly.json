@@ -1,0 +1,202 @@
+{
+  "textureSize": [
+    64,
+    32
+  ],
+  "parts": [
+    {
+      "name": "body",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        21.0,
+        2.0,
+        1.570796,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -2.0,
+            -1.0,
+            1.0,
+            5.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "antennae",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        21.5,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -2.0,
+            3.0,
+            1.0,
+            2.0
+          ],
+          "uv": [
+            4.0,
+            0.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightwing",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        21.5,
+        2.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6.0,
+            0.0,
+            -4.0,
+            6.0,
+            1.0,
+            9.0
+          ],
+          "uv": [
+            0.0,
+            6.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leftwing",
+      "parent": "$mesh",
+      "pose": [
+        1.0,
+        21.5,
+        2.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            -4.0,
+            6.0,
+            1.0,
+            9.0
+          ],
+          "uv": [
+            0.0,
+            16.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "fauna/familiarfauna/entities/model/ModelButterfly.java",
+  "sourceSha256": "4e8d13cf7d5ef22eded264655796e9c4b95f597bbd4f0c292895b4b421397668",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [
+    {
+      "bone": "rightwing",
+      "target": "zRot",
+      "op": "=",
+      "value": [
+        "*",
+        -1,
+        [
+          "*",
+          [
+            "*",
+            [
+              "cos",
+              [
+                "*",
+                "age",
+                1.7
+              ]
+            ],
+            3.141592653589793
+          ],
+          0.2
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "leftwing",
+      "target": "zRot",
+      "op": "=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "cos",
+            [
+              "*",
+              "age",
+              1.7
+            ]
+          ],
+          3.141592653589793
+        ],
+        0.2
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:cavern_block_of_scarlet_neodymium"
+  ],
+  "result": {
+    "count": 9,
+    "id": "jugcraft:cavern_scarlet_neodymium_ingot"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

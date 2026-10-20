@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BHB",
+    "E E"
+  ],
+  "key": {
+    "H": "jugcraft:cavern_tough_hide",
+    "B": "minecraft:bone_block",
+    "E": "jugcraft:cavern_heavy_bone"
+  },
+  "result": {
+    "id": "jugcraft:cavern_primordial_helmet"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

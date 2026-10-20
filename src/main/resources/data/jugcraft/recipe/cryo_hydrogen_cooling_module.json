@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ICI",
+    "BMB",
+    "III"
+  ],
+  "key": {
+    "I": "jugcraft:cryogenic_insulation",
+    "C": "jugcraft:advanced_chip",
+    "B": "jugcraft:ceramic_bearing_set",
+    "M": "jugcraft:methane_cooling_module"
+  },
+  "result": {
+    "id": "jugcraft:hydrogen_cooling_module",
+    "count": 1
+  }
+}

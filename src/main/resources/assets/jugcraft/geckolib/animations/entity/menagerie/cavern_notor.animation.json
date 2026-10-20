@@ -1,0 +1,125 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "idle": {
+      "loop": true,
+      "animation_length": 1,
+      "bones": {}
+    },
+    "walk": {
+      "loop": true,
+      "animation_length": 1,
+      "bones": {
+        "leg_1": {
+          "rotation": [
+            "math.sin(query.anim_time * 360) * 22",
+            0,
+            0
+          ]
+        },
+        "leg_-1": {
+          "rotation": [
+            "math.sin(query.anim_time * 360) * 22",
+            0,
+            0
+          ]
+        },
+        "arm_-1": {
+          "rotation": [
+            "math.sin(query.anim_time * 360) * -22",
+            0,
+            0
+          ]
+        },
+        "arm_-1_0": {
+          "rotation": [
+            "math.sin(query.anim_time * 360) * 22",
+            0,
+            0
+          ]
+        },
+        "arm_-1_1": {
+          "rotation": [
+            "math.sin(query.anim_time * 360) * -22",
+            0,
+            0
+          ]
+        },
+        "arm_1": {
+          "rotation": [
+            "math.sin(query.anim_time * 360) * -22",
+            0,
+            0
+          ]
+        },
+        "arm_1_0": {
+          "rotation": [
+            "math.sin(query.anim_time * 360) * 22",
+            0,
+            0
+          ]
+        },
+        "arm_1_1": {
+          "rotation": [
+            "math.sin(query.anim_time * 360) * -22",
+            0,
+            0
+          ]
+        }
+      }
+    },
+    "fly": {
+      "loop": true,
+      "animation_length": 1,
+      "bones": {}
+    },
+    "swim": {
+      "loop": true,
+      "animation_length": 1,
+      "bones": {}
+    },
+    "sit": {
+      "loop": true,
+      "animation_length": 1,
+      "bones": {
+        "root": {
+          "position": [
+            0,
+            -2.2399999999999998,
+            0
+          ]
+        }
+      }
+    },
+    "attack": {
+      "animation_length": 0.7,
+      "loop": false,
+      "bones": {
+        "root": {
+          "rotation": {
+            "0": [
+              0,
+              0,
+              0
+            ],
+            ".2": [
+              -15,
+              0,
+              0
+            ],
+            ".4": [
+              20,
+              0,
+              0
+            ],
+            ".7": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}

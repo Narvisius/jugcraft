@@ -1,0 +1,771 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        17.5,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "body",
+      "parent": "root",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.5,
+            -2.5,
+            -1.0,
+            5.0,
+            5.0,
+            7.0
+          ],
+          "uv": [
+            31.0,
+            25.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -3.0,
+            -4.0,
+            -6.0,
+            6.0,
+            7.0,
+            5.0
+          ],
+          "uv": [
+            0.0,
+            32.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "legs",
+      "parent": "root",
+      "pose": [
+        0.0,
+        2.5,
+        -2.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "head",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -1.0,
+        -5.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.5,
+            -2.0,
+            -2.5,
+            5.0,
+            4.0,
+            3.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lWing",
+      "parent": "body",
+      "pose": [
+        2.5,
+        -2.0,
+        -2.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "rWing",
+      "parent": "body",
+      "pose": [
+        -2.5,
+        -2.0,
+        -2.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "lleg",
+      "parent": "legs",
+      "pose": [
+        1.0,
+        0.0,
+        -2.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0.0,
+            0.0,
+            1.0,
+            4.0,
+            0.0
+          ],
+          "uv": [
+            2.0,
+            11.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "rleg",
+      "parent": "legs",
+      "pose": [
+        -1.0,
+        0.0,
+        -2.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0.0,
+            0.0,
+            1.0,
+            4.0,
+            0.0
+          ],
+          "uv": [
+            2.0,
+            11.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lleg2",
+      "parent": "legs",
+      "pose": [
+        1.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0.0,
+            0.0,
+            1.0,
+            4.0,
+            0.0
+          ],
+          "uv": [
+            2.0,
+            11.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "rleg2",
+      "parent": "legs",
+      "pose": [
+        -1.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0.0,
+            0.0,
+            1.0,
+            4.0,
+            0.0
+          ],
+          "uv": [
+            2.0,
+            11.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rleg3",
+      "parent": "legs",
+      "pose": [
+        -1.0,
+        0.0,
+        2.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0.0,
+            0.0,
+            1.0,
+            4.0,
+            0.0
+          ],
+          "uv": [
+            2.0,
+            11.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lleg3",
+      "parent": "legs",
+      "pose": [
+        1.0,
+        0.0,
+        2.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0.0,
+            0.0,
+            1.0,
+            4.0,
+            0.0
+          ],
+          "uv": [
+            2.0,
+            11.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "rantennae",
+      "parent": "head",
+      "pose": [
+        -1.0,
+        -2.0,
+        -2.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -7.5,
+            -7.0,
+            0.0,
+            8.0,
+            7.0,
+            0.0
+          ],
+          "uv": [
+            22.0,
+            38.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lantennae",
+      "parent": "head",
+      "pose": [
+        1.0,
+        -2.0,
+        -2.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            -7.0,
+            0.0,
+            8.0,
+            7.0,
+            0.0
+          ],
+          "uv": [
+            22.0,
+            38.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "lWing_b",
+      "parent": "lWing",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0.0,
+            -12.0,
+            13.0,
+            0.0,
+            16.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lWing_s",
+      "parent": "lWing",
+      "pose": [
+        0.0,
+        0.25,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            0.0,
+            -2.0,
+            11.0,
+            0.0,
+            16.0
+          ],
+          "uv": [
+            0.0,
+            16.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rWing_b",
+      "parent": "rWing",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -12.5,
+            0.0,
+            -12.0,
+            13.0,
+            0.0,
+            16.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "rWing_s",
+      "parent": "rWing",
+      "pose": [
+        0.0,
+        0.25,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -11.0,
+            0.0,
+            -2.0,
+            11.0,
+            0.0,
+            16.0
+          ],
+          "uv": [
+            0.0,
+            16.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/GloomothModel.java",
+  "sourceSha256": "fb1f34df656d42ed8f0eabdf86b99e4bddea217e470d640bea98b293ad6ef996",
+  "animationRoot": "root",
+  "headLook": "head",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "rantennae",
+      "kind": "walk",
+      "speed": 0.1,
+      "degree": 0.15,
+      "invert": true,
+      "phase": 1.0,
+      "bias": [
+        "*",
+        -1,
+        0.3
+      ],
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "lantennae",
+      "kind": "walk",
+      "speed": 0.1,
+      "degree": 0.15,
+      "invert": true,
+      "phase": 1.0,
+      "bias": [
+        "*",
+        -1,
+        0.3
+      ],
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "rantennae",
+      "kind": "flap",
+      "speed": 0.1,
+      "degree": 0.15,
+      "invert": false,
+      "phase": 1.0,
+      "bias": [
+        "*",
+        -1,
+        0.1
+      ],
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "lantennae",
+      "kind": "flap",
+      "speed": 0.1,
+      "degree": 0.15,
+      "invert": true,
+      "phase": 1.0,
+      "bias": [
+        "*",
+        -1,
+        0.1
+      ],
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "rWing",
+      "kind": "flap",
+      "speed": [
+        "*",
+        0.6,
+        1.5
+      ],
+      "degree": 0.9,
+      "invert": false,
+      "phase": 1.5,
+      "bias": [
+        "*",
+        -1,
+        0.1
+      ],
+      "clock": "age",
+      "amount": [
+        "*",
+        "fly",
+        1
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lWing",
+      "kind": "flap",
+      "speed": [
+        "*",
+        0.6,
+        1.5
+      ],
+      "degree": 0.9,
+      "invert": true,
+      "phase": 1.5,
+      "bias": [
+        "*",
+        -1,
+        0.1
+      ],
+      "clock": "age",
+      "amount": [
+        "*",
+        "fly",
+        1
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rWing_s",
+      "kind": "flap",
+      "speed": [
+        "*",
+        0.6,
+        1.5
+      ],
+      "degree": [
+        "*",
+        0.9,
+        0.45
+      ],
+      "invert": false,
+      "phase": 2.0,
+      "bias": [
+        "*",
+        -1,
+        0.1
+      ],
+      "clock": "age",
+      "amount": [
+        "*",
+        "fly",
+        1
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lWing_s",
+      "kind": "flap",
+      "speed": [
+        "*",
+        0.6,
+        1.5
+      ],
+      "degree": [
+        "*",
+        0.9,
+        0.45
+      ],
+      "invert": true,
+      "phase": 2.0,
+      "bias": [
+        "*",
+        -1,
+        0.1
+      ],
+      "clock": "age",
+      "amount": [
+        "*",
+        "fly",
+        1
+      ],
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.walk(this.lleg, walkSpeed, walkDegree, false, 4.0f, 0.1f, limbSwing, limbSwingAmount * groundedAmount);",
+      "reason": "Unbound expression variable groundedAmount"
+    },
+    {
+      "call": "this.walk(this.lleg2, walkSpeed, walkDegree, false, 2.5f, 0.1f, limbSwing, limbSwingAmount * groundedAmount);",
+      "reason": "Unbound expression variable groundedAmount"
+    },
+    {
+      "call": "this.walk(this.lleg3, walkSpeed, walkDegree, false, 1.0f, 0.1f, limbSwing, limbSwingAmount * groundedAmount);",
+      "reason": "Unbound expression variable groundedAmount"
+    },
+    {
+      "call": "this.walk(this.rleg, walkSpeed, walkDegree, true, 4.0f, -0.1f, limbSwing, limbSwingAmount * groundedAmount);",
+      "reason": "Unbound expression variable groundedAmount"
+    },
+    {
+      "call": "this.walk(this.rleg2, walkSpeed, walkDegree, true, 2.5f, -0.1f, limbSwing, limbSwingAmount * groundedAmount);",
+      "reason": "Unbound expression variable groundedAmount"
+    },
+    {
+      "call": "this.walk(this.rleg3, walkSpeed, walkDegree, true, 1.0f, -0.1f, limbSwing, limbSwingAmount * groundedAmount);",
+      "reason": "Unbound expression variable groundedAmount"
+    },
+    {
+      "call": "this.bob(this.root, flySpeed, flyDegree * 2.0f, false, ageInTicks, flyProgress);",
+      "reason": "Unbound expression variable flyProgress"
+    },
+    {
+      "call": "this.root.rotateAngleX += pitchAmount;",
+      "reason": "Unbound expression variable pitchAmount"
+    },
+    {
+      "call": "this.root.rotateAngleZ += rollAmount;",
+      "reason": "Unbound expression variable rollAmount"
+    }
+  ],
+  "expressions": [],
+  "poses": []
+}

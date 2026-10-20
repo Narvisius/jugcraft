@@ -505,15 +505,15 @@ TANK_NAMES = {
     "fuel": "Fuel tank",
     "feed": "Feed tank",
     "anode_gas": "Oxygen/chlorine tank",
-    "hydrogen": "Hydrogen tank",
+    "hydrogen": "Primary feed tank",
     "lye": "Lye tank",
-    "reactant": "Reactant gas tank",
+    "reactant": "Secondary feed tank",
     "product": "Product gas tank",
     "water": "Water tank",
     "oxidant": "Oxidant tank",
     "co2": "Carbon dioxide tank",
     "liquid": "Liquid tank",
-    "gas": "Gas tank",
+    "gas": "Co-reactant tank",
     "biogas": "Biogas tank",
 }
 
@@ -1790,7 +1790,7 @@ def write_all(write, assets, data, lang, condition, self_drop):
     lang[f"container.{MOD}.form.socket.bed"] = "Catalyst bed"
     # The Infuser's bed socket holds the nickel catalyst bed: the owner's selected one nickel ingot on two ordinary fired
     # bricks (docs/features/industrial-starter-gas-and-acid-factory.md), made once and never used up.
-    write(data / "tags" / "item" / f"{CATALYST_BEDS}.json", {"values": [f"{MOD}:nickel_catalyst_bed", f"{MOD}:vanadium_contact_bed"]})
+    write(data / "tags" / "item" / f"{CATALYST_BEDS}.json", {"values": [f"{MOD}:nickel_catalyst_bed", f"{MOD}:vanadium_contact_bed", f"{MOD}:cobalt_catalyst_bed"]})
     # The vanadium contact bed: the owner's selected reusable vanadium-oxide/ceramic bed, its oxide on two fired bricks
     # like the nickel bed, made once and never used up.
     write(data / "recipe" / "vanadium_contact_bed.json", {
@@ -1867,6 +1867,13 @@ def write_all(write, assets, data, lang, condition, self_drop):
     coastal_metals.write_extras(write, assets, data, lang, condition)
     polymers.write_extras(write, assets, data, lang, condition)
     fluorochemistry.write_extras(write, assets, data, lang, condition)
+    ceramics.write_extras(write, assets, data, lang, condition)
+    structural_alloys.write_extras(write, assets, data, lang, condition)
+    battery_expansion.write_extras(write, assets, data, lang, condition)
+    advanced_electronics.write_extras(write, assets, data, lang, condition)
+    phosphate_processing.write_extras(write, assets, data, lang, condition)
+    synthetic_fuels.write_extras(write, assets, data, lang, condition)
+    cryogenic_fuels.write_extras(write, assets, data, lang, condition)
     for kind, name, recipe in form_recipe_files(condition):
         write(data / "recipe" / kind / f"{name}.json", recipe)
 
@@ -2005,3 +2012,82 @@ machine_consolidation.apply(FORMS, HANDBOOK)
 # adds recipes and explicitly aliased tanks rather than replacing existing factories.
 import machine_expansion_compat
 machine_expansion_compat.apply(_RELEASED, FORMS, FORM_RECIPES, HANDBOOK, MODELS, ROTORS, ITEM_EXTRAS)
+
+# Owner package 1 extends the shared oven without moving any saved ports or slots.
+import ceramics
+import ceramics_models
+FORMS.update(ceramics.FORMS)
+FORMS['alumina_calciner']['capabilities'].append('jugcraft:ceramic_firing')
+FORM_RECIPES.update(ceramics.RECIPES)
+for machine, recipes in ceramics.EXTRA_RECIPES.items():
+    FORM_RECIPES[machine].extend(recipes)
+HANDBOOK.update(ceramics.HANDBOOK)
+HANDBOOK['alumina_calciner'].append('Also fires porcelain, alumina and zirconia blanks and calcines zirconia precursor. The solution tank must be empty for dry firing. Use Recipes to select a ceramic job; old calcination, drying and PTFE recipes remain supported.')
+HANDBOOK['mineral_conditioner'].append('Also prepares ceramic powder charges with water and recovers trace zircon from sand. See Ceramics and Precision in the Handbook for the whole route. Clear incompatible fluids and lock the desired job when switching.')
+TANK_NAMES.update(ceramics.TANK_NAMES)
+MODELS.update(ceramics_models.MODELS)
+ROTORS.update(ceramics_models.ROTORS)
+ITEM_EXTRAS.update(ceramics_models.ITEM_EXTRAS)
+
+import structural_alloys
+for machine, recipes in structural_alloys.EXTRA_RECIPES.items():
+    FORM_RECIPES[machine].extend(recipes)
+HANDBOOK['mineral_conditioner'].append('Also washes regional chromite: two minerals and 250 mB water make two concentrate. The Arc Furnace reduces two concentrate with one Coke into two Ferrochromium Ingots for stainless alloying.')
+HANDBOOK['precision_finisher'].append('Finish an assembled Stainless Valve with the Felt Polishing Head: 240 ticks at 48 JE/t, returning the same 125 mB cooling water. Its alternate vessel recipes feed existing chemical equipment.')
+
+import battery_expansion
+for machine, recipes in battery_expansion.RECIPES.items():
+    FORMS[machine]['capabilities'].append('jugcraft:battery_' + machine)
+    FORM_RECIPES[machine].extend(recipes)
+
+# Package 4 adds one wet bench; all other process stages reuse released equipment.
+import advanced_electronics
+import advanced_electronics_models
+FORMS.update(advanced_electronics.FORMS)
+for machine, recipes in advanced_electronics.RECIPES.items():
+    for entry in recipes:
+        if entry['capability'] not in FORMS[machine]['capabilities']:
+            FORMS[machine]['capabilities'].append(entry['capability'])
+    FORM_RECIPES.setdefault(machine, []).extend(recipes)
+HANDBOOK.update(advanced_electronics.HANDBOOK)
+HANDBOOK['electrolytic_separator'].append('Also makes peroxide from Oxygenated Process Water: the first outlet carries peroxide, the second returned water, and the third remains unused. Empty old products before changing jobs; see Advanced Electronics and Automation.')
+TANK_NAMES.update(advanced_electronics.TANK_NAMES)
+MODELS.update(advanced_electronics_models.MODELS)
+ROTORS.update(advanced_electronics_models.ROTORS)
+ITEM_EXTRAS.update(advanced_electronics_models.ITEM_EXTRAS)
+
+# Package 5 extends existing formed machines without changing ports, tanks or IDs.
+import phosphate_processing
+for machine, recipes in phosphate_processing.RECIPES.items():
+    for entry in recipes:
+        if entry['capability'] not in FORMS[machine]['capabilities']:
+            FORMS[machine]['capabilities'].append(entry['capability'])
+    FORM_RECIPES[machine].extend(recipes)
+TANK_NAMES.update(phosphate_processing.TANK_NAMES)
+HANDBOOK['chemical_dissolution_chamber'].append('Also dissolves Ground Phosphate with ordinary sulfuric acid into slurry. Use the recipe picker; empty old fluid from the shared process outlet before switching from HF.')
+HANDBOOK['aluminate_filter_press'].append('Also filters phosphate slurry: first fluid outlet phosphoric acid, second water, first solid output gypsum-rich residue. See Phosphate Processing and Fertilizers.')
+HANDBOOK['mineral_conditioner'].append('Also prepares organic fertilizer carriers from compost or digestate fibre, and washes gypsum-rich residue with water. The gypsum route requires room for Spent Mineral Wash.')
+HANDBOOK['alumina_calciner'].append('Also dries Wet Superphosphate, returning water, and prepares Washed Gypsum into the existing Gypsum Binder. Empty incompatible stored outputs before switching jobs.')
+HANDBOOK['bulk_chemical_reactor'].append('Also makes Wet Superphosphate from ground phosphate and phosphoric acid, or dissolves Mixed-farm Fertilizer into existing Nutrient Solution. Recipe lock selects the intended job.')
+
+# Package 6: no new station, port or tank identity.
+import synthetic_fuels
+for machine, recipes in synthetic_fuels.RECIPES.items():
+    for entry in recipes:
+        if entry['capability'] not in FORMS[machine]['capabilities']:
+            FORMS[machine]['capabilities'].append(entry['capability'])
+    FORM_RECIPES[machine].extend(recipes)
+HANDBOOK['chemical_infuser'].append('Install the reusable Cobalt-Ceramic Catalyst Bed for synthetic crude or CO/water gas balancing. First output carries crude or hydrogen; second carries water or CO2. Drain excess applies only to water. See Synthetic Fuels and Recovery.')
+HANDBOOK['mineral_conditioner'].append('Also prepares primary cobalt stock and treats wafer waste with calcite and lye. Treated water and recovery concentrate require separate outlets; concentrate can be stabilized with clay. No acid or solvent is recovered from the fungible mixture.')
+HANDBOOK['chemical_distillation_station'].append('Also recovers water from Treated Process Water: first outlet water, second Process Recovery Concentrate. Use the existing recipe picker, output previews and Lock recipe to separate this from ethanol and titanium jobs.')
+TANK_NAMES.update({'product_gas':'Primary process product','process_water':'Secondary product / water'})
+
+# Package 7 extends shared formed processors without changing their ports or slots.
+import cryogenic_fuels
+for machine, recipes in cryogenic_fuels.RECIPES.items():
+    for entry in recipes:
+        if entry['capability'] not in FORMS[machine]['capabilities']:
+            FORMS[machine]['capabilities'].append(entry['capability'])
+    FORM_RECIPES[machine].extend(recipes)
+HANDBOOK['bulk_chemical_reactor'].append('Also prepares storable hydrazine and N2O4 propellants, each with a solid process residue. See Cryogenics and Rocket Fuels for compatible loaded motors and waste recovery.')
+HANDBOOK['chemical_distillation_station'].append('Also vaporizes LOX, liquid methane or liquid hydrogen into the matching gas through the first outlet. Each paid batch expands 250 mB liquid to 1000 mB gas; clear old outputs and lock the desired recipe.')

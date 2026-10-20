@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "TTT",
+    "S S",
+    "S S"
+  ],
+  "key": {
+    "S": "jugcraft:cavern_metal_rebar",
+    "T": "jugcraft:cavern_scrap_metal"
+  },
+  "result": {
+    "count": 6,
+    "id": "jugcraft:cavern_metal_scaffolding"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

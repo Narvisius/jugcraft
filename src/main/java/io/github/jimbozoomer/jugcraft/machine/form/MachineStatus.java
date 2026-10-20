@@ -28,7 +28,7 @@ public record MachineStatus(MachineLifecycle state, Reason reason, int index, in
 		/** A generator's store is full: nothing is drawing its power. */
 		POWER_FULL,
 		COASTAL_SOURCE,
-		MIXED_INPUTS, RECIPE_UNAVAILABLE;
+		MIXED_INPUTS, RECIPE_UNAVAILABLE, STOCK_TARGET;
 
 		public String translationKey() {
 			return "container.jugcraft.form.reason." + name().toLowerCase();

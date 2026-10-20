@@ -1,0 +1,153 @@
+{
+  "textureSize": [
+    32,
+    32
+  ],
+  "parts": [
+    {
+      "name": "spear",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        15.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            -20.0,
+            -0.5,
+            1.0,
+            29.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r1",
+      "parent": "spear",
+      "pose": [
+        0.0,
+        -23.0,
+        0.0,
+        0.7854,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -6.0,
+            -6.0,
+            0.0,
+            12.0,
+            12.0
+          ],
+          "uv": [
+            7.0,
+            8.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r2",
+      "parent": "spear",
+      "pose": [
+        0.0,
+        -18.0,
+        0.0,
+        0.7854,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -3.0,
+            -6.0,
+            0.0,
+            9.0,
+            9.0
+          ],
+          "uv": [
+            4.0,
+            1.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r3",
+      "parent": "spear",
+      "pose": [
+        0.0,
+        8.0,
+        0.0,
+        0.7854,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -3.0,
+            -2.0,
+            0.0,
+            5.0,
+            5.0
+          ],
+          "uv": [
+            20.0,
+            1.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/FrostmintSpearModel.java",
+  "sourceSha256": "50e937ace5f31b5a4df527d7f2374e07428e9e92b6cd489ef322e78060ad0a93",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

@@ -1,0 +1,21 @@
+{
+	"display": {
+		"icon": {
+			"id": "inventorypets:item_petrifier"
+		},
+		"title": {
+			"translate": "advancement.ip.petachievePetrifier"
+		},
+		"description": {
+			"translate": "advancement.ip.petachievePetrifier.desc"
+		},
+		"show_toast": true,
+		"announce_to_chat": true
+	},
+	"parent": "inventorypets:root",
+    "criteria": {
+        "example": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

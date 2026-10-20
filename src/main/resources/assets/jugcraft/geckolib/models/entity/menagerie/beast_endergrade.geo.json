@@ -1,0 +1,137 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.beast_endergrade",
+        "texture_width": 64,
+        "texture_height": 64,
+        "visible_bounds_width": 4,
+        "visible_bounds_height": 4,
+        "visible_bounds_offset": [
+          0,
+          0.4,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "body",
+          "parent": "root",
+          "pivot": [
+            0.0,
+            6.4,
+            0.0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -5.04,
+                0,
+                -7.2
+              ],
+              "size": [
+                10.08,
+                6.4,
+                14.4
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "head",
+          "parent": "root",
+          "pivot": [
+            0.0,
+            8.96,
+            -6.48
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -3.6,
+                5.120000000000001,
+                -10.08
+              ],
+              "size": [
+                7.2,
+                3.84,
+                7.2
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "wing_-1",
+          "parent": "root",
+          "pivot": [
+            -4.32,
+            3.2,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -15.840000000000002,
+                3.2,
+                -5.04
+              ],
+              "size": [
+                11.520000000000001,
+                0.768,
+                11.520000000000001
+              ],
+              "uv": [
+                0,
+                32.0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "wing_1",
+          "parent": "root",
+          "pivot": [
+            4.32,
+            3.2,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                4.32,
+                3.2,
+                -5.04
+              ],
+              "size": [
+                11.520000000000001,
+                0.768,
+                11.520000000000001
+              ],
+              "uv": [
+                0,
+                32.0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

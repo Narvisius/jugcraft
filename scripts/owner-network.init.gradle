@@ -1,0 +1,11 @@
+// Bound the primary client when the test launches a second JVM (2 GiB).
+// Usage: ./gradlew runClientGameTest -PclientTests=OwnerCollectionsNetworkTests -I scripts/owner-network.init.gradle
+allprojects {
+    afterEvaluate {
+        tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+            maxHeapSize = '3G'
+            jvmArgs '-XX:ActiveProcessorCount=8'
+            systemProperty 'jdk.lang.processReaperUseDefaultStackSize', 'true'
+        }
+    }
+}

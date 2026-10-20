@@ -342,6 +342,7 @@ public final class RulesParser {
 			throw new Invalid("operation: \"" + principle + "\" is not a Principle");
 		}
 		int strongest = switch (kind) {
+			case NOUVEAU_BLOCK, NOUVEAU_CREATURE, NOUVEAU -> EffectSpec.MAX_MAGNITUDE;
 			case STATUS -> EffectSpec.MAX_AMPLIFIER;
 			case MOVEMENT -> EffectSpec.MAX_PUSH;
 			case DAMAGE, RESTORATION, PROTECTION -> EffectSpec.MAX_MAGNITUDE;
@@ -350,11 +351,12 @@ public final class RulesParser {
 		int weakest = kind == EffectKind.DAMAGE || kind == EffectKind.RESTORATION || kind == EffectKind.PROTECTION
 				|| kind == EffectKind.MOVEMENT ? 1 : 0;
 		int magnitude = body.has("magnitude") || weakest > 0 ? range(body, "magnitude", weakest, strongest) : 0;
-		boolean lasting = kind == EffectKind.STATUS || kind == EffectKind.PROTECTION || kind == EffectKind.DETECTION
+		boolean nouveau = kind == EffectKind.NOUVEAU_BLOCK || kind == EffectKind.NOUVEAU_CREATURE || kind == EffectKind.NOUVEAU;
+		boolean lasting = nouveau || kind == EffectKind.STATUS || kind == EffectKind.PROTECTION || kind == EffectKind.DETECTION
 				|| kind == EffectKind.ILLUMINATION;
 		int duration = lasting ? range(body, "duration", 1, EffectSpec.MAX_DURATION) : body.has("duration") ? range(body, "duration", 0, 0) : 0;
-		String status = kind == EffectKind.STATUS ? id(body, "status") : null;
-		if (kind != EffectKind.STATUS && body.has("status")) {
+		String status = kind == EffectKind.STATUS || nouveau ? id(body, "status") : null;
+		if (kind != EffectKind.STATUS && !nouveau && body.has("status")) {
 			throw new Invalid("operation: only a status effect names a status");
 		}
 		Stacking stacking = Stacking.STRONGEST;

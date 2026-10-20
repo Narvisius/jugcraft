@@ -52,7 +52,7 @@ FRAME = [
     "................",
     "................",
 ]
-FILLINGS = {"red_bean_mooncake": "5a1a1a", "chestnut_mooncake": "4a2e1a", "pumpkin_mooncake": "f6c83a"}
+FILLINGS = {"osmanthus_mooncake": "e8d08a","red_bean_mooncake": "5a1a1a", "chestnut_mooncake": "4a2e1a", "pumpkin_mooncake": "f6c83a"}
 CRUST = [rgb("a8641e"), rgb("c47e2c"), rgb("d8963a"), rgb("ecb058")]
 
 

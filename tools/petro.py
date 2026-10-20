@@ -182,7 +182,7 @@ ITEMS = {
     # Etched in the lithography station (batch 7).
     "microchip": "Microchip",
     # Rubber and polymers (batch 14): synthetic rubber, and gaskets pressed from it with steel.
-    "rubber": "Synthetic Rubber",
+    "rubber": "Rubber",
     "gasket": "Gasket",
     # Chlor-alkali (batch 15): PVC resin (pressed into plastic sheets) and soap (washes off status effects).
     "pvc_resin": "PVC Resin",
@@ -601,6 +601,7 @@ def fluid_recipe_files(condition):
                                          for r in recipe["fluid_results"]]
             if recipe.get("results"):
                 data["results"] = [{"id": item, "count": count} for item, count in recipe["results"]]
+            if recipe.get("tool"): data["tool"] = recipe["tool"]
             data["time"] = recipe["ticks"]
             yield kind, recipe["name"], data
 
@@ -630,3 +631,36 @@ from fluorochemistry import FLUIDS as FLUORO_FLUIDS, GASES as FLUORO_GASES, ITEM
 FLUIDS.update({k: v for k, v in FLUORO_FLUIDS.items() if k not in FLUIDS})
 GASES.update({k: v for k, v in FLUORO_GASES.items() if k not in GASES})
 ITEMS.update({k: v for k, v in FLUORO_ITEMS.items() if k not in ITEMS})
+
+from ceramics import ITEMS as CERAMIC_ITEMS
+ITEMS.update(CERAMIC_ITEMS)
+
+from structural_alloys import ITEMS as ALLOY_ITEMS
+ITEMS.update(ALLOY_ITEMS)
+
+from battery_expansion import ITEMS as BATTERY_ITEMS, REACTOR_RECIPES as BATTERY_REACTOR_RECIPES
+ITEMS.update(BATTERY_ITEMS)
+FLUID_RECIPES['chemical_reactor'].extend(BATTERY_REACTOR_RECIPES)
+
+import advanced_electronics
+ITEMS.update(advanced_electronics.ITEMS)
+FLUIDS.update(advanced_electronics.FLUIDS)
+FLUID_RECIPES['chemical_reactor'].extend(advanced_electronics.REACTOR_RECIPES)
+FLUID_RECIPES['lithography_station'].extend(advanced_electronics.LITHOGRAPHY_RECIPES)
+
+import phosphate_processing
+ITEMS.update(phosphate_processing.ITEMS)
+FLUIDS.update(phosphate_processing.FLUIDS)
+FLUID_RECIPES['chemical_reactor'].extend(phosphate_processing.REACTOR_RECIPES)
+
+import synthetic_fuels
+ITEMS.update(synthetic_fuels.ITEMS)
+FLUIDS.update(synthetic_fuels.FLUIDS)
+FLUID_RECIPES['distillation_tower'].extend(synthetic_fuels.REFINERY_RECIPES)
+
+# Package 7 reuses the compact liquefier and tank-filling reactor.
+import cryogenic_fuels
+ITEMS.update(cryogenic_fuels.ITEMS)
+FLUIDS.update(cryogenic_fuels.FLUIDS)
+FLUID_RECIPES["cryogenic_liquefier"].extend(cryogenic_fuels.LIQUEFIER_RECIPES)
+FLUID_RECIPES["chemical_reactor"].extend(cryogenic_fuels.TANK_RECIPES)

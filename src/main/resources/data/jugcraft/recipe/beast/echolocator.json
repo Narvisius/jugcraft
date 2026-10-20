@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CPC",
+    "PAP",
+    " P "
+  ],
+  "key": {
+    "A": "jugcraft:beast_ambergris",
+    "C": "jugcraft:beast_cachalot_whale_tooth",
+    "P": "minecraft:iron_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:beast_echolocator"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

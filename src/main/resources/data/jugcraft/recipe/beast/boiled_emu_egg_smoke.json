@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smoking",
+  "ingredient": "jugcraft:beast_emu_egg",
+  "result": {
+    "id": "jugcraft:beast_boiled_emu_egg"
+  },
+  "experience": 0.15,
+  "cookingtime": 100,
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

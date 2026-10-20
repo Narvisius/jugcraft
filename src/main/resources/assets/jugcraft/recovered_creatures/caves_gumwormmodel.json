@@ -1,0 +1,554 @@
+{
+  "textureSize": [
+    256,
+    256
+  ],
+  "parts": [
+    {
+      "name": "main",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        -6.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "head",
+      "parent": "main",
+      "pose": [
+        0.0,
+        -16.5,
+        35.25,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -16.5,
+            -16.5,
+            -22.25,
+            33.0,
+            33.0,
+            22.0
+          ],
+          "uv": [
+            116.0,
+            67.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -16.5,
+            -16.5,
+            -22.25,
+            33.0,
+            33.0,
+            3.0
+          ],
+          "uv": [
+            17.0,
+            220.0
+          ],
+          "inflate": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "bottom_Eye",
+      "parent": "head",
+      "pose": [
+        0.0,
+        18.0,
+        -11.75,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "left_Eye",
+      "parent": "head",
+      "pose": [
+        18.0,
+        0.0,
+        -10.75,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -6.0,
+            -6.0,
+            3.0,
+            12.0,
+            12.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_Eye",
+      "parent": "head",
+      "pose": [
+        -18.0,
+        0.0,
+        -10.75,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -6.0,
+            -6.0,
+            3.0,
+            12.0,
+            12.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "top_Eye",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -18.0,
+        -11.75,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "gum_Strand1",
+      "parent": "head",
+      "pose": [
+        9.0,
+        1.0,
+        -35.75,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -18.5,
+            -9.5,
+            0.0,
+            37.0,
+            19.0
+          ],
+          "uv": [
+            218.0,
+            103.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "gum_Strand2",
+      "parent": "head",
+      "pose": [
+        -9.0,
+        1.0,
+        -35.75,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -18.5,
+            -9.5,
+            0.0,
+            37.0,
+            19.0
+          ],
+          "uv": [
+            218.0,
+            103.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "gum_Strand3",
+      "parent": "head",
+      "pose": [
+        0.0,
+        1.0,
+        -35.75,
+        0.0,
+        0.7854,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -18.5,
+            -9.5,
+            0.0,
+            37.0,
+            19.0
+          ],
+          "uv": [
+            218.0,
+            103.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "bottom_Jaw",
+      "parent": "head",
+      "pose": [
+        0.0,
+        6.5,
+        -22.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -16.5,
+            0.0,
+            -36.25,
+            33.0,
+            10.0,
+            36.0
+          ],
+          "uv": [
+            102.0,
+            9.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -16.5,
+            -10.0,
+            -36.25,
+            33.0,
+            10.0,
+            36.0
+          ],
+          "uv": [
+            0.0,
+            43.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -16.5,
+            0.0,
+            -36.25,
+            33.0,
+            10.0,
+            36.0
+          ],
+          "uv": [
+            118.0,
+            210.0
+          ],
+          "inflate": [
+            1.01,
+            1.01,
+            1.01
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "top_Jaw",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -6.5,
+        -22.25,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -16.5,
+            -10.0,
+            -36.0,
+            33.0,
+            10.0,
+            36.0
+          ],
+          "uv": [
+            118.0,
+            165.0
+          ],
+          "inflate": [
+            1.01,
+            1.01,
+            1.01
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -16.5,
+            0.0,
+            -36.0,
+            33.0,
+            10.0,
+            36.0
+          ],
+          "uv": [
+            0.0,
+            144.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -16.5,
+            -10.0,
+            -36.0,
+            33.0,
+            10.0,
+            36.0
+          ],
+          "uv": [
+            0.0,
+            89.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r1",
+      "parent": "bottom_Eye",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -1.5708
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -6.0,
+            -6.0,
+            3.0,
+            12.0,
+            12.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "cube_r2",
+      "parent": "top_Eye",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.5708
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -6.0,
+            -6.0,
+            3.0,
+            12.0,
+            12.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/GumWormModel.java",
+  "sourceSha256": "a5a4d83ccec0ea9db7367cc941196dc973bd0dea231e47f2115ff3b280992ac0",
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "bottom_Jaw",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.1,
+      "invert": true,
+      "phase": 1.0,
+      "bias": [
+        "*",
+        -1,
+        0.8
+      ],
+      "clock": "age",
+      "amount": [
+        "*",
+        "combat",
+        1
+      ],
+      "when": 1
+    },
+    {
+      "bone": "top_Jaw",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.1,
+      "invert": false,
+      "phase": 1.0,
+      "bias": [
+        "*",
+        -1,
+        0.8
+      ],
+      "clock": "age",
+      "amount": [
+        "*",
+        "combat",
+        1
+      ],
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.gum_Strand1.setScale(1.0f, gumStretchVertical, 1.0f - gumStretchVertical * 0.2f);",
+      "reason": "Unbound expression variable gumStretchVertical"
+    },
+    {
+      "call": "this.gum_Strand2.setScale(1.0f, gumStretchVertical, 1.0f - gumStretchVertical * 0.2f);",
+      "reason": "Unbound expression variable gumStretchVertical"
+    },
+    {
+      "call": "this.gum_Strand3.setScale(1.0f, gumStretchVertical, 1.0f - gumStretchVertical * 0.2f);",
+      "reason": "Unbound expression variable gumStretchVertical"
+    },
+    {
+      "call": "this.head.rotateAngleZ += (float)Math.toRadians(entity.getBodyZRot(partialTicks));",
+      "reason": "Unsupported expression radians(entity.getBodyZRot(partialTicks))"
+    }
+  ],
+  "expressions": [],
+  "poses": []
+}

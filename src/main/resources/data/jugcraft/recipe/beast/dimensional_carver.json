@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MEM",
+    " X ",
+    " X "
+  ],
+  "key": {
+    "M": "jugcraft:beast_void_worm_mandible",
+    "E": "jugcraft:beast_void_worm_eye",
+    "X": "minecraft:netherite_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:beast_dimensional_carver"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

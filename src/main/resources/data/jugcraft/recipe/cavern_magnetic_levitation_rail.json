@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "INI",
+    "ISI",
+    "INI"
+  ],
+  "key": {
+    "N": "jugcraft:cavern_azure_neodymium_ingot",
+    "I": "minecraft:iron_ingot",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "count": 6,
+    "id": "jugcraft:cavern_magnetic_levitation_rail"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

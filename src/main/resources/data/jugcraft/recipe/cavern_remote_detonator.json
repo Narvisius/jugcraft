@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " F ",
+    "PRP",
+    " P "
+  ],
+  "key": {
+    "F": "jugcraft:cavern_fissile_core",
+    "R": "minecraft:redstone_block",
+    "P": "jugcraft:cavern_polymer_plate"
+  },
+  "result": {
+    "id": "jugcraft:cavern_remote_detonator"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

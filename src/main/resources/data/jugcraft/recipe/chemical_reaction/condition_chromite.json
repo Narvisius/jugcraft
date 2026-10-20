@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:mineral_conditioning",
+  "items": [
+    {
+      "ingredient": "jugcraft:chromite",
+      "count": 2
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 250
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:chromite_concentrate",
+      "count": 2
+    }
+  ],
+  "energy_per_tick": 32,
+  "time": 160
+}

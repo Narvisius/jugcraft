@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:block_column",
+  "allowed_placement": {
+    "type": "minecraft:true"
+  },
+  "direction": "down",
+  "layers": [
+    {
+      "height": {
+        "type": "minecraft:biased_to_bottom",
+        "min_inclusive": 1,
+        "max_inclusive": 6
+      },
+      "provider": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:water",
+          "properties": {
+            "level": "0"
+          }
+        }
+      }
+    }
+  ],
+  "prioritize_tip": false
+}

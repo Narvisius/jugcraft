@@ -22,6 +22,7 @@ public class MachineMenu extends AbstractContainerMenu {
 	public static final int INPUT_X = 56;
 	public static final int OUTPUT_X = 116;
 	public static final int SLOT_Y = 35;
+    public static final int PATTERN_X = 116, PATTERN_Y = 13;
 	/** Byproduct slots sit in a row above the output slot. */
 	public static final int BYPRODUCT_Y = 13;
 
@@ -153,6 +154,14 @@ public class MachineMenu extends AbstractContainerMenu {
 					}
 				});
 			}
+            if (kind.hasProcessTool()) {
+                addSlot(new Slot(container, kind.slots, PATTERN_X, PATTERN_Y) {
+                    @Override public boolean mayPlace(ItemStack stack) {
+                        return kind.acceptsProcessTool(stack);
+                    }
+                    @Override public int getMaxStackSize() { return 1; }
+                });
+            }
 		} else if (kind.isProcessor()) {
 			int inputs = kind.outputSlot();
 			for (int slot = 0; slot < inputs; slot++) {
@@ -193,7 +202,8 @@ public class MachineMenu extends AbstractContainerMenu {
 	/** Side-configuration buttons (ids 0..5 cycle a face, 6 toggles ejecting); only the server applies them. */
 	@Override
 	public boolean clickMenuButton(Player player, int id) {
-		return container instanceof MachineBlockEntity machine && machine.clickSideButton(id);
+		return stillValid(player) && container instanceof MachineBlockEntity machine
+			&& (machine.clickBatteryButton(id) || machine.clickSideButton(id));
 	}
 
 	public MachineKind kind() {
@@ -206,6 +216,8 @@ public class MachineMenu extends AbstractContainerMenu {
 
 	/** Shift-click into the machine: upgrades only into upgrade slots, everything else only into the others. */
 	private boolean moveIntoMachine(ItemStack stack, int machineSlots) {
+        if (kind.hasProcessTool() && kind.acceptsProcessTool(stack))
+            return moveItemStackTo(stack, kind.slots, kind.slots + 1, false);
 		boolean upgrade = MachineUpgrades.isUpgrade(stack) && kind.upgradeSlots() > 0;
 		int from = upgrade ? kind.slots : 0;
 		int to = upgrade ? machineSlots : kind.slots;

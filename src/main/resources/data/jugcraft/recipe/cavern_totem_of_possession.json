@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DED",
+    "DBD",
+    "DBD"
+  ],
+  "key": {
+    "B": "jugcraft:cavern_thornwood_branch",
+    "E": "jugcraft:cavern_occult_gem",
+    "D": "jugcraft:cavern_moth_dust"
+  },
+  "result": {
+    "id": "jugcraft:cavern_totem_of_possession"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

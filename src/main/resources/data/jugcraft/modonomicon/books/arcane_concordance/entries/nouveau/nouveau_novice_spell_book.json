@@ -1,0 +1,41 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:nouveau/nouveau_novice_spell_book",
+  "category": "jugcraft:nouveau",
+  "x": 78,
+  "y": 15,
+  "name": "book.jugcraft.arcane_concordance.nouveau.nouveau_novice_spell_book.name",
+  "description": "book.jugcraft.arcane_concordance.nouveau.nouveau_novice_spell_book.description",
+  "icon": "jugcraft:nouveau_novice_spell_book",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/square_gray",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "id": "p0",
+      "title": "book.jugcraft.arcane_concordance.nouveau.nouveau_novice_spell_book.p0.title",
+      "text": "book.jugcraft.arcane_concordance.nouveau.nouveau_novice_spell_book.p0.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p1",
+      "title1": "book.jugcraft.arcane_concordance.nouveau.nouveau_novice_spell_book.p1.title",
+      "recipe_id_1": "jugcraft:nouveau/novice_spell_book",
+      "text": "book.jugcraft.arcane_concordance.nouveau.nouveau_novice_spell_book.p1.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p2",
+      "title1": "book.jugcraft.arcane_concordance.nouveau.nouveau_novice_spell_book.p2.title",
+      "recipe_id_1": "jugcraft:nouveau/novice_spellbook_alt",
+      "text": "book.jugcraft.arcane_concordance.nouveau.nouveau_novice_spell_book.p2.text"
+    }
+  ]
+}

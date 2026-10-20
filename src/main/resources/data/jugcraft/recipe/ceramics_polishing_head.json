@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " W ",
+    "AIA",
+    " W "
+  ],
+  "key": {
+    "W": "#minecraft:wool",
+    "A": "jugcraft:alumina",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "id": "jugcraft:polishing_head",
+    "count": 1
+  }
+}

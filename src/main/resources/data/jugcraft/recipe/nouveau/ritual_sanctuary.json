@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:nouveau_blue_archwood_log",
+    "jugcraft:nouveau_water_essence",
+    "minecraft:sea_lantern"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_ritual_sanctuary"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

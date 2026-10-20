@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:noise_threshold",
+  "seed": 12346,
+  "noise": {
+    "base_octave": -3,
+    "octave_count": 1,
+    "amplitude_modifiers": [
+      1.7
+    ],
+    "normalize": "legacy"
+  },
+  "scale": 2,
+  "threshold": 0.15,
+  "high_chance": 0.4,
+  "default_state": "minecraft:coarse_dirt",
+  "low_states": [
+    "minecraft:moss_block"
+  ],
+  "high_states": [
+    "minecraft:rooted_dirt"
+  ]
+}

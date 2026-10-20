@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PAP",
+    "SCS",
+    "PAP"
+  ],
+  "key": {
+    "P": "jugcraft:ptfe_liner",
+    "A": "jugcraft:carbon_anode",
+    "S": "jugcraft:battery_separator",
+    "C": "jugcraft:copper_wire"
+  },
+  "result": {
+    "id": "jugcraft:flow_cell_stack",
+    "count": 1
+  }
+}

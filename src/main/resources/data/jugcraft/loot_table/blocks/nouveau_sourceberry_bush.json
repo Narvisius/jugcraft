@@ -1,0 +1,40 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:nouveau_sourceberry_bush"
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:nouveau_sourceberry_bush",
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 3
+              }
+            }
+          ]
+        }
+      ],
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "jugcraft:nouveau_sourceberry_bush",
+        "state": {
+          "age": "3"
+        }
+      }
+    }
+  ]
+}

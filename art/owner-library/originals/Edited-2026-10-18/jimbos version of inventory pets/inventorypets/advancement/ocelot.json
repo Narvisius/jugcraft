@@ -1,0 +1,31 @@
+{
+    "display": {
+        "icon": {
+            "id": "inventorypets:pet_ocelot"
+        },
+        "title": {
+            "translate": "advancement.ip.petach_ocelot"
+        },
+        "description": {
+            "translate": "advancement.ip.petach_ocelot.desc"
+        },
+        "show_toast": true,
+        "announce_to_chat": true
+    },
+    "parent": "inventorypets:mooshroom",
+    "criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                        	"inventorypets:pet_ocelot"
+                    	]
+                    }
+                    
+                ]
+            }
+        }
+    }
+}

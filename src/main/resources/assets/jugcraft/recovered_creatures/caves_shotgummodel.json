@@ -1,0 +1,537 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "shot_gum",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        21.0,
+        6.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -9.0,
+            -5.0,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            32.0,
+            23.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -4.0,
+            -9.0,
+            -5.0,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            30.0
+          ],
+          "inflate": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "parent": "shot_gum",
+      "pose": [
+        0.0,
+        0.5,
+        -1.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -1.5,
+            -3.0,
+            0.0,
+            3.0,
+            6.0
+          ],
+          "uv": [
+            7.0,
+            40.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "gum_layers",
+      "parent": "shot_gum",
+      "pose": [
+        0.0,
+        -1.0,
+        -2.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "stock",
+      "parent": "shot_gum",
+      "pose": [
+        0.0,
+        -2.75,
+        3.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "barrels",
+      "parent": "shot_gum",
+      "pose": [
+        0.0,
+        -3.8333,
+        -5.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.5,
+            -0.6667,
+            -12.0,
+            7.0,
+            3.0,
+            12.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -0.5,
+            -2.6667,
+            -12.0,
+            1.0,
+            2.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -3.5,
+            -0.6667,
+            -12.0,
+            7.0,
+            3.0,
+            12.0
+          ],
+          "uv": [
+            0.0,
+            15.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "crank",
+      "parent": "shot_gum",
+      "pose": [
+        4.0,
+        -5.0,
+        -1.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -2.0,
+            0.0,
+            2.0,
+            4.0,
+            0.0
+          ],
+          "uv": [
+            8.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "gum_layer",
+      "parent": "gum_layers",
+      "pose": [
+        0.0,
+        -4.0,
+        1.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -3.8,
+            -4.0,
+            8.0,
+            2.0,
+            8.0
+          ],
+          "uv": [
+            31.0,
+            7.0
+          ],
+          "inflate": [
+            -0.05,
+            -0.05,
+            -0.05
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "gum_layer2",
+      "parent": "gum_layers",
+      "pose": [
+        0.0,
+        -4.0,
+        1.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -1.9,
+            -4.0,
+            8.0,
+            2.0,
+            8.0
+          ],
+          "uv": [
+            31.0,
+            9.0
+          ],
+          "inflate": [
+            -0.05,
+            -0.05,
+            -0.05
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "gum_layer3",
+      "parent": "gum_layers",
+      "pose": [
+        0.0,
+        -4.0,
+        1.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            0.0,
+            -4.0,
+            8.0,
+            2.0,
+            8.0
+          ],
+          "uv": [
+            31.0,
+            11.0
+          ],
+          "inflate": [
+            -0.05,
+            -0.05,
+            -0.05
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "gum_layer4",
+      "parent": "gum_layers",
+      "pose": [
+        0.0,
+        -4.0,
+        1.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            1.9,
+            -4.0,
+            8.0,
+            2.0,
+            8.0
+          ],
+          "uv": [
+            31.0,
+            13.0
+          ],
+          "inflate": [
+            -0.05,
+            -0.05,
+            -0.05
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r1",
+      "parent": "stock",
+      "pose": [
+        0.0,
+        3.0,
+        0.0,
+        -0.5236,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -7.0,
+            1.0,
+            4.0,
+            3.0,
+            7.0
+          ],
+          "uv": [
+            0.0,
+            49.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -2.0,
+            -4.0,
+            -3.0,
+            4.0,
+            4.0,
+            11.0
+          ],
+          "uv": [
+            41.0,
+            44.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -2.0,
+            -7.0,
+            1.0,
+            4.0,
+            7.0,
+            7.0
+          ],
+          "uv": [
+            0.0,
+            59.0
+          ],
+          "inflate": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/ShotGumModel.java",
+  "sourceSha256": "00aca615cf8bad84f7e29a90cf56202a14249f5e1e6841793937eb0aae05b321",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [
+    {
+      "bone": "crank",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        "age",
+        0.017453292519943295
+      ],
+      "when": 1
+    },
+    {
+      "bone": "barrels",
+      "target": "xScale",
+      "op": "=",
+      "value": [
+        "+",
+        1.0,
+        [
+          "*",
+          "walk",
+          0.3
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "barrels",
+      "target": "yScale",
+      "op": "=",
+      "value": [
+        "+",
+        1.0,
+        [
+          "*",
+          "walk",
+          0.3
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "barrels",
+      "target": "zScale",
+      "op": "=",
+      "value": [
+        "-",
+        1.0,
+        [
+          "*",
+          "walk",
+          0.5
+        ]
+      ],
+      "when": 1
+    }
+  ],
+  "poses": [
+    {
+      "bone": "shot_gum",
+      "weight": [
+        "/",
+        "walk",
+        1.0
+      ],
+      "target": "rotation",
+      "value": [
+        -0.3490658503988659,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "barrels",
+      "weight": [
+        "/",
+        "walk",
+        1.0
+      ],
+      "target": "position",
+      "value": [
+        0.0,
+        -1.0,
+        1.0
+      ],
+      "when": 1
+    }
+  ]
+}

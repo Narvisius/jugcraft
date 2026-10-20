@@ -1,0 +1,1120 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "body",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -3.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6.5,
+            -6.0,
+            -9.0,
+            13.0,
+            9.0,
+            18.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "tail",
+      "parent": "body",
+      "pose": [
+        0.0,
+        1.0,
+        9.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -4.0,
+            0.0,
+            8.0,
+            6.0,
+            14.0
+          ],
+          "uv": [
+            0.0,
+            28.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leftArm",
+      "parent": "body",
+      "pose": [
+        7.5,
+        2.5,
+        -4.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -0.5,
+            -2.0,
+            8.0,
+            1.0,
+            5.0
+          ],
+          "uv": [
+            31.0,
+            28.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            7.0,
+            0.5,
+            -2.0,
+            0.0,
+            2.0,
+            5.0
+          ],
+          "uv": [
+            0.0,
+            7.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightArm",
+      "parent": "body",
+      "pose": [
+        -7.5,
+        2.5,
+        -4.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -7.0,
+            -0.5,
+            -2.0,
+            8.0,
+            1.0,
+            5.0
+          ],
+          "uv": [
+            31.0,
+            28.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            -7.0,
+            0.5,
+            -2.0,
+            0.0,
+            2.0,
+            5.0
+          ],
+          "uv": [
+            0.0,
+            7.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "head",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -1.0,
+        -5.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.5,
+            -3.0,
+            -9.0,
+            7.0,
+            6.0,
+            10.0
+          ],
+          "uv": [
+            35.0,
+            39.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -2.5,
+            0.0,
+            -12.0,
+            5.0,
+            3.0,
+            3.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leftLeg",
+      "parent": "tail",
+      "pose": [
+        2.0,
+        -0.2,
+        13.4,
+        0.0,
+        0.3491,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -2.0,
+            0.0,
+            2.0,
+            4.0,
+            8.0
+          ],
+          "uv": [
+            45.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightLeg",
+      "parent": "tail",
+      "pose": [
+        -2.0,
+        -0.2,
+        13.4,
+        0.0,
+        -0.3491,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -2.0,
+            0.0,
+            2.0,
+            4.0,
+            8.0
+          ],
+          "uv": [
+            45.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "leftWhisker",
+      "parent": "head",
+      "pose": [
+        2.5,
+        2.0,
+        -11.0,
+        0.0,
+        -0.2182,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -2.0,
+            0.0,
+            2.0,
+            3.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            7.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightWhisker",
+      "parent": "head",
+      "pose": [
+        -2.5,
+        2.0,
+        -11.0,
+        0.0,
+        0.2182,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -2.0,
+            0.0,
+            2.0,
+            3.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            7.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelSeal.java",
+  "sourceSha256": "0ab807775b4f9c875f64b1e627367387a92478b37b1eb2ba86421603cd791680",
+  "animationRoot": "root",
+  "headLook": "head",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "body",
+      "kind": "walk",
+      "speed": [
+        "select",
+        "baby",
+        0.25,
+        0.5
+      ],
+      "degree": [
+        "*",
+        1.0,
+        0.1
+      ],
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.04,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          "swim"
+        ]
+      ]
+    },
+    {
+      "bone": "head",
+      "kind": "walk",
+      "speed": [
+        "select",
+        "baby",
+        0.25,
+        0.5
+      ],
+      "degree": [
+        "*",
+        1.0,
+        0.1
+      ],
+      "invert": true,
+      "phase": 1.0,
+      "bias": 0.04,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          "swim"
+        ]
+      ]
+    },
+    {
+      "bone": "tail",
+      "kind": "walk",
+      "speed": [
+        "select",
+        "baby",
+        0.25,
+        0.5
+      ],
+      "degree": [
+        "*",
+        1.0,
+        0.15
+      ],
+      "invert": true,
+      "phase": 1.0,
+      "bias": 0.06,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          "swim"
+        ]
+      ]
+    },
+    {
+      "bone": "rightArm",
+      "kind": "flap",
+      "speed": [
+        "select",
+        "baby",
+        0.25,
+        0.5
+      ],
+      "degree": 1.0,
+      "invert": true,
+      "phase": 3.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          "swim"
+        ]
+      ]
+    },
+    {
+      "bone": "leftArm",
+      "kind": "flap",
+      "speed": [
+        "select",
+        "baby",
+        0.25,
+        0.5
+      ],
+      "degree": 1.0,
+      "invert": false,
+      "phase": 3.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          "swim"
+        ]
+      ]
+    },
+    {
+      "bone": "rightArm",
+      "kind": "swing",
+      "speed": [
+        "select",
+        "baby",
+        0.25,
+        0.5
+      ],
+      "degree": 1.0,
+      "invert": false,
+      "phase": 2.0,
+      "bias": [
+        "*",
+        -1,
+        0.2
+      ],
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          "swim"
+        ]
+      ]
+    },
+    {
+      "bone": "leftArm",
+      "kind": "swing",
+      "speed": [
+        "select",
+        "baby",
+        0.25,
+        0.5
+      ],
+      "degree": 1.0,
+      "invert": true,
+      "phase": 2.0,
+      "bias": [
+        "*",
+        -1,
+        0.2
+      ],
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          "swim"
+        ]
+      ]
+    },
+    {
+      "bone": "rightArm",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        2.5
+      ],
+      "invert": true,
+      "phase": 3.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          [
+            "!",
+            "swim"
+          ]
+        ]
+      ]
+    },
+    {
+      "bone": "leftArm",
+      "kind": "flap",
+      "speed": 0.5,
+      "degree": [
+        "*",
+        0.5,
+        2.5
+      ],
+      "invert": false,
+      "phase": 3.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          [
+            "!",
+            "swim"
+          ]
+        ]
+      ]
+    },
+    {
+      "bone": "leftLeg",
+      "kind": "walk",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        4.0
+      ],
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          [
+            "!",
+            "swim"
+          ]
+        ]
+      ]
+    },
+    {
+      "bone": "rightLeg",
+      "kind": "walk",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        4.0
+      ],
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          [
+            "!",
+            "swim"
+          ]
+        ]
+      ]
+    },
+    {
+      "bone": "head",
+      "kind": "walk",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "*",
+          -1,
+          3.0
+        ],
+        0.0
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          [
+            "!",
+            "swim"
+          ]
+        ]
+      ]
+    },
+    {
+      "bone": "body",
+      "kind": "walk",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "*",
+          -1,
+          3.0
+        ],
+        0.5235987755982988
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          [
+            "!",
+            "swim"
+          ]
+        ]
+      ]
+    },
+    {
+      "bone": "tail",
+      "kind": "walk",
+      "speed": 0.5,
+      "degree": 0.5,
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "*",
+          -1,
+          3.0
+        ],
+        1.0471975511965976
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move",
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          [
+            "!",
+            "swim"
+          ]
+        ]
+      ]
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.swing(this.rightArm, 0.6f, 0.85f, true, 1.0f, -0.1f, ageInTicks, amount);",
+      "reason": "Unbound source condition [{'unsupported': 'diggingProgress > 0.0f'}]"
+    },
+    {
+      "call": "this.swing(this.leftArm, 0.6f, 0.85f, false, 1.0f, -0.1f, ageInTicks, amount);",
+      "reason": "Unbound source condition [{'unsupported': 'diggingProgress > 0.0f'}]"
+    },
+    {
+      "call": "this.walk(this.tail, 0.6f, 0.1f, false, 3.0f, -0.1f, ageInTicks, amount);",
+      "reason": "Unbound source condition [{'unsupported': 'diggingProgress > 0.0f'}]"
+    },
+    {
+      "call": "this.bob(this.body, 0.3f, 3.0f, true, ageInTicks, amount);",
+      "reason": "Unbound source condition [{'unsupported': 'diggingProgress > 0.0f'}]"
+    },
+    {
+      "call": "this.walk(this.head, 0.05f, 0.2f, true, 1.0f, -0.1f, ageInTicks, 1.0f);",
+      "reason": "Unbound source condition [{'unsupported': 'baskProgress > 0.0f && !entity.isTearsEasterEgg()'}]"
+    },
+    {
+      "call": "this.flap(this.rightArm, 0.05f, 0.2f, true, 3.0f, -0.1f, ageInTicks, 1.0f);",
+      "reason": "Unbound source condition [{'unsupported': 'baskProgress > 0.0f && !entity.isTearsEasterEgg()'}, {'unsupported': 'baskType == 0'}]"
+    },
+    {
+      "call": "this.flap(this.leftArm, 0.05f, 0.2f, true, 3.0f, -0.1f, ageInTicks, 1.0f);",
+      "reason": "Unbound source condition [{'unsupported': 'baskProgress > 0.0f && !entity.isTearsEasterEgg()'}, {'unsupported': 'baskType == 0'}]"
+    },
+    {
+      "call": "this.flap(this.rightArm, 0.05f, 0.2f, false, 3.0f, -0.1f, ageInTicks, 1.0f);",
+      "reason": "Unbound source condition [{'unsupported': 'baskProgress > 0.0f && !entity.isTearsEasterEgg()'}, ['&&', ['!', {'unsupported': 'baskType == 0'}], {'unsupported': 'baskType == 1'}]]"
+    },
+    {
+      "call": "this.flap(this.leftArm, 0.05f, 0.2f, false, 3.0f, -0.1f, ageInTicks, 1.0f);",
+      "reason": "Unbound source condition [{'unsupported': 'baskProgress > 0.0f && !entity.isTearsEasterEgg()'}, ['&&', ['!', {'unsupported': 'baskType == 0'}], {'unsupported': 'baskType == 1'}]]"
+    },
+    {
+      "call": "this.flap(this.rightArm, 0.05f, 0.2f, true, 3.0f, -0.1f, ageInTicks, 1.0f);",
+      "reason": "Unbound source condition [{'unsupported': 'baskProgress > 0.0f && !entity.isTearsEasterEgg()'}, ['&&', ['!', ['||', {'unsupported': 'baskType == 0'}, {'unsupported': 'baskType == 1'}]], {'unsupported': 'baskType == 2'}]]"
+    },
+    {
+      "call": "this.flap(this.leftArm, 0.05f, 0.2f, false, 3.0f, -0.1f, ageInTicks, 1.0f);",
+      "reason": "Unbound source condition [{'unsupported': 'baskProgress > 0.0f && !entity.isTearsEasterEgg()'}, ['&&', ['!', ['||', {'unsupported': 'baskType == 0'}, {'unsupported': 'baskType == 1'}]], {'unsupported': 'baskType == 2'}]]"
+    },
+    {
+      "call": "this.flap(this.rightArm, 0.05f, 0.2f, true, 3.0f, -0.1f, ageInTicks, 1.0f);",
+      "reason": "Unbound source condition [{'unsupported': 'baskProgress > 0.0f && !entity.isTearsEasterEgg()'}, ['&&', ['!', ['||', ['||', {'unsupported': 'baskType == 0'}, {'unsupported': 'baskType == 1'}], {'unsupported': 'baskType == 2'}]], {'unsupported': 'baskType == 3'}]]"
+    },
+    {
+      "call": "this.flap(this.leftArm, 0.05f, 0.2f, false, 3.0f, -0.1f, ageInTicks, 1.0f);",
+      "reason": "Unbound source condition [{'unsupported': 'baskProgress > 0.0f && !entity.isTearsEasterEgg()'}, ['&&', ['!', ['||', ['||', {'unsupported': 'baskType == 0'}, {'unsupported': 'baskType == 1'}], {'unsupported': 'baskType == 2'}]], {'unsupported': 'baskType == 3'}]]"
+    },
+    {
+      "call": "this.flap(this.rightArm, 0.05f, 0.2f, true, 3.0f, -0.1f, ageInTicks, 1.0f);",
+      "reason": "Unbound source condition [{'unsupported': 'baskProgress > 0.0f && !entity.isTearsEasterEgg()'}, ['&&', ['!', ['||', ['||', ['||', {'unsupported': 'baskType == 0'}, {'unsupported': 'baskType == 1'}], {'unsupported': 'baskType == 2'}], {'unsupported': 'baskType == 3'}]], {'unsupported': 'baskType == 4'}]]"
+    },
+    {
+      "call": "this.flap(this.leftArm, 0.05f, 0.2f, false, 3.0f, -0.1f, ageInTicks, 1.0f);",
+      "reason": "Unbound source condition [{'unsupported': 'baskProgress > 0.0f && !entity.isTearsEasterEgg()'}, ['&&', ['!', ['||', ['||', ['||', {'unsupported': 'baskType == 0'}, {'unsupported': 'baskType == 1'}], {'unsupported': 'baskType == 2'}], {'unsupported': 'baskType == 3'}]], {'unsupported': 'baskType == 4'}]]"
+    },
+    {
+      "call": "this.swing(this.head, 0.1f, 0.6f, true, 3.0f, 0.0f, ageInTicks, 1.0f);",
+      "reason": "Unbound source condition [{'unsupported': 'entity.isTearsEasterEgg() && !entity.m_20069_()'}]"
+    },
+    {
+      "call": "this.walk(this.head, 0.1f, 0.1f, true, 2.0f, 0.3f, ageInTicks, 1.0f);",
+      "reason": "Unbound source condition [{'unsupported': 'entity.isTearsEasterEgg() && !entity.m_20069_()'}]"
+    },
+    {
+      "call": "this.head.rotationPointZ += (float)(Math.sin(ageInTicks * 0.7f) * 0.5 * (double)bobbingProgress);",
+      "reason": "Unbound expression variable bobbingProgress"
+    },
+    {
+      "call": "this.body.rotateAngleZ += yawAmount;",
+      "reason": "Unbound expression variable yawAmount"
+    }
+  ],
+  "expressions": [
+    {
+      "bone": "body",
+      "target": "y",
+      "op": "+=",
+      "value": [
+        "*",
+        1.4,
+        [
+          "min",
+          0.0,
+          [
+            "-",
+            [
+              "*",
+              [
+                "*",
+                [
+                  "*",
+                  [
+                    "sin",
+                    [
+                      "*",
+                      "walk",
+                      [
+                        "select",
+                        "baby",
+                        0.25,
+                        0.5
+                      ]
+                    ]
+                  ],
+                  "move"
+                ],
+                [
+                  "*",
+                  1.0,
+                  0.3
+                ]
+              ],
+              9.0
+            ],
+            [
+              "*",
+              [
+                "*",
+                "move",
+                [
+                  "*",
+                  1.0,
+                  0.3
+                ]
+              ],
+              9.0
+            ]
+          ]
+        ]
+      ],
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          "swim"
+        ]
+      ]
+    },
+    {
+      "bone": "body",
+      "target": "z",
+      "op": "+=",
+      "value": [
+        "-",
+        [
+          "*",
+          [
+            "*",
+            [
+              "*",
+              [
+                "sin",
+                [
+                  "-",
+                  [
+                    "*",
+                    "walk",
+                    [
+                      "select",
+                      "baby",
+                      0.25,
+                      0.5
+                    ]
+                  ],
+                  1.5
+                ]
+              ],
+              "move"
+            ],
+            [
+              "*",
+              1.0,
+              0.3
+            ]
+          ],
+          9.0
+        ],
+        [
+          "*",
+          [
+            "*",
+            "move",
+            [
+              "*",
+              1.0,
+              0.3
+            ]
+          ],
+          9.0
+        ]
+      ],
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          "swim"
+        ]
+      ]
+    },
+    {
+      "bone": "head",
+      "target": "z",
+      "op": "+=",
+      "value": [
+        "-",
+        [
+          "*",
+          [
+            "*",
+            [
+              "*",
+              [
+                "sin",
+                [
+                  "-",
+                  [
+                    "*",
+                    "walk",
+                    [
+                      "select",
+                      "baby",
+                      0.25,
+                      0.5
+                    ]
+                  ],
+                  2.0
+                ]
+              ],
+              "move"
+            ],
+            [
+              "*",
+              1.0,
+              0.3
+            ]
+          ],
+          2.0
+        ],
+        [
+          "*",
+          [
+            "*",
+            "move",
+            [
+              "*",
+              1.0,
+              0.3
+            ]
+          ],
+          2.0
+        ]
+      ],
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          "swim"
+        ]
+      ]
+    },
+    {
+      "bone": "body",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        "pitch",
+        [
+          "/",
+          3.141592653589793,
+          180
+        ]
+      ],
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          [
+            "!",
+            "swim"
+          ]
+        ]
+      ]
+    },
+    {
+      "bone": "body",
+      "target": "y",
+      "op": "+=",
+      "value": [
+        "-",
+        [
+          "*",
+          [
+            "*",
+            [
+              "*",
+              [
+                "sin",
+                [
+                  "*",
+                  "walk",
+                  0.5
+                ]
+              ],
+              "move"
+            ],
+            0.5
+          ],
+          9.0
+        ],
+        [
+          "*",
+          [
+            "*",
+            "move",
+            0.5
+          ],
+          9.0
+        ]
+      ],
+      "when": [
+        "&&",
+        1,
+        [
+          "!",
+          [
+            "!",
+            "swim"
+          ]
+        ]
+      ]
+    }
+  ],
+  "poses": []
+}

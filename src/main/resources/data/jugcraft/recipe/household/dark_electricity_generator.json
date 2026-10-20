@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:household_light_electricity_generator",
+    "minecraft:black_dye"
+  ],
+  "result": {
+    "id": "jugcraft:household_dark_electricity_generator"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

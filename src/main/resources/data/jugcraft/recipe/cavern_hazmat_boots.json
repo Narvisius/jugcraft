@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "P P",
+    "P P"
+  ],
+  "key": {
+    "P": "jugcraft:cavern_polymer_plate"
+  },
+  "result": {
+    "id": "jugcraft:cavern_hazmat_boots"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

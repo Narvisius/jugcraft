@@ -44,11 +44,13 @@ public final class ConcordanceCodecs {
 	public static final Codec<FocusPool> FOCUS = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.INT.optionalFieldOf("schema", FocusPool.SCHEMA).forGetter(pool -> FocusPool.SCHEMA),
 			Codec.INT.fieldOf("stored").forGetter(FocusPool::stored),
-			Codec.LONG.fieldOf("stamp").forGetter(FocusPool::stamp)
-	).apply(instance, (schema, stored, stamp) -> new FocusPool(stored, stamp)));
+			Codec.LONG.fieldOf("stamp").forGetter(FocusPool::stamp),
+            Codec.intRange(FocusPool.MAX,FocusPool.HARD_MAX).optionalFieldOf("capacity",FocusPool.MAX).forGetter(FocusPool::capacity)
+	).apply(instance, (schema, stored, stamp, capacity) -> new FocusPool(stored, stamp, capacity)));
 
 	public static final StreamCodec<ByteBuf, FocusPool> FOCUS_STREAM = StreamCodec.composite(
 			ByteBufCodecs.VAR_INT, FocusPool::stored,
 			ByteBufCodecs.VAR_LONG, FocusPool::stamp,
+            ByteBufCodecs.VAR_INT,FocusPool::capacity,
 			FocusPool::new);
 }

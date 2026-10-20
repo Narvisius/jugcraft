@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "D": "minecraft:cyan_dye",
+    "K": "#jugcraft:household/coloured_kitchen_cabinetry"
+  },
+  "pattern": [
+    "D",
+    "K"
+  ],
+  "result": {
+    "id": "jugcraft:household_cyan_kitchen_cabinetry"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -79,8 +79,8 @@ public record Component(String id, Slot slot, Definitions.Requirement requires, 
 		public boolean suits(EffectKind.On on) {
 			return switch (this) {
 				case STRUCK -> true;
-				case CREATURES, ALLIES -> on == EffectKind.On.CREATURE;
-				case BLOCKS -> on == EffectKind.On.BLOCK;
+				case CREATURES, ALLIES -> on == EffectKind.On.CREATURE || on == EffectKind.On.ANY;
+				case BLOCKS -> on == EffectKind.On.BLOCK || on == EffectKind.On.ANY;
 			};
 		}
 	}
@@ -102,6 +102,9 @@ public record Component(String id, Slot slot, Definitions.Requirement requires, 
 
 	/** What a modifier changes. */
 	public enum Aspect {
+		DAMPEN(Slot.OPERATION), DURATION_DOWN(Slot.OPERATION), FORTUNE(Slot.OPERATION), EXTRACT(Slot.OPERATION),
+		SENSITIVE(Slot.OPERATION), RANDOMIZE(Slot.OPERATION), PIERCE(Slot.OPERATION),
+        ACCELERATE(Slot.DELIVERY), DECELERATE(Slot.DELIVERY), SPLIT(Slot.DELIVERY),
 		/** An operation's strength, by a percentage (at least one more). */
 		MAGNITUDE(Slot.OPERATION),
 		/** An operation's time, by a percentage. */

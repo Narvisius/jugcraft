@@ -15,6 +15,7 @@ import io.github.jimbozoomer.jugcraft.deposit.Deposits;
 import io.github.jimbozoomer.jugcraft.energy.EnergyNetworks;
 import io.github.jimbozoomer.jugcraft.energy.EnergyStorage;
 import io.github.jimbozoomer.jugcraft.energy.SimpleEnergyStorage;
+import io.github.jimbozoomer.jugcraft.energy.BatteryEnergyStorage;
 import io.github.jimbozoomer.jugcraft.fluid.FluidNetworks;
 import io.github.jimbozoomer.jugcraft.fluid.JugcraftFluids;
 import io.github.jimbozoomer.jugcraft.fluid.StoredFluid;
@@ -105,7 +106,12 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	public static final int DATA_SIDES = 10;
 	/** Fluid processors: two values per tank from here (see {@link FluidTanks#data}): the fluid's id, then mB. */
 	public static final int DATA_TANKS = 11;
-	public static final int DATA_COUNT = DATA_TANKS + 2 * FluidMachineSpec.MAX_TANKS;
+	public static final int DATA_BATTERY_MODE = DATA_TANKS + 2 * FluidMachineSpec.MAX_TANKS;
+	public static final int DATA_BATTERY_RESERVE = DATA_BATTERY_MODE + 1;
+	public static final int DATA_BATTERY_PRIORITY = DATA_BATTERY_MODE + 2;
+	public static final int DATA_BATTERY_OUTPUT = DATA_BATTERY_MODE + 3;
+	public static final int DATA_BATTERY_MODULES = DATA_BATTERY_MODE + 4;
+	public static final int DATA_COUNT = DATA_BATTERY_MODE + 5;
 	/** Fluid processors push their output tanks into pipes and neighbouring tanks every this many ticks... */
 	public static final int FLUID_PUSH_INTERVAL = 4;
 	/** ...up to this many mB from each output tank. */
@@ -137,6 +143,33 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	private long lastProcessorTick = -1000, lastContributed = -1000;
 	private int assistQuarters, assistedArgonTicks;
 	private final SimpleEnergyStorage energy;
+	private int batteryMode, batteryReserve, batteryPriority, batteryOutput = 100;
+
+	private int flowPairs() {
+		return level == null || kind != MachineKind.FLOW_BATTERY ? 0
+			: BatteryInstallation.pairs(level, worldPosition, facing(getBlockState()));
+	}
+	private long flowPhysicalMb() { return (1L + flowPairs()) * MachineKind.FLOW_BATTERY_TANK; }
+	private boolean batteryAvailable() {
+		return kind != MachineKind.FLOW_BATTERY || reservoir == null
+			|| reservoir.amount <= flowPhysicalMb() * FluidNetworks.DROPLETS_PER_MB;
+	}
+	private long batteryRate() {
+		return kind == MachineKind.FLOW_BATTERY && level != null
+			&& BatteryInstallation.stack(level, worldPosition, facing(getBlockState())) ? 16_384 : kind.maxInput;
+	}
+	public boolean clickBatteryButton(int id) {
+		if (!kind.isBattery()) return false;
+		switch (id) {
+			case 20 -> batteryMode = (batteryMode + 1) % 4;
+			case 21 -> batteryReserve = (batteryReserve + 10) % 100;
+			case 22 -> batteryPriority = batteryPriority == 1 ? -1 : batteryPriority + 1;
+			case 23 -> batteryOutput = batteryOutput == 100 ? 50 : batteryOutput == 50 ? 25 : 100;
+			default -> { return false; }
+		}
+		setChanged();
+		return true;
+	}
 	private NonNullList<ItemStack> items;
 	private int progress;
 	private int maxProgress;
@@ -184,6 +217,12 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 				case DATA_FORMED -> formed ? 1 : 0;
 				case DATA_TANK -> tank;
 				case DATA_SIDES -> sides.pack();
+				case DATA_BATTERY_MODE -> batteryMode;
+				case DATA_BATTERY_RESERVE -> batteryReserve;
+				case DATA_BATTERY_PRIORITY -> batteryPriority + 1;
+				case DATA_BATTERY_OUTPUT -> batteryOutput;
+				case DATA_BATTERY_MODULES -> flowPairs() + (batteryAvailable() ? 0 : 16)
+					+ (batteryRate() > kind.maxInput ? 32 : 0);
 				default -> tanks != null && index >= DATA_TANKS && index < DATA_TANKS + 2 * tanks.size()
 						? tanks.data(index - DATA_TANKS) : 0;
 			};
@@ -212,13 +251,16 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		// Producers only give energy out; consumers only take it in; the battery box does both.
 		long insert = kind.isGenerator() ? 0 : kind.maxInput;
 		long extract = kind.isProcessor() ? 0 : kind.maxOutput;
-		this.energy = kind == MachineKind.FLOW_BATTERY
-				? new SimpleEnergyStorage(kind.capacity, insert, extract, this::setChanged, this::electrolyteCeiling)
+		this.energy = kind.isBattery()
+				? new BatteryEnergyStorage(kind == MachineKind.FLOW_BATTERY ? BatteryInstallation.MAX_ENERGY : kind.capacity,
+					this::setChanged, () -> kind == MachineKind.FLOW_BATTERY ? electrolyteCeiling() : kind.capacity,
+					() -> level == null ? 0 : level.getGameTime(), this::batteryRate,
+					() -> batteryMode, () -> batteryReserve, () -> batteryPriority, () -> batteryOutput, this::batteryAvailable)
 				: new SimpleEnergyStorage(kind.capacity, insert, extract, this::setChanged);
 		this.reservoir = switch (kind) {
 			case STEEL_TANK -> SingleFluidStorage.withFixedCapacity(MachineKind.STEEL_TANK_CAPACITY * FluidNetworks.DROPLETS_PER_MB, this::setChanged);
 			case GAS_HOLDER -> gasReservoir(MachineKind.GAS_HOLDER_CAPACITY * FluidNetworks.DROPLETS_PER_MB);
-			case FLOW_BATTERY -> electrolyteReservoir(MachineKind.FLOW_BATTERY_TANK * FluidNetworks.DROPLETS_PER_MB);
+			case FLOW_BATTERY -> electrolyteReservoir(BatteryInstallation.MAX_FLUID_MB * FluidNetworks.DROPLETS_PER_MB);
 			default -> null;
 		};
 		this.inlet = switch (kind) {
@@ -330,14 +372,14 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	 */
 	private SingleFluidStorage electrolyteReservoir(long capacity) {
 		return new SingleFluidStorage() {
-			@Override
-			protected long getCapacity(FluidVariant variant) {
-				return capacity;
+			@Override protected long getCapacity(FluidVariant variant) {
+				// Detached modules strand contents safely; they never delete or duplicate it.
+				return Math.min(capacity, Math.max(amount, flowPhysicalMb() * FluidNetworks.DROPLETS_PER_MB));
 			}
 
 			@Override
 			protected boolean canInsert(FluidVariant variant) {
-				return variant.isOf(PetroFluids.VANADIUM_ELECTROLYTE.source());
+				return variant.isOf(PetroFluids.VANADIUM_ELECTROLYTE.source()) && batteryAvailable();
 			}
 
 			@Override
@@ -373,7 +415,14 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		super.applyImplicitComponents(components);
 		StoredFluid stored = components.get(JugcraftFluids.STORED_FLUID);
 		if (stored != null && reservoir != null) {
-			stored.restore(reservoir);
+			if (kind == MachineKind.FLOW_BATTERY && stored.variant().isOf(PetroFluids.VANADIUM_ELECTROLYTE.source())) {
+				reservoir.variant = stored.variant();
+				reservoir.amount = Math.clamp(stored.amount(), 0L, BatteryInstallation.MAX_FLUID_MB * FluidNetworks.DROPLETS_PER_MB);
+			} else stored.restore(reservoir);
+		}
+		if (stored != null && kind == MachineKind.CHEMICAL_REACTOR
+				&& stored.variant().isOf(PetroFluids.SULFURIC_ACID.source()) && stored.amount() > 0) {
+			stored.restore(tanks.input(2));
 		}
 		if (stored != null && kind == MachineKind.CHEMICAL_REACTOR
 				&& stored.variant().isOf(PetroFluids.SULFURIC_ACID.source()) && stored.amount() > 0) {
@@ -447,9 +496,11 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		}
 		boolean front = side == getBlockState().getValue(MachineBlock.FACING);
 		return new EnergyStorage() {
+			@Override public Object transferIdentity() { return energy; }
+			@Override public int chargePriority() { return energy.chargePriority(); }
 			@Override
 			public boolean supportsInsertion() {
-				return !front;
+				return !front && energy.supportsInsertion();
 			}
 
 			@Override
@@ -459,7 +510,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 
 			@Override
 			public boolean supportsExtraction() {
-				return front;
+				return front && energy.supportsExtraction();
 			}
 
 			@Override
@@ -484,12 +535,13 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	public void serverTick(ServerLevel level, BlockPos pos, BlockState state) {
 		if (companionJobs.length > 0) companionStatus = local.peepo.CompanionStatus.NO_INPUT;
 		boolean active = switch (kind) {
+			case FLOW_TANK_MODULE, FLOW_STACK_MODULE -> false;
 			case COAL_GENERATOR -> tickGenerator(level, pos);
 			case SOLAR_PANEL -> tickSolar(level, pos);
 			case ADVANCED_SOLAR_PANEL -> tickSolar(level, pos);
 			case STEAM_GENERATOR -> tickSteam(level, pos);
 			case LARGE_STEAM_ENGINE -> tickLargeEngine(level, pos, state);
-			case BATTERY_BOX, CAPACITOR_BANK, LITHIUM_BATTERY_BANK, FLOW_BATTERY -> tickBattery(level, pos, state);
+			case LEAD_ACID_BATTERY_BANK, BATTERY_BOX, CAPACITOR_BANK, LITHIUM_BATTERY_BANK, FLOW_BATTERY -> tickBattery(level, pos, state);
 			case STEEL_TANK, GAS_HOLDER -> false;
 			case GEOTHERMAL_GENERATOR -> tickGeothermal(level, pos, state);
 			case WIND_TURBINE -> tickWind(level, pos, state);
@@ -796,7 +848,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	private boolean tickBattery(ServerLevel level, BlockPos pos, BlockState state) {
 		Direction front = state.getValue(MachineBlock.FACING);
 		Footprint footprint = footprint(state);
-		long budget = kind.maxOutput;
+		((BatteryEnergyStorage) energy).tickPolicy();
+		long budget = batteryRate() * batteryOutput / 100;
 		for (int part = 0; part < footprint.size() && budget > 0; part++) {
 			budget -= EnergyNetworks.pushToNeighbors(level, footprint.partPos(pos, facing(state), part), energy, budget, List.of(front));
 		}
@@ -995,6 +1048,12 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			return false;
 		}
 		FluidRecipe recipe = found.get();
+        if (recipe.tool().isPresent() && (!kind.hasProcessTool()
+                || !recipe.tool().get().test(items.get(kind.slots)))) {
+            processorStatus(local.peepo.CompanionStatus.MACHINE_TOOL);
+            if (progress != 0) { progress = 0; setChanged(); }
+            return false;
+        }
 		maxProgress = recipe.time();
 		if (energy.getAmount() < kind.usePerTick) {
 			return false; // Keeps progress; resumes when power returns.
@@ -1965,7 +2024,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	@Override
 	public void setItem(int slot, ItemStack stack) {
 		// A different input restarts processing, so progress cannot carry over to another recipe.
-		if ((kind.isProcessor() || kind.isFluidProcessor()) && slot < kind.outputSlot()
+		if ((kind.isProcessor() || kind.isFluidProcessor()) && (slot < kind.outputSlot() || (kind.hasProcessTool() && slot == kind.slots))
 				&& !ItemStack.isSameItemSameComponents(items.get(slot), stack)) {
 			progress = 0;
 			resetCompanionEffort();
@@ -1975,6 +2034,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 
 	@Override
 	public boolean canPlaceItem(int slot, ItemStack stack) {
+        if (kind.hasProcessTool() && slot == kind.slots)
+            return kind.acceptsProcessTool(stack);
 		if (kind == MachineKind.ADVANCED_ENGINE) {
 			return slot == 0 && stack.is(PetroItems.TURBOCHARGER);
 		}
@@ -2097,6 +2158,11 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		items = NonNullList.withSize(kind.containerSize(), ItemStack.EMPTY);
 		ContainerHelper.loadAllItems(input, items);
 		companionPort.load(input);
+		batteryMode = Math.clamp(input.getIntOr("batteryMode", 0), 0, 3);
+		batteryReserve = Math.clamp(input.getIntOr("batteryReserve", 0), 0, 90);
+		batteryPriority = Math.clamp(input.getIntOr("batteryPriority", 0), -1, 1);
+		int savedOutput = input.getIntOr("batteryOutput", 100);
+		batteryOutput = savedOutput == 25 || savedOutput == 50 ? savedOutput : 100;
 		progress = input.getInt("progress").orElse(0);
 		assistedArgonTicks = Math.clamp(input.getIntOr("CompanionArgonTicks", 0), 0, MachineKind.ASU_ARGON_INTERVAL - 1);
 		maxProgress = input.getInt("max_progress").orElse(0);
@@ -2107,6 +2173,12 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		cursor = input.getInt("cursor").orElse(0);
 		if (reservoir != null) {
 			reservoir.readValue(input);
+			if (kind == MachineKind.FLOW_BATTERY) {
+				// Preserve expanded contents even before modules/chunks are available on load.
+				reservoir.amount = Math.clamp(input.getLong("FlowElectrolyteAmount").orElse(reservoir.amount),
+					0L, BatteryInstallation.MAX_FLUID_MB * FluidNetworks.DROPLETS_PER_MB);
+				if (reservoir.amount > 0) reservoir.variant = FluidVariant.of(PetroFluids.VANADIUM_ELECTROLYTE.source());
+			}
 		}
 		// After the reservoir: the flow battery's charge is capped by its electrolyte.
 		energy.setAmount(input.getLong("energy").orElse(0L));
@@ -2120,6 +2192,12 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		super.saveAdditional(output);
 		ContainerHelper.saveAllItems(output, items);
 		companionPort.save(output);
+		if (kind.isBattery()) {
+			output.putInt("batteryMode", batteryMode);
+			output.putInt("batteryReserve", batteryReserve);
+			output.putInt("batteryPriority", batteryPriority);
+			output.putInt("batteryOutput", batteryOutput);
+		}
 		output.putLong("energy", energy.getAmount());
 		output.putInt("progress", progress);
 		if (kind == MachineKind.AIR_SEPARATION_UNIT) output.putInt("CompanionArgonTicks", assistedArgonTicks);
@@ -2133,6 +2211,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		}
 		if (reservoir != null) {
 			reservoir.writeValue(output);
+			if (kind == MachineKind.FLOW_BATTERY) output.putLong("FlowElectrolyteAmount", reservoir.amount);
 		}
 		if (tanks != null) {
 			tanks.save(output);

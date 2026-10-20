@@ -1,0 +1,219 @@
+{
+  "textureSize": [
+    109,
+    125
+  ],
+  "parts": [
+    {
+      "name": "head",
+      "parent": "$mesh",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -9.0,
+            -4.0,
+            8.0,
+            9.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -3.5,
+            -8.5,
+            -3.5,
+            7.0,
+            8.0,
+            7.0
+          ],
+          "uv": [
+            56.0,
+            16.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "hat",
+      "parent": "head",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -13.0,
+            -4.5,
+            6.0,
+            7.0,
+            9.0
+          ],
+          "uv": [
+            32.0,
+            0.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -6.0,
+            -10.0,
+            -4.5,
+            3.0,
+            4.0,
+            9.0
+          ],
+          "uv": [
+            62.0,
+            3.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            3.0,
+            -10.0,
+            -4.5,
+            3.0,
+            4.0,
+            9.0
+          ],
+          "uv": [
+            62.0,
+            3.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "beard",
+      "parent": "head",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6.0,
+            -5.0,
+            -4.0,
+            2.0,
+            5.0,
+            0.0
+          ],
+          "uv": [
+            2.0,
+            3.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            4.0,
+            -5.0,
+            -4.0,
+            2.0,
+            5.0,
+            0.0
+          ],
+          "uv": [
+            2.0,
+            3.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            -4.0,
+            0.0,
+            -4.0,
+            8.0,
+            6.0,
+            0.0
+          ],
+          "uv": [
+            88.0,
+            6.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "rotten/com/github/teamfusion/rottencreatures/client/level/blockentities/model/DeadBeardSkullModel.java",
+  "sourceSha256": "f364c0ff032f0a4ebcd26d3fc653eb4893c8460096ea7da0dd8ed34d025c1ccb",
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

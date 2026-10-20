@@ -56,8 +56,8 @@ import org.jspecify.annotations.Nullable;
  * ammunition counter.
  * <ul>
  * <li>With a gun in the main hand the attack button is the trigger (it never mines or punches): a press fires a
- * single-shot gun, holding fires an automatic at its rate. Right click (held) aims. G reloads and H inspects (not R
- * and I, which Iris, in the pack, keeps for its shaders).</li>
+ * single-shot gun, holding fires an automatic at its rate. Right click (held) aims. R reloads and H inspects. Iris shader reload uses F8;
+ * JEI recipes use Y, so neither competes with reload.</li>
  * <li>Each shot asks the server and at once plays the shot, its sound and a little kick of the view here; the server
  * may still refuse (it decides). The counter allows for shots the server has not answered yet.</li>
  * <li>Switching to a gun plays its draw, and it cannot fire until the draw is done.</li>
@@ -71,7 +71,7 @@ import org.jspecify.annotations.Nullable;
  * counter gives the shots its Energy Cells' charge holds.</li>
  * <li>Slice 10G, two guns at once: with a one-handed gun in each hand ({@link GunItem#dual}), right click is the other
  * gun's trigger (GunItem hands it the click, {@link GunHooks#offTrigger}): a press fires it, holding fires an automatic
- * at its rate. Each gun keeps its own rate, draw and counter, the other's beyond its slot on its side of the hotbar. G
+ * at its rate. Each gun keeps its own rate, draw and counter, the other's beyond its slot on its side of the hotbar. R
  * reloads the main hand's gun, or the other's when the main one has no room or nothing to load; one gun reloads at a
  * time; H inspects both.</li>
  * </ul>
@@ -124,7 +124,7 @@ public final class GunsClient {
 			}
 		});
 		GunHooks.offTrigger = GunsClient::offTrigger;
-		reloadKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.jugcraft.reload", InputConstants.KEY_G, PartyClient.CATEGORY));
+		reloadKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.jugcraft.reload", InputConstants.KEY_R, PartyClient.CATEGORY));
 		inspectKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.jugcraft.inspect", InputConstants.KEY_H, PartyClient.CATEGORY));
 		stabKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.jugcraft.stab", InputConstants.KEY_V, PartyClient.CATEGORY));
 		ClientPreAttackCallback.EVENT.register(GunsClient::attack);
@@ -343,7 +343,7 @@ public final class GunsClient {
 				0.8F, 1.3F, false);
 	}
 
-	/** Whether the gun in this hand has room for a reload and something to load (slice 10G: which gun G reloads). */
+	/** Whether the gun in this hand has room for a reload and something to load (slice 10G: which gun R reloads). */
 	private static boolean canReload(LocalPlayer player, Held held) {
 		ItemStack stack = player.getItemInHand(held.hand);
 		if (!(stack.getItem() instanceof GunItem gun)) {

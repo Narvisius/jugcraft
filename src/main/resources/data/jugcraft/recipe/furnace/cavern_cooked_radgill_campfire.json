@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "ingredient": "jugcraft:cavern_radgill",
+  "result": {
+    "id": "jugcraft:cavern_cooked_radgill"
+  },
+  "experience": 0.15,
+  "cookingtime": 600,
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

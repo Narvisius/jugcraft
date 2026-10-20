@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:bowl",
+    "minecraft:wheat",
+    "minecraft:wheat",
+    "minecraft:wheat",
+    "jugcraft:household_sea_salt"
+  ],
+  "result": {
+    "id": "jugcraft:household_wheat_flour"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "jugcraft:nouveau_archwood_planks"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_archwood_button"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

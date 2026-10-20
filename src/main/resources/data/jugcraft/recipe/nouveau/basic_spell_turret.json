@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "x": "#c:gems/source",
+    "y": "#c:ingots/gold",
+    "z": "#c:storage_blocks/redstone"
+  },
+  "pattern": [
+    "xxx",
+    "xzy",
+    "yyy"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_basic_spell_turret"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

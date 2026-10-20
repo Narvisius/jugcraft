@@ -1,0 +1,83 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "spinner",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        16.0,
+        -1.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6.0,
+            -4.0,
+            -4.0,
+            12.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            16.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -6.0,
+            -4.0,
+            -4.0,
+            12.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/QuarryGrinderModel.java",
+  "sourceSha256": "acc636b22d03b9edb517963416a55604bcec80a60e8f09b7147b27ddbb40c2df",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [
+    {
+      "bone": "spinner",
+      "target": "xRot",
+      "op": "-=",
+      "value": [
+        "*",
+        "walk",
+        0.5
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

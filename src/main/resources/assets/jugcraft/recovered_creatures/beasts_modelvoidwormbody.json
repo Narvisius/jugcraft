@@ -1,0 +1,273 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "body",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -14.0,
+        -10.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -7.0,
+            -12.0,
+            0.0,
+            14.0,
+            26.0,
+            21.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "frillstop_left",
+      "parent": "body",
+      "pose": [
+        7.0,
+        -12.0,
+        10.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "frillstop_right",
+      "parent": "body",
+      "pose": [
+        -7.0,
+        -12.0,
+        10.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "frillsbottom_left",
+      "parent": "body",
+      "pose": [
+        7.0,
+        14.0,
+        10.0,
+        0.0,
+        0.0,
+        1.6581
+      ],
+      "cubes": []
+    },
+    {
+      "name": "frillsbottom_right",
+      "parent": "body",
+      "pose": [
+        -7.0,
+        14.0,
+        10.0,
+        0.0,
+        0.0,
+        -1.6581
+      ],
+      "cubes": []
+    },
+    {
+      "name": "frillstop_left_r1",
+      "parent": "frillstop_left",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.7854
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -8.0,
+            -10.0,
+            0.0,
+            8.0,
+            21.0
+          ],
+          "uv": [
+            0.0,
+            48.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "frillstop_right_r1",
+      "parent": "frillstop_right",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.7854
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -8.0,
+            -10.0,
+            0.0,
+            8.0,
+            21.0
+          ],
+          "uv": [
+            0.0,
+            48.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "frillsbottom_left_r1",
+      "parent": "frillsbottom_left",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.7854
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -8.0,
+            -10.0,
+            0.0,
+            8.0,
+            21.0
+          ],
+          "uv": [
+            0.0,
+            48.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "frillsbottom_right_r1",
+      "parent": "frillsbottom_right",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.7854
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -8.0,
+            -10.0,
+            0.0,
+            8.0,
+            21.0
+          ],
+          "uv": [
+            0.0,
+            48.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelVoidWormBody.java",
+  "sourceSha256": "32cc324762fadd1f41f3f1eb4b548f105337b60c07d2e803b76e93a1d547f0ec",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.body.rotateAngleZ += yawAmount;",
+      "reason": "Unbound expression variable yawAmount"
+    }
+  ],
+  "expressions": [
+    {
+      "bone": "root",
+      "target": "xRot",
+      "op": "+=",
+      "value": [
+        "*",
+        "pitch",
+        [
+          "/",
+          3.141592653589793,
+          180
+        ]
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

@@ -1,0 +1,25 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_steel": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "jugcraft:steel_block"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_steel"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "jugcraft:mecha_workbench"
+    ]
+  }
+}

@@ -1,0 +1,165 @@
+{
+  "textureSize": [
+    96,
+    64
+  ],
+  "parts": [
+    {
+      "name": "head",
+      "parent": "$mesh",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -8.0,
+            -4.0,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "hat",
+      "parent": "head",
+      "pose": [
+        -0.5,
+        -0.5,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -8.0,
+            -3.75,
+            9.0,
+            9.0,
+            8.0
+          ],
+          "uv": [
+            32.0,
+            0.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -4.5,
+            -8.5,
+            -5.75,
+            2.0,
+            10.0,
+            2.0
+          ],
+          "uv": [
+            67.0,
+            5.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            3.5,
+            -8.5,
+            -5.75,
+            2.0,
+            10.0,
+            2.0
+          ],
+          "uv": [
+            67.0,
+            5.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -2.5,
+            -8.5,
+            -5.75,
+            6.0,
+            2.0,
+            2.0
+          ],
+          "uv": [
+            77.0,
+            0.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -2.5,
+            -0.5,
+            -5.75,
+            6.0,
+            2.0,
+            2.0
+          ],
+          "uv": [
+            77.0,
+            13.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "rotten/com/github/teamfusion/rottencreatures/client/level/blockentities/model/GlacialHunterSkullModel.java",
+  "sourceSha256": "8af165686db353ed4fff116a299513fbc91a95781c9155bd3818db9c829209ed",
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

@@ -1,0 +1,44 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "refurbished_furniture:block/warped_lattice_fence_center"
+      }
+    },
+    {
+      "apply": {
+        "model": "refurbished_furniture:block/warped_lattice_fence_connection",
+        "y": 180
+      },
+      "when": {
+        "north": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "refurbished_furniture:block/warped_lattice_fence_connection",
+        "y": 270
+      },
+      "when": {
+        "east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "refurbished_furniture:block/warped_lattice_fence_connection"
+      },
+      "when": {
+        "south": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "refurbished_furniture:block/warped_lattice_fence_connection",
+        "y": 90
+      },
+      "when": {
+        "west": "true"
+      }
+    }
+  ]
+}

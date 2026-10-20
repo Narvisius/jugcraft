@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " C ",
+    " I ",
+    "EIE"
+  ],
+  "key": {
+    "C": "jugcraft:beast_capsid",
+    "E": "minecraft:end_stone",
+    "I": "minecraft:iron_nugget"
+  },
+  "result": {
+    "count": 3,
+    "id": "jugcraft:beast_enderiophage_rocket"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

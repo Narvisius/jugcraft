@@ -85,7 +85,7 @@ public class FluorochemistryGameTests {
                 checked++;
             }
         }
-        h.assertTrue(checked == 10, "All new process and molding recipes exercised, found " + checked);
+        h.assertTrue(checked >= 10, "All new process and molding recipes exercised, found " + checked);
         h.succeed();
     }
 

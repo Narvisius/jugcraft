@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " L ",
+    "LLL",
+    " H "
+  ],
+  "key": {
+    "H": "jugcraft:beast_bear_fur",
+    "L": "minecraft:leather"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:beast_falconry_glove"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

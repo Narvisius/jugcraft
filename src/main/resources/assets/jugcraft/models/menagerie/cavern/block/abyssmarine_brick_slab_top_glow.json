@@ -1,0 +1,157 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "slab": "jugcraft:menagerie/cavern/block/abyssmarine_bricks",
+    "particle": "jugcraft:menagerie/cavern/block/abyssmarine_bricks",
+    "glow": "jugcraft:menagerie/cavern/block/abyssmarine_bricks_glow"
+  },
+  "elements": [
+    {
+      "from": [
+        -0.1,
+        8,
+        -0.1
+      ],
+      "to": [
+        16.1,
+        16,
+        16.1
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#slab"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#slab",
+          "cullface": "up"
+        },
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            8
+          ],
+          "texture": "#slab",
+          "cullface": "north"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            8
+          ],
+          "texture": "#slab",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            8
+          ],
+          "texture": "#slab",
+          "cullface": "west"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            8
+          ],
+          "texture": "#slab",
+          "cullface": "east"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        7.9,
+        0
+      ],
+      "to": [
+        16,
+        16.1,
+        16
+      ],
+      "shade": false,
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#glow"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#glow",
+          "cullface": "up"
+        },
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            8
+          ],
+          "texture": "#glow",
+          "cullface": "north"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            8
+          ],
+          "texture": "#glow",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            8
+          ],
+          "texture": "#glow",
+          "cullface": "west"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            8
+          ],
+          "texture": "#glow",
+          "cullface": "east"
+        }
+      }
+    }
+  ]
+}

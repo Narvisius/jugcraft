@@ -66,6 +66,13 @@ public final class Encyclopedia {
 			Bestiary.write(player, out);
 		});
 		page("inspect", InspectPage::write);
+        page("nouveau", io.github.jimbozoomer.jugcraft.nouveau.NouveauGuide::write);
+        page("menagerie", io.github.jimbozoomer.jugcraft.menagerie.MenagerieGuide::write);
+        page("woodland", io.github.jimbozoomer.jugcraft.menagerie.MenagerieGuide::woodland);
+        page("household", io.github.jimbozoomer.jugcraft.menagerie.MenagerieGuide::household);
+        page("habitats", io.github.jimbozoomer.jugcraft.menagerie.MenagerieGuide::habitats);
+        page("beasts", io.github.jimbozoomer.jugcraft.menagerie.MenagerieGuide::beasts);
+        page("caverns", io.github.jimbozoomer.jugcraft.menagerie.MenagerieGuide::caverns);
 		PayloadTypeRegistry.serverboundPlay().register(EncyclopediaRequestPayload.TYPE, EncyclopediaRequestPayload.CODEC);
 		PayloadTypeRegistry.clientboundPlay().register(EncyclopediaPayload.TYPE, EncyclopediaPayload.CODEC);
 		ServerPlayNetworking.registerGlobalReceiver(EncyclopediaRequestPayload.TYPE, (payload, context) -> receive(context.player(), payload));

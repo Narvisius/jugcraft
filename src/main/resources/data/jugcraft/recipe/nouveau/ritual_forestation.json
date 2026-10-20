@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:nouveau_green_archwood_log",
+    "jugcraft:nouveau_mendosteen_pod",
+    "jugcraft:nouveau_earth_essence"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_ritual_forestation"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

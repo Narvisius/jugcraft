@@ -457,8 +457,14 @@ def assets(root, write, lang):
     for i in range(WIND_CHIMES["bones"]):
         angle = math.radians(360 * i / WIND_CHIMES["bones"])
         item_bones += moved(chime_bone(), 8 + CHIME_RADIUS * math.cos(angle), 0, 8 + CHIME_RADIUS * math.sin(angle))
-    write(models / f"{chimes}_item.json", fitted(block_model(CHIME_TEXTURES, chimes_elements() + item_bones + moved(chime_skull(), 8, 0, 8),
-                                                             CHIME_TEXTURES["bone"])))
+    chime_item = fitted(block_model(CHIME_TEXTURES, chimes_elements() + item_bones + moved(chime_skull(), 8, 0, 8),
+                                   CHIME_TEXTURES["bone"]))
+    # libm's final bit differs on Windows/Linux; model coordinates need no more
+    # than millionths of a model pixel. Keep the authored shape reproducible.
+    for element in chime_item["elements"]:
+        for bound in ("from", "to"):
+            element[bound] = [round(value, 6) for value in element[bound]]
+    write(models / f"{chimes}_item.json", chime_item)
     item_model(chimes, f"{chimes}_item")
     lang[f"block.{MOD}.{chimes}"] = WIND_CHIMES["display"]
 

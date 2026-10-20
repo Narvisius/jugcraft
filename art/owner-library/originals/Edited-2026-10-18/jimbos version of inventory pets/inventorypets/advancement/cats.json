@@ -1,0 +1,42 @@
+{
+	"display": {
+		"icon": {
+			"id": "inventorypets:pet_siamese"
+		},
+		"title": {
+			"translate": "advancement.ip.petachieveCat"
+		},
+		"description": {
+			"translate": "advancement.ip.petachieveCat.desc"
+		},
+		"show_toast": true,
+		"announce_to_chat": true,
+		"frame": "goal",
+		"hidden": true
+	},
+	"parent": "inventorypets:root",
+	"criteria": {
+		"crafting_table": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": [
+							"inventorypets:pet_siamese"
+							]
+					},
+					{
+						"items": [
+							"inventorypets:pet_ocelot"
+							]
+					},
+					{
+						"items": [
+							"inventorypets:pet_cheetah"
+							]
+					}
+				]
+			}
+		}
+	}
+}

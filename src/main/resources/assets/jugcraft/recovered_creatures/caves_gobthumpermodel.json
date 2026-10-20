@@ -1,0 +1,318 @@
+{
+  "textureSize": [
+    32,
+    32
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "main",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -7.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "stick",
+      "parent": "main",
+      "pose": [
+        0.0,
+        7.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -10.0,
+            -1.0,
+            0.0,
+            10.0,
+            2.0
+          ],
+          "uv": [
+            16.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r1",
+      "parent": "stick",
+      "pose": [
+        0.0,
+        -6.0,
+        0.0,
+        0.0,
+        1.5272,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -4.0,
+            -1.0,
+            0.0,
+            10.0,
+            2.0
+          ],
+          "uv": [
+            16.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "upper_gel",
+      "parent": "stick",
+      "pose": [
+        0.0,
+        -7.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -4.0,
+            -2.0,
+            4.0,
+            8.0,
+            4.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "gumballs",
+      "parent": "stick",
+      "pose": [
+        0.0,
+        -6.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -5.0,
+            -2.0,
+            4.0,
+            8.0,
+            4.0
+          ],
+          "uv": [
+            0.0,
+            12.0
+          ],
+          "inflate": [
+            -0.25,
+            -0.25,
+            -0.25
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/GobthumperModel.java",
+  "sourceSha256": "3b987d7e4431650799938fd4ca12339957aa9f503431dd0678c3a5673937c063",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [
+    {
+      "bone": "upper_gel",
+      "target": "xScale",
+      "op": "=",
+      "value": [
+        "+",
+        1.0,
+        [
+          "*",
+          [
+            "+",
+            [
+              "sin",
+              [
+                "*",
+                "age",
+                0.7
+              ]
+            ],
+            1.0
+          ],
+          0.5
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "upper_gel",
+      "target": "yScale",
+      "op": "=",
+      "value": [
+        "+",
+        1.0,
+        [
+          "*",
+          0.25,
+          [
+            "*",
+            [
+              "+",
+              [
+                "cos",
+                [
+                  "-",
+                  [
+                    "*",
+                    "age",
+                    0.7
+                  ],
+                  1.0
+                ]
+              ],
+              1.0
+            ],
+            0.5
+          ]
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "upper_gel",
+      "target": "zScale",
+      "op": "=",
+      "value": [
+        "+",
+        1.0,
+        [
+          "*",
+          [
+            "+",
+            [
+              "sin",
+              [
+                "*",
+                "age",
+                0.7
+              ]
+            ],
+            1.0
+          ],
+          0.5
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "upper_gel",
+      "target": "y",
+      "op": "-=",
+      "value": [
+        "*",
+        [
+          "+",
+          [
+            "sin",
+            [
+              "*",
+              "age",
+              0.7
+            ]
+          ],
+          1.0
+        ],
+        0.5
+      ],
+      "when": 1
+    },
+    {
+      "bone": "main",
+      "target": "y",
+      "op": "+=",
+      "value": [
+        "*",
+        [
+          "*",
+          [
+            "+",
+            [
+              "cos",
+              [
+                "-",
+                [
+                  "*",
+                  "age",
+                  0.7
+                ],
+                1.0
+              ]
+            ],
+            1.0
+          ],
+          0.5
+        ],
+        1.0
+      ],
+      "when": 1
+    }
+  ],
+  "poses": []
+}

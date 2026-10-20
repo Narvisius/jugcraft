@@ -1,0 +1,100 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:match_tool",
+                  "predicate": {
+                    "enchantments": [
+                      {
+                        "enchantment": "minecraft:silk_touch",
+                        "levels": {
+                          "min": 1
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "name": "goblinsanddungeons:urn"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:survives_explosion",
+				  "condition": "minecraft:random_chance",
+				  "chance": 0.07
+                }
+              ],
+              "name": "minecraft:iron_nugget"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:survives_explosion",
+				  "condition": "minecraft:random_chance",
+				  "chance": 0.1
+                }
+              ],
+              "name": "minecraft:emerald"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:survives_explosion",
+				  "condition": "minecraft:random_chance",
+				  "chance": 0.4
+                }
+              ],
+              "name": "minecraft:string"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:survives_explosion",
+				  "condition": "minecraft:random_chance",
+				  "chance": 0.3
+                }
+              ],
+              "name": "minecraft:bread"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:survives_explosion",
+				  "condition": "minecraft:random_chance",
+				  "chance": 0.25
+                }
+              ],
+              "name": "minecraft:bone"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:survives_explosion",
+				  "condition": "minecraft:random_chance",
+				  "chance": 0.5
+                }
+              ],
+              "name": "minecraft:rotten_flesh"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

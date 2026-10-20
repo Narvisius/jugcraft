@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:clamp",
+  "input": {
+    "type": "minecraft:cache",
+    "input": {
+      "type": "minecraft:add",
+      "left": {
+        "type": "minecraft:noise",
+        "noise": "jugcraft:math/cheese/landscape_megacave",
+        "xz_scale": 1.5,
+        "y_scale": 1.725
+      },
+      "right": 0.47
+    }
+  },
+  "max": 1,
+  "min": -1
+}

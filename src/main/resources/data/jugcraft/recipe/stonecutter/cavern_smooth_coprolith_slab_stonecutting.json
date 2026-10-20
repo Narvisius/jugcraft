@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 2,
+  "ingredient": "jugcraft:cavern_smooth_coprolith",
+  "result": {
+    "id": "jugcraft:cavern_smooth_coprolith_slab"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

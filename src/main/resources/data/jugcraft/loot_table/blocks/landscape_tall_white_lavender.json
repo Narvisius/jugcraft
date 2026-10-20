@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "jugcraft:landscape_tall_white_lavender",
+            "state": {
+              "half": "lower"
+            }
+          },
+          "name": "jugcraft:landscape_tall_white_lavender"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "jugcraft:blocks/landscape_tall_white_lavender"
+}

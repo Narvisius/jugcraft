@@ -21,8 +21,9 @@ PARTS = {
 OVERLAY = {"head": "hat", "body": "jacket", "right_arm": "right_sleeve", "left_arm": "left_sleeve",
            "right_leg": "right_pants", "left_leg": "left_pants"}
 
-SKIN_TONES = [(244, 208, 177), (230, 188, 152), (205, 156, 118), (170, 120, 84), (128, 86, 58), (96, 64, 44)]
-HAIR = [(40, 28, 20), (90, 60, 34), (150, 104, 56), (200, 160, 90), (120, 40, 20), (170, 170, 170), (30, 30, 34)]
+# Owner-selected Nordic-inspired town cast, preserving seeds and one-pixel eyes.
+SKIN_TONES = [(244, 211, 190), (237, 199, 174), (230, 187, 160), (247, 220, 204), (226, 191, 174), (240, 205, 185)]
+HAIR = [(62, 45, 34), (104, 77, 48), (164, 127, 76), (209, 180, 115), (142, 66, 36), (177, 174, 164), (59, 50, 45)]
 EYES = [(60, 90, 160), (70, 120, 70), (90, 60, 40), (50, 50, 60)]
 
 
@@ -85,7 +86,7 @@ class Skin:
                     self.px[x + i, y + j] = (0, 0, 0, 0)
 
     def save(self, path):
-        self.img.save(path, optimize=True)
+        self.img.save(path, optimize=False, compress_level=0)
 
 
 def strands(s, hair, style):

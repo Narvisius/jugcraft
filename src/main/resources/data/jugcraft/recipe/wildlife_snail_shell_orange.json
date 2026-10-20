@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:wildlife_snail_shell",
+    "minecraft:orange_dye"
+  ],
+  "result": {
+    "id": "jugcraft:wildlife_snail_shell",
+    "count": 1,
+    "components": {
+      "minecraft:custom_data": {
+        "Color": 1
+      }
+    }
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

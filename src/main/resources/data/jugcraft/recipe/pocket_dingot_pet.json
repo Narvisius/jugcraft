@@ -1,0 +1,23 @@
+{
+  "result": {
+    "id": "jugcraft:pocket_pet_dingot"
+  },
+  "pattern": [
+    "OFO",
+    "OBO",
+    "ODO"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "jugcraft:pocket_pet_biome",
+    "F": "minecraft:copper_ingot",
+    "D": "jugcraft:pocket_pet_pingot",
+    "O": "minecraft:diamond"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

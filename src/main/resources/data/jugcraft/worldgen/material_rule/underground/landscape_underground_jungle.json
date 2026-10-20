@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:condition",
+  "if_true": {
+    "type": "minecraft:not",
+    "invert": {
+      "type": "minecraft:above_preliminary_surface"
+    }
+  },
+  "then_run": {
+    "type": "minecraft:condition",
+    "if_true": {
+      "type": "minecraft:biome",
+      "biome_is": "jugcraft:cave/landscape_underground_jungle"
+    },
+    "then_run": {
+      "type": "minecraft:condition",
+      "if_true": {
+        "type": "minecraft:stone_depth",
+        "offset": 2,
+        "surface_type": "floor",
+        "add_surface_depth": false,
+        "secondary_depth_range": 0
+      },
+      "then_run": {
+        "type": "minecraft:block",
+        "result_state": "minecraft:mud"
+      }
+    }
+  }
+}

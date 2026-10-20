@@ -1,0 +1,47 @@
+{
+  "attributes": {
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawn_costs": {},
+        "spawns_by_category": {}
+      },
+      "modifier": "overlay"
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "jugcraft:landscape_end_spore"
+        },
+        "probability": 0.005
+      }
+    ]
+  },
+  "carvers": [],
+  "downfall": 0.5,
+  "effects": {
+    "foliage_color": "#eab35d",
+    "grass_color": "#eab35d",
+    "water_color": "#3f76e4"
+  },
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [
+      "minecraft:end_gateway_return"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [
+      "jugcraft:landscape_flower_end_wilds",
+      "jugcraft:landscape_lumaloop",
+      "jugcraft:landscape_patch_enderphytes",
+      "jugcraft:landscape_trees_end_wilds"
+    ]
+  ],
+  "has_precipitation": false,
+  "temperature": 0.5
+}

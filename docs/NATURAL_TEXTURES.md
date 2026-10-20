@@ -70,7 +70,7 @@ Seen among vanilla trees, ours look like more of the same world, not a different
 ### 3. Colours from the owner's paintings, kept within vanilla's range
 - **Take a new wood's colour from the owner's paintings** (`WOOD`: which painting, and the colour sampled from its
   painted side). If there is no painting, ask for one, or pick a colour the owner approves.
-- **Check it beside vanilla's woods:** oak, spruce, birch, jungle, acacia, dark oak, mangrove, cherry and pale oak. It
+- **Check it beside vanilla's woods:** oak, spruce, birch, jungle, acacia, dark oak, mangrove, cherry, pale oak, bamboo, crimson and warped. It
   should be no brighter, no more saturated and no more contrasting than they are. It should also differ from the
   nearest of them in hue, so the wood is worth having.
 

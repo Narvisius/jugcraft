@@ -1,0 +1,31 @@
+{
+  "parent": "jugcraft:nouveau_root",
+  "criteria": {
+    "eat_bombegranate": {
+      "conditions": {
+        "item": {
+          "items": "jugcraft:nouveau_bombegranate_pod"
+        }
+      },
+      "trigger": "minecraft:consume_item"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "jugcraft.nouveau_adv.desc.eat_bombegranate"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "jugcraft:nouveau_bombegranate_pod"
+    },
+    "title": {
+      "translate": "jugcraft.nouveau_adv.title.eat_bombegranate"
+    }
+  },
+  "requirements": [
+    [
+      "eat_bombegranate"
+    ]
+  ]
+}

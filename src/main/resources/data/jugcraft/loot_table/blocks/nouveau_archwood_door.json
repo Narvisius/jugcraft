@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:nouveau_archwood_door"
+        }
+      ],
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "jugcraft:nouveau_archwood_door",
+        "state": {
+          "half": "lower"
+        }
+      }
+    }
+  ]
+}

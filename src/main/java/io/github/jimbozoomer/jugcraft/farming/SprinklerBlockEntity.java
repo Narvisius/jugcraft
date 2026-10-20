@@ -2,6 +2,8 @@ package io.github.jimbozoomer.jugcraft.farming;
 
 import io.github.jimbozoomer.jugcraft.chemistry.FertilizerItem;
 import io.github.jimbozoomer.jugcraft.chemistry.PetroItems;
+import io.github.jimbozoomer.jugcraft.chemistry.SpecializedFertilizerItem;
+import io.github.jimbozoomer.jugcraft.town.TownProtection;
 import io.github.jimbozoomer.jugcraft.fluid.FluidNetworks;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.SingleFluidStorage;
@@ -10,6 +12,7 @@ import net.fabricmc.fabric.api.transfer.v1.item.base.SingleStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
@@ -67,7 +70,7 @@ public class SprinklerBlockEntity extends BlockEntity {
 
 		@Override
 		protected boolean canInsert(ItemVariant variant) {
-			return variant.isOf(PetroItems.FERTILIZER);
+			return acceptsFertilizer(variant.toStack());
 		}
 
 		@Override
@@ -98,7 +101,25 @@ public class SprinklerBlockEntity extends BlockEntity {
 	public net.fabricmc.fabric.api.transfer.v1.storage.Storage<ItemVariant> fertilizerInput() { return hopper; }
 
 	@Override
-	public void preRemoveSideEffects(BlockPos pos, BlockState state) { companion.drop(); }
+	public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+		companion.drop();
+		if (level != null && !level.isClientSide()) Block.popResource(level, pos, takeFertilizer());
+	}
+
+	public static boolean acceptsFertilizer(ItemStack stack) {
+		return stack.is(PetroItems.FERTILIZER) || stack.getItem() instanceof SpecializedFertilizerItem;
+	}
+
+	public Component fertilizerName() {
+		return fertilizerStack.isEmpty() ? Component.translatable("message.jugcraft.no_fertilizer") : fertilizerStack.getHoverName();
+	}
+
+	public ItemStack takeFertilizer() {
+		ItemStack result = fertilizerStack;
+		fertilizerStack = ItemStack.EMPTY;
+		setChanged();
+		return result;
+	}
 
 	public int fertilizer() {
 		return fertilizerStack.getCount();
@@ -106,9 +127,16 @@ public class SprinklerBlockEntity extends BlockEntity {
 
 	/** Loads up to {@code count} fertilizer from a player's hand; returns how many it took. */
 	public int addFertilizer(int count) {
-		int added = Math.min(count, MAX_FERTILIZER - fertilizer());
+		return count > 0 ? addFertilizer(new ItemStack(PetroItems.FERTILIZER, count)) : 0;
+	}
+
+	/** Preserves the loaded item and components; different blends cannot silently replace one another. */
+	public int addFertilizer(ItemStack stack) {
+		if (stack.isEmpty() || !acceptsFertilizer(stack)
+				|| (!fertilizerStack.isEmpty() && !ItemStack.isSameItemSameComponents(stack, fertilizerStack))) return 0;
+		int added = Math.min(stack.getCount(), MAX_FERTILIZER - fertilizer());
 		if (added > 0) {
-			fertilizerStack = new ItemStack(PetroItems.FERTILIZER, fertilizer() + added);
+			fertilizerStack = stack.copyWithCount(fertilizer() + added);
 			setChanged();
 		}
 		return added;
@@ -132,7 +160,13 @@ public class SprinklerBlockEntity extends BlockEntity {
 		}
 		if (++pulses >= FERTILIZE_PULSES) {
 			pulses = 0;
-			if (fertilizer() > 0 && FertilizerItem.fertilize(level, pos) > 0) {
+			int grown = 0;
+			if (!fertilizerStack.isEmpty()) {
+				grown = fertilizerStack.getItem() instanceof SpecializedFertilizerItem blend
+					? blend.apply(level, pos, at -> !TownProtection.shieldsBlock(level, at))
+					: FertilizerItem.fertilize(level, pos);
+			}
+			if (grown > 0) {
 				fertilizerStack.shrink(1);
 			}
 		}
@@ -144,8 +178,13 @@ public class SprinklerBlockEntity extends BlockEntity {
 		super.loadAdditional(input);
 		water.readValue(input);
 		companion.load(input);
-		int count = input.getInt("fertilizer").orElse(0);
-		fertilizerStack = count > 0 ? new ItemStack(PetroItems.FERTILIZER, count) : ItemStack.EMPTY;
+		int count = Math.clamp(input.getInt("fertilizer").orElse(0), 0, MAX_FERTILIZER);
+		fertilizerStack = input.read("fertilizer_stack", ItemStack.CODEC)
+				.orElseGet(() -> count > 0 ? new ItemStack(PetroItems.FERTILIZER, count) : ItemStack.EMPTY);
+		if (!fertilizerStack.isEmpty()) {
+			if (!acceptsFertilizer(fertilizerStack)) fertilizerStack = ItemStack.EMPTY;
+			else fertilizerStack.setCount(Math.min(MAX_FERTILIZER, fertilizerStack.getCount()));
+		}
 		pulses = input.getInt("pulses").orElse(0);
 	}
 
@@ -154,7 +193,9 @@ public class SprinklerBlockEntity extends BlockEntity {
 		super.saveAdditional(output);
 		water.writeValue(output);
 		companion.save(output);
-		output.putInt("fertilizer", fertilizer());
+		// Retain the legacy count for ordinary fertilizer; specialized loads use the full item codec.
+		output.putInt("fertilizer", fertilizerStack.is(PetroItems.FERTILIZER) ? fertilizer() : 0);
+		if (!fertilizerStack.isEmpty()) output.store("fertilizer_stack", ItemStack.CODEC, fertilizerStack);
 		output.putInt("pulses", pulses);
 	}
 }

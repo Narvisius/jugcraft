@@ -237,7 +237,8 @@ public class ElectrolyticSeparatorGameTests {
 	public void itRunsItsOwnRecipesAndCostsTwentyPlates(GameTestHelper helper) {
 		ServerLevel level = helper.getLevel();
 		FormMachineBlockEntity machine = place(helper, new BlockPos(2, 1, 2), Direction.NORTH);
-		List<FluidRecipes.Entry> own = machine.recipes(level.getServer());
+		List<FluidRecipes.Entry> own = machine.recipes(level.getServer()).stream()
+                .filter(e -> e.id().getPath().startsWith("electrolysis/separator_")).toList();
 		helper.assertTrue(own.size() == 2 && own.get(0).id().equals(Jugcraft.id("electrolysis/separator_brine"))
 				&& own.get(0).recipe().time() == BRINE_TICKS && own.get(1).id().equals(Jugcraft.id("electrolysis/separator_water"))
 				&& own.get(1).recipe().time() == WATER_TICKS, "Its two recipes: " + own.stream().map(FluidRecipes.Entry::id).toList());

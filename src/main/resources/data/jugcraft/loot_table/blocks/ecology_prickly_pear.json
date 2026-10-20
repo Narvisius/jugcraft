@@ -1,0 +1,48 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:ecology_prickly_pear"
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:ecology_prickly_pear",
+          "modifier": [
+            {
+              "enchantment": "minecraft:fortune",
+              "formula": "minecraft:binomial_with_bonus_count",
+              "parameters": {
+                "extra": 2,
+                "probability": 0.5714286
+              },
+              "type": "minecraft:apply_bonus"
+            }
+          ]
+        }
+      ],
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "jugcraft:ecology_prickly_pear",
+        "state": {
+          "age": "3"
+        }
+      }
+    }
+  ],
+  "modifier": [
+    {
+      "type": "minecraft:explosion_decay"
+    }
+  ]
+}

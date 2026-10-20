@@ -1,0 +1,34 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:nouveau/nouveau_deny_scroll",
+  "category": "jugcraft:nouveau",
+  "x": 75,
+  "y": 12,
+  "name": "book.jugcraft.arcane_concordance.nouveau.nouveau_deny_scroll.name",
+  "description": "book.jugcraft.arcane_concordance.nouveau.nouveau_deny_scroll.description",
+  "icon": "jugcraft:nouveau_deny_scroll",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/square_gray",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "pages": [
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p0",
+      "title1": "book.jugcraft.arcane_concordance.nouveau.nouveau_deny_scroll.p0.title",
+      "recipe_id_1": "jugcraft:nouveau/clear_deny",
+      "text": "book.jugcraft.arcane_concordance.nouveau.nouveau_deny_scroll.p0.text"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p1",
+      "title1": "book.jugcraft.arcane_concordance.nouveau.nouveau_deny_scroll.p1.title",
+      "recipe_id_1": "jugcraft:nouveau/deny_scroll",
+      "text": "book.jugcraft.arcane_concordance.nouveau.nouveau_deny_scroll.p1.text"
+    }
+  ]
+}

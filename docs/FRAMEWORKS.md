@@ -18,6 +18,8 @@ The machine-readable source of truth is [frameworks.lock.json](../distribution/f
 | [Trinkets Updated](https://github.com/Patbox/trinkets) | 4.2.1+26.3 | Required, common | Equipment slots; the maintained fork required by the selected Spell Engine release |
 | [Cloth Config](https://github.com/shedaniel/ClothConfig) | 26.3.159 | Required, common artifact; screens only on clients | Configuration; already required by Spell Engine, so do not add YACL just to duplicate it |
 | [Jade](https://github.com/Snownee/Jade) | 26.3.5+fabric | Optional to standalone Jugcraft; included on both sides of the pack | Inspection overlays and server-supplied machine state |
+| [Traveler's Backpack](https://github.com/Tiviacz1337/Travelers-Backpack) | 26.3–11.4.1 | Optional to standalone Jugcraft; included on both sides of the pack | [Industrial backpack progression](features/travelers-backpack.md), Trinkets Back slot and portable storage |
+| [Forge Config API Port](https://github.com/Fuzss/forgeconfigapiport) | 26.3.1 | Optional to standalone Jugcraft; common pack dependency of Traveler's Backpack | Native server/world backpack configuration |
 | [JEI](https://github.com/mezz/JustEnoughItems) | 31.8.0.49 | Optional; existing API integration; included in the pack | Recipes, ingredients, uses, catalysts |
 | [Fusion](https://github.com/SuperMartijn642/Fusion/wiki) | 1.3.16 for Fabric 26.3 | Optional, client | Connected, scrolling, continuous textures and overlays |
 | [LambDynamicLights](https://lambdaurora.dev/projects/lambdynamiclights/docs/v4/) | 4.13.0+26.3 | Optional, client | Moving item/entity illumination; data definitions or API integration |
@@ -26,6 +28,7 @@ The machine-readable source of truth is [frameworks.lock.json](../distribution/f
 | [Mod Menu](https://github.com/TerraformersMC/ModMenu) | 21.0.0 | Optional, client | Access to library configuration screens |
 | [Iris](https://github.com/IrisShaders/Iris) | 1.11.7+mc26.3 | Optional, client | Shader-pack support; no shader pack is supplied |
 | [Sodium](https://github.com/CaffeineMC/sodium) | 0.9.2+mc26.3 | Optional, client; required by the selected Iris release | Renderer used by the presentation stack |
+| [Diorama](https://modrinth.com/mod/diorama-map) | 0.1.1+26.3 | Client-only; installed by default in Complete, optional to standalone Jugcraft | Angled minimap, fullscreen exploration map and waypoints |
 
 All selected client files are installed by Jugcraft Complete. "Optional" means the standalone mod does not require them to load. It does not mean the complete pack silently omits them. Dedicated-server installs omit files marked client-only.
 

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:cavern_vesper_wing",
+    "jugcraft:cavern_thornwood_branch",
+    "minecraft:brown_mushroom",
+    "minecraft:bowl"
+  ],
+  "result": {
+    "id": "jugcraft:cavern_vesper_stew"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

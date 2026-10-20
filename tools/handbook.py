@@ -66,7 +66,9 @@ ABOUT = {
                  "fertilizer (by hand or hopper) and every 30 seconds it spreads one over the 5x5 crops around it.",
     "cryogenic_liquefier": "A cold box of chrome heat exchangers under frost. Pipe oxygen (from the air separation unit) "
                            "into its tank: every 4 seconds a bucket of oxygen condenses into 250 mB of liquid oxygen, "
-                           "the oxidizer for liquid rocket motors. 96 JE/t.",
+                           "the oxidizer for liquid rocket motors. 96 JE/t. Install a Methane Cooling Module for liquid "
+                           "methane, or an advanced Hydrogen Cooling Module for either methane or hydrogen. Tools are "
+                           "retained. See Cryogenics and Rocket Fuels for timings, storage and loaded motor assemblies.",
     "ammonia_chiller": "Ammonia boiling in its coils draws the heat out of water. Pipe ammonia into its first tank and "
                        "water into its second: every 5 seconds a bucket of water freezes into a block of ice. Put four "
                        "ice in its slot and it presses them into packed ice, and four packed ice into blue ice, against "
@@ -131,6 +133,7 @@ ABOUT = {
     "brass_wrench": "Right-click turns a machine. Sneak and right-click to pick a Jugcraft block up, with everything inside.",
     "speed_upgrade": "In a machine's upgrade slot: each card makes it faster but uses more energy per item. Four cards: 3x as "
                      "fast for twice the energy.",
+    "automation_upgrade": "Enables saved recipe priorities and output stock targets in supported machines. Open Recipes to configure up to eight rules. Removing the card suspends the rules without deleting them.",
     "efficiency_upgrade": "In a machine's upgrade slot: each card cuts energy use by a fifth. Four cards: 41% of the energy.",
     "prospector": "Right-click to survey the 3x3 chunks around you, from the bottom of the world to a little above you. "
                   "It shows which ores resonate, how strongly (1 to 5 bars) and roughly how deep, never exactly where.",
@@ -794,7 +797,7 @@ def ores_page():
                      "Windswept Forest and Stony Peaks; most centers are near Y 24. Needs an iron pickaxe. "
                      "Look for pale-green mineral faces in small stone outcrops, or use the prospector and ore drill. "
                      "The crusher gives two spodumene per ore; nine compact into a storage block. "
-                     "Expanded lithium refining is planned separately; existing lepidolite processing remains available.")
+                     "Fire spodumene in the Industrial Oven, then condition two activated spodumene with 500 mB sulfuric acid into two Lithium Carbonate. See Batteries and Power Management; existing lepidolite processing remains available.")
         elif mineral == "vanadium_iron":
             line += (" Vanadiferous magnetite: richest below Shield and Volcano, with smaller, rarer pockets below "
                      "Highland, Basin, Windswept Hills, Windswept Gravelly Hills, Windswept Forest and Stony Peaks. "
@@ -1238,4 +1241,20 @@ def build():
         "Build a Concentrator for seawater or acid; a Gas Scrubber for synthesis gas, biogas or fermentation gas; a Filter Press for aluminate or digestate; and an Industrial Oven for drying, calcination or PTFE sintering. Each handles multiple resources without a separate named machine for every output.",
         "The five older specialist designs stay craftable and continue working in existing factories. The four recommended machines also keep their original saved block IDs, inventories and ports. The Oven gains one connected solution inlet on its lower rear face.",
         "Open Recipes to search and preview inputs, outputs and costs. Lock recipe chooses the only job new batches may start; Automatic restores input-driven selection. Saved locks also filter automated inputs. Drain incompatible input AND output fluids and clear other feed items when changing jobs; running batches finish unchanged."]})
+    import ceramics
+    chapters.append({"title": "Ceramics and Precision", "icon": "jugcraft:porcelain_insulator",
+                     "pages": ceramics.GUIDE_PAGES + [form_page('precision_finisher')]})
+    import structural_alloys
+    chapters.append({"title": "Stainless and Structural Alloys", "icon": "jugcraft:stainless_steel_ingot",
+                     "pages": structural_alloys.GUIDE_PAGES})
+    import battery_expansion
+    chapters.append(dict(title='Batteries and Power Management', icon='jugcraft:lead_acid_battery_bank', pages=battery_expansion.GUIDE_PAGES))
+    import cryogenic_fuels
+    chapters.append(dict(title='Cryogenics and Rocket Fuels', icon='jugcraft:hydrolox_motor', pages=cryogenic_fuels.GUIDE_PAGES))
+    import synthetic_fuels
+    chapters.append(dict(title='Synthetic Fuels and Recovery', icon='jugcraft:synthetic_crude_bucket', pages=synthetic_fuels.GUIDE_PAGES))
+    import phosphate_processing
+    chapters.append(dict(title='Phosphate Processing and Fertilizers', icon='jugcraft:triple_superphosphate', pages=phosphate_processing.GUIDE_PAGES))
+    import advanced_electronics
+    chapters.append(dict(title='Advanced Electronics and Automation', icon='jugcraft:advanced_chip', pages=advanced_electronics.GUIDE_PAGES))
     return {"chapters": chapters}

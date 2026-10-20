@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "I I",
+    "L L"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "L": "minecraft:leather"
+  },
+  "result": {
+    "id": "jugcraft:beast_pigshoes",
+    "count": 1
+  }
+}

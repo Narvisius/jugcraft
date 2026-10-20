@@ -1,0 +1,16 @@
+{
+  "type": "jugcraft:household_freezer",
+  "ingredient": "minecraft:water_bucket",
+  "result": {
+    "id": "minecraft:ice"
+  },
+  "cookingtime": 600,
+  "experience": 0.1,
+  "category": "blocks",
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MF",
+    "FM"
+  ],
+  "key": {
+    "M": "minecraft:magma_block",
+    "F": "jugcraft:cavern_flood_basalt"
+  },
+  "result": {
+    "count": 2,
+    "id": "jugcraft:cavern_primal_magma"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

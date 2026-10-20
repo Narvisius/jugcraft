@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "ingredient": "jugcraft:cavern_dinosaur_chop",
+  "result": {
+    "id": "jugcraft:cavern_cooked_dinosaur_chop"
+  },
+  "experience": 0.15,
+  "cookingtime": 600,
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

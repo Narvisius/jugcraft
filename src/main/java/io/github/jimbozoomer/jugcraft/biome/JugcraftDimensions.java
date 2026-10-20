@@ -48,6 +48,9 @@ public final class JugcraftDimensions {
 			Jugcraft.LOGGER.error("Could not read {}; no Jugcraft Nether or End biomes", FILE, e);
 			return;
 		}
+        try (var in=JugcraftDimensions.class.getResourceAsStream("/jugcraft/menagerie/landscape-dimensions.json")) {
+            if(in!=null){var extra=JsonParser.parseReader(new InputStreamReader(in,StandardCharsets.UTF_8)).getAsJsonObject();data.getAsJsonArray("nether").addAll(extra.getAsJsonArray("nether"));data.getAsJsonArray("end").addAll(extra.getAsJsonArray("end"));}
+        }catch(IOException e){throw new IllegalStateException("Cannot read owner landscape dimensions",e);}
 		for (JsonElement element : data.getAsJsonArray("nether")) {
 			JsonObject biome = element.getAsJsonObject();
 			ResourceKey<Biome> key = key(biome.get("biome").getAsString());

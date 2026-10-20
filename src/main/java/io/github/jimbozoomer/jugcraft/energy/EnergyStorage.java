@@ -31,4 +31,10 @@ public interface EnergyStorage {
 	long getAmount();
 
 	long getCapacity();
+
+	/** Local cable insertion preference; zero preserves the ordinary network behavior. */
+	default int chargePriority() { return 0; }
+
+	/** All sided wrappers of one buffer must return the same identity. */
+	default Object transferIdentity() { return this; }
 }

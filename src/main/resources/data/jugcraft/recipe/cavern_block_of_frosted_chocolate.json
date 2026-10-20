@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FF",
+    "CC"
+  ],
+  "key": {
+    "C": "jugcraft:cavern_block_of_chocolate",
+    "F": "jugcraft:cavern_block_of_frosting"
+  },
+  "result": {
+    "count": 4,
+    "id": "jugcraft:cavern_block_of_frosted_chocolate"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

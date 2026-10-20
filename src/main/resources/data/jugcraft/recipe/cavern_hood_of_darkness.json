@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DOD",
+    "D D"
+  ],
+  "key": {
+    "D": "jugcraft:cavern_shadow_silk",
+    "O": "jugcraft:cavern_occult_gem"
+  },
+  "result": {
+    "id": "jugcraft:cavern_hood_of_darkness"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

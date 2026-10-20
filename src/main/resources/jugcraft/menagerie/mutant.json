@@ -1,0 +1,379 @@
+{
+  "species": [
+    {
+      "source": "mutant_zombie",
+      "id": "mutant_mutant_zombie",
+      "name": "Mutant Zombie",
+      "shape": "humanoid",
+      "movement": "land",
+      "habitat": "summoned",
+      "mood": "hostile",
+      "width": 1.8,
+      "height": 3.2,
+      "health": 180,
+      "feed": "minecraft:carrot",
+      "mount": false,
+      "model": "mutant_mutant_zombie",
+      "variants": [
+        {
+          "name": "mutant_zombie",
+          "texture": "menagerie/mutant/entity/mutant_zombie",
+          "babyTexture": "menagerie/mutant/entity/mutant_zombie",
+          "weight": 1,
+          "model": "mutant/mutant_zombie/mutant_zombie",
+          "babyModel": "mutant/mutant_zombie/mutant_zombie"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "sit",
+        "attack"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "mutant_skeleton",
+      "id": "mutant_mutant_skeleton",
+      "name": "Mutant Skeleton",
+      "shape": "skeleton",
+      "movement": "land",
+      "habitat": "summoned",
+      "mood": "hostile",
+      "width": 1.2,
+      "height": 3.6,
+      "health": 160,
+      "feed": "minecraft:carrot",
+      "mount": false,
+      "model": "mutant_mutant_skeleton",
+      "variants": [
+        {
+          "name": "mutant_skeleton",
+          "texture": "menagerie/mutant/entity/mutant_skeleton",
+          "babyTexture": "menagerie/mutant/entity/mutant_skeleton",
+          "weight": 1,
+          "model": "mutant/mutant_skeleton/mutant_skeleton",
+          "babyModel": "mutant/mutant_skeleton/mutant_skeleton"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "sit",
+        "attack"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "mutant_creeper",
+      "id": "mutant_mutant_creeper",
+      "name": "Mutant Creeper",
+      "shape": "creeper",
+      "movement": "land",
+      "habitat": "summoned",
+      "mood": "hostile",
+      "width": 1.99,
+      "height": 2.8,
+      "health": 160,
+      "feed": "minecraft:carrot",
+      "mount": false,
+      "model": "mutant_mutant_creeper",
+      "variants": [
+        {
+          "name": "mutant_creeper",
+          "texture": "menagerie/mutant/entity/mutant_creeper",
+          "babyTexture": "menagerie/mutant/entity/mutant_creeper",
+          "weight": 1,
+          "model": "mutant/mutant_creeper/mutant_creeper",
+          "babyModel": "mutant/mutant_creeper/mutant_creeper"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "sit",
+        "attack"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "mutant_enderman",
+      "id": "mutant_mutant_enderman",
+      "name": "Mutant Enderman",
+      "shape": "enderman",
+      "movement": "land",
+      "habitat": "summoned",
+      "mood": "hostile",
+      "width": 1.2,
+      "height": 4.2,
+      "health": 200,
+      "feed": "minecraft:carrot",
+      "mount": false,
+      "model": "mutant_mutant_enderman",
+      "variants": [
+        {
+          "name": "mutant_enderman",
+          "texture": "menagerie/mutant/entity/mutant_enderman/mutant_enderman",
+          "babyTexture": "menagerie/mutant/entity/mutant_enderman/mutant_enderman",
+          "weight": 1,
+          "model": "mutant/mutant_enderman/mutant_enderman",
+          "babyModel": "mutant/mutant_enderman/mutant_enderman"
+        },
+        {
+          "name": "mutant_enderman_death",
+          "texture": "menagerie/mutant/entity/mutant_enderman/mutant_enderman_death",
+          "babyTexture": "menagerie/mutant/entity/mutant_enderman/mutant_enderman_death",
+          "weight": 1,
+          "model": "mutant/mutant_enderman/mutant_enderman_death",
+          "babyModel": "mutant/mutant_enderman/mutant_enderman_death"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "sit",
+        "attack"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "mutant_snow_golem",
+      "id": "mutant_mutant_snow_golem",
+      "name": "Mutant Snow Golem",
+      "shape": "snowman",
+      "movement": "land",
+      "habitat": "summoned",
+      "mood": "neutral",
+      "width": 1.15,
+      "height": 2.3,
+      "health": 100,
+      "feed": "minecraft:snowball",
+      "mount": false,
+      "model": "mutant_mutant_snow_golem",
+      "variants": [
+        {
+          "name": "jack_o_lantern",
+          "texture": "menagerie/mutant/entity/mutant_snow_golem/jack_o_lantern",
+          "babyTexture": "menagerie/mutant/entity/mutant_snow_golem/jack_o_lantern",
+          "weight": 1,
+          "model": "mutant/mutant_snow_golem/jack_o_lantern",
+          "babyModel": "mutant/mutant_snow_golem/jack_o_lantern"
+        },
+        {
+          "name": "mutant_snow_golem",
+          "texture": "menagerie/mutant/entity/mutant_snow_golem/mutant_snow_golem",
+          "babyTexture": "menagerie/mutant/entity/mutant_snow_golem/mutant_snow_golem",
+          "weight": 1,
+          "model": "mutant/mutant_snow_golem/mutant_snow_golem",
+          "babyModel": "mutant/mutant_snow_golem/mutant_snow_golem"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "sit",
+        "attack"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "spider_pig",
+      "id": "mutant_spider_pig",
+      "name": "Spider Pig",
+      "shape": "spider",
+      "movement": "land",
+      "habitat": "summoned",
+      "mood": "neutral",
+      "width": 1.4,
+      "height": 0.9,
+      "health": 40,
+      "feed": "minecraft:carrot",
+      "mount": true,
+      "model": "mutant_spider_pig",
+      "variants": [
+        {
+          "name": "spider_pig",
+          "texture": "menagerie/mutant/entity/spider_pig",
+          "babyTexture": "menagerie/mutant/entity/spider_pig",
+          "weight": 1,
+          "model": "mutant/spider_pig/spider_pig",
+          "babyModel": "mutant/spider_pig/spider_pig"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "sit",
+        "attack"
+      ],
+      "armorTextures": {}
+    },
+    {
+      "source": "creeper_minion",
+      "id": "mutant_creeper_minion",
+      "name": "Creeper Minion",
+      "shape": "creeper",
+      "movement": "land",
+      "habitat": "summoned",
+      "mood": "neutral",
+      "width": 0.3,
+      "height": 0.85,
+      "health": 20,
+      "feed": "minecraft:gunpowder",
+      "mount": false,
+      "model": "mutant_creeper_minion",
+      "variants": [
+        {
+          "name": "mutant_creeper",
+          "texture": "menagerie/mutant/entity/mutant_creeper",
+          "babyTexture": "menagerie/mutant/entity/mutant_creeper",
+          "weight": 1,
+          "model": "mutant/creeper_minion/mutant_creeper",
+          "babyModel": "mutant/creeper_minion/mutant_creeper"
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "sit",
+        "attack"
+      ],
+      "armorTextures": {}
+    }
+  ],
+  "items": {
+    "mutant_chemical_x": {
+      "source": "chemical_x",
+      "name": "Chemical X"
+    },
+    "mutant_creeper_minion_spawn_egg": {
+      "source": "creeper_minion_spawn_egg",
+      "name": "Creeper Minion Spawn Egg"
+    },
+    "mutant_creeper_minion_tracker": {
+      "source": "creeper_minion_tracker",
+      "name": "Creeper Minion Tracker"
+    },
+    "mutant_creeper_shard": {
+      "source": "creeper_shard",
+      "name": "Creeper Shard"
+    },
+    "mutant_endersoul_hand": {
+      "source": "endersoul_hand",
+      "name": "Endersoul Hand"
+    },
+    "mutant_hulk_hammer": {
+      "source": "hulk_hammer",
+      "name": "Hulk Hammer"
+    },
+    "mutant_mutant_creeper_spawn_egg": {
+      "source": "mutant_creeper_spawn_egg",
+      "name": "Mutant Creeper Spawn Egg"
+    },
+    "mutant_mutant_enderman_spawn_egg": {
+      "source": "mutant_enderman_spawn_egg",
+      "name": "Mutant Enderman Spawn Egg"
+    },
+    "mutant_mutant_skeleton_arms": {
+      "source": "mutant_skeleton_arms",
+      "name": "Mutant Skeleton Arms"
+    },
+    "mutant_mutant_skeleton_boots": {
+      "source": "mutant_skeleton_boots",
+      "name": "Mutant Skeleton Boots"
+    },
+    "mutant_mutant_skeleton_chestplate": {
+      "source": "mutant_skeleton_chestplate",
+      "name": "Mutant Skeleton Chestplate"
+    },
+    "mutant_mutant_skeleton_leggings": {
+      "source": "mutant_skeleton_leggings",
+      "name": "Mutant Skeleton Leggings"
+    },
+    "mutant_mutant_skeleton_limb": {
+      "source": "mutant_skeleton_limb",
+      "name": "Mutant Skeleton Limb"
+    },
+    "mutant_mutant_skeleton_pelvis": {
+      "source": "mutant_skeleton_pelvis",
+      "name": "Mutant Skeleton Pelvis"
+    },
+    "mutant_mutant_skeleton_rib": {
+      "source": "mutant_skeleton_rib",
+      "name": "Mutant Skeleton Rib"
+    },
+    "mutant_mutant_skeleton_rib_cage": {
+      "source": "mutant_skeleton_rib_cage",
+      "name": "Mutant Skeleton Rib Cage"
+    },
+    "mutant_mutant_skeleton_shoulder_pad": {
+      "source": "mutant_skeleton_shoulder_pad",
+      "name": "Mutant Skeleton Shoulder Pad"
+    },
+    "mutant_mutant_skeleton_skull": {
+      "source": "mutant_skeleton_skull",
+      "name": "Mutant Skeleton Skull"
+    },
+    "mutant_mutant_skeleton_spawn_egg": {
+      "source": "mutant_skeleton_spawn_egg",
+      "name": "Mutant Skeleton Spawn Egg"
+    },
+    "mutant_mutant_snow_golem_spawn_egg": {
+      "source": "mutant_snow_golem_spawn_egg",
+      "name": "Mutant Snow Golem Spawn Egg"
+    },
+    "mutant_mutant_zombie_spawn_egg": {
+      "source": "mutant_zombie_spawn_egg",
+      "name": "Mutant Zombie Spawn Egg"
+    },
+    "mutant_spider_pig_spawn_egg": {
+      "source": "spider_pig_spawn_egg",
+      "name": "Spider Pig Spawn Egg"
+    }
+  },
+  "blocks": {
+    "mutant_mutant_skeleton_skull": {
+      "source": "mutant_skeleton_skull"
+    },
+    "mutant_mutant_skeleton_wall_skull": {
+      "source": "mutant_skeleton_wall_skull"
+    }
+  },
+  "sounds": [
+    "mutant.entity.creeper_minion.ambient",
+    "mutant.entity.creeper_minion.death",
+    "mutant.entity.creeper_minion.hurt",
+    "mutant.entity.creeper_minion.primed",
+    "mutant.entity.creeper_minion_egg.hatch",
+    "mutant.entity.endersoul_clone.death",
+    "mutant.entity.endersoul_clone.teleport",
+    "mutant.entity.endersoul_fragment.explode",
+    "mutant.entity.mutant_creeper.ambient",
+    "mutant.entity.mutant_creeper.charge",
+    "mutant.entity.mutant_creeper.death",
+    "mutant.entity.mutant_creeper.hurt",
+    "mutant.entity.mutant_creeper.primed",
+    "mutant.entity.mutant_enderman.ambient",
+    "mutant.entity.mutant_enderman.death",
+    "mutant.entity.mutant_enderman.hurt",
+    "mutant.entity.mutant_enderman.morph",
+    "mutant.entity.mutant_enderman.scream",
+    "mutant.entity.mutant_enderman.stare",
+    "mutant.entity.mutant_enderman.teleport",
+    "mutant.entity.mutant_skeleton.ambient",
+    "mutant.entity.mutant_skeleton.death",
+    "mutant.entity.mutant_skeleton.hurt",
+    "mutant.entity.mutant_skeleton.step",
+    "mutant.entity.mutant_snow_golem.death",
+    "mutant.entity.mutant_snow_golem.hurt",
+    "mutant.entity.mutant_zombie.ambient",
+    "mutant.entity.mutant_zombie.attack",
+    "mutant.entity.mutant_zombie.death",
+    "mutant.entity.mutant_zombie.grunt",
+    "mutant.entity.mutant_zombie.hurt",
+    "mutant.entity.mutant_zombie.roar",
+    "mutant.entity.spider_pig.ambient",
+    "mutant.entity.spider_pig.death",
+    "mutant.entity.spider_pig.hurt"
+  ]
+}

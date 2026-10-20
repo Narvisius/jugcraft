@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "R",
+    "T",
+    "N"
+  ],
+  "key": {
+    "R": "jugcraft:cavern_notor_gizmo",
+    "N": "jugcraft:cavern_azure_neodymium_ingot",
+    "T": "jugcraft:cavern_telecore"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:cavern_holocoder"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

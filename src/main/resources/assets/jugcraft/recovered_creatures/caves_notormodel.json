@@ -1,0 +1,547 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "body",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        20.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -2.0,
+            -2.0,
+            4.0,
+            4.0,
+            4.0
+          ],
+          "uv": [
+            0.0,
+            4.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "propeller",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -2.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            -2.0,
+            0.0,
+            1.0,
+            3.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "larm",
+      "parent": "body",
+      "pose": [
+        -1.5,
+        2.0,
+        2.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0.0,
+            0.0,
+            1.0,
+            2.0,
+            0.0
+          ],
+          "uv": [
+            4.0,
+            12.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rarm",
+      "parent": "body",
+      "pose": [
+        1.5,
+        2.0,
+        2.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0.0,
+            0.0,
+            1.0,
+            2.0,
+            0.0
+          ],
+          "uv": [
+            4.0,
+            12.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rleg",
+      "parent": "body",
+      "pose": [
+        1.5,
+        2.0,
+        -2.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0.0,
+            0.0,
+            1.0,
+            2.0,
+            0.0
+          ],
+          "uv": [
+            4.0,
+            12.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lleg",
+      "parent": "body",
+      "pose": [
+        -1.5,
+        2.0,
+        -2.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            0.0,
+            0.0,
+            1.0,
+            2.0,
+            0.0
+          ],
+          "uv": [
+            4.0,
+            12.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r1",
+      "parent": "propeller",
+      "pose": [
+        0.0,
+        -1.0,
+        0.0,
+        0.0,
+        -1.5708,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            -1.0,
+            0.0,
+            1.0,
+            3.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "blades",
+      "parent": "propeller",
+      "pose": [
+        0.0,
+        -1.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -9.0,
+            0.0,
+            -2.0,
+            18.0,
+            0.0,
+            4.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/NotorModel.java",
+  "sourceSha256": "829f2b3922e9fa8af40a172581f57e5f04a4c6c4b6e3f7d85d89c8d590a31860",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "propeller",
+      "kind": "flap",
+      "speed": 0.2,
+      "degree": 0.1,
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "*",
+        "ground",
+        1
+      ],
+      "when": 1
+    },
+    {
+      "bone": "larm",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.3,
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.2,
+      "clock": "age",
+      "amount": [
+        "*",
+        "ground",
+        1
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rarm",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.3,
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.2,
+      "clock": "age",
+      "amount": [
+        "*",
+        "ground",
+        1
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lleg",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.3,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.2,
+      "clock": "age",
+      "amount": [
+        "*",
+        "ground",
+        1
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rleg",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.3,
+      "invert": true,
+      "phase": 0.0,
+      "bias": 0.2,
+      "clock": "age",
+      "amount": [
+        "*",
+        "ground",
+        1
+      ],
+      "when": 1
+    },
+    {
+      "bone": "larm",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.3,
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.2,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "ground",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rarm",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.3,
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.2,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "ground",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "lleg",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.3,
+      "invert": false,
+      "phase": 2.0,
+      "bias": 0.2,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "ground",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "rleg",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.3,
+      "invert": false,
+      "phase": 2.0,
+      "bias": 0.2,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "ground",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.1,
+      "invert": false,
+      "phase": 2.0,
+      "bias": 0.2,
+      "clock": "walk",
+      "amount": [
+        "*",
+        "move",
+        [
+          "-",
+          1.0,
+          [
+            "*",
+            "ground",
+            1
+          ]
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "kind": "flap",
+      "speed": 0.4,
+      "degree": 0.05,
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        1.0
+      ],
+      "bias": 0.0,
+      "clock": "age",
+      "amount": [
+        "-",
+        1.0,
+        [
+          "*",
+          "ground",
+          1
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "propeller",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": 0.1,
+      "invert": true,
+      "phase": 2.0,
+      "bias": 0.2,
+      "clock": "walk",
+      "amount": [
+        "*",
+        "move",
+        [
+          "-",
+          1.0,
+          [
+            "*",
+            "ground",
+            1
+          ]
+        ]
+      ],
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.body.rotationPointY += bodyIdleBob + bodyFlyBob;",
+      "reason": "Unbound expression variable bodyIdleBob"
+    },
+    {
+      "call": "this.larm.rotationPointY -= bodyIdleBob * 0.8f;",
+      "reason": "Unbound expression variable bodyIdleBob"
+    },
+    {
+      "call": "this.rarm.rotationPointY -= bodyIdleBob * 0.8f;",
+      "reason": "Unbound expression variable bodyIdleBob"
+    },
+    {
+      "call": "this.lleg.rotationPointY -= bodyIdleBob * 0.8f;",
+      "reason": "Unbound expression variable bodyIdleBob"
+    },
+    {
+      "call": "this.rleg.rotationPointY -= bodyIdleBob * 0.8f;",
+      "reason": "Unbound expression variable bodyIdleBob"
+    },
+    {
+      "call": "this.propeller.rotateAngleY += (float)Math.toRadians(entity.getPropellerAngle(partialTick) - bodyYaw * flyProgress);",
+      "reason": "Unbound expression variable bodyYaw"
+    }
+  ],
+  "expressions": [],
+  "poses": []
+}

@@ -1,0 +1,33 @@
+{
+    "parent": "inventorypets:mob",
+    "display": {
+		"icon": {
+            "id": "inventorypets:pet_blaze"
+        },
+        "title": {
+            "translate": "advancement.ip.petach_blaze"
+        },
+        "description": {
+            "translate": "advancement.ip.petach_blaze.desc"
+        },
+        "show_toast": true,
+        "announce_to_chat": true
+    },
+    
+    "criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                      "items": [
+                        "inventorypets:pet_blaze"
+                      ]
+                	}
+                    
+                ]
+            }
+        }
+    }
+}
+

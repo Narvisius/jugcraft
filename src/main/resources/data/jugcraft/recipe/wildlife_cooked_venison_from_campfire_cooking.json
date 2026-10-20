@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "ingredient": "jugcraft:wildlife_venison",
+  "result": {
+    "id": "jugcraft:wildlife_cooked_venison"
+  },
+  "experience": 0.35,
+  "cookingtime": 600,
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

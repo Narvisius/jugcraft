@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "F F",
+    "F F",
+    "SBS"
+  ],
+  "key": {
+    "F": "jugcraft:beast_roadrunner_feather",
+    "B": "minecraft:leather_boots",
+    "S": "minecraft:chiseled_sandstone"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:beast_roadrunner_boots"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

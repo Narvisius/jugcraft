@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FL ",
+    "L L"
+  ],
+  "key": {
+    "F": "jugcraft:beast_roadrunner_feather",
+    "L": "minecraft:leather"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:beast_falconry_hood"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

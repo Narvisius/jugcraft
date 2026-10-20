@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "RER",
+    "RER",
+    " C "
+  ],
+  "key": {
+    "R": "#jugcraft:cavern_rock_candies",
+    "E": "jugcraft:cavern_radiant_essence",
+    "C": "jugcraft:cavern_candy_cane"
+  },
+  "result": {
+    "id": "jugcraft:cavern_biome_treat"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

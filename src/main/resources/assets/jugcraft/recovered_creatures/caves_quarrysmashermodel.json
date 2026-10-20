@@ -1,0 +1,548 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "body",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        18.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            4.0,
+            -1.5,
+            -3.0,
+            2.0,
+            7.0,
+            6.0
+          ],
+          "uv": [
+            20.0,
+            41.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -6.0,
+            -1.5,
+            -3.0,
+            2.0,
+            7.0,
+            6.0
+          ],
+          "uv": [
+            36.0,
+            41.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -6.0,
+            -10.5,
+            -6.0,
+            12.0,
+            9.0,
+            12.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r1",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -6.0,
+        0.0,
+        0.7854,
+        0.0,
+        1.5708
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -17.5,
+            -2.0,
+            4.0,
+            4.0,
+            4.0
+          ],
+          "uv": [
+            54.0,
+            4.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -0.5,
+            -13.5,
+            -1.0,
+            2.0,
+            7.0,
+            2.0
+          ],
+          "uv": [
+            48.0,
+            26.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "cube_r2",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -6.0,
+        0.0,
+        0.7854,
+        0.0,
+        -1.5708
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.5,
+            -17.5,
+            -2.0,
+            4.0,
+            4.0,
+            4.0
+          ],
+          "uv": [
+            54.0,
+            4.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            -1.5,
+            -13.5,
+            -1.0,
+            2.0,
+            7.0,
+            2.0
+          ],
+          "uv": [
+            48.0,
+            26.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "cube_r3",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -6.0,
+        0.0,
+        -0.7854,
+        0.0,
+        -1.5708
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.5,
+            -17.5,
+            -2.0,
+            4.0,
+            4.0,
+            4.0
+          ],
+          "uv": [
+            54.0,
+            4.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            -1.5,
+            -13.5,
+            -1.0,
+            2.0,
+            7.0,
+            2.0
+          ],
+          "uv": [
+            48.0,
+            26.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "cube_r4",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -6.0,
+        0.0,
+        -0.7854,
+        0.0,
+        1.5708
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -17.5,
+            -2.0,
+            4.0,
+            4.0,
+            4.0
+          ],
+          "uv": [
+            54.0,
+            4.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -0.5,
+            -13.5,
+            -1.0,
+            2.0,
+            7.0,
+            2.0
+          ],
+          "uv": [
+            48.0,
+            26.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "arm2",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -6.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -20.0,
+            -9.5,
+            -4.0,
+            8.0,
+            13.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            54.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            -18.0,
+            -14.5,
+            -2.0,
+            4.0,
+            5.0,
+            4.0
+          ],
+          "uv": [
+            32.0,
+            58.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            -32.0,
+            -11.5,
+            -4.0,
+            14.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            42.0,
+            61.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            -14.0,
+            -11.5,
+            -2.0,
+            14.0,
+            0.0,
+            6.0
+          ],
+          "uv": [
+            46.0,
+            48.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            -12.0,
+            -4.5,
+            -2.0,
+            6.0,
+            5.0,
+            3.0
+          ],
+          "uv": [
+            36.0,
+            4.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "coil",
+      "parent": "body",
+      "pose": [
+        0.0,
+        2.5,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.5,
+            -3.5,
+            -3.5,
+            9.0,
+            7.0,
+            7.0
+          ],
+          "uv": [
+            0.0,
+            21.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -4.0,
+            -3.0,
+            -3.0,
+            8.0,
+            6.0,
+            6.0
+          ],
+          "uv": [
+            26.0,
+            29.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "lleg",
+      "parent": "body",
+      "pose": [
+        5.0,
+        -7.5,
+        5.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "larm",
+      "parent": "body",
+      "pose": [
+        5.0,
+        -7.5,
+        -5.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "rleg",
+      "parent": "body",
+      "pose": [
+        -5.0,
+        -7.5,
+        5.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "rarm",
+      "parent": "body",
+      "pose": [
+        -5.0,
+        -7.5,
+        -5.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    }
+  ],
+  "source": "caves/com/github/alexmodguy/alexscaves/client/model/QuarrySmasherModel.java",
+  "sourceSha256": "61cabed641fdc1eaf280070803376f5770f9cb01e0945d744e044e27595b72f5",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.flap(this.body, 1.0f, 0.5f, true, 0.0f, 0.0f, ageInTicks, wiggleActive);",
+      "reason": "Unbound expression variable wiggleActive"
+    },
+    {
+      "call": "this.swing(this.body, 1.0f, 0.35f, false, 2.0f, 0.0f, ageInTicks, wiggleActive);",
+      "reason": "Unbound expression variable wiggleActive"
+    },
+    {
+      "call": "this.body.rotateAngleX = (float)((double)this.body.rotateAngleX + Math.sin(ageInTicks * 0.7f + 1.0f) * (double)shake * (double)0.05f);",
+      "reason": "Unsupported expression (this.body.rotateAngleX + sin(ageInTicks * 0.7 + 1.0) * shake * 0.05)"
+    },
+    {
+      "call": "this.body.rotateAngleZ = (float)((double)this.body.rotateAngleZ + Math.sin(ageInTicks * 0.7f) * (double)shake * (double)0.1f);",
+      "reason": "Unsupported expression (this.body.rotateAngleZ + sin(ageInTicks * 0.7) * shake * 0.1)"
+    },
+    {
+      "call": "this.coil.rotateAngleX = (float)Math.toRadians(chainLength * 260.0f);",
+      "reason": "Unbound expression variable chainLength"
+    }
+  ],
+  "expressions": [],
+  "poses": []
+}

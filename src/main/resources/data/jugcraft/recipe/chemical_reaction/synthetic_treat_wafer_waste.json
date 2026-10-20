@@ -1,0 +1,40 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:process_recovery",
+  "items": [
+    {
+      "ingredient": "minecraft:calcite",
+      "count": 1
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:spent_wafer_mixture",
+      "amount": 1000
+    },
+    {
+      "fluid": "jugcraft:lye",
+      "amount": 250
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:treated_process_water",
+      "amount": 1000,
+      "tank": 0
+    },
+    {
+      "fluid": "jugcraft:recovery_concentrate",
+      "amount": 250,
+      "tank": 1
+    }
+  ],
+  "energy_per_tick": 64,
+  "time": 320
+}

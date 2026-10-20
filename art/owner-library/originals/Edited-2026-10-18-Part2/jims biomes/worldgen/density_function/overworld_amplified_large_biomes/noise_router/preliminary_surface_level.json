@@ -1,0 +1,114 @@
+{
+  "type": "minecraft:find_top_surface",
+  "density": {
+    "type": "minecraft:min",
+    "left": {
+      "type": "minecraft:add",
+      "left": 0,
+      "right": {
+        "type": "minecraft:add",
+        "left": 0.4,
+        "right": {
+          "type": "minecraft:mul",
+          "left": {
+            "type": "minecraft:gradient",
+            "from_value": 0,
+            "to_value": 1,
+            "axis": "y",
+            "from_coordinate": -64,
+            "to_coordinate": -40
+          },
+          "right": {
+            "type": "minecraft:add",
+            "left": -0.4,
+            "right": {
+              "type": "minecraft:add",
+              "left": -0.078125,
+              "right": {
+                "type": "minecraft:mul",
+                "left": {
+                  "type": "minecraft:gradient",
+                  "from_value": 1,
+                  "to_value": 0,
+                  "axis": "y",
+                  "from_coordinate": 300,
+                  "to_coordinate": 342
+                },
+                "right": {
+                  "type": "minecraft:add",
+                  "left": 0.078125,
+                  "right": {
+                    "type": "minecraft:clamp",
+                    "input": {
+                      "type": "minecraft:add",
+                      "left": -0.703125,
+                      "right": {
+                        "type": "minecraft:mul",
+                        "left": 4,
+                        "right": {
+                          "type": "minecraft:quarter_negative",
+                          "input": {
+                            "type": "minecraft:mul",
+                            "left": "terralith:overworld_amplified_large_biomes/depth",
+                            "right": {
+                              "type": "minecraft:cache",
+                              "input": "terralith:overworld_amplified_large_biomes/factor"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "max": 64,
+                    "min": -64
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "right": {
+      "type": "minecraft:mul",
+      "left": 1,
+      "right": "terralith:overworld/subtract_terrain_sum"
+    }
+  },
+  "upper_bound": {
+    "type": "minecraft:clamp",
+    "input": {
+      "type": "minecraft:add",
+      "left": 128,
+      "right": {
+        "type": "minecraft:mul",
+        "left": -128,
+        "right": {
+          "type": "minecraft:add",
+          "left": {
+            "type": "minecraft:mul",
+            "left": 0.2734375,
+            "right": {
+              "type": "minecraft:reciprocal",
+              "input": {
+                "type": "minecraft:cache",
+                "input": "terralith:overworld_amplified_large_biomes/factor"
+              }
+            }
+          },
+          "right": {
+            "type": "minecraft:mul",
+            "left": -1,
+            "right": {
+              "type": "minecraft:cache",
+              "input": "terralith:overworld_amplified_large_biomes/offset"
+            }
+          }
+        }
+      }
+    },
+    "min": -40,
+    "max": 320
+  },
+  "lower_bound": -64,
+  "cell_height": 8
+}

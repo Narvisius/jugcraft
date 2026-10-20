@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " N ",
+    "NNN",
+    " N "
+  ],
+  "key": {
+    "N": "jugcraft:cavern_raw_azure_neodymium"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:cavern_azure_neodymium_node"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

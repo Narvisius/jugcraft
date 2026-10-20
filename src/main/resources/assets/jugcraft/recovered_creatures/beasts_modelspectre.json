@@ -1,0 +1,312 @@
+{
+  "textureSize": [
+    256,
+    256
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "body",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -0.5,
+        0.0,
+        0.0,
+        -0.7854,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -12.0,
+            -5.5,
+            -12.0,
+            24.0,
+            6.0,
+            24.0
+          ],
+          "uv": [
+            43.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "spine",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -5.5,
+        0.0,
+        0.0,
+        0.7854,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -3.0,
+            -14.0,
+            0.0,
+            8.0,
+            42.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "wing_left_p",
+      "parent": "body",
+      "pose": [
+        12.0,
+        -2.5,
+        -12.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "wing_right_p",
+      "parent": "body",
+      "pose": [
+        -12.0,
+        -2.5,
+        12.0,
+        0.0,
+        1.5708,
+        0.0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "tail",
+      "parent": "spine",
+      "pose": [
+        0.0,
+        1.0,
+        28.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -6.0,
+            0.0,
+            0.0,
+            11.0,
+            27.0
+          ],
+          "uv": [
+            76.0,
+            31.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "wing_left",
+      "parent": "wing_left_p",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -1.5,
+            0.0,
+            26.0,
+            3.0,
+            23.0
+          ],
+          "uv": [
+            76.0,
+            76.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "wing_right",
+      "parent": "wing_right_p",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -26.0,
+            -1.5,
+            0.0,
+            26.0,
+            3.0,
+            23.0
+          ],
+          "uv": [
+            0.0,
+            51.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelSpectre.java",
+  "sourceSha256": "c0f25c0580671b8471d3c3625f688e440e3053848872f6acf4afcd67812d0daf",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "spine",
+      "kind": "swing",
+      "speed": 0.2,
+      "degree": [
+        "*",
+        0.6,
+        0.05
+      ],
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "tail",
+      "kind": "swing",
+      "speed": 0.2,
+      "degree": [
+        "*",
+        0.6,
+        0.7
+      ],
+      "invert": true,
+      "phase": 3.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "wing_left",
+      "kind": "flap",
+      "speed": 0.2,
+      "degree": [
+        "*",
+        0.6,
+        0.85
+      ],
+      "invert": true,
+      "phase": 7.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "wing_right",
+      "kind": "flap",
+      "speed": 0.2,
+      "degree": [
+        "*",
+        0.6,
+        0.85
+      ],
+      "invert": false,
+      "phase": 7.0,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    },
+    {
+      "bone": "root",
+      "kind": "walk",
+      "speed": 0.2,
+      "degree": [
+        "*",
+        0.6,
+        0.15
+      ],
+      "invert": true,
+      "phase": 7.3,
+      "bias": 0.0,
+      "clock": "age",
+      "amount": 1.0,
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.root.rotateAngleX += birdPitch * ((float)Math.PI / 180);",
+      "reason": "Unbound expression variable birdPitch"
+    }
+  ],
+  "expressions": [],
+  "poses": []
+}

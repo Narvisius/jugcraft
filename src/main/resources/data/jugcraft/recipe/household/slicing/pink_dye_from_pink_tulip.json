@@ -1,0 +1,17 @@
+{
+  "type": "jugcraft:cutting",
+  "ingredient": "minecraft:pink_tulip",
+  "tool": "#jugcraft:knives",
+  "results": [
+    {
+      "count": 2,
+      "id": "minecraft:pink_dye"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

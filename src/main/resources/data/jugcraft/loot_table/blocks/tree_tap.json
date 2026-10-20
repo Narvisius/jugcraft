@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:tree_tap",
+          "modifier": {
+            "type": "minecraft:copy_state",
+            "block": "jugcraft:tree_tap",
+            "properties": [
+              "upgraded"
+            ]
+          }
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "jugcraft:blocks/tree_tap"
+}

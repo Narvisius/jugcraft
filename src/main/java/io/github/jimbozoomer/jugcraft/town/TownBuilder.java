@@ -144,6 +144,7 @@ public final class TownBuilder {
 				}
 			}
 		}
+		TownWayfinding.chunkBuilt(level, pos, origin);
 	}
 
 	/** The column's ground: the highest block that is not air, water, a plant, a log or leaves. */

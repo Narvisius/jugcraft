@@ -1,0 +1,22 @@
+{
+  "type": "jugcraft:household_construction",
+  "ingredients": [
+    {
+      "count": 4,
+      "ingredient": "minecraft:birch_planks"
+    },
+    {
+      "count": 4,
+      "ingredient": "minecraft:stick"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:household_birch_lattice_fence"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PPP",
+    "PTP",
+    "SNS"
+  ],
+  "key": {
+    "S": "jugcraft:cavern_ferrouslime_ball",
+    "P": "jugcraft:cavern_packed_galena",
+    "T": "jugcraft:cavern_telecore",
+    "N": "jugcraft:cavern_scarlet_neodymium_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:cavern_galena_gauntlet"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

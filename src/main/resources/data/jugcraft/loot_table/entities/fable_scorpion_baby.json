@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:rotten_flesh",
+          "modifier": [
+            {
+              "add": false,
+              "count": 1.0,
+              "type": "minecraft:set_count"
+            },
+            {
+              "count": 1.0,
+              "type": "minecraft:enchanted_count_increase",
+              "enchantment": "minecraft:looting"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "jugcraft:entities/fable_scorpion_baby"
+}

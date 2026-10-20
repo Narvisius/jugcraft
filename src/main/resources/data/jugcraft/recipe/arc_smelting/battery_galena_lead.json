@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "lead"
+    }
+  ],
+  "type": "jugcraft:arc_smelting",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:galena_concentrate",
+      "count": 2
+    },
+    {
+      "ingredient": "jugcraft:coke",
+      "count": 1
+    }
+  ],
+  "result": {
+    "id": "jugcraft:lead_ingot",
+    "count": 2
+  },
+  "time": 240
+}

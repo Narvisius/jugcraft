@@ -1,0 +1,32 @@
+{
+  "pools": [
+    {
+      "name": "jugcraft_source_cavern_heart_of_iron",
+      "rolls": 1,
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 1
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_heart_of_iron"
+        }
+      ]
+    },
+    {
+      "name": "jugcraft_source_cavern_disc_fragment_fusion",
+      "rolls": 1,
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.25
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:cavern_disc_fragment_fusion"
+        }
+      ]
+    }
+  ]
+}

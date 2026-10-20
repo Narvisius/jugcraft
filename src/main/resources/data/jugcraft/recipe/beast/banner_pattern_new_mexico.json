@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:paper",
+    "jugcraft:beast_tarantula_hawk_wing_fragment"
+  ],
+  "result": {
+    "id": "jugcraft:beast_banner_pattern_new_mexico"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

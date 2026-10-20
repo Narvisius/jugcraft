@@ -1,0 +1,808 @@
+{
+  "textureSize": [
+    128,
+    128
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        21.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "tail",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -7.6,
+        -21.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -7.0,
+            -4.2,
+            -8.0,
+            14.0,
+            9.0,
+            16.0
+          ],
+          "uv": [
+            0.0,
+            27.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leftLegTailF",
+      "parent": "tail",
+      "pose": [
+        6.6,
+        3.6,
+        -5.0,
+        0.2269,
+        -0.1833,
+        -0.5585
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -2.0,
+            -1.0,
+            10.0,
+            3.0,
+            2.0
+          ],
+          "uv": [
+            42.0,
+            62.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightLegTailF",
+      "parent": "tail",
+      "pose": [
+        -6.6,
+        3.6,
+        -5.0,
+        0.2269,
+        0.1833,
+        0.5585
+      ],
+      "cubes": [
+        {
+          "box": [
+            -10.0,
+            -2.0,
+            -1.0,
+            10.0,
+            3.0,
+            2.0
+          ],
+          "uv": [
+            42.0,
+            62.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "leftLegTailB",
+      "parent": "tail",
+      "pose": [
+        6.6,
+        3.6,
+        4.0,
+        0.4977,
+        -0.6749,
+        -0.7314
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -2.0,
+            -1.0,
+            10.0,
+            3.0,
+            2.0
+          ],
+          "uv": [
+            42.0,
+            62.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightLegTailB",
+      "parent": "tail",
+      "pose": [
+        -6.6,
+        3.6,
+        4.0,
+        0.4977,
+        0.6749,
+        0.7314
+      ],
+      "cubes": [
+        {
+          "box": [
+            -10.0,
+            -2.0,
+            -1.0,
+            10.0,
+            3.0,
+            2.0
+          ],
+          "uv": [
+            42.0,
+            62.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "leftTail",
+      "parent": "tail",
+      "pose": [
+        2.5,
+        -0.1,
+        8.0,
+        0.3054,
+        0.3927,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            -1.1,
+            -1.0,
+            2.0,
+            3.0,
+            12.0
+          ],
+          "uv": [
+            62.0,
+            35.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightTail",
+      "parent": "tail",
+      "pose": [
+        -2.5,
+        -0.1,
+        8.0,
+        0.3054,
+        -0.3927,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -1.1,
+            -1.0,
+            2.0,
+            3.0,
+            12.0
+          ],
+          "uv": [
+            62.0,
+            35.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "leftLeg2TailF",
+      "parent": "leftLegTailF",
+      "pose": [
+        9.1,
+        0.5,
+        0.1,
+        0.0,
+        0.0,
+        1.4835
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -4.0,
+            0.0,
+            15.0,
+            6.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            53.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightLeg2TailF",
+      "parent": "rightLegTailF",
+      "pose": [
+        -9.1,
+        0.5,
+        0.1,
+        0.0,
+        0.0,
+        -1.4835
+      ],
+      "cubes": [
+        {
+          "box": [
+            -10.0,
+            -4.0,
+            0.0,
+            15.0,
+            6.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            53.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "leftLegTailB2",
+      "parent": "leftLegTailB",
+      "pose": [
+        9.1,
+        0.5,
+        0.1,
+        0.0,
+        0.0,
+        1.4835
+      ],
+      "cubes": [
+        {
+          "box": [
+            -5.0,
+            -4.0,
+            0.0,
+            15.0,
+            6.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            53.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightLegTailB2",
+      "parent": "rightLegTailB",
+      "pose": [
+        -9.1,
+        0.5,
+        0.1,
+        0.0,
+        0.0,
+        -1.4835
+      ],
+      "cubes": [
+        {
+          "box": [
+            -10.0,
+            -4.0,
+            0.0,
+            15.0,
+            6.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            53.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "leftTailEnd",
+      "parent": "leftTail",
+      "pose": [
+        0.0,
+        0.0,
+        11.0,
+        -0.5672,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.5,
+            -1.1,
+            -1.0,
+            0.0,
+            8.0,
+            23.0
+          ],
+          "uv": [
+            38.0,
+            30.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "rightTailEnd",
+      "parent": "rightTail",
+      "pose": [
+        0.0,
+        0.0,
+        11.0,
+        -0.5672,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            -1.1,
+            -1.0,
+            0.0,
+            8.0,
+            23.0
+          ],
+          "uv": [
+            38.0,
+            30.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelCaveCentipede.java",
+  "sourceSha256": "17809a720316d01bad489894d1c2fb178b1b5101d906d45ebeac60ed4f9278be",
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "leftLegTailF",
+      "kind": "swing",
+      "speed": 1.5,
+      "degree": 0.85,
+      "invert": true,
+      "phase": [
+        "*",
+        [
+          "+",
+          "segment",
+          1
+        ],
+        1.5707963267948966
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move"
+    },
+    {
+      "bone": "rightLegTailF",
+      "kind": "swing",
+      "speed": 1.5,
+      "degree": 0.85,
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "+",
+          "segment",
+          1
+        ],
+        1.5707963267948966
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move"
+    },
+    {
+      "bone": "leftLegTailB",
+      "kind": "swing",
+      "speed": 1.5,
+      "degree": 0.85,
+      "invert": true,
+      "phase": [
+        "+",
+        [
+          "*",
+          [
+            "+",
+            "segment",
+            1
+          ],
+          1.5707963267948966
+        ],
+        0.5
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move"
+    },
+    {
+      "bone": "rightLegTailB",
+      "kind": "swing",
+      "speed": 1.5,
+      "degree": 0.85,
+      "invert": false,
+      "phase": [
+        "+",
+        [
+          "*",
+          [
+            "+",
+            "segment",
+            1
+          ],
+          1.5707963267948966
+        ],
+        0.5
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move"
+    },
+    {
+      "bone": "leftLeg2TailF",
+      "kind": "flap",
+      "speed": 1.5,
+      "degree": 0.425,
+      "invert": true,
+      "phase": [
+        "*",
+        [
+          "+",
+          "segment",
+          1
+        ],
+        1.5707963267948966
+      ],
+      "bias": 0.1,
+      "clock": "walk",
+      "amount": "move"
+    },
+    {
+      "bone": "rightLeg2TailF",
+      "kind": "flap",
+      "speed": 1.5,
+      "degree": 0.425,
+      "invert": false,
+      "phase": [
+        "*",
+        [
+          "+",
+          "segment",
+          1
+        ],
+        1.5707963267948966
+      ],
+      "bias": 0.1,
+      "clock": "walk",
+      "amount": "move"
+    },
+    {
+      "bone": "leftLegTailB2",
+      "kind": "flap",
+      "speed": 1.5,
+      "degree": 0.425,
+      "invert": true,
+      "phase": [
+        "+",
+        [
+          "*",
+          [
+            "+",
+            "segment",
+            1
+          ],
+          1.5707963267948966
+        ],
+        0.5
+      ],
+      "bias": 0.1,
+      "clock": "walk",
+      "amount": "move"
+    },
+    {
+      "bone": "rightLegTailB2",
+      "kind": "flap",
+      "speed": 1.5,
+      "degree": 0.425,
+      "invert": false,
+      "phase": [
+        "+",
+        [
+          "*",
+          [
+            "+",
+            "segment",
+            1
+          ],
+          1.5707963267948966
+        ],
+        0.5
+      ],
+      "bias": 0.1,
+      "clock": "walk",
+      "amount": "move"
+    },
+    {
+      "bone": "leftTail",
+      "kind": "swing",
+      "speed": 1.5,
+      "degree": 0.17,
+      "invert": true,
+      "phase": [
+        "+",
+        [
+          "*",
+          [
+            "+",
+            "segment",
+            1
+          ],
+          1.5707963267948966
+        ],
+        1
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move"
+    },
+    {
+      "bone": "leftTail",
+      "kind": "walk",
+      "speed": 0.25,
+      "degree": 0.35,
+      "invert": true,
+      "phase": [
+        "+",
+        [
+          "*",
+          [
+            "+",
+            "segment",
+            1
+          ],
+          1.5707963267948966
+        ],
+        1.5
+      ],
+      "bias": -0.5,
+      "clock": "age",
+      "amount": 1
+    },
+    {
+      "bone": "rightTail",
+      "kind": "swing",
+      "speed": 1.5,
+      "degree": 0.17,
+      "invert": false,
+      "phase": [
+        "+",
+        [
+          "*",
+          [
+            "+",
+            "segment",
+            1
+          ],
+          1.5707963267948966
+        ],
+        1
+      ],
+      "bias": 0,
+      "clock": "walk",
+      "amount": "move"
+    },
+    {
+      "bone": "rightTail",
+      "kind": "walk",
+      "speed": 0.25,
+      "degree": 0.35,
+      "invert": false,
+      "phase": [
+        "+",
+        [
+          "*",
+          [
+            "+",
+            "segment",
+            1
+          ],
+          1.5707963267948966
+        ],
+        1.5
+      ],
+      "bias": 0.5,
+      "clock": "age",
+      "amount": 1
+    }
+  ],
+  "expressions": [
+    {
+      "bone": "tail",
+      "target": "y",
+      "op": "+=",
+      "value": [
+        "+",
+        [
+          "-",
+          [
+            "*",
+            [
+              "*",
+              [
+                "sin",
+                [
+                  "-",
+                  [
+                    "*",
+                    "walk",
+                    1.5
+                  ],
+                  [
+                    "*",
+                    [
+                      "*",
+                      [
+                        "+",
+                        "segment",
+                        1
+                      ],
+                      1.5707963267948966
+                    ],
+                    1.5707963267948966
+                  ]
+                ]
+              ],
+              "move"
+            ],
+            0.85
+          ],
+          [
+            "*",
+            "move",
+            0.85
+          ]
+        ],
+        [
+          "*",
+          [
+            "sin",
+            [
+              "-",
+              [
+                "*",
+                "age",
+                0.1
+              ],
+              [
+                "*",
+                [
+                  "*",
+                  [
+                    "+",
+                    "segment",
+                    1
+                  ],
+                  1.5707963267948966
+                ],
+                1.5707963267948966
+              ]
+            ]
+          ],
+          0.01
+        ]
+      ]
+    }
+  ]
+}

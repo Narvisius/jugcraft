@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:household_acacia_light_ceiling_fan",
+    "minecraft:black_dye"
+  ],
+  "result": {
+    "id": "jugcraft:household_acacia_dark_ceiling_fan"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

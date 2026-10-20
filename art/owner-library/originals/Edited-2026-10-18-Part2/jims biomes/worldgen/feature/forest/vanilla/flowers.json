@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:simple_block",
+  "to_place": {
+    "type": "minecraft:noise",
+    "noise": {
+      "base_octave": -5,
+      "octave_count": 2,
+      "amplitude_modifiers": [
+        1.8,
+        1.5
+      ],
+      "normalize": "legacy"
+    },
+    "scale": 1,
+    "seed": 0,
+    "states": [
+      "minecraft:poppy",
+      "minecraft:dandelion",
+      "minecraft:allium",
+      "minecraft:azure_bluet"
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "parent": "mutantmonsters:burn_zombie_burn",
+  "criteria": {
+    "killed_mutant_zombie": {
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "mutantmonsters:mutant_zombie"
+          }
+        },
+        "killing_blow": {
+          "direct_entity": {
+            "minecraft:equipment": {
+              "mainhand": {
+                "items": "mutantmonsters:hulk_hammer"
+              }
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.mutantmonsters.hulk_smash.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "id": "mutantmonsters:hulk_hammer"
+    },
+    "title": {
+      "translate": "advancements.mutantmonsters.hulk_smash.title"
+    }
+  },
+  "requirements": [
+    [
+      "killed_mutant_zombie"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

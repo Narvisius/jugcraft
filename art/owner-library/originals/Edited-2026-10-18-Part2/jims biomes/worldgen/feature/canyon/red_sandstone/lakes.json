@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:simple_block",
+  "to_place": {
+    "type": "minecraft:noise",
+    "noise": {
+      "base_octave": -6,
+      "octave_count": 5,
+      "amplitude_modifiers": [
+        1.25,
+        1,
+        2,
+        3,
+        1.5
+      ],
+      "normalize": "legacy"
+    },
+    "scale": 1,
+    "seed": 0,
+    "states": [
+      "minecraft:water",
+      "minecraft:red_sand",
+      "minecraft:red_sand"
+    ]
+  }
+}

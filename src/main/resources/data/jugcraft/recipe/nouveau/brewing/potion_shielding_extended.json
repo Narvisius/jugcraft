@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:brewing",
+  "input": {
+    "item": "minecraft:potion",
+    "potion_contents": {
+      "potions": "jugcraft:nouveau_shielding"
+    }
+  },
+  "output": {
+    "id": "minecraft:potion",
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "jugcraft:nouveau_shielding_long"
+      }
+    }
+  },
+  "reagent": {
+    "item": "minecraft:redstone"
+  }
+}

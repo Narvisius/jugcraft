@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "name": "jugcraft_source_beast_ghostly_pickaxe",
+      "rolls": 1,
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.02
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:beast_ghostly_pickaxe"
+        }
+      ]
+    },
+    {
+      "name": "jugcraft_source_beast_halo",
+      "rolls": 1,
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.02
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:beast_halo"
+        }
+      ]
+    }
+  ]
+}

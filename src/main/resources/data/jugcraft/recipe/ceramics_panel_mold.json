@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "salt"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "I C",
+    " P "
+  ],
+  "key": {
+    "I": "jugcraft:zirconia_insert",
+    "P": "#c:plates/steel",
+    "C": "minecraft:iron_ingot"
+  },
+  "result": {
+    "id": "jugcraft:panel_mold",
+    "count": 1
+  }
+}

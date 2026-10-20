@@ -1,0 +1,82 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "refurbished_furniture:block/dark_oak_lattice_fence_gate_closed"
+      },
+      "when": {
+        "facing": "north",
+        "open": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "refurbished_furniture:block/dark_oak_lattice_fence_gate_closed",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "open": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "refurbished_furniture:block/dark_oak_lattice_fence_gate_closed",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "open": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "refurbished_furniture:block/dark_oak_lattice_fence_gate_closed",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "open": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "refurbished_furniture:block/dark_oak_lattice_fence_gate_open"
+      },
+      "when": {
+        "facing": "north",
+        "open": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "refurbished_furniture:block/dark_oak_lattice_fence_gate_open",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "open": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "refurbished_furniture:block/dark_oak_lattice_fence_gate_open",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "open": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "refurbished_furniture:block/dark_oak_lattice_fence_gate_open",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "open": "true"
+      }
+    }
+  ]
+}

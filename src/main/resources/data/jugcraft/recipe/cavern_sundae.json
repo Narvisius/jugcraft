@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ABC",
+    "DEF",
+    " G "
+  ],
+  "key": {
+    "A": "jugcraft:cavern_candy_cane",
+    "B": "jugcraft:cavern_caramel",
+    "C": "#jugcraft:cavern_sweet_berries",
+    "D": "jugcraft:cavern_vanilla_ice_cream_scoop",
+    "E": "jugcraft:cavern_chocolate_ice_cream_scoop",
+    "F": "jugcraft:cavern_sweetberry_ice_cream_scoop",
+    "G": "minecraft:bowl"
+  },
+  "result": {
+    "id": "jugcraft:cavern_sundae"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

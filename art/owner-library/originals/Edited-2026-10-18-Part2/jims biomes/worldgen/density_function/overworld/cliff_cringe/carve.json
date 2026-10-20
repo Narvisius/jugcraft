@@ -1,0 +1,49 @@
+{
+  "type": "minecraft:cache",
+  "input": {
+    "type": "minecraft:add",
+    "left": "terralith:overworld/cliff/spline",
+    "right": {
+      "type": "minecraft:max",
+      "left": {
+        "type": "minecraft:add",
+        "left": -1.65,
+        "right": {
+          "type": "minecraft:cache",
+          "input": {
+            "type": "minecraft:noise",
+            "noise": "terralith:math/cliff/max_cut",
+            "xz_scale": 1.0,
+            "y_scale": 0.0
+          }
+        }
+      },
+      "right": {
+        "type": "minecraft:range_choice",
+        "input": "terralith:overworld/cliff/spline",
+        "min_inclusive": -1000000,
+        "max_exclusive": 2.0,
+        "when_in_range": {
+          "type": "minecraft:add",
+          "left": {
+            "type": "minecraft:range_choice",
+            "input": "terralith:overworld/cliff/carve_depth",
+            "min_inclusive": -1000000,
+            "max_exclusive": 0.0,
+            "when_in_range": "terralith:overworld/cliff/carve_depth",
+            "when_out_of_range": 64
+          },
+          "right": {
+            "type": "minecraft:gradient",
+            "from_value": -0.2,
+            "to_value": 7.5,
+            "axis": "y",
+            "from_coordinate": 53,
+            "to_coordinate": 40
+          }
+        },
+        "when_out_of_range": 64
+      }
+    }
+  }
+}

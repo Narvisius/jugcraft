@@ -1,0 +1,153 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "head",
+      "parent": "$mesh",
+      "pose": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -8.0,
+            -4.0,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "head_r1",
+      "parent": "head",
+      "pose": [
+        4.0,
+        -4.5,
+        -1.0,
+        0.0,
+        -0.7854,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -3.5,
+            0.0,
+            2.0,
+            8.0,
+            0.0
+          ],
+          "uv": [
+            51.0,
+            8.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "head_r2",
+      "parent": "head",
+      "pose": [
+        -4.0,
+        -3.5,
+        -1.0,
+        0.0,
+        0.7854,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -4.5,
+            0.0,
+            2.0,
+            8.0,
+            0.0
+          ],
+          "uv": [
+            35.0,
+            8.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "head_r3",
+      "parent": "head",
+      "pose": [
+        0.0,
+        -8.0,
+        -1.0,
+        -0.7854,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -2.0,
+            0.0,
+            8.0,
+            2.0,
+            0.0
+          ],
+          "uv": [
+            40.0,
+            3.0
+          ],
+          "inflate": [
+            0,
+            0,
+            0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "source": "rotten/com/github/teamfusion/rottencreatures/client/level/blockentities/model/ZapSkullModel.java",
+  "sourceSha256": "c0007294d1560abf3b9643bc960143dbb0aa922adfa51b6f24a078b5902c0f8d",
+  "animationRoot": "$mesh",
+  "headLook": "head",
+  "actions": {},
+  "motions": [],
+  "unboundAnimationCalls": [],
+  "expressions": [],
+  "poses": []
+}

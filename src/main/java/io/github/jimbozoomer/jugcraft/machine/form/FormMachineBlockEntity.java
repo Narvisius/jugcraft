@@ -137,6 +137,72 @@ public class FormMachineBlockEntity extends BlockEntity implements ExtendedMenuP
 	/** The player's stop-instead choice: vented tanks keep their excess and a full one stops the work. */
 	private boolean holdVented;
 	private @Nullable Identifier recipeLock;
+    private final Map<Identifier, RecipeAutomation> automationRules = new java.util.LinkedHashMap<>();
+
+    public boolean hasAutomation() {
+        if (form.generator() || MachineUpgrades.AUTOMATION == null) return false;
+        for (int i = form.firstUpgradeSlot(); i < form.containerSize(); i++)
+            if (items.get(i).is(MachineUpgrades.AUTOMATION)) return true;
+        return false;
+    }
+    public int automationRuleCount() { return automationRules.size(); }
+    public boolean clearAutomation() {
+        if (!(level instanceof ServerLevel) || !hasAutomation()) return false;
+        automationRules.clear(); setChanged(); return true;
+    }
+    public int recipePriority(Identifier id) {
+        var rule = automationRules.get(id); return rule == null ? 0 : rule.priority();
+    }
+    public int stockTarget(Identifier id) {
+        var rule = automationRules.get(id); return rule == null ? 0 : rule.target();
+    }
+    /** Caller has checked menu identity and town permissions. No operation cancels running work. */
+    public boolean cycleAutomation(Identifier id, boolean target) {
+        if (!(level instanceof ServerLevel server) || !hasAutomation()) return false;
+        var entry = recipes(server.getServer()).stream().filter(e -> e.id().equals(id)).findFirst();
+        if (entry.isEmpty()) return false;
+        if (!automationRules.containsKey(id) && automationRules.size() >= RecipeAutomation.MAX_RULES) return false;
+        int priority = recipePriority(id), stock = stockTarget(id);
+        if (target) {
+            if (entry.get().recipe().results().isEmpty() && entry.get().recipe().fluidResults().isEmpty()) return false;
+            int[] choices = entry.get().recipe().results().isEmpty()
+                ? new int[]{0, 250, 500, 1000, 2000} : new int[]{0, 16, 32, 64};
+            int next = 0;
+            for (int choice : choices) if (choice > stock) { next = choice; break; }
+            stock = next;
+        } else priority = (priority + 1) % 4;
+        if (priority == 0 && stock == 0) automationRules.remove(id);
+        else automationRules.put(id, new RecipeAutomation(id, priority, stock));
+        setChanged();
+        return true;
+    }
+    /** Bounded local scan includes all lanes' promised matching products, preventing multi-lane overshoot. */
+    private boolean targetReached(Identifier id, FluidRecipe recipe) {
+        int target = stockTarget(id);
+        if (!hasAutomation() || target == 0) return false;
+        long stock = 0, batch = 0;
+        if (!recipe.results().isEmpty()) {
+            ItemStack product = recipe.results().getFirst().create();
+            for (int i = form.firstOutputSlot(); i < form.firstSocketSlot(); i++)
+                if (ItemStack.isSameItemSameComponents(items.get(i), product)) stock += items.get(i).getCount();
+            for (WorkLane lane : lanes) if (lane != null)
+                for (var part : lane.itemResults())
+                    if (ItemStack.isSameItemSameComponents(part.stack(), product)) stock += part.stack().getCount();
+            for (var result : recipe.results()) {
+                var stack = result.create();
+                if (ItemStack.isSameItemSameComponents(stack, product)) batch += stack.getCount();
+            }
+        } else if (!recipe.fluidResults().isEmpty()) {
+            Fluid fluid = recipe.fluidResults().getFirst().fluid();
+            for (int i = 0; i < form.tanks().outputTanks().size(); i++)
+                if (tanks.output(i).variant.isOf(fluid)) stock += tanks.output(i).millibuckets();
+            for (WorkLane lane : lanes) if (lane != null)
+                for (var part : lane.fluidResults()) if (part.fluid().isOf(fluid)) stock += part.mb();
+            for (var result : recipe.fluidResults()) if (result.fluid() == fluid) batch += result.amount();
+        }
+        return stock + batch > target;
+    }
+
 
 	public @Nullable Identifier recipeLock() { return recipeLock; }
 
@@ -151,7 +217,11 @@ public class FormMachineBlockEntity extends BlockEntity implements ExtendedMenuP
 
 	private List<FluidRecipes.Entry> allowedRecipes(MinecraftServer server) {
 		var all = recipes(server);
-		return recipeLock == null ? all : all.stream().filter(e -> e.id().equals(recipeLock)).toList();
+		if (recipeLock != null) return all.stream().filter(e -> e.id().equals(recipeLock)).toList();
+        // Stable sort preserves the existing recipe priority/id ordering among equal local preferences.
+        return hasAutomation() && !automationRules.isEmpty()
+            ? all.stream().sorted(java.util.Comparator.comparingInt((FluidRecipes.Entry e) -> recipePriority(e.id())).reversed()).toList()
+            : all;
 	}
 	private boolean drainWater = true;
 	private long drainedWater;
@@ -691,12 +761,16 @@ public class FormMachineBlockEntity extends BlockEntity implements ExtendedMenuP
 			FluidRecipe recipe = entry.recipe();
 			// Shared process families must not ignore another job's leftover liquid.
 			// Leave original single-capability machinery and already escrowed batches unchanged.
-			if ((recipeLock != null || form.capabilities().size() > 1) && !consistent(recipe, inputs)) {
+			if ((recipeLock != null || form.capabilities().size() > 1 || form == IndustrialForms.WET_PROCESSING_BENCH_FORM) && !consistent(recipe, inputs)) {
 				continue;
 			}
 			if (!recipe.itemsMatch(inputs) || !recipe.fluidsMatch(tanks)) {
 				continue;
 			}
+            if (targetReached(entry.id(), recipe)) {
+                if (first == null) first = MachineStatus.of(MachineLifecycle.OUTPUT_BLOCKED, MachineStatus.Reason.STOCK_TARGET);
+                continue;
+            }
 			int tool = -1;
 			if (recipe.tool().isPresent()) {
 				tool = socketHolding(recipe.tool().get());
@@ -1283,7 +1357,7 @@ public class FormMachineBlockEntity extends BlockEntity implements ExtendedMenuP
 		if (slot < form.firstUpgradeSlot()) {
 			return form.sockets().get(slot - form.firstSocketSlot()).accepts(stack) && items.get(slot).isEmpty();
 		}
-		return MachineUpgrades.isUpgrade(stack);
+		return MachineUpgrades.isFormUpgrade(stack);
 	}
 
 	@Override
@@ -1336,7 +1410,7 @@ public class FormMachineBlockEntity extends BlockEntity implements ExtendedMenuP
 		};
 		if (previewUpgradeStart >= 0 && input.getIntOr("inventory_layout", 0) < 2
 				&& (form.roleAliases().keySet().stream().anyMatch(role -> input.child("tank_" + role).isPresent())
-				|| MachineUpgrades.isUpgrade(items.get(previewUpgradeStart)))) {
+				|| MachineUpgrades.isFormUpgrade(items.get(previewUpgradeStart)))) {
 			for (int slot = items.size() - 1; slot > previewUpgradeStart; slot--) items.set(slot, items.get(slot - 1));
 			items.set(previewUpgradeStart, ItemStack.EMPTY);
 		}
@@ -1344,6 +1418,9 @@ public class FormMachineBlockEntity extends BlockEntity implements ExtendedMenuP
 		paused = input.getBooleanOr("paused", false);
 		holdVented = input.getBooleanOr("hold_vented", false);
 		recipeLock = input.read("recipe_lock", Identifier.CODEC).orElse(null);
+        automationRules.clear();
+        for (var rule : input.read("recipe_automation", RecipeAutomation.LIST_CODEC).orElse(List.of()))
+            automationRules.put(rule.recipe(), rule);
 		drainWater = input.getBooleanOr("drain_water", true);
 		drainedWater = Math.max(0, input.getLongOr("drained_water", 0));
 		processEmissions = Math.clamp(input.getLongOr("process_emissions", 0), 0, 0xFFFF_FFFFL);
@@ -1380,6 +1457,7 @@ public class FormMachineBlockEntity extends BlockEntity implements ExtendedMenuP
 		output.putBoolean("paused", paused);
 		output.putBoolean("hold_vented", holdVented);
 		if (recipeLock != null) output.store("recipe_lock", Identifier.CODEC, recipeLock);
+        output.store("recipe_automation", RecipeAutomation.LIST_CODEC, List.copyOf(automationRules.values()));
 		output.putBoolean("drain_water", drainWater);
 		output.putLong("drained_water", drainedWater);
 		output.putLong("process_emissions", processEmissions);

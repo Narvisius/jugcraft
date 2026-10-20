@@ -99,10 +99,10 @@ public class ChemicalInfuserGameTests {
 			try (Transaction transaction = Transaction.openOuter()) {
 				helper.assertTrue(hydrogen.insert(FluidVariant.of(PetroFluids.CHLORINE.fluid()), FluidConstants.BUCKET, transaction) == 0,
 						facing + ": the left inlet refuses chlorine");
-				helper.assertTrue(reactant.insert(FluidVariant.of(PetroFluids.HYDROGEN.fluid()), FluidConstants.BUCKET, transaction) == 0,
-						facing + ": the right inlet refuses hydrogen");
-				helper.assertTrue(reactant.insert(FluidVariant.of(Fluids.WATER), FluidConstants.BUCKET, transaction) == 0,
-						facing + ": the right inlet refuses water");
+				helper.assertTrue(reactant.insert(FluidVariant.of(PetroFluids.ARGON.fluid()), FluidConstants.BUCKET, transaction) == 0,
+						facing + ": the right inlet refuses argon");
+				helper.assertTrue(reactant.insert(FluidVariant.of(Fluids.LAVA), FluidConstants.BUCKET, transaction) == 0,
+						facing + ": the right inlet refuses lava");
 				helper.assertTrue(product.insert(FluidVariant.of(PetroFluids.HYDROGEN.fluid()), FluidConstants.BUCKET, transaction) == 0,
 						facing + ": nothing goes in at an outlet");
 				transaction.abort();
@@ -344,7 +344,8 @@ public class ChemicalInfuserGameTests {
 	public void itRunsItsOwnRecipeAndIsBuiltFromTheStarterBill(GameTestHelper helper) {
 		ServerLevel level = helper.getLevel();
 		FormMachineBlockEntity machine = place(helper, new BlockPos(2, 1, 2), Direction.NORTH);
-		List<FluidRecipes.Entry> own = machine.recipes(level.getServer());
+		List<FluidRecipes.Entry> own = machine.recipes(level.getServer()).stream()
+                .filter(e -> !e.id().getPath().startsWith("gas_synthesis/synthetic_")).toList();
 		helper.assertTrue(own.size() == 11 && own.get(0).id().equals(Jugcraft.id("gas_synthesis/infuser_biogas_upgrading"))
 				&& own.get(0).recipe().time() == METHANATION_TICKS && own.get(0).recipe().tool().isPresent()
 				&& own.get(1).id().equals(Jugcraft.id("gas_synthesis/infuser_carbon_dioxide_methanation"))

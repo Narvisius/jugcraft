@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:ecology_maple_syrup_bottle",
+    "#c:crops/wheat",
+    "#c:crops/wheat"
+  ],
+  "result": {
+    "count": 8,
+    "id": "jugcraft:ecology_maple_cookie"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

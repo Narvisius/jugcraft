@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": "jugcraft:cavern_guanostone_redstone_ore",
+  "result": {
+    "id": "minecraft:redstone"
+  },
+  "experience": 0.7,
+  "cookingtime": 100,
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

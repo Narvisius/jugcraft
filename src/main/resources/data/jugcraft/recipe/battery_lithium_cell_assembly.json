@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CAS",
+    " P "
+  ],
+  "key": {
+    "C": "jugcraft:lithium_cathode",
+    "A": "jugcraft:carbon_anode",
+    "S": "jugcraft:battery_separator",
+    "P": "#c:plates/aluminum"
+  },
+  "result": {
+    "id": "jugcraft:lithium_cell_assembly",
+    "count": 1
+  }
+}

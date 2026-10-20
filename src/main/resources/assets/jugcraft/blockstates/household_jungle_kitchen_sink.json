@@ -1,0 +1,63 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "jugcraft:household/block/jungle_kitchen_sink",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "jugcraft:household/block/jungle_kitchen_sink"
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "jugcraft:household/block/jungle_kitchen_sink",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "jugcraft:household/block/jungle_kitchen_sink",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "water_level": "1"
+      },
+      "apply": {
+        "model": "jugcraft:household/block/water_1"
+      }
+    },
+    {
+      "when": {
+        "water_level": "2"
+      },
+      "apply": {
+        "model": "jugcraft:household/block/water_2"
+      }
+    },
+    {
+      "when": {
+        "water_level": "3"
+      },
+      "apply": {
+        "model": "jugcraft:household/block/water_3"
+      }
+    }
+  ]
+}

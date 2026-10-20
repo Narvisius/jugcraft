@@ -1,0 +1,374 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "items": "#minecraft:candles",
+          "weight": 6,
+          "modifier": {
+            "count": {
+              "max": 8,
+              "min": 1,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:gunpowder",
+          "weight": 8,
+          "modifier": {
+            "condition": {
+              "type": "minecraft:random_chance",
+              "chance": 0.375
+            },
+            "count": {
+              "max": 12,
+              "min": 3,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:paper",
+          "weight": 12,
+          "modifier": {
+            "condition": {
+              "type": "minecraft:random_chance",
+              "chance": 0.5
+            },
+            "count": {
+              "max": 11,
+              "min": 4,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:book",
+          "weight": 3,
+          "modifier": {
+            "condition": {
+              "type": "minecraft:random_chance",
+              "chance": 0.5
+            },
+            "count": {
+              "max": {
+                "type": "minecraft:uniform",
+                "max": 3,
+                "min": 1
+              },
+              "min": 1,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:leather",
+          "weight": 5,
+          "modifier": {
+            "condition": {
+              "type": "minecraft:random_chance",
+              "chance": 0.5
+            },
+            "count": {
+              "max": 8,
+              "min": 2,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:bone_block",
+          "weight": 2,
+          "modifier": {
+            "count": {
+              "max": 5,
+              "min": 1,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        }
+      ],
+      "rolls": 4
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:powder_snow_bucket",
+          "weight": 3,
+          "modifier": {
+            "count": {
+              "max": 2,
+              "min": 1,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:packed_ice",
+          "weight": 3,
+          "modifier": {
+            "count": {
+              "max": 12,
+              "min": 3,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:blue_ice",
+          "weight": 4,
+          "modifier": {
+            "count": {
+              "max": 7,
+              "min": 3,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:snowball",
+          "weight": 5,
+          "modifier": {
+            "count": {
+              "max": 6,
+              "min": 2,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        }
+      ],
+      "rolls": 2
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.65
+          },
+          "name": "minecraft:iron_ingot",
+          "weight": 5,
+          "modifier": {
+            "count": {
+              "max": 8,
+              "min": 3,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:gold_ingot",
+          "weight": 4,
+          "modifier": {
+            "condition": {
+              "type": "minecraft:random_chance",
+              "chance": 0.4
+            },
+            "count": {
+              "max": 6,
+              "min": 1,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:copper_ingot",
+          "weight": 7,
+          "modifier": {
+            "count": {
+              "max": 12,
+              "min": 4,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:copper_block",
+          "weight": 2,
+          "modifier": {
+            "condition": {
+              "type": "minecraft:random_chance",
+              "chance": 0.5
+            },
+            "count": {
+              "max": 2,
+              "min": 1,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_nugget",
+          "weight": 9,
+          "modifier": {
+            "count": {
+              "max": 6,
+              "min": 4,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.5
+          },
+          "name": "minecraft:gold_nugget",
+          "weight": 9,
+          "modifier": {
+            "count": {
+              "max": 15,
+              "min": 7,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.5
+          },
+          "name": "minecraft:lapis_lazuli",
+          "weight": 1,
+          "modifier": {
+            "count": {
+              "max": 7,
+              "min": 2,
+              "type": "minecraft:uniform"
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.1
+          },
+          "name": "minecraft:diamond",
+          "weight": 1
+        }
+      ],
+      "rolls": {
+        "max": 2,
+        "min": 1,
+        "type": "minecraft:uniform"
+      }
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:tag",
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.75
+          },
+          "expand": true,
+          "items": "#terralith:spire/common_tools",
+          "modifier": [
+            {
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.75
+              },
+              "damage": {
+                "max": 0.75,
+                "min": 0,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_damage"
+            },
+            {
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.75
+              },
+              "options": "#minecraft:on_random_loot",
+              "levels": {
+                "type": "minecraft:uniform",
+                "max": {
+                  "type": "minecraft:uniform",
+                  "max": 24,
+                  "min": 7
+                },
+                "min": 5
+              },
+              "type": "minecraft:enchant_with_levels"
+            }
+          ]
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.125
+          },
+          "name": "minecraft:book",
+          "modifier": {
+            "options": "#minecraft:on_random_loot",
+            "type": "minecraft:enchant_randomly"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.125
+          },
+          "name": "minecraft:book",
+          "modifier": {
+            "levels": {
+              "type": "minecraft:uniform",
+              "max": 15,
+              "min": 1
+            },
+            "options": "#minecraft:non_treasure",
+            "type": "minecraft:enchant_with_levels"
+          }
+        }
+      ],
+      "rolls": 2
+    }
+  ]
+}

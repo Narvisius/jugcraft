@@ -1,0 +1,16 @@
+{
+  "type": "jugcraft:household_oven",
+  "ingredient": "jugcraft:household_raw_vegetable_pizza",
+  "result": {
+    "id": "jugcraft:household_cooked_vegetable_pizza"
+  },
+  "cookingtime": 1200,
+  "experience": 0.1,
+  "category": "food",
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.landscape_mimic",
+        "texture_width": 64,
+        "texture_height": 64,
+        "visible_bounds_width": 4,
+        "visible_bounds_height": 4,
+        "visible_bounds_offset": [
+          0,
+          0.5,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "body",
+          "parent": "root",
+          "pivot": [
+            0,
+            8.0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -8.0,
+                0,
+                -8.0
+              ],
+              "size": [
+                16,
+                16,
+                16
+              ],
+              "uv": {
+                "north": {
+                  "uv": [
+                    14,
+                    7
+                  ],
+                  "uv_size": [
+                    28,
+                    28
+                  ]
+                },
+                "east": {
+                  "uv": [
+                    14,
+                    7
+                  ],
+                  "uv_size": [
+                    28,
+                    28
+                  ]
+                },
+                "south": {
+                  "uv": [
+                    14,
+                    7
+                  ],
+                  "uv_size": [
+                    28,
+                    28
+                  ]
+                },
+                "west": {
+                  "uv": [
+                    14,
+                    7
+                  ],
+                  "uv_size": [
+                    28,
+                    28
+                  ]
+                },
+                "up": {
+                  "uv": [
+                    14,
+                    7
+                  ],
+                  "uv_size": [
+                    28,
+                    28
+                  ]
+                },
+                "down": {
+                  "uv": [
+                    14,
+                    7
+                  ],
+                  "uv_size": [
+                    28,
+                    28
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

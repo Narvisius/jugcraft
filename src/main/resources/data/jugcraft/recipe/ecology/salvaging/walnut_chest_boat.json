@@ -1,0 +1,19 @@
+{
+  "type": "jugcraft:cutting",
+  "ingredient": "jugcraft:ecology_walnut_chest_boat",
+  "tool": "#minecraft:hoes",
+  "results": [
+    {
+      "id": "jugcraft:ecology_walnut_boat"
+    },
+    {
+      "id": "minecraft:chest"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

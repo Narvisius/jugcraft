@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "HHH",
+    "H H",
+    "B B"
+  ],
+  "key": {
+    "H": "jugcraft:cavern_tough_hide",
+    "B": "minecraft:bone_block"
+  },
+  "result": {
+    "id": "jugcraft:cavern_primordial_pants"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -1566,6 +1566,31 @@ def main():
     import owner_art
     owner_art.write_all()
 
+    import ceramics_art
+    ceramics_art.draw_all(save)
+
+    import structural_alloys_art
+    structural_alloys_art.draw_all(save)
+    import battery_expansion
+    battery_expansion.draw_all(save)
+    import advanced_electronics
+    advanced_electronics.draw_all(save)
+    import phosphate_processing
+    phosphate_processing.draw_all(save)
+    import cryogenic_fuels
+    cryogenic_fuels.draw_all(save)
+    import synthetic_fuels
+    synthetic_fuels.draw_all(save)
+
+
+def fluorite_assets(assets):
+    from pathlib import Path
+    import shutil
+    import material_icons
+    source=Path(__file__).resolve().parents[1]/"art/owner-library/originals/Blocks/block_fluorite.png"
+    shutil.copyfile(source,assets/"textures/block/fluorite_block.png")
+    material_icons.draw("raw",material_icons.tones(material_icons.ORE_RAMPS["fluorite"])).save(assets/"textures/item/fluorite.png")
+
 
 def fluorite_assets(assets):
     from pathlib import Path

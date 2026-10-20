@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:nouveau_red_archwood_log",
+    "minecraft:golden_sword",
+    "minecraft:golden_sword",
+    "minecraft:golden_sword",
+    "minecraft:book",
+    "minecraft:book",
+    "minecraft:book"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:nouveau_ritual_disintegration"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

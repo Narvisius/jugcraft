@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:concordance",
+  "display": {
+    "icon": {
+      "id": "jugcraft:nouveau_source_gem"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.concordance_nouveau_arcana_encountered.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.concordance_nouveau_arcana_encountered.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -72,6 +72,9 @@ import regatta_data
 import flora_data
 import plants_data
 import trees_data
+import fungal_trees_data
+import hanging_fruit_data
+import rainforest_data
 import kitchen_data
 import feasts_data
 import menu_data
@@ -231,6 +234,9 @@ def assets(root, write, lang):
 
     festival_data.assets(root, write, lang)
     trees_data.assets(root, write)
+    fungal_trees_data.assets(root, write, lang)
+    hanging_fruit_data.assets(root, write, lang)
+    rainforest_data.assets(root, write, lang)
     plants_data.assets(root, write, lang)
     carving_data.assets(root, write, lang)
     halloween_data.assets(root, write, lang)
@@ -418,6 +424,9 @@ def loot(data, write):
         write(out / f"{block}.json", table(block, pool(entry(block), condition={"type": "minecraft:survives_explosion"}), decay=False))
     festival_data.loot(out, write)
     trees_data.loot(out, write)
+    fungal_trees_data.loot(out, write)
+    hanging_fruit_data.loot(out, write)
+    rainforest_data.loot(out, write)
     plants_data.loot(out, write)
     carving_data.loot(out, write)
     halloween_data.loot(out, write)
@@ -495,7 +504,7 @@ def recipes(out, write):
     for result, info in COOKING.items():
         for kind, time in COOK_TIMES.items():
             name = result if kind == "smelting" else f"{result}_from_{kind}"
-            write(out / f"{name}.json", {"fabric:load_conditions": conditions(), "type": f"minecraft:{kind}",
+            write(out / f"{name}.json", {"fabric:load_conditions": conditions(switch=info.get("switch", FEATURE)), "type": f"minecraft:{kind}",
                                          "category": info.get("category", "food"),
                                          "ingredient": rid(info["input"]), "result": {"id": rid(result)},
                                          "experience": info["xp"], "cookingtime": time})
@@ -578,6 +587,9 @@ def tags(tags):
             tags.add("block", LEGUME_TAG, rid(info["block"]))
     festival_data.tags(tags)
     trees_data.tags(tags)
+    fungal_trees_data.tags(tags)
+    hanging_fruit_data.tags(tags)
+    rainforest_data.tags(tags)
     plants_data.tags(tags)
     carving_data.tags(tags)
     halloween_data.tags(tags)
@@ -668,6 +680,7 @@ def worldgen(data, write):
     festival_data.worldgen(data, write)
     cider_data.worldgen(data, write)
     trees_data.worldgen(data, write)
+    fungal_trees_data.worldgen(data, write)
     plants_data.worldgen(data, write)
     halloween_data.worldgen(data, write)
     foraging_data.worldgen(data, write)

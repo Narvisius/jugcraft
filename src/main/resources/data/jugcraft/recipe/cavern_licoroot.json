@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "VV",
+    "VV"
+  ],
+  "key": {
+    "V": "jugcraft:cavern_licoroot_vine"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:cavern_licoroot"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

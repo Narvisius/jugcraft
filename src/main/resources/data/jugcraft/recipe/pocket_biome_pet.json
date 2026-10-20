@@ -1,0 +1,28 @@
+{
+  "result": {
+    "id": "jugcraft:pocket_pet_biome"
+  },
+  "pattern": [
+    "IFA",
+    "RDN",
+    "TGL"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": "minecraft:sand",
+    "R": "minecraft:gravel",
+    "T": "minecraft:cobblestone",
+    "D": "minecraft:diamond",
+    "F": "minecraft:grass_block",
+    "G": "minecraft:gold_ingot",
+    "I": "minecraft:dirt",
+    "L": "minecraft:clay",
+    "N": "minecraft:snowball"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

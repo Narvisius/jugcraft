@@ -147,7 +147,7 @@ public class JournalScreen extends Screen {
 			scrollBy(-page);
 		} else if (key == InputConstants.KEY_PAGEDOWN) {
 			scrollBy(page);
-		} else if (key == InputConstants.KEY_R) {
+		} else if (key == InputConstants.KEY_F6) {
 			JournalClient.request();
 		} else if (key == InputConstants.KEY_X) {
 			toggleExact();

@@ -1,0 +1,1087 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "root",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        24.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "body",
+      "parent": "root",
+      "pose": [
+        0.0,
+        -3.0,
+        -0.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.5,
+            -3.0,
+            -4.5,
+            7.0,
+            5.0,
+            9.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "tongue",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -1.0,
+        -4.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            0.0,
+            -2.0,
+            2.0,
+            0.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "left_arm",
+      "parent": "body",
+      "pose": [
+        3.5,
+        0.0,
+        -3.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -0.01,
+            -2.0,
+            4.0,
+            3.0,
+            4.0
+          ],
+          "uv": [
+            0.0,
+            15.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_arm",
+      "parent": "body",
+      "pose": [
+        -3.5,
+        0.0,
+        -3.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -0.01,
+            -2.0,
+            4.0,
+            3.0,
+            4.0
+          ],
+          "uv": [
+            0.0,
+            15.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_leg",
+      "parent": "body",
+      "pose": [
+        2.5,
+        1.25,
+        2.25,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.5,
+            -1.25,
+            -0.25,
+            2.0,
+            3.0,
+            2.0
+          ],
+          "uv": [
+            15.0,
+            21.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        },
+        {
+          "box": [
+            -0.5,
+            1.749,
+            -2.25,
+            4.0,
+            0.0,
+            4.0
+          ],
+          "uv": [
+            17.0,
+            15.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_leg",
+      "parent": "body",
+      "pose": [
+        -2.5,
+        1.25,
+        2.25,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -1.25,
+            -0.25,
+            2.0,
+            3.0,
+            2.0
+          ],
+          "uv": [
+            15.0,
+            21.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        },
+        {
+          "box": [
+            -3.5,
+            1.749,
+            -2.25,
+            4.0,
+            0.0,
+            4.0
+          ],
+          "uv": [
+            17.0,
+            15.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "left_eye",
+      "parent": "body",
+      "pose": [
+        1.5,
+        -3.0,
+        -2.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.0,
+            -2.0,
+            2.0,
+            1.0,
+            3.0
+          ],
+          "uv": [
+            0.0,
+            23.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "right_eye",
+      "parent": "body",
+      "pose": [
+        -1.5,
+        -3.0,
+        -2.5,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.0,
+            -2.0,
+            2.0,
+            1.0,
+            3.0
+          ],
+          "uv": [
+            0.0,
+            23.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    }
+  ],
+  "source": "beasts/com/github/alexthe666/alexsmobs/client/model/ModelRainFrog.java",
+  "sourceSha256": "b52f35a8accbe2bcc0b2d6a0e9d6ffa632c7a5fb0cb306f520fcd15eff33c1dd",
+  "animationRoot": "root",
+  "headLook": "",
+  "actions": {},
+  "motions": [
+    {
+      "bone": "body",
+      "kind": "flap",
+      "speed": [
+        "select",
+        "baby",
+        1.0,
+        2.3
+      ],
+      "degree": [
+        "*",
+        1.0,
+        0.35
+      ],
+      "invert": false,
+      "phase": 0.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "kind": "swing",
+      "speed": [
+        "select",
+        "baby",
+        1.0,
+        2.3
+      ],
+      "degree": [
+        "*",
+        1.0,
+        0.35
+      ],
+      "invert": false,
+      "phase": 1.0,
+      "bias": 0.0,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "left_arm",
+      "kind": "walk",
+      "speed": [
+        "select",
+        "baby",
+        1.0,
+        2.3
+      ],
+      "degree": [
+        "*",
+        1.0,
+        1.2
+      ],
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        2.5
+      ],
+      "bias": [
+        "*",
+        -1,
+        0.2
+      ],
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "right_arm",
+      "kind": "walk",
+      "speed": [
+        "select",
+        "baby",
+        1.0,
+        2.3
+      ],
+      "degree": [
+        "*",
+        1.0,
+        1.2
+      ],
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        2.5
+      ],
+      "bias": 0.2,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "right_leg",
+      "kind": "walk",
+      "speed": [
+        "select",
+        "baby",
+        1.0,
+        2.3
+      ],
+      "degree": 1.0,
+      "invert": false,
+      "phase": [
+        "*",
+        -1,
+        2.5
+      ],
+      "bias": 0.3,
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    },
+    {
+      "bone": "left_leg",
+      "kind": "walk",
+      "speed": [
+        "select",
+        "baby",
+        1.0,
+        2.3
+      ],
+      "degree": 1.0,
+      "invert": true,
+      "phase": [
+        "*",
+        -1,
+        2.5
+      ],
+      "bias": [
+        "*",
+        -1,
+        0.3
+      ],
+      "clock": "walk",
+      "amount": "move",
+      "when": 1
+    }
+  ],
+  "unboundAnimationCalls": [
+    {
+      "call": "this.swing(this.body, digSpeed, digDegree * 0.5f, false, 3.0f, 0.0f, ageInTicks, digAmount);",
+      "reason": "Unbound expression variable digAmount"
+    },
+    {
+      "call": "this.walk(this.right_arm, digSpeed, digDegree, false, -1.5f, -0.2f, ageInTicks, digAmount);",
+      "reason": "Unbound expression variable digAmount"
+    },
+    {
+      "call": "this.walk(this.left_arm, digSpeed, digDegree, false, -1.5f, -0.2f, ageInTicks, digAmount);",
+      "reason": "Unbound expression variable digAmount"
+    },
+    {
+      "call": "this.walk(this.right_leg, digSpeed, digDegree, false, -1.5f, 0.2f, ageInTicks, digAmount);",
+      "reason": "Unbound expression variable digAmount"
+    },
+    {
+      "call": "this.walk(this.left_leg, digSpeed, digDegree, false, -1.5f, 0.2f, ageInTicks, digAmount);",
+      "reason": "Unbound expression variable digAmount"
+    },
+    {
+      "call": "this.swing(this.body, danceSpeed, danceDegree * 0.5f, false, 1.0f, 0.0f, ageInTicks, danceProgress * 0.2f);",
+      "reason": "Unbound expression variable danceProgress"
+    },
+    {
+      "call": "this.walk(this.body, danceSpeed, danceDegree * 0.5f, false, 3.0f, -0.4f, ageInTicks, danceProgress * 0.2f);",
+      "reason": "Unbound expression variable danceProgress"
+    },
+    {
+      "call": "this.flap(this.right_arm, danceSpeed, danceDegree, false, 0.0f, 0.3f, ageInTicks, danceProgress * 0.2f);",
+      "reason": "Unbound expression variable danceProgress"
+    },
+    {
+      "call": "this.flap(this.left_arm, danceSpeed, danceDegree, true, 0.0f, 0.3f, ageInTicks, danceProgress * 0.2f);",
+      "reason": "Unbound expression variable danceProgress"
+    },
+    {
+      "call": "this.body.setScale(1.0f + stanceProgress * 0.025f, 1.0f + stanceProgress * 0.075f, 1.0f + stanceProgress * 0.025f);",
+      "reason": "Unbound expression variable stanceProgress"
+    },
+    {
+      "call": "this.left_leg.rotateAngleX -= 1.0f * this.body.rotateAngleX;",
+      "reason": "Unsupported expression 1.0 * this.body.rotateAngleX"
+    },
+    {
+      "call": "this.left_leg.rotateAngleY -= 1.0f * this.body.rotateAngleY;",
+      "reason": "Unsupported expression 1.0 * this.body.rotateAngleY"
+    },
+    {
+      "call": "this.left_leg.rotateAngleZ -= 1.0f * this.body.rotateAngleZ;",
+      "reason": "Unsupported expression 1.0 * this.body.rotateAngleZ"
+    },
+    {
+      "call": "this.right_leg.rotateAngleX -= 1.0f * this.body.rotateAngleX;",
+      "reason": "Unsupported expression 1.0 * this.body.rotateAngleX"
+    },
+    {
+      "call": "this.right_leg.rotateAngleY -= 1.0f * this.body.rotateAngleY;",
+      "reason": "Unsupported expression 1.0 * this.body.rotateAngleY"
+    },
+    {
+      "call": "this.right_leg.rotateAngleZ -= 1.0f * this.body.rotateAngleZ;",
+      "reason": "Unsupported expression 1.0 * this.body.rotateAngleZ"
+    }
+  ],
+  "expressions": [
+    {
+      "bone": "left_leg",
+      "target": "y",
+      "op": "+=",
+      "value": [
+        "*",
+        1.5,
+        [
+          "-",
+          [
+            "*",
+            [
+              "*",
+              [
+                "sin",
+                [
+                  "-",
+                  [
+                    "*",
+                    "walk",
+                    [
+                      "select",
+                      "baby",
+                      1.0,
+                      2.3
+                    ]
+                  ],
+                  2.5
+                ]
+              ],
+              "move"
+            ],
+            1.0
+          ],
+          [
+            "*",
+            "move",
+            1.0
+          ]
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "right_leg",
+      "target": "y",
+      "op": "+=",
+      "value": [
+        "*",
+        1.5,
+        [
+          "-",
+          [
+            "*",
+            [
+              "*",
+              [
+                "sin",
+                [
+                  "+",
+                  [
+                    "*",
+                    -1,
+                    [
+                      "*",
+                      "walk",
+                      [
+                        "select",
+                        "baby",
+                        1.0,
+                        2.3
+                      ]
+                    ]
+                  ],
+                  2.5
+                ]
+              ],
+              "move"
+            ],
+            1.0
+          ],
+          [
+            "*",
+            "move",
+            1.0
+          ]
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "left_leg",
+      "target": "z",
+      "op": "-=",
+      "value": [
+        "*",
+        2.0,
+        [
+          "-",
+          [
+            "*",
+            [
+              "*",
+              [
+                "sin",
+                [
+                  "-",
+                  [
+                    "*",
+                    "walk",
+                    [
+                      "select",
+                      "baby",
+                      1.0,
+                      2.3
+                    ]
+                  ],
+                  2.5
+                ]
+              ],
+              "move"
+            ],
+            1.0
+          ],
+          [
+            "*",
+            "move",
+            1.0
+          ]
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "right_leg",
+      "target": "z",
+      "op": "-=",
+      "value": [
+        "*",
+        2.0,
+        [
+          "-",
+          [
+            "*",
+            [
+              "*",
+              [
+                "sin",
+                [
+                  "+",
+                  [
+                    "*",
+                    -1,
+                    [
+                      "*",
+                      "walk",
+                      [
+                        "select",
+                        "baby",
+                        1.0,
+                        2.3
+                      ]
+                    ]
+                  ],
+                  2.5
+                ]
+              ],
+              "move"
+            ],
+            1.0
+          ],
+          [
+            "*",
+            "move",
+            1.0
+          ]
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "right_arm",
+      "target": "y",
+      "op": "+=",
+      "value": [
+        "*",
+        1.5,
+        [
+          "-",
+          [
+            "*",
+            [
+              "*",
+              [
+                "sin",
+                [
+                  "-",
+                  [
+                    "*",
+                    "walk",
+                    [
+                      "select",
+                      "baby",
+                      1.0,
+                      2.3
+                    ]
+                  ],
+                  2.5
+                ]
+              ],
+              "move"
+            ],
+            1.0
+          ],
+          [
+            "*",
+            "move",
+            1.0
+          ]
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "left_arm",
+      "target": "y",
+      "op": "+=",
+      "value": [
+        "*",
+        1.5,
+        [
+          "-",
+          [
+            "*",
+            [
+              "*",
+              [
+                "sin",
+                [
+                  "+",
+                  [
+                    "*",
+                    -1,
+                    [
+                      "*",
+                      "walk",
+                      [
+                        "select",
+                        "baby",
+                        1.0,
+                        2.3
+                      ]
+                    ]
+                  ],
+                  2.5
+                ]
+              ],
+              "move"
+            ],
+            1.0
+          ],
+          [
+            "*",
+            "move",
+            1.0
+          ]
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "right_arm",
+      "target": "z",
+      "op": "+=",
+      "value": [
+        "*",
+        1.0,
+        [
+          "-",
+          [
+            "*",
+            [
+              "*",
+              [
+                "sin",
+                [
+                  "-",
+                  [
+                    "*",
+                    "walk",
+                    [
+                      "select",
+                      "baby",
+                      1.0,
+                      2.3
+                    ]
+                  ],
+                  2.5
+                ]
+              ],
+              "move"
+            ],
+            1.0
+          ],
+          [
+            "*",
+            "move",
+            1.0
+          ]
+        ]
+      ],
+      "when": 1
+    },
+    {
+      "bone": "left_arm",
+      "target": "z",
+      "op": "+=",
+      "value": [
+        "*",
+        1.0,
+        [
+          "-",
+          [
+            "*",
+            [
+              "*",
+              [
+                "sin",
+                [
+                  "+",
+                  [
+                    "*",
+                    -1,
+                    [
+                      "*",
+                      "walk",
+                      [
+                        "select",
+                        "baby",
+                        1.0,
+                        2.3
+                      ]
+                    ]
+                  ],
+                  2.5
+                ]
+              ],
+              "move"
+            ],
+            1.0
+          ],
+          [
+            "*",
+            "move",
+            1.0
+          ]
+        ]
+      ],
+      "when": 1
+    }
+  ],
+  "poses": [
+    {
+      "bone": "tongue",
+      "weight": [
+        "/",
+        [
+          "-",
+          5.0,
+          [
+            "*",
+            "combat",
+            5.0
+          ]
+        ],
+        5.0
+      ],
+      "target": "position",
+      "value": [
+        0.0,
+        0.0,
+        3.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "weight": [
+        "/",
+        [
+          "*",
+          "combat",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "position",
+      "value": [
+        0.0,
+        0.0,
+        -2.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "body",
+      "weight": [
+        "/",
+        [
+          "*",
+          "combat",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        -0.17453292519943295,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "right_leg",
+      "weight": [
+        "/",
+        [
+          "*",
+          "combat",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.17453292519943295,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "left_leg",
+      "weight": [
+        "/",
+        [
+          "*",
+          "combat",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.17453292519943295,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "left_arm",
+      "weight": [
+        "/",
+        [
+          "*",
+          "combat",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.17453292519943295,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "right_arm",
+      "weight": [
+        "/",
+        [
+          "*",
+          "combat",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "rotation",
+      "value": [
+        0.17453292519943295,
+        0.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "left_leg",
+      "weight": [
+        "/",
+        [
+          "*",
+          "combat",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "position",
+      "value": [
+        0.0,
+        -1.0,
+        0.0
+      ],
+      "when": 1
+    },
+    {
+      "bone": "right_leg",
+      "weight": [
+        "/",
+        [
+          "*",
+          "combat",
+          5.0
+        ],
+        5.0
+      ],
+      "target": "position",
+      "value": [
+        0.0,
+        -1.0,
+        0.0
+      ],
+      "when": 1
+    }
+  ]
+}

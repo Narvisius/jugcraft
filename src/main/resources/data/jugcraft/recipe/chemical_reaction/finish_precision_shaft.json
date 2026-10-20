@@ -1,0 +1,38 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:precision_finishing",
+  "items": [
+    {
+      "ingredient": "jugcraft:steel_shaft_blank",
+      "count": 1
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 125
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 125,
+      "tank": 0
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:precision_shaft",
+      "count": 1
+    }
+  ],
+  "tool": "jugcraft:abrasive_head",
+  "energy_per_tick": 48,
+  "time": 200
+}

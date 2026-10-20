@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BBB",
+    "DRD",
+    "BBB"
+  ],
+  "key": {
+    "D": "jugcraft:cavern_depth_charge",
+    "R": "minecraft:redstone",
+    "B": "minecraft:bucket"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:cavern_drain"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

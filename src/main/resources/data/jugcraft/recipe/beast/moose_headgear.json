@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AIA",
+    "S S"
+  ],
+  "key": {
+    "A": "jugcraft:beast_moose_antler",
+    "I": "minecraft:iron_ingot",
+    "S": "minecraft:string"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:beast_moose_headgear"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:companion_sea_bunny_slime_bottle",
+    "jugcraft:companion_sea_bunny_slime_bottle",
+    "jugcraft:companion_sea_bunny_slime_bottle",
+    "jugcraft:companion_sea_bunny_slime_bottle"
+  ],
+  "result": {
+    "id": "jugcraft:companion_sea_bunny_slime_block",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ]
+}

@@ -170,3 +170,7 @@ Results are recorded under "Results" below after CI runs.
   - Would a pillager outpost near the start be too harsh? Vanilla's meadows allow outposts, and Alpine Spawn joins `#minecraft:is_mountain`. Villages exclude outposts nearby.
   - Is the biome large enough now? It covers about 1.9% of the land (seed `jugcraft`), up from 0.8%. It could grow further by taking more of the cool plateau (its old-growth taiga) or the windswept hills, at the cost of more vanilla terrain.
   - Should larches also grow outside Alpine Spawn (for example in taiga)? Today they are unique to it.
+
+## Tree batches 8–8c update
+
+Tree batch 8 retains 0–2 planting attempts/chunk and changes the mix to larch 50%, stone pine 20%, spruce 20%, juniper bush 10%. Pine and juniper acquisition support Alpine Spawn independently of the biomes feature. Nut pines provide year-round renewable pine nuts. See [implementation and verification](trees-batch-8abc.md).

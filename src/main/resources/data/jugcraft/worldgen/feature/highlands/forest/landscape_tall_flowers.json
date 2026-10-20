@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:simple_block",
+  "to_place": {
+    "type": "minecraft:noise",
+    "noise": {
+      "base_octave": -7,
+      "octave_count": 3,
+      "amplitude_modifiers": [
+        1,
+        1,
+        1
+      ],
+      "normalize": "legacy"
+    },
+    "scale": 1,
+    "seed": 69420,
+    "states": [
+      "minecraft:rose_bush"
+    ]
+  }
+}

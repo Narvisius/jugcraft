@@ -1,6 +1,5 @@
 package io.github.jimbozoomer.jugcraft.farming;
 
-import io.github.jimbozoomer.jugcraft.chemistry.PetroItems;
 import io.github.jimbozoomer.jugcraft.fluid.FluidConnectable;
 import io.github.jimbozoomer.jugcraft.fluid.FluidNetworks;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorageUtil;
@@ -62,10 +61,14 @@ public class SprinklerBlock extends Block implements EntityBlock, FluidConnectab
 		if (!(level.getBlockEntity(pos) instanceof SprinklerBlockEntity sprinkler)) {
 			return super.useItemOn(stack, state, level, pos, player, hand, hit);
 		}
-		if (stack.is(PetroItems.FERTILIZER)) {
+		if (SprinklerBlockEntity.acceptsFertilizer(stack)) {
+			if (!player.mayBuild() || !level.mayInteract(player, pos)
+					|| !player.mayUseItemAt(pos, hit.getDirection(), stack)
+					|| io.github.jimbozoomer.jugcraft.town.TownProtection.denies(player, level, pos)) return InteractionResult.FAIL;
 			if (!level.isClientSide()) {
-				int added = sprinkler.addFertilizer(stack.getCount());
+				int added = sprinkler.addFertilizer(stack);
 				stack.shrink(added);
+				if (added == 0) player.sendOverlayMessage(Component.translatable("message.jugcraft.sprinkler_wrong_fertilizer"));
 			}
 			return InteractionResult.SUCCESS;
 		}
@@ -82,9 +85,11 @@ public class SprinklerBlock extends Block implements EntityBlock, FluidConnectab
 					&& !io.github.jimbozoomer.jugcraft.town.TownProtection.denies(player,level,pos)) {
 				var buckets = sprinkler.companion.takeBuckets();
 				if (!buckets.isEmpty() && !player.getInventory().add(buckets)) Block.popResource(level,pos.above(),buckets);
+				var fertilizer = sprinkler.takeFertilizer();
+				if (!fertilizer.isEmpty() && !player.getInventory().add(fertilizer)) Block.popResource(level,pos.above(),fertilizer);
 			}
-			player.sendOverlayMessage(Component.translatable("message.jugcraft.sprinkler",
-					sprinkler.water.amount / FluidNetworks.DROPLETS_PER_MB, sprinkler.fertilizer()));
+			player.sendOverlayMessage(Component.translatable("message.jugcraft.sprinkler_loaded",
+					sprinkler.water.amount / FluidNetworks.DROPLETS_PER_MB, sprinkler.fertilizer(), sprinkler.fertilizerName()));
 		}
 		return InteractionResult.SUCCESS;
 	}

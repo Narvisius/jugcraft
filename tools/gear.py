@@ -436,7 +436,8 @@ def write_all(write, assets, data, lang, condition):
     for tag, values in concordance_dark_matter.item_tags().items():
         by_tag.setdefault(tag, []).extend(values)
     import concordance_ee_equipment, concordance_ee_artifacts
-    for module in (concordance_ee_equipment, concordance_ee_artifacts):
+    import nouveau_content
+    for module in (concordance_ee_equipment, concordance_ee_artifacts, nouveau_content):
         for tag, values in module.item_tags().items():
             by_tag.setdefault(tag, []).extend(values)
     for tag, values in by_tag.items():

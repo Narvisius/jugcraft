@@ -1,0 +1,35 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:gas_synthesis",
+  "capability": "jugcraft:syngas_balancing",
+  "fluids": [
+    {
+      "fluid": "jugcraft:carbon_monoxide",
+      "amount": 250
+    },
+    {
+      "fluid": "minecraft:water",
+      "amount": 500
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:hydrogen",
+      "amount": 250,
+      "tank": 0
+    },
+    {
+      "fluid": "jugcraft:carbon_dioxide",
+      "amount": 250,
+      "tank": 1
+    }
+  ],
+  "tool": "jugcraft:cobalt_catalyst_bed",
+  "energy_per_tick": 128,
+  "time": 200
+}

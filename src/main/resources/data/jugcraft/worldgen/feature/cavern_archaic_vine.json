@@ -1,0 +1,40 @@
+{
+  "allowed_placement": {
+    "type": "minecraft:matching_blocks",
+    "blocks": [
+      "minecraft:air",
+      "minecraft:cave_air",
+      "minecraft:void_air",
+      "jugcraft:cavern_ambersol_light"
+    ]
+  },
+  "direction": "down",
+  "layers": [
+    {
+      "height": {
+        "type": "minecraft:weighted_list",
+        "distribution": [
+          {
+            "data": {
+              "max_inclusive": 11,
+              "min_inclusive": 1,
+              "type": "minecraft:uniform"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "provider": {
+        "id": "jugcraft:cavern_archaic_vine_plant"
+      }
+    },
+    {
+      "height": 1,
+      "provider": {
+        "id": "jugcraft:cavern_archaic_vine"
+      }
+    }
+  ],
+  "prioritize_tip": true,
+  "type": "minecraft:block_column"
+}
