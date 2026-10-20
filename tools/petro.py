@@ -388,6 +388,10 @@ FLUID_RECIPES = {
          "retained_inputs": [2], "fluid_results": [("jugcraft:sulfuric_acid", 500)], "ticks": 100, "features": ["machines", "sulfur"]},
         {"name": "hydrochloric_copper", "items": [("minecraft:raw_copper", 1)], "fluids": [("jugcraft:hydrochloric_acid", 250)],
          "results": [("jugcraft:washed_copper_ore", 1)], "ticks": 160, "features": ["machines"]},
+        # Coking with gas recovery (docs/features/coke-gas-recovery.md): coal baked into coke in the reactor, faster than the
+        # Coke Oven and on power, keeping the gas the Coke Oven lets go as methane (coke-oven gas's fuel part).
+        {"name": "coke_with_gas_recovery", "items": [("minecraft:coal", 4)], "results": [("jugcraft:coke", 4)],
+         "fluid_results": [("jugcraft:methane", 200)], "source": 200, "ticks": 400, "features": ["machines"]},
         # Zinc dissolved in hydrochloric acid gives off hydrogen (docs/features/zinc-hydrogen.md): a small, power-cheap
         # hydrogen source before electrolysis, spending the zinc. Zn + 2 HCl -> ZnCl2 + H2.
         {"name": "hydrogen_from_zinc", "items": [("#c:ingots/zinc", 1)], "fluids": [("jugcraft:hydrochloric_acid", 500)],

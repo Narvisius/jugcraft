@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "items": [
+    {
+      "ingredient": "minecraft:coal",
+      "count": 4
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:methane",
+      "amount": 200
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:coke",
+      "count": 4
+    }
+  ],
+  "time": 400
+}
