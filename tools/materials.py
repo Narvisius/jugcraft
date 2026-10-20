@@ -370,6 +370,10 @@ def feature_of(entry_id):
     import bunkerworks
     if entry_id in bunkerworks.blocks():
         return "machines"
+    import aged_wood
+    # Aged pine and maple come from the biomes branch's trees.
+    if entry_id in aged_wood.blocks():
+        return "biomes"
     import fire_control
     if entry_id in fire_control.blocks() + fire_control.items():
         return "machines"

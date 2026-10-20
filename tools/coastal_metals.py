@@ -60,6 +60,8 @@ EXTRA_RECIPES={'chemical_distillation_station':[dict(name='purify_titanium_chlor
 PRODUCTS=[('housing','#jugcraft:moldable_rigid_polymers',4,'polymer_housing',1),('fitting','jugcraft:pvc_resin',2,'polymer_fitting',2),('insulation','jugcraft:rubber',2,'cable_insulation',3),('gasket','jugcraft:rubber',2,'gasket',2),('hose','jugcraft:rubber',3,'flexible_hose',1),('panel','#jugcraft:moldable_rigid_polymers',4,'polymer_vehicle_panel',1)]
 for mold,stock,count,product,yield_ in PRODUCTS:
  RECIPES['polymer_molding_press'].append(rec('mold_'+mold,'polymer_molding_press',[],[],120,32,items=[(stock,count)],results=[('jugcraft:'+product,yield_)],tool='jugcraft:'+mold+'_mold'))
+# Silicone (docs/features/silicone.md): the gasket mold also presses two silicone rubber into three heat-proof gaskets.
+RECIPES['polymer_molding_press'].append(rec('mold_silicone_gasket','polymer_molding_press',[],[],120,32,items=[('jugcraft:silicone',2)],results=[('jugcraft:gasket',3)],tool='jugcraft:gasket_mold'))
 TANK_NAMES={k:k.replace('_',' ').capitalize() for f in FORMS.values() for k in f['input_tanks']+f['output_tanks']}
 TANK_NAMES.update(mineral_feed='Mineral feed / prepared acid',conditioning_reagent='Lye',conditioned_liquid='Conditioned liquid / spent wash',distilled_ethanol='Distilled product',stillage='Distillation residue')
 HANDBOOK={

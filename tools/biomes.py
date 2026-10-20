@@ -148,7 +148,8 @@ RULES = [
 ]
 
 # Trees from other features, given a placed feature ("<name>") that checks the given sapling-like block would survive.
-PLACED_TREES = {"apple_tree_checked": ("jugcraft:apple_tree", "jugcraft:apple_sapling"),
+PLACED_TREES = {"apple_tree_bees_checked": ("jugcraft:apple_tree_bees", "jugcraft:apple_sapling"),
+                "apple_tree_checked": ("jugcraft:apple_tree", "jugcraft:apple_sapling"),
                 "chestnut_checked": ("jugcraft:chestnut", "jugcraft:chestnut_sapling"),
                 # The orchards' fruit trees (tools/orchard.py), picked by the Orchard, Mediterranean Forest, Subtropics,
                 # Tropics and Rainforest.
@@ -234,6 +235,10 @@ EXTRAS = {
         {"type": "minecraft:surface_water_depth_filter", "max_water_depth": 0},
         {"type": "minecraft:heightmap", "heightmap": "OCEAN_FLOOR"}, {"type": "minecraft:biome"},
         {"type": "minecraft:block_predicate_filter", "predicate": {"type": "minecraft:would_survive", "state": "jugcraft:hawthorn_sapling"}}]},
+    "lone_bristlecone": {"feature": "jugcraft:bristlecone", "step": 9, "placement": [
+        {"type": "minecraft:rarity_filter", "chance": 4}, {"type": "minecraft:in_square"},
+        {"type": "minecraft:surface_water_depth_filter", "max_water_depth": 0},
+        {"type": "minecraft:heightmap", "heightmap": "OCEAN_FLOOR"}, {"type": "minecraft:biome"}]},
     "lone_rowan": {"feature": "jugcraft:rowan", "step": 9, "placement": [
         {"type": "minecraft:rarity_filter", "chance": 8}, {"type": "minecraft:in_square"},
         {"type": "minecraft:surface_water_depth_filter", "max_water_depth": 0},
@@ -902,14 +907,14 @@ BIOMES = {
         "extras": ["peonies", "bushes_dense"],
         "tags": ["minecraft:has_structure/village_plains"],
     },
-    # An orchard: chestnut, pear, peach and plum trees (the agriculture branch's), oaks with bees and flowering azaleas,
+    # An orchard: chestnut, pear, peach and plum trees (the agriculture branch's), apples with bees and flowering azaleas,
     # rose bushes and daisies.
     "orchard": {
         "display": "Orchard", "base": "plains", "temperature": 0.8, "downfall": 0.5, "seasons": True,
         "effects": {"grass_color": "#8fbd5a", "foliage_color": "#77ad48"},
         "trees": {"count": [2, 3], "default": "jugcraft:chestnut_checked", "picks": [
-            ["minecraft:oak_bees_002", 0.2], ["jugcraft:azalea_tree_checked", 0.1], ["jugcraft:pear_checked", 0.2],
-            ["jugcraft:peach_checked", 0.2], ["jugcraft:plum_checked", 0.15]]},
+            ["jugcraft:apple_tree_bees_checked", 0.2], ["jugcraft:azalea_tree_checked", 0.1], ["jugcraft:pear_checked", 0.15 / 0.72],
+            ["jugcraft:peach_checked", 0.10 / 0.57], ["jugcraft:plum_checked", 0.06912 / 0.47]]},
         "extras": ["rose_bushes", "oxeye_daisies"],
         "tags": ["c:is_plains"],
     },
@@ -952,14 +957,14 @@ BIOMES = {
                       ["minecraft:sheep", 8, 4, 4]],
         "tags": ["c:is_tropical", "minecraft:has_structure/jungle_temple"],
     },
-    # Warm, green, plains-like country with flowering azaleas, oaks, birches, small palms, vine-hung oaks and lemon and
+    # Warm, green, plains-like country with flowering azaleas, live oaks, small palms, vine-hung oaks and lemon and
     # orange trees, hydrangeas and sugar cane; villages.
     "subtropics": {
         "display": "Subtropics", "base": "plains", "temperature": 0.9, "downfall": 0.7, "seasons": False,
         "effects": {"grass_color": "#6cc043", "foliage_color": "#5ab035"},
         "trees": {"count": [2, 3], "default": "jugcraft:azalea_tree_checked", "picks": [
-            ["jugcraft:live_oak_checked", 0.3], ["minecraft:birch_checked", 0.1], ["jugcraft:small_palm_checked", 0.2],
-            ["jugcraft:tall_vine_oak_checked", 0.1], ["jugcraft:lemon_checked", 0.15], ["jugcraft:orange_checked", 0.15]]},
+            ["jugcraft:live_oak_checked", 0.3], ["jugcraft:small_palm_checked", 0.126 / 0.7],
+            ["jugcraft:tall_vine_oak_checked", 0.0504 / 0.574], ["jugcraft:lemon_checked", 0.06804 / 0.5236], ["jugcraft:orange_checked", 0.10 / 0.45556]]},
         "extras": ["hydrangeas", "field_flowers"],
         "tags": [],
     },
@@ -971,7 +976,9 @@ BIOMES = {
         "trees": {"count": [14, 16], "default": "minecraft:fancy_oak_checked", "picks": [
             ["minecraft:oak_checked", 0.3], ["minecraft:dark_oak_checked", 0.1],
             ["jugcraft:holly_checked", 0.05 / 0.63], ["jugcraft:oak_bush_checked", (0.63 * 0.1111 - 0.05) / 0.58],
-            ["jugcraft:great_oak_checked", 0.0357]]},
+            ["jugcraft:great_oak_checked", 0.0357],
+            ["jugcraft:walnut_checked", .08 / ((.63 - .05 - (.63 * .1111 - .05)) * (1 - .0357))],
+            ["jugcraft:large_walnut_checked", .02 / ((.63 - .05 - (.63 * .1111 - .05)) * (1 - .0357) - .08)]]},
         "extras": ["leaf_litter", "ferns"],
         "tags": ["minecraft:has_structure/woodland_mansion"],
     },
@@ -1008,7 +1015,9 @@ BIOMES = {
             ["minecraft:fancy_oak_leaf_litter", 0.25], ["jugcraft:hawthorn_bush_checked", 0.04 / 0.75],
             ["jugcraft:oak_bush_checked", 0.035 / 0.71], ["minecraft:fallen_oak_tree", 0.03],
             ["jugcraft:elder_checked", 0.04 / (0.675 * 0.97)],
-            ["jugcraft:holly_checked", 0.04 / (0.675 * 0.97 - 0.04)]]},
+            ["jugcraft:holly_checked", 0.04 / (0.675 * 0.97 - 0.04)],
+            ["jugcraft:walnut_checked", .032 / (.675 * .97 - .08)],
+            ["jugcraft:large_walnut_checked", .008 / (.675 * .97 - .08 - .032)]]},
         "extras": ["leaf_litter", "berry_bushes", "oxeye_daisies", "poppies"],
         "tags": ["minecraft:has_structure/village_plains", "minecraft:has_structure/woodland_mansion"],
     },
@@ -1058,7 +1067,7 @@ BIOMES = {
         "surface": {"floor": "rule:minecraft:overworld/gravel_or_stone_if_ceiling", "under": "minecraft:gravel",
                     "patches": [[-0.2, 0.0, "minecraft:stone"], [0.5, 0.6, "minecraft:andesite"]]},
         "trees": None,
-        "extras": ["patch_dead_bush"],
+        "extras": ["patch_dead_bush", "lone_bristlecone"],
         "creatures": [],
         "tags": ["c:is_dry"],
     },

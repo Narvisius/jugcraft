@@ -1581,6 +1581,8 @@ def main():
     cryogenic_fuels.draw_all(save)
     import synthetic_fuels
     synthetic_fuels.draw_all(save)
+    import walnut_furniture
+    walnut_furniture.write_all()
 
 
 def fluorite_assets(assets):

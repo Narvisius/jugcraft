@@ -3,19 +3,22 @@
   "category": "building",
   "group": "wooden_slab",
   "key": {
-    "#": "jugcraft:ecology_walnut_planks"
+    "#": "#jugcraft:walnut_compat/walnut_planks"
   },
   "pattern": [
     "###"
   ],
   "result": {
     "count": 6,
-    "id": "jugcraft:ecology_walnut_slab"
+    "id": "jugcraft:walnut_slab"
   },
   "fabric:load_conditions": [
     {
       "condition": "jugcraft:feature_enabled",
-      "feature": "agriculture"
+      "feature": "biomes",
+      "or": [
+        "agriculture"
+      ]
     }
   ]
 }

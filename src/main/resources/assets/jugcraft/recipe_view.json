@@ -3888,6 +3888,26 @@
         {
           "in": [
             [
+              "#jugcraft:walnut_logs",
+              1
+            ]
+          ],
+          "out": [
+            "jugcraft:walnut_planks",
+            6
+          ],
+          "extra": [
+            [
+              "jugcraft:sawdust",
+              1,
+              0.5
+            ]
+          ],
+          "ticks": 100
+        },
+        {
+          "in": [
+            [
               "#minecraft:planks",
               1
             ]
@@ -4672,6 +4692,31 @@
           "extra": [
             [
               "jugcraft:hawthorn_sapling",
+              1,
+              1.0
+            ],
+            [
+              "minecraft:stick",
+              1,
+              0.1
+            ]
+          ],
+          "ticks": 400
+        },
+        {
+          "in": [
+            [
+              "jugcraft:walnut_sapling",
+              1
+            ]
+          ],
+          "out": [
+            "jugcraft:walnut_log",
+            6
+          ],
+          "extra": [
+            [
+              "jugcraft:walnut_sapling",
               1,
               1.0
             ],
@@ -7395,6 +7440,25 @@
           "items": [],
           "fluids": [
             [
+              "jugcraft:vinyl_acetate",
+              500
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:pvac_glue",
+              4
+            ]
+          ],
+          "ticks": 100,
+          "tool": "",
+          "retained_inputs": []
+        },
+        {
+          "items": [],
+          "fluids": [
+            [
               "jugcraft:butadiene",
               500
             ]
@@ -7546,6 +7610,62 @@
           "retained_inputs": [
             2
           ]
+        },
+        {
+          "items": [],
+          "fluids": [
+            [
+              "jugcraft:methane",
+              500
+            ],
+            [
+              "jugcraft:chlorine",
+              500
+            ]
+          ],
+          "fluid_results": [
+            [
+              "jugcraft:methyl_chloride",
+              500
+            ]
+          ],
+          "results": [],
+          "ticks": 100,
+          "tool": "",
+          "retained_inputs": []
+        },
+        {
+          "items": [
+            [
+              "jugcraft:silicon",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:methyl_chloride",
+              500
+            ],
+            [
+              "minecraft:water",
+              250
+            ]
+          ],
+          "fluid_results": [
+            [
+              "jugcraft:hydrochloric_acid",
+              250
+            ]
+          ],
+          "results": [
+            [
+              "jugcraft:silicone",
+              2
+            ]
+          ],
+          "ticks": 160,
+          "tool": "",
+          "retained_inputs": []
         },
         {
           "items": [
@@ -7736,6 +7856,210 @@
             ]
           ],
           "ticks": 80,
+          "tool": "",
+          "retained_inputs": []
+        },
+        {
+          "items": [
+            [
+              "jugcraft:willow_log",
+              4
+            ]
+          ],
+          "fluids": [
+            [
+              "minecraft:water",
+              500
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:salicylic_acid",
+              2
+            ]
+          ],
+          "ticks": 160,
+          "tool": "",
+          "retained_inputs": []
+        },
+        {
+          "items": [
+            [
+              "minecraft:birch_log",
+              4
+            ]
+          ],
+          "fluids": [
+            [
+              "minecraft:water",
+              500
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:salicylic_acid",
+              1
+            ]
+          ],
+          "ticks": 160,
+          "tool": "",
+          "retained_inputs": []
+        },
+        {
+          "items": [
+            [
+              "jugcraft:salicylic_acid",
+              2
+            ],
+            [
+              "jugcraft:cider_vinegar",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:sulfuric_acid",
+              50
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:aspirin",
+              4
+            ]
+          ],
+          "ticks": 120,
+          "tool": "",
+          "retained_inputs": []
+        },
+        {
+          "items": [
+            [
+              "jugcraft:borax",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:sulfuric_acid",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:boric_acid",
+              2
+            ]
+          ],
+          "ticks": 100,
+          "tool": "",
+          "retained_inputs": []
+        },
+        {
+          "items": [
+            [
+              "jugcraft:lemon",
+              4
+            ]
+          ],
+          "fluids": [
+            [
+              "minecraft:water",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:citric_acid",
+              2
+            ]
+          ],
+          "ticks": 120,
+          "tool": "",
+          "retained_inputs": []
+        },
+        {
+          "items": [
+            [
+              "jugcraft:orange",
+              4
+            ]
+          ],
+          "fluids": [
+            [
+              "minecraft:water",
+              250
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:citric_acid",
+              1
+            ]
+          ],
+          "ticks": 120,
+          "tool": "",
+          "retained_inputs": []
+        },
+        {
+          "items": [
+            [
+              "jugcraft:corn",
+              4
+            ],
+            [
+              "minecraft:glass_bottle",
+              1
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:hydrochloric_acid",
+              50
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:glucose_syrup",
+              1
+            ]
+          ],
+          "ticks": 160,
+          "tool": "",
+          "retained_inputs": []
+        },
+        {
+          "items": [
+            [
+              "jugcraft:cider_vinegar",
+              2
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:ethylene",
+              500
+            ],
+            [
+              "jugcraft:oxygen",
+              250
+            ]
+          ],
+          "fluid_results": [
+            [
+              "jugcraft:vinyl_acetate",
+              500
+            ]
+          ],
+          "results": [],
+          "ticks": 120,
           "tool": "",
           "retained_inputs": []
         },
@@ -8838,6 +9162,54 @@
             ]
           ],
           "ticks": 60,
+          "tool": "",
+          "retained_inputs": []
+        },
+        {
+          "items": [
+            [
+              "jugcraft:pine_planks",
+              8
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:nitric_acid",
+              100
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:aged_pine_planks",
+              8
+            ]
+          ],
+          "ticks": 100,
+          "tool": "",
+          "retained_inputs": []
+        },
+        {
+          "items": [
+            [
+              "jugcraft:maple_planks",
+              8
+            ]
+          ],
+          "fluids": [
+            [
+              "jugcraft:nitric_acid",
+              100
+            ]
+          ],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:aged_maple_planks",
+              8
+            ]
+          ],
+          "ticks": 100,
           "tool": "",
           "retained_inputs": []
         },
@@ -13181,6 +13553,25 @@
         {
           "items": [
             [
+              "jugcraft:silicone",
+              2
+            ]
+          ],
+          "fluids": [],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:gasket",
+              3
+            ]
+          ],
+          "ticks": 120,
+          "tool": "jugcraft:gasket_mold",
+          "energy_per_tick": 32
+        },
+        {
+          "items": [
+            [
               "jugcraft:ptfe_powder",
               1
             ]
@@ -13448,16 +13839,12 @@
           "results": [
             [
               "jugcraft:plastic_sheet",
-              3
-            ],
-            [
-              "jugcraft:hdpe_offcut",
-              1
+              8
             ]
           ],
           "ticks": 160,
           "tool": "jugcraft:sheet_extrusion_die",
-          "energy_per_tick": 48
+          "energy_per_tick": 24
         },
         {
           "items": [
@@ -13480,7 +13867,7 @@
           ],
           "ticks": 160,
           "tool": "jugcraft:film_extrusion_die",
-          "energy_per_tick": 48
+          "energy_per_tick": 24
         },
         {
           "items": [
@@ -13503,13 +13890,13 @@
           ],
           "ticks": 160,
           "tool": "jugcraft:profile_extrusion_die",
-          "energy_per_tick": 48
+          "energy_per_tick": 24
         },
         {
           "items": [
             [
               "jugcraft:rubber",
-              4
+              3
             ]
           ],
           "fluids": [],
@@ -13518,15 +13905,11 @@
             [
               "jugcraft:flexible_hose",
               1
-            ],
-            [
-              "jugcraft:rubber_offcut",
-              1
             ]
           ],
           "ticks": 160,
           "tool": "jugcraft:hose_extrusion_die",
-          "energy_per_tick": 48
+          "energy_per_tick": 24
         },
         {
           "items": [
@@ -13540,16 +13923,12 @@
           "results": [
             [
               "jugcraft:cable_insulation",
-              3
-            ],
-            [
-              "jugcraft:rubber_offcut",
-              1
+              6
             ]
           ],
           "ticks": 160,
           "tool": "jugcraft:insulation_extrusion_die",
-          "energy_per_tick": 48
+          "energy_per_tick": 24
         },
         {
           "items": [
@@ -13563,16 +13942,12 @@
           "results": [
             [
               "jugcraft:plastic_sheet",
-              3
-            ],
-            [
-              "jugcraft:pvc_offcut",
-              1
+              8
             ]
           ],
           "ticks": 160,
           "tool": "jugcraft:sheet_extrusion_die",
-          "energy_per_tick": 48
+          "energy_per_tick": 24
         },
         {
           "items": [

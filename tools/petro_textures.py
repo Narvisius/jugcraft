@@ -205,6 +205,74 @@ def gasification_residue():
     return img
 
 
+def boric_acid():
+    """Boric acid: a heap of pearly white flakes with a faint warm cast, lit from the top left."""
+    import material_style as ms
+    img = ms.dust([(140, 136, 128), (192, 188, 178), (220, 218, 208), (240, 238, 230), (252, 252, 248)])
+    for x, y in ((7, 9), (10, 11), (5, 12)):
+        img.putpixel((x, y), (255, 255, 255, 255))
+    return img
+
+
+def boron_doped_silicon():
+    """Boron-doped silicon: a round wafer of dark blue-grey silicon, the standard 12-pixel pixel circle (symmetric on
+    both axes), with a grid of cells, lit from the top left and outlined in its own darkest tone."""
+    o, d, m, l, h = (30, 34, 52), (58, 66, 96), (84, 96, 136), (120, 136, 180), (178, 194, 232)
+    widths = [4, 8, 10, 10, 12, 12, 12, 12, 10, 10, 8, 4]  # rows 2 to 13, centred on the middle two columns
+    top = 2
+    span = {top + i: (8 - w // 2, 8 + w // 2 - 1) for i, w in enumerate(widths)}
+
+    def inside(x, y):
+        return y in span and span[y][0] <= x <= span[y][1]
+
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    for y in span:
+        for x in range(span[y][0], span[y][1] + 1):
+            if not all(inside(x + dx, y + dy) for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))):
+                c = o
+            elif x in (5, 10) or y in (5, 10):
+                c = d
+            elif x + y <= 11:
+                c = h if x + y <= 9 else l
+            elif x + y >= 19:
+                c = d
+            else:
+                c = m
+            img.putpixel((x, y), c + (255,))
+    return img
+
+
+def control_rod_assembly():
+    """A control rod assembly: four dark boron rods hanging apart from a steel spider and hub, outlined in their darkest tones."""
+    steel = {"o": (52, 56, 62), "d": (110, 116, 124), "m": (160, 166, 174), "l": (210, 214, 220)}
+    rod = {"O": (28, 30, 34), "D": (58, 60, 66), "M": (86, 90, 98), "L": (120, 124, 132)}
+    rows = [
+        "......oooo......",
+        "......olmo......",
+        "..oooooldoooooo.",
+        ".ollllllmmmmmddo",
+        "..oOoooOoOoooOo.",
+        "..OL..OL.OL..OL.",
+        "..OL..OL.OL..OL.",
+        "..OL..OL.OL..OL.",
+        "..OM..OM.OM..OM.",
+        "..OM..OM.OM..OM.",
+        "..OM..OM.OM..OM.",
+        "..OD..OD.OD..OD.",
+        "..OD..OD.OD..OD.",
+        "..OO..OO.OO..OO.",
+        "................",
+        "................",
+    ]
+    tones = {**steel, **rod}
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    for y, row in enumerate(rows):
+        for x, ch in enumerate(row):
+            if ch in tones:
+                img.putpixel((x, y), tones[ch] + (255,))
+    return img
+
+
 def ammonium_nitrate():
     """Ammonium nitrate: a heap of small round white prills, lit from the top left and outlined in their own darkest
     tone (docs/ITEM_ICONS.md)."""
@@ -485,6 +553,37 @@ def rubber():
     return img
 
 
+def silicone():
+    """Silicone rubber: a soft, rounded bale of heat-proof red silicone with a pressed seam, lit from the top left and
+    outlined in its own dark (docs/ITEM_ICONS.md)."""
+    tones = {"O": (110, 30, 24), "D": (170, 52, 40), "M": (204, 72, 54), "L": (226, 104, 80), "H": (246, 156, 128)}
+    rows = [
+        "................",
+        "................",
+        "................",
+        "................",
+        "...OOOOOOOOOO...",
+        "..OHHLLLLLLMMO..",
+        "..OHLLLLLLMMMO..",
+        "..OLLLLLLMMMDO..",
+        "..OLLLLLMMMMDO..",
+        "..ODDDDDDDDDDO..",
+        "..OLLLLMMMMMDO..",
+        "..OLLLMMMMMDDO..",
+        "..OMMMMMMMDDDO..",
+        "...OOOOOOOOOO...",
+        "................",
+        "................",
+    ]
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    for y, row in enumerate(rows):
+        assert len(row) == 16, row
+        for x, ch in enumerate(row):
+            if ch in tones:
+                img.putpixel((x, y), tones[ch] + (255,))
+    return img
+
+
 def gasket():
     """Gasket: a flat black rubber ring round a steel face, seen from above."""
     img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
@@ -605,6 +704,12 @@ def draw_all(save, save_animation):
     save(vanadium_contact_bed(), "item", "vanadium_contact_bed")
     save(gasification_residue(), "item", "gasification_residue")
     save(ammonium_nitrate(), "item", "ammonium_nitrate")
+    save(citric_acid(), "item", "citric_acid")
+    save(glucose_syrup(), "item", "glucose_syrup")
+    save(pvac_glue(), "item", "pvac_glue")
+    save(boric_acid(), "item", "boric_acid")
+    save(control_rod_assembly(), "item", "control_rod_assembly")
+    save(boron_doped_silicon(), "item", "boron_doped_silicon")
     save(guncotton(), "item", "guncotton")
     save(grenade(), "item", "grenade")
     save(grenade_launcher(), "item", "grenade_launcher")
@@ -623,6 +728,7 @@ def draw_all(save, save_animation):
     save(catalyst(), "item", "cracking_catalyst")
     save(rubber(), "item", "rubber")
     save(gasket(), "item", "gasket")
+    save(silicone(), "item", "silicone")
     save(pvc_resin(), "item", "pvc_resin")
     save(soap(), "item", "soap")
     save(asphalt_binder(), "item", "asphalt_binder")
@@ -633,3 +739,74 @@ def draw_all(save, save_animation):
     # Gases: a still swirl only, for recipe viewers (they have no block, so nothing flows in the world).
     for index, (gas, info) in enumerate(GASES.items()):
         save_animation(still(info["colors"], 880 + index), f"{gas}_still", frametime=4)
+
+
+def citric_acid():
+    """Citric acid: a heap of clear white crystals with a faint lemon cast, a few glinting, lit from the top left."""
+    import material_style as ms
+    img = ms.dust([(150, 148, 112), (204, 202, 160), (230, 230, 196), (244, 244, 222), (254, 254, 240)])
+    for x, y in ((6, 10), (9, 9), (11, 12)):
+        img.putpixel((x, y), (255, 255, 255, 255))
+    return img
+
+
+def glucose_syrup():
+    """Glucose syrup: a stoppered glass bottle of thick clear pale-gold syrup, outlined in each part's own dark."""
+    tones = {"c": (92, 62, 36), "k": (150, 106, 64), "g": (86, 108, 116), "w": (196, 222, 228),
+             "o": (150, 104, 20), "s": (214, 164, 48), "y": (240, 204, 92), "h": (255, 240, 180)}
+    rows = [
+        "................",
+        "......cccc......",
+        "......ckkc......",
+        "......cccc......",
+        ".......gg.......",
+        "......gwwg......",
+        ".....gwyyyg.....",
+        "....goyhyyyog...",
+        "...goyhyyyyyog..",
+        "...goyhyyyysog..",
+        "...goyyyyyysog..",
+        "...gosyyyyssog..",
+        "...goossssssog..",
+        "....gooooooog...",
+        ".....ggggggg....",
+        "................",
+    ]
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    for y, row in enumerate(rows):
+        for x, ch in enumerate(row):
+            if ch in tones:
+                img.putpixel((x, y), tones[ch] + (255,))
+    return img
+
+
+def pvac_glue():
+    """PVAc wood glue: a tall white squeeze bottle with a blue label band and a tapered orange nozzle, centred, lit from
+    the top left and outlined in each part's own dark."""
+    tones = {"O": (74, 74, 82), "D": (176, 176, 184), "M": (214, 214, 220), "L": (236, 236, 240), "H": (252, 252, 255),
+             "a": (98, 40, 8), "n": (212, 104, 26), "N": (244, 156, 64),
+             "q": (40, 64, 110), "r": (70, 104, 168), "s": (112, 148, 206)}
+    rows = [
+        "................",
+        ".......aa.......",
+        "......aNna......",
+        "......aNna......",
+        ".....aNnnna.....",
+        ".....aNnnna.....",
+        "....OOOOOOOO....",
+        "....OHLLMMDO....",
+        "....OHLLMMDO....",
+        "....qssrrrrq....",
+        "....qsrrrrrq....",
+        "....OHLMMMDO....",
+        "....OHLMMMDO....",
+        "....OLMMMDDO....",
+        "....OOOOOOOO....",
+        "................",
+    ]
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    for y, row in enumerate(rows):
+        for x, ch in enumerate(row):
+            if ch in tones:
+                img.putpixel((x, y), tones[ch] + (255,))
+    return img

@@ -1,0 +1,32 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "biomes"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "items": [
+    {
+      "ingredient": "jugcraft:maple_planks",
+      "count": 8
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "jugcraft:nitric_acid",
+      "amount": 100
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:aged_maple_planks",
+      "count": 8
+    }
+  ],
+  "time": 100
+}

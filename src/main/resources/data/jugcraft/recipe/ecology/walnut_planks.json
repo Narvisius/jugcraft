@@ -7,12 +7,15 @@
   ],
   "result": {
     "count": 4,
-    "id": "jugcraft:ecology_walnut_planks"
+    "id": "jugcraft:walnut_planks"
   },
   "fabric:load_conditions": [
     {
       "condition": "jugcraft:feature_enabled",
-      "feature": "agriculture"
+      "feature": "biomes",
+      "or": [
+        "agriculture"
+      ]
     }
   ]
 }

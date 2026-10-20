@@ -6,7 +6,7 @@ of the roster (no grapes, hops or berries yet). Every texture is drawn by tools/
 what agriculture/OrchardTree, OrchardLeavesBlock and JugcraftAgriculture use; tools/check_mod_data.py compares them.
 tools/orchard_data.py writes the JSON.
 
-A tree grows from its seed (a pear's seeds, a peach's pit) planted as a sapling, into a tree of vanilla oak logs with a
+A tree grows from its seed (a pear's seeds, a peach's pit) planted as a sapling, into a tree with species-appropriate logs and a
 crown of its own leaves. Leaves the tree grew itself, with air below them, blossom (fruit 1) and then hang with ripe fruit
 (fruit 2), a stage in FRUIT_CHANCE random ticks each, about a Minecraft day in all; a right-click picks the ripe fruit,
 which drops below, and the leaves start again. Broken, the leaves drop as the apple's do: now and then a seed, sticks, and
@@ -26,7 +26,7 @@ FEATURE = "agriculture"
 FRUIT_CHANCE = 10
 
 # The trees, in the order of the OrchardTree enum. fruit: [hunger, saturation modifier]; pick: fruit a ripe cluster gives
-# [min, max]; trunk and foliage: the tree's shape (a straight trunk `base_height` tall plus up to `height_rand_a`, of oak
+# [min, max]; trunk and foliage: the tree's shape (a straight or explicitly forked trunk `base_height` tall plus up to `height_rand_a`, of oak
 # logs or the tree's own `log`, and a blob of leaves `radius` across and `height` deep, or the foliage `type` vanilla
 # places: the pear tall and pointed, the peach low and wide, the citrus small and round); biomes: the vanilla biome tags
 # (ConventionalBiomeTags) a wild patch grows in, one tree in `rarity` chunks; regions: Jugcraft biomes whose trees include
@@ -35,23 +35,23 @@ FRUIT_CHANCE = 10
 # Mediterranean lemon/orange remain 5% each after the earlier olive and umbrella-pine picks.
 TREES = {
     "pear": {"display": "Pear", "seed": "pear_seeds", "seed_display": "Pear Seeds", "food": [4, 0.3], "pick": [1, 3],
-             "trunk": {"base_height": 5, "height_rand_a": 1}, "foliage": {"radius": 2, "height": 4},
-             "biomes": ["IS_FOREST", "IS_BIRCH_FOREST"], "rarity": 16, "regions": {"orchard": 0.2}},
+             "log": "jugcraft:fruitwood_log", "trunk": {"base_height": 6, "height_rand_a": 1}, "foliage": {"radius": 2, "height": 4},
+             "biomes": ["IS_FOREST", "IS_BIRCH_FOREST"], "rarity": 16, "regions": {"orchard": 0.15 / 0.72}},
     "peach": {"display": "Peach", "seed": "peach_pit", "seed_display": "Peach Pit", "food": [4, 0.3], "pick": [1, 3],
-              "trunk": {"base_height": 3, "height_rand_a": 1}, "foliage": {"radius": 3, "height": 2},
-              "biomes": ["IS_PLAINS", "IS_SAVANNA"], "rarity": 16, "regions": {"orchard": 0.2}},
+              "log": "minecraft:cherry_log", "trunk": {"type": "jugcraft:dry_country_trunk_placer", "shape": "small", "base_height": 3, "height_rand_a": 1}, "foliage": {"radius": 2, "height": 2},
+              "biomes": ["IS_PLAINS", "IS_SAVANNA"], "rarity": 16, "regions": {"orchard": 0.10 / 0.57}},
     "lemon": {"display": "Lemon", "seed": "lemon_seeds", "seed_display": "Lemon Seeds", "food": [2, 0.1], "pick": [1, 3],
-              "trunk": {"base_height": 3, "height_rand_a": 1}, "foliage": {"radius": 2, "height": 3},
-              "biomes": ["IS_SAVANNA"], "rarity": 16, "regions": {"mediterranean_forest": 0.05 / 0.45, "subtropics": 0.15}},
+              "trunk": {"base_height": 3, "height_rand_a": 1}, "foliage": {"radius": 2, "height": 2},
+              "biomes": ["IS_SAVANNA"], "rarity": 16, "regions": {"mediterranean_forest": 0.05 / 0.45, "subtropics": 0.06804 / 0.5236}},
     "orange": {"display": "Orange", "seed": "orange_seeds", "seed_display": "Orange Seeds", "food": [4, 0.3], "pick": [1, 3],
-               "trunk": {"base_height": 4, "height_rand_a": 1}, "foliage": {"radius": 2, "height": 3},
-               "biomes": ["IS_SAVANNA", "IS_JUNGLE"], "rarity": 16, "regions": {"mediterranean_forest": 0.05 / 0.4, "subtropics": 0.15}},
+               "trunk": {"base_height": 3, "height_rand_a": 1}, "foliage": {"radius": 2, "height": 2},
+               "biomes": ["IS_SAVANNA", "IS_JUNGLE"], "rarity": 16, "regions": {"mediterranean_forest": 0.05 / 0.4, "subtropics": 0.10 / 0.45556}},
     # The fruit crops (tools/fruit_crops.py, 8 October 2026): the plum, an oak-trunked tree as the others; and the banana,
     # a soft green-brown stem of its own (`log`, BANANA_STEM below) under a crown of long fronds that droop and hang
     # (vanilla's cherry foliage placer, `foliage` "type"), its fruit hanging in bunches among them.
     "plum": {"display": "Plum", "seed": "plum_pit", "seed_display": "Plum Pit", "food": [4, 0.3], "pick": [1, 3],
              "trunk": {"base_height": 4, "height_rand_a": 1}, "foliage": {"radius": 2, "height": 3},
-             "biomes": ["IS_FOREST", "IS_TAIGA"], "rarity": 16, "regions": {"orchard": 0.15}},
+             "biomes": ["IS_FOREST", "IS_TAIGA"], "rarity": 16, "regions": {"orchard": 0.06912 / 0.47}},
     # Batch 12: regions stores conditional selector chances; 1.0 also represents a default pick.
     "banana": {"display": "Banana", "seed": "banana_pup", "seed_display": "Banana Pup", "food": [4, 0.4], "pick": [2, 4],
                "log": "jugcraft:banana_stem", "trunk": {"base_height": 4, "height_rand_a": 2},
@@ -110,7 +110,7 @@ PRESERVES = {
 ITEMS = {}
 for _tree, _info in TREES.items():
     ITEMS[_tree] = {"display": _info["display"], "food": list(_info["food"]), "compost": "medium_high",
-                    "tags": ["c:foods", "c:foods/fruit", f"c:crops/{_tree}"]}
+                    "tags": ["c:foods", "c:foods/fruit", f"c:crops/{_tree}"] + (["jugcraft:fermentable"] if _tree in ("pear", "peach", "lemon", "orange") else [])}
     ITEMS[_info["seed"]] = {"display": _info["seed_display"], "plants": sapling(_tree), "compost": "low", "tags": [f"c:seeds/{_tree}"]}
 for _name, _info in DISHES.items():
     ITEMS[_name] = {"display": _info["display"], "food": list(_info["food"]), "drink": list(_info["effect"]), "tags": ["c:foods"]}

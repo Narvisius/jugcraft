@@ -82,6 +82,9 @@ WOOD = {
     "baobab": (21, "bb9b8e"),
     "fig": (8, "7f6f63"),
     "mango": ("2:4", "938167"),
+    # Owner bank's black walnut, cooled away from cedar/yew for batch 13.
+    # Append to preserve every earlier wood's deterministic seeds.
+    "walnut": ("2:2", "5a4b41"),
 }
 # The owner's second set of painted woods (5 October 2026: "you can use these and use them to recolor for future wood"):
 # eight full woods (bark, ends, stripped, planks). Row 6's wood is the jacaranda's and row 0's (western red cedar) the
@@ -104,6 +107,7 @@ EUCALYPTUS_FLECKS = pal("e8a578", "e3a0a0", "9cc0d8", "e6c87a", "f0e0c0")
 
 # Each tree's bark: its colour (dark to light) and its character.
 BARK = {
+    "walnut": (OWNER_BANK["black_walnut"][2], "furrowed"),
     "fig": (pal("4f4d4a", "686561", "817d79", "989592", "b0adab"), "stringy"),
     "mango": (pal("312d2b", "413c39", "514b48", "615a56", "716965"), "furrowed"),
     "baobab": (pal("61524c", "7b6861", "937e77", "a69691", "baafab"), "plated"),
@@ -246,7 +250,7 @@ def bark(wood, seed):
             c.px(x, y, p[4])
             if rng.random() < 0.5:
                 c.px(x, (y + 1) % 16, p[4 if kind == "stringy" else 3])
-    if wood in ("olive", "fig"):
+    if wood in ("olive", "fig", "walnut"):
         return bark_details(c.img, p, seed + 11000)
     return c.img
 
@@ -607,6 +611,8 @@ def wood_textures():
     out.update(tropical_textures())
     from rainforest_textures import textures as rainforest_textures
     out.update(rainforest_textures())
+    from walnut_textures import textures as walnut_textures
+    out.update(walnut_textures())
     out["block", "olive_planks"] = figure(out["block", "olive_planks"])
     chestnut = out[("block", "chestnut_leaves")]
     out[("block", "chestnut_leaves_burs")] = chestnut_fruit(chestnut, 1)

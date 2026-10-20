@@ -45,6 +45,7 @@ public class TreeBatchTwoClientGameTests implements FabricClientGameTest {
 	protected void validateSurvey(String biome, Map<String, Integer> survey) { }
 	protected BlockPos surveySpot(ServerLevel level, BlockPos first, ResourceKey<Biome> biome) { return first; }
 	protected boolean includeSubmergedColumns() { return false; }
+	protected Block gardenSoil(String shape) { return shape.equals("mallee") ? Blocks.RED_SAND : Blocks.GRASS_BLOCK; }
 	protected List<BlockPos> surveyAnchors(String biome) {
 		var anchors = new ArrayList<BlockPos>();
 		anchors.add(BlockPos.ZERO);
@@ -89,7 +90,7 @@ public class TreeBatchTwoClientGameTests implements FabricClientGameTest {
 					long seed = sample + 1;
 					var size = server.computeOnServer(minecraft -> {
 						var level = minecraft.overworld();
-						TreeBatchTwoGameTests.reset(level, at, shape.equals("mallee") ? Blocks.RED_SAND : Blocks.GRASS_BLOCK);
+						TreeBatchTwoGameTests.reset(level, at, gardenSoil(shape));
 						// Support the comparison plots, including falling sand, and make them safe to walk between.
 						for (BlockPos support : BlockPos.betweenClosed(at.offset(-20, -2, -20), at.offset(20, -2, 20)))
 							level.setBlock(support, Blocks.STONE.defaultBlockState(), Block.UPDATE_CLIENTS);

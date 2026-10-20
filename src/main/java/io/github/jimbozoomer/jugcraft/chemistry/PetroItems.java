@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import io.github.jimbozoomer.jugcraft.weapons.DescribedItem;
+import net.minecraft.world.item.Items;
 
 /** Plain items of the oil line (ITEMS in tools/petro.py). */
 public final class PetroItems {
@@ -48,6 +49,18 @@ public final class PetroItems {
 	public static Item VANADIUM_PENTOXIDE;
 	public static Item GASIFICATION_RESIDUE;
 	public static Item AMMONIUM_NITRATE;
+	/** Boron (docs/features/boric-acid.md): boric acid from borax, and the reactor's control rod assembly made with it. */
+	public static Item BORIC_ACID;
+	public static Item CONTROL_ROD_ASSEMBLY;
+	/** Food chemistry (docs/features/sour-candy.md): citric acid, a candy flavour, and glucose syrup, which crafts into sugar. */
+	public static Item CITRIC_ACID;
+	public static Item GLUCOSE_SYRUP;
+	/** PVAc wood glue (docs/features/pvac-glue.md): binds books and makes sticky pistons. */
+	public static Item PVAC_GLUE;
+	/** Boron in solar cells (docs/features/boron-solar.md): the Advanced Solar Panel's doped silicon. */
+	public static Item BORON_DOPED_SILICON;
+	/** Silicone rubber (docs/features/silicone.md): pressed into heat-proof gaskets. */
+	public static Item SILICONE;
 	/** Bone meal doses ammonium nitrate gives each crop. */
 	public static final int AMMONIUM_NITRATE_DOSES = 3;
 	public static Item VANADIUM_CONTACT_BED;
@@ -233,6 +246,14 @@ public final class PetroItems {
 		// A nitrogen fertilizer: superphosphate's 5x5 area, three doses a crop instead of two.
 		AMMONIUM_NITRATE = JugcraftRegistry.item("ammonium_nitrate",
 				properties -> new FertilizerItem(properties, FertilizerItem.RADIUS, AMMONIUM_NITRATE_DOSES));
+		BORIC_ACID = JugcraftRegistry.item("boric_acid");
+		CONTROL_ROD_ASSEMBLY = JugcraftRegistry.item("control_rod_assembly", properties -> new Item(properties.stacksTo(16)));
+		CITRIC_ACID = JugcraftRegistry.item("citric_acid");
+		GLUCOSE_SYRUP = JugcraftRegistry.item("glucose_syrup",
+				properties -> new Item(properties.stacksTo(16).craftRemainder(Items.GLASS_BOTTLE)));
+		PVAC_GLUE = JugcraftRegistry.item("pvac_glue");
+		BORON_DOPED_SILICON = JugcraftRegistry.item("boron_doped_silicon");
+		SILICONE = JugcraftRegistry.item("silicone");
 
 		VANADIUM_IRON_CONCENTRATE = JugcraftRegistry.item("vanadium_iron_concentrate");
 		VANADIUM_OXIDE = JugcraftRegistry.item("vanadium_oxide");
@@ -542,6 +563,13 @@ public final class PetroItems {
 			output.accept(VANADIUM_PENTOXIDE);
 			output.accept(GASIFICATION_RESIDUE);
 			output.accept(AMMONIUM_NITRATE);
+			output.accept(BORIC_ACID);
+			output.accept(CONTROL_ROD_ASSEMBLY);
+			output.accept(CITRIC_ACID);
+			output.accept(GLUCOSE_SYRUP);
+			output.accept(PVAC_GLUE);
+			output.accept(BORON_DOPED_SILICON);
+			output.accept(SILICONE);
 			output.accept(VANADIUM_CONTACT_BED);
 		});
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT).register(output -> {

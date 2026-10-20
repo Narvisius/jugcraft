@@ -30,11 +30,11 @@ All values below are provisional fictional game units. Heat and pressure regulat
 | HDPE polymerization | 1000 mB ethylene + retained HDPE cartridge -> 4 HDPE pellets | 200 x 64 |
 | LDPE polymerization | 1000 mB ethylene + retained LDPE insert -> 4 LDPE pellets | 240 x 80 |
 | PVC / rubber | 500 mB vinyl chloride / butadiene -> 4 existing PVC / rubber | 160 x 64 |
-| Sheets | 4 HDPE pellets or PVC -> 3 existing plastic sheets + 1 matching offcut | 160 x 48 |
-| Film | 4 LDPE pellets -> 3 film rolls + 1 LDPE offcut | 160 x 48 |
-| Profile | 4 PVC -> 3 profiles + 1 PVC offcut | 160 x 48 |
-| Hose | 4 rubber -> 1 existing hose + 1 rubber offcut | 160 x 48 |
-| Insulation | 4 rubber -> 3 existing insulation + 1 rubber offcut | 160 x 48 |
+| Sheets | 4 HDPE pellets or PVC -> 8 existing plastic sheets + 1 matching offcut | 160 x 24 |
+| Film | 4 LDPE pellets -> 3 film rolls + 1 LDPE offcut | 160 x 24 |
+| Profile | 4 PVC -> 3 profiles + 1 PVC offcut | 160 x 24 |
+| Hose | 3 rubber -> 1 existing hose + 1 rubber offcut | 160 x 24 |
+| Insulation | 4 rubber -> 6 existing insulation + 1 rubber offcut | 160 x 24 |
 | Clean recovery | 4 matching offcuts -> 1 original stock; or 3 clean films/profiles -> 1 matching stock | 120 x 32 |
 
 Monomer recovery always needs outlet space; it never vents HCl. Absorb HCl through the existing Chemical Reactor. Drain incompatible feeds/products before switching jobs. The old refinery/PVC/polymer routes remain available.
@@ -63,3 +63,13 @@ This checkpoint completed the ordinary molding/extrusion route described above. 
 - The first full run had one unrelated crow-flight timeout; the complete rerun and final delivery server run passed without changing that test. The data audit caught a missing crude-oil feature condition on the added white-plastic crafting recipe; it was corrected and the complete audit passed.
 
 The local delivery records the source commit, JAR/pack SHA-256 checksums, saved world and validation logs outside Git. No upload or main merge. Automated testing is distinct from owner survival playtesting, Modrinth app import, two-client multiplayer and representative factory-load testing.
+
+
+## Combined integration correction (20 October 2026)
+
+Full-yield sheet, insulation and hose extrusion returns no offcut. Film/profile
+batches retain their one offcut; reclaiming remains four offcuts to one stock.
+This replaces the earlier claim that every improved-yield batch could also return
+scrap. Tests account for each product in stock-equivalent units and verify that
+a full sheet drawer blocks spending and eight sheets survive batch save/reload.
+Integration validation is recorded in [the combined feature record](trees-chemistry-integration-oct20.md).

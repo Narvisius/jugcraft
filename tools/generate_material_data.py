@@ -232,6 +232,8 @@ def assets():
     bunkerworks.write_all(write, ASSETS, DATA / MOD, lang, condition, self_drop)
     import aluminum_roles
     aluminum_roles.write_all(write, DATA / MOD, condition)
+    import aged_wood
+    aged_wood.write_all(write, ASSETS, DATA / MOD, lang, condition, self_drop)
     import fire_control
     fire_control.write_all(write, ASSETS, DATA / MOD, lang, condition, self_drop)
     import raiders
@@ -1309,6 +1311,27 @@ def recipes():
         write(out / f"{name}.json", recipe)
     drone_recipes(out)
 
+    # Food chemistry (docs/features/sour-candy.md): a bottle of glucose syrup crafts into three sugar, leaving the bottle.
+    syrup = shapeless(MACHINE_FEATURE, [rid("glucose_syrup")], "glucose_syrup", 3)
+    syrup["result"]["id"] = "minecraft:sugar"
+    syrup["fabric:load_conditions"] = [c for f in ("agriculture", MACHINE_FEATURE) for c in condition(f)]
+    write(out / "sugar_from_glucose_syrup.json", syrup)
+    # PVAc wood glue (docs/features/pvac-glue.md): it binds three paper into a book without leather, and makes a piston
+    # sticky without slime.
+    glue = [c for f in ("agriculture", MACHINE_FEATURE) for c in condition(f)]
+    for name, ingredients, result in (("book_from_pvac_glue", ["minecraft:paper"] * 3 + [rid("pvac_glue")], "minecraft:book"),
+                                      ("sticky_piston_from_pvac_glue", ["minecraft:piston", rid("pvac_glue")],
+                                       "minecraft:sticky_piston")):
+        recipe = shapeless(MACHINE_FEATURE, ingredients, "pvac_glue", 1, "redstone" if "piston" in name else "misc")
+        recipe["result"]["id"] = result
+        recipe["fabric:load_conditions"] = glue
+        write(out / f"{name}.json", recipe)
+    # Boron in solar cells (docs/features/boron-solar.md): two silicon fired with a boric acid dope into two
+    # boron-doped silicon, for the Advanced Solar Panel.
+    doped = shapeless(MACHINE_FEATURE, ["#c:silicon", "#c:silicon", rid("boric_acid")], "boron_doped_silicon", 2)
+    doped["fabric:load_conditions"] = [c for f in (MACHINE_FEATURE, "silicon", "sulfur") for c in condition(f)]
+    write(out / "boron_doped_silicon.json", doped)
+
     # Explosive weapons (batch 18): grenades and the launcher, behind the explosives switch.
     boom = [c for f in (MACHINE_FEATURE, "explosives") for c in condition(f)]
     for name, recipe in (
@@ -1452,6 +1475,8 @@ def tags():
     tags.add("block", "minecraft:mineable/pickaxe", rid(guns.RACK))
     import bunkerworks
     bunkerworks.add_tags(tags)
+    import aged_wood
+    aged_wood.add_tags(tags)
     import fire_control
     fire_control.add_tags(tags)
     import raiders
@@ -1772,6 +1797,8 @@ def main():
     vehicle_bays.write()
     import owner_resource_patches
     owner_resource_patches.apply()
+    import walnut_data
+    walnut_data.reconcile(write)
     from generated_resource_cleanup import prune
     prune(RES, previous, WRITTEN_RESOURCES)
     RESOURCE_MANIFEST.write_text(json.dumps(sorted(WRITTEN_RESOURCES), indent=2) + "\n", encoding="utf-8")

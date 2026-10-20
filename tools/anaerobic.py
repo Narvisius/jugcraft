@@ -38,7 +38,7 @@ FORMS = {
      (['PGP','MCT','PKP'],{'P':'#c:plates/steel','G':'jugcraft:iron_gear','M':'jugcraft:electric_motor','C':'jugcraft:basic_circuit','T':'jugcraft:fluid_tank','K':'jugcraft:machine_casing'})),
 }
 FORMS['anaerobic_digester'].update(profile='EXPANDED',tank_mb=8000,warmup=80)
-FORMS['bio_generator'].update(capabilities=[],fuels=[('jugcraft:clean_biogas',192,64),('jugcraft:bioethanol',192,64)],upgrades=False,warmup=0)
+FORMS['bio_generator'].update(capabilities=[],fuels=[('jugcraft:clean_biogas',268,64),('jugcraft:bioethanol',192,64)],upgrades=False,warmup=0)
 
 RECIPES = {
  'anaerobic_digester':[recipe('digest_farm_material','anaerobic_digester',[('minecraft:water',1000)],
@@ -69,7 +69,7 @@ HANDBOOK = {
   '1000 mB digestate -> 750 mB reusable water + one Digestate Fiber in 100 ticks at 16 JE/t. Eight fibers craft one existing Fertilizer, usable in the farming and hydroponics systems. Fertilizer and recovered water are never accepted as biomass feed, and water alone cannot produce fuel.'],
  'bio_generator':[
   'Three wide, four deep and three tall. A modest farm engine with a guarded flywheel, generator coupling, radiator and control cabinet. Either the lower right collar or the low rear fuel fitting accepts cleaned biogas or existing bioethanol into the same tank; drain before switching fuels. Electricity leaves the rear left cabinet. Its crafting bill uses an iron gear, distinct from the industrial gas generator.',
-  'Both fuels give 192 JE per mB at 64 JE/t, below the industrial Gas Burning Generator. Raw biogas, methane and hydrogen are rejected. Fuel is spent only when electricity fits; fractional fuel credit survives saving.',
+  'Cleaned biogas gives 268 JE per mB, the same as ordinary biogas, so cleaning it never loses power; bioethanol gives 192 JE per mB. Both burn at up to 64 JE/t, below the industrial Gas Burning Generator. Raw biogas, methane and hydrogen are rejected. Fuel is spent only when electricity fits; fractional fuel credit survives saving.',
   'Optional upgrade: the existing Chemical Infuser and reusable nickel bed combine 1000 mB cleaned biogas with 1600 mB hydrogen into 1000 mB pure methane and 1600 mB recovered water, 600 ticks at 128 JE/t. Its water overflow setting applies. This preserves the original 600 mB methane and converts the 400 mB CO2 rather than throwing it away. Pure methane uses the existing Gas Burning Generator.']}
 
 def write_extras(write,assets,data,lang,condition):

@@ -2,6 +2,7 @@
 from pathlib import Path
 import sys
 import unittest
+from fractions import Fraction
 sys.path.insert(0,str(Path(__file__).resolve().parents[2]/'tools'))
 import polymers as p
 import polymer_models as models
@@ -15,11 +16,22 @@ class PolymerTests(unittest.TestCase):
             self.assertEqual(product,{'hdpe':'jugcraft:hdpe_pellets','ldpe':'jugcraft:ldpe_pellets','pvc':'jugcraft:pvc_resin','rubber':'jugcraft:rubber'}[grade])
             self.assertGreater(recipe['energy_per_tick']*recipe['ticks'],0)
     def test_extrusion_budget_counts_offcuts_once(self):
+        # Stock-equivalent units follow the existing presses. Offcuts are conservatively
+        # charged one full unit here (reclaiming returns only a quarter).
+        units={'plastic_sheet':Fraction(1,2),'cable_insulation':Fraction(2,3),
+               'flexible_hose':3,'ldpe_film':1,'pvc_profile':1}
         for recipe in p.RECIPES['polymer_extruder']:
-            feed,n=recipe['items'][0];product,m=recipe['results'][0];scrap,q=recipe['results'][1]
-            product_units=3 if product=='jugcraft:flexible_hose' else 1
-            self.assertEqual(n,m*product_units+q)
-            self.assertTrue(recipe['tool'].endswith('_extrusion_die'))
+            with self.subTest(recipe=recipe['name']):
+                n=recipe['items'][0][1]
+                used=sum(count*(1 if item.endswith('_offcut') else units[item.split(':')[1]])
+                         for item,count in recipe['results'])
+                self.assertEqual(n,used)
+                self.assertTrue(recipe['tool'].endswith('_extrusion_die'))
+                self.assertLessEqual(recipe['energy_per_tick'],24)
+    def test_full_yield_extrusion_cannot_also_return_recyclable_scrap(self):
+        for recipe in p.RECIPES['polymer_extruder']:
+            if recipe['results'][0][0].endswith(('plastic_sheet','cable_insulation','flexible_hose')):
+                self.assertEqual(len(recipe['results']),1,recipe['name'])
     def test_polyethylene_requires_distinct_retained_inserts(self):
         recipes=[r for r in p.RECIPES['polymerization_kettle'] if r['name'].startswith('polymerize_')]
         self.assertEqual(len(recipes),2)

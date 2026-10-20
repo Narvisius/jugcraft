@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "salt"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "fluids": [
+    {
+      "fluid": "jugcraft:methane",
+      "amount": 500
+    },
+    {
+      "fluid": "jugcraft:chlorine",
+      "amount": 500
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:methyl_chloride",
+      "amount": 500
+    }
+  ],
+  "time": 100
+}

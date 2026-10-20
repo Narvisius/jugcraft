@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:polymerization",
+  "fluids": [
+    {
+      "fluid": "jugcraft:vinyl_acetate",
+      "amount": 500
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:pvac_glue",
+      "count": 4
+    }
+  ],
+  "time": 100
+}

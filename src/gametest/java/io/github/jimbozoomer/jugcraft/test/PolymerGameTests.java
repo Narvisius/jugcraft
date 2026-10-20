@@ -123,15 +123,15 @@ public class PolymerGameTests {
         long energy=m.energy().getAmount();ticks(h,m,2);
         h.assertTrue(m.lane(0)==null && m.energy().getAmount()==energy && m.container().getItem(0).getCount()==4,"Wrong die cannot spend HDPE");
         m.container().setItem(m.form().firstSocketSlot(),new ItemStack(PetroItems.SHEET_EXTRUSION_DIE));
-        m.container().setItem(m.form().firstOutputSlot()+1,new ItemStack(PetroItems.HDPE_OFFCUT,64));ticks(h,m,2);
-        h.assertTrue(m.lane(0)==null && m.energy().getAmount()==energy,"Full offcut drawer prevents spending");
-        m.container().setItem(m.form().firstOutputSlot()+1,ItemStack.EMPTY);ticks(h,m,65);
+        m.container().setItem(m.form().firstOutputSlot(),new ItemStack(PetroItems.PLASTIC_SHEET,64));ticks(h,m,2);
+        h.assertTrue(m.lane(0)==null && m.energy().getAmount()==energy,"Full sheet drawer prevents spending");
+        m.container().setItem(m.form().firstOutputSlot(),ItemStack.EMPTY);ticks(h,m,65);
         CompoundTag tag=m.saveWithFullMetadata(h.getLevel().registryAccess());
         m.loadWithComponents(TagValueInput.create(ProblemReporter.DISCARDING,h.getLevel().registryAccess(),tag));ticks(h,m,95);
-        h.assertTrue(m.container().getItem(m.form().firstOutputSlot()).getCount()==3,"Three sheets once after reload");
-        h.assertTrue(m.container().getItem(m.form().firstOutputSlot()+1).getCount()==1,"One allocated offcut");
+        h.assertTrue(m.container().getItem(m.form().firstOutputSlot()).getCount()==8,"Eight sheets once after reload");
+        h.assertTrue(m.container().getItem(m.form().firstOutputSlot()+1).isEmpty(),"Full-yield sheets cannot also create recyclable offcuts");
         h.assertTrue(m.container().getItem(m.form().firstSocketSlot()).is(PetroItems.SHEET_EXTRUSION_DIE),"Die retained");
-        h.assertTrue(energy-m.energy().getAmount()==7680,"Fully paid across reload");
+        h.assertTrue(energy-m.energy().getAmount()==3840,"Fully paid across reload");
         clear(h,m);h.succeed();
     }
     @GameTest(structure=ARENA)

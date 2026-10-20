@@ -200,6 +200,10 @@ public final class PetroFluids {
 	public static Gas HYDROGEN_FLUORIDE;
 	public static Gas CHLORODIFLUOROMETHANE;
 	public static Gas TETRAFLUOROETHYLENE;
+	/** Vinyl acetate (docs/features/pvac-glue.md), polymerized into PVAc wood glue. */
+	public static Gas VINYL_ACETATE;
+	/** Methane and chlorine (docs/features/silicone.md), reacted over silicon into silicone rubber. */
+	public static Gas METHYL_CHLORIDE;
 
 	public static Entry OXYGENATED_PROCESS_WATER;
 	public static Entry HYDROGEN_PEROXIDE;
@@ -276,6 +280,7 @@ public final class PetroFluids {
 		HYDROGEN_FLUORIDE = gas("hydrogen_fluoride", 0xFF4E7B67);
 		CHLORODIFLUOROMETHANE = gas("chlorodifluoromethane", 0xFF59708D);
 		TETRAFLUOROETHYLENE = gas("tetrafluoroethylene", 0xFF69808A);
+		VINYL_ACETATE = gas("vinyl_acetate", 0xFFD0D8CE);
 
 		OXYGENATED_PROCESS_WATER = fluid("oxygenated_process_water", 8, 3, 1, 0xFF4C6E77, MapColor.COLOR_LIGHT_GRAY);
 		HYDROGEN_PEROXIDE = fluid("hydrogen_peroxide", 8, 3, 1, 0xFF5C7B8B, MapColor.COLOR_LIGHT_GRAY);
@@ -294,6 +299,7 @@ public final class PetroFluids {
 		LIQUID_HYDROGEN = fluid("liquid_hydrogen", 8, 3, 1, 0xFF51607C, MapColor.COLOR_LIGHT_GRAY);
 		HYDRAZINE = fluid("hydrazine", 8, 3, 1, 0xFF606749, MapColor.COLOR_LIGHT_GRAY);
 		DINITROGEN_TETROXIDE = fluid("dinitrogen_tetroxide", 8, 3, 1, 0xFF734830, MapColor.COLOR_LIGHT_GRAY);
+		METHYL_CHLORIDE = gas("methyl_chloride", 0xFF9ABA98);
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(output -> {
 			for (Entry entry : FLUIDS.values()) {

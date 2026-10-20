@@ -3,7 +3,7 @@
   "category": "building",
   "group": "wooden_stairs",
   "key": {
-    "#": "jugcraft:ecology_walnut_planks"
+    "#": "#jugcraft:walnut_compat/walnut_planks"
   },
   "pattern": [
     "#  ",
@@ -12,12 +12,15 @@
   ],
   "result": {
     "count": 4,
-    "id": "jugcraft:ecology_walnut_stairs"
+    "id": "jugcraft:walnut_stairs"
   },
   "fabric:load_conditions": [
     {
       "condition": "jugcraft:feature_enabled",
-      "feature": "agriculture"
+      "feature": "biomes",
+      "or": [
+        "agriculture"
+      ]
     }
   ]
 }

@@ -49,6 +49,11 @@ def extend(root, edge, evidence, items):
     route(java + 'agriculture/TreeTapBlock.java',
           ['rubber_tree_sapling', 'tree_tap', 'minecraft:glass_bottle'], ['latex_bottle'],
           'grow_rooted_rubber_tree_with_live_canopy_and_wait_four_tap_fill_steps')
+    found(['walnut_log', 'walnut_leaves'], java + 'agriculture/WalnutTree.java',
+          'Walnut and large walnut trees generate in Woodland and Dense Forest; harvest logs and supported leaves with the tools required by their block loot.')
+    route(java + 'agriculture/WalnutLeavesBlock.java',
+          ['walnut_leaves'], ['ecology_walnut', 'walnut_husk'],
+          'harvest_ripe_supported_walnut_leaves_in_season')
 
     for name, tree in ag.TREES.items():
         if tree.get('fruit'):
@@ -102,8 +107,7 @@ def extend(root, edge, evidence, items):
     found(['companion_pearl', 'companion_snail_slime_bottle', 'companion_sea_bunny_slime_bottle'],
           java + 'menagerie/CompanionCreatures.java', 'Species-specific pearl/slime harvesting with regrowth cooldown.')
     found(['ecology_coconut', 'ecology_prickly_pear'], java + 'menagerie/Ecology.java', 'Harvest ripe supported fruit plants.')
-    found(['ecology_walnut', 'ecology_coconut_leaves', 'ecology_coconut_log', 'ecology_coconut_seedling',
-           'ecology_walnut_leaves', 'ecology_walnut_log', 'ecology_walnut_sapling',
+    found(['ecology_coconut_leaves', 'ecology_coconut_log', 'ecology_coconut_seedling',
            'ecology_maple_log', 'ecology_sappy_maple_log', 'ecology_maple_sapling',
            'ecology_azalea_log', 'ecology_azalea_flower'], java + 'menagerie/EcologyTree.java',
           'Native generated/grown trees and their harvests; verify biome availability in a survival world.')
@@ -168,6 +172,14 @@ def extend(root, edge, evidence, items):
     import gear
     exclusions = {j(tier + '_' + part): 'Deferred acquisition design: owner requested preview armor only on October 6; tools/gear.py ARMOR_TIERS records the still-unassigned recipe/drop choice.'
                   for tier in gear.ARMOR_TIERS for part in ('helmet', 'chestplate', 'leggings', 'boots')}
+    # Only the retired basic forms are compatibility-only. Recovered furniture,
+    # boats and the edible walnut remain active survival items.
+    from walnut_data import ALIASES
+    for old, canonical in (ALIASES | {
+            j('ecology_walnut_leaves'): j('walnut_leaves'),
+            j('ecology_walnut_sapling'): j('walnut_sapling')}).items():
+        exclusions[old] = ('Saved-world compatibility ID; tools/walnut_data.py directs new recipes and drops to '
+                           + canonical + '. No fresh survival source for the retired form.')
     for name in ('creative_drone', 'creative_energy_cell', 'creative_supply_crate', 'creative_tower_guide',
                  'nouveau_creative_source_jar', 'nouveau_creative_spell_book', 'nouveau_debug', 'fauna_ff_icon',
                  'landscape_bop_icon', 'check_source'):
@@ -177,4 +189,8 @@ def extend(root, edge, evidence, items):
     found(['rotten_spear'], java + 'menagerie/RottenCreatures.java',
           'Glacial Hunter equips this spear with setItemSlotAndDropWhenKilled; defeat the encounter for the equipment drop.')
     exclusions['jugcraft:rotten_treasure_chest'] = 'Preview encounter storage; Deadbeard treasure placement is still on the creature-recovery TODO. No survival acquisition is implemented yet.'
+    # Full-yield extrusion no longer invents recyclable waste. Preserve saved
+    # HDPE/rubber offcuts and their existing reclaim recipes as compatibility items.
+    for name in ('hdpe_offcut', 'rubber_offcut'):
+        exclusions[j(name)] = 'Saved-world compatibility offcut; full-yield extrusion no longer creates scrap. Existing stock still reclaims through the Polymer Reclaimer.'
     return exclusions

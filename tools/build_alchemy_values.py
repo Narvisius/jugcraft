@@ -50,6 +50,25 @@ def build(jar):
     # must include its recoverable shell, and pot output must not count returned bottles twice.
     for item, price in {'jugcraft:latex_bottle': 2, 'jugcraft:rubber': 1}.items():
         values[item] = Fraction(price); origins[item] = 'local natural rubber/container accounting'
+    # Saved walnut aliases drop the unified blocks. They must cost the same,
+    # even though recipes now output only the canonical IDs.
+    walnut_aliases = {'walnut_log': 32, 'walnut_wood': 32, 'stripped_walnut_log': 32,
+                      'stripped_walnut_wood': 32, 'walnut_planks': 8, 'walnut_stairs': 12,
+                      'walnut_slab': 4, 'walnut_fence': Fraction(40, 3), 'walnut_fence_gate': 32,
+                      'walnut_leaves': 1, 'walnut_sapling': 32}
+    for name, price in walnut_aliases.items():
+        values['jugcraft:ecology_'+name] = Fraction(price)
+        origins['jugcraft:ecology_'+name] = 'local walnut compatibility accounting'
+    # A consumed husk replaces one brown dye; keep the established dye value.
+    values['jugcraft:walnut_husk'] = Fraction(64)
+    origins['jugcraft:walnut_husk'] = 'local walnut dye accounting'
+    # Selected chemistry/production integration: include returned bottles and
+    # account for the existing presses' two-sheets-per-stock yield. Fluid processing
+    # has no general derivation below, so record these explicit local budgets.
+    for item, price in {'glucose_syrup': Fraction(2), 'boric_acid': Fraction(1, 2),
+                        'plastic_sheet': Fraction(1, 2), 'silicone': Fraction(9, 8)}.items():
+        values['jugcraft:'+item] = price
+        origins['jugcraft:'+item] = 'local chemistry/output/container accounting'
     locked=set(values)
     edges=[]
     for rid,r in recipes.items():
@@ -83,7 +102,7 @@ def build(jar):
                 costs=[min((values[i] for i in options if i in values),default=None) for options in inputs]
                 if any(v is None for v in costs) or out in locked:continue
                 # Keep fractions: forcing a cheap nugget/slab up to one creates value in crafting loops.
-                v=sum(costs)/count
+                v=(sum(costs) - (values["minecraft:glass_bottle"] if rid == "jugcraft:sugar_from_glucose_syrup" else 0))/count
                 if v<=0 or v>1_000_000_000 or v.numerator>2**63-1 or v.denominator>2**63-1:continue
                 if out not in values or v<values[out]:values[out]=v;origins[out]='recipe '+rid;changed=True
             if not changed:break

@@ -73,6 +73,9 @@ public final class FieldChemistry {
 	/** Medicines: the first aid kit's cooldown (seconds) and how long the stimulant lasts (ticks). */
 	public static final int FIRST_AID_COOLDOWN = 10;
 	public static final int STIMULANT_TICKS = 1200;
+	/** Aspirin (docs/features/aspirin.md): Regeneration I for this long (ticks), and the wait before the next (seconds). */
+	public static final int ASPIRIN_REGENERATION_TICKS = 200;
+	public static final int ASPIRIN_COOLDOWN = 30;
 
 	public static final ResourceKey<DamageType> CHLORINE_DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE,
 			Jugcraft.id("chlorine"));
@@ -95,6 +98,8 @@ public final class FieldChemistry {
 	public static Item FIRST_AID_KIT;
 	public static Item ANTIDOTE;
 	public static Item STIMULANT;
+	public static Item SALICYLIC_ACID;
+	public static Item ASPIRIN;
 	public static EntityType<ChemicalCloud> CHEMICAL_CLOUD;
 
 	/** Every item, by id, in registration order. */
@@ -133,6 +138,16 @@ public final class FieldChemistry {
 								new MobEffectInstance(MobEffects.HUNGER, STIMULANT_TICKS, 0))))
 						.build())));
 
+		// Willow bark's salicylic acid, acetylated: eases pain (regeneration) and settles the stomach (no nausea).
+		SALICYLIC_ACID = item("salicylic_acid", DescribedItem::new);
+		ASPIRIN = item("aspirin", properties -> new DescribedItem(properties.stacksTo(16).useCooldown(ASPIRIN_COOLDOWN)
+				.component(DataComponents.CONSUMABLE, Consumable.builder().consumeSeconds(0.8F).animation(ItemUseAnimation.EAT)
+						.sound(SoundEvents.GENERIC_EAT).hasConsumeParticles(false)
+						.onConsume(new RemoveStatusEffectsConsumeEffect(HolderSet.direct(List.of(MobEffects.NAUSEA))))
+						.onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.REGENERATION,
+								ASPIRIN_REGENERATION_TICKS, 0)))
+						.build())));
+
 		ResourceKey<EntityType<?>> key = ResourceKey.create(Registries.ENTITY_TYPE, Jugcraft.id("chemical_cloud"));
 		CHEMICAL_CLOUD = Registry.register(BuiltInRegistries.ENTITY_TYPE, key,
 				EntityType.Builder.<ChemicalCloud>of(ChemicalCloud::new, MobCategory.MISC).noSummon().noLootTable()
@@ -149,8 +164,12 @@ public final class FieldChemistry {
 			output.accept(FIRST_AID_KIT);
 			output.accept(ANTIDOTE);
 			output.accept(STIMULANT);
+			output.accept(ASPIRIN);
 		});
-		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS).register(output -> output.accept(THERMITE));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS).register(output -> {
+			output.accept(THERMITE);
+			output.accept(SALICYLIC_ACID);
+		});
 	}
 
 	private static Item item(String name, java.util.function.Function<Item.Properties, Item> factory) {

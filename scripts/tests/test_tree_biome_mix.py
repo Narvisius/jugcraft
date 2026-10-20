@@ -40,10 +40,10 @@ class TreeBiomeMixTests(unittest.TestCase):
                 with self.subTest(biome=biome, tree=tree):
                     self.assertAlmostEqual(actual[f"jugcraft:{tree}_checked"], share, places=6)
 
-    def test_existing_citrus_and_shield_companions_keep_their_shares(self):
+    def test_citrus_and_shield_companion_shares(self):
         subtropics = shares("subtropics")
         self.assertAlmostEqual(subtropics["jugcraft:lemon_checked"], .7 * .9 * .8 * .9 * .15)
-        self.assertAlmostEqual(subtropics["jugcraft:orange_checked"], .7 * .9 * .8 * .9 * .85 * .15)
+        self.assertAlmostEqual(subtropics["jugcraft:orange_checked"], .10)  # Batch 14 replaces birch with more orange.
         shield = shares("shield")
         self.assertAlmostEqual(shield["jugcraft:aspen_checked"], .75 * (1 - .1867) * .1311)
         self.assertAlmostEqual(shield["jugcraft:larch_checked"], .75 * (1 - .1867) * (1 - .1311) * .1509)

@@ -1574,6 +1574,14 @@ a rainforest giant read as one, and they remove the last vanilla emergent from t
 
 ### Batch 13: walnut and bristlecone
 
+Implementation: [PR #436](https://github.com/jimbozoomer-byte/jugcraft/pull/436),
+with the owner's approved walnut timber and the recovered walnut family reconciled
+without deleting saved IDs. The final shapes use bounded native placement for
+connected spreading branches and rocky bristlecone support; the large variant is
+named `large_walnut`. Distribution, harvest routes and validation are recorded in
+[the Batch 13 feature record](../features/trees-batch-13.md). The roster below is
+the original visual brief. Batch 14 remains outside this work.
+
 #### walnut
 Walnut (*Juglans regia*; black walnut, *J. nigra*). **Medium.** It gives the dense oak forest a tree of its own and a
 nut to forage. It is medium priority because the plain oak woods are already right.
@@ -1629,6 +1637,11 @@ deepen the barren basin's ancient mood without filling it.
   own. Its placement checks for gravel, stone or andesite below in place of a sapling check.
 
 ### Batch 14: orchard fruit (agriculture slice 4)
+
+Implementation: [PR #437](https://github.com/jimbozoomer-byte/jugcraft/pull/437),
+`codex/tree-generation-batch-14`. See [the feature record](../features/trees-batch-14.md)
+for current dimensions, exact selector shares, reuse of the already shipped agriculture
+orchards and validation. The roster below records the original planning rationale.
 
 `AGRICULTURE.md` already plans pear, peach, lemon and orange for slice 4, so they are built there with the
 `AppleLeavesBlock` pattern and placed wild by this roster. The same PR:

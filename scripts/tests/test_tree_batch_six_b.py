@@ -27,11 +27,14 @@ class HollyTests(unittest.TestCase):
         expected = {
             "woodland": ([9, 10], {"minecraft:fancy_oak_leaf_litter": .25, "jugcraft:hawthorn_bush_checked": .04,
                 "jugcraft:oak_bush_checked": .035, "minecraft:fallen_oak_tree": .675 * .03,
-                "jugcraft:elder_checked": .04, "jugcraft:holly_checked": .04, "minecraft:oak_leaf_litter": .675 * .97 - .08}),
+                "jugcraft:elder_checked": .04, "jugcraft:holly_checked": .04,
+                "jugcraft:walnut_checked": .032, "jugcraft:large_walnut_checked": .008,
+                "minecraft:oak_leaf_litter": .675 * .97 - .08 - .04}),
             "dense_forest": ([14, 16], {"minecraft:oak_checked": .3, "minecraft:dark_oak_checked": .07,
                 "jugcraft:oak_bush_checked": .63 * .1111 - .05, "jugcraft:holly_checked": .05,
                 "jugcraft:great_oak_checked": .63 * (1 - .1111) * .0357,
-                "minecraft:fancy_oak_checked": .63 * (1 - .1111) * (1 - .0357)}),
+                "jugcraft:walnut_checked": .08, "jugcraft:large_walnut_checked": .02,
+                "minecraft:fancy_oak_checked": .63 * (1 - .1111) * (1 - .0357) - .10}),
         }
         for biome, (count, wanted) in expected.items():
             self.assertEqual(biomes.BIOMES[biome]["trees"]["count"], count)

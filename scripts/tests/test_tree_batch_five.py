@@ -62,11 +62,15 @@ class TreeBatchFiveTests(unittest.TestCase):
 
     def test_tree_farm_and_crafting_use_shared_timber(self):
         recipes = machines._tree_farm()
-        for tree, wood in (("rowan", "jugcraft:fruitwood_log"), ("elder", "minecraft:oak_log")):
+        # Rowan shares fruitwood with orchard pears, so either feature enables it.
+        # Elder remains a biome-only tree despite using vanilla oak timber.
+        for tree, wood, switches in (
+                ("rowan", "jugcraft:fruitwood_log", ["biomes", "agriculture"]),
+                ("elder", "minecraft:oak_log", ["biomes"])):
             farm = next(r for r in recipes if r["input"] == f"jugcraft:{tree}_sapling")
             self.assertEqual(farm["output"], wood)
             self.assertIn([f"jugcraft:{tree}_sapling", 1, 1., None], farm["byproducts"])
-            self.assertEqual(ag.tree_switches(tree), ["biomes"])
+            self.assertEqual(ag.tree_switches(tree), switches)
         self.assertNotIn("rowan", ag.WOOD_SETS)
         self.assertNotIn("elder", ag.WOOD_SETS)
         self.assertEqual(len(ag.wood_blocks("fruitwood", "Fruitwood")), 9)

@@ -21,6 +21,16 @@ import orchard
 # Each tree's leaves, six tones dark to light (tools/wood_style.py LEAVES): the pear a fresh mid green, the peach a
 # yellower green, the lemon and orange a dark glossy evergreen (the lemon a touch yellower).
 LEAVES = {
+    "pear": pal("18341e", "22492a", "2d5f37", "397445", "468e54", "58a768"),
+    "peach": pal("2e411a", "405c25", "547830", "68923e", "7fb24c", "99bf73"),
+    "lemon": pal("12301a", "1a4222", "24552b", "2f6936", "3e7e42", "549856"),
+    "orange": pal("193010", "234317", "2e581e", "396a27", "468230", "56983e"),
+    # The fruit crops (tools/fruit_crops.py): the plum a cool, deep green; the banana's fronds a bright yellow-green.
+    "plum": pal("162e1a", "1f4024", "2a552e", "386c3a", "4a844a", "649e5e"),
+    "banana": pal("2a4a12", "3a6418", "4e801e", "649c26", "7cb432", "a0cc4a"),
+}
+# Keep the established fruit item icons independent of the canopy palette.
+ITEM_LEAVES = {
     "pear": pal("1c3a16", "27501d", "356a26", "458431", "5a9e3e", "79b856"),
     "peach": pal("26401a", "345a22", "46752c", "5a8f36", "74a846", "96c262"),
     "lemon": pal("12301a", "1a4222", "24552b", "2f6936", "3e7e42", "549856"),
@@ -33,10 +43,10 @@ SEEDS = {tree: 900 + i for i, tree in enumerate(orchard.TREES)}
 
 # Blossom: (petal light, petal shade, centre).
 BLOSSOM = {
-    "pear": (rgb("faf8f2"), rgb("e4e0d6"), rgb("8a2a3a")),
-    "peach": (rgb("f8b4c8"), rgb("e07a9c"), rgb("b23a66")),
+    "pear": (rgb("e4dfd6"), rgb("d8d2c8"), rgb("b8b0b4")),
+    "peach": (rgb("e896aa"), rgb("d4708c"), rgb("b84a6a")),
     "lemon": (rgb("f8f4fa"), rgb("dccae6"), rgb("e8d040")),
-    "orange": (rgb("fdfaf2"), rgb("e8e2d2"), rgb("f0cc3a")),
+    "orange": (rgb("e4dfd2"), rgb("d8d2c4"), rgb("f0cc3a")),
     "plum": (rgb("fbf6f8"), rgb("e4d6de"), rgb("d8b03a")),
     # The banana's flower: deep maroon bracts round a pale tip.
     "banana": (rgb("a83a5e"), rgb("6e2440"), rgb("f0d890")),
@@ -163,7 +173,7 @@ def fruit_item(tree):
     nib at each end), an orange (round, dimpled) or a plum (an oval with its crease and a bloomy light), each with a leaf;
     a banana (a curved yellow finger)."""
     tones = FRUIT[tree]
-    leaf = LEAVES[tree]
+    leaf = ITEM_LEAVES[tree]
     c = Canvas()
 
     def disc(cx, cy, rx, ry):

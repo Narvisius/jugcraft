@@ -206,6 +206,24 @@ ITEMS = {
     # Nitric acid neutralized with ammonia in the Bulk Chemical Reactor (tools/industrial_forms.py): a nitrogen
     # fertilizer (chemistry/FertilizerItem, three doses), and the explosive filling of grenades and HE rockets.
     "ammonium_nitrate": "Ammonium Nitrate",
+    # Boron (docs/features/boric-acid.md): borax freed with sulfuric acid in the Chemical Reactor gives boric acid; with
+    # tungsten and steel it makes the neutron-absorbing control rod assembly every reactor pressure vessel holds.
+    "boric_acid": "Boric Acid",
+    "control_rod_assembly": "Control Rod Assembly",
+    # Food chemistry (docs/features/sour-candy.md): citric acid pressed and crystallized from lemons or oranges in the
+    # Chemical Reactor (a Candy Kettle flavour, tools/agriculture.py CANDY "sour"), and corn hydrolysed with dilute
+    # hydrochloric acid into a bottle of glucose syrup that crafts into sugar.
+    "citric_acid": "Citric Acid",
+    "glucose_syrup": "Glucose Syrup",
+    # PVAc (docs/features/pvac-glue.md): vinyl acetate polymerized into a pot of white wood glue, which binds paper into
+    # a book without leather and makes a piston sticky without slime.
+    "pvac_glue": "PVAc Wood Glue",
+    # Boron in solar cells (docs/features/boron-solar.md): silicon doped with boric acid, the p-type layer of the
+    # Advanced Solar Panel's cells.
+    "boron_doped_silicon": "Boron-Doped Silicon",
+    # Silicone (docs/features/silicone.md): silicon reacted with methyl chloride and water in the Chemical Reactor, a
+    # heat-proof rubber the Polymer Molding Press's gasket mold presses into gaskets.
+    "silicone": "Silicone Rubber",
 }
 
 
@@ -358,6 +376,9 @@ FLUID_RECIPES = {
         # PVC (batch 15): vinyl chloride polymerized into resin.
         {"name": "vinyl_chloride", "fluids": [("jugcraft:vinyl_chloride", 500)], "fluid_results": [],
          "results": [("jugcraft:pvc_resin", 4)], "source": 0, "ticks": 100, "features": ["crude_oil", "salt"]},
+        # PVAc (docs/features/pvac-glue.md): vinyl acetate polymerized in water into white wood glue.
+        {"name": "vinyl_acetate", "fluids": [("jugcraft:vinyl_acetate", 500)], "fluid_results": [],
+         "results": [("jugcraft:pvac_glue", 4)], "source": 0, "ticks": 100, "features": ["agriculture", "machines"]},
         # Synthetic rubber (batch 14): butadiene polymerized into crumbs of rubber.
         {"name": "butadiene", "fluids": [("jugcraft:butadiene", 500)], "fluid_results": [],
          "results": [("jugcraft:rubber", 4)], "source": 0, "ticks": 100, "features": ["crude_oil"]},
@@ -386,6 +407,14 @@ FLUID_RECIPES = {
          "fluid_results": [("jugcraft:hydrochloric_acid", 1000)], "ticks": 100, "features": ["machines"]},
         {"name": "absorb_sulfur_trioxide", "fluids": [("minecraft:water", 250), ("jugcraft:sulfur_trioxide", 250), ("jugcraft:sulfuric_acid", 1000)],
          "retained_inputs": [2], "fluid_results": [("jugcraft:sulfuric_acid", 500)], "ticks": 100, "features": ["machines", "sulfur"]},
+        # Silicone (docs/features/silicone.md): methane chlorinated to methyl chloride; methyl chloride over silicon
+        # with water gives silicone rubber and gives back some of the chlorine as hydrochloric acid. Quantities for review.
+        {"name": "methyl_chloride", "fluids": [("jugcraft:methane", 500), ("jugcraft:chlorine", 500)],
+         "fluid_results": [("jugcraft:methyl_chloride", 500)], "ticks": 100, "features": ["machines", "salt"]},
+        {"name": "silicone", "items": [("jugcraft:silicon", 1)],
+         "fluids": [("jugcraft:methyl_chloride", 500), ("minecraft:water", 250)],
+         "results": [("jugcraft:silicone", 2)], "fluid_results": [("jugcraft:hydrochloric_acid", 250)], "ticks": 160,
+         "features": ["machines", "silicon"]},
         {"name": "hydrochloric_copper", "items": [("minecraft:raw_copper", 1)], "fluids": [("jugcraft:hydrochloric_acid", 250)],
          "results": [("jugcraft:washed_copper_ore", 1)], "ticks": 160, "features": ["machines"]},
         # Cement burnt with its carbon dioxide captured (docs/features/cement-co2-capture.md): the furnace's cement, with
@@ -412,6 +441,34 @@ FLUID_RECIPES = {
         # Superphosphate: phosphate rock treated with sulfuric acid becomes a soluble fertilizer.
         {"name": "fertilizer", "items": [("jugcraft:phosphate", 2)], "fluids": [("jugcraft:sulfuric_acid", 250)],
          "results": [("jugcraft:fertilizer", 4)], "ticks": 80, "features": ["phosphate", "sulfur"]},
+        # Pharmacy (docs/features/aspirin.md): willow bark steeped and hydrolysed in hot water gives salicylic acid; birch
+        # bark gives less. Salicylic acid acetylated with cider vinegar over a little sulfuric acid makes aspirin tablets.
+        # Quantities for review.
+        {"name": "salicylic_acid_willow", "items": [("jugcraft:willow_log", 4)], "fluids": [("minecraft:water", 500)],
+         "results": [("jugcraft:salicylic_acid", 2)], "ticks": 160, "features": ["biomes", "machines"]},
+        {"name": "salicylic_acid_birch", "items": [("minecraft:birch_log", 4)], "fluids": [("minecraft:water", 500)],
+         "results": [("jugcraft:salicylic_acid", 1)], "ticks": 160, "features": ["machines"]},
+        {"name": "aspirin", "items": [("jugcraft:salicylic_acid", 2), ("jugcraft:cider_vinegar", 1)],
+         "fluids": [("jugcraft:sulfuric_acid", 50)], "results": [("jugcraft:aspirin", 4)], "ticks": 120,
+         "features": ["agriculture", "sulfur", "machines"]},
+        # Boric acid (docs/features/boric-acid.md): borax freed with sulfuric acid. Quantities for review.
+        {"name": "boric_acid", "items": [("jugcraft:borax", 1)], "fluids": [("jugcraft:sulfuric_acid", 250)],
+         "results": [("jugcraft:boric_acid", 2)], "ticks": 100, "features": ["silicon", "sulfur"]},
+        # Food chemistry (docs/features/sour-candy.md): citrus juice steeped in hot water and crystallized gives citric
+        # acid (lemons give more than oranges); corn starch hydrolysed with a little dilute hydrochloric acid gives glucose
+        # syrup, bottled. Quantities for review.
+        {"name": "citric_acid_lemon", "items": [("jugcraft:lemon", 4)], "fluids": [("minecraft:water", 250)],
+         "results": [("jugcraft:citric_acid", 2)], "ticks": 120, "features": ["agriculture", "machines"]},
+        {"name": "citric_acid_orange", "items": [("jugcraft:orange", 4)], "fluids": [("minecraft:water", 250)],
+         "results": [("jugcraft:citric_acid", 1)], "ticks": 120, "features": ["agriculture", "machines"]},
+        {"name": "glucose_syrup", "items": [("jugcraft:corn", 4), ("minecraft:glass_bottle", 1)],
+         "fluids": [("jugcraft:hydrochloric_acid", 50)], "results": [("jugcraft:glucose_syrup", 1)], "ticks": 160,
+         "features": ["agriculture", "machines"]},
+        # Vinyl acetate (docs/features/pvac-glue.md): ethylene and oxygen with cider vinegar's acetic acid over a hot
+        # catalyst. Quantities for review.
+        {"name": "vinyl_acetate", "items": [("jugcraft:cider_vinegar", 2)],
+         "fluids": [("jugcraft:ethylene", 500), ("jugcraft:oxygen", 250)],
+         "fluid_results": [("jugcraft:vinyl_acetate", 500)], "ticks": 120, "features": ["agriculture", "machines"]},
         # Saponification (batch 15): fat (rotten flesh, rendered) boiled in lye sets into soap.
         {"name": "soap", "items": [("minecraft:rotten_flesh", 2)], "fluids": [("jugcraft:lye", 250)],
          "results": [("jugcraft:soap", 4)], "ticks": 80, "features": ["salt"]},
@@ -574,6 +631,9 @@ FLUID_RECIPES["catalytic_cracker"] += _rocketry.CRACKER_RECIPES
 FLUID_MACHINES["cryogenic_liquefier"] = _rocketry.LIQUEFIER
 FLUID_RECIPES["cryogenic_liquefier"] = _rocketry.LIQUEFIER_RECIPES
 FLUID_RECIPES["chemical_reactor"] += _rocketry.TANK_RECIPES
+import aged_wood as _aged_wood  # noqa: E402
+# Aged pine and maple planks (docs/features/aged-wood.md): planks treated with nitric acid.
+FLUID_RECIPES["chemical_reactor"] += _aged_wood.reactor_recipes()
 
 # Crops that ferment into bioethanol (data/jugcraft/tags/item/fermentable.json).
 FERMENTABLE = ["minecraft:wheat", "minecraft:sugar_cane", "minecraft:potato", "minecraft:carrot", "minecraft:beetroot",
@@ -630,6 +690,10 @@ ITEMS.update({k: v for k, v in POLYMER_ITEMS.items() if k not in ITEMS})
 from fluorochemistry import FLUIDS as FLUORO_FLUIDS, GASES as FLUORO_GASES, ITEMS as FLUORO_ITEMS
 FLUIDS.update({k: v for k, v in FLUORO_FLUIDS.items() if k not in FLUIDS})
 GASES.update({k: v for k, v in FLUORO_GASES.items() if k not in GASES})
+# Vinyl acetate (docs/features/pvac-glue.md): ethylene, oxygen and cider vinegar's acetic acid in the Chemical Reactor,
+# polymerized into PVAc wood glue. Last, so the swirls drawn by index for the gases before it keep their seeds.
+GASES["vinyl_acetate"] = {"display": "Vinyl Acetate", "feature": "machines",
+                          "colors": [(150, 160, 150), (182, 192, 182), (208, 216, 206), (234, 240, 232)]}
 ITEMS.update({k: v for k, v in FLUORO_ITEMS.items() if k not in ITEMS})
 
 from ceramics import ITEMS as CERAMIC_ITEMS
@@ -664,3 +728,7 @@ ITEMS.update(cryogenic_fuels.ITEMS)
 FLUIDS.update(cryogenic_fuels.FLUIDS)
 FLUID_RECIPES["cryogenic_liquefier"].extend(cryogenic_fuels.LIQUEFIER_RECIPES)
 FLUID_RECIPES["chemical_reactor"].extend(cryogenic_fuels.TANK_RECIPES)
+# Methyl chloride (docs/features/silicone.md): methane and chlorine in the Chemical Reactor, made into silicone rubber.
+# Last, so the swirls drawn by index for the gases before it keep their seeds.
+GASES["methyl_chloride"] = {"display": "Methyl Chloride", "feature": "machines",
+                            "colors": [(120, 150, 120), (154, 186, 152), (186, 212, 182), (220, 238, 214)]}

@@ -197,6 +197,8 @@ public final class JugcraftAgriculture {
 	public static final TreeGrower ANCIENT_OLIVE_GROWER = grower("ancient_olive");
 	public static final TreeGrower HOLLY_GROWER = grower("holly");
 	public static final SeasonalLeavesBlock.Schedule HOLLY_LEAVES = new SeasonalLeavesBlock.Schedule(100, 300, 335);
+	public static final SeasonalLeavesBlock.Schedule WALNUT_LEAVES = new SeasonalLeavesBlock.Schedule(105, 255, 290);
+	public static final TreeGrower WALNUT_GROWER = weightedGrower("walnut", "large_walnut", 4, 1);
 	public static final TreeGrower PERSIMMON_GROWER = grower("persimmon");
 	public static final SeasonalLeavesBlock.Schedule HAWTHORN_LEAVES = new SeasonalLeavesBlock.Schedule(85, 280, 325);
 	public static final SeasonalLeavesBlock.Schedule PERSIMMON_LEAVES = new SeasonalLeavesBlock.Schedule(98, 280, 315);
@@ -421,7 +423,7 @@ public final class JugcraftAgriculture {
 	public static BlockEntityType<PunchBowlBlockEntity> PUNCH_BOWL_ENTITY;
 	public static BlockEntityType<CornMazeGateBlockEntity> CORN_MAZE_GATE_ENTITY;
 	/** The mooncakes, baked in the Cooking Pot. */
-	public static final List<String> MOONCAKES = List.of("osmanthus_mooncake", "red_bean_mooncake", "chestnut_mooncake", "pumpkin_mooncake");
+	public static final List<String> MOONCAKES = List.of("osmanthus_mooncake", "red_bean_mooncake", "walnut_mooncake", "chestnut_mooncake", "pumpkin_mooncake");
 	public static BlockEntityType<ShowLauncherBlockEntity> SHOW_LAUNCHER_ENTITY;
 	/** A spooky firework made with glowstone dust: its sparks twinkle. */
 	public static DataComponentType<Boolean> TWINKLE;
@@ -542,6 +544,7 @@ public final class JugcraftAgriculture {
 		// Generated trees' seasonal leaves start in today's look (tools/trees.py DECORATOR).
 		Registry.register(BuiltInRegistries.TREE_DECORATOR_TYPE, Jugcraft.id("seasonal_leaves"), SeasonalLeavesDecorator.TYPE);
 		Registry.register(BuiltInRegistries.TRUNK_PLACER_TYPE, Jugcraft.id("olive_trunk_placer"), OliveTrunkPlacer.TYPE);
+		Registry.register(BuiltInRegistries.FEATURE_TYPE, Jugcraft.id("walnut_tree"), WalnutTree.CODEC);
 		Registry.register(BuiltInRegistries.TRUNK_PLACER_TYPE, Jugcraft.id("banyan_trunk_placer"), BanyanTrunkPlacer.TYPE);
 		Registry.register(BuiltInRegistries.TRUNK_PLACER_TYPE, Jugcraft.id("dry_country_trunk_placer"), DryCountryTrunkPlacer.TYPE);
 		Registry.register(BuiltInRegistries.FEATURE_TYPE, Jugcraft.id("fungal_growth"), FungalGrowthFeature.CODEC);
@@ -621,6 +624,11 @@ public final class JugcraftAgriculture {
         registerFoliage("banyan", "banyan_leaves", BANYAN_GROWER, Blocks.OAK_SAPLING, Blocks.OAK_LEAVES,
                 BanyanLeavesBlock::new);
         registerWoodSet("fig", MapColor.COLOR_LIGHT_GRAY, MapColor.TERRACOTTA_BROWN);
+        // Batch 13 timber approval stage; tree acquisition follows owner approval.
+        registerWoodSet("walnut", MapColor.TERRACOTTA_BROWN, MapColor.COLOR_BROWN);
+        registerFoliage("walnut", "walnut_leaves", WALNUT_GROWER, Blocks.OAK_SAPLING, Blocks.OAK_LEAVES, WalnutLeavesBlock::new);
+        food("roasted_walnuts", 4, 0.6F, COMPOST_MEDIUM_HIGH);
+        registerItem("walnut_husk", Item::new, new Item.Properties(), FOOD_TAB);
         registerTree("mango", "mango_leaves", MANGO_GROWER, null, Blocks.OAK_SAPLING, Blocks.OAK_LEAVES,
                 MapColor.COLOR_GRAY, MapColor.WOOD);
         food("sea_grapes", 2, 0.2F, COMPOST_MEDIUM);

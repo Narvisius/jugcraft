@@ -1,10 +1,10 @@
 {
   "type": "jugcraft:cutting",
-  "ingredient": "jugcraft:ecology_walnut_log",
+  "ingredient": "#jugcraft:walnut_compat/walnut_log",
   "tool": "#minecraft:axes",
   "results": [
     {
-      "id": "jugcraft:ecology_stripped_walnut_log"
+      "id": "jugcraft:stripped_walnut_log"
     },
     {
       "id": "jugcraft:sawdust"
@@ -13,7 +13,10 @@
   "fabric:load_conditions": [
     {
       "condition": "jugcraft:feature_enabled",
-      "feature": "agriculture"
+      "feature": "biomes",
+      "or": [
+        "agriculture"
+      ]
     }
   ]
 }

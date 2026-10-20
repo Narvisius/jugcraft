@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:polymer_molding",
+  "items": [
+    {
+      "ingredient": "jugcraft:silicone",
+      "count": 2
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:gasket",
+      "count": 3
+    }
+  ],
+  "tool": "jugcraft:gasket_mold",
+  "energy_per_tick": 32,
+  "time": 120
+}

@@ -3,7 +3,7 @@ blockstates, items, loot and tags) and the tree features biomes and saplings gro
 other woods (festival_data.wood_assets); wood and leaf textures are drawn by wood_style.py.
 """
 from agriculture import TREES, SEASON_STATES, SAPLING_CHANCES, sapling, leaf_looks, trunk_block
-from trees import SHAPES, FALLEN, DECORATOR
+from trees import SHAPES, BOUNDED_SHAPES, FALLEN, DECORATOR
 
 MOD = "jugcraft"
 SHEARS_OR_SILK = {"type": "minecraft:any_of", "terms": ["minecraft:tool/can_shear", "minecraft:tool/can_silk_touch"]}
@@ -214,6 +214,9 @@ def worldgen(data, write):
         survives = info.get("survives_as") or (f"{tree}_sapling" if tree.startswith("minecraft:") else rid(sapling(tree)))
         write(folder / "placed_feature" / f"{shape}_checked.json", {"feature": rid(shape), "placement": [
             {"type": "minecraft:block_predicate_filter", "predicate": {"type": "minecraft:would_survive", "state": survives}}]})
+    for shape in BOUNDED_SHAPES:
+        write(folder / "feature" / f"{shape}.json", {"type": "jugcraft:walnut_tree", "shape": shape})
+        write(folder / "placed_feature" / f"{shape}_checked.json", {"feature": rid(shape), "placement": []})
     write(folder / "feature" / "dry_river_empty.json", {"type": "minecraft:no_op"})
     write(folder / "placed_feature" / "dry_river_empty.json", {"feature": rid("dry_river_empty"), "placement": []})
     for wood, length in FALLEN.items():

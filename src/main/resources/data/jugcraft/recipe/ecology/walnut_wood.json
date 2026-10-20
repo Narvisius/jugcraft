@@ -3,7 +3,7 @@
   "category": "building",
   "group": "bark",
   "key": {
-    "#": "jugcraft:ecology_walnut_log"
+    "#": "#jugcraft:walnut_compat/walnut_log"
   },
   "pattern": [
     "##",
@@ -11,12 +11,15 @@
   ],
   "result": {
     "count": 3,
-    "id": "jugcraft:ecology_walnut_wood"
+    "id": "jugcraft:walnut_wood"
   },
   "fabric:load_conditions": [
     {
       "condition": "jugcraft:feature_enabled",
-      "feature": "agriculture"
+      "feature": "biomes",
+      "or": [
+        "agriculture"
+      ]
     }
   ]
 }

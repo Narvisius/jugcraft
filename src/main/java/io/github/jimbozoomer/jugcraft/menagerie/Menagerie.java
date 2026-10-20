@@ -92,7 +92,7 @@ public final class Menagerie {
         item("mount_summoning_staff",p->new MenagerieItems.Recall(p.stacksTo(1)));
         item("menagerie_field_guide",p->new MenagerieItems.Guide(p.stacksTo(1)));
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.SPAWN_EGGS).register(entries->ITEMS.forEach((id,item)->{if((id.endsWith("spawn_egg")||id.contains("_spawn_egg_")))entries.accept(item);}));
-        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(entries->ITEMS.forEach((id,item)->{if(!(id.endsWith("spawn_egg")||id.contains("_spawn_egg_")))entries.accept(item);}));
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(entries->ITEMS.forEach((id,item)->{if(!(id.endsWith("spawn_egg")||id.contains("_spawn_egg_"))&&!Ecology.legacyWalnut(id))entries.accept(item);}));
     }
     private static boolean habitat(BiomeSelectionContext c,Species s){
         if(!io.github.jimbozoomer.jugcraft.config.JugcraftConfig.isFeatureEnabled("agriculture"))return false;

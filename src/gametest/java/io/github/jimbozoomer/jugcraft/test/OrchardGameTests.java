@@ -57,7 +57,12 @@ public class OrchardGameTests {
 
 	/** The block a tree's trunk is made of (tools/orchard.py log): oak, but the banana's own stem. */
 	private static Block trunk(OrchardTree tree) {
-		return tree == OrchardTree.BANANA ? block("banana_stem") : Blocks.OAK_LOG;
+		return switch (tree) {
+            case BANANA -> block("banana_stem");
+            case PEAR -> block("fruitwood_log");
+            case PEACH -> Blocks.CHERRY_LOG;
+            default -> Blocks.OAK_LOG;
+        };
 	}
 
 	/**

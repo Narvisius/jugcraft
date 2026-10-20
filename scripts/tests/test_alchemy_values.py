@@ -49,3 +49,18 @@ class AlchemyValueTests(unittest.TestCase):
                                      ('klein_star_6','klein_star_5','jugcraft:dark_matter')]:
             self.assertEqual(value('jugcraft:'+result),value('jugcraft:'+base)+value(addition)+value('jugcraft:high_covalence_dust'))
             self.assertTrue(VALUES['jugcraft:'+result]['source'].startswith('recipe '))
+
+    def test_chemistry_remainders_and_molding_do_not_create_essence(self):
+        self.assertGreaterEqual(value('jugcraft:glucose_syrup'),
+                                3*value('minecraft:sugar')+value('minecraft:glass_bottle'))
+        self.assertGreaterEqual(value('jugcraft:borax'),2*value('jugcraft:boric_acid'))
+        self.assertGreaterEqual(2*value('jugcraft:silicone'),3*value('jugcraft:gasket'))
+        for stock in ('plastic_pellets','pvc_resin','hdpe_pellets'):
+            self.assertGreaterEqual(value('jugcraft:'+stock),2*value('jugcraft:plastic_sheet'))
+
+    def test_aged_wood_has_consistent_shaped_values(self):
+        for wood in ('pine','maple'):
+            plank=value('jugcraft:aged_'+wood+'_planks')
+            self.assertEqual(plank,value('jugcraft:'+wood+'_planks'))
+            self.assertEqual(6*value('jugcraft:aged_'+wood+'_slab'),3*plank)
+            self.assertEqual(4*value('jugcraft:aged_'+wood+'_stairs'),6*plank)

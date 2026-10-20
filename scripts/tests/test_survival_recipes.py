@@ -45,6 +45,28 @@ class SurvivalGraphTests(unittest.TestCase):
                      'fauna_bug_habitat_empty', 'cavern_spelunkery_table', 'cavern_nuclear_furnace', 'landscape_scoria'):
             self.assertEqual('recipe_chain_reachable', rows['jugcraft:' + name]['status'], name)
         self.assertEqual('intentional_noncraftable', rows['jugcraft:nouveau_creative_spell_book']['status'])
+        for name in ('walnut_log', 'walnut_leaves', 'walnut_sapling', 'walnut_planks',
+                     'stripped_walnut_log', 'walnut_husk', 'roasted_walnuts', 'walnut_mooncake'):
+            self.assertIn('jugcraft:' + name, rows, 'Walnut items must exist in the real registry snapshot')
+            self.assertNotIn('jugcraft:' + name, report['unregistered_model_definitions'])
+        self.assertTrue(any(e['source'].endswith('/WalnutTree.java')
+                            for e in rows['jugcraft:walnut_log']['evidence']))
+        self.assertTrue(any(e['source'].endswith('/WalnutLeavesBlock.java')
+                            and e['inputs'] == [['jugcraft:walnut_leaves']]
+                            and set(e['outputs']) == {'jugcraft:ecology_walnut', 'jugcraft:walnut_husk'}
+                            for e in report['edges']))
+        for form in ('walnut_log', 'walnut_wood', 'stripped_walnut_log', 'stripped_walnut_wood',
+                     'walnut_planks', 'walnut_stairs', 'walnut_slab', 'walnut_fence',
+                     'walnut_fence_gate', 'walnut_leaves', 'walnut_sapling'):
+            retired = rows['jugcraft:ecology_' + form]
+            self.assertEqual('intentional_noncraftable', retired['status'])
+            self.assertEqual([], retired['evidence'], 'Retired IDs must not seed acquisition chains')
+        for name in ('ecology_walnut', 'ecology_walnut_door', 'ecology_walnut_cabinet',
+                     'ecology_walnut_shelf', 'ecology_walnut_boat'):
+            self.assertEqual('', rows['jugcraft:' + name]['reason'], 'Active walnut items must not be excluded')
+        for name in ('hdpe_offcut', 'rubber_offcut'):
+            self.assertEqual('intentional_noncraftable', rows['jugcraft:'+name]['status'])
+            self.assertIn('compatibility offcut', rows['jugcraft:'+name]['reason'])
         # Treasure is not silently converted into an ordinary crafting product.
         self.assertFalse(any(e['source'].find('survival_completion') >= 0 and
                              any(o in {'jugcraft:needle_rapier', 'jugcraft:vesper_scythe'} for o in e['outputs'])

@@ -3,7 +3,7 @@
   "category": "redstone",
   "group": "wooden_button",
   "ingredients": [
-    "jugcraft:ecology_walnut_planks"
+    "#jugcraft:walnut_compat/walnut_planks"
   ],
   "result": {
     "id": "jugcraft:ecology_walnut_button"
@@ -11,7 +11,10 @@
   "fabric:load_conditions": [
     {
       "condition": "jugcraft:feature_enabled",
-      "feature": "agriculture"
+      "feature": "biomes",
+      "or": [
+        "agriculture"
+      ]
     }
   ]
 }

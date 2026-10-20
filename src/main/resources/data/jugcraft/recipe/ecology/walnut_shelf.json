@@ -3,7 +3,7 @@
   "category": "misc",
   "group": "shelf",
   "key": {
-    "#": "jugcraft:ecology_stripped_walnut_log"
+    "#": "#jugcraft:walnut_compat/stripped_walnut_log"
   },
   "pattern": [
     "###",
@@ -17,7 +17,10 @@
   "fabric:load_conditions": [
     {
       "condition": "jugcraft:feature_enabled",
-      "feature": "agriculture"
+      "feature": "biomes",
+      "or": [
+        "agriculture"
+      ]
     }
   ]
 }

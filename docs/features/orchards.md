@@ -1,7 +1,7 @@
 # Orchards: pear, peach, lemon and orange trees
 
 Status: implemented in source; **not yet played**. The Build workflow compiles it; see Verification for what has actually run.
-Proposal issue: none; requested directly by the owner on 7 October 2026 ("lots more crops, plants, food, cooking devices, preparation systems ... lots and lots of the food to be very decorative and displayable"). This is slice 6 of the ten-slice plan in [branches/AGRICULTURE.md](../branches/AGRICULTURE.md#the-kitchen-and-cooking-expansion-planned). The owner's library has no fruit trees, grapes or berries, so the owner was asked how to go on and chose "Slice 6, Jugcraft art", and of the plan's roster "Pear, peach, lemon, orange" (no grapes, hops or berries yet). The apple tree is unchanged.
+Proposal issue: none; requested directly by the owner on 7 October 2026 ("lots more crops, plants, food, cooking devices, preparation systems ... lots and lots of the food to be very decorative and displayable"). This is slice 6 of the ten-slice plan in [branches/AGRICULTURE.md](../branches/AGRICULTURE.md#the-kitchen-and-cooking-expansion-planned). The owner's library has no fruit trees, grapes or berries, so the owner was asked how to go on and chose "Slice 6, Jugcraft art", and of the plan's roster "Pear, peach, lemon, orange" (no grapes, hops or berries yet). The original agriculture slice left apple unchanged. [Tree Batch 14](trees-batch-14.md) updates apple foliage and the Orchard bee variant, pear/peach timber and shapes, citrus sizes and biome selection.
 Owner: @jimbozoomer-byte
 Target milestone and tier: Milestone 3 (first homestead); Discovery tier. A fruit, found on a wild tree or traded, starts an orchard; nothing needs a station but the Hearth Oven, the Cooking Pot and the Canning Kettle the farm already has.
 Primary specialty and supported player role: farming; supports cooks (juices, pies, preserves) and traders (fruit from biomes others do not live in)
@@ -9,8 +9,8 @@ Primary specialty and supported player role: farming; supports cooks (juices, pi
 ## Player experience
 Plant an orchard that fruits every year:
 
-- **Four fruit trees,** each grown from its seed: Pear Seeds, a Peach Pit, Lemon Seeds and Orange Seeds. A fruit crafts into its seed, and broken leaves drop one now and then. Planted on dirt or grass, a sapling grows (in time, or with bone meal) into its tree: vanilla oak logs under a crown of its own leaves, each tree in its own shape (the pear tall and pointed, the peach low and wide, the lemon and orange small and round).
-- **Blossom and fruit,** as the apple tree's: leaves the tree grew itself, with air below them, flower (pear blossom white with dark red centres, peach blossom pink, citrus blossom white) and then hang with ripe fruit. **A right-click picks the ripe fruit** (one to three drop below) and the leaves start again; the tree is never cut down. Leaves a player places never fruit. Broken ripe, they drop their fruit.
+- **Four fruit trees,** each grown from its seed: Pear Seeds, a Peach Pit, Lemon Seeds and Orange Seeds. A fruit crafts into its seed, and broken leaves drop one now and then. Planted on dirt or grass, a sapling grows (in time, or with bone meal) into its tree: fruitwood for pear, cherry logs for peach, oak for citrus, under a crown of its own leaves, each tree in its own shape (the pear tall and pointed, the peach low and wide, the lemon and orange small and round).
+- **Blossom and fruit,** as the apple tree's: leaves the tree grew itself, with air below them, flower (pear blossom pale white with muted centres, peach blossom pink, citrus blossom white) and then hang with ripe fruit. **A right-click picks the ripe fruit** (one to three drop below) and the leaves start again; the tree is never cut down. Leaves a player places never fruit. Broken ripe, they drop their fruit.
 - **The fruit:** a Pear, Peach or Orange is as filling as an apple; a Lemon, sour, half as much.
 - **What it makes:**
   - **Orange Juice** (two oranges in a bottle; Health Boost) and **Lemonade** (a lemon and sugar; Speed), drunk even on a full stomach. A sneaking player sets either down as a bottle standing on a table, as the menu's drinks are.
@@ -66,7 +66,7 @@ No new dependency.
 
 **Jugcraft's own art,** drawn by code in `tools/orchard_textures.py` from fixed seeds; no Mojang texture is read, traced or recoloured, and none of the owner's files is used (the owner has drawn no fruit trees). The leaves are painted as every Jugcraft tree's are (`tools/wood_style.py` `paint_leaves`, the same painter, each tree in its own green), with blossom or fruit drawn over them; the juices are the bottle every Jugcraft drink is drawn in; the pies are drawn by `tools/pie_textures.py` from their filling's colour (the lemon pie with its new meringue top) and the jars by the pantry's painter. If the owner draws these later, their files can replace these under the same IDs.
 
-The trees use vanilla oak logs, so no new wood is added. The set-down juices' models are fitted to their icons as the menu's are (`tools/menu_data.py`).
+Batch 14 reuses fruitwood logs for pear, vanilla cherry for peach and vanilla oak for citrus; no new wood set is added. The set-down juices' models are fitted to their icons as the menu's are (`tools/menu_data.py`).
 
 ## Verification
 CI (7 October 2026, GitHub Actions, the pins in [PLATFORM.md](../PLATFORM.md)):

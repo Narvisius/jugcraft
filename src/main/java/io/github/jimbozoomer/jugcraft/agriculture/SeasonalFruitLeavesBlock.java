@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 
 /** The established fruit harvest and decay rules, with independent seasonal appearance. */
-public final class SeasonalFruitLeavesBlock extends FruitingLeavesBlock implements SeasonalFoliage {
+public class SeasonalFruitLeavesBlock extends FruitingLeavesBlock implements SeasonalFoliage {
 	public static final int FRUIT_CHANCE = 10;
 	private final SeasonalLeavesBlock.Schedule schedule;
 	private final String fruitId;

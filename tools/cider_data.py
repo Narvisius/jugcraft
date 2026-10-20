@@ -172,7 +172,7 @@ def worldgen(data, write):
     """The apple tree: a short oak trunk with a rounded crown of apple leaves; found in plains and flower-rich places."""
     folder = data / MOD / "worldgen"
     trunk, foliage = TREE["trunk"], TREE["foliage"]
-    write(folder / "feature" / "apple_tree.json", {
+    apple = {
         "type": "minecraft:tree", "below_trunk_provider": "minecraft:soil_beneath_tree", "decorators": [],
         "foliage_placer": {"type": "minecraft:blob_foliage_placer", "height": foliage["height"], "offset": 0, "radius": foliage["radius"]},
         "foliage_provider": {"id": rid(TREE["leaves"]),
@@ -180,7 +180,9 @@ def worldgen(data, write):
         "ignore_vines": True, "minimum_size": {"type": "minecraft:two_layers_feature_size"},
         "trunk_placer": {"type": "minecraft:straight_trunk_placer", "base_height": trunk["base_height"],
                          "height_rand_a": trunk["height_rand_a"], "height_rand_b": 0},
-        "trunk_provider": {"id": "minecraft:oak_log", "properties": {"axis": "y"}}})
+        "trunk_provider": {"id": "minecraft:oak_log", "properties": {"axis": "y"}}}
+    write(folder / "feature" / "apple_tree.json", apple)
+    write(folder / "feature" / "apple_tree_bees.json", {**apple, "decorators": [{"type": "minecraft:beehive", "probability": 0.02}]})
     write(folder / "placed_feature" / "patch_apple_tree.json", {"feature": rid("apple_tree"), "placement": [
         {"type": "minecraft:rarity_filter", "chance": TREE["rarity"]},
         {"type": "minecraft:in_square"},

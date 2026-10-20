@@ -2,14 +2,17 @@
   "fabric:load_conditions": [
     {
       "condition": "jugcraft:feature_enabled",
-      "feature": "agriculture"
+      "feature": "biomes",
+      "or": [
+        "agriculture"
+      ]
     }
   ],
   "type": "minecraft:crafting_shaped",
   "group": "fd_cabinet",
   "key": {
     "D": "jugcraft:ecology_walnut_trapdoor",
-    "_": "jugcraft:ecology_walnut_slab"
+    "_": "#jugcraft:walnut_compat/walnut_slab"
   },
   "pattern": [
     "___",

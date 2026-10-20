@@ -4,7 +4,7 @@
   "group": "wooden_fence",
   "key": {
     "#": "#c:rods/wooden",
-    "W": "jugcraft:ecology_walnut_planks"
+    "W": "#jugcraft:walnut_compat/walnut_planks"
   },
   "pattern": [
     "W#W",
@@ -12,12 +12,15 @@
   ],
   "result": {
     "count": 3,
-    "id": "jugcraft:ecology_walnut_fence"
+    "id": "jugcraft:walnut_fence"
   },
   "fabric:load_conditions": [
     {
       "condition": "jugcraft:feature_enabled",
-      "feature": "agriculture"
+      "feature": "biomes",
+      "or": [
+        "agriculture"
+      ]
     }
   ]
 }

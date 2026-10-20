@@ -9,7 +9,7 @@ Called from agriculture_data.py (assets, loot, tags, worldgen). Formats follow v
 import orchard
 from decor_data import MOD, rid, self_drop
 from festival_data import SHEARS_OR_SILK
-from trees_data import foliage_placer
+from trees_data import foliage_placer, trunk_placer
 
 
 def assets(root, write, lang):
@@ -100,8 +100,7 @@ def worldgen(data, write):
             "foliage_provider": {"id": rid(orchard.leaves(tree)),
                                  "properties": {"distance": "7", "fruit": "0", "persistent": "false", "waterlogged": "false"}},
             "ignore_vines": True, "minimum_size": {"type": "minecraft:two_layers_feature_size"},
-            "trunk_placer": {"type": "minecraft:straight_trunk_placer", "base_height": trunk["base_height"],
-                             "height_rand_a": trunk["height_rand_a"], "height_rand_b": 0},
+            "trunk_placer": trunk_placer({"type": "straight", **trunk}),
             "trunk_provider": {"id": orchard.log(tree), "properties": {"axis": "y"}}})
         write(folder / "placed_feature" / f"patch_{orchard.feature(tree)}.json", {"feature": rid(orchard.feature(tree)), "placement": [
             {"type": "minecraft:rarity_filter", "chance": info["rarity"]},

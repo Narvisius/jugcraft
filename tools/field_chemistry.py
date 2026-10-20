@@ -34,6 +34,9 @@ SCUBA_GAS_OXYGEN = 20
 # Medicines: the first aid kit's cooldown (seconds) and the stimulant's length (ticks).
 FIRST_AID_COOLDOWN = 10
 STIMULANT_TICKS = 1200
+# Aspirin (docs/features/aspirin.md): Regeneration I for this long (ticks), Nausea cleared, then a wait (seconds).
+ASPIRIN_REGENERATION_TICKS = 200
+ASPIRIN_COOLDOWN = 30
 
 ITEMS = {
     "chlorine_grenade": ("Chlorine Grenade", "Bursts into a cloud of chlorine that hurts whatever breathes inside it for "
@@ -50,9 +53,11 @@ ITEMS = {
     "first_aid_kit": ("First Aid Kit", "Heals four hearts. Then a 10 second wait before the next."),
     "antidote": ("Antidote", "Clears poison, wither and every other harmful effect, and keeps the good ones."),
     "stimulant": ("Stimulant", "Speed II and Haste II for a minute, and hungry for it."),
+    "salicylic_acid": ("Salicylic Acid", "Steeped from willow or birch bark. Acetylated with cider vinegar, it makes aspirin."),
+    "aspirin": ("Aspirin", "Eases pain: Regeneration I for 10 seconds and clears nausea. Then a 30 second wait."),
 }
 GRENADES = ["chlorine_grenade", "smoke_grenade", "thermite_grenade", "flashbang"]
-MEDICINES = ["first_aid_kit", "antidote", "stimulant"]
+MEDICINES = ["first_aid_kit", "antidote", "stimulant", "aspirin"]
 
 # Crafting recipes; the reactor's are in petro.py. Grenades follow the frag grenade's shape: a steel case of two plates
 # round the filling, with an iron nugget for the pin.
@@ -211,6 +216,31 @@ def first_aid_kit():
     return img
 
 
+def salicylic_acid():
+    """A heap of fine white needle crystals with a faint cream cast."""
+    img = ms.dust([(150, 146, 132), (196, 192, 178), (222, 220, 208), (238, 236, 228), (250, 250, 246)])
+    for x, y in ((6, 9), (9, 11), (11, 10)):
+        _px(img, x, y, (255, 255, 255))
+    return img
+
+
+def aspirin():
+    """Two round white tablets side by side, each scored across the middle, lit from the top left."""
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    edge, shade, body, light, score = (112, 112, 108), (196, 196, 190), (228, 228, 222), (250, 250, 248), (160, 160, 154)
+    for cx, cy in ((4.5, 6.5), (11.0, 10.0)):
+        for y in range(16):
+            for x in range(16):
+                d = ((x + 0.5 - cx) / 4.0) ** 2 + ((y + 0.5 - cy) / 3.6) ** 2
+                if d <= 1.0:
+                    lit = (x + 0.5 - cx) + (y + 0.5 - cy) < -1.5
+                    dark = (x + 0.5 - cx) + (y + 0.5 - cy) > 2.0
+                    _px(img, x, y, edge if d > 0.72 else light if lit else shade if dark else body)
+        for dx in (-2, -1, 0, 1):
+            _px(img, int(cx) + dx, int(cy), score)
+    return img
+
+
 def _bottle(liquid, cork=(150, 110, 70)):
     img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
     glass = (190, 220, 230)
@@ -318,7 +348,7 @@ def gas_mask_layer():
 
 
 def draw_all(save, save_armor):
-    for item in GRENADES + ["thermite"] + MEDICINES:
+    for item in GRENADES + ["thermite", "salicylic_acid"] + MEDICINES:
         save(globals()[item](), "item", item)
     save(gas_mask_icon(), "item", "gas_mask")
     save_armor(gas_mask_layer(), "humanoid", "gas_mask")

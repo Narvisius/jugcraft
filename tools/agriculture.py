@@ -287,6 +287,8 @@ ITEMS = {
                     "tags": ["c:crops/cranberry", "c:foods/berry", "minecraft:fox_food"]},
     "chestnut": {"display": "Chestnut", "plants": "chestnut_sapling", "compost": "low",
                  "tags": ["c:crops/chestnut", "minecraft:pig_food"]},
+    "roasted_walnuts": {"display": "Roasted Walnuts", "food": [4, 0.6], "compost": "medium_high", "tags": ["c:foods", "c:foods/nut"]},
+    "walnut_husk": {"display": "Walnut Husk", "tags": []},
     "roasted_chestnuts": {"display": "Roasted Chestnuts", "food": [4, 0.6], "compost": "medium_high", "tags": ["c:foods"]},
     "baked_acorn_squash": {"display": "Baked Acorn Squash", "food": [6, 0.6], "compost": "medium_high", "tags": ["c:foods"]},
     "squash_pie": {"display": "Squash Pie", "food": [8, 0.3], "compost": "medium_high", "tags": ["c:foods"]},
@@ -438,7 +440,7 @@ CHESTNUT = {"sapling": "chestnut_sapling", "leaves": "chestnut_leaves", "seed": 
 WOOD_SETS = {"chestnut": "Chestnut", "larch": "Larch", "maple": "Maple", "aspen": "Aspen", "fir": "Fir", "dead": "Dead",
              "jacaranda": "Jacaranda", "willow": "Willow", "palm": "Palm", "cypress": "Cypress", "redwood": "Redwood",
              "eucalyptus": "Eucalyptus", "mahogany": "Mahogany", "cedar": "Cedar", "pine": "Pine", "yew": "Yew",
-             "bald_cypress": "Bald Cypress", "magnolia": "Magnolia", "fruitwood": "Fruitwood", "persimmon": "Persimmon", "juniper": "Juniper", "holly": "Holly", "olive": "Olive", "tamarisk": "Tamarisk", "yucca": "Yucca", "dragonblood": "Dragonblood", "baobab": "Baobab", "fig": "Fig", "mango": "Mango"}
+             "bald_cypress": "Bald Cypress", "magnolia": "Magnolia", "fruitwood": "Fruitwood", "persimmon": "Persimmon", "juniper": "Juniper", "holly": "Holly", "olive": "Olive", "tamarisk": "Tamarisk", "yucca": "Yucca", "dragonblood": "Dragonblood", "baobab": "Baobab", "fig": "Fig", "mango": "Mango", "walnut": "Walnut"}
 # The feature switches each wood's hand and sawmill recipes, and its tree's leaves and sapling, follow: every switch
 # that grows its logs, any one of which turns them on (TREES.md rule 4). The chestnut grows wild (agriculture) and in
 # the Orchard (biomes); the larch in Alpine Spawn and, as the larch and the tamarack, in Jugcraft's biomes.
@@ -447,7 +449,7 @@ WOOD_SWITCHES = {"chestnut": [FEATURE, "biomes"], "larch": ["alpine_spawn", "bio
                  "aspen": ["biomes"], "fir": ["biomes"], "dead": ["biomes"], "jacaranda": ["biomes"], "willow": ["biomes"],
                  "palm": ["biomes"], "cypress": ["biomes"], "redwood": ["biomes"], "eucalyptus": ["biomes"],
                  "mahogany": ["biomes"], "cedar": ["biomes"], "pine": ["biomes", "alpine_spawn"], "yew": ["biomes"],
-                 "bald_cypress": ["biomes"], "magnolia": ["biomes"], "fruitwood": ["biomes"], "persimmon": ["biomes"], "juniper": ["biomes", "alpine_spawn"], "holly": ["biomes"], "olive": ["biomes"], "tamarisk": ["biomes"], "yucca": ["biomes"], "dragonblood": ["biomes"], "baobab": ["biomes"], "fig": ["biomes"], "mango": ["biomes"]}
+                 "bald_cypress": ["biomes"], "magnolia": ["biomes"], "fruitwood": ["biomes", "agriculture"], "persimmon": ["biomes"], "juniper": ["biomes", "alpine_spawn"], "holly": ["biomes"], "olive": ["biomes"], "tamarisk": ["biomes"], "yucca": ["biomes"], "dragonblood": ["biomes"], "baobab": ["biomes"], "fig": ["biomes"], "mango": ["biomes"], "walnut": ["biomes"]}
 
 
 def wood_blocks(wood, display):
@@ -514,6 +516,10 @@ TREES = {
                  "season": [85, 280, 325], "autumn": {"gold": 1}, "base": "oak",
                  "sapling_shapes": {"hawthorn": 1, "hawthorn_bush": 3},
                  "fruit": {"item": "haws", "min": 1, "max": 2, "chance": 10, "exposed_sides": True}},
+    "walnut": {"display": "Walnut", "leaves": "walnut_leaves", "leaves_display": "Walnut Leaves",
+               "season": [105, 255, 290], "autumn": {"gold": 1}, "base": "oak",
+               "sapling_shapes": {"walnut": 4, "large_walnut": 1},
+               "fruit": {"item": "ecology_walnut", "min": 1, "max": 2, "chance": 10}},
     "persimmon": {"display": "Persimmon", "leaves": "persimmon_leaves", "leaves_display": "Persimmon Leaves",
                   "season": [98, 280, 315], "autumn": {"gold": 1}, "base": "oak",
                   "fruit": {"item": "persimmon", "min": 1, "max": 2, "chance": 10}},
@@ -1155,7 +1161,7 @@ SQUIRRELS = {"entity": "squirrel", "display": "Squirrel", "health": 6, "speed": 
              "bury_ticks": 200, "sapling_chance": 0.25, "sapling_space": 3, "acorn_chance": 0.05,
              "acorn_leaves": ["oak_leaves", "dark_oak_leaves"], "acorn": "acorn", "acorn_display": "Acorn", "roasted": "roasted_acorns",
              "habitat": ["#minecraft:is_forest", "#minecraft:is_taiga"],
-             "food": ["jugcraft:acorn", "jugcraft:chestnut", "jugcraft:roasted_chestnuts", "jugcraft:pine_nuts", "jugcraft:roasted_pine_nuts"]}
+             "food": ["jugcraft:acorn", "jugcraft:chestnut", "jugcraft:roasted_chestnuts", "jugcraft:pine_nuts", "jugcraft:roasted_pine_nuts", "jugcraft:ecology_walnut", "jugcraft:roasted_walnuts"]}
 # The Pumpkling (Pumpkling): a hand-carved pumpkin woken by a spark into a pet; follows past `follow_start`, stops at
 # `follow_stop`, comes to its owner past `teleport`; treats heal `treat_heal`.
 PUMPKLING = {"entity": "pumpkling", "display": "Pumpkling", "health": 16, "speed": 0.3, "size": [0.6, 0.9],
@@ -1609,7 +1615,7 @@ CIDER = {"tree": {"sapling": "apple_sapling", "leaves": "apple_leaves", "seed": 
                   "biomes": ["IS_PLAINS", "IS_FLORAL"], "rarity": 12, "display": {"apple_sapling": "Apple Sapling",
                                                                                     "apple_leaves": "Apple Leaves"}},
          "press": {"block": "cider_press", "display": "Cider Press", "apples": "jugcraft:cider_apples",
-                   "apple_items": ["minecraft:apple"], "capacity": 8, "trough": 8, "turns": 4, "work_ticks": 8,
+                   "apple_items": ["minecraft:apple", "jugcraft:pear"], "capacity": 8, "trough": 8, "turns": 4, "work_ticks": 8,
                    "apples_per_pomace": 2},
          "barrel": {"block": "cider_barrel", "display": "Cider Barrel", "capacity": 16, "sparkling_ticks": 24000,
                     "aged_ticks": 72000, "stages": ["sweet_cider", "sparkling_cider", "aged_cider"]}}
@@ -1714,6 +1720,7 @@ LANTERNS = {"item": "sky_lantern", "display": "Sky Lantern", "entity": "sky_lant
             "per_craft": 2, "festival_lanterns": 8, "festival_radius": 32, "festival_window": 2400, "festival_cooldown": 24000,
             "luck_ticks": 6000, "memory": 256,
             "mooncakes": {"osmanthus_mooncake": {"display": "Osmanthus Mooncake", "filling": {"jugcraft:osmanthus_flowers": 2}}, "red_bean_mooncake": {"display": "Red Bean Mooncake", "filling": {"jugcraft:beans": 2}},
+                          "walnut_mooncake": {"display": "Walnut Mooncake", "filling": {"jugcraft:roasted_walnuts": 2}},
                           "chestnut_mooncake": {"display": "Chestnut Mooncake", "filling": {"jugcraft:roasted_chestnuts": 2}},
                           "pumpkin_mooncake": {"display": "Pumpkin Mooncake", "filling": {"minecraft:pumpkin": 1}}},
             "mooncake_base": {"minecraft:wheat": 2, "minecraft:sugar": 1, "minecraft:egg": 1}, "mooncake_count": 4,
@@ -1820,7 +1827,11 @@ CANDY = {"kettle": "candy_kettle", "kettle_display": "Candy Kettle", "tray": "ca
                       "spiced": {"display": "Spiced", "items": ["jugcraft:mulling_spices"], "effect": "FIRE_RESISTANCE", "seconds": 15,
                                  "color": 0xA0522D},
                       "chestnut": {"display": "Chestnut", "items": ["jugcraft:roasted_chestnuts"], "effect": "HASTE", "seconds": 15,
-                                   "color": 0x8A5A30}}}
+                                   "color": 0x8A5A30},
+                      "orange": {"display": "Orange", "items": ["jugcraft:orange"], "effect": "JUMP_BOOST", "seconds": 15, "color": 0xE0861C},
+                      # Citric acid from the Chemical Reactor (tools/petro.py): sour candy makes the eater jump.
+                      "sour": {"display": "Sour", "items": ["jugcraft:citric_acid"], "effect": "JUMP_BOOST", "seconds": 10,
+                               "color": 0xD8E048}}}
 
 
 def candy_blocks():
@@ -2174,6 +2185,7 @@ COOKING = {
     "baked_sweet_potato": {"input": "sweet_potato", "xp": 0.35},
     "roasted_sunflower_seeds": {"input": "sunflower_seeds", "xp": 0.1},
     "roasted_pine_nuts": {"input": "pine_nuts", "xp": 0.1, "switch": ["biomes", "alpine_spawn"]},
+    "roasted_walnuts": {"input": "ecology_walnut", "xp": 0.35},
     "roasted_chestnuts": {"input": "chestnut", "xp": 0.35},
     "baked_acorn_squash": {"input": "acorn_squash", "xp": 0.35},
     "roasted_pumpkin_seeds": {"input": "minecraft:pumpkin_seeds", "xp": 0.1},

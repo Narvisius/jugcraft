@@ -40,6 +40,13 @@ public final class Ecology {
     public static final Map<String,EntityType<Boat>> BOATS=new LinkedHashMap<>();
     public static final Map<String,EntityType<ChestBoat>> CHEST_BOATS=new LinkedHashMap<>();
     private Ecology(){}
+    /** Retain saved IDs, but show only the unified forms in the creative catalogue. */
+    public static boolean legacyWalnut(String id) {
+        return Set.of("ecology_walnut_log", "ecology_walnut_wood", "ecology_stripped_walnut_log",
+                "ecology_stripped_walnut_wood", "ecology_walnut_planks", "ecology_walnut_stairs",
+                "ecology_walnut_slab", "ecology_walnut_fence", "ecology_walnut_fence_gate",
+                "ecology_walnut_leaves", "ecology_walnut_sapling").contains(id);
+    }
     public static Block block(String name){return Objects.requireNonNull(BLOCKS.get("ecology_"+name),name);}
     static void register(){
         JsonObject catalog;
@@ -51,8 +58,8 @@ public final class Ecology {
             var key=ResourceKey.create(Registries.BLOCK,Jugcraft.id(id));var p=BlockBehaviour.Properties.of().setId(key).strength(2).sound(SoundType.WOOD);
             Block b=switch(kind){
                 case "log" -> name.startsWith("stripped_")?new RotatedPillarBlock(p):new StrippableLogBlock(p,"stripped_"+name){@Override public Block stripped(){return block(name.equals("sappy_maple_log")?"stripped_maple_log":"stripped_"+name);}};
-                case "leaves" -> new TintedParticleLeavesBlock(.01F,p.noOcclusion().randomTicks().strength(.2F).sound(SoundType.GRASS));
-                case "sapling" -> new SaplingBlock(grower(name.replace("_sapling","").replace("_seedling","")),p.noCollision().randomTicks().instabreak().sound(SoundType.GRASS)){
+                case "leaves" -> name.equals("walnut_leaves") ? new WalnutLeavesBlock(p.noOcclusion().randomTicks().strength(.2F).sound(SoundType.GRASS)) : new TintedParticleLeavesBlock(.01F,p.noOcclusion().randomTicks().strength(.2F).sound(SoundType.GRASS));
+                case "sapling" -> new SaplingBlock(name.equals("walnut_sapling") ? JugcraftAgriculture.WALNUT_GROWER : grower(name.replace("_sapling","").replace("_seedling","")),p.noCollision().randomTicks().instabreak().sound(SoundType.GRASS)){
                     @Override protected boolean mayPlaceOn(BlockState s,BlockGetter l,BlockPos at){return name.startsWith("coconut_")&&s.is(BlockTags.SAND)||super.mayPlaceOn(s,l,at);}
                 };
                 case "stairs" -> new StairBlock(Blocks.OAK_PLANKS.defaultBlockState(),p);
@@ -97,11 +104,15 @@ public final class Ecology {
                 if(name.equals("maple_sap_bucket"))return new SapBucket(p.stacksTo(1).craftRemainder(Items.BUCKET));
                 if(name.equals("maple_syrup_bottle"))return new Item(p.food(new FoodProperties.Builder().nutrition(6).saturationModifier(.1F).build()).stacksTo(16).usingConvertsTo(Items.GLASS_BOTTLE).component(net.minecraft.core.component.DataComponents.CONSUMABLE,net.minecraft.world.item.component.Consumables.HONEY_BOTTLE));
                 if(name.equals("music_disc_coconut"))return new Item(p.stacksTo(1).jukeboxPlayable(ResourceKey.create(Registries.JUKEBOX_SONG,Jugcraft.id("ecology_coconut"))));
-                if(BLOCKS.containsKey(id))return new BlockItem(BLOCKS.get(id),p.useBlockDescriptionPrefix());
+                if(BLOCKS.containsKey(id)) {
+                    if(name.contains("walnut") && !name.contains("leaves") && !name.contains("sapling"))
+                        p.cookingFuel(name.endsWith("_slab") ? net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders.COOKING_TIME_WOOD_SLABS : net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders.COOKING_TIME_WOOD_BLOCKS);
+                    return new BlockItem(BLOCKS.get(id),p.useBlockDescriptionPrefix());
+                }
                 return new Item(p);
             });
         }
-        for(String tree:List.of("coconut","maple","walnut","azalea","flowering_azalea"))BiomeModifications.addFeature(BiomeSelectors.foundInOverworld().and(c->switch(tree){case "coconut"->c.hasTag(BiomeTags.IS_BEACH);case "maple"->c.hasTag(BiomeTags.IS_FOREST);case "walnut"->c.hasTag(BiomeTags.IS_TAIGA);default->c.getBiomeKey().identifier().getPath().equals("lush_caves");}),GenerationStep.Decoration.VEGETAL_DECORATION,ResourceKey.create(Registries.PLACED_FEATURE,Jugcraft.id("ecology/"+tree)));
+        for(String tree:List.of("coconut","maple","azalea","flowering_azalea"))BiomeModifications.addFeature(BiomeSelectors.foundInOverworld().and(c->switch(tree){case "coconut"->c.hasTag(BiomeTags.IS_BEACH);case "maple"->c.hasTag(BiomeTags.IS_FOREST);default->c.getBiomeKey().identifier().getPath().equals("lush_caves");}),GenerationStep.Decoration.VEGETAL_DECORATION,ResourceKey.create(Registries.PLACED_FEATURE,Jugcraft.id("ecology/"+tree)));
     }
     private static TreeGrower grower(String wood){var key=ResourceKey.create(Registries.FEATURE,Jugcraft.id("ecology/"+wood));return new TreeGrower("jugcraft_ecology_"+wood,WeightedList.of(key),WeightedList.of(),WeightedList.of(),key);}
     private static void registerBoats(String wood){

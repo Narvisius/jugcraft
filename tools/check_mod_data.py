@@ -24,6 +24,7 @@ import menu
 import rice
 import soil
 import orchard
+from trees_data import trunk_placer as orchard_trunk_placer
 import cakes
 import cake_data
 import pie_tart_data
@@ -73,6 +74,7 @@ import tower_guns
 import guns
 import fortifications
 import bunkerworks
+import aged_wood
 import fire_control
 import raiders
 import armoured_walker
@@ -249,7 +251,7 @@ def check_assets(registered):
     lang = load(ASSETS / "lang" / "en_us.json") or {}
     for block in (all_blocks() + machine_blocks() + ag.all_blocks() + petro.petro_blocks() + list(deposits.DEPOSITS)
                   + list(tank_display.BLOCKS) + plastic.blocks() + ph.blocks() + (town_assets.blocks() + styx.blocks()) + seasons.BLOCKS
-                  + construction.blocks() + control_electronics.blocks() + rocketry.blocks() + dieselworks.blocks() + kaiserworks.blocks() + trenchworks.blocks() + fortifications.blocks() + bunkerworks.blocks() + fire_control.blocks()
+                  + construction.blocks() + control_electronics.blocks() + rocketry.blocks() + dieselworks.blocks() + kaiserworks.blocks() + trenchworks.blocks() + fortifications.blocks() + bunkerworks.blocks() + aged_wood.blocks() + fire_control.blocks()
                   + concordance.blocks() + guns.blocks() + industrial_forms.blocks() + list(vehicle_bays.BLOCKS) + menagerie.blocks()):
         state = load(ASSETS / "blockstates" / f"{block}.json")
         if state:
@@ -274,7 +276,7 @@ def check_assets(registered):
             item_models(definition["model"])
         if item not in (all_blocks() + machine_blocks() + ag.all_blocks() + petro.petro_blocks() + list(deposits.DEPOSITS)
                         + list(tank_display.BLOCKS) + plastic.blocks() + ph.blocks() + (town_assets.blocks() + styx.blocks())
-                        + construction.blocks() + control_electronics.blocks() + rocketry.blocks() + dieselworks.blocks() + kaiserworks.blocks() + trenchworks.blocks() + fortifications.blocks() + bunkerworks.blocks() + fire_control.blocks()
+                        + construction.blocks() + control_electronics.blocks() + rocketry.blocks() + dieselworks.blocks() + kaiserworks.blocks() + trenchworks.blocks() + fortifications.blocks() + bunkerworks.blocks() + aged_wood.blocks() + fire_control.blocks()
                         + concordance.blocks() + guns.blocks() + industrial_forms.blocks() + list(vehicle_bays.BLOCKS) + menagerie.blocks()) and f"item.{MOD}.{item}" not in lang:
             err(f"Missing name for item {item}")
 
@@ -383,7 +385,7 @@ def item_units(ref):
     # metal-recovery recipe. Acquiring them consumes inputs; none yields ingots.
     if ns == MOD and path in menagerie.entries() or ref == '#c:eggs':
         return {}
-    if ref.startswith('#') and ns == MOD and path.startswith(('cavern_','beast_','household_','ecology_','fauna_','mutant_','landscape_')):
+    if ref.startswith('#') and ns == MOD and path.startswith(('cavern_','beast_','household_','ecology_','fauna_','mutant_','landscape_','walnut_compat/')):
         tag = load(DATA / MOD / 'tags' / 'item' / (path+'.json')) or {}
         values = [v if isinstance(v,str) else v['id'] for v in tag.get('values',[])]
         # Ingredients select one member. Conservatively use the least valuable
@@ -440,7 +442,7 @@ def item_units(ref):
     if path in NON_METAL:
         return {}
     if path in plastic.blocks() or path in exosuit.items() or path in grapple.items() or path in field_chemistry.items()\
-            or path in construction.items() or path in construction.blocks() or path in gas_storage.items() or path in control_electronics.blocks() or path in control_electronics.items() or path in rocketry.items() or path in rocketry.blocks() or path in dieselworks.blocks() or path in kaiserworks.blocks() or path in trenchworks.blocks() or path in fortifications.blocks() or path in bunkerworks.blocks() or path in fire_control.blocks() or path in fire_control.items() or path in raiders.ITEMS or path in armoured_walker.ITEMS or path in howitzer_walker.ITEMS or path in zeppelin.ITEMS or path in mech.ITEMS or path in landship.ITEMS or path in artillery.ITEMS or path in tower_guns.items()\
+            or path in construction.items() or path in construction.blocks() or path in gas_storage.items() or path in control_electronics.blocks() or path in control_electronics.items() or path in rocketry.items() or path in rocketry.blocks() or path in dieselworks.blocks() or path in kaiserworks.blocks() or path in trenchworks.blocks() or path in fortifications.blocks() or path in bunkerworks.blocks() or path in aged_wood.blocks() or path in fire_control.blocks() or path in fire_control.items() or path in raiders.ITEMS or path in armoured_walker.ITEMS or path in howitzer_walker.ITEMS or path in zeppelin.ITEMS or path in mech.ITEMS or path in landship.ITEMS or path in artillery.ITEMS or path in tower_guns.items()\
             or path in guns.items() or path in guns.blocks() or path in concordance.items() or path in concordance.blocks() or path in industrial_forms.blocks():
         return {}
     if path in arms.items():
@@ -712,7 +714,7 @@ def check_tags():
                                                     + list(tank_display.BLOCKS) + seasons.BLOCKS + ph.blocks() + ph.items()
                                                     + arms.items() + arms_variants.items()
                                                     + gear.items() + plastic.blocks() + exosuit.items() + grapple.items()
-                                                    + field_chemistry.items() + construction.items() + construction.blocks() + gas_storage.items() + control_electronics.blocks() + control_electronics.items() + rocketry.items() + rocketry.blocks() + dieselworks.blocks() + kaiserworks.blocks() + trenchworks.blocks() + fortifications.blocks() + bunkerworks.blocks() + fire_control.blocks() + fire_control.items() + list(raiders.ITEMS) + list(raiders.BLOCKS) + list(armoured_walker.ITEMS) + list(howitzer_walker.ITEMS) + list(zeppelin.ITEMS) + list(mech.ITEMS) + list(landship.ITEMS) + list(artillery.ITEMS) + tower_guns.items()
+                                                    + field_chemistry.items() + construction.items() + construction.blocks() + gas_storage.items() + control_electronics.blocks() + control_electronics.items() + rocketry.items() + rocketry.blocks() + dieselworks.blocks() + kaiserworks.blocks() + trenchworks.blocks() + fortifications.blocks() + bunkerworks.blocks() + aged_wood.blocks() + fire_control.blocks() + fire_control.items() + list(raiders.ITEMS) + list(raiders.BLOCKS) + list(armoured_walker.ITEMS) + list(howitzer_walker.ITEMS) + list(zeppelin.ITEMS) + list(mech.ITEMS) + list(landship.ITEMS) + list(artillery.ITEMS) + tower_guns.items()
                                                     + ag.all_blocks() + ag.all_items() + (town_assets.blocks() + styx.blocks())
                                                     + guns.items() + guns.blocks() + concordance.items() + concordance.blocks() + concordance.itemless_blocks())
         import nouveau_content
@@ -1546,7 +1548,8 @@ def check_field_chemistry():
     java = (JAVA_ROOT / "weapons" / "FieldChemistry.java").read_text(encoding="utf-8")
     for const in ("CHLORINE_RADIUS", "CHLORINE_TICKS", "CHLORINE_DAMAGE", "SMOKE_RADIUS", "SMOKE_TICKS", "THERMITE_RADIUS",
                   "THERMITE_TICKS", "THERMITE_DAMAGE", "THERMITE_FIRE_SECONDS", "FLASH_RADIUS", "FLASH_BLIND_TICKS",
-                  "FLASH_STUN_TICKS", "GAS_MASK_DURABILITY", "SCUBA_GAS_OXYGEN", "FIRST_AID_COOLDOWN", "STIMULANT_TICKS"):
+                  "FLASH_STUN_TICKS", "GAS_MASK_DURABILITY", "SCUBA_GAS_OXYGEN", "FIRST_AID_COOLDOWN", "STIMULANT_TICKS",
+                  "ASPIRIN_REGENERATION_TICKS", "ASPIRIN_COOLDOWN"):
         value = getattr(field_chemistry, const)
         m = re.search(rf"\b{const} = ([0-9_.]+)F?;", java)
         if not m or float(m.group(1).replace("_", "")) != float(value):
@@ -2905,7 +2908,13 @@ def check_wood_switches():
         if patch is not None:
             placed_by(patch["feature"], ag.FEATURE if name in inside else f"(patch_{name}, outside registerWorldgen)")
     woods = {shape: info["wood"] for shape, info in tr.SHAPES.items() if info["wood"] in ag.WOOD_SETS}
+    woods.update({shape: info["wood"] for shape, info in tr.BOUNDED_SHAPES.items()})
     woods.update({f"fallen_{wood}_tree": wood for wood in tr.FALLEN})
+    for tree in orchard.TREES:
+        wood = orchard.log(tree).split(":")[-1].removesuffix("_log")
+        if wood in ag.WOOD_SETS:
+            woods[orchard.feature(tree)] = wood
+            woods[tree] = wood
     for placed, (feature, _) in bm.PLACED_TREES.items():
         ns, path = split(feature)
         if ns == MOD and path in ag.WOOD_SETS:
@@ -2922,6 +2931,13 @@ def check_wood_switches():
             missing = placers.get(shape, set()) - set(ag.tree_switches(tree))
             if missing:
                 err(f"{shape} places {tree} foliage through uncovered switches {sorted(missing)}")
+    for shape, info in tr.BOUNDED_SHAPES.items():
+        configured = load(DATA / MOD / "worldgen/feature" / f"{shape}.json")
+        if configured != {"type": "jugcraft:walnut_tree", "shape": shape}:
+            err(f"{shape} must use its bounded native feature")
+        missing = placers.get(shape, set()) - set(ag.tree_switches(info["tree"]))
+        if missing:
+            err(f"{shape} places foliage through uncovered switches {sorted(missing)}")
 
 
 def check_alpine():
@@ -4898,8 +4914,7 @@ def check_orchard():
         if (feature.get("trunk_provider", {}).get("id") != orchard.log(tree)
                 or feature.get("foliage_placer", {}).get("type") != placer
                 or feature.get("foliage_provider", {}).get("id") != f"{MOD}:{leaves}"
-                or feature.get("trunk_placer", {}).get("base_height") != info["trunk"]["base_height"]
-                or feature.get("trunk_placer", {}).get("height_rand_a") != info["trunk"]["height_rand_a"]
+                or feature.get("trunk_placer") != orchard_trunk_placer({"type": "straight", **info["trunk"]})
                 or feature.get("foliage_placer", {}).get("radius") != info["foliage"]["radius"]
                 or feature.get("foliage_placer", {}).get("height") != info["foliage"]["height"]):
             err(f"worldgen/feature/{orchard.feature(tree)}.json differs from tools/orchard.py TREES[{tree!r}]")
@@ -4917,8 +4932,10 @@ def check_orchard():
     stem = orchard.BANANA_STEM["block"]
     if f'registerBlock("{stem}", RotatedPillarBlock::new' not in main:
         err(f"JugcraftAgriculture must register {stem} as a RotatedPillarBlock")
-    if any(tree_info.get("log", f"{MOD}:{stem}") != f"{MOD}:{stem}" for tree_info in orchard.TREES.values()):
-        err("tools/orchard.py: a tree's own log must be the banana's stem, the only one registered")
+    for tree in orchard.TREES:
+        expected_log = {"pear": "jugcraft:fruitwood_log", "peach": "minecraft:cherry_log", "banana": "jugcraft:banana_stem"}.get(tree, "minecraft:oak_log")
+        if orchard.log(tree) != expected_log:
+            err(f"{tree}: orchard log must be {expected_log}")
     state = load(ASSETS / "blockstates" / f"{stem}.json") or {}
     if set(state.get("variants", {})) != {"axis=x", "axis=y", "axis=z"}:
         err(f"{stem}: blockstate does not cover every axis")
@@ -5071,6 +5088,11 @@ def check_festival(java, main):
         if composed:
             edge_fruiting = ", true" if info["fruit"].get("exposed_sides") else ""
             factory = f'props -> new SeasonalFruitLeavesBlock({tree.upper()}_LEAVES, "{info["fruit"]["item"]}", props{edge_fruiting})'
+            if tree == "walnut":
+                factory = "WalnutLeavesBlock::new"
+                walnut_java = (JAVA_ROOT / "agriculture/WalnutLeavesBlock.java").read_text(encoding="utf-8")
+                if 'super(SCHEDULE, "ecology_walnut", properties)' not in walnut_java or "SCHEDULE = JugcraftAgriculture.WALNUT_LEAVES" not in walnut_java:
+                    err("Walnut leaves must use the shared schedule and recovered raw nut")
             registration = re.search(rf'registerFoliage\("{tree}",.*?;', main, re.S)
             if registration is None or factory not in registration.group():
                 err(f"{tree} must register its own seasonal fruit schedule and fruit item")
@@ -5141,6 +5163,11 @@ def check_seasonal_trees(main, leaves):
             expected_looks = ({"spring": {"green", "bare"}, "summer": {"green"},
                                "autumn": {"green", "gold"}, "winter": {"bare"}}[mode]
                               if tree == "holly" else {wanted[mode]})
+            if tree == "walnut":
+                # The approved late leaf-out/early leaf-fall dates straddle the
+                # fixed April 15 and October 20 modes. Audit those exact sets.
+                expected_looks = {"spring": {"bare", "green"}, "summer": {"green"},
+                                  "autumn": {"bare", "gold"}, "winter": {"bare"}}[mode]
             if seen != expected_looks:
                 err(f"/jugcraft season set {mode} (day {day}) shows {tree} leaves {sorted(seen)}, expected {sorted(expected_looks)}")
 
@@ -16111,7 +16138,7 @@ def registered_items():
                   | set(deposits.DEPOSITS) | set(guide_books.BOOKS) | set(tank_display.BLOCKS)
                   | set(arms.items()) | set(arms_variants.items())
                   | set(gear.items()) | set(plastic.blocks()) | set(exosuit.items()) | set(grapple.items())
-                  | set(field_chemistry.items()) | set(construction.items()) | set(construction.blocks()) | set(gas_storage.items()) | set(control_electronics.blocks()) | set(control_electronics.items()) | set(rocketry.items()) | set(rocketry.blocks()) | set(dieselworks.blocks()) | set(kaiserworks.blocks()) | set(trenchworks.blocks()) | set(fortifications.blocks()) | set(bunkerworks.blocks()) | set(fire_control.blocks()) | set(fire_control.items()) | set(raiders.ITEMS) | set(armoured_walker.ITEMS) | set(howitzer_walker.ITEMS) | set(zeppelin.ITEMS) | set(mech.ITEMS) | set(landship.ITEMS) | set(artillery.ITEMS) | set(tower_guns.items())
+                  | set(field_chemistry.items()) | set(construction.items()) | set(construction.blocks()) | set(gas_storage.items()) | set(control_electronics.blocks()) | set(control_electronics.items()) | set(rocketry.items()) | set(rocketry.blocks()) | set(dieselworks.blocks()) | set(kaiserworks.blocks()) | set(trenchworks.blocks()) | set(fortifications.blocks()) | set(bunkerworks.blocks()) | set(aged_wood.blocks()) | set(fire_control.blocks()) | set(fire_control.items()) | set(raiders.ITEMS) | set(armoured_walker.ITEMS) | set(howitzer_walker.ITEMS) | set(zeppelin.ITEMS) | set(mech.ITEMS) | set(landship.ITEMS) | set(artillery.ITEMS) | set(tower_guns.items())
                   | set(ph.blocks()) | set(ph.items()) | set((town_assets.blocks() + styx.blocks()))
                   | set(guns.items()) | set(guns.blocks()) | set(concordance.items()) | set(concordance.blocks()) | set(industrial_forms.blocks()))
     registered |= menagerie.entries() | set(vehicle_bays.BLOCKS)

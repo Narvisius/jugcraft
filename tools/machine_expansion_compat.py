@@ -50,6 +50,6 @@ def apply(released, forms, recipes, handbook, models, rotors, extras):
     handbook["anaerobic_digester"].append("The expanded route collects liquid digestate at the lower rear-left outlet for the Filter Press. The original route still makes biogas and bone meal. This vessel retains four bulk lanes and 16,000 mB tanks.")
     # The fermenter's existing collect/vent control applies to either recipe's gas.
     # The secondary preview vent toggle would otherwise bypass that control.
-    forms["bio_generator"]["fuels"].append(("jugcraft:clean_biogas", 192, 64))
-    handbook["bio_generator"].append("Also burns cleaned biogas from the expanded scrubber chain at 192 JE/mB, up to 64 JE/t.")
+    forms["bio_generator"]["fuels"].append(("jugcraft:clean_biogas", 268, 64))
+    handbook["bio_generator"].append("Also burns cleaned biogas from the expanded scrubber chain at 268 JE/mB, up to 64 JE/t.")
 

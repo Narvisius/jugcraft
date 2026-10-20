@@ -124,9 +124,10 @@ public class AnaerobicGameTests {
         m.tanks().input(0).fill(PetroFluids.RAW_BIOGAS.fluid(),3);ticks(h,m,2);
         h.assertTrue(m.energy().getAmount()==0 && m.tanks().input(0).millibuckets()==3,"Uncleaned biogas is rejected");
         m.tanks().input(0).drain(3);m.tanks().input(0).fill(PetroFluids.CLEAN_BIOGAS.fluid(),3);ticks(h,m,1);
-        h.assertTrue(m.energy().getAmount()==64 && m.burn()==128,"Lower 64 JE/t rate with fractional credit");
+        h.assertTrue(m.energy().getAmount()==64 && m.burn()==204,"Lower 64 JE/t rate with fractional credit");
         var save=m.saveWithoutMetadata(h.getLevel().registryAccess());m.loadWithComponents(TagValueInput.create(ProblemReporter.DISCARDING,h.getLevel().registryAccess(),save));ticks(h,m,8);
-        h.assertTrue(m.energy().getAmount()==576 && m.burn()==0 && m.tanks().input(0).millibuckets()==0,"Exactly 192 JE/mB after restart");
+        h.assertTrue(m.energy().getAmount()==576 && m.burn()==228 && m.tanks().input(0).millibuckets()==0,"Credit carries across restart");
+        ticks(h,m,4);h.assertTrue(m.energy().getAmount()==804 && m.burn()==0,"Exactly 268 JE/mB, the same as ordinary biogas");
         m.tanks().input(0).fill(PetroFluids.BIOETHANOL.source(),1);((SimpleEnergyStorage)m.energy()).setAmount(m.energy().getCapacity());ticks(h,m,3);
         h.assertTrue(m.tanks().input(0).millibuckets()==1,"No fuel spent when full");
         ((SimpleEnergyStorage)m.energy()).setAmount(0);ticks(h,m,3);h.assertTrue(m.energy().getAmount()==192,"Existing bioethanol works");h.succeed();
@@ -134,12 +135,12 @@ public class AnaerobicGameTests {
     @GameTest(structure=ARENA)
     public void wholePlantProductsAndEnergyHaveNoWaterFuelLoop(GameTestHelper h){
         long digestion=400*29, cleaning=100*24, separation=100*16;
-        h.assertTrue(192000-digestion-cleaning-separation==176400,"Usable power from 16 consumed farm items");
-        h.assertTrue(176400/16 > (192000-38400)/32,"Advanced plant improves over legacy fermentation per crop");
+        h.assertTrue(268000-digestion-cleaning-separation==252400,"Usable power from 16 consumed farm items");
+        h.assertTrue(252400/16 > (192000-38400)/32,"Advanced plant improves over legacy fermentation per crop");
         long hydrogenCost=new MachineUpgrades.Effect(0,4).use(MachineKind.ELECTROLYTIC_CELL.usePerTick)*800/500;
         for(int speed=0;speed<=4;speed++)for(int efficiency=0;efficiency<=4;efficiency++){
             var e=new MachineUpgrades.Effect(speed,efficiency);
-            h.assertTrue(192000+1600*hydrogenCost+e.use(128)*e.ticks(600)>448000,"Biogas plus electrolytic H2 cannot create a positive electrical upgrade loop");
+            h.assertTrue(268000+1600*hydrogenCost+e.use(128)*e.ticks(600)>448000,"Biogas plus electrolytic H2 cannot create a positive electrical upgrade loop");
         }
         var m=place(h,IndustrialForms.ANAEROBIC_DIGESTER);m.tanks().input(0).fill(Fluids.WATER,8000);ticks(h,m,10);
         h.assertTrue(m.lane(0)==null && m.lane(1)==null,"Water alone cannot start digestion");h.succeed();

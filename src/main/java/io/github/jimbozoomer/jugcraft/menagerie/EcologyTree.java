@@ -18,6 +18,7 @@ public record EcologyTree(String wood) implements Feature {
     public static final MapCodec<EcologyTree> CODEC=RecordCodecBuilder.mapCodec(i->i.group(Codec.STRING.fieldOf("wood").forGetter(EcologyTree::wood)).apply(i,EcologyTree::new));
     @Override public MapCodec<? extends Feature> codec(){return CODEC;}
     @Override public boolean place(WorldGenLevel l,ChunkGenerator generator,RandomSource r,BlockPos origin){
+        if(wood.equals("walnut"))return new io.github.jimbozoomer.jugcraft.agriculture.WalnutTree(r.nextInt(5)==0?"large_walnut":"walnut").place(l,generator,r,origin);
         if(!Set.of("maple","walnut","coconut","azalea","flowering_azalea").contains(wood))return false;
         if(!l.getBlockState(origin.below()).is(BlockTags.DIRT)&&!(wood.equals("coconut")&&l.getBlockState(origin.below()).is(BlockTags.SAND)))return false;
         int height=(wood.equals("coconut")?8:6)+r.nextInt(3);var facing=Direction.Plane.HORIZONTAL.getRandomDirection(r);var plan=new LinkedHashMap<BlockPos,BlockState>();

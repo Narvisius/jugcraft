@@ -6,7 +6,7 @@
     "type": "minecraft:blob_foliage_placer",
     "height": 2,
     "offset": 0,
-    "radius": 3
+    "radius": 2
   },
   "foliage_provider": {
     "id": "jugcraft:peach_leaves",
@@ -22,13 +22,14 @@
     "type": "minecraft:two_layers_feature_size"
   },
   "trunk_placer": {
-    "type": "minecraft:straight_trunk_placer",
+    "type": "jugcraft:dry_country_trunk_placer",
     "base_height": 3,
     "height_rand_a": 1,
-    "height_rand_b": 0
+    "height_rand_b": 0,
+    "shape": "small"
   },
   "trunk_provider": {
-    "id": "minecraft:oak_log",
+    "id": "minecraft:cherry_log",
     "properties": {
       "axis": "y"
     }

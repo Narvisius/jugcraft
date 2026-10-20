@@ -3,7 +3,7 @@
   "category": "redstone",
   "group": "wooden_trapdoor",
   "key": {
-    "#": "jugcraft:ecology_walnut_planks"
+    "#": "#jugcraft:walnut_compat/walnut_planks"
   },
   "pattern": [
     "###",
@@ -16,7 +16,10 @@
   "fabric:load_conditions": [
     {
       "condition": "jugcraft:feature_enabled",
-      "feature": "agriculture"
+      "feature": "biomes",
+      "or": [
+        "agriculture"
+      ]
     }
   ]
 }

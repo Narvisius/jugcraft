@@ -475,7 +475,8 @@ CRAFTING = {
     "advanced_engine": (["TPT", "MDM", "TCT"], {"T": "#c:ingots/titanium", "P": "jugcraft:processor",
                                                 "M": "jugcraft:neodymium_magnet", "D": "jugcraft:diesel_engine",
                                                 "C": "jugcraft:machine_casing"}, 1),
-    "advanced_solar_panel": (["SSS", "ACA", "PTP"], {"S": "jugcraft:solar_panel", "A": "#c:plates/aluminum",
+    # Its cells' p-type layer is boron-doped silicon (docs/features/boron-solar.md).
+    "advanced_solar_panel": (["SSS", "ACA", "PTP"], {"S": "jugcraft:solar_panel", "A": "jugcraft:boron_doped_silicon",
                                                      "C": "jugcraft:processor", "P": "jugcraft:aluminum_cable",
                                                      "T": "#c:ingots/titanium"}, 1),
     # Glass walls, grow lights (glowstone), a tank for the solution and a steel frame.

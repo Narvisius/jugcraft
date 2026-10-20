@@ -32,18 +32,8 @@ def leaves(fruit=0):
     """Apple leaves in clumps, as vanilla leaves: each clump lit along its top and shaded along its foot, with gaps
     between; fruit 1 adds white-and-pink blossom, 2 ripe red apples."""
     c = Canvas()
-    grain = bs.grain(16, 16, 26101, 1.6, 4.0)
-    for y in range(16):
-        for x in range(16):
-            g = grain(x, y)
-            if g < 0.3:
-                c.img.putpixel((x, y), LEAF[0] + (0,))  # a gap
-            elif grain(x, (y - 1) % 16) < 0.3:
-                c.px(x, y, LEAF[4])                      # lit along the top of a clump
-            elif grain(x, (y + 1) % 16) < 0.3:
-                c.px(x, y, LEAF[1])                      # shaded along its foot
-            else:
-                c.px(x, y, LEAF[3] if g > 0.6 else LEAF[2])
+    from wood_style import paint_leaves
+    c.img = paint_leaves(LEAF, "leaves", 26101)
     if fruit == 1:
         for cx, cy in ((3, 4), (11, 3), (7, 9), (13, 12), (3, 13)):
             for dx, dy in ((0, -1), (-1, 0), (1, 0), (0, 1)):

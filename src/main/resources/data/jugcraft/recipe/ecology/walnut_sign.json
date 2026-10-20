@@ -3,7 +3,7 @@
   "category": "misc",
   "group": "wooden_sign",
   "key": {
-    "#": "jugcraft:ecology_walnut_planks",
+    "#": "#jugcraft:walnut_compat/walnut_planks",
     "X": "#c:rods/wooden"
   },
   "pattern": [
@@ -18,7 +18,10 @@
   "fabric:load_conditions": [
     {
       "condition": "jugcraft:feature_enabled",
-      "feature": "agriculture"
+      "feature": "biomes",
+      "or": [
+        "agriculture"
+      ]
     }
   ]
 }

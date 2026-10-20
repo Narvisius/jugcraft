@@ -337,7 +337,7 @@ public final class IndustrialForms {
 			.inputTank("fuel")
 			.fuel(Jugcraft.id("bioethanol"), 192, 96)
 			.fuel(Jugcraft.id("biogas"), 268, 64)
-			.fuel(Jugcraft.id("clean_biogas"), 192, 64)
+			.fuel(Jugcraft.id("clean_biogas"), 268, 64)
 			.port("fuel_in", FormPort.Kind.FLUID_IN, 0, 2, 2, 0, FormSide.RIGHT)
 			.port("power_out", FormPort.Kind.ENERGY_OUT, 0, 0, 2, 0, FormSide.LEFT)
 			.build();

@@ -276,8 +276,12 @@ CRAFTING = {
     "shielding_concrete": (["CCC", "CLC", "CCC"], {"C": "minecraft:gray_concrete", "L": "#c:ingots/lead"}, 8),
     "reactor_link_card": ([" P ", "PCP", " P "], {"P": "jugcraft:plastic_sheet", "C": "jugcraft:advanced_circuit"}, 1),
     # The equipment: heavy steel, with the reactor's own parts needing tungsten and the electrics copper and circuits.
-    "reactor_pressure_vessel": (["TCT", "BFB", "BBB"], {"T": "#c:plates/tungsten", "C": "jugcraft:processor",
-                                                       "B": "#c:storage_blocks/steel", "F": "jugcraft:leu_fuel_assembly"}, 1),
+    # Its control rods (docs/features/boric-acid.md): boric acid's boron absorbs neutrons, in tungsten-clad steel.
+    "control_rod_assembly": (["TBT", "TBT", "SBS"], {"T": "#c:plates/tungsten", "B": "jugcraft:boric_acid",
+                                                    "S": "#c:plates/steel"}, 1),
+    "reactor_pressure_vessel": (["TCT", "RFR", "BBB"], {"T": "#c:plates/tungsten", "C": "jugcraft:processor",
+                                                       "R": "jugcraft:control_rod_assembly", "B": "#c:storage_blocks/steel",
+                                                       "F": "jugcraft:leu_fuel_assembly"}, 1),
     "reactor_steam_generator": (["SBS", "TCT", "SBS"], {"S": "#c:plates/steel", "B": "#c:storage_blocks/steel",
                                                        "T": "#c:plates/nickel", "C": "minecraft:copper_block"}, 1),
     "reactor_coolant_pump": (["SMS", "BPB", "SBS"], {"S": "#c:plates/steel", "M": "jugcraft:electric_motor",

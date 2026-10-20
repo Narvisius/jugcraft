@@ -2,45 +2,23 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "rolls": 1.0,
-      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:alternatives",
           "children": [
             {
               "type": "minecraft:item",
-              "name": "jugcraft:ecology_walnut_leaves",
               "condition": {
+                "type": "minecraft:any_of",
                 "terms": [
-                  {
-                    "predicate": {
-                      "items": "minecraft:shears"
-                    },
-                    "type": "minecraft:match_tool"
-                  },
-                  {
-                    "predicate": {
-                      "predicates": {
-                        "minecraft:enchantments": [
-                          {
-                            "enchantments": "minecraft:silk_touch",
-                            "levels": {
-                              "min": 1
-                            }
-                          }
-                        ]
-                      }
-                    },
-                    "type": "minecraft:match_tool"
-                  }
-                ],
-                "type": "minecraft:any_of"
-              }
+                  "minecraft:tool/can_shear",
+                  "minecraft:tool/can_silk_touch"
+                ]
+              },
+              "name": "jugcraft:walnut_leaves"
             },
             {
               "type": "minecraft:item",
-              "name": "jugcraft:ecology_walnut_sapling",
               "condition": {
                 "type": "minecraft:all_of",
                 "terms": [
@@ -48,45 +26,40 @@
                     "type": "minecraft:survives_explosion"
                   },
                   {
-                    "enchantment": "minecraft:fortune",
+                    "type": "minecraft:table_bonus",
                     "chances": [
                       0.05,
                       0.0625,
                       0.083333336,
                       0.1
                     ],
-                    "type": "minecraft:table_bonus"
+                    "enchantment": "minecraft:fortune"
                   }
                 ]
-              }
+              },
+              "name": "jugcraft:walnut_sapling"
             }
           ]
         }
-      ]
+      ],
+      "rolls": 1
     },
     {
-      "rolls": 1.0,
-      "bonus_rolls": 0.0,
+      "condition": {
+        "type": "minecraft:inverted",
+        "term": {
+          "type": "minecraft:any_of",
+          "terms": [
+            "minecraft:tool/can_shear",
+            "minecraft:tool/can_silk_touch"
+          ]
+        }
+      },
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:stick",
-          "modifier": [
-            {
-              "count": {
-                "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
-              },
-              "add": false,
-              "type": "minecraft:set_count"
-            },
-            {
-              "type": "minecraft:explosion_decay"
-            }
-          ],
           "condition": {
-            "enchantment": "minecraft:fortune",
+            "type": "minecraft:table_bonus",
             "chances": [
               0.02,
               0.022222223,
@@ -94,97 +67,70 @@
               0.033333335,
               0.1
             ],
-            "type": "minecraft:table_bonus"
-          }
-        }
-      ],
-      "condition": {
-        "term": {
-          "terms": [
+            "enchantment": "minecraft:fortune"
+          },
+          "modifier": [
             {
-              "predicate": {
-                "items": "minecraft:shears"
-              },
-              "type": "minecraft:match_tool"
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 2
+              }
             },
             {
-              "predicate": {
-                "predicates": {
-                  "minecraft:enchantments": [
-                    {
-                      "levels": {
-                        "min": 1
-                      },
-                      "enchantments": "minecraft:silk_touch"
-                    }
-                  ]
-                }
-              },
-              "type": "minecraft:match_tool"
+              "type": "minecraft:explosion_decay"
             }
           ],
-          "type": "minecraft:any_of"
-        },
-        "type": "minecraft:inverted"
-      }
+          "name": "minecraft:stick"
+        }
+      ],
+      "rolls": 1
     },
     {
-      "rolls": 1.0,
-      "bonus_rolls": 0.0,
+      "condition": {
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "minecraft:inverted",
+            "term": {
+              "type": "minecraft:any_of",
+              "terms": [
+                "minecraft:tool/can_shear",
+                "minecraft:tool/can_silk_touch"
+              ]
+            }
+          },
+          {
+            "type": "minecraft:match_block",
+            "blocks": "jugcraft:ecology_walnut_leaves",
+            "state": {
+              "fruit": "2"
+            }
+          }
+        ]
+      },
       "entries": [
         {
           "type": "minecraft:item",
           "name": "jugcraft:ecology_walnut",
-          "condition": {
-            "type": "minecraft:all_of",
-            "terms": [
-              {
-                "type": "minecraft:survives_explosion"
-              },
-              {
-                "enchantment": "minecraft:fortune",
-                "chances": [
-                  0.075,
-                  0.085,
-                  0.095,
-                  0.15
-                ],
-                "type": "minecraft:table_bonus"
-              }
-            ]
-          }
-        }
-      ],
-      "condition": {
-        "term": {
-          "terms": [
+          "modifier": [
             {
-              "predicate": {
-                "items": "minecraft:shears"
-              },
-              "type": "minecraft:match_tool"
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 2
+              }
             },
             {
-              "predicate": {
-                "predicates": {
-                  "minecraft:enchantments": [
-                    {
-                      "enchantments": "minecraft:silk_touch",
-                      "levels": {
-                        "min": 1
-                      }
-                    }
-                  ]
-                }
-              },
-              "type": "minecraft:match_tool"
+              "type": "minecraft:explosion_decay"
             }
-          ],
-          "type": "minecraft:any_of"
-        },
-        "type": "minecraft:inverted"
-      }
+          ]
+        }
+      ],
+      "rolls": 1
     }
   ],
-  "random_sequence": "jugcraft:blocks/ecology_walnut_leaves"
+  "random_sequence": "jugcraft:blocks/walnut_leaves"
 }

@@ -85,7 +85,7 @@ public class CoastalMetalsGameTests {
                 checked++;
             }
         }
-        h.assertTrue(checked >= 21, "Coastal, molding and shared concentrator recipes exercised, found " + checked);
+        h.assertTrue(checked >= 22, "Coastal, molding and shared concentrator recipes exercised, found " + checked);
         h.succeed();
     }
 

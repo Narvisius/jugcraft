@@ -6,7 +6,9 @@
       "jugcraft:ecology_walnut_trapdoor",
       "jugcraft:ecology_walnut_sign",
       "jugcraft:ecology_walnut_hanging_sign",
+      "jugcraft:walnut_fence",
       "jugcraft:ecology_walnut_fence",
+      "jugcraft:walnut_fence_gate",
       "jugcraft:ecology_walnut_fence_gate",
       "jugcraft:ecology_walnut_pressure_plate",
       "jugcraft:ecology_walnut_button",
@@ -18,7 +20,9 @@
       "jugcraft:ecology_walnut_trapdoor",
       "jugcraft:ecology_walnut_sign",
       "jugcraft:ecology_walnut_hanging_sign",
+      "jugcraft:walnut_fence",
       "jugcraft:ecology_walnut_fence",
+      "jugcraft:walnut_fence_gate",
       "jugcraft:ecology_walnut_fence_gate",
       "jugcraft:ecology_walnut_pressure_plate",
       "jugcraft:ecology_walnut_button",
@@ -30,7 +34,9 @@
       "jugcraft:ecology_walnut_trapdoor",
       "jugcraft:ecology_walnut_sign",
       "jugcraft:ecology_walnut_hanging_sign",
+      "jugcraft:walnut_fence",
       "jugcraft:ecology_walnut_fence",
+      "jugcraft:walnut_fence_gate",
       "jugcraft:ecology_walnut_fence_gate",
       "jugcraft:ecology_walnut_pressure_plate",
       "jugcraft:ecology_walnut_button",
@@ -42,7 +48,9 @@
       "jugcraft:ecology_walnut_trapdoor",
       "jugcraft:ecology_walnut_sign",
       "jugcraft:ecology_walnut_hanging_sign",
+      "jugcraft:walnut_fence",
       "jugcraft:ecology_walnut_fence",
+      "jugcraft:walnut_fence_gate",
       "jugcraft:ecology_walnut_fence_gate",
       "jugcraft:ecology_walnut_pressure_plate",
       "jugcraft:ecology_walnut_button",
@@ -51,12 +59,15 @@
     ]
   ],
   "result": {
-    "id": "jugcraft:ecology_walnut_planks"
+    "id": "jugcraft:walnut_planks"
   },
   "fabric:load_conditions": [
     {
       "condition": "jugcraft:feature_enabled",
-      "feature": "agriculture"
+      "feature": "biomes",
+      "or": [
+        "agriculture"
+      ]
     }
   ]
 }

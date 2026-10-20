@@ -13,6 +13,14 @@ wood grow when planted in a square (agriculture.TREES "giant"; agriculture/Giant
 
 DECORATOR = "seasonal_leaves"
 
+# Atomic native features validate their complete plan and preserve the original ground.
+# Keep timber ownership visible to the shared feature-switch audit.
+BOUNDED_SHAPES = {
+    "walnut": {"wood": "walnut", "tree": "walnut"},
+    "large_walnut": {"wood": "walnut", "tree": "walnut"},
+    "bristlecone": {"wood": "pine", "tree": "pine"},
+}
+
 def hanging_fruit(block, probability):
     return {"type": "minecraft:attached_to_leaves", "probability": probability, "exclusion_radius_xz": 1,
             "exclusion_radius_y": 1, "required_empty_blocks": 1, "directions": ["down"],

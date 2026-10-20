@@ -47,7 +47,7 @@ public final class DarkMatter {
         for (DarkMatterTool.Kind kind : DarkMatterTool.Kind.values()) {
             String id = "dark_matter_" + kind.id;
             var key = ResourceKey.create(Registries.ITEM, Jugcraft.id(id));
-            var properties = new Item.Properties().setId(key).rarity(Rarity.RARE).component(MODE, 0);
+            var properties = new Item.Properties().setId(key).rarity(Rarity.RARE).fireResistant().component(MODE, 0);
             if (kind == DarkMatterTool.Kind.AXE) properties.axe(MATERIAL, 5.0F, -3.1F);
             else properties.pickaxe(MATERIAL, kind == DarkMatterTool.Kind.HAMMER ? 3.0F : 1.0F, -2.8F);
             ITEMS.put(id, Registry.register(BuiltInRegistries.ITEM, key, new DarkMatterTool(properties, kind)));
