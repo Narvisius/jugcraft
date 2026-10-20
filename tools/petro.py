@@ -388,6 +388,10 @@ FLUID_RECIPES = {
          "retained_inputs": [2], "fluid_results": [("jugcraft:sulfuric_acid", 500)], "ticks": 100, "features": ["machines", "sulfur"]},
         {"name": "hydrochloric_copper", "items": [("minecraft:raw_copper", 1)], "fluids": [("jugcraft:hydrochloric_acid", 250)],
          "results": [("jugcraft:washed_copper_ore", 1)], "ticks": 160, "features": ["machines"]},
+        # Zinc dissolved in hydrochloric acid gives off hydrogen (docs/features/zinc-hydrogen.md): a small, power-cheap
+        # hydrogen source before electrolysis, spending the zinc. Zn + 2 HCl -> ZnCl2 + H2.
+        {"name": "hydrogen_from_zinc", "items": [("#c:ingots/zinc", 1)], "fluids": [("jugcraft:hydrochloric_acid", 500)],
+         "fluid_results": [("jugcraft:hydrogen", 500)], "ticks": 80, "features": ["machines", "zinc"]},
         {"name": "sulfuric_acid", "items": [("jugcraft:sulfur_dust", 2)], "fluids": [("minecraft:water", 1000)],
          "fluid_results": [("jugcraft:sulfuric_acid", 1000)], "source": 0, "ticks": 100, "features": ["sulfur"]},
         # The Bayer process: bauxite digested in hot lye leaves alumina (each bauxite holds two ingots' worth).
