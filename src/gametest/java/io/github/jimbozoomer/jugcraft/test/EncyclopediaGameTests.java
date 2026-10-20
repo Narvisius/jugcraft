@@ -13,6 +13,7 @@ import io.github.jimbozoomer.jugcraft.concordance.RateGate;
 import io.github.jimbozoomer.jugcraft.concordance.rules.Evidence;
 import io.github.jimbozoomer.jugcraft.concordance.rules.ResearchState;
 import io.github.jimbozoomer.jugcraft.config.JugcraftConfig;
+import io.github.jimbozoomer.jugcraft.guide.encyclopedia.Bestiary;
 import io.github.jimbozoomer.jugcraft.guide.encyclopedia.Encyclopedia;
 import io.github.jimbozoomer.jugcraft.guide.encyclopedia.EncyclopediaPayload;
 import io.github.jimbozoomer.jugcraft.guide.encyclopedia.EncyclopediaRequestPayload;
@@ -38,6 +39,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -48,7 +50,11 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -502,6 +508,33 @@ public class EncyclopediaGameTests {
 				"a page no longer sent falls back to the one preferred");
 		navigator.reset();
 		helper.assertTrue(!navigator.received() && navigator.pages().isEmpty() && navigator.current() == null, "forgotten on leaving");
+		helper.succeed();
+	}
+
+	/**
+	 * The bestiary (docs/features/bestiary-field-notes.md): a newcomer's Expeditions page has no field notes; once they
+	 * have defeated a Jugcraft creature (and been defeated by it), its notes give its own numbers and their tally.
+	 */
+	@GameTest
+	public void theBestiaryListsOnlyCreaturesFought(GameTestHelper helper) {
+		ServerPlayer player = player(helper);
+		helper.assertTrue(Bestiary.fought(player).isEmpty(), "A newcomer has fought " + Bestiary.fought(player));
+		helper.assertFalse(keys(build(player)).contains("encyclopedia.jugcraft.bestiary.heading"), "A newcomer sees field notes");
+		EntityType<?> creature = BuiltInRegistries.ENTITY_TYPE.stream()
+				.filter(type -> BuiltInRegistries.ENTITY_TYPE.getKey(type).getNamespace().equals(Jugcraft.MOD_ID))
+				.filter(type -> type.getCategory() != MobCategory.MISC && DefaultAttributes.hasSupplier(type))
+				.findFirst().orElseThrow(() -> helper.assertionException("Jugcraft has no living creature"));
+		player.awardStat(Stats.ENTITY_KILLED.get(creature), 3);
+		player.awardStat(Stats.ENTITY_KILLED_BY.get(creature), 1);
+		List<Bestiary.Entry> fought = Bestiary.fought(player);
+		helper.assertTrue(fought.size() == 1 && fought.getFirst().type() == creature && fought.getFirst().defeated() == 3
+				&& fought.getFirst().defeatedBy() == 1, "The bestiary counts " + fought);
+		EncyclopediaPayload.Page expedition = page(build(player), "expedition");
+		helper.assertTrue(expedition != null, "No Expeditions page after a fight");
+		List<String> rows = new ArrayList<>();
+		expedition.rows().forEach(row -> keys(row.text(), rows));
+		helper.assertTrue(rows.contains("encyclopedia.jugcraft.bestiary.heading") && rows.contains("encyclopedia.jugcraft.bestiary.record")
+				&& rows.contains(creature.getDescriptionId()), "The field notes show " + rows);
 		helper.succeed();
 	}
 }

@@ -31,7 +31,7 @@
 - [x] Local implementation: replace spell text entry with an animated, keyboard-accessible constellation editor over the existing compiler.
 - [x] Local implementation: illustrated two-page encyclopedia, simple contents, topic directories and focused detail/recipe pages.
 - [x] Rendered interaction/scale checks, full server regression and optional-library absence checks passed locally.
-- [ ] Expand the bestiary beyond encountered-lair dossiers and consider optional search/favorites.
+- [ ] Expand the bestiary beyond encountered-lair dossiers and consider optional search/favorites. Field notes are built: every Jugcraft creature a player has fought, with its own numbers and their tally ([bestiary field notes](features/bestiary-field-notes.md)); search and favorites wait for the owner's approval of the chapter organisation.
 - Evidence and scope: [constellation and field-guide record](features/constellation-and-field-guide.md).
 
 ## Howitzer-Walker (owner request, 13 October 2026)

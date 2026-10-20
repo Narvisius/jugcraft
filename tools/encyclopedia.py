@@ -2,7 +2,7 @@
 
 The encyclopedia is one screen with pages the server writes for each player (guide/encyclopedia/Encyclopedia.java):
 Discover (the First Light route, concordance/encyclopedia/FirstLightRoute.java), Spellcraft, Expeditions (the lair
-dossiers, lair/LairDossiers.java) and Inspect, then the client's own Keys page. This module holds every word they show
+dossiers, lair/LairDossiers.java, then the bestiary, guide/encyclopedia/Bestiary.java) and Inspect, then the client's own Keys page. This module holds every word they show
 and the route's shape: its steps in order, the recipes, sales and codex entries each step names, and the game tests
 that exercise it. generate_material_data.py writes the words into the language file; check_mod_data.py
 (check_encyclopedia) checks the Java against PAGES, STATES, EDGES, FIRST_ROUTE, DOSSIERS and KEY_HELP, and the record
@@ -257,6 +257,17 @@ DOSSIER = {
     "unknown_count": "%s more lairs are yet to be found",
 }
 
+# The bestiary (guide/encyclopedia/Bestiary.java), after the lair dossiers on the Expeditions page: every Jugcraft
+# creature the player has defeated or been defeated by, with the numbers the game itself gives it, and their own tally.
+BESTIARY = {
+    "heading": "Field notes",
+    "intro": "Creatures you have fought, with the game's own numbers. Ones you have not met stay unwritten.",
+    "stats": "Health %s, attack %s, armour %s",
+    "stats.no_attack": "Health %s, armour %s; it does not strike in melee",
+    "record": "You have defeated it %s times; it has defeated you %s times",
+    "more": "%s more creatures you have fought are not listed here",
+}
+
 GENERAL = {
     "absent": "Not available on this server: %s",
     "trade.town": "Buy at the town's %3$s: %1$s × %2$s for %4$s Jugs",
@@ -314,7 +325,8 @@ def lang_entries(lang):
         lang[f"encyclopedia.{MOD}.state.{state}"] = name
     for edge, name in EDGES.items():
         lang[f"encyclopedia.{MOD}.edge.{edge}"] = name
-    for prefix, table in (("route", ROUTE), ("spellcraft", SPELLCRAFT), ("inspect", INSPECT), ("dossier", DOSSIER)):
+    for prefix, table in (("route", ROUTE), ("spellcraft", SPELLCRAFT), ("inspect", INSPECT), ("dossier", DOSSIER),
+                          ("bestiary", BESTIARY)):
         for key, text in table.items():
             lang[f"encyclopedia.{MOD}.{prefix}.{key}"] = text
     for key, text in GENERAL.items():

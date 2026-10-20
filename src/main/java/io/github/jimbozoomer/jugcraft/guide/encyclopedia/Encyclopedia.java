@@ -27,9 +27,9 @@ import net.minecraft.server.level.ServerPlayer;
 /**
  * The Jugcraft Encyclopedia's server side (Concordance Chunk A, A-04): it builds a player's pages when they ask (opening
  * the encyclopedia, or asking again), from what the server knows about that player and nothing else. Pages come in a
- * fixed order (Discover, Spellcraft, Expeditions, Inspect; the client adds its own Keys page last); a page that has
- * nothing to show for this player is left out, so there is never an empty tab, and one that fails says so and the log
- * says why, without hiding the others.
+ * fixed order (Discover, Spellcraft, Expeditions with the bestiary, Inspect; the client adds its own Keys page last); a
+ * page that has nothing to show for this player is left out, so there is never an empty tab, and one that fails says so
+ * and the log says why, without hiding the others.
  * <p>
  * A player may ask at most once every {@value #REQUEST_TICKS} ticks; one who asks sooner is answered at the first
  * allowed tick (only their newest request waits). The request names no page and claims nothing, so a modified client
@@ -60,7 +60,11 @@ public final class Encyclopedia {
 		// The pages, in the order they are shown (tools/check_mod_data.py pins the ids to tools/encyclopedia.py).
 		page("discover", FirstLightRoute::write);
 		page("spellcraft", SpellcraftPage::write);
-		page("expedition", LairDossiers::write);
+		// The Expeditions page: the lair dossiers, then the bestiary's field notes on the creatures this player has fought.
+		page("expedition", (player, request, out) -> {
+			LairDossiers.write(player, request, out);
+			Bestiary.write(player, out);
+		});
 		page("inspect", InspectPage::write);
 		PayloadTypeRegistry.serverboundPlay().register(EncyclopediaRequestPayload.TYPE, EncyclopediaRequestPayload.CODEC);
 		PayloadTypeRegistry.clientboundPlay().register(EncyclopediaPayload.TYPE, EncyclopediaPayload.CODEC);
