@@ -16069,6 +16069,7 @@ def main():
     check_pixel_hollows()
     check_town()
     check_diagonal_connections()
+    check_aluminum_bootstrap()
     check_concordance(registered)
     for path in RES.rglob("*.json"):
         load(path)
@@ -16076,6 +16077,130 @@ def main():
         print("\n".join(errors), file=sys.stderr)
         sys.exit(1)
     print(f"PASS: {len(registered)} material IDs, data files and recipe audit. No Minecraft build or game test performed.")
+
+
+# The first aluminum line (docs/features/aluminum-bootstrap-check.md): the machines that make aluminum from bauxite, and
+# the machine that makes their lye, built from these crafting recipes.
+ALUMINUM_ENTRY = ("electrolytic_separator", "bauxite_digester", "aluminate_filter_press", "alumina_calciner",
+                  "aluminum_reduction_cell", "arc_furnace_controller", "arc_furnace_casing")
+# What the line consumes besides bauxite and water.
+ALUMINUM_REAGENTS = ("jugcraft:lye", "jugcraft:coke")
+# Not aluminum metal: the line's own intermediate and its own machine.
+NOT_ALUMINUM_METAL = {"jugcraft:aluminum_hydroxide", "jugcraft:aluminum_reduction_cell"}
+
+
+def check_aluminum_bootstrap():
+    """Industrial chemistry: aluminum is never needed to start making aluminum. With aluminum metal withheld (every
+    jugcraft item named "aluminum", bar the hydroxide and the reduction cell itself), a thing counts as reachable when
+    no recipe makes it (a mined or vanilla thing) or some recipe makes it from reachable things. Every machine of the
+    first line and every reagent it uses must stay reachable. Ingredient trees only: the machines that run each
+    process step are not followed, apart from those listed here."""
+    def tag_members(ref, seen=frozenset()):
+        ns, path = split(ref)
+        if ref in seen:
+            return set()
+        values = None
+        for kind in ("item", "fluid"):
+            data = load(DATA / ns / "tags" / kind / f"{path}.json") if (DATA / ns / "tags" / kind / f"{path}.json").is_file() else None
+            if data is not None:
+                values = (values or []) + data.get("values", [])
+        if values is None:
+            return None
+        members = set()
+        for value in values:
+            value = value.get("id") if isinstance(value, dict) else value
+            if value.startswith("#"):
+                members |= tag_members(value[1:], seen | {ref}) or set()
+            else:
+                members.add(value)
+        return members
+
+    def alternatives(spec):
+        """One ingredient slot as a set of choices ("#tag" or an id)."""
+        if isinstance(spec, str):
+            return {spec}
+        if isinstance(spec, list):
+            out = set()
+            for part in spec:
+                out |= alternatives(part)
+            return out
+        if isinstance(spec, dict):
+            for key in ("ingredient", "item", "id", "fluid"):
+                if key in spec:
+                    return alternatives(spec[key])
+            if "tag" in spec:
+                return {"#" + spec["tag"]}
+        return set()
+
+    def outputs(recipe):
+        found = []
+        result = recipe.get("result")
+        if isinstance(result, str):
+            found.append(result)
+        elif isinstance(result, dict):
+            found.append(result.get("id") or result.get("item"))
+        for part in recipe.get("results", []) or []:
+            if isinstance(part, dict):
+                found.append(part.get("id") or part.get("item"))
+        for part in recipe.get("fluid_results", []) or []:
+            found.append(part.get("fluid"))
+        return [ref for ref in found if ref]
+
+    def slots(recipe):
+        found = []
+        key = recipe.get("key")
+        if isinstance(key, dict):
+            found += [alternatives(spec) for spec in key.values()]
+        for field in ("ingredients", "items", "fluids"):
+            for spec in recipe.get(field, []) or []:
+                found.append(alternatives(spec))
+        for field in ("ingredient", "input", "base", "addition", "template"):
+            if field in recipe:
+                found.append(alternatives(recipe[field]))
+        return [choices for choices in found if choices]
+
+    producers = {}
+    for path in DATA.glob("*/recipe/**/*.json"):
+        recipe = load(path)
+        if not isinstance(recipe, dict):
+            continue
+        needs = slots(recipe)
+        for out in outputs(recipe):
+            producers.setdefault(out, []).append(needs)
+
+    def withheld(ref):
+        ns, path = split(ref)
+        return ns == MOD and "aluminum" in path and ref not in NOT_ALUMINUM_METAL
+
+    tags = {}
+    reachable = set()
+
+    def ok(choice):
+        if choice.startswith("#"):
+            if choice not in tags:
+                tags[choice] = tag_members(choice[1:])
+            members = tags[choice]
+            return members is None or any(member in reachable or (member not in producers and not withheld(member)) for member in members)
+        return choice in reachable or (choice not in producers and not withheld(choice))
+
+    changed = True
+    while changed:
+        changed = False
+        for out, recipes in producers.items():
+            if out in reachable or withheld(out):
+                continue
+            if any(all(any(ok(choice) for choice in slot) for slot in needs) for needs in recipes):
+                reachable.add(out)
+                changed = True
+    for name in ALUMINUM_ENTRY:
+        ref = f"{MOD}:{name}"
+        if ref not in producers:
+            err(f"aluminum bootstrap: no recipe makes {ref}")
+        elif ref not in reachable:
+            err(f"aluminum bootstrap: {ref} cannot be made without aluminum")
+    for ref in ALUMINUM_REAGENTS:
+        if ref not in reachable:
+            err(f"aluminum bootstrap: {ref} cannot be made without aluminum")
 
 
 def check_journal(co, root, lang):
