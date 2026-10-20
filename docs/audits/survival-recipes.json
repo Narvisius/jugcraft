@@ -20,15 +20,15 @@
     "Reachability is qualitative; energy, quantities, research and encounter difficulty require playtesting."
   ],
   "summary": {
-    "chain_with_acquisition_evidence": 3182,
+    "chain_with_acquisition_evidence": 3183,
     "recipe_chain_reachable": 1522,
-    "natural_or_interaction_source": 565,
+    "natural_or_interaction_source": 561,
     "loot_only": 286,
     "deferred_acquisition_design": 78,
-    "intentional_noncraftable": 320
+    "intentional_noncraftable": 329
   },
   "recipe_types": {
-    "minecraft:crafting_shaped": 2728,
+    "minecraft:crafting_shaped": 2729,
     "minecraft:crafting_shapeless": 1037,
     "jugcraft:alloying": 10,
     "minecraft:blasting": 40,
@@ -21307,6 +21307,15 @@
       "blocked_by": []
     },
     {
+      "item": "jugcraft:chima_spawn_egg",
+      "status": "intentional_noncraftable",
+      "reason": "Creative spawn egg; acquire creatures through world encounters.",
+      "route_count": 0,
+      "routes": [],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
       "item": "jugcraft:chimera_finial",
       "status": "recipe_chain_reachable",
       "reason": "",
@@ -21812,8 +21821,8 @@
     },
     {
       "item": "jugcraft:coal_deposit",
-      "status": "natural_or_interaction_source",
-      "reason": "",
+      "status": "intentional_noncraftable",
+      "reason": "Natural finite reserve, not a survival block item: picks drop nothing; the deposit drill extracts coal or raw metal.",
       "route_count": 0,
       "routes": [],
       "evidence": [
@@ -23198,8 +23207,8 @@
     },
     {
       "item": "jugcraft:copper_deposit",
-      "status": "natural_or_interaction_source",
-      "reason": "",
+      "status": "intentional_noncraftable",
+      "reason": "Natural finite reserve, not a survival block item: picks drop nothing; the deposit drill extracts coal or raw metal.",
       "route_count": 0,
       "routes": [],
       "evidence": [
@@ -24632,6 +24641,17 @@
       "blocked_by": []
     },
     {
+      "item": "jugcraft:deep_drilling_assembly",
+      "status": "chain_with_acquisition_evidence",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/deep_drilling_assembly.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
       "item": "jugcraft:deepslate_chromite_ore",
       "status": "natural_or_interaction_source",
       "reason": "",
@@ -24643,6 +24663,15 @@
           "source": "src/main/resources/data/jugcraft/worldgen/feature/ore_chromite.json"
         }
       ],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:deepslate_coal_deposit",
+      "status": "intentional_noncraftable",
+      "reason": "Natural finite reserve, not a survival block item: picks drop nothing; the deposit drill extracts coal or raw metal.",
+      "route_count": 0,
+      "routes": [],
+      "evidence": [],
       "blocked_by": []
     },
     {
@@ -24660,6 +24689,15 @@
       "blocked_by": []
     },
     {
+      "item": "jugcraft:deepslate_copper_deposit",
+      "status": "intentional_noncraftable",
+      "reason": "Natural finite reserve, not a survival block item: picks drop nothing; the deposit drill extracts coal or raw metal.",
+      "route_count": 0,
+      "routes": [],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
       "item": "jugcraft:deepslate_fluorite_ore",
       "status": "natural_or_interaction_source",
       "reason": "",
@@ -24671,6 +24709,15 @@
           "source": "src/main/resources/data/jugcraft/worldgen/feature/ore_fluorite.json"
         }
       ],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:deepslate_iron_deposit",
+      "status": "intentional_noncraftable",
+      "reason": "Natural finite reserve, not a survival block item: picks drop nothing; the deposit drill extracts coal or raw metal.",
+      "route_count": 0,
+      "routes": [],
+      "evidence": [],
       "blocked_by": []
     },
     {
@@ -24812,6 +24859,15 @@
           "source": "src/main/resources/data/jugcraft/worldgen/feature/ore_thallite_rich.json"
         }
       ],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:deepslate_tin_deposit",
+      "status": "intentional_noncraftable",
+      "reason": "Natural finite reserve, not a survival block item: picks drop nothing; the deposit drill extracts coal or raw metal.",
+      "route_count": 0,
+      "routes": [],
+      "evidence": [],
       "blocked_by": []
     },
     {
@@ -40995,8 +41051,8 @@
     },
     {
       "item": "jugcraft:iron_deposit",
-      "status": "natural_or_interaction_source",
-      "reason": "",
+      "status": "intentional_noncraftable",
+      "reason": "Natural finite reserve, not a survival block item: picks drop nothing; the deposit drill extracts coal or raw metal.",
       "route_count": 0,
       "routes": [],
       "evidence": [
@@ -71032,8 +71088,8 @@
     },
     {
       "item": "jugcraft:tin_deposit",
-      "status": "natural_or_interaction_source",
-      "reason": "",
+      "status": "intentional_noncraftable",
+      "reason": "Natural finite reserve, not a survival block item: picks drop nothing; the deposit drill extracts coal or raw metal.",
       "route_count": 0,
       "routes": [],
       "evidence": [
@@ -120497,6 +120553,42 @@
       ],
       "outputs": [
         "jugcraft:death_knell"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/deep_drilling_assembly.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "jugcraft:steel_plate"
+        ],
+        [
+          "jugcraft:steel_gear"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ],
+        [
+          "jugcraft:steel_gear"
+        ],
+        [
+          "jugcraft:basic_circuit"
+        ],
+        [
+          "jugcraft:steel_gear"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ],
+        [
+          "jugcraft:steel_pickaxe"
+        ],
+        [
+          "jugcraft:steel_plate"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:deep_drilling_assembly"
       ]
     },
     {
@@ -259653,6 +259745,18 @@
       ]
     },
     {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/deep_drilling_assembly.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:deep_drilling_assembly"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:deep_drilling_assembly"
+      ]
+    },
+    {
       "source": "src/main/resources/data/jugcraft/loot_table/blocks/depleted_uranium_armor.json",
       "type": "block_drop",
       "inputs": [
@@ -295702,78 +295806,6 @@
         ]
       ],
       "outputs": [
-        "jugcraft:hard_candy"
-      ]
-    },
-    {
-      "source": "tools/agriculture.py:CANDY/syrup",
-      "type": "candy_temperature",
-      "inputs": [
-        [
-          "jugcraft:candy_kettle"
-        ],
-        [
-          "jugcraft:candy_tray"
-        ],
-        [
-          "minecraft:sugar"
-        ],
-        [
-          "minecraft:water_bucket"
-        ],
-        [
-          "minecraft:campfire"
-        ]
-      ],
-      "outputs": [
-        "jugcraft:candy_corn"
-      ]
-    },
-    {
-      "source": "tools/agriculture.py:CANDY/syrup",
-      "type": "candy_temperature",
-      "inputs": [
-        [
-          "jugcraft:candy_kettle"
-        ],
-        [
-          "jugcraft:candy_tray"
-        ],
-        [
-          "minecraft:sugar"
-        ],
-        [
-          "minecraft:water_bucket"
-        ],
-        [
-          "minecraft:campfire"
-        ]
-      ],
-      "outputs": [
-        "jugcraft:burnt_sugar"
-      ]
-    },
-    {
-      "source": "tools/agriculture.py:CANDY/syrup",
-      "type": "candy_temperature",
-      "inputs": [
-        [
-          "jugcraft:candy_kettle"
-        ],
-        [
-          "jugcraft:candy_tray"
-        ],
-        [
-          "minecraft:sugar"
-        ],
-        [
-          "minecraft:water_bucket"
-        ],
-        [
-          "minecraft:campfire"
-        ]
-      ],
-      "outputs": [
         "jugcraft:rock_candy"
       ]
     },
@@ -295822,11 +295854,11 @@
         ]
       ],
       "outputs": [
-        "jugcraft:caramel"
+        "jugcraft:burnt_sugar"
       ]
     },
     {
-      "source": "tools/agriculture.py:CANDY/cream",
+      "source": "tools/agriculture.py:CANDY/syrup",
       "type": "candy_temperature",
       "inputs": [
         [
@@ -295843,13 +295875,58 @@
         ],
         [
           "minecraft:campfire"
-        ],
-        [
-          "minecraft:milk_bucket"
         ]
       ],
       "outputs": [
-        "jugcraft:burnt_sugar"
+        "jugcraft:caramel"
+      ]
+    },
+    {
+      "source": "tools/agriculture.py:CANDY/syrup",
+      "type": "candy_temperature",
+      "inputs": [
+        [
+          "jugcraft:candy_kettle"
+        ],
+        [
+          "jugcraft:candy_tray"
+        ],
+        [
+          "minecraft:sugar"
+        ],
+        [
+          "minecraft:water_bucket"
+        ],
+        [
+          "minecraft:campfire"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:candy_corn"
+      ]
+    },
+    {
+      "source": "tools/agriculture.py:CANDY/syrup",
+      "type": "candy_temperature",
+      "inputs": [
+        [
+          "jugcraft:candy_kettle"
+        ],
+        [
+          "jugcraft:candy_tray"
+        ],
+        [
+          "minecraft:sugar"
+        ],
+        [
+          "minecraft:water_bucket"
+        ],
+        [
+          "minecraft:campfire"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:hard_candy"
       ]
     },
     {
@@ -295903,7 +295980,7 @@
         ]
       ],
       "outputs": [
-        "jugcraft:cream_caramel"
+        "jugcraft:burnt_sugar"
       ]
     },
     {
@@ -295931,6 +296008,33 @@
       ],
       "outputs": [
         "jugcraft:toffee"
+      ]
+    },
+    {
+      "source": "tools/agriculture.py:CANDY/cream",
+      "type": "candy_temperature",
+      "inputs": [
+        [
+          "jugcraft:candy_kettle"
+        ],
+        [
+          "jugcraft:candy_tray"
+        ],
+        [
+          "minecraft:sugar"
+        ],
+        [
+          "minecraft:water_bucket"
+        ],
+        [
+          "minecraft:campfire"
+        ],
+        [
+          "minecraft:milk_bucket"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:cream_caramel"
       ]
     },
     {

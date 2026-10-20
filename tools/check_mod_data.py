@@ -249,7 +249,7 @@ def item_models(definition):
 def check_assets(registered):
     import vehicle_bays
     lang = load(ASSETS / "lang" / "en_us.json") or {}
-    for block in (all_blocks() + machine_blocks() + ag.all_blocks() + petro.petro_blocks() + list(deposits.DEPOSITS)
+    for block in (all_blocks() + machine_blocks() + ag.all_blocks() + petro.petro_blocks() + deposits.all_blocks()
                   + list(tank_display.BLOCKS) + plastic.blocks() + ph.blocks() + (town_assets.blocks() + styx.blocks()) + seasons.BLOCKS
                   + construction.blocks() + control_electronics.blocks() + rocketry.blocks() + dieselworks.blocks() + kaiserworks.blocks() + trenchworks.blocks() + fortifications.blocks() + bunkerworks.blocks() + aged_wood.blocks() + fire_control.blocks()
                   + concordance.blocks() + guns.blocks() + industrial_forms.blocks() + list(vehicle_bays.BLOCKS) + menagerie.blocks()):
@@ -274,7 +274,7 @@ def check_assets(registered):
         definition = load(ASSETS / "items" / f"{item}.json")
         if definition:
             item_models(definition["model"])
-        if item not in (all_blocks() + machine_blocks() + ag.all_blocks() + petro.petro_blocks() + list(deposits.DEPOSITS)
+        if item not in (all_blocks() + machine_blocks() + ag.all_blocks() + petro.petro_blocks() + deposits.all_blocks()
                         + list(tank_display.BLOCKS) + plastic.blocks() + ph.blocks() + (town_assets.blocks() + styx.blocks())
                         + construction.blocks() + control_electronics.blocks() + rocketry.blocks() + dieselworks.blocks() + kaiserworks.blocks() + trenchworks.blocks() + fortifications.blocks() + bunkerworks.blocks() + aged_wood.blocks() + fire_control.blocks()
                         + concordance.blocks() + guns.blocks() + industrial_forms.blocks() + list(vehicle_bays.BLOCKS) + menagerie.blocks()) and f"item.{MOD}.{item}" not in lang:
@@ -379,6 +379,8 @@ def item_units(ref):
     """Returns {metal: units} for an item or tag reference."""
     import vehicle_bays
     ns, path = split(ref.lstrip("#"))
+    if ns == MOD and path == "deep_drilling_assembly":
+        return {}  # Assembled machinery: no ingot-recovery recipe, like the deposit drill itself.
     if ns == MOD and path in vehicle_bays.BLOCKS:
         return {}  # Like other assembled machines, bays have no ingot-recovery recipe.
     # Animal products, cloth, stone, pet tokens and crafted equipment have no
@@ -710,7 +712,7 @@ def check_tags():
     for path in sorted(DATA.rglob("tags/*/**/*.json")):
         registry = path.relative_to(DATA).parts[2]
         known = OTHER_ENTRIES.get(registry) or set(all_blocks() + all_items() + machine_blocks() + machine_items()
-                                                    + petro.petro_blocks() + petro.petro_items() + list(deposits.DEPOSITS)
+                                                    + petro.petro_blocks() + petro.petro_items() + deposits.all_blocks()
                                                     + list(tank_display.BLOCKS) + seasons.BLOCKS + ph.blocks() + ph.items()
                                                     + arms.items() + arms_variants.items()
                                                     + gear.items() + plastic.blocks() + exosuit.items() + grapple.items()
@@ -12704,6 +12706,17 @@ def check_deposits():
     for item in (info["yield"] for info in deposits.DEPOSITS.values()):
         if split(item)[0] == MOD and split(item)[1] not in all_items():
             err(f"Deposit yield {item} is not a Jugcraft item")
+    for family, (chance, biomes) in deposits.UNDERGROUND.items():
+        name = f"underground_{family}_deposit"
+        configured = json.loads((DATA / MOD / "worldgen" / "feature" / f"{name}.json").read_text(encoding="utf-8"))
+        placed = json.loads((DATA / MOD / "worldgen" / "placed_feature" / f"{name}.json").read_text(encoding="utf-8"))
+        tag = json.loads((DATA / MOD / "tags" / "worldgen" / "biome" / "has_bulk_deposit" / f"{family}.json").read_text(encoding="utf-8"))
+        if configured != {"type": "jugcraft:underground_deposit", "family": family, "surface_biomes": f"jugcraft:has_bulk_deposit/{family}"}:
+            err(f"{name}: configured surface-biome policy drift")
+        if placed["placement"] != [{"type": "minecraft:rarity_filter", "chance": chance}, {"type": "minecraft:in_square"}]:
+            err(f"{name}: rarity drift or cave-biome filter introduced")
+        if tag["values"] != biomes:
+            err(f"{name}: eligibility drift")
     stats = STATS["deposit_drill"]
     kinds = MACHINE_JAVA.read_text(encoding="utf-8")
     for key, constant in (("ticks", "DEPOSIT_TICKS"), ("units", "DEPOSIT_UNITS"), ("reach", "DEPOSIT_REACH"),
@@ -16135,7 +16148,7 @@ def registered_items():
     import vehicle_bays
     registered = (set(all_blocks()) | set(all_items()) | set(machine_blocks()) | set(machine_items())
                   | set(ag.all_blocks()) | set(ag.all_items()) | set(petro.petro_items()) | set(petro.petro_blocks())
-                  | set(deposits.DEPOSITS) | set(guide_books.BOOKS) | set(tank_display.BLOCKS)
+                  | set(deposits.all_blocks()) | set(guide_books.BOOKS) | set(tank_display.BLOCKS)
                   | set(arms.items()) | set(arms_variants.items())
                   | set(gear.items()) | set(plastic.blocks()) | set(exosuit.items()) | set(grapple.items())
                   | set(field_chemistry.items()) | set(construction.items()) | set(construction.blocks()) | set(gas_storage.items()) | set(control_electronics.blocks()) | set(control_electronics.items()) | set(rocketry.items()) | set(rocketry.blocks()) | set(dieselworks.blocks()) | set(kaiserworks.blocks()) | set(trenchworks.blocks()) | set(fortifications.blocks()) | set(bunkerworks.blocks()) | set(aged_wood.blocks()) | set(fire_control.blocks()) | set(fire_control.items()) | set(raiders.ITEMS) | set(armoured_walker.ITEMS) | set(howitzer_walker.ITEMS) | set(zeppelin.ITEMS) | set(mech.ITEMS) | set(landship.ITEMS) | set(artillery.ITEMS) | set(tower_guns.items())

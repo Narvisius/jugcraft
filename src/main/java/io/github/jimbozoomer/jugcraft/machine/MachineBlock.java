@@ -139,6 +139,9 @@ public class MachineBlock extends BaseEntityBlock implements EnergyConnectable {
 	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
 			InteractionHand hand, BlockHitResult hit) {
 		MachineBlockEntity machine = machineAt(level, pos, state);
+		if (kind == MachineKind.DEPOSIT_DRILL && stack.is(io.github.jimbozoomer.jugcraft.deposit.JugcraftDeposits.DEEP_DRILLING_ASSEMBLY.asItem())) {
+			return io.github.jimbozoomer.jugcraft.deposit.DeepDrillingAssemblyBlock.install(stack, level, pos, state, player);
+		}
 		Storage<FluidVariant> tank = machine == null ? null : machine.fluidFor(hit.getDirection());
 		if (tank != null && FluidStorageUtil.interactWithFluidStorage(tank, player, hand)) {
 			return InteractionResult.SUCCESS;
@@ -148,6 +151,8 @@ public class MachineBlock extends BaseEntityBlock implements EnergyConnectable {
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+		if (!level.isClientSide() && kind == MachineKind.DEPOSIT_DRILL && level.getBlockEntity(pos) instanceof MachineBlockEntity drill)
+			drill.claimDepositDrill(player);
 		if (kind == MachineKind.STEEL_TANK || kind == MachineKind.GAS_HOLDER) {
 			// A tank has no screen: show what it holds, like the tinplate tank.
 			// LargeMachineBlock passes the master's position here.
@@ -165,6 +170,13 @@ public class MachineBlock extends BaseEntityBlock implements EnergyConnectable {
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+	}
+
+	@Override
+	public void setPlacedBy(Level level, BlockPos pos, BlockState state, net.minecraft.world.entity.@Nullable LivingEntity placer, ItemStack stack) {
+		super.setPlacedBy(level, pos, state, placer, stack);
+		if (!level.isClientSide() && kind == MachineKind.DEPOSIT_DRILL && placer instanceof Player player
+				&& level.getBlockEntity(pos) instanceof MachineBlockEntity drill) drill.claimDepositDrill(player);
 	}
 
 	@Override

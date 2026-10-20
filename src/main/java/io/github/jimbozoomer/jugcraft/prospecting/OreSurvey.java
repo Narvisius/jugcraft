@@ -34,7 +34,8 @@ public final class OreSurvey {
 			family("fluorite", "jugcraft:fluorite_ore"), family("spodumene", "jugcraft:spodumene_ore"),
 			family("chromite", "jugcraft:chromite_ore"), family("cobaltite", "jugcraft:cobaltite_ore"),
 			sand("titanium_sand"), sand("zircon_sand"), sand("rare_earth_sand"), sand("garnet_sand"),
-			family("vanadium_iron", "jugcraft:vanadium_iron_ore"));
+			family("vanadium_iron", "jugcraft:vanadium_iron_ore"),
+			bulk("coal"), bulk("iron"), bulk("copper"), bulk("tin"));
 	/** Surveyed chunks in each direction from the player's chunk: 1 means 3x3. */
 	public static final int RADIUS = 1;
 	/** Only every STRIDE-th column in x and z is sampled. */
@@ -59,6 +60,10 @@ public final class OreSurvey {
 	public static final Identifier OIL_ICON = Identifier.fromNamespaceAndPath("jugcraft", "crude_oil_bucket");
 
 	private OreSurvey() {
+	}
+
+	private static Family bulk(String name) {
+		return new Family("bulk_" + name, TagKey.create(Registries.BLOCK, Identifier.parse("jugcraft:bulk_deposits/" + name)), Identifier.parse("jugcraft:" + name + "_deposit"));
 	}
 
 	private static Family sand(String name) {
@@ -99,8 +104,10 @@ public final class OreSurvey {
 							}
 							for (int i = 0; i < FAMILIES.size(); i++) {
 								if (state.is(FAMILIES.get(i).tag())) {
-									counts[i]++;
-									heights[i] += y;
+									int weight = FAMILIES.get(i).name().startsWith("bulk_")
+											? io.github.jimbozoomer.jugcraft.deposit.Deposits.remaining(level, pos) : 1;
+									counts[i] += weight;
+									heights[i] += (long) y * weight;
 									break;
 								}
 							}
@@ -113,7 +120,9 @@ public final class OreSurvey {
 		for (int i = 0; i < FAMILIES.size(); i++) {
 			if (counts[i] > 0) {
 				int average = (int) (heights[i] / counts[i]);
-				readings.add(new Reading(FAMILIES.get(i).icon(), signal(counts[i], random), average >= 40 ? 0 : average >= 0 ? 1 : 2));
+				boolean bulk = FAMILIES.get(i).name().startsWith("bulk_");
+				readings.add(new Reading(FAMILIES.get(i).icon(), signal(bulk ? Math.max(1, counts[i] / 250) : counts[i], random),
+						average >= 40 ? 0 : average >= 0 ? 1 : 2, bulk ? "prospector.jugcraft." + FAMILIES.get(i).name() : ""));
 			}
 		}
 		oil(level, middleX, middleZ, radius, random, readings);

@@ -51,7 +51,7 @@ public final class Deposits {
 
 	/** What a used-up deposit leaves behind. */
 	static BlockState depleted(BlockState deposit) {
-		return Blocks.STONE.defaultBlockState();
+		return (deposit.getBlock() instanceof DepositBlock block && block.deepslate() ? Blocks.DEEPSLATE : Blocks.STONE).defaultBlockState();
 	}
 
 	/** Called when a deposit block is removed, so a new one placed there later starts full. */

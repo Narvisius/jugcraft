@@ -91,6 +91,17 @@ public final class Authority {
 		return FakePlayer.get(level, new GameProfile(owner, STAND_IN));
 	}
 
+	/**
+	 * Loaded deposit drills are unattended mechanical factories. Their saved operator (or an unprivileged identity
+	 * for old unclaimed rigs) answers current protection questions even offline. This grants no inventory,
+	 * progression or claim exemption and does not change the absent-owner policy for magical devices.
+	 */
+	public static ServerPlayer depositDrillActor(ServerLevel level, @Nullable UUID owner) {
+		ServerPlayer here = present(level, owner);
+		if (here != null) return here;
+		return FakePlayer.get(level, new GameProfile(owner != null ? owner : new UUID(0, 438), "[Deposit drill]"));
+	}
+
 	/** A stand-in may answer protection questions but must not acquire personal progression or payment state. */
 	public static boolean isStandIn(Player actor) {
 		return actor instanceof FakePlayer;

@@ -45,7 +45,9 @@ Primary specialty and supported player role: mining and logistics
 - **Removal.** Removing a deposit block (by hand or when it runs out) deletes its record.
 - **Restart.** The drill finds its target block again after a restart (not saved); its items, energy, sides and upgrades are saved as for any machine.
 - **Disable.** `deposits.enabled=false` stops new patches generating. Existing deposit blocks and drills stay and keep working. `tin.enabled=false` also stops tin patches.
-- **Protection.** The drill does not check claims or spawn protection, like the ore drill.
+- **Protection.** The underground-deposit extension adds current town, spawn and claim checks to deposit drilling;
+  see [underground bulk deposits](underground-bulk-deposits.md). New rigs record their operator, and legacy rigs
+  record one on first use. Offline and unclaimed rigs use a permission-only stand-in without special rights.
 
 ## Dependencies and assets
 No new dependencies. Uses Fabric API biome modifications and the `c:is_windswept` / `c:is_stony_shores` convention tags. All textures and models are original:
@@ -68,10 +70,10 @@ No new dependencies. Uses Fabric API biome modifications and the `c:is_windswept
 - **Placement:** patches replace stone, andesite, diorite, granite, tuff, calcite, gravel, grass, dirt and coarse dirt in the top layer only, never under water.
 - **New chunks only:** there is no retrogeneration.
 - **Not done yet:** a new resource-rich biome. Fabric API can add biomes to the Nether and End but not to the Overworld; doing that needs either a biome-placement library (TerraBlender or similar, a new dependency) or replacing the Overworld's biome layout in a datapack, which other world-generation mods conflict with. This needs the owner's choice.
-- **Later:** underground deposits (the drill already reaches 3 deep).
+- **Underground extension:** [underground bulk deposits and deep drilling](underground-bulk-deposits.md).
 
 ## Rollout and open questions
 - Owner choice: how to add a resource-rich biome (see above).
-- Underground deposits: thicker veins in caves, with a deeper drill tier.
+- The underground-deposit extension provides thicker buried bodies and an optional deep-drilling assembly.
 - More deposit types (gold, zinc, lead, nickel, salt) once the first four are played.
 - A visible drilling animation (spinning augers) is later polish.

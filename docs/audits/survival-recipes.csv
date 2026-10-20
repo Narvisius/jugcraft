@@ -1306,6 +1306,7 @@ jugcraft:chicken_cuts,recipe_chain_reachable,,src/main/resources/data/jugcraft/r
 jugcraft:chicken_sandwich,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/chicken_sandwich.json,,
 jugcraft:chicken_soup,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/pot_cooking/chicken_soup.json,,
 jugcraft:chili,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/pot_cooking/chili.json,,
+jugcraft:chima_spawn_egg,intentional_noncraftable,Creative spawn egg; acquire creatures through world encounters.,,,
 jugcraft:chimera_finial,recipe_chain_reachable,,src/main/resources/data/jugcraft/recipe/chimera_finial.json,,
 jugcraft:chiseled_crypt_stone,recipe_chain_reachable,,src/main/resources/data/jugcraft/recipe/chiseled_crypt_stone_from_stonecutting.json,,
 jugcraft:chitin_smg,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/chitin_smg.json,,
@@ -1348,7 +1349,7 @@ jugcraft:clockwork_porter,recipe_chain_reachable,,src/main/resources/data/jugcra
 jugcraft:cloud_seeding_rocket,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/rocket_assembly/cloud_seeding_rocket.json,,
 jugcraft:clover,natural_or_interaction_source,,,,src/main/resources/data/jugcraft/worldgen/feature/clover.json
 jugcraft:coach_gun,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/coach_gun.json,,
-jugcraft:coal_deposit,natural_or_interaction_source,,,,src/main/resources/data/jugcraft/worldgen/feature/coal_deposit.json
+jugcraft:coal_deposit,intentional_noncraftable,"Natural finite reserve, not a survival block item: picks drop nothing; the deposit drill extracts coal or raw metal.",,,src/main/resources/data/jugcraft/worldgen/feature/coal_deposit.json
 jugcraft:coal_gasifier,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/coal_gasifier.json | src/main/resources/data/jugcraft/recipe/expanded_coal_gasifier.json,,
 jugcraft:coal_generator,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/coal_generator.json,,
 jugcraft:coastal_seawater_intake,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/coastal_seawater_intake.json,,
@@ -1471,7 +1472,7 @@ jugcraft:cooling_tower_controller,chain_with_acquisition_evidence,,src/main/reso
 jugcraft:cooling_tower_fill,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/cooling_tower_fill.json,,
 jugcraft:copper_busbar,recipe_chain_reachable,,src/main/resources/data/jugcraft/recipe/copper_busbar.json,,
 jugcraft:copper_cable,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/ceramics_copper_cable.json | src/main/resources/data/jugcraft/recipe/copper_cable.json | src/main/resources/data/jugcraft/recipe/insulated_copper_cable.json,,
-jugcraft:copper_deposit,natural_or_interaction_source,,,,src/main/resources/data/jugcraft/worldgen/feature/copper_deposit.json
+jugcraft:copper_deposit,intentional_noncraftable,"Natural finite reserve, not a survival block item: picks drop nothing; the deposit drill extracts coal or raw metal.",,,src/main/resources/data/jugcraft/worldgen/feature/copper_deposit.json
 jugcraft:copper_dome_plate,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/copper_dome_plate.json,,
 jugcraft:copper_dome_plate_slab,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/copper_dome_plate_slab.json,,
 jugcraft:copper_dome_plate_stairs,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/copper_dome_plate_stairs.json,,
@@ -1596,9 +1597,13 @@ jugcraft:dead_stairs,chain_with_acquisition_evidence,,src/main/resources/data/ju
 jugcraft:dead_wood,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/dead_wood.json,,
 jugcraft:deadly_nightshade,natural_or_interaction_source,,,,src/main/resources/data/jugcraft/worldgen/feature/deadly_nightshade.json
 jugcraft:death_knell,recipe_chain_reachable,,src/main/resources/data/jugcraft/recipe/death_knell.json,,
+jugcraft:deep_drilling_assembly,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/deep_drilling_assembly.json,,
 jugcraft:deepslate_chromite_ore,natural_or_interaction_source,,,,src/main/resources/data/jugcraft/worldgen/feature/ore_chromite.json
+jugcraft:deepslate_coal_deposit,intentional_noncraftable,"Natural finite reserve, not a survival block item: picks drop nothing; the deposit drill extracts coal or raw metal.",,,
 jugcraft:deepslate_cobaltite_ore,natural_or_interaction_source,,,,src/main/resources/data/jugcraft/worldgen/feature/ore_cobaltite.json
+jugcraft:deepslate_copper_deposit,intentional_noncraftable,"Natural finite reserve, not a survival block item: picks drop nothing; the deposit drill extracts coal or raw metal.",,,
 jugcraft:deepslate_fluorite_ore,natural_or_interaction_source,,,,src/main/resources/data/jugcraft/worldgen/feature/ore_fluorite.json
+jugcraft:deepslate_iron_deposit,intentional_noncraftable,"Natural finite reserve, not a survival block item: picks drop nothing; the deposit drill extracts coal or raw metal.",,,
 jugcraft:deepslate_lead_ore,natural_or_interaction_source,,,,src/main/resources/data/jugcraft/worldgen/feature/ore_lead.json
 jugcraft:deepslate_lepidolite_ore,natural_or_interaction_source,,,,src/main/resources/data/jugcraft/worldgen/feature/ore_lepidolite.json
 jugcraft:deepslate_monazite_ore,natural_or_interaction_source,,,,src/main/resources/data/jugcraft/worldgen/feature/ore_monazite.json
@@ -1609,6 +1614,7 @@ jugcraft:deepslate_sarcophagus,recipe_chain_reachable,,src/main/resources/data/j
 jugcraft:deepslate_silver_ore,natural_or_interaction_source,,,,src/main/resources/data/jugcraft/worldgen/feature/ore_silver.json
 jugcraft:deepslate_spodumene_ore,natural_or_interaction_source,,,,src/main/resources/data/jugcraft/worldgen/feature/ore_spodumene.json
 jugcraft:deepslate_thallite_ore,natural_or_interaction_source,,,,src/main/resources/data/jugcraft/worldgen/feature/ore_thallite.json | src/main/resources/data/jugcraft/worldgen/feature/ore_thallite_rich.json
+jugcraft:deepslate_tin_deposit,intentional_noncraftable,"Natural finite reserve, not a survival block item: picks drop nothing; the deposit drill extracts coal or raw metal.",,,
 jugcraft:deepslate_tin_ore,natural_or_interaction_source,,,,src/main/resources/data/jugcraft/worldgen/feature/ore_tin.json
 jugcraft:deepslate_titanium_ore,natural_or_interaction_source,,,,src/main/resources/data/jugcraft/worldgen/feature/ore_titanium.json
 jugcraft:deepslate_tungsten_ore,natural_or_interaction_source,,,,src/main/resources/data/jugcraft/worldgen/feature/ore_tungsten.json
@@ -3003,7 +3009,7 @@ jugcraft:ion_emitter,chain_with_acquisition_evidence,,src/main/resources/data/ju
 jugcraft:iron_band,recipe_chain_reachable,,src/main/resources/data/jugcraft/recipe/iron_band.json,,
 jugcraft:iron_bayonet,recipe_chain_reachable,,src/main/resources/data/jugcraft/recipe/iron_bayonet.json,,
 jugcraft:iron_bound_coffin,recipe_chain_reachable,,src/main/resources/data/jugcraft/recipe/iron_bound_coffin.json,,
-jugcraft:iron_deposit,natural_or_interaction_source,,,,src/main/resources/data/jugcraft/worldgen/feature/iron_deposit.json
+jugcraft:iron_deposit,intentional_noncraftable,"Natural finite reserve, not a survival block item: picks drop nothing; the deposit drill extracts coal or raw metal.",,,src/main/resources/data/jugcraft/worldgen/feature/iron_deposit.json
 jugcraft:iron_dust,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/pulverizing/deepslate_iron_ore.json | src/main/resources/data/jugcraft/recipe/pulverizing/deepslate_nickel_ore.json | src/main/resources/data/jugcraft/recipe/pulverizing/deepslate_thallite_ore.json | src/main/resources/data/jugcraft/recipe/pulverizing/iron_ingot.json | src/main/resources/data/jugcraft/recipe/pulverizing/iron_ore.json | src/main/resources/data/jugcraft/recipe/pulverizing/nickel_ore.json | src/main/resources/data/jugcraft/recipe/pulverizing/raw_iron.json | src/main/resources/data/jugcraft/recipe/pulverizing/thallite_ore.json | src/main/resources/data/jugcraft/recipe/pulverizing/washed_iron_ore.json | src/main/resources/data/jugcraft/recipe/pulverizing/washed_nickel_ore.json | src/main/resources/data/jugcraft/recipe/pulverizing/washed_thallite_ore.json,,
 jugcraft:iron_gear,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/iron_gear.json,,
 jugcraft:iron_knife,recipe_chain_reachable,,src/main/resources/data/jugcraft/recipe/iron_knife.json,,
@@ -5489,7 +5495,7 @@ jugcraft:timber_revetment_slab,recipe_chain_reachable,,src/main/resources/data/j
 jugcraft:timber_revetment_stairs,recipe_chain_reachable,,src/main/resources/data/jugcraft/recipe/timber_revetment_stairs.json,,
 jugcraft:timber_shoring,recipe_chain_reachable,,src/main/resources/data/jugcraft/recipe/timber_shoring.json,,
 jugcraft:tin_block,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/tin_block.json,,
-jugcraft:tin_deposit,natural_or_interaction_source,,,,src/main/resources/data/jugcraft/worldgen/feature/tin_deposit.json
+jugcraft:tin_deposit,intentional_noncraftable,"Natural finite reserve, not a survival block item: picks drop nothing; the deposit drill extracts coal or raw metal.",,,src/main/resources/data/jugcraft/worldgen/feature/tin_deposit.json
 jugcraft:tin_dust,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/pulverizing/deepslate_tin_ore.json | src/main/resources/data/jugcraft/recipe/pulverizing/deepslate_tungsten_ore.json | src/main/resources/data/jugcraft/recipe/pulverizing/raw_tin.json | src/main/resources/data/jugcraft/recipe/pulverizing/tin_ingot.json | src/main/resources/data/jugcraft/recipe/pulverizing/tin_ore.json | src/main/resources/data/jugcraft/recipe/pulverizing/tungsten_ore.json | src/main/resources/data/jugcraft/recipe/pulverizing/washed_tin_ore.json | src/main/resources/data/jugcraft/recipe/pulverizing/washed_tungsten_ore.json,,
 jugcraft:tin_ingot,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/tin_ingot_from_blasting_raw_tin.json | src/main/resources/data/jugcraft/recipe/tin_ingot_from_blasting_tin_dust.json | src/main/resources/data/jugcraft/recipe/tin_ingot_from_blasting_tin_ore.json | src/main/resources/data/jugcraft/recipe/tin_ingot_from_nuggets.json | src/main/resources/data/jugcraft/recipe/tin_ingot_from_smelting_raw_tin.json | src/main/resources/data/jugcraft/recipe/tin_ingot_from_smelting_tin_dust.json | src/main/resources/data/jugcraft/recipe/tin_ingot_from_smelting_tin_ore.json | src/main/resources/data/jugcraft/recipe/tin_ingot_from_tin_block.json,,
 jugcraft:tin_nugget,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/sifting/gravel.json | src/main/resources/data/jugcraft/recipe/tin_nugget.json,,

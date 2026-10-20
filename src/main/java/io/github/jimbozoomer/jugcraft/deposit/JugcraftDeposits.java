@@ -25,6 +25,7 @@ public final class JugcraftDeposits {
 	/** Deposit block id to the item each unit gives. */
 	public static final Map<String, Identifier> DEPOSITS = new LinkedHashMap<>();
 	public static final Map<String, DepositBlock> BLOCKS = new LinkedHashMap<>();
+	public static DeepDrillingAssemblyBlock DEEP_DRILLING_ASSEMBLY;
 
 	static {
 		DEPOSITS.put("coal_deposit", Identifier.fromNamespaceAndPath("minecraft", "coal"));
@@ -38,15 +39,29 @@ public final class JugcraftDeposits {
 
 	public static void register() {
 		DEPOSITS.forEach((name, yield) -> {
+			registerDeposit(name, yield, false);
+			registerDeposit("deepslate_" + name, yield, true);
+		});
+		ResourceKey<Block> assemblyKey = ResourceKey.create(Registries.BLOCK, Jugcraft.id("deep_drilling_assembly"));
+		DEEP_DRILLING_ASSEMBLY = Registry.register(BuiltInRegistries.BLOCK, assemblyKey, new DeepDrillingAssemblyBlock(
+				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(assemblyKey).noOcclusion()
+						.pushReaction(net.minecraft.world.level.material.PushReaction.IMMOVEABLE)));
+		ResourceKey<Item> assemblyItem = ResourceKey.create(Registries.ITEM, assemblyKey.identifier());
+		Registry.register(BuiltInRegistries.ITEM, assemblyItem, new BlockItem(DEEP_DRILLING_ASSEMBLY,
+				new Item.Properties().setId(assemblyItem).useBlockDescriptionPrefix()));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output -> output.accept(DEEP_DRILLING_ASSEMBLY));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.NATURAL_BLOCKS).register(output -> BLOCKS.values().forEach(output::accept));
+	}
+
+	private static void registerDeposit(String name, Identifier yield, boolean deep) {
 			ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, Jugcraft.id(name));
 			// As slow to break as obsidian and as blast-proof, so a patch is not lost by accident.
-			DepositBlock block = Registry.register(BuiltInRegistries.BLOCK, blockKey, new DepositBlock(yield,
-					BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).setId(blockKey).strength(50.0F, 1200.0F)));
+			DepositBlock block = Registry.register(BuiltInRegistries.BLOCK, blockKey, new DepositBlock(yield, deep,
+					BlockBehaviour.Properties.ofFullCopy(deep ? Blocks.DEEPSLATE : Blocks.STONE).setId(blockKey)
+							.strength(50.0F, 1200.0F).pushReaction(net.minecraft.world.level.material.PushReaction.IMMOVEABLE)));
 			BLOCKS.put(name, block);
 			ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, Jugcraft.id(name));
 			Registry.register(BuiltInRegistries.ITEM, itemKey,
 					new BlockItem(block, new Item.Properties().setId(itemKey).useBlockDescriptionPrefix()));
-		});
-		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.NATURAL_BLOCKS).register(output -> BLOCKS.values().forEach(output::accept));
 	}
 }

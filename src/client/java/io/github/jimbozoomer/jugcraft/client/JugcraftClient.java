@@ -50,6 +50,11 @@ public final class JugcraftClient implements ClientModInitializer {
 		MeshItemModels.register();
 		StructureItemRenderers.register();
 		new io.github.jimbozoomer.jugcraft.client.scary.ScaryClient().onInitializeClient();
+		// Chima the lion cub (docs/features/chima.md).
+		ModelLayerRegistry.registerModelLayer(io.github.jimbozoomer.jugcraft.client.chima.ChimaModel.LAYER,
+				io.github.jimbozoomer.jugcraft.client.chima.ChimaModel::createLayer);
+		EntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.creatures.chima.ChimaMod.CHIMA,
+				io.github.jimbozoomer.jugcraft.client.chima.ChimaRenderer::new);
 		for (MachineKind kind : MachineKind.values()) {
 			MenuScreens.register(JugcraftMachines.menuType(kind), MachineScreen::new);
 		}

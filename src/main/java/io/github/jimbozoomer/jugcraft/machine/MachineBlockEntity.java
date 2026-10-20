@@ -12,6 +12,7 @@ import io.github.jimbozoomer.jugcraft.chemistry.PetroFluids;
 import io.github.jimbozoomer.jugcraft.chemistry.PetroItems;
 import io.github.jimbozoomer.jugcraft.deposit.DepositBlock;
 import io.github.jimbozoomer.jugcraft.deposit.Deposits;
+import io.github.jimbozoomer.jugcraft.deposit.DeepDrillingAssemblyBlock;
 import io.github.jimbozoomer.jugcraft.energy.EnergyNetworks;
 import io.github.jimbozoomer.jugcraft.energy.EnergyStorage;
 import io.github.jimbozoomer.jugcraft.energy.SimpleEnergyStorage;
@@ -111,7 +112,10 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	public static final int DATA_BATTERY_PRIORITY = DATA_BATTERY_MODE + 2;
 	public static final int DATA_BATTERY_OUTPUT = DATA_BATTERY_MODE + 3;
 	public static final int DATA_BATTERY_MODULES = DATA_BATTERY_MODE + 4;
-	public static final int DATA_COUNT = DATA_BATTERY_MODE + 5;
+	public static final int DATA_DRILL_DEPTH = DATA_BATTERY_MODE + 5;
+	public static final int DATA_DRILL_STAGE = DATA_DRILL_DEPTH + 1;
+	public static final int DATA_DRILL_USE = DATA_DRILL_STAGE + 1;
+	public static final int DATA_COUNT = DATA_DRILL_USE + 1;
 	/** Fluid processors push their output tanks into pipes and neighbouring tanks every this many ticks... */
 	public static final int FLUID_PUSH_INTERVAL = 4;
 	/** ...up to this many mB from each output tank. */
@@ -196,7 +200,22 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	/** Ore drill: the next block to check, counted from the top layer below the drill (see {@link OreDrilling}). */
 	private int cursor;
 	/** Deposit drill: the deposit block it is working (found again after loading; not saved). */
-	private @Nullable BlockPos depositTarget;
+	private final List<BlockPos> depositSources = new ArrayList<>();
+	private int depositDepth, depositBoreProgress;
+	private boolean depositLayerReady, deepDepositMode;
+	private java.util.@Nullable UUID depositOwner;
+	public int depositDepth() { return depositDepth; }
+	public int depositBoreProgress() { return depositBoreProgress; }
+	public void claimDepositDrill(net.minecraft.world.entity.player.Player player) {
+		if (kind == MachineKind.DEPOSIT_DRILL && depositOwner == null) { depositOwner = player.getUUID(); setChanged(); }
+	}
+
+	private boolean mayWorkDeposit(ServerLevel level, BlockPos pos) {
+		if (!level.isLoaded(pos) || !level.isInWorldBounds(pos) || !level.getWorldBorder().isWithinBounds(pos)
+				|| io.github.jimbozoomer.jugcraft.town.TownProtection.shieldsBlock(level, pos)) return false;
+		var actor = io.github.jimbozoomer.jugcraft.concordance.Authority.depositDrillActor(level, depositOwner);
+		return io.github.jimbozoomer.jugcraft.concordance.Authority.mayChange(level, actor, pos);
+	}
 	/** Wind turbine, water wheel, cobblestone generator: whether the surroundings check has run since loading. */
 	private boolean checked;
 	/** Water wheel: JE per tick from the water found at the last check. */
@@ -210,8 +229,13 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 				case DATA_ENERGY_HIGH -> (int) ((energy.getAmount() >>> 16) & 0xFFFF);
 				case DATA_CAPACITY_LOW -> (int) (energy.getCapacity() & 0xFFFF);
 				case DATA_CAPACITY_HIGH -> (int) ((energy.getCapacity() >>> 16) & 0xFFFF);
-				case DATA_PROGRESS -> progress;
-				case DATA_MAX_PROGRESS -> maxProgress;
+				case DATA_PROGRESS -> deepDepositMode && !depositLayerReady ? depositBoreProgress : progress;
+				case DATA_MAX_PROGRESS -> deepDepositMode && !depositLayerReady ? DeepDrillingAssemblyBlock.BORE_TICKS : maxProgress;
+				case DATA_DRILL_DEPTH -> depositDepth;
+				case DATA_DRILL_STAGE -> deepDepositMode ? (depositLayerReady ? 2 : 1) : 0;
+				case DATA_DRILL_USE -> kind == MachineKind.DEPOSIT_DRILL
+						? (int) (deepDepositMode && !depositLayerReady ? DeepDrillingAssemblyBlock.USE
+						: upgrades().use(deepDepositMode ? DeepDrillingAssemblyBlock.USE : kind.usePerTick)) : 0;
 				case DATA_BURN -> burn;
 				case DATA_MAX_BURN -> maxBurn;
 				case DATA_FORMED -> formed ? 1 : 0;
@@ -1559,49 +1583,65 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	 * into chests, pipes and machines beside it. A full drill waits; a drill with no deposit left in reach stops.
 	 */
 	private boolean tickDepositDrill(ServerLevel level, BlockPos pos, BlockState state) {
-		if (sides.eject() && level.getGameTime() % EJECT_INTERVAL == 0) {
-			eject(level, pos, state);
+		if (sides.eject() && level.getGameTime() % EJECT_INTERVAL == 0) eject(level, pos, state);
+		boolean deep = DeepDrillingAssemblyBlock.installed(level, pos, state);
+		if (deep != deepDepositMode) { deepDepositMode = deep; depositSources.clear(); }
+		if (!sides.redstone().allows(poweredByRedstone(level, pos, state))) return false;
+		if (deep) {
+			BlockPos center = DeepDrillingAssemblyBlock.center(pos, state);
+			for (int dx : new int[]{-4, 4}) for (int dz : new int[]{-4, 4})
+				if (!level.isLoaded(center.offset(dx, -Math.max(1, depositDepth), dz))) return false;
 		}
-		if (depositTarget == null || !(level.getBlockState(depositTarget).getBlock() instanceof DepositBlock)) {
-			// Look again at most once a second, so a drill with nothing left costs almost nothing.
-			if (level.getGameTime() % MachineKind.SOURCE_CHECK_INTERVAL != 0) {
-				return false;
+		if (deep && !depositLayerReady) {
+			if (depositDepth >= DeepDrillingAssemblyBlock.DEPTH) return false;
+			BlockPos next = DeepDrillingAssemblyBlock.center(pos, state).below(depositDepth + 1);
+			if (next.getY() < level.getMinY() || !mayWorkDeposit(level, next)) return false;
+			// Do not load neighbouring chunks or bore through a protected/bedrock barrier.
+			for (int dx = -4; dx <= 4; dx++) for (int dz = -4; dz <= 4; dz++) {
+				BlockPos at = next.offset(dx, 0, dz);
+				if (!level.isLoaded(at) || level.getBlockState(at).is(Blocks.BEDROCK)
+						|| io.github.jimbozoomer.jugcraft.town.TownProtection.shieldsBlock(level, at)) return false;
 			}
-			List<BlockPos> found = findDeposits(level, pos, state);
-			depositTarget = found.isEmpty() ? null : found.get(0);
-			progress = 0;
-			if (depositTarget == null) {
-				return false;
+			boolean room = false;
+			for (var block : io.github.jimbozoomer.jugcraft.deposit.JugcraftDeposits.BLOCKS.values())
+				room |= resultSlotFor(new ItemStack(block.yield())) >= 0;
+			if (!room) return processorStopped(local.peepo.CompanionStatus.FULL);
+			if (energy.getAmount() < DeepDrillingAssemblyBlock.USE) return false;
+			energy.setAmount(energy.getAmount() - DeepDrillingAssemblyBlock.USE);
+			if (++depositBoreProgress >= DeepDrillingAssemblyBlock.BORE_TICKS) {
+				depositBoreProgress = 0; depositDepth++; depositLayerReady = true;
+				depositSources.clear();
 			}
+			setChanged();
+			return true;
 		}
-		ItemStack first = new ItemStack(((DepositBlock) level.getBlockState(depositTarget).getBlock()).yield());
-		if (resultSlotFor(first) < 0) return processorStopped(local.peepo.CompanionStatus.FULL);
-		if (!sides.redstone().allows(poweredByRedstone(level, pos, state))) {
+		// Bounded scans: 75 blocks for a basic rig, 81 for a deep rig's current layer.
+		depositSources.removeIf(source -> !level.isLoaded(source) || !(level.getBlockState(source).getBlock() instanceof DepositBlock));
+		if (depositSources.isEmpty() || level.getGameTime() % MachineKind.SOURCE_CHECK_INTERVAL == 0) {
+			if (!deep && depositSources.isEmpty() && level.getGameTime() % MachineKind.SOURCE_CHECK_INTERVAL != 0) return false;
+			depositSources.clear(); depositSources.addAll(findDeposits(level, pos, state));
+		}
+		if (depositSources.isEmpty()) {
+			if (deep) { depositLayerReady = false; setChanged(); }
 			return false;
 		}
+		boolean room = depositSources.stream().anyMatch(source -> resultSlotFor(new ItemStack(((DepositBlock) level.getBlockState(source).getBlock()).yield())) >= 0);
+		if (!room) return processorStopped(local.peepo.CompanionStatus.FULL);
 		MachineUpgrades.Effect upgrades = upgrades();
 		maxProgress = upgrades.ticks(MachineKind.DEPOSIT_TICKS);
-		long use = upgrades.use(kind.usePerTick);
-		if (energy.getAmount() < use) {
-			return false;
-		}
+		long use = upgrades.use(deep ? DeepDrillingAssemblyBlock.USE : kind.usePerTick);
+		if (energy.getAmount() < use) return false;
 		energy.setAmount(energy.getAmount() - use);
 		if ((progress += 1 + companionBonus(use, maxProgress - progress - 1)) >= maxProgress) {
 			progress = 0;
 			for (BlockPos source : findDeposits(level, pos, state)) {
-				ItemStack mined = new ItemStack(((DepositBlock) level.getBlockState(source).getBlock()).yield(),
-						MachineKind.DEPOSIT_UNITS);
+				ItemStack mined = new ItemStack(((DepositBlock) level.getBlockState(source).getBlock()).yield(), MachineKind.DEPOSIT_UNITS);
 				int slot = resultSlotFor(mined);
-				if (slot < 0) {
-					continue; // No room for this kind; the others still come out.
-				}
+				if (slot < 0) continue;
 				int got = Deposits.extract(level, source, mined.getCount());
 				if (got > 0) {
-					if (items.get(slot).isEmpty()) {
-						items.set(slot, mined.copyWithCount(got));
-					} else {
-						items.get(slot).grow(got);
-					}
+					if (items.get(slot).isEmpty()) items.set(slot, mined.copyWithCount(got));
+					else items.get(slot).grow(got);
 				}
 			}
 		}
@@ -1609,36 +1649,21 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		return true;
 	}
 
-	/**
-	 * The deposit blocks the drill works next, one of each kind (coal, iron, ...): for each, the highest in the area
-	 * under its 3x3 base and {@link MachineKind#DEPOSIT_REACH} blocks round it, down to {@link MachineKind#DEPOSIT_DEPTH}
-	 * layers. Empty when none is left.
-	 */
+	/** One highest eligible source per output family; stone and deepslate never double the rate. */
 	public List<BlockPos> findDeposits(ServerLevel level, BlockPos pos, BlockState state) {
-		Direction facing = state.getValue(MachineBlock.FACING);
-		Footprint footprint = footprint(state);
-		int minX = Integer.MAX_VALUE, maxX = Integer.MIN_VALUE, minZ = Integer.MAX_VALUE, maxZ = Integer.MIN_VALUE;
-		for (int part = 0; part < footprint.size(); part++) {
-			BlockPos partPos = footprint.partPos(pos, facing, part);
-			minX = Math.min(minX, partPos.getX());
-			maxX = Math.max(maxX, partPos.getX());
-			minZ = Math.min(minZ, partPos.getZ());
-			maxZ = Math.max(maxZ, partPos.getZ());
+		boolean deep = DeepDrillingAssemblyBlock.installed(level, pos, state);
+		if (deep && (!depositLayerReady || depositDepth < 1 || depositDepth > DeepDrillingAssemblyBlock.DEPTH)) return List.of();
+		BlockPos center = DeepDrillingAssemblyBlock.center(pos, state);
+		int radius = deep ? DeepDrillingAssemblyBlock.RADIUS : (footprint(state).size() > 1 ? 1 : 0) + MachineKind.DEPOSIT_REACH;
+		int first = deep ? depositDepth : 1, last = deep ? depositDepth : MachineKind.DEPOSIT_DEPTH;
+		Map<Item, BlockPos> byFamily = new LinkedHashMap<>();
+		for (int depth = first; depth <= last; depth++) for (int dx = -radius; dx <= radius; dx++) for (int dz = -radius; dz <= radius; dz++) {
+			BlockPos at = center.offset(dx, -depth, dz);
+			if (!level.isLoaded(at)) continue;
+			if (level.getBlockState(at).getBlock() instanceof DepositBlock deposit && !byFamily.containsKey(deposit.yield())
+					&& mayWorkDeposit(level, at) && Deposits.remaining(level, at) > 0) byFamily.put(deposit.yield(), at);
 		}
-		int reach = MachineKind.DEPOSIT_REACH;
-		Map<Block, BlockPos> byKind = new LinkedHashMap<>();
-		BlockPos.MutableBlockPos at = new BlockPos.MutableBlockPos();
-		for (int y = pos.getY() - 1; y >= pos.getY() - MachineKind.DEPOSIT_DEPTH; y--) {
-			for (int x = minX - reach; x <= maxX + reach; x++) {
-				for (int z = minZ - reach; z <= maxZ + reach; z++) {
-					Block block = level.getBlockState(at.set(x, y, z)).getBlock();
-					if (block instanceof DepositBlock && !byKind.containsKey(block)) {
-						byKind.put(block, at.immutable());
-					}
-				}
-			}
-		}
-		return new ArrayList<>(byKind.values());
+		return new ArrayList<>(byFamily.values());
 	}
 
 	/**
@@ -2171,6 +2196,11 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		tank = input.getInt("water").orElse(0);
 		sides.unpack(input.getInt("sides").orElse(sides.pack()));
 		cursor = input.getInt("cursor").orElse(0);
+		depositDepth = Math.clamp(input.getIntOr("depositDepth", 0), 0, DeepDrillingAssemblyBlock.DEPTH);
+		depositBoreProgress = Math.clamp(input.getIntOr("depositBoreProgress", 0), 0, DeepDrillingAssemblyBlock.BORE_TICKS - 1);
+		depositLayerReady = input.getBooleanOr("depositLayerReady", false) && depositDepth > 0;
+		depositOwner = input.read("depositOwner", net.minecraft.core.UUIDUtil.CODEC).orElse(null);
+		depositSources.clear();
 		if (reservoir != null) {
 			reservoir.readValue(input);
 			if (kind == MachineKind.FLOW_BATTERY) {
@@ -2200,6 +2230,12 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		}
 		output.putLong("energy", energy.getAmount());
 		output.putInt("progress", progress);
+		if (kind == MachineKind.DEPOSIT_DRILL) {
+			output.putInt("depositDepth", depositDepth);
+			output.putInt("depositBoreProgress", depositBoreProgress);
+			output.putBoolean("depositLayerReady", depositLayerReady);
+			if (depositOwner != null) output.store("depositOwner", net.minecraft.core.UUIDUtil.CODEC, depositOwner);
+		}
 		if (kind == MachineKind.AIR_SEPARATION_UNIT) output.putInt("CompanionArgonTicks", assistedArgonTicks);
 		output.putInt("max_progress", maxProgress);
 		output.putInt("burn", burn);

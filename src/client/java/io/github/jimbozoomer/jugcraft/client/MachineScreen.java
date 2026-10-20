@@ -462,7 +462,9 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 			return;
 		}
 		int labelY = MachineMenu.SLOT_Y - 10;
-		graphics.text(font, Component.translatable("container.jugcraft.label.in"), MachineMenu.inputX(kind, 0), labelY, theme.dim(), false);
+		if (kind.outputSlot() > 0) {
+			graphics.text(font, Component.translatable("container.jugcraft.label.in"), MachineMenu.inputX(kind, 0), labelY, theme.dim(), false);
+		}
 		if (kind.byproductSlots() <= 1) {
 			graphics.text(font, Component.translatable("container.jugcraft.label.out"), MachineMenu.OUTPUT_X, labelY, theme.dim(), false);
 		}
@@ -475,12 +477,19 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 		int y = MachineSkin.wrap(graphics, font, Component.translatable("container.jugcraft.terminal." + status.key), STATUS_X, STATUS_Y,
 				STATUS_WIDTH, STATUS_BOTTOM, status.warning ? theme.warn() : theme.text());
 		y += 2;
+		if (kind == MachineKind.DEPOSIT_DRILL && menu.data(MachineBlockEntity.DATA_DRILL_STAGE) > 0) {
+			y = MachineSkin.wrap(graphics, font, Component.translatable(
+					menu.data(MachineBlockEntity.DATA_DRILL_STAGE) == 1 ? "container.jugcraft.drill.boring" : "container.jugcraft.drill.extracting",
+					menu.data(MachineBlockEntity.DATA_DRILL_DEPTH)), STATUS_X, y, STATUS_WIDTH, STATUS_BOTTOM, theme.text());
+			y += 2;
+		}
 		if (status.hint != null) {
 			y = MachineSkin.wrap(graphics, font, Component.translatable("container.jugcraft.hint." + status.hint), STATUS_X, y,
 					STATUS_WIDTH, STATUS_BOTTOM, status.warning ? theme.warn() : theme.dim());
 			y += 2;
 		}
-		if (hasProgress(kind) && status.active && y + 9 <= STATUS_BOTTOM) {
+		if (hasProgress(kind) && (status.active || kind == MachineKind.DEPOSIT_DRILL
+				&& menu.data(MachineBlockEntity.DATA_PROGRESS) > 0) && y + 9 <= STATUS_BOTTOM) {
 			int percent = (int) Math.min(100, progressFraction() * 100);
 			MachineSkin.meter(graphics, font, theme, y, percent, percent + "%");
 			y += 10;
@@ -554,6 +563,16 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 			}
 			boolean needsFuel = kind == MachineKind.COAL_GENERATOR ? empty(0) : kind.isBoiler() && empty(MachineBlockEntity.SLOT_FUEL);
 			return new Status("idle", false, false, needsFuel ? "add_fuel" : null);
+		}
+		if (kind == MachineKind.DEPOSIT_DRILL) {
+			if (menu.energy() < menu.data(MachineBlockEntity.DATA_DRILL_USE)) return new Status("no_power", true, false, "no_power");
+			boolean full = true;
+			for (int slot = 0; slot < kind.slots; slot++) {
+				Slot output = machineSlot(slot);
+				full &= output != null && !output.getItem().isEmpty() && output.getItem().getCount() >= output.getItem().getMaxStackSize();
+			}
+			if (full) return new Status("output_full", true, false, "output_full");
+			return new Status(working ? "running" : "idle", false, working, null);
 		}
 		if (working) {
 			return new Status("running", false, true, null);

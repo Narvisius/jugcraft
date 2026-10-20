@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PGP",
+    "GCG",
+    "PDP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "G": "#c:gears/steel",
+    "C": "jugcraft:basic_circuit",
+    "D": "jugcraft:steel_pickaxe"
+  },
+  "result": {
+    "id": "jugcraft:deep_drilling_assembly",
+    "count": 1
+  }
+}

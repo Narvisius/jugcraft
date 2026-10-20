@@ -20,11 +20,19 @@ import net.minecraft.world.phys.BlockHitResult;
  */
 public class DepositBlock extends Block {
 	private final Identifier yield;
+	private final boolean deepslate;
 
 	public DepositBlock(Identifier yield, Properties properties) {
+		this(yield, false, properties);
+	}
+
+	public DepositBlock(Identifier yield, boolean deepslate, Properties properties) {
 		super(properties);
 		this.yield = yield;
+		this.deepslate = deepslate;
 	}
+
+	public boolean deepslate() { return deepslate; }
 
 	/** What a drill gets for each unit: coal, or the raw ore. */
 	public Item yield() {

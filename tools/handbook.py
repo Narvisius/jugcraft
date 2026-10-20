@@ -240,7 +240,15 @@ ABOUT = {
                      "stony hills): every 15 seconds it takes one coal or raw ore from each kind of deposit under it "
                      "or one block round it, down to 3 blocks deep, using 16 JE/t. It pushes what it mines out of every side "
                      "into a chest, item pipe, conveyor or machine beside it. Each deposit block holds 1,000 and then "
-                     "turns to stone; right-click one to see how much is left. Picks only break deposits, for nothing.",
+                     "turns to its host rock; right-click one to see how much is left. Picks only break deposits, for nothing. "
+                     "The same four resources also form underground seams, lenses and veins. A basic rig built down "
+                     "at the seam works normally. Craft a Deep-Drilling Assembly from four steel plates, three steel gears, "
+                     "a basic circuit and a steel pickaxe, then use it on the rig to add a taller mast. It bores a 9x9 "
+                     "column up to 128 blocks below the base, one layer per powered second at 32 JE/t, and works each "
+                     "depth until exhausted. Extraction remains one item per family every 15 seconds; speed and "
+                     "efficiency cards apply. Power loss and full outputs preserve progress. Right-click the mast "
+                     "for depth or open the rig for live progress. Stone and deepslate deposits share the same rate. "
+                     "The Prospector shows separate bulk-deposit readings. High mountain rigs may need a lower platform.",
     "ore_drill": "Two blocks tall. Mines the ore blocks in a 9x9 column below it, one layer at a time down to the bottom "
                  "of the world, one ore every 2 seconds. Each hole is refilled with stone or deepslate. The ores come "
                  "out whole, ready for ore processing.",
