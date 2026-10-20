@@ -388,6 +388,10 @@ FLUID_RECIPES = {
          "retained_inputs": [2], "fluid_results": [("jugcraft:sulfuric_acid", 500)], "ticks": 100, "features": ["machines", "sulfur"]},
         {"name": "hydrochloric_copper", "items": [("minecraft:raw_copper", 1)], "fluids": [("jugcraft:hydrochloric_acid", 250)],
          "results": [("jugcraft:washed_copper_ore", 1)], "ticks": 160, "features": ["machines"]},
+        # Cement burnt with its carbon dioxide captured (docs/features/cement-co2-capture.md): the furnace's cement, with
+        # the CO2 the lime gives off kept in a tank instead of lost. The calcite in four cement mix releases 250 mB.
+        {"name": "cement_with_co2_capture", "items": [("jugcraft:cement_mix", 4)], "results": [("jugcraft:cement", 4)],
+         "fluid_results": [("jugcraft:carbon_dioxide", 250)], "source": 250, "ticks": 200, "features": ["machines"]},
         # Calcite dissolved in hydrochloric acid gives off carbon dioxide (docs/features/calcite-co2.md): a quick CO2 source
         # for methanation without a kiln or coal, spending the acid. CaCO3 + 2 HCl -> CaCl2 + H2O + CO2.
         {"name": "carbon_dioxide_from_calcite", "items": [("minecraft:calcite", 1)], "fluids": [("jugcraft:hydrochloric_acid", 500)],

@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "items": [
+    {
+      "ingredient": "jugcraft:cement_mix",
+      "count": 4
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:carbon_dioxide",
+      "amount": 250
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:cement",
+      "count": 4
+    }
+  ],
+  "time": 200
+}
