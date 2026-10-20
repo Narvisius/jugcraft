@@ -364,8 +364,11 @@ Slice 7 finishes the attachments the owner modelled for these twelve guns, excep
 |---|---|---|
 | Iron Bayonet | 4 | an iron ingot over an iron nugget |
 | Steel Bayonet | 5 | a steel ingot over an iron nugget |
-| Diamond Bayonet | 5 | a diamond over an iron nugget |
+| Diamond Bayonet | 5.5 | a diamond over an iron nugget |
 | Netherite Bayonet | 6 | a Diamond Bayonet, a netherite ingot and a netherite upgrade template, at a smithing table |
+
+Stab is in half hearts. On 19 October 2026 the Diamond Bayonet went from 5 to 5.5 (a provisional figure for the owner to confirm), because it stabbed no harder than the Steel Bayonet; `eachBayonetStabsHarderThanTheTierBelow` now checks that every tier beats the one below.
+Fork [run 39303243194](https://github.com/mmme123-spec/jugcraftfork/actions/runs/39303243194) failed the material data check because `tools/guns.py` still said 5; with it matched, [run 39311203238](https://github.com/mmme123-spec/jugcraftfork/actions/runs/39311203238) on 6aa2a5fbf was green: the data checks, the build, every server game test including the new one, and all eight client shards.
 
 - The owner's art for each: the item icon, and the blade on each gun that takes one. The owner's fourth bayonet is anthralite, a Scorched Guns metal Jugcraft does not have. Its grey blade and wrapped grip read as steel, so it is the Steel Bayonet (a proposed name).
 - **Which guns:** the Patchwork Carbine, Thunderpipe, Longhorn Rifle, Drover Rifle, Coach Gun, Line Musket and Bellmouth take all four. The pistols, the SMG and the Haymaker have no bayonet parts.

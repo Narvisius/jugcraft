@@ -614,6 +614,17 @@ public class GunsGameTests {
 	 * damage, and cannot stab again until its time has passed; a bare carbine cannot stab, and the bayonet does not reach
 	 * a pig seven blocks off.
 	 */
+	@GameTest
+	public void eachBayonetStabsHarderThanTheTierBelow(GameTestHelper helper) {
+		String[] tiers = {"iron_bayonet", "steel_bayonet", "diamond_bayonet", "netherite_bayonet"};
+		for (int i = 1; i < tiers.length; i++) {
+			float lower = JugcraftGuns.ATTACHMENTS.get(tiers[i - 1]).stab();
+			float higher = JugcraftGuns.ATTACHMENTS.get(tiers[i]).stab();
+			helper.assertTrue(higher > lower, tiers[i] + " stabs for " + higher + ", not more than " + tiers[i - 1] + "'s " + lower);
+		}
+		helper.succeed();
+	}
+
 	@GameTest(structure = ARENA, maxTicks = 40)
 	public void bayonetStabsWithinReach(GameTestHelper helper) {
 		floor(helper);

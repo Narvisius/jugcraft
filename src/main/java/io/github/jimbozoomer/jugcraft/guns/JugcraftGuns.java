@@ -272,7 +272,7 @@ public final class JugcraftGuns {
 		ATTACHMENTS.put("vertical_grip", new GunAttachment("grip", false, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 0.65F, 1.0F, 0.0F));
 		ATTACHMENTS.put("iron_bayonet", new GunAttachment("grip", false, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 4.0F));
 		ATTACHMENTS.put("steel_bayonet", new GunAttachment("grip", false, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 5.0F));
-		ATTACHMENTS.put("diamond_bayonet", new GunAttachment("grip", false, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 5.0F));
+		ATTACHMENTS.put("diamond_bayonet", new GunAttachment("grip", false, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 5.5F));
 		ATTACHMENTS.put("netherite_bayonet", new GunAttachment("grip", false, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 6.0F));
 		ATTACHMENTS.put("long_scope", new GunAttachment("optic", true, 1.0F, 1.0F, 1.25F, 0.5F, 1.0F, 1.0F, 1.0F, 1.0F, 0.0F));
 		ATTACHMENTS.put("medium_scope", new GunAttachment("optic", true, 1.0F, 1.0F, 1.1F, 0.7F, 1.0F, 1.0F, 1.0F, 1.0F, 0.0F));

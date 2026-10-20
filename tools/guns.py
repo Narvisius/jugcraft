@@ -2798,7 +2798,7 @@ ATTACHMENTS = {
     },
     "diamond_bayonet": {
         "display": "Diamond Bayonet", "slot": "grip", "parts": ["diamond_bayonet"], "replaces": False, "effects": {},
-        "stab": 5.0, "model": "diamond_bayonet", "texture": "diamond_bayonet",
+        "stab": 5.5, "model": "diamond_bayonet", "texture": "diamond_bayonet",
         "tooltip": "A diamond blade under the muzzle. Stab with it up close.",
     },
     "netherite_bayonet": {
