@@ -14,7 +14,7 @@ Eight screens that each had their own style now share the machine screens' looks
 | Screen | Look | What changed |
 | --- | --- | --- |
 | Geo-Resonance Prospector | workshop | Brass body and orange glass from the workshop machines. The signal count is in a chip, and each reading's depth is a tag (brighter nearer the surface). The resonance gauge sits beside a help strip: "Strongest first. More bars, more ore. Readings are approximate." The warm-up and scan line stay. |
-| Rocket pad | industrial | The plain grey screen is gone. It now has the industrial body, pane and tray, an arrow from the cargo to the rocket (lit once a rocket is loaded), and faint rocket and plan hints in the empty slots. Hovering a slot says what goes there. Launch is a key with a tooltip. The last result sits in a chip by the title, and the lamp is green after a launch and red when one failed. |
+| Rocket pad | industrial | The plain grey screen is gone. It now has the industrial body, pane and tray, an arrow from the cargo to the rocket (lit once a rocket is loaded), and faint rocket and plan hints in the empty slots. Hovering a slot says what goes there. Launch is a key with a tooltip. The last result sits in a chip by the title, and the lamp is green after a launch and red when one failed. Polished on 19 October 2026 at the contributor's request: the slots are centred in the pane, a yellow-and-black hazard stripe runs along the pad's edge, and Launch stays dark until a rocket, a flight plan and some cargo are in, its tooltip naming what is missing (the server still makes every check). |
 | Storage tank | industrial | The cutaway tank picture stays, in its own pane. Its readouts are grouped into Contents (with a fill bar), Flow and Outlet (with a lamp). The rating is a chip, and the outlet hint is a help strip. |
 | Logic controller | advanced | A heading row (#, SENSOR, LEVEL, TARGET, SET) and hologram keys with tooltips. Rules that are on stand out, and an ON action key is lit. The channel strip shows each reading under its swatch (hover one for its name), plus a help strip. |
 | Reactor console | advanced | The owner-approved layout is unchanged. It now has the hologram body and panes, a status lamp by the title, and the status in a chip. |
@@ -71,6 +71,10 @@ CI, [run 38657990009](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/
 - The workshop glass's band ran across the middle of the prospector's readings. It is now the rule under the heading.
 
 CI, [run 38659890877](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38659890877) on 37b86deed with those fixes: green. The shots showed each fix working. They also showed one more fault from before the restyle: on the remote shutdown panel, "This panel (control room locked out)" ran past its pane. It now wraps above the transfer switch. The re-run with that fix: see the PR.
+
+Rocket pad polish (19 October 2026), on the fork:
+- [Run 39188846806](https://github.com/mmme123-spec/jugcraftfork/actions/runs/39188846806) on a576c0c9f: the mod, server tests and shard 4 (`JugcraftClientGameTests`) passed. Its shot showed the centred slots and the stripe, but Launch, though disabled with the plan slot empty, still looked lit: the shared button only shades a disabled face by 20. The pad now draws an unready Launch dark green with a dim label.
+- [Run 39192229706](https://github.com/mmme123-spec/jugcraftfork/actions/runs/39192229706) on 60a629665: green, every job and all eight client shards. Its shot shows Launch unlit with the plan slot empty.
 
 Not run:
 - a human using each screen;

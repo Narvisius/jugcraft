@@ -13,11 +13,11 @@ import net.minecraft.world.item.ItemStack;
 
 /** The rocket pad's screen: a 3x3 cargo grid at the left, the rocket and flight plan slots at the right, a launch button. */
 public class RocketPadMenu extends AbstractContainerMenu {
-	public static final int CARGO_X = 30;
+	public static final int CARGO_X = 25;
 	public static final int CARGO_Y = 17;
-	public static final int ROCKET_X = 116;
+	public static final int ROCKET_X = 111;
 	public static final int ROCKET_Y = 17;
-	public static final int PLAN_X = 140;
+	public static final int PLAN_X = 135;
 	public static final int PLAN_Y = 17;
 	public static final int LAUNCH = 0;
 
