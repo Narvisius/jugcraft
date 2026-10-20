@@ -388,6 +388,10 @@ FLUID_RECIPES = {
          "retained_inputs": [2], "fluid_results": [("jugcraft:sulfuric_acid", 500)], "ticks": 100, "features": ["machines", "sulfur"]},
         {"name": "hydrochloric_copper", "items": [("minecraft:raw_copper", 1)], "fluids": [("jugcraft:hydrochloric_acid", 250)],
          "results": [("jugcraft:washed_copper_ore", 1)], "ticks": 160, "features": ["machines"]},
+        # Calcite dissolved in hydrochloric acid gives off carbon dioxide (docs/features/calcite-co2.md): a quick CO2 source
+        # for methanation without a kiln or coal, spending the acid. CaCO3 + 2 HCl -> CaCl2 + H2O + CO2.
+        {"name": "carbon_dioxide_from_calcite", "items": [("minecraft:calcite", 1)], "fluids": [("jugcraft:hydrochloric_acid", 500)],
+         "fluid_results": [("jugcraft:carbon_dioxide", 250)], "ticks": 60, "features": ["machines"]},
         # Coking with gas recovery (docs/features/coke-gas-recovery.md): coal baked into coke in the reactor, faster than the
         # Coke Oven and on power, keeping the gas the Coke Oven lets go as methane (coke-oven gas's fuel part).
         {"name": "coke_with_gas_recovery", "items": [("minecraft:coal", 4)], "results": [("jugcraft:coke", 4)],

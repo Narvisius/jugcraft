@@ -237,10 +237,13 @@ public class IndustrialFermenterGameTests {
 		List<FluidRecipes.Entry> own = machine.recipes(level.getServer());
 		helper.assertTrue(own.size() == 2 && own.get(0).id().equals(Jugcraft.id("chemical_reaction/fermenter_bioethanol"))
 				&& own.get(0).recipe().time() == TICKS, "Original fermentation remains first beside the expanded mash route: " + own.stream().map(FluidRecipes.Entry::id).toList());
+		// The reactor ferments crops into bioethanol without collecting the gas; collecting it is the Fermenter's. (Other
+		// reactor recipes may give carbon dioxide from minerals, such as cement and calcite.)
 		long reactor = FluidRecipes.recipes(level.getServer(), MachineKind.CHEMICAL_REACTOR).stream()
 				.filter(recipe -> recipe.fluidResults().stream().anyMatch(result -> result.fluid() == PetroFluids.CARBON_DIOXIDE.fluid()))
+				.filter(recipe -> recipe.items().stream().anyMatch(part -> part.ingredient().test(new ItemStack(Items.WHEAT))))
 				.count();
-		helper.assertTrue(reactor == 0, "The Chemical Reactor makes no carbon dioxide");
+		helper.assertTrue(reactor == 0, "The Chemical Reactor collects no fermentation carbon dioxide");
 
 		RecipeManager.CachedCheck<CraftingInput, CraftingRecipe> crafting = RecipeManager.createCheck(RecipeType.CRAFTING);
 		ItemStack plate = stack("steel_plate");
