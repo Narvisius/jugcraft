@@ -224,6 +224,8 @@ def assets():
     fortifications.write_all(write, ASSETS, DATA / MOD, lang, condition, self_drop)
     import bunkerworks
     bunkerworks.write_all(write, ASSETS, DATA / MOD, lang, condition, self_drop)
+    import aluminum_roles
+    aluminum_roles.write_all(write, DATA / MOD, condition)
     import fire_control
     fire_control.write_all(write, ASSETS, DATA / MOD, lang, condition, self_drop)
     import raiders

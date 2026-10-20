@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WPW",
+    "RRR"
+  ],
+  "key": {
+    "W": "#c:wires/aluminum",
+    "P": "#c:plates/aluminum",
+    "R": "jugcraft:silver_cable"
+  },
+  "result": {
+    "id": "jugcraft:aluminum_cable",
+    "count": 4
+  }
+}
