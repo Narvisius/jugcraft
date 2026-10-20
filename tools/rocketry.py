@@ -135,6 +135,9 @@ def workshop_recipes():
          "output": rid("solid_propellant"), "count": 2, "ticks": 200, "features": feature + ["aluminum"]},
         {"inputs": [[rid("steel_plate"), 3]], "output": rid("rocket_casing"), "count": 1, "ticks": 160,
          "features": feature},
+        # Titanium casings (docs/features/titanium-rocket-casing.md): lighter and stiffer than steel, two plates make two.
+        {"name": "rocket_casing_from_titanium", "inputs": [[rid("titanium_plate"), 2]], "output": rid("rocket_casing"),
+         "count": 2, "ticks": 160, "features": feature + ["titanium"]},
         {"inputs": [[rid("tungsten_ingot"), 1], [rid("steel_plate"), 1]], "output": rid("rocket_nozzle"), "count": 2,
          "ticks": 160, "features": feature + ["tungsten"]},
         {"inputs": [[rid("processor"), 1], [rid("microchip"), 2], [rid("copper_wire"), 2]],
