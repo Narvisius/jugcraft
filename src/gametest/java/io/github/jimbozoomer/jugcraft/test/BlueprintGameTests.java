@@ -13,11 +13,17 @@ import java.util.Map;
 import java.util.UUID;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ComparatorBlock;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.entity.ComparatorBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.phys.AABB;
 
 /** The Blueprint System's first slice: built-in blueprints load, stakes offer bottom-up jobs, and finished builds pop off. */
@@ -119,6 +125,8 @@ public class BlueprintGameTests {
 		expectInvalid(helper, good.replace("minecraft:stone_bricks", "minecraft:command_block"), "not allowed");
 		expectInvalid(helper, good.replace("\"SSS\", \"SSS\"", "\"SXS\""), "not in the palette");
 		expectInvalid(helper, "{not json", "Not valid JSON");
+		expectInvalid(helper, good.replace("minecraft:stone_bricks", "#minecraft:no_such_tag"), "Unknown block tag");
+		expectInvalid(helper, good.replace("minecraft:stone_bricks", "#minecraft:portals"), "not allowed");
 		expectInvalid(helper, good.replace("\"format\": 1", "\"format\": 3"), "format");
 		helper.succeed();
 	}
@@ -219,6 +227,135 @@ public class BlueprintGameTests {
 					e -> e.getItem().is(net.minecraft.world.item.Items.DIAMOND)).isEmpty(), "the chest's contents were dropped, not lost");
 			helper.succeed();
 		});
+	}
+
+	/**
+	 * A comparator beside a stake reads how much of the build is in place, 1 + 14 x placed / total like a container's
+	 * fill (0 with nothing placed): first what the ground already holds, then with about half the rest set.
+	 */
+	@GameTest(structure = ARENA, maxTicks = 200, skyAccess = true)
+	public void aComparatorReadsTheBuildsProgress(GameTestHelper helper) {
+		if (TestFocus.skip("blueprints")) {
+			helper.succeed();
+			return;
+		}
+		BlockPos stakePos = helper.absolutePos(new BlockPos(22, 1, 40));
+		helper.getLevel().setBlockAndUpdate(stakePos, JugcraftBlueprints.STAKE.defaultBlockState());
+		SurveyStakeBlockEntity stake = (SurveyStakeBlockEntity) helper.getLevel().getBlockEntity(stakePos);
+		stake.setup("drone_tower_foundation", Rotation.NONE, UUID.randomUUID());
+		Map<BlockPos, BlockState> wanted = stake.wanted();
+		Direction side = Direction.Plane.HORIZONTAL.stream().filter(d -> !wanted.containsKey(stakePos.relative(d))).findFirst().orElseThrow();
+		BlockPos comparator = stakePos.relative(side);
+		// A comparator needs solid ground under it.
+		helper.getLevel().setBlockAndUpdate(comparator.below(), Blocks.STONE.defaultBlockState());
+		helper.getLevel().setBlockAndUpdate(comparator, Blocks.COMPARATOR.defaultBlockState().setValue(ComparatorBlock.FACING, side.getOpposite()));
+		helper.assertTrue(helper.getLevel().getBlockState(comparator).is(Blocks.COMPARATOR), "The comparator did not stay beside the stake");
+		int total = wanted.size();
+		int[] expected = {-1};
+		helper.runAfterDelay(45, () -> {
+			// Whatever of the foundation the arena already holds counts too.
+			List<Map.Entry<BlockPos, BlockState>> open = wanted.entrySet().stream()
+					.filter(entry -> !SurveyStakeBlockEntity.matches(helper.getLevel().getBlockState(entry.getKey()), entry.getValue())).toList();
+			int already = total - open.size();
+			int before = already == 0 ? 0 : 1 + 14 * already / total;
+			helper.assertTrue(stake.signal() == before && output(helper, comparator) == before,
+					"With " + already + " of " + total + " in place the stake gives " + stake.signal() + " and the comparator reads "
+							+ output(helper, comparator) + ", not " + before);
+			int half = open.size() / 2;
+			open.stream().limit(half).forEach(entry -> helper.getLevel().setBlockAndUpdate(entry.getKey(), entry.getValue()));
+			expected[0] = 1 + 14 * (already + half) / total;
+		});
+		helper.succeedWhen(() -> {
+			helper.assertTrue(expected[0] >= 0, "Not built yet");
+			helper.assertTrue(stake.signal() == expected[0], "The stake gives " + stake.signal() + ", not " + expected[0]);
+			helper.assertTrue(output(helper, comparator) == expected[0], "The comparator reads " + output(helper, comparator) + ", not " + expected[0]);
+		});
+	}
+
+	private static int output(GameTestHelper helper, BlockPos comparator) {
+		return helper.getLevel().getBlockEntity(comparator) instanceof ComparatorBlockEntity entity ? entity.getOutputSignal() : -1;
+	}
+
+	/**
+	 * "Any material" slots: a palette entry naming a block tag ({@code "#minecraft:planks"}) shows the tag's first block,
+	 * and any block of the tag counts there. Birch and spruce planks set by hand count; a drone's job for the last cell
+	 * names the tag, and dark oak planks it brings complete the build. A block of another tag does not count. Stairs of
+	 * another wood keep the drawn stairs' facing.
+	 */
+	@GameTest(structure = ARENA, maxTicks = 200, skyAccess = true)
+	public void anyMaterialSlotsTakeAnyBlockOfTheirTag(GameTestHelper helper) {
+		if (TestFocus.skip("blueprints")) {
+			helper.succeed();
+			return;
+		}
+		String json = "{\"format\": 1, \"name\": \"Any Plank Bench\", \"palette\": {\"P\": \"#minecraft:planks\"},"
+				+ " \"layers\": [[\"PPP\"]], \"anchor\": [1, 0, 2]}";
+		Blueprint bench;
+		try {
+			bench = io.github.jimbozoomer.jugcraft.blueprint.BlueprintLibrary.importText(helper.getLevel().getServer(), json);
+		} catch (Blueprint.Invalid e) {
+			throw new AssertionError("a blueprint with a tag slot was refused: " + e.getMessage());
+		}
+		helper.assertTrue(bench.anyOf(0) != null && bench.anyOf(0).equals(BlockTags.PLANKS) && bench.state(0, Rotation.NONE).is(BlockTags.PLANKS),
+				"the slot names the planks tag and shows a plank, got " + bench.anyOf(0) + " " + bench.state(0, Rotation.NONE));
+		UUID owner = UUID.randomUUID();
+		BlockPos stakePos = helper.absolutePos(new BlockPos(22, 1, 40));
+		helper.getLevel().setBlockAndUpdate(stakePos, JugcraftBlueprints.STAKE.defaultBlockState());
+		SurveyStakeBlockEntity stake = (SurveyStakeBlockEntity) helper.getLevel().getBlockEntity(stakePos);
+		stake.setup(bench.id, Rotation.NONE, owner);
+		List<BlockPos> cells = List.copyOf(stake.wanted().keySet());
+		helper.assertTrue(cells.size() == 3, "the bench has three cells, got " + cells.size());
+		helper.getLevel().setBlockAndUpdate(cells.get(0), Blocks.BIRCH_PLANKS.defaultBlockState());
+		helper.getLevel().setBlockAndUpdate(cells.get(1), Blocks.SPRUCE_PLANKS.defaultBlockState());
+		helper.getLevel().setBlockAndUpdate(cells.get(2), Blocks.STONE.defaultBlockState());
+		helper.runAfterDelay(2, () -> {
+			List<BuildJobs.Target> targets = BuildJobs.sources().stream()
+					.flatMap(s -> s.openTargets(helper.getLevel(), stakePos, 64, owner, UseMode.PERSONAL, 64).stream())
+					.filter(t -> t.owner().equals(owner)).toList();
+			helper.assertTrue(targets.size() == 1 && targets.get(0).pos().equals(cells.get(2)) && BlockTags.PLANKS.equals(targets.get(0).anyOf()),
+					"only the stone cell is still to do, as any planks: " + targets.stream().map(t -> t.pos() + " " + t.anyOf()).toList());
+			BuildJobs.Target target = targets.get(0);
+			helper.assertTrue(target.source().fill(helper.getLevel(), target, BuildJobs.like(target.state(), Blocks.DARK_OAK_PLANKS)),
+					"the drone's dark oak planks went in");
+		});
+		helper.runAfterDelay(4, () -> {
+			BlockState stairs = Blocks.OAK_STAIRS.defaultBlockState().setValue(StairBlock.FACING, Direction.EAST).setValue(StairBlock.HALF, Half.TOP);
+			BlockState spruce = BuildJobs.like(stairs, Blocks.SPRUCE_STAIRS);
+			helper.assertTrue(spruce.is(Blocks.SPRUCE_STAIRS) && spruce.getValue(StairBlock.FACING) == Direction.EAST
+					&& spruce.getValue(StairBlock.HALF) == Half.TOP, "the spruce stairs kept the drawn facing and half: " + spruce);
+		});
+		helper.succeedWhen(() -> helper.assertTrue(helper.getLevel().getBlockState(stakePos).is(Blocks.AIR),
+				"the bench of three woods is complete and the stake popped off"));
+	}
+
+	/**
+	 * The design kit: the AI guide in the jar shows the example and the tag slots; the example imports as a 5 x 4 x 4
+	 * shed with a planks slot; the block list holds stairs with their properties but no command block; the tag list
+	 * holds planks but not the portals tag, which holds forbidden blocks.
+	 */
+	@GameTest
+	public void theDesignKitDescribesWhatTheGameAllows(GameTestHelper helper) {
+		if (TestFocus.skip("blueprints")) {
+			helper.succeed();
+			return;
+		}
+		String guide = io.github.jimbozoomer.jugcraft.blueprint.BlueprintKit.resource(io.github.jimbozoomer.jugcraft.blueprint.BlueprintKit.GUIDE);
+		helper.assertTrue(guide.contains("Garden Shed") && guide.contains("#minecraft:planks") && guide.contains("8,192"),
+				"the guide shows the example, tag slots and limits");
+		try {
+			Blueprint shed = Blueprint.parse("import/kit_example",
+					io.github.jimbozoomer.jugcraft.blueprint.BlueprintKit.resource(io.github.jimbozoomer.jugcraft.blueprint.BlueprintKit.EXAMPLE), "imported");
+			helper.assertTrue(shed.sizeX == 5 && shed.sizeY == 4 && shed.sizeZ == 4 && BlockTags.PLANKS.equals(shed.anyOf(shed.size() - 1)),
+					"the example is a 5 x 4 x 4 shed roofed with any planks, got " + shed.sizeX + "x" + shed.sizeY + "x" + shed.sizeZ);
+		} catch (Blueprint.Invalid e) {
+			throw new AssertionError("the kit's example does not import: " + e.getMessage());
+		}
+		String blocks = io.github.jimbozoomer.jugcraft.blueprint.BlueprintKit.blocks();
+		helper.assertTrue(blocks.contains("\nminecraft:stone_bricks\n") && blocks.contains("\nminecraft:oak_stairs [") && blocks.contains("facing=")
+				&& !blocks.contains("minecraft:command_block") && !blocks.contains("\nminecraft:air"), "the block list holds what is allowed only");
+		String tags = io.github.jimbozoomer.jugcraft.blueprint.BlueprintKit.tags();
+		helper.assertTrue(tags.contains("\n#minecraft:planks (") && !tags.contains("#minecraft:portals"), "the tag list holds usable tags only");
+		helper.succeed();
 	}
 
 	@GameTest(structure = ARENA, maxTicks = 200, skyAccess = true)

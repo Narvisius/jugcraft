@@ -9,6 +9,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Property;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -38,6 +39,25 @@ public final class BuildJobs {
 	 * @param supplied   the source has already paid for the materials (the Drone Tower's modules): the depot
 	 *                   takes nothing from its packager and nothing goes back to it
 	 */
+	/**
+	 * {@code block} set the way {@code wanted} is (facing, half, axis and the like, where it has them): what goes into an
+	 * "any material" cell when another block of its tag is used, so oak stairs drawn facing east become spruce stairs
+	 * facing east.
+	 */
+	public static BlockState like(BlockState wanted, Block block) {
+		BlockState state = block.defaultBlockState();
+		for (Property<?> property : wanted.getProperties()) {
+			if (state.hasProperty(property)) {
+				state = copy(wanted, state, property);
+			}
+		}
+		return state;
+	}
+
+	private static <T extends Comparable<T>> BlockState copy(BlockState from, BlockState to, Property<T> property) {
+		return to.setValue(property, from.getValue(property));
+	}
+
 	public record Target(Source source, UUID jobId, UUID owner, UseMode mode, BlockPos pos, BlockState state,
 			@Nullable TagKey<Block> anyOf, boolean supplied) {
 		public Target(Source source, UUID jobId, UUID owner, UseMode mode, BlockPos pos, BlockState state, @Nullable TagKey<Block> anyOf) {

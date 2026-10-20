@@ -14,6 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -47,6 +48,11 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 	private int cursor;
 	/** Large builds: ticks between full checks of which blocks are in place. */
 	private static final int VERIFY_INTERVAL = 600;
+	/**
+	 * What a comparator reads: 0 before any block is in place, then 1 to 15 as the build fills, like a container. Set
+	 * at each check of the build, so a comparator costs nothing extra; not saved (the first check after loading sets it).
+	 */
+	private int signal;
 
 	public SurveyStakeBlockEntity(BlockPos pos, BlockState state) {
 		super(JugcraftBlueprints.STAKE_ENTITY, pos, state);
@@ -139,6 +145,11 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 	/** True when {@code world} counts as the wanted block (same block; states that change on their own are ignored). */
 	public static boolean matches(BlockState world, BlockState wanted) {
 		return world.is(wanted.getBlock());
+	}
+
+	/** The same for a cell that may be an "any material" slot: then any block of {@code anyOf} counts. */
+	public static boolean matches(BlockState world, BlockState wanted, @Nullable TagKey<Block> anyOf) {
+		return anyOf != null ? world.is(anyOf) : matches(world, wanted);
 	}
 
 	/** The placed blueprint's cells in the world (null while its blueprint is unknown). */
@@ -239,14 +250,17 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 				return;
 			}
 			boolean all = true;
+			int placed = 0;
 			BlockPos.MutableBlockPos at = new BlockPos.MutableBlockPos();
 			for (int i = 0; i < site.size(); i++) {
 				at.set(site.pos(i));
 				boolean in = server.isLoaded(at) && site.matches(server.getBlockState(at), i);
 				site.done.set(i, in);
 				all &= in;
+				placed += in ? 1 : 0;
 			}
 			cursor = 0;
+			signal(placed, site.size());
 			if (all) {
 				complete(server);
 			}
@@ -255,13 +269,33 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 		if (Math.floorMod(phase, CHECK_INTERVAL) != 0) {
 			return;
 		}
+		// Every block is looked at (at most MAX_BLOCKS, once per CHECK_INTERVAL), so the comparator signal counts them all.
+		int placed = 0;
 		for (int i = 0; i < site.size(); i++) {
 			BlockPos p = site.blockPos(i);
-			if (!server.isLoaded(p) || !site.matches(server.getBlockState(p), i)) {
-				return;
+			if (server.isLoaded(p) && site.matches(server.getBlockState(p), i)) {
+				placed++;
 			}
 		}
-		complete(server);
+		signal(placed, site.size());
+		if (placed == site.size()) {
+			complete(server);
+		}
+	}
+
+	/** The comparator signal (see {@link #signal}). */
+	public int signal() {
+		return signal;
+	}
+
+	private void signal(int placed, int total) {
+		int next = placed <= 0 || total <= 0 ? 0 : 1 + (int) (14L * Math.min(placed, total) / total);
+		if (next != signal) {
+			signal = next;
+			if (level != null) {
+				level.updateNeighbourForOutputSignal(getBlockPos(), getBlockState().getBlock());
+			}
+		}
 	}
 
 	private void complete(ServerLevel server) {
@@ -337,12 +371,12 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 			return ((long) pos.getX() << 32) | (pos.getZ() & 0xFFFFFFFFL);
 		}
 
-		private boolean open(ServerLevel level, BlockPos pos, BlockState state) {
+		private boolean open(ServerLevel level, BlockPos pos, BuildSite site, int i) {
 			if (!level.isLoaded(pos)) {
 				return false;
 			}
 			BlockState now = level.getBlockState(pos);
-			return !matches(now, state) && (now.canBeReplaced() || obstacle(level, pos, now));
+			return !site.matches(now, i) && (now.canBeReplaced() || obstacle(level, pos, now));
 		}
 
 		/**
@@ -445,7 +479,7 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 					.filter(i -> reservedUntil.getOrDefault(site.blockPos(i), Long.MIN_VALUE) < now)
 					.sorted(Comparator.comparingInt((Integer i) -> -site.layerOf(i)).thenComparingDouble(i -> site.blockPos(i).distSqr(center)))
 					.limit(max)
-					.forEach(i -> out.add(new BuildJobs.Target(this, jobId, owner, mode, site.blockPos(i), site.state(i), null)));
+					.forEach(i -> out.add(new BuildJobs.Target(this, jobId, owner, mode, site.blockPos(i), site.state(i), site.anyOf(i))));
 			// Then the empty cells, roughly layer by layer, a few layers at a time: while the last blocks of a layer
 			// are still in the air the next layers go ahead, so a big fleet keeps working instead of waiting.
 			int lowest = lowestHere;
@@ -459,7 +493,7 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 					.filter(i -> supported(level, site.blockPos(i), site))
 					.sorted(Comparator.comparingInt((Integer i) -> site.layerOf(i)).thenComparingDouble(i -> site.blockPos(i).distSqr(center)))
 					.limit(Math.max(0, max - out.size()))
-					.forEach(i -> out.add(new BuildJobs.Target(this, jobId, owner, mode, site.blockPos(i), site.state(i), null)));
+					.forEach(i -> out.add(new BuildJobs.Target(this, jobId, owner, mode, site.blockPos(i), site.state(i), site.anyOf(i))));
 			return out;
 		}
 
@@ -486,9 +520,8 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 		public boolean stillWanted(ServerLevel level, BuildJobs.Target target, UUID depotOwner, UseMode depotMode) {
 			BuildSite site = site();
 			int i = site == null ? -1 : site.find(target.pos());
-			BlockState state = i < 0 ? null : site.state(i);
-			return state != null && !isRemoved() && owner != null && JugcraftParties.mayServe(depotOwner, depotMode, owner, mode)
-					&& open(level, target.pos(), state);
+			return i >= 0 && !isRemoved() && owner != null && JugcraftParties.mayServe(depotOwner, depotMode, owner, mode)
+					&& open(level, target.pos(), site, i);
 		}
 
 		@Override

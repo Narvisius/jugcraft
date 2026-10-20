@@ -16,7 +16,11 @@ import java.util.Map;
 import java.util.Set;
 import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
@@ -98,8 +102,23 @@ public final class Blueprint {
 		}
 	}
 
-	/** One block of the blueprint, relative to the stake (already turned). */
-	public record Cell(BlockPos offset, BlockState state) {
+	/**
+	 * One block of the blueprint, relative to the stake (already turned). An "any material" cell names the block tag
+	 * whose blocks all count ({@code anyOf}); its {@code state} is then the tag's first block, shown and placed by hand.
+	 */
+	public record Cell(BlockPos offset, BlockState state, @Nullable TagKey<Block> anyOf) {
+		public Cell(BlockPos offset, BlockState state) {
+			this(offset, state, null);
+		}
+	}
+
+	/** A palette entry: a block, or for an "any material" slot ({@code "#minecraft:planks"}) its tag and first block. */
+	private record Slot(BlockState state, @Nullable TagKey<Block> anyOf) {
+	}
+
+	/** Whether {@code block} may appear in a blueprint (the forbidden ones never may, alone or inside a tag). */
+	public static boolean allowed(Block block) {
+		return !FORBIDDEN.contains(block) && !block.defaultBlockState().isAir();
 	}
 
 	/** A blueprint that does not pass the checks; the message says why in plain words. */
@@ -131,6 +150,8 @@ public final class Blueprint {
 	private final int[] packed;
 	private final short[] stateOf;
 	private final BlockState[] palette;
+	/** Each palette entry's "any material" tag (null for an exact block), or null when the blueprint has none. */
+	private final @Nullable TagKey<Block> @Nullable [] paletteTags;
 	private final BlockState[][] turnedPalette = new BlockState[4][];
 	/** The parts a set is made of, for the placement preview: id, offset of the part's corner from the stake, turn. */
 	public final List<PartRef> parts;
@@ -141,7 +162,8 @@ public final class Blueprint {
 	}
 
 	private Blueprint(String id, String name, String source, Kind kind, Category category, String json, int sizeX, int sizeY, int sizeZ,
-			int anchorX, int anchorY, int anchorZ, int[] packed, short[] stateOf, BlockState[] palette, List<PartRef> parts) {
+			int anchorX, int anchorY, int anchorZ, int[] packed, short[] stateOf, BlockState[] palette, @Nullable TagKey<Block> @Nullable [] paletteTags,
+			List<PartRef> parts) {
 		this.id = id;
 		this.name = name;
 		this.source = source;
@@ -157,6 +179,7 @@ public final class Blueprint {
 		this.packed = packed;
 		this.stateOf = stateOf;
 		this.palette = palette;
+		this.paletteTags = paletteTags;
 		this.parts = parts;
 	}
 
@@ -272,13 +295,17 @@ public final class Blueprint {
 		if (!root.has("palette") || !root.get("palette").isJsonObject()) {
 			throw new Invalid("\"palette\" is missing: it maps one character to a block, like {\"A\": \"minecraft:stone_bricks\"}");
 		}
-		Map<Character, BlockState> palette = new HashMap<>();
+		Map<Character, Slot> palette = new HashMap<>();
 		for (Map.Entry<String, JsonElement> entry : root.getAsJsonObject("palette").entrySet()) {
 			if (entry.getKey().length() != 1 || entry.getKey().equals(".") || entry.getKey().equals(" ")
 					|| (format == 2 && Character.isDigit(entry.getKey().charAt(0)))) {
 				throw new Invalid("Palette key \"" + entry.getKey() + "\" must be one character (not '.', a space" + (format == 2 ? " or a digit)" : ")"));
 			}
 			String text = entry.getValue().getAsString();
+			if (text.startsWith("#")) {
+				palette.put(entry.getKey().charAt(0), anyOf(text, entry.getKey()));
+				continue;
+			}
 			BlockState state;
 			try {
 				state = BlockStateParser.parseForBlock(BuiltInRegistries.BLOCK, text, false).blockState();
@@ -289,11 +316,11 @@ public final class Blueprint {
 				throw new Invalid("\"" + text + "\" (palette " + entry.getKey() + ") is not allowed in blueprints");
 			}
 			if (!state.isAir()) {
-				palette.put(entry.getKey().charAt(0), state);
+				palette.put(entry.getKey().charAt(0), new Slot(state, null));
 			}
 		}
 		// Cells in file coordinates; a later cell at the same place replaces an earlier one (layers go over parts).
-		Map<Long, BlockState> cells = new LinkedHashMap<>();
+		Map<Long, Slot> cells = new LinkedHashMap<>();
 		int sx = 0, sz = 0, sy = 0;
 		List<PartRef> parts = new ArrayList<>();
 		if (root.has("parts")) {
@@ -316,6 +343,7 @@ public final class Blueprint {
 				for (int i = 0; i < part.size(); i++) {
 					int fx = unpackX(part.packed[i]) + part.anchorX, fy = unpackY(part.packed[i]) + part.anchorY, fz = unpackZ(part.packed[i]) + part.anchorZ;
 					BlockState state = part.palette[part.stateOf[i]];
+					TagKey<Block> tag = part.anyOf(i);
 					int cw = w, cd = d;
 					for (int t = 0; t < turns; t++) {
 						// A quarter turn clockwise (seen from above) inside the part's footprint: (x, z) -> (depth-1-z, x).
@@ -327,7 +355,7 @@ public final class Blueprint {
 						cd = swap;
 						state = state.rotate(Rotation.CLOCKWISE_90);
 					}
-					cells.put(key(fx + px, fy + py, fz + pz), state);
+					cells.put(key(fx + px, fy + py, fz + pz), new Slot(state, tag));
 				}
 				int fw = turns % 2 == 0 ? w : d, fd = turns % 2 == 0 ? d : w;
 				parts.add(new PartRef(partId, px, py, pz, turns, fw, part.sizeY, fd));
@@ -367,7 +395,7 @@ public final class Blueprint {
 							x += count;
 							continue;
 						}
-						BlockState state = palette.get(c);
+						Slot state = palette.get(c);
 						if (state == null && !root.getAsJsonObject("palette").has(String.valueOf(c))) {
 							throw new Invalid("Layer " + y + ", row " + z + " uses '" + c + "', which is not in the palette");
 						}
@@ -409,11 +437,11 @@ public final class Blueprint {
 			az = anchor.get(2).getAsInt();
 		}
 		// Bottom layer first (drones and holograms work up from the lowest unfinished layer).
-		List<Map.Entry<Long, BlockState>> sorted = new ArrayList<>(cells.entrySet());
+		List<Map.Entry<Long, Slot>> sorted = new ArrayList<>(cells.entrySet());
 		sorted.sort(java.util.Comparator.comparingInt(e -> keyY(e.getKey())));
 		int[] packed = new int[sorted.size()];
 		short[] stateOf = new short[sorted.size()];
-		Map<BlockState, Integer> index = new LinkedHashMap<>();
+		Map<Slot, Integer> index = new LinkedHashMap<>();
 		for (int i = 0; i < sorted.size(); i++) {
 			long k = sorted.get(i).getKey();
 			int ox = keyX(k) - ax, oy = keyY(k) - ay, oz = keyZ(k) - az;
@@ -442,8 +470,38 @@ public final class Blueprint {
 		}
 		Kind kind = "imported".equals(source) ? Kind.IMPORTED : category == Category.PARTIAL ? Kind.PART : Kind.COMPLETE;
 		String kept = builtIn && LARGE_BUILT_IN.contains(id) ? "" : json;
-		return new Blueprint(id, name, source, kind, category, kept, sx, sy, sz, ax, ay, az, packed, stateOf,
-				index.keySet().toArray(BlockState[]::new), List.copyOf(parts));
+		BlockState[] states = index.keySet().stream().map(Slot::state).toArray(BlockState[]::new);
+		@SuppressWarnings("unchecked")
+		TagKey<Block>[] tags = index.keySet().stream().anyMatch(slot -> slot.anyOf() != null)
+				? index.keySet().stream().map(Slot::anyOf).toArray(TagKey[]::new) : null;
+		return new Blueprint(id, name, source, kind, category, kept, sx, sy, sz, ax, ay, az, packed, stateOf, states, tags, List.copyOf(parts));
+	}
+
+	/**
+	 * An "any material" palette entry, {@code "#namespace:tag"}: every block of that block tag counts, and the first is
+	 * the one shown. The tag must exist, hold blocks and contain nothing forbidden.
+	 */
+	private static Slot anyOf(String text, String key) throws Invalid {
+		Identifier name = Identifier.tryParse(text.substring(1));
+		if (name == null) {
+			throw new Invalid("\"" + text + "\" (palette " + key + ") is not a block tag name, like \"#minecraft:planks\"");
+		}
+		TagKey<Block> tag = TagKey.create(Registries.BLOCK, name);
+		BlockState first = null;
+		for (Holder<Block> holder : BuiltInRegistries.BLOCK.getTagOrEmpty(tag)) {
+			Block block = holder.value();
+			if (FORBIDDEN.contains(block)) {
+				throw new Invalid("\"" + text + "\" (palette " + key + ") includes " + BuiltInRegistries.BLOCK.getKey(block)
+						+ ", which is not allowed in blueprints");
+			}
+			if (first == null && !block.defaultBlockState().isAir()) {
+				first = block.defaultBlockState();
+			}
+		}
+		if (first == null) {
+			throw new Invalid("Unknown block tag \"" + text + "\" in palette " + key + " (no blocks have it)");
+		}
+		return new Slot(first, tag);
 	}
 
 	private static long key(int x, int y, int z) {
@@ -514,6 +572,11 @@ public final class Blueprint {
 		return turned[stateOf[i]];
 	}
 
+	/** Cell {@code i}'s "any material" tag: every block of it counts there. Null for an exact block. */
+	public @Nullable TagKey<Block> anyOf(int i) {
+		return paletteTags == null ? null : paletteTags[stateOf[i]];
+	}
+
 	/** The highest cell above the stake. */
 	public int top() {
 		return packed.length == 0 ? 0 : unpackY(packed[packed.length - 1]);
@@ -523,7 +586,7 @@ public final class Blueprint {
 	public List<Cell> cells(Rotation rotation) {
 		List<Cell> out = new ArrayList<>(packed.length);
 		for (int i = 0; i < packed.length; i++) {
-			out.add(new Cell(offset(i, rotation), state(i, rotation)));
+			out.add(new Cell(offset(i, rotation), state(i, rotation), anyOf(i)));
 		}
 		return out;
 	}

@@ -233,6 +233,19 @@ public class BlueprintTableScreen extends Screen {
 		resultOk = true;
 	}
 
+	/** Writes the design kit to the player's computer and says where. */
+	void exportKit() {
+		try {
+			BlueprintKitExport.write();
+			result = "Kit written to .minecraft/jugcraft/blueprint_kit/";
+			resultOk = true;
+		} catch (Exception e) {
+			io.github.jimbozoomer.jugcraft.Jugcraft.LOGGER.warn("Could not write the blueprint design kit", e);
+			result = "Could not write the design kit: " + e.getMessage();
+			resultOk = false;
+		}
+	}
+
 	/** For the client game test: open IMPORT, paste what is on the clipboard and press IMPORT. */
 	public void testImport() {
 		setTab(IMPORT);
@@ -274,6 +287,8 @@ public class BlueprintTableScreen extends Screen {
 				result = "";
 			}));
 			stamps.add(new Stamp("IMPORT", px1 - 64, py1 - 30, 56, 17, STAMP_RED, true, this::sendImport));
+			// The design kit: the AI guide, this game's allowed blocks and tags, and an example, for writing blueprints.
+			stamps.add(new Stamp("KIT", px1 - 60, py0 + 7, 52, 18, STAMP_GREY, true, this::exportKit));
 			return;
 		}
 		stamps.add(new Stamp("PRINT", px1 - 60, py0 + 7, 52, 18, STAMP_RED, printable() != null, this::printSelected));

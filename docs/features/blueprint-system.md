@@ -22,6 +22,11 @@ Owner: Narvisius
     - Every blueprint you have imported, kept on your own computer in `.minecraft/jugcraft/imported_blueprints/`, so the list follows you to any server.
     - Select one to see it, import it again (IMPORT), print it when the server has it (PRINT), or remove it from your list (REMOVE).
     - **+ NEW IMPORT** shows a sheet of tracing paper to paste on, with PASTE, CLEAR and IMPORT stamps.
+    - **KIT** on that sheet writes the **design kit** to `.minecraft/jugcraft/blueprint_kit/`, for designing a blueprint by hand or with an AI:
+      - `ai_guide.md`: the format, limits, forbidden blocks, "any material" slots, which way the front faces, and tips;
+      - `blocks.txt`: every block this game allows, its mods' included, with each state property and its values;
+      - `tags.txt`: every block tag a slot may name, with how many blocks it holds;
+      - `example.jugbp.json`: a garden shed with a planks slot, ready to import.
 - **Item colour in the inventory** (`Blueprint.Kind`; the holograms are unchanged):
   - **blue:** a complete build, either an individual structure or a whole set;
   - **green:** a partial structure, one part of a set such as a single cooling tower;
@@ -40,12 +45,13 @@ Owner: Narvisius
   - **PERSONAL/PARTY**, **ROTATE** and **REMOVE** buttons for the player who placed it (or the party leader). REMOVE takes the stake down without giving the blueprint back.
 
   Sneak-right-click also switches Personal/Party.
+- **Comparator output:** a comparator beside the stake reads how much of the build is in place, like a container's fill: 0 before any block, then 1 to 15 as it fills. It changes at the stake's regular checks (every 2 seconds; every 30 seconds for the largest built-in blueprints), so a lamp or a door can show when a drone build is half or nearly done.
 - **A blueprint is used up when it is placed:** when every block is in place the stake pops off and nothing drops, and breaking the stake drops nothing either. Print another at the table (it is free).
 
 ## How it works
 - **Format:** format 1 `*.jugbp.json` files. Each holds:
   - `name`;
-  - `palette`: one character → a block state;
+  - `palette`: one character → a block state, or an "any material" slot: a block tag such as `"#minecraft:planks"`;
   - `layers`: bottom first, each a list of text rows, with `.` or space meaning nothing;
   - optional `anchor`: where the stake stands, in front of the build;
   - optional `size`: the build's full size (empty edges count).
@@ -67,6 +73,10 @@ Owner: Narvisius
   - A stake syncs only its blueprint id, rotation, owner and mode.
   - Pasted text goes to the server in 8,000-character parts.
 - **Block checks:** a block counts when it is the same block as the one wanted. Stairs and other directional blocks are turned with the blueprint.
+- **"Any material" slots:** a palette entry naming a block tag (`"#minecraft:planks"`, `"#minecraft:wool"`) lets any block of that tag count there.
+  - The tag must exist and hold blocks, and none of them may be forbidden.
+  - The tag's first block is the one shown: in the hologram, the turning preview and the bill of materials.
+  - A drone's job for such a cell names the tag. The depot brings any block of it from the packager and sets it the way the drawn block is set: oak stairs drawn facing east become spruce stairs facing east (`BuildJobs.like`). With the endless test supply it brings the first block.
 - **The table block:** `BlueprintTableBlock` has `facing` and `part` (`main`/`side`). The side half goes to the player's right; each half removes itself when its partner is gone, and only the main half drops the item (loot `match_block` on `part=main`). Models are generated per half by `tools/blueprints.py` (`table_elements`), with the board tilted 22.5 degrees and its drawing split across the two halves; the item model shows both halves.
 - **The turning preview:** `TurntableRaster` (plain Java) fills each block face that shows, shaded by direction and tinted by the block's map colour, then inks the outline and depth steps in white. `BlueprintTurntable` runs it on a worker thread about twelve times a second into a `DynamicTexture` the screen draws.
 - **Drone jobs:** the stake is a `BuildJobs.Source`, the interface the Drone Depot already uses.
@@ -84,6 +94,13 @@ Owner: Narvisius
 - **Nuclear equipment in a blueprint** (an equipment anchor block with its facing): drones deliver the equipment's
   item and the stake places it whole, clearing any ground in its body first. The blueprint leaves the body empty.
 
+- **Comparator:** `SurveyStakeBlockEntity` counts the placed blocks at each check and keeps the signal, which `SurveyStakeBlock` reports.
+  - A small build (at most 8,192 blocks) is counted in full every 40 ticks. Before, the check stopped at the first missing block.
+  - A large built-in build is counted at its 600-tick full check, which already looked at every block.
+  - The signal is not saved: the first check after loading sets it.
+
+- **The design kit:** `BlueprintKit` reads the guide and example from `assets/jugcraft/blueprint/` in the jar and makes the block and tag lists from the game's registry, so they match the mods installed. A tag is listed only when it holds an allowed block and nothing forbidden. `BlueprintKitExport` (client) writes them; nothing goes to the server.
+
 ## Testing aids (operators only: cheats on, or op level 2)
 - `/nuclear build <blueprint> [fuelled]`: builds any blueprint at once where you stand, facing the way you face
   (equipment placed whole, pipes joined, consoles linked to the nearest reactor).
@@ -95,13 +112,14 @@ Owner: Narvisius
   - built-in blueprints load (225-block foundation with one core; the church; rotation keeps every block);
   - a stake offers only its floor layer first, and nothing to a stranger's depot;
   - a finished foundation pops the stake and returns the blueprint.
-- **Server game tests:** import checks (a valid paste is saved; unknown block, forbidden block, missing palette key, bad JSON and wrong format are each refused with the right message).
+- **Server game test (`BlueprintGameTests.aComparatorReadsTheBuildsProgress`):** a real comparator beside a foundation stake reads what the ground already holds, then 1 + 14 × placed / total once about half the rest is set. Added on the contributor's fork; passed in run [38631695156](https://github.com/mmme123-spec/jugcraftfork/actions/runs/38631695156) (commit 85490fa9), with every other server and client test.
+- **Server game test (`BlueprintGameTests.anyMaterialSlotsTakeAnyBlockOfTheirTag`):** an imported bench with a `#minecraft:planks` slot: birch and spruce planks set by hand count, a stone block does not, the drone job for it names the tag and dark oak planks complete it; stairs of another wood keep the drawn facing and half. Added on the contributor's fork; passed in run [38631695156](https://github.com/mmme123-spec/jugcraftfork/actions/runs/38631695156) (commit 85490fa9), with every other server and client test.
+- **Server game test (`BlueprintGameTests.theDesignKitDescribesWhatTheGameAllows`):** the guide in the jar shows the example, tag slots and limits; the example imports as a 5 × 4 × 4 shed with a planks slot; the block list holds stairs with their properties but no command block or air; the tag list holds planks but not the portals tag. Added on the contributor's fork; passed in run [38638745852](https://github.com/mmme123-spec/jugcraftfork/actions/runs/38638745852) (commit e949ef54), with every other server and client test (its first attempt's server job without optional integrations failed in the nuclear plant's radiation test, which this change does not touch, and passed on the one re-run).
+- **Server game tests:** import checks (a valid paste is saved; unknown block, forbidden block, unknown block tag, a tag holding forbidden blocks (`#minecraft:portals`), missing palette key, bad JSON and wrong format are each refused with the right message).
 - **Client game test (`BlueprintClientGameTests`):** preview and placement from 20 blocks away, hologram, stake screen, table tabs and IMPORT (a pasted blueprint arrives in the client library and the import list), Item Index, chair, Creative Energy Cell.
 
 ## Not yet done (from #23)
-- "Any material" slots and tags.
-- Comparator output.
-- The design kit and in-JAR AI guide.
+Nothing listed in #23 remains. Comparator output, "any material" slots and the design kit with its in-JAR AI guide, listed here before, are built (see above).
 
 ## World height
 

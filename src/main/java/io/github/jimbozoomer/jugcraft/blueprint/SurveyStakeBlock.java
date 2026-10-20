@@ -1,6 +1,7 @@
 package io.github.jimbozoomer.jugcraft.blueprint;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -22,7 +23,8 @@ import org.jspecify.annotations.Nullable;
  * The Survey Stake: where a placed blueprint stands. Right-click opens its screen (progress, what is still
  * needed, Personal/Party, rotate, remove);
  * sneak-right-click (the placer, or the party leader for a Party blueprint) switches Personal/Party.
- * Breaking it gives the blueprint back; it also pops off by itself when the build is complete.
+ * Breaking it gives the blueprint back; it also pops off by itself when the build is complete. A comparator reads how
+ * much of the build is in place.
  */
 public class SurveyStakeBlock extends BaseEntityBlock {
 	private static final VoxelShape SHAPE = Block.box(5, 0, 5, 11, 14, 11);
@@ -70,4 +72,14 @@ public class SurveyStakeBlock extends BaseEntityBlock {
 		return InteractionResult.SUCCESS;
 	}
 
+	/** A comparator reads how much of the build is in place: 0 before any block, then 1 to 15 as it fills. */
+	@Override
+	protected boolean hasAnalogOutputSignal(BlockState state) {
+		return true;
+	}
+
+	@Override
+	protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos, Direction direction) {
+		return level.getBlockEntity(pos) instanceof SurveyStakeBlockEntity stake ? stake.signal() : 0;
+	}
 }

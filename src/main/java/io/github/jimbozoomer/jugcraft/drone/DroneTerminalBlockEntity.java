@@ -785,9 +785,10 @@ public class DroneTerminalBlockEntity extends BlockEntity {
 			inFlight.add(target.pos());
 			return new Cargo(target, target.pos(), new ItemStack(wanted.getBlock().asItem()), wanted, true);
 		}
-		if ((packager.unlimited() || CreativeSupplyCrateBlock.near(level, getBlockPos())) && target.anyOf() == null
+		if ((packager.unlimited() || CreativeSupplyCrateBlock.near(level, getBlockPos()))
 				&& wanted.getBlock().asItem() != net.minecraft.world.item.Items.AIR) {
 			// The endless test supply (a Creative Supply Crate nearby, or /dronetest supplies): any block, nothing taken.
+			// An "any material" cell gets the first block of its tag, the one its blueprint shows.
 			if (!target.source().reserve(level, target, depotId, now + RESERVE_TICKS)) {
 				return null;
 			}
@@ -819,8 +820,7 @@ public class DroneTerminalBlockEntity extends BlockEntity {
 		}
 		BlockState state = wanted;
 		if (target.anyOf() != null && item.getItem() instanceof BlockItem blockItem) {
-			Block block = blockItem.getBlock();
-			state = block.defaultBlockState();
+			state = BuildJobs.like(wanted, blockItem.getBlock());
 		}
 		inFlight.add(target.pos());
 		return new Cargo(target, target.pos(), item, state, false);

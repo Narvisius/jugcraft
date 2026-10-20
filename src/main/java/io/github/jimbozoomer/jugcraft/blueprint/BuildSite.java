@@ -3,8 +3,11 @@ package io.github.jimbozoomer.jugcraft.blueprint;
 import java.util.Arrays;
 import java.util.BitSet;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A placed blueprint's cells in the world, kept compact so a whole power plant (a third of a million blocks) costs a
@@ -17,6 +20,8 @@ public final class BuildSite {
 	public final BlockPos origin;
 	private final long[] pos;
 	private final BlockState[] states;
+	/** Each cell's "any material" tag (null for an exact block), or null when the blueprint has no such cells. */
+	private final @Nullable TagKey<Block> @Nullable [] tags;
 	/** layerStart[k] is the first cell of layer k (y = minY + k); the last entry is the cell count. */
 	private final int[] layerStart;
 	public final int minY;
@@ -35,12 +40,17 @@ public final class BuildSite {
 		this.origin = origin.immutable();
 		int total = blueprint.size();
 		int fluids = 0;
+		boolean tagged = false;
 		for (int i = 0; i < total; i++) {
 			if (fluid(blueprint.state(i, Rotation.NONE))) fluids++;
+			tagged |= blueprint.anyOf(i) != null;
 		}
 		int n = total - fluids;
 		pos = new long[n];
 		states = new BlockState[n];
+		@SuppressWarnings("unchecked")
+		TagKey<Block>[] anyOf = tagged ? new TagKey[n] : null;
+		tags = anyOf;
 		fluidPos = new long[fluids];
 		fluidStates = new BlockState[fluids];
 		int lowest = Integer.MAX_VALUE, highest = Integer.MIN_VALUE;
@@ -68,6 +78,9 @@ public final class BuildSite {
 			int idx = k0++;
 			pos[idx] = p.asLong();
 			states[idx] = st;
+			if (tags != null) {
+				tags[idx] = blueprint.anyOf(i);
+			}
 			int k = p.getY() - lowest;
 			while (layer <= k) {
 				layerStart[layer++] = idx;
@@ -145,7 +158,12 @@ public final class BuildSite {
 		return k < 0 ? -1 : sortedIdx[k];
 	}
 
+	/** Cell {@code i}'s "any material" tag, or null for an exact block. */
+	public @Nullable TagKey<Block> anyOf(int i) {
+		return tags == null ? null : tags[i];
+	}
+
 	public boolean matches(BlockState world, int i) {
-		return SurveyStakeBlockEntity.matches(world, states[i]);
+		return SurveyStakeBlockEntity.matches(world, states[i], anyOf(i));
 	}
 }

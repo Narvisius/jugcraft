@@ -107,7 +107,7 @@ public class SurveyStakeRenderer implements BlockEntityRenderer<SurveyStakeBlock
 			}
 			at.setWithOffset(origin, cell.offset());
 			BlockState now = level.getBlockState(at);
-			if (SurveyStakeBlockEntity.matches(now, cell.state())) {
+			if (SurveyStakeBlockEntity.matches(now, cell.state(), cell.anyOf())) {
 				continue;
 			}
 			int color = !now.canBeReplaced() ? WRONG : SurveyStakeBlockEntity.handOnly(cell.state()) ? HAND_ONLY : MISSING;

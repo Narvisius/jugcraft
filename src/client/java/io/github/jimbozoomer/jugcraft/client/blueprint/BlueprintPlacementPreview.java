@@ -69,7 +69,8 @@ public final class BlueprintPlacementPreview {
 			if (hull == null) {
 				for (Blueprint.Cell cell : blueprint.cells(target.rotation())) {
 					at.setWithOffset(stake, cell.offset());
-					boolean clear = level.getBlockState(at).canBeReplaced() || level.getBlockState(at).is(cell.state().getBlock());
+					boolean clear = level.getBlockState(at).canBeReplaced()
+							|| io.github.jimbozoomer.jugcraft.blueprint.SurveyStakeBlockEntity.matches(level.getBlockState(at), cell.state(), cell.anyOf());
 					boxes.add(new float[] {cell.offset().getX(), cell.offset().getY(), cell.offset().getZ(), Float.intBitsToFloat(clear ? CLEAR : BLOCKED)});
 				}
 			}
