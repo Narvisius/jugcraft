@@ -17,7 +17,7 @@ FEATURES = ["tin", "zinc", "lead", "silver", "nickel", "tungsten", "uranium", "t
             "salt", "phosphate", "lithium", "rare_earths", "fluorite", "mineral_sands", "vanadium", "sulfur", "silicon", "crude_oil", "machines", "deposits",
             "explosives", "agriculture", "parties", "drones",
             "pixel_hollows", "retro_trader", "alpine_spawn", "biomes", "town", "diagonal_connections", "raiders",
-            "concordance", "guns"]
+            "concordance", "guns", "adam_ondi_ahman"]
 
 # Metals use the vanilla form set. "mined" adds ore, deepslate ore, raw item and raw block.
 # cook: which vanilla cookers can smelt the ore/raw form. tool: minimum pickaxe tier.

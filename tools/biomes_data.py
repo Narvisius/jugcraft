@@ -86,8 +86,10 @@ def biome(name):
         spawns["creature"] = [spawn(entry) for entry in info["creatures"]]
     if "monsters" in info:
         spawns["monster"] = [spawn(entry) for entry in info["monsters"]]
+    costs = copy.deepcopy(base.get("spawn_costs", {}))
+    costs.update(copy.deepcopy(info.get("spawn_costs", {})))
     attributes = {"minecraft:gameplay/natural_mob_spawns": {"argument": {
-        "spawn_costs": copy.deepcopy(base.get("spawn_costs", {})), "spawns_by_category": spawns}, "modifier": "overlay"}}
+        "spawn_costs": costs, "spawns_by_category": spawns}, "modifier": "overlay"}}
     if "sky_color" in base:
         attributes["minecraft:visual/sky_color"] = base["sky_color"]
     if "music" in base:

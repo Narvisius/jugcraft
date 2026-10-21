@@ -1,6 +1,8 @@
 # Bosses branch (brainstorm)
 
-Status: **a brainstorm; seven bosses are built.** On 10 October 2026 the owner chose to build a new boss "the same way" as Madame Tatterlace ([features/tatterlace.md](../features/tatterlace.md)); the Yeti King is first, to the plan below. The same day the owner asked for "the next boss same way" as him: the Cinder Tyrant, to his plan below. Both are built. On 13 October 2026 the owner chose the next: the Mire Hag, to her plan below, who is built too; and after her, the same day, the Crypt Lich, to his plan below, who is built too. On 14 October 2026 the owner chose the Iron Dreadnought, to his plan below, who is built too. The same day the owner chose the Alpha Werewolf, to his plan below. On 4 October 2026 the owner asked for variant weapons, many of them "drops from bosses ill make later", themed around those bosses ("example: Yeti King"), and to "brainstorm bosses we could make". This page is that brainstorm. The bosses' weapons already exist: Arms VII ([features/arms-vii.md](../features/arms-vii.md)) adds two trophies for each of the first eight bosses below, and their loot tables are ready (`data/jugcraft/loot_table/bosses/<boss>.json`, one of the two per roll). Building a boss is a separate, reviewed feature each time, in the order the Yeti King was built in: [BOSS_PLAYBOOK.md](BOSS_PLAYBOOK.md). Everything here is a proposal for the owner to pick from, change or drop.
+Status: **a brainstorm; eight bosses are built.** On 10 October 2026 the owner chose to build a new boss "the same way" as Madame Tatterlace ([features/tatterlace.md](../features/tatterlace.md)); the Yeti King is first, to the plan below. The same day the owner asked for "the next boss same way" as him: the Cinder Tyrant, to his plan below. Both are built. On 13 October 2026 the owner chose the next: the Mire Hag, to her plan below, who is built too; and after her, the same day, the Crypt Lich, to his plan below, who is built too. On 14 October 2026 the owner chose the Iron Dreadnought, to his plan below, who is built too. The same day the owner chose the Alpha Werewolf, to his plan below. On 4 October 2026 the owner asked for variant weapons, many of them "drops from bosses ill make later", themed around those bosses ("example: Yeti King"), and to "brainstorm bosses we could make". This page is that brainstorm. The bosses' weapons already exist: Arms VII ([features/arms-vii.md](../features/arms-vii.md)) adds two trophies for each of the first eight bosses below, and their loot tables are ready (`data/jugcraft/loot_table/bosses/<boss>.json`, one of the two per roll). Building a boss is a separate, reviewed feature each time, in the order the Yeti King was built in: [BOSS_PLAYBOOK.md](BOSS_PLAYBOOK.md). Everything here is a proposal for the owner to pick from, change or drop.
+
+The owner's Mars adventure, the Cydonian Sentinel, is also implemented: [feature record](../features/cydonian-sentinel.md).
 
 ## Rules every boss follows
 
@@ -728,6 +730,147 @@ He follows the rules every boss follows (above):
 - every opening costs a Howling Totem, and a full moon is never required to make or use one.
 
 Nothing a tier needs comes only from him: silver, leather and the werewolves' own pelts all come without him.
+## Adam-ondi-Ahman and the Cydonian Sentinel: the plan (being built)
+
+The owner's own boss, proposed on 14 October 2026: a peaceful valley near the start, modelled on Adam-ondi-Ahman, whose ancient altar opens a way to an instanced dungeon on Mars and a hard, multi-phase boss. The owner chose:
+- **the real name**, Adam-ondi-Ahman, for the valley and its altar;
+- **one valley near the start of every new world, and rare ones elsewhere**, with the rarity a setting;
+- **a crafted late-game key** to wake the altar;
+- **a boss at the top of the planning pack's envelope**, made harder by its mechanics rather than by numbers outside it.
+
+It is built by [the boss playbook](BOSS_PLAYBOOK.md), in three pull requests rather than two, because the summoning needs a place before it needs a lair:
+1. **Part 1, the valley and the altar** (this plan's first section): the biome, the knoll of altars and where they generate. The altar is there, and dormant. Record: [features/adam-ondi-ahman.md](../features/adam-ondi-ahman.md).
+2. **Part 2, the Sanctum and the keystone:** the lair on Mars, the Altar Keystone, and the rite that opens the way. Record: [features/cydonian-sanctum.md](../features/cydonian-sanctum.md), which says what changed in building it (among them the Concordance's recipe: dreamglass and an astrolabe).
+3. **Part 3, the Sentinel, its adds and its loot.** Record: [features/cydonian-sentinel.md](../features/cydonian-sentinel.md), which says what changed in building it (among them its trophies: the Corelance, a pike, and the Redstar Cleaver, a battle axe).
+
+The numbers here are the plan's. Each part's feature record says what changed in building it.
+
+### The place: Adam-ondi-Ahman
+
+The real Adam-ondi-Ahman stands on the bluffs above the Grand River in northern Missouri, where early accounts describe the ruins of stone altars on its hills, and where Latter-day Saints settled in 1838. Jugcraft's valley is modelled on that landscape:
+- **The valley:** a quiet, open river valley about 350 blocks across, of rolling prairie grass and wildflowers, goldenrod and a few springs, with oaks and birches standing alone or in twos and threes. It has four seasons. Monsters are few: every kind that spawns there spawns sparsely (vanilla's spawn costs, as in the soul sand valley). Rivers and lakes through it keep their own biomes, so the river is still a river.
+- **The knoll of altars:** at the valley's heart, a grassy knoll rising about nine blocks over the land, with a worn path up its south side. On its crown stand three altars of ancient stone, stacked: a broad, broken footing of mossy rubble; a second, smaller course of cracked and mossy stone blocks; and a third of carved stone. On the top lies the **Ancient Altar**, a stone older than the rest, carved with a red star.
+- **The old settlement:** at the knoll's foot, the log footings of two cabins, a fallen chimney, and a spring in a ring of stones.
+- **The Ancient Altar** cannot be broken, like an end portal frame. In part 1 it is dormant: used, it only says so ("The altar is dormant. Its oldest stone is carved with a red star."). Everything else on the knoll is ordinary stone, logs and earth.
+
+**Where it is:**
+- **Near the start:** one valley in every new world, 800 to 1,600 blocks from the world's start, on suitable land (below). It is chosen once, on the world's first start, after Alpine Spawn and the town have settled, and saved. Only the land's noise is read to choose it, so no chunk is generated to do so.
+- **Elsewhere, rare:** the Overworld is divided into cells 3,072 blocks square. Half of them (chosen by the seed) try up to six places, inset from the cell's edges, and the first whose land is suitable becomes a valley. The cell size (`adam_ondi_ahman.spacing`) and the share (`adam_ondi_ahman.chance`) are settings.
+- **Suitable land:** inland and dry; temperate (not frozen, not desert-hot); neither the peaks nor a river's bed; and gentle, so the knoll does not sit on a cliff. A place that fails is skipped, and the cell tries its next.
+- `/locate biome jugcraft:adam_ondi_ahman` finds the nearest valley.
+
+### The way to Mars: the Altar Keystone (part 2)
+
+1. Craft an **Altar Keystone**. There are two recipes, so that neither specialty is forced through the other. The factories' recipe uses titanium and tungsten ingots and advanced circuits; the Concordance's uses a late reagent of its own. Both are settled in part 2, from things players already make.
+2. At night, set it into the Ancient Altar: use it on the altar.
+3. The three altars kindle with red fire one after another (3 seconds), and a column of red light rises from the top. A **red mist** opens over the altar, and you step through onto Mars, into the Sanctum's gate chamber. The keystone crumbles to dust.
+4. For 60 seconds the mist stays, and anyone who uses it follows. Nobody is taken in by standing near it.
+5. By day, with the mist already open, or with every instance of the Sanctum taken, the keystone only says why, and nothing is used up.
+
+It works all year, and is no Witching Season boss.
+
+### The Cydonian Sanctum (part 2)
+
+Ruins under the butterscotch sky of Cydonia on Mars, cut into red rock. Two small moons hang over the crater: Phobos, and Deimos further off. The air is thin and the ground light: in the Sanctum everyone jumps higher (Jump Boost I) and takes half damage from falls.
+- **The gate chamber, the arrival:** a hall cut into the rock. The red mist hangs in an arch behind the arrival: the way home. It is safe.
+- **The Dust Gallery:** a corridor about 40 blocks long with two hazards and a puzzle:
+  - **dust vents** in its floor hiss and puff on a fixed rhythm. Read by a hiss and a rising wisp (1 s), a puff deals 3 damage and throws you back;
+  - **the Star Door** at its end is carved with three constellations. Three **star dials** stand along the gallery's walls. Turn each one (use it) until its carved stars match one of the door's; the door's figures light as they are matched, and when all three are lit the door grinds open. Any player can do it.
+- **The crater, the arena:** a crater about 44 blocks across of red sand and rust-red rock, ringed by its rim wall.
+  - **Four standing stones** stand round it, carved like the altar: shelter from the storm (his rule).
+  - **The Sentinel's plinth** is on the north rim, where it waits.
+  - **Small craters** scattered on the floor are where his sentries rise.
+
+The lair-only blocks are fixtures like the other lairs': unbreakable, no items, no drops. Only the star dials and the red mist can be used.
+
+### The fight (part 3)
+
+**The Cydonian Sentinel:** *a construct four blocks tall of red stone plates and rusted iron, built round a floating core of red light. Its arms are pillars, its face a carved visor, and the altar's red star is cut into its chest.*
+
+It has 480 health, scaled for the party: half as much again for each player after the first, at most two and a half times. Its shell gives armour 12. Knockback, falls, fire, drowning, poison and wither never harm it.
+
+It waits on its plinth, a statue with its core dark. It wakes when a player who can fight it steps onto the crater floor, or strikes it: its core flares, and it steps down (2.5 s, unhurt meanwhile). It keeps to its crater: more than 30 blocks from the centre, it strides back.
+
+**Its rule: the Red Storm and the standing stones.** Every 35 seconds (25 from phase 2, 20 in phase 3, 15 in the enrage) it calls the storm.
+- **The tell (2.5 s):** it plants its arms and the sky reddens. Dust streams in from one side of the crater, and the bar over the screen names it ("The storm comes from the east").
+- **The storm (6 s):** a scouring wind crosses the crater from that side. Anyone not sheltered in the lee of a standing stone, or under the rim on the windward side, takes 2 damage every half second and is pushed downwind.
+- **There is always shelter:** the stones are spaced so that from anywhere on the floor the lee of one is within 12 blocks.
+
+**Its weak point: the core.** When it charges its Core Lance, its chest plates open. While they are open its core takes double damage, and its armour does not count. The first blow, arrow or thrown weapon of 6 damage or more during the wind-up staggers it (2 s) and the lance fails.
+
+**Phase 1, "The Sentinel"** (full health to 60%):
+
+| Attack | Read it by | What it does |
+| --- | --- | --- |
+| Hammerfall | It raises both fists (0.8 s) | A two-fisted slam in front of it: 14 damage within 3 blocks, a knockback within 6 |
+| Shard Volley | Rust shards bristle along its arms (0.7 s) | Five shards in a fan at its foe, 24 blocks: 5 damage each |
+| Quake Line | It stamps, and a glowing crack runs at its foe (1.0 s) | Spikes of red rock burst up along a 14-block line: 10 damage, thrown up |
+| Core Lance | Its chest plates open, the core brightening (1.2 s) | A beam 16 blocks long at its foe for 1.5 s: 4 damage each quarter-second. The core is open (above) |
+
+**At 60%, "The Shell Cracks":** it roars for 3 seconds, unhurt, and two **Shard Sentries** rise from the craters. Then the fight changes.
+
+**Phase 2, "The Red Storm"** (60% to 25%): it keeps every attack, and adds:
+
+| Attack | Read it by | What it does |
+| --- | --- | --- |
+| Sentry Call | It raises a fist and the craters glow (1.0 s) | Two Shard Sentries rise; at most four at a time |
+| Storm Shards | During its storm, shards ride the wind (the storm's own tell) | Its Shard Volley thrown downwind reaches the whole crater |
+
+**Shard Sentries:** fist-sized stones circling a red spark, 16 health. They float slowly after the nearest player and shoot a slow shard (3 damage) every 3 seconds. They drop nothing and crumble when it falls, resets or is gone. Whoever hurts one has taken part in its fight.
+
+**At 25%, "The Unbound Core":** its shell bursts apart (3 s, unhurt). The core floats free, a red-hot sphere wreathed in orbiting shards, about two blocks over the floor. With no shell its armour is 4, and it is faster. Its attacks:
+
+| Attack | Read it by | What it does |
+| --- | --- | --- |
+| Sweeping Lance | It turns, and its light gathers (1.0 s) | A beam sweeps 90° over 2 s: 4 damage each quarter-second. It is always open now, but nothing staggers it |
+| Shard Burst | Its orbit spins faster, whining (0.8 s) | Twelve shards fly outward: 6 damage each. A standing stone is cover |
+| Starfall | Red marks glow on the ground round each player (2.0 s) | Meteors strike the marks: 10 damage within 2 blocks. Afterwards it sinks to the ground for 3 s, dimmed: the moment for blows |
+
+**Below 10%, "Red Giant":** every cooldown, and its pause between attacks, is a third shorter. Its storm comes every 15 seconds, and its Starfall marks two places round each player.
+
+**Left alone** for 10 seconds, it strides back to its plinth and reforms, healed. Its sentries crumble, and who hurt it is forgotten.
+
+### Its loot (per participant)
+
+A participant is a player who hurt it or its sentries, and is within 64 blocks of the crater's centre when it falls.
+
+| Loot | Chance |
+| --- | --- |
+| **Cydonian Shards**, red crystal from its shell | 4 to 8, always |
+| **A trophy:** one of its two (below) | 15%; certain on a player's first kill |
+| **The Lowfall Core** | 25% |
+| **The Sentinel's Visor** | 20% |
+| 400 experience, shared out | always |
+| The advancement **Red Planet** | always |
+
+- **Cydonian Shards:** a cheaper Altar Keystone (its part of what summons it again). For those who never fight it, the Crusher grinds a shard into rare earth oxide, a second source of a material the factories already use. No recipe makes shards back.
+- **The Lowfall Core:** held in the offhand, you fall as on Mars: slowly, and with no fall damage.
+- **The Sentinel's Visor:** a costume worn on the head, its carved visor in small.
+- **The trophies:** it is not one of the first eight, so its two trophies are new, made the way Arms VII's are ([features/arms-vii.md](../features/arms-vii.md)), with a **Rust** boon: a struck foe's armour counts for less for a few seconds. A lance and a war axe are proposed; part 3 settles them.
+- When it falls, its core gutters out, the storm dies, and the red mist opens in the crater's middle, the way home.
+
+### The shared lair contract
+
+- **Arrival, staging, waking and return:** the gate chamber and the gallery are safe from it. It wakes when a player steps onto the crater floor or strikes it. The red mist in the gate chamber is always the way home, and it opens in the crater when it falls.
+- **Fixtures:** the star dials, the Star Door, which opens itself, and the red mist. Nothing else can be used, built or broken.
+- **The floor:** the Sanctum owns it. The Star Door is the only block that changes, and each instance is placed fresh. Its storms, shards, spikes and meteors are its own, not blocks.
+- **Who fights:** players who may fight a lair's boss (`LairBosses`), with party health as above.
+- **Reset:** when no eligible player is left, or it is left alone for 10 seconds.
+- **Clean-up:** its sentries, shards, spikes and meteors are its own, capped, and gone with it.
+- **Death, disconnect and restart:** as every lair. Grave Goods keep what a player falls with, and instances close on a restart. Each participant's loot is rolled once when it falls.
+- **An ordinary player** can do everything: dials are turned by using them, the storm's side is shown by the dust and the words over the screen, the stones are cover from it, its core is open to any weapon, and every attack is read before it lands.
+
+### Rules kept
+
+It follows the rules every boss follows (above):
+- its crater is its arena, and resets when everyone leaves;
+- every big attack is read before it lands, and there is always shelter from its storm;
+- dying there keeps everything as Grave Goods;
+- its health scales with the party, and every participant rolls its loot;
+- nothing in the Sanctum can be built or broken;
+- every opening costs an Altar Keystone.
+
+Nothing a tier needs comes only from it. The valley in the Overworld is never an arena: nothing fights there, and nothing there is changed by the fight.
 
 ## More bosses to consider (no trophies yet)
 

@@ -1,0 +1,33 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "adam_ondi_ahman"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "DAD",
+    "RSR",
+    " D "
+  ],
+  "key": {
+    "D": "jugcraft:dreamglass",
+    "A": "jugcraft:astrolabe",
+    "R": "minecraft:redstone",
+    "S": "minecraft:chiseled_stone_bricks"
+  },
+  "result": {
+    "id": "jugcraft:altar_keystone",
+    "count": 1
+  }
+}

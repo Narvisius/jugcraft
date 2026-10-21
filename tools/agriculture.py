@@ -19,6 +19,7 @@ import decor17
 import decor18
 import decor19
 import decor20
+import adam_ondi_ahman
 import lairs
 import tatterlace
 import yeti_king
@@ -27,6 +28,7 @@ import mire_hag
 import crypt_lich
 import iron_dreadnought
 import alpha_werewolf
+import cydonian_sentinel
 import vesperine
 import kitchen
 import feasts
@@ -2770,7 +2772,7 @@ def itemless_blocks():
     """Blocks without an item of their own: the item that plants them (or the pumpkins they drop) stands in for them."""
     return (crop_blocks() + stem_blocks() + [CRANBERRY["block"], CHESTNUT["sapling"], CIDER["tree"]["sapling"]] + giant_blocks()
             + [potted(m) for m in MUMS] + [potted(WOLFSBANE["block"])] + [MAZE["finish"], MAZE["corn"]] + plants.itemless() + list(feasts.PLACED_PIES) + menu.blocks() + rice.itemless() + soil.itemless() + orchard.itemless() + garden.itemless()
-            + herbs.itemless() + lairs.itemless_blocks())
+            + herbs.itemless() + lairs.itemless_blocks() + adam_ondi_ahman.blocks_registered())
 
 
 HANGING_FRUIT_BLOCKS = ["baobab_pod", "date_cluster"]
@@ -2786,7 +2788,7 @@ def all_blocks():
             + decor4_blocks() + decor5_blocks() + decor6_blocks() + decor7_blocks() + decor8_blocks() + decor9_blocks() + decor10_blocks()
             + decor11_blocks() + decor12_blocks() + decor13_blocks() + decor14_blocks() + chandlery_blocks() + cider_blocks() + pantry_blocks()
             + firework_blocks() + feast_blocks() + maze_blocks() + candy_blocks() + foraging_blocks() + bat_blocks() + [KNITTING["wheel"]] + pie_blocks() + [SPIRIT_BOARD["block"], TURKEYS["roast"], THEREMIN["block"], OFRENDA["block"]] + list(OFRENDA["decor"]) + graveyard.blocks() + [WOLFSBANE["block"], potted(WOLFSBANE["block"])] + WEREWOLF_RUGS + midway.blocks() + ferris_wheel.blocks() + hot_air_balloon.blocks() + plants.blocks() + decor15.blocks() + decor16.blocks() + decor17.blocks() + decor18.blocks() + decor19.blocks() + decor20.blocks() + kitchen.blocks() + feasts.blocks() + menu.blocks() + rice.blocks() + soil.blocks() + orchard.blocks() + cakes.blocks() + pies_and_tarts.blocks() + milkshakes.blocks() + garden.blocks()
-            + herbs.blocks() + spices.blocks() + lairs.blocks() + vesperine.blocks())
+            + herbs.blocks() + spices.blocks() + lairs.blocks() + vesperine.blocks() + adam_ondi_ahman.blocks_registered())
 
 
 def all_items():
@@ -2800,7 +2802,7 @@ def all_items():
             + lantern_items() + feast_blocks() + [MAZE["gate"]] + ghost_items() + face_paint_items() + candy_items() + foraging_items() + bat_items() + knitting_items() + pie_items() + [SPIRIT_BOARD["block"], TURKEYS["roast"], THEREMIN["block"], OFRENDA["block"]] + list(OFRENDA["decor"]) + graveyard.items() + [h["item"] for h in HEX["brews"].values()] + [BROOMSTICK["item"]] + [WOLFSBANE["block"], WEREWOLF["dagger"], WEREWOLF["arrow"]] + WEREWOLF_PELTS + WEREWOLF_RUGS + [SQUIRRELS["acorn"]] + midway.items() + ferris_wheel.items() + pinata.items() + hot_air_balloon.items() + leaf_blower.items() + plants.items() + decor15.items() + decor16.items() + decor17.items() + decor18.items() + decor19.items() + decor20.items() + kitchen.items() + feasts.items() + rice.items() + soil.items() + orchard.items() + [i for i in cakes.items() if i not in cakes.ITEMS] + pies_and_tarts.items() + garden.items()
             + herbs.items() + spices.items() + lairs.items() + vesperine.items() + tatterlace.items()
             + yeti_king.items() + cinder_tyrant.items() + mire_hag.items() + crypt_lich.items()
-            + iron_dreadnought.items() + alpha_werewolf.items())
+            + iron_dreadnought.items() + alpha_werewolf.items() + cydonian_sentinel.items())
 
 
 def owns(entry_id):

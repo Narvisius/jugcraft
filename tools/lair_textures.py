@@ -6,6 +6,7 @@ Cinder Kiln's blocks and the Kiln Seal; from tools/lantern_fen_textures.py, the 
 from tools/crypt_archive_textures.py, the Archive of Last Names' fixtures and the Writ of Exhumation; from
 tools/foundry_trench_textures.py, the Foundry Trench's fixtures and Sealed Orders; and from
 tools/moonlit_ring_textures.py, the Moonlit Ring's leaves and Warden Bells and the Howling Totem.
+Also includes the Cydonian Sanctum fixtures and Altar Keystone from tools/cydonian_sanctum_textures.py.
 Painted here by code, 16 x 16, in the clean
 style of the Witching Season: a few flat tones per material, crisp edges, no noise for its own sake. Called from
 tools/crop_textures.py. No Mojang texture is read, traced or copied.
@@ -310,6 +311,7 @@ def lair_textures():
     from crypt_archive_textures import crypt_archive_textures
     from foundry_trench_textures import foundry_trench_textures
     from moonlit_ring_textures import moonlit_ring_textures
+    from cydonian_sanctum_textures import cydonian_sanctum_textures
     from glacier_hall_textures import glacier_hall_textures
     from lantern_fen_textures import lantern_fen_textures
     from spindle_loft_textures import spindle_loft_textures
@@ -321,6 +323,7 @@ def lair_textures():
         **crypt_archive_textures(),
         **foundry_trench_textures(),
         **moonlit_ring_textures(),
+        **cydonian_sanctum_textures(),
         ("block", "blighted_soil_top"): soil(21, top=True),
         ("block", "blighted_soil_side"): soil_side(),
         ("block", "blighted_soil"): soil(23),

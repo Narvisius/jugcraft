@@ -3,6 +3,7 @@ package io.github.jimbozoomer.jugcraft.mixin;
 import com.mojang.datafixers.util.Pair;
 import io.github.jimbozoomer.jugcraft.biome.JugcraftRegions;
 import io.github.jimbozoomer.jugcraft.biome.BiomeBootstrapScope;
+import io.github.jimbozoomer.jugcraft.world.AdamOndiAhman;
 import io.github.jimbozoomer.jugcraft.world.AlpineSpawn;
 import io.github.jimbozoomer.jugcraft.world.PixelHollows;
 import java.util.function.Consumer;
@@ -23,7 +24,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * place a new Overworld biome, so this is the one hook needed. Vanilla's meadows come out as Alpine Spawn (the
  * builder's output is wrapped before vanilla adds anything), and so do the cool plateau's forest and taiga (picked
  * where the builder chooses plateau biomes, so lowland forest and taiga are untouched). The Pixel Hollows is appended
- * after vanilla's own. The Jugcraft regions record their layout from the same output and list their biomes
+ * after vanilla's own, and Adam-ondi-Ahman listed where no climate reaches it (its valleys are placed round their sites,
+ * {@link AdamOndiAhman}). The Jugcraft regions record their layout from the same output and list their biomes
  * ({@link JugcraftRegions}).
  */
 @Mixin(OverworldBiomeBuilder.class)
@@ -60,6 +62,7 @@ public abstract class OverworldBiomeBuilderMixin {
 	private void jugcraft$addPixelHollows(Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> biomes, CallbackInfo ci) {
 		if (BiomeBootstrapScope.isVanillaOnly()) return;
 		PixelHollows.addToOverworld(jugcraft$output != null ? jugcraft$output : biomes);
+		AdamOndiAhman.addToOverworld(jugcraft$output != null ? jugcraft$output : biomes);
 		if (jugcraft$recorder != null) {
 			jugcraft$recorder.finish();
 		}

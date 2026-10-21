@@ -281,6 +281,10 @@ public class ArmItem extends Item {
 				target.addEffect(new MobEffectInstance(MobEffects.GLOWING, ArmVariants.MARK_TICKS, 0), attacker);
 				level.sendParticles(ParticleTypes.ENCHANT, target.getX(), y, target.getZ(), 10, 0.3, 0.4, 0.3, 0.3);
 			}
+			case RUST -> {
+				target.addEffect(new MobEffectInstance(ArmVariants.RUSTED, ArmVariants.RUST_TICKS, ArmVariants.RUST_AMPLIFIER), attacker);
+				level.sendParticles(ParticleTypes.CRIMSON_SPORE, target.getX(), y, target.getZ(), 10, 0.3, 0.4, 0.3, 0.02);
+			}
 			default -> {
 			}
 		}

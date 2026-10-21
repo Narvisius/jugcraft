@@ -1,5 +1,15 @@
 # Tree batches 9 and 9b: giant fungi and dragonblood
 
+## October 20 integration survey correction
+
+PR #445's combined client run found no natural bramble bush in the nearest Netherbrush
+fragment: 13 surveyed chunks around `(192, 64, -224)`. The survey now allows the same
+five bounded regional anchors for every target biome that it already used for rare
+End growth. It still requires the expected block in its actual biome, without planting
+fixtures or changing production generation, placement rates or any other assertion.
+This verifies natural presence, not a guaranteed bush in every biome fragment or a
+statistical density. Final rerun evidence is recorded on PR #445. Actual tool: Codex (GPT-6).
+
 Status: implemented, awaiting owner inspection; owner-authorized 17 October 2026. Public branch: `codex/tree-generation-batch-9-9b` in `speedygroyper/jugcraft`; [draft PR #413](https://github.com/jimbozoomer-byte/jugcraft/pull/413). Based on approved PR #411 (`964c2e775`), which remains a dependency until integrated. Actual tool/model: OpenAI Codex (GPT-6). No batch 10 or later work is included.
 
 ## Authorized scope

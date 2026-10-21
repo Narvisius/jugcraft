@@ -75,6 +75,10 @@ MOON = M((42, 34, 70), (82, 72, 128), (126, 114, 180), (170, 160, 220), (208, 20
 # headdress and the amethyst at her brow.
 NEEDLE = M((22, 30, 48), (52, 66, 92), (90, 108, 138), (132, 152, 182), (180, 196, 222), (232, 240, 252))
 VELVET = M((40, 6, 14), (72, 12, 24), (104, 20, 36), (140, 30, 48), (176, 50, 66), (206, 84, 96), shine=False)
+# The Cydonian Sentinel's: red crystal from its shell, rusted iron, red Martian stone (its core's light is MAGMA's).
+CYDONIAN_CRYSTAL = M((46, 8, 10), (80, 14, 18), (140, 30, 28), (186, 52, 40), (226, 92, 64), (250, 160, 130))
+RUST_IRON = M((36, 22, 14), (58, 36, 22), (98, 58, 30), (134, 82, 40), (170, 112, 56), (204, 150, 92))
+MARS_STONE = M((44, 18, 12), (70, 30, 20), (116, 52, 32), (154, 74, 44), (190, 104, 64), (222, 142, 98), shine=False)
 AMETHYST = M((40, 16, 62), (70, 32, 104), (104, 54, 150), (146, 92, 196), (190, 144, 232), (232, 204, 252))
 
 # The Sentinel's, from the owner's design (as armor_paint.SENTINEL): gold from brown to cream, brown leather, and the
@@ -111,6 +115,7 @@ LEVIATHAN = Style(SEABRONZE, SEABRONZE, px.LEATHER, px.DARK_WOOD, PEARL, PEARL, 
 HADES = Style(SLATE, ASHEN, BLOOD, NIGHT, BLOOD, SOOT, BLOOD)
 VESPER = Style(MOON, SILVER, BLOOD, OBSIDIAN, MOONSTONE, MOONSTONE, BLOOD)
 TATTER = Style(NEEDLE, GOLD, VELVET, px.DARK_WOOD, AMETHYST, VELVET, VELVET)
+SENTINEL_CORE = Style(CYDONIAN_CRYSTAL, RUST_IRON, DARK_IRON, MARS_STONE, MAGMA, MAGMA, RUST_IRON)
 
 SENTINEL = Style(SENTINEL_GOLD, SENTINEL_GOLD, SENTINEL_LEATHER, SENTINEL_LEATHER, SENTINEL_JET, SENTINEL_GOLD,
                  SENTINEL_LEATHER)
@@ -120,6 +125,7 @@ REAPER = Style(REAPER_BONE, REAPER_SLATE, REAPER_SLATE, REAPER_BONE, REAPER_SLAT
 # Each line's materials, by its name in tools/arms_variants.py (a variant's 16x16 icon is coloured from them).
 LINE_STYLES = {"gilded": GILDED, "ironclad": IRONCLAD, "bonecarved": BONECARVED, "runebound": RUNEBOUND,
                "yeti_king": YETI, "cinder_tyrant": CINDER, "mire_hag": HAG, "crypt_lich": LICH,
+               "cydonian_sentinel": SENTINEL_CORE,
                "iron_dreadnought": DREADNOUGHT, "werewolf_alpha": WEREWOLF, "storm_roc": ROC,
                "abyssal_leviathan": LEVIATHAN, "vesperine": VESPER, "tatterlace": TATTER, "hades": HADES, "sentinel": SENTINEL, "frost_knight": FROST_KNIGHT,
                "wight_king": WIGHT_KING, "reaper": REAPER}
@@ -611,6 +617,43 @@ def gravewarden():
     return d
 
 
+# ---------------------------------------------------------------- the Cydonian Sentinel
+
+
+def corelance():
+    """A pike of red Martian stone, its guard rusted iron round a burning core, its point red crystal."""
+    st = SENTINEL_CORE
+    d = Design(36, grip=9.0)
+    d.disc(1.0, 0.0, 1.0, RUST_IRON, depth=2.0)
+    d.strip(1.0, 8.0, 0.9, material=MARS_STONE, depth=1.8)
+    grip(d, 8.0, 11.0, 1.0, st, period=1.5)
+    d.poly([(11.0, -0.9), (12.4, -3.6), (13.6, -3.6), (13.6, 3.6), (12.4, 3.6), (11.0, 0.9)], RUST_IRON, depth=3.0)
+    d.disc(12.6, 0.0, 1.3, MAGMA, depth=3.4, z=1, part="core")
+    d.strip(13.6, 30.5, lambda s: 1.9 - 1.2 * (s - 13.6) / 16.9, material=MARS_STONE, depth=2.4, stripes=(3.0, MID))
+    d.poly([(29.0, -1.0), (36.0, 0.0), (29.0, 1.0)], CYDONIAN_CRYSTAL, depth=1.8, part="point")
+    d.strip(29.0, 30.0, 1.0, material=RUST_IRON, depth=2.0, z=1)
+    return d
+
+
+def redstar_cleaver():
+    """A battle axe: a haft of red stone bound in rusted iron, a broad bit of red crystal with the red star burning in
+    it."""
+    st = SENTINEL_CORE
+    d = Design(42, grip=7.5)
+    d.disc(1.0, 0.0, 1.3, RUST_IRON, depth=2.4)
+    d.strip(1.0, 41.0, 0.85, material=MARS_STONE, depth=1.8)
+    grip(d, 1.8, 12.0, 1.05, st)
+    socket(d, 31.0, 39.5, 1.3, st)
+    d.poly([(39.5, 1.3), (42.0, 3.0), (42.0, 11.5), (28.0, 11.5), (28.0, 8.0), (31.0, 1.3)], CYDONIAN_CRYSTAL,
+           depth=1.3, part="bit")
+    d.strip(28.0, 42.0, -10.4, 11.5, material=CYDONIAN_CRYSTAL, depth=1.3, z=1, tone=HIGHLIGHT, part="edge")
+    # The red star in the bit.
+    d.poly([(35.0, 4.4), (35.7, 6.2), (37.6, 6.2), (36.1, 7.3), (36.7, 9.1), (35.0, 8.0), (33.3, 9.1), (33.9, 7.3),
+            (32.4, 6.2), (34.3, 6.2)], MAGMA, depth=1.6, z=2, part="star")
+    d.poly([(37.0, -1.3), (39.5, -4.8), (35.5, -4.0), (33.5, -1.3)], RUST_IRON, depth=1.2)
+    return d
+
+
 # ---------------------------------------------------------------- the Iron Dreadnought
 
 
@@ -1018,6 +1061,7 @@ DESIGNS = {name: fn for name, fn in globals().items() if callable(fn) and name i
     "ironclad_war_pick", "ironclad_battle_axe", "bonecarved_dagger", "bonecarved_flail", "bonecarved_glaive",
     "bonecarved_labrys", "runebound_nodachi", "runebound_moonblade", "runebound_staff", "runebound_war_hammer",
     "glacier_maul", "rimeclaw", "cinderbrand", "magmaw", "hagthorn", "bogfang", "soulreaver", "gravewarden",
+    "corelance", "redstar_cleaver",
     "dynamo_halberd", "piston_hammer", "moonfang", "howler", "stormcaller", "galefeather", "tidebreaker",
     "leviathans_hook", "vesper_scythe", "needle_rapier", "hades_scythe", "sentinel_longsword", "frost_knight_greatsword", "wight_king_zweihander",
     "reaper_scythe")}

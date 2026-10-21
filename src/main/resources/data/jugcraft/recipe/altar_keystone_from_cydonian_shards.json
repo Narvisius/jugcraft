@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "adam_ondi_ahman"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:cydonian_shard",
+    "jugcraft:cydonian_shard",
+    "jugcraft:cydonian_shard",
+    "jugcraft:cydonian_shard",
+    "minecraft:chiseled_stone_bricks",
+    "minecraft:redstone"
+  ],
+  "result": {
+    "id": "jugcraft:altar_keystone",
+    "count": 1
+  }
+}

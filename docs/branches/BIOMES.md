@@ -197,6 +197,10 @@ Every page in the catalog, what Jugcraft does with it, and in which batch. "Remo
 | Woodland | Overworld | current | Woodland | 5 |  |
 | Xeric Shrubland | Overworld | current | Xeric Shrubland | 4 |  |
 
+## Beyond the catalog
+
+- **Adam-ondi-Ahman** ([features/adam-ondi-ahman.md](../features/adam-ondi-ahman.md)): the owner's own biome, not from the catalog. A quiet river valley round a knoll of stone altars, modelled on the real Adam-ondi-Ahman. It is placed round its sites (one near every new world's start, rare ones elsewhere) rather than by a region rule, so it is in no layout. Its altar is the way to the Mars boss planned in [BOSSES.md](BOSSES.md).
+
 ## Open questions
 - Region size and share are first guesses; the batch 1 client test logs how far the first world has to go to find each new biome.
 - Marrow Heap (the catalog's Visceral Heap and Parasitic Heap) should be bone and gristle rather than gore, to suit Jugcraft's cozy tone.

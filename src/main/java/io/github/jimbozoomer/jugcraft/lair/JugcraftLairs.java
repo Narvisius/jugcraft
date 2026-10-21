@@ -24,9 +24,9 @@ import net.minecraft.world.level.material.PushReaction;
 /**
  * The lairs' registrations (docs/features/hollow-acre.md, docs/features/spindle-loft.md, docs/features/glacier-hall.md,
  * docs/features/cinder-kiln.md, docs/features/lantern-fen.md, docs/features/crypt-archive.md,
- * docs/features/foundry-trench.md, docs/features/moonlit-ring.md): the lair-only blocks (unbreakable, no items, no
+ * docs/features/foundry-trench.md, docs/features/moonlit-ring.md, docs/features/cydonian-sanctum.md): the lair-only blocks (unbreakable, no items, no
  * drops), the Mourning Wreath and the Death Knell of the Last Rites, the Cursed Spindle, the Frost Horn, the Kiln Seal,
- * the Hag Stone, the Writ of Exhumation, Sealed Orders, the Howling Totem, the Mist Gate, and the lairs' events, rules,
+ * the Hag Stone, the Writ of Exhumation, Sealed Orders, the Howling Totem, the Altar Keystone, the Mist Gate, and the lairs' events, rules,
  * rituals and commands. Registered whatever the
  * feature switch says, so saved worlds keep them; the switch
  * ({@value #FEATURE}) stops the rituals.
@@ -76,6 +76,11 @@ public final class JugcraftLairs {
 	public static Block MOONWOOD_LEAVES;
 	public static Block WARDEN_BELL;
 	public static Block RAKED_TURF;
+	public static Block RED_MIST;
+	public static Block STAR_STONE;
+	public static Block STAR_DIAL;
+	public static Block STAR_DOOR;
+	public static Block DUST_VENT;
 	public static Block MOURNING_WREATH;
 	public static Item MOURNING_WREATH_ITEM;
 	public static Item DEATH_KNELL;
@@ -86,6 +91,7 @@ public final class JugcraftLairs {
 	public static Item EXHUMATION_WRIT;
 	public static Item SEALED_ORDERS;
 	public static Item HOWLING_TOTEM;
+	public static Item ALTAR_KEYSTONE;
 	public static EntityType<MistGateEntity> MIST_GATE;
 
 	private JugcraftLairs() {
@@ -149,6 +155,14 @@ public final class JugcraftLairs {
 		MOONWOOD_LEAVES = fixture("moonwood_leaves", Block::new, MapColor.PLANT, SoundType.GRASS, 0, Fit.SEE_THROUGH);
 		WARDEN_BELL = fixture("warden_bell", WardenBellBlock::new, MapColor.METAL, SoundType.ANVIL, 0, Fit.SEE_THROUGH);
 		RAKED_TURF = fixture("raked_turf", RakedTurfBlock::new, MapColor.PLANT, SoundType.MOSS, 0, Fit.SOLID);
+		// The Cydonian Sanctum's (docs/features/cydonian-sanctum.md): its way home, its carved stones, its dials and door
+		// (the door's figures burn as the dials match them), and its dust vents.
+		RED_MIST = fixture("red_mist", LairExitBlock::new, MapColor.COLOR_RED, SoundType.WOOL, 6, Fit.PASSABLE);
+		STAR_STONE = fixture("star_stone", Block::new, MapColor.TERRACOTTA_RED, SoundType.STONE, 0, Fit.SOLID);
+		STAR_DIAL = fixture("star_dial", StarDialBlock::new, MapColor.TERRACOTTA_RED, SoundType.STONE, 0, Fit.SOLID);
+		STAR_DOOR = fixture("star_door", p -> new StarDoorBlock(p.lightLevel(StarDoorBlock::light)), MapColor.TERRACOTTA_RED,
+				SoundType.STONE, 0, Fit.SOLID);
+		DUST_VENT = fixture("dust_vent", Block::new, MapColor.TERRACOTTA_RED, SoundType.STONE, 0, Fit.SOLID);
 
 		ResourceKey<Block> wreathKey = ResourceKey.create(Registries.BLOCK, Jugcraft.id("mourning_wreath"));
 		MOURNING_WREATH = Registry.register(BuiltInRegistries.BLOCK, wreathKey, new MourningWreathBlock(BlockBehaviour.Properties.of()
@@ -177,6 +191,9 @@ public final class JugcraftLairs {
 		ResourceKey<Item> totemKey = ResourceKey.create(Registries.ITEM, Jugcraft.id("howling_totem"));
 		HOWLING_TOTEM = Registry.register(BuiltInRegistries.ITEM, totemKey, new HowlingTotemItem(new Item.Properties().stacksTo(16)
 				.setId(totemKey)));
+		ResourceKey<Item> keystoneKey = ResourceKey.create(Registries.ITEM, Jugcraft.id("altar_keystone"));
+		ALTAR_KEYSTONE = Registry.register(BuiltInRegistries.ITEM, keystoneKey, new AltarKeystoneItem(new Item.Properties()
+				.stacksTo(16).setId(keystoneKey)));
 
 		ResourceKey<EntityType<?>> gateKey = ResourceKey.create(Registries.ENTITY_TYPE, Jugcraft.id("mist_gate"));
 		MIST_GATE = Registry.register(BuiltInRegistries.ENTITY_TYPE, gateKey, EntityType.Builder.<MistGateEntity>of(MistGateEntity::new,
@@ -189,6 +206,8 @@ public final class JugcraftLairs {
 		SpindleRite.register();
 		ExhumationRite.register();
 		OrdersRite.register();
+		AltarKeystoneRite.register();
+		CydonianSanctum.register();
 		LairCommands.register();
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(output -> {
 			output.accept(DEATH_KNELL);
@@ -199,6 +218,7 @@ public final class JugcraftLairs {
 			output.accept(EXHUMATION_WRIT);
 			output.accept(SEALED_ORDERS);
 			output.accept(HOWLING_TOTEM);
+			output.accept(ALTAR_KEYSTONE);
 		});
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output -> output.accept(MOURNING_WREATH_ITEM));
 	}

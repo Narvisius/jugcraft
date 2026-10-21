@@ -688,6 +688,11 @@ def _crusher():
          "features": [FEATURE]},
         {"input": "minecraft:gravel", "output": "minecraft:sand", "count": 1, "ticks": 100, "features": [FEATURE]},
     ]
+    # Boss loot for those who never fight its boss: the Cydonian Sentinel's shards (tools/cydonian_sentinel.py CRUSHING).
+    from cydonian_sentinel import CRUSHING
+    for item, info in CRUSHING.items():
+        recipes.append({"input": f"jugcraft:{item}", "output": info["result"], "count": info["count"], "ticks": info["time"],
+                        "features": list(info["features"])})
     return recipes
 
 

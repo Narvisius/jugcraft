@@ -33,6 +33,8 @@ GENERATED_DIRS = [
     DATA / MOD / "loot_table", DATA / MOD / "recipe", DATA / MOD / "worldgen",
     # The lairs' dimensions and templates (tools/lair_data.py).
     DATA / MOD / "dimension", DATA / MOD / "dimension_type", DATA / MOD / "structure" / "lair",
+    # Adam-ondi-Ahman's knoll (tools/adam_ondi_ahman_data.py).
+    DATA / MOD / "structure" / "adam_ondi_ahman",
     DATA / "c" / "tags", DATA / "minecraft" / "tags", RES / MOD, PACKS,
     DATA / MOD / "villager_trade", DATA / MOD / "trade_set", DATA / MOD / "tags" / "villager_trade",
     RES / "assets" / "minecraft",

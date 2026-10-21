@@ -1,0 +1,42 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "adam_ondi_ahman"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "titanium"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "tungsten"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TWT",
+    "RSR",
+    " C "
+  ],
+  "key": {
+    "T": "jugcraft:titanium_ingot",
+    "W": "jugcraft:tungsten_ingot",
+    "R": "minecraft:redstone",
+    "S": "minecraft:chiseled_stone_bricks",
+    "C": "jugcraft:advanced_circuit"
+  },
+  "result": {
+    "id": "jugcraft:altar_keystone",
+    "count": 1
+  }
+}

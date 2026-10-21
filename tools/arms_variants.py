@@ -69,6 +69,9 @@ BOSSES = {
     "crypt_lich": {"display": "the Crypt Lich", "lair": "crypt_archive"},
     # Fought in the Foundry Trench (docs/features/iron-dreadnought.md); his loot drops one of his two.
     "iron_dreadnought": {"display": "the Iron Dreadnought", "lair": "foundry_trench"},
+    # Fought in the Cydonian Sanctum on Mars (docs/features/cydonian-sentinel.md), the owner's own boss: not one of the
+    # first eight, so its two trophies were made with it, with a boon of their own (Rust).
+    "cydonian_sentinel": {"display": "the Cydonian Sentinel", "lair": "cydonian_sanctum"},
     "werewolf_alpha": {"display": "the Alpha Werewolf"},
     "storm_roc": {"display": "the Storm Roc"},
     "abyssal_leviathan": {"display": "the Abyssal Leviathan"},
@@ -112,6 +115,7 @@ BOONS = {
     "harvest": "Harvest: a kill heals you two hearts (once every 5 s), and every fifth kill charges your next blow to loose "
                "a pale crescent.",
     "stitch": "Stitch: three hits on one foe within 4 s stitch it, slowing it (Slowness II, 2 s).",
+    "rust": "Rust: a hit rusts the foe's armor, which counts for 30% less (Rusted, 4 s).",
 }
 FROST = (60, 1)        # Slowness: ticks, amplifier
 EMBER_SECONDS = 3
@@ -119,6 +123,8 @@ VENOM = (80, 0)        # Poison
 WITHER = (60, 0)       # Wither
 HOWL = (60, 0)         # Weakness
 MARK_TICKS = 80        # Glowing
+RUST = (80, 0)         # Rusted (jugcraft:rusted): ticks, amplifier
+RUST_ARMOR = 0.3       # the share of its armor a Rusted foe loses
 DRAIN_HEAL = 1.0
 SHOCK_SHARE = 0.3
 SHOCK_RANGE = 4.0
@@ -156,6 +162,8 @@ VARIANTS = [
     ("bogfang", "kama", "mire_hag", "venom", "Bogfang"),
     ("soulreaver", "moonblade", "crypt_lich", "drain", "Soulreaver"),
     ("gravewarden", "executioner", "crypt_lich", "wither", "Gravewarden"),
+    ("corelance", "pike", "cydonian_sentinel", "rust", "Corelance"),
+    ("redstar_cleaver", "battle_axe", "cydonian_sentinel", "rust", "Redstar Cleaver"),
     ("dynamo_halberd", "halberd", "iron_dreadnought", "shock", "Dynamo Halberd"),
     ("piston_hammer", "war_hammer", "iron_dreadnought", "shock", "Piston Hammer"),
     ("moonfang", "sabre", "werewolf_alpha", "howl", "Moonfang"),

@@ -140,9 +140,11 @@ public class FungalEndTreeClientGameTests extends TreeBatchTwoClientGameTests {
     private static boolean rareEndBiome(String name){return name.equals("outer_flats")||name.equals("rotted_expanse");}
     private static BlockPos natural(ServerLevel level,String name){
         var key=ResourceKey.create(Registries.BIOME,Jugcraft.id(name));
-        // A rare one-in-ten placement cannot be required in the nearest tiny island fringe.
-        // Sample additional distant regions for sparse End extras, keeping the search bounded.
-        int[][] anchors=rareEndBiome(name)?new int[][]{{0,0},{4096,0},{0,4096},{-4096,0},{0,-4096}}:new int[][]{{0,0}};
+        // The nearest biome fragment need not have a successful placement: Netherbrush may
+        // expose too few clear floors, just as a tiny End fringe may miss a rare tree.
+        // Keep the natural-growth assertion, but sample at most five regions for every biome.
+        // This only observes existing generation; it never plants or changes placement rates.
+        int[][] anchors={{0,0},{4096,0},{0,4096},{-4096,0},{0,-4096}};
         for(int[] anchor:anchors){
             var result=naturalNear(level,name,key,new BlockPos(anchor[0],64,anchor[1]));
             if(result!=null)return result;

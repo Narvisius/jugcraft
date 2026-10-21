@@ -132,6 +132,26 @@ public class ArmsVIIGameTests {
 		helper.succeed();
 	}
 
+	/**
+	 * Rust (the Cydonian Sentinel's trophies): struck, the foe is Rusted for its length, and while it is its armor counts
+	 * for {@value ArmVariants#RUST_ARMOR} less; when it wears off the armor is whole again.
+	 */
+	@GameTest(structure = ARENA)
+	public void rustRustsTheFoesArmor(GameTestHelper helper) {
+		floor(helper);
+		check(helper, "corelance", new BlockPos(1, 2, 3), ArmVariants.RUSTED, ArmVariants.RUST_TICKS, ArmVariants.RUST_AMPLIFIER);
+		ServerPlayer player = wielder(helper, "redstar_cleaver", new BlockPos(5, 2, 1));
+		Mob pig = pig(helper, new BlockPos(5, 2, 3));
+		pig.getAttribute(Attributes.ARMOR).setBaseValue(10.0);
+		strike(player, pig);
+		double rusted = pig.getAttributeValue(Attributes.ARMOR);
+		helper.assertTrue(pig.hasEffect(ArmVariants.RUSTED) && Math.abs(rusted - 10.0 * (1.0 - ArmVariants.RUST_ARMOR)) < 1.0E-4,
+				"Rusted, the pig's 10 armor counts for " + rusted + ", not " + 10.0 * (1.0 - ArmVariants.RUST_ARMOR));
+		pig.removeEffect(ArmVariants.RUSTED);
+		helper.assertTrue(pig.getAttributeValue(Attributes.ARMOR) == 10.0, "Rust worn off, the pig's armor is " + pig.getAttributeValue(Attributes.ARMOR));
+		helper.succeed();
+	}
+
 	/** Drain heals the wielder; Gale throws the foe up; Shock arcs to the nearest other foe within reach, and no farther. */
 	@GameTest(structure = ARENA, maxTicks = 40)
 	public void drainGaleAndShock(GameTestHelper helper) {

@@ -5,7 +5,7 @@ the Last Rites' Mourning Wreath and Death Knell, the Cursed Spindle, the Frost H
 Writ of Exhumation, Sealed Orders, the Howling Totem, the Mist Gate's name, the lairs' messages, and each lair's dimension
 (its dimension type, level stem and biome) and structure template (tools/hollow_acre.py, tools/spindle_loft.py,
 tools/glacier_hall.py, tools/cinder_kiln.py, tools/lantern_fen.py, tools/crypt_archive.py, tools/foundry_trench.py,
-tools/moonlit_ring.py).
+tools/moonlit_ring.py, tools/cydonian_sanctum.py).
 
 Called from tools/agriculture_data.py (assets, loot, recipes, tags, worldgen). Formats follow vanilla 26.3's own files:
 the dimension type copies the shape of vanilla's End (logged from the running game by LairGameTests), the level stem a
@@ -16,6 +16,7 @@ import alpha_werewolf as aw
 import cinder_kiln
 import crypt_archive
 import foundry_trench
+import cydonian_sanctum
 import glacier_hall
 import hollow_acre
 import lantern_fen
@@ -25,11 +26,12 @@ from lairs import (BELL_NAMES, FIXTURES, GATE, HORN_GROUND, ICICLE_PARTS, ITEMS,
                    MOURNING_FLOWERS, NAME_GLOWS, NAMES, RECIPES, RITE_CANDLES, SEAL_GROUND, SEAL_LANDS, SLUICE_FLOWS,
                    SLUICE_PARTS, PYLON_NAMES, STONE_GROUND, STONE_LANDS, THREAD_COLOURS, TRENCH_WORKS, WEREWOLF_PELTS,
                    WRIT_TOMBS)
+from cydonian_sanctum import CONSTELLATIONS, DOOR_FIGURES
 
 # Each lair's template, by the lair's id.
 TEMPLATES = {"hollow_acre": hollow_acre, "spindle_loft": spindle_loft, "glacier_hall": glacier_hall,
              "cinder_kiln": cinder_kiln, "lantern_fen": lantern_fen, "crypt_archive": crypt_archive,
-             "foundry_trench": foundry_trench, "moonlit_ring": moonlit_ring}
+             "foundry_trench": foundry_trench, "moonlit_ring": moonlit_ring, "cydonian_sanctum": cydonian_sanctum}
 
 
 def cube(lo, hi, faces, texture, cull=None, shade=True, uvs=None):
@@ -76,9 +78,10 @@ def brazier(lit):
     return {"parent": "minecraft:block/block", "textures": textures, "elements": elements}
 
 
-def mist(axis):
-    """Grey Mist: a curtain of mist across the middle of the block, see-through and without collision."""
-    texture = {"force_translucent": True, "sprite": rid("block/lair_exit")}
+def mist(axis, sprite="lair_exit"):
+    """Grey Mist (or the Sanctum's Red Mist): a curtain of mist across the middle of the block, see-through and without
+    collision."""
+    texture = {"force_translucent": True, "sprite": rid(f"block/{sprite}")}
     curtain = {"from": [0, 0, 7], "to": [16, 16, 9], "shade": False,
                "faces": {"north": {"texture": "#mist"}, "south": {"texture": "#mist"}}}
     return {"parent": "minecraft:block/block", "textures": {"particle": texture, "mist": texture}, "elements": [curtain]}
@@ -563,6 +566,59 @@ def moonlit_ring_assets(models, states, write):
     write(models / "raked_turf.json", {"parent": "minecraft:block/cube_bottom_top", "textures": {
         "top": rid("block/raked_turf"), "side": rid("block/raked_turf_side"), "bottom": rid("block/raked_turf_side")}})
     write(states / "raked_turf.json", {"variants": {f"turf={i}": {"model": rid("block/raked_turf")} for i in range(len(aw.TURFS))}})
+def star_door(figure, lit):
+    """A block of the Star Door: carved red stone, a constellation carved on its south face (the gallery's side), lit or
+    dark."""
+    face = "star_door" if figure == "plain" else f"star_door_{figure}" + ("_lit" if lit else "")
+    model = {"parent": "minecraft:block/cube", "textures": {
+        "particle": rid("block/star_door"), "north": rid("block/star_door"), "east": rid("block/star_door"),
+        "west": rid("block/star_door"), "up": rid("block/star_door"), "down": rid("block/star_door"),
+        "south": rid(f"block/{face}")}}
+    if lit:
+        # The lit figure burns: full light, unshaded, on its own face.
+        model = {"parent": "minecraft:block/block", "textures": model["textures"], "elements": [
+            cube([0, 0, 0], [16, 16, 16], ("north", "east", "west", "up", "down"), "#north", cull=ALL),
+            {**cube([0, 0, 0], [16, 16, 16], ("south",), "#south", cull=("south",), shade=False), "light_emission": 12}]}
+        for face_name in ("east", "west", "up", "down"):
+            model["elements"][0]["faces"][face_name]["texture"] = f"#{face_name}"
+    return model
+
+
+def cydonian_sanctum_assets(models, states, write, simple):
+    """The Cydonian Sanctum's lair-only blocks (tools/cydonian_sanctum.py): the Red Mist (its way home), the star stones,
+    the star dials, the Star Door and the dust vents."""
+    write(models / "red_mist.json", mist("x", "red_mist"))
+    write(states / "red_mist.json", {"variants": {"axis=x": {"model": rid("block/red_mist")},
+                                                  "axis=z": {"model": rid("block/red_mist"), "y": 90}}})
+    simple("star_stone", {"parent": "minecraft:block/cube_column", "textures": {
+        "side": rid("block/star_stone"), "end": rid("block/star_stone_end")}})
+    variants = {}
+    for stars in CONSTELLATIONS:
+        write(models / f"star_dial_{stars}.json", {"parent": "minecraft:block/orientable", "textures": {
+            "top": rid("block/star_dial_top"), "side": rid("block/star_dial_side"), "front": rid(f"block/star_dial_{stars}")}})
+        for facing in HORIZONTAL:
+            variants[f"facing={facing},stars={stars}"] = turned(f"star_dial_{stars}", facing)
+    write(states / "star_dial.json", {"variants": variants})
+    variants = {}
+    for figure in ("plain", *DOOR_FIGURES):
+        for lit in (False, True):
+            name = "star_door" if figure == "plain" else f"star_door_{figure}" + ("_lit" if lit else "")
+            if figure != "plain" or not lit:
+                write(models / f"{name}.json", star_door(figure, lit))
+            for opening in (False, True):
+                variants[f"figure={figure},lit={str(lit).lower()},opening={str(opening).lower()}"] = {
+                    "model": rid(f"block/{'star_door' if figure == 'plain' else name}")}
+    write(states / "star_door.json", {"variants": variants})
+    # The dust vent: the owner's sulfur vent (art/owner-library, Guns), its faces cut from one 32 x 32 sheet.
+    simple("dust_vent", {"parent": "minecraft:block/block", "textures": {
+        "vent": rid("block/dust_vent"), "particle": rid("block/dust_vent")}, "elements": [{
+            "from": [0, 0, 0], "to": [16, 16, 16], "faces": {
+                "north": {"uv": [0, 0, 8, 8], "texture": "#vent", "cullface": "north"},
+                "east": {"uv": [8, 8, 16, 16], "texture": "#vent", "cullface": "east"},
+                "south": {"uv": [0, 0, 8, 8], "texture": "#vent", "cullface": "south"},
+                "west": {"uv": [8, 8, 16, 16], "texture": "#vent", "cullface": "west"},
+                "up": {"uv": [8, 16, 0, 8], "texture": "#vent", "cullface": "up"},
+                "down": {"uv": [16, 0, 8, 8], "texture": "#vent", "cullface": "down"}}}]})
 
 
 def assets(root, write, lang):
@@ -594,6 +650,7 @@ def assets(root, write, lang):
     crypt_archive_assets(models, states, write)
     foundry_trench_assets(models, states, write)
     moonlit_ring_assets(models, states, write)
+    cydonian_sanctum_assets(models, states, write, simple)
     for name, display in LAIR_BLOCKS.items():
         lang[f"block.{MOD}.{name}"] = display
 
@@ -614,6 +671,7 @@ def assets(root, write, lang):
     lang[f"item.{MOD}.exhumation_writ"] = ITEMS["exhumation_writ"]
     lang[f"item.{MOD}.sealed_orders"] = ITEMS["sealed_orders"]
     lang[f"item.{MOD}.howling_totem"] = ITEMS["howling_totem"]
+    lang[f"item.{MOD}.altar_keystone"] = ITEMS["altar_keystone"]
     lang[f"tooltip.{MOD}.death_knell"] = "Rung at a grave at night, among lit candles, with a wreath laid on it"
     lang[f"tooltip.{MOD}.cursed_spindle"] = "Used on a Spinning Wheel at night: prick your finger, and wake in the Spindle Loft"
     lang[f"tooltip.{MOD}.mourning_wreath"] = "Lay it on a grave for the Last Rites"
@@ -634,6 +692,10 @@ def assets(root, write, lang):
         lang[f"lair.{MOD}.foundry_trench.pylon.{name}"] = f"the {name} pylon"
     for name in BELL_NAMES:
         lang[f"lair.{MOD}.moonlit_ring.bell.{name}"] = f"the {name} bell"
+    lang[f"tooltip.{MOD}.altar_keystone"] = ("Set into the Ancient Altar of Adam-ondi-Ahman at night: the altars kindle red, "
+                                             "and the red mist opens onto Mars")
+    for stars in CONSTELLATIONS:
+        lang[f"lair.{MOD}.cydonian_sanctum.stars.{stars}"] = f"the {stars.capitalize()}"
     lang[f"entity.{MOD}.{GATE['entity']}"] = GATE["display"]
 
     for lair, info in LAIRS.items():
@@ -694,6 +756,17 @@ def assets(root, write, lang):
         f"message.{MOD}.lair.totem.opened": "The totem howls at the moon, and something far off answers",
         f"message.{MOD}.lair.bell.resting": "The bell is still swinging",
         f"message.{MOD}.lair.seal.cold": "The seal is cold: no chain binds it now",
+        f"message.{MOD}.lair.keystone.not_overworld": "The altar answers only in the Overworld",
+        f"message.{MOD}.lair.keystone.not_night": "By day the red star lies cold: set the keystone at night",
+        f"message.{MOD}.lair.keystone.misting": "The altar already burns red: use the red mist to follow",
+        f"message.{MOD}.lair.keystone.kindled": "The keystone crumbles, and the altars kindle with red fire one after another",
+        f"message.{MOD}.lair.keystone.opened": "A column of red light rises, and the red mist opens over the altar",
+        f"message.{MOD}.lair.keystone.not_altar": "Set the keystone into the Ancient Altar of Adam-ondi-Ahman",
+        f"message.{MOD}.lair.dial.turned": "The dial turns to %s",
+        f"message.{MOD}.lair.dial.matched": "%s lights on the Star Door",
+        f"message.{MOD}.lair.door.opened": "The Star Door grinds open",
+        f"death.attack.{MOD}.dust_vent": "%1$s was scoured by a dust vent",
+        f"death.attack.{MOD}.dust_vent.player": "%1$s was scoured by a dust vent while fighting %2$s",
         f"message.{MOD}.lair.lectern.read": "The Archive of Last Names: %s, %s and %s",
         f"message.{MOD}.lair.lectern.restored": "You read the name back: %s is cut into its stone again",
         f"message.{MOD}.lair.sluice.open": "The sluice is already open",
@@ -724,10 +797,10 @@ def loot(out, write):
 
 
 def recipes(out, write, conditions):
-    for item, recipe in RECIPES.items():
-        write(out / f"{item}.json", {"fabric:load_conditions": conditions(), "type": "minecraft:crafting_shaped",
-                                     "category": "misc", "pattern": recipe["pattern"], "key": recipe["key"],
-                                     "result": {"id": rid(item), "count": 1}})
+    for name, recipe in RECIPES.items():
+        write(out / f"{name}.json", {"fabric:load_conditions": conditions(*recipe.get("features", [])),
+                                     "type": "minecraft:crafting_shaped", "category": "misc", "pattern": recipe["pattern"],
+                                     "key": recipe["key"], "result": {"id": rid(recipe.get("result", name)), "count": 1}})
 
 
 def tags(tags):
@@ -815,3 +888,6 @@ def worldgen(data, write):
                                                    "features": False, "biome": rid(lair)}}})
     for module in TEMPLATES.values():
         module.write(data / MOD / "structure" / f"{module.TEMPLATE}.nbt")
+    # The Cydonian Sanctum's dust vents strike with their own damage (its death message is in the lang).
+    write(data / MOD / "damage_type" / "dust_vent.json", {"message_id": f"{MOD}.dust_vent", "exhaustion": 0.1,
+                                                          "scaling": "when_caused_by_living_non_player"})

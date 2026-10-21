@@ -36,6 +36,7 @@ jugcraft:alloy_panel,chain_with_acquisition_evidence,,src/main/resources/data/ju
 jugcraft:alloy_smelter,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/alloy_smelter.json,,
 jugcraft:alpha_pelt,loot_only,,,,src/main/resources/data/jugcraft/loot_table/entities/alpha_werewolf.json
 jugcraft:alphas_hood,loot_only,,,,src/main/resources/data/jugcraft/loot_table/entities/alpha_werewolf.json
+jugcraft:altar_keystone,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/altar_keystone.json | src/main/resources/data/jugcraft/recipe/altar_keystone_from_cydonian_shards.json | src/main/resources/data/jugcraft/recipe/altar_keystone_from_dreamglass.json,,
 jugcraft:alumina,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/chemical_reaction/alumina.json | src/main/resources/data/jugcraft/recipe/chemical_reaction/calcine_hydroxide.json,,
 jugcraft:alumina_blank,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/pressing/ceramics_alumina_blank.json,,
 jugcraft:alumina_calciner,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/alumina_calciner.json,,
@@ -1484,6 +1485,7 @@ jugcraft:copper_dome_plate_stairs,chain_with_acquisition_evidence,,src/main/reso
 jugcraft:copper_dust,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/pulverizing/copper_ingot.json | src/main/resources/data/jugcraft/recipe/pulverizing/copper_ore.json | src/main/resources/data/jugcraft/recipe/pulverizing/deepslate_copper_ore.json | src/main/resources/data/jugcraft/recipe/pulverizing/raw_copper.json | src/main/resources/data/jugcraft/recipe/pulverizing/washed_copper_ore.json,,
 jugcraft:copper_plate,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/pressing/copper_ingot.json,,
 jugcraft:copper_wire,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/wire_drawing/copper_ingot.json,,
+jugcraft:corelance,loot_only,,,,src/main/resources/data/jugcraft/loot_table/bosses/cydonian_sentinel.json | src/main/resources/data/jugcraft/loot_table/entities/cydonian_sentinel.json
 jugcraft:corn,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/corn_from_crate.json | src/main/resources/data/jugcraft/recipe/hydroponics/corn_kernels.json | src/main/java/io/github/jimbozoomer/jugcraft/agriculture/TallCropBlock.java,,
 jugcraft:corn_crate,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/corn_crate.json,,
 jugcraft:corn_dog,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/corn_dog.json,,
@@ -1553,6 +1555,7 @@ jugcraft:cursed_spindle,recipe_chain_reachable,,src/main/resources/data/jugcraft
 jugcraft:cutting_board,recipe_chain_reachable,,src/main/resources/data/jugcraft/recipe/cutting_board.json,,
 jugcraft:cyan_alchemical_bag,recipe_chain_reachable,,src/main/resources/data/jugcraft/recipe/cyan_alchemical_bag.json,,
 jugcraft:cyan_plastic,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/cyan_plastic.json,,
+jugcraft:cydonian_shard,loot_only,,,,src/main/resources/data/jugcraft/loot_table/entities/cydonian_sentinel.json
 jugcraft:cypress_fence,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/cypress_fence.json,,
 jugcraft:cypress_fence_gate,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/cypress_fence_gate.json,,
 jugcraft:cypress_leaves,natural_or_interaction_source,,,,src/main/resources/data/jugcraft/worldgen/feature/cypress.json
@@ -3753,6 +3756,7 @@ jugcraft:longhorn_rifle,chain_with_acquisition_evidence,,src/main/resources/data
 jugcraft:lookout_rifle,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/lookout_rifle.json,,
 jugcraft:lounge_table,recipe_chain_reachable,,src/main/resources/data/jugcraft/recipe/lounge_table.json,,
 jugcraft:low_covalence_dust,recipe_chain_reachable,,src/main/resources/data/jugcraft/recipe/low_covalence_dust.json,,
+jugcraft:lowfall_core,loot_only,,,,src/main/resources/data/jugcraft/loot_table/entities/cydonian_sentinel.json
 jugcraft:lox_tank,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/chemical_reaction/lox_tank.json,,
 jugcraft:lubricant_bucket,chain_with_acquisition_evidence,,src/main/java/io/github/jimbozoomer/jugcraft/chemistry/PetroFluids.java,,
 jugcraft:lumen_sconce,recipe_chain_reachable,,src/main/resources/data/jugcraft/recipe/lumen_sconce.json,,
@@ -4771,7 +4775,7 @@ jugcraft:railing_gate,recipe_chain_reachable,,src/main/resources/data/jugcraft/r
 jugcraft:range_finder,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/ceramics_range_finder.json | src/main/resources/data/jugcraft/recipe/range_finder.json,,
 jugcraft:range_module,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/range_module.json,,
 jugcraft:ranger_rifle,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/ranger_rifle.json,,
-jugcraft:rare_earth_oxide,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/arc_smelting/monazite.json | src/main/resources/data/jugcraft/recipe/chemical_reaction/rare_earth_oxide.json | src/main/resources/data/jugcraft/recipe/rare_earth_oxide.json,,
+jugcraft:rare_earth_oxide,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/arc_smelting/monazite.json | src/main/resources/data/jugcraft/recipe/chemical_reaction/rare_earth_oxide.json | src/main/resources/data/jugcraft/recipe/crushing/cydonian_shard.json | src/main/resources/data/jugcraft/recipe/rare_earth_oxide.json,,
 jugcraft:rare_earth_sand,natural_or_interaction_source,,,,src/main/resources/data/jugcraft/worldgen/feature/ore_rare_earth_sand.json
 jugcraft:ratatouille,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/pot_cooking/ratatouille.json,,
 jugcraft:rattler_pistol,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/rattler_pistol.json,,
@@ -4874,6 +4878,7 @@ jugcraft:red_mum,natural_or_interaction_source,,,,src/main/resources/data/jugcra
 jugcraft:red_plastic,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/red_plastic.json,,
 jugcraft:red_velvet_cake,recipe_chain_reachable,,src/main/java/io/github/jimbozoomer/jugcraft/agriculture/HearthOvenBlockEntity.java,,
 jugcraft:red_velvet_cake_slice,recipe_chain_reachable,,src/main/java/io/github/jimbozoomer/jugcraft/agriculture/PieBlock.java,,
+jugcraft:redstar_cleaver,loot_only,,,,src/main/resources/data/jugcraft/loot_table/bosses/cydonian_sentinel.json | src/main/resources/data/jugcraft/loot_table/entities/cydonian_sentinel.json
 jugcraft:redwood_fence,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/redwood_fence.json,,
 jugcraft:redwood_fence_gate,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/redwood_fence_gate.json,,
 jugcraft:redwood_log,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/tree_growing/redwood_sapling.json,,src/main/resources/data/jugcraft/worldgen/feature/fallen_redwood_tree.json | src/main/resources/data/jugcraft/worldgen/feature/giant_redwood.json | src/main/resources/data/jugcraft/worldgen/feature/redwood.json
@@ -5063,6 +5068,7 @@ jugcraft:sentinel_helmet,deferred_acquisition_design,Deferred acquisition design
 jugcraft:sentinel_leggings,deferred_acquisition_design,Deferred acquisition design: owner requested preview armor only on October 6; tools/gear.py ARMOR_TIERS records the still-unassigned recipe/drop choice.,,,
 jugcraft:sentinel_longsword,deferred_acquisition_design,Deferred acquisition design: matching owner-preview armor set; tools/arms_variants.py SETS and ArmsVIIGameTests intentionally specify no survival recipe or trophy table yet.,,,
 jugcraft:sentinel_shield,deferred_acquisition_design,Deferred acquisition design: matching owner-preview armor set; tools/arms_variants.py SETS and ArmsVIIGameTests intentionally specify no survival recipe or trophy table yet.,,,
+jugcraft:sentinels_visor,loot_only,,,,src/main/resources/data/jugcraft/loot_table/entities/cydonian_sentinel.json
 jugcraft:sentry_pistol,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/sentry_pistol.json,,
 jugcraft:server_rack,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/server_rack.json,,
 jugcraft:service_pedestal,chain_with_acquisition_evidence,,src/main/resources/data/jugcraft/recipe/service_pedestal.json,,

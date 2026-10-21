@@ -6,10 +6,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
@@ -43,10 +48,10 @@ public final class ArmVariants {
 	 * wielder; WITHER withers; SHOCK arcs to the nearest other foe; GALE throws the foe up and back; HOWL weakens; TIDE
 	 * strikes harder at a foe in water or rain; GRAVEBANE strikes the undead harder; MARK makes the foe glow; HARVEST heals
 	 * the wielder on a kill and charges a crescent ({@link HarvestBoon}); STITCH slows a foe struck three times in a short
-	 * while ({@link StitchBoon}).
+	 * while ({@link StitchBoon}); RUST rusts the foe's armor, which counts for less ({@link #RUSTED}).
 	 */
 	public enum Boon {
-		FROST, EMBER, VENOM, DRAIN, WITHER, SHOCK, GALE, HOWL, TIDE, GRAVEBANE, MARK, HARVEST, STITCH
+		FROST, EMBER, VENOM, DRAIN, WITHER, SHOCK, GALE, HOWL, TIDE, GRAVEBANE, MARK, HARVEST, STITCH, RUST
 	}
 
 	/**
@@ -87,6 +92,8 @@ public final class ArmVariants {
 			new Variant("bogfang", "kama", "mire_hag", Boon.VENOM),
 			new Variant("soulreaver", "moonblade", "crypt_lich", Boon.DRAIN),
 			new Variant("gravewarden", "executioner", "crypt_lich", Boon.WITHER),
+			new Variant("corelance", "pike", "cydonian_sentinel", Boon.RUST),
+			new Variant("redstar_cleaver", "battle_axe", "cydonian_sentinel", Boon.RUST),
 			new Variant("dynamo_halberd", "halberd", "iron_dreadnought", Boon.SHOCK),
 			new Variant("piston_hammer", "war_hammer", "iron_dreadnought", Boon.SHOCK),
 			new Variant("moonfang", "sabre", "werewolf_alpha", Boon.HOWL),
@@ -136,6 +143,10 @@ public final class ArmVariants {
 	public static final int HOWL_AMPLIFIER = 0;
 	/** MARK: Glowing. */
 	public static final int MARK_TICKS = 80;
+	/** RUST: Rusted ({@link #RUSTED}), and the share of its armor a Rusted foe loses. */
+	public static final int RUST_TICKS = 80;
+	public static final int RUST_AMPLIFIER = 0;
+	public static final float RUST_ARMOR = 0.3F;
 	/** DRAIN: health a hit gives back. */
 	public static final float DRAIN_HEAL = 1.0F;
 	/** SHOCK: the arc's share of the wielder's attack damage, and how far it reaches. */
@@ -157,6 +168,9 @@ public final class ArmVariants {
 	public static final int IRONCLAD_DURABILITY = 2;
 	public static final int TROPHY_DURABILITY = 2;
 
+	/** Rusted (the Rust boon's): its holder's armor counts for {@link #RUST_ARMOR} less. */
+	public static Holder<MobEffect> RUSTED;
+
 	/** Every variant, by id, in registration order. */
 	public static final Map<String, Item> ITEMS = new LinkedHashMap<>();
 	/** The patterns, by id. */
@@ -167,7 +181,16 @@ public final class ArmVariants {
 	private ArmVariants() {
 	}
 
+	/** Rusted: no more than its change to armor. */
+	private static final class RustedEffect extends MobEffect {
+		RustedEffect() {
+			super(MobEffectCategory.HARMFUL, 0xA0522D);
+		}
+	}
+
 	static void register() {
+		RUSTED = Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT, Jugcraft.id("rusted"), new RustedEffect()
+				.addAttributeModifier(Attributes.ARMOR, Jugcraft.id("rusted"), -RUST_ARMOR, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 		for (Variant variant : VARIANTS) {
 			JugcraftArms.Kind kind = JugcraftArms.KINDS.stream().filter(k -> k.name().equals(variant.kind())).findFirst()
 					.orElseThrow(() -> new IllegalStateException("Arms VII: no kind " + variant.kind()));

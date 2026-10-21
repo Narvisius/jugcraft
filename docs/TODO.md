@@ -2,6 +2,14 @@
 
 **19 October publication authorization:** the owner approved publishing the current local content and merging ready PRs. Earlier local-only checkpoints are historical; remaining behavioral parity and independent multiplayer work stay open.
 
+## Adam-ondi-Ahman and Cydonian adventure — October 20 integration
+
+- [x] Combine the altar valley, both Altar Keystone crafting routes, Cydonian Sanctum, Sentinel encounter, participant loot and return gates from #370, #372 and #382. Preserve all existing lairs and equipment.
+- [x] Reconcile the shared registrations, generators, mist-gate effects, boss audits and acquisition routes against current main. Add a saved-placement codec regression for the valley's chosen site and new-chunk evidence.
+- Merge gate: combined Build/Foundation workflows and inspection of the rendered valley, dungeon and boss gallery. The integration PR records final results and whether this group has reached main.
+- [ ] Human survival balancing, multiple seeds and a two-account dedicated-server playtest. Automated client tests do not replace these checks.
+- Feature records: [valley](features/adam-ondi-ahman.md), [Sanctum](features/cydonian-sanctum.md), [Sentinel](features/cydonian-sentinel.md).
+
 ## Supplied creature models, animations and systems — October 19, local
 
 - [x] Preserve all six newly supplied collections with source hashes; recover 278 source model classes without geometry-parser failures and bind 167 species to original geometry/UVs and unchanged supplied skins.

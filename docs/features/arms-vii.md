@@ -27,7 +27,7 @@ The arm keeps its enchantments and wear.
 | Bonecarved: bone, horn, leather, a garnet eye | Bonecarver's Pattern: bone, flint, leather, paper | bone block | dagger, flail (a horned skull on a spine of vertebrae, swinging free in the hand since 5 October 2026: [arms-restyle.md](arms-restyle.md#the-flails-head-swings-5-october-2026)), glaive (a jawbone blade), labrys (shoulder-blade bits) | **Gravebane:** 20% harder against the undead |
 | Runebound: void-dark steel with runes that glow cyan | Runecarver's Pattern: amethyst, ectoplasm, paper | ectoplasm | nodachi, moonblade, staff (quarterstaff), war hammer | **Mark:** a struck foe glows for 4 s, seen through walls |
 
-**Boss trophies: 16 arms, two for each of eight bosses.** They have no recipe. Each boss's loot table is ready to drop one of its two (see [branches/BOSSES.md](../branches/BOSSES.md)). The Yeti King, the Cinder Tyrant, the Mire Hag, the Crypt Lich and the Iron Dreadnought are made, and drop theirs ([yeti-king.md](yeti-king.md), [cinder-tyrant.md](cinder-tyrant.md), [mire-hag.md](mire-hag.md), [crypt-lich.md](crypt-lich.md), [iron-dreadnought.md](iron-dreadnought.md)); the other three bosses are still to be made. They last twice as long as steel, carry epic rarity, and have a boon:
+**Boss trophies: 18 arms, two for each of nine bosses.** They have no recipe. The Yeti King, Cinder Tyrant, Mire Hag, Crypt Lich, Iron Dreadnought, Alpha Werewolf and Cydonian Sentinel drop their trophies; the remaining two planned boss pairs retain their existing status. See [the boss roster](../branches/BOSSES.md) and [Cydonian Sentinel](cydonian-sentinel.md). They last twice as long as steel, carry epic rarity, and have a boon:
 
 | Boss | Trophies | Boon |
 |---|---|---|
@@ -36,6 +36,7 @@ The arm keeps its enchantments and wear.
 | the Mire Hag | Hagthorn (scythe), Bogfang (kama) | **Venom:** Poison, 4 s |
 | the Crypt Lich | Soulreaver (moonblade) | **Drain:** each hit heals you half a heart |
 | the Crypt Lich | Gravewarden (executioner) | **Wither:** Wither, 3 s |
+| the Cydonian Sentinel | Corelance (pike), Redstar Cleaver (battle axe) | **Rust:** the foe's armour counts for 30% less (Rusted, 4 s) |
 | the Iron Dreadnought | Dynamo Halberd (halberd), Piston Hammer (war hammer) | **Shock:** arcs to the nearest other foe within 4 blocks, for 30% of the blow |
 | the Alpha Werewolf | Moonfang (sabre), Howler (twinblade) | **Howl:** Weakness, 3 s |
 | the Storm Roc | Stormcaller (glaive), Galefeather (estoc) | **Gale:** throws the foe up and back |

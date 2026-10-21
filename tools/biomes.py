@@ -1628,6 +1628,26 @@ BIOMES = {
                       ["minecraft:rabbit", 4, 2, 3]],
         "tags": ["c:is_plains", "c:is_dry"],
     },
+    # Adam-ondi-Ahman (tools/adam_ondi_ahman.py): a quiet river valley round a knoll of stacked stone altars. It is placed
+    # round its sites by world/AdamOndiAhman, not by a region rule ("placement": "site"). Prairie grass, wildflowers and
+    # goldenrod, oaks and birches standing alone; four seasons. Monsters are few: every kind spawns sparsely (spawn costs,
+    # as in vanilla's soul sand valley), and no village, outpost or ruined portal is built in it.
+    "adam_ondi_ahman": {
+        "display": "Adam-ondi-Ahman", "base": "plains", "temperature": 0.7, "downfall": 0.6, "seasons": True,
+        "placement": "site",
+        "effects": {"grass_color": "#86bd55", "foliage_color": "#74a948"},
+        "trees": {"count": [0, 1], "default": "minecraft:oak_checked", "picks": [
+            ["minecraft:birch_checked", 0.35], ["minecraft:fancy_oak_checked", 0.15]]},
+        "extras": ["meadow_wildflowers", "goldenrod", "oxeye_daisies", "tall_grass_dense"],
+        "creatures": [["minecraft:sheep", 12, 4, 4], ["minecraft:cow", 8, 4, 4], ["minecraft:chicken", 10, 4, 4],
+                      ["minecraft:horse", 5, 2, 6], ["minecraft:rabbit", 4, 2, 3]],
+        "spawn_costs": {monster: {"charge": 0.7, "energy_budget": 0.15} for monster in (
+            "minecraft:spider", "minecraft:zombie", "minecraft:zombie_villager", "minecraft:zombie_horse", "minecraft:skeleton",
+            "minecraft:creeper", "minecraft:slime", "minecraft:enderman", "minecraft:witch")},
+        "untags": ["minecraft:has_structure/village_plains", "minecraft:has_structure/pillager_outpost",
+                   "minecraft:has_structure/ruined_portal_standard"],
+        "tags": ["c:is_plains"],
+    },
 }
 
 def biome_tags(name):
