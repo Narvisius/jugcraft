@@ -102,6 +102,7 @@ public final class JugcraftClient implements ClientModInitializer {
 		io.github.jimbozoomer.jugcraft.nuclear.StorageTanks.openScreen = pos -> net.minecraft.client.Minecraft.getInstance().gui.setScreen(new StorageTankScreen(pos));
 		WallRunOverlay.register();
 		RocketPackClient.register();
+		FinanceClient.register();
 		BroomstickClient.register();
 		BalloonClient.register();
 		EntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.airship.JugcraftAirships.ZEPPELIN, ZeppelinRenderer::new);

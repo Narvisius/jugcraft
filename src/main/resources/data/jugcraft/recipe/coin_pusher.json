@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "town"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GGG",
+    "IPI",
+    "IRI"
+  ],
+  "key": {
+    "G": "minecraft:glass_pane",
+    "I": "minecraft:iron_ingot",
+    "P": "minecraft:piston",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "jugcraft:coin_pusher",
+    "count": 1
+  }
+}

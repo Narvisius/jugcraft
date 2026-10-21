@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "town"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WWW",
+    "BCB",
+    "PRP"
+  ],
+  "key": {
+    "W": "minecraft:green_wool",
+    "B": "minecraft:gold_block",
+    "C": "minecraft:clock",
+    "P": "minecraft:dark_oak_planks",
+    "R": "minecraft:redstone_block"
+  },
+  "result": {
+    "id": "jugcraft:poker_table_clockwork",
+    "count": 1
+  }
+}

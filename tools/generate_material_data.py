@@ -290,6 +290,14 @@ def assets():
     lang.update(diesel_sounds.LANG)
     import guide_books
     guide_books.write_assets(write, rid, ASSETS, DATA, lang)
+    import exchange_guide
+    exchange_guide.write_assets(write, rid, ASSETS, DATA, lang)
+    import exchange_blocks
+    exchange_blocks.write_assets(write, rid, ASSETS, DATA, lang)
+    import exchange_poker
+    exchange_poker.write_assets(write, rid, ASSETS, DATA, lang)
+    import exchange_casino
+    exchange_casino.write_assets(write, rid, ASSETS, DATA, lang)
     seasons_assets(lang)
     import alpine_data
     alpine_data.lang(lang)
@@ -758,6 +766,8 @@ def machine_assets(lang):
     powered_tools(lang)
     petro_assets(lang)
     lang[f"message.{MOD}.hand_crank"] = "Turning for %s more seconds"
+    # The Exchange (finance/): its key, in the Jugcraft controls category that tools/party.py names.
+    lang[f"key.{MOD}.exchange"] = "Open the Exchange"
     lang[f"message.{MOD}.steam_engine"] = "Steam engine: %s fuel, %s / %s mB water"
     lang[f"message.{MOD}.dynamo"] = "Dynamo: %s / %s JE"
     lang[f"message.{MOD}.electric_motor"] = "Electric motor: %s / %s JE"
@@ -1450,6 +1460,15 @@ def tags():
     tags = Tags()
     import wall_runs
     wall_runs.write_tags(tags, rid)
+    # The Exchange's Market Chest is a wooden counter (tools/exchange_blocks.py).
+    tags.add("block", "minecraft:mineable/axe", rid("market_chest"))
+    import exchange_poker
+    for block in exchange_poker.BLOCKS:
+        tags.add("block", "minecraft:mineable/axe", rid(block))
+    import exchange_casino  # wooden tables take an axe, the slot machines' metal cabinets a pickaxe
+    for design in exchange_casino.DESIGNS:
+        tool = "pickaxe" if design.height > 1 else "axe"
+        tags.add("block", f"minecraft:mineable/{tool}", rid(design.block))
     import petro
     for crop in petro.FERMENTABLE:
         tags.add("item", f"{MOD}:fermentable", crop)

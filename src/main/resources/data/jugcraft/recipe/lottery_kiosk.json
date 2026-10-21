@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "town"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "YGY",
+    "PRP",
+    "IHI"
+  ],
+  "key": {
+    "Y": "minecraft:yellow_concrete",
+    "G": "minecraft:glass_pane",
+    "P": "minecraft:paper",
+    "R": "minecraft:redstone",
+    "I": "minecraft:iron_ingot",
+    "H": "minecraft:hopper"
+  },
+  "result": {
+    "id": "jugcraft:lottery_kiosk",
+    "count": 1
+  }
+}

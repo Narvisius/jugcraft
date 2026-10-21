@@ -76,6 +76,11 @@ public final class Jugs {
 			return balances.getOrDefault(player, 0L);
 		}
 
+		/** Every balance, read-only (the Exchange's money supply and rich list). */
+		public Map<UUID, Long> balances() {
+			return java.util.Collections.unmodifiableMap(balances);
+		}
+
 		public long add(UUID player, long amount) {
 			if (amount <= 0) {
 				return balance(player);

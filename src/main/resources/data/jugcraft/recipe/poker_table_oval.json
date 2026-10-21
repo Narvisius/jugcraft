@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "town"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WWW",
+    "GLG",
+    "PPP"
+  ],
+  "key": {
+    "W": "minecraft:green_wool",
+    "G": "minecraft:gold_ingot",
+    "L": "minecraft:leather",
+    "P": "minecraft:dark_oak_planks"
+  },
+  "result": {
+    "id": "jugcraft:poker_table_oval",
+    "count": 1
+  }
+}

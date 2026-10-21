@@ -21,14 +21,14 @@
   ],
   "summary": {
     "chain_with_acquisition_evidence": 3203,
-    "recipe_chain_reachable": 1522,
-    "natural_or_interaction_source": 561,
+    "recipe_chain_reachable": 1545,
+    "natural_or_interaction_source": 566,
     "loot_only": 291,
     "deferred_acquisition_design": 78,
     "intentional_noncraftable": 329
   },
   "recipe_types": {
-    "minecraft:crafting_shaped": 2747,
+    "minecraft:crafting_shaped": 2770,
     "minecraft:crafting_shapeless": 1040,
     "jugcraft:alloying": 10,
     "minecraft:blasting": 40,
@@ -1632,6 +1632,17 @@
       "route_count": 1,
       "routes": [
         "src/main/resources/data/jugcraft/recipe/avionics_module.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:baccarat_table",
+      "status": "recipe_chain_reachable",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/baccarat_table.json"
       ],
       "evidence": [],
       "blocked_by": []
@@ -6049,6 +6060,17 @@
       "blocked_by": []
     },
     {
+      "item": "jugcraft:blackjack_table",
+      "status": "recipe_chain_reachable",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/blackjack_table.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
       "item": "jugcraft:blackstone_sarcophagus",
       "status": "recipe_chain_reachable",
       "reason": "",
@@ -8418,6 +8440,17 @@
       "route_count": 1,
       "routes": [
         "src/main/resources/data/jugcraft/recipe/carving_knife.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:casino_arcade",
+      "status": "recipe_chain_reachable",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/casino_arcade.json"
       ],
       "evidence": [],
       "blocked_by": []
@@ -22176,6 +22209,17 @@
       "blocked_by": []
     },
     {
+      "item": "jugcraft:coin_pusher",
+      "status": "recipe_chain_reachable",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/coin_pusher.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
       "item": "jugcraft:coke",
       "status": "recipe_chain_reachable",
       "reason": "",
@@ -23761,6 +23805,17 @@
       "blocked_by": []
     },
     {
+      "item": "jugcraft:craps_table",
+      "status": "recipe_chain_reachable",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/craps_table.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
       "item": "jugcraft:crawling_hand",
       "status": "recipe_chain_reachable",
       "reason": "",
@@ -25109,6 +25164,17 @@
       "route_count": 1,
       "routes": [
         "src/main/resources/data/jugcraft/recipe/deposit_drill.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:derby_table",
+      "status": "recipe_chain_reachable",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/derby_table.json"
       ],
       "evidence": [],
       "blocked_by": []
@@ -28397,6 +28463,21 @@
         "src/main/resources/data/jugcraft/recipe/evertide_amulet.json"
       ],
       "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:exchange_guide",
+      "status": "natural_or_interaction_source",
+      "reason": "",
+      "route_count": 0,
+      "routes": [],
+      "evidence": [
+        {
+          "kind": "native_acquisition",
+          "source": "src/main/java/io/github/jimbozoomer/jugcraft/finance/ExchangeGuide.java",
+          "note": "Granted once on joining; additional guides from /jugcraft exchange guide."
+        }
+      ],
       "blocked_by": []
     },
     {
@@ -50645,6 +50726,17 @@
       "blocked_by": []
     },
     {
+      "item": "jugcraft:lottery_kiosk",
+      "status": "recipe_chain_reachable",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/lottery_kiosk.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
       "item": "jugcraft:lounge_table",
       "status": "recipe_chain_reachable",
       "reason": "",
@@ -51497,6 +51589,21 @@
         "src/main/resources/data/jugcraft/recipe/marigold_petals.json"
       ],
       "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:market_chest",
+      "status": "natural_or_interaction_source",
+      "reason": "",
+      "route_count": 0,
+      "routes": [],
+      "evidence": [
+        {
+          "kind": "native_acquisition",
+          "source": "src/main/java/io/github/jimbozoomer/jugcraft/finance/ExchangeBlocks.java",
+          "note": "A company controller purchases a Market Chest from the Exchange Equities tab for the configured Jugs price; buyChest checks ownership and transfers the fee to the reserve."
+        }
+      ],
       "blocked_by": []
     },
     {
@@ -60172,6 +60279,17 @@
       "blocked_by": []
     },
     {
+      "item": "jugcraft:plinko_board",
+      "status": "recipe_chain_reachable",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/plinko_board.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
       "item": "jugcraft:plum",
       "status": "natural_or_interaction_source",
       "reason": "",
@@ -61552,6 +61670,39 @@
       "blocked_by": []
     },
     {
+      "item": "jugcraft:poker_table_clockwork",
+      "status": "recipe_chain_reachable",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/poker_table_clockwork.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:poker_table_oval",
+      "status": "recipe_chain_reachable",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/poker_table_oval.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:poker_table_saloon",
+      "status": "recipe_chain_reachable",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/poker_table_saloon.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
       "item": "jugcraft:polar_crane",
       "status": "chain_with_acquisition_evidence",
       "reason": "",
@@ -62044,6 +62195,17 @@
       "route_count": 1,
       "routes": [
         "src/main/resources/data/jugcraft/recipe/printer.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:prize_wheel",
+      "status": "recipe_chain_reachable",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/prize_wheel.json"
       ],
       "evidence": [],
       "blocked_by": []
@@ -65249,6 +65411,17 @@
       "blocked_by": []
     },
     {
+      "item": "jugcraft:roulette_table",
+      "status": "recipe_chain_reachable",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/roulette_table.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
       "item": "jugcraft:rounded_gravestone",
       "status": "recipe_chain_reachable",
       "reason": "",
@@ -65977,6 +66150,51 @@
         "src/main/resources/data/jugcraft/villager_trade/halloween_peddler/emerald_scarecrow_hat.json"
       ],
       "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:scratch_card_copper",
+      "status": "natural_or_interaction_source",
+      "reason": "",
+      "route_count": 0,
+      "routes": [],
+      "evidence": [
+        {
+          "kind": "native_acquisition",
+          "source": "src/main/java/io/github/jimbozoomer/jugcraft/finance/CasinoBlockEntity.java",
+          "note": "Purchased as server-issued, single-use paid tickets at a lottery kiosk; alchemy blanks have no prize entitlement."
+        }
+      ],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:scratch_card_gold",
+      "status": "natural_or_interaction_source",
+      "reason": "",
+      "route_count": 0,
+      "routes": [],
+      "evidence": [
+        {
+          "kind": "native_acquisition",
+          "source": "src/main/java/io/github/jimbozoomer/jugcraft/finance/CasinoBlockEntity.java",
+          "note": "Purchased as server-issued, single-use paid tickets at a lottery kiosk; alchemy blanks have no prize entitlement."
+        }
+      ],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:scratch_card_iron",
+      "status": "natural_or_interaction_source",
+      "reason": "",
+      "route_count": 0,
+      "routes": [],
+      "evidence": [
+        {
+          "kind": "native_acquisition",
+          "source": "src/main/java/io/github/jimbozoomer/jugcraft/finance/CasinoBlockEntity.java",
+          "note": "Purchased as server-issued, single-use paid tickets at a lottery kiosk; alchemy blanks have no prize entitlement."
+        }
+      ],
       "blocked_by": []
     },
     {
@@ -67005,6 +67223,116 @@
       "route_count": 1,
       "routes": [
         "src/main/resources/data/jugcraft/recipe/sliding_gate.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:slot_machine_classic",
+      "status": "recipe_chain_reachable",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/slot_machine_classic.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:slot_machine_clockwork",
+      "status": "recipe_chain_reachable",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/slot_machine_clockwork.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:slot_machine_creeper",
+      "status": "recipe_chain_reachable",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/slot_machine_creeper.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:slot_machine_dragon",
+      "status": "recipe_chain_reachable",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/slot_machine_dragon.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:slot_machine_gem",
+      "status": "recipe_chain_reachable",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/slot_machine_gem.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:slot_machine_nether",
+      "status": "recipe_chain_reachable",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/slot_machine_nether.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:slot_machine_progressive",
+      "status": "recipe_chain_reachable",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/slot_machine_progressive.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:slot_machine_pub",
+      "status": "recipe_chain_reachable",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/slot_machine_pub.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:slot_machine_shark",
+      "status": "recipe_chain_reachable",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/slot_machine_shark.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:slot_machine_treasure",
+      "status": "recipe_chain_reachable",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/slot_machine_treasure.json"
       ],
       "evidence": [],
       "blocked_by": []
@@ -80821,6 +81149,42 @@
       ]
     },
     {
+      "source": "src/main/resources/data/jugcraft/recipe/baccarat_table.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "minecraft:green_wool"
+        ],
+        [
+          "minecraft:green_wool"
+        ],
+        [
+          "minecraft:green_wool"
+        ],
+        [
+          "minecraft:emerald"
+        ],
+        [
+          "minecraft:paper"
+        ],
+        [
+          "minecraft:emerald"
+        ],
+        [
+          "minecraft:dark_oak_planks"
+        ],
+        [
+          "minecraft:dark_oak_planks"
+        ],
+        [
+          "minecraft:dark_oak_planks"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:baccarat_table"
+      ]
+    },
+    {
       "source": "src/main/resources/data/jugcraft/recipe/bacon_and_eggs.json",
       "type": "minecraft:crafting_shapeless",
       "inputs": [
@@ -85520,6 +85884,42 @@
       ],
       "outputs": [
         "jugcraft:black_plastic"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/blackjack_table.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "minecraft:green_wool"
+        ],
+        [
+          "minecraft:green_wool"
+        ],
+        [
+          "minecraft:green_wool"
+        ],
+        [
+          "minecraft:gold_ingot"
+        ],
+        [
+          "minecraft:paper"
+        ],
+        [
+          "minecraft:gold_ingot"
+        ],
+        [
+          "minecraft:dark_oak_planks"
+        ],
+        [
+          "minecraft:dark_oak_planks"
+        ],
+        [
+          "minecraft:dark_oak_planks"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:blackjack_table"
       ]
     },
     {
@@ -92916,6 +93316,42 @@
       ],
       "outputs": [
         "jugcraft:carving_knife"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/casino_arcade.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "minecraft:black_concrete"
+        ],
+        [
+          "minecraft:glass_pane"
+        ],
+        [
+          "minecraft:black_concrete"
+        ],
+        [
+          "minecraft:lapis_lazuli"
+        ],
+        [
+          "minecraft:redstone"
+        ],
+        [
+          "minecraft:lapis_lazuli"
+        ],
+        [
+          "minecraft:black_concrete"
+        ],
+        [
+          "minecraft:stone_button"
+        ],
+        [
+          "minecraft:black_concrete"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:casino_arcade"
       ]
     },
     {
@@ -114273,6 +114709,42 @@
       ]
     },
     {
+      "source": "src/main/resources/data/jugcraft/recipe/coin_pusher.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "minecraft:glass_pane"
+        ],
+        [
+          "minecraft:glass_pane"
+        ],
+        [
+          "minecraft:glass_pane"
+        ],
+        [
+          "minecraft:iron_ingot"
+        ],
+        [
+          "minecraft:piston"
+        ],
+        [
+          "minecraft:iron_ingot"
+        ],
+        [
+          "minecraft:iron_ingot"
+        ],
+        [
+          "minecraft:redstone"
+        ],
+        [
+          "minecraft:iron_ingot"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:coin_pusher"
+      ]
+    },
+    {
       "source": "src/main/resources/data/jugcraft/recipe/coke_oven.json",
       "type": "minecraft:crafting_shaped",
       "inputs": [
@@ -117436,6 +117908,42 @@
       ],
       "outputs": [
         "jugcraft:crackling"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/craps_table.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "minecraft:green_wool"
+        ],
+        [
+          "minecraft:green_wool"
+        ],
+        [
+          "minecraft:green_wool"
+        ],
+        [
+          "minecraft:bone"
+        ],
+        [
+          "minecraft:quartz_block"
+        ],
+        [
+          "minecraft:bone"
+        ],
+        [
+          "minecraft:dark_oak_planks"
+        ],
+        [
+          "minecraft:dark_oak_planks"
+        ],
+        [
+          "minecraft:dark_oak_planks"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:craps_table"
       ]
     },
     {
@@ -121348,6 +121856,42 @@
       ],
       "outputs": [
         "jugcraft:deposit_drill"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/derby_table.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "minecraft:glass_pane"
+        ],
+        [
+          "minecraft:glass_pane"
+        ],
+        [
+          "minecraft:glass_pane"
+        ],
+        [
+          "minecraft:saddle"
+        ],
+        [
+          "minecraft:clock"
+        ],
+        [
+          "minecraft:saddle"
+        ],
+        [
+          "minecraft:green_wool"
+        ],
+        [
+          "minecraft:hay_block"
+        ],
+        [
+          "minecraft:green_wool"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:derby_table"
       ]
     },
     {
@@ -178577,6 +179121,42 @@
       ]
     },
     {
+      "source": "src/main/resources/data/jugcraft/recipe/lottery_kiosk.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "minecraft:yellow_concrete"
+        ],
+        [
+          "minecraft:glass_pane"
+        ],
+        [
+          "minecraft:yellow_concrete"
+        ],
+        [
+          "minecraft:paper"
+        ],
+        [
+          "minecraft:redstone"
+        ],
+        [
+          "minecraft:paper"
+        ],
+        [
+          "minecraft:iron_ingot"
+        ],
+        [
+          "minecraft:hopper"
+        ],
+        [
+          "minecraft:iron_ingot"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:lottery_kiosk"
+      ]
+    },
+    {
       "source": "src/main/resources/data/jugcraft/recipe/lounge_table.json",
       "type": "minecraft:crafting_shaped",
       "inputs": [
@@ -195174,6 +195754,42 @@
       ]
     },
     {
+      "source": "src/main/resources/data/jugcraft/recipe/plinko_board.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "minecraft:iron_nugget"
+        ],
+        [
+          "minecraft:glass_pane"
+        ],
+        [
+          "minecraft:iron_nugget"
+        ],
+        [
+          "minecraft:iron_nugget"
+        ],
+        [
+          "minecraft:iron_nugget"
+        ],
+        [
+          "minecraft:iron_nugget"
+        ],
+        [
+          "minecraft:dark_oak_planks"
+        ],
+        [
+          "minecraft:redstone"
+        ],
+        [
+          "minecraft:dark_oak_planks"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:plinko_board"
+      ]
+    },
+    {
       "source": "src/main/resources/data/jugcraft/recipe/plum_milkshake.json",
       "type": "minecraft:crafting_shapeless",
       "inputs": [
@@ -200019,6 +200635,111 @@
       ]
     },
     {
+      "source": "src/main/resources/data/jugcraft/recipe/poker_table_clockwork.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "minecraft:green_wool"
+        ],
+        [
+          "minecraft:green_wool"
+        ],
+        [
+          "minecraft:green_wool"
+        ],
+        [
+          "minecraft:gold_block"
+        ],
+        [
+          "minecraft:clock"
+        ],
+        [
+          "minecraft:gold_block"
+        ],
+        [
+          "minecraft:dark_oak_planks"
+        ],
+        [
+          "minecraft:redstone_block"
+        ],
+        [
+          "minecraft:dark_oak_planks"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:poker_table_clockwork"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/poker_table_oval.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "minecraft:green_wool"
+        ],
+        [
+          "minecraft:green_wool"
+        ],
+        [
+          "minecraft:green_wool"
+        ],
+        [
+          "minecraft:gold_ingot"
+        ],
+        [
+          "minecraft:leather"
+        ],
+        [
+          "minecraft:gold_ingot"
+        ],
+        [
+          "minecraft:dark_oak_planks"
+        ],
+        [
+          "minecraft:dark_oak_planks"
+        ],
+        [
+          "minecraft:dark_oak_planks"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:poker_table_oval"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/poker_table_saloon.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "minecraft:green_wool"
+        ],
+        [
+          "minecraft:green_wool"
+        ],
+        [
+          "minecraft:green_wool"
+        ],
+        [
+          "minecraft:dark_oak_planks"
+        ],
+        [
+          "minecraft:dark_oak_planks"
+        ],
+        [
+          "minecraft:dark_oak_planks"
+        ],
+        [
+          "minecraft:stick"
+        ],
+        [
+          "minecraft:stick"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:poker_table_saloon"
+      ]
+    },
+    {
       "source": "src/main/resources/data/jugcraft/recipe/polar_crane.json",
       "type": "minecraft:crafting_shaped",
       "inputs": [
@@ -203384,6 +204105,42 @@
       ],
       "outputs": [
         "jugcraft:printer"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/prize_wheel.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "minecraft:red_dye"
+        ],
+        [
+          "minecraft:yellow_dye"
+        ],
+        [
+          "minecraft:blue_dye"
+        ],
+        [
+          "minecraft:gold_ingot"
+        ],
+        [
+          "minecraft:gold_block"
+        ],
+        [
+          "minecraft:gold_ingot"
+        ],
+        [
+          "minecraft:dark_oak_planks"
+        ],
+        [
+          "minecraft:dark_oak_planks"
+        ],
+        [
+          "minecraft:dark_oak_planks"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:prize_wheel"
       ]
     },
     {
@@ -212114,6 +212871,42 @@
       ]
     },
     {
+      "source": "src/main/resources/data/jugcraft/recipe/roulette_table.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "minecraft:red_wool"
+        ],
+        [
+          "minecraft:green_wool"
+        ],
+        [
+          "minecraft:black_wool"
+        ],
+        [
+          "minecraft:gold_ingot"
+        ],
+        [
+          "minecraft:compass"
+        ],
+        [
+          "minecraft:gold_ingot"
+        ],
+        [
+          "minecraft:dark_oak_planks"
+        ],
+        [
+          "minecraft:dark_oak_planks"
+        ],
+        [
+          "minecraft:dark_oak_planks"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:roulette_table"
+      ]
+    },
+    {
       "source": "src/main/resources/data/jugcraft/recipe/rounded_gravestone_from_stonecutting.json",
       "type": "minecraft:stonecutting",
       "inputs": [
@@ -216376,6 +217169,366 @@
       ],
       "outputs": [
         "jugcraft:sliding_gate"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/slot_machine_classic.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "minecraft:iron_ingot"
+        ],
+        [
+          "minecraft:glass_pane"
+        ],
+        [
+          "minecraft:iron_ingot"
+        ],
+        [
+          "minecraft:apple"
+        ],
+        [
+          "minecraft:redstone"
+        ],
+        [
+          "minecraft:apple"
+        ],
+        [
+          "minecraft:iron_ingot"
+        ],
+        [
+          "minecraft:iron_ingot"
+        ],
+        [
+          "minecraft:iron_ingot"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:slot_machine_classic"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/slot_machine_clockwork.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "minecraft:gold_ingot"
+        ],
+        [
+          "minecraft:glass_pane"
+        ],
+        [
+          "minecraft:gold_ingot"
+        ],
+        [
+          "minecraft:clock"
+        ],
+        [
+          "minecraft:redstone"
+        ],
+        [
+          "minecraft:clock"
+        ],
+        [
+          "minecraft:gold_ingot"
+        ],
+        [
+          "minecraft:lever"
+        ],
+        [
+          "minecraft:gold_ingot"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:slot_machine_clockwork"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/slot_machine_creeper.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "minecraft:green_concrete"
+        ],
+        [
+          "minecraft:glass_pane"
+        ],
+        [
+          "minecraft:green_concrete"
+        ],
+        [
+          "minecraft:gunpowder"
+        ],
+        [
+          "minecraft:redstone"
+        ],
+        [
+          "minecraft:gunpowder"
+        ],
+        [
+          "minecraft:black_concrete"
+        ],
+        [
+          "minecraft:tnt"
+        ],
+        [
+          "minecraft:black_concrete"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:slot_machine_creeper"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/slot_machine_dragon.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "minecraft:red_concrete"
+        ],
+        [
+          "minecraft:glass_pane"
+        ],
+        [
+          "minecraft:red_concrete"
+        ],
+        [
+          "minecraft:lantern"
+        ],
+        [
+          "minecraft:redstone"
+        ],
+        [
+          "minecraft:lantern"
+        ],
+        [
+          "minecraft:red_concrete"
+        ],
+        [
+          "minecraft:gold_block"
+        ],
+        [
+          "minecraft:red_concrete"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:slot_machine_dragon"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/slot_machine_gem.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "minecraft:deepslate_bricks"
+        ],
+        [
+          "minecraft:glass_pane"
+        ],
+        [
+          "minecraft:deepslate_bricks"
+        ],
+        [
+          "minecraft:diamond"
+        ],
+        [
+          "minecraft:redstone"
+        ],
+        [
+          "minecraft:emerald"
+        ],
+        [
+          "minecraft:deepslate_bricks"
+        ],
+        [
+          "minecraft:minecart"
+        ],
+        [
+          "minecraft:deepslate_bricks"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:slot_machine_gem"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/slot_machine_nether.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "minecraft:blackstone"
+        ],
+        [
+          "minecraft:glass_pane"
+        ],
+        [
+          "minecraft:blackstone"
+        ],
+        [
+          "minecraft:magma_block"
+        ],
+        [
+          "minecraft:redstone"
+        ],
+        [
+          "minecraft:magma_block"
+        ],
+        [
+          "minecraft:nether_bricks"
+        ],
+        [
+          "minecraft:blaze_rod"
+        ],
+        [
+          "minecraft:nether_bricks"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:slot_machine_nether"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/slot_machine_progressive.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "minecraft:glowstone"
+        ],
+        [
+          "minecraft:glass_pane"
+        ],
+        [
+          "minecraft:glowstone"
+        ],
+        [
+          "minecraft:gold_block"
+        ],
+        [
+          "minecraft:redstone_block"
+        ],
+        [
+          "minecraft:gold_block"
+        ],
+        [
+          "minecraft:obsidian"
+        ],
+        [
+          "minecraft:obsidian"
+        ],
+        [
+          "minecraft:obsidian"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:slot_machine_progressive"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/slot_machine_pub.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "minecraft:oak_planks"
+        ],
+        [
+          "minecraft:glass_pane"
+        ],
+        [
+          "minecraft:oak_planks"
+        ],
+        [
+          "minecraft:apple"
+        ],
+        [
+          "minecraft:redstone"
+        ],
+        [
+          "minecraft:sweet_berries"
+        ],
+        [
+          "minecraft:iron_ingot"
+        ],
+        [
+          "minecraft:stone_button"
+        ],
+        [
+          "minecraft:iron_ingot"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:slot_machine_pub"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/slot_machine_shark.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "minecraft:blue_concrete"
+        ],
+        [
+          "minecraft:glass_pane"
+        ],
+        [
+          "minecraft:blue_concrete"
+        ],
+        [
+          "minecraft:cod"
+        ],
+        [
+          "minecraft:redstone"
+        ],
+        [
+          "minecraft:cod"
+        ],
+        [
+          "minecraft:blue_concrete"
+        ],
+        [
+          "minecraft:iron_ingot"
+        ],
+        [
+          "minecraft:blue_concrete"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:slot_machine_shark"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/slot_machine_treasure.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "minecraft:prismarine_bricks"
+        ],
+        [
+          "minecraft:glass_pane"
+        ],
+        [
+          "minecraft:prismarine_bricks"
+        ],
+        [
+          "minecraft:heart_of_the_sea"
+        ],
+        [
+          "minecraft:redstone"
+        ],
+        [
+          "minecraft:nautilus_shell"
+        ],
+        [
+          "minecraft:prismarine_bricks"
+        ],
+        [
+          "minecraft:sea_lantern"
+        ],
+        [
+          "minecraft:prismarine_bricks"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:slot_machine_treasure"
       ]
     },
     {
@@ -251495,6 +252648,18 @@
       ]
     },
     {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/baccarat_table.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:baccarat_table"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:baccarat_table"
+      ]
+    },
+    {
       "source": "src/main/resources/data/jugcraft/loot_table/blocks/bacon_and_eggs.json",
       "type": "block_drop",
       "inputs": [
@@ -252685,6 +253850,18 @@
       ]
     },
     {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/blackjack_table.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:blackjack_table"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:blackjack_table"
+      ]
+    },
+    {
       "source": "src/main/resources/data/jugcraft/loot_table/blocks/blackstone_sarcophagus.json",
       "type": "block_drop",
       "inputs": [
@@ -253744,6 +254921,18 @@
       ],
       "outputs": [
         "jugcraft:carrot_crate"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/casino_arcade.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:casino_arcade"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:casino_arcade"
       ]
     },
     {
@@ -259002,6 +260191,18 @@
       ]
     },
     {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/coin_pusher.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:coin_pusher"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:coin_pusher"
+      ]
+    },
+    {
       "source": "src/main/resources/data/jugcraft/loot_table/blocks/coke_oven.json",
       "type": "block_drop",
       "inputs": [
@@ -259842,6 +261043,18 @@
       ],
       "outputs": [
         "jugcraft:cranberry_pie"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/craps_table.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:craps_table"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:craps_table"
       ]
     },
     {
@@ -260885,6 +262098,18 @@
       ],
       "outputs": [
         "jugcraft:deposit_drill"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/derby_table.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:derby_table"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:derby_table"
       ]
     },
     {
@@ -280057,6 +281282,18 @@
       ]
     },
     {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/lottery_kiosk.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:lottery_kiosk"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:lottery_kiosk"
+      ]
+    },
+    {
       "source": "src/main/resources/data/jugcraft/loot_table/blocks/lounge_table.json",
       "type": "block_drop",
       "inputs": [
@@ -280711,6 +281948,18 @@
       ],
       "outputs": [
         "jugcraft:marigold_petals"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/market_chest.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:market_chest"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:market_chest"
       ]
     },
     {
@@ -284899,6 +286148,18 @@
       ]
     },
     {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/plinko_board.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:plinko_board"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:plinko_board"
+      ]
+    },
+    {
       "source": "src/main/resources/data/jugcraft/loot_table/blocks/plum_leaves.json",
       "type": "block_drop",
       "inputs": [
@@ -284995,6 +286256,42 @@
       ],
       "outputs": [
         "jugcraft:pocket_stone_block"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/poker_table_clockwork.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:poker_table_clockwork"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:poker_table_clockwork"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/poker_table_oval.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:poker_table_oval"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:poker_table_oval"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/poker_table_saloon.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:poker_table_saloon"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:poker_table_saloon"
       ]
     },
     {
@@ -285712,6 +287009,18 @@
       ],
       "outputs": [
         "jugcraft:printer"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/prize_wheel.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:prize_wheel"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:prize_wheel"
       ]
     },
     {
@@ -287017,6 +288326,18 @@
       ]
     },
     {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/roulette_table.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:roulette_table"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:roulette_table"
+      ]
+    },
+    {
       "source": "src/main/resources/data/jugcraft/loot_table/blocks/rounded_gravestone.json",
       "type": "block_drop",
       "inputs": [
@@ -287906,6 +289227,126 @@
       ],
       "outputs": [
         "jugcraft:sliding_gate"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/slot_machine_classic.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:slot_machine_classic"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:slot_machine_classic"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/slot_machine_clockwork.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:slot_machine_clockwork"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:slot_machine_clockwork"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/slot_machine_creeper.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:slot_machine_creeper"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:slot_machine_creeper"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/slot_machine_dragon.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:slot_machine_dragon"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:slot_machine_dragon"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/slot_machine_gem.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:slot_machine_gem"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:slot_machine_gem"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/slot_machine_nether.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:slot_machine_nether"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:slot_machine_nether"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/slot_machine_progressive.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:slot_machine_progressive"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:slot_machine_progressive"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/slot_machine_pub.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:slot_machine_pub"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:slot_machine_pub"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/slot_machine_shark.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:slot_machine_shark"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:slot_machine_shark"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/loot_table/blocks/slot_machine_treasure.json",
+      "type": "block_drop",
+      "inputs": [
+        [
+          "jugcraft:slot_machine_treasure"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:slot_machine_treasure"
       ]
     },
     {
@@ -297037,7 +298478,7 @@
         ]
       ],
       "outputs": [
-        "jugcraft:rock_candy"
+        "jugcraft:hard_candy"
       ]
     },
     {
@@ -297061,7 +298502,7 @@
         ]
       ],
       "outputs": [
-        "jugcraft:salt_water_taffy"
+        "jugcraft:burnt_sugar"
       ]
     },
     {
@@ -297133,7 +298574,7 @@
         ]
       ],
       "outputs": [
-        "jugcraft:burnt_sugar"
+        "jugcraft:rock_candy"
       ]
     },
     {
@@ -297157,61 +298598,7 @@
         ]
       ],
       "outputs": [
-        "jugcraft:hard_candy"
-      ]
-    },
-    {
-      "source": "tools/agriculture.py:CANDY/cream",
-      "type": "candy_temperature",
-      "inputs": [
-        [
-          "jugcraft:candy_kettle"
-        ],
-        [
-          "jugcraft:candy_tray"
-        ],
-        [
-          "minecraft:sugar"
-        ],
-        [
-          "minecraft:water_bucket"
-        ],
-        [
-          "minecraft:campfire"
-        ],
-        [
-          "minecraft:milk_bucket"
-        ]
-      ],
-      "outputs": [
-        "jugcraft:toffee"
-      ]
-    },
-    {
-      "source": "tools/agriculture.py:CANDY/cream",
-      "type": "candy_temperature",
-      "inputs": [
-        [
-          "jugcraft:candy_kettle"
-        ],
-        [
-          "jugcraft:candy_tray"
-        ],
-        [
-          "minecraft:sugar"
-        ],
-        [
-          "minecraft:water_bucket"
-        ],
-        [
-          "minecraft:campfire"
-        ],
-        [
-          "minecraft:milk_bucket"
-        ]
-      ],
-      "outputs": [
-        "jugcraft:burnt_sugar"
+        "jugcraft:salt_water_taffy"
       ]
     },
     {
@@ -297266,6 +298653,60 @@
       ],
       "outputs": [
         "jugcraft:fudge"
+      ]
+    },
+    {
+      "source": "tools/agriculture.py:CANDY/cream",
+      "type": "candy_temperature",
+      "inputs": [
+        [
+          "jugcraft:candy_kettle"
+        ],
+        [
+          "jugcraft:candy_tray"
+        ],
+        [
+          "minecraft:sugar"
+        ],
+        [
+          "minecraft:water_bucket"
+        ],
+        [
+          "minecraft:campfire"
+        ],
+        [
+          "minecraft:milk_bucket"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:burnt_sugar"
+      ]
+    },
+    {
+      "source": "tools/agriculture.py:CANDY/cream",
+      "type": "candy_temperature",
+      "inputs": [
+        [
+          "jugcraft:candy_kettle"
+        ],
+        [
+          "jugcraft:candy_tray"
+        ],
+        [
+          "minecraft:sugar"
+        ],
+        [
+          "minecraft:water_bucket"
+        ],
+        [
+          "minecraft:campfire"
+        ],
+        [
+          "minecraft:milk_bucket"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:toffee"
       ]
     },
     {

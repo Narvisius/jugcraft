@@ -145,6 +145,23 @@ public class ForagingGameTests {
 		helper.succeed();
 	}
 
+	/** Passive scans and sprouting must not generate terrain around a player's unloaded destination. */
+	@GameTest(maxTicks = 20)
+	public void fairyRingsNeverLoadDistantChunks(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		BlockPos far = new BlockPos(23_777_776, 64, -23_777_776);
+		for (int dx = -1; dx <= 1; dx++) for (int dz = -1; dz <= 1; dz++) {
+			helper.assertTrue(!level.hasChunkAt(far.offset(dx * 16, 0, dz * 16)), "Probe area starts unloaded");
+		}
+		helper.assertTrue(FairyRings.count(level, far) == 0, "Unloaded terrain supplies no mushrooms");
+		helper.assertTrue(FairyRings.sprout(level, far, mushroom("chanterelle"),
+				net.minecraft.util.RandomSource.create(42)) == 0, "No mushrooms sprout into unloaded terrain");
+		for (int dx = -1; dx <= 1; dx++) for (int dz = -1; dz <= 1; dz++) {
+			helper.assertTrue(!level.hasChunkAt(far.offset(dx * 16, 0, dz * 16)), "Fairy-ring work must not load chunks");
+		}
+		helper.succeed();
+	}
+
 	/**
 	 * The basket takes forage, not stone; picking a mushroom with it in the other hand puts it straight in; full of all five
 	 * mushrooms it earns Forager.

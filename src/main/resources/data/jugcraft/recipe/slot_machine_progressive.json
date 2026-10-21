@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "town"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "LGL",
+    "BRB",
+    "OOO"
+  ],
+  "key": {
+    "L": "minecraft:glowstone",
+    "G": "minecraft:glass_pane",
+    "B": "minecraft:gold_block",
+    "R": "minecraft:redstone_block",
+    "O": "minecraft:obsidian"
+  },
+  "result": {
+    "id": "jugcraft:slot_machine_progressive",
+    "count": 1
+  }
+}

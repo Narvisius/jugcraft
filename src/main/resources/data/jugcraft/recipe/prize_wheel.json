@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "town"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RYB",
+    "GCG",
+    "PPP"
+  ],
+  "key": {
+    "R": "minecraft:red_dye",
+    "Y": "minecraft:yellow_dye",
+    "B": "minecraft:blue_dye",
+    "G": "minecraft:gold_ingot",
+    "C": "minecraft:gold_block",
+    "P": "minecraft:dark_oak_planks"
+  },
+  "result": {
+    "id": "jugcraft:prize_wheel",
+    "count": 1
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "town"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RWB",
+    "GCG",
+    "DDD"
+  ],
+  "key": {
+    "R": "minecraft:red_wool",
+    "W": "minecraft:green_wool",
+    "B": "minecraft:black_wool",
+    "G": "minecraft:gold_ingot",
+    "C": "minecraft:compass",
+    "D": "minecraft:dark_oak_planks"
+  },
+  "result": {
+    "id": "jugcraft:roulette_table",
+    "count": 1
+  }
+}

@@ -277,7 +277,8 @@ def check_assets(registered):
         if item not in (all_blocks() + machine_blocks() + ag.all_blocks() + petro.petro_blocks() + deposits.all_blocks()
                         + list(tank_display.BLOCKS) + plastic.blocks() + ph.blocks() + (town_assets.blocks() + styx.blocks())
                         + construction.blocks() + control_electronics.blocks() + rocketry.blocks() + dieselworks.blocks() + kaiserworks.blocks() + trenchworks.blocks() + fortifications.blocks() + bunkerworks.blocks() + aged_wood.blocks() + fire_control.blocks()
-                        + concordance.blocks() + guns.blocks() + industrial_forms.blocks() + list(vehicle_bays.BLOCKS) + menagerie.blocks()) and f"item.{MOD}.{item}" not in lang:
+                        + concordance.blocks() + guns.blocks() + industrial_forms.blocks() + list(vehicle_bays.BLOCKS) + menagerie.blocks()
+                        + exchange_blocks.BLOCKS + exchange_poker.BLOCKS + exchange_casino.BLOCKS + exchange_casino.ITEMS) and f"item.{MOD}.{item}" not in lang:
             err(f"Missing name for item {item}")
 
 
@@ -372,6 +373,9 @@ UNITS = {"ingots": 9, "nuggets": 1, "raw_materials": 9, "ores": 9, "storage_bloc
 
 
 import guide_books
+import exchange_blocks
+import exchange_poker
+import exchange_casino
 NON_METAL = set(guide_books.BOOKS) | {"sawdust"} | set(MINERALS) | set(ITEMS) | set(machine_blocks()) | set(machine_items()) | set(CIRCUITS) | {b for m in MINERALS for b in (f"{m}_ore", f"deepslate_{m}_ore", f"{m}_block")} | {"oil_sand"} | set(petro.petro_items()) | set(ag.all_blocks()) | set(ag.all_items()) | set(petro.petro_blocks()) | set(tank_display.BLOCKS) | set(ph.blocks()) | set(ph.items()) | set((town_assets.blocks() + styx.blocks()))
 
 
@@ -445,7 +449,8 @@ def item_units(ref):
         return {}
     if path in plastic.blocks() or path in exosuit.items() or path in grapple.items() or path in field_chemistry.items()\
             or path in construction.items() or path in construction.blocks() or path in gas_storage.items() or path in control_electronics.blocks() or path in control_electronics.items() or path in rocketry.items() or path in rocketry.blocks() or path in dieselworks.blocks() or path in kaiserworks.blocks() or path in trenchworks.blocks() or path in fortifications.blocks() or path in bunkerworks.blocks() or path in aged_wood.blocks() or path in fire_control.blocks() or path in fire_control.items() or path in raiders.ITEMS or path in armoured_walker.ITEMS or path in howitzer_walker.ITEMS or path in zeppelin.ITEMS or path in mech.ITEMS or path in landship.ITEMS or path in artillery.ITEMS or path in tower_guns.items()\
-            or path in guns.items() or path in guns.blocks() or path in concordance.items() or path in concordance.blocks() or path in industrial_forms.blocks():
+            or path in guns.items() or path in guns.blocks() or path in concordance.items() or path in concordance.blocks() or path in industrial_forms.blocks()\
+            or path in exchange_poker.BLOCKS or path in exchange_casino.BLOCKS or path in exchange_casino.ITEMS:
         return {}
     if path in arms.items():
         return arms.metal_content(path)
@@ -712,6 +717,7 @@ def check_tags():
     for path in sorted(DATA.rglob("tags/*/**/*.json")):
         registry = path.relative_to(DATA).parts[2]
         known = OTHER_ENTRIES.get(registry) or set(all_blocks() + all_items() + machine_blocks() + machine_items()
+                                                    + list(exchange_blocks.BLOCKS) + list(exchange_poker.BLOCKS) + list(exchange_casino.BLOCKS) + list(exchange_casino.ITEMS)
                                                     + petro.petro_blocks() + petro.petro_items() + deposits.all_blocks()
                                                     + list(tank_display.BLOCKS) + seasons.BLOCKS + ph.blocks() + ph.items()
                                                     + arms.items() + arms_variants.items()
@@ -16993,7 +16999,7 @@ def registered_items():
     import vehicle_bays
     registered = (set(all_blocks()) | set(all_items()) | set(machine_blocks()) | set(machine_items())
                   | set(ag.all_blocks()) | set(ag.all_items()) | set(petro.petro_items()) | set(petro.petro_blocks())
-                  | set(deposits.all_blocks()) | set(guide_books.BOOKS) | set(tank_display.BLOCKS)
+                  | set(deposits.all_blocks()) | set(guide_books.BOOKS) | set(tank_display.BLOCKS) | set(exchange_blocks.BLOCKS) | set(exchange_poker.BLOCKS) | set(exchange_casino.BLOCKS) | set(exchange_casino.ITEMS)
                   | set(arms.items()) | set(arms_variants.items())
                   | set(gear.items()) | set(plastic.blocks()) | set(exosuit.items()) | set(grapple.items())
                   | set(field_chemistry.items()) | set(construction.items()) | set(construction.blocks()) | set(gas_storage.items()) | set(control_electronics.blocks()) | set(control_electronics.items()) | set(rocketry.items()) | set(rocketry.blocks()) | set(dieselworks.blocks()) | set(kaiserworks.blocks()) | set(trenchworks.blocks()) | set(fortifications.blocks()) | set(bunkerworks.blocks()) | set(aged_wood.blocks()) | set(fire_control.blocks()) | set(fire_control.items()) | set(raiders.ITEMS) | set(armoured_walker.ITEMS) | set(howitzer_walker.ITEMS) | set(zeppelin.ITEMS) | set(mech.ITEMS) | set(landship.ITEMS) | set(artillery.ITEMS) | set(tower_guns.items())

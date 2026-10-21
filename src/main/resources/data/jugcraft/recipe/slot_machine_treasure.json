@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "town"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PGP",
+    "HRN",
+    "PLP"
+  ],
+  "key": {
+    "P": "minecraft:prismarine_bricks",
+    "G": "minecraft:glass_pane",
+    "H": "minecraft:heart_of_the_sea",
+    "R": "minecraft:redstone",
+    "N": "minecraft:nautilus_shell",
+    "L": "minecraft:sea_lantern"
+  },
+  "result": {
+    "id": "jugcraft:slot_machine_treasure",
+    "count": 1
+  }
+}

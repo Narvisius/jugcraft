@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "town"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "OGO",
+    "ARS",
+    "IBI"
+  ],
+  "key": {
+    "O": "minecraft:oak_planks",
+    "G": "minecraft:glass_pane",
+    "A": "minecraft:apple",
+    "R": "minecraft:redstone",
+    "S": "minecraft:sweet_berries",
+    "I": "minecraft:iron_ingot",
+    "B": "minecraft:stone_button"
+  },
+  "result": {
+    "id": "jugcraft:slot_machine_pub",
+    "count": 1
+  }
+}

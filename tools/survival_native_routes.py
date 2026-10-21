@@ -197,4 +197,11 @@ def extend(root, edge, evidence, items):
     # HDPE/rubber offcuts and their existing reclaim recipes as compatibility items.
     for name in ('hdpe_offcut', 'rubber_offcut'):
         exclusions[j(name)] = 'Saved-world compatibility offcut; full-yield extrusion no longer creates scrap. Existing stock still reclaims through the Polymer Reclaimer.'
+    found(['market_chest'], java + 'finance/ExchangeBlocks.java',
+          'A company controller purchases a Market Chest from the Exchange Equities tab for the configured Jugs price; buyChest checks ownership and transfers the fee to the reserve.')
+    found(['exchange_guide'], java + 'finance/ExchangeGuide.java',
+          'Granted once on joining; additional guides from /jugcraft exchange guide.')
+    import exchange_casino
+    found(list(exchange_casino.SCRATCH_CARDS),
+          java + 'finance/CasinoBlockEntity.java', 'Purchased as server-issued, single-use paid tickets at a lottery kiosk; alchemy blanks have no prize entitlement.')
     return exclusions

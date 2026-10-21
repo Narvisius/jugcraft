@@ -354,6 +354,12 @@ def feature_of(entry_id):
     import zeppelin
     if entry_id in zeppelin.ITEMS:
         return "machines"
+    import exchange_poker  # the Exchange's poker tables go with the town
+    if entry_id in exchange_poker.BLOCKS:
+        return exchange_poker.FEATURE
+    import exchange_casino
+    if entry_id in exchange_casino.BLOCKS:
+        return exchange_casino.FEATURE
     import mech
     if entry_id in mech.ITEMS:
         return "machines"

@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "town"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RGR",
+    "LDL",
+    "RBR"
+  ],
+  "key": {
+    "R": "minecraft:red_concrete",
+    "G": "minecraft:glass_pane",
+    "L": "minecraft:lantern",
+    "D": "minecraft:redstone",
+    "B": "minecraft:gold_block"
+  },
+  "result": {
+    "id": "jugcraft:slot_machine_dragon",
+    "count": 1
+  }
+}

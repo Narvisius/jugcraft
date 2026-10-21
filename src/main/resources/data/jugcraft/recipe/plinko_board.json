@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "town"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "NGN",
+    "NNN",
+    "PRP"
+  ],
+  "key": {
+    "N": "minecraft:iron_nugget",
+    "G": "minecraft:glass_pane",
+    "P": "minecraft:dark_oak_planks",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "jugcraft:plinko_board",
+    "count": 1
+  }
+}

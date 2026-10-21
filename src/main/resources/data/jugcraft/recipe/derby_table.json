@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "town"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "LLL",
+    "SCS",
+    "WHW"
+  ],
+  "key": {
+    "L": "minecraft:glass_pane",
+    "S": "minecraft:saddle",
+    "C": "minecraft:clock",
+    "W": "minecraft:green_wool",
+    "H": "minecraft:hay_block"
+  },
+  "result": {
+    "id": "jugcraft:derby_table",
+    "count": 1
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "town"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IGI",
+    "ARA",
+    "III"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "G": "minecraft:glass_pane",
+    "A": "minecraft:apple",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "jugcraft:slot_machine_classic",
+    "count": 1
+  }
+}

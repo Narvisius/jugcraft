@@ -12,6 +12,7 @@ import io.github.jimbozoomer.jugcraft.deposit.JugcraftDeposits;
 import io.github.jimbozoomer.jugcraft.electronics.JugcraftElectronics;
 import io.github.jimbozoomer.jugcraft.drone.JugcraftDrones;
 import io.github.jimbozoomer.jugcraft.farming.JugcraftFarming;
+import io.github.jimbozoomer.jugcraft.finance.JugcraftFinance;
 import io.github.jimbozoomer.jugcraft.fluid.JugcraftFluids;
 import io.github.jimbozoomer.jugcraft.gear.JugcraftExosuit;
 import io.github.jimbozoomer.jugcraft.gear.JugcraftGear;
@@ -101,6 +102,7 @@ public final class Jugcraft implements ModInitializer {
 		io.github.jimbozoomer.jugcraft.weapons.FieldChemistry.register();
 		io.github.jimbozoomer.jugcraft.chemistry.ConstructionChemistry.register();
 		JugcraftGuide.register();
+		JugcraftFinance.register();
 		JugcraftAgriculture.register();
 		io.github.jimbozoomer.jugcraft.lair.JugcraftLairs.register();
 		io.github.jimbozoomer.jugcraft.lair.vesperine.JugcraftVesperine.register();

@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "town"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CGC",
+    "URU",
+    "KTK"
+  ],
+  "key": {
+    "C": "minecraft:green_concrete",
+    "G": "minecraft:glass_pane",
+    "U": "minecraft:gunpowder",
+    "R": "minecraft:redstone",
+    "K": "minecraft:black_concrete",
+    "T": "minecraft:tnt"
+  },
+  "result": {
+    "id": "jugcraft:slot_machine_creeper",
+    "count": 1
+  }
+}

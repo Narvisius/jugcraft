@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "town"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "NGN",
+    "CRC",
+    "NLN"
+  ],
+  "key": {
+    "N": "minecraft:gold_ingot",
+    "G": "minecraft:glass_pane",
+    "C": "minecraft:clock",
+    "R": "minecraft:redstone",
+    "L": "minecraft:lever"
+  },
+  "result": {
+    "id": "jugcraft:slot_machine_clockwork",
+    "count": 1
+  }
+}

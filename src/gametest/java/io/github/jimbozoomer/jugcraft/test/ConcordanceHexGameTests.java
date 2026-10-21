@@ -48,6 +48,8 @@ public class ConcordanceHexGameTests {
 
 	private static ServerPlayer hexer(GameTestHelper helper) {
 		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        // Join listeners may supply welcome items. Each fixture below defines its own exact escrow.
+        player.getInventory().clearContent();
 		player.setGameMode(GameType.SURVIVAL);
 		BlockPos absolute = helper.absolutePos(STAND);
 		player.snapTo(absolute.getX() + 0.5, absolute.getY(), absolute.getZ() + 0.5, 0.0F, 0.0F);
@@ -175,6 +177,7 @@ public class ConcordanceHexGameTests {
 		helper.setBlock(new BlockPos(2, 1, 4), Dreaming.CENSER);
 		dreamer.getInventory().setItem(0, new ItemStack(Items.DIAMOND, 3));
 		dreamer.getInventory().setItem(7, new ItemStack(Items.IRON_INGOT, 12));
+        dreamer.getInventory().setItem(5,new ItemStack(io.github.jimbozoomer.jugcraft.finance.ExchangeGuide.GUIDE));
 		dreamer.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
 		dreamer.experienceLevel = 5;
 		helper.assertTrue(Dreaming.begin(dreamer, level, censer, false).equals("needs_night") && Dreaming.expedition(dreamer) == null
@@ -182,7 +185,7 @@ public class ConcordanceHexGameTests {
 		String reason = Dreaming.begin(dreamer, level, censer, true);
 		helper.assertTrue(reason.isEmpty(), "At night the dream begins: " + reason);
 		DreamExpedition expedition = Dreaming.expedition(dreamer);
-		helper.assertTrue(expedition != null && expedition.items() == 3 + 12 + 1 && dreamer.getInventory().isEmpty()
+		helper.assertTrue(expedition != null && expedition.items() == 3 + 12 + 1 + 1 && dreamer.getInventory().isEmpty()
 				&& Dreaming.currentMode(dreamer) == GameType.ADVENTURE, "Everything is held in the escrow; the dreamer carries nothing, in adventure mode");
 		// In the dream: pick something up, gain experience, catch a wisp.
 		dreamer.getInventory().setItem(3, new ItemStack(Items.COBBLESTONE, 5));
@@ -201,6 +204,8 @@ public class ConcordanceHexGameTests {
 		helper.assertTrue(dreamer.getInventory().getItem(0).getCount() == 3 && dreamer.getInventory().getItem(0).is(Items.DIAMOND)
 				&& dreamer.getInventory().getItem(7).getCount() == 12 && dreamer.getItemBySlot(EquipmentSlot.HEAD).is(Items.IRON_HELMET),
 				"Every item is back in its own slot");
+        helper.assertTrue(dreamer.getInventory().getItem(5).is(io.github.jimbozoomer.jugcraft.finance.ExchangeGuide.GUIDE)
+                && dreamer.getInventory().countItem(io.github.jimbozoomer.jugcraft.finance.ExchangeGuide.GUIDE)==1,"The Exchange guide is restored exactly once in its original slot");
 		helper.assertTrue(dreamer.experienceLevel == 5 && Dreaming.currentMode(dreamer) == GameType.SURVIVAL && Dreaming.expedition(dreamer) == null,
 				"The experience and game mode are as before; no expedition remains");
 		helper.assertTrue(dreamer.getInventory().countItem(Items.COBBLESTONE) == 0 && dreamer.getInventory().countItem(Dreaming.DREAMGLASS) == 1,
@@ -265,6 +270,8 @@ public class ConcordanceHexGameTests {
 		Dreaming.end(dreamer, DreamRules.End.DISCONNECTED);
 		helper.assertTrue(Dreaming.dreaming(dreamer) && dreamer.getInventory().isEmpty(), "Ending it on the dead body does nothing");
 		ServerPlayer respawned = helper.makeMockServerPlayerInLevel();
+        // This helper simulates a login; a real respawn starts with an empty body, without another join gift.
+        respawned.getInventory().clearContent();
 		respawned.setGameMode(GameType.ADVENTURE);
 		helper.assertTrue(Dreaming.recover(dreamer, respawned) && respawned.getInventory().getItem(2).getCount() == 9
 				&& Dreaming.currentMode(respawned) == GameType.SURVIVAL && !Dreaming.dreaming(dreamer), "The new body has the gold back, in survival");

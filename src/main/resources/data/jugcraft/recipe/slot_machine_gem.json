@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "town"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SGS",
+    "DRE",
+    "SMS"
+  ],
+  "key": {
+    "S": "minecraft:deepslate_bricks",
+    "G": "minecraft:glass_pane",
+    "D": "minecraft:diamond",
+    "R": "minecraft:redstone",
+    "E": "minecraft:emerald",
+    "M": "minecraft:minecart"
+  },
+  "result": {
+    "id": "jugcraft:slot_machine_gem",
+    "count": 1
+  }
+}

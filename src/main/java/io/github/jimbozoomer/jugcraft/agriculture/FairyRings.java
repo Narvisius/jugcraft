@@ -60,7 +60,7 @@ public final class FairyRings {
 		});
 	}
 
-	/** How many wild mushrooms stand in the circle round {@code centre}. */
+	/** How many wild mushrooms stand in the loaded circle round {@code centre}; never requests chunks. */
 	public static int count(Level level, BlockPos centre) {
 		int found = 0;
 		for (int dx = -4; dx <= 4; dx++) {
@@ -70,7 +70,10 @@ public final class FairyRings {
 					continue;
 				}
 				for (int dy = -1; dy <= 1; dy++) {
-					if (level.getBlockState(centre.offset(dx, dy, dz)).getBlock() instanceof WildMushroomBlock) {
+					BlockPos spot = centre.offset(dx, dy, dz);
+					// Teleporting/disconnected players and chunk borders must not make this passive scan load terrain.
+					if (!level.hasChunkAt(spot)) break;
+					if (level.getBlockState(spot).getBlock() instanceof WildMushroomBlock) {
 						found++;
 						break;
 					}
@@ -122,6 +125,7 @@ public final class FairyRings {
 		for (int[] point : RING) {
 			for (int dy : new int[] {0, 1, -1}) {
 				BlockPos spot = centre.offset(point[0], dy, point[1]);
+				if (!level.hasChunkAt(spot)) break;
 				if (level.getBlockState(spot).getBlock() instanceof WildMushroomBlock) {
 					break;
 				}

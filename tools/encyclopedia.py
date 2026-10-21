@@ -128,6 +128,7 @@ KEY_HELP = {
     "reload": "Reloads the gun in your hand",
     "inspect": "Inspects the gun in your hand",
     "stab": "Stabs with the bayonet on your gun",
+    "exchange": "Opens the Exchange: bank, markets, land, shares and the casino",
 }
 
 # The inventory button's sprite, copied byte for byte from the owner's library (A-D8): runtime path under
