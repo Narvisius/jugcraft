@@ -109,7 +109,7 @@ def write_extras(write,assets,data,lang,condition):
   write(data/'recipe'/f'{mold}_mold.json',dict(type='minecraft:crafting_shaped',category='misc',pattern=[' P ','PXP',' P '],key={'P':P,'X':pattern},result={'id':'jugcraft:'+mold+'_mold','count':1},**{'fabric:load_conditions':condition('machines')}))
  uses=[('housing_casing',['jugcraft:polymer_housing','#c:plates/steel','#c:plates/steel'],'machine_casing',1),
        ('fitting_pipe',['jugcraft:polymer_fitting','jugcraft:bronze_fluid_pipe','#c:plates/steel'],'steel_fluid_pipe',3),
-       ('insulated_copper_cable',['jugcraft:cable_insulation','#c:ingots/copper','#c:ingots/copper','#c:ingots/tin'],'copper_cable',8),
+       ('insulated_copper_cable',['jugcraft:cable_insulation','#c:ingots/copper','#c:ingots/copper','#c:ingots/tin'],'copper_cable',16),
        ('hose_valve',['jugcraft:flexible_hose','jugcraft:steel_fluid_pipe','#c:plates/steel'],'fluid_valve',1),
        ('molded_composite_panel',['jugcraft:polymer_vehicle_panel','jugcraft:coke','jugcraft:coke','jugcraft:coke','jugcraft:coke'],'carbon_composite_panel',4)]
  for name,ingredients,result,count in uses:

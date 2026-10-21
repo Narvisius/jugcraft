@@ -41,6 +41,18 @@ jobs:
         run: python3 scripts/package_modrinth.py verify
       - name: Package Jugcraft Complete
         run: python3 scripts/package_modrinth.py build
+      - name: Verify distributable mixins and real player/server release assembly
+        run: |
+          python3 - <<'PY'
+          import os, subprocess
+          from pathlib import Path
+          jars = [p for p in Path('build/libs').glob('*.jar') if not p.name.endswith('-sources.jar')]
+          assert len(jars) == 1, f'Expected one distributable mod JAR, found {len(jars)}'
+          subprocess.run(['python3', 'tools/check_mixin_jar.py', str(jars[0])], check=True)
+          subprocess.run(['python3', 'scripts/package_release.py', '--jar', str(jars[0]),
+              '--output', 'build/release-smoke', '--version', '0.1.0-ci.' + os.environ['GITHUB_SHA'][:12],
+              '--commit', os.environ['GITHUB_SHA']], check=True)
+          PY
       - uses: actions/upload-artifact@v4
         with:
           name: jugcraft-installers

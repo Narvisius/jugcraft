@@ -1,0 +1,25 @@
+{
+  "type": "jugcraft:starter_working",
+  "station": 0,
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:brass_ingot",
+      "count": 1
+    }
+  ],
+  "result": {
+    "id": "jugcraft:brass_plate",
+    "count": 1
+  },
+  "time": 100,
+  "heated": false,
+  "tool": {
+    "id": "jugcraft:workshop_hammer"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

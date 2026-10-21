@@ -47,6 +47,7 @@ import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 public final class JugcraftClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
+		AcademyAtmosphere.register();
 		MeshItemModels.register();
 		StructureItemRenderers.register();
 		new io.github.jimbozoomer.jugcraft.client.scary.ScaryClient().onInitializeClient();
@@ -69,6 +70,8 @@ public final class JugcraftClient implements ClientModInitializer {
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.StorageTanks.GATE_ENTITY, RailingGateRenderer::new);
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.StorageTanks.HATCH_ENTITY, StorageTankHatchRenderer::new);
 		MenuScreens.register(io.github.jimbozoomer.jugcraft.machine.form.JugcraftForms.MENU, FormMachineScreen::new);
+		MenuScreens.register(io.github.jimbozoomer.jugcraft.workshop.JugcraftWorkshop.MENU, WorkshopScreen::new);
+		WorkshopScreen.registerOverlayCompatibility();
 		MenuScreens.register(io.github.jimbozoomer.jugcraft.vehiclebay.VehicleBays.MENU, VehicleBayScreen::new);
 		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.vehiclebay.VehicleBays.ENTITY, VehicleBayRenderer::new);
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.machine.form.IndustrialForms.ENTITY, FormMachineRenderer::new);

@@ -1,0 +1,71 @@
+name: Prepare JUGCRAFT release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Unique pack version, e.g. 0.1.0-alpha.20261021.1'
+        required: true
+        type: string
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: jugcraft-release
+  cancel-in-progress: false
+jobs:
+  candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Require current main and successful checks on this exact source
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: |
+          python3 - <<'PY'
+          import json, os, re, subprocess
+          from pathlib import Path
+          assert os.environ['GITHUB_REF'] == 'refs/heads/main', 'Run this workflow from main'
+          assert re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._+\-]{0,79}', os.environ['RELEASE_VERSION']), 'Unsafe version'
+          sha = os.environ['GITHUB_SHA']
+          for workflow in ('build.yml', 'foundation.yml'):
+              rows = json.loads(subprocess.check_output(['gh','run','list','--workflow',workflow,'--commit',sha,
+                  '--branch','main','--event','push','--limit','10','--json','databaseId,status,conclusion']))
+              assert rows and rows[0]['status'] == 'completed' and rows[0]['conclusion'] == 'success', f'{workflow} must be green on {sha}'
+              if workflow == 'build.yml':
+                  with open(os.environ['GITHUB_ENV'], 'a') as f: f.write(f"BUILD_RUN={rows[0]['databaseId']}\n")
+          PY
+      - name: Download the already tested build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh run download "$BUILD_RUN" --name jugcraft-installers --dir build/tested
+      - name: Verify libraries and assemble matched player and hosting files
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: |
+          python3 scripts/package_modrinth.py verify
+          python3 - <<'PY'
+          import os, subprocess
+          from pathlib import Path
+          jars = [p for p in Path('build/tested').rglob('*.jar') if not p.name.endswith('-sources.jar')]
+          assert len(jars) == 1, f'Expected one tested mod JAR, found {len(jars)}'
+          subprocess.run(['python3','tools/check_mixin_jar.py',str(jars[0])], check=True)
+          subprocess.run(['python3','scripts/package_release.py','--jar',str(jars[0]),'--output','build/release',
+              '--version',os.environ['RELEASE_VERSION'],'--commit',os.environ['GITHUB_SHA']], check=True)
+          PY
+      - name: Upload release files
+        uses: actions/upload-artifact@v4
+        with:
+          name: JUGCRAFT-release-${{ inputs.version }}
+          path: build/release/*
+          if-no-files-found: error
+      - name: Create a draft prerelease for staging and owner promotion
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: |
+          gh release create "pack-$RELEASE_VERSION" build/release/* --target "$GITHUB_SHA" \
+            --title "JUGCRAFT $RELEASE_VERSION" --draft --prerelease --notes-file distribution/RELEASE-NOTES.md

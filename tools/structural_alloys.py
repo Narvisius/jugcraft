@@ -67,6 +67,9 @@ GUIDE_PAGES = [
         'Seven Aluminum Ingots and one Magnesium Ingot make eight Aluminum-Magnesium Alloy Ingots in the Alloy Smelter, 240 ticks. Use the existing bauxite and coastal-seawater magnesium routes. This approximate whole-ingot game batch conserves all eight metal units.',
         'Press each ingot to a plate and each plate to one formed panel. Four alloy plates and one Precision Shaft craft two lightweight frames. Panels feed Rocket Workshop casings; frames support an alternate Zeppelin recipe. Frames and panels also provide an alternate Howitzer Walker assembly, keeping its Diesel Walker core, dispenser and pistons.',
         'These are manufacturing alternatives, not different vehicle stats or hidden weight bonuses. Existing vehicle construction and worlds remain supported. Titanium alloys and new armor/tool tiers remain separate future work.']},
+    {'title': 'Alloy cladding and drone propellers', 'icon': 'jugcraft:aluminum_propeller_set', 'text': [
+        'Four Aluminum-Magnesium Alloy Plates craft six Aluminum Cladding. Four plates around one stick craft two Aluminum Propeller Sets. These optional material-saving routes reuse the existing alloy, drone parts and cladding; the ordinary aluminum recipes remain available.',
+        'The plates come from the established seven-aluminum/one-magnesium alloy batch. No second magnalium metal or parallel processing chain is needed. These alternatives change material costs, not drone performance.']},
 ]
 
 
@@ -96,6 +99,11 @@ def write_extras(write, assets, data, lang, condition):
     shaped('lightweight_frames', ['P P', 'PSP'],
            {'P': '#c:plates/aluminum_magnesium', 'S': 'jugcraft:precision_shaft'},
            'lightweight_frame', 2, ['aluminum'])
+    shaped('aluminum_cladding', ['PP', 'PP'], {'P': '#c:plates/aluminum_magnesium'},
+           'aluminum_cladding', 6, ['aluminum'])
+    shaped('aluminum_propeller_sets', [' P ', 'PSP', ' P '],
+           {'P': '#c:plates/aluminum_magnesium', 'S': 'minecraft:stick'},
+           'aluminum_propeller_set', 2, ['aluminum'])
     shaped('steel_fluid_pipe', ['FBF'], {'F': 'jugcraft:stainless_fitting', 'B': 'jugcraft:bronze_fluid_pipe'},
            'steel_fluid_pipe', 4, ['nickel'])
     shaped('steel_tank', ['V', 'T'], {'V': 'jugcraft:stainless_vessel', 'T': 'jugcraft:fluid_tank'},

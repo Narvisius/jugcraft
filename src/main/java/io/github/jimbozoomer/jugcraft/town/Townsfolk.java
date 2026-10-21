@@ -121,7 +121,7 @@ public class Townsfolk extends PathfinderMob {
 			case "guard" -> new ItemStack(Items.IRON_SWORD);
 			case "decorator" -> new ItemStack(Items.LANTERN);
 			case "baker" -> new ItemStack(Items.BREAD);
-			case "priest" -> new ItemStack(Items.BOOK);
+			case "priest", "academy_radiance" -> new ItemStack(Items.BOOK);
 			case "shopkeeper" -> shop.equals("florist") ? new ItemStack(Items.POPPY) : ItemStack.EMPTY;
 			default -> ItemStack.EMPTY;
 		};
@@ -208,6 +208,10 @@ public class Townsfolk extends PathfinderMob {
 		getLookControl().setLookAt(player);
 		listener = player;
 		listeningUntil = tickCount + 80;
+		if (role.equals("academy_radiance")) {
+			io.github.jimbozoomer.jugcraft.academy.JugcraftAcademy.consult(server);
+			return InteractionResult.SUCCESS;
+		}
 		if (isGuard() && player.isShiftKeyDown()) {
 			if (tickCount - lastTalk >= 20) {
 				lastTalk = tickCount;

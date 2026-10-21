@@ -455,6 +455,38 @@
       ]
     },
     {
+      "title": "Starter workshop",
+      "icon": "jugcraft:workshop_bench",
+      "pages": [
+        {
+          "title": "From clay to alloys",
+          "icon": "jugcraft:small_ceramic_kiln",
+          "text": [
+            "Fire clay balls in an ordinary furnace for bricks. Four brick blocks and a furnace make the Small Ceramic Kiln. Shape four clay balls into a lining and seven into a crucible. Fire them in the kiln for 20 and 30 seconds. Shape one clay ball into two insulator blanks; fire the pair for 10 seconds.",
+            "Build the Small Crucible Furnace from four brick blocks and a furnace. Leave two blocks of height clear. Install the fired lining and crucible in its screen; both last indefinitely. Select bronze, brass or solder, insert the metals and ordinary fuel. Bronze/brass take 10 seconds; solder takes 6. One coal supplies 80 seconds of active heat.",
+            "Hoppers can insert ingredients and fuel and remove finished products and empty fuel containers. A blocked output pauses without spending fuel. Remaining heat and partial batches survive saving. Cancel returns the reserved ingredients if their slots have room; breaking either part returns the station, parts and ingredients once."
+          ]
+        },
+        {
+          "title": "A bench and three tools",
+          "icon": "jugcraft:workshop_hammer",
+          "text": [
+            "Make the two-block-wide bench with a crafting table, four planks and two cobblestone. A hammer needs two iron and a stick; cutters need two iron and two sticks; the soldering tool needs copper and a stick. Tools are reusable and never wear out.",
+            "Choose a recipe on the left, follow the preview, insert ingredients and the matching tool, then click Start Work. Click Stop Work or leave the bench menu to pause; hoppers cannot work for you. One ingot makes one iron, copper, tin, zinc, lead, bronze or brass plate in 5 seconds. One copper ingot makes three wires in 5 seconds.",
+            "For a basic circuit, use existing silicon, three wires and one solder ingot with the soldering tool and fuel. A circuit takes 10 seconds. Work remains enabled until you click Stop Work or leave the menu. Powered machines keep the same yields and can run without a player at the bench. Silicon still comes from existing processing; a later batch will add the local quartz and upgraded-heat route."
+          ]
+        },
+        {
+          "title": "Connecting the first machine",
+          "icon": "jugcraft:copper_cable",
+          "text": [
+            "Six wires, a tin ingot and two fired insulators make eight copper cables. Two copper ingots and one tin make four directly; adding molded cable insulation makes sixteen. The bronze-blend recipe remains available. Starter ceramics need the machines feature, not drones.",
+            "Use these same alloys and components for existing casings, generators, shafts and powered machines. Nothing here requires a circuit just to make the first furnace, kiln or bench. Advanced ceramics, bellows and mechanical expansion remain separate."
+          ]
+        }
+      ]
+    },
+    {
       "title": "Getting Started",
       "icon": "jugcraft:engineers_handbook",
       "pages": [
@@ -841,7 +873,7 @@
           "title": "Parts",
           "icon": "jugcraft:bronze_gear",
           "text": [
-            "Plates (Metal Press): copper, iron, tin, bronze, brass, invar, aluminum, nickel, lead, tungsten, steel, titanium, thallite, stainless_steel, aluminum_magnesium.",
+            "Plates (Metal Press): copper, iron, tin, zinc, bronze, brass, invar, aluminum, nickel, lead, tungsten, steel, titanium, thallite, stainless_steel, aluminum_magnesium.",
             "Gears (four plates): iron, bronze, brass, invar, steel.",
             "Wires (Wire Drawer): copper, silver, aluminum.",
             "Every part works with other mods' parts through c: tags."
@@ -1033,7 +1065,7 @@
               null
             ],
             "result": "jugcraft:copper_cable",
-            "count": 6
+            "count": 4
           }
         },
         {
@@ -1664,12 +1696,12 @@
             {
               "in": [
                 [
-                  "jugcraft:bronze_ingot",
+                  "jugcraft:zinc_ingot",
                   1
                 ]
               ],
               "out": [
-                "jugcraft:bronze_plate",
+                "jugcraft:zinc_plate",
                 1
               ]
             }
@@ -6307,6 +6339,14 @@
             "Seven Aluminum Ingots and one Magnesium Ingot make eight Aluminum-Magnesium Alloy Ingots in the Alloy Smelter, 240 ticks. Use the existing bauxite and coastal-seawater magnesium routes. This approximate whole-ingot game batch conserves all eight metal units.",
             "Press each ingot to a plate and each plate to one formed panel. Four alloy plates and one Precision Shaft craft two lightweight frames. Panels feed Rocket Workshop casings; frames support an alternate Zeppelin recipe. Frames and panels also provide an alternate Howitzer Walker assembly, keeping its Diesel Walker core, dispenser and pistons.",
             "These are manufacturing alternatives, not different vehicle stats or hidden weight bonuses. Existing vehicle construction and worlds remain supported. Titanium alloys and new armor/tool tiers remain separate future work."
+          ]
+        },
+        {
+          "title": "Alloy cladding and drone propellers",
+          "icon": "jugcraft:aluminum_propeller_set",
+          "text": [
+            "Four Aluminum-Magnesium Alloy Plates craft six Aluminum Cladding. Four plates around one stick craft two Aluminum Propeller Sets. These optional material-saving routes reuse the existing alloy, drone parts and cladding; the ordinary aluminum recipes remain available.",
+            "The plates come from the established seven-aluminum/one-magnesium alloy batch. No second magnalium metal or parallel processing chain is needed. These alternatives change material costs, not drone performance."
           ]
         }
       ]

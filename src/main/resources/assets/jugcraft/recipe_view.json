@@ -1139,6 +1139,20 @@
         {
           "in": [
             [
+              "jugcraft:zinc_ingot",
+              1
+            ]
+          ],
+          "out": [
+            "jugcraft:zinc_plate",
+            1
+          ],
+          "extra": [],
+          "ticks": 100
+        },
+        {
+          "in": [
+            [
               "jugcraft:bronze_ingot",
               1
             ]
@@ -15590,6 +15604,377 @@
           "ticks": 160,
           "tool": "",
           "energy_per_tick": 64
+        }
+      ]
+    },
+    {
+      "block": "jugcraft:workshop_bench",
+      "type": "starter_workshop_bench",
+      "recipes": [
+        {
+          "items": [
+            [
+              "minecraft:copper_ingot",
+              1
+            ]
+          ],
+          "fluids": [],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:copper_plate",
+              1
+            ]
+          ],
+          "ticks": 100,
+          "tool": "jugcraft:workshop_hammer",
+          "retained_inputs": [],
+          "energy_per_tick": 0
+        },
+        {
+          "items": [
+            [
+              "minecraft:iron_ingot",
+              1
+            ]
+          ],
+          "fluids": [],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:iron_plate",
+              1
+            ]
+          ],
+          "ticks": 100,
+          "tool": "jugcraft:workshop_hammer",
+          "retained_inputs": [],
+          "energy_per_tick": 0
+        },
+        {
+          "items": [
+            [
+              "jugcraft:tin_ingot",
+              1
+            ]
+          ],
+          "fluids": [],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:tin_plate",
+              1
+            ]
+          ],
+          "ticks": 100,
+          "tool": "jugcraft:workshop_hammer",
+          "retained_inputs": [],
+          "energy_per_tick": 0
+        },
+        {
+          "items": [
+            [
+              "jugcraft:zinc_ingot",
+              1
+            ]
+          ],
+          "fluids": [],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:zinc_plate",
+              1
+            ]
+          ],
+          "ticks": 100,
+          "tool": "jugcraft:workshop_hammer",
+          "retained_inputs": [],
+          "energy_per_tick": 0
+        },
+        {
+          "items": [
+            [
+              "jugcraft:bronze_ingot",
+              1
+            ]
+          ],
+          "fluids": [],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:bronze_plate",
+              1
+            ]
+          ],
+          "ticks": 100,
+          "tool": "jugcraft:workshop_hammer",
+          "retained_inputs": [],
+          "energy_per_tick": 0
+        },
+        {
+          "items": [
+            [
+              "jugcraft:brass_ingot",
+              1
+            ]
+          ],
+          "fluids": [],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:brass_plate",
+              1
+            ]
+          ],
+          "ticks": 100,
+          "tool": "jugcraft:workshop_hammer",
+          "retained_inputs": [],
+          "energy_per_tick": 0
+        },
+        {
+          "items": [
+            [
+              "jugcraft:lead_ingot",
+              1
+            ]
+          ],
+          "fluids": [],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:lead_plate",
+              1
+            ]
+          ],
+          "ticks": 100,
+          "tool": "jugcraft:workshop_hammer",
+          "retained_inputs": [],
+          "energy_per_tick": 0
+        },
+        {
+          "items": [
+            [
+              "minecraft:copper_ingot",
+              1
+            ]
+          ],
+          "fluids": [],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:copper_wire",
+              3
+            ]
+          ],
+          "ticks": 100,
+          "tool": "jugcraft:wire_cutters",
+          "retained_inputs": [],
+          "energy_per_tick": 0
+        },
+        {
+          "items": [
+            [
+              "jugcraft:silicon",
+              1
+            ],
+            [
+              "jugcraft:copper_wire",
+              3
+            ],
+            [
+              "jugcraft:solder_ingot",
+              1
+            ]
+          ],
+          "fluids": [],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:basic_circuit",
+              1
+            ]
+          ],
+          "ticks": 200,
+          "tool": "jugcraft:soldering_tool",
+          "retained_inputs": [],
+          "energy_per_tick": 0
+        }
+      ]
+    },
+    {
+      "block": "jugcraft:small_ceramic_kiln",
+      "type": "starter_small_ceramic_kiln",
+      "recipes": [
+        {
+          "items": [
+            [
+              "jugcraft:unfired_ceramic_lining",
+              1
+            ]
+          ],
+          "fluids": [],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:basic_ceramic_lining",
+              1
+            ]
+          ],
+          "ticks": 400,
+          "tool": "",
+          "retained_inputs": [],
+          "energy_per_tick": 0
+        },
+        {
+          "items": [
+            [
+              "jugcraft:unfired_ceramic_crucible",
+              1
+            ]
+          ],
+          "fluids": [],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:ceramic_crucible",
+              1
+            ]
+          ],
+          "ticks": 600,
+          "tool": "",
+          "retained_inputs": [],
+          "energy_per_tick": 0
+        },
+        {
+          "items": [
+            [
+              "jugcraft:unfired_insulator",
+              2
+            ]
+          ],
+          "fluids": [],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:ceramic_insulator",
+              2
+            ]
+          ],
+          "ticks": 200,
+          "tool": "",
+          "retained_inputs": [],
+          "energy_per_tick": 0
+        }
+      ]
+    },
+    {
+      "block": "jugcraft:small_crucible_furnace",
+      "type": "starter_small_crucible_furnace",
+      "recipes": [
+        {
+          "items": [
+            [
+              "minecraft:copper_ingot",
+              3
+            ],
+            [
+              "jugcraft:tin_ingot",
+              1
+            ],
+            [
+              "jugcraft:basic_ceramic_lining",
+              1
+            ],
+            [
+              "jugcraft:ceramic_crucible",
+              1
+            ]
+          ],
+          "fluids": [],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:bronze_ingot",
+              4
+            ]
+          ],
+          "ticks": 200,
+          "tool": "",
+          "retained_inputs": [
+            2,
+            3
+          ],
+          "energy_per_tick": 0
+        },
+        {
+          "items": [
+            [
+              "minecraft:copper_ingot",
+              3
+            ],
+            [
+              "jugcraft:zinc_ingot",
+              1
+            ],
+            [
+              "jugcraft:basic_ceramic_lining",
+              1
+            ],
+            [
+              "jugcraft:ceramic_crucible",
+              1
+            ]
+          ],
+          "fluids": [],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:brass_ingot",
+              4
+            ]
+          ],
+          "ticks": 200,
+          "tool": "",
+          "retained_inputs": [
+            2,
+            3
+          ],
+          "energy_per_tick": 0
+        },
+        {
+          "items": [
+            [
+              "jugcraft:tin_ingot",
+              1
+            ],
+            [
+              "jugcraft:lead_ingot",
+              1
+            ],
+            [
+              "jugcraft:basic_ceramic_lining",
+              1
+            ],
+            [
+              "jugcraft:ceramic_crucible",
+              1
+            ]
+          ],
+          "fluids": [],
+          "fluid_results": [],
+          "results": [
+            [
+              "jugcraft:solder_ingot",
+              2
+            ]
+          ],
+          "ticks": 120,
+          "tool": "",
+          "retained_inputs": [
+            2,
+            3
+          ],
+          "energy_per_tick": 0
         }
       ]
     }

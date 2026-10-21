@@ -181,6 +181,8 @@ def assets():
     agriculture_data.assets(ASSETS, write, lang)
     pixel_hollows_assets(lang)
     town_assets.assets(ASSETS, write, lang)
+    import academy_data
+    academy_data.assets(ASSETS, write, lang)
     import styx
     styx.write_all(write, ASSETS, DATA / MOD, lang)
     import deposits
@@ -1812,6 +1814,8 @@ def main():
     import nouveau_data
     language = json.loads((ASSETS / "lang/en_us.json").read_text(encoding="utf-8"))
     nouveau_data.write_all(write, ASSETS, DATA / MOD, language)
+    import starter_workshop
+    starter_workshop.write_all(write, ASSETS, DATA / MOD, language)
     write(ASSETS / "lang/en_us.json", language)
     import town
     for problem in town.write():

@@ -55,6 +55,19 @@ def build():
     # Industrial forms run their own capability recipes, so each form is its own category.
     import industrial_forms
     fluid_machines += industrial_forms.recipe_view()
+    import starter_workshop
+    for index, station in enumerate(starter_workshop.STATIONS):
+        rows = []
+        for _, r in starter_workshop.processes():
+            if r['station'] != index: continue
+            inputs = [[p['ingredient'], p['count']] for p in r['ingredients']]
+            retained = []
+            if index == 2:
+                retained = [len(inputs), len(inputs)+1]
+                inputs += [['jugcraft:basic_ceramic_lining',1],['jugcraft:ceramic_crucible',1]]
+            rows.append(dict(items=inputs, fluids=[], fluid_results=[], results=[[r['result']['id'],r['result']['count']]],
+                ticks=r['time'], tool=r.get('tool',{}).get('id',''), retained_inputs=retained, energy_per_tick=0))
+        fluid_machines.append(dict(block='jugcraft:'+station,type='starter_'+station,recipes=rows))
     import concordance
     import acquisition
     return {"machines": machines, "fluid_machines": fluid_machines, "concordance": concordance.recipe_view(),

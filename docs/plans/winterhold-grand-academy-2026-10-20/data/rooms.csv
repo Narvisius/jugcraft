@@ -1,0 +1,37 @@
+id,name,floor,floor_index,position,target_size_blocks,usable_function,access,milestone
+EXT-01,Approach bridge,OUT,0,south,70x7,"entry, climate transition, rune lamps",public,M0
+EXT-02,Gatehouse vestibule,L0,0,south,15x15,"admissions, weather threshold, notice board",public,M0
+EXT-03,Main courtyard,L0,0,center,37 diameter,"navigation, Shalidor-style monument, aura heart",public,M0
+EXT-04,Battlements and balconies,L1,1,ring,varies,"lookouts, exploration, sightlines",public,M2
+ELM-01,Hall of the Elements,L0,0,northeast,29 diameter,"public lessons, spell demonstration and safe training",public,M0
+ELM-02,Circle lecture gallery,L1,1,northeast,27 diameter,teacher-led demonstration viewpoints,public,M2
+ELM-03,Practical exercise room,L1,1,east,17x15,existing spell practice challenges,research,M2
+ATT-01,Attainment common hall,L0,0,southwest,23 diameter,student arrivals and help,public,M1
+ATT-02,Apprentice sleeping quarters,L1,1,southwest,8 cells 7x7,"beds and safe lockers, learner notes",public,M1
+ATT-03,Upper study gallery,L2,2,southwest,21 diameter,quiet research and group lessons,public,M2
+CNT-01,Countenance faculty lobby,L0,0,northwest,23 diameter,faculty schedule and consultation,public,M1
+CNT-02,Faculty rooms,L1,1,northwest,7 cells 7x7,"unique desks, teacher IDs, research clues",public,M2
+CNT-03,Magister council room,L2,2,northwest,17 diameter,periodic knowledge discussions,research,M4
+ARC-01,Arcanaeum main hall,L0,0,north,29 diameter,"codex discovery, librarian, accessible reading",public,M1
+ARC-02,Upper stacks,L1,1,north,29 diameter,"shelving, annotated volumes",public,M2
+ARC-03,Restricted archives,L2,2,north,15x19,advanced research and first secrets,research,M3
+ARC-04,Echo memory vault,L-1,-1,north,15 diameter,recover lost recorded stories,secret,M5
+AMG-01,Arch-Mage antechamber,L2,2,north high,15x13,permission transition,research,M3
+AMG-02,Arch-Mage quarters,L3,3,north high,25 diameter,private study and indoor garden,research,M3
+AMG-03,Northern observatory,L3,3,far north,17 diameter,sky/season observation ritual,research,M4
+WRK-01,Alchemy workshop,L0,0,southeast,17x17,existing alchemical tools and ingredients,public,M2
+WRK-02,Enchanting atelier,L1,1,southeast,17x15,existing enchant/crafting stations,research,M3
+WRK-03,Rime lesson hall,L1,1,east annex,19x15,winter-themed examination,public,M3
+WRK-04,Storm terrace,L2,2,east roof,21x13,weather instruments and Tempest lesson,research,M4
+WRK-05,Healing conservatory,L1,1,west annexe,17x15,Verdance support/safe plants,public,M3
+SRV-01,Dining and hearth,L0,0,west annexe,19x15,"food, rest, gossip and teacher rumors",public,M3
+SRV-02,Kitchen and supply room,L-1,-1,west below,15x13,food storage/supply loops,public,M3
+SRV-03,Washroom and laundry,L-1,-1,west below,11x9,world-believability and water interaction,public,M4
+MID-01,Midden staircase,L-1,-1,beneath courtyard,9x11,first guarded hidden descent,secret,M3
+MID-02,Midden old tunnels,L-2,-2,below ring,variable,navigation/danger/ambient stories,secret,M4
+MID-03,Atronach forge chamber,L-2,-2,below northeast,19 diameter,ritual ingredients and forge puzzle,research,M4
+MID-04,Relic hand vault,L-2,-2,below west,15x13,clue/relic trial,secret,M4
+MID-05,Abandoned lab,L-2,-2,below north,17x13,recover failed experiments,secret,M4
+MID-06,Midden Dark,L-3,-3,deep northeast,variable,hostile magic exploration,secret,M5
+MID-07,Augur sanctuary,L-3,-3,deep north,19 diameter,"lore, wisdom, controlled discoveries",secret,M5
+MID-08,Sea escape tunnel,L-2,-2,cliff face,variable,"alternate safe exit, can be sealed",secret,M5

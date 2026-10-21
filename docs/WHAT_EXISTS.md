@@ -42,6 +42,19 @@ CI runs all of these and fails if generated files are out of date.
 
 ## Content inventory
 
+### Frostward College (`tools/winterhold_academy.py`)
+
+The [Winterhold-inspired academy](features/frostward-academy.md) is an operator-placeable template:
+`/place template jugcraft:academy/winterhold`. It includes a rocky base following a circular campus, bridge, enclosed court/cloister, teaching hall,
+attached library and residential wings, private quarters and connected Midden chambers, using existing magic stations.
+M0 adds Professor Arctus Vale using the existing townsfolk model and Concordance Journal, four courtyard runes
+with personal lore completion, and bounded localized client snow/mist. Existing benches retain their research/material
+costs. No automatic worldgen, schedules or new spell progression is added. Python regeneration, nine structure tests,
+independent Node checks and common/client/game-test Java compilation pass. All 2,111 required server GameTests pass,
+including the four academy tests. The selected academy client GameTest also passes and produced nine inspected
+Minecraft screenshots. Two-client play, transition/performance checks, interior polish and full `build` certification
+remain open; see the feature page for screenshots and exact test limits.
+
 ### World Designer (`world/design/`, `tools/world-designer/`)
 
 The [offline editor](WORLD_DESIGNER.md) shapes a new world's height field, paints registered biomes, selects spawn and the existing walled town, and pins native structure start chunks. The operator command `/jugcraft design export` writes its UI and a live registry catalog. `model.js` validates the versioned design and compiles a datapack with the `jugcraft:designed` preset. `DesignDensity`, `DesignBiomeSource`, `DesignPlacement` and `DesignGrid` serialize generation state per world; `WorldDesigner` connects the existing spawn and town hooks. No extra library is required. New-world generation only; no arbitrary city assembly, structure rotation or retrogen. See the [feature record](features/world-designer.md) before extending it.

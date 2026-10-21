@@ -158,7 +158,7 @@ EXTRA_NAMES = {"bronze_blend": "Bronze Blend"}
 # Metal content per item in nugget units; the checker uses these to audit recipes.
 PART_UNITS = {"plate": 9, "gear": 36, "wire": 3, "dust": 9}
 COMPONENTS = {
-    "plate": ["copper", "iron", "tin", "bronze", "brass", "invar", "aluminum", "nickel", "lead", "tungsten", "steel",
+    "plate": ["copper", "iron", "tin", "zinc", "bronze", "brass", "invar", "aluminum", "nickel", "lead", "tungsten", "steel",
               "titanium", "thallite", "stainless_steel", "aluminum_magnesium"],
     "gear": ["iron", "bronze", "brass", "invar", "steel"],
     "wire": ["copper", "silver", "aluminum"],

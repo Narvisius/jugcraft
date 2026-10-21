@@ -1,0 +1,41 @@
+{
+  "type": "jugcraft:starter_working",
+  "station": 0,
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:silicon",
+      "count": 1
+    },
+    {
+      "ingredient": "jugcraft:copper_wire",
+      "count": 3
+    },
+    {
+      "ingredient": "jugcraft:solder_ingot",
+      "count": 1
+    }
+  ],
+  "result": {
+    "id": "jugcraft:basic_circuit",
+    "count": 1
+  },
+  "time": 200,
+  "heated": true,
+  "tool": {
+    "id": "jugcraft:soldering_tool"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "lead"
+    }
+  ]
+}

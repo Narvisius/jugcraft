@@ -1,0 +1,594 @@
+{
+  "schema": "jugcraft-winterhold-design-v1",
+  "status": "PROPOSED_NOT_IMPLEMENTED",
+  "coordinate_frame": "origin courtyard center; Y0 courtyard relative",
+  "footprint_blocks": {
+    "x": 132,
+    "z": 138,
+    "bridge_additional_length_target": 75
+  },
+  "cliff_raised_blocks_target": [
+    35,
+    55
+  ],
+  "rooms": [
+    {
+      "id": "EXT-01",
+      "name": "Approach bridge",
+      "floor": "OUT",
+      "floor_index": 0,
+      "position": "south",
+      "target_size_blocks": "70x7",
+      "usable_function": "entry, climate transition, rune lamps",
+      "access": "public",
+      "milestone": "M0"
+    },
+    {
+      "id": "EXT-02",
+      "name": "Gatehouse vestibule",
+      "floor": "L0",
+      "floor_index": 0,
+      "position": "south",
+      "target_size_blocks": "15x15",
+      "usable_function": "admissions, weather threshold, notice board",
+      "access": "public",
+      "milestone": "M0"
+    },
+    {
+      "id": "EXT-03",
+      "name": "Main courtyard",
+      "floor": "L0",
+      "floor_index": 0,
+      "position": "center",
+      "target_size_blocks": "37 diameter",
+      "usable_function": "navigation, Shalidor-style monument, aura heart",
+      "access": "public",
+      "milestone": "M0"
+    },
+    {
+      "id": "EXT-04",
+      "name": "Battlements and balconies",
+      "floor": "L1",
+      "floor_index": 1,
+      "position": "ring",
+      "target_size_blocks": "varies",
+      "usable_function": "lookouts, exploration, sightlines",
+      "access": "public",
+      "milestone": "M2"
+    },
+    {
+      "id": "ELM-01",
+      "name": "Hall of the Elements",
+      "floor": "L0",
+      "floor_index": 0,
+      "position": "northeast",
+      "target_size_blocks": "29 diameter",
+      "usable_function": "public lessons, spell demonstration and safe training",
+      "access": "public",
+      "milestone": "M0"
+    },
+    {
+      "id": "ELM-02",
+      "name": "Circle lecture gallery",
+      "floor": "L1",
+      "floor_index": 1,
+      "position": "northeast",
+      "target_size_blocks": "27 diameter",
+      "usable_function": "teacher-led demonstration viewpoints",
+      "access": "public",
+      "milestone": "M2"
+    },
+    {
+      "id": "ELM-03",
+      "name": "Practical exercise room",
+      "floor": "L1",
+      "floor_index": 1,
+      "position": "east",
+      "target_size_blocks": "17x15",
+      "usable_function": "existing spell practice challenges",
+      "access": "research",
+      "milestone": "M2"
+    },
+    {
+      "id": "ATT-01",
+      "name": "Attainment common hall",
+      "floor": "L0",
+      "floor_index": 0,
+      "position": "southwest",
+      "target_size_blocks": "23 diameter",
+      "usable_function": "student arrivals and help",
+      "access": "public",
+      "milestone": "M1"
+    },
+    {
+      "id": "ATT-02",
+      "name": "Apprentice sleeping quarters",
+      "floor": "L1",
+      "floor_index": 1,
+      "position": "southwest",
+      "target_size_blocks": "8 cells 7x7",
+      "usable_function": "beds and safe lockers, learner notes",
+      "access": "public",
+      "milestone": "M1"
+    },
+    {
+      "id": "ATT-03",
+      "name": "Upper study gallery",
+      "floor": "L2",
+      "floor_index": 2,
+      "position": "southwest",
+      "target_size_blocks": "21 diameter",
+      "usable_function": "quiet research and group lessons",
+      "access": "public",
+      "milestone": "M2"
+    },
+    {
+      "id": "CNT-01",
+      "name": "Countenance faculty lobby",
+      "floor": "L0",
+      "floor_index": 0,
+      "position": "northwest",
+      "target_size_blocks": "23 diameter",
+      "usable_function": "faculty schedule and consultation",
+      "access": "public",
+      "milestone": "M1"
+    },
+    {
+      "id": "CNT-02",
+      "name": "Faculty rooms",
+      "floor": "L1",
+      "floor_index": 1,
+      "position": "northwest",
+      "target_size_blocks": "7 cells 7x7",
+      "usable_function": "unique desks, teacher IDs, research clues",
+      "access": "public",
+      "milestone": "M2"
+    },
+    {
+      "id": "CNT-03",
+      "name": "Magister council room",
+      "floor": "L2",
+      "floor_index": 2,
+      "position": "northwest",
+      "target_size_blocks": "17 diameter",
+      "usable_function": "periodic knowledge discussions",
+      "access": "research",
+      "milestone": "M4"
+    },
+    {
+      "id": "ARC-01",
+      "name": "Arcanaeum main hall",
+      "floor": "L0",
+      "floor_index": 0,
+      "position": "north",
+      "target_size_blocks": "29 diameter",
+      "usable_function": "codex discovery, librarian, accessible reading",
+      "access": "public",
+      "milestone": "M1"
+    },
+    {
+      "id": "ARC-02",
+      "name": "Upper stacks",
+      "floor": "L1",
+      "floor_index": 1,
+      "position": "north",
+      "target_size_blocks": "29 diameter",
+      "usable_function": "shelving, annotated volumes",
+      "access": "public",
+      "milestone": "M2"
+    },
+    {
+      "id": "ARC-03",
+      "name": "Restricted archives",
+      "floor": "L2",
+      "floor_index": 2,
+      "position": "north",
+      "target_size_blocks": "15x19",
+      "usable_function": "advanced research and first secrets",
+      "access": "research",
+      "milestone": "M3"
+    },
+    {
+      "id": "ARC-04",
+      "name": "Echo memory vault",
+      "floor": "L-1",
+      "floor_index": -1,
+      "position": "north",
+      "target_size_blocks": "15 diameter",
+      "usable_function": "recover lost recorded stories",
+      "access": "secret",
+      "milestone": "M5"
+    },
+    {
+      "id": "AMG-01",
+      "name": "Arch-Mage antechamber",
+      "floor": "L2",
+      "floor_index": 2,
+      "position": "north high",
+      "target_size_blocks": "15x13",
+      "usable_function": "permission transition",
+      "access": "research",
+      "milestone": "M3"
+    },
+    {
+      "id": "AMG-02",
+      "name": "Arch-Mage quarters",
+      "floor": "L3",
+      "floor_index": 3,
+      "position": "north high",
+      "target_size_blocks": "25 diameter",
+      "usable_function": "private study and indoor garden",
+      "access": "research",
+      "milestone": "M3"
+    },
+    {
+      "id": "AMG-03",
+      "name": "Northern observatory",
+      "floor": "L3",
+      "floor_index": 3,
+      "position": "far north",
+      "target_size_blocks": "17 diameter",
+      "usable_function": "sky/season observation ritual",
+      "access": "research",
+      "milestone": "M4"
+    },
+    {
+      "id": "WRK-01",
+      "name": "Alchemy workshop",
+      "floor": "L0",
+      "floor_index": 0,
+      "position": "southeast",
+      "target_size_blocks": "17x17",
+      "usable_function": "existing alchemical tools and ingredients",
+      "access": "public",
+      "milestone": "M2"
+    },
+    {
+      "id": "WRK-02",
+      "name": "Enchanting atelier",
+      "floor": "L1",
+      "floor_index": 1,
+      "position": "southeast",
+      "target_size_blocks": "17x15",
+      "usable_function": "existing enchant/crafting stations",
+      "access": "research",
+      "milestone": "M3"
+    },
+    {
+      "id": "WRK-03",
+      "name": "Rime lesson hall",
+      "floor": "L1",
+      "floor_index": 1,
+      "position": "east annex",
+      "target_size_blocks": "19x15",
+      "usable_function": "winter-themed examination",
+      "access": "public",
+      "milestone": "M3"
+    },
+    {
+      "id": "WRK-04",
+      "name": "Storm terrace",
+      "floor": "L2",
+      "floor_index": 2,
+      "position": "east roof",
+      "target_size_blocks": "21x13",
+      "usable_function": "weather instruments and Tempest lesson",
+      "access": "research",
+      "milestone": "M4"
+    },
+    {
+      "id": "WRK-05",
+      "name": "Healing conservatory",
+      "floor": "L1",
+      "floor_index": 1,
+      "position": "west annexe",
+      "target_size_blocks": "17x15",
+      "usable_function": "Verdance support/safe plants",
+      "access": "public",
+      "milestone": "M3"
+    },
+    {
+      "id": "SRV-01",
+      "name": "Dining and hearth",
+      "floor": "L0",
+      "floor_index": 0,
+      "position": "west annexe",
+      "target_size_blocks": "19x15",
+      "usable_function": "food, rest, gossip and teacher rumors",
+      "access": "public",
+      "milestone": "M3"
+    },
+    {
+      "id": "SRV-02",
+      "name": "Kitchen and supply room",
+      "floor": "L-1",
+      "floor_index": -1,
+      "position": "west below",
+      "target_size_blocks": "15x13",
+      "usable_function": "food storage/supply loops",
+      "access": "public",
+      "milestone": "M3"
+    },
+    {
+      "id": "SRV-03",
+      "name": "Washroom and laundry",
+      "floor": "L-1",
+      "floor_index": -1,
+      "position": "west below",
+      "target_size_blocks": "11x9",
+      "usable_function": "world-believability and water interaction",
+      "access": "public",
+      "milestone": "M4"
+    },
+    {
+      "id": "MID-01",
+      "name": "Midden staircase",
+      "floor": "L-1",
+      "floor_index": -1,
+      "position": "beneath courtyard",
+      "target_size_blocks": "9x11",
+      "usable_function": "first guarded hidden descent",
+      "access": "secret",
+      "milestone": "M3"
+    },
+    {
+      "id": "MID-02",
+      "name": "Midden old tunnels",
+      "floor": "L-2",
+      "floor_index": -2,
+      "position": "below ring",
+      "target_size_blocks": "variable",
+      "usable_function": "navigation/danger/ambient stories",
+      "access": "secret",
+      "milestone": "M4"
+    },
+    {
+      "id": "MID-03",
+      "name": "Atronach forge chamber",
+      "floor": "L-2",
+      "floor_index": -2,
+      "position": "below northeast",
+      "target_size_blocks": "19 diameter",
+      "usable_function": "ritual ingredients and forge puzzle",
+      "access": "research",
+      "milestone": "M4"
+    },
+    {
+      "id": "MID-04",
+      "name": "Relic hand vault",
+      "floor": "L-2",
+      "floor_index": -2,
+      "position": "below west",
+      "target_size_blocks": "15x13",
+      "usable_function": "clue/relic trial",
+      "access": "secret",
+      "milestone": "M4"
+    },
+    {
+      "id": "MID-05",
+      "name": "Abandoned lab",
+      "floor": "L-2",
+      "floor_index": -2,
+      "position": "below north",
+      "target_size_blocks": "17x13",
+      "usable_function": "recover failed experiments",
+      "access": "secret",
+      "milestone": "M4"
+    },
+    {
+      "id": "MID-06",
+      "name": "Midden Dark",
+      "floor": "L-3",
+      "floor_index": -3,
+      "position": "deep northeast",
+      "target_size_blocks": "variable",
+      "usable_function": "hostile magic exploration",
+      "access": "secret",
+      "milestone": "M5"
+    },
+    {
+      "id": "MID-07",
+      "name": "Augur sanctuary",
+      "floor": "L-3",
+      "floor_index": -3,
+      "position": "deep north",
+      "target_size_blocks": "19 diameter",
+      "usable_function": "lore, wisdom, controlled discoveries",
+      "access": "secret",
+      "milestone": "M5"
+    },
+    {
+      "id": "MID-08",
+      "name": "Sea escape tunnel",
+      "floor": "L-2",
+      "floor_index": -2,
+      "position": "cliff face",
+      "target_size_blocks": "variable",
+      "usable_function": "alternate safe exit, can be sealed",
+      "access": "secret",
+      "milestone": "M5"
+    }
+  ],
+  "connections": [
+    {
+      "from": "EXT-01",
+      "to": "EXT-02",
+      "type": "public bridge"
+    },
+    {
+      "from": "EXT-02",
+      "to": "EXT-03",
+      "type": "gate"
+    },
+    {
+      "from": "EXT-03",
+      "to": "ELM-01",
+      "type": "open doorway"
+    },
+    {
+      "from": "EXT-03",
+      "to": "ATT-01",
+      "type": "entrance"
+    },
+    {
+      "from": "EXT-03",
+      "to": "CNT-01",
+      "type": "entrance"
+    },
+    {
+      "from": "EXT-03",
+      "to": "ARC-01",
+      "type": "entrance"
+    },
+    {
+      "from": "EXT-03",
+      "to": "WRK-01",
+      "type": "workshop arch"
+    },
+    {
+      "from": "EXT-03",
+      "to": "SRV-01",
+      "type": "common room arch"
+    },
+    {
+      "from": "ELM-01",
+      "to": "ELM-02",
+      "type": "public stairs"
+    },
+    {
+      "from": "ELM-02",
+      "to": "ELM-03",
+      "type": "hallway"
+    },
+    {
+      "from": "ATT-01",
+      "to": "ATT-02",
+      "type": "stairs"
+    },
+    {
+      "from": "ATT-02",
+      "to": "ATT-03",
+      "type": "stairs"
+    },
+    {
+      "from": "CNT-01",
+      "to": "CNT-02",
+      "type": "stairs"
+    },
+    {
+      "from": "CNT-02",
+      "to": "CNT-03",
+      "type": "stairs"
+    },
+    {
+      "from": "ARC-01",
+      "to": "ARC-02",
+      "type": "stairs"
+    },
+    {
+      "from": "ARC-02",
+      "to": "ARC-03",
+      "type": "research access"
+    },
+    {
+      "from": "ARC-03",
+      "to": "ARC-04",
+      "type": "hidden puzzle stairs"
+    },
+    {
+      "from": "ARC-03",
+      "to": "AMG-01",
+      "type": "faculty corridor"
+    },
+    {
+      "from": "AMG-01",
+      "to": "AMG-02",
+      "type": "stairs"
+    },
+    {
+      "from": "AMG-02",
+      "to": "AMG-03",
+      "type": "stairs"
+    },
+    {
+      "from": "WRK-01",
+      "to": "WRK-02",
+      "type": "stairs"
+    },
+    {
+      "from": "WRK-02",
+      "to": "WRK-03",
+      "type": "arched hallway"
+    },
+    {
+      "from": "WRK-03",
+      "to": "WRK-04",
+      "type": "roof stairs"
+    },
+    {
+      "from": "CNT-01",
+      "to": "WRK-05",
+      "type": "side hall"
+    },
+    {
+      "from": "SRV-01",
+      "to": "SRV-02",
+      "type": "service stairs"
+    },
+    {
+      "from": "SRV-02",
+      "to": "SRV-03",
+      "type": "side hall"
+    },
+    {
+      "from": "EXT-03",
+      "to": "MID-01",
+      "type": "trapdoor stairs"
+    },
+    {
+      "from": "MID-01",
+      "to": "MID-02",
+      "type": "stone descent"
+    },
+    {
+      "from": "MID-02",
+      "to": "MID-03",
+      "type": "tunnel"
+    },
+    {
+      "from": "MID-02",
+      "to": "MID-04",
+      "type": "tunnel"
+    },
+    {
+      "from": "MID-02",
+      "to": "MID-05",
+      "type": "tunnel"
+    },
+    {
+      "from": "MID-05",
+      "to": "MID-06",
+      "type": "sealed descent"
+    },
+    {
+      "from": "MID-06",
+      "to": "MID-07",
+      "type": "hidden arch"
+    },
+    {
+      "from": "MID-02",
+      "to": "MID-08",
+      "type": "cliff passage"
+    },
+    {
+      "from": "MID-08",
+      "to": "EXT-04",
+      "type": "emergency cliff stair"
+    },
+    {
+      "from": "EXT-04",
+      "to": "ARC-02",
+      "type": "balcony door"
+    }
+  ]
+}

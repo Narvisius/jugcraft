@@ -30,11 +30,11 @@ import org.jspecify.annotations.Nullable;
 public class MultiMachineRecipe implements Recipe<MachineInput> {
 	/** One ingredient stack: what it accepts and how many are used per operation. */
 	public record Part(Ingredient ingredient, int count) {
-		static final Codec<Part> CODEC = RecordCodecBuilder.create(i -> i.group(
+		public static final Codec<Part> CODEC = RecordCodecBuilder.create(i -> i.group(
 				Ingredient.CODEC.fieldOf("ingredient").forGetter(Part::ingredient),
 				ExtraCodecs.POSITIVE_INT.optionalFieldOf("count", 1).forGetter(Part::count)
 		).apply(i, Part::new));
-		static final StreamCodec<RegistryFriendlyByteBuf, Part> STREAM_CODEC = StreamCodec.composite(
+		public static final StreamCodec<RegistryFriendlyByteBuf, Part> STREAM_CODEC = StreamCodec.composite(
 				Ingredient.CONTENTS_STREAM_CODEC, Part::ingredient, ByteBufCodecs.VAR_INT, Part::count, Part::new);
 	}
 
@@ -77,8 +77,13 @@ public class MultiMachineRecipe implements Recipe<MachineInput> {
 	 * hold this recipe: each ingredient needs its own slot with enough items, and other slots must be empty.
 	 */
 	public int @Nullable [] take(MachineInput input) {
+		return take(parts, input);
+	}
+
+	/** Shared distinct-slot matching for powered machines and the starter workshop. */
+	public static int @Nullable [] take(List<Part> parts, MachineInput input) {
 		int[] take = new int[input.size()];
-		if (!assign(0, input, new boolean[input.size()], take)) {
+		if (!assign(parts, 0, input, new boolean[input.size()], take)) {
 			return null;
 		}
 		for (int slot = 0; slot < input.size(); slot++) {
@@ -90,7 +95,7 @@ public class MultiMachineRecipe implements Recipe<MachineInput> {
 	}
 
 	/** Backtracking assignment of ingredients to distinct slots (at most a few slots, so this stays tiny). */
-	private boolean assign(int index, MachineInput input, boolean[] used, int[] take) {
+	private static boolean assign(List<Part> parts, int index, MachineInput input, boolean[] used, int[] take) {
 		if (index == parts.size()) {
 			return true;
 		}
@@ -100,7 +105,7 @@ public class MultiMachineRecipe implements Recipe<MachineInput> {
 			if (!used[slot] && part.ingredient().test(stack) && stack.getCount() >= part.count()) {
 				used[slot] = true;
 				take[slot] = part.count();
-				if (assign(index + 1, input, used, take)) {
+				if (assign(parts, index + 1, input, used, take)) {
 					return true;
 				}
 				used[slot] = false;

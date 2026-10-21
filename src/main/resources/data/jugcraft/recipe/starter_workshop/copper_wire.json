@@ -1,0 +1,25 @@
+{
+  "type": "jugcraft:starter_working",
+  "station": 0,
+  "ingredients": [
+    {
+      "ingredient": "minecraft:copper_ingot",
+      "count": 1
+    }
+  ],
+  "result": {
+    "id": "jugcraft:copper_wire",
+    "count": 3
+  },
+  "time": 100,
+  "heated": false,
+  "tool": {
+    "id": "jugcraft:wire_cutters"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

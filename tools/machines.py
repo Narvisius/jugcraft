@@ -379,7 +379,7 @@ ALT_CRAFTING = {
 
 CRAFTING = {
     "machine_casing": (["BZB", "Z Z", "BZB"], {"B": "#c:ingots/bronze", "Z": "#c:ingots/zinc"}, 1),
-    "copper_cable": (["CTC"], {"C": "#c:ingots/copper", "T": "#c:ingots/tin"}, 6),
+    "copper_cable": (["CTC"], {"C": "#c:ingots/copper", "T": "#c:ingots/tin"}, 4),
     # Faster cables: silver wire (wire drawer), then aluminum wire armored with steel.
     "silver_cable": (["WWW", "RRR"], {"W": "#c:wires/silver", "R": "jugcraft:copper_cable"}, 3),
     "aluminum_cable": (["WPW", "RRR"], {"W": "#c:wires/aluminum", "P": "#c:plates/steel", "R": "jugcraft:silver_cable"}, 3),

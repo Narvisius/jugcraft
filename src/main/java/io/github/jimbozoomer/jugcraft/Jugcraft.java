@@ -63,6 +63,7 @@ public final class Jugcraft implements ModInitializer {
 		io.github.jimbozoomer.jugcraft.machine.Electroplating.register();
 		JugcraftDeposits.register();
 		JugcraftMachines.register();
+		io.github.jimbozoomer.jugcraft.workshop.JugcraftWorkshop.register();
 		io.github.jimbozoomer.jugcraft.machine.form.JugcraftForms.register();
 		io.github.jimbozoomer.jugcraft.machine.form.IndustrialForms.register();
 		JugcraftFluids.register();
@@ -136,6 +137,7 @@ public final class Jugcraft implements ModInitializer {
 		io.github.jimbozoomer.jugcraft.creatures.chima.ChimaMod.register();
 		io.github.jimbozoomer.jugcraft.town.JugcraftTown.register();
 		io.github.jimbozoomer.jugcraft.concordance.JugcraftConcordance.register();
+		io.github.jimbozoomer.jugcraft.academy.JugcraftAcademy.register();
 		io.github.jimbozoomer.jugcraft.nouveau.JugNouveau.register();
 		io.github.jimbozoomer.jugcraft.menagerie.Menagerie.register();
 		io.github.jimbozoomer.jugcraft.diagonal.DiagonalWalls.register();

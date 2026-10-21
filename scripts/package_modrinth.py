@@ -140,7 +140,7 @@ def inspect_jugcraft_jar(jar: Path, lock: dict) -> dict:
 def make_index(lock: dict, version: str) -> dict:
     return {
         "formatVersion": 1, "game": "minecraft", "versionId": version,
-        "name": "Jugcraft Complete",
+        "name": "JUGCRAFT",
         "summary": "Jugcraft with its pinned animation, magic, interface, and presentation libraries.",
         "files": [{
             "path": "mods/" + library["filename"],

@@ -1,0 +1,37 @@
+from_id,to_id,connection
+EXT-01,EXT-02,public bridge
+EXT-02,EXT-03,gate
+EXT-03,ELM-01,open doorway
+EXT-03,ATT-01,entrance
+EXT-03,CNT-01,entrance
+EXT-03,ARC-01,entrance
+EXT-03,WRK-01,workshop arch
+EXT-03,SRV-01,common room arch
+ELM-01,ELM-02,public stairs
+ELM-02,ELM-03,hallway
+ATT-01,ATT-02,stairs
+ATT-02,ATT-03,stairs
+CNT-01,CNT-02,stairs
+CNT-02,CNT-03,stairs
+ARC-01,ARC-02,stairs
+ARC-02,ARC-03,research access
+ARC-03,ARC-04,hidden puzzle stairs
+ARC-03,AMG-01,faculty corridor
+AMG-01,AMG-02,stairs
+AMG-02,AMG-03,stairs
+WRK-01,WRK-02,stairs
+WRK-02,WRK-03,arched hallway
+WRK-03,WRK-04,roof stairs
+CNT-01,WRK-05,side hall
+SRV-01,SRV-02,service stairs
+SRV-02,SRV-03,side hall
+EXT-03,MID-01,trapdoor stairs
+MID-01,MID-02,stone descent
+MID-02,MID-03,tunnel
+MID-02,MID-04,tunnel
+MID-02,MID-05,tunnel
+MID-05,MID-06,sealed descent
+MID-06,MID-07,hidden arch
+MID-02,MID-08,cliff passage
+MID-08,EXT-04,emergency cliff stair
+EXT-04,ARC-02,balcony door

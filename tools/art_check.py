@@ -854,6 +854,8 @@ def _cross_errors(name, faces, boxes, cells, shells_for=None, open_allowed=False
 
 # Numbered part models of decor drawn whole and shared out among their blocks: (model, its block's offset in px).
 DRAWN_TOGETHER = {
+    "workshop_bench": [("workshop_bench_part0", (0, 0, 0)), ("workshop_bench_part1", (-16, 0, 0))],
+    "small_crucible_furnace": [("small_crucible_furnace_part0", (0, 0, 0)), ("small_crucible_furnace_part1", (0, 16, 0))],
     "deep_drilling_assembly": [("deep_drilling_assembly", (0, 0, 0)), ("deep_drilling_assembly_upper", (0, 16, 0))],
     "farm_stand": [("farm_stand_0", (0, 0, 0)), ("farm_stand_1", (-16, 0, 0))],
     "harvest_effigy": [(f"harvest_effigy_{i}", (0, 16 * i, 0)) for i in range(3)],

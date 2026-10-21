@@ -191,6 +191,11 @@ def build(registry_path=None):
         if d.get('capability'):
             extra.append(capabilities[d['capability']])
             if not extra[-1]: invalid.append({'source': rid, 'ingredient': d['capability'], 'problem': 'no machine capability adapter'})
+        elif typ == 'jugcraft:starter_working':
+            from starter_workshop import STATIONS
+            extra.append(['jugcraft:' + STATIONS[d['station']]])
+            if d['station'] == 2:
+                extra += [['jugcraft:basic_ceramic_lining'], ['jugcraft:ceramic_crucible']]
         elif typ in stations: extra.append(stations[typ])
         if d.get('form'): extra.append([d['form']])
         for fluid in d.get('fluids', []): extra.append(['fluid:' + fluid['fluid']])

@@ -25,3 +25,4 @@ jobs:
         run: |
           python3 scripts/package_modrinth.py check
           python3 -m unittest discover -s scripts/tests -v
+          python3 -m unittest discover -s tools -p test_winterhold_academy.py -v

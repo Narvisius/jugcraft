@@ -248,11 +248,12 @@ def item_models(definition):
 
 def check_assets(registered):
     import vehicle_bays
+    import starter_workshop
     lang = load(ASSETS / "lang" / "en_us.json") or {}
     for block in (all_blocks() + machine_blocks() + ag.all_blocks() + petro.petro_blocks() + deposits.all_blocks()
                   + list(tank_display.BLOCKS) + plastic.blocks() + ph.blocks() + (town_assets.blocks() + styx.blocks()) + seasons.BLOCKS
                   + construction.blocks() + control_electronics.blocks() + rocketry.blocks() + dieselworks.blocks() + kaiserworks.blocks() + trenchworks.blocks() + fortifications.blocks() + bunkerworks.blocks() + aged_wood.blocks() + fire_control.blocks()
-                  + concordance.blocks() + guns.blocks() + industrial_forms.blocks() + list(vehicle_bays.BLOCKS) + menagerie.blocks()):
+                  + concordance.blocks() + guns.blocks() + industrial_forms.blocks() + list(vehicle_bays.BLOCKS) + menagerie.blocks() + starter_workshop.STATIONS):
         state = load(ASSETS / "blockstates" / f"{block}.json")
         if state:
             for variant in state.get("variants", {}).values():
@@ -277,7 +278,7 @@ def check_assets(registered):
         if item not in (all_blocks() + machine_blocks() + ag.all_blocks() + petro.petro_blocks() + deposits.all_blocks()
                         + list(tank_display.BLOCKS) + plastic.blocks() + ph.blocks() + (town_assets.blocks() + styx.blocks())
                         + construction.blocks() + control_electronics.blocks() + rocketry.blocks() + dieselworks.blocks() + kaiserworks.blocks() + trenchworks.blocks() + fortifications.blocks() + bunkerworks.blocks() + aged_wood.blocks() + fire_control.blocks()
-                        + concordance.blocks() + guns.blocks() + industrial_forms.blocks() + list(vehicle_bays.BLOCKS) + menagerie.blocks()
+                        + concordance.blocks() + guns.blocks() + industrial_forms.blocks() + list(vehicle_bays.BLOCKS) + menagerie.blocks() + starter_workshop.STATIONS
                         + exchange_blocks.BLOCKS + exchange_poker.BLOCKS + exchange_casino.BLOCKS + exchange_casino.ITEMS) and f"item.{MOD}.{item}" not in lang:
             err(f"Missing name for item {item}")
 
@@ -706,6 +707,7 @@ DIAGONAL_WALLS = {dg.DIAGONAL_WALL.format(name) for _, name in dg.all_walls()}
 
 def check_tags():
     import vehicle_bays
+    import starter_workshop
     # Shared generation must retain both kitchen tools and combat equipment.
     from kitchen import KNIVES
     for tag in ("enchantable/melee_weapon", "enchantable/durability"):
@@ -727,6 +729,8 @@ def check_tags():
                                                     + guns.items() + guns.blocks() + concordance.items() + concordance.blocks() + concordance.itemless_blocks())
         import nouveau_content
         known = set(known)
+        if registry == 'block': known.update(starter_workshop.STATIONS)
+        if registry == 'item': known.update(starter_workshop.NAMES)
         if registry in {'item', 'block'}: known.update(vehicle_bays.BLOCKS)
         if registry in {'item','block'}:known.update(menagerie.entries())
         if registry == 'entity_type':known.update(menagerie.entities())
@@ -17005,7 +17009,8 @@ def registered_items():
                   | set(field_chemistry.items()) | set(construction.items()) | set(construction.blocks()) | set(gas_storage.items()) | set(control_electronics.blocks()) | set(control_electronics.items()) | set(rocketry.items()) | set(rocketry.blocks()) | set(dieselworks.blocks()) | set(kaiserworks.blocks()) | set(trenchworks.blocks()) | set(fortifications.blocks()) | set(bunkerworks.blocks()) | set(aged_wood.blocks()) | set(fire_control.blocks()) | set(fire_control.items()) | set(raiders.ITEMS) | set(armoured_walker.ITEMS) | set(howitzer_walker.ITEMS) | set(zeppelin.ITEMS) | set(mech.ITEMS) | set(landship.ITEMS) | set(artillery.ITEMS) | set(tower_guns.items())
                   | set(ph.blocks()) | set(ph.items()) | set((town_assets.blocks() + styx.blocks()))
                   | set(guns.items()) | set(guns.blocks()) | set(concordance.items()) | set(concordance.blocks()) | set(industrial_forms.blocks()))
-    registered |= menagerie.entries() | set(vehicle_bays.BLOCKS)
+    import starter_workshop
+    registered |= menagerie.entries() | set(vehicle_bays.BLOCKS) | set(starter_workshop.NAMES)
     return registered
 
 

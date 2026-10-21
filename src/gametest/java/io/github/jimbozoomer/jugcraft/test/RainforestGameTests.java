@@ -111,7 +111,25 @@ public class RainforestGameTests {
         });
     }
 
-    @GameTest(maxTicks = 1230)
+    /** Inspect the real chunk scheduler, including duplicate entries, without advancing the world's clock. */
+    private static long pendingTapTick(GameTestHelper h, BlockPos pos) {
+        var tap = block("tree_tap");
+        var ticks = (net.minecraft.world.ticks.LevelChunkTicks<Block>) h.getLevel().getChunkAt(pos).getBlockTicks();
+        var entries = ticks.getAll()
+                .filter(t -> t.pos().equals(pos) && t.type() == tap).toList();
+        h.assertTrue(entries.size() == 1, "Expected exactly one pending tap tick at " + pos + ", got " + entries.size());
+        return entries.getFirst().triggerTick();
+    }
+    /** Keep the production-delay assertion; accelerate only this fixture's already-verified tick. */
+    private static void dispatchTapSoon(GameTestHelper h, BlockPos pos, long expectedDue) {
+        h.assertTrue(TreeTapBlock.INTERVAL == 1200, "Production interval must remain one minute");
+        h.assertTrue(pendingTapTick(h, pos) == expectedDue, "Tap changed its scheduled deadline");
+        var level = h.getLevel(); var tap = block("tree_tap");
+        var ticks = (net.minecraft.world.ticks.LevelChunkTicks<Block>) level.getChunkAt(pos).getBlockTicks();
+        ticks.removeIf(t -> t.pos().equals(pos) && t.type() == tap);
+        level.scheduleTick(pos, tap, 8);
+    }
+    @GameTest(maxTicks = 100)
     public void tapSchedulesItsOwnProductionAndHarvestConsumesBottleOnce(GameTestHelper h) {
         var level=h.getLevel(); var at=AT.offset(320,0,0); grow(h,"rubber_tree",at,3);
         var chunk = net.minecraft.world.level.ChunkPos.containing(at);
@@ -122,8 +140,9 @@ public class RainforestGameTests {
         var supportHit=new BlockHitResult(Vec3.atCenterOf(support).relative(Direction.NORTH,.5),Direction.NORTH,support,false);
         player.gameMode.useItemOn(player,level,player.getMainHandItem(),InteractionHand.MAIN_HAND,supportHit);
         h.assertTrue(level.getBlockState(tapAt).is(block("tree_tap")) && player.getMainHandItem().isEmpty(),"Tap item placement failed");
-        h.runAfterDelay(1190,()->h.assertTrue(level.getBlockState(tapAt).getValue(TreeTapBlock.LATEX)==0,"Tap filled early"));
-        h.runAfterDelay(1205,()-> {
+        dispatchTapSoon(h, tapAt, level.getGameTime() + TreeTapBlock.INTERVAL);
+        h.runAfterDelay(3,()->h.assertTrue(level.getBlockState(tapAt).getValue(TreeTapBlock.LATEX)==0,"Tap filled early"));
+        h.runAfterDelay(12,()-> {
             h.assertTrue(level.getBlockState(tapAt).getValue(TreeTapBlock.LATEX)==1,"Scheduled fill missing");
             level.setBlock(tapAt,level.getBlockState(tapAt).setValue(TreeTapBlock.LATEX,4),Block.UPDATE_CLIENTS);
             player.setItemInHand(InteractionHand.MAIN_HAND,new ItemStack(Items.GLASS_BOTTLE,2));
@@ -203,27 +222,31 @@ public class RainforestGameTests {
         TreeBatchTwoGameTests.reset(level, at, Blocks.GRASS_BLOCK); h.succeed();
     }
 
-    @GameTest(maxTicks = 1230)
+    @GameTest(maxTicks = 100)
     public void upgradeAndBottlingPreservePartialFillAndPendingTick(GameTestHelper h) {
         var level = h.getLevel(); var at = AT.offset(480, 0, 0); grow(h, "rubber_tree", at, 2);
         var chunk = net.minecraft.world.level.ChunkPos.containing(at); level.setChunkForced(chunk.x(), chunk.z(), true);
         var pos = at.above().north(); var tap = (TreeTapBlock) block("tree_tap");
         level.setBlock(pos, tap.defaultBlockState().setValue(TreeTapBlock.LATEX, 2), Block.UPDATE_ALL);
         var player = h.makeMockServerPlayerInLevel(); player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
-        h.runAfterDelay(300, () -> {
+        long originalDue = level.getGameTime() + TreeTapBlock.INTERVAL;
+        h.assertTrue(pendingTapTick(h, pos) == originalDue, "Incorrect production interval");
+        h.runAfterDelay(2, () -> {
             player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.BUCKET));
             useTap(player, pos, InteractionHand.MAIN_HAND);
             h.assertTrue(level.getBlockState(pos).getValue(TreeTapBlock.LATEX) == 2, "Upgrade reset progress");
+            h.assertTrue(pendingTapTick(h, pos) == originalDue, "Upgrade postponed the pending tick");
         });
-        h.runAfterDelay(600, () -> {
+        h.runAfterDelay(4, () -> {
             level.setBlock(pos, level.getBlockState(pos).setValue(TreeTapBlock.LATEX, 7), Block.UPDATE_CLIENTS);
             player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.GLASS_BOTTLE, 8));
             useTap(player, pos, InteractionHand.MAIN_HAND); useTap(player, pos, InteractionHand.MAIN_HAND);
             h.assertTrue(level.getBlockState(pos).getValue(TreeTapBlock.LATEX) == 3, "Bottling discarded partial fill");
             h.assertTrue(player.getMainHandItem().getCount() == 7, "Incomplete bottle was collected");
+            dispatchTapSoon(h, pos, originalDue);
         });
-        h.runAfterDelay(1190, () -> h.assertTrue(level.getBlockState(pos).getValue(TreeTapBlock.LATEX) == 3, "Fill tick accelerated"));
-        h.runAfterDelay(1205, () -> {
+        h.runAfterDelay(7, () -> h.assertTrue(level.getBlockState(pos).getValue(TreeTapBlock.LATEX) == 3, "Fill tick accelerated"));
+        h.runAfterDelay(16, () -> {
             h.assertTrue(level.getBlockState(pos).getValue(TreeTapBlock.LATEX) == 4, "Upgrade or bottling postponed the pending fill tick");
             TreeBatchTwoGameTests.reset(level, at, Blocks.GRASS_BLOCK); level.setChunkForced(chunk.x(), chunk.z(), false); h.succeed();
         });
@@ -258,7 +281,7 @@ public class RainforestGameTests {
         TreeBatchTwoGameTests.reset(level, at, Blocks.GRASS_BLOCK); h.succeed();
     }
 
-    @GameTest(maxTicks = 2430)
+    @GameTest(maxTicks = 100)
     public void fullStoppedTapsResumeAfterUpgradeOrBatchCollection(GameTestHelper h) {
         var level = h.getLevel(); var tap = (TreeTapBlock) block("tree_tap");
         var bases = List.of(AT.offset(720, 0, 0), AT.offset(800, 0, 0));
@@ -267,17 +290,18 @@ public class RainforestGameTests {
             var chunk = net.minecraft.world.level.ChunkPos.containing(at); level.setChunkForced(chunk.x(), chunk.z(), true);
             level.setBlock(at.above().north(), tap.defaultBlockState().setValue(TreeTapBlock.UPGRADED, i == 1)
                     .setValue(TreeTapBlock.LATEX, i == 1 ? 32 : 4), Block.UPDATE_ALL);
+            dispatchTapSoon(h, at.above().north(), level.getGameTime() + TreeTapBlock.INTERVAL);
         }
         var player = h.makeMockServerPlayerInLevel(); player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
-        h.runAfterDelay(1205, () -> {
+        h.runAfterDelay(12, () -> {
             for (var at : bases) h.assertFalse(level.getBlockTicks().hasScheduledTick(at.above().north(), tap), "Full tap kept scheduling");
             player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.BUCKET));
             useTap(player, bases.getFirst().above().north(), InteractionHand.MAIN_HAND);
             player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.GLASS_BOTTLE, 8));
             useTap(player, bases.getLast().above().north(), InteractionHand.MAIN_HAND);
-            for (var at : bases) h.assertTrue(level.getBlockTicks().hasScheduledTick(at.above().north(), tap), "Stopped tap did not restart");
+            for (var at : bases) dispatchTapSoon(h, at.above().north(), level.getGameTime() + TreeTapBlock.INTERVAL);
         });
-        h.runAfterDelay(2410, () -> {
+        h.runAfterDelay(24, () -> {
             h.assertTrue(level.getBlockState(bases.getFirst().above().north()).getValue(TreeTapBlock.LATEX) == 5, "Full basic tap did not continue after upgrade");
             h.assertTrue(level.getBlockState(bases.getLast().above().north()).getValue(TreeTapBlock.LATEX) == 1, "Full bucket did not refill after collecting");
             for (var at : bases) {

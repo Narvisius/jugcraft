@@ -134,7 +134,8 @@ public final class WorkLane {
 	public boolean drainWater() { return drainWater; }
 	public int emissions() { return emissions; }
 
-	void advance(int ticks) {
-		progress += ticks;
+	public void advance(int ticks) {
+		if (ticks < 0) throw new IllegalArgumentException("Paid work cannot be negative");
+		progress = (int) Math.min(duration, (long) progress + ticks);
 	}
 }

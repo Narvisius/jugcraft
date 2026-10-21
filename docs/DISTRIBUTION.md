@@ -1,5 +1,9 @@
 # Installing and distributing Jugcraft
 
+**Hosted server and player releases:** see [SERVER_RELEASES.md](SERVER_RELEASES.md)
+for matched upload/player bundles, the JUGCRAFT profile name, Windows import
+helper and native Modrinth Server Project update flow.
+
 Jugcraft has two artifacts:
 
 - **Jugcraft JAR:** the original mod. Supporting launchers can install the required dependencies declared on its Modrinth release. Manual JAR installation still requires the dependencies.
@@ -18,11 +22,11 @@ required for the pack's client installation and excluded from server installatio
 Standalone Jugcraft still loads without it. The existing Fabric API dependency
 already satisfies Diorama's requirements; no additional platform upgrade is needed.
 
-Pack controls: **M** opens the map, **N** creates a waypoint, **U** opens the waypoint
+Pack controls: **M** opens the map, **comma (,)** creates a waypoint, **U** opens the waypoint
 list, and **B** remains the Jugcraft encyclopedia. The new-waypoint default differs
 from upstream's B to avoid opening two screens with one key. Saved custom bindings
 are preserved; if Diorama was installed previously with B, change its New Waypoint
-binding to N in Controls (or reset that binding).
+binding to comma in Controls (or reset that binding). **N** opens the backpack.
 
 Existing exported packs and already installed profiles are not changed retroactively.
 Import the new pack or explicitly update an existing profile. See the

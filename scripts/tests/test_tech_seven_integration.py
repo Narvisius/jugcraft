@@ -7,6 +7,26 @@ import check_mod_data as audit
 import petro, industrial_forms, machines, generate_material_data as data
 
 class TechSevenIntegrationTests(unittest.TestCase):
+    def test_alloy_payoffs_preserve_plain_recipes_and_do_not_mint_essence(self):
+        from fractions import Fraction
+        root = Path(__file__).resolve().parents[2] / 'src/main/resources'
+        catalog = json.loads((root/'data/jugcraft/alchemy/values.json').read_text())['items']
+        def value(name):
+            row = catalog[name]
+            return Fraction(row['numerator'], row['denominator'])
+        recipes = root/'data/jugcraft/recipe'
+        for name, output, count, stick in [('alloys_aluminum_cladding', 'aluminum_cladding', 6, 0),
+                ('alloys_aluminum_propeller_sets', 'aluminum_propeller_set', 2, 1)]:
+            row = json.loads((recipes/(name+'.json')).read_text())
+            self.assertEqual(row['key']['P'], '#c:plates/aluminum_magnesium')
+            self.assertEqual(''.join(row['pattern']).count('P'), 4)
+            self.assertEqual(row['result'], dict(id='jugcraft:'+output, count=count))
+            cost = 4*value('jugcraft:aluminum_magnesium_plate') + stick*value('minecraft:stick')
+            self.assertLessEqual(count*value('jugcraft:'+output), cost)
+            alternatives = [json.loads(p.read_text()) for p in recipes.glob('*'+output+'*.json')
+                            if p.stem != name]
+            self.assertTrue(alternatives, 'Original aluminum route must remain available')
+
     def test_phase_cycle_is_not_a_free_fuel_source(self):
         def recipe(source,target,amount=1000):
             return dict(fluids=[(source,1000)],fluid_results=[(target,amount)],ticks=10)

@@ -1,5 +1,17 @@
 # Jugcraft TODO
 
+## Overnight integration — October 21
+
+- [x] Combine starter workshop and Frostward College M0 with main; reconcile older tech drafts with canonical packages. [Exact scope](features/remaining-release-oct21.md).
+- [x] Add optional alloy cladding and drone propeller recipes using existing Aluminum-Magnesium Alloy Plates.
+- [x] Prepare JUGCRAFT player/server packaging, integrity manifest, Windows import helper and checked-main draft release workflow. [Install/update procedure](SERVER_RELEASES.md).
+- [ ] Confirm final combined CI/merge results in the integration PR before promoting artifacts.
+- [ ] Add food-grade phosphoric-acid/cola production separately from industrial acid; extend MMH/methylamine propellant chemistry on shared machinery. These residual draft ideas are not implemented.
+- [ ] Review eight-group fertilizer/legume tuning against existing nitrogen/phosphate tags; retain current behavior until tested.
+- [ ] Finish college room furnishing and stair-edge/railing review, then the larger curriculum/campus plan.
+- [ ] Owner: configure Modrinth Server Project/address, stage files, exercise two-account joins/restart and native updating, choose deployment window and promote the tested release.
+- [ ] Custom JUGCRAFT main menu and main server Play button: wait until owner is awake, as requested.
+
 **19 October publication authorization:** the owner approved publishing the current local content and merging ready PRs. Earlier local-only checkpoints are historical; remaining behavioral parity and independent multiplayer work stay open.
 
 ## Adam-ondi-Ahman and Cydonian adventure — October 20 integration
