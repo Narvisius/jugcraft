@@ -154,8 +154,11 @@ public class CrowGameTests {
 		helper.succeed();
 	}
 
-	/** With its own AI (by day), a crow above a field flies down to the ripe crop it was sent after and pecks it back. */
-	@GameTest(maxTicks = 200)
+	/**
+	 * With its own AI (by day), a crow flies down and pecks. Keep this field beyond neighboring tests' 12-block
+	 * scarecrow and 6-block player effects; the default one-block padding does not isolate a live flying crow.
+	 */
+	@GameTest(maxTicks = 200, padding = 16)
 	public void aCrowFliesDownToPeck(GameTestHelper helper) {
 		ServerLevel level = helper.getLevel();
 		floor(helper);
@@ -168,7 +171,9 @@ public class CrowGameTests {
 		level.addFreshEntity(crow);
 		helper.assertTrue(crow.raid(level, helper.absolutePos(crop)), "It goes for the ripe wheat");
 		helper.succeedWhen(() -> {
-			helper.assertTrue(age(helper, crop) == RIPE - Crow.SETBACK, "Waiting for it to fly down and peck: at " + crow.position());
+			helper.assertTrue(age(helper, crop) == RIPE - Crow.SETBACK, "Waiting for it to fly down and peck: at " + crow.position()
+					+ ", crop age=" + age(helper, crop) + ", target=" + crow.crop() + ", fleeing=" + crow.fleeing()
+					+ ", guarded=" + guarded(helper, crop) + ", pecking allowed=" + Crow.mayPeck(level));
 			crow.discard();
 		});
 	}

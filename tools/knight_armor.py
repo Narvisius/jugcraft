@@ -41,7 +41,7 @@ import math
 from dataclasses import replace
 
 import armor_models as am
-from armor_paint import BRONZE, P, STEEL, shade
+from armor_paint import BRONZE, P, STEEL, TITANIUM, shade
 
 H = P("hammer")   # the owner's broken, hammered strips over a nested-L plate
 
@@ -495,4 +495,6 @@ def model(metal="steel"):
     }
 
 
-SETS = [am.ArmorSet("steel_knight", STEEL, model("steel")), am.ArmorSet("bronze_knight", BRONZE, model("bronze"))]
+SETS = [am.ArmorSet("steel_knight", STEEL, model("steel")), am.ArmorSet("bronze_knight", BRONZE, model("bronze")),
+        # Titanium armor (docs/features/titanium-gear.md): the steel's design and paint, in the titanium palette.
+        am.ArmorSet("titanium_knight", TITANIUM, model("titanium"))]

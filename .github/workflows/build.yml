@@ -12,7 +12,10 @@ concurrency:
 jobs:
   mod:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    # Resource generation/model audits precede the 21-minute server suite.
+    # Run 39506127768 reached 2,167 passes with two tests still running at 30 minutes.
+    # Preserve every check and assertion; budget for the complete combined workload.
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:

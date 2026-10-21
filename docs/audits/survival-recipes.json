@@ -20,7 +20,7 @@
     "Reachability is qualitative; energy, quantities, research and encounter difficulty require playtesting."
   ],
   "summary": {
-    "chain_with_acquisition_evidence": 3192,
+    "chain_with_acquisition_evidence": 3202,
     "recipe_chain_reachable": 1522,
     "natural_or_interaction_source": 561,
     "loot_only": 286,
@@ -28,8 +28,8 @@
     "intentional_noncraftable": 329
   },
   "recipe_types": {
-    "minecraft:crafting_shaped": 2736,
-    "minecraft:crafting_shapeless": 1038,
+    "minecraft:crafting_shaped": 2745,
+    "minecraft:crafting_shapeless": 1039,
     "jugcraft:alloying": 10,
     "minecraft:blasting": 40,
     "jugcraft:arc_smelting": 16,
@@ -71287,12 +71287,45 @@
       "blocked_by": []
     },
     {
+      "item": "jugcraft:titanium_axe",
+      "status": "chain_with_acquisition_evidence",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/titanium_axe.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
       "item": "jugcraft:titanium_block",
       "status": "chain_with_acquisition_evidence",
       "reason": "",
       "route_count": 1,
       "routes": [
         "src/main/resources/data/jugcraft/recipe/titanium_block.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:titanium_boots",
+      "status": "chain_with_acquisition_evidence",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/titanium_boots.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:titanium_chestplate",
+      "status": "chain_with_acquisition_evidence",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/titanium_chestplate.json"
       ],
       "evidence": [],
       "blocked_by": []
@@ -71309,6 +71342,28 @@
       "blocked_by": []
     },
     {
+      "item": "jugcraft:titanium_helmet",
+      "status": "chain_with_acquisition_evidence",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/titanium_helmet.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:titanium_hoe",
+      "status": "chain_with_acquisition_evidence",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/titanium_hoe.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
       "item": "jugcraft:titanium_ingot",
       "status": "chain_with_acquisition_evidence",
       "reason": "",
@@ -71317,6 +71372,17 @@
         "src/main/resources/data/jugcraft/recipe/arc_smelting/titanium_sponge.json",
         "src/main/resources/data/jugcraft/recipe/titanium_ingot_from_nuggets.json",
         "src/main/resources/data/jugcraft/recipe/titanium_ingot_from_titanium_block.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:titanium_leggings",
+      "status": "chain_with_acquisition_evidence",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/titanium_leggings.json"
       ],
       "evidence": [],
       "blocked_by": []
@@ -71344,6 +71410,28 @@
           "source": "src/main/resources/data/jugcraft/worldgen/feature/ore_titanium.json"
         }
       ],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:titanium_paxel",
+      "status": "chain_with_acquisition_evidence",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/titanium_paxel.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:titanium_pickaxe",
+      "status": "chain_with_acquisition_evidence",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/titanium_pickaxe.json"
+      ],
+      "evidence": [],
       "blocked_by": []
     },
     {
@@ -71383,6 +71471,17 @@
       "blocked_by": []
     },
     {
+      "item": "jugcraft:titanium_shovel",
+      "status": "chain_with_acquisition_evidence",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/titanium_shovel.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
       "item": "jugcraft:titanium_sponge",
       "status": "chain_with_acquisition_evidence",
       "reason": "",
@@ -71390,6 +71489,17 @@
       "routes": [
         "src/main/resources/data/jugcraft/recipe/chemical_reaction/titanium_sponge.json",
         "src/main/resources/data/jugcraft/recipe/electrolysis/reduce_and_clean_titanium_sponge.json"
+      ],
+      "evidence": [],
+      "blocked_by": []
+    },
+    {
+      "item": "jugcraft:titanium_sword",
+      "status": "chain_with_acquisition_evidence",
+      "reason": "",
+      "route_count": 1,
+      "routes": [
+        "src/main/resources/data/jugcraft/recipe/titanium_sword.json"
       ],
       "evidence": [],
       "blocked_by": []
@@ -123875,6 +123985,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -123914,6 +124026,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -123953,6 +124067,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -123992,6 +124108,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -124031,6 +124149,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -124070,6 +124190,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -124109,6 +124231,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -124174,6 +124298,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -124214,6 +124340,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -124254,6 +124382,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -125662,6 +125792,7 @@
           "jugcraft:red_matter_katar",
           "jugcraft:steel_hoe",
           "jugcraft:thallite_hoe",
+          "jugcraft:titanium_hoe",
           "minecraft:copper_hoe",
           "minecraft:diamond_hoe",
           "minecraft:golden_hoe",
@@ -125750,6 +125881,7 @@
           "jugcraft:red_matter_katar",
           "jugcraft:steel_hoe",
           "jugcraft:thallite_hoe",
+          "jugcraft:titanium_hoe",
           "minecraft:copper_hoe",
           "minecraft:diamond_hoe",
           "minecraft:golden_hoe",
@@ -125838,6 +125970,7 @@
           "jugcraft:red_matter_katar",
           "jugcraft:steel_hoe",
           "jugcraft:thallite_hoe",
+          "jugcraft:titanium_hoe",
           "minecraft:copper_hoe",
           "minecraft:diamond_hoe",
           "minecraft:golden_hoe",
@@ -125918,6 +126051,7 @@
           "jugcraft:red_matter_katar",
           "jugcraft:steel_hoe",
           "jugcraft:thallite_hoe",
+          "jugcraft:titanium_hoe",
           "minecraft:copper_hoe",
           "minecraft:diamond_hoe",
           "minecraft:golden_hoe",
@@ -126006,6 +126140,7 @@
           "jugcraft:red_matter_katar",
           "jugcraft:steel_hoe",
           "jugcraft:thallite_hoe",
+          "jugcraft:titanium_hoe",
           "minecraft:copper_hoe",
           "minecraft:diamond_hoe",
           "minecraft:golden_hoe",
@@ -229156,6 +229291,30 @@
       ]
     },
     {
+      "source": "src/main/resources/data/jugcraft/recipe/titanium_axe.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "minecraft:stick"
+        ],
+        [
+          "minecraft:stick"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:titanium_axe"
+      ]
+    },
+    {
       "source": "src/main/resources/data/jugcraft/recipe/titanium_block.json",
       "type": "minecraft:crafting_shaped",
       "inputs": [
@@ -229192,6 +229351,60 @@
       ]
     },
     {
+      "source": "src/main/resources/data/jugcraft/recipe/titanium_boots.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "jugcraft:titanium_ingot"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:titanium_boots"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/titanium_chestplate.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "jugcraft:titanium_ingot"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:titanium_chestplate"
+      ]
+    },
+    {
       "source": "src/main/resources/data/jugcraft/recipe/titanium_chlorinator.json",
       "type": "minecraft:crafting_shaped",
       "inputs": [
@@ -229225,6 +229438,51 @@
       ],
       "outputs": [
         "jugcraft:titanium_chlorinator"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/titanium_helmet.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "jugcraft:titanium_ingot"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:titanium_helmet"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/titanium_hoe.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "minecraft:stick"
+        ],
+        [
+          "minecraft:stick"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:titanium_hoe"
       ]
     },
     {
@@ -229276,6 +229534,36 @@
       ]
     },
     {
+      "source": "src/main/resources/data/jugcraft/recipe/titanium_leggings.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "jugcraft:titanium_ingot"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:titanium_leggings"
+      ]
+    },
+    {
       "source": "src/main/resources/data/jugcraft/recipe/titanium_nugget.json",
       "type": "minecraft:crafting_shapeless",
       "inputs": [
@@ -229285,6 +229573,48 @@
       ],
       "outputs": [
         "jugcraft:titanium_nugget"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/titanium_paxel.json",
+      "type": "minecraft:crafting_shapeless",
+      "inputs": [
+        [
+          "jugcraft:titanium_pickaxe"
+        ],
+        [
+          "jugcraft:titanium_axe"
+        ],
+        [
+          "jugcraft:titanium_shovel"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:titanium_paxel"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/titanium_pickaxe.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "minecraft:stick"
+        ],
+        [
+          "minecraft:stick"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:titanium_pickaxe"
       ]
     },
     {
@@ -229321,6 +229651,42 @@
       ],
       "outputs": [
         "jugcraft:titanium_reduction_retort"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/titanium_shovel.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "minecraft:stick"
+        ],
+        [
+          "minecraft:stick"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:titanium_shovel"
+      ]
+    },
+    {
+      "source": "src/main/resources/data/jugcraft/recipe/titanium_sword.json",
+      "type": "minecraft:crafting_shaped",
+      "inputs": [
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "jugcraft:titanium_ingot"
+        ],
+        [
+          "minecraft:stick"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:titanium_sword"
       ]
     },
     {
@@ -292659,6 +293025,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -292694,6 +293062,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -292729,6 +293099,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -292764,6 +293136,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -292799,6 +293173,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -292834,6 +293210,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -292869,6 +293247,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -292904,6 +293284,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -292939,6 +293321,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -292974,6 +293358,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293009,6 +293395,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293044,6 +293432,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293079,6 +293469,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293114,6 +293506,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293149,6 +293543,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293184,6 +293580,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293219,6 +293617,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293254,6 +293654,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293289,6 +293691,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293324,6 +293728,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293359,6 +293765,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293394,6 +293802,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293429,6 +293839,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293464,6 +293876,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293499,6 +293913,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293534,6 +293950,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293569,6 +293987,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293604,6 +294024,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293639,6 +294061,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293674,6 +294098,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293709,6 +294135,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293744,6 +294172,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293779,6 +294209,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293814,6 +294246,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293849,6 +294283,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293884,6 +294320,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293919,6 +294357,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293954,6 +294394,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -293989,6 +294431,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -294024,6 +294468,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -294059,6 +294505,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -294094,6 +294542,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -294129,6 +294579,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -294164,6 +294616,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -294199,6 +294653,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -294234,6 +294690,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -294269,6 +294727,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -294304,6 +294764,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -294339,6 +294801,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -294374,6 +294838,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -294409,6 +294875,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -294444,6 +294912,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -294479,6 +294949,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -294514,6 +294986,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -294549,6 +295023,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -294584,6 +295060,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -294619,6 +295097,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -294654,6 +295134,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -295214,6 +295696,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -295249,6 +295733,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -295284,6 +295770,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -295319,6 +295807,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -296353,7 +296843,7 @@
         ]
       ],
       "outputs": [
-        "jugcraft:candy_corn"
+        "jugcraft:caramel"
       ]
     },
     {
@@ -296377,7 +296867,7 @@
         ]
       ],
       "outputs": [
-        "jugcraft:salt_water_taffy"
+        "jugcraft:rock_candy"
       ]
     },
     {
@@ -296425,7 +296915,7 @@
         ]
       ],
       "outputs": [
-        "jugcraft:caramel"
+        "jugcraft:salt_water_taffy"
       ]
     },
     {
@@ -296473,34 +296963,7 @@
         ]
       ],
       "outputs": [
-        "jugcraft:rock_candy"
-      ]
-    },
-    {
-      "source": "tools/agriculture.py:CANDY/cream",
-      "type": "candy_temperature",
-      "inputs": [
-        [
-          "jugcraft:candy_kettle"
-        ],
-        [
-          "jugcraft:candy_tray"
-        ],
-        [
-          "minecraft:sugar"
-        ],
-        [
-          "minecraft:water_bucket"
-        ],
-        [
-          "minecraft:campfire"
-        ],
-        [
-          "minecraft:milk_bucket"
-        ]
-      ],
-      "outputs": [
-        "jugcraft:toffee"
+        "jugcraft:candy_corn"
       ]
     },
     {
@@ -296554,7 +297017,7 @@
         ]
       ],
       "outputs": [
-        "jugcraft:burnt_sugar"
+        "jugcraft:toffee"
       ]
     },
     {
@@ -296582,6 +297045,33 @@
       ],
       "outputs": [
         "jugcraft:fudge"
+      ]
+    },
+    {
+      "source": "tools/agriculture.py:CANDY/cream",
+      "type": "candy_temperature",
+      "inputs": [
+        [
+          "jugcraft:candy_kettle"
+        ],
+        [
+          "jugcraft:candy_tray"
+        ],
+        [
+          "minecraft:sugar"
+        ],
+        [
+          "minecraft:water_bucket"
+        ],
+        [
+          "minecraft:campfire"
+        ],
+        [
+          "minecraft:milk_bucket"
+        ]
+      ],
+      "outputs": [
+        "jugcraft:burnt_sugar"
       ]
     },
     {
@@ -296886,6 +297376,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",
@@ -299684,6 +300176,8 @@
           "jugcraft:steel_paxel",
           "jugcraft:stone_paxel",
           "jugcraft:thallite_axe",
+          "jugcraft:titanium_axe",
+          "jugcraft:titanium_paxel",
           "jugcraft:wood_paxel",
           "minecraft:copper_axe",
           "minecraft:diamond_axe",

@@ -242,7 +242,8 @@ public class KnightArmorClientGameTests implements FabricClientGameTest {
 		}
 		List<String> wrong = new ArrayList<>();
 		List<String> read = new ArrayList<>();
-		for (String metal : List.of("steel", "bronze")) {
+		// Titanium armor is the same knight design in another palette (docs/features/titanium-gear.md).
+		for (String metal : List.of("steel", "bronze", "titanium")) {
 			for (String piece : PIECES) {
 				String id = metal + "_" + piece;
 				int expected = parts(keys, id);

@@ -83,6 +83,12 @@ BRONZE = {**STEEL,
           "gold_light": (236, 204, 96), "gold_dark": (196, 160, 60),
           "leather_light": (82, 56, 42), "leather_mid_light": (70, 48, 36), "leather_mid": (62, 42, 32),
           "leather_dark": (46, 31, 25), "leather_darkest": (32, 22, 18)}
+# Titanium, the knight's make a step above steel (docs/features/titanium-gear.md): the steel's six steps re-drawn on
+# the titanium ingot's light periwinkle grey (material_icons.METAL_RAMPS["titanium"]: 2a3144 5e73a4 95a4c5 c5cddd
+# f3f5f7), cooler and bluer than the steel, with the steel's gold trim, leather and slate under-layer.
+TITANIUM = {**STEEL,
+            "light": (204, 212, 226), "mid_light": (172, 184, 208), "mid": (146, 160, 194), "dark": (118, 134, 172),
+            "seam": (92, 108, 150), "void": (62, 72, 104)}
 # Bloodthorn, the owner's crimson design (tools/bloodthorn_armor.py), sampled from their render. That render is lit as
 # Blockbench lights a model (front and back faces 0.8, sides 0.6, tops 1.0: its side faces measure 0.75 of the fronts,
 # and a lit top edge 1.22), so each tone is the median of its texel interiors on front and back faces divided by 0.8.

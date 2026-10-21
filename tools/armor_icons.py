@@ -240,7 +240,7 @@ import armor_paint
 FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "armor_icons")
 SIZE = 16
 PIECES = ("helmet", "chestplate", "leggings", "boots")
-METALS = {"steel": armor_paint.STEEL, "bronze": armor_paint.BRONZE}
+METALS = {"steel": armor_paint.STEEL, "bronze": armor_paint.BRONZE, "titanium": armor_paint.TITANIUM}
 # An item icon's outline sits at about this luma (the owner's outlines measure about 35 to 42; the item-icon rules in
 # review on the arms-icons branch, docs/ITEM_ICONS.md, keep it at 45 or less). The knight's void (steel 68, bronze 56)
 # is lighter, so the outline is the void carried down to it, keeping its hue.
@@ -252,6 +252,7 @@ TONES = {"D": "dark", "M": "mid", "L": "mid_light", "H": "light", "F": "gold_dar
          "u": "under_dark", "U": "under_light"}
 # symbol -> tone, per metal: the bronze's brass fittings are its own plate on the steel
 FITTINGS = {"steel": {"R": "light", "r": "mid", "Q": "leather_mid"},
+            "titanium": {"R": "light", "r": "mid", "Q": "leather_mid"},
             "bronze": {"R": "gold_light", "r": "gold_dark", "Q": "gold_light"}}
 # Sets with maps of their own (armor_icons/<set>/<piece>.txt): set -> (palette, {symbol: tone name}); "O" is always the
 # metal's outline, its "void" taken down to OUTLINE_LUMA.

@@ -112,9 +112,9 @@ ROCK = {"stone": {"r": hx("6a7076"), "s": hx("7c8288"), "t": hx("8c9298"), "u": 
         "deepslate": {"r": hx("36383e"), "s": hx("42444b"), "t": hx("4e5058"), "u": hx("5c5e66")}}
 
 TOOLS = ("sword", "pickaxe", "axe", "shovel", "hoe", "paxel")
-TOOL_METALS = ("bronze", "steel", "thallite")
+TOOL_METALS = ("bronze", "steel", "thallite", "titanium")
 # The metals with a paxel (tools/gear.py PAXEL_TIERS); thallite has none (docs/features/thallite.md).
-PAXEL_METALS = ("bronze", "steel")
+PAXEL_METALS = ("bronze", "steel", "titanium")
 
 # True: ores are vanilla's stone or deepslate with our overlay on top. False: the fallback, full textures on our host.
 OVERLAY = True

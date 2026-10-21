@@ -224,6 +224,14 @@ def draw_all(save, save_armor, part_palette):
         save_armor(armor_styles.layer(style, armor, False), "humanoid", style)
         save_armor(armor_styles.layer(style, armor, True), "humanoid_leggings", style)
         save(arms_variants_art.pattern16(style), "item", gear.ARMOR_STYLES[style]["template"])
+    # Titanium armor: the knight armor's icons in the titanium palette; worn, its 3D model (tools/knight_armor.py), so
+    # it has no flat layer. Its tools are the material-set maps (material_icons.draw_tools, below).
+    for piece in armor_icons.PIECES:
+        save(armor_icons.icon("titanium", piece), "item", f"titanium_{piece}")
+    # Its fallback flat layers, which no equipment asset draws (as the steel's): the steel's Kaiser look.
+    kaiser = armor_styles.PALETTES["kaiser"]
+    save_armor(armor_styles.layer("kaiser", kaiser, False), "humanoid", "titanium")
+    save_armor(armor_styles.layer("kaiser", kaiser, True), "humanoid_leggings", "titanium")
     # Thallite armor, plain and Earthbound, and the Earthbinding Template: hand-drawn maps (tools/thallite_armor.py).
     thallite_armor.draw(save, save_armor)
 

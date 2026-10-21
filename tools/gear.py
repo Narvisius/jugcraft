@@ -22,6 +22,12 @@ GEAR_TIERS = {
     "thallite": {"display": "Thallite", "ingot": "#c:ingots/thallite", "feature": "thallite",
                  "tool": (200, 6.0, 2.0, 18), "drops": "iron",
                  "armor": (13, (2, 5, 6, 2), 18, 0.0, 0.0), "arms": False},
+    # Titanium (docs/features/titanium-gear.md): the step above steel, below netherite. Diamond's drops (netherite's
+    # need netherite), steel's uses half again, diamond's speed and damage, and better enchanting than either; its armor
+    # is diamond's defense and toughness with steel's knockback resistance. Its arms are not drawn yet ("arms": False).
+    "titanium": {"display": "Titanium", "ingot": "#c:ingots/titanium", "feature": "titanium",
+                 "tool": (1300, 8.0, 3.0, 15), "drops": "diamond",
+                 "armor": (30, (3, 6, 8, 3), 14, 2.0, 0.05), "arms": False},
 }
 TOOLS = ["sword", "pickaxe", "axe", "shovel", "hoe"]
 ARMOR = ["helmet", "chestplate", "leggings", "boots"]
@@ -29,7 +35,7 @@ PIECES = TOOLS + ARMOR
 
 # Paxels: pickaxe, axe and shovel in one, three times the durability of the tier's tools.
 PAXEL_TIERS = {"wood": "Wooden", "stone": "Stone", "iron": "Iron", "gold": "Golden", "diamond": "Diamond",
-               "netherite": "Netherite", "bronze": "Bronze", "steel": "Steel"}
+               "netherite": "Netherite", "bronze": "Bronze", "steel": "Steel", "titanium": "Titanium"}
 PAXEL_DURABILITY = 3
 # The vanilla tools a vanilla-tier paxel is made from.
 VANILLA_TOOL_PREFIX = {"wood": "wooden", "stone": "stone", "iron": "iron", "gold": "golden", "diamond": "diamond",

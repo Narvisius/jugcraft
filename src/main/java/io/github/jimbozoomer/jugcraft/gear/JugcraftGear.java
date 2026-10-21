@@ -45,6 +45,7 @@ import net.minecraft.world.level.block.Block;
  * <p>Steampunk and Kaiser Armor (docs/features/steampunk-and-kaiser-armor.md) are bronze and steel armor in another
  * look: their materials are the metal's with only the equipment asset changed ({@link #restyle}), and a smithing
  * template ({@link #STYLE_TEMPLATES}) turns a plain piece into a styled one and back (data-driven recipes).
+ * <p>Titanium (docs/features/titanium-gear.md) is the step above steel, its armor the knight armor in titanium.
  * <p>Thallite (docs/features/thallite.md) is the third metal with a full set, and Earthbound thallite a style of its
  * armor, one-way and with a perk; their traits, Regrowth and Rooted, are {@link ThalliteGear}.
  * <p>Armor-only tiers ({@link #ARMOR_TIERS}; docs/features/bloodthorn-armor.md) are the owner's own armor designs, each
@@ -53,12 +54,12 @@ import net.minecraft.world.level.block.Block;
  */
 public final class JugcraftGear {
 	/** Metals with a full set of tools and armor (tools/gear.py: GEAR_TIERS). */
-	public static final List<String> TIERS = List.of("bronze", "steel", "thallite");
+	public static final List<String> TIERS = List.of("bronze", "steel", "thallite", "titanium");
 	public static final List<String> PIECES = List.of("sword", "pickaxe", "axe", "shovel", "hoe", "helmet", "chestplate",
 			"leggings", "boots");
 	/** Paxel tiers (tools/gear.py: PAXEL_TIERS). */
 	public static final List<String> PAXEL_TIERS = List.of("wood", "stone", "iron", "gold", "diamond", "netherite", "bronze",
-			"steel");
+			"steel", "titanium");
 	/** A paxel lasts as long as the three tools it is made from. */
 	public static final int PAXEL_DURABILITY = 3;
 	/** What a paxel mines fast: everything a pickaxe, axe or shovel does (data/jugcraft/tags/block/mineable/paxel.json). */
@@ -70,6 +71,15 @@ public final class JugcraftGear {
 	/** Steel: diamond-tier drops, between iron and diamond in everything else (diamond: 1561, 8.0, 3.0, 10). */
 	public static final ToolMaterial STEEL = new ToolMaterial(BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 900, 7.0F, 2.5F, 12,
 			repairs("steel"));
+	/**
+	 * Titanium: the step above steel (docs/features/titanium-gear.md). Diamond's drops, speed and damage, steel's uses
+	 * half again and better enchanting.
+	 */
+	public static final ToolMaterial TITANIUM = new ToolMaterial(BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 1300, 8.0F, 3.0F, 15,
+			repairs("titanium"));
+	/** Titanium armor: diamond's defense and toughness, steel's knockback resistance, better enchanting. */
+	public static final ArmorMaterial TITANIUM_ARMOR = new ArmorMaterial(30, defense(3, 6, 8, 3), 14,
+			SoundEvents.ARMOR_EQUIP_IRON, 2.0F, 0.05F, repairs("titanium"), asset("titanium"));
 	/** Bronze armor: iron's defense with a little toughness. */
 	public static final ArmorMaterial BRONZE_ARMOR = new ArmorMaterial(15, defense(2, 5, 6, 2), 12,
 			SoundEvents.ARMOR_EQUIP_IRON, 0.5F, 0.0F, repairs("bronze"), asset("bronze"));
@@ -197,6 +207,7 @@ public final class JugcraftGear {
 		set("bronze", BRONZE, BRONZE_ARMOR, 6.0F, -3.1F, -2.0F, -1.0F, Item::new);
 		set("steel", STEEL, STEEL_ARMOR, 5.5F, -3.0F, -2.5F, 0.0F, Item::new);
 		set("thallite", THALLITE, THALLITE_ARMOR, 6.0F, -3.1F, -2.0F, -1.0F, properties -> new ThalliteGearItem(properties, false));
+		set("titanium", TITANIUM, TITANIUM_ARMOR, 5.0F, -3.0F, -3.0F, 0.0F, Item::new);
 		styled("steampunk", STEAMPUNK_ARMOR, DescribedItem::new);
 		styled("kaiser", KAISER_ARMOR, DescribedItem::new);
 		styled("earthbound_thallite", EARTHBOUND_THALLITE_ARMOR, properties -> new ThalliteGearItem(properties, true));
@@ -348,6 +359,7 @@ public final class JugcraftGear {
 			case "netherite" -> ToolMaterial.NETHERITE;
 			case "bronze" -> BRONZE;
 			case "steel" -> STEEL;
+			case "titanium" -> TITANIUM;
 			default -> throw new IllegalArgumentException(tier);
 		};
 	}
