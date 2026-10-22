@@ -28,6 +28,32 @@ SOURCES = [ROOT / "src" / "main" / "java", ROOT / "src" / "client" / "java", ROO
 # key in the lock: (what the Concordance does with it, what happens without it, the game tests, what is still limited).
 # Tests name a game test method, or a client game test class (whose single test is its runTest).
 MATRIX = {
+    "lithium": (
+        "General tick, AI and physics optimization; no Concordance-specific API integration",
+        "Jugcraft gameplay remains available without the optimization",
+        ["TownClientGameTests"],
+        "Compatibility covered by combined tests; representative hosted performance benchmarking remains outstanding"),
+    "ferrite-core": (
+        "Memory reductions in block-state and model storage; no Concordance-specific API integration",
+        "Jugcraft gameplay remains available without the optimization",
+        ["TownClientGameTests"],
+        "Compatibility covered by combined tests; representative hosted performance benchmarking remains outstanding"),
+    "krypton": (
+        "Network transport optimization; no Concordance-specific API integration",
+        "Jugcraft gameplay remains available without the optimization",
+        ["TownClientGameTests"],
+        "Compatibility covered by combined tests; representative hosted performance benchmarking remains outstanding"),
+    "immediatelyfast": (
+        "Client immediate-mode rendering optimization; no Concordance-specific API integration",
+        "Jugcraft gameplay remains available without the optimization",
+        ["TownClientGameTests"],
+        "Compatibility covered by combined tests; representative hosted performance benchmarking remains outstanding"),
+
+    "resourcify": (
+        "No Concordance-specific behavior; Complete adds in-game resource-pack and shader browsing with a guarded worker-thread shutdown fix",
+        "browser buttons are absent; normal pack selection and gameplay are unchanged",
+        ["PackBrowserClientGameTests"],
+        "Catalog screens and clean shutdown tested locally; installing a downloaded pack and third-party shader compatibility need player testing"),
     "diorama": (
         "Launcher-installed client minimap, world map and waypoints; no Concordance progression hook",
         "map and waypoint controls are absent; server gameplay is unchanged",

@@ -305,7 +305,7 @@ public final class Assaying {
 			return false;
 		}
 		Material material = catalog().material(BuiltInRegistries.ITEM.getKey(pattern.getItem()).toString());
-		if (!material.formable()) {
+		if (!material.formable() || !TabletOutputs.allowed(pattern)) {
 			refuse(player, pattern, "not_formable");
 			return false;
 		}

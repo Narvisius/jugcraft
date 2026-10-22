@@ -71,11 +71,11 @@ public class AlchemicalWorkshopClientGameTests implements FabricClientGameTest {
                     sign(p,base.offset(-12+4*i,0,-2),"COLLECTOR MK "+i,"Open to inspect","Daylight -> essence","Star charges here");
                 }
                 for(int i=1;i<=2;i++){
-                    var con=place(p,base.offset(4*i,0,-4),"condenser_mk"+i);con.setItem(1,new ItemStack(Items.IRON_INGOT));con.setItem(2,new ItemStack(Items.COAL,64));con.setEssence(8000);
+                    var con=place(p,base.offset(4*i,0,-4),"condenser_mk"+i);con.setItem(1,new ItemStack(Items.OAK_LOG));con.setItem(2,new ItemStack(Items.COAL,64));con.setEssence(8000);
                     sign(p,base.offset(4*i,0,-2),"CONDENSER MK "+i,"Target is kept","Inputs dissolve","Output to factory");
                 }
                 // Independent automation demonstration with top input and bottom output hoppers.
-                var auto=place(p,base.offset(1,0,3),"condenser_mk1");auto.setItem(1,new ItemStack(Items.IRON_INGOT));auto.setEssence(4000);
+                var auto=place(p,base.offset(1,0,3),"condenser_mk1");auto.setItem(1,new ItemStack(Items.OAK_LOG));auto.setEssence(4000);
                 place(p,base.offset(0,0,3),"collector_mk3");
                 p.level().setBlockAndUpdate(base.offset(1,1,3),Blocks.HOPPER.defaultBlockState());
                 ((HopperBlockEntity)p.level().getBlockEntity(base.offset(1,1,3))).setItem(0,new ItemStack(Items.COAL,64));
@@ -85,7 +85,7 @@ public class AlchemicalWorkshopClientGameTests implements FabricClientGameTest {
                 p.level().setBlockAndUpdate(base.offset(-5,0,5),Blocks.CHEST.defaultBlockState());var chest=(ChestBlockEntity)p.level().getBlockEntity(base.offset(-5,0,5));
                 int slot=0;for(var b:AlchemicalWorkshops.BLOCKS.values())chest.setItem(slot++,new ItemStack(b));
                 for(int i=1;i<=6;i++)chest.setItem(slot++,new ItemStack(KleinStars.ITEMS.get("klein_star_"+i)));
-                for(Item item:new Item[]{Items.IRON_INGOT,Items.COAL,Items.DIAMOND,Items.GLASS,Items.GLOWSTONE,Items.OBSIDIAN,Items.FURNACE,Items.CHEST,Items.HOPPER,Items.LEVER,DarkMatter.ITEMS.get("dark_matter"),DarkMatter.ITEMS.get("high_covalence_dust")})chest.setItem(slot++,new ItemStack(item,32));
+                for(Item item:new Item[]{Items.OAK_LOG,Items.COAL,Items.DIAMOND,Items.GLASS,Items.GLOWSTONE,Items.OBSIDIAN,Items.FURNACE,Items.CHEST,Items.HOPPER,Items.LEVER,DarkMatter.ITEMS.get("dark_matter"),DarkMatter.ITEMS.get("high_covalence_dust")})chest.setItem(slot++,new ItemStack(item,32));
                 p.level().setBlockAndUpdate(base.offset(-8,0,5),Blocks.CRAFTING_TABLE.defaultBlockState());p.level().setBlockAndUpdate(base.offset(-7,0,5),Blocks.SMITHING_TABLE.defaultBlockState());
                 sign(p,base.offset(-5,0,6),"SUPPLIES","All five workshops","Stars / ingredients","Your world to test");
             });
@@ -120,7 +120,7 @@ public class AlchemicalWorkshopClientGameTests implements FabricClientGameTest {
             server.runCommand("time set noon");
             server.runOnServer(s->{var p=s.getPlayerList().getPlayers().getFirst();p.level().setBlockAndUpdate(base.offset(-8,1,-4),Blocks.STONE.defaultBlockState());});c.waitTicks(45);
             server.runOnServer(s->{var p=s.getPlayerList().getPlayers().getFirst();if(be(p,base.offset(-8,0,-4)).status()!=AlchemicalWorkshopBlockEntity.NO_SUN)throw new AssertionError("Opaque roof stops generation");p.level().setBlockAndUpdate(base.offset(-8,1,-4),Blocks.AIR.defaultBlockState());
-                var chest=(ChestBlockEntity)p.level().getBlockEntity(base.offset(1,-1,4));if(chest.countItem(Items.IRON_INGOT)<1)throw new AssertionError("Live output hopper supplies chest");
+                var chest=(ChestBlockEntity)p.level().getBlockEntity(base.offset(1,-1,4));if(chest.countItem(Items.OAK_LOG)<1)throw new AssertionError("Live output hopper supplies chest");
                 var auto=be(p,base.offset(1,0,3));var in=(HopperBlockEntity)p.level().getBlockEntity(base.offset(1,1,3));if(in.getItem(0).getCount()>=64)throw new AssertionError("Live input hopper feeds materials");
                 // Fabric transfer transaction also observes the exposed slots and rolls back without changing items.
                 var storage=ItemStorage.SIDED.find(p.level(),auto.getBlockPos(),Direction.UP);int before=auto.countItem(Items.COAL);

@@ -54,7 +54,7 @@ public class HowitzerWalker extends DieselWalker {
 	public static final float MIN_ELEVATION = -15.0F;
 	public static final float MAX_ELEVATION = 60.0F;
 	public static final float REST_ELEVATION = 25.0F;
-	public static final int AIM_REACH = 128;
+	public static final int AIM_REACH = 250;
 	public static final double LEAP = 0.7;
 	public static final int CROUCH_TICKS = 6;
 	public static final double STOMP_HOP = 0.45;

@@ -31,6 +31,15 @@ public final class Blast {
 	private Blast() {
 	}
 
+    /** Distance to the hull/body, not its feet; flak must be able to damage large airborne targets. */
+    public static double surfaceDistance(Vec3 point, LivingEntity target) {
+        AABB box = target.getBoundingBox();
+        Vec3 nearest = new Vec3(net.minecraft.util.Mth.clamp(point.x, box.minX, box.maxX),
+                net.minecraft.util.Mth.clamp(point.y, box.minY, box.maxY),
+                net.minecraft.util.Mth.clamp(point.z, box.minZ, box.maxZ));
+        return point.distanceTo(nearest);
+    }
+
 	/**
 	 * Sets off a blast at {@code center}. {@code direct} is the grenade and {@code owner} who threw or fired it (either
 	 * may be null). Returns how many living things it hurt.
@@ -54,10 +63,14 @@ public final class Blast {
 				2.0F, 1.2F + level.getRandom().nextFloat() * 0.2F);
 		DamageSource source = level.damageSources().explosion(direct, owner);
 		List<LivingEntity> targets = level.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(radius),
-				target -> target.isAlive() && !target.isSpectator() && target.getType() != EntityTypes.ARMOR_STAND && !spare.test(target));
+				target -> target.isAlive() && !target.isSpectator() && target.getType() != EntityTypes.ARMOR_STAND && !spare.test(target)
+                && (!(direct instanceof io.github.jimbozoomer.jugcraft.artillery.ArtilleryShell shell)
+                    || !shell.isAutomatedDefense() || io.github.jimbozoomer.jugcraft.artillery.AutomatedDefense.hostile(target)));
 		int hurt = 0;
 		for (LivingEntity target : targets) {
-			double distance = Math.sqrt(target.distanceToSqr(center));
+			double distance = direct instanceof io.github.jimbozoomer.jugcraft.artillery.ArtilleryShell
+                    && direct.getType() == io.github.jimbozoomer.jugcraft.artillery.JugcraftArtillery.FLAK_SHELL
+                    ? surfaceDistance(center, target) : Math.sqrt(target.distanceToSqr(center));
 			if (distance > radius) {
 				continue;
 			}

@@ -116,6 +116,8 @@ def main():
     for i,(name,biome) in enumerate({'ferrocave':'magnetic_caves','dino_bowl':'primordial_caves','volcano':'primordial_caves','acid_pit':'toxic_caves','ocean_trench':'abyssal_chasm','forlorn_canyon':'forlorn_hollows','forlorn_bridge':'forlorn_hollows','cake_cave':'candy_cavity','donut_arch':'candy_cavity'}.items()):
         blocks=shape(name);path='cavern/landmarks/'+name;template(path,blocks);register('cavern_'+name,[path],'jugcraft:cavern_'+biome,salt=182030+i);created[name]=len(blocks)
     write(ROOT/'art/owner-library/catalog/edited-2026-10-18-part2/landmark-runtime.json',{'provided_ecology_templates':len(ruins),'provided_cave_landmarks':list(provided),'newly_authored_cave_shapes':created,'validation':'Not tested; owner requested all implementation first.'})
+    import candy_cavity_content
+    candy_cavity_content.main()
 
 
 if __name__=='__main__':main()

@@ -371,7 +371,7 @@ def furnish(p, rng, st, w, d, purpose, door_x):
             if x != w - 2:
                 v.set(x, 1, cz, S(f"{wood}_slab" if wood != "dark_oak" else "dark_oak_slab", type="top", waterlogged="false"))
             v.set(x, 1, cz - 1, S("air"))
-        v.set(w - 2, 1, cz, S(f"{wood}_fence_gate", facing="east", in_wall="false", open="false", powered="false"))
+        v.set(w - 2, 1, cz, S(f"{wood}_fence_gate", facing="east", in_wall="false", open="true", powered="false"))
         p.spot("shopkeeper", door_x, 1, cz + 1)
         for x in range(1, w - 1):
             if x not in (door_x,):
@@ -678,7 +678,7 @@ def church(rng):
         for x in range(nave_x0 + 1, nave_x1):
             if abs(x - mid) <= 1:
                 continue
-            v.set(x, 1, z, S("spruce_stairs", facing="south", half="bottom"))
+            v.set(x, 1, z, S("spruce_stairs", facing="north", half="bottom"))
     for z in range(1, body_z1 + 3):
         v.set(mid, 1, z, S("red_carpet")) if v.get(mid, 1, z) is None and z >= tower else None
     for x in range(mid - 2, mid + 3):
@@ -922,6 +922,8 @@ def bank(rng):
     p.site("banner", "north", [(W - 2, 6, -2, 0)])
     p.door = (mid, -2)
     town_refinement.bank(p)
+    v.set(2, 1, 3, S("ender_chest", facing="east", waterlogged="false"))
+    v.set(2, 2, 3, S("air"))
     return p
 
 

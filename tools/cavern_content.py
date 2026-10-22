@@ -181,6 +181,8 @@ def main():
     if entry not in atlas['sources']:atlas['sources'].append(entry)
     write(RES/'assets/minecraft/atlases/blocks.json',atlas)
     write(ROOT/'art/owner-library/catalog/edited-2026-10-18-part2/cavern-runtime.json',{'copies':COPIES,'species':len(catalog['species']),'blocks':len(catalog['blocks']),'items':len(catalog['items']),'biomes':list(CAVES),'validation':'Implementation in progress; testing deferred until complete. Reconstructed rigs require visual review.'})
+    import candy_cavity_content
+    candy_cavity_content.main()
     print('Prepared cave resources:',len(catalog['species']),'species,',len(catalog['blocks']),'blocks,',len(catalog['items']),'items.')
 
 

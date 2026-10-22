@@ -74,7 +74,7 @@ public final class TransmutationMenu extends AbstractContainerMenu {
         long balance = Assaying.balance(player);
         Material input = material(INPUT), sample = material(SAMPLE);
         long gain = input == null || !input.dissolvable() ? 0 : Assay.dissolve(input, Math.min(64, contents.getItem(INPUT).getCount()));
-        long cost = sample == null || !sample.formable() ? 0 : Assay.form(sample, 1);
+        long cost = sample == null || !sample.formable() || !TabletOutputs.allowed(contents.getItem(SAMPLE)) ? 0 : Assay.form(sample, 1);
         boolean valid = stillValid(player);
         int status = contents.getItem(SAMPLE).isEmpty() ? 1 : cost == 0 ? 2 : cost > balance ? 3
                 : !outputFits(contents.getItem(SAMPLE)) ? 4 : 0;

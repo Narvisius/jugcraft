@@ -37,30 +37,30 @@ public class ConnectedAlchemyGameTests {
     private static AlchemyMachinesBlockEntity pedestal(GameTestHelper h,ServerPlayer p,String artifact){var pos=new BlockPos(2,3,2);h.setBlock(pos,AlchemyMachines.BLOCKS.get("dark_matter_pedestal"));var be=h.getBlockEntity(pos,AlchemyMachinesBlockEntity.class);be.placedBy(p);be.setEssence(1000);be.setItem(1,item(artifact));return be;}
     private static AlchemicalWorkshopBlockEntity collector(GameTestHelper h,ServerPlayer p){var pos=new BlockPos(2,3,2);h.setBlock(pos,AlchemicalWorkshops.BLOCKS.get("collector_mk3"));h.setBlock(pos.above(),Blocks.STONE);var be=h.getBlockEntity(pos,AlchemicalWorkshopBlockEntity.class);be.placedBy(p);return be;}
     @GameTest(maxTicks=20)public void patternsDissolveLearnAndFormWithoutSample(GameTestHelper h){
-        var p=player(h);var m=new AlchemyPatternMenu(1,p.getInventory(),()->true,ItemStack.EMPTY);m.getSlot(0).set(new ItemStack(Items.IRON_INGOT));press(m,p,0);press(m,p,0);
-        h.assertTrue(AlchemyPatterns.known(p).contains("minecraft:iron_ingot")&&!m.getSlot(0).hasItem(),"Dissolving consumes the sample and teaches its identity");
+        var p=player(h);var m=new AlchemyPatternMenu(1,p.getInventory(),()->true,ItemStack.EMPTY);m.getSlot(0).set(new ItemStack(Items.OAK_LOG));press(m,p,0);press(m,p,0);
+        h.assertTrue(AlchemyPatterns.known(p).contains("minecraft:oak_log")&&!m.getSlot(0).hasItem(),"Dissolving consumes the sample and teaches its identity");
         m.getSlot(0).set(ItemStack.EMPTY);long balance=Assaying.balance(p);press(m,p,1);
-        h.assertTrue(m.getSlot(1).getItem().is(Items.IRON_INGOT)&&Assaying.balance(p)==balance-m.price(),"Known pattern forms without a sample at audited cost");h.succeed();
+        h.assertTrue(m.getSlot(1).getItem().is(Items.OAK_LOG)&&Assaying.balance(p)==balance-m.price(),"Known pattern forms without a sample at audited cost");h.succeed();
     }
     @GameTest(maxTicks=20)public void patternGhostsNeverBecomeInventory(GameTestHelper h){
-        var p=player(h);AlchemyPatterns.learn(p,new ItemStack(Items.IRON_INGOT));var m=new AlchemyPatternMenu(1,p.getInventory(),()->true,ItemStack.EMPTY);
+        var p=player(h);AlchemyPatterns.learn(p,new ItemStack(Items.OAK_LOG));var m=new AlchemyPatternMenu(1,p.getInventory(),()->true,ItemStack.EMPTY);
         for(var input:ContainerInput.values()){RateGate.forget(p.getUUID());m.clicked(AlchemyPatternMenu.GHOST_START,0,input,p);}
         h.assertTrue(m.getCarried().isEmpty()&&m.quickMoveStack(p,AlchemyPatternMenu.GHOST_START).isEmpty(),"Every ghost click and shift move is read-only");m.removed(p);
         h.assertTrue(p.getInventory().isEmpty(),"Closing returns only real slots");h.succeed();
     }
     @GameTest(maxTicks=20)public void patternSearchFavoritesAndForeignPlayers(GameTestHelper h){
-        var p=player(h);AlchemyPatterns.learn(p,new ItemStack(Items.IRON_INGOT));AlchemyPatterns.learn(p,new ItemStack(Items.GOLD_INGOT));AlchemyPatterns.favorite(p,"minecraft:iron_ingot");
-        var m=new AlchemyPatternMenu(1,p.getInventory(),()->true,ItemStack.EMPTY);m.search("gold");h.assertTrue(m.getSlot(38).getItem().is(Items.GOLD_INGOT)&&m.getSlot(39).getItem().isEmpty(),"Search filters authoritative identities");
-        m.search("");press(m,p,5);h.assertTrue(m.getSlot(38).getItem().is(Items.IRON_INGOT),"Favorites contain only the saved selection");
+        var p=player(h);AlchemyPatterns.learn(p,new ItemStack(Items.OAK_LOG));AlchemyPatterns.learn(p,new ItemStack(Items.SPRUCE_LOG));AlchemyPatterns.favorite(p,"minecraft:oak_log");
+        var m=new AlchemyPatternMenu(1,p.getInventory(),()->true,ItemStack.EMPTY);m.search("spruce");h.assertTrue(m.getSlot(38).getItem().is(Items.SPRUCE_LOG)&&m.getSlot(39).getItem().isEmpty(),"Search filters authoritative identities");
+        m.search("");press(m,p,5);h.assertTrue(m.getSlot(38).getItem().is(Items.OAK_LOG),"Favorites contain only the saved selection");
         var other=player(h);h.assertTrue(!m.clickMenuButton(other,1)&&AlchemyPatterns.known(other).isEmpty(),"No shared knowledge or foreign menu mutation");h.succeed();
     }
     @GameTest(maxTicks=20)public void modifiedAndExcludedPatternsCannotBeLearned(GameTestHelper h){
-        var p=player(h);var named=new ItemStack(Items.IRON_INGOT);named.set(DataComponents.CUSTOM_NAME,Component.literal("Keepsake"));
-        h.assertTrue(!AlchemyPatterns.learn(p,named)&&AlchemyPatterns.learn(p,item("klein_star_1"))&&!AlchemyPatterns.known(p).contains("minecraft:iron_ingot"),"Patched matter is refused; an empty default star is learnable");h.succeed();
+        var p=player(h);var named=new ItemStack(Items.OAK_LOG);named.set(DataComponents.CUSTOM_NAME,Component.literal("Keepsake"));
+        h.assertTrue(!AlchemyPatterns.learn(p,named)&&AlchemyPatterns.learn(p,item("klein_star_1"))&&!AlchemyPatterns.known(p).contains("minecraft:oak_log"),"Patched matter is refused; an empty default star is learnable");h.succeed();
     }
     @GameTest(maxTicks=20)public void fullPatternOutputAndLostAccessDoNotSpend(GameTestHelper h){
         var p=player(h);boolean[] access={true};var m=new AlchemyPatternMenu(1,p.getInventory(),()->access[0],ItemStack.EMPTY);
-        m.getSlot(0).set(new ItemStack(Items.IRON_INGOT));press(m,p,0);press(m,p,0);m.getSlot(1).set(new ItemStack(Items.IRON_INGOT,64));long before=Assaying.balance(p);press(m,p,1);
+        m.getSlot(0).set(new ItemStack(Items.OAK_LOG));press(m,p,0);press(m,p,0);m.getSlot(1).set(new ItemStack(Items.OAK_LOG,64));long before=Assaying.balance(p);press(m,p,1);
         h.assertTrue(Assaying.balance(p)==before,"Full output refuses payment");access[0]=false;m.getSlot(1).set(ItemStack.EMPTY);h.assertTrue(!press(m,p,1)&&Assaying.balance(p)==before,"Walking away closes authority");h.succeed();
     }
     @GameTest(maxTicks=20)public void carriedStarsPayAndRefundConservatively(GameTestHelper h){
@@ -80,10 +80,10 @@ public class ConnectedAlchemyGameTests {
         long expected=Assay.dissolve(AlchemicalWorkshopBlockEntity.material(new ItemStack(Items.COAL)),16);h.assertTrue(Assaying.balance(p)==expected,"Exact existing ledger value");h.succeed();
     }
     @GameTest(maxTicks=20)public void densityBlocksOnFullOutputAndMakesSelectedTier(GameTestHelper h){
-        var p=player(h);var a=item("gem_of_eternal_density");a.set(AlchemicalGear.ACTIVE,Unit.INSTANCE);a.set(AlchemyAutomation.FILTER,List.of("minecraft:coal"));a.set(AlchemyPatterns.TARGET,"minecraft:iron_ingot");
-        var c=new SimpleContainer(3);c.setItem(0,a);c.setItem(1,new ItemStack(Items.COAL,32));c.setItem(2,new ItemStack(Items.STONE,64));long before=Assaying.balance(p);
+        var p=player(h);var a=item("gem_of_eternal_density");a.set(AlchemicalGear.ACTIVE,Unit.INSTANCE);a.set(AlchemyAutomation.FILTER,List.of("minecraft:stone"));a.set(AlchemyPatterns.TARGET,"minecraft:oak_log");
+        var c=new SimpleContainer(3);c.setItem(0,a);c.setItem(1,new ItemStack(Items.STONE,32));c.setItem(2,new ItemStack(Items.GLASS,64));long before=Assaying.balance(p);
         h.assertTrue(!AlchemyAutomation.convert(p,c,a,0,3)&&Assaying.balance(p)==before&&c.getItem(1).getCount()==32,"No free output space means no input consumed");c.setItem(2,ItemStack.EMPTY);
-        h.assertTrue(AlchemyAutomation.convert(p,c,a,0,3)&&c.getItem(2).is(Items.IRON_INGOT),"Consolidates into chosen output");h.succeed();
+        h.assertTrue(AlchemyAutomation.convert(p,c,a,0,3)&&c.getItem(2).is(Items.OAK_LOG),"Consolidates into chosen output");h.succeed();
     }
     @GameTest(maxTicks=20)public void storageRepairUsesStarAndRetainsComponents(GameTestHelper h){
         var p=player(h);Assaying.setBalance(p,0);p.getInventory().setItem(6,star(10));var c=new SimpleContainer(4);var talisman=new ItemStack(AlchemicalGear.TALISMAN);talisman.set(AlchemicalGear.ACTIVE,Unit.INSTANCE);c.setItem(0,talisman);

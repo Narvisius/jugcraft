@@ -16,9 +16,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class TownFireBlockMixin {
 	@Inject(method = "tick", at = @At("HEAD"), cancellable = true)
 	private void jugcraft$keepTown(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, CallbackInfo ci) {
-		if (TownProtection.shieldsBlock(level, pos)) {
+		if (TownProtection.shieldsBlock(level, pos) || io.github.jimbozoomer.jugcraft.finance.LandRegistry.isClaimed(level, pos)) {
 			level.removeBlock(pos, false);
 			ci.cancel();
 		}
 	}
+    @Inject(method = "checkBurnOut", at = @At("HEAD"), cancellable = true)
+    private void jugcraft$preventBurningNeighbour(net.minecraft.world.level.Level level, BlockPos pos, int chance, RandomSource random, int age, CallbackInfo ci) {
+        if (TownProtection.shieldsBlock(level, pos) || io.github.jimbozoomer.jugcraft.finance.LandRegistry.isClaimed(level, pos)) ci.cancel();
+    }
 }

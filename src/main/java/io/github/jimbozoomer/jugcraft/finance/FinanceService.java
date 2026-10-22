@@ -936,7 +936,7 @@ public final class FinanceService {
 		for (LandRegistry.Claim claim : land.around(cx, cz, LandRegistry.MAP_RADIUS)) {
 			plots.add(new FinanceSnapshotPayload.Plot(LandRegistry.keyX(claim.key) - cx, LandRegistry.keyZ(claim.key) - cz,
 					FinanceBook.clean(claim.ownerName, 40), LandRegistry.actsFor(server, id, claim.owner),
-					land.trustedBy(claim.owner).contains(id), claim.price, claim.auctionEnd, claim.bid,
+					(land.trustedBy(claim.owner).contains(id) || LandRegistry.partyMayBuild(claim,id)), claim.price, claim.auctionEnd, claim.bid,
 					claim.onAuction() ? LandRegistry.minimumBid(claim, book) : 0, id.equals(claim.bidder)));
 		}
 		List<String> trusted = new ArrayList<>();

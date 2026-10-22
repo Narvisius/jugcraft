@@ -71,6 +71,7 @@ public final class TownData {
 	private final short[] surface;
 	public final List<Site> sites;
 	public final List<Spot> spots;
+	public final Map<Integer, BlockPos> beds = new HashMap<>();
 	public final List<BlockPos> atms;
 	public final List<String> themes;
 	/** kind -> theme -> slots -> choices (state text with "{facing}" and "{rotation}"). */
@@ -112,6 +113,10 @@ public final class TownData {
 		for (JsonElement e : root.getAsJsonArray("spots")) {
 			JsonObject o = e.getAsJsonObject();
 			JsonArray p = o.getAsJsonArray("pos");
+            if (o.has("bed")) {
+                JsonArray b = o.getAsJsonArray("bed");
+                beds.put(spots.size(), new BlockPos(b.get(0).getAsInt(), b.get(1).getAsInt(), b.get(2).getAsInt()));
+            }
 			spots.add(new Spot(spots.size(), o.get("role").getAsString(), o.has("shop") ? o.get("shop").getAsString() : null,
 					o.get("name").getAsString(), o.get("skin").getAsString(),
 					new BlockPos(p.get(0).getAsInt(), p.get(1).getAsInt(), p.get(2).getAsInt())));
@@ -174,13 +179,16 @@ public final class TownData {
 
 	public static synchronized TownData get() {
 		if (instance == null) {
-			instance = load();
+			instance = load("/data/jugcraft/town/town.json.gz");
 		}
 		return instance;
 	}
 
-	private static TownData load() {
-		String path = "/data/jugcraft/town/town.json.gz";
+	public static TownData revision(int version) {
+        return version == TownUpgrades.CURRENT ? get() : load("/data/jugcraft/town/revisions/" + version + ".json.gz");
+    }
+
+    private static TownData load(String path) {
 		try (InputStream raw = TownData.class.getResourceAsStream(path)) {
 			if (raw == null) {
 				throw new IllegalStateException("missing " + path);

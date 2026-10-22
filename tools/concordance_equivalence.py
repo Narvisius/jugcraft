@@ -55,7 +55,7 @@ REASONS = {
     "metadata": "it is not plain: something about it has been changed",
     "uncatalogued": "the scale does not know its worth",
     "not_dissolvable": "the scale knows its worth but will not dissolve it",
-    "not_formable": "the scale will not form it",
+    "not_formable": "This item cannot be withdrawn; only approved building and convenience items can be formed.",
     "too_poor": "you have too little essence",
     "full": "your ledger cannot hold more essence",
     "unbalanced": "the scale is out of balance: an operator must fix its data (/jugcraft concordance equivalence audit)",

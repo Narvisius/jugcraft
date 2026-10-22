@@ -66,7 +66,13 @@ public class FluoriteClientGameTests implements FabricClientGameTest {
 				check(found != null, "No snowy plains on seed " + seed);
 				return found.getFirst();
 			});
-			sample = world.getServer().computeOnServer(server -> sample(server.overworld(), center, 8, seed));
+			sample = world.getServer().computeOnServer(server -> {
+				// Outcrops are rare and reject water, steep slopes and structures. Keep
+				// the natural-generation assertion, but survey beyond the first biome edge.
+				Sample result = sample(server.overworld(), center, 8, seed);
+				if (result.surface.isEmpty()) result = sample(server.overworld(), center, 16, seed + " expanded");
+				return result;
+			});
 			check(!sample.underground.isEmpty(), "No natural fluorite on " + seed);
 			check(!sample.surface.isEmpty(), "No natural outcrop on " + seed);
 			outcrop = sample.surface.getFirst();

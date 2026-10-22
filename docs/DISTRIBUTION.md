@@ -1,8 +1,9 @@
 # Installing and distributing Jugcraft
 
 **Hosted server and player releases:** see [SERVER_RELEASES.md](SERVER_RELEASES.md)
-for matched upload/player bundles, the JUGCRAFT profile name, Windows import
-helper and native Modrinth Server Project update flow.
+for matched upload/player bundles and the JUGCRAFT profile name. Current player
+delivery is one direct `.mrpack` import followed by the [in-game updater](features/direct-player-updater.md),
+with no public Modrinth pack listing.
 
 Jugcraft has two artifacts:
 

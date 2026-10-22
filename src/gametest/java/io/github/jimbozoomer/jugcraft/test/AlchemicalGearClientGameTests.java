@@ -57,7 +57,7 @@ public class AlchemicalGearClientGameTests implements FabricClientGameTest {
                 for(int a=0;a<4;a++)for(int b=0;b<3;b++)level.setBlockAndUpdate(new BlockPos(x+6,y+b,z-1+a),Blocks.STONE_BRICKS.defaultBlockState());
                 AlchemicalGear.STONE.use(level,p,InteractionHand.MAIN_HAND);
                 var m=(AlchemyPatternMenu)p.containerMenu;
-                m.getSlot(0).set(new ItemStack(Items.COPPER_INGOT,8)); m.broadcastChanges();
+                m.getSlot(0).set(new ItemStack(Items.TORCH,8)); m.broadcastChanges();
             });
             c.waitForScreen(AlchemyPatternScreen.class); c.waitTicks(8);
             c.runOnClient(mc->{
@@ -70,8 +70,8 @@ public class AlchemicalGearClientGameTests implements FabricClientGameTest {
             c.clickScreenButton("screen.jugcraft.pattern.confirm"); c.waitTicks(6);
             c.clickScreenButton("screen.jugcraft.pattern.make"); c.waitTicks(8);
             boolean paid=server.computeOnServer(s->{var p=s.getPlayerList().getPlayers().getFirst();var m=(AlchemyPatternMenu)p.containerMenu;
-                return Assaying.balance(p)==100896 && m.getSlot(0).getItem().isEmpty() && m.getSlot(1).getItem().is(Items.COPPER_INGOT) && m.getSlot(1).getItem().getCount()==1 && AlchemyPatterns.known(p).contains("minecraft:copper_ingot");});
-            if(!paid)throw new AssertionError("Server menu consumes eight copper, learns copper and forms one at its exact 128 essence value");
+                return Assaying.balance(p)==100063 && m.getSlot(0).getItem().isEmpty() && m.getSlot(1).getItem().is(Items.TORCH) && m.getSlot(1).getItem().getCount()==1 && AlchemyPatterns.known(p).contains("minecraft:torch");});
+            if(!paid)throw new AssertionError("Server menu consumes eight torches, learns torches and forms one at its exact 9 essence value");
             c.runOnClient(mc->mc.gui.toastManager().clear()); c.takeScreenshot("alchemy_stone_result");
             int scale=c.computeOnClient(mc->mc.options.guiScale().get());
             c.runOnClient(mc->{mc.options.guiScale().set(1);mc.resizeGui();});c.waitTicks(5);c.takeScreenshot("alchemy_tablet_scale1");
@@ -81,7 +81,7 @@ public class AlchemicalGearClientGameTests implements FabricClientGameTest {
             c.getInput().pressKey(InputConstants.KEY_TAB); c.waitTicks(2);
             c.runOnClient(mc->{if(mc.gui.screen().getFocused()==null)throw new AssertionError("Menu actions must be keyboard focusable");mc.options.guiScale().set(scale);mc.resizeGui();});
             c.getInput().pressKey(InputConstants.KEY_ESCAPE);c.waitForScreen(null);c.waitTicks(5);
-            server.runOnServer(s->{var p=s.getPlayerList().getPlayers().getFirst();if(p.getInventory().countItem(Items.IRON_INGOT)!=32||p.getInventory().countItem(Items.COPPER_INGOT)!=1)throw new AssertionError("Closing returns the actual copper output without manufacturing a retained sample");});
+            server.runOnServer(s->{var p=s.getPlayerList().getPlayers().getFirst();if(p.getInventory().countItem(Items.IRON_INGOT)!=32||p.getInventory().countItem(Items.TORCH)!=1)throw new AssertionError("Closing returns the actual torch output without manufacturing a retained sample");});
             // Exercise the real server tick hook, not just the pure per-player pulse used by game tests.
             server.runOnServer(s->{var p=s.getPlayerList().getPlayers().getFirst();
                 p.getInventory().setItem(8,p.getMainHandItem()); p.setItemInHand(InteractionHand.MAIN_HAND,p.getInventory().getItem(3));p.getInventory().setItem(3,ItemStack.EMPTY);

@@ -1,5 +1,58 @@
 # Jugcraft TODO
 
+## City defense and performance — October 22
+
+- [x] Implement city-only raider targeting, combat-invulnerable guard crews/walkers, six tower flak stations, 250-block mounted-weapon targeting and the usable bank Ender Chest. [Implementation](features/city-defense-and-performance.md).
+- [x] Pin compatible Lithium, FerriteCore, Krypton and ImmediatelyFast releases in the shared pack/server dependency lock.
+- [x] Add read-only Candy Cavity chunk survey and [safe refresh procedure](CANDY_CAVERN_REFRESH.md).
+- [x] Run combined server sweeps, repair the discovered issues, pass focused regressions with optional mods present/absent, and review both town client runs. Exact coverage/limits are in the feature record.
+- [ ] Owner visual playtest, hosted multiplayer acceptance and existing-world upgrade rehearsal before the coordinated client/server update.
+- [ ] Review exact old-cave coordinates, claims/builds and a consistent backup; test any approved refresh on a copy first.
+- [ ] Design opt-in/progression triggers for player-directed raids later; do not restore equipment-blind random attacks.
+- [ ] Benchmark server tick time, memory and client frame times under representative player load.
+
+
+## Local transmutation economy follow-up — October 21
+
+- [x] Implement and automatically test convenience-only tablet, condenser and density-gem outputs; preserve saved valuables and balances, and import the supplied Exchange interface. See [feature record](features/convenience-transmutation.md).
+- [ ] Owner-playtest the imported interface and convenience economy; keep out of the public update channel until the combined release is ready.
+- [ ] Before public economy release, audit recipe conversions, collector fuel upgrades and NPC buy/sell prices. Tablets, condensers and density gems now share convenience-only output restrictions; ordinary supplies still feed crafting and trade chains.
+
+
+## Next coordinated release batch — October 21
+
+Owner requests larger update batches: prepare and test locally, then deploy the
+server and promote its matching client update only when the owner says ready.
+Do not promote each small addition separately. [Release sequence](SERVER_RELEASES.md#coordinated-release-batches).
+
+- [x] Include Resourcify for in-game resource-pack/shader browsing and default Diorama's minimap off for fresh installs. Preserve existing player settings. [Implementation](features/pack-browser-and-map-defaults.md).
+- [x] Repair Candy Cavity terrain, supplied landmark/template placement and soda rivers; complete generation tests and local visual review. New chunks only, with no automatic rewriting of existing caves. [Implementation](features/candy-cavity-generation.md).
+- [x] Add crouch/axe tree felling, persistent personal keep-inventory commands, four reusable free starter chunks, explicit party land sharing and native claim damage/boundary protections. Combined automated tests pass; dedicated player acceptance and indirect-interaction abuse audit remain below. [Implementation and remaining policy decisions](features/viewer-server-tools.md).
+- [x] Pass the local two-simulated-player weapon/automation regressions and extended native boundary guards in the 2,254-test combined server run. [Scope](features/server-defense-and-clock.md).
+- [x] Pass local tests for the 2x daylight / 2/3 night clock, villager anti-mob targeting (Pillager exception), and claim-aware automated defenses with friendly-fire protection and redstone emergency stop. [Implementation and setup](features/server-defense-and-clock.md).
+- [ ] Complete a real two-account hosted claim/defense acceptance check before release.
+- [ ] Finish the selected batch, combined validation and owner playtest; record one exact release version/source commit.
+- [ ] Prepare matching client pack, managed-mod update manifest and changed-files server bundle; keep the public channel unchanged during preparation.
+- [ ] When the owner says ready: back up the world, deploy the server's changed files, verify startup/join, then promote the matching client manifest and share release notes.
+
+## Player updater — October 21
+
+- [x] Replace the EXE/hook player flow with a single `.mrpack` import and in-game update consent. Locate the active instance automatically and preserve settings, saves and extra mods. [Implementation and validation](features/direct-player-updater.md).
+- [x] Stage/verify changed managed mods; use a bundled Java helper after Minecraft exits, with journal recovery and a relaunch guard.
+- [ ] Complete the real-player Modrinth import, download, Apply & quit and relaunch acceptance cycle before promoting this updater to the public channel. Remove the old per-instance EXE hook on early test installations.
+- [ ] Validate macOS/Linux launcher and filesystem behavior; only Windows is locally tested.
+- [ ] Keep the public pack listing disabled; promote GitHub updates only after the corresponding server deployment is verified.
+
+## Living spawn city — October 21 local work
+
+- [x] Add explicit, resumable existing-town blueprint upgrades; preserve edited blocks, inventories and NPC identities. [Scope and operator commands](features/living-town-upgrades.md).
+- [x] Church of Notch, Priest of Notch, altar-facing pews, white glowing shop signs, retired map kiosk, twelve guards and late-night civilian beds.
+- [x] Replace idle airborne hovering with flight/landing/rest behavior.
+- [x] Pass local validation: all 2,233 required server GameTests, 11 town architecture checks and repository checks.
+- [ ] Owner visual playtest and hosted multiplayer check before deploying this city revision.
+- [ ] **MUST: audit seasonal content against every newer biome collection** (landscape, ecology/grove, caves and custom dimensions). Check season eligibility, foliage/grass tint, temperature/snow/rain, crop growth, wildlife spawns, Halloween/December encounters and town decorations. Add explicit biome tags/rules and regressions where missing; preserve earned seasonal items and existing builds. Determine which systems need adaptation before deciding on a larger seasonal rewrite.
+- [ ] Add a separately versioned migration for future Styx observatory-district redesigns and any town footprint expansion; core-town upgrades must not regenerate those areas.
+
 ## Overnight integration — October 21
 
 - [x] Combine starter workshop and Frostward College M0 with main; reconcile older tech drafts with canonical packages. [Exact scope](features/remaining-release-oct21.md).

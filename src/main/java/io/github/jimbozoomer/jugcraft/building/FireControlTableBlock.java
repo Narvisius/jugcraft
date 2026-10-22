@@ -104,6 +104,12 @@ public class FireControlTableBlock extends HorizontalDirectionalBlock implements
 				.setValue(POWERED, context.getLevel().hasNeighborSignal(context.getClickedPos()));
 	}
 
+    @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, net.minecraft.world.entity.LivingEntity placer, ItemStack stack) {
+        super.setPlacedBy(level, pos, state, placer, stack);
+        if (placer instanceof Player player && level.getBlockEntity(pos) instanceof Entity table) table.authorize(player);
+    }
+
 	@Override
 	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
 		if (!oldState.is(this)) {
@@ -148,7 +154,9 @@ public class FireControlTableBlock extends HorizontalDirectionalBlock implements
 		if (!(level instanceof ServerLevel server)) {
 			return InteractionResult.SUCCESS;
 		}
-		if (wire) {
+		if (!io.github.jimbozoomer.jugcraft.finance.LandRegistry.mayBuild(player, level, pos)) return InteractionResult.FAIL;
+        table.authorize(player);
+        if (wire) {
 			if (player.isShiftKeyDown()) {
 				table.links.clear();
 				table.setChanged();
@@ -184,7 +192,9 @@ public class FireControlTableBlock extends HorizontalDirectionalBlock implements
 		if (!(level instanceof ServerLevel server) || !(level.getBlockEntity(pos) instanceof Entity table)) {
 			return InteractionResult.SUCCESS;
 		}
-		if (player.isShiftKeyDown()) {
+		if (!io.github.jimbozoomer.jugcraft.finance.LandRegistry.mayBuild(player, level, pos)) return InteractionResult.FAIL;
+        table.authorize(player);
+        if (player.isShiftKeyDown()) {
 			table.sector = (table.sector + 1) % FireControl.SECTORS.length;
 			table.setChanged();
 		} else {
@@ -205,7 +215,8 @@ public class FireControlTableBlock extends HorizontalDirectionalBlock implements
 		}
 		player.sendOverlayMessage(Component.translatable("message.jugcraft.fire_control.status",
 				Component.translatable("message.jugcraft.fire_control.mode." + state.getValue(MODE).getSerializedName()),
-				table.readyCount(level.getGameTime()), table.links.size(), table.sectorWidth(), target));
+				table.readyCount(level.getGameTime()), table.links.size(), table.sectorWidth(), target)
+                .append(state.getValue(MODE) == Mode.SENTRY ? Component.literal(table.sentryDisabled() ? " — Sentry stopped by redstone" : " — Sentry active; redstone power stops firing") : Component.empty()));
 	}
 
 	@Override
@@ -226,7 +237,8 @@ public class FireControlTableBlock extends HorizontalDirectionalBlock implements
 
 	/** The table's orders: its linked guns, target, sector and salvo count, and which guns last said they were ready. */
 	public static class Entity extends BlockEntity {
-		private final List<UUID> links = new ArrayList<>();
+		private @Nullable UUID operator;
+        private final List<UUID> links = new ArrayList<>();
 		private final Map<UUID, Long> readyAt = new HashMap<>();
 		private @Nullable BlockPos target;
 		private int sector = FireControl.SECTORS.length - 1;
@@ -240,7 +252,25 @@ public class FireControlTableBlock extends HorizontalDirectionalBlock implements
 			super(FireControl.TABLE_ENTITY, pos, state);
 		}
 
-		public Mode mode() {
+		public void authorize(Player player) {
+            operator = player.getUUID();
+            setChanged();
+        }
+
+        /** Recheck on every order: an old link is not a permanent grant after land changes hands. */
+        public boolean mayOperate(ServerLevel world, BlockPos gun) {
+            if (!io.github.jimbozoomer.jugcraft.finance.ClaimTransfers.allowed(world, worldPosition, gun)) return false;
+            if (operator == null) return !io.github.jimbozoomer.jugcraft.finance.LandRegistry.isClaimed(world, worldPosition);
+            var actor = io.github.jimbozoomer.jugcraft.concordance.Authority.depositDrillActor(world, operator);
+            return actor != null && io.github.jimbozoomer.jugcraft.finance.LandRegistry.mayBuild(actor, world, worldPosition)
+                    && io.github.jimbozoomer.jugcraft.finance.LandRegistry.mayBuild(actor, world, gun);
+        }
+
+        public boolean sentryDisabled() {
+            return mode() == Mode.SENTRY && getBlockState().getValue(POWERED);
+        }
+
+        public Mode mode() {
 			BlockState state = getBlockState();
 			return state.hasProperty(MODE) ? state.getValue(MODE) : Mode.HOLD;
 		}
@@ -375,6 +405,7 @@ public class FireControlTableBlock extends HorizontalDirectionalBlock implements
 		@Override
 		protected void loadAdditional(ValueInput input) {
 			super.loadAdditional(input);
+            operator = input.read("operator", UUIDUtil.STRING_CODEC).orElse(null);
 			links.clear();
 			links.addAll(input.read("links", UUIDUtil.STRING_CODEC.listOf()).orElse(List.of()));
 			target = input.read("target", BlockPos.CODEC).orElse(null);
@@ -387,6 +418,7 @@ public class FireControlTableBlock extends HorizontalDirectionalBlock implements
 		@Override
 		protected void saveAdditional(ValueOutput output) {
 			super.saveAdditional(output);
+            if (operator != null) output.store("operator", UUIDUtil.STRING_CODEC, operator);
 			output.store("links", UUIDUtil.STRING_CODEC.listOf(), List.copyOf(links));
 			if (target != null) {
 				output.store("target", BlockPos.CODEC, target);

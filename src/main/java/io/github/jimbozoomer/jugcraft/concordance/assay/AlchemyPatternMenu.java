@@ -12,9 +12,9 @@ import net.minecraft.world.entity.player.*;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 
-/** Two real transaction slots and 24 read-only, server-synchronized learned patterns. */
+/** Two real transaction slots and 12 read-only, server-synchronized learned patterns. */
 public final class AlchemyPatternMenu extends AbstractContainerMenu {
-    public static final int GHOST_START=38, PAGE_SIZE=24;
+    public static final int GHOST_START=38, PAGE_SIZE=12;
     private final Player owner;
     private final BooleanSupplier access;
     private final ItemStack eye;
@@ -30,19 +30,22 @@ public final class AlchemyPatternMenu extends AbstractContainerMenu {
     private String lastQuery;
     private boolean lastFilter;
     private int lastPage=-1;
+    private long lastPolicyRevision=-1;
     public AlchemyPatternMenu(int id,Inventory inv){this(id,inv,()->true,ItemStack.EMPTY);}
     public AlchemyPatternMenu(int id,Inventory inv,BooleanSupplier access,ItemStack eye){
         super(AlchemyPatterns.MENU,id);owner=inv.player;this.access=access;this.eye=eye;
         if(!eye.isEmpty())selected=eye.getOrDefault(AlchemyPatterns.TARGET,"");
-        addSlot(new Slot(real,0,31,63){@Override public boolean isActive(){return !eye();}@Override public boolean mayPlace(ItemStack s){return !eye();}});
-        addSlot(new Slot(real,1,113,63){@Override public boolean isActive(){return !eye();}@Override public boolean mayPlace(ItemStack s){return false;}});
-        addStandardInventorySlots(inv,181,151);
-        for(int i=0;i<PAGE_SIZE;i++)addSlot(new Slot(ghost,i,205+(i%6)*22,52+(i/6)*20){
+        addSlot(new Slot(real,0,41,76){@Override public boolean isActive(){return !eye();}@Override public boolean mayPlace(ItemStack s){return !eye();}});
+        addSlot(new Slot(real,1,156,76){@Override public boolean isActive(){return !eye();}@Override public boolean mayPlace(ItemStack s){return false;}});
+        addStandardInventorySlots(inv,35,145);
+        for(int i=0;i<PAGE_SIZE;i++)addSlot(new Slot(ghost,i,patternX(i),patternY(i)){
             @Override public boolean mayPlace(ItemStack s){return false;}
             @Override public boolean mayPickup(Player p){return false;}
         });
         addDataSlots(data);refresh();
     }
+    public static int patternX(int i){return 156+(int)Math.round(40*Math.cos(i*Math.PI/6));}
+    public static int patternY(int i){return 76+(int)Math.round(40*Math.sin(i*Math.PI/6));}
     public void search(String s){query=s.substring(0,Math.min(48,s.length())).toLowerCase(Locale.ROOT);page=0;broadcastChanges();}
     private ItemStack target(){var id=Identifier.tryParse(selected);return id==null?ItemStack.EMPTY:new ItemStack(BuiltInRegistries.ITEM.getValue(id));}
     public int page(){return data.get(0);} public int pages(){return Math.max(1,data.get(1));}
@@ -67,17 +70,19 @@ public final class AlchemyPatternMenu extends AbstractContainerMenu {
         if(batch==0)while(n>0&&Assay.form(m,n)>AlchemyPower.available(p))n--;
         return n;
     }
-    private boolean allowed(ItemStack stack){var m=AlchemicalWorkshopBlockEntity.material(stack);return m!=null&&m.formable()&&(eye.isEmpty()||AlchemyPatterns.building(stack));}
+    private boolean allowed(ItemStack stack){var m=AlchemicalWorkshopBlockEntity.material(stack);return m!=null&&m.formable()&&TabletOutputs.allowed(stack)&&(eye.isEmpty()||AlchemyPatterns.building(stack));}
     private void refresh(){
         if(!(owner instanceof ServerPlayer p))return;
         var known=AlchemyPatterns.known(p);var starred=AlchemyPatterns.favorites(p);var catalogue=Assaying.catalog();
-        boolean rebuild=known!=lastKnown||starred!=lastFavorites||catalogue!=lastCatalogue||!query.equals(lastQuery)||favorites!=lastFilter;
+        long policyRevision=TabletOutputs.revision();
+        boolean rebuild=policyRevision!=lastPolicyRevision||known!=lastKnown||starred!=lastFavorites||catalogue!=lastCatalogue||!query.equals(lastQuery)||favorites!=lastFilter;
         if(rebuild){cachedIds=known.stream().filter(id->{
             var key=Identifier.tryParse(id);if(key==null)return false;
             var stack=new ItemStack(BuiltInRegistries.ITEM.getValue(key));
             return allowed(stack)&&(!favorites||AlchemyPatterns.favorites(p).contains(id))
                     &&(id.contains(query)||stack.getHoverName().getString().toLowerCase(Locale.ROOT).contains(query));
         }).sorted().toList();lastKnown=known;lastFavorites=starred;lastCatalogue=catalogue;lastQuery=query;lastFilter=favorites;}
+        lastPolicyRevision=policyRevision;
         var ids=cachedIds;
         int pages=Math.max(1,(ids.size()+PAGE_SIZE-1)/PAGE_SIZE);page=Math.clamp(page,0,pages-1);
         if(rebuild||lastPage!=page)for(int i=0;i<PAGE_SIZE;i++)ghost.setItem(i,page*PAGE_SIZE+i<ids.size()?new ItemStack(BuiltInRegistries.ITEM.getValue(Identifier.parse(ids.get(page*PAGE_SIZE+i)))):ItemStack.EMPTY);

@@ -37,7 +37,11 @@ public final class TownCommand {
 		dispatcher.register(Commands.literal("jugcraft")
 				.then(Commands.literal("town")
 						.executes(context -> info(context.getSource()))
-						.then(Commands.literal("place").requires(TownCommand::isOperator).executes(TownCommand::place))
+						.then(Commands.literal("upgrade").requires(TownCommand::isOperator)
+                                .executes(c -> TownUpgrades.status(c.getSource()))
+                                .then(Commands.literal("preview").executes(c -> TownUpgrades.status(c.getSource())))
+                                .then(Commands.literal("apply").executes(c -> TownUpgrades.request(c.getSource()))))
+                        .then(Commands.literal("place").requires(TownCommand::isOperator).executes(TownCommand::place))
 						.then(Commands.literal("theme").requires(TownCommand::isOperator)
 								.then(Commands.argument("theme", StringArgumentType.word())
 										.suggests((context, builder) -> {

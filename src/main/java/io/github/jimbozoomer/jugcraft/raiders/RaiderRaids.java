@@ -40,8 +40,7 @@ import org.jspecify.annotations.Nullable;
  * Raids (batch 57, docs/features/raiders.md), in the Overworld only. Every {@value #RAID_CHECK_TICKS} ticks, if raids are
  * on ({@link #enabled}), mobs spawn and it is not peaceful, and no raid is under way, a player who has played for the
  * grace days ({@code raiders.grace_days}) may be raided, at most once every {@code raiders.interval_days} in the world,
- * {@link #RAID_CHANCE} of the checks after that. The objective is the player's base (where they stand), or the town if
- * they are within {@value #TOWN_REACH} blocks of it.
+ * {@link #RAID_CHANCE} of the checks after that. The objective is always the town centre; automatic raids only start with an eligible observer near town.
  *
  * <p>A party ({@link #PARTY}, by the world's raid level, 1 to {@value #MAX_LEVEL}) gathers {@value #SPAWN_MIN} to
  * {@value #SPAWN_MAX} blocks away, on open ground outside the town, and marches on the objective; everyone near is told
@@ -54,8 +53,8 @@ import org.jspecify.annotations.Nullable;
 public final class RaiderRaids {
 	public static final int RAID_CHECK_TICKS = 1200;
 	public static final float RAID_CHANCE = 0.2F;
-	public static final int SPAWN_MIN = 48;
-	public static final int SPAWN_MAX = 64;
+	public static final int SPAWN_MIN = 120;
+	public static final int SPAWN_MAX = 144;
 	public static final int RAID_TIMEOUT = 12000;
 	public static final int ABANDON_TICKS = 2400;
 	public static final int ABANDON_RANGE = 160;
@@ -109,7 +108,10 @@ public final class RaiderRaids {
 				|| !state.raids.isEmpty() || level.getGameTime() - state.lastRaid < days("raiders.interval_days", 3)) {
 			return;
 		}
-		List<ServerPlayer> players = new ArrayList<>(level.players());
+		BlockPos town = Town.origin(level);
+        if (town == null) return;
+        BlockPos centre = Town.centre(town);
+        List<ServerPlayer> players = new ArrayList<>(level.getPlayers(p -> p.blockPosition().distSqr(centre) <= (double) ABANDON_RANGE * ABANDON_RANGE));
 		Collections.shuffle(players);
 		long grace = days("raiders.grace_days", 3);
 		RandomSource random = level.getRandom();
@@ -118,26 +120,24 @@ public final class RaiderRaids {
 				continue;
 			}
 			if (random.nextFloat() < RAID_CHANCE) {
-				start(level, objectiveFor(level, player), state.level, random);
+				start(level, centre, state.level, random);
 			}
 			return;
 		}
 	}
 
-	/** Where a raid on {@code player} makes for: the town if they are near it, otherwise where they stand. */
-	public static BlockPos objectiveFor(ServerLevel level, ServerPlayer player) {
+	/** The city objective, regardless of player equipment/location; null if no city exists. */
+	public static @Nullable BlockPos objectiveFor(ServerLevel level, ServerPlayer player) {
 		BlockPos town = Town.origin(level);
-		if (town != null && player.blockPosition().distSqr(town) <= (double) TOWN_REACH * TOWN_REACH) {
-			return town;
-		}
-		return player.blockPosition();
+		return town == null ? null : Town.centre(town);
 	}
 
 	/**
 	 * Starts a raid of {@code raidLevel} on {@code objective}: gathers its party on open ground nearby and sends it
 	 * marching. Returns the raid, or null if there was nowhere for it to gather.
 	 */
-	public static @Nullable Raid start(ServerLevel level, BlockPos objective, int raidLevel, RandomSource random) {
+	public static @Nullable Raid start(ServerLevel level, @Nullable BlockPos objective, int raidLevel, RandomSource random) {
+        if (objective == null) return null;
 		BlockPos gather = gatheringPoint(level, objective, random);
 		return gather == null ? null : start(level, objective, gather, raidLevel, random);
 	}
@@ -146,7 +146,7 @@ public final class RaiderRaids {
 	public static Raid start(ServerLevel level, BlockPos objective, BlockPos gather, int raidLevel, RandomSource random) {
 		raidLevel = Mth.clamp(raidLevel, 1, MAX_LEVEL);
 		State state = State.get(level);
-		Raid raid = new Raid(UUID.randomUUID(), objective.immutable(), raidLevel, level.getGameTime(), 0, 0, List.of());
+		Raid raid = new Raid(UUID.randomUUID(), objective.immutable(), raidLevel, level.getGameTime(), 0, 0, List.of(), true);
 		int[] party = PARTY[raidLevel - 1];
 		List<EntityType<? extends Mob>> kinds = List.of(JugcraftRaiders.GRUNT, JugcraftRaiders.GRENADIER, JugcraftRaiders.OFFICER,
 				JugcraftRaiders.BLIMP, JugcraftRaiders.WALKER, JugcraftRaiders.GUNNER);
@@ -252,10 +252,12 @@ public final class RaiderRaids {
 				Codec.LONG.fieldOf("started").forGetter(r -> r.started),
 				Codec.INT.optionalFieldOf("lonely", 0).forGetter(r -> r.lonely),
 				Codec.INT.optionalFieldOf("total", 0).forGetter(r -> r.total),
-				UUIDUtil.STRING_CODEC.listOf().optionalFieldOf("members", List.of()).forGetter(r -> List.copyOf(r.members)))
+				UUIDUtil.STRING_CODEC.listOf().optionalFieldOf("members", List.of()).forGetter(r -> List.copyOf(r.members)),
+                Codec.BOOL.optionalFieldOf("city_policy", false).forGetter(r -> r.cityPolicy))
 				.apply(i, Raid::new));
 
-		final UUID id;
+		final boolean cityPolicy;
+        final UUID id;
 		final BlockPos objective;
 		final int level;
 		final long started;
@@ -264,7 +266,8 @@ public final class RaiderRaids {
 		final Set<UUID> members = new HashSet<>();
 		private @Nullable ServerBossEvent bar;
 
-		Raid(UUID id, BlockPos objective, int level, long started, int lonely, int total, List<UUID> members) {
+		Raid(UUID id, BlockPos objective, int level, long started, int lonely, int total, List<UUID> members, boolean cityPolicy) {
+            this.cityPolicy = cityPolicy;
 			this.id = id;
 			this.objective = objective;
 			this.level = level;
@@ -335,7 +338,12 @@ public final class RaiderRaids {
 		/** Updates every raid: its bar and who sees it, and whether it is won or withdraws. */
 		void update(ServerLevel world) {
 			for (Raid raid : List.copyOf(raids)) {
-				ServerBossEvent bar = raid.bar();
+				BlockPos town = Town.origin(world);
+                if (!raid.cityPolicy && (town == null || !raid.objective.equals(Town.centre(town)))) {
+                    end(world, raid, false);
+                    continue;
+                }
+                ServerBossEvent bar = raid.bar();
 				double range = (double) ABANDON_RANGE * ABANDON_RANGE;
 				boolean anyone = false;
 				for (ServerPlayer player : world.players()) {

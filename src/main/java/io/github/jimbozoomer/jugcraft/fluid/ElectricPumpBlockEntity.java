@@ -106,6 +106,7 @@ public class ElectricPumpBlockEntity extends BlockEntity {
 
 	/** Fills the buffer from below; returns droplets taken. */
 	private long pull(ServerLevel level, BlockPos below) {
+		if (!io.github.jimbozoomer.jugcraft.finance.ClaimTransfers.allowed(level, worldPosition, below)) return 0;
 		long room = bufferCapacity - buffer.amount;
 		if (room <= 0) {
 			return 0;

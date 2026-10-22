@@ -31,7 +31,7 @@ from zeppelin import tiled_quads
 MOD = "jugcraft"
 
 # The Great Shell: muzzle speed (blocks a tick), gravity, blast reach (blocks) and centre damage.
-GREAT_SPEED = 3.2
+GREAT_SPEED = 5.0
 GREAT_GRAVITY = 0.05
 GREAT_RADIUS = 7.0
 GREAT_DAMAGE = 48
@@ -44,7 +44,7 @@ GREAT_DAMAGE = 48
 # entity's height in blocks. recoil: how far the barrel kicks back, in pixels.
 GUNS = {
     "bastion_mortar": dict(
-        name="Bastion Mortar", size=3, shell="heavy", speed=3.0, cooldown=70, traverse=3.0, pitch=(45, 85), high=True,
+        name="Bastion Mortar", size=3, shell="heavy", speed=5.0, cooldown=70, traverse=3.0, pitch=(45, 89), high=True,
         auto=False, barrels=[0], turntable=(0, 9, 0), trunnion=(0, 27, 2), muzzle=44, health=160,
         seats=[(0, 12, -15), (11, 12, -9)], height=2.4, recoil=5),
     "bastion_autocannon": dict(
@@ -52,15 +52,15 @@ GUNS = {
         auto=True, barrels=[-5, 5], turntable=(0, 9, 0), trunnion=(0, 25, 6), muzzle=50, health=120,
         seats=[(0, 12, -16)], height=2.2, recoil=2),
     "grand_mortar": dict(
-        name="Grand Mortar", size=5, shell="great", speed=GREAT_SPEED, cooldown=200, traverse=1.0, pitch=(45, 85), high=True,
+        name="Grand Mortar", size=5, shell="great", speed=GREAT_SPEED, cooldown=200, traverse=1.0, pitch=(45, 89), high=True,
         auto=False, barrels=[0], turntable=(0, 12, 0), trunnion=(0, 50, 4), muzzle=86, health=320,
         seats=[(0, 15, -26), (20, 15, -16), (-20, 15, -16)], height=4.0, recoil=8),
     "fortress_rifle": dict(
-        name="Fortress Rifle", size=5, shell="heavy", speed=4.5, cooldown=120, traverse=1.5, pitch=(-5, 45), high=False,
+        name="Fortress Rifle", size=5, shell="heavy", speed=5.0, cooldown=120, traverse=1.5, pitch=(-5, 45), high=False,
         auto=False, barrels=[0], turntable=(0, 12, 0), trunnion=(0, 34, 14), muzzle=104, health=300,
         seats=[(0, 15, -30), (18, 15, -26)], height=3.0, recoil=10),
     "triple_battery": dict(
-        name="Triple Battery", size=5, shell="heavy", speed=3.0, cooldown=140, traverse=1.5, pitch=(-5, 60), high=False,
+        name="Triple Battery", size=5, shell="heavy", speed=5.0, cooldown=140, traverse=1.5, pitch=(-5, 60), high=False,
         auto=False, barrels=[-11, 0, 11], turntable=(0, 12, 0), trunnion=(0, 32, 14), muzzle=78, health=300,
         seats=[(0, 15, -30), (18, 15, -26)], height=2.8, recoil=7),
 }

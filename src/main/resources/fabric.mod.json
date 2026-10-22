@@ -16,6 +16,9 @@
   "icon": "assets/jugcraft/icon.png",
   "environment": "*",
   "entrypoints": {
+    "preLaunch": [
+      "io.github.jimbozoomer.jugcraft.update.UpdateStartupGuard"
+    ],
     "main": [
       "io.github.jimbozoomer.jugcraft.Jugcraft",
       "local.peepo.PeepoMod"

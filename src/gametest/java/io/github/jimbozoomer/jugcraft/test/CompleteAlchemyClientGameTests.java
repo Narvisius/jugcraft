@@ -94,7 +94,7 @@ public class CompleteAlchemyClientGameTests implements FabricClientGameTest {
                 sign(p,base.offset(7,0,2),"CONNECTED LINE","Collector -> relay","Relay -> furnace","Gold in output slots");
                 for(int tier=1;tier<=2;tier++){
                     var at=base.offset(6+4*tier,0,6);p.level().setBlockAndUpdate(at,AlchemicalWorkshops.BLOCKS.get("condenser_mk"+tier).defaultBlockState().setValue(AlchemicalWorkshopBlock.FACING,Direction.SOUTH));
-                    var be=(AlchemicalWorkshopBlockEntity)p.level().getBlockEntity(at);be.placedBy(p);be.setEssence(8000);be.setItem(1,new ItemStack(Items.IRON_INGOT));OWNED.add(at);
+                    var be=(AlchemicalWorkshopBlockEntity)p.level().getBlockEntity(at);be.placedBy(p);be.setEssence(8000);be.setItem(1,new ItemStack(Items.OAK_LOG));OWNED.add(at);
                     sign(p,at.south(2),"CONDENSER MK "+tier,"Sample -> copies","Uses stored essence","Animated owner art");
                 }
                 var equipment=new ArrayList<>(ExtendedAlchemyEquipment.ITEMS.values());

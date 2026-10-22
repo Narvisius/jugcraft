@@ -1,7 +1,7 @@
 """Architectural finish for the existing town pieces, in their original local frames.
 
 Keep footprints, resident anchors and seasonal site order stable. These edits are
-compiled into town.json.gz; they never repair or overwrite an existing save.
+compiled into town.json.gz. Existing saves use the explicit versioned TownUpgrades migration, never regeneration.
 """
 import math
 

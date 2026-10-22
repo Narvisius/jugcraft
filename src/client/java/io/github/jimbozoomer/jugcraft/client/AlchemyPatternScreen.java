@@ -15,21 +15,21 @@ public final class AlchemyPatternScreen extends AbstractContainerScreen<AlchemyP
     private int debounce;
     private TransmutationScreen.ActionButton learn,make,favorite,filter,previous,next,area;
     private final TransmutationScreen.ActionButton[] batches=new TransmutationScreen.ActionButton[4];
-    public AlchemyPatternScreen(AlchemyPatternMenu menu,Inventory inv,Component title){super(menu,inv,title,360,238);}
+    public AlchemyPatternScreen(AlchemyPatternMenu menu,Inventory inv,Component title){super(menu,inv,title,320,238);}
     private static Component ui(String s,Object... args){return Component.translatable("screen.jugcraft.pattern."+s,args);}
     private void press(int id){if(minecraft.gameMode!=null)minecraft.gameMode.handleInventoryButtonClick(menu.containerId,id);}
     private TransmutationScreen.ActionButton button(int x,int y,int w,String key,int id){return addRenderableWidget(new TransmutationScreen.ActionButton(leftPos+x,topPos+y,w,ui(key),b->press(id)));}
     @Override protected void init(){
         String saved=search==null?sent:search.getValue();super.init();
-        search=addRenderableWidget(new EditBox(font,leftPos+204,topPos+30,134,18,ui("search")));search.setMaxLength(48);search.setHint(ui("search"));search.setValue(saved);
+        search=addRenderableWidget(new EditBox(font,leftPos+230,topPos+28,82,18,ui("search")));search.setMaxLength(48);search.setHint(ui("search"));search.setValue(saved);
         search.setResponder(s->debounce=5);search.setTextColor(0xFFE4F1ED);search.setTextColorUneditable(0xFF8599A5);
-        learn=button(16,88,82,"learn",0);learn.setTooltip(Tooltip.create(ui("learn_help")));make=button(103,88,89,"make",1);
-        for(int i=0;i<4;i++)batches[i]=button(16+i*45,114,41,"batch_"+i,6+i);
-        area=button(16,114,176,"area",10);
-        favorite=button(16,153,82,"favorite",4);filter=button(103,153,76,"all",5);
-        previous=button(205,129,30,"previous",2);next=button(309,129,30,"next",3);
-        addRenderableWidget(new TransmutationScreen.ActionButton(leftPos+16,topPos+209,82,ui("guide"),b->{if(minecraft.player!=null)minecraft.player.closeContainer();minecraft.gui.setScreen(new AlchemyStorageManualScreen());}));
-        addRenderableWidget(new TransmutationScreen.ActionButton(leftPos+103,topPos+209,76,Component.translatable("screen.jugcraft.alchemy.gem_controls"),b->{if(minecraft.player!=null)minecraft.player.closeContainer();minecraft.gui.setScreen(new GemAbilitiesScreen());}));
+        learn=button(230,52,82,"learn",0);learn.setTooltip(Tooltip.create(ui("learn_help")));make=button(230,76,82,"make",1);
+        for(int i=0;i<4;i++)batches[i]=button(230+(i%2)*42,100+(i/2)*24,42,"batch_"+i,6+i);
+        area=button(230,100,82,"area",10);
+        favorite=button(230,148,82,"favorite",4);filter=button(230,172,82,"all",5);
+        previous=button(230,196,24,"previous",2);next=button(288,196,24,"next",3);
+        addRenderableWidget(new TransmutationScreen.ActionButton(leftPos+8,topPos+218,80,ui("guide"),b->{if(minecraft.player!=null)minecraft.player.closeContainer();minecraft.gui.setScreen(new AlchemyStorageManualScreen());}));
+        addRenderableWidget(new TransmutationScreen.ActionButton(leftPos+100,topPos+218,112,Component.translatable("screen.jugcraft.alchemy.gem_controls"),b->{if(minecraft.player!=null)minecraft.player.closeContainer();minecraft.gui.setScreen(new GemAbilitiesScreen());}));
         refresh();
     }
     private void refresh(){
@@ -49,41 +49,42 @@ public final class AlchemyPatternScreen extends AbstractContainerScreen<AlchemyP
     @Override public void extractBackground(GuiGraphicsExtractor g,int mx,int my,float delta){
         int x=leftPos,y=topPos;
         g.fill(0,0,width,height,0xB0081018);
-        OwnerAlchemyArt.frame(g,x,y,imageWidth,imageHeight);
-
-        OwnerAlchemyArt.panel(g,x+11,y+48,183,36,OwnerAlchemyArt.VIOLET);
-        OwnerAlchemyArt.panel(g,x+199,y+29,145,100,OwnerAlchemyArt.TEAL);
-        OwnerAlchemyArt.panel(g,x+178,y+149,173,82,OwnerAlchemyArt.SILVER);
-        OwnerAlchemyArt.panel(g,x+11,y+178,164,28,OwnerAlchemyArt.GOLD);
-        OwnerAlchemyArt.sigil(g,x+39,y+71,12,OwnerAlchemyArt.VIOLET,menu.canDissolve(),delta);
-        OwnerAlchemyArt.flow(g,x+54,x+96,y+71,OwnerAlchemyArt.TEAL,menu.canDissolve(),delta);
-        OwnerAlchemyArt.socket(g,x+165,y+63,OwnerAlchemyArt.GOLD);
-        for(var s:menu.slots){
-            if(!s.isActive())continue;
-            int sx=x+s.x,sy=y+s.y;
-            OwnerAlchemyArt.slot(g,"alchchest",sx,sy,11,3);
-            if(s.index<2)OwnerAlchemyArt.socket(g,sx,sy,s.index==0?OwnerAlchemyArt.VIOLET:OwnerAlchemyArt.TEAL);
-            if(s.index>=AlchemyPatternMenu.GHOST_START&&net.minecraft.world.item.ItemStack.isSameItemSameComponents(s.getItem(),menu.selection())&&!s.getItem().isEmpty())
-                g.outline(sx-2,sy-2,20,20,OwnerAlchemyArt.GOLD);
+        // The supplied atlas is copied byte-for-byte. Original inventory recesses line up with real slots.
+        g.blit(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED,
+                io.github.jimbozoomer.jugcraft.Jugcraft.id("textures/gui/alchemy/transmute.png"),
+                x,y+28,0,0,228,196,228,196,256,256);
+        // Cover atlas-only controls that have no action in Jugcraft, without editing the source art.
+        g.fill(x+87,y+124,x+124,y+142,0xFFC7C7C7);
+        OwnerAlchemyArt.panel(g,x+228,y+24,86,194,OwnerAlchemyArt.VIOLET);
+        for(var slot:menu.slots){
+            if(!slot.isActive()||slot.index>=2&&slot.index<AlchemyPatternMenu.GHOST_START)continue;
+            int sx=x+slot.x,sy=y+slot.y;
+            g.fill(sx-1,sy-1,sx+17,sy+17,0xA06B567F);
+            g.outline(sx-1,sy-1,18,18,0xFFA99AB5);
+            if(slot.index>=AlchemyPatternMenu.GHOST_START&&!slot.getItem().isEmpty()
+                    &&net.minecraft.world.item.ItemStack.isSameItemSameComponents(slot.getItem(),menu.selection()))
+                g.outline(sx-2,sy-2,20,20,0xFFFFDE88);
         }
-        if(!menu.selection().isEmpty())g.item(menu.selection(),x+165,y+63);
-        if(menu.eye()){
-            OwnerAlchemyArt.panel(g,x+11,y+48,135,36,OwnerAlchemyArt.VIOLET);
-            BookArt.icon(g,"jugcraft:mercurial_eye",x+23,y+60);
-            OwnerAlchemyArt.flow(g,x+53,x+145,y+71,OwnerAlchemyArt.TEAL,!menu.selection().isEmpty(),delta);
-        }
-
+        if(menu.eye()&&!menu.selection().isEmpty())g.item(menu.selection(),x+156,y+76);
+        if(menu.canMake())OwnerAlchemyArt.sigil(g,x+164,y+84,12,0xFF694080,true,delta);
     }
+
     private void line(GuiGraphicsExtractor g,String s,int x,int y,int width,int color){g.text(font,BookArt.fit(font,s,width),x,y,color,false);}
     @Override protected void extractLabels(GuiGraphicsExtractor g,int mx,int my){
-        g.text(font,ui(menu.eye()?"build":"title"),13,12,0xFFE5DDEB,false);
-        line(g,ui("balance",String.format("%,d",menu.balance())).getString(),13,26,180,0xFFAADCD9);
-        g.text(font,ui("collection"),204,16,0xFF9FC8CA,false);
-        line(g,ui("sources",menu.balance()-menu.stars(),menu.stars()).getString(),13,37,180,0xFF9AAFB8);
-        if(!menu.eye()){g.text(font,ui("sample"),16,51,0xFFE4C786,false);g.text(font,ui("output"),104,51,0xFFE4C786,false);}g.text(font,ui("target"),150,51,0xFFE4C786,false);
-        line(g,ui(menu.eye()?"cost":"total",menu.eye()?menu.price()+8:menu.batchCost()).getString(),16,140,178,0xFFBBCBD7);
-        line(g,ui(menu.eye()?"area_help":"input_"+menu.inputStatus(),menu.gain()).getString(),16,181,164,0xFFE4C786);
-        if(!menu.eye())line(g,ui("form_"+menu.formStatus()).getString(),16,193,164,0xFFBBCBD7);
-        g.text(font,ui("page",menu.page()+1,menu.pages()),247,135,0xFFDDD0EB,false);
+        line(g,ui(menu.eye()?"build":"title").getString(),6,3,222,0xFFE5DDEB);
+        line(g,ui("balance",String.format("%,d",menu.balance())).getString(),6,15,145,0xFFAADCD9);
+        line(g,String.format("%,d",menu.price())+" essence",151,15,75,0xFFE5DDEB);
+        line(g,ui("collection").getString(),230,15,88,0xFFE5DDEB);
+        if(!menu.eye()){
+            line(g,ui("sample").getString(),8,100,76,0xFF403248);
+
+        }
+        line(g,ui("economy_building").getString(),8,115,96,0xFF49324F);
+        line(g,ui("economy_convenience").getString(),8,127,96,0xFF49324F);
+        line(g,ui("page",menu.page()+1,menu.pages()).getString(),255,203,32,0xFFE5DDEB);
+        // Transaction details remain available without crowding the art or covering inventory slots.
+        learn.setTooltip(Tooltip.create(Component.literal(ui("learn_help").getString()+"\n"+ui("input_"+menu.inputStatus(),menu.gain()).getString())));
+        make.setTooltip(Tooltip.create(Component.literal(ui(menu.eye()?"build_help":"make_help").getString()+"\n"+
+                ui(menu.eye()?"cost":"total",menu.eye()?menu.price()+8:menu.batchCost()).getString()+"\n"+ui("form_"+menu.formStatus()).getString())));
     }
 }

@@ -1,5 +1,7 @@
 # Alchemy playability — local owner test, 17 October 2026
 
+> October 21 local follow-up: [convenience transmutation](convenience-transmutation.md) restricts tablet, legacy/handheld formation and building-eye outputs to approved supplies while retaining values and knowledge. The original universal-withdrawal description below is historical. Condensers and density gems now share the same output allowlist; old valuable targets pause without consuming inputs.
+
 > Publication update, 18 October 2026: the owner accepted the combined alchemy presentation and authorized publishing the alchemy additions and UI fixes. Historical local-only checkpoints below are superseded. Current scope and validation are recorded in [Alchemy interfaces and access](alchemy-interface-and-access.md).
 
 **Current equipment access:** [the interface/access revision](alchemy-interface-and-access.md) removes the research prerequisite described below. Possessing equipment is sufficient to operate it; tablet pattern learning and essence costs remain.

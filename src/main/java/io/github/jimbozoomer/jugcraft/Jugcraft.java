@@ -145,6 +145,8 @@ public final class Jugcraft implements ModInitializer {
 		FeatureEnabledCondition.register();
 		JugcraftWorldgen.register();
 		JugcraftParties.register();
+        io.github.jimbozoomer.jugcraft.server.PlayerRules.register();
+        io.github.jimbozoomer.jugcraft.server.ViewerWorldRules.register();
 		registerMachineStylePack();
 		// Higher-priority data overrides only exist when the optional backpack mod is installed.
 		if (FabricLoader.getInstance().isModLoaded("travelersbackpack")) {

@@ -28,7 +28,10 @@ The machine-readable source of truth is [frameworks.lock.json](../distribution/f
 | [Mod Menu](https://github.com/TerraformersMC/ModMenu) | 21.0.0 | Optional, client | Access to library configuration screens |
 | [Iris](https://github.com/IrisShaders/Iris) | 1.11.7+mc26.3 | Optional, client | Shader-pack support; no shader pack is supplied |
 | [Sodium](https://github.com/CaffeineMC/sodium) | 0.9.2+mc26.3 | Optional, client; required by the selected Iris release | Renderer used by the presentation stack |
-| [Diorama](https://modrinth.com/mod/diorama-map) | 0.1.1+26.3 | Client-only; installed by default in Complete, optional to standalone Jugcraft | Angled minimap, fullscreen exploration map and waypoints |
+| [Diorama](https://modrinth.com/mod/diorama-map) | 0.1.1+26.3 | Client-only; installed by default in Complete, optional to standalone Jugcraft | Fullscreen exploration map and waypoints; minimap off by default |
+| [Resourcify](https://modrinth.com/mod/resourcify) | 1.8.7 for Fabric 26.3 | Client-only; installed by default in Complete, optional to standalone Jugcraft | Browse/download resource packs and Iris shaders inside Minecraft |
+
+The October 22 local batch also pins Lithium 0.26.2+mc26.3, FerriteCore 9.0.0 and Krypton 0.3.2 on both sides, and ImmediatelyFast 1.17.1+26.3 on clients. See [city defense and performance](features/city-defense-and-performance.md).
 
 All selected client files are installed by Jugcraft Complete. "Optional" means the standalone mod does not require them to load. It does not mean the complete pack silently omits them. Dedicated-server installs omit files marked client-only.
 

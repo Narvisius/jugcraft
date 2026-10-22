@@ -77,7 +77,22 @@ dependencies {
 	}
 }
 
+def compileUpdateHelper = tasks.register('compileUpdateHelper', JavaCompile) {
+    source = files('src/main/java/io/github/jimbozoomer/jugcraft/update/UpdateApplier.java')
+    classpath = files()
+    destinationDirectory = layout.buildDirectory.dir('update-helper/classes')
+    options.release = 25
+}
+def updateHelperJar = tasks.register('updateHelperJar', Jar) {
+    dependsOn compileUpdateHelper
+    from compileUpdateHelper.flatMap { it.destinationDirectory }
+    archiveFileName = 'updater-helper.jar'
+    destinationDirectory = layout.buildDirectory.dir('update-helper')
+    manifest { attributes 'Main-Class': 'io.github.jimbozoomer.jugcraft.update.UpdateApplier' }
+}
 processResources {
+    dependsOn updateHelperJar
+    from(updateHelperJar.flatMap { it.archiveFile }) { into 'jugcraft' }
 	from('tools/world-designer') {
 		include 'index.html', 'style.css', 'model.js', 'editor.js'
 		into 'jugcraft/world-designer'
@@ -108,6 +123,14 @@ test {
 	// tests below. Gradle 9 fails a test task that discovers none.
 	failOnNoDiscoveredTests = false
 }
+
+tasks.register('gameUpdaterTest', JavaExec) {
+    dependsOn tasks.named('testClasses')
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'io.github.jimbozoomer.jugcraft.update.GameUpdaterTests'
+    args layout.buildDirectory.file('update-helper/updater-helper.jar').get().asFile.absolutePath
+}
+tasks.named('check') { dependsOn tasks.named('gameUpdaterTest') }
 
 // In-game tests (src/gametest): a headless server runs them as part of `./gradlew build`.
 fabricApi {
@@ -142,6 +165,13 @@ tasks.matching { it.name in ["runClient", "runServer", "runGameTest", "runClient
 			if (!destination.exists()) {
 				destination.parentFile.mkdirs()
 				destination.bytes = file("distribution/overrides/${relative}").bytes
+			}
+		}
+		if (name in ["runClient", "runClientGameTest"]) {
+			File destination = new File(runDirectory, "diorama/config.json")
+			if (!destination.exists()) {
+				destination.parentFile.mkdirs()
+				destination.bytes = file("distribution/client-overrides/diorama/config.json").bytes
 			}
 		}
 	}

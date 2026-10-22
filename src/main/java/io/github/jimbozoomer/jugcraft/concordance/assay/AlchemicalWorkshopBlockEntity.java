@@ -99,7 +99,7 @@ public final class AlchemicalWorkshopBlockEntity extends BlockEntity implements 
         return stack.isEmpty() || !Assaying.eligibility(stack).isEmpty() ? null
                 : Assaying.catalog().material(BuiltInRegistries.ITEM.getKey(stack.getItem()).toString());
     }
-    public long cost() { Material m = material(items.get(SAMPLE)); return m == null || !m.formable() ? 0 : Assay.form(m, 1); }
+    public long cost() { Material m = material(items.get(SAMPLE)); return m == null || !m.formable() || !TabletOutputs.allowed(items.get(SAMPLE)) ? 0 : Assay.form(m, 1); }
     private int outputSlot() {
         ItemStack sample = items.get(SAMPLE);
         for (int i = OUTPUT_FIRST; i < SLOTS; i++) {
@@ -223,7 +223,7 @@ public final class AlchemicalWorkshopBlockEntity extends BlockEntity implements 
         if (slot == STAR) return KleinStars.capacity(stack) > 0;
         if (collector()) return slot>=INPUT_FIRST&&slot<INPUT_END&&fuelTier(stack)>=0&&fuelTier(stack)<3;
         Material m = material(stack);
-        return slot == SAMPLE ? m != null && m.formable() : slot >= INPUT_FIRST && slot < INPUT_END && m != null && m.dissolvable();
+        return slot == SAMPLE ? m != null && m.formable() && TabletOutputs.allowed(stack) : slot >= INPUT_FIRST && slot < INPUT_END && m != null && m.dissolvable();
     }
     @Override public int getContainerSize() { return SLOTS; }
     @Override public boolean isEmpty() { return items.stream().allMatch(ItemStack::isEmpty); }

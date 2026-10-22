@@ -1,4 +1,4 @@
-"""Readable vanilla signs and a framed town map; no changes to layout RNG or resident IDs."""
+"""Readable vanilla building signs; no changes to layout RNG or resident IDs."""
 from town_voxels import S, turn_xz, turn_facing
 
 SHOP_LINES = {
@@ -10,7 +10,7 @@ SHOP_LINES = {
     "innkeeper": ["THE TAVERN", "Innkeeper here", "Rest & chat", "No shop menu yet"],
     "banker": ["JUGS BANK", "Four Jug Tellers", "Jugs transfers", "Use a teller"],
     "mayor": ["TOWN HALL", "Meet the mayor", "Civic gathering", "Welcome!"],
-    "priest": ["TOWN CHURCH", "A quiet refuge", "Meet the priest", "All are welcome"],
+    "priest": ["CHURCH OF NOTCH", "Praise Notch", "Priest of Notch", "All are welcome"],
 }
 
 
@@ -38,18 +38,5 @@ def add_piece(town, piece, ox, oy, oz, turns, purpose):
 
 
 def boards(town):
-    x, z = 88, 113  # south-west edge, facing NORTH into the open square
-    for dx in range(-3, 4):
-        for y in range(1, 5):
-            if town.v.b.get((x + dx, y, z), "minecraft:air") != "minecraft:air":
-                raise ValueError("Town map board collides with existing architecture")
-        town.v.set(x + dx, 4, z, S("spruce_slab", type="bottom", waterlogged="false"))
-        for y in range(1 if dx in (-3, 3) else 2, 4):
-            town.v.set(x + dx, y, z, S("stripped_spruce_log", axis="y") if dx in (-3, 3) else S("spruce_planks"))
-    for dx, lines in [(-2, ["TOWN DIRECTORY", "1 Church / N", "2 Bank (west)", "3 Hall (east)"]),
-                      (2, ["4 General Store", "Market nearby", "North = top", "Crouch + use"]),
-                      (0, ["TOWN MAP", "Market square", "Ask a guard", "Free copies"])]:
-        y = 3 if dx == 0 else 2
-        town.v.set(x + dx, y, z - 1, S("spruce_wall_sign", facing="north", waterlogged="false"))
-        town.signs.append({"pos": [x + dx, y, z - 1], "lines": lines})
-    town.map_boards.append({"pos": [x, 2, z - 1], "facing": "north"})
+    # The old map kiosk is retired. Individual buildings retain their signs.
+    pass

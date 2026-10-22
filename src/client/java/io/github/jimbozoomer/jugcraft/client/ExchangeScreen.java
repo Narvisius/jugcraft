@@ -1531,9 +1531,9 @@ public class ExchangeScreen extends Screen {
 		boolean auction = plot != null && plot.onAuction();
 		boolean buyable = selectionOnMap() && (plot == null || (!mine && !auction && plot.price() > 0));
 		landBuy.visible = !mine && !auction;
-		landBuy.active = buyable && !data.overdue();
 		long price = plot == null ? data.land().nextPrice() : plot.price();
-		landBuy.setMessage(Component.literal(buyable ? "Buy for " + FinanceBook.amount(price) : "Not for sale"));
+        landBuy.active = buyable && (!data.overdue() || (plot == null && price == 0));
+        landBuy.setMessage(Component.literal(buyable ? (price == 0 ? "Claim free" : "Buy for " + FinanceBook.amount(price)) : "Not for sale"));
 		landBid.visible = !mine && auction;
 		landBid.active = auction && !plot.leading() && !data.overdue();
 		landBid.setMessage(Component.literal(auction && plot.leading() ? "You lead" : "Bid"));
@@ -1665,7 +1665,7 @@ public class ExchangeScreen extends Screen {
 		String status;
 		int color = CREAM;
 		if (plot == null) {
-			status = "Unclaimed: " + FinanceBook.amount(land.nextPrice());
+			status = land.nextPrice() == 0 ? "Unclaimed: free claim available" : "Unclaimed: " + FinanceBook.amount(land.nextPrice());
 		} else if (plot.onAuction()) {
 			String top = plot.bid() > 0 ? "top bid " + FinanceBook.amount(plot.bid()) : "no bids";
 			status = (plot.mine() ? "Your auction" : plot.owner() + "'s auction") + ": " + top + ", to day " + plot.auctionEnd();

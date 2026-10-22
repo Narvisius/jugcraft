@@ -52,7 +52,7 @@ public final class FireControl {
 	 * Sentry: how far round each gun it looks for hostile mobs, how close to the gun it will not fire, how near a player
 	 * must not be to its mark, and how often (ticks) it picks a target.
 	 */
-	public static final int SENTRY_RANGE = 96;
+	public static final int SENTRY_RANGE = 250;
 	public static final int SENTRY_MIN_RANGE = 12;
 	public static final int CHECK_FIRE = 8;
 	public static final int SENTRY_SCAN = 10;
@@ -109,22 +109,32 @@ public final class FireControl {
 
 	/** Remembers the table a player has started a link from. */
 	public static void startLink(Player player, ServerLevel level, BlockPos table) {
-		PENDING.put(player.getUUID(), new Pending(level.dimension(), table.immutable()));
+		if (!io.github.jimbozoomer.jugcraft.finance.LandRegistry.mayBuild(player, level, table)) return;
+        PENDING.put(player.getUUID(), new Pending(level.dimension(), table.immutable()));
 	}
 
 	/** Using the wire on a gun: links it to the player's table, or unlinks it if it is linked there already. */
 	public static InteractionResult link(Player player, CrewedGun gun) {
+        if (gun.townStation() != null) return InteractionResult.FAIL;
 		if (!(gun.level() instanceof ServerLevel level)) {
 			return InteractionResult.SUCCESS;
 		}
 		Pending pending = PENDING.get(player.getUUID());
 		if (pending == null || pending.dimension() != level.dimension()
-				|| !(level.getBlockEntity(pending.table()) instanceof FireControlTableBlock.Entity table)) {
+				|| !level.hasChunkAt(pending.table())
+                || !(level.getBlockEntity(pending.table()) instanceof FireControlTableBlock.Entity table)) {
 			PENDING.remove(player.getUUID());
 			player.sendOverlayMessage(Component.translatable("message.jugcraft.fire_control.no_table"));
 			return InteractionResult.SUCCESS;
 		}
-		if (table.linked(gun.getUUID())) {
+		if (!io.github.jimbozoomer.jugcraft.finance.LandRegistry.mayBuild(player, level, pending.table())
+                || !io.github.jimbozoomer.jugcraft.finance.LandRegistry.mayBuild(player, level, gun.blockPosition())
+                || !io.github.jimbozoomer.jugcraft.finance.ClaimTransfers.allowed(level, pending.table(), gun.blockPosition())) {
+            player.sendOverlayMessage(Component.literal("The table and gun must be on land you can use, within the same claim owner boundary."));
+            return InteractionResult.FAIL;
+        }
+        table.authorize(player);
+        if (table.linked(gun.getUUID())) {
 			table.unlink(gun.getUUID());
 			gun.unlinkDirector();
 			player.sendOverlayMessage(Component.translatable("message.jugcraft.fire_control.unlinked"));

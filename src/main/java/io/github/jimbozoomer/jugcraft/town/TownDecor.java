@@ -188,6 +188,9 @@ public final class TownDecor {
 		TownData data = TownData.get();
 		TownData.Site site = data.sites.get(index);
 		String theme = state.theme();
+        if (site.kind().equals("retired")) {
+            state.setSiteTheme(index, theme); CLAIMS.remove(index); return;
+        }
 		for (int i = 0; i < site.blocks().length; i++) {
 			int[] b = site.blocks()[i];
 			BlockState wanted = stateFor(data, site, theme, b[3]);

@@ -34,7 +34,7 @@ import net.minecraft.world.item.component.TooltipDisplay;
  * switched off: attack fires the gun instead.
  */
 public final class JugcraftArtillery {
-	public static final double HEAVY_SPEED = 3.0;
+	public static final double HEAVY_SPEED = 5.0;
 	public static final double HEAVY_GRAVITY = 0.05;
 	public static final double HEAVY_RADIUS = 5.0;
 	public static final float HEAVY_DAMAGE = 32F;
@@ -42,7 +42,7 @@ public final class JugcraftArtillery {
 	public static final double FLAK_GRAVITY = 0.01;
 	public static final double FLAK_RADIUS = 3.0;
 	public static final float FLAK_DAMAGE = 10F;
-	public static final int FLAK_FUSE = 30;
+	public static final int FLAK_FUSE = 130;
 	public static final double FLAK_PROXIMITY = 2.5;
 	public static final int MORTAR_COOLDOWN = 100;
 	public static final int HOWITZER_COOLDOWN = 80;
@@ -58,7 +58,7 @@ public final class JugcraftArtillery {
 	public static final int HOWITZER_FUEL_PER_SECOND = 5;
 	public static final int BALLOON_HEIGHT = 32;
 	public static final double BALLOON_CLIMB = 0.08;
-	public static final int MARK_RANGE = 256;
+	public static final int MARK_RANGE = 250;
 	public static final int MARK_TTL = 6000;
 	public static final int MORTAR_HEALTH = 150;
 	public static final int HOWITZER_HEALTH = 140;

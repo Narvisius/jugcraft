@@ -19,8 +19,8 @@ import net.minecraft.world.phys.Vec3;
 
 /**
  * A raider's grenade (thrown by a grenadier or launched by a walker) or, heavy, a blimp's bomb. It bursts on whatever
- * it hits as a damage-only {@link Blast} (never breaking a block) that spares raiders. It passes through raiders
- * rather than bursting on them.
+ * it hits as a damage-only {@link Blast} (never breaking a block). Only city guards are combat targets;
+ * players, civilians, pets and other raiders neither trigger contact bursts nor receive splash damage.
  */
 public class RaiderBomb extends ThrowableItemProjectile {
 	private boolean heavy;
@@ -45,7 +45,7 @@ public class RaiderBomb extends ThrowableItemProjectile {
 
 	@Override
 	protected boolean canHitEntity(net.minecraft.world.entity.Entity entity) {
-		return !(entity instanceof Raider) && super.canHitEntity(entity);
+		return RaiderTargets.allowed(entity) && super.canHitEntity(entity);
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class RaiderBomb extends ThrowableItemProjectile {
 			center = entity.getEntity().position().add(0, entity.getEntity().getBbHeight() / 2, 0);
 		}
 		Blast.detonate(server, center, this, getOwner(), heavy ? JugcraftRaiders.BOMB_RADIUS : JugcraftRaiders.GRENADE_RADIUS,
-				heavy ? JugcraftRaiders.BOMB_DAMAGE : JugcraftRaiders.GRENADE_DAMAGE, target -> target instanceof Raider);
+				heavy ? JugcraftRaiders.BOMB_DAMAGE : JugcraftRaiders.GRENADE_DAMAGE, target -> !RaiderTargets.allowed(target));
 		discard();
 	}
 

@@ -126,7 +126,8 @@ def assets(assets_dir, write, lang):
         f"facing={facing}": {"model": rid("block/atm"), **rot} for facing, rot in rotations.items()}})
     write(assets_dir / "items" / "atm.json", {"model": {"type": "minecraft:model", "model": rid("block/atm")}})
     lang.update(town_lang.lang())
+    lang["entity.jugcraft.town_guard_mecha"] = "City Guard Walker"
 
 
 USABLE = ["#minecraft:wooden_doors", "#minecraft:fence_gates", "#minecraft:buttons", "minecraft:lever",
-          "minecraft:crafting_table", "#minecraft:beds", rid("atm")]
+          "minecraft:crafting_table", "#minecraft:beds", "minecraft:ender_chest", rid("atm")]

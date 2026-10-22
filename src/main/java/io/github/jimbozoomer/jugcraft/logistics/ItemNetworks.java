@@ -1,5 +1,7 @@
 package io.github.jimbozoomer.jugcraft.logistics;
 
+import io.github.jimbozoomer.jugcraft.finance.ClaimTransfers;
+import io.github.jimbozoomer.jugcraft.finance.LandRegistry;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,6 +54,7 @@ public final class ItemNetworks {
 			return 0;
 		}
 		BlockPos neighbor = pos.relative(side);
+            if (!ClaimTransfers.allowed(level, pos, neighbor)) return 0;
 		if (level.getBlockState(neighbor).getBlock() instanceof ItemPipeBlock) {
 			return network(level, neighbor).distribute(level, source, maxItems, exclude, pos);
 		}
@@ -65,10 +68,12 @@ public final class ItemNetworks {
 	private static Network network(Level level, BlockPos pipePos) {
 		Map<BlockPos, Network> networks = CACHE.computeIfAbsent(level, l -> new HashMap<>());
 		Network cached = networks.get(pipePos);
-		if (cached != null) {
+		if (cached != null && cached.revision == LandRegistry.revision(level)
+                && cached.pipes.stream().allMatch(level::hasChunkAt)) {
 			return cached;
 		}
 		Network network = Network.discover(level, pipePos);
+        network.revision = LandRegistry.revision(level);
 		for (BlockPos pipe : network.pipes) {
 			networks.put(pipe, network);
 		}
@@ -79,6 +84,7 @@ public final class ItemNetworks {
 		private final Set<BlockPos> pipes = new HashSet<>();
 		private final List<Endpoint> endpoints = new ArrayList<>();
 		private int turn;
+        private long revision;
 
 		static Network discover(Level level, BlockPos start) {
 			Network network = new Network();
@@ -89,6 +95,7 @@ public final class ItemNetworks {
 				BlockPos pipe = queue.poll();
 				for (Direction direction : Direction.values()) {
 					BlockPos next = pipe.relative(direction).immutable();
+                    if (!ClaimTransfers.allowed(level, pipe, next)) continue;
 					if (level.getBlockState(next).getBlock() instanceof ItemPipeBlock) {
 						if (network.pipes.add(next)) {
 							queue.add(next);
@@ -105,6 +112,7 @@ public final class ItemNetworks {
 			List<Storage<ItemVariant>> sorters = new ArrayList<>();
 			List<Storage<ItemVariant>> others = new ArrayList<>();
 			for (Endpoint endpoint : endpoints) {
+                if (!ClaimTransfers.allowed(level, pusher, endpoint.pos)) continue;
 				if (endpoint.pos.equals(pusher) || exclude.contains(endpoint.pos)) {
 					continue;
 				}

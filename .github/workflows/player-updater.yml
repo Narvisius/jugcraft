@@ -1,0 +1,36 @@
+name: JUGCRAFT Windows updater
+on:
+  pull_request:
+    paths: ['distribution/updater/**', 'scripts/package_player_update.py', 'scripts/promote_player_update.py', '.github/workflows/player-updater.yml']
+  push:
+    branches: [main]
+    paths: ['distribution/updater/**', 'scripts/package_player_update.py', 'scripts/promote_player_update.py', '.github/workflows/player-updater.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Build installer
+        shell: pwsh
+        run: ./distribution/updater/build.ps1
+      - name: Test interrupted and conflicting updates in isolated folders
+        shell: pwsh
+        run: |
+          $compiler = Join-Path $env:WINDIR 'Microsoft.NET/Framework64/v4.0.30319/csc.exe'
+          & $compiler /nologo /target:exe /main:UpdaterTests /warnaserror+ /reference:System.Windows.Forms.dll /reference:System.Drawing.dll /reference:System.Web.Extensions.dll /reference:System.Management.dll '/out:build\player-updater\UpdaterTests.exe' 'distribution\updater\JugcraftUpdater.cs' 'distribution\updater\UpdaterTests.cs'
+          if ($LASTEXITCODE -ne 0) { throw 'Test compilation failed' }
+          & ./build/player-updater/UpdaterTests.exe
+          if ($LASTEXITCODE -ne 0) { throw 'Updater tests failed' }
+      - name: Package Discord handout
+        shell: pwsh
+        run: Compress-Archive -Path build/player-updater/JUGCRAFT.exe,distribution/updater/READ-ME.txt -DestinationPath build/player-updater/JUGCRAFT-Installer.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: JUGCRAFT-Windows-updater
+          path: build/player-updater/JUGCRAFT-Installer.zip

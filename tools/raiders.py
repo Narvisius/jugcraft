@@ -1,4 +1,4 @@
-"""The raider faction (batch 57, docs/features/raiders.md): dieselpunk raiders who come for players' bases.
+"""The raider faction (batch 57, docs/features/raiders.md): dieselpunk raiders who attack the city guard.
 
 - Infantry: the Raider Grunt (a cleaver), the Raider Grenadier (lobs small grenades from range), the Raider Officer
   (rallies the raiders near them; when they fall, the rest lose heart) and, slice 10F of the guns, the Raider Gunner
@@ -6,7 +6,7 @@
 - The Raider Walker: the Armoured Walker (batch 58, the owner's model) in raider paint. It wades in and rams with its
   piston, and lobs grenades from its hull gun.
 - The Raider Blimp: a small airship that cruises over its target and drops bombs. Flak brings it down.
-- Raids: now and then a party marches on a player's base (or the town, if they are in it). It shows a bar, ends when
+- Raids: now and then a party marches on the city; player-directed raids are deferred. It shows a bar, ends when
   every raider has fallen, and the next is a little stronger; if nobody fights it, it withdraws.
 
 Every blast is a damage-only weapons/Blast: raiders never break, move or burn a block. They are hostile mobs, so sentry
@@ -78,8 +78,8 @@ LADDER_TTL = 1200
 # lasts RAID_TIMEOUT ticks, or has nobody within ABANDON_RANGE blocks for ABANDON_TICKS, withdraws.
 RAID_CHECK_TICKS = 1200
 RAID_CHANCE = 0.2
-SPAWN_MIN = 48
-SPAWN_MAX = 64
+SPAWN_MIN = 120
+SPAWN_MAX = 144
 RAID_TIMEOUT = 12000
 ABANDON_TICKS = 2400
 ABANDON_RANGE = 160
@@ -108,10 +108,10 @@ ENTITIES = {**{k: v[0] for k, v in INFANTRY.items()}, **{k: v[0] for k, v in MAC
 ITEMS = {INSIGNIA: "Raider Insignia", "raid_horn": "Raider War Horn"}
 BLOCKS = {"siege_ladder": "Siege Ladder"}
 TOOLTIPS = {INSIGNIA: "Torn from a raider officer's sleeve: proof of a raid beaten off. Three make a Raider War Horn.",
-            "raid_horn": "Blow it to call a raid on your base now, at the world's raid level. Used up when it brings one."}
+            "raid_horn": "Blow it near the city to call a guard-defense raid at the world's raid level. Used up only when raiders gather; player bases are not targeted."}
 LANG = {
     "event.jugcraft.raid": "Raid (level %s)",
-    "message.jugcraft.raid.coming": "Raiders are coming! Their engines rumble to the %s.",
+    "message.jugcraft.raid.coming": "Raiders are approaching the city from the %s! The city guard is defending.",
     "message.jugcraft.raid.won": "The raid is beaten off. The next will be stronger.",
     "message.jugcraft.raid.withdrawn": "The raiders withdraw.",
     "message.jugcraft.raid.dir.north": "north", "message.jugcraft.raid.dir.south": "south",
@@ -120,7 +120,7 @@ LANG = {
     "message.jugcraft.raid_horn.dimension": "Only the Overworld's raiders answer the horn",
     "message.jugcraft.raid_horn.peaceful": "No raiders come in peaceful",
     "message.jugcraft.raid_horn.under_way": "A raid is already under way",
-    "message.jugcraft.raid_horn.no_room": "The raiders found nowhere near to gather",
+    "message.jugcraft.raid_horn.no_room": "No loaded gathering ground near the city; the horn was kept",
     "advancements.jugcraft.raid_beaten.title": "Beat Them Back",
     "advancements.jugcraft.raid_beaten.description": "See a raid through until every raider has fallen",
 }

@@ -178,10 +178,10 @@ public class TownClientGameTests implements FabricClientGameTest {
 				}
 				var frames = level.getEntitiesOfClass(net.minecraft.world.entity.decoration.ItemFrame.class,
 						new AABB(origin.offset(88, 2, 112)).inflate(1));
-				if (frames.size() != 1 || !frames.getFirst().hasFramedMap()) throw new AssertionError("Town map frame missing");
+				if (!frames.isEmpty()) throw new AssertionError("Retired town map must stay absent");
 				var player = minecraft.getPlayerList().getPlayers().getFirst();
-				io.github.jimbozoomer.jugcraft.town.TownWayfinding.giveMap(player);
-				LOGGER.info("Wayfinding: {} waxed signs, framed map and personal map ready", TownData.get().signs.size());
+				// The owner retired town maps; signs remain.
+				LOGGER.info("Wayfinding: {} waxed signs, retired map absent", TownData.get().signs.size());
 			});
 			context.runOnClient(client -> {
 				for (var entry : TownData.get().signs) for (String line : entry.lines()) {
@@ -194,6 +194,22 @@ public class TownClientGameTests implements FabricClientGameTest {
 			fly(context, server, origin, 80, 1, 101, 90, 0);
 			singleplayer.getConnection().waitForChunksRender();
 			context.takeScreenshot("jugcraft_town_keeper_skin");
+
+            var flakSpot=TownData.get().spots.stream().filter(s -> s.role().equals("flak_guard")).findFirst().orElseThrow().pos();
+            fly(context, server, origin, flakSpot.getX()+6, flakSpot.getY()+3, flakSpot.getZ()+8, 143, 15);
+            singleplayer.getConnection().waitForChunksRender();
+            context.takeScreenshot("jugcraft_city_flak_crew");
+            server.runOnServer(minecraft -> {
+                var level=minecraft.overworld();
+                var crews=level.getEntitiesOfClass(Townsfolk.class, townBox(origin,TownData.get().size), p->p.role().equals("flak_guard"));
+                if(crews.isEmpty() || crews.stream().anyMatch(p->!(p.getVehicle() instanceof io.github.jimbozoomer.jugcraft.artillery.FlakGun)))
+                    throw new AssertionError("Every loaded tower crew must actually be seated on its gun");
+                var walkers=level.getEntitiesOfClass(io.github.jimbozoomer.jugcraft.town.TownGuardMecha.class,townBox(origin,TownData.get().size));
+                if(walkers.isEmpty())throw new AssertionError("City guard walkers missing");
+                var walker=walkers.getFirst();walker.setNoAi(true);walker.snapTo(origin.getX()+78.5,origin.getY()+1,origin.getZ()+94.5,0,0);
+            });
+            fly(context,server,origin,84,3,102,143,8);
+            singleplayer.getConnection().waitForChunksRender();context.takeScreenshot("jugcraft_city_guard_walker");
 			// Leave the exported copy at the square, ready for owner-controlled play.
 			setHudHidden(context, false);
 			fly(context, server, origin, 96, 1, 89, 180, -12);

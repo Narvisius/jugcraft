@@ -21,7 +21,7 @@ public final class AlchemyAutomationScreen extends AbstractContainerScreen<Alche
         reserve.setTooltip(Tooltip.create(ui("reserve_help")));
         active.setTooltip(Tooltip.create(ui("help")));target.setTooltip(Tooltip.create(ui("output_help")));refresh();
     }
-    private void refresh(){budget.setMessage(ui("budget",menu.budget()));reserve.setMessage(ui("reserve",menu.reserve()));active.setMessage(ui(menu.active()?"stop":"start"));active.selected=menu.active();target.visible=!menu.voiding();target.setMessage(ui("target_"+Math.max(0,menu.target())));}
+    private void refresh(){budget.setMessage(ui("budget",menu.budget()));reserve.setMessage(ui("reserve",menu.reserve()));active.setMessage(ui(menu.active()?"stop":"start"));active.selected=menu.active();target.visible=!menu.voiding();target.setMessage(ui(menu.target()<0?"target_blocked":"target_"+menu.target()));}
     @Override protected void containerTick(){super.containerTick();refresh();}
     @Override public void extractRenderState(GuiGraphicsExtractor g,int mx,int my,float delta){extractBackground(g,mx,my,delta);super.extractRenderState(g,mx,my,delta);extractTooltip(g,mx,my);}
     @Override public void extractBackground(GuiGraphicsExtractor g,int mx,int my,float delta){
@@ -36,7 +36,7 @@ public final class AlchemyAutomationScreen extends AbstractContainerScreen<Alche
         for(var slot:menu.slots)OwnerAlchemyArt.slot(g,"eternal_density",x+slot.x,y+slot.y,61,25);
         OwnerAlchemyArt.sigil(g,x+43,y+188,17,OwnerAlchemyArt.VIOLET,menu.active(),delta);
         BookArt.icon(g,menu.voiding()?"jugcraft:void_ring":"jugcraft:gem_of_eternal_density",x+35,y+180);
-        if(!menu.voiding())BookArt.icon(g,AlchemyAutomationMenu.TARGETS.get(Math.clamp(menu.target(),0,2)),x+281,y+179);
+        if(!menu.voiding()&&menu.target()>=0&&menu.target()<AlchemyAutomationMenu.TARGETS.size())BookArt.icon(g,AlchemyAutomationMenu.TARGETS.get(menu.target()),x+281,y+179);
 
     }
     @Override protected void extractLabels(GuiGraphicsExtractor g,int mx,int my){

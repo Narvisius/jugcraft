@@ -30,6 +30,7 @@ public final class JugcraftTown {
 
 	public static Block ATM;
 	public static EntityType<Townsfolk> TOWNSFOLK;
+    public static EntityType<TownGuardMecha> GUARD_MECHA;
 	public static ExtendedMenuType<ShopMenu, ShopMenu.Opening> SHOP_MENU;
 	public static ExtendedMenuType<AtmMenu, AtmMenu.Opening> ATM_MENU;
 
@@ -47,12 +48,20 @@ public final class JugcraftTown {
 		TOWNSFOLK = Registry.register(BuiltInRegistries.ENTITY_TYPE, townsfolkKey, EntityType.Builder.<Townsfolk>of(Townsfolk::new, MobCategory.MISC)
 				.sized(0.6F, 1.8F).eyeHeight(1.62F).fireImmune().clientTrackingRange(10).build(townsfolkKey));
 		FabricDefaultAttributeRegistry.register(TOWNSFOLK, Townsfolk.createAttributes());
+        ResourceKey<EntityType<?>> mechaKey = ResourceKey.create(Registries.ENTITY_TYPE, Jugcraft.id("town_guard_mecha"));
+        GUARD_MECHA = Registry.register(BuiltInRegistries.ENTITY_TYPE, mechaKey, EntityType.Builder.<TownGuardMecha>of(TownGuardMecha::new, MobCategory.MISC)
+            .sized(2.3F, 3.8F).eyeHeight(3.1F).fireImmune().noLootTable().clientTrackingRange(16).updateInterval(1).build(mechaKey));
+        FabricDefaultAttributeRegistry.register(GUARD_MECHA, Townsfolk.createAttributes()
+            .add(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH, 200)
+            .add(net.minecraft.world.entity.ai.attributes.Attributes.KNOCKBACK_RESISTANCE, 1)
+            .add(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE, 20));
 
 		SHOP_MENU = Registry.register(BuiltInRegistries.MENU, Jugcraft.id("town_shop"), new ExtendedMenuType<>(ShopMenu::new, ShopMenu.Opening.STREAM_CODEC));
 		ATM_MENU = Registry.register(BuiltInRegistries.MENU, Jugcraft.id("atm"), new ExtendedMenuType<>(AtmMenu::new, AtmMenu.Opening.STREAM_CODEC));
 
 		TownProtection.register();
 		TownBuilder.register();
+        TownUpgrades.register();
 		TownPlanner.register();
 		TownDecor.register();
 		TownsfolkCare.register();

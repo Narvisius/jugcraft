@@ -46,12 +46,12 @@ public class Landship extends Entity {
 	public static final double SPEED = 0.15;
 	public static final float TURN = 2.5F;
 	public static final int CANNON_COOLDOWN = 40;
-	public static final double SHELL_SPEED = 2.5;
+	public static final double SHELL_SPEED = 5.0;
 	public static final double SHELL_RADIUS = 3.5;
 	public static final float SHELL_DAMAGE = 22F;
 	public static final int GUN_INTERVAL = 10;
 	public static final float GUN_DAMAGE = 4F;
-	public static final int GUN_RANGE = 24;
+	public static final int GUN_RANGE = 250;
 	public static final float CRUSH_DAMAGE = 4F;
 	public static final int FUEL_TANK = 6000;
 	public static final int FUEL_PER_BUCKET = 1000;
@@ -375,6 +375,8 @@ public class Landship extends Entity {
 
 	@Override
 	public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
+        if (source.getEntity() instanceof net.minecraft.world.entity.player.Player attacker
+                && !io.github.jimbozoomer.jugcraft.finance.LandRegistry.mayBuild(attacker, level, blockPosition())) return false;
 		if (isRemoved() || !(source.getEntity() instanceof Player player) || player.getRootVehicle() == this) {
 			return false;
 		}

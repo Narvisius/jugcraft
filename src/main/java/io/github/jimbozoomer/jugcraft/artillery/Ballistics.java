@@ -5,7 +5,8 @@ import org.jspecify.annotations.Nullable;
 /**
  * Works out the elevation that lands a shell on a target, by stepping a shell's flight exactly as a thrown projectile
  * moves each tick (move by its speed, lose 1% to drag, then fall by its gravity) and searching between the gun's
- * elevation limits. High arcs (mortars) search 45 to 85 degrees, low arcs up to 45.
+ * elevation limits. High arcs (mortars) search down from the highest elevation;
+ * direct fire searches upward from the lowest, including steep shots at aircraft.
  */
 public final class Ballistics {
 	private static final double DRAG = 0.99;
@@ -21,32 +22,48 @@ public final class Ballistics {
 	 */
 	public static @Nullable Float solve(double speed, double gravity, double distance, double rise, boolean high,
 			float minPitch, float maxPitch) {
-		float lo = high ? Math.max(45.0F, minPitch) : minPitch;
-		float hi = high ? maxPitch : Math.min(45.0F, maxPitch);
-		if (lo >= hi) {
-			return null;
-		}
-		double reachLo = range(speed, gravity, lo, rise);
-		double reachHi = range(speed, gravity, hi, rise);
-		// On the low arc range grows with elevation; on the high arc it shrinks.
-		double near = Math.min(reachLo, reachHi);
-		double far = Math.max(reachLo, reachHi);
-		if (distance < near - 0.5 || distance > far + 0.5) {
-			return null;
-		}
-		for (int i = 0; i < 40; i++) {
-			float mid = (lo + hi) / 2;
-			double reach = range(speed, gravity, mid, rise);
-			boolean tooFar = reach > distance;
-			// Low arc: too far means aim lower; high arc: too far means aim higher.
-			if (tooFar != high) {
-				hi = mid;
-			} else {
-				lo = mid;
-			}
-		}
-		return (lo + hi) / 2;
-	}
+        if (distance <= 0 || speed <= 0 || gravity < 0 || !Double.isFinite(distance)
+                || !Double.isFinite(rise) || !Double.isFinite(speed) || !Double.isFinite(gravity)) return null;
+        float low = high ? Math.max(45F, minPitch) : minPitch;
+        float upper = maxPitch;
+        if (low >= upper) return null;
+        // Test height at the target's horizontal distance, not only the descending
+        // crossing of its height. The latter missed nearby elevated blimps entirely.
+        float previous = high ? upper : low;
+        double before = heightAtDistance(speed, gravity, previous, distance) - rise;
+        if (Double.isFinite(before) && Math.abs(before) < .001) return previous;
+        int steps = (int)Math.ceil((upper-low)*2);
+        for (int step=1; step<=steps; step++) {
+            float angle = high ? Math.max(low, upper-step*.5F) : Math.min(upper, low+step*.5F);
+            double after = heightAtDistance(speed, gravity, angle, distance) - rise;
+            if (Double.isFinite(after) && Math.abs(after)<.001) return angle;
+            // Only the first crossing from below the target belongs to this
+            // branch. Do not silently substitute a lob for an unavailable low shot.
+            if (before < 0 && after >= 0) {
+                float a=previous,b=angle; double fa=before;
+                for(int n=0;n<28;n++) {
+                    float mid=(a+b)*.5F;
+                    double fm=heightAtDistance(speed,gravity,mid,distance)-rise;
+                    if ((fa<0)==(fm<0)) {a=mid;fa=fm;} else b=mid;
+                }
+                float result=(a+b)*.5F;
+                if (Math.abs(heightAtDistance(speed,gravity,result,distance)-rise)<.1) return result;
+            }
+            previous=angle;before=after;
+        }
+        return null;
+    }
+
+    /** First horizontal crossing; negative infinity means drag prevents reaching the point. */
+    public static double heightAtDistance(double speed,double gravity,float pitch,double distance) {
+        double rad=Math.toRadians(pitch),vx=speed*Math.cos(rad),vy=speed*Math.sin(rad),x=0,y=0;
+        for(int tick=0;tick<MAX_TICKS;tick++) {
+            if(x+vx>=distance) return y+vy*(distance-x)/vx;
+            x+=vx;y+=vy;vx*=DRAG;vy=vy*DRAG-gravity;
+            if(vx<1e-6) break;
+        }
+        return Double.NEGATIVE_INFINITY;
+    }
 
 	/** How far a shell travels horizontally before falling back through {@code rise}; 0 if it never gets there. */
 	public static double range(double speed, double gravity, float pitch, double rise) {

@@ -179,7 +179,7 @@ public class ConcordanceBaselineGameTests {
 
 	/**
 	 * Absorption takes damage before health, and hurt immunity lets a hit within 10 ticks count only for what it
-	 * exceeds the last: a villager shielded by Dawn Aegis's effect and struck for 6, 4 and 9 at once ends with the
+	 * exceeds the last: a cow shielded by Dawn Aegis's effect and struck for 6, 4 and 9 at once ends with the
 	 * health and absorption the model computes.
 	 */
 	@GameTest(maxTicks = 20)
@@ -187,18 +187,18 @@ public class ConcordanceBaselineGameTests {
 		floor(helper);
 		ServerLevel level = helper.getLevel();
 		ServerPlayer player = master(helper, new BlockPos(1, 2, 1));
-		Mob villager = helper.spawnWithNoFreeWill(EntityTypes.VILLAGER, new BlockPos(4, 2, 4));
+		Mob cow = helper.spawnWithNoFreeWill(EntityTypes.COW, new BlockPos(4, 2, 4));
 		Mob zombie = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, new BlockPos(6, 2, 6));
-		ConcordanceEffects.Result shielded = ConcordanceEffects.apply(context(level, player, villager.position()), firstEffect("jugcraft:aegis"), villager);
-		helper.assertTrue(shielded.applied() && villager.getAbsorptionAmount() == 8.0F, "Dawn Aegis's shell absorbs 8: " + shielded + " "
-				+ villager.getAbsorptionAmount());
+		ConcordanceEffects.Result shielded = ConcordanceEffects.apply(context(level, player, cow.position()), firstEffect("jugcraft:aegis"), cow);
+		helper.assertTrue(shielded.applied() && cow.getAbsorptionAmount() == 8.0F, "Dawn Aegis's shell absorbs 8: " + shielded + " "
+				+ cow.getAbsorptionAmount());
 		for (float hit : new float[] {6.0F, 4.0F, 9.0F}) {
-			villager.hurtServer(level, level.damageSources().mobAttack(zombie), hit);
+			cow.hurtServer(level, level.damageSources().mobAttack(zombie), hit);
 		}
-		double[] model = Benchmark.afterHits(villager.getMaxHealth(), 8.0, villager.getArmorValue(),
-				(int) villager.getAttributeValue(Attributes.ARMOR_TOUGHNESS), 6.0, 4.0, 9.0);
-		helper.assertTrue(Math.abs(villager.getHealth() - model[0]) < 1.0E-3 && Math.abs(villager.getAbsorptionAmount() - model[1]) < 1.0E-3,
-				"Hits of 6, 4 and 9 leave health " + villager.getHealth() + " and absorption " + villager.getAbsorptionAmount() + "; the model says "
+		double[] model = Benchmark.afterHits(cow.getMaxHealth(), 8.0, cow.getArmorValue(),
+				(int) cow.getAttributeValue(Attributes.ARMOR_TOUGHNESS), 6.0, 4.0, 9.0);
+		helper.assertTrue(Math.abs(cow.getHealth() - model[0]) < 1.0E-3 && Math.abs(cow.getAbsorptionAmount() - model[1]) < 1.0E-3,
+				"Hits of 6, 4 and 9 leave health " + cow.getHealth() + " and absorption " + cow.getAbsorptionAmount() + "; the model says "
 						+ model[0] + " and " + model[1]);
 		helper.succeed();
 	}

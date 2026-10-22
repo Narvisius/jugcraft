@@ -20,7 +20,7 @@ import net.minecraft.world.level.Level;
 /**
  * The Raider War Horn (raider extras): made from three officers' insignia, it calls a raid on purpose. Blown in the
  * Overworld with raids on, not in peaceful and with no raid under way, it brings one at the world's raid level against
- * the blower's base (or the town, if they are near it) and is used up. Otherwise it says why not and is kept.
+ * the city guard and is used up. Otherwise it says why not and is kept.
  */
 public class RaidHornItem extends Item {
 	public RaidHornItem(Properties properties) {

@@ -173,12 +173,12 @@ public class WerewolfGameTests {
 
 		// A villager can be hunted at once, where a player who has only just appeared can't be yet. Without AI, so only
 		// its own ward check (not a target goal) changes its target.
-		Villager unwarded = helper.spawnWithNoFreeWill(villager(), new BlockPos(7, 2, 5));
-		Villager sprigged = helper.spawnWithNoFreeWill(villager(), new BlockPos(1, 2, 3));
+		Mob unwarded = helper.spawnWithNoFreeWill(EntityTypes.COW, new BlockPos(7, 2, 5));
+		Mob sprigged = helper.spawnWithNoFreeWill(EntityTypes.COW, new BlockPos(1, 2, 3));
 		sprigged.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Werewolves.wolfsbane()));
 		Werewolf werewolf = werewolf(helper, new BlockPos(3, 2, 3));
 		werewolf.setTarget(unwarded);
-		helper.assertTrue(werewolf.getTarget() == unwarded, "It hunts a villager");
+		helper.assertTrue(werewolf.getTarget() == unwarded, "It can hunt unwarded livestock");
 		helper.assertTrue(!werewolf.checkWard(level) && werewolf.getTarget() == unwarded, "It keeps hunting someone unwarded");
 		werewolf.setTarget(sprigged);
 		helper.assertTrue(werewolf.checkWard(level), "Its ward check finds wolfsbane on its target");
@@ -279,7 +279,7 @@ public class WerewolfGameTests {
 	@GameTest
 	public void brownWerewolvesFleeWhenHurt(GameTestHelper helper) {
 		floor(helper);
-		Villager villager = helper.spawnWithNoFreeWill(villager(), new BlockPos(6, 2, 6));
+		Mob villager = helper.spawnWithNoFreeWill(EntityTypes.COW, new BlockPos(6, 2, 6));
 		Werewolf brown = werewolf(helper, new BlockPos(2, 2, 2), Werewolf.Kind.BROWN);
 		brown.setTarget(villager);
 		helper.assertTrue(!brown.checkFlight() && brown.getTarget() == villager, "Unhurt, it hunts on");
@@ -337,7 +337,7 @@ public class WerewolfGameTests {
 	public void shadowWerewolvesStepOutBehindTheirPrey(GameTestHelper helper) {
 		ServerLevel level = helper.getLevel();
 		floor(helper);
-		Villager prey = helper.spawnWithNoFreeWill(villager(), new BlockPos(6, 2, 6));
+		Mob prey = helper.spawnWithNoFreeWill(EntityTypes.COW, new BlockPos(6, 2, 6));
 		// Facing south (+z), so behind it is north.
 		prey.setYRot(0.0F);
 		prey.setYHeadRot(0.0F);
@@ -363,7 +363,7 @@ public class WerewolfGameTests {
 		ServerLevel level = helper.getLevel();
 		floor(helper);
 		ServerPlayer near = player(helper, new BlockPos(1, 2, 6), ItemStack.EMPTY);
-		Villager prey = helper.spawnWithNoFreeWill(villager(), new BlockPos(6, 2, 6));
+		Mob prey = helper.spawnWithNoFreeWill(EntityTypes.COW, new BlockPos(6, 2, 6));
 		Werewolf shadow = werewolf(helper, new BlockPos(2, 2, 2), Werewolf.Kind.SHADOW);
 		Werewolf brown = werewolf(helper, new BlockPos(5, 2, 2), Werewolf.Kind.BROWN);
 		shadow.setTarget(prey);
@@ -383,7 +383,7 @@ public class WerewolfGameTests {
 	public void onlyPlantedWolfsbaneWardsShadowWerewolves(GameTestHelper helper) {
 		ServerLevel level = helper.getLevel();
 		floor(helper);
-		Villager sprigged = helper.spawnWithNoFreeWill(villager(), new BlockPos(1, 2, 6));
+		Mob sprigged = helper.spawnWithNoFreeWill(EntityTypes.COW, new BlockPos(1, 2, 6));
 		sprigged.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Werewolves.wolfsbane()));
 		Werewolf brown = werewolf(helper, new BlockPos(1, 2, 1), Werewolf.Kind.BROWN);
 		brown.setTarget(sprigged);

@@ -49,13 +49,13 @@ LINES = {
         "december": ["That tree took me all morning. Worth it.", "Red and white awnings, like peppermint.", "Presents under the tree are just wool. Shh."],
     },
     "priest": {
-        "spring": ["Spring brings new life. Welcome to the church.", "The bells ring for every season.", "Peace be with you, traveller."],
-        "summer": ["The rose window shines brightest in summer.", "Rest awhile in the cool of the nave.", "Peace be with you."],
-        "autumn": ["We give thanks for the harvest.", "The days grow short; the candles burn longer.", "Peace be with you."],
-        "winter": ["Even in winter, the doors are open.", "Warm yourself by the candles.", "Peace be with you."],
-        "halloween": ["Fear not the lanterns. They are only pumpkins.", "All souls are welcome here.", "Peace be with you, and with your costume."],
-        "harvest": ["Share what you have; that is the feast.", "We give thanks together.", "Peace be with you."],
-        "december": ["The longest nights bring the brightest lights.", "Goodwill to all who pass the gates.", "Peace be with you."],
+        "spring": ["Welcome to the Church of Notch, the Maker of our block-built world.", "The bells ring for every season.", "Peace be with you, traveller."],
+        "summer": ["We honour Notch by creating, exploring and sharing what we build.", "Rest awhile in the cool of the nave.", "Peace be with you."],
+        "autumn": ["We thank Notch for the earth and this harvest.", "The days grow short; the candles burn longer.", "Peace be with you."],
+        "winter": ["The Church of Notch keeps its doors open even in winter.", "Warm yourself by the candles.", "Peace be with you."],
+        "halloween": ["Fear not the lanterns. They are only pumpkins.", "All travellers are welcome in the Church of Notch.", "Peace be with you, and with your costume."],
+        "harvest": ["Share what you have; that is the feast.", "Together we give thanks to Notch, the Maker.", "Peace be with you."],
+        "december": ["The longest nights bring the brightest lights.", "May the blessing of Notch follow all who pass these gates.", "Peace be with you."],
     },
     "mayor": {
         "spring": ["Welcome to our town! Mind the flower boxes.", "The town council approves of spring.", "Our walls keep the town as it ever was."],
@@ -127,7 +127,7 @@ def lang():
                 out[f"message.jugcraft.townsfolk.{role}.{theme}.{i}"] = line
     out.update({
         "filled_map.jugcraft.town": "Town Map - 1 Church / 2 Bank / 3 Hall / 4 Store",
-        "message.jugcraft.town.map_hint": "Need directions? Crouch and use a guard for a free town map. The directory is south-west of the square.",
+        "message.jugcraft.town.map_hint": "The Church of Notch is north of the square; the bank is west and the town hall east. Look for the bright shop signs.",
         "message.jugcraft.town.map_given": "Here is your town map. North is up: 1 Church, 2 Bank, 3 Town Hall, 4 General Store. The market surrounds the square.",
         "message.jugcraft.town.have_map": "You already carry our town map. North is up: 1 Church, 2 Bank, 3 Hall, 4 Store.",
         "message.jugcraft.town.map_full": "Make one empty inventory slot and ask me again for a free map.",

@@ -2,6 +2,7 @@
 
 import copy
 import hashlib
+import io
 import json
 from pathlib import Path
 import sys
@@ -80,6 +81,23 @@ class PackagingTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "needs missing project"):
             packaging.validate_lock(self.lock)
 
+    def test_browser_and_quiet_map_are_client_only_pack_defaults(self):
+        repository = Path(__file__).resolve().parents[2]
+        pack = packaging.build_pack(self.lock, self.jar(), self.root / "browser", root=repository)
+        with zipfile.ZipFile(pack) as archive:
+            self.assertEqual(json.loads(archive.read("client-overrides/diorama/config.json")),
+                             {"minimap": False})
+            self.assertNotIn("overrides/diorama/config.json", archive.namelist())
+            library = next(x for x in self.lock["dependencies"] if x["key"] == "resourcify")
+            entry = next(x for x in json.loads(archive.read("modrinth.index.json"))["files"]
+                         if x["path"] == "mods/" + library["filename"])
+            self.assertEqual(entry["env"], {"client": "required", "server": "unsupported"})
+            self.assertFalse(library["requiredByJugcraft"])
+            self.assertEqual(entry["downloads"], library["downloads"])
+        self.lock["dependencies"] = [x for x in self.lock["dependencies"] if x["key"] != "fabric-language-kotlin"]
+        with self.assertRaisesRegex(ValueError, "needs missing project"):
+            packaging.validate_lock(self.lock)
+
     def test_wrong_exact_dependency_is_rejected(self):
         sodium = next(x for x in self.lock["dependencies"] if x["key"] == "sodium")
         sodium["modrinthVersion"] = "different"
@@ -109,6 +127,23 @@ class PackagingTests(unittest.TestCase):
     def test_nested_third_party_jars_cannot_be_packaged(self):
         with self.assertRaisesRegex(ValueError, "must not bundle"):
             packaging.build_pack(self.lock, self.jar(nested=True), self.root / "output", root=self.root)
+
+    def test_game_updater_baseline_matches_initial_pack_without_circular_hash(self):
+        jar = self.jar()
+        helper = io.BytesIO()
+        with zipfile.ZipFile(helper, 'w') as z:
+            z.writestr('META-INF/MANIFEST.MF', 'Main-Class: io.github.jimbozoomer.jugcraft.update.UpdateApplier\n')
+            z.writestr('io/github/jimbozoomer/jugcraft/update/UpdateApplier.class', b'fixture')
+        with zipfile.ZipFile(jar, 'a') as z:
+            z.writestr('jugcraft/updater-helper.jar', helper.getvalue())
+        result = packaging.build_pack(self.lock, jar, self.root / 'game-update', root=self.root)
+        with zipfile.ZipFile(result) as z:
+            baseline = json.loads(z.read('client-overrides/JUGCRAFT-UPDATE.json'))
+            self.assertEqual(baseline['releaseVersion'], '0.1.0-test')
+            own = next(f for f in baseline['files'] if f['path'] == 'mods/jugcraft.jar')
+            self.assertEqual(own['sha512'], hashlib.sha512(jar.read_bytes()).hexdigest())
+            self.assertEqual(len(baseline['files']), len(self.lock['dependencies']) + 1)
+            self.assertNotIn('pack', baseline)
 
     def test_jade_remains_optional_in_standalone_publication(self):
         jade = next(x for x in self.lock["dependencies"] if x["key"] == "jade")

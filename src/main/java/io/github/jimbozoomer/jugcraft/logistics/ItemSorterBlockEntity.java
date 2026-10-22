@@ -59,6 +59,7 @@ public class ItemSorterBlockEntity extends BaseContainerBlockEntity implements W
 				return 0;
 			}
 			Direction facing = getBlockState().getValue(ItemSorterBlock.FACING);
+			if (!io.github.jimbozoomer.jugcraft.finance.ClaimTransfers.allowed(level, worldPosition, worldPosition.relative(facing))) return 0;
 			Storage<ItemVariant> target = ItemStorage.SIDED.find(level, worldPosition.relative(facing), facing.getOpposite());
 			return target == null ? 0 : target.insert(resource, maxAmount, transaction);
 		}

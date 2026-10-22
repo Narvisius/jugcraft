@@ -28,7 +28,7 @@ from zeppelin import tiled_quads
 MOD = "jugcraft"
 
 # Shells: muzzle speed (blocks a tick), gravity (blocks a tick, a tick), blast reach and centre damage.
-HEAVY_SPEED = 3.0
+HEAVY_SPEED = 5.0
 HEAVY_GRAVITY = 0.05
 HEAVY_RADIUS = 5.0
 HEAVY_DAMAGE = 32
@@ -36,7 +36,7 @@ FLAK_SPEED = 4.0
 FLAK_GRAVITY = 0.01
 FLAK_RADIUS = 3.0
 FLAK_DAMAGE = 10
-FLAK_FUSE = 30
+FLAK_FUSE = 130
 # How close a flak shell must pass to something flying to burst, in blocks.
 FLAK_PROXIMITY = 2.5
 # Ticks between shots.
@@ -59,7 +59,7 @@ HOWITZER_FUEL_PER_SECOND = 5
 BALLOON_HEIGHT = 32
 BALLOON_CLIMB = 0.08
 # The range finder's reach and how long a mark lasts (ticks).
-MARK_RANGE = 256
+MARK_RANGE = 250
 MARK_TTL = 6000
 HEALTH = {"siege_mortar": 150, "self_propelled_howitzer": 140, "flak_gun": 60, "observation_balloon": 30}
 
@@ -82,7 +82,7 @@ TOOLTIPS = {
                            "climb out and it winches down.",
     "heavy_shell": "Ammunition for the Siege Mortar and the Self-Propelled Howitzer.",
     "flak_shell": "Ammunition for the Flak Gun.",
-    "range_finder": "Use to mark the block you look at, up to 256 blocks away, as a target for your guns and any "
+    "range_finder": "Use to mark the block you look at, up to 250 blocks away, as a target for your guns and any "
                     "gunner nearby. Sneak and use to clear your mark.",
 }
 ENTITIES = ["siege_mortar", "self_propelled_howitzer", "flak_gun", "observation_balloon", "heavy_shell", "flak_shell"]
@@ -101,7 +101,7 @@ HOWITZER_GUN = (6, 32, 4)
 FLAK_HEAD = (0, 18, 0)
 # Each gun's elevation limits in degrees (artillery/SiegeMortar, SelfPropelledHowitzer and FlakGun) and how far its
 # barrel kicks back when it fires, in pixels (client/ArtilleryRenderers): tools/gun_poses.py poses the guns over these.
-MORTAR_PITCH, HOWITZER_PITCH, FLAK_PITCH = (45, 85), (-5, 70), (-5, 85)
+MORTAR_PITCH, HOWITZER_PITCH, FLAK_PITCH = (45, 89), (-5, 70), (-5, 85)
 MORTAR_RECOIL, HOWITZER_RECOIL, FLAK_RECOIL = 6, 8, 2
 # The howitzer's track path round each track unit, (z, y) in pixels, and the units' x span.
 HOWITZER_TRACK = [(-38, 1), (36, 1), (44, 8), (44, 16), (36, 23), (-38, 23), (-46, 16), (-46, 8)]

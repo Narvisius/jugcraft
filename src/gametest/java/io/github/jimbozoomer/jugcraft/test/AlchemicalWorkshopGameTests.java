@@ -32,7 +32,7 @@ public class AlchemicalWorkshopGameTests {
         h.setBlock(pos,AlchemicalWorkshops.BLOCKS.get(name));var be=h.getBlockEntity(pos,AlchemicalWorkshopBlockEntity.class);be.placedBy(p);return be;
     }
     private static AlchemicalWorkshopBlockEntity condenser(GameTestHelper h,ServerPlayer p,int tier) {
-        var be=place(h,p,"condenser_mk"+tier,new BlockPos(2,2,2));be.setItem(1,new ItemStack(Items.IRON_INGOT));return be;
+        var be=place(h,p,"condenser_mk"+tier,new BlockPos(2,2,2));be.setItem(1,new ItemStack(Items.OAK_LOG));return be;
     }
     private static void press(AlchemicalWorkshopMenu m,ServerPlayer p,int id) {RateGate.forget(p.getUUID());m.clickMenuButton(p,id);}
     private static int outputs(AlchemicalWorkshopBlockEntity be) {int n=0;for(int i=5;i<11;i++)n+=be.getItem(i).getCount();return n;}
@@ -40,8 +40,22 @@ public class AlchemicalWorkshopGameTests {
 
     @GameTest(maxTicks=20) public void condenserUsesExactTabletPriceAndKeepsSample(GameTestHelper h) {
         var p=player(h);var be=condenser(h,p,1);be.setEssence(10000);long cost=be.cost();be.pulse(p);
-        h.assertTrue(outputs(be)==1&&be.getItem(5).is(Items.IRON_INGOT)&&be.getItem(1).getCount()==1,"One ordinary output; real sample retained");
+        h.assertTrue(outputs(be)==1&&be.getItem(5).is(Items.OAK_LOG)&&be.getItem(1).getCount()==1,"One ordinary output; real sample retained");
         h.assertTrue(be.essence()==10000-cost&&cost==Assay.form(AlchemicalWorkshopBlockEntity.material(be.getItem(1)),1),"Identical conservative price to tablet");h.succeed();
+    }
+    @GameTest(maxTicks=20) public void savedValuableTargetPausesWithoutConsumingAndCanBeReplaced(GameTestHelper h) {
+        var p=player(h);var be=condenser(h,p,1);
+        be.setItem(1,new ItemStack(Items.DIAMOND));be.setItem(0,star(4000));be.setItem(2,new ItemStack(Items.COAL,12));
+        be.setItem(5,new ItemStack(Items.DIAMOND,3));be.setEssence(9000);
+        var saved=be.saveWithoutMetadata(h.getLevel().registryAccess());
+        be.loadWithComponents(TagValueInput.create(ProblemReporter.DISCARDING,h.getLevel().registryAccess(),saved));be.pulse(p);
+        h.assertTrue(be.status()==AlchemicalWorkshopBlockEntity.INVALID_SAMPLE&&be.essence()==9000&&KleinStars.stored(be.getItem(0))==4000&&be.getItem(2).getCount()==12,"Saved valuable sample pauses before any intake or payment");
+        h.assertTrue(be.getItem(1).is(Items.DIAMOND)&&be.getItem(5).getCount()==3&&be.acceptEssence(p,100)==0,"Sample and existing output retained; relay intake blocked");
+        var menu=new AlchemicalWorkshopMenu(1,p.getInventory(),be);
+        h.assertTrue(!menu.getSlot(1).mayPlace(new ItemStack(Items.DIAMOND))&&menu.getSlot(1).mayPickup(p),"Cannot insert valuables but can recover old sample");
+        h.assertTrue(!be.canPlaceItemThroughFace(1,new ItemStack(Items.DIAMOND),Direction.UP)&&be.canTakeItemThroughFace(5,be.getItem(5),Direction.DOWN),"Automation cannot replace target; existing outputs remain recoverable");
+        be.removeItem(1,1);be.setItem(1,new ItemStack(Items.OAK_LOG));be.pulse(p);
+        h.assertTrue(be.status()==AlchemicalWorkshopBlockEntity.FORMING&&be.getItem(6).is(Items.OAK_LOG)&&be.getItem(5).getCount()==3,"Changing to approved target resumes without deleting old products");menu.removed(p);h.succeed();
     }
     @GameTest(maxTicks=20) public void secondTierFormsAtMostEightPerPulse(GameTestHelper h) {
         var p=player(h);var be=condenser(h,p,2);be.setEssence(100000);long cost=be.cost();be.pulse(p);
@@ -60,7 +74,7 @@ public class AlchemicalWorkshopGameTests {
     @GameTest(maxTicks=20) public void missingAndModifiedTargetsRefuseIntake(GameTestHelper h) {
         var p=player(h);var be=condenser(h,p,1);be.setItem(0,star(4000));be.setItem(2,new ItemStack(Items.COAL,12));be.setItem(1,ItemStack.EMPTY);be.pulse(p);
         h.assertTrue(be.status()==AlchemicalWorkshopBlockEntity.NO_SAMPLE&&be.essence()==0,"No target waits");
-        var named=new ItemStack(Items.IRON_INGOT);named.set(DataComponents.CUSTOM_NAME,Component.literal("Keep me"));be.setItem(1,named);be.pulse(p);
+        var named=new ItemStack(Items.OAK_LOG);named.set(DataComponents.CUSTOM_NAME,Component.literal("Keep me"));be.setItem(1,named);be.pulse(p);
         h.assertTrue(be.status()==AlchemicalWorkshopBlockEntity.INVALID_SAMPLE&&be.essence()==0&&KleinStars.stored(be.getItem(0))==4000&&be.getItem(2).getCount()==12,"Modified target preserved, no intake");h.succeed();
     }
     @GameTest(maxTicks=20) public void changedItemsCannotBeDissolvedEvenIfInsertedByCommand(GameTestHelper h) {
@@ -70,7 +84,7 @@ public class AlchemicalWorkshopGameTests {
     @GameTest(maxTicks=20) public void lowBalanceAndAlmostFullOutputNeverOverspend(GameTestHelper h) {
         var p=player(h);var be=condenser(h,p,2);be.setEssence((int)be.cost()-1);be.pulse(p);
         h.assertTrue(outputs(be)==0&&be.essence()==be.cost()-1,"Wait for exact price");
-        for(int i=5;i<11;i++)be.setItem(i,new ItemStack(Items.IRON_INGOT,64));be.getItem(5).setCount(63);be.setEssence(10000);be.pulse(p);
+        for(int i=5;i<11;i++)be.setItem(i,new ItemStack(Items.OAK_LOG,64));be.getItem(5).setCount(63);be.setEssence(10000);be.pulse(p);
         h.assertTrue(outputs(be)==384&&be.essence()==10000-be.cost(),"Only one remaining slot paid; seven impossible outputs not charged");h.succeed();
     }
     @GameTest(maxTicks=20) public void condenserStarDrawConservesAndRespectsItsRate(GameTestHelper h) {
@@ -96,10 +110,10 @@ public class AlchemicalWorkshopGameTests {
         be.pulse(p);h.assertTrue(outputs(be)==0,"Manual pause");
         be.setPaused(false);h.setBlock(new BlockPos(3,2,2),Blocks.REDSTONE_BLOCK);be.pulse(p);h.assertTrue(outputs(be)==0,"Redstone pause");h.setBlock(new BlockPos(3,2,2),Blocks.AIR);
         be.pulse(null);h.assertTrue(outputs(be)==1&&be.status()==AlchemicalWorkshopBlockEntity.FORMING,"Authorized factory resolves its owner and processes");
-        boolean before=Assaying.enabled();try{JugcraftConfig.setFeatureEnabled(JugcraftConcordance.FEATURE,false);be.pulse(p);h.assertTrue(outputs(be)==1&&be.essence()==9744,"Disabled retains buffer");}finally{JugcraftConfig.setFeatureEnabled(JugcraftConcordance.FEATURE,before);}h.succeed();
+        boolean before=Assaying.enabled();try{JugcraftConfig.setFeatureEnabled(JugcraftConcordance.FEATURE,false);be.pulse(p);h.assertTrue(outputs(be)==1&&be.essence()==9968,"Disabled retains buffer");}finally{JugcraftConfig.setFeatureEnabled(JugcraftConcordance.FEATURE,before);}h.succeed();
     }
     @GameTest(maxTicks=20) public void freshOwnersCanProduceButClaimsStillGuardMenus(GameTestHelper h) {
-        var unknown=h.makeMockServerPlayerInLevel();unknown.setGameMode(GameType.SURVIVAL);var be=condenser(h,unknown,1);be.setEssence(10000);be.pulse(unknown);h.assertTrue(outputs(be)==1&&be.essence()==9744,"Fresh owner produces without research and pays the exact iron price");
+        var unknown=h.makeMockServerPlayerInLevel();unknown.setGameMode(GameType.SURVIVAL);var be=condenser(h,unknown,1);be.setEssence(10000);be.pulse(unknown);h.assertTrue(outputs(be)==1&&be.essence()==9968,"Fresh owner produces without research and pays the exact log price");
         var p=player(h);be.placedBy(p);try(var claims=TestClaims.open()){claims.block(be.getBlockPos(),UUID.randomUUID());be.pulse(p);h.assertTrue(outputs(be)==1&&!new AlchemicalWorkshopMenu(1,p.getInventory(),be).stillValid(p),"Claims stop production and opening");}h.succeed();
     }
     @GameTest(maxTicks=20) public void menuTransfersClampsAndRejectsForeignOrDistantClicks(GameTestHelper h) {
@@ -112,7 +126,7 @@ public class AlchemicalWorkshopGameTests {
     @GameTest(maxTicks=20) public void saveLoadRetainsInventoryOwnerBufferAndPause(GameTestHelper h) {
         var p=player(h);var be=condenser(h,p,2);be.setEssence(123456);be.setPaused(true);be.setItem(0,star(8765));be.setItem(2,new ItemStack(Items.COAL,23));
         var saved=be.saveWithoutMetadata(h.getLevel().registryAccess());var copy=new AlchemicalWorkshopBlockEntity(be.getBlockPos(),be.getBlockState());copy.loadWithComponents(TagValueInput.create(ProblemReporter.DISCARDING,h.getLevel().registryAccess(),saved));
-        h.assertTrue(copy.essence()==123456&&copy.paused()&&p.getUUID().equals(copy.owner())&&copy.getItem(2).getCount()==23&&KleinStars.stored(copy.getItem(0))==8765&&copy.getItem(1).is(Items.IRON_INGOT),"Actual block save round trip");h.succeed();
+        h.assertTrue(copy.essence()==123456&&copy.paused()&&p.getUUID().equals(copy.owner())&&copy.getItem(2).getCount()==23&&KleinStars.stored(copy.getItem(0))==8765&&copy.getItem(1).is(Items.OAK_LOG),"Actual block save round trip");h.succeed();
     }
     @GameTest(maxTicks=20) public void lootAndSmithingKeepStoredEssence(GameTestHelper h) {
         var p=player(h);var be=condenser(h,p,1);be.setEssence(45678);
@@ -133,9 +147,9 @@ public class AlchemicalWorkshopGameTests {
         for(var block:AlchemicalWorkshops.BLOCKS.values())h.assertTrue(Assaying.eligibility(new ItemStack(block)).isEmpty(),"Default empty workshop can be exchanged");h.succeed();
     }
     @GameTest(maxTicks=20) public void unsidedAutomationCannotStealStarOrSample(GameTestHelper h) {
-        var p=player(h);var be=condenser(h,p,1);be.setItem(0,star(5000));be.setItem(5,new ItemStack(Items.IRON_INGOT,8));
+        var p=player(h);var be=condenser(h,p,1);be.setItem(0,star(5000));be.setItem(5,new ItemStack(Items.OAK_LOG,8));
         var storage=ItemStorage.SIDED.find(h.getLevel(),be.getBlockPos(),null);
-        try(var t=Transaction.openOuter()){h.assertTrue(storage.extract(ItemVariant.of(be.getItem(0)),1,t)==0&&storage.extract(ItemVariant.of(Items.IRON_INGOT),64,t)==0,"Unsided access is deliberately closed");t.commit();}
+        try(var t=Transaction.openOuter()){h.assertTrue(storage.extract(ItemVariant.of(be.getItem(0)),1,t)==0&&storage.extract(ItemVariant.of(Items.OAK_LOG),64,t)==0,"Unsided access is deliberately closed");t.commit();}
         h.assertTrue(Arrays.equals(be.getSlotsForFace(Direction.DOWN),new int[]{5,6,7,8,9,10})&&Arrays.equals(be.getSlotsForFace(Direction.UP),new int[]{2,3,4}),"Only explicit input/output faces exposed");h.succeed();
     }
     @GameTest(maxTicks=20) public void clientPredictionDoesNotRequireTheServerOnlyCatalogue(GameTestHelper h) {
@@ -143,10 +157,10 @@ public class AlchemicalWorkshopGameTests {
         var mirror=new AlchemicalWorkshopMenu(1,p.getInventory(),false);var rules=ConcordanceData.rules();
         try {
             ConcordanceData.replace(io.github.jimbozoomer.jugcraft.concordance.rules.ConcordanceRules.EMPTY);
-            h.assertTrue(mirror.getSlot(1).mayPlace(new ItemStack(Items.IRON_INGOT))&&mirror.getSlot(2).mayPlace(new ItemStack(Items.COAL)),"Dedicated-client prediction has no server catalogue dependency");
-            h.assertTrue(real.getSlot(1).mayPlace(new ItemStack(Items.IRON_INGOT))&&real.getSlot(2).mayPlace(new ItemStack(Items.COAL)),"Universal values do not disappear with the historical narrow research catalogue");
+            h.assertTrue(mirror.getSlot(1).mayPlace(new ItemStack(Items.OAK_LOG))&&mirror.getSlot(2).mayPlace(new ItemStack(Items.COAL)),"Dedicated-client prediction has no server catalogue dependency");
+            h.assertTrue(real.getSlot(1).mayPlace(new ItemStack(Items.OAK_LOG))&&real.getSlot(2).mayPlace(new ItemStack(Items.COAL)),"Universal values do not disappear with the historical narrow research catalogue");
             h.assertTrue(!mirror.clickMenuButton(p,1),"A client mirror is never a server-authorized transaction");
         } finally {ConcordanceData.replace(rules);}
-        h.assertTrue(real.getSlot(1).mayPlace(new ItemStack(Items.IRON_INGOT)),"Restored server catalogue accepts valid target");h.succeed();
+        h.assertTrue(real.getSlot(1).mayPlace(new ItemStack(Items.OAK_LOG)),"Restored server catalogue accepts valid target");h.succeed();
     }
 }

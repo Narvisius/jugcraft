@@ -1,5 +1,7 @@
 package io.github.jimbozoomer.jugcraft.energy;
 
+import io.github.jimbozoomer.jugcraft.finance.ClaimTransfers;
+import io.github.jimbozoomer.jugcraft.finance.LandRegistry;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,6 +47,7 @@ public final class EnergyNetworks {
 				break;
 			}
 			BlockPos neighbor = pos.relative(side);
+            if (!ClaimTransfers.allowed(level, pos, neighbor)) continue;
 			if (level.getBlockState(neighbor).getBlock() instanceof CableBlock cable) {
 				Network network = network(level, neighbor);
 				moved += network.distribute(level, pos, source, Math.min(budget, network.rate));
@@ -97,10 +100,11 @@ public final class EnergyNetworks {
 	private static Network network(Level level, BlockPos cablePos) {
 		Map<BlockPos, Network> networks = CACHE.computeIfAbsent(level, l -> new HashMap<>());
 		Network cached = networks.get(cablePos);
-		if (cached != null) {
+		if (cached != null && cached.revision == LandRegistry.revision(level) && cached.cables.stream().allMatch(level::hasChunkAt)) {
 			return cached;
 		}
 		Network network = Network.discover(level, cablePos);
+        network.revision = LandRegistry.revision(level);
 		for (BlockPos cable : network.cables) {
 			networks.put(cable, network);
 		}
@@ -113,6 +117,7 @@ public final class EnergyNetworks {
 		private final List<Endpoint> endpoints = new ArrayList<>();
 		/** JE per push: the slowest cable tier in the network sets it. */
 		private long rate = Long.MAX_VALUE;
+        private long revision;
 
 		static Network discover(Level level, BlockPos start) {
 			Network network = new Network();
@@ -127,6 +132,7 @@ public final class EnergyNetworks {
 				}
 				for (Direction direction : Direction.values()) {
 					BlockPos next = cable.relative(direction).immutable();
+                    if (!ClaimTransfers.allowed(level, cable, next)) continue;
 					if (level.getBlockState(next).getBlock() instanceof CableBlock) {
 						if (network.cables.add(next)) {
 							queue.add(next);
@@ -144,6 +150,7 @@ public final class EnergyNetworks {
 			List<EnergyStorage> receivers = new ArrayList<>();
 			Set<Object> identities = java.util.Collections.newSetFromMap(new java.util.IdentityHashMap<>());
 			for (Endpoint endpoint : endpoints) {
+                if (!ClaimTransfers.allowed(level, sourcePos, endpoint.pos)) continue;
 				if (endpoint.pos.equals(sourcePos)) {
 					continue;
 				}

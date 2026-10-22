@@ -143,7 +143,8 @@ public class ConveyorBlockEntity extends BlockEntity implements KineticConsumer 
 			for (Direction direction : Direction.Plane.HORIZONTAL) {
 				for (int dy = -1; dy <= 1; dy++) {
 					BlockPos next = pos.relative(direction).above(dy);
-					if (seen.contains(next) || !(level.getBlockEntity(next) instanceof ConveyorBlockEntity other)) {
+					if (seen.contains(next) || !io.github.jimbozoomer.jugcraft.finance.ClaimTransfers.allowed(level, pos, next)
+                            || !(level.getBlockEntity(next) instanceof ConveyorBlockEntity other)) {
 						continue;
 					}
 					// Joined if either feeds the other.
@@ -275,7 +276,7 @@ public class ConveyorBlockEntity extends BlockEntity implements KineticConsumer 
 		}
 		// Nothing takes it: off the front end, if nothing is in the way.
 		BlockPos ahead = outputPos();
-		if (level.getBlockState(ahead).getCollisionShape(level, ahead).isEmpty()) {
+		if (io.github.jimbozoomer.jugcraft.finance.ClaimTransfers.allowed(level, pos, ahead) && level.getBlockState(ahead).getCollisionShape(level, ahead).isEmpty()) {
 			Vec3 at = Vec3.atCenterOf(base).add(facing.getStepX() * 0.6, -0.1, facing.getStepZ() * 0.6);
 			ItemEntity dropped = new ItemEntity(level, at.x, at.y, at.z, stack,
 					facing.getStepX() * SPEED, 0, facing.getStepZ() * SPEED);
@@ -287,7 +288,8 @@ public class ConveyorBlockEntity extends BlockEntity implements KineticConsumer 
 	}
 
 	/** Puts as much of the stack as fits into the block at {@code target}, entered from its {@code travel.getOpposite()} side. */
-	private static ItemStack offer(ServerLevel level, BlockPos target, Direction travel, ItemStack stack) {
+	private ItemStack offer(ServerLevel level, BlockPos target, Direction travel, ItemStack stack) {
+		if (!io.github.jimbozoomer.jugcraft.finance.ClaimTransfers.allowed(level, worldPosition, target)) return stack;
 		if (level.getBlockEntity(target) instanceof ConveyorBlockEntity next) {
 			Direction nextFacing = next.facing();
 			if (nextFacing == travel.getOpposite()) {
@@ -352,6 +354,7 @@ public class ConveyorBlockEntity extends BlockEntity implements KineticConsumer 
 		Direction facing = facing();
 		AABB area = new AABB(pos.getX(), pos.getY() + 0.2, pos.getZ(), pos.getX() + 1, pos.getY() + 0.8, pos.getZ() + 1);
 		for (ItemEntity item : level.getEntitiesOfClass(ItemEntity.class, area, ItemEntity::isAlive)) {
+            if (!io.github.jimbozoomer.jugcraft.finance.ClaimTransfers.allowed(level, pos, item.blockPosition())) continue;
 			Vec3 offset = item.position().subtract(Vec3.atCenterOf(pos));
 			float progress = (float) Math.max(0, Math.min(0.9, 0.5 + offset.x * facing.getStepX() + offset.z * facing.getStepZ()));
 			if (roomAt(progress)) {

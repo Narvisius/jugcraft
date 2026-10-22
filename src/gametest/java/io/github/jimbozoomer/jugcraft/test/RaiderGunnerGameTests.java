@@ -142,7 +142,14 @@ public class RaiderGunnerGameTests {
 
 	/** A still pig that takes many hits. */
 	private static Mob sturdyPig(GameTestHelper helper, BlockPos pos) {
-		Mob pig = GunsGameTests.pig(helper, pos);
+		Mob pig = new io.github.jimbozoomer.jugcraft.town.Townsfolk(io.github.jimbozoomer.jugcraft.town.JugcraftTown.TOWNSFOLK, helper.getLevel()) {
+            // Damageable training fixture isolates bullet damage/reload from the real guard's immunity.
+            @Override public boolean hurtServer(ServerLevel level, net.minecraft.world.damagesource.DamageSource source, float amount) {
+                setHealth(getHealth() - amount); return true;
+            }
+        };
+        ((io.github.jimbozoomer.jugcraft.town.Townsfolk)pig).setUp(new io.github.jimbozoomer.jugcraft.town.TownData.Spot(-1, "guard", null, "Training target", "guard_blue", BlockPos.ZERO), helper.absolutePos(pos));
+        pig.setNoAi(true); pig.snapTo(helper.absoluteVec(net.minecraft.world.phys.Vec3.atBottomCenterOf(pos))); helper.getLevel().addFreshEntity(pig);
 		pig.getAttribute(Attributes.MAX_HEALTH).setBaseValue(1000.0);
 		pig.setHealth(1000.0F);
 		return pig;

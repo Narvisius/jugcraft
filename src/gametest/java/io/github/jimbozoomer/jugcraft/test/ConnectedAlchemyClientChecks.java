@@ -22,24 +22,24 @@ final class ConnectedAlchemyClientChecks {
         server.runOnServer(s->{var p=s.getPlayerList().getPlayers().getFirst();p.getInventory().setSelectedSlot(0);p.getInventory().setItem(0,new ItemStack(AlchemyStorage.ITEMS.get("transmutation_tablet")));p.inventoryMenu.broadcastChanges();});c.waitTicks(12);
         c.getInput().pressMouse(InputConstants.MOUSE_BUTTON_RIGHT);c.waitForScreen(AlchemyPatternScreen.class);c.waitTicks(5);
         c.runOnClient(mc->{
-            if(mc.getWindow().getGuiScaledWidth()<360||mc.getWindow().getGuiScaledHeight()<238)throw new AssertionError("Whole tablet fits the actual GUI scale");
-            for(var slot:mc.player.containerMenu.slots)if(slot.x<0||slot.y<0||slot.x+16>360||slot.y+16>238)throw new AssertionError("All tablet slots fit the panel");
+            if(mc.getWindow().getGuiScaledWidth()<320||mc.getWindow().getGuiScaledHeight()<238)throw new AssertionError("Whole tablet fits the actual GUI scale");
+            for(var slot:mc.player.containerMenu.slots)if(slot.x<0||slot.y<0||slot.x+16>320||slot.y+16>238)throw new AssertionError("All tablet slots fit the panel");
         });
-        server.runOnServer(s->{var p=s.getPlayerList().getPlayers().getFirst();p.containerMenu.getSlot(0).set(new ItemStack(Items.IRON_INGOT));p.containerMenu.broadcastChanges();});c.waitTicks(8);
+        server.runOnServer(s->{var p=s.getPlayerList().getPlayers().getFirst();p.containerMenu.getSlot(0).set(new ItemStack(Items.OAK_LOG));p.containerMenu.broadcastChanges();});c.waitTicks(8);
         click(c,"screen.jugcraft.pattern.learn");click(c,"screen.jugcraft.pattern.confirm");click(c,"screen.jugcraft.pattern.favorite");click(c,"screen.jugcraft.pattern.make");
-        server.runOnServer(s->{var p=s.getPlayerList().getPlayers().getFirst();if(!AlchemyPatterns.known(p).contains("minecraft:iron_ingot")||!AlchemyPatterns.favorites(p).contains("minecraft:iron_ingot")||!p.containerMenu.getSlot(1).getItem().is(Items.IRON_INGOT))throw new AssertionError("Networked learn, favorite and paid formation");
-            for(Item item:new Item[]{Items.GOLD_INGOT,Items.COAL,Items.STONE,Items.GLASS,Items.DIAMOND,Items.OAK_LOG})AlchemyPatterns.learn(p,new ItemStack(item));p.containerMenu.broadcastChanges();});c.waitTicks(8);
+        server.runOnServer(s->{var p=s.getPlayerList().getPlayers().getFirst();if(!AlchemyPatterns.known(p).contains("minecraft:oak_log")||!AlchemyPatterns.favorites(p).contains("minecraft:oak_log")||!p.containerMenu.getSlot(1).getItem().is(Items.OAK_LOG))throw new AssertionError("Networked learn, favorite and paid formation");
+            for(Item item:new Item[]{Items.SPRUCE_LOG,Items.COAL,Items.STONE,Items.GLASS,Items.DIAMOND,Items.OAK_LOG})AlchemyPatterns.learn(p,new ItemStack(item));p.containerMenu.broadcastChanges();});c.waitTicks(8);
         shot(c,"learned_transmutation_patterns");
         server.runOnServer(s->{var p=s.getPlayerList().getPlayers().getFirst();p.containerMenu.getSlot(1).set(ItemStack.EMPTY);Assaying.setBalance(p,10000);p.containerMenu.broadcastChanges();});c.waitTicks(8);
         click(c,"screen.jugcraft.pattern.batch_1");click(c,"screen.jugcraft.pattern.make");
-        server.runOnServer(s->{var p=s.getPlayerList().getPlayers().getFirst();if(p.containerMenu.getSlot(1).getItem().getCount()!=16||Assaying.balance(p)!=5904)throw new AssertionError("Networked 16-item withdrawal costs exactly 4096");});
+        server.runOnServer(s->{var p=s.getPlayerList().getPlayers().getFirst();if(p.containerMenu.getSlot(1).getItem().getCount()!=16||Assaying.balance(p)!=9488)throw new AssertionError("Networked 16-item withdrawal costs exactly 512");});
         shot(c,"tablet_bulk_withdrawal");
-        c.runOnClient(mc->{for(var child:mc.gui.screen().children())if(child instanceof EditBox edit)edit.setValue("gold");});c.waitTicks(15);
+        c.runOnClient(mc->{for(var child:mc.gui.screen().children())if(child instanceof EditBox edit)edit.setValue("spruce");});c.waitTicks(15);
         int savedScale=c.computeOnClient(mc->mc.options.guiScale().get());
         c.runOnClient(mc->{mc.options.guiScale().set(1);mc.resizeGui();});c.waitTicks(6);
-        c.runOnClient(mc->{for(var child:mc.gui.screen().children())if(child instanceof EditBox edit&&!edit.getValue().equals("gold"))throw new AssertionError("Resizing retains tablet search");});shot(c,"tablet_search_scale1");
+        c.runOnClient(mc->{for(var child:mc.gui.screen().children())if(child instanceof EditBox edit&&!edit.getValue().equals("spruce"))throw new AssertionError("Resizing retains tablet search");});shot(c,"tablet_search_scale1");
         c.runOnClient(mc->{mc.options.guiScale().set(savedScale);mc.resizeGui();});c.waitTicks(6);
-        server.runOnServer(s->{var p=s.getPlayerList().getPlayers().getFirst();if(!p.containerMenu.getSlot(38).getItem().is(Items.GOLD_INGOT)||p.containerMenu.getSlot(39).hasItem())throw new AssertionError("Search packet filters real server ghosts");});
+        server.runOnServer(s->{var p=s.getPlayerList().getPlayers().getFirst();if(!p.containerMenu.getSlot(38).getItem().is(Items.SPRUCE_LOG)||p.containerMenu.getSlot(39).hasItem())throw new AssertionError("Search packet filters real server ghosts");});
         c.runOnClient(mc->mc.gameMode.handleContainerInput(mc.player.containerMenu.containerId,38,0,ContainerInput.PICKUP,mc.player));c.waitTicks(5);
         c.runOnClient(mc->{if(!mc.player.containerMenu.getCarried().isEmpty())throw new AssertionError("Pattern ghost cannot be taken");});close(c);
         // Real converter filter clicks copy identity without consuming the held input stack.

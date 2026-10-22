@@ -50,6 +50,7 @@ public final class JugcraftFinance {
 	// ------------------------------------------------------------------ commands
 
 	private static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher) {
+        ClaimCommands.register(dispatcher);
 		dispatcher.register(literal("jugcraft").then(literal("exchange")
 				.executes(ctx -> {
 					ServerPlayer player = ctx.getSource().getPlayerOrException();

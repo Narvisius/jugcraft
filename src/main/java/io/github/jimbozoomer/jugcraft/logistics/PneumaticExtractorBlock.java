@@ -69,6 +69,7 @@ public class PneumaticExtractorBlock extends Block implements ItemConnectable {
 		}
 		Direction facing = state.getValue(FACING);
 		BlockPos intake = pos.relative(facing);
+		if (!io.github.jimbozoomer.jugcraft.finance.ClaimTransfers.allowed(level, pos, intake)) return;
 		Storage<ItemVariant> source = ItemStorage.SIDED.find(level, intake, facing.getOpposite());
 		if (source == null || !source.supportsExtraction()) {
 			return;

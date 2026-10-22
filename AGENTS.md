@@ -22,7 +22,7 @@ The owner authorized the framework foundation and automatic-install companion pa
 - Keep Jade, JEI, GuiLib, Fusion, lighting, and shader integrations guarded where optional. `-PjugcraftOptionalIntegrations=false` exercises the supported absence path.
 - Keep existing ArmsMotion ownership explicit when introducing Player Animation Library or Spell Engine actions. Do not let two systems pose the same action independently.
 - A library being installed does not mean every existing Jugcraft feature uses it. Record the actual integration in `docs/features/`.
-- Use the launcher-managed pack from [docs/DISTRIBUTION.md](docs/DISTRIBUTION.md). No startup downloader, third-party JARs in Git, or copied dependency assets/code.
+- Use the launcher-managed pack from [docs/DISTRIBUTION.md](docs/DISTRIBUTION.md). No third-party JARs in Git or copied dependency assets/code. The owner-authorized [in-game updater](docs/features/direct-player-updater.md) is a bounded exception to the old no-startup-downloader rule: opted-in client packs only, title-menu check, explicit download/apply consent, verified managed mods, replacement only after the game exits.
 
 Run `python scripts/package_modrinth.py check` and `python -m unittest discover -s scripts/tests -v` for dependency/pack changes, plus applicable compilation, server/client tests, and the checks in [docs/TESTING.md](docs/TESTING.md). Do not claim pack import or gameplay passed merely because packaging succeeded.
 

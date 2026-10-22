@@ -122,7 +122,6 @@ public class UndergroundDepositClientGameTests implements FabricClientGameTest {
 	}
 
 	private static Set<BlockPos> findNatural(ServerLevel level, UndergroundDepositFeature.Family family) {
-		String biome = switch (family) { case COAL -> "minecraft:forest"; case IRON, TIN -> "jugcraft:shield"; case COPPER -> "minecraft:badlands"; };
 		var feature = (UndergroundDepositFeature) level.registryAccess().lookupOrThrow(Registries.FEATURE)
 				.getValue(Jugcraft.id("underground_" + family.id() + "_deposit"));
 		check(feature != null, "Missing registered feature " + family);
@@ -131,12 +130,14 @@ public class UndergroundDepositClientGameTests implements FabricClientGameTest {
 			var holder = level.registryAccess().lookupOrThrow(Registries.BIOME).getOrThrow(key);
 			check(level.getChunkSource().getGenerator().getBiomeGenerationSettings(holder).hasFeature(placed), "Missing surface/cave biome attachment: " + family + " / " + key);
 		}
-		for (int attempt = 0; attempt < 3; attempt++) {
-			var found = level.findClosestBiome3d(holder -> holder.is(net.minecraft.resources.Identifier.parse(biome)),
+		// Survey the actual eligible biome tag, not just one potentially tiny biome.
+		// All samples still come from ordinary chunk decoration, never fixture placement.
+		for (int attempt = 0; attempt < 6; attempt++) {
+			var found = level.findClosestBiome3d(holder -> holder.is(feature.surfaceBiomes()),
 					new BlockPos(attempt * 6000, 80, 0), 8192, 32, 64);
-			check(found != null, "No target biome " + biome);
+			check(found != null, "No target biome for " + family);
 			int cx = found.getFirst().getX() >> 4, cz = found.getFirst().getZ() >> 4;
-			int radius = 9 + attempt * 3;
+			int radius = 15;
 			for (int x = cx - radius; x <= cx + radius; x++) for (int z = cz - radius; z <= cz + radius; z++) level.getChunk(x, z);
 			Set<BlockPos> positions = new LinkedHashSet<>();
 			for (int x = (cx - radius + 1) * 16; x < (cx + radius) * 16; x++)

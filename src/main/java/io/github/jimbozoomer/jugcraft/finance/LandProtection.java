@@ -15,13 +15,17 @@ import net.minecraft.world.level.Level;
 /**
  * Keeps other players out of claimed land: breaking, placing, using blocks (doors, chests, machines) and hitting or
  * using entities (animals, item frames, armour stands). Owners, players they trust and operators are let through.
- * Explosions, fluids, fire and pistons are not stopped yet (see docs/features/finance-exchange.md).
+ * Explosions/fire are shielded and fluid/piston ownership boundaries are enforced by the native mixins.
+ * Explicit party sharing is checked through LandRegistry.
  */
 final class LandProtection {
 	private LandProtection() {
 	}
 
 	static void register() {
+        net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents.ALLOW_DAMAGE.register((target, source, amount) ->
+                target instanceof Player || !(source.getEntity() instanceof Player player)
+                || LandRegistry.mayBuild(player, target.level(), target.blockPosition()));
 		PlayerBlockBreakEvents.BEFORE.register((level, player, pos, state, blockEntity) -> allowed(player, level, pos));
 		AttackBlockCallback.EVENT.register((player, level, hand, pos, direction) ->
 				allowed(player, level, pos) ? InteractionResult.PASS : InteractionResult.FAIL);

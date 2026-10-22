@@ -58,7 +58,9 @@ public class Townsfolk extends PathfinderMob {
 
 	public Townsfolk(EntityType<? extends Townsfolk> type, Level level) {
 		super(type, level);
-		setPersistenceRequired();
+        setPersistenceRequired();
+        if (getNavigation() instanceof net.minecraft.world.entity.ai.navigation.GroundPathNavigation nav) nav.setCanOpenDoors(true);
+        getNavigation().setRequiredPathLength(128);
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {
@@ -75,7 +77,9 @@ public class Townsfolk extends PathfinderMob {
 	@Override
 	protected void registerGoals() {
 		goalSelector.addGoal(0, new FloatGoal(this));
-		goalSelector.addGoal(1, new Goal() {
+        goalSelector.addGoal(1, new LateBedGoal());
+        goalSelector.addGoal(1, new net.minecraft.world.entity.ai.goal.OpenDoorGoal(this, true));
+        goalSelector.addGoal(1, new Goal() {
 			{ setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK)); }
 			@Override public boolean canUse() {
 				return listener != null && listener.isAlive() && tickCount < listeningUntil
@@ -106,13 +110,17 @@ public class Townsfolk extends PathfinderMob {
 
 	/** Sets this townsperson up for a place in the town (at spawning). */
 	public void setUp(TownData.Spot place, BlockPos home) {
-		this.role = place.role();
+        refresh(place, home);
+        dress();
+    }
+
+    public void refresh(TownData.Spot place, BlockPos home) {
+        this.role = place.role();
 		this.shop = place.shop() == null ? "" : place.shop();
 		this.home = home.immutable();
 		this.spot = place.index();
 		entityData.set(SKIN, place.skin());
 		setCustomName(Component.literal(place.name()));
-		dress();
 	}
 
 	/** What a role carries. */
@@ -151,13 +159,14 @@ public class Townsfolk extends PathfinderMob {
 	}
 
 	public boolean isGuard() {
-		return role.equals("guard");
+		return role.equals("guard") || role.equals("flak_guard") || role.equals("mecha_guard");
 	}
 
 	/** How far from their place a role wanders. */
 	public int range() {
 		return switch (role) {
-			case "guard" -> 20;
+			case "guard", "mecha_guard" -> 20;
+            case "flak_guard" -> 0;
 			case "townsfolk" -> 70;
 			case "decorator" -> DECORATOR_REACH;
 			default -> 2;
@@ -181,6 +190,7 @@ public class Townsfolk extends PathfinderMob {
 	@Override
 	protected void customServerAiStep(ServerLevel level) {
 		super.customServerAiStep(level);
+        if (tickCount % 100 == 0) TownDefense.crew(level, this);
 		if (tickCount % 100 == 0) {
 			// A townsperson the town has since replaced (after it went missing) steps aside.
 			UUID recorded = spot < 0 ? null : TownState.get(level).townsperson(spot);
@@ -206,17 +216,14 @@ public class Townsfolk extends PathfinderMob {
 			return InteractionResult.SUCCESS;
 		}
 		getLookControl().setLookAt(player);
-		listener = player;
+        if (isSleeping()) {
+            player.sendSystemMessage(Component.literal("" + getName().getString() + " is asleep. Come back in the morning."));
+            return InteractionResult.SUCCESS;
+        }
+        listener = player;
 		listeningUntil = tickCount + 80;
 		if (role.equals("academy_radiance")) {
 			io.github.jimbozoomer.jugcraft.academy.JugcraftAcademy.consult(server);
-			return InteractionResult.SUCCESS;
-		}
-		if (isGuard() && player.isShiftKeyDown()) {
-			if (tickCount - lastTalk >= 20) {
-				lastTalk = tickCount;
-				TownWayfinding.giveMap(server);
-			}
 			return InteractionResult.SUCCESS;
 		}
 		if (role.equals("shopkeeper") && TownShops.get().shop(shop) != null) {
@@ -240,6 +247,7 @@ public class Townsfolk extends PathfinderMob {
 
 	/** Which set of lines a role speaks: guards and decorators have their own, everyone else the town's. */
 	private String roleKey() {
+        if (isGuard()) return "guard";
 		return switch (role) {
 			case "guard", "decorator", "priest", "mayor" -> role;
 			default -> "townsfolk";
@@ -266,7 +274,55 @@ public class Townsfolk extends PathfinderMob {
 		spot = input.getIntOr("spot", -1);
 	}
 
-	// ---------------------------------------------------------------- goals
+    protected long scheduleTime() { return level().getOverworldClockTime(); }
+
+    public static boolean bedtime(long dayTime) { return Math.floorMod(dayTime, 24000L) >= 18000; }
+
+    public @Nullable BlockPos bed() {
+        if (isGuard() || spot < 0 || !(level() instanceof ServerLevel level)) return null;
+        BlockPos origin = TownState.get(level).origin(), relative = TownData.get().beds.get(spot);
+        return origin == null || relative == null ? null : origin.offset(relative);
+    }
+
+    /** Civilian bedtime is midnight, not sunset. Guards stay on duty. No teleporting or chunk tickets. */
+    private class LateBedGoal extends Goal {
+        private @Nullable BlockPos bed;
+        private int retryAt;
+        LateBedGoal() { setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK, Flag.JUMP)); }
+        @Override public boolean canUse() {
+            if (!bedtime(scheduleTime()) || isGuard() || getTarget() != null) return false;
+            bed = Townsfolk.this.bed();
+            return bed != null && validBed();
+        }
+        private boolean validBed() {
+            if (bed == null || !(level() instanceof ServerLevel level) || level.getChunkSource().getChunkNow(bed.getX()>>4,bed.getZ()>>4) == null) return false;
+            var block = level.getBlockState(bed);
+            if (!(block.getBlock() instanceof net.minecraft.world.level.block.BedBlock)
+                || block.getValue(net.minecraft.world.level.block.BedBlock.PART) != net.minecraft.world.level.block.state.properties.BedPart.HEAD) return false;
+            BlockPos foot = bed.relative(block.getValue(net.minecraft.world.level.block.BedBlock.FACING).getOpposite());
+            if (level.getChunkSource().getChunkNow(foot.getX()>>4,foot.getZ()>>4) == null) return false;
+            var other = level.getBlockState(foot);
+            return other.is(block.getBlock()) && other.getValue(net.minecraft.world.level.block.BedBlock.PART) == net.minecraft.world.level.block.state.properties.BedPart.FOOT
+                && (isSleeping() || !block.getValue(net.minecraft.world.level.block.BedBlock.OCCUPIED));
+        }
+        @Override public boolean canContinueToUse() {
+            return bedtime(scheduleTime()) && !isGuard() && getTarget() == null && validBed();
+        }
+        @Override public void start() { listener = null; retryAt = 0; getNavigation().stop(); }
+        @Override public void tick() {
+            if (bed == null || isSleeping()) return;
+            if (distanceToSqr(bed.getX()+.5,bed.getY(),bed.getZ()+.5) < 4 && Math.abs(getY()-bed.getY()) < 1.5) {
+                getNavigation().stop(); startSleeping(bed);
+            } else if (tickCount >= retryAt) {
+                // Long cross-town trips are split into navigable stages by vanilla's pathfinder.
+                getNavigation().moveTo(bed.getX()+.5,bed.getY(),bed.getZ()+.5, .85);
+                retryAt = tickCount + 100;
+            }
+        }
+        @Override public void stop() { if (isSleeping()) stopSleeping(); getNavigation().stop(); bed = null; }
+    }
+
+    // ---------------------------------------------------------------- goals
 
 	/** Back towards their place when they have strayed (after a chase, or pushed). */
 	private class ReturnHomeGoal extends Goal {

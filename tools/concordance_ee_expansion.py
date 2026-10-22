@@ -23,7 +23,7 @@ LANG={
  'screen.jugcraft.alchemy.patterns':'Patterns',
  'screen.jugcraft.alchemy.gem_controls':'Gem armor',
  **{f'screen.jugcraft.pattern.{k}':v for k,v in {
- 'title':'Learned transmutation','build':'Mercurial building palette','search':'Search patterns...',
+ 'title':'Learned transmutation','build':'Mercurial building palette','search':'Search...',
  'learn':'Learn','make':'Form one','choose':'Use pattern','previous':'<','next':'>','favorite':'Favorite',
  'unfavorite':'Unfavorite','favorites':'Favorites','all':'All patterns','balance':'Essence: %s','sample':'Sample','target':'Target','preview':'Preview',
  'output':'Output','cost':'Price per item: %s','page':'%s / %s','learn_help':'Learn once; keep sample','area':'3 x 3 / up to nine blocks',
@@ -31,10 +31,10 @@ LANG={
  'build_help':'Select a learned building block. Choose an area and use the eye on a surface to place that face, each block at the displayed price. Protected or occupied positions are skipped.',
  }.items()},
  **{f'screen.jugcraft.automation.{k}':v for k,v in {
- 'start':'Start automatic','stop':'Stop automatic','target_0':'Output: Iron','target_1':'Output: Gold','target_2':'Output: Diamond',
+ 'start':'Start automatic','stop':'Stop automatic','target_0':'Output: Oak logs','target_1':'Output: Glass','target_2':'Output: Torches','target_3':'Output: Stone bricks','target_4':'Output: Ladders','target_blocked':'Choose supplies',
  'clear':'Clear filters','filters':'Allowed input materials','hint':'Copy a held stack into a filter.',
  'help':'Only these material types may be consumed. Click a filter with an empty cursor to remove it. Your stack is kept. Modified items and hotbar equipment are excluded.',
- 'output_help':'Forms at most one output per pulse at its normal price, using your shared essence balance. Existing essence may be spent. A full output stops input consumption.',
+ 'output_help':'Choose approved building supplies. Forms one item per pulse at its normal essence price. A forbidden target or full output consumes nothing; choose a new target to resume.',
  }.items()},
  **{f'screen.jugcraft.gem.{k}':v for k,v in {
  'title':'Gem armor abilities','action_0':'Helmet: toggle night vision','action_1':'Chest: repel nearby enemies','action_2':'Leggings: forward dash','action_3':'Boots: toggle flight',
@@ -61,15 +61,15 @@ def write_all(write,assets,data,lang,condition,self_drop):
      'All default item types have values. Dissolve rounds down; withdrawal rounds up, with no surcharge. Use 1 / 16 / 64 / Max. Search and favorites are optional. Empty charged or filled items before dissolving; their contents are never copied.',
      'Next craft a Klein Star, daylight collector and condenser. Charge feeds neighbors; Fuel upgrades coal for the difference in item values. Loaded factories work while you are away. Claims, pause and redstone still stop them.',
      'Bags have 54 independent slots. Sort and Stack merge identical items. Pause disables stored artifacts. Repair Talisman repairs gear; Black Hole Band gathers matching drops. Open menus pause automation. No nesting.',
-     'Use Density Gem or sneak-use Void Ring. Set allowed inputs, input limit and wallet reserve, then Start. Empty filters do nothing. Density makes iron, gold or diamond, one per second. Last status explains waiting. Your hotbar is not feedstock.',
+     'Use Density Gem or sneak-use Void Ring. Set allowed inputs, input limit and wallet reserve, then Start. Empty filters do nothing. Density makes approved building supplies, one per second. Saved valuable targets pause without consuming anything; select a new output. Last status explains waiting. Your hotbar is not feedstock.',
      'Add a pedestal for farming or defense. Its panel shows the effect, range and last cost. Gem controls show toggles and cooldown; bind direct powers in Controls. The HUD shows wallet, stars and last payment. Aim the Eye/tools to preview area and cost.',
     ]
     for i,text in enumerate(bodies):lang[f'screen.jugcraft.alchemy_storage.manual.body_{i}']=text
 def codex():
     return {('equivalence','connected_alchemy'):{'name':'Connected Alchemy','x':18,'y':0,'icon':'jugcraft:transmutation_tablet','condition':None,'description':'Learn patterns; automate a living workshop',
         'pages':[
-         ('text','Learn Once','The tablet opens **dissolving and learned items together**. Put an item into the input, inspect its value and confirm dissolution: the input is consumed and its default form is learned permanently. Choose an icon, then **1 / 16 / 64 / Max** and Withdraw. Pay the exact value, no surcharge, using wallet then carried stars. Max fills one affordable output stack. Empty containers and charge first; custom state is not copied. All registered types are valued; unfamiliar custom items may use provisional local values.'),
-         ('text','Automatic Storage','Configure a **Density Gem** or sneak-use a **Void Ring**. Copy up to nine allowed input types into its filter and start it. Only plain matching material is consumed. Density forms its selected iron/gold/diamond target; Void deposits essence. A carried bag or owned chest also supports active **Repair Talisman** and **Black Hole Band**. Seed storage with a desired item to filter pickup. Storage menus pause their own background writer.'),
+         ('text','Learn Once','The tablet opens **dissolving and learned items together**. Put an item into the input, inspect its value and confirm dissolution: the input is consumed and its default form is learned permanently. Choose an icon, then **1 / 16 / 64 / Max** and Withdraw. Pay the exact value, no surcharge, using wallet then carried stars. Max fills one affordable output stack. Empty containers and charge first; custom state is not copied. All registered types are valued, but **only approved building and convenience supplies can be withdrawn**. Dissolving valuables does not unlock their withdrawal. Unfamiliar custom items may use provisional local values.'),
+         ('text','Automatic Storage','Configure a **Density Gem** or sneak-use a **Void Ring**. Copy up to nine allowed input types into its filter and start it. Only plain matching material is consumed. Density forms its selected approved building-supply target; Void deposits essence. A carried bag or owned chest also supports active **Repair Talisman** and **Black Hole Band**. Seed storage with a desired item to filter pickup. Storage menus pause their own background writer.'),
          ('text','Collector Fuels','Choose **Charge**, **Alchemical Coal**, **Mobius Fuel** or **Aeternalis Fuel** in a collector. Each step consumes one previous fuel and **the difference between input and output item values**. Intermediate fuels remain in output and can continue until the chosen stop. Clear output space is required. Charge mode retains the existing neighbor/star export behavior.'),
          ('text','Pedestal Workshop','Original six effects remain. **Harvest Goddess now replants ripe crops**. **Black Hole Band** transfers drops into adjacent inventories. **Mind Stone** stores nearby XP, preserving merged orb counts. **Archangel**, **Ignition**, **Zero** defend against monsters. **Watch** gives adjacent furnaces/condensers one extra paid work pulse per second, shared across all Watches. All effects use the pedestal buffer and owner authority.'),
          ('text','Stone and Eye','Stone: use terrain to transmute; sneak-use terrain changes area (1x1, 3x3, 5x5); sneak-use air opens crafting. Each changed block costs at least 8 essence. Eye: open its learned building palette, select a block, then use a surface for a selected **1x1 / 3x3 / 5x5 face**. Each placed block costs formation price plus 8. Claims, collision, reach and loaded terrain apply.'),
@@ -80,21 +80,21 @@ def codex():
 LANG.update({"screen.jugcraft.pattern."+k:v for k,v in {
  "title":"Transmutation tablet", "learn":"Dissolve", "confirm":"Confirm", "make":"Withdraw",
  "sample":"Dissolve", "sources":"Wallet %s / stars %s", "total":"Total price: %s essence",
- "learn_help":"Consumes the input stack and permanently teaches its default item. Click twice to confirm. Empty stored contents and reset charged/configured items first.",
- "make_help":"Withdraw learned items at their exact value, no surcharge. Wallet first, then carried stars. Max fills up to one affordable output stack.",
+ "learn_help":"Consumes the input stack for essence. Valuables can be dissolved but cannot be withdrawn. Click twice to confirm. Stored contents and altered items are protected.",
+ "make_help":"Withdraw permitted building and convenience items at their essence value. Valuables, equipment and machines are excluded. Wallet first, then carried stars.",
  "batch_0":"1", "batch_1":"16", "batch_2":"64", "batch_3":"Max",
  "input_0":"Dissolve for +%s essence", "input_1":"Put an item in the input.",
  "input_2":"Empty/reset item state first.", "input_3":"Wallet is full.", "input_4":"Batch is worth less than 1.",
  "form_0":"Ready to withdraw", "form_1":"Dissolve once to learn an item.",
  "form_2":"Not enough essence", "form_3":"Take the output first."
 }.items()})
-TOOLTIPS['transmutation_tablet']='Dissolve an item to learn it permanently. Browse learned items, choose 1/16/64/Max and spend their essence value with no surcharge. Stored contents and charge must be emptied first.'
+TOOLTIPS['transmutation_tablet']='Dissolve plain items for essence. Withdraw learned building and convenience supplies at their value. Valuables, ores and equipment cannot be withdrawn.'
 
 LANG.update({"screen.jugcraft.automation."+k:v for k,v in {
  "budget":"Input limit: %s/s", "reserve":"Reserve: %s", "preview":"Price: %s essence",
  "reserve_help":"Density never spends below this wallet reserve. Input limit bounds how many filtered items are dissolved per second. Stars are not used by automatic density.",
  "menu_pause":"Automation pauses while a menu is open.", "status_0":"Last pulse: working", "status_1":"Last pulse: none", "status_2":"Add at least one input filter",
- "status_3":"Output space is full", "status_4":"Output has no value", "status_5":"Waiting for filtered inputs", "status_6":"Saving for output / reserve"
+ "status_3":"Output space is full", "status_4":"Choose an approved building / convenience output", "status_5":"Waiting for filtered inputs", "status_6":"Saving for output / reserve"
 }.items()})
 LANG.update({"screen.jugcraft.alchemy_storage."+k:v for k,v in {
  "sort":"Sort", "stack":"Stack", "pause":"Pause", "inventory":"Automation pauses while open",
@@ -137,7 +137,7 @@ LANG.update({
     "screen.jugcraft.pattern.target": "Selected",
     "screen.jugcraft.pattern.sample": "Input",
     "screen.jugcraft.pattern.sources": "Wallet %s / stars %s",
-    "screen.jugcraft.pattern.form_1": "Dissolve an item, then select it.",
+    "screen.jugcraft.pattern.form_1": "Choose a permitted learned item.",
     "screen.jugcraft.automation.filters": "Allowed inputs (click with an item)",
     "screen.jugcraft.gem.missing": "Equip this armor",
     "screen.jugcraft.alchemy_storage.no_nesting": "54 slots / no bags inside",
@@ -146,3 +146,9 @@ LANG.update({
     "screen.jugcraft.gem.help_2": "Wear Gem Leggings and click to dash while grounded. Costs 64 essence; requires clear space and permission.",
     "screen.jugcraft.gem.help_3": "Wear Gem Boots and click to toggle flight. Uses the shared paid flight lease; ends without power or when removed.",
 })
+
+# Owner-directed convenience catalogue; no valuable withdrawals from the tablet.
+LANG["screen.jugcraft.pattern.economy"] = "Building & convenience only"
+
+# Convenience-only tablet labels; output policy is server-owned.
+LANG.update({"screen.jugcraft.pattern.economy_building": "Building supplies", "screen.jugcraft.pattern.economy_convenience": "Convenience only"})

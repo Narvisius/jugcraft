@@ -52,7 +52,7 @@ public class SiegeMortar extends CrewedGun {
 
 	@Override
 	protected float maxPitch() {
-		return 85.0F;
+		return 89.0F;
 	}
 
 	@Override

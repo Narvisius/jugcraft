@@ -86,7 +86,7 @@ public class MenagerieAnimal extends Animal implements GeoEntity {
         super(type,level);this.species=species;
         if(LavaSwimming.species(species)){navigation=new LavaSwimming.Navigation(this,level);moveControl=new LavaSwimming.Control(this);}
         else if(species.aquatic()){navigation=new WaterBoundPathNavigation(this,level);moveControl=new SmoothSwimmingMoveControl(this,85,10,.08F,.02F,false);}
-        else if(species.flying()){var nav=new FlyingPathNavigation(this,level);nav.setCanFloat(true);navigation=nav;moveControl=new FlyingMoveControl(this,12,true);}
+        else if(species.flying()){var nav=new FlyingPathNavigation(this,level);nav.setCanFloat(true);navigation=nav;moveControl=new FlyingMoveControl(this,12,!BirdFlightGoal.applies(species));}
         // BreedGoal captures ServerLevel in its constructor. Client replicas only
         // render synchronized state and must never construct server AI goals.
         if(!level.isClientSide())installGoals();
@@ -135,7 +135,7 @@ public class MenagerieAnimal extends Animal implements GeoEntity {
             public boolean canUse(){return !sitting()&&!isVehicle()&&owner()!=null&&level() instanceof ServerLevel l&&Authority.present(l,owner()) instanceof ServerPlayer p&&distanceToSqr(p)>36&&distanceToSqr(p)<1024;}
             public void tick(){if(tickCount%10==0&&level() instanceof ServerLevel l){var p=Authority.present(l,owner());if(p!=null)getNavigation().moveTo(p,1);}}
         });
-        goalSelector.addGoal(6,LavaSwimming.species(species)?new LavaSwimming.Wander(this):species.aquatic()?new RandomSwimmingGoal(this,1,40):species.flying()?new WaterAvoidingRandomFlyingGoal(this,.8):new WaterAvoidingRandomStrollGoal(this,.8));
+        goalSelector.addGoal(6,LavaSwimming.species(species)?new LavaSwimming.Wander(this):species.aquatic()?new RandomSwimmingGoal(this,1,40):species.flying()?(BirdFlightGoal.applies(species)?new BirdFlightGoal(this):new WaterAvoidingRandomFlyingGoal(this,.8)):new WaterAvoidingRandomStrollGoal(this,.8));
         goalSelector.addGoal(7,new LookAtPlayerGoal(this,Player.class,8));goalSelector.addGoal(8,new RandomLookAroundGoal(this));
     }
     public boolean canHunt(Animal prey){return prey.getType()!=getType()&&prey.getBbWidth()<getBbWidth()&&!prey.isLeashed()
@@ -230,7 +230,7 @@ public class MenagerieAnimal extends Animal implements GeoEntity {
     @Override protected float getRiddenSpeed(Player p){return (float)getAttributeValue(Attributes.MOVEMENT_SPEED)*(species.flying()?1.4F:1.15F);}
     @Override protected Vec3 getPassengerAttachmentPoint(Entity passenger,EntityDimensions dimensions,float scale){return new Vec3(0,dimensions.height()*.7,0);}
     @Override public void travel(Vec3 input){
-        if((species.flying()&&(isVehicle()||!onGround()))||(species.aquatic()&&inHomeFluid())){
+        if((species.flying()&&(isVehicle()||(BirdFlightGoal.applies(species)?!getNavigation().isDone()&&!sitting():!onGround())))||(species.aquatic()&&inHomeFluid())){
             setNoGravity(true);moveRelative(isVehicle()?getSpeed():.025F,input);move(MoverType.SELF,getDeltaMovement());setDeltaMovement(getDeltaMovement().scale(.9));
         }else{setNoGravity(false);super.travel(input);}
     }

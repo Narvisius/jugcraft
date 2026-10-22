@@ -82,24 +82,24 @@ public class ConcordanceAssayGameTests {
 		helper.succeed();
 	}
 
-	/** Forming an ingot costs five quarters of its worth, rounded up; the pattern in the other hand is kept; a round trip loses. */
+	/** Forming a permitted log costs its worth; the held pattern is kept and a round trip conserves value. */
 	@GameTest(maxTicks = 20)
 	public void formingSpendsExactValueWithoutSurcharge(GameTestHelper helper) {
 		ServerLevel level = helper.getLevel();
 		ServerPlayer player = assayer(helper);
 		Assaying.setBalance(player, 1000L);
-		ItemStack pattern = new ItemStack(Items.IRON_INGOT);
+		ItemStack pattern = new ItemStack(Items.OAK_LOG);
 		use(player, level, ItemStack.EMPTY, pattern);
-		// The formed ingot goes where the inventory puts it back: here it joins the pattern's stack in the other hand.
-		helper.assertTrue(Assaying.balance(player) == 1000 - 256 && player.getOffhandItem() == pattern
-				&& player.getInventory().countItem(Items.IRON_INGOT) == 2, "One ingot formed for 256 essence; the pattern kept: "
-						+ Assaying.balance(player) + " grains, " + player.getInventory().countItem(Items.IRON_INGOT) + " ingots");
-		use(player, level, new ItemStack(Items.IRON_INGOT), ItemStack.EMPTY);
+		// The formed log goes where the inventory puts it back: here it joins the pattern's stack in the other hand.
+		helper.assertTrue(Assaying.balance(player) == 1000 - 32 && player.getOffhandItem() == pattern
+				&& player.getInventory().countItem(Items.OAK_LOG) == 2, "One log formed for 32 essence; the pattern kept: "
+						+ Assaying.balance(player) + " grains, " + player.getInventory().countItem(Items.OAK_LOG) + " logs");
+		use(player, level, new ItemStack(Items.OAK_LOG), ItemStack.EMPTY);
 		Assaying.use(player, level, player.getMainHandItem(), player.getOffhandItem());
-		helper.assertTrue(Assaying.balance(player) == 1000 - 256 + 256, "Dissolved again it pays 256: the round trip conserves value");
-		Assaying.setBalance(player, 100L);
-		use(player, level, ItemStack.EMPTY, new ItemStack(Items.IRON_INGOT));
-		helper.assertTrue(Assaying.balance(player) == 100 && player.getInventory().countItem(Items.IRON_INGOT) == 1,
+		helper.assertTrue(Assaying.balance(player) == 1000 - 32 + 32, "Dissolved again it pays 32: the round trip conserves value");
+		Assaying.setBalance(player, 10L);
+		use(player, level, ItemStack.EMPTY, new ItemStack(Items.OAK_LOG));
+		helper.assertTrue(Assaying.balance(player) == 10 && player.getInventory().countItem(Items.OAK_LOG) == 1,
 				"Too few grains: nothing is formed and nothing is taken");
 		helper.succeed();
 	}

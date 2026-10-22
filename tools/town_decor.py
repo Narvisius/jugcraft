@@ -247,6 +247,9 @@ CENTERPIECES = {
 }
 
 
+KINDS["retired"] = {theme: [[S("air")]] for theme in THEMES}
+
+
 def data():
     """The decor table the mod reads (written into town.json.gz as "decor")."""
     centre = {theme: {str(k): v for k, v in sorted(fn().items())} for theme, fn in CENTERPIECES.items()}

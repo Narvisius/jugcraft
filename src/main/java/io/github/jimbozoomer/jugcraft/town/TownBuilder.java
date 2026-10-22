@@ -62,7 +62,7 @@ public final class TownBuilder {
 			return;
 		}
 		long key = pos.pack();
-		if (!TownState.get(level).built(key) && QUEUED.add(key)) {
+		if ((!TownState.get(level).built(key) || TownUpgrades.pending(level, key)) && QUEUED.add(key)) {
 			QUEUE.add(pos);
 		}
 	}
@@ -107,10 +107,15 @@ public final class TownBuilder {
 			QUEUED.remove(key);
 			LevelChunk chunk = level.getChunkSource().getChunkNow(pos.x(), pos.z());
 			TownState state = TownState.get(level);
-			if (chunk == null || state.built(key) || state.origin() == null) {
+			if (chunk == null || state.origin() == null) {
 				continue;
 			}
-			build(level, chunk, state.origin());
+            if (state.built(key)) {
+                if (TownUpgrades.pending(level, key)) TownUpgrades.applyChunk(level, pos);
+                continue;
+            }
+            build(level, chunk, state.origin());
+            TownUpgrades.markCurrent(level, key);
 			state.markBuilt(key);
 			TownDecor.chunkBuilt(level, pos);
 			TownsfolkCare.chunkBuilt(level, pos);

@@ -1,6 +1,6 @@
 # Fire control (batch 56)
 
-Status: implemented (pending CI and review)
+Status: implemented; October 21 local safety/control follow-up below
 Proposal issue: none. On 4 October 2026 the owner asked to "do those 1-6... each very carefully and detailed... one at a time with lots of depth". This is idea 2: a fire-control table directing several guns, with sectors and an optional sentry mode. It builds on fortifications (batch 55), which are not merged yet.
 Owner: jimbozoomer-byte
 Target milestone and tier: steel tier, after the big guns (batch 51) and tower guns (batch 54)
@@ -132,3 +132,12 @@ Not applicable: everything is crafted and placed by players. The raider faction 
 ## Rollout and open questions
 - Next is **idea 3, a dieselpunk raider faction.** Its raiders will count as hostile mobs, so sentries engage them.
 - Both earlier ideas, a creeping barrage and crewed guns following the table, are now done (above).
+
+## October 21 server-defense follow-up
+
+The [defense and clock record](server-defense-and-clock.md) supersedes the older
+player-only check-fire policy above: sentries hold fire around friendly living
+creatures, unattended shells spare them at impact, and redstone power stops sentry
+mode. Table operators, claim changes, wire links and ammunition ownership are
+checked. Existing recipes and models are retained. Current validation and the
+remaining real-player acceptance are recorded there.

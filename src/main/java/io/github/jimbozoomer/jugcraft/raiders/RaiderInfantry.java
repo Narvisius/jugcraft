@@ -102,6 +102,11 @@ public class RaiderInfantry extends Monster implements RangedAttackMob, Raider, 
 	}
 
 	@Override
+	public boolean canAttack(net.minecraft.world.entity.LivingEntity target) {
+		return RaiderTargets.allowed(target) && super.canAttack(target);
+	}
+
+	@Override
 	protected void registerGoals() {
 		goalSelector.addGoal(1, new FloatGoal(this));
 		if (role() == Role.GRENADIER) {
@@ -116,8 +121,7 @@ public class RaiderInfantry extends Monster implements RangedAttackMob, Raider, 
 		goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 0.8));
 		goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 12.0F));
 		targetSelector.addGoal(1, new HurtByTargetGoal(this, RaiderInfantry.class, RaiderWalker.class, RaiderBlimp.class).setAlertOthers());
-		targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
-		targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Townsfolk.class, true));
+		targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, io.github.jimbozoomer.jugcraft.town.Townsfolk.class, true));
 	}
 
 	@Override

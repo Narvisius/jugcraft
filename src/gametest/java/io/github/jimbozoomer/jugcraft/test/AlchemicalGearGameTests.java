@@ -44,24 +44,24 @@ public class AlchemicalGearGameTests {
 
     @GameTest(maxTicks=20) public void stoneConfirmsAndKeepsItsSample(GameTestHelper h) {
         var p=player(h); var m=new TransmutationMenu(1,p.getInventory());
-        slot(m,0,new ItemStack(Items.IRON_INGOT,4)); slot(m,1,new ItemStack(Items.IRON_INGOT));
+        slot(m,0,new ItemStack(Items.OAK_LOG,4)); slot(m,1,new ItemStack(Items.OAK_LOG));
         press(m,p,0); h.assertTrue(m.confirming() && m.getSlot(0).getItem().getCount()==4 && Assaying.balance(p)==1000,"First click only confirms");
-        press(m,p,0); h.assertTrue(m.getSlot(0).getItem().isEmpty() && Assaying.balance(p)==2024,"Four ingots dissolve once");
-        press(m,p,1); h.assertTrue(m.getSlot(1).getItem().getCount()==1 && m.getSlot(2).getItem().getCount()==1 && Assaying.balance(p)==1768,"Sample kept; output charged 256");
-        m.removed(p); h.assertTrue(p.getInventory().countItem(Items.IRON_INGOT)==2,"Closing returns sample and output"); h.succeed();
+        press(m,p,0); h.assertTrue(m.getSlot(0).getItem().isEmpty() && Assaying.balance(p)==1128,"Four logs dissolve once");
+        press(m,p,1); h.assertTrue(m.getSlot(1).getItem().getCount()==1 && m.getSlot(2).getItem().getCount()==1 && Assaying.balance(p)==1096,"Sample kept; output charged 32");
+        m.removed(p); h.assertTrue(p.getInventory().countItem(Items.OAK_LOG)==2,"Closing returns sample and output"); h.succeed();
     }
     @GameTest(maxTicks=20) public void changedInputRequiresFreshConfirmation(GameTestHelper h) {
         var p=player(h); var m=new TransmutationMenu(1,p.getInventory());
-        slot(m,0,new ItemStack(Items.IRON_INGOT,2)); press(m,p,0);
-        slot(m,0,new ItemStack(Items.IRON_INGOT,3)); press(m,p,0);
+        slot(m,0,new ItemStack(Items.OAK_LOG,2)); press(m,p,0);
+        slot(m,0,new ItemStack(Items.OAK_LOG,3)); press(m,p,0);
         h.assertTrue(Assaying.balance(p)==1000 && m.getSlot(0).getItem().getCount()==3 && m.confirming(),"Changed quantity cannot inherit confirmation"); h.succeed();
     }
     @GameTest(maxTicks=20) public void modifiedMatterAndFullOutputNeverCharge(GameTestHelper h) {
         var p=player(h); var m=new TransmutationMenu(1,p.getInventory());
-        var named=new ItemStack(Items.IRON_INGOT); named.set(DataComponents.CUSTOM_NAME,Component.literal("Keep me"));
+        var named=new ItemStack(Items.OAK_LOG); named.set(DataComponents.CUSTOM_NAME,Component.literal("Keep me"));
         slot(m,0,named); slot(m,1,named.copy()); press(m,p,0); press(m,p,1);
         h.assertTrue(!m.canDissolve() && !m.canForm() && Assaying.balance(p)==1000,"Named matter refused");
-        slot(m,1,new ItemStack(Items.IRON_INGOT)); slot(m,2,new ItemStack(Items.IRON_INGOT,64)); press(m,p,1);
+        slot(m,1,new ItemStack(Items.OAK_LOG)); slot(m,2,new ItemStack(Items.OAK_LOG,64)); press(m,p,1);
         h.assertTrue(m.formStatus()==4 && Assaying.balance(p)==1000,"Full output never debits");
         slot(m,2,new ItemStack(Items.COPPER_INGOT)); press(m,p,1);
         h.assertTrue(m.formStatus()==4 && Assaying.balance(p)==1000,"Different output never overwritten"); h.succeed();

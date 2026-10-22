@@ -153,6 +153,11 @@ public final class TownState extends SavedData {
 		setDirty();
 	}
 
+    /** Clear only a resident positively observed being destroyed, never one whose chunk is unloaded. */
+    public void removeTownsperson(int spot, UUID expected) {
+        if (townsfolk.remove(spot, expected)) setDirty();
+    }
+
 	/** Records a player's first visit; true the first time. */
 	public boolean welcome(UUID player) {
 		if (welcomed.add(player)) {

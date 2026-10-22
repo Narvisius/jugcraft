@@ -56,7 +56,7 @@ public final class AlchemyPatterns {
     }
     public static boolean building(ItemStack stack){
         var m=AlchemicalWorkshopBlockEntity.material(stack);
-        return m!=null&&m.formable()&&stack.getItem() instanceof BlockItem b&&!b.getBlock().defaultBlockState().hasBlockEntity()
+        return m!=null&&m.formable()&&TabletOutputs.allowed(stack)&&stack.getItem() instanceof BlockItem b&&!b.getBlock().defaultBlockState().hasBlockEntity()
                 &&b.getBlock().defaultBlockState().getFluidState().isEmpty();
     }
     public record Search(int menu,String text) implements CustomPacketPayload {

@@ -24,6 +24,17 @@ import net.minecraft.world.phys.Vec3;
  */
 public class ArtilleryShell extends ThrowableItemProjectile {
 	private static final int HEAVY_LIFETIME = 600;
+    private boolean automatedDefense;
+    public void setAutomatedDefense(boolean value) { automatedDefense = value; }
+    public boolean isAutomatedDefense() { return automatedDefense; }
+    @Override protected void addAdditionalSaveData(net.minecraft.world.level.storage.ValueOutput output) {
+        super.addAdditionalSaveData(output);
+        output.putBoolean("jugcraft_automated_defense", automatedDefense);
+    }
+    @Override protected void readAdditionalSaveData(net.minecraft.world.level.storage.ValueInput input) {
+        super.readAdditionalSaveData(input);
+        automatedDefense = input.getBooleanOr("jugcraft_automated_defense", false);
+    }
 
 	public ArtilleryShell(EntityType<? extends ArtilleryShell> type, Level level) {
 		super(type, level);
@@ -37,6 +48,11 @@ public class ArtilleryShell extends ThrowableItemProjectile {
 		return type == JugcraftArtillery.FLAK_SHELL ? JugcraftArtillery.FLAK_SHELL_ITEM
 				: type == JugcraftTowerGuns.GREAT_SHELL ? JugcraftTowerGuns.GREAT_SHELL_ITEM : JugcraftArtillery.HEAVY_SHELL_ITEM;
 	}
+
+    @Override protected boolean canHitEntity(Entity entity) {
+        if (automatedDefense && (!(entity instanceof LivingEntity living) || !AutomatedDefense.hostile(living))) return false;
+        return super.canHitEntity(entity);
+    }
 
 	private boolean flak() {
 		return getType() == JugcraftArtillery.FLAK_SHELL;
@@ -82,7 +98,8 @@ public class ArtilleryShell extends ThrowableItemProjectile {
 		Entity owner = getOwner();
 		AABB reach = getBoundingBox().inflate(JugcraftArtillery.FLAK_PROXIMITY);
 		return !level.getEntitiesOfClass(LivingEntity.class, reach, e -> e.isAlive() && !e.onGround() && !e.isPassenger()
-				&& e != owner && (owner == null || e.getRootVehicle() != owner.getRootVehicle())).isEmpty();
+                && Blast.surfaceDistance(position(), e) <= JugcraftArtillery.FLAK_PROXIMITY
+				&& (!automatedDefense || AutomatedDefense.hostile(e)) && e != owner && (owner == null || e.getRootVehicle() != owner.getRootVehicle())).isEmpty();
 	}
 
 	@Override

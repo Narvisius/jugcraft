@@ -1,0 +1,48 @@
+LEGACY WINDOWS HELPER — SUPERSEDED FOR NEW PLAYER PACKS
+
+New players should import the .mrpack once and use JUGCRAFT Updates inside
+Minecraft. No EXE or launch hook is needed. These instructions are retained
+for early installations; remove their instance hook when migrating.
+
+JUGCRAFT — ONE INSTALLATION, YOUR SETTINGS KEPT
+
+Windows 10/11. Requires the official Modrinth App and your own Minecraft account.
+This pack does not need to be listed or approved on Modrinth.
+
+FIRST TIME
+1. Extract this ZIP and run JUGCRAFT.exe. It keeps a stable copy under
+   %LOCALAPPDATA%\JUGCRAFT so cleaning Downloads will not break the update hook.
+2. Click "Install once" and confirm ONE JUGCRAFT import in Modrinth.
+   Already have the current JUGCRAFT pack? Skip this step.
+3. In that instance, use Modrinth's Open folder command. Copy its folder path.
+   In our updater click "Select instance folder" and select that folder.
+4. Click "Copy launch hook". In THAT instance's Settings > Launch hooks,
+   paste into Pre-launch and save. Do not use global/default launch hooks.
+   If you already use a pre-launch command, ask for help combining them.
+5. Play the same JUGCRAFT instance in Modrinth as usual. Join jugcraft.modrinth.gg.
+
+UPDATES
+Before Minecraft starts, the hook checks the server owner's promoted GitHub
+release. If an update is available it asks permission, downloads changed mods,
+checks their hashes and updates the existing folder. Cancel stops this launch.
+A failed check/update stops launch; retry after the connection/problem is fixed.
+No new instance is created. No launcher accounts or database are edited.
+Options, keybinds, resource/shader selections, screenshots, saves, server lists,
+configs and unrelated mods are left alone. Pack config migrations are not automatic.
+Modified managed mods stop the update for manual review; they are not overwritten.
+Do not use Modrinth's "update all mods" on this server's pinned dependencies.
+
+Keep the hook enabled. Removing it skips update checks. Java/Minecraft/Fabric
+platform changes require separate reviewed setup; this updater will stop instead
+of silently upgrading them. The updater executable does not silently update itself.
+This first updater supports Windows; macOS/Linux users still import packs manually.
+
+The app is unsigned; normal Windows download checks apply. Do not turn off Windows
+security. Source and release checksums are available from the server owner's GitHub.
+
+RECOVERY
+Interrupted installs recover the previous complete managed files on the next run.
+The private .jugcraft-update folder holds the inventory, transaction and backups.
+Do not edit it or move the profile while updating. Close Minecraft before running
+"Check for update" manually. To move the profile later, select its new folder and
+copy the updated hook. Never point this updater at a different modpack.

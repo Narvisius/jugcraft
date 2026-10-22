@@ -68,17 +68,14 @@ class ReleasePackagingTests(unittest.TestCase):
             self.build()
         self.assertFalse((self.root / 'out').exists())
 
-    def test_player_helper_verifies_exact_pack_and_never_changes_security_policy(self):
+    def test_player_handout_contains_pack_and_instructions_without_executable(self):
         result = self.build()
         player = next(x for x in result['artifacts'] if '-player-' in x['name'])
         with zipfile.ZipFile(self.root / 'out' / player['name']) as archive:
             name = next(n for n in archive.namelist() if n.endswith('.mrpack'))
-            script = archive.read('Install-JUGCRAFT.cmd').decode()
-            self.assertIn(hashlib.sha512(archive.read(name)).hexdigest(), script)
-            self.assertIn('Get-FileHash -LiteralPath', script)
-            self.assertNotIn('ExecutionPolicy', script)
-            self.assertNotIn('Remove-Item', script)
-            self.assertIn('set "JUGCRAFT_PACK=%~dp0', script)
+            self.assertEqual(set(archive.namelist()), {name, 'READ-ME.txt'})
+            self.assertIn('Apply update & quit', archive.read('READ-ME.txt').decode())
+        self.assertFalse(any(x['name'].endswith(('.cmd', '.exe', '.ps1')) for x in result['artifacts']))
         with zipfile.ZipFile(self.root / 'out' / name) as archive:
             self.assertEqual(json.loads(archive.read('modrinth.index.json'))['name'], 'JUGCRAFT')
 
@@ -95,10 +92,9 @@ class ReleasePackagingTests(unittest.TestCase):
                 release.build_release(self.lock, self.jar, self.cache, self.root / 'out', version, commit, self.root)
 
     def test_online_installer_is_pinned_and_verifies_before_opening(self):
-        result = self.build()
-        record = next(x for x in result['artifacts'] if x['name'].endswith('.cmd'))
-        script = (self.root/'out'/record['name']).read_text()
-        pack_record = next(x for x in result['artifacts'] if x['name'].endswith('.mrpack'))
+        # Legacy utility remains readable/tested, but new releases do not ship it.
+        pack_record = {'name': 'jugcraft-complete-0.1.0-test.1.mrpack', 'sha512': 'a' * 128}
+        script = release.online_installer('0.1.0-test.1', pack_record['name'], pack_record['sha512']).decode()
         self.assertIn('/releases/download/pack-0.1.0-test.1/'+pack_record['name'], script)
         self.assertIn(pack_record['sha512'], script)
         self.assertLess(script.index('Get-FileHash'), script.index('Start-Process'))
@@ -106,6 +102,28 @@ class ReleasePackagingTests(unittest.TestCase):
         self.assertNotIn('ExecutionPolicy', script)
         self.assertNotIn('/latest/', script)
         self.assertLess(max(map(len, script.splitlines())), 8191)
+
+    def test_configured_server_is_recorded_and_join_bundle_checksummed(self):
+        settings = {'projectUrl': 'https://modrinth.com/server/jugcraft-server',
+                    'serverAddress': 'jugcraft.modrinth.gg'}
+        (self.root / 'distribution/server-project.json').write_text(json.dumps(settings))
+        result = self.build()
+        self.assertEqual(result['serverAddress'], settings['serverAddress'])
+        self.assertEqual(result['modrinthServerProject'], settings['projectUrl'])
+        entry = next(x for x in result['artifacts'] if x['name'] == 'JUGCRAFT-Join.zip')
+        self.assertEqual(entry['sha512'], release.sha512(self.root / 'out' / entry['name']))
+
+    def test_disabled_listing_uses_direct_inventory_without_join_shortcut(self):
+        (self.root/'distribution/server-project.json').write_text(json.dumps({
+            'enabled':False,'projectUrl':'https://modrinth.com/server/jugcraft-server',
+            'serverAddress':'jugcraft.modrinth.gg'}))
+        result=self.build()
+        self.assertIsNone(result['modrinthServerProject'])
+        self.assertNotIn('JUGCRAFT-Join.zip',[a['name'] for a in result['artifacts']])
+        manifest=json.loads((self.root/'out/player-update.json').read_text())
+        self.assertEqual(manifest['sourceCommit'],'a'*40)
+        self.assertEqual(len(manifest['files']),len(self.lock['dependencies'])+1)
+        self.assertEqual((self.root/'out/jugcraft-client.jar').read_bytes(),self.jar.read_bytes())
 
 
 if __name__ == '__main__':

@@ -29,17 +29,32 @@ public final class AlchemyAutomationMenu extends AbstractContainerMenu {
         if(!(owner instanceof ServerPlayer))return;
         var ids=artifact.getOrDefault(AlchemyAutomation.FILTER,List.<String>of());
         for(int i=0;i<9;i++){var key=i<ids.size()?Identifier.tryParse(ids.get(i)):null;filters.setItem(i,key==null?ItemStack.EMPTY:new ItemStack(BuiltInRegistries.ITEM.getValue(key)));}
-        data.set(1,artifact.has(AlchemicalGear.ACTIVE)?1:0);data.set(2,TARGETS.indexOf(artifact.getOrDefault(AlchemyPatterns.TARGET,"minecraft:diamond")));
+        data.set(1,artifact.has(AlchemicalGear.ACTIVE)?1:0);data.set(2,TARGETS.indexOf(artifact.getOrDefault(AlchemyPatterns.TARGET,"minecraft:oak_log")));
         data.set(4,AlchemyAutomation.budget(artifact));int reserve=AlchemyAutomation.reserve(artifact);data.set(5,reserve&65535);data.set(6,reserve>>>16);data.set(7,artifact.getOrDefault(AlchemyAutomation.STATUS,1));
-        var m=Assaying.catalog().material(TARGETS.get(Math.clamp(target(),0,2)));data.set(8,m==null?0:(int)io.github.jimbozoomer.jugcraft.concordance.equivalence.Assay.form(m,1));
+        var key=Identifier.tryParse(artifact.getOrDefault(AlchemyPatterns.TARGET,"minecraft:oak_log"));
+        var sample=key==null?ItemStack.EMPTY:new ItemStack(BuiltInRegistries.ITEM.getValue(key));
+        var m=AlchemicalWorkshopBlockEntity.material(sample);
+        boolean allowed=m!=null&&m.formable()&&TabletOutputs.allowed(sample);
+        data.set(8,allowed?(int)io.github.jimbozoomer.jugcraft.concordance.equivalence.Assay.form(m,1):0);
+        if(!allowed&&!artifact.is(AlchemyStorage.ITEMS.get("void_ring")))data.set(7,4);
         data.set(3,artifact.is(AlchemyStorage.ITEMS.get("void_ring"))?1:0);
     }
-    public static final List<String> TARGETS=List.of("minecraft:iron_ingot","minecraft:gold_ingot","minecraft:diamond");
+    public static final List<String> TARGETS=List.of("minecraft:oak_log","minecraft:glass","minecraft:torch","minecraft:stone_bricks","minecraft:ladder");
     @Override public void broadcastChanges(){refresh();super.broadcastChanges();}
     @Override public boolean clickMenuButton(Player p,int action){
         if(!(p instanceof ServerPlayer server)||!stillValid(p)||action<0||action>4||!RateGate.allow(server,"alchemy_filter",2))return false;
         if(action==0){if(active())artifact.remove(AlchemicalGear.ACTIVE);else artifact.set(AlchemicalGear.ACTIVE,Unit.INSTANCE);}
-        if(action==1)artifact.set(AlchemyPatterns.TARGET,TARGETS.get(Math.floorMod(target()+1,3)));
+        if(action==1){
+            // Retain legacy targets until the owner chooses a permitted replacement.
+            for(int step=1;step<=TARGETS.size();step++){
+                String id=TARGETS.get(Math.floorMod(target()+step,TARGETS.size()));
+                var stack=new ItemStack(BuiltInRegistries.ITEM.getValue(Identifier.parse(id)));
+                var material=AlchemicalWorkshopBlockEntity.material(stack);
+                if(TabletOutputs.allowed(stack)&&material!=null&&material.formable()){
+                    artifact.set(AlchemyPatterns.TARGET,id);break;
+                }
+            }
+        }
         if(action==2)artifact.remove(AlchemyAutomation.FILTER);
         if(action==3){var sizes=List.of(1,4,16,64);artifact.set(AlchemyAutomation.BUDGET,sizes.get(Math.floorMod(sizes.indexOf(budget())+1,sizes.size())));}
         if(action==4){var reserves=List.of(0,1024,8192,65536);artifact.set(AlchemyAutomation.RESERVE,reserves.get(Math.floorMod(reserves.indexOf(reserve())+1,reserves.size())));}

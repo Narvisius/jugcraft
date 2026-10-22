@@ -2,48 +2,30 @@
   "feature": "jugcraft:cavern_floating_gummy_ring",
   "placement": [
     {
-      "type": "minecraft:count",
-      "count": {
-        "max_inclusive": 70,
-        "min_inclusive": 30,
-        "type": "minecraft:uniform"
-      }
+      "type": "minecraft:in_square"
     },
     {
       "type": "minecraft:height_range",
       "height": {
-        "type": "minecraft:uniform",
-        "max_inclusive": {
-          "above_bottom": 160
-        },
-        "min_inclusive": {
-          "above_bottom": 0
-        }
+        "absolute": -39
+      }
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:matching_blocks",
+        "offset": [
+          0,
+          -1,
+          0
+        ],
+        "blocks": [
+          "jugcraft:cavern_purple_soda"
+        ]
       }
     },
     {
       "type": "minecraft:biome"
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "minecraft:environment_scan",
-      "allowed_search_condition": {
-        "type": "minecraft:matching_blocks",
-        "blocks": [
-          "minecraft:air",
-          "minecraft:cave_air",
-          "minecraft:void_air",
-          "jugcraft:cavern_ambersol_light"
-        ]
-      },
-      "direction_of_search": "up",
-      "max_steps": 32,
-      "target_condition": {
-        "type": "minecraft:has_sturdy_face",
-        "direction": "down"
-      }
     }
   ]
 }

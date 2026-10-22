@@ -386,6 +386,8 @@ public class DieselWalker extends Entity {
 
 	@Override
 	public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
+        if (source.getEntity() instanceof net.minecraft.world.entity.player.Player attacker
+                && !io.github.jimbozoomer.jugcraft.finance.LandRegistry.mayBuild(attacker, level, blockPosition())) return false;
 		if (isRemoved() || !(source.getEntity() instanceof Player player) || player.getVehicle() == this) {
 			return false;
 		}

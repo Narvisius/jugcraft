@@ -42,6 +42,8 @@ public final class NaturalCollections {
         Registry.register(BuiltInRegistries.FEATURE_TYPE,Jugcraft.id("owner_template"),OwnerTemplateFeature.CODEC);
         Registry.register(BuiltInRegistries.FEATURE_TYPE,Jugcraft.id("owner_patch"),OwnerPatchFeature.CODEC);
         Registry.register(BuiltInRegistries.FEATURE_TYPE,Jugcraft.id("cavern_chamber"),CavernChamber.CODEC);
+        Registry.register(BuiltInRegistries.FEATURE_TYPE,Jugcraft.id("candy_cavity"),CandyCavity.CODEC);
+        CandyLandmark.register();
         for(String group:List.of("landscape","cavern"))try(var in=NaturalCollections.class.getResourceAsStream("/jugcraft/menagerie/"+group+".json")){
             if(in!=null)register(group,JsonParser.parseReader(new InputStreamReader(in,StandardCharsets.UTF_8)).getAsJsonObject());
         }catch(IOException e){throw new IllegalStateException(e);}
@@ -86,7 +88,11 @@ public final class NaturalCollections {
                 case "campfire"->new CampfireBlock(n.contains("soul_campfire"),n.contains("soul_campfire")?2:1,p.strength(2).noOcclusion().lightLevel(s->s.getValue(CampfireBlock.LIT)?12:0));
                 case "building"->new Block(p);
                 case "cavern"->n.equals("nuclear_furnace")?new BlastFurnaceBlock(p):HouseholdBlock.create(p.noOcclusion().randomTicks(),d.getAsJsonObject("definition"));
-                default->HouseholdBlock.create(p.noOcclusion(),d.getAsJsonObject("definition"));
+                // These supplied cube models inherit their geometry from vanilla parents.
+                // The furniture importer has no explicit boxes for them, so its fallback
+                // is a two-pixel slab. Use native solid pillars and preserve saved axis IDs.
+                default->group.equals("cavern")&&Set.of("cake_layer","block_of_chocolate","licoroot","candy_cane_block","stripped_candy_cane_block").contains(n)
+                        ?new RotatedPillarBlock(p):HouseholdBlock.create(p.noOcclusion(),d.getAsJsonObject("definition"));
             };
             Registry.register(BuiltInRegistries.BLOCK,key,b);Menagerie.BLOCKS.put(id,b);
             if(kind.equals("shelf"))((FabricBlockEntityType)JugcraftAgriculture.KITCHEN_CABINET_ENTITY).addValidBlock(b);

@@ -11,6 +11,9 @@
       "io.github.jimbozoomer.jugcraft.test.TestForms"
     ],
     "fabric-gametest": [
+      "io.github.jimbozoomer.jugcraft.test.CityDefenseGameTests",
+      "io.github.jimbozoomer.jugcraft.test.CandyCavityGameTests",
+      "io.github.jimbozoomer.jugcraft.test.TownLifeGameTests",
       "io.github.jimbozoomer.jugcraft.test.AcademyGameTests",
       "io.github.jimbozoomer.jugcraft.test.UndergroundDepositGameTests",
       "io.github.jimbozoomer.jugcraft.test.StarterWorkshopGameTests",
@@ -291,9 +294,14 @@
       "io.github.jimbozoomer.jugcraft.test.CydonianSanctumGameTests",
       "io.github.jimbozoomer.jugcraft.test.CydonianSentinelGameTests",
       "io.github.jimbozoomer.jugcraft.test.FinanceGameTests",
-      "io.github.jimbozoomer.jugcraft.finance.ExchangeIntegrationGameTests"
+      "io.github.jimbozoomer.jugcraft.finance.ExchangeIntegrationGameTests",
+      "io.github.jimbozoomer.jugcraft.test.PlayerRulesGameTests",
+      "io.github.jimbozoomer.jugcraft.finance.ClaimProtectionGameTests",
+      "io.github.jimbozoomer.jugcraft.finance.ServerDefenseGameTests"
     ],
     "fabric-client-gametest": [
+      "io.github.jimbozoomer.jugcraft.test.CandyCavityClientGameTests",
+      "io.github.jimbozoomer.jugcraft.test.UpdateMenuClientGameTests",
       "io.github.jimbozoomer.jugcraft.finance.ExchangeClientGameTests",
       "io.github.jimbozoomer.jugcraft.test.AcademyClientGameTests",
       "io.github.jimbozoomer.jugcraft.test.UndergroundDepositClientGameTests",
@@ -525,7 +533,9 @@
       "io.github.jimbozoomer.jugcraft.test.ChemistryIntegrationClientGameTests",
       "io.github.jimbozoomer.jugcraft.test.AdamOndiAhmanClientGameTests",
       "io.github.jimbozoomer.jugcraft.test.CydonianSanctumClientGameTests",
-      "io.github.jimbozoomer.jugcraft.test.CydonianSentinelClientGameTests"
+      "io.github.jimbozoomer.jugcraft.test.CydonianSentinelClientGameTests",
+      "io.github.jimbozoomer.jugcraft.test.PackBrowserClientGameTests",
+      "io.github.jimbozoomer.jugcraft.test.ConvenienceTabletClientGameTests"
     ]
   },
   "depends": {

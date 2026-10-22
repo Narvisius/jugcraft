@@ -29,13 +29,13 @@ SPEED = 0.15
 TURN = 2.5
 # The cannon: ticks between shots, shell speed (blocks a tick), the blast's reach and centre damage.
 CANNON_COOLDOWN = 40
-SHELL_SPEED = 2.5
+SHELL_SPEED = 5.0
 SHELL_RADIUS = 3.5
 SHELL_DAMAGE = 22
 # The sponson guns: ticks between bursts (the same as a creature's hurt cooldown), damage a hit and reach.
 GUN_INTERVAL = 10
 GUN_DAMAGE = 4
-GUN_RANGE = 24
+GUN_RANGE = 250
 # Crushing: damage to anything the hull drives into.
 CRUSH_DAMAGE = 4
 # Fuel in mB: the tank, what a bucket adds and what driving burns a second.

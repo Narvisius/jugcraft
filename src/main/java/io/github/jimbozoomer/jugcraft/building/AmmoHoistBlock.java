@@ -150,6 +150,7 @@ public class AmmoHoistBlock extends Block implements EntityBlock {
 		}
 
 		private long deliver(ServerLevel level, BlockPos target, Direction face, long max) {
+			if (!io.github.jimbozoomer.jugcraft.finance.ClaimTransfers.allowed(level, worldPosition, target)) return 0;
 			Storage<ItemVariant> storage = ItemStorage.SIDED.find(level, target, face);
 			return storage == null ? 0 : StorageUtil.move(buffer, storage, v -> true, max, null);
 		}

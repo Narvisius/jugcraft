@@ -1,14 +1,15 @@
 """Validate the reviewed library lock and build a reproducible, offline .mrpack.
 
-Only the explicit `verify` command downloads library artifacts. Neither the mod
-nor pack creation downloads executable code. The player's launcher installs the
-locked files when they choose to import/install the resulting pack.
+Only the explicit `verify` command downloads artifacts during packaging. The
+launcher installs pinned files on initial import; opted-in client packs offer
+owner-promoted updates through the mod's consent-based title-menu updater.
 """
 
 from __future__ import annotations
 
 import argparse
 import hashlib
+import io
 import json
 from pathlib import Path, PurePosixPath
 import re
@@ -132,8 +133,13 @@ def inspect_jugcraft_jar(jar: Path, lock: dict) -> dict:
             if library["requiredByJugcraft"]:
                 require(metadata["depends"].get(library["modId"]) == ">=" + library["modVersion"],
                         f"Built JAR is missing the locked {library['key']} requirement")
-        require(not any(name.endswith(".jar") for name in archive.namelist()),
+        require(not any(name.endswith(".jar") and name != "jugcraft/updater-helper.jar" for name in archive.namelist()),
                 "Jugcraft must not bundle third-party mod JARs")
+        if "jugcraft/updater-helper.jar" in archive.namelist():
+            with zipfile.ZipFile(io.BytesIO(archive.read("jugcraft/updater-helper.jar"))) as helper:
+                require(all(n.endswith('/') or n == 'META-INF/MANIFEST.MF' or
+                            n == 'io/github/jimbozoomer/jugcraft/update/UpdateApplier.class'
+                            for n in helper.namelist()), 'Unexpected code in bundled updater helper')
     return metadata
 
 
@@ -179,8 +185,24 @@ def build_pack(lock: dict, jar: Path, output: Path, version: str | None = None, 
     with zipfile.ZipFile(result, "w") as archive:
         add_entry(archive, "modrinth.index.json", json_bytes(make_index(lock, version)))
         # Only Jugcraft's own artifact is carried in overrides. Libraries remain official downloads.
-        add_entry(archive, "overrides/mods/jugcraft.jar", jar.read_bytes())
+        jar_bytes = jar.read_bytes()
+        add_entry(archive, "overrides/mods/jugcraft.jar", jar_bytes)
         add_entry(archive, "overrides/JUGCRAFT-LIBRARIES.json", json_bytes(lock))
+        # Explicit opt-in: standalone mod JARs never check/download updates. No
+        # pack hash here (that would be circular); this is the installed inventory.
+        with zipfile.ZipFile(jar) as built:
+            has_updater = 'jugcraft/updater-helper.jar' in built.namelist()
+        if has_updater:
+            inventory = [{"path": "mods/" + lib["filename"], "sha512": lib["hashes"]["sha512"],
+                          "size": lib["size"], "url": lib["downloads"][0], "policy": "managed"}
+                         for lib in lock["dependencies"]]
+            inventory.append({"path": "mods/jugcraft.jar", "sha512": hashlib.sha512(jar_bytes).hexdigest(),
+                              "size": len(jar_bytes), "policy": "managed",
+                              "url": "https://github.com/jimbozoomer-byte/jugcraft/releases/download/pack-" + version + "/jugcraft-client.jar"})
+            add_entry(archive, "client-overrides/JUGCRAFT-UPDATE.json", json_bytes({
+                "schemaVersion": 1, "updaterVersion": 1, "releaseVersion": version,
+                "minecraft": lock["minecraft"], "fabricLoader": lock["fabricLoader"],
+                "java": lock["java"], "files": inventory}))
         for folder in ("overrides", "client-overrides", "server-overrides"):
             base = root / "distribution" / folder
             if base.exists():
@@ -191,7 +213,7 @@ def build_pack(lock: dict, jar: Path, output: Path, version: str | None = None, 
                     relative = path.relative_to(base).as_posix()
                     require(".." not in PurePosixPath(relative).parts and path.suffix != ".jar",
                             "Pack overrides must not contain external JARs or path escapes")
-                    require(relative not in {"JUGCRAFT-LIBRARIES.json", "mods/jugcraft.jar"},
+                    require(relative not in {"JUGCRAFT-LIBRARIES.json", "JUGCRAFT-UPDATE.json", "mods/jugcraft.jar"},
                             "Reserved pack override path")
                     add_entry(archive, folder + "/" + relative, path.read_bytes())
     (output / "modrinth-version.json").write_bytes(json_bytes(publication_metadata(lock, metadata["version"])))

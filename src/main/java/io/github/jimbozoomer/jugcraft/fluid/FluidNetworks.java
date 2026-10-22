@@ -1,5 +1,7 @@
 package io.github.jimbozoomer.jugcraft.fluid;
 
+import io.github.jimbozoomer.jugcraft.finance.ClaimTransfers;
+import io.github.jimbozoomer.jugcraft.finance.LandRegistry;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,6 +56,7 @@ public final class FluidNetworks {
 				break;
 			}
 			BlockPos neighbor = pos.relative(side);
+            if (!ClaimTransfers.allowed(level, pos, neighbor)) continue;
 			BlockState neighborState = level.getBlockState(neighbor);
 			if (neighborState.getBlock() instanceof FluidPipeBlock pipe) {
 				if (!pipe.carries(neighborState)) {
@@ -74,10 +77,12 @@ public final class FluidNetworks {
 	private static Network network(Level level, BlockPos pipePos) {
 		Map<BlockPos, Network> networks = CACHE.computeIfAbsent(level, l -> new HashMap<>());
 		Network cached = networks.get(pipePos);
-		if (cached != null) {
+		if (cached != null && cached.revision == LandRegistry.revision(level)
+                && cached.pipes.stream().allMatch(level::hasChunkAt)) {
 			return cached;
 		}
 		Network network = Network.discover(level, pipePos);
+        network.revision = LandRegistry.revision(level);
 		for (BlockPos pipe : network.pipes) {
 			networks.put(pipe, network);
 		}
@@ -90,6 +95,7 @@ public final class FluidNetworks {
 		private final List<Endpoint> endpoints = new ArrayList<>();
 		/** Droplets one push may send: the slowest pipe's rate, so bronze pipes limit a steel line like cables do. */
 		private long rate = Long.MAX_VALUE;
+        private long revision;
 
 		static Network discover(Level level, BlockPos start) {
 			Network network = new Network();
@@ -105,6 +111,7 @@ public final class FluidNetworks {
 				BlockPos pipe = queue.poll();
 				for (Direction direction : Direction.values()) {
 					BlockPos next = pipe.relative(direction).immutable();
+                    if (!ClaimTransfers.allowed(level, pipe, next)) continue;
 					BlockState nextState = level.getBlockState(next);
 					if (nextState.getBlock() instanceof FluidPipeBlock nextPipe) {
 						// A closed valve ends the network: it is neither a pipe of it nor a storage on it.
@@ -127,6 +134,7 @@ public final class FluidNetworks {
 		long distribute(Level level, BlockPos sourcePos, Storage<FluidVariant> source, long budget) {
 			Map<Storage<FluidVariant>, Predicate<FluidVariant>> receivers = new LinkedHashMap<>();
 			for (Endpoint endpoint : endpoints) {
+                if (!ClaimTransfers.allowed(level, sourcePos, endpoint.pos)) continue;
 				if (endpoint.pos.equals(sourcePos)) {
 					continue;
 				}

@@ -32,7 +32,7 @@ UI = {
     "input_help": "Insert plain catalogued matter. Named or modified items are refused. Your ledger must have room for the whole stack (maximum 2,000,000,000 essence).",
     "form_help": "Keep one sample here. Creates one copy for the displayed price, paid from your personal ledger.",
     "status_0": "Form one copy. The sample is kept; take the result from the output slot.",
-    "status_1": "Place one sample in the sample slot.", "status_2": "This sample cannot be formed. Only plain catalogued mundane materials qualify.",
+    "status_1": "Place one sample in the sample slot.", "status_2": "This sample cannot be formed. Choose an approved building or convenience item.",
     "status_3": "Not enough essence. Dissolve spare materials first.", "status_4": "Take the formed items out first; the output is full or holds another material.",
 }
 

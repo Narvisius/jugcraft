@@ -60,7 +60,7 @@ public class AlchemyMachinesGameTests {
     }
     @GameTest(maxTicks=20)public void collectorFeedsRelayAndRelayFeedsExistingCondenser(GameTestHelper h){
         var p=player(h);var relay=place(h,p,"relay_mk1");h.getLevel().setBlock(relay.getBlockPos(),relay.getBlockState().setValue(AlchemyMachinesBlock.FACING,Direction.EAST),3);
-        h.setBlock(new BlockPos(3,3,2),AlchemicalWorkshops.BLOCKS.get("condenser_mk1"));var condenser=h.getBlockEntity(new BlockPos(3,3,2),AlchemicalWorkshopBlockEntity.class);condenser.placedBy(p);condenser.setItem(1,new ItemStack(Items.IRON_INGOT));
+        h.setBlock(new BlockPos(3,3,2),AlchemicalWorkshops.BLOCKS.get("condenser_mk1"));var condenser=h.getBlockEntity(new BlockPos(3,3,2),AlchemicalWorkshopBlockEntity.class);condenser.placedBy(p);condenser.setItem(1,new ItemStack(Items.OAK_LOG));
         h.setBlock(new BlockPos(1,3,2),AlchemicalWorkshops.BLOCKS.get("collector_mk1"));var collector=h.getBlockEntity(new BlockPos(1,3,2),AlchemicalWorkshopBlockEntity.class);collector.placedBy(p);collector.setEssence(1000);collector.pulse(p);
         h.assertTrue(relay.essence()==64,"Collector supplies the new network");relay.pulse(p);h.assertTrue(condenser.essence()==64&&relay.essence()==0,"No loss crossing relay");h.succeed();
     }

@@ -49,10 +49,15 @@ public class RaiderBlimp extends Monster implements Raider {
 	}
 
 	@Override
+	public boolean canAttack(net.minecraft.world.entity.LivingEntity target) {
+		return RaiderTargets.allowed(target) && super.canAttack(target);
+	}
+
+	@Override
 	protected void registerGoals() {
 		targetSelector.addGoal(1, new HurtByTargetGoal(this, RaiderInfantry.class, RaiderWalker.class, RaiderBlimp.class));
 		// It hunts from the air: it needs no line of sight.
-		targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, false));
+		targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, io.github.jimbozoomer.jugcraft.town.Townsfolk.class, false));
 	}
 
 	@Override

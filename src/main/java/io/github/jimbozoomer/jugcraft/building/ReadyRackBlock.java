@@ -117,7 +117,8 @@ public class ReadyRackBlock extends HorizontalDirectionalBlock implements Entity
 	private static boolean find(ServerLevel level, AABB area, Item ammo, boolean take) {
 		for (BlockPos pos : BlockPos.betweenClosed(BlockPos.containing(area.minX, area.minY, area.minZ),
 				BlockPos.containing(area.maxX, area.maxY, area.maxZ))) {
-			if (!(level.getBlockEntity(pos) instanceof Entity rack)) {
+			if (!io.github.jimbozoomer.jugcraft.finance.ClaimTransfers.allowed(level, BlockPos.containing(area.getCenter()), pos)
+                    || !(level.getBlockEntity(pos) instanceof Entity rack)) {
 				continue;
 			}
 			for (int slot = 0; slot < rack.shells.getContainerSize(); slot++) {

@@ -86,10 +86,11 @@ public final class AlchemyAutomation {
         if(!AlchemicalGear.ready(p)||!artifact.has(AlchemicalGear.ACTIVE))return stopped(artifact,1);
         if(artifact.getOrDefault(FILTER,List.of()).isEmpty())return stopped(artifact,2);
         boolean voiding=artifact.is(AlchemyStorage.ITEMS.get("void_ring"));
-        var key=Identifier.tryParse(artifact.getOrDefault(AlchemyPatterns.TARGET,"minecraft:diamond"));
+        var key=Identifier.tryParse(artifact.getOrDefault(AlchemyPatterns.TARGET,"minecraft:oak_log"));
         var target=key==null?ItemStack.EMPTY:new ItemStack(BuiltInRegistries.ITEM.getValue(key));
         var targetMaterial=AlchemicalWorkshopBlockEntity.material(target);
-        long price=targetMaterial!=null&&targetMaterial.formable()?Assay.form(targetMaterial,1):0;
+        long price=targetMaterial!=null&&targetMaterial.formable()&&TabletOutputs.allowed(target)?Assay.form(targetMaterial,1):0;
+        if(!voiding&&price<=0)return stopped(artifact,4);
         int output=voiding?-1:room(c,target,first,end);
         if(!voiding&&(price<=0||output<0))return stopped(artifact,output<0?3:4);
         boolean changed=false;

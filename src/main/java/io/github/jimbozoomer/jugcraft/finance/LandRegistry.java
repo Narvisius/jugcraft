@@ -23,7 +23,8 @@ import net.minecraft.world.level.saveddata.SavedDataType;
  * The land office: who owns which Overworld chunk, which are for sale, and whom each owner trusts. Saved with the
  * overworld (data/jugcraft_land.dat).
  *
- * <p>Unclaimed chunks are bought from the central bank: the base price, 10% dearer for every chunk the buyer already
+ * <p>Four starter chunks are free and reusable when abandoned. Further unclaimed chunks are bought from the bank:
+ * the base price, 10% dearer for every paid chunk the buyer already
  * owns, paid into the reserve (a money sink). Owned chunks can be put up for sale at the owner's price; a buyer pays
  * the owner. Only the owner, players they trust and operators may break, place or use blocks, or touch entities, in a
  * claimed chunk. Every check is one hash lookup, and nothing here loads chunks.
@@ -34,6 +35,7 @@ public final class LandRegistry extends SavedData {
 	/** How far, in chunks, the land map reaches from the player; claims beyond it are refused. */
 	public static final int MAP_RADIUS = 7;
 	public static final int MAX_TRUSTED = 32;
+    public static final int FREE_STARTER_CHUNKS = 4;
 
 	/**
 	 * One claimed chunk. {@code price} above zero means it is for sale at that price. An auction runs while
@@ -49,6 +51,8 @@ public final class LandRegistry extends SavedData {
 		public long bid;
 		public UUID bidder;
 		public String bidderName;
+        public UUID sharedParty;
+        public boolean starter;
 
 		public Claim(long key, UUID owner, String ownerName, long price) {
 			this(key, owner, ownerName, price, -1, 0, 0, java.util.Optional.empty(), "");
@@ -56,8 +60,18 @@ public final class LandRegistry extends SavedData {
 
 		public Claim(long key, UUID owner, String ownerName, long price, long auctionEnd, long opening, long bid,
 				java.util.Optional<UUID> bidder, String bidderName) {
-			this.key = key;
-			this.owner = owner;
+			this(key, owner, ownerName, price, auctionEnd, opening, bid, bidder, bidderName, java.util.Optional.empty());
+        }
+        public Claim(long key, UUID owner, String ownerName, long price, long auctionEnd, long opening, long bid,
+                java.util.Optional<UUID> bidder, String bidderName, java.util.Optional<UUID> sharedParty) {
+            this(key, owner, ownerName, price, auctionEnd, opening, bid, bidder, bidderName, sharedParty, false);
+        }
+        public Claim(long key, UUID owner, String ownerName, long price, long auctionEnd, long opening, long bid,
+                java.util.Optional<UUID> bidder, String bidderName, java.util.Optional<UUID> sharedParty, boolean starter) {
+            this.starter = starter;
+            this.sharedParty = sharedParty.orElse(null);
+            this.key = key;
+            this.owner = owner;
 			this.ownerName = ownerName;
 			this.price = price;
 			this.auctionEnd = auctionEnd;
@@ -90,7 +104,9 @@ public final class LandRegistry extends SavedData {
 			Codec.LONG.optionalFieldOf("opening", 0L).forGetter(c -> c.opening),
 			Codec.LONG.optionalFieldOf("bid", 0L).forGetter(c -> c.bid),
 			UUIDUtil.CODEC.optionalFieldOf("bidder").forGetter(c -> java.util.Optional.ofNullable(c.bidder)),
-			Codec.STRING.optionalFieldOf("bidder_name", "").forGetter(c -> c.bidderName == null ? "" : c.bidderName)
+			Codec.STRING.optionalFieldOf("bidder_name", "").forGetter(c -> c.bidderName == null ? "" : c.bidderName),
+            UUIDUtil.CODEC.optionalFieldOf("shared_party").forGetter(c -> java.util.Optional.ofNullable(c.sharedParty)),
+            Codec.BOOL.optionalFieldOf("starter", false).forGetter(c -> c.starter)
 	).apply(i, Claim::new));
 	static final Codec<LandRegistry> CODEC = RecordCodecBuilder.create(i -> i.group(
 			Codec.LONG.optionalFieldOf("base_price", DEFAULT_BASE_PRICE).forGetter(l -> l.basePrice),
@@ -123,6 +139,12 @@ public final class LandRegistry extends SavedData {
 			this.trusted.put(e.getKey(), new HashSet<UUID>(e.getValue()));
 		}
 	}
+
+	private long revision;
+    @Override public void setDirty() { super.setDirty(); revision++; }
+    public static long revision(Level level) {
+        return level.getServer() == null ? 0 : get(level.getServer()).revision;
+    }
 
 	public static LandRegistry get(MinecraftServer server) {
 		return server.overworld().getDataStorage().computeIfAbsent(TYPE);
@@ -167,11 +189,16 @@ public final class LandRegistry extends SavedData {
 		return count;
 	}
 
+    public int freeRemaining(UUID player) {
+        return Math.max(0, FREE_STARTER_CHUNKS - (int) claims.values().stream().filter(c -> c.starter && c.owner.equals(player)).count());
+    }
+
 	/** What the next unclaimed chunk costs {@code buyer}: the base price, the admins' step dearer for each chunk they own. */
 	public long nextPrice(UUID buyer, FinanceBook book) {
-		long price = basePrice;
+		if (freeRemaining(buyer) > 0) return 0;
+        long price = basePrice;
 		int growth = (int) ExchangeSettings.value(book, ExchangeSettings.LAND_GROWTH);
-		int owned = owned(buyer);
+		int owned = Math.max(0, owned(buyer) - (FREE_STARTER_CHUNKS - freeRemaining(buyer)));
 		for (int i = 0; i < owned && price < FinanceBook.MAX_AMOUNT && growth > 0; i++) {
 			price = Math.min(FinanceBook.MAX_AMOUNT, price + Math.max(1, FinanceBook.percentOf(price, growth)));
 		}
@@ -218,7 +245,8 @@ public final class LandRegistry extends SavedData {
 		if (claim == null || actsFor(mc, player.getUUID(), claim.owner)) {
 			return true;
 		}
-		// Corporation land: the controlling shareholder's trusted players may build too.
+		if (partyMayBuild(claim, player.getUUID())) return true;
+        // Corporation land: the controlling shareholder's trusted players may build too.
 		Equities.Corporation corp = Equities.get(mc).byTreasury(claim.owner);
 		UUID boss = corp == null ? claim.owner : Equities.get(mc).controller(corp);
 		if (boss != null && land.trustedBy(boss).contains(player.getUUID())) {
@@ -226,6 +254,33 @@ public final class LandRegistry extends SavedData {
 		}
 		return FinanceService.isAdmin(server);
 	}
+
+    /** Explicit sharing is tied to one party ID; leaving/recreating a party cannot transfer access. */
+    public static boolean partyMayBuild(Claim claim, UUID player) {
+        return claim.sharedParty != null
+                && io.github.jimbozoomer.jugcraft.party.JugcraftParties.partyId(claim.owner).filter(claim.sharedParty::equals).isPresent()
+                && io.github.jimbozoomer.jugcraft.party.JugcraftParties.partyId(player).filter(claim.sharedParty::equals).isPresent();
+    }
+    public FinanceBook.Result shareParty(ServerPlayer player, boolean enabled) {
+        if (player.level().dimension() != Level.OVERWORLD) return FinanceBook.Result.fail("Claims are in the Overworld.");
+        var claim = claims.get(keyOf(player.blockPosition()));
+        if (claim == null || !claim.owner.equals(player.getUUID())) return FinanceBook.Result.fail("Stand in land you personally own.");
+        var party = io.github.jimbozoomer.jugcraft.party.JugcraftParties.partyId(player.getUUID());
+        if (enabled && party.isEmpty()) return FinanceBook.Result.fail("Join or create a party first with /party.");
+        claim.sharedParty = enabled ? party.orElseThrow() : null;
+        setDirty();
+        return new FinanceBook.Result(true, enabled ? "Your current party can build here. Only you can sell or release the claim." : "Party access removed from this claim.");
+    }
+    public static boolean isClaimed(Level level, BlockPos pos) {
+        return !level.isClientSide() && level.dimension() == Level.OVERWORLD && level.getServer() != null
+                && get(level.getServer()).claims.containsKey(keyOf(pos));
+    }
+    /** Environmental movement may stay within one owner's claims, but cannot cross an ownership boundary. */
+    public static boolean crossesBoundary(Level level, BlockPos from, BlockPos to) {
+        if (level.isClientSide() || level.dimension() != Level.OVERWORLD || level.getServer() == null) return false;
+        var land = get(level.getServer()); var a = land.claims.get(keyOf(from)); var b = land.claims.get(keyOf(to));
+        return !java.util.Objects.equals(a == null ? null : a.owner, b == null ? null : b.owner);
+    }
 
 	/** True when {@code player} owns the land of {@code owner}: it is them, or a corporation they control. */
 	public static boolean actsFor(MinecraftServer server, UUID player, UUID owner) {
@@ -272,14 +327,18 @@ public final class LandRegistry extends SavedData {
 			if (price > shownPrice) {
 				return FinanceBook.Result.fail("The price is now " + book.format(price) + ": try again.");
 			}
-			FinanceBook.Result paid = book.payBank(player.getUUID(), price, day, name + " bought " + where + " from the land office for "
+			boolean starter = freeRemaining(player.getUUID()) > 0;
+            FinanceBook.Result paid = starter ? new FinanceBook.Result(true, "Starter allowance") : book.payBank(player.getUUID(), price, day, name + " bought " + where + " from the land office for "
 					+ book.format(price) + ".");
 			if (!paid.ok()) {
 				return paid;
 			}
-			claims.put(key, new Claim(key, player.getUUID(), name, 0));
+			var acquired = new Claim(key, player.getUUID(), name, 0);
+            acquired.starter = starter;
+            claims.put(key, acquired);
+            if (starter) book.note(day, player.getUUID(), null, name + " used a free starter claim for " + where + ".");
 			setDirty();
-			return new FinanceBook.Result(true, "You own " + where + ".");
+			return new FinanceBook.Result(true, "You own " + where + ". Free claims remaining: " + freeRemaining(player.getUUID()) + ".");
 		}
 		if (actsFor(player.level().getServer(), player.getUUID(), claim.owner)) {
 			return FinanceBook.Result.fail("You already own this land.");
@@ -303,10 +362,12 @@ public final class LandRegistry extends SavedData {
 			return paid;
 		}
 		claim.owner = player.getUUID();
+            claim.sharedParty = null;
+            claim.starter = false;
 		claim.ownerName = name;
 		claim.price = 0;
 		setDirty();
-		return new FinanceBook.Result(true, "You own " + where + ".");
+		return new FinanceBook.Result(true, "You own " + where + ". Free claims remaining: " + freeRemaining(player.getUUID()) + ".");
 	}
 
 	static boolean touchesTown(Level level, long key) {
@@ -316,6 +377,7 @@ public final class LandRegistry extends SavedData {
 	/** Puts the owner's chunk up for sale at {@code price}, or takes it off the market with 0. */
 	public FinanceBook.Result sell(ServerPlayer player, FinanceBook book, long key, long price, long day) {
 		Claim claim = claims.get(key);
+        if (claim != null && claim.starter) return FinanceBook.Result.fail("Starter land cannot be sold, auctioned or transferred. Abandon it to recover the free claim.");
 		if (claim == null || !actsFor(player.level().getServer(), player.getUUID(), claim.owner)) {
 			return FinanceBook.Result.fail("You do not own that land.");
 		}
@@ -373,6 +435,7 @@ public final class LandRegistry extends SavedData {
 	public FinanceBook.Result zone(ServerPlayer player, FinanceBook book, long key, long corpId, long day) {
 		MinecraftServer server = player.level().getServer();
 		Claim claim = claims.get(key);
+        if (claim != null && claim.starter) return FinanceBook.Result.fail("Starter land cannot be sold, auctioned or transferred. Abandon it to recover the free claim.");
 		if (claim == null || !actsFor(server, player.getUUID(), claim.owner)) {
 			return FinanceBook.Result.fail("You do not own that land.");
 		}
@@ -383,6 +446,8 @@ public final class LandRegistry extends SavedData {
 		String where = "chunk " + keyX(key) + ", " + keyZ(key);
 		if (corpId == 0) {
 			claim.owner = player.getUUID();
+            claim.sharedParty = null;
+            claim.starter = false;
 			claim.ownerName = player.getName().getString();
 		} else {
 			Equities.Corporation corp = equities.corp(corpId);
@@ -390,6 +455,8 @@ public final class LandRegistry extends SavedData {
 				return FinanceBook.Result.fail("You do not control that corporation.");
 			}
 			claim.owner = corp.treasury;
+            claim.sharedParty = null;
+            claim.starter = false;
 			claim.ownerName = corp.ticker;
 		}
 		claim.price = 0;
@@ -408,6 +475,7 @@ public final class LandRegistry extends SavedData {
 	/** The owner puts a chunk up for auction for {@code days}: the top bidder when it closes buys it. */
 	public FinanceBook.Result auction(ServerPlayer player, FinanceBook book, long key, long opening, int lengthIndex, long day) {
 		Claim claim = claims.get(key);
+        if (claim != null && claim.starter) return FinanceBook.Result.fail("Starter land cannot be sold, auctioned or transferred. Abandon it to recover the free claim.");
 		if (claim == null || !actsFor(player.level().getServer(), player.getUUID(), claim.owner)) {
 			return FinanceBook.Result.fail("You do not own that land.");
 		}
@@ -476,6 +544,8 @@ public final class LandRegistry extends SavedData {
 				book.settle(claim.bidder, claim.owner, claim.bid, day, claim.bidderName + " won the auction of " + where + " from "
 						+ claim.ownerName + " for " + book.format(claim.bid) + ".");
 				claim.owner = claim.bidder;
+            claim.sharedParty = null;
+            claim.starter = false;
 				claim.ownerName = claim.bidderName;
 			} else {
 				book.note(day, claim.owner, null, "The auction of " + where + " closed with no bids; " + claim.ownerName
@@ -534,6 +604,8 @@ public final class LandRegistry extends SavedData {
 			claims.put(key, new Claim(key, to.id, to.name, 0));
 		} else {
 			claim.owner = to.id;
+            claim.sharedParty = null;
+            claim.starter = false;
 			claim.ownerName = to.name;
 			claim.price = 0;
 		}

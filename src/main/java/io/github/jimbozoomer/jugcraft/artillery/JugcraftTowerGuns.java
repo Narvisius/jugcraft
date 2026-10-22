@@ -27,7 +27,7 @@ import net.minecraft.world.phys.Vec3;
  * Shell. Keep the numbers in sync with tools/tower_guns.py; tools/check_mod_data.py checks each {@code spec(...)} line.
  */
 public final class JugcraftTowerGuns {
-	public static final double GREAT_SPEED = 3.2;
+	public static final double GREAT_SPEED = 5.0;
 	public static final double GREAT_GRAVITY = 0.05;
 	public static final double GREAT_RADIUS = 7.0;
 	public static final float GREAT_DAMAGE = 48F;
@@ -71,11 +71,11 @@ public final class JugcraftTowerGuns {
 	}
 
 	public static final List<Spec> SPECS = List.of(
-			spec("bastion_mortar", 3, "heavy", 3.0, 70, 3.0F, 45.0F, 85.0F, true, false, 1.6875, 0.125, 2.75, 160, 2.4F, new double[] {0.0}, new Vec3(0.0, 0.75, -0.9375), new Vec3(0.6875, 0.75, -0.5625)),
+			spec("bastion_mortar", 3, "heavy", 5.0, 70, 3.0F, 45.0F, 89.0F, true, false, 1.6875, 0.125, 2.75, 160, 2.4F, new double[] {0.0}, new Vec3(0.0, 0.75, -0.9375), new Vec3(0.6875, 0.75, -0.5625)),
 			spec("bastion_autocannon", 3, "flak", 4.0, 6, 10.0F, -10.0F, 85.0F, false, true, 1.5625, 0.375, 3.125, 120, 2.2F, new double[] {-0.3125, 0.3125}, new Vec3(0.0, 0.75, -1.0)),
-			spec("grand_mortar", 5, "great", 3.2, 200, 1.0F, 45.0F, 85.0F, true, false, 3.125, 0.25, 5.375, 320, 4.0F, new double[] {0.0}, new Vec3(0.0, 0.9375, -1.625), new Vec3(1.25, 0.9375, -1.0), new Vec3(-1.25, 0.9375, -1.0)),
-			spec("fortress_rifle", 5, "heavy", 4.5, 120, 1.5F, -5.0F, 45.0F, false, false, 2.125, 0.875, 6.5, 300, 3.0F, new double[] {0.0}, new Vec3(0.0, 0.9375, -1.875), new Vec3(1.125, 0.9375, -1.625)),
-			spec("triple_battery", 5, "heavy", 3.0, 140, 1.5F, -5.0F, 60.0F, false, false, 2.0, 0.875, 4.875, 300, 2.8F, new double[] {-0.6875, 0.0, 0.6875}, new Vec3(0.0, 0.9375, -1.875), new Vec3(1.125, 0.9375, -1.625)));
+			spec("grand_mortar", 5, "great", 5.0, 200, 1.0F, 45.0F, 89.0F, true, false, 3.125, 0.25, 5.375, 320, 4.0F, new double[] {0.0}, new Vec3(0.0, 0.9375, -1.625), new Vec3(1.25, 0.9375, -1.0), new Vec3(-1.25, 0.9375, -1.0)),
+			spec("fortress_rifle", 5, "heavy", 5.0, 120, 1.5F, -5.0F, 45.0F, false, false, 2.125, 0.875, 6.5, 300, 3.0F, new double[] {0.0}, new Vec3(0.0, 0.9375, -1.875), new Vec3(1.125, 0.9375, -1.625)),
+			spec("triple_battery", 5, "heavy", 5.0, 140, 1.5F, -5.0F, 60.0F, false, false, 2.0, 0.875, 4.875, 300, 2.8F, new double[] {-0.6875, 0.0, 0.6875}, new Vec3(0.0, 0.9375, -1.875), new Vec3(1.125, 0.9375, -1.625)));
 
 	/** Each gun's entity type and item, by id, in the order above. */
 	public static final Map<String, EntityType<TowerGun>> TYPES = new LinkedHashMap<>();

@@ -119,7 +119,23 @@ public abstract class CrewedGun extends Entity {
 
 	protected abstract double barrelLength();
 
-	protected abstract Item dropItem();
+	private @Nullable BlockPos townStation;
+    public @Nullable BlockPos townStation() { return townStation; }
+    public void setTownStation(BlockPos at) { townStation = at.immutable(); unlinkDirector(); }
+    private boolean cityCrew() {
+        return townStation != null && getFirstPassenger() instanceof io.github.jimbozoomer.jugcraft.town.Townsfolk guard
+            && guard.isAlive() && guard.role().equals("flak_guard") && guard.home().equals(townStation);
+    }
+    private void defendTown(ServerLevel level, Vec3 pivot) {
+        if (tickCount % 20 == 0) sentryTarget = io.github.jimbozoomer.jugcraft.town.TownDefense.target(level, this, pivot);
+        if (sentryTarget == null || !AutomatedDefense.hostile(sentryTarget) || sentryTarget.distanceToSqr(pivot) > 250 * 250) return;
+        Vec3 aim = lead(sentryTarget, pivot);
+        float[] wanted = solve(aim, pivot);
+        if (wanted != null && slew(wanted) && reloaded()
+                && io.github.jimbozoomer.jugcraft.town.TownDefense.visible(level, this, pivot, sentryTarget.getBoundingBox().getCenter())) fire(level, null, pivot);
+    }
+
+    protected abstract Item dropItem();
 
 	protected abstract int health();
 
@@ -189,6 +205,7 @@ public abstract class CrewedGun extends Entity {
 
 	/** Use: climb aboard. */
 	public InteractionResult use(Player player, InteractionHand hand) {
+        if (townStation != null) return InteractionResult.FAIL;
 		if (player.isPassenger() || getPassengers().size() >= seats()) {
 			return InteractionResult.PASS;
 		}
@@ -209,7 +226,9 @@ public abstract class CrewedGun extends Entity {
 		move(level, listening);
 		resetFallDistance();
 		Vec3 pivot = pivot();
-		if (gunner instanceof ServerPlayer player) {
+		if (cityCrew()) {
+            defendTown(level, pivot);
+        } else if (gunner instanceof ServerPlayer player && townStation == null) {
 			FireControlTableBlock.Entity table = director(level);
 			if (table != null) {
 				// Orders given while someone crews the gun are theirs to ignore, not to fire later.
@@ -237,7 +256,7 @@ public abstract class CrewedGun extends Entity {
 		} else {
 			ordered = false;
 			fireHeld = false;
-			if (gunner == null) {
+			if (gunner == null && townStation == null) {
 				directed(level, pivot);
 			}
 		}
@@ -263,7 +282,8 @@ public abstract class CrewedGun extends Entity {
 
 	/** The yaw and elevation that land a shell on {@code point}, or null if it is out of reach. */
 	private float @Nullable [] solve(Vec3 point, Vec3 pivot) {
-		Vec3 delta = point.subtract(pivot);
+		if (point.distanceToSqr(pivot) > 250 * 250) return null;
+        Vec3 delta = point.subtract(pivot);
 		float yaw = limitYaw((float) Math.toDegrees(Math.atan2(-delta.x, delta.z)));
 		double distance = Math.sqrt(delta.x * delta.x + delta.z * delta.z) - barrelLength();
 		Float pitch = Ballistics.solve(shellSpeed(), shellGravity(), distance, delta.y, highArc(), minPitch(), maxPitch());
@@ -291,6 +311,7 @@ public abstract class CrewedGun extends Entity {
 
 	/** Links the gun to a table (dropping any earlier table's link), so it starts on the table's next salvo. */
 	public void linkDirector(ServerLevel level, BlockPos pos, FireControlTableBlock.Entity table) {
+        if (townStation != null) return;
 		if (director != null && !director.equals(pos) && level.isLoaded(director)
 				&& level.getBlockEntity(director) instanceof FireControlTableBlock.Entity old) {
 			old.unlink(getUUID());
@@ -318,7 +339,7 @@ public abstract class CrewedGun extends Entity {
 	/** An uncrewed gun working to its table's orders. */
 	private void directed(ServerLevel level, Vec3 pivot) {
 		FireControlTableBlock.Entity table = director(level);
-		if (table == null) {
+		if (table == null || !table.mayOperate(level, blockPosition()) || table.sentryDisabled()) {
 			salvoOrdered = false;
 			sentryTarget = null;
 			return;
@@ -346,7 +367,8 @@ public abstract class CrewedGun extends Entity {
 			}
 		} else if (mode == FireControlTableBlock.Mode.SENTRY) {
 			salvoOrdered = false;
-			if (sentryTarget != null && (!sentryTarget.isAlive() || sentryTarget.isRemoved())) {
+			if (sentryTarget != null && (!AutomatedDefense.hostile(sentryTarget) || sentryTarget.isRemoved() || !table.inSector(sentryTarget.position())
+                    || sentryTarget.distanceToSqr(pivot) > (double) FireControl.SENTRY_RANGE * FireControl.SENTRY_RANGE)) {
 				sentryTarget = null;
 			}
 			if (tickCount % FireControl.SENTRY_SCAN == 0) {
@@ -379,7 +401,7 @@ public abstract class CrewedGun extends Entity {
 	private @Nullable LivingEntity pickTarget(ServerLevel level, FireControlTableBlock.Entity table, Vec3 pivot) {
 		double min = (double) FireControl.SENTRY_MIN_RANGE * FireControl.SENTRY_MIN_RANGE;
 		List<LivingEntity> candidates = level.getEntitiesOfClass(LivingEntity.class, new AABB(pivot, pivot).inflate(FireControl.SENTRY_RANGE),
-				e -> e instanceof Enemy && e.isAlive() && !(e instanceof Player) && e.getRootVehicle() != this);
+				e -> AutomatedDefense.hostile(e) && e.getRootVehicle() != this);
 		candidates.sort(Comparator.comparingDouble(e -> e.distanceToSqr(pivot)));
 		int tried = 0;
 		for (LivingEntity candidate : candidates) {
@@ -421,8 +443,7 @@ public abstract class CrewedGun extends Entity {
 	/** Check fire: never shell a point with a player within {@value FireControl#CHECK_FIRE} blocks of it. */
 	private static boolean clearToFire(ServerLevel level, Vec3 point) {
 		double r = FireControl.CHECK_FIRE;
-		return level.getEntitiesOfClass(Player.class, new AABB(point, point).inflate(r),
-				p -> !p.isSpectator() && p.distanceToSqr(point) <= r * r).isEmpty();
+		return AutomatedDefense.clearToFire(level, point, r);
 	}
 
 	private AABB rackReach() {
@@ -502,11 +523,12 @@ public abstract class CrewedGun extends Entity {
 		int fired = 0;
 		for (double offset : barrelOffsets()) {
 			// Each barrel uses a shell; a salvo fires as many barrels as there are shells for.
-			if ((gunner == null || !gunner.getAbilities().instabuild) && !takeAmmo(level, gunner == null ? null : gunner.getInventory())) {
+			if (!cityCrew() && (gunner == null || !gunner.getAbilities().instabuild) && !takeAmmo(level, gunner == null ? null : gunner.getInventory())) {
 				break;
 			}
 			Vec3 muzzle = pivot.add(across.scale(offset)).add(dir.scale(barrelLength()));
 			ArtilleryShell shell = gunner == null ? new ArtilleryShell(shellType(), level) : new ArtilleryShell(shellType(), level, gunner);
+			if (gunner == null) shell.setAutomatedDefense(true);
 			shell.setPos(muzzle);
 			shell.shoot(dir.x, dir.y, dir.z, (float) shellSpeed(), 0.0F);
 			level.addFreshEntity(shell);
@@ -553,7 +575,7 @@ public abstract class CrewedGun extends Entity {
 
 	@Override
 	protected boolean canAddPassenger(Entity passenger) {
-		return getPassengers().size() < seats();
+		return getPassengers().size() < seats() && (townStation == null || passenger instanceof io.github.jimbozoomer.jugcraft.town.Townsfolk guard && guard.role().equals("flak_guard") && guard.home().equals(townStation));
 	}
 
 	@Override
@@ -574,6 +596,9 @@ public abstract class CrewedGun extends Entity {
 
 	@Override
 	public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
+        if (townStation != null) return false;
+        if (source.getEntity() instanceof net.minecraft.world.entity.player.Player attacker
+                && !io.github.jimbozoomer.jugcraft.finance.LandRegistry.mayBuild(attacker, level, blockPosition())) return false;
 		if (isRemoved() || !(source.getEntity() instanceof Player player) || player.getRootVehicle() == this) {
 			return false;
 		}
@@ -605,6 +630,7 @@ public abstract class CrewedGun extends Entity {
 
 	@Override
 	protected void readAdditionalSaveData(ValueInput input) {
+        townStation = input.read("town_station", BlockPos.CODEC).orElse(null);
 		entityData.set(AIM_YAW, input.getFloatOr("aim_yaw", getYRot()));
 		entityData.set(AIM_PITCH, input.getFloatOr("aim_pitch", 20.0F));
 		director = input.read("director", BlockPos.CODEC).orElse(null);
@@ -613,6 +639,7 @@ public abstract class CrewedGun extends Entity {
 
 	@Override
 	protected void addAdditionalSaveData(ValueOutput output) {
+        if (townStation != null) output.store("town_station", BlockPos.CODEC, townStation);
 		output.putFloat("aim_yaw", entityData.get(AIM_YAW));
 		output.putFloat("aim_pitch", entityData.get(AIM_PITCH));
 		if (director != null) {

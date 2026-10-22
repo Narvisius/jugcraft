@@ -7,7 +7,6 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -20,9 +19,8 @@ import net.minecraft.world.level.block.entity.SignTextSlot;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.saveddata.maps.MapId;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
-import net.minecraft.world.phys.AABB;
 
-/** Vanilla signs and a locked, north-up town plan. No client dependency or chunk scanning. */
+/** Bright vanilla signs; legacy map serialization retained for existing items. No client dependency or chunk scanning. */
 public final class TownWayfinding {
     private TownWayfinding() {}
 
@@ -31,24 +29,17 @@ public final class TownWayfinding {
         for (var entry : TownData.get().signs) {
             BlockPos pos = origin.offset(entry.pos());
             if (!ChunkPos.containing(pos).equals(chunk)) continue;
-            if (level.getBlockEntity(pos) instanceof SignBlockEntity sign) {
-                List<Component> lines = entry.lines().stream().map(Component::literal).map(c -> (Component)c).toList();
-                for (var slot : SignTextSlot.values()) sign.setText(new SignText(lines, lines, DyeColor.WHITE, false), slot);
-                sign.setWaxed(true);
-                sign.setChanged();
-                level.sendBlockUpdated(pos, sign.getBlockState(), sign.getBlockState(), 3);
-            }
+            writeSign(level, pos, entry.lines());
         }
-        for (var entry : TownData.get().mapBoards) {
-            BlockPos pos = origin.offset(entry.pos());
-            if (!ChunkPos.containing(pos).equals(chunk)) continue;
-            // Idempotent if an operator retries construction of this chunk.
-            if (!level.getEntitiesOfClass(ItemFrame.class, new AABB(pos).inflate(0.5),
-                    frame -> frame.getItem().is(Items.FILLED_MAP)).isEmpty()) continue;
-            ItemFrame frame = new ItemFrame(level, pos, entry.facing());
-            frame.setItem(map(level));
-            frame.setPermanentlyInvulnerable(true);
-            level.addFreshEntity(frame);
+    }
+
+    static void writeSign(ServerLevel level, BlockPos pos, List<String> content) {
+        if (level.getBlockEntity(pos) instanceof SignBlockEntity sign) {
+            List<Component> lines = content.stream().map(Component::literal).map(c -> (Component)c).toList();
+            for (var slot : SignTextSlot.values()) sign.setText(new SignText(lines, lines, DyeColor.WHITE, true), slot);
+            sign.setWaxed(true);
+            sign.setChanged();
+            level.sendBlockUpdated(pos, sign.getBlockState(), sign.getBlockState(), 3);
         }
     }
 
