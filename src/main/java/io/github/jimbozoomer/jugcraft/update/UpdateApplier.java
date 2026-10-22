@@ -2,6 +2,7 @@ package io.github.jimbozoomer.jugcraft.update;
 
 import java.io.*;
 import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 import java.nio.file.*;
 import java.security.MessageDigest;
 import java.time.Duration;
@@ -124,23 +125,65 @@ public final class UpdateApplier {
             safe(work.resolve("downloaded.properties"));Files.deleteIfExists(work.resolve("downloaded.properties"));
         }catch(IOException ignored){} // Harmless extra backup; retry cleanup next update.
     }
+    static void log(String message) { System.out.println(java.time.Instant.now()+" [updater pid="+ProcessHandle.current().pid()+"] "+message); }
+
+    /** Only a null tryLock result is contention. IO errors and interruption must escape. */
+    static FileLock awaitGameLock(FileChannel channel, Duration timeout) throws IOException, InterruptedException {
+        long started=System.nanoTime(),budget=timeout.toNanos();
+        require(budget>0,"Invalid game-lock wait deadline");
+        for (;;) {
+            FileLock lock=channel.tryLock();
+            long elapsed=System.nanoTime()-started;
+            if(lock!=null) {log("Game lock acquired after "+Duration.ofNanos(elapsed).toMillis()+" ms");return lock;}
+            if(elapsed>=budget) {
+                log("Game lock timed out after "+Duration.ofNanos(elapsed).toMillis()+" ms");
+                throw new IOException("Timed out waiting for this instance's game lock after Minecraft exited ("+timeout.toSeconds()+" seconds). Another game may still be running or Windows may still be releasing its files; no managed files changed");
+            }
+            Thread.sleep(Math.max(1,Math.min(100,Duration.ofNanos(budget-elapsed).toMillis())));
+        }
+    }
+
+    public record StartupLease(FileChannel channel, FileLock lock) implements AutoCloseable {
+        @Override public void close() throws IOException {try {lock.release();}finally {channel.close();}}
+    }
+
+    /** Startup and helper both take helper.lock before game.lock. Null means recovery is needed. */
+    public static StartupLease startupLease(Path root) throws IOException {
+        Path work=root.resolve(WORK);safe(work);Files.createDirectories(work);
+        safe(work.resolve("helper.lock"));safe(work.resolve("game.lock"));
+        try(var helperChannel=FileChannel.open(work.resolve("helper.lock"),StandardOpenOption.CREATE,StandardOpenOption.WRITE);var helperLock=helperChannel.tryLock()) {
+            require(helperLock!=null,"JUGCRAFT is finishing an update; wait before pressing Play again");
+            if(Files.exists(work.resolve("plan.properties"))||Files.exists(work.resolve("journal.properties")))return null;
+            var channel=FileChannel.open(work.resolve("game.lock"),StandardOpenOption.CREATE,StandardOpenOption.WRITE);
+            try {
+                var lock=channel.tryLock();require(lock!=null,"JUGCRAFT is already running in this instance");
+                return new StartupLease(channel,lock);
+            } catch(IOException|RuntimeException e) {channel.close();throw e;}
+        }
+    }
+
     public static void main(String[] args) throws Exception {
         require(args.length==3 && (args[2].equals("apply")||args[2].equals("recover")),"Invalid helper arguments");
         Path root=Path.of(args[0]).toAbsolutePath().normalize(),work=root.resolve(WORK); safe(root); safe(work);
         safe(work.resolve("helper.lock"));
         try(var channel=FileChannel.open(work.resolve("helper.lock"),StandardOpenOption.CREATE,StandardOpenOption.WRITE); var lock=channel.tryLock()) {
             require(lock!=null,"Another updater is already active");
-            atomic(work.resolve("ready.txt"),Long.toString(ProcessHandle.current().pid()).getBytes(java.nio.charset.StandardCharsets.UTF_8));
-            long parent=Long.parseLong(args[1]),deadline=System.nanoTime()+Duration.ofMinutes(15).toNanos();
-            while(ProcessHandle.of(parent).map(ProcessHandle::isAlive).orElse(false)) {
-                require(System.nanoTime()<deadline,"Minecraft did not exit; no files changed"); Thread.sleep(200);
-            }
-            safe(work.resolve("game.lock"));
-            try(var gameChannel=FileChannel.open(work.resolve("game.lock"),StandardOpenOption.CREATE,StandardOpenOption.WRITE);var gameLock=gameChannel.tryLock()) {
-                require(gameLock!=null,"Another game is using this instance; no files changed");
-                if(args[2].equals("recover")) {recover(root); Files.deleteIfExists(work.resolve("plan.properties"));}
-                else apply(root,i->{});
+            try {
+                long parent=Long.parseLong(args[1]),started=System.nanoTime();
+                log("Starting "+args[2]+"; parent pid="+parent+"; helper lock acquired");
+                atomic(work.resolve("ready.txt"),Long.toString(ProcessHandle.current().pid()).getBytes(java.nio.charset.StandardCharsets.UTF_8));
+                while(ProcessHandle.of(parent).map(ProcessHandle::isAlive).orElse(false)) {
+                    require(System.nanoTime()-started<Duration.ofMinutes(15).toNanos(),"Minecraft did not exit; no files changed"); Thread.sleep(200);
+                }
+                log("Parent pid="+parent+" exited; waited "+Duration.ofNanos(System.nanoTime()-started).toMillis()+" ms; waiting up to 30000 ms for game lock");
+                safe(work.resolve("game.lock"));
+                try(var gameChannel=FileChannel.open(work.resolve("game.lock"),StandardOpenOption.CREATE,StandardOpenOption.WRITE);var gameLock=awaitGameLock(gameChannel,Duration.ofSeconds(30))) {
+                    if(args[2].equals("recover")) {recover(root); Files.deleteIfExists(work.resolve("plan.properties"));}
+                    else apply(root,i->{});
+                    log("Completed "+args[2]);
+                }
             } catch(Exception e) {
+                log("Failed: "+e.getClass().getSimpleName()+": "+e.getMessage());
                 atomic(work.resolve("result.txt"),("Update failed: "+e.getMessage()).getBytes(java.nio.charset.StandardCharsets.UTF_8));
                 // A rolled-back install may start again and offer a retry. An incomplete
                 // rollback retains the plan, and the startup guard blocks that install.

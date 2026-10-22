@@ -138,7 +138,8 @@ def inspect_jugcraft_jar(jar: Path, lock: dict) -> dict:
         if "jugcraft/updater-helper.jar" in archive.namelist():
             with zipfile.ZipFile(io.BytesIO(archive.read("jugcraft/updater-helper.jar"))) as helper:
                 require(all(n.endswith('/') or n == 'META-INF/MANIFEST.MF' or
-                            n == 'io/github/jimbozoomer/jugcraft/update/UpdateApplier.class'
+                            n in ('io/github/jimbozoomer/jugcraft/update/UpdateApplier.class',
+                                  'io/github/jimbozoomer/jugcraft/update/UpdateApplier$StartupLease.class')
                             for n in helper.namelist()), 'Unexpected code in bundled updater helper')
     return metadata
 

@@ -134,6 +134,7 @@ class PackagingTests(unittest.TestCase):
         with zipfile.ZipFile(helper, 'w') as z:
             z.writestr('META-INF/MANIFEST.MF', 'Main-Class: io.github.jimbozoomer.jugcraft.update.UpdateApplier\n')
             z.writestr('io/github/jimbozoomer/jugcraft/update/UpdateApplier.class', b'fixture')
+            z.writestr('io/github/jimbozoomer/jugcraft/update/UpdateApplier$StartupLease.class', b'fixture')
         with zipfile.ZipFile(jar, 'a') as z:
             z.writestr('jugcraft/updater-helper.jar', helper.getvalue())
         result = packaging.build_pack(self.lock, jar, self.root / 'game-update', root=self.root)
@@ -144,6 +145,17 @@ class PackagingTests(unittest.TestCase):
             self.assertEqual(own['sha512'], hashlib.sha512(jar.read_bytes()).hexdigest())
             self.assertEqual(len(baseline['files']), len(self.lock['dependencies']) + 1)
             self.assertNotIn('pack', baseline)
+
+    def test_unexpected_helper_classes_are_still_rejected(self):
+        jar = self.jar()
+        helper = io.BytesIO()
+        with zipfile.ZipFile(helper, 'w') as z:
+            z.writestr('io/github/jimbozoomer/jugcraft/update/UpdateApplier.class', b'fixture')
+            z.writestr('io/github/jimbozoomer/jugcraft/update/UpdateApplier$Unexpected.class', b'fixture')
+        with zipfile.ZipFile(jar, 'a') as z:
+            z.writestr('jugcraft/updater-helper.jar', helper.getvalue())
+        with self.assertRaisesRegex(ValueError, 'Unexpected code'):
+            packaging.inspect_jugcraft_jar(jar, self.lock)
 
     def test_jade_remains_optional_in_standalone_publication(self):
         jade = next(x for x in self.lock["dependencies"] if x["key"] == "jade")

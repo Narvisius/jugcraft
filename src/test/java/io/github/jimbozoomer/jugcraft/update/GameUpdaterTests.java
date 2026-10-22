@@ -4,6 +4,8 @@ import java.nio.file.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.nio.channels.FileChannel;
+import java.time.Duration;
 
 /** Offline real-file transactions in disposable folders; never touches a player profile. */
 public final class GameUpdaterTests {
@@ -74,7 +76,48 @@ public final class GameUpdaterTests {
             put(f.resolve("release-parent"),"exit now");
             check(helper.waitFor(20,TimeUnit.SECONDS)&&helper.exitValue()==0,"Helper commits after game exits");
             check(Files.readString(f.resolve("mods/jugcraft.jar")).equals("new mod"),"Real subprocess installed update");preserved(f);
+            // Parent has exited, but another process (this harness) retains the OS lock.
+            // This deterministically models delayed Windows cleanup without relying on a timing fluke.
+            Path delayed=fixture(temp);var delayedWork=delayed.resolve(UpdateApplier.WORK);
+            Process delayedHelper;
+            try(var held=FileChannel.open(delayedWork.resolve("game.lock"),StandardOpenOption.CREATE,StandardOpenOption.WRITE);var heldLock=held.lock()) {
+                delayedHelper=new ProcessBuilder(java,"-jar",args[0],delayed.toString(),Long.toString(parent.pid()),"apply").redirectErrorStream(true).redirectOutput(delayed.resolve("helper-test.log").toFile()).start();
+                waitReady(delayed,delayedHelper);
+                Thread.sleep(400);
+                check(delayedHelper.isAlive(),"Delayed lock release is retried after parent exit");
+                check(Files.readString(delayed.resolve("mods/jugcraft.jar")).equals("old mod"),"No managed writes before game lock acquisition");
+                rejects(()->UpdateApplier.startupLease(delayed));
+                try(var ch=FileChannel.open(delayedWork.resolve("helper.lock"),StandardOpenOption.WRITE);var l=ch.tryLock()) {check(l==null,"Helper lock remains held throughout wait");}
+            }
+            check(delayedHelper.waitFor(20,TimeUnit.SECONDS)&&delayedHelper.exitValue()==0,"Delayed lock eventually permits update");
+            check(Files.readString(delayed.resolve("mods/jugcraft.jar")).equals("new mod"),"Delayed handoff installs verified payload");
+            String handoff=Files.readString(delayed.resolve("helper-test.log"));
+            check(handoff.contains("parent pid=")&&handoff.contains("Game lock acquired after")&&handoff.contains("Completed apply"),"Handoff records PIDs, elapsed wait and success");preserved(delayed);
+
+            Path busy=fixture(temp);var busyWork=busy.resolve(UpdateApplier.WORK);
+            try(var held=FileChannel.open(busyWork.resolve("game.lock"),StandardOpenOption.CREATE,StandardOpenOption.WRITE);var heldLock=held.lock()) {
+                Process blocked=new ProcessBuilder(java,"-jar",args[0],busy.toString(),Long.toString(parent.pid()),"apply").redirectErrorStream(true).redirectOutput(busy.resolve("helper-test.log").toFile()).start();
+                waitReady(busy,blocked);
+                check(blocked.waitFor(45,TimeUnit.SECONDS)&&blocked.exitValue()!=0,"Persistent conflicting process times out");
+                check(Files.readString(busy.resolve("mods/jugcraft.jar")).equals("old mod")&&Files.exists(busy.resolve("mods/retired.jar"))&&!Files.exists(busy.resolve("mods/added.jar")),"Timeout leaves all managed files unchanged");
+                check(Files.readString(busy.resolve(UpdateApplier.BASELINE)).equals("old inventory")&&!Files.exists(busyWork.resolve("journal.properties")),"Timeout never begins transaction");
+                check(Files.readString(busyWork.resolve("result.txt")).contains("Timed out waiting"),"Timeout accurately reports lock wait failure");preserved(busy);
+            }
+            Path launch=fixture(temp);var launchWork=launch.resolve(UpdateApplier.WORK);
+            check(UpdateApplier.startupLease(launch)==null,"Pending transaction requests recovery before taking game lock");
+            try(var ch=FileChannel.open(launchWork.resolve("game.lock"),StandardOpenOption.CREATE,StandardOpenOption.WRITE);var l=ch.tryLock()) {check(l!=null,"Rejected recovery launch does not retain game lock");}
+            Files.delete(launchWork.resolve("plan.properties"));
+            try(var lease=UpdateApplier.startupLease(launch)) {check(lease!=null,"Clean launch retains a game lease");rejects(()->UpdateApplier.startupLease(launch));}
+            try(var ch=FileChannel.open(launchWork.resolve("game.lock"),StandardOpenOption.WRITE)) {
+                ch.close();long start=System.nanoTime();rejects(()->UpdateApplier.awaitGameLock(ch,Duration.ofSeconds(30)));
+                check(System.nanoTime()-start<TimeUnit.SECONDS.toNanos(1),"IO failure is not treated as lock contention");
+            }
             System.out.println("PASS: "+assertions+" offline in-game updater assertions");
         }finally{try(var paths=Files.walk(temp)){for(Path p:paths.sorted(Comparator.reverseOrder()).toList())Files.deleteIfExists(p);}}
+    }
+    private static void waitReady(Path root,Process helper)throws Exception {
+        long deadline=System.nanoTime()+TimeUnit.SECONDS.toNanos(10);
+        while(!Files.exists(root.resolve(UpdateApplier.WORK+"/ready.txt"))&&helper.isAlive()&&System.nanoTime()<deadline)Thread.sleep(20);
+        check(helper.isAlive()&&Files.exists(root.resolve(UpdateApplier.WORK+"/ready.txt")),"Helper acquired update lock and signaled readiness");
     }
 }
