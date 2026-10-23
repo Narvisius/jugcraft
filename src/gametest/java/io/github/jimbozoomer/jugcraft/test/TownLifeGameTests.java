@@ -37,7 +37,11 @@ public class TownLifeGameTests {
         h.runAfterDelay(10,()->{h.assertTrue(!resident.isSleeping(),"Resident stays awake at sunset");clock[0]=18000;});
         h.runAfterDelay(120,()->{
             h.assertTrue(resident.isSleeping(),"Resident walks to and sleeps in the bed at midnight");
-            h.assertTrue(!guard.isSleeping(),"Guard remains on duty");clock[0]=0;
+            h.assertTrue(!guard.isSleeping(),"Guard remains on duty");
+            var resting=resident.position();
+            resident.setDeltaMovement(new Vec3(.5,0,.5));resident.travel(new Vec3(1,0,1));
+            h.assertTrue(resident.position().distanceToSqr(resting)<.0001 && resident.getDeltaMovement().lengthSqr()==0,"Sleeping residents cannot travel even with stale walking input");
+            clock[0]=0;
         });
         h.runAfterDelay(150,()->{h.assertTrue(!resident.isSleeping(),"Resident wakes at dawn");resident.discard();guard.discard();h.succeed();});
     }

@@ -34,8 +34,10 @@ import net.minecraft.world.phys.BlockHitResult;
 /**
  * Keeps the town as it was built. In its protected area (inside the wall and {@code protect} blocks round it, from
  * {@link Town#PROTECT_BELOW} under the ground up) players cannot break or place blocks, use items on blocks, empty or
- * fill buckets, or harm its decorations; they can still open doors and gates, press buttons, and use the town's ATMs,
- * crafting tables and beds (the blocks in {@code #jugcraft:town_usable}) and its shops. Townsfolk cannot be harmed by
+ * fill buckets, or harm its decorations; they can use non-container blocks, including doors, trapdoors, gates,
+ * controls, workstations and seats. Block entities are private unless explicitly public in
+ * {@code #jugcraft:town_usable}; stored item/fluid inventories remain protected, with personal ender chests exempt.
+ * Interaction executes the block action directly and cannot fall through into held-item placement. Townsfolk cannot be harmed by
  * anyone. Hostile mobs do not spawn naturally inside the wall. Explosions, fire and pistons cannot change protected
  * blocks (the mixins {@code TownExplosionCalculatorMixin}, {@code TownEntityExplosionMixin}, {@code TownFireBlockMixin}
  * and {@code TownPistonMixin} ask {@link #shieldsBlock}).
@@ -96,17 +98,49 @@ public final class TownProtection {
 		if (!denies(player, level, pos) && !denies(player, level, beside)) {
 			return InteractionResult.PASS;
 		}
+		if (player.isSpectator()) return InteractionResult.FAIL;
 		BlockState state = level.getBlockState(pos);
 		boolean holding = !player.getMainHandItem().isEmpty() || !player.getOffhandItem().isEmpty();
-		// Doors, gates, buttons and the town's own machines work; sneaking with something in hand would skip them and use
-		// the item instead, so that is refused.
-		if (state.is(USABLE) && !(player.isSecondaryUseActive() && holding)) {
-			return InteractionResult.PASS;
+		// Execute only the block's ordinary interaction, never the held item's use-on-block
+		// fallback (placing, stripping, dyeing, waterlogging, etc.). Claim checks still apply.
+		if (publicBlock(level, pos, state)
+				&& io.github.jimbozoomer.jugcraft.finance.LandRegistry.mayBuild(player, level, pos)) {
+			InteractionResult result = state.useWithoutItem(level, player, hit);
+			return result.consumesAction() ? result : InteractionResult.FAIL;
 		}
 		if (holding) {
 			tell(player);
 		}
 		return InteractionResult.FAIL;
+	}
+
+	/** Public amenities do not expose persistent inventories; unknown block entities stay private. */
+	public static boolean publicBlock(Level level, BlockPos pos, BlockState state) {
+		// This is the player's personal inventory, explicitly provided by the bank.
+		if (state.is(net.minecraft.world.level.block.Blocks.ENDER_CHEST)) return true;
+		var entity = level.getBlockEntity(pos);
+		if (entity instanceof net.minecraft.world.Container
+				|| state.getBlock() instanceof net.minecraft.world.WorldlyContainerHolder) return false;
+		// Include sided/proxy inventories and fluid tanks, not just vanilla chest entities.
+		if (hasStoredResources(level, pos, null)) return false;
+		for (var side : net.minecraft.core.Direction.values()) if (hasStoredResources(level, pos, side)) return false;
+		if (state.getBlock() instanceof io.github.jimbozoomer.jugcraft.menagerie.HouseholdBlock household)
+			return household.publicTownInteraction();
+		if (state.is(USABLE)) return true;
+		// Non-container furniture/workstations can be used without permitting item mutations.
+		// Flower pots hold removable town decorations, so treat them as small containers.
+		return entity == null && !(state.getBlock() instanceof net.minecraft.world.level.block.FlowerPotBlock);
+	}
+
+	private static boolean hasStoredResources(Level level, BlockPos pos, net.minecraft.core.Direction side) {
+		return net.fabricmc.fabric.api.transfer.v1.item.ItemStorage.SIDED.find(level, pos, side) != null
+				|| net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage.SIDED.find(level, pos, side) != null;
+	}
+
+	/** Lets native furniture perform its ordinary public interaction, not modification with tools/items. */
+	public static boolean allowsPublicUse(Player player, Level level, BlockPos pos) {
+		return denies(player, level, pos) && publicBlock(level, pos, level.getBlockState(pos))
+				&& io.github.jimbozoomer.jugcraft.finance.LandRegistry.mayBuild(player, level, pos);
 	}
 
 	private static InteractionResult useItem(Player player, Level level, InteractionHand hand) {

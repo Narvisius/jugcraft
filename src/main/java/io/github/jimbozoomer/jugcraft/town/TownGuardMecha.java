@@ -17,6 +17,7 @@ public class TownGuardMecha extends Townsfolk {
     private float gunYaw;
     private int lastShot = -100, clientShot = -100;
     private float stride, oldStride, weight, oldWeight;
+    private Vec3 previousStridePosition;
     public TownGuardMecha(EntityType<? extends TownGuardMecha> type, Level level) { super(type, level); }
     @Override public boolean isGuard() { return true; }
     @Override protected void defineSynchedData(SynchedEntityData.Builder builder) {
@@ -31,13 +32,15 @@ public class TownGuardMecha extends Townsfolk {
     public int sinceShot() { return tickCount - (level().isClientSide() ? clientShot : lastShot); }
     public float gunPitch() { return entityData.get(PITCH); }
     @Override public void tick() {
-        double x = getX(), z = getZ();
         super.tick();
         if (!level().isClientSide() && gunTarget != null && gunTarget.isAlive()) {
             setYRot(gunYaw); yBodyRot = gunYaw; yHeadRot = gunYaw;
         }
         oldStride = stride; oldWeight = weight;
-        double step = Math.hypot(getX() - x, getZ() - z);
+        Vec3 now = position();
+        double step = previousStridePosition == null ? 0 : now.subtract(previousStridePosition).horizontalDistance();
+        previousStridePosition = now;
+        if (step > 2) step = 0; // Teleports and initial network placement are not walking.
         stride += (float) Math.min(step, .5);
         weight += ((float)Math.min(1, step * 6) - weight) * .3F;
     }

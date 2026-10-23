@@ -1,5 +1,15 @@
 # Jugcraft TODO
 
+## Town maintenance and updater rollout — October 22
+
+- [x] Allow public doors, trapdoors, controls, seating and inventory-free workstations in Spawn City while protecting shared containers, stored resources, building and breaking. Preserve personal bank Ender Chest access.
+- [x] Stop sleeping townsfolk from travelling; prevent city flak from using near-vertical fallback shots at unreachable ground targets; animate guard-walker movement and render seated guard pilots.
+- [x] Include the merged Windows updater lock-handoff fix from PR #456.
+- [ ] Validate and publish the isolated combined town/updater release, back up and replace the live server's managed JAR, verify startup, then promote the matching client channel.
+- [ ] Owner checks the real launcher update/relaunch and hosted town visuals. On October 22 the owner explicitly authorized rollout without the blocked launcher click-through; this is an outstanding acceptance check, not a test pass.
+
+See [town release scope and evidence](features/town-updater-release-oct22.md).
+
 ## City defense and performance — October 22
 
 - [x] Implement city-only raider targeting, combat-invulnerable guard crews/walkers, six tower flak stations, 250-block mounted-weapon targeting and the usable bank Ender Chest. [Implementation](features/city-defense-and-performance.md).

@@ -284,6 +284,18 @@ public class Townsfolk extends PathfinderMob {
         return origin == null || relative == null ? null : origin.offset(relative);
     }
 
+    /** Sleeping is a physical rest state, not merely a render pose. */
+    @Override public void travel(net.minecraft.world.phys.Vec3 input) {
+        if (isSleeping()) {
+            getNavigation().stop();
+            setSpeed(0); xxa = 0; yya = 0; zza = 0;
+            setJumping(false);
+            setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
+            return;
+        }
+        super.travel(input);
+    }
+
     /** Civilian bedtime is midnight, not sunset. Guards stay on duty. No teleporting or chunk tickets. */
     private class LateBedGoal extends Goal {
         private @Nullable BlockPos bed;
@@ -333,7 +345,7 @@ public class Townsfolk extends PathfinderMob {
 		@Override
 		public boolean canUse() {
 			int r = range() + 4;
-			return getTarget() == null && distanceToSqr(home.getX() + 0.5, home.getY(), home.getZ() + 0.5) > (double) r * r;
+			return !isSleeping() && !isPassenger() && getTarget() == null && distanceToSqr(home.getX() + 0.5, home.getY(), home.getZ() + 0.5) > (double) r * r;
 		}
 
 		@Override
@@ -343,7 +355,7 @@ public class Townsfolk extends PathfinderMob {
 
 		@Override
 		public boolean canContinueToUse() {
-			return !getNavigation().isDone();
+			return !isSleeping() && !isPassenger() && !getNavigation().isDone();
 		}
 	}
 
@@ -355,7 +367,7 @@ public class Townsfolk extends PathfinderMob {
 
 		@Override
 		public boolean canUse() {
-			if (getRandom().nextInt(range() <= 2 ? 200 : 80) != 0) {
+			if (isSleeping() || isPassenger() || getRandom().nextInt(range() <= 2 ? 200 : 80) != 0) {
 				return false;
 			}
 			for (int tries = 0; tries < 6; tries++) {
@@ -370,7 +382,7 @@ public class Townsfolk extends PathfinderMob {
 
 		@Override
 		public boolean canContinueToUse() {
-			return !getNavigation().isDone();
+			return !isSleeping() && !isPassenger() && !getNavigation().isDone();
 		}
 	}
 
@@ -385,7 +397,7 @@ public class Townsfolk extends PathfinderMob {
 
 		@Override
 		public boolean canUse() {
-			if (!role.equals("decorator") || !(level() instanceof ServerLevel level) || tickCount % 40 != 0) {
+			if (isSleeping() || isPassenger() || !role.equals("decorator") || !(level() instanceof ServerLevel level) || tickCount % 40 != 0) {
 				return false;
 			}
 			site = TownDecor.claim(level, blockPosition(), getUUID(), DECORATOR_REACH);
@@ -409,7 +421,7 @@ public class Townsfolk extends PathfinderMob {
 
 		@Override
 		public boolean canContinueToUse() {
-			return site >= 0 && level() instanceof ServerLevel level && TownDecor.stale(level, site);
+			return !isSleeping() && !isPassenger() && site >= 0 && level() instanceof ServerLevel level && TownDecor.stale(level, site);
 		}
 
 		@Override

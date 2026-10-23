@@ -127,10 +127,10 @@ public abstract class CrewedGun extends Entity {
             && guard.isAlive() && guard.role().equals("flak_guard") && guard.home().equals(townStation);
     }
     private void defendTown(ServerLevel level, Vec3 pivot) {
-        if (tickCount % 20 == 0) sentryTarget = io.github.jimbozoomer.jugcraft.town.TownDefense.target(level, this, pivot);
+        if (tickCount % 20 == 0) sentryTarget = io.github.jimbozoomer.jugcraft.town.TownDefense.target(level, this, pivot, target -> solveDirect(lead(target, pivot), pivot) != null);
         if (sentryTarget == null || !AutomatedDefense.hostile(sentryTarget) || sentryTarget.distanceToSqr(pivot) > 250 * 250) return;
         Vec3 aim = lead(sentryTarget, pivot);
-        float[] wanted = solve(aim, pivot);
+        float[] wanted = solveDirect(aim, pivot);
         if (wanted != null && slew(wanted) && reloaded()
                 && io.github.jimbozoomer.jugcraft.town.TownDefense.visible(level, this, pivot, sentryTarget.getBoundingBox().getCenter())) fire(level, null, pivot);
     }
@@ -281,13 +281,22 @@ public abstract class CrewedGun extends Entity {
 	}
 
 	/** The yaw and elevation that land a shell on {@code point}, or null if it is out of reach. */
+	/** City crews never lob near-vertical shells at targets below their depression limit. */
+	public float @Nullable [] solveDirect(Vec3 point, Vec3 pivot) {
+		return solve(point, pivot, false);
+	}
+
 	private float @Nullable [] solve(Vec3 point, Vec3 pivot) {
+		return solve(point, pivot, true);
+	}
+
+	private float @Nullable [] solve(Vec3 point, Vec3 pivot, boolean allowHighFallback) {
 		if (point.distanceToSqr(pivot) > 250 * 250) return null;
         Vec3 delta = point.subtract(pivot);
 		float yaw = limitYaw((float) Math.toDegrees(Math.atan2(-delta.x, delta.z)));
 		double distance = Math.sqrt(delta.x * delta.x + delta.z * delta.z) - barrelLength();
 		Float pitch = Ballistics.solve(shellSpeed(), shellGravity(), distance, delta.y, highArc(), minPitch(), maxPitch());
-		if (pitch == null && !highArc()) {
+		if (pitch == null && !highArc() && allowHighFallback) {
 			pitch = Ballistics.solve(shellSpeed(), shellGravity(), distance, delta.y, true, minPitch(), maxPitch());
 		}
 		return pitch == null ? null : new float[] {yaw, pitch};

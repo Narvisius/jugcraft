@@ -54,6 +54,68 @@ public class TownGameTests {
 	/** The test town's corner: far from every other test's area. */
 	private static final int FAR = 48_000;
 
+	private static void publicAmenities(GameTestHelper h, BlockPos at) {
+		var level = h.getLevel();
+		// Vanilla's in-level mock hardcodes its mode; use a real connected player for permissions.
+		var profile = new com.mojang.authlib.GameProfile(UUID.randomUUID(), "town-visitor-test");
+		var player = new ServerPlayer(level.getServer(), level, profile, net.minecraft.server.level.ClientInformation.createDefault());
+		var connection = new net.minecraft.network.Connection(net.minecraft.network.protocol.PacketFlow.SERVERBOUND);
+		new io.netty.channel.embedded.EmbeddedChannel(connection);
+		level.getServer().getPlayerList().placeNewPlayer(connection, player, net.minecraft.server.network.CommonListenerCookie.createInitial(profile, false));
+		player.setGameMode(GameType.SURVIVAL);
+		h.assertTrue(!player.isCreative() && !player.isSpectator(), "Public amenities are tested by a real survival visitor");
+		var old = level.getBlockState(at); var below = level.getBlockState(at.below()); var above = level.getBlockState(at.above());
+		var hit = new BlockHitResult(Vec3.atCenterOf(at), Direction.UP, at, false);
+		java.util.function.Supplier<net.minecraft.world.InteractionResult> click = () ->
+			net.fabricmc.fabric.api.event.player.UseBlockCallback.EVENT.invoker().interact(player, level, InteractionHand.MAIN_HAND, hit);
+		try {
+			player.snapTo(at.getX()+.5, at.getY()+1, at.getZ()+1.5, 0, 0);
+			level.setBlockAndUpdate(at.below(), Blocks.STONE.defaultBlockState());
+			level.setBlockAndUpdate(at.above(), Blocks.AIR.defaultBlockState());
+			player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.COBBLESTONE, 4));
+			level.setBlockAndUpdate(at, Blocks.OAK_DOOR.defaultBlockState());
+			level.setBlockAndUpdate(at.above(), Blocks.OAK_DOOR.defaultBlockState().setValue(net.minecraft.world.level.block.DoorBlock.HALF, net.minecraft.world.level.block.state.properties.DoubleBlockHalf.UPPER));
+			h.assertTrue(click.get().consumesAction() && level.getBlockState(at).getValue(net.minecraft.world.level.block.DoorBlock.OPEN), "Visitor opens a town door with a held item");
+			level.setBlockAndUpdate(at.above(), Blocks.AIR.defaultBlockState());
+			level.setBlockAndUpdate(at, Blocks.OAK_TRAPDOOR.defaultBlockState());
+			player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.WATER_BUCKET));
+			h.assertTrue(click.get().consumesAction() && level.getBlockState(at).getValue(net.minecraft.world.level.block.TrapDoorBlock.OPEN), "Visitor opens a trapdoor");
+			h.assertTrue(!level.getBlockState(at).getValue(net.minecraft.world.level.block.TrapDoorBlock.WATERLOGGED) && player.getMainHandItem().is(Items.WATER_BUCKET), "Held bucket cannot waterlog the public trapdoor");
+			for (var block : List.of(Blocks.OAK_FENCE_GATE, Blocks.LEVER, Blocks.NOTE_BLOCK)) {
+				level.setBlockAndUpdate(at, block.defaultBlockState()); var before = level.getBlockState(at);
+				h.assertTrue(click.get().consumesAction() && level.getBlockState(at) != before, "Public control works: " + block);
+			}
+			for (var block : List.of(Blocks.CRAFTING_TABLE, Blocks.STONECUTTER, Blocks.SMITHING_TABLE, Blocks.GRINDSTONE, Blocks.ANVIL, Blocks.ENCHANTING_TABLE, Blocks.ENDER_CHEST, io.github.jimbozoomer.jugcraft.town.JugcraftTown.ATM)) {
+				level.setBlockAndUpdate(at, block.defaultBlockState()); player.closeContainer();
+				h.assertTrue(click.get().consumesAction() && player.containerMenu != player.inventoryMenu, "Public workstation/personal ender chest opens: " + block);
+				player.closeContainer();
+			}
+			for (var block : List.of(Blocks.CHEST, Blocks.BARREL, Blocks.FURNACE, Blocks.HOPPER, Blocks.SHULKER_BOX, Blocks.BREWING_STAND, Blocks.LECTERN, Blocks.JUKEBOX,
+					io.github.jimbozoomer.jugcraft.menagerie.Menagerie.BLOCKS.get("household_oak_storage_cabinet"))) {
+				level.setBlockAndUpdate(at, block.defaultBlockState());
+				var entity = level.getBlockEntity(at);
+				if (entity instanceof net.minecraft.world.Container container) container.setItem(0, new ItemStack(Items.DIAMOND, 3));
+				h.assertTrue(click.get() == net.minecraft.world.InteractionResult.FAIL && player.containerMenu == player.inventoryMenu, "Town inventory stays closed: " + block);
+				if (entity instanceof net.minecraft.world.Container container) { h.assertTrue(container.getItem(0).getCount() == 3, "Stored items untouched"); container.clearContent(); }
+			}
+			level.setBlockAndUpdate(at, io.github.jimbozoomer.jugcraft.menagerie.Menagerie.BLOCKS.get("household_oak_chair").defaultBlockState());
+			h.assertTrue(click.get().consumesAction() && player.isPassenger(), "Visitor can sit on town furniture"); player.stopRiding();
+			level.setBlockAndUpdate(at, Blocks.STONE.defaultBlockState());
+			player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.COBBLESTONE,4)); player.setShiftKeyDown(true);
+			player.gameMode.useItemOn(player, level, player.getMainHandItem(), InteractionHand.MAIN_HAND, hit);
+			h.assertTrue(level.getBlockState(at.above()).isAir() && player.getMainHandItem().getCount() == 4, "Sneaking does not enable placement fallthrough");
+			h.assertTrue(!player.gameMode.destroyBlock(at) && level.getBlockState(at).is(Blocks.STONE), "Public use never grants breaking permission");
+			player.setShiftKeyDown(false); player.setGameMode(GameType.SPECTATOR);
+			level.setBlockAndUpdate(at, Blocks.OAK_TRAPDOOR.defaultBlockState());
+			h.assertTrue(click.get() == net.minecraft.world.InteractionResult.FAIL && !level.getBlockState(at).getValue(net.minecraft.world.level.block.TrapDoorBlock.OPEN), "Spectators cannot mutate public amenities");
+		} finally {
+			player.setGameMode(GameType.SURVIVAL);
+			player.setShiftKeyDown(false); player.stopRiding(); player.closeContainer();
+			level.setBlockAndUpdate(at, old); level.setBlockAndUpdate(at.below(), below); level.setBlockAndUpdate(at.above(), above);
+			level.getServer().getPlayerList().remove(player);
+		}
+	}
+
 	@GameTest
 	public void townPumpkinsAtUnloadedChunkEdgeStayDecorations(GameTestHelper helper) {
 		ServerLevel level = helper.getLevel();
@@ -403,6 +465,8 @@ public class TownGameTests {
 		player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.WATER_BUCKET));
 		player.gameMode.useItem(player, level, player.getMainHandItem(), InteractionHand.MAIN_HAND);
 		helper.assertTrue(player.getMainHandItem().is(Items.WATER_BUCKET), "A survival player can't empty a bucket in the town");
+		publicAmenities(helper, paving.above(70));
+		player.snapTo(paving.getX() + .5, paving.getY() + 1, paving.getZ() + .5, 0, 0);
 		// An explosion in the square leaves it as it was.
 		BlockPos fountain = origin.offset(88, 1, 104);
 		BlockState fountainState = level.getBlockState(fountain);

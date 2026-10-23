@@ -129,5 +129,6 @@ def assets(assets_dir, write, lang):
     lang["entity.jugcraft.town_guard_mecha"] = "City Guard Walker"
 
 
-USABLE = ["#minecraft:wooden_doors", "#minecraft:fence_gates", "#minecraft:buttons", "minecraft:lever",
-          "minecraft:crafting_table", "#minecraft:beds", "minecraft:ender_chest", rid("atm")]
+USABLE = ["#minecraft:doors", "#minecraft:trapdoors", "#minecraft:fence_gates", "#minecraft:buttons", "minecraft:lever",
+          "minecraft:crafting_table", "#minecraft:beds", "minecraft:bell", "minecraft:enchanting_table",
+          "minecraft:ender_chest", rid("atm")]

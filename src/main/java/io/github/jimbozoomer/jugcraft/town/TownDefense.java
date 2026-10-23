@@ -13,11 +13,16 @@ public final class TownDefense {
     private TownDefense() {}
 
     public static LivingEntity target(ServerLevel level, net.minecraft.world.entity.Entity shooter, Vec3 from) {
+        return target(level, shooter, from, candidate -> true);
+    }
+
+    public static LivingEntity target(ServerLevel level, net.minecraft.world.entity.Entity shooter, Vec3 from,
+            java.util.function.Predicate<LivingEntity> reachable) {
         LivingEntity best = null;
         double distance = RANGE * RANGE;
         for (var candidate : level.getEntitiesOfClass(LivingEntity.class, new AABB(from, from).inflate(RANGE), AutomatedDefense::hostile)) {
             double d = candidate.distanceToSqr(from);
-            if (d >= distance || !visible(level, shooter, from, candidate.getBoundingBox().getCenter())) continue;
+            if (d >= distance || !reachable.test(candidate) || !visible(level, shooter, from, candidate.getBoundingBox().getCenter())) continue;
             best = candidate; distance = d;
         }
         return best;

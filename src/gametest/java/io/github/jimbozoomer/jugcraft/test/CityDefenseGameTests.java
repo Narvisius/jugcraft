@@ -78,6 +78,21 @@ public class CityDefenseGameTests {
     }
 
     @GameTest
+    public void towerFlakRejectsSteepFallbackAndWalkerTracksNetworkMovement(GameTestHelper h) {
+        var gun=h.spawn(JugcraftArtillery.FLAK_GUN,new BlockPos(2,2,2));
+        Vec3 pivot=gun.position().add(0,20,0);
+        h.assertTrue(gun.solveDirect(pivot.add(0,-20,10),pivot)==null,"Nearby ground target cannot cause near-vertical fallback fire");
+        h.assertTrue(gun.solveDirect(pivot.add(0,15,60),pivot)!=null,"Elevated airship has a direct firing solution");
+        gun.discard();
+        var walker=h.spawnWithNoFreeWill(JugcraftTown.GUARD_MECHA,new BlockPos(2,2,2));walker.setNoGravity(true);
+        walker.tick();float before=walker.stride(1);
+        walker.setPos(walker.getX()+.25,walker.getY(),walker.getZ());walker.tick();
+        h.assertTrue(walker.stride(1)>before && walker.strideWeight(1)>0,"Movement between ticks animates the walker");
+        before=walker.stride(1);walker.setPos(walker.getX()+100,walker.getY(),walker.getZ());walker.tick();
+        h.assertTrue(walker.stride(1)==before,"Teleports do not create a giant stride");walker.discard();h.succeed();
+    }
+
+    @GameTest
     public void artilleryCanReach250AndBankHasUsableEnderChest(GameTestHelper h) {
         h.assertTrue(Ballistics.solve(JugcraftArtillery.HEAVY_SPEED,JugcraftArtillery.HEAVY_GRAVITY,245,0,true,45,85)!=null,"Heavy shells can reach 250 including barrel");
         h.assertTrue(Ballistics.solve(JugcraftArtillery.FLAK_SPEED,JugcraftArtillery.FLAK_GRAVITY,247,0,false,-5,85)!=null,"Flak has a 250-block solution");

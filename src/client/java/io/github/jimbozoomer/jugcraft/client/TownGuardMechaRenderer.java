@@ -24,6 +24,7 @@ public class TownGuardMechaRenderer extends EntityRenderer<TownGuardMecha, TownG
 	/** The punch: how many ticks the swing lasts and how far forward the arm comes, in degrees. */
 	private static final float PUNCH_TICKS = 10.0F;
 	private static final float PUNCH_SWING = 70.0F;
+	private final TownsfolkModel pilot;
 	private static final int FULL_BRIGHT = 0xF000F0;
 
 	public static final class State extends EntityRenderState {
@@ -32,10 +33,12 @@ public class TownGuardMechaRenderer extends EntityRenderer<TownGuardMecha, TownG
 		float strideWeight;
 		float swing;
 		float pitch;
+        final TownsfolkRenderer.State pilot = new TownsfolkRenderer.State();
 	}
 
 	public TownGuardMechaRenderer(EntityRendererProvider.Context context) {
 		super(context);
+        pilot = new TownsfolkModel(context.bakeLayer(TownsfolkModel.LAYER));
 		shadowRadius = 1.4F;
 	}
 
@@ -59,6 +62,8 @@ public class TownGuardMechaRenderer extends EntityRenderer<TownGuardMecha, TownG
 		float swingTime = walker.sinceShot() + partialTick;
 		state.swing = swingTime < PUNCH_TICKS ? Mth.sin(swingTime / PUNCH_TICKS * Mth.PI) : 0.0F;
 		state.pitch = walker.gunPitch();
+        state.pilot.isPassenger = true;
+        state.pilot.ageInTicks = walker.tickCount + partialTick;
 	}
 
 	@Override
@@ -67,6 +72,15 @@ public class TownGuardMechaRenderer extends EntityRenderer<TownGuardMecha, TownG
 		pose.rotateDegrees(Axis.YP, -state.yRot);
 		draw("walker_body", pose, collector, state.lightCoords);
 		draw("walker_core", pose, collector, FULL_BRIGHT);
+        pose.pushPose();
+        // Hip at y=31px on the seat; head rises above the front cockpit wall.
+        pose.translate(0, 43.0 / 16, 0);
+        pose.rotateDegrees(Axis.YP, 180);
+        pose.scale(-1, -1, 1);
+        collector.order(0).submitModel(pilot, state.pilot, pose,
+            net.minecraft.client.renderer.rendertype.RenderTypes.entityCutout(io.github.jimbozoomer.jugcraft.Jugcraft.id("textures/entity/townsfolk/guard_blue.png")),
+            state.lightCoords, net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY, -1, null, state.outlineColor);
+        pose.popPose();
 		float legSwing = Mth.sin(state.stride * STRIDE_RATE) * LEG_SWING * state.strideWeight;
 		for (int i = 0; i < HIPS.length; i++) {
 			pose.pushPose();
