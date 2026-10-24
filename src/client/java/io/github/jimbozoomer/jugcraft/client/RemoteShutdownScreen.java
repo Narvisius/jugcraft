@@ -9,6 +9,7 @@ import java.util.Locale;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -24,7 +25,7 @@ import net.minecraft.network.chat.Component;
  * console's advanced look (docs/features/machine-screens.md), with a status lamp and chip by the title; laid out at
  * 360 x 220 and scaled to fit.
  */
-public class RemoteShutdownScreen extends Screen {
+public class RemoteShutdownScreen extends Screen implements ScreenKit.Fitted {
 	static final int W = 360, H = 220;
 	static final int EDGE = ReactorConsoleScreen.EDGE, TEXT = ReactorConsoleScreen.TEXT, DIM = ReactorConsoleScreen.DIM,
 			GREEN = ReactorConsoleScreen.GREEN, AMBER = ReactorConsoleScreen.AMBER, RED = ReactorConsoleScreen.RED;
@@ -223,5 +224,10 @@ public class RemoteShutdownScreen extends Screen {
 			}
 		}
 		return super.mouseClicked(event, doubleClick);
+	}
+
+	@Override
+	public ScreenRectangle panelArea() {
+		return new ScreenRectangle(Math.round(left * scale), Math.round(top * scale), Math.round(W * scale), Math.round(H * scale));
 	}
 }

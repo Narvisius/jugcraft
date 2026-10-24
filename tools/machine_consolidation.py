@@ -49,6 +49,8 @@ UI_LABELS = {
     "recipes_locked": "Locked recipe",
     "reason.recipe_unavailable": "Locked recipe unavailable. Restore it or choose another recipe.",
     "recipes": "Recipes",
+    "recipes_of": "%s: recipes",
+    "recipe_count": "%s recipes",
     "recipes_hint": "Browse inputs, outputs and costs; lock a job or use automatic mode.",
     "search_recipes": "Search recipes",
     "lock_recipe": "Lock recipe",

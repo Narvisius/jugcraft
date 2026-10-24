@@ -8,6 +8,11 @@ Every change to Jugcraft, newest first, grouped by pull request. For what each t
 
 No numbered release yet. Entries on feature branches remain proposed until their pull requests merge.
 
+### Unmerged: The recipe page in its machine's look, and a screen fit check
+- The industrial forms' **recipe page** takes the forms' industrial look instead of its own teal. It has a status lamp by "<machine>: recipes" (green while a recipe is locked, amber when the recipes were reloaded), the list and the details in panes, and keys in the look: the chosen recipe, Automatic and the locked recipe's Lock key are lit. Every function and button id is unchanged.
+- The **storage tank** screen (352 wide) now scales itself down to fit a narrower window, as the reactor console and remote shutdown panel do.
+- A new client game test, `ScreenFitClientGameTests`, opens every machine screen, form screen, the recipe page and the eight other machine screens at the smallest GUI Minecraft gives (320 × 240, a 640 × 480 window), checks that each fits the window, and photographs some. Record: [screen-fit-check.md](docs/features/screen-fit-check.md).
+
 ### Unmerged: The Exchange (bank, markets, land and shares, in Jugs)
 - Press **N** (or `/jugcraft exchange`) for the **Exchange**, a walnut-and-brass ledger with seven tabs. It deals only in **Jugs**, the town's credit: no new currency.
 - **Banking and loans:** a one-time **starter loan** (100 Jugs) for new players, a flat 10% fee, due in 10 days. While you owe, a quarter of your market earnings repays the bank; overdue borrowers may sell but not buy. Paying off on time raises your credit limit.

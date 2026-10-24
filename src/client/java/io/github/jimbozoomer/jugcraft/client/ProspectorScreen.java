@@ -4,6 +4,7 @@ import io.github.jimbozoomer.jugcraft.prospecting.OreSurvey;
 import java.util.List;
 import java.util.Locale;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -16,7 +17,7 @@ import net.minecraft.world.item.ItemStack;
  * and its depth; a scan line sweeps the glass; and under it, a help strip and a needle gauge showing the overall
  * resonance. Every reading is deliberately approximate (see {@link OreSurvey}).
  */
-public class ProspectorScreen extends Screen {
+public class ProspectorScreen extends Screen implements ScreenKit.Fitted {
 	private static final int WIDTH = 268;
 	private static final int HEIGHT = 196;
 	private static final int ROWS = 6;
@@ -158,5 +159,10 @@ public class ProspectorScreen extends Screen {
 			int half = (int) Math.sqrt(r * r - dy * dy);
 			graphics.fill(cx - half, cy + dy, cx + half + 1, cy + dy + 1, color);
 		}
+	}
+
+	@Override
+	public ScreenRectangle panelArea() {
+		return new ScreenRectangle(left, top, WIDTH, HEIGHT);
 	}
 }

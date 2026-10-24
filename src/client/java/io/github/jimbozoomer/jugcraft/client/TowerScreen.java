@@ -10,6 +10,7 @@ import java.util.Map;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -23,7 +24,7 @@ import net.minecraft.resources.Identifier;
  * Opened from the Tower Core, or from the depot terminal's TOWER key. Everything shown comes from the core's synced
  * block entity; the server checks the upgrade again.
  */
-public class TowerScreen extends Screen {
+public class TowerScreen extends Screen implements ScreenKit.Fitted {
 	private static final int WIDTH = 300;
 	private static final int HEIGHT = 190;
 	private static final int AMBER = 0xFFFFC04A;
@@ -179,5 +180,10 @@ public class TowerScreen extends Screen {
 
 	private void say(GuiGraphicsExtractor g, String text, int x, int y, int color) {
 		g.text(font, ScreenKit.fit(font, text, left + WIDTH - 12 - x), x, y, color, false);
+	}
+
+	@Override
+	public ScreenRectangle panelArea() {
+		return new ScreenRectangle(left, top, WIDTH, HEIGHT);
 	}
 }

@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -25,7 +26,19 @@ public final class ScreenKit {
 	/** Where the title strip puts the lamp and the title, from the body's corner; panes start under it. */
 	public static final int TITLE_HEIGHT = 13;
 
+	/** The smallest GUI Minecraft's automatic scale gives (a 640 x 480 window at scale 2): every machine screen fits it. */
+	public static final int SMALLEST_GUI_WIDTH = 320;
+	public static final int SMALLEST_GUI_HEIGHT = 240;
+
 	private ScreenKit() {
+	}
+
+	/**
+	 * A machine screen that says where it draws its panel, in GUI pixels after any scaling to fit, so the screen fit test
+	 * (ScreenFitClientGameTests) can check that it fits the window at the smallest GUI.
+	 */
+	public interface Fitted {
+		ScreenRectangle panelArea();
 	}
 
 	// ------------------------------------------------------------------ bodies and panes
@@ -278,6 +291,11 @@ public final class ScreenKit {
 		return font.plainSubstrByWidth(text, Math.max(0, width - font.width("…"))) + "…";
 	}
 
+	/** How bright a colour looks, 0 to 255. */
+	static int luminance(int color) {
+		return (((color >> 16) & 0xFF) * 299 + ((color >> 8) & 0xFF) * 587 + (color & 0xFF) * 114) / 1000;
+	}
+
 	/** A colour faded towards black by {@code amount} (0 to 255). */
 	static int darken(int color, int amount) {
 		int r = Math.max(0, ((color >> 16) & 0xFF) - amount);
@@ -315,12 +333,14 @@ public final class ScreenKit {
 			int h = height;
 			boolean hover = active && (isHovered() || isFocused());
 			int face = theme.buttonFace();
+			// A lit key darkens a light face (the industrial look's green) and lightens a dark one, so its label stays clear.
+			boolean light = luminance(face) > 96;
 			if (selected) {
-				face = MachineSkin.lighten(face, 40);
+				face = light ? darken(face, 45) : MachineSkin.lighten(face, 40);
 			} else if (hover) {
-				face = MachineSkin.lighten(face, 24);
+				face = MachineSkin.lighten(face, light ? 16 : 24);
 			} else if (!active) {
-				face = darken(face, 20);
+				face = darken(face, 50);
 			}
 			if (theme.outlined() && !"lab".equals(theme.shape())) {
 				int edge = selected || hover ? theme.buttonLight() : active ? theme.buttonEdge() : theme.dim();
@@ -330,11 +350,18 @@ public final class ScreenKit {
 				g.fill(x, y, x + w, y + h, rim);
 				g.fill(x + 1, y + 1, x + w - 1, y + h - 1, face);
 				g.fill(x + 1, y + 1, x + w - 1, y + 2, "lab".equals(theme.shape()) ? MachineSkin.lighten(face, 60) : theme.buttonLight());
+				if (selected && !"lab".equals(theme.shape())) {
+					g.outline(x + 1, y + 1, w - 2, h - 2, theme.buttonLight());
+				}
 			}
 			if (selected) {
 				g.fill(x + 3, y + h - 3, x + w - 3, y + h - 2, theme.ok());
 			}
-			int color = !active ? theme.dim() : "lab".equals(theme.shape()) ? 0xFFF0F0F0 : theme.buttonIcon();
+			// A key that cannot be pressed has its label half faded; one that is lit (the state it is in) keeps it whole.
+			int color = "lab".equals(theme.shape()) ? 0xFFF0F0F0 : theme.buttonIcon();
+			if (!active && !selected) {
+				color = (color & 0x00FFFFFF) | 0x80000000;
+			}
 			String text = fit(font, getMessage().getString(), w - 4);
 			Component shown = text.equals(getMessage().getString()) ? getMessage() : Component.literal(text).setStyle(getMessage().getStyle());
 			g.text(font, shown, x + (w - font.width(text)) / 2, y + (h - 8) / 2, color, false);

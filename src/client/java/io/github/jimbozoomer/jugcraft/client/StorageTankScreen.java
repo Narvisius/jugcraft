@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -26,7 +27,7 @@ import org.jspecify.annotations.Nullable;
  * full or empty at that rate) and the outlet valve; and a help strip. Everything is read live from the outlet's synced
  * block entity.
  */
-public class StorageTankScreen extends Screen {
+public class StorageTankScreen extends Screen implements ScreenKit.Fitted {
 	static final int W = 352, H = 196;
 	static final int AMBER = 0xFFF0B030, WHITE = 0xFFFFFFFF;
 	// The tank's paint, as on the real thing: white shell, the yellow and black checker band, dark rim and roof edge.
@@ -37,6 +38,7 @@ public class StorageTankScreen extends Screen {
 
 	private final BlockPos outlet;
 	private final MachineScreenThemes.Theme theme = MachineScreenThemes.screen("storage_tank");
+	private float scale = 1;
 	private int left, top;
 
 	public StorageTankScreen(BlockPos outlet) {
@@ -46,8 +48,11 @@ public class StorageTankScreen extends Screen {
 
 	@Override
 	protected void init() {
-		left = (width - W) / 2;
-		top = (height - H) / 2;
+		// Laid out at W x H, and scaled down to fit a narrower window (the smallest GUI is 320 wide), as the reactor
+		// console and the remote shutdown panel are.
+		scale = Math.min(1F, Math.min((width - 8) / (float) W, (height - 8) / (float) H));
+		left = Math.round((width / scale - W) / 2);
+		top = Math.round((height / scale - H) / 2);
 	}
 
 	@Override
@@ -71,6 +76,13 @@ public class StorageTankScreen extends Screen {
 	@Override
 	public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float delta) {
 		super.extractRenderState(g, mouseX, mouseY, delta);
+		g.pose().pushMatrix();
+		g.pose().scale(scale, scale);
+		draw(g);
+		g.pose().popMatrix();
+	}
+
+	private void draw(GuiGraphicsExtractor g) {
 		int x0 = left, y0 = top;
 		ScreenKit.body(g, theme, x0, y0, W, H);
 		StorageTankPortBlockEntity tank = tank();
@@ -258,5 +270,10 @@ public class StorageTankScreen extends Screen {
 		int gr = (int) Math.round((a >> 8 & 255) + ((b >> 8 & 255) - (a >> 8 & 255)) * t);
 		int bl = (int) Math.round((a & 255) + ((b & 255) - (a & 255)) * t);
 		return 0xFF000000 | r << 16 | gr << 8 | bl;
+	}
+
+	@Override
+	public ScreenRectangle panelArea() {
+		return new ScreenRectangle(Math.round(left * scale), Math.round(top * scale), Math.round(W * scale), Math.round(H * scale));
 	}
 }

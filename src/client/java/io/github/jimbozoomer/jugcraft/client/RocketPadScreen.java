@@ -3,6 +3,7 @@ package io.github.jimbozoomer.jugcraft.client;
 import io.github.jimbozoomer.jugcraft.rocketry.RocketPadBlockEntity;
 import io.github.jimbozoomer.jugcraft.rocketry.RocketPadMenu;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -16,7 +17,7 @@ import net.minecraft.world.inventory.Slot;
  * centred in the pane over a hazard-striped pad edge, and Launch stays dark until a rocket, a flight plan and some cargo
  * are in, its tooltip naming what is missing (the server still makes every check).
  */
-public class RocketPadScreen extends AbstractContainerScreen<RocketPadMenu> {
+public class RocketPadScreen extends AbstractContainerScreen<RocketPadMenu> implements ScreenKit.Fitted {
 	private static final int CONTAINER_SLOTS = RocketPadBlockEntity.CARGO + 2;
 	private final MachineScreenThemes.Theme theme = MachineScreenThemes.screen("rocket_pad");
 	private ScreenKit.TextButton launch;
@@ -148,5 +149,10 @@ public class RocketPadScreen extends AbstractContainerScreen<RocketPadMenu> {
 			ScreenKit.chip(graphics, font, theme, imageWidth - 3, 0, result.message().getString(),
 					result == RocketPadBlockEntity.Result.LAUNCHED ? theme.ok() : theme.warn());
 		}
+	}
+
+	@Override
+	public ScreenRectangle panelArea() {
+		return new ScreenRectangle(leftPos, topPos, imageWidth, imageHeight);
 	}
 }

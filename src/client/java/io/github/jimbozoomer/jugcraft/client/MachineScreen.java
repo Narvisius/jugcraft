@@ -23,6 +23,7 @@ import io.github.jimbozoomer.jugcraft.machine.SideConfig;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -44,7 +45,7 @@ import org.jspecify.annotations.Nullable;
  * pane into the machine's six faces, each clicked to change what it does, with the key in the help box. Hovering an
  * empty slot says what goes in it.
  */
-public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
+public class MachineScreen extends AbstractContainerScreen<MachineMenu> implements ScreenKit.Fitted {
 	private static final int BAR_X = 10;
 	private static final int BAR_Y = 17;
 	private static final int BAR_WIDTH = 12;
@@ -636,5 +637,10 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 		}
 		int color = PetroFluids.gaugeColor(fluid);
 		return color != 0 ? color : 0xFF8090A8;
+	}
+
+	@Override
+	public ScreenRectangle panelArea() {
+		return new ScreenRectangle(leftPos, topPos, imageWidth, imageHeight);
 	}
 }

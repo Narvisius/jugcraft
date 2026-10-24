@@ -10,6 +10,7 @@ import java.util.Locale;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -25,7 +26,7 @@ import net.minecraft.resources.Identifier;
  * The screen is laid out at 504 x 348 and scaled to fit. It is drawn in the advanced look
  * (docs/features/machine-screens.md): the hologram body and panes, and a status lamp and chip by the title.
  */
-public class ReactorConsoleScreen extends Screen {
+public class ReactorConsoleScreen extends Screen implements ScreenKit.Fitted {
 	static final int W = 504, H = 348;
 	static final Identifier SCRAM_TEXTURE = Jugcraft.id("textures/gui/reactor_scram.png");
 	/** The advanced look's tones for the parts the console draws itself (gauges, keys, annunciators). */
@@ -412,5 +413,10 @@ public class ReactorConsoleScreen extends Screen {
 			return true;
 		}
 		return super.mouseReleased(event);
+	}
+
+	@Override
+	public ScreenRectangle panelArea() {
+		return new ScreenRectangle(Math.round(left * scale), Math.round(top * scale), Math.round(W * scale), Math.round(H * scale));
 	}
 }

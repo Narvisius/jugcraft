@@ -22,6 +22,7 @@ import io.github.jimbozoomer.jugcraft.machine.form.MachineStatus;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -45,7 +46,7 @@ import org.jspecify.annotations.Nullable;
  * <p>A generator form shows its fuel tank, an arrow lit while it makes power and its store on the right, where a
  * processor's outputs would be; the status pane gives the power it made last tick. It has no batches, so no Cancel.
  */
-public class FormMachineScreen extends AbstractContainerScreen<FormMachineMenu> {
+public class FormMachineScreen extends AbstractContainerScreen<FormMachineMenu> implements ScreenKit.Fitted {
 	private static final int BAY_WIDTH = 176;
 	private static final int BAR_X = 10;
 	private static final int BAR_Y = 17;
@@ -83,6 +84,16 @@ public class FormMachineScreen extends AbstractContainerScreen<FormMachineMenu> 
 
 	void returnFromRecipes() {
 		recipePageOpen = false;
+	}
+
+	/** This screen's look, which its recipe page shares. */
+	MachineScreenThemes.Theme theme() {
+		return theme;
+	}
+
+	@Override
+	public ScreenRectangle panelArea() {
+		return new ScreenRectangle(leftPos, topPos, imageWidth, imageHeight);
 	}
 
 	@Override

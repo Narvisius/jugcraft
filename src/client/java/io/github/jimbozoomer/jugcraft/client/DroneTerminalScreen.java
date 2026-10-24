@@ -11,6 +11,7 @@ import java.util.TreeMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -23,7 +24,7 @@ import net.minecraft.network.chat.Component;
  * and POWER. The PERSONAL / PARTY key switches who the depot works for (owner only; the server checks), and TOWER opens
  * the tower's screen. Everything shown comes from the terminal's live {@link DepotView}.
  */
-public class DroneTerminalScreen extends Screen {
+public class DroneTerminalScreen extends Screen implements ScreenKit.Fitted {
 	private static final int WIDTH = 260;
 	private static final int HEIGHT = 170;
 	private static final int AMBER = 0xFFFFC04A;
@@ -213,5 +214,10 @@ public class DroneTerminalScreen extends Screen {
 
 	private void bar(GuiGraphicsExtractor g, int x, int y, long value, long max, int color) {
 		ScreenKit.bar(g, theme, x, y, WIDTH - 40, 6, max <= 0 ? 0 : value / (double) max, color);
+	}
+
+	@Override
+	public ScreenRectangle panelArea() {
+		return new ScreenRectangle(left, top, WIDTH, HEIGHT);
 	}
 }
