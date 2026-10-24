@@ -120,6 +120,12 @@ SCREENS = {
     "remote_shutdown": "advanced",
     "drone_terminal": "drone",
     "drone_tower": "drone",
+    # The benches: the workshop look.
+    "cooking_pot": "workshop",
+    "lampwright_bench": "workshop",
+    "farm_stand": "workshop",
+    "cave_survey": "workshop",
+    "carving": "workshop",
 }
 
 WORKSHOP = {"coal_generator", "steam_generator", "water_wheel", "wind_turbine", "crusher", "electric_furnace",
@@ -555,6 +561,19 @@ def write_all(write, assets, lang, machines):
         "tank.heading.contents": "CONTENTS",
         "tank.heading.flow": "FLOW",
         "tank.heading.outlet": "OUTLET",
+        # The benches in the workshop look.
+        "cooking_pot.assisted": "+50% speed",
+        "cave_survey.title": "Cave survey",
+        "cave_survey.choose": "CHOOSE AN EXPEDITION",
+        "cave_survey.heading": "SURVEY",
+        "cave_survey.found": "Found",
+        "cave_survey.status.0": "A survey does not load or alter distant chunks.",
+        "cave_survey.status.1": "Surveying nearby terrain... %s%%",
+        "cave_survey.status.2": "X %s   Y -16   Z %s",
+        "cave_survey.status.3": "No match within 1,024 blocks. Try farther away.",
+        "cave_survey.status.5": "Survey from the Overworld.",
+        "cave_survey.status.6": "Survey desks are busy. Try again shortly.",
+        "cave_survey.help": "Bring paper and a cave tablet to the desk to keep the location on a physical map.",
     }
     for key, text in screens.items():
         lang[f"screen.jugcraft.{key}"] = text

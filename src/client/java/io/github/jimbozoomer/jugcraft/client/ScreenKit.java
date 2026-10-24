@@ -198,6 +198,19 @@ public final class ScreenKit {
 		}
 	}
 
+	/**
+	 * A progress arrow pointing right from (x, middle), {@code width} long: a shaft and a head, lit for its first
+	 * {@code lit} pixels, the rest a faint copy of the colour (so it shows on any glass).
+	 */
+	public static void arrow(GuiGraphicsExtractor g, int x, int middle, int width, int lit, int color) {
+		int unlit = (color & 0x00FFFFFF) | 0x40000000;
+		int head = Math.min(5, width / 4);
+		for (int column = 0; column < width; column++) {
+			int half = column < width - head ? 1 : width - column;
+			g.fill(x + column, middle - half, x + column + 1, middle + half + 1, column < lit ? color : unlit);
+		}
+	}
+
 	/** A label on the left and its value on the right of a row {@code w} wide; the label is cut short to leave room. */
 	public static void row(GuiGraphicsExtractor g, Font font, MachineScreenThemes.Theme theme, int x, int y, int w, String label, String value,
 			int color) {
@@ -208,6 +221,12 @@ public final class ScreenKit {
 
 	/** A help strip over (x, y, w, h): the look's help box with its text wrapped inside. */
 	public static void help(GuiGraphicsExtractor g, Font font, MachineScreenThemes.Theme theme, int x, int y, int w, int h, Component text) {
+		help(g, font, theme, x, y, w, h, text, theme.help());
+	}
+
+	/** A help strip with its text in {@code color} (a warning, say, in place of the usual help). */
+	public static void help(GuiGraphicsExtractor g, Font font, MachineScreenThemes.Theme theme, int x, int y, int w, int h, Component text,
+			int color) {
 		if (theme.outlined() && !"lab".equals(theme.shape())) {
 			chamfer(g, x, y, w, h, 3, theme.frame().helpBox(), theme.frame().rim());
 		} else {
@@ -219,7 +238,7 @@ public final class ScreenKit {
 			if (line + 9 > y + h - 1) {
 				break;
 			}
-			g.text(font, part, x + 5, line, theme.help(), false);
+			g.text(font, part, x + 5, line, color, false);
 			line += 9;
 		}
 	}

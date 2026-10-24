@@ -1,28 +1,26 @@
 package io.github.jimbozoomer.jugcraft.client;
 
-import io.github.jimbozoomer.jugcraft.Jugcraft;
 import io.github.jimbozoomer.jugcraft.agriculture.CookingPotBlockEntity;
 import io.github.jimbozoomer.jugcraft.agriculture.CookingPotMenu;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 
-/** The Cooking Pot: a 3x2 ingredient grid, a progress arrow, 2x2 meal slots, and a flame that shows whether the pot has heat. */
-public class CookingPotScreen extends AbstractContainerScreen<CookingPotMenu> {
-	private static final Identifier TEXTURE = Jugcraft.id("textures/gui/machine.png");
-	private static final int DARK = 0xFF373737;
-	private static final int SLOT = 0xFF8B8B8B;
-	private static final int LIGHT = 0xFFFFFFFF;
-	private static final int PROGRESS = 0xFFD8862C;
+/**
+ * The Cooking Pot, in the workshop look (docs/features/bench-screens.md): a 3x2 ingredient grid on the glass, a progress
+ * arrow to the 2x2 meal slots, and a flame under the arrow that shows whether the pot has heat. The status lamp is lit
+ * while the pot has heat (green while a helper speeds it up), and a line under the meals says what it lacks.
+ */
+public class CookingPotScreen extends AbstractContainerScreen<CookingPotMenu> implements ScreenKit.Fitted {
 	private static final int FLAME = 0xFFE06020;
-	private static final int COLD = 0xFF6A6A6A;
-	private static final int TEXT = 0xFF404040;
 	private static final int ARROW_X = 88;
-	private static final int ARROW_Y = 41;
+	private static final int ARROW_Y = 43;
 	private static final int ARROW_WIDTH = 22;
+	/** The casing and its glass end here; the inventory tray starts under them. */
+	private static final int BODY_HEIGHT = 78;
+	private final MachineScreenThemes.Theme theme = MachineScreenThemes.screen("cooking_pot");
 
 	public CookingPotScreen(CookingPotMenu menu, Inventory inventory, Component title) {
 		super(menu, inventory, title);
@@ -31,7 +29,9 @@ public class CookingPotScreen extends AbstractContainerScreen<CookingPotMenu> {
 	@Override
 	protected void init() {
 		super.init();
-		titleLabelX = (imageWidth - font.width(title)) / 2;
+		titleLabelX = 12;
+		titleLabelY = 2;
+		inventoryLabelY = 10_000;
 	}
 
 	@Override
@@ -45,19 +45,23 @@ public class CookingPotScreen extends AbstractContainerScreen<CookingPotMenu> {
 	public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
 		int x = leftPos;
 		int y = topPos;
-		graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, x, y, 0.0F, 0.0F, imageWidth, imageHeight, 256, 256);
+		ScreenKit.body(graphics, theme, x, y, imageWidth, BODY_HEIGHT);
+		ScreenKit.pane(graphics, theme, x + 3, y + 13, imageWidth - 6, BODY_HEIGHT - 15);
+		ScreenKit.tray(graphics, theme, x, y + BODY_HEIGHT + 1, imageWidth, imageHeight - BODY_HEIGHT - 1);
+		ScreenKit.inventory(graphics, theme, x + 8, y + 84);
+		MachineSkin.lamp(graphics, x + 4, y + 3, menu.assisted() ? theme.ok() : menu.heated() ? theme.progress() : theme.dim());
 		for (int slot = 0; slot < CookingPotBlockEntity.INPUTS; slot++) {
-			slotFrame(graphics, x + CookingPotMenu.INPUT_X + (slot % 3) * 18, y + CookingPotMenu.INPUT_Y + (slot / 3) * 18);
+			MachineSkin.slot(graphics, theme, x + CookingPotMenu.INPUT_X + (slot % 3) * 18, y + CookingPotMenu.INPUT_Y + (slot / 3) * 18);
 		}
 		for (int index = 0; index < CookingPotBlockEntity.OUTPUTS; index++) {
-			slotFrame(graphics, x + CookingPotMenu.RESULT_X + (index % 2) * 18, y + CookingPotMenu.RESULT_Y + (index / 2) * 18);
+			MachineSkin.slot(graphics, theme, x + CookingPotMenu.RESULT_X + (index % 2) * 18, y + CookingPotMenu.RESULT_Y + (index / 2) * 18);
 		}
-		graphics.fill(x + ARROW_X, y + ARROW_Y, x + ARROW_X + ARROW_WIDTH, y + ARROW_Y + 4, DARK);
-		graphics.fill(x + ARROW_X, y + ARROW_Y, x + ARROW_X + menu.progress(ARROW_WIDTH), y + ARROW_Y + 4, menu.assisted()?0xFF4C9B48:PROGRESS);
-		// A small flame under the arrow: bright with heat below the pot, grey without.
-		int color = menu.heated() ? FLAME : COLD;
+		ScreenKit.arrow(graphics, x + ARROW_X, y + ARROW_Y, ARROW_WIDTH, menu.progress(ARROW_WIDTH),
+				menu.assisted() ? theme.ok() : theme.progress());
+		// A small flame under the arrow: bright with heat below the pot, faint without.
+		int color = menu.heated() ? FLAME : theme.dim();
 		int fx = x + ARROW_X + ARROW_WIDTH / 2;
-		int fy = y + 52;
+		int fy = y + 51;
 		graphics.fill(fx - 3, fy + 4, fx + 3, fy + 8, color);
 		graphics.fill(fx - 2, fy + 1, fx + 2, fy + 4, color);
 		graphics.fill(fx - 1, fy - 2, fx + 1, fy + 1, color);
@@ -65,19 +69,17 @@ public class CookingPotScreen extends AbstractContainerScreen<CookingPotMenu> {
 
 	@Override
 	protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
-		super.extractLabels(graphics, mouseX, mouseY);
-		if(menu.assisted()) {
-			String hint="+50% speed";
-			graphics.text(font,hint,imageWidth-8-font.width(hint),72,0xFF276C27);
-		} else if (!menu.heated()) {
-			String hint = Component.translatable("container.jugcraft.cooking_pot.cold").getString();
-			graphics.text(font, hint, imageWidth - 8 - font.width(hint), 72, TEXT);
+		graphics.text(font, title, titleLabelX, titleLabelY, theme.label(), false);
+		// What the pot lacks, or what speeds it up, under the meals.
+		String line = menu.assisted() ? Component.translatable("screen.jugcraft.cooking_pot.assisted").getString()
+				: menu.heated() ? "" : Component.translatable("container.jugcraft.cooking_pot.cold").getString();
+		if (!line.isEmpty()) {
+			graphics.text(font, line, imageWidth - 9 - font.width(line), 65, menu.assisted() ? theme.ok() : theme.warn(), false);
 		}
 	}
 
-	private static void slotFrame(GuiGraphicsExtractor graphics, int slotX, int slotY) {
-		graphics.fill(slotX - 1, slotY - 1, slotX + 17, slotY + 17, DARK);
-		graphics.fill(slotX, slotY, slotX + 17, slotY + 17, LIGHT);
-		graphics.fill(slotX, slotY, slotX + 16, slotY + 16, SLOT);
+	@Override
+	public ScreenRectangle panelArea() {
+		return new ScreenRectangle(leftPos, topPos, imageWidth, imageHeight);
 	}
 }

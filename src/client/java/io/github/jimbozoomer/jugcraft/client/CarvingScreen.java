@@ -14,6 +14,7 @@ import java.util.List;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -28,8 +29,11 @@ import net.minecraft.network.chat.Component;
  * screen opened is fixed. Mirror copies every stroke to the other half; starter faces (blown up on a giant)
  * and a Pumpkin Stencil held in the other hand can be pressed in; the candle shows it lit. Done sends the face
  * to the server, which checks it and carves ({@link io.github.jimbozoomer.jugcraft.agriculture.PumpkinCarvings}).
+ * In the workshop look (docs/features/bench-screens.md): the face on the glass in its rind, keys at the right (the tool
+ * in use, Mirror and the candle lit while they are on), the actual-size preview in its own pane, and the hint (or what
+ * went wrong) in a help strip. The status lamp is lit while there are strokes for Done to send.
  */
-public class CarvingScreen extends Screen {
+public class CarvingScreen extends Screen implements ScreenKit.Fitted {
 	/** The grid is about this many GUI pixels a side, whatever the face size. */
 	private static final int GRID_SPAN = 160;
 	private static final int WIDTH = 304;
@@ -39,11 +43,6 @@ public class CarvingScreen extends Screen {
 	private static final int UNDO_LIMIT = 64;
 
 	private static final int RIND = 0xFF6B3A10;
-	private static final int PANEL = 0xFF2B1A0E;
-	private static final int PANEL_LIGHT = 0xFF4A2E16;
-	private static final int TEXT = 0xFFF5D9A8;
-	private static final int TEXT_DIM = 0xFFB89468;
-	private static final int SELECTED = 0xFFFFC040;
 	private static final int SKIN = 0xFFE08A2A;
 	private static final int SKIN_RIB = 0xFFC0661A;
 
@@ -78,7 +77,10 @@ public class CarvingScreen extends Screen {
 	private int top;
 	private int gridX;
 	private int gridY;
-	private final Button[] toolButtons = new Button[Tool.values().length];
+	private final MachineScreenThemes.Theme theme = MachineScreenThemes.screen("carving");
+	private final ScreenKit.TextButton[] toolButtons = new ScreenKit.TextButton[Tool.values().length];
+	private ScreenKit.TextButton mirrorButton;
+	private ScreenKit.TextButton candleButton;
 
 	public CarvingScreen(OpenCarvingPayload payload) {
 		super(Component.translatable("screen.jugcraft.carving"));
@@ -121,41 +123,44 @@ public class CarvingScreen extends Screen {
 		int toolWidth = (column - 4) / tools.length;
 		for (int i = 0; i < tools.length; i++) {
 			Tool each = tools[i];
-			toolButtons[i] = addRenderableWidget(Button.builder(Component.translatable("screen.jugcraft.carving." + each.name().toLowerCase()),
-					button -> tool = each).bounds(x + i * (toolWidth + 2), y, toolWidth, 16).build());
+			toolButtons[i] = addRenderableWidget(key(x + i * (toolWidth + 2), y, toolWidth,
+					Component.translatable("screen.jugcraft.carving." + each.name().toLowerCase()), button -> tool = each));
 			toolButtons[i].active = freeDraw;
 		}
 		int half = (column - 2) / 2;
-		Button brushButton = addRenderableWidget(Button.builder(brushLabel(), button -> {
+		// Brush and Mirror share a row; Mirror's label is the longer.
+		int brushWidth = Math.min(half, 46);
+		ScreenKit.TextButton brushButton = addRenderableWidget(key(x, y + 20, brushWidth, brushLabel(), button -> {
 			brushIndex = (brushIndex + 1) % brushes.length;
 			button.setMessage(brushLabel());
-		}).bounds(x, y + 20, half, 16).build());
-		Button mirrorButton = addRenderableWidget(Button.builder(mirrorLabel(), button -> {
+		}));
+		mirrorButton = addRenderableWidget(key(x + brushWidth + 2, y + 20, column - brushWidth - 2, mirrorLabel(), button -> {
 			mirror = !mirror;
 			button.setMessage(mirrorLabel());
-		}).bounds(x + half + 2, y + 20, half, 16).build());
+		}));
 		brushButton.active = freeDraw;
 		mirrorButton.active = freeDraw;
-		addRenderableWidget(Button.builder(templateLabel(), button -> {
+		addRenderableWidget(key(x, y + 40, column - 36, templateLabel(), button -> {
 			template = (template + 1) % patterns.size();
 			button.setMessage(templateLabel());
-		}).bounds(x, y + 40, column - 36, 16).build());
-		addRenderableWidget(Button.builder(Component.translatable("screen.jugcraft.carving.apply"), button -> applyTemplate())
-				.bounds(x + column - 34, y + 40, 34, 16).build());
-		addRenderableWidget(Button.builder(candleLabel(), button -> {
+		}));
+		addRenderableWidget(key(x + column - 34, y + 40, 34, Component.translatable("screen.jugcraft.carving.apply"), button -> applyTemplate()));
+		candleButton = addRenderableWidget(key(x, y + 60, column, candleLabel(), button -> {
 			litPreview = !litPreview;
 			button.setMessage(candleLabel());
-		}).bounds(x, y + 60, column, 16).build());
-		addRenderableWidget(Button.builder(Component.translatable("screen.jugcraft.carving.undo"), button -> undo())
-				.bounds(x, y + 80, half, 16).build());
-		addRenderableWidget(Button.builder(Component.translatable("screen.jugcraft.carving.reset"), button -> {
+		}));
+		addRenderableWidget(key(x, y + 80, half, Component.translatable("screen.jugcraft.carving.undo"), button -> undo()));
+		addRenderableWidget(key(x + half + 2, y + 80, half, Component.translatable("screen.jugcraft.carving.reset"), button -> {
 			pushUndo();
 			System.arraycopy(original, 0, face, 0, face.length);
-		}).bounds(x + half + 2, y + 80, half, 16).build());
-		addRenderableWidget(Button.builder(Component.translatable("gui.done"), button -> finish())
-				.bounds(x, top + HEIGHT - 22, half, 16).build());
-		addRenderableWidget(Button.builder(Component.translatable("gui.cancel"), button -> onClose())
-				.bounds(x + half + 2, top + HEIGHT - 22, half, 16).build());
+		}));
+		addRenderableWidget(key(x, top + HEIGHT - 22, half, Component.translatable("gui.done"), button -> finish()));
+		addRenderableWidget(key(x + half + 2, top + HEIGHT - 22, half, Component.translatable("gui.cancel"), button -> onClose()));
+	}
+
+	/** A key in the workshop look, 16 high. */
+	private ScreenKit.TextButton key(int x, int y, int w, Component label, Button.OnPress onPress) {
+		return new ScreenKit.TextButton(x, y, w, 16, theme, label, onPress);
 	}
 
 	private Component brushLabel() {
@@ -322,16 +327,29 @@ public class CarvingScreen extends Screen {
 	@Override
 	public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
 		super.extractBackground(graphics, mouseX, mouseY, delta);
-		graphics.fill(left - 2, top - 2, left + WIDTH + 2, top + HEIGHT + 2, RIND);
-		graphics.fill(left, top, left + WIDTH, top + HEIGHT, PANEL);
-		graphics.fill(left, top, left + WIDTH, top + 1, PANEL_LIGHT);
+		ScreenKit.body(graphics, theme, left, top, WIDTH, HEIGHT);
+		// The face on the glass, in its rind; the preview in a pane of its own.
+		ScreenKit.pane(graphics, theme, gridX - 6, gridY - 6, grid + 12, grid + 12);
 		graphics.fill(gridX - 2, gridY - 2, gridX + grid + 2, gridY + grid + 2, RIND);
+		int px = gridX + grid + 12;
+		ScreenKit.pane(graphics, theme, px - 3, gridY + 98, WIDTH - (px - left) - 6, PREVIEW + 22);
+		Component hint = notice.getString().isEmpty() ? Component.translatable("screen.jugcraft.carving.hint") : notice;
+		int helpY = gridY + grid + 10;
+		ScreenKit.help(graphics, font, theme, gridX - 6, helpY, grid + 12, top + HEIGHT - 6 - helpY, hint,
+				notice.getString().isEmpty() ? theme.help() : theme.progress());
 	}
 
 	@Override
 	public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
+		// The tool in use, Mirror and the candle are lit while they are on.
+		for (Tool each : Tool.values()) {
+			toolButtons[each.ordinal()].setSelected(freeDraw && each == tool);
+		}
+		mirrorButton.setSelected(mirror);
+		candleButton.setSelected(litPreview);
 		super.extractRenderState(graphics, mouseX, mouseY, delta);
-		graphics.text(font, title, left + 12, top + 9, TEXT, false);
+		// The lamp is lit while there are strokes for Done to send.
+		ScreenKit.title(graphics, font, theme, left, top, title, Arrays.equals(face, original) ? theme.dim() : theme.progress(), WIDTH - 8);
 
 		// The face, a cell per texel, with faint lines between cells big enough to have them.
 		for (int y = 0; y < size; y++) {
@@ -358,16 +376,10 @@ public class CarvingScreen extends Screen {
 				graphics.outline(gridX + mx * cell, gridY + (cy + low) * cell, span, span, 0x88FFFFFF);
 			}
 		}
-		// The selected tool.
-		Button selected = toolButtons[tool.ordinal()];
-		if (freeDraw) {
-			graphics.outline(selected.getX() - 1, selected.getY() - 1, selected.getWidth() + 2, selected.getHeight() + 2, SELECTED);
-		}
-
 		// The whole face small, as it will look on the pumpkin.
 		int px = gridX + grid + 12;
 		int py = gridY + 102;
-		graphics.text(font, Component.translatable("screen.jugcraft.carving.preview"), px, py, TEXT_DIM, false);
+		graphics.text(font, Component.translatable("screen.jugcraft.carving.preview"), px, py, theme.dim(), false);
 		int scale = Math.max(1, PREVIEW / size);
 		int span = size * scale;
 		graphics.fill(px - 1, py + 11, px + span + 1, py + 12 + span, RIND);
@@ -376,9 +388,11 @@ public class CarvingScreen extends Screen {
 				graphics.fill(px + x * scale, py + 12 + y * scale, px + (x + 1) * scale, py + 12 + (y + 1) * scale, color(x, y));
 			}
 		}
+	}
 
-		Component hint = notice.getString().isEmpty() ? Component.translatable("screen.jugcraft.carving.hint") : notice;
-		graphics.text(font, hint, gridX, gridY + grid + 8, notice.getString().isEmpty() ? TEXT_DIM : SELECTED, false);
+	@Override
+	public ScreenRectangle panelArea() {
+		return new ScreenRectangle(left, top, WIDTH, HEIGHT);
 	}
 
 	/** A cell's colour: the pumpkin's skin with darker ribs, shaved flesh, or a hole (lit or not). */

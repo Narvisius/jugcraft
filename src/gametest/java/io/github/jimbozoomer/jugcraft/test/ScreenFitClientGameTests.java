@@ -1,8 +1,19 @@
 package io.github.jimbozoomer.jugcraft.test;
 
+import io.github.jimbozoomer.jugcraft.agriculture.CarvingFace;
+import io.github.jimbozoomer.jugcraft.agriculture.CarvingTemplates;
+import io.github.jimbozoomer.jugcraft.agriculture.CookingPotMenu;
+import io.github.jimbozoomer.jugcraft.agriculture.FarmStandMenu;
+import io.github.jimbozoomer.jugcraft.agriculture.OpenCarvingPayload;
+import io.github.jimbozoomer.jugcraft.agriculture.PumpkinCarving;
 import io.github.jimbozoomer.jugcraft.chemistry.FluidRecipes;
+import io.github.jimbozoomer.jugcraft.client.CarvingScreen;
+import io.github.jimbozoomer.jugcraft.client.CaveWorkshopScreen;
+import io.github.jimbozoomer.jugcraft.client.CookingPotScreen;
 import io.github.jimbozoomer.jugcraft.client.DroneTerminalScreen;
+import io.github.jimbozoomer.jugcraft.client.FarmStandScreen;
 import io.github.jimbozoomer.jugcraft.client.FormMachineScreen;
+import io.github.jimbozoomer.jugcraft.client.LampwrightBenchScreen;
 import io.github.jimbozoomer.jugcraft.client.LogicControllerScreen;
 import io.github.jimbozoomer.jugcraft.client.MachineRecipeScreen;
 import io.github.jimbozoomer.jugcraft.client.MachineScreen;
@@ -13,6 +24,7 @@ import io.github.jimbozoomer.jugcraft.client.RocketPadScreen;
 import io.github.jimbozoomer.jugcraft.client.ScreenKit;
 import io.github.jimbozoomer.jugcraft.client.StorageTankScreen;
 import io.github.jimbozoomer.jugcraft.client.TowerScreen;
+import io.github.jimbozoomer.jugcraft.concordance.LampwrightBenchMenu;
 import io.github.jimbozoomer.jugcraft.control.LogicControllerMenu;
 import io.github.jimbozoomer.jugcraft.machine.JugcraftMachines;
 import io.github.jimbozoomer.jugcraft.machine.MachineKind;
@@ -20,10 +32,12 @@ import io.github.jimbozoomer.jugcraft.machine.MachineMenu;
 import io.github.jimbozoomer.jugcraft.machine.form.FormMachineMenu;
 import io.github.jimbozoomer.jugcraft.machine.form.JugcraftForms;
 import io.github.jimbozoomer.jugcraft.machine.form.MachineForm;
+import io.github.jimbozoomer.jugcraft.menagerie.CaveWorkshop;
 import io.github.jimbozoomer.jugcraft.prospecting.OreSurvey;
 import io.github.jimbozoomer.jugcraft.rocketry.RocketPadMenu;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
 import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
@@ -32,6 +46,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
@@ -40,7 +55,7 @@ import net.minecraft.world.entity.player.Inventory;
  * Every machine screen fits the smallest GUI Minecraft's automatic scale gives: a 640 x 480 window at scale 2, which is
  * 320 x 240 GUI pixels (docs/features/screen-fit-check.md). With the window at that size it opens every machine kind's
  * screen, every form's, a form's recipe page and the other machine screens, on stand-in menus (no block or server round
- * trip: only their size and layout are judged here; other tests show them working), checks that each one's panel
+ * trip: only their size and layout are judged here; other tests show them working) and the workshop benches, checks that each one's panel
  * ({@link ScreenKit.Fitted}) lies inside the window, and photographs a few at that size. Then it puts the window back.
  */
 public class ScreenFitClientGameTests implements FabricClientGameTest {
@@ -120,6 +135,18 @@ public class ScreenFitClientGameTests implements FabricClientGameTest {
 				check(context, faults, "remote shutdown panel", "remote_shutdown", inventory -> new RemoteShutdownScreen(BlockPos.ZERO));
 				check(context, faults, "drone depot terminal", "drone_terminal", inventory -> new DroneTerminalScreen(BlockPos.ZERO));
 				check(context, faults, "drone tower", "drone_tower", inventory -> new TowerScreen(BlockPos.ZERO));
+
+				// The benches in the workshop look (docs/features/bench-screens.md).
+				check(context, faults, "cooking pot", "cooking_pot", inventory -> new CookingPotScreen(new CookingPotMenu(0, inventory), inventory,
+						Component.translatable("container.jugcraft.cooking_pot")));
+				check(context, faults, "lampwright's bench", "lampwright_bench", inventory -> new LampwrightBenchScreen(
+						new LampwrightBenchMenu(0, inventory), inventory, Component.translatable("block.jugcraft.lampwright_bench")));
+				check(context, faults, "farm stand", "farm_stand", inventory -> new FarmStandScreen(new FarmStandMenu(0, inventory,
+						new FarmStandMenu.Opening(BlockPos.ZERO, "Steve", true)), inventory, Component.translatable("block.jugcraft.farm_stand")));
+				check(context, faults, "cave survey desk", "cave_survey", inventory -> new CaveWorkshopScreen(new CaveWorkshop(0, inventory), inventory,
+						Component.empty()));
+				check(context, faults, "carving knife", "carving", inventory -> new CarvingScreen(new OpenCarvingPayload(BlockPos.ZERO, Direction.NORTH,
+						new CarvingFace.Sized(PumpkinCarving.SIZE, CarvingTemplates.ALL.getFirst().face().clone()), true, Optional.empty())));
 			} finally {
 				context.runOnClient(client -> {
 					client.player.containerMenu = client.player.inventoryMenu;

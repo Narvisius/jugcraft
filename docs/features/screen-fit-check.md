@@ -29,6 +29,7 @@ Minecraft never gives a GUI smaller than 320 × 240 GUI pixels: whatever GUI sca
 - every industrial form's screen;
 - the recipe page of the form with the most recipes;
 - the prospector, rocket pad, logic controller, storage tank, reactor console, remote shutdown panel, drone depot terminal and drone tower.
+- since [the benches in the workshop look](bench-screens.md): the cooking pot, lampwright's bench, farm stand, cave survey desk and carving knife.
 
 For each screen it checks that the panel the screen reports (`ScreenKit.Fitted.panelArea`, after any scaling to fit) lies inside the window. It fails with a list of the screens that do not fit. It photographs one machine screen, the busiest form, the recipe page and the eight other screens at that size (`jugcraft_fit_*`), then puts the window and GUI scale back.
 
