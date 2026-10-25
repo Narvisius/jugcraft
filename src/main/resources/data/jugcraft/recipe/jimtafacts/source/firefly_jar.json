@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " E ",
+    "GLG",
+    " G "
+  ],
+  "key": {
+    "G": "#c:glass_blocks",
+    "E": "jugcraft:jimta_spellbooks_arcane_essence",
+    "L": "minecraft:lantern"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_firefly_jar",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

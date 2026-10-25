@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:jimta_spellbooks_weapon_schematics",
+    "jugcraft:jimta_spellbooks_mithril_ingot",
+    "jugcraft:jimta_spellbooks_rare_ink"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_lesser_spell_slot_upgrade"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

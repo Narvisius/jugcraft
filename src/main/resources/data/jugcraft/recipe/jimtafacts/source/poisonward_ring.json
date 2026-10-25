@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "M": "jugcraft:jimta_spellbooks_nature_rune",
+    "X": "jugcraft:jimta_spellbooks_mithril_scrap"
+  },
+  "pattern": [
+    "M ",
+    " X"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:jimta_spellbooks_poisonward_ring"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

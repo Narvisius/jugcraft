@@ -1,0 +1,109 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:jimta_spellbooks_wicked_bone_ring"
+        }
+      ],
+      "rolls": 1,
+      "condition": {
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "minecraft:killed_by_player"
+          },
+          {
+            "enchantment": "minecraft:looting",
+            "unenchanted_chance": 0.5,
+            "enchanted_chance": {
+              "type": "minecraft:linear",
+              "base": 0.55,
+              "per_level_above_first": 0.05
+            },
+            "type": "minecraft:random_chance_with_enchanted_bonus"
+          }
+        ]
+      }
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:jimta_spellbooks_scroll_firebolt",
+          "modifier": [
+            {
+              "spells": [
+                "fang_swirl"
+              ],
+              "type": "jugcraft:jimtafacts_spell_scroll"
+            }
+          ]
+        }
+      ],
+      "condition": {
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "minecraft:killed_by_player"
+          },
+          {
+            "enchantment": "minecraft:looting",
+            "unenchanted_chance": 0.7,
+            "enchanted_chance": {
+              "type": "minecraft:linear",
+              "base": 0.75,
+              "per_level_above_first": 0.05
+            },
+            "type": "minecraft:random_chance_with_enchanted_bonus"
+          }
+        ]
+      }
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:jimta_spellbooks_arcane_essence",
+          "modifier": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 45.0,
+                "min": 28.0
+              },
+              "type": "minecraft:set_count"
+            },
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 3.0,
+                "min": 1.0
+              },
+              "enchantment": "minecraft:looting",
+              "type": "minecraft:enchanted_count_increase"
+            }
+          ]
+        }
+      ],
+      "rolls": 2
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:jimta_spellbooks_blank_rune"
+        }
+      ],
+      "rolls": {
+        "min": 1,
+        "max": 2,
+        "type": "minecraft:uniform"
+      }
+    }
+  ]
+}

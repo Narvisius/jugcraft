@@ -126,7 +126,13 @@ public enum MachineKind implements StringRepresentable {
 	// Append storage hardware to preserve existing ordinal-based integrations.
 	LEAD_ACID_BATTERY_BANK("lead_acid_battery_bank", 2_000_000, 1_024, 1_024, 0, 0),
 	FLOW_TANK_MODULE("flow_tank_module", 0, 0, 0, 0, 0),
-	FLOW_STACK_MODULE("flow_stack_module", 0, 0, 0, 0, 0);
+	FLOW_STACK_MODULE("flow_stack_module", 0, 0, 0, 0, 0),
+	// Legacy industrial processes use the shared machine interface and JE economy.
+	JIMTA_COMPRESSOR("jimta_compressor", 16_000, 128, 0, 16, 2),
+	JIMTA_EXTRACTOR("jimta_extractor", 16_000, 128, 0, 12, 4),
+	JIMTA_THERMAL_CENTRIFUGE("jimta_thermal_centrifuge", 40_000, 256, 0, 32, 4),
+	JIMTA_RECYCLER("jimta_recycler", 16_000, 128, 0, 4, 2),
+	JIMTA_METAL_CUTTER("jimta_metal_cutter", 16_000, 128, 0, 16, 2);
 
 	/** JE produced per tick while the coal generator burns. */
 	public static final int GENERATION_PER_TICK = 32;
@@ -334,7 +340,9 @@ public enum MachineKind implements StringRepresentable {
 				|| this == COKE_OVEN || this == STEEL_FOUNDRY || this == ORE_DRILL || this == DEPOSIT_DRILL
 				|| this == COBBLESTONE_GENERATOR || this == TREE_FARM || this == AUTO_CRAFTER
 				|| this == CROP_HARVESTER || this == HYDROPONIC_BAY || this == ELECTROPLATING_BATH || this == ROCKET_WORKSHOP
-				|| this == GAS_CENTRIFUGE_CASCADE || this == FUEL_FABRICATOR;
+				|| this == GAS_CENTRIFUGE_CASCADE || this == FUEL_FABRICATOR
+				|| this == JIMTA_COMPRESSOR || this == JIMTA_EXTRACTOR || this == JIMTA_THERMAL_CENTRIFUGE
+				|| this == JIMTA_RECYCLER || this == JIMTA_METAL_CUTTER;
 	}
 
 	/** Stores energy and gives it out of its front face only. */
@@ -359,6 +367,11 @@ public enum MachineKind implements StringRepresentable {
 	 */
 	public String recipeType() {
 		return switch (this) {
+			case JIMTA_RECYCLER -> "jimta_recycling";
+			case JIMTA_METAL_CUTTER -> "jimta_metal_cutting";
+			case JIMTA_COMPRESSOR -> "jimta_compressing";
+			case JIMTA_EXTRACTOR -> "jimta_extracting";
+			case JIMTA_THERMAL_CENTRIFUGE -> "jimta_thermal_centrifuging";
 			case CRUSHER -> "crushing";
 			case ARC_FURNACE -> "arc_smelting";
 			case ALLOY_SMELTER -> "alloying";
@@ -487,7 +500,8 @@ public enum MachineKind implements StringRepresentable {
 			return 1; // Container remainders, such as the empty bucket from a cake.
 		}
 		return this == PULVERIZER || this == SIEVE || this == SAWMILL || this == ORE_DRILL || this == DEPOSIT_DRILL
-				|| this == TREE_FARM || this == CROP_HARVESTER || this == HYDROPONIC_BAY ? 2 : 0;
+				|| this == TREE_FARM || this == CROP_HARVESTER || this == HYDROPONIC_BAY
+				|| this == JIMTA_THERMAL_CENTRIFUGE || this == JIMTA_EXTRACTOR ? 2 : 0;
 	}
 
 	/**

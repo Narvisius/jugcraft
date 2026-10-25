@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    " S ",
+    "MPM"
+  ],
+  "key": {
+    "P": "#c:ingots/pyrium",
+    "M": "minecraft:smooth_stone_slab",
+    "S": "minecraft:stone"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_tyros_statue",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

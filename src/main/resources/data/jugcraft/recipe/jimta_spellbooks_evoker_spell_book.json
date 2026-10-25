@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:book",
+    "minecraft:totem_of_undying",
+    "jugcraft:jimta_spellbooks_magic_cloth",
+    "jugcraft:jimta_spellbooks_common_ink"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_evoker_spell_book",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

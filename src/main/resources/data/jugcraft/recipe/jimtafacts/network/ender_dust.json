@@ -1,0 +1,14 @@
+{
+  "type": "jugcraft:crushing",
+  "ingredient": "minecraft:ender_pearl",
+  "result": {
+    "id": "jugcraft:jimta_ender_dust"
+  },
+  "time": 100,
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

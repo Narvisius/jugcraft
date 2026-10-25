@@ -66,6 +66,14 @@ public class WindTurbineRenderer implements BlockEntityRenderer<MachineBlockEnti
 	public void extractRenderState(MachineBlockEntity machine, State state, float partialTick, Vec3 camera,
 			ModelFeatureRenderer.@Nullable CrumblingOverlay crumbling) {
 		BlockEntityRenderState.extractBase(machine, state, crumbling);
+		// Original Jimtafacts compact housings already contain their machinery. Large native rotors
+		// and offset fittings must not float around these one-block machines.
+		if (machine.kind().id.startsWith("jimta_") || machine.getBlockState().getBlock() instanceof io.github.jimbozoomer.jugcraft.jimtafacts.industry.JimtaIndustryMachine) {
+			state.spins = List.of();
+			state.fittings = List.of();
+			state.turbine = false;
+			return;
+		}
 		state.spins = MachineRotors.extract(machine, partialTick);
 		state.fittings = MachineConnections.extract(machine);
 		state.turbine = machine.kind() == MachineKind.WIND_TURBINE;

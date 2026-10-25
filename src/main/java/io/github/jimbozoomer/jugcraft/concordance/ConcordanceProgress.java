@@ -63,7 +63,12 @@ public final class ConcordanceProgress {
 
 	public static FocusPool focus(Player player) {
         var pool=player.getAttachedOrElse(JugcraftConcordance.FOCUS, FocusPool.FULL);
-        if(player instanceof ServerPlayer server){int maximum=io.github.jimbozoomer.jugcraft.nouveau.NouveauThreads.focusCapacity(player);if(pool.capacity()!=maximum){pool=pool.withCapacity(now(player.level()),maximum);server.setAttached(JugcraftConcordance.FOCUS,pool);}}
+        if(player instanceof ServerPlayer server){
+            int maximum=Math.min(FocusPool.HARD_MAX,io.github.jimbozoomer.jugcraft.nouveau.NouveauThreads.focusCapacity(player)
+                    +io.github.jimbozoomer.jugcraft.jimtafacts.spellbooks.JimtaSpellbookCurios.focusCapacityBonus(player)
+                    +io.github.jimbozoomer.jugcraft.jimtafacts.spellbooks.JimtaUpgrades.focusBonus(player));
+            if(pool.capacity()!=maximum){pool=pool.withCapacity(now(player.level()),maximum);server.setAttached(JugcraftConcordance.FOCUS,pool);}
+        }
         return pool;
 	}
 

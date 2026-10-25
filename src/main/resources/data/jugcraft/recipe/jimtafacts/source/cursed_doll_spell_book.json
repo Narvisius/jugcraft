@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IB ",
+    "BRB",
+    " BI"
+  ],
+  "key": {
+    "R": "jugcraft:jimta_spellbooks_ruined_book",
+    "B": "jugcraft:jimta_spellbooks_bloody_vellum",
+    "I": "jugcraft:jimta_spellbooks_arcane_ingot"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_cursed_doll_spell_book",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

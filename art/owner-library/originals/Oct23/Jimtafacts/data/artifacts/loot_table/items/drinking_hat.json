@@ -1,0 +1,50 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "artifacts:config_value",
+                  "value": "items.plastic_drinking_hat.generateAsLoot"
+                }
+              ],
+              "name": "artifacts:plastic_drinking_hat",
+              "weight": 3
+            },
+            {
+              "type": "minecraft:empty",
+              "weight": 3
+            }
+          ]
+        },
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "artifacts:config_value",
+                  "value": "items.novelty_drinking_hat.generateAsLoot"
+                }
+              ],
+              "name": "artifacts:novelty_drinking_hat"
+            },
+            {
+              "type": "minecraft:empty"
+            }
+          ]
+        }
+      ],
+      "name": "main",
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "artifacts:items/drinking_hat"
+}

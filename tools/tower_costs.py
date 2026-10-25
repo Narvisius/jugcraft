@@ -57,18 +57,18 @@ def family(block):
 # SIE per block placed (from check()'s computation; keep in step with the recipes).
 BLOCK_VALUE = {
     "access_floor_tile": 0.633, "acoustic_wall_panel": 0.275, "aluminum_cladding": 1.0, "armored_conduit": 0.75,
-    "blast_glass": 0.267, "cable_tray": 0.287, "carbon_composite_panel": 0.875, "cargo_exchange_port": 6.3,
+    "blast_glass": 0.267, "cable_tray": 0.287, "carbon_composite_panel": 0.5, "cargo_exchange_port": 10.3,
     "cargo_packager": 14.7, "carpet_tile": 0.2, "ceiling_light_panel": 0.525, "ceramic_insulator": 0.2,
-    "chiseled_stone_bricks": 0.2, "concrete_column": 0.275, "console_desk": 4.9, "control_screen": 1.317, "cooling_fin": 1.75,
+    "chiseled_stone_bricks": 0.2, "concrete_column": 0.275, "console_desk": 8.9, "control_screen": 2.65, "cooling_fin": 1.75,
     "copper_busbar": 0.5, "depleted_uranium_armor": 4.75, "dock_plating": 0.35, "drone_depot_terminal": 16.333,
-    "energy_exchange_port": 8.9, "equipment_rack": 5.25, "graphene_lattice": 1.45, "hangar_bay_door": 4.0,
-    "hangar_pad": 1.113, "hazard_plating": 0.55, "holo_table": 1.35, "intake_funnel": 2.5, "landing_pad": 0.417,
+    "energy_exchange_port": 8.9, "equipment_rack": 11.25, "graphene_lattice": 1.45, "hangar_bay_door": 4.0,
+    "hangar_pad": 1.113, "hazard_plating": 0.55, "holo_table": 2.683, "intake_funnel": 2.5, "landing_pad": 0.417,
     "landing_platform": 0.675, "operator_chair": 3.4, "red_light_strip": 0.108, "reinforced_concrete": 0.275,
     "silicon_carbide_armor": 1.55, "steel_armor_plate": 2.0, "steel_girder": 1.167, "superconducting_conduit": 3.375,
     "supply_pickup": 1.056, "transformer_casing": 2.8, "tungsten_steel_frame": 4.0, "warning_light": 0.5,
 }
 # SIE per module crafted.
-MODULE_VALUE = {"structural_module": 47.88, "armor_module": 46.5, "hangar_module": 21.9, "avionics_module": 24.43}
+MODULE_VALUE = {"structural_module": 47.88, "armor_module": 46.5, "hangar_module": 21.9, "avionics_module": 20.93}
 
 
 def module_cost(tier, block_names):

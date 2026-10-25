@@ -1,0 +1,35 @@
+{
+  "textures": {
+    "indicator": "jugcraft:jimtafacts/ae2/part/monitor_sides_status_on",
+    "particle": "jugcraft:jimtafacts/ae2/block/transparent"
+  },
+  "elements": [
+    {
+      "from": [
+        6,
+        6,
+        4
+      ],
+      "to": [
+        10,
+        10,
+        5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#indicator"
+        },
+        "up": {
+          "texture": "#indicator"
+        },
+        "east": {
+          "texture": "#indicator"
+        },
+        "west": {
+          "texture": "#indicator"
+        }
+      },
+      "light_emission": 15
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:jimta_spellbooks_arcane_essence",
+          "modifier": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 8.0,
+                "min": 0.0
+              },
+              "type": "minecraft:set_count"
+            },
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.0
+              },
+              "enchantment": "minecraft:looting",
+              "type": "minecraft:enchanted_count_increase"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:jimta_spellbooks_scroll_firebolt",
+          "modifier": [
+            {
+              "spells": [
+                "heal",
+                "greater_heal",
+                "cleanse",
+                "fortify",
+                "haste",
+                "angel_wings",
+                "wisp",
+                "blessing_of_life",
+                "guiding_bolt",
+                "healing_circle",
+                "cloud_of_regeneration",
+                "divine_smite",
+                "sunbeam"
+              ],
+              "type": "jugcraft:jimtafacts_spell_scroll"
+            }
+          ]
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "rolls": {
+        "min": 1,
+        "max": 3,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "jugcraft:jimtafacts/spellbooks/magic_items/good_ink"
+        }
+      ]
+    }
+  ]
+}

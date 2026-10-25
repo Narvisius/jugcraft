@@ -1,0 +1,15 @@
+{
+  "name": "jugcraft:jimtafacts/spellbooks/mountain_tower_pool",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/mountain_tower",
+        "processors": "jugcraft:jimtafacts/spellbooks/weather_stone_blocks",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

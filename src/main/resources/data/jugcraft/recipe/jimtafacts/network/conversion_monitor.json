@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:jimta_storage_monitor",
+    "jugcraft:jimta_formation_core",
+    "jugcraft:jimta_annihilation_core"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_conversion_monitor",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

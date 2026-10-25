@@ -613,6 +613,9 @@ def icon_size_check():
     """(errors, warnings): frozen legacy sizes plus specific, unchanged owner-authorized source imports."""
     legacy, sizes = set(legacy_icons()), item_icon_sizes()
     errors, authorized = [], set()
+    import jimtafacts_catalog
+    authorized.update(name for name in sizes if jimtafacts_catalog.original_texture(
+        os.path.join(ASSETS, 'textures', 'item', name + '.png')))
     for name, (source, approved_width) in OWNER_ICON_EXCEPTIONS.items():
         runtime = os.path.join(ASSETS, "textures", "item", name + ".png")
         original = os.path.join(ROOT, "art", "owner-library", "originals", "Magic", source)

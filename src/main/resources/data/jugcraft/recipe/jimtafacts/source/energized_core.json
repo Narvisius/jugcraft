@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FFF",
+    "FRF",
+    "FFF"
+  ],
+  "key": {
+    "F": "#jugcraft:jimtafacts/spellbooks/lightning_focus",
+    "R": "minecraft:copper_block"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_energized_core",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IFI",
+    "ITI",
+    "IEI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "F": "jugcraft:jimta_fluix_crystal",
+    "T": "jugcraft:jimta_terminal",
+    "E": "jugcraft:jimta_engineering_processor"
+  },
+  "result": {
+    "id": "jugcraft:jimta_wireless_terminal",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

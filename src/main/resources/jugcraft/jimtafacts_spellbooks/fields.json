@@ -1,0 +1,62 @@
+{
+  "healing_circle": {
+    "radius": 5,
+    "lifetime": 200,
+    "interval": 40,
+    "burst": 0,
+    "pulse": 1,
+    "secondary": "heal",
+    "follow": false,
+    "drift": 0
+  },
+  "blizzard": {
+    "radius": 8,
+    "lifetime": 230,
+    "interval": 10,
+    "burst": 0,
+    "pulse": 0,
+    "secondary": "blizzard",
+    "follow": false,
+    "drift": 0.05
+  },
+  "earthquake": {
+    "radius": 8,
+    "lifetime": 240,
+    "interval": 20,
+    "burst": 0,
+    "pulse": 2,
+    "secondary": "quake",
+    "follow": false,
+    "drift": 0
+  },
+  "thunderstorm": {
+    "radius": 20,
+    "lifetime": 400,
+    "interval": 40,
+    "burst": 0,
+    "pulse": 8,
+    "secondary": "storm",
+    "follow": true,
+    "drift": 0
+  },
+  "scorch": {
+    "radius": 2.5,
+    "lifetime": 200,
+    "interval": 20,
+    "burst": 8,
+    "pulse": 1,
+    "secondary": "ignite",
+    "follow": false,
+    "drift": 0
+  },
+  "poison_splash": {
+    "radius": 3,
+    "lifetime": 140,
+    "interval": 20,
+    "burst": 8,
+    "pulse": 1,
+    "secondary": "poison",
+    "follow": false,
+    "drift": 0
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:brewing",
+  "input": {
+    "item": "minecraft:splash_potion",
+    "potion_contents": {
+      "potions": "jugcraft:jimta_spellbooks_instant_mana_three"
+    }
+  },
+  "output": {
+    "id": "minecraft:splash_potion",
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "jugcraft:jimta_spellbooks_instant_mana_four"
+      }
+    }
+  },
+  "reagent": {
+    "item": "minecraft:amethyst_cluster"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

@@ -45,6 +45,12 @@ public class CableBlock extends PipeBlock implements EnergyConnectable {
 	public long transferRate() {
 		return rate;
 	}
+	public long transferRate(BlockState state){return transferRate();}
+
+	/** A closed switch is a network boundary, not a zero-rate member that stalls its entire neighboring bus. */
+	public boolean conducts(BlockState state) { return transferRate(state) > 0; }
+	public boolean observesTransfers() { return false; }
+	public void onEnergyTransferred(Level level, BlockPos pos, long amount) {}
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {

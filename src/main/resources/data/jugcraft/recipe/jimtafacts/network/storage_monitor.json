@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:jimta_terminal",
+    "jugcraft:jimta_level_emitter"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_storage_monitor",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

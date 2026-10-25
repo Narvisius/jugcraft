@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "#c:ingots/netherite",
+  "base": "#jugcraft:jimtafacts/spellbooks/wizard_base_helmet",
+  "result": {
+    "count": 1,
+    "id": "jugcraft:jimta_spellbooks_netherite_mage_helmet"
+  },
+  "template": "minecraft:netherite_upgrade_smithing_template",
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

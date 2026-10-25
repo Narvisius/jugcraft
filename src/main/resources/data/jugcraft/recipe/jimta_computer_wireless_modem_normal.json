@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    "minecraft:ender_pearl",
+    "minecraft:redstone",
+    "minecraft:stone"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_computer_wireless_modem_normal"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

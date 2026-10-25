@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " BI",
+    "BIB",
+    "IB "
+  ],
+  "key": {
+    "B": "jugcraft:jimta_spellbooks_frozen_bone",
+    "I": "jugcraft:jimta_spellbooks_arcane_ingot"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_frosted_helve",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

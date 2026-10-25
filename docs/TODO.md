@@ -1,11 +1,54 @@
 # Jugcraft TODO
 
+## Jimtafacts collection — October 23 local integration
+
+**Current direction:** test and repair the existing combined candidate, then
+prepare the coordinated release. Further implementation is tracked in
+[Jimtafacts remaining work](features/jimtafacts-remaining.md). Earlier requests to
+defer tests are superseded by the owner's October 23 release request. No test or
+deployment is considered passed until its evidence is recorded.
+
+October 25 checkpoint: 389 combined server regressions now pass, including the
+Jimtafacts systems and affected older features; compilation, asset/data and
+updater checks have passed. Full release CI and rendered-client checks remain
+pending. Earlier "not run" text below describes the implementation checkpoints;
+the [validation record](features/jimtafacts-integration.md) is the current evidence.
+
+- [x] Preserve and SHA-256 verify all 17,598 supplied files; index named content, namespaces, legacy class generations and source-format issues.
+- [x] Implement and validate the first 28 accessory/food item behaviors: native slots, cooldowns, acquisition, party protection and grave interactions. Source-parity and worn-model work remains below.
+- [ ] Validate the locally implemented 49 accessory/items, mimic/campsites, original wearable models and animations in the final combined batch. Source defaults intentionally disable durability.
+- [ ] Validate the locally implemented 113 named spells, source armor/models/animations, encounter behavior and 236 supplied templates across nine structures. Preserve the explicitly recorded missing statue assets and native spell-level adaptations; see [structures](features/jimtafacts-structures.md) and [encounters](features/jimtafacts-encounters.md). Implementation is not yet a test pass.
+- [ ] Finish network parity beyond the implemented P2P/cards, quantum storage, 32 cable attachment types, facade/anchor system, joined plane geometry, guide/card wallet, meteorites, bounded 2³/16³ spatial exchange and asynchronous dependencies. Physical ingredient escrow, per-face job-tree cancellation, original creative cell, item/fluid I/O fill/empty, fluid partitioning and bounded paid spatial anchors are local. Remaining: 128³/entity migration and the documented source/API differences. Validate all together at the end; see [exact network status](features/jimtafacts-network.md).
+- [ ] Finish IndustrialCraft mapping beyond 22 shared processor housings, rechargeable/fueled gear, 29 crop varieties/genetics, recycling and metal-former production; retain consolidated power/agriculture/nuclear systems and finish distinct process gaps.
+- [ ] Validate the local lathe, boats, luminator, fluid regulator/distributor, solar distiller/steam condenser, four transformers, magnetizer, personal safe, barter/charging stations, six animated engines/dynamo, original glass tank/pump and configurable chute. Original supplied art and recovered geometry are used; combined compilation/gameplay/visual tests have not run.
+- [ ] Validate original-art charging/programming tables, advanced crafting table, manual forge hammer/wire cutters, portable toolbox, finite brewing barrel, fourteen cable families, six terraformer plans, biogas jetpack and construction-foam backpack together. Implementation and conservation scenarios are local; no tests have run for this continuation.
+- [x] Implement the 39 native transport variants, including obsidian collection, stripes placement/breaking, resource-specific lapis/daizuli/emzuli routes and filtered wooden item/fluid extraction. Original textures, directional collars, cargo/sample separation and bounded scans are local. This is native instantaneous transport, not the source travelling-item simulation or arbitrary item-use API.
+- [ ] Validate the 39 transport variants (including four independent Emzuli banks), three gate modifiers/parameter editor and five expansions together with lasers, integration tables, 20 robot programs and recovered animated quarry rails/drill. New conservation/filter/parameter tests are authored, not run.
+- [ ] Validate the locally implemented construction/paint/scaffold system, seven machine upgrades and fourteen heat/kinetic devices with original wind/water rotors, coolant, two-stage superheated/ordinary steam, 5×5×5 reactor vessel/ports and laser tables. Native boiler headroom interlock replaces source pressure explosions; existing JE/KE systems remain authoritative.
+- [ ] Validate the 23 local computer/terminal/disk/peripheral/turtle entries, source models/animation, wired transfers, paginated printing, linked pockets, 48×24 monitors using the original terminal font, saved programs/integer control flow, bounded speaker clips, loaded cross-dimensional advanced modems and operator-only Command Computers. Full Lua/CraftOS compatibility remains unimplemented; native workshop instructions are explicitly labelled. See [computer scope](features/jimtafacts-computers.md).
+- [ ] Finish combined survival, economy, visuals, multiplayer, save/restart and performance checks; prepare the local owner playtest before release.
+
+[Scope, supplied files, implemented behavior and pending parity](features/jimtafacts-integration.md). Preserved content is not automatically playable content.
+
+## Planes, furniture and graves — October 22 candidate
+
+- [x] Integrate seven supplied aircraft with equipment/cargo, fuel, repair, ownership, weapons and retained models/animations. Correct grounded model/seat/weapon offsets.
+- [x] Integrate 267 ready-made furniture blocks, 18 related items, 28 paintings and 317 recipes using supplied art and native seating, beds, storage and cooking.
+- [x] Implement the bounded artisan editor, paid crafting/recycling and local design library; retain supplied workstation art.
+- [x] Implement persistent owner-recoverable death graves with personal/global keep-inventory, totem and boss-lair exclusions.
+- [x] Complete combined regression and rendered checks plus an isolated existing-world save/restart rehearsal; fix all sheet/sleeping-bag collisions and generator/atlas omissions.
+- [ ] Complete final CI and prepare/publish the matching client/server update; do not promote before hosted startup.
+- [ ] Owner confirms restart; warn players for 30 seconds, back up, deploy, verify, then promote the client channel.
+- [ ] Hosted two-account acceptance and owner flight/editor feedback. Future editor extensions: rotated/oversized parts, more materials, per-design inventory preview.
+
+[Scope, native-port limits and test evidence](features/owner-graves-aircraft-furniture.md).
+
 ## Town maintenance and updater rollout — October 22
 
 - [x] Allow public doors, trapdoors, controls, seating and inventory-free workstations in Spawn City while protecting shared containers, stored resources, building and breaking. Preserve personal bank Ender Chest access.
 - [x] Stop sleeping townsfolk from travelling; prevent city flak from using near-vertical fallback shots at unreachable ground targets; animate guard-walker movement and render seated guard pilots.
 - [x] Include the merged Windows updater lock-handoff fix from PR #456.
-- [ ] Validate and publish the isolated combined town/updater release, back up and replace the live server's managed JAR, verify startup, then promote the matching client channel.
+- [x] Publish/deploy town/updater `0.1.0-alpha.20261022.3` from main `f904df3fd`: hosted startup verified and matching client channel promoted.
 - [ ] Owner checks the real launcher update/relaunch and hosted town visuals. On October 22 the owner explicitly authorized rollout without the blocked launcher click-through; this is an outstanding acceptance check, not a test pass.
 
 See [town release scope and evidence](features/town-updater-release-oct22.md).

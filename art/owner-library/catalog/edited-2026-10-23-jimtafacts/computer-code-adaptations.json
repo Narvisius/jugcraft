@@ -1,0 +1,18 @@
+{
+  "scope": "Owner-authorized static source inspection and native adapters. Supplied executables and ROM scripts were not run.",
+  "adaptations": [
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/computers/data/computercraft/lua/rom/modules/main/cc/audio/dfpwm.lua",
+      "runtime": "src/client/java/io/github/jimbozoomer/jugcraft/client/jimtafacts/WorkshopDfpwm.java",
+      "license": "MPL-2.0",
+      "notice": "SPDX-FileCopyrightText: 2021 The CC: Tweaked Developers",
+      "changes": "Predictor, strength, anti-jerk and low-pass decoder adapted to a finite Java byte-array decoder. 4096-byte input cap; fresh decoder state per clip. Original SPDX notice retained in adapted source. No source ROM execution."
+    },
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/computers/dan200/computercraft/client/render/text/DirectFixedWidthFontRenderer.class",
+      "runtime": "src/client/java/io/github/jimbozoomer/jugcraft/client/jimtafacts/ComputerMonitorRenderer.java",
+      "changes": "Statically recovered original term_font.png atlas layout: 16 columns at 8x11 pitch, visible 6x9 glyphs and solid patch at 250..252. Native Minecraft render submission, no class loading. Texture copied unchanged via computer-copies.json."
+    }
+  ],
+  "validation": "Authored locally; combined build, audio playback and rendered-client validation deferred by owner."
+}

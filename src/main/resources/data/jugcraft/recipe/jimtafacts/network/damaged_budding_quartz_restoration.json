@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:jimta_damaged_budding_quartz",
+    "jugcraft:jimta_certus_quartz_crystal",
+    "jugcraft:jimta_certus_quartz_crystal"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_flawed_budding_quartz"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "handcrafted:warped_shelf"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_warped_shelf": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:warped_planks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_warped_shelf"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "handcrafted:warped_shelf"
+    ]
+  }
+}

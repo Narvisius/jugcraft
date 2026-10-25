@@ -320,7 +320,7 @@ CRAFTING = {
     "spent_fuel_rack": (["SBS", "B B", "SBS"], {"S": "#c:plates/steel", "B": "minecraft:iron_bars"}, 1),
     "dry_storage_cask": (["CSC", "C C", "CSC"], {"C": "jugcraft:shielding_concrete", "S": "#c:plates/steel"}, 1),
     "travelling_water_screen": (["SMS", "BBB", "BBB"], {"S": "#c:plates/steel", "M": "jugcraft:electric_motor", "B": "minecraft:iron_bars"}, 1),
-    "plant_display_wall": (["GGG", "CPC", "SSS"], {"G": "minecraft:glass_pane", "C": "jugcraft:advanced_circuit", "P": "jugcraft:processor", "S": "#c:plates/steel"}, 1),
+    "plant_display_wall": (["GGG", "CPC", "SSS"], {"G": "jugcraft:wall_display", "C": "jugcraft:advanced_circuit", "P": "jugcraft:processor", "S": "#c:plates/steel"}, 1),
     "main_control_board": (["RGR", "CCC", "SSS"], {"R": "minecraft:redstone_lamp", "G": "minecraft:glass_pane", "C": "jugcraft:advanced_circuit", "S": "#c:plates/steel"}, 1),
     "switchgear_lineup": (["SRS", "CAC", "SSS"], {"S": "#c:plates/steel", "R": "minecraft:redstone", "C": "minecraft:copper_ingot", "A": "jugcraft:aluminum_cable"}, 1),
     "air_handling_unit": (["SBS", "WMW", "SSS"], {"S": "#c:plates/steel", "B": "minecraft:iron_bars", "W": "minecraft:white_wool", "M": "jugcraft:electric_motor"}, 1),

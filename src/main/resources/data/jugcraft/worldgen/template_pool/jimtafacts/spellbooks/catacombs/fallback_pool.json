@@ -1,0 +1,26 @@
+{
+  "name": "jugcraft:jimtafacts/spellbooks/catacombs_fallback_pool",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/catacombs/end_hallway_wall",
+        "processors": "jugcraft:jimtafacts/spellbooks/catacombs_randomization",
+        "projection": "rigid",
+        "element_type": "jugcraft:jimtafacts_individual_terrain",
+        "terrain_adjustment": "bury"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/catacombs/end_room_wall",
+        "processors": "jugcraft:jimtafacts/spellbooks/catacombs_randomization",
+        "projection": "rigid",
+        "element_type": "jugcraft:jimtafacts_individual_terrain",
+        "terrain_adjustment": "bury"
+      }
+    }
+  ]
+}

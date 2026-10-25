@@ -1,0 +1,110 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 15,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "jugcraft:jimta_spellbooks_arcane_essence",
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 3,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "minecraft:candle"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "minecraft:paper"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "minecraft:pumpkin"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 3,
+          "name": "minecraft:obsidian"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 8,
+          "name": "minecraft:blaze_rod"
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 0,
+        "max": 5,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "jugcraft:jimtafacts/spellbooks/magic_items/poor_ink"
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 0,
+        "max": 2,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:jimta_spellbooks_scroll_firebolt",
+          "modifier": [
+            {
+              "spells": [
+                "firebolt",
+                "fireball",
+                "fire_arrow",
+                "heat_surge",
+                "scorch",
+                "blaze_storm",
+                "fire_breath",
+                "flaming_strike",
+                "burning_dash",
+                "soulfire_ray",
+                "flaming_barrage",
+                "magma_bomb",
+                "raise_hell",
+                "wall_of_fire"
+              ],
+              "type": "jugcraft:jimtafacts_spell_scroll"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "jugcraft:jimtafacts/spellbooks/magic_items/basic_curios"
+        }
+      ],
+      "condition": {
+        "chance": 0.4,
+        "type": "minecraft:random_chance"
+      }
+    }
+  ]
+}

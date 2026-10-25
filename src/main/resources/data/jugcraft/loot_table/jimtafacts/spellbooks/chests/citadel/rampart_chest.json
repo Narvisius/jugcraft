@@ -1,0 +1,271 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:ominous_bottle",
+          "modifier": [
+            {
+              "add": false,
+              "count": 1.0,
+              "type": "minecraft:set_count"
+            },
+            {
+              "amplifier": {
+                "type": "minecraft:uniform",
+                "max": 4.0,
+                "min": 0.0
+              },
+              "type": "minecraft:set_ominous_bottle_amplifier"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0,
+      "condition": {
+        "chance": 0.25,
+        "type": "minecraft:random_chance"
+      }
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:jimta_spellbooks_keeper_flamberge",
+          "weight": 2,
+          "modifier": [
+            {
+              "damage": {
+                "min": 0.01,
+                "max": 0.23,
+                "type": "minecraft:uniform"
+              },
+              "add": false,
+              "type": "minecraft:set_damage"
+            }
+          ],
+          "condition": {
+            "chance": 0.25,
+            "type": "minecraft:random_chance"
+          }
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:flint_and_steel",
+          "weight": 2,
+          "modifier": [
+            {
+              "damage": {
+                "min": 0.1,
+                "max": 0.4,
+                "type": "minecraft:uniform"
+              },
+              "add": false,
+              "type": "minecraft:set_damage"
+            }
+          ],
+          "condition": {
+            "chance": 0.55,
+            "type": "minecraft:random_chance"
+          }
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:lantern",
+          "modifier": [
+            {
+              "count": {
+                "min": 0,
+                "max": 8,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 3,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:soul_sand",
+          "modifier": [
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 4,
+                "max": 8
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:bone",
+          "modifier": [
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 4,
+                "max": 8
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:flint",
+          "modifier": [
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 4,
+                "max": 8
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:jimta_spellbooks_arcane_essence",
+          "modifier": [
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 2,
+                "max": 5
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:emerald",
+          "modifier": [
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 4,
+                "max": 8
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond",
+          "modifier": [
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 2
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:ancient_debris"
+        },
+        {
+          "type": "minecraft:empty"
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:emerald",
+          "modifier": [
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 4,
+                "max": 8
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond",
+          "modifier": [
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 2
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 7
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:jimta_spellbooks_blank_rune",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:jimta_spellbooks_scroll_firebolt",
+          "weight": 13,
+          "modifier": [
+            {
+              "spells": [
+                "firebolt",
+                "fireball",
+                "fire_arrow",
+                "heat_surge",
+                "scorch",
+                "blaze_storm",
+                "fire_breath",
+                "flaming_strike",
+                "burning_dash",
+                "soulfire_ray",
+                "flaming_barrage",
+                "magma_bomb",
+                "raise_hell",
+                "wall_of_fire"
+              ],
+              "type": "jugcraft:jimtafacts_spell_scroll"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:gunpowder",
+          "modifier": [
+            {
+              "count": {
+                "min": 7,
+                "max": 16,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:charcoal",
+          "modifier": [
+            {
+              "count": {
+                "min": 7,
+                "max": 16,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:ghast_tear"
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:jimta_spellbooks_affinity_ring",
+          "modifier": [
+            {
+              "school": "fire",
+              "type": "jugcraft:jimtafacts_ring_enhancement"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:jimta_spellbooks_scroll_firebolt",
+          "modifier": [
+            {
+              "spells": [
+                "firebolt",
+                "fireball",
+                "fire_arrow",
+                "heat_surge",
+                "scorch",
+                "blaze_storm",
+                "fire_breath",
+                "flaming_strike",
+                "burning_dash",
+                "soulfire_ray",
+                "flaming_barrage",
+                "magma_bomb",
+                "raise_hell",
+                "wall_of_fire"
+              ],
+              "type": "jugcraft:jimtafacts_spell_scroll"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

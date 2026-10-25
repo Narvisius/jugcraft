@@ -1,0 +1,77 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "sheet": "jugcraft:block/jimtafacts/personal/energy_vendor",
+    "particle": "#sheet"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#sheet",
+          "uv": [
+            0.0,
+            0,
+            2.6666666666666665,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#sheet",
+          "uv": [
+            2.6666666666666665,
+            0,
+            5.333333333333333,
+            16
+          ]
+        },
+        "north": {
+          "texture": "#sheet",
+          "uv": [
+            8.0,
+            0,
+            10.666666666666666,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#sheet",
+          "uv": [
+            13.333333333333334,
+            0,
+            16.0,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#sheet",
+          "uv": [
+            10.666666666666666,
+            0,
+            13.333333333333334,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#sheet",
+          "uv": [
+            5.333333333333333,
+            0,
+            8.0,
+            16
+          ]
+        }
+      }
+    }
+  ]
+}

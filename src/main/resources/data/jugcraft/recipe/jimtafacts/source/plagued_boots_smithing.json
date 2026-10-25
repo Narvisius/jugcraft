@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "jugcraft:jimta_spellbooks_arcane_essence",
+  "base": "#jugcraft:jimtafacts/spellbooks/wizard_base_boots",
+  "result": {
+    "count": 1,
+    "id": "jugcraft:jimta_spellbooks_plagued_boots"
+  },
+  "template": "jugcraft:jimta_spellbooks_nature_rune",
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

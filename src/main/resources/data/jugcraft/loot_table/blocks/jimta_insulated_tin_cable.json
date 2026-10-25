@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:jimta_insulated_tin_cable",
+          "modifier": {
+            "type": "minecraft:copy_state",
+            "block": "jugcraft:jimta_insulated_tin_cable",
+            "properties": [
+              "color"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

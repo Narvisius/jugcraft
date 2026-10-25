@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "C",
+    "S",
+    "S"
+  ],
+  "key": {
+    "C": "jugcraft:jimta_certus_quartz_crystal",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "jugcraft:jimta_certus_quartz_shovel"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

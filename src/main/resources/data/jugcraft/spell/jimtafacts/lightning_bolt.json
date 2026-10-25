@@ -1,0 +1,41 @@
+{
+  "school": "spell_power:lightning",
+  "range": 24,
+  "tier": 1,
+  "group": "jimtafacts_spellbooks",
+  "type": "ACTIVE",
+  "active": {
+    "cast": {
+      "duration": 0,
+      "animation": {
+        "id": "jugcraft:instant_projectile"
+      }
+    }
+  },
+  "release": {},
+  "target": {
+    "type": "CASTER"
+  },
+  "deliver": {
+    "type": "DIRECT"
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "CUSTOM",
+        "custom": {
+          "handler": "jugcraft:jimtafacts_spellbook",
+          "intent": "HELPFUL"
+        }
+      }
+    }
+  ],
+  "cost": {
+    "exhaust": 0,
+    "durability": 0,
+    "cooldown": {
+      "duration": 25,
+      "hosting_item": false
+    }
+  }
+}

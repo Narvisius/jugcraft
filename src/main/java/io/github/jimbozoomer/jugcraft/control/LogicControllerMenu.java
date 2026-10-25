@@ -60,7 +60,8 @@ public class LogicControllerMenu extends AbstractContainerMenu {
 	@Override
 	public boolean clickMenuButton(Player player, int id) {
 		if (!(player instanceof ServerPlayer server) || controller == null || !stillValid(player)
-				|| !player.mayBuild() || !server.level().mayInteract(player, pos)) {
+				|| !player.mayBuild() || !server.level().mayInteract(player, pos)
+				|| !io.github.jimbozoomer.jugcraft.concordance.Authority.mayChange(server.level(), player, pos)) {
 			return false;
 		}
 		boolean changed = controller.click(id / 8, id % 8);

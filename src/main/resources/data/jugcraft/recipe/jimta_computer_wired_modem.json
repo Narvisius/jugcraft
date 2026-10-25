@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    "jugcraft:data_cable",
+    "minecraft:redstone",
+    "minecraft:stone"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_computer_wired_modem"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

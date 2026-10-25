@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "VVV",
+    "MRM",
+    "CCC"
+  ],
+  "key": {
+    "M": "jugcraft:jimta_spellbooks_mithril_scrap",
+    "R": "jugcraft:jimta_spellbooks_ruined_book",
+    "C": "jugcraft:jimta_spellbooks_magic_cloth",
+    "V": "jugcraft:jimta_spellbooks_ice_venom_vial"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_ice_spell_book",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

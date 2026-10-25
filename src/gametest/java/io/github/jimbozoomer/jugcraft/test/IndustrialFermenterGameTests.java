@@ -235,7 +235,7 @@ public class IndustrialFermenterGameTests {
 		ServerLevel level = helper.getLevel();
 		FormMachineBlockEntity machine = place(helper, new BlockPos(6, 1, 2), Direction.NORTH);
 		List<FluidRecipes.Entry> own = machine.recipes(level.getServer());
-		helper.assertTrue(own.size() == 2 && own.get(0).id().equals(Jugcraft.id("chemical_reaction/fermenter_bioethanol"))
+		helper.assertTrue(own.size() == 4 && own.stream().map(FluidRecipes.Entry::id).collect(java.util.stream.Collectors.toSet()).equals(java.util.Set.of(Jugcraft.id("chemical_reaction/fermenter_bioethanol"), Jugcraft.id("chemical_reaction/ferment_crop_mash"), Jugcraft.id("jimtafacts_crops/ferment_hops"), Jugcraft.id("jimtafacts_production/ferment_biochaff"))) && own.get(0).id().equals(Jugcraft.id("chemical_reaction/fermenter_bioethanol"))
 				&& own.get(0).recipe().time() == TICKS, "Original fermentation remains first beside the expanded mash route: " + own.stream().map(FluidRecipes.Entry::id).toList());
 		// The reactor ferments crops into bioethanol without collecting the gas; collecting it is the Fermenter's. (Other
 		// reactor recipes may give carbon dioxide from minerals, such as cement and calcite.)

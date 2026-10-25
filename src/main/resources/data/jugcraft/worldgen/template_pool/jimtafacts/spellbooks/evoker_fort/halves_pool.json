@@ -1,0 +1,60 @@
+{
+  "name": "jugcraft:jimtafacts/spellbooks/evoker_fort_halves_pool",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 5,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/evoker_fort/halves/medium_decorations",
+        "processors": "jugcraft:jimtafacts/spellbooks/evoker_fort_randomizer",
+        "projection": "terrain_matching",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 3,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/evoker_fort/halves/small_decorations",
+        "processors": "jugcraft:jimtafacts/spellbooks/evoker_fort_randomizer",
+        "projection": "terrain_matching",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/evoker_fort/halves/tree",
+        "processors": "jugcraft:jimtafacts/spellbooks/evoker_fort_randomizer",
+        "projection": "terrain_matching",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 3,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/evoker_fort/halves/villager_cage",
+        "processors": "jugcraft:jimtafacts/spellbooks/evoker_fort_randomizer",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/evoker_fort/halves/gallows",
+        "processors": "jugcraft:jimtafacts/spellbooks/evoker_fort_randomizer",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/evoker_fort/halves/campsite",
+        "processors": "jugcraft:jimtafacts/spellbooks/evoker_fort_randomizer",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

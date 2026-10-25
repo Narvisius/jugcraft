@@ -1,0 +1,42 @@
+{
+  "type": "minecraft:jigsaw",
+  "liquid_settings": "ignore_waterlogging",
+  "start_pool": "jugcraft:jimtafacts/spellbooks/catacombs/catacombs_start_pool",
+  "size": 7,
+  "biomes": "#jugcraft:jimtafacts/spellbooks/has_structure/catacombs",
+  "terrain_adaptation": "bury",
+  "use_expansion_hack": false,
+  "start_height": {
+    "type": "minecraft:uniform",
+    "min_inclusive": {
+      "absolute": -40
+    },
+    "max_inclusive": {
+      "absolute": 20
+    }
+  },
+  "step": "underground_decoration",
+  "max_distance_from_center": 96,
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "piece",
+      "spawns": [
+        {
+          "type": "jugcraft:jimtafacts_catacombs_zombie",
+          "weight": 10,
+          "count": 1
+        },
+        {
+          "type": "minecraft:skeleton",
+          "weight": 5,
+          "count": 1
+        },
+        {
+          "type": "jugcraft:jimtafacts_necromancer",
+          "weight": 2,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

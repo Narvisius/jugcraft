@@ -1,0 +1,20 @@
+{
+  "structures": [
+    {
+      "structure": "jugcraft:jimtafacts/spellbooks/ancient_battleground",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "salt": 1111569999,
+    "spacing": 35,
+    "separation": 12,
+    "type": "minecraft:random_spread"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

@@ -1,0 +1,753 @@
+{
+  "recipes": [
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_brew",
+      "base_fluid": {
+        "amount": 1000,
+        "id": "irons_spellbooks:rare_ink"
+      },
+      "input": {
+        "item": "minecraft:gold_ingot"
+      },
+      "results": [
+        {
+          "amount": 250,
+          "id": "irons_spellbooks:epic_ink"
+        }
+      ],
+      "source_recipe": "brew_epic_ink"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_brew",
+      "base_fluid": {
+        "amount": 1000,
+        "components": {
+          "irons_spellbooks:potion_bottle_type": "regular",
+          "minecraft:potion_contents": {
+            "potion": "irons_spellbooks:instant_mana_three"
+          }
+        },
+        "id": "irons_spellbooks:potion"
+      },
+      "input": {
+        "item": "minecraft:ender_pearl"
+      },
+      "results": [
+        {
+          "amount": 250,
+          "id": "irons_spellbooks:evasion_elixir"
+        }
+      ],
+      "source_recipe": "brew_evasion_elixir"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_brew",
+      "base_fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:evasion_elixir"
+      },
+      "input": {
+        "item": "minecraft:dragon_breath"
+      },
+      "results": [
+        {
+          "amount": 250,
+          "id": "irons_spellbooks:greater_evasion_elixir"
+        }
+      ],
+      "source_recipe": "brew_greater_evasion_elixir"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_brew",
+      "base_fluid": {
+        "amount": 1000,
+        "components": {
+          "irons_spellbooks:potion_bottle_type": "regular",
+          "minecraft:potion_contents": {
+            "potion": "minecraft:strong_healing"
+          }
+        },
+        "id": "irons_spellbooks:potion"
+      },
+      "input": {
+        "item": "minecraft:amethyst_shard"
+      },
+      "results": [
+        {
+          "amount": 250,
+          "id": "irons_spellbooks:greater_healing_elixir"
+        }
+      ],
+      "source_recipe": "brew_greater_healing_elixir"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_brew",
+      "base_fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:invisibility_elixir"
+      },
+      "input": {
+        "item": "minecraft:amethyst_cluster"
+      },
+      "results": [
+        {
+          "amount": 250,
+          "id": "irons_spellbooks:greater_invisibility_elixir"
+        }
+      ],
+      "source_recipe": "brew_greater_invisibility_elixir"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_brew",
+      "base_fluid": {
+        "amount": 500,
+        "id": "irons_spellbooks:oakskin_elixir"
+      },
+      "input": {
+        "item": "minecraft:amethyst_shard"
+      },
+      "results": [
+        {
+          "amount": 250,
+          "id": "irons_spellbooks:greater_oakskin_elixir"
+        }
+      ],
+      "source_recipe": "brew_greater_oakskin_elixir"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_brew",
+      "base_fluid": {
+        "amount": 250,
+        "id": "minecraft:water"
+      },
+      "input": {
+        "item": "irons_spellbooks:icy_fang"
+      },
+      "results": [
+        {
+          "amount": 250,
+          "id": "irons_spellbooks:ice_venom"
+        }
+      ],
+      "source_recipe": "brew_ice_venom"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_brew",
+      "base_fluid": {
+        "amount": 1000,
+        "components": {
+          "irons_spellbooks:potion_bottle_type": "regular",
+          "minecraft:potion_contents": {
+            "potion": "minecraft:long_invisibility"
+          }
+        },
+        "id": "irons_spellbooks:potion"
+      },
+      "input": {
+        "item": "irons_spellbooks:shriving_stone"
+      },
+      "results": [
+        {
+          "amount": 250,
+          "id": "irons_spellbooks:invisibility_elixir"
+        }
+      ],
+      "source_recipe": "brew_invisibility_elixir"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_brew",
+      "base_fluid": {
+        "amount": 1000,
+        "id": "irons_spellbooks:epic_ink"
+      },
+      "input": {
+        "item": "minecraft:amethyst_shard"
+      },
+      "results": [
+        {
+          "amount": 250,
+          "id": "irons_spellbooks:legendary_ink"
+        }
+      ],
+      "source_recipe": "brew_legendary_ink"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_brew",
+      "base_fluid": {
+        "amount": 500,
+        "components": {
+          "irons_spellbooks:potion_bottle_type": "regular",
+          "minecraft:potion_contents": {
+            "potion": "minecraft:strong_healing"
+          }
+        },
+        "id": "irons_spellbooks:potion"
+      },
+      "input": {
+        "item": "minecraft:oak_log"
+      },
+      "results": [
+        {
+          "amount": 250,
+          "id": "irons_spellbooks:oakskin_elixir"
+        }
+      ],
+      "source_recipe": "brew_oakskin_elixir"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_brew",
+      "base_fluid": {
+        "amount": 1000,
+        "id": "irons_spellbooks:uncommon_ink"
+      },
+      "input": {
+        "item": "minecraft:iron_ingot"
+      },
+      "results": [
+        {
+          "amount": 250,
+          "id": "irons_spellbooks:rare_ink"
+        }
+      ],
+      "source_recipe": "brew_rare_ink"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_brew",
+      "base_fluid": {
+        "amount": 250,
+        "components": {
+          "irons_spellbooks:potion_bottle_type": "regular",
+          "minecraft:potion_contents": {
+            "potion": "minecraft:mundane"
+          }
+        },
+        "id": "irons_spellbooks:potion"
+      },
+      "input": {
+        "item": "minecraft:echo_shard"
+      },
+      "results": [
+        {
+          "amount": 250,
+          "id": "irons_spellbooks:timeless_slurry"
+        }
+      ],
+      "source_recipe": "brew_timeless_slurry"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_brew",
+      "base_fluid": {
+        "amount": 1000,
+        "id": "irons_spellbooks:common_ink"
+      },
+      "input": {
+        "item": "minecraft:copper_ingot"
+      },
+      "results": [
+        {
+          "amount": 250,
+          "id": "irons_spellbooks:uncommon_ink"
+        }
+      ],
+      "source_recipe": "brew_uncommon_ink"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_empty",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:blood"
+      },
+      "input": {
+        "item": "minecraft:glass_bottle"
+      },
+      "result": {
+        "count": 1,
+        "id": "irons_spellbooks:blood_vial"
+      },
+      "source_recipe": "empty_blood_vial"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_empty",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:common_ink"
+      },
+      "input": {
+        "item": "minecraft:glass_bottle"
+      },
+      "result": {
+        "count": 1,
+        "id": "irons_spellbooks:common_ink"
+      },
+      "source_recipe": "empty_common_ink"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_empty",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:epic_ink"
+      },
+      "input": {
+        "item": "minecraft:glass_bottle"
+      },
+      "result": {
+        "count": 1,
+        "id": "irons_spellbooks:epic_ink"
+      },
+      "source_recipe": "empty_epic_ink"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_empty",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:evasion_elixir"
+      },
+      "input": {
+        "item": "minecraft:glass_bottle"
+      },
+      "result": {
+        "count": 1,
+        "id": "irons_spellbooks:evasion_elixir"
+      },
+      "source_recipe": "empty_evasion_elixir"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_empty",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:greater_evasion_elixir"
+      },
+      "input": {
+        "item": "minecraft:glass_bottle"
+      },
+      "result": {
+        "count": 1,
+        "id": "irons_spellbooks:greater_evasion_elixir"
+      },
+      "source_recipe": "empty_greater_evasion_elixir"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_empty",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:greater_healing_elixir"
+      },
+      "input": {
+        "item": "minecraft:glass_bottle"
+      },
+      "result": {
+        "count": 1,
+        "id": "irons_spellbooks:greater_healing_potion"
+      },
+      "source_recipe": "empty_greater_healing_potion"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_empty",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:greater_invisibility_elixir"
+      },
+      "input": {
+        "item": "minecraft:glass_bottle"
+      },
+      "result": {
+        "count": 1,
+        "id": "irons_spellbooks:greater_invisibility_elixir"
+      },
+      "source_recipe": "empty_greater_invisibility_elixir"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_empty",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:greater_oakskin_elixir"
+      },
+      "input": {
+        "item": "minecraft:glass_bottle"
+      },
+      "result": {
+        "count": 1,
+        "id": "irons_spellbooks:greater_oakskin_elixir"
+      },
+      "source_recipe": "empty_greater_oakskin_elixir"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_empty",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:ice_venom"
+      },
+      "input": {
+        "item": "minecraft:glass_bottle"
+      },
+      "result": {
+        "count": 1,
+        "id": "irons_spellbooks:ice_venom_vial"
+      },
+      "source_recipe": "empty_ice_venom_vial"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_empty",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:invisibility_elixir"
+      },
+      "input": {
+        "item": "minecraft:glass_bottle"
+      },
+      "result": {
+        "count": 1,
+        "id": "irons_spellbooks:invisibility_elixir"
+      },
+      "source_recipe": "empty_invisibility_elixir"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_empty",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:legendary_ink"
+      },
+      "input": {
+        "item": "minecraft:glass_bottle"
+      },
+      "result": {
+        "count": 1,
+        "id": "irons_spellbooks:legendary_ink"
+      },
+      "source_recipe": "empty_legendary_ink"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_empty",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:oakskin_elixir"
+      },
+      "input": {
+        "item": "minecraft:glass_bottle"
+      },
+      "result": {
+        "count": 1,
+        "id": "irons_spellbooks:oakskin_elixir"
+      },
+      "source_recipe": "empty_oakskin_elixir"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_empty",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:rare_ink"
+      },
+      "input": {
+        "item": "minecraft:glass_bottle"
+      },
+      "result": {
+        "count": 1,
+        "id": "irons_spellbooks:rare_ink"
+      },
+      "source_recipe": "empty_rare_ink"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_empty",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:timeless_slurry"
+      },
+      "input": {
+        "item": "minecraft:glass_bottle"
+      },
+      "result": {
+        "count": 1,
+        "id": "irons_spellbooks:timeless_slurry"
+      },
+      "source_recipe": "empty_timeless_slurry"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_empty",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:uncommon_ink"
+      },
+      "input": {
+        "item": "minecraft:glass_bottle"
+      },
+      "result": {
+        "count": 1,
+        "id": "irons_spellbooks:uncommon_ink"
+      },
+      "source_recipe": "empty_uncommon_ink"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_empty",
+      "fluid": {
+        "amount": 1000,
+        "id": "minecraft:water"
+      },
+      "input": {
+        "item": "minecraft:bucket"
+      },
+      "result": {
+        "count": 1,
+        "id": "minecraft:water_bucket"
+      },
+      "sound": "minecraft:item.bucket.fill",
+      "source_recipe": "empty_water_bucket"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_fill",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:blood"
+      },
+      "input": {
+        "item": "irons_spellbooks:blood_vial"
+      },
+      "result": {
+        "count": 1,
+        "id": "minecraft:glass_bottle"
+      },
+      "source_recipe": "fill_blood_vial"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_fill",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:common_ink"
+      },
+      "input": {
+        "item": "irons_spellbooks:common_ink"
+      },
+      "result": {
+        "count": 1,
+        "id": "minecraft:glass_bottle"
+      },
+      "source_recipe": "fill_common_ink"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_fill",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:epic_ink"
+      },
+      "input": {
+        "item": "irons_spellbooks:epic_ink"
+      },
+      "result": {
+        "count": 1,
+        "id": "minecraft:glass_bottle"
+      },
+      "source_recipe": "fill_epic_ink"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_fill",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:evasion_elixir"
+      },
+      "input": {
+        "item": "irons_spellbooks:evasion_elixir"
+      },
+      "result": {
+        "count": 1,
+        "id": "minecraft:glass_bottle"
+      },
+      "source_recipe": "fill_evasion_elixir"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_fill",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:greater_evasion_elixir"
+      },
+      "input": {
+        "item": "irons_spellbooks:greater_evasion_elixir"
+      },
+      "result": {
+        "count": 1,
+        "id": "minecraft:glass_bottle"
+      },
+      "source_recipe": "fill_greater_evasion_elixir"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_fill",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:greater_healing_elixir"
+      },
+      "input": {
+        "item": "irons_spellbooks:greater_healing_potion"
+      },
+      "result": {
+        "count": 1,
+        "id": "minecraft:glass_bottle"
+      },
+      "source_recipe": "fill_greater_healing_potion"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_fill",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:greater_invisibility_elixir"
+      },
+      "input": {
+        "item": "irons_spellbooks:greater_invisibility_elixir"
+      },
+      "result": {
+        "count": 1,
+        "id": "minecraft:glass_bottle"
+      },
+      "source_recipe": "fill_greater_invisibility_elixir"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_fill",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:greater_oakskin_elixir"
+      },
+      "input": {
+        "item": "irons_spellbooks:greater_oakskin_elixir"
+      },
+      "result": {
+        "count": 1,
+        "id": "minecraft:glass_bottle"
+      },
+      "source_recipe": "fill_greater_oakskin_elixir"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_fill",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:ice_venom"
+      },
+      "input": {
+        "item": "irons_spellbooks:ice_venom_vial"
+      },
+      "result": {
+        "count": 1,
+        "id": "minecraft:glass_bottle"
+      },
+      "source_recipe": "fill_ice_venom_vial"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_fill",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:invisibility_elixir"
+      },
+      "input": {
+        "item": "irons_spellbooks:invisibility_elixir"
+      },
+      "result": {
+        "count": 1,
+        "id": "minecraft:glass_bottle"
+      },
+      "source_recipe": "fill_invisibility_elixir"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_fill",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:legendary_ink"
+      },
+      "input": {
+        "item": "irons_spellbooks:legendary_ink"
+      },
+      "result": {
+        "count": 1,
+        "id": "minecraft:glass_bottle"
+      },
+      "source_recipe": "fill_legendary_ink"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_fill",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:oakskin_elixir"
+      },
+      "input": {
+        "item": "irons_spellbooks:oakskin_elixir"
+      },
+      "result": {
+        "count": 1,
+        "id": "minecraft:glass_bottle"
+      },
+      "source_recipe": "fill_oakskin_elixir"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_fill",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:rare_ink"
+      },
+      "input": {
+        "item": "irons_spellbooks:rare_ink"
+      },
+      "result": {
+        "count": 1,
+        "id": "minecraft:glass_bottle"
+      },
+      "source_recipe": "fill_rare_ink"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_fill",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:timeless_slurry"
+      },
+      "input": {
+        "item": "irons_spellbooks:timeless_slurry"
+      },
+      "result": {
+        "count": 1,
+        "id": "minecraft:glass_bottle"
+      },
+      "source_recipe": "fill_timeless_slurry"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_fill",
+      "fluid": {
+        "amount": 250,
+        "id": "irons_spellbooks:uncommon_ink"
+      },
+      "input": {
+        "item": "irons_spellbooks:uncommon_ink"
+      },
+      "result": {
+        "count": 1,
+        "id": "minecraft:glass_bottle"
+      },
+      "source_recipe": "fill_uncommon_ink"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_fill",
+      "fluid": {
+        "amount": 1000,
+        "id": "minecraft:water"
+      },
+      "input": {
+        "item": "minecraft:water_bucket"
+      },
+      "mustFitAll": false,
+      "result": {
+        "count": 1,
+        "id": "minecraft:bucket"
+      },
+      "sound": "minecraft:item.bucket.empty",
+      "source_recipe": "fill_water_bucket"
+    },
+    {
+      "type": "irons_spellbooks:alchemist_cauldron_brew",
+      "base_fluid": {
+        "amount": 1000,
+        "id": "irons_spellbooks:blood"
+      },
+      "byproduct": {
+        "id": "irons_spellbooks:bloody_vellum"
+      },
+      "input": {
+        "item": "irons_spellbooks:hogskin"
+      },
+      "results": [],
+      "source_recipe": "soak_bloody_vellum"
+    }
+  ]
+}

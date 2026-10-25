@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CL",
+    "CP"
+  ],
+  "key": {
+    "C": "jugcraft:jimta_fluix_glass_cable",
+    "L": "minecraft:lever",
+    "P": "minecraft:piston"
+  },
+  "result": {
+    "id": "jugcraft:jimta_toggle_bus",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

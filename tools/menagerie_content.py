@@ -30,6 +30,19 @@ def copy(src,dst):
     dst.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(src,dst)
     PROVENANCE.append({'source':src.relative_to(SOURCE).as_posix(),'runtime':dst.relative_to(RES).as_posix(),'change':'byte-identical'})
 
+def resolve_egg_recipe(value):
+    """Retain the cooked-egg item, but make it a distinct household pan preparation."""
+    result = value.get('result')
+    if not isinstance(result, dict) or result.get('id') != 'jugcraft:wildlife_cooked_egg':
+        return value
+    if value.get('type') in ('minecraft:smoking', 'minecraft:campfire_cooking'):
+        return None
+    if value.get('type') == 'minecraft:smelting':
+        return {**value, 'type': 'jugcraft:household_pan', 'category': 'food',
+                'fabric:load_conditions': [{'condition': 'jugcraft:feature_enabled', 'feature': 'agriculture'}]}
+    return value
+
+
 def remap(v,group='wildlife',namespace='naturalist',resource=False):
     if isinstance(v,str):
         if v.startswith('#'):return '#'+remap(v[1:],group,namespace,resource)
@@ -244,7 +257,12 @@ def main():
     for kind in ['recipe','loot_table','tags','jukebox_song']:
         for p in (NATURE/'naturalist'/kind).rglob('*.json'):
             value=remap(read(p));rel=p.relative_to(NATURE/'naturalist'/kind)
-            if kind=='recipe' and value.get('type')=='jugcraft:wildlife_net':continue
+            if kind=='recipe':
+                value=resolve_egg_recipe(value)
+                if value is None:
+                    (DATA/'recipe'/rel.parent/('wildlife_'+rel.name)).unlink(missing_ok=True)
+                    continue
+                if value.get('type')=='jugcraft:wildlife_net':continue
             destkind={'recipes':'recipe','loot_tables':'loot_table'}.get(kind,kind)
             # Prefix the leaf, preserving vanilla registry subdirectories.
             if kind=='tags':rel=Path(*[{'items':'item','blocks':'block','entity_types':'entity_type'}.get(x,x) for x in rel.parts])

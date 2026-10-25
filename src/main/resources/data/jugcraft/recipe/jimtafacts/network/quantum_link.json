@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GGG",
+    "GPG",
+    "GGG"
+  ],
+  "key": {
+    "G": "jugcraft:jimta_quartz_glass",
+    "P": "jugcraft:jimta_fluix_pearl"
+  },
+  "result": {
+    "id": "jugcraft:jimta_quantum_link"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

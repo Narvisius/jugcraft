@@ -1,0 +1,131 @@
+{
+  "processors": [
+    {
+      "integrity": 0.95,
+      "processor_type": "minecraft:block_rot",
+      "rottable_blocks": "#jugcraft:jimtafacts/spellbooks/ice_spider_den_replaceable"
+    },
+    {
+      "processor_type": "minecraft:rule",
+      "rules": [
+        {
+          "input_predicate": {
+            "block": "minecraft:blue_ice",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.5
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "minecraft:packed_ice"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "jugcraft:jimta_spellbooks_mithril_ore",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.5
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "minecraft:blue_ice"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "minecraft:blue_ice",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.25
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "minecraft:stone"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "minecraft:packed_ice",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.5
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "minecraft:stone"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "minecraft:stone_bricks",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.4
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "minecraft:cracked_stone_bricks"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "minecraft:cobweb",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.35
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "minecraft:air"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "jugcraft:jimta_spellbooks_book_stack",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.25
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "minecraft:air"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "minecraft:decorated_pot",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.15
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "minecraft:air"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "minecraft:decorated_pot",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.35
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "minecraft:flower_pot"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:jimta_wireless_terminal",
+    "jugcraft:jimta_calculation_processor",
+    "minecraft:crafting_table"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_wireless_crafting_terminal",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

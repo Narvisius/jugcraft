@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " C ",
+    "CHC",
+    " P "
+  ],
+  "key": {
+    "C": "jugcraft:jimta_spellbooks_magic_cloth",
+    "H": "minecraft:leather_helmet",
+    "P": "minecraft:carved_pumpkin"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_pumpkin_helmet",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

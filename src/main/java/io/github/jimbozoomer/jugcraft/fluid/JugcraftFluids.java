@@ -43,6 +43,8 @@ public final class JugcraftFluids {
 	public static Block ELECTRIC_PUMP;
 	/** Batch 20: a borosilicate glass tank (it shows what it holds) and the tank gauge. */
 	public static Block GLASS_TANK;
+	public static Block JIMTA_GLASS_TANK;
+	public static Block JIMTA_PUMP;
 	public static Block TANK_GAUGE;
 	public static BlockEntityType<FluidTankBlockEntity> TANK_ENTITY;
 	public static BlockEntityType<ElectricPumpBlockEntity> PUMP_ENTITY;
@@ -85,11 +87,15 @@ public final class JugcraftFluids {
 				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(3.0F).noOcclusion()), ElectricPumpBlockEntity.Tier.ELECTRIC));
 		HEAVY_PUMP = block("heavy_pump", new ElectricPumpBlock(properties("heavy_pump",
 				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(4.0F).noOcclusion()), ElectricPumpBlockEntity.Tier.HEAVY));
+		JIMTA_GLASS_TANK = block("jimta_glass_tank", new WorkshopGlassTankBlock(properties("jimta_glass_tank",
+				BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).strength(1.5F).noOcclusion())));
+		JIMTA_PUMP = block("jimta_factory_pump", new ElectricPumpBlock(properties("jimta_factory_pump",
+				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(3.0F).noOcclusion()), ElectricPumpBlockEntity.Tier.ELECTRIC));
 
 		TANK_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("fluid_tank"),
-				FabricBlockEntityTypeBuilder.create(FluidTankBlockEntity::new, FLUID_TANK, GLASS_TANK, INSULATED_FLUID_TANK, VACUUM_INSULATED_TANK).build());
+				FabricBlockEntityTypeBuilder.create(FluidTankBlockEntity::new, FLUID_TANK, GLASS_TANK, INSULATED_FLUID_TANK, VACUUM_INSULATED_TANK, JIMTA_GLASS_TANK).build());
 		PUMP_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("electric_pump"),
-				FabricBlockEntityTypeBuilder.create(ElectricPumpBlockEntity::new, ELECTRIC_PUMP, HEAVY_PUMP).build());
+				FabricBlockEntityTypeBuilder.create(ElectricPumpBlockEntity::new, ELECTRIC_PUMP, HEAVY_PUMP, JIMTA_PUMP).build());
 
 		FILTER_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("fluid_filter"),
 				FabricBlockEntityTypeBuilder.create(FluidFilterBlockEntity::new, FLUID_FILTER).build());
@@ -120,6 +126,8 @@ public final class JugcraftFluids {
 			output.accept(TANK_GAUGE);
 			output.accept(ELECTRIC_PUMP);
 			output.accept(HEAVY_PUMP);
+			output.accept(JIMTA_GLASS_TANK);
+			output.accept(JIMTA_PUMP);
 		});
 	}
 

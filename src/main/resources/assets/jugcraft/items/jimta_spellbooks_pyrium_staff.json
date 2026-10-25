@@ -1,0 +1,18 @@
+{
+  "model": {
+    "type": "minecraft:composite",
+    "models": [
+      {
+        "type": "minecraft:model",
+        "model": "jugcraft:jimtafacts/spellbooks/item/pyrium_staff_haft"
+      },
+      {
+        "type": "minecraft:special",
+        "base": "jugcraft:jimtafacts/spellbooks/item/pyrium_staff_haft",
+        "model": {
+          "type": "jugcraft:jimta_pyrium"
+        }
+      }
+    ]
+  }
+}

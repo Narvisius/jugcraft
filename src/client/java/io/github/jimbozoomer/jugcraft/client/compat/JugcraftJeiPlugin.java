@@ -48,7 +48,7 @@ public class JugcraftJeiPlugin implements IModPlugin {
 	private static final int TEXT = 0xFF404040;
 
 	/** One recipe: input slots (a tag shows all its items), the result, byproducts with chances, and time. */
-	public record ViewRecipe(List<List<ItemStack>> inputs, ItemStack output, List<ItemStack> extras, List<Float> chances, int ticks) {
+	public record ViewRecipe(List<List<ItemStack>> inputs, ItemStack output, List<ItemStack> extras, List<Float> chances, int ticks, int minimumHeat) {
 	}
 
 	private record Machine(Item block, IRecipeType<ViewRecipe> type, List<ViewRecipe> recipes) {
@@ -77,6 +77,7 @@ public class JugcraftJeiPlugin implements IModPlugin {
 	private @Nullable Bench bench;
 	/** Other Concordance stations shown like the bench (recipe_view.json "concordance_stations": the Circle Anchor). */
 	private List<Bench> stations = new ArrayList<>();
+	private List<JugcraftJeiStations.Station> processingStations = List.of();
 	/** JEI's fluid amount for one bucket on this platform (81,000 droplets on Fabric). */
 	private static long bucketVolume = 1000;
 
@@ -98,6 +99,8 @@ public class JugcraftJeiPlugin implements IModPlugin {
 		fluidMachines = loadFluidMachines();
 		bucketVolume = registration.getJeiHelpers().getPlatformFluidHelper().bucketVolume();
 		IGuiHelper gui = registration.getJeiHelpers().getGuiHelper();
+		processingStations = JugcraftJeiStations.load();
+		for (var station : processingStations) registration.addRecipeCategories(new JugcraftJeiStations.Category(gui, station));
 		for (Machine machine : machines) {
 			registration.addRecipeCategories(new MachineCategory(gui, machine));
 		}
@@ -116,6 +119,8 @@ public class JugcraftJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerRecipes(IRecipeRegistration registration) {
+		for (var station : processingStations) registration.addRecipes(station.type(), station.recipes());
+		JugcraftJeiStations.addInformation(registration);
 		for (Machine machine : machines()) {
 			registration.addRecipes(machine.type(), machine.recipes());
 		}
@@ -136,6 +141,11 @@ public class JugcraftJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+		for (var station : processingStations) for (var catalyst : station.catalysts()) registration.addCraftingStation(station.type(), catalyst);
+		registration.addCraftingStation(mezz.jei.api.constants.RecipeTypes.SMELTING, item("jugcraft:electric_furnace"));
+		registration.addCraftingStation(mezz.jei.api.constants.RecipeTypes.BLASTING, item("jugcraft:cavern_nuclear_furnace_component"));
+		for (String block : List.of("kitchen_stove", "skillet", "halloween_bonfire"))
+			registration.addCraftingStation(mezz.jei.api.constants.RecipeTypes.CAMPFIRE_COOKING, item("jugcraft:" + block));
 		for (Machine machine : machines()) {
 			registration.addCraftingStation(machine.type(), machine.block());
 		}
@@ -363,7 +373,8 @@ public class JugcraftJeiPlugin implements IModPlugin {
 			extras.add(new ItemStack(item(values.get(0).getAsString()), values.get(1).getAsInt()));
 			chances.add(values.get(2).getAsFloat());
 		}
-		return new ViewRecipe(inputs, output, extras, chances, row.get("ticks").getAsInt());
+		return new ViewRecipe(inputs, output, extras, chances, row.get("ticks").getAsInt(),
+				row.has("minimum_heat") ? row.get("minimum_heat").getAsInt() : 0);
 	}
 
 	private static Item item(String id) {
@@ -414,7 +425,7 @@ public class JugcraftJeiPlugin implements IModPlugin {
 
 		@Override
 		public int getHeight() {
-			return 38;
+			return machine.recipes().stream().anyMatch(r -> r.minimumHeat() > 0) ? 52 : 38;
 		}
 
 		@Override
@@ -442,6 +453,8 @@ public class JugcraftJeiPlugin implements IModPlugin {
 		public void draw(ViewRecipe recipe, IRecipeSlotsView slots, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
 			var font = Minecraft.getInstance().font;
 			graphics.text(font, String.format(Locale.ROOT, "%.1f s", recipe.ticks() / 20.0), 0, 28, TEXT, false);
+			if (recipe.minimumHeat() > 0) graphics.text(font,
+					Component.translatable("jei.jugcraft.minimum_heat", recipe.minimumHeat()), 0, 40, TEXT, false);
 			for (int i = 0; i < recipe.chances().size(); i++) {
 				String chance = Math.round(recipe.chances().get(i) * 100) + "%";
 				graphics.text(font, chance, 118 + i * 24 + 9 - font.width(chance) / 2, 28, TEXT, false);

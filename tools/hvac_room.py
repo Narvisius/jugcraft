@@ -554,7 +554,7 @@ CRAFTING = {
     "hv_duct_riser": (["P P", "P P", "P P"], {"P": "#c:plates/iron"}, 8),
     "hv_duct_elbow": (["PP ", "P P", " PP"], {"P": "#c:plates/iron"}, 4),
     "hv_duct_elbow_down": (["PPP", "P P", "P  "], {"P": "#c:plates/iron"}, 4),
-    "hv_duct_elbow_up": (["P  ", "P P", "PPP"], {"P": "#c:plates/iron"}, 4),
+    "hv_duct_elbow_up": (["P  ", "P  ", "PP "], {"P": "jugcraft:hv_duct"}, 4),
     "hv_duct_tee": (["PPP", "P P", "P P"], {"P": "#c:plates/iron"}, 4),
     "hv_duct_tee_down": (["PPP", " P ", "P P"], {"P": "#c:plates/iron"}, 4),
     "hv_duct_sleeve": (["C C", "CPC", "C C"], {"P": "#c:plates/iron", "C": "minecraft:smooth_stone"}, 2),
@@ -566,12 +566,12 @@ CRAFTING = {
     "hv_chw_pipe_trapeze": (["N N", "WCW"], {"N": "minecraft:iron_nugget", "W": "minecraft:white_wool", "C": "minecraft:copper_ingot"}, 4),
     "hv_chw_riser": (["WCW", "WCW", "WCW"], {"W": "minecraft:white_wool", "C": "minecraft:copper_ingot"}, 8),
     "hv_chw_elbow": (["WC ", " CW"], {"W": "minecraft:white_wool", "C": "minecraft:copper_ingot"}, 4),
-    "hv_chw_elbow_down": (["WCW", " C "], {"W": "minecraft:white_wool", "C": "minecraft:copper_ingot"}, 4),
+    "hv_chw_elbow_down": (["P  ", "P  ", "PP "], {"P": "jugcraft:hv_chw_pipe"}, 4),
     "hv_chw_elbow_up": ([" C ", "WCW"], {"W": "minecraft:white_wool", "C": "minecraft:copper_ingot"}, 4),
-    "hv_chw_tee": (["WCW", " C "], {"W": "minecraft:copper_ingot", "C": "minecraft:copper_ingot"}, 4),
+    "hv_chw_tee": (["PPP", " P "], {"P": "jugcraft:hv_chw_pipe"}, 4),
     "hv_damper": (["PRP", "PIP", "PPP"], {"P": "#c:plates/iron", "R": "minecraft:redstone", "I": "minecraft:iron_bars"}, 2),
 }
-CRAFTING["hv_chw_tee"] = (["WCW", " C "], {"W": "minecraft:white_wool", "C": "minecraft:copper_ingot"}, 4)
+# The tee has four openings/segments; horizontal mirroring cannot turn it into an elbow.
 CRAFTING.update({
     "hv_expansion_tank": (["PPP", "PRP", "N N"], {"P": "#c:plates/steel", "R": "minecraft:rabbit_hide", "N": "minecraft:iron_nugget"}, 1),
     "hv_expansion_tank_top": (["NCN", "PPP", "P P"], {"P": "#c:plates/steel", "C": "minecraft:copper_ingot", "N": "minecraft:iron_nugget"}, 1),
@@ -581,12 +581,13 @@ CRAFTING.update({
     "hv_refrig_sensor": (["PRP", " N "], {"P": "#c:plates/iron", "R": "minecraft:redstone", "N": "minecraft:iron_nugget"}, 2),
     "hv_filter_rack": (["P P", "SSS", "P P"], {"P": "#c:plates/iron", "S": "minecraft:paper"}, 2),
 })
+LABEL_DYES = {"oa": "white", "filtered": "yellow", "supply": "blue", "return": "red"}
 for k in DUCT_LABELS:
-    CRAFTING[f"hv_duct_label_{k}"] = (["PPP", "PDP", "PPP"], {"P": "#c:plates/iron", "D": "minecraft:paper"}, 8)
+    CRAFTING[f"hv_duct_label_{k}"] = (["PPP", "PDP", "PLP"], {"P": "#c:plates/iron", "L": "minecraft:paper", "D": f"minecraft:{LABEL_DYES[k]}_dye"}, 8)
 for k in ("supply", "return"):
-    CRAFTING[f"hv_duct_riser_label_{k}"] = (["P P", "PDP", "P P"], {"P": "#c:plates/iron", "D": "minecraft:paper"}, 8)
+    CRAFTING[f"hv_duct_riser_label_{k}"] = (["PLP", "PDP", "P P"], {"P": "#c:plates/iron", "L": "minecraft:paper", "D": f"minecraft:{LABEL_DYES[k]}_dye"}, 8)
 for k in PIPE_LABELS:
-    CRAFTING[f"hv_chw_label_{k}"] = (["WWW", "CDC", "WWW"], {"W": "minecraft:white_wool", "C": "minecraft:copper_ingot", "D": "minecraft:green_dye"}, 8)
+    CRAFTING[f"hv_chw_label_{k}"] = (["WWW", "CDC", "WWW"], {"W": "minecraft:white_wool", "C": "minecraft:copper_ingot", "D": "minecraft:green_dye" if k == "chws" else "minecraft:lime_dye"}, 8)
 for i, k in enumerate(PLENUM_KINDS):
     name = f"hv_plenum_{k}" if k != "plain" else "hv_plenum"
     CRAFTING[name] = (["PPP", "PXP", "PPP"], {"P": "#c:plates/iron", "X": ["minecraft:iron_bars", "minecraft:smooth_stone_slab", "minecraft:iron_nugget",
@@ -1192,7 +1193,7 @@ CRAFTING.update({
     HP_KEY: (["LGL", "CXC", "PRP"], {"L": "minecraft:redstone_lamp", "G": "minecraft:glass_pane", "C": "jugcraft:basic_circuit",
                                      "X": "minecraft:comparator", "P": "#c:plates/steel", "R": "minecraft:redstone"}, 1),
     RAD_KEY: (["PGP", "CXC", "PRP"], {"P": "#c:plates/steel", "G": "minecraft:glass_pane", "C": "jugcraft:basic_circuit",
-                                      "X": "jugcraft:geiger_counter", "R": "minecraft:redstone"}, 1),
+                                      "X": "jugcraft:geiger_counter", "R": "jugcraft:hv_duct"}, 1),
     TOX_KEY: (["PGP", "CXC", "PRP"], {"P": "#c:plates/steel", "G": "minecraft:glass_pane", "C": "jugcraft:basic_circuit",
                                       "X": "minecraft:glass_bottle", "R": "minecraft:redstone"}, 1),
     RF_KEY: (["PGP", "CXC", "PRP"], {"P": "#c:plates/steel", "G": "minecraft:glass_pane", "C": "jugcraft:basic_circuit",

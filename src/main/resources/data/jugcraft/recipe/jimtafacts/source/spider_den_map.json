@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SW ",
+    "WCW",
+    " WS"
+  ],
+  "key": {
+    "S": "jugcraft:jimta_spellbooks_frozen_bone",
+    "W": "minecraft:cobweb",
+    "C": "jugcraft:jimta_spellbooks_magic_cloth"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_furled_map_ice_spider_den"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

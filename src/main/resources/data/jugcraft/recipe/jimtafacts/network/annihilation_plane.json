@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "III",
+    "FFF",
+    " C "
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "F": "jugcraft:jimta_fluix_crystal",
+    "C": "jugcraft:jimta_annihilation_core"
+  },
+  "result": {
+    "id": "jugcraft:jimta_annihilation_plane",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

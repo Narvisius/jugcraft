@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:blasting",
+  "cookingtime": 200,
+  "experience": 0.0,
+  "ingredient": "jugcraft:jimta_spellbooks_pyrium_ingot",
+  "result": {
+    "id": "minecraft:ancient_debris",
+    "count": 5
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

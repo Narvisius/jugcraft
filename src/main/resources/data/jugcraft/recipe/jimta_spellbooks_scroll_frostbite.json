@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:paper",
+    "jugcraft:jimta_spellbooks_uncommon_ink",
+    "jugcraft:jimta_spellbooks_ice_rune",
+    "minecraft:blue_ice"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_scroll_frostbite",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

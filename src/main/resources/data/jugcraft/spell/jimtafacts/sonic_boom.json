@@ -1,0 +1,52 @@
+{
+  "school": "spell_power:arcane",
+  "range": 32,
+  "tier": 1,
+  "group": "jimtafacts_spellbooks",
+  "type": "ACTIVE",
+  "active": {
+    "cast": {
+      "duration": 1.5,
+      "animation": {
+        "id": "jugcraft:charge_spit"
+      }
+    }
+  },
+  "release": {
+    "animation": {
+      "id": "jugcraft:long_cast_finish"
+    }
+  },
+  "target": {
+    "type": "BEAM",
+    "cap": 8,
+    "beam": {
+      "texture_id": "jugcraft:textures/jimtafacts/spellbooks/entity/ray/solid.png",
+      "width": 0.22,
+      "color_rgba": 4294967295,
+      "inner_color_rgba": 4294967295
+    }
+  },
+  "deliver": {
+    "type": "DIRECT"
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "CUSTOM",
+        "custom": {
+          "handler": "jugcraft:jimtafacts_combat",
+          "intent": "HARMFUL"
+        }
+      }
+    }
+  ],
+  "cost": {
+    "exhaust": 0,
+    "durability": 0,
+    "cooldown": {
+      "duration": 25,
+      "hosting_item": false
+    }
+  }
+}

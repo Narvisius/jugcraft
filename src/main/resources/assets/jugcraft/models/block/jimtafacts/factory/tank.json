@@ -1,0 +1,45 @@
+{
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        16,
+        14
+      ],
+      "faces": {
+        "down": {
+          "texture": "#down",
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#up",
+          "cullface": "up"
+        },
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        }
+      }
+    }
+  ],
+  "textures": {
+    "particle": "jugcraft:block/jimtafacts/factory/tank/side",
+    "up": "jugcraft:block/jimtafacts/factory/tank/end",
+    "down": "jugcraft:block/jimtafacts/factory/tank/end",
+    "side": "jugcraft:block/jimtafacts/factory/tank/side"
+  },
+  "parent": "minecraft:block/block"
+}

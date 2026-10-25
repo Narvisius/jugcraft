@@ -95,11 +95,8 @@ public final class Lairs {
 				died(player);
 			}
 		});
-		ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
-			if (!alive) {
-				handBack(newPlayer);
-			}
-		});
+		// Fabric copies death-persistent attachments in AFTER_RESPAWN too. Returning goods in that
+		// event depends on initializer order; tick() returns them after every listener has finished.
 	}
 
 	// ---------------------------------------------------------------- settings
@@ -422,10 +419,15 @@ public final class Lairs {
 
 	// ---------------------------------------------------------------- death
 
-	/**
-	 * A player has died in a lair: what they dropped (this tick's items and experience round them) is gathered up at
-	 * once as their Grave Goods, to be handed back when they respawn outside. Their visit is over.
-	 */
+	/** Capture the exact native death stack before spawning it, including during chunk transitions. */
+	public static void retainDeathItem(ServerPlayer player, ItemStack stack) {
+		if (!isLair(player.level()) || stack.isEmpty()) return;
+		GraveGoods held = player.getAttached(GRAVE_GOODS);
+		List<ItemStack> items = List.of(stack.copy());
+		player.setAttached(GRAVE_GOODS, held == null ? new GraveGoods(items, 0) : held.plus(items, 0));
+	}
+
+	/** End the visit and retain experience; item stacks are captured directly by the native death hook. */
 	public static void died(ServerPlayer player) {
 		if (!(player.level() instanceof ServerLevel level) || !isLair(level)) {
 			return;
@@ -437,16 +439,14 @@ public final class Lairs {
 		player.removeAttached(VISIT);
 		AABB around = player.getBoundingBox().inflate(3.0);
 		List<ItemStack> items = new ArrayList<>();
-		for (ItemEntity item : level.getEntitiesOfClass(ItemEntity.class, around, item -> item.tickCount == 0)) {
-			items.add(item.getItem().copy());
-			item.discard();
-		}
 		int experience = 0;
 		for (ExperienceOrb orb : level.getEntitiesOfClass(ExperienceOrb.class, around, orb -> orb.tickCount == 0)) {
 			experience += orb.getValue();
 			orb.discard();
 		}
 		if (items.isEmpty() && experience == 0) {
+			if (player.getAttached(GRAVE_GOODS) != null)
+				player.sendSystemMessage(Component.translatable("message.jugcraft.lair.grave_goods.kept"));
 			return;
 		}
 		GraveGoods held = player.getAttached(GRAVE_GOODS);
@@ -474,6 +474,11 @@ public final class Lairs {
 	// ---------------------------------------------------------------- once a second
 
 	private static void tick(MinecraftServer server) {
+		for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+			if (player.isAlive() && !isLair(player.level()) && player.getAttached(GRAVE_GOODS) != null) {
+				handBack(player);
+			}
+		}
 		if (server.getTickCount() % CHECK_TICKS != 0) {
 			return;
 		}

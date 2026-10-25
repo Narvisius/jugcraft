@@ -1,0 +1,48 @@
+{
+  "school": "spell_power:frost",
+  "range": 30,
+  "tier": 1,
+  "group": "jimtafacts_spellbooks",
+  "type": "ACTIVE",
+  "active": {
+    "cast": {
+      "duration": 0,
+      "animation": {
+        "id": "jugcraft:instant_projectile"
+      }
+    }
+  },
+  "release": {},
+  "target": {
+    "type": "BEAM",
+    "cap": 1,
+    "beam": {
+      "texture_id": "jugcraft:textures/jimtafacts/spellbooks/entity/ray_of_frost/core.png",
+      "width": 0.12,
+      "color_rgba": 4294967295,
+      "inner_color_rgba": 4294967295
+    }
+  },
+  "deliver": {
+    "type": "DIRECT"
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "CUSTOM",
+        "custom": {
+          "handler": "jugcraft:jimtafacts_combat",
+          "intent": "HARMFUL"
+        }
+      }
+    }
+  ],
+  "cost": {
+    "exhaust": 0,
+    "durability": 0,
+    "cooldown": {
+      "duration": 15,
+      "hosting_item": false
+    }
+  }
+}

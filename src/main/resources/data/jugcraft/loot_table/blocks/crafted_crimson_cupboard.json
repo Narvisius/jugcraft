@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:crafted_crimson_cupboard",
+          "modifier": [
+            {
+              "block": "jugcraft:crafted_crimson_cupboard",
+              "properties": [
+                "type"
+              ],
+              "type": "minecraft:copy_state"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

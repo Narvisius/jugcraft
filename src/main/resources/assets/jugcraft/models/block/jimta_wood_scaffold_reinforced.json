@@ -1,0 +1,77 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "all": "jugcraft:jimtafacts/construction/wood_scaffold_reinforced",
+    "particle": "jugcraft:jimtafacts/construction/wood_scaffold_reinforced"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#all",
+          "uv": [
+            0.0,
+            0,
+            2.6666666666666665,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#all",
+          "uv": [
+            2.6666666666666665,
+            0,
+            5.333333333333333,
+            16
+          ]
+        },
+        "north": {
+          "texture": "#all",
+          "uv": [
+            5.333333333333333,
+            0,
+            8.0,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#all",
+          "uv": [
+            8.0,
+            0,
+            10.666666666666666,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#all",
+          "uv": [
+            10.666666666666666,
+            0,
+            13.333333333333334,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#all",
+          "uv": [
+            13.333333333333334,
+            0,
+            16.0,
+            16
+          ]
+        }
+      }
+    }
+  ]
+}

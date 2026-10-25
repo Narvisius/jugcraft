@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:crafted_bamboo_chair",
+          "modifier": [
+            {
+              "block": "jugcraft:crafted_bamboo_chair",
+              "properties": [
+                "color"
+              ],
+              "type": "minecraft:copy_state"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

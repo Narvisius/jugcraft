@@ -1,5 +1,7 @@
 # Shared owner asset library
 
+**23 October Jimtafacts:** [verified collection and implementation status](catalog/edited-2026-10-23-jimtafacts/README.md): 17,598 supplied files covering accessories, spellbooks, storage networks, industry, transport and computers. Preserved sources and native runtime integrations are tracked separately.
+
 **19 October model recovery:** [original wildlife client model data](catalog/naturalist-models-2026-10-19/README.md), 228 client files preserved with SHA-256 hashes. This supplies 73 geometry layers and 441 animation clips for the 47 existing wildlife species; the supplied classes are inspected as data, never executed.
 
 **18 October, part two:** [nine additional owner-edited collections](catalog/edited-2026-10-18-part2/README.md), 26,765 files preserved with SHA-256 verification. Native integration is tracked separately from intake.

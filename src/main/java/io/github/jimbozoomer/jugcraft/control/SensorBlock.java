@@ -96,6 +96,11 @@ public class SensorBlock extends Block implements DataConnectable {
 	 * energy, fluid or item storage on the touching face).
 	 */
 	public static int percent(Level level, BlockPos pos, BlockState state) {
+		return state.getBlock() instanceof SensorBlock sensor ? sensor.reading(level, pos, state) : -1;
+	}
+
+	/** Subtypes can measure an environmental signal on the same colored controller network. */
+	protected int reading(Level level, BlockPos pos, BlockState state) {
 		BlockPos target = target(pos, state);
 		Direction side = state.getValue(FACING);
 		EnergyStorage energy = EnergyStorage.SIDED.find(level, target, side);

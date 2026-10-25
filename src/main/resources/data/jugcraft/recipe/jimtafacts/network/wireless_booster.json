@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "EQE",
+    "IWI"
+  ],
+  "key": {
+    "E": "jugcraft:jimta_ender_dust",
+    "Q": "jugcraft:jimta_certus_quartz_dust",
+    "I": "minecraft:iron_ingot",
+    "W": "jugcraft:jimta_fluix_glass_cable"
+  },
+  "result": {
+    "id": "jugcraft:jimta_wireless_booster",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

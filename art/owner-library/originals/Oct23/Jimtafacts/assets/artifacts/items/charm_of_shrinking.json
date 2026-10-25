@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "artifacts:item/charm_of_shrinking"
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "artifacts:item/charm_of_shrinking_broken"
+    },
+    "property": "artifacts:needs_repair"
+  }
+}

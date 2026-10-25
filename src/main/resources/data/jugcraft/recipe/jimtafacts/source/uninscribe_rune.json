@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "#jugcraft:jimtafacts/spellbooks/inscribed_rune",
+    "jugcraft:jimta_spellbooks_shriving_stone"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_blank_rune"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

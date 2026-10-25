@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:crafted_birch_drawer",
+          "modifier": [
+            {
+              "block": "jugcraft:crafted_birch_drawer",
+              "properties": [
+                "type"
+              ],
+              "type": "minecraft:copy_state"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

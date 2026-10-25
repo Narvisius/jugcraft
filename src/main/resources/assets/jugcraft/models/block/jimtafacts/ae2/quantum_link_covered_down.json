@@ -1,0 +1,47 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "ring": "jugcraft:jimtafacts/ae2/block/quantum_ring",
+    "link": "jugcraft:jimtafacts/ae2/block/quantum_link",
+    "light": "jugcraft:jimtafacts/ae2/block/quantum_ring_light",
+    "corner": "jugcraft:jimtafacts/ae2/block/quantum_ring_light_corner",
+    "covered": "jugcraft:jimtafacts/ae2/part/cable/covered/transparent",
+    "glass": "jugcraft:jimtafacts/ae2/part/cable/glass/transparent",
+    "particle": "jugcraft:jimtafacts/ae2/block/quantum_ring"
+  },
+  "elements": [
+    {
+      "from": [
+        4.992,
+        0,
+        4.992
+      ],
+      "to": [
+        11.008,
+        1.992,
+        11.008
+      ],
+      "light_emission": 0,
+      "faces": {
+        "west": {
+          "texture": "#covered"
+        },
+        "east": {
+          "texture": "#covered"
+        },
+        "north": {
+          "texture": "#covered"
+        },
+        "south": {
+          "texture": "#covered"
+        },
+        "down": {
+          "texture": "#covered"
+        },
+        "up": {
+          "texture": "#covered"
+        }
+      }
+    }
+  ]
+}

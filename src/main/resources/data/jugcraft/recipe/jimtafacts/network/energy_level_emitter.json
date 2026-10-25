@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:jimta_level_emitter",
+    "jugcraft:jimta_fluix_crystal"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_energy_level_emitter",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

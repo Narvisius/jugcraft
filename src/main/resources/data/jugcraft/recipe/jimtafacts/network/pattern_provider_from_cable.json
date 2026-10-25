@@ -1,0 +1,11 @@
+{
+  "type": "jugcraft:jimta_compact_part",
+  "input": "cable_pattern_provider",
+  "output": "pattern_provider",
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

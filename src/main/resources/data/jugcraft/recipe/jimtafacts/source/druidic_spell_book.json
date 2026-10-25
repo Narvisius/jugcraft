@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " SC",
+    "HRA",
+    "CG "
+  ],
+  "key": {
+    "R": "jugcraft:jimta_spellbooks_rotten_spell_book",
+    "A": "minecraft:amethyst_cluster",
+    "H": "minecraft:honey_bottle",
+    "S": "minecraft:spore_blossom",
+    "G": "minecraft:glow_ink_sac",
+    "C": "jugcraft:jimta_spellbooks_magic_cloth"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_druidic_spell_book",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

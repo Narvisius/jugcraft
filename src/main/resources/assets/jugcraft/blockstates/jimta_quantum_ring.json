@@ -1,0 +1,110 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "formed": "false"
+      },
+      "apply": {
+        "model": "jugcraft:jimtafacts/ae2/block/quantum_ring"
+      }
+    },
+    {
+      "when": {
+        "formed": "true",
+        "corner": "true"
+      },
+      "apply": {
+        "model": "jugcraft:jimtafacts/ae2/block/quantum_ring"
+      }
+    },
+    {
+      "when": {
+        "formed": "true",
+        "corner": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimtafacts/ae2/quantum_edge"
+      }
+    },
+    {
+      "when": {
+        "formed": "true",
+        "corner": "false",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimtafacts/ae2/quantum_edge_light"
+      }
+    },
+    {
+      "when": {
+        "formed": "true",
+        "corner": "true",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimtafacts/ae2/quantum_corner_light"
+      }
+    },
+    {
+      "when": {
+        "formed": "true",
+        "west": "true",
+        "corner": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimtafacts/ae2/quantum_corner_west"
+      }
+    },
+    {
+      "when": {
+        "formed": "true",
+        "east": "true",
+        "corner": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimtafacts/ae2/quantum_corner_east"
+      }
+    },
+    {
+      "when": {
+        "formed": "true",
+        "north": "true",
+        "corner": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimtafacts/ae2/quantum_corner_north"
+      }
+    },
+    {
+      "when": {
+        "formed": "true",
+        "south": "true",
+        "corner": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimtafacts/ae2/quantum_corner_south"
+      }
+    },
+    {
+      "when": {
+        "formed": "true",
+        "down": "true",
+        "corner": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimtafacts/ae2/quantum_corner_down"
+      }
+    },
+    {
+      "when": {
+        "formed": "true",
+        "up": "true",
+        "corner": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimtafacts/ae2/quantum_corner_up"
+      }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " QC",
+    " IQ",
+    "I  "
+  ],
+  "key": {
+    "Q": "jugcraft:jimta_charged_certus_quartz_crystal",
+    "C": "jugcraft:jimta_energy_cell",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "id": "jugcraft:jimta_charged_staff"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

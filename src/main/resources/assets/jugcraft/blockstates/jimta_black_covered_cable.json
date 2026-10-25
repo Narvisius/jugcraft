@@ -1,0 +1,69 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "jugcraft:jimtafacts/ae2/part/cable/covered/black/center"
+      }
+    },
+    {
+      "when": {
+        "north": "true"
+      },
+      "apply": {
+        "model": "jugcraft:jimtafacts/ae2/part/cable/covered/black/connection",
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "east": "true"
+      },
+      "apply": {
+        "model": "jugcraft:jimtafacts/ae2/part/cable/covered/black/connection",
+        "x": 0,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true"
+      },
+      "apply": {
+        "model": "jugcraft:jimtafacts/ae2/part/cable/covered/black/connection",
+        "x": 0,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "jugcraft:jimtafacts/ae2/part/cable/covered/black/connection",
+        "x": 0,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": "true"
+      },
+      "apply": {
+        "model": "jugcraft:jimtafacts/ae2/part/cable/covered/black/connection",
+        "x": 270,
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "down": "true"
+      },
+      "apply": {
+        "model": "jugcraft:jimtafacts/ae2/part/cable/covered/black/connection",
+        "x": 90,
+        "y": 0
+      }
+    }
+  ]
+}

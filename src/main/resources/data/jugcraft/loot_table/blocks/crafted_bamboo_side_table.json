@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:crafted_bamboo_side_table",
+          "modifier": [
+            {
+              "block": "jugcraft:crafted_bamboo_side_table",
+              "properties": [
+                "color"
+              ],
+              "type": "minecraft:copy_state"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

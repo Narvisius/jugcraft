@@ -1,0 +1,124 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "down"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimtafacts/factory/chute",
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "connected_down": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimtafacts/factory/chute_connected",
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "up"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimtafacts/factory/chute",
+        "x": 180,
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "connected_up": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimtafacts/factory/chute_connected",
+        "x": 180,
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimtafacts/factory/chute",
+        "x": 90,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "connected_north": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimtafacts/factory/chute_connected",
+        "x": 90,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimtafacts/factory/chute",
+        "x": 90,
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "connected_south": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimtafacts/factory/chute_connected",
+        "x": 90,
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimtafacts/factory/chute",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "connected_west": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimtafacts/factory/chute_connected",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimtafacts/factory/chute",
+        "x": 90,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "connected_east": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimtafacts/factory/chute_connected",
+        "x": 90,
+        "y": 270
+      }
+    }
+  ]
+}

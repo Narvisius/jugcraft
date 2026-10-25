@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "RRR",
+    "ROR",
+    "RRR"
+  ],
+  "key": {
+    "O": "minecraft:poisonous_potato",
+    "R": "minecraft:potato"
+  },
+  "result": {
+    "id": "minecraft:poisonous_potato",
+    "count": 4
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

@@ -54,6 +54,7 @@ public final class ItemNetworks {
 			return 0;
 		}
 		BlockPos neighbor = pos.relative(side);
+            if (!level.hasChunkAt(neighbor)) return 0;
             if (!ClaimTransfers.allowed(level, pos, neighbor)) return 0;
 		if (level.getBlockState(neighbor).getBlock() instanceof ItemPipeBlock) {
 			return network(level, neighbor).distribute(level, source, maxItems, exclude, pos);
@@ -74,9 +75,9 @@ public final class ItemNetworks {
 		}
 		Network network = Network.discover(level, pipePos);
         network.revision = LandRegistry.revision(level);
-		for (BlockPos pipe : network.pipes) {
-			networks.put(pipe, network);
-		}
+		// Directional fittings make reachability depend on the entry pipe.
+		networks.put(pipePos.immutable(), network);
+		if(!network.directed && !network.colored)for(var pipe:network.pipes)networks.put(pipe,network);
 		return network;
 	}
 
@@ -85,23 +86,49 @@ public final class ItemNetworks {
 		private final List<Endpoint> endpoints = new ArrayList<>();
 		private int turn;
         private long revision;
+		private long rate = Long.MAX_VALUE;
+		private boolean truncated;
+		private boolean directed;
+		private boolean colored;
+		private BlockPos entry;
 
 		static Network discover(Level level, BlockPos start) {
+			return discover(level, start, null);
+		}
+		static Network discover(Level level, BlockPos start, ItemVariant resource) {
 			Network network = new Network();
-			ArrayDeque<BlockPos> queue = new ArrayDeque<>();
-			queue.add(start.immutable());
+			network.entry = start.immutable();
+			ArrayDeque<Route> queue = new ArrayDeque<>();
+			Set<Route> visited = new HashSet<>();
+			queue.add(new Route(start.immutable(), -1));
+			visited.add(queue.peek());
 			network.pipes.add(start.immutable());
-			while (!queue.isEmpty() && network.pipes.size() < MAX_PIPES) {
-				BlockPos pipe = queue.poll();
+			while (!queue.isEmpty()) {
+				Route route = queue.poll();
+				BlockPos pipe = route.pos;
+				if (!level.hasChunkAt(pipe)) continue;
+				var own = level.getBlockState(pipe);
+				if (!(own.getBlock() instanceof ItemPipeBlock current)) continue;
+				network.rate = Math.min(network.rate, current.transferLimit());
+				network.directed |= current.directionalRouting();
+				network.colored |= current.coloredRouting();
+				int color = resource == null ? -1 : current.routeColor(level, pipe, own, resource, route.color);
+				if (color < -1) continue;
 				for (Direction direction : Direction.values()) {
 					BlockPos next = pipe.relative(direction).immutable();
-                    if (!ClaimTransfers.allowed(level, pipe, next)) continue;
-					if (level.getBlockState(next).getBlock() instanceof ItemPipeBlock) {
-						if (network.pipes.add(next)) {
-							queue.add(next);
+                    if (!level.hasChunkAt(next) || !ClaimTransfers.allowed(level, pipe, next)) continue;
+					var neighbor = level.getBlockState(next);
+					if (!current.routesTo(own, direction, neighbor)) continue;
+					if (neighbor.getBlock() instanceof ItemPipeBlock nextPipe) {
+						if (!current.joins(own, neighbor) || !nextPipe.joins(neighbor, own)) continue;
+						Route nextRoute = new Route(next, color);
+						if (!visited.contains(nextRoute) && visited.size() >= MAX_PIPES) { network.truncated = true; return network; }
+						if (visited.add(nextRoute)) {
+							network.pipes.add(next);
+							queue.add(nextRoute);
 						}
 					} else if (ItemStorage.SIDED.find(level, next, direction.getOpposite()) != null) {
-						network.endpoints.add(new Endpoint(next, direction.getOpposite()));
+						network.endpoints.add(new Endpoint(next, direction.getOpposite(),current.prefersAdjacentInventory()));
 					}
 				}
 			}
@@ -109,38 +136,58 @@ public final class ItemNetworks {
 		}
 
 		long distribute(Level level, Storage<ItemVariant> source, long budget, Set<BlockPos> exclude, BlockPos pusher) {
+			return distribute(level, source, budget, exclude, pusher, null);
+		}
+		long distribute(Level level, Storage<ItemVariant> source, long budget, Set<BlockPos> exclude, BlockPos pusher, ItemVariant only) {
+			if (truncated) return 0;
+			budget = Math.min(budget, rate);
 			List<Storage<ItemVariant>> sorters = new ArrayList<>();
+			List<Storage<ItemVariant>> preferred = new ArrayList<>();
 			List<Storage<ItemVariant>> others = new ArrayList<>();
-			for (Endpoint endpoint : endpoints) {
+			// Put preferred endpoints first so an ordinary alias cannot hide their priority.
+			for (Endpoint endpoint : endpoints.stream().sorted(java.util.Comparator.comparing(Endpoint::preferred).reversed()).toList()) {
+                if (!level.hasChunkAt(endpoint.pos)) continue;
                 if (!ClaimTransfers.allowed(level, pusher, endpoint.pos)) continue;
 				if (endpoint.pos.equals(pusher) || exclude.contains(endpoint.pos)) {
 					continue;
 				}
 				Storage<ItemVariant> storage = ItemStorage.SIDED.find(level, endpoint.pos, endpoint.side);
 				if (storage == null || storage == source || !storage.supportsInsertion()
-						|| sorters.contains(storage) || others.contains(storage)) {
+						|| sorters.contains(storage) || preferred.contains(storage) || others.contains(storage)) {
 					continue;
 				}
-				(level.getBlockState(endpoint.pos).getBlock() instanceof ItemSorterBlock ? sorters : others).add(storage);
+				(level.getBlockState(endpoint.pos).getBlock() instanceof ItemSorterBlock ? sorters : endpoint.preferred?preferred:others).add(storage);
 			}
-			if (sorters.isEmpty() && others.isEmpty()) {
+			if (sorters.isEmpty() && preferred.isEmpty() && others.isEmpty()) {
 				return 0;
 			}
 			List<ItemVariant> resources = new ArrayList<>();
+			int examined = 0;
 			for (StorageView<ItemVariant> view : source.nonEmptyViews()) {
-				if (!resources.contains(view.getResource())) {
+				if (++examined > 4096) return 0;
+				if ((only == null || only.equals(view.getResource())) && !resources.contains(view.getResource())) {
 					resources.add(view.getResource());
 				}
 			}
 			long moved = 0;
 			turn++;
 			for (ItemVariant resource : resources) {
+				if (colored && only == null) {
+					// Recompute with carried color for this resource. Filter inventories can change without block updates.
+					moved += discover(level, entry, resource).distribute(level,source,budget-moved,exclude,pusher,resource);
+					if (moved >= budget) return moved;
+					continue;
+				}
 				// Matching sorters first: they only accept what their filter allows.
 				for (Storage<ItemVariant> sorter : sorters) {
 					moved += StorageUtil.move(source, sorter, resource::equals, budget - moved, null);
 					if (moved >= budget) {
 						return moved;
 					}
+				}
+				for(var target:preferred) {
+					moved+=StorageUtil.move(source,target,resource::equals,budget-moved,null);
+					if(moved>=budget)return moved;
 				}
 				for (int i = 0; i < others.size() && moved < budget; i++) {
 					Storage<ItemVariant> target = others.get(Math.floorMod(turn + i, others.size()));
@@ -154,6 +201,7 @@ public final class ItemNetworks {
 		}
 	}
 
-	private record Endpoint(BlockPos pos, Direction side) {
+	private record Endpoint(BlockPos pos, Direction side,boolean preferred) {
 	}
+	private record Route(BlockPos pos, int color) {}
 }

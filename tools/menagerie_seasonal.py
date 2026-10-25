@@ -4,6 +4,13 @@ from menagerie_content import *
 def cube(a,b,texture='#all'):
     return {'from':a,'to':b,'faces':{face:{'uv':[0,0,16,16],'texture':texture} for face in ['north','south','east','west','up','down']}}
 
+def gravestone_recipe(style, material):
+    return {'type': 'minecraft:crafting_shaped',
+            'pattern': [' S ', 'SSS', ' S '] if style == 'cross' else ['SS', 'SS', ' S'],
+            'key': {'S': 'minecraft:mossy_cobblestone' if material == 'mossy' else 'minecraft:stone'},
+            'result': {'id': f'jugcraft:herbal_gravestone_{style}_{material}'}}
+
+
 def main():
     lang=read(ASSET/'lang/en_us.json');sounds=read(ASSET/'sounds.json')
     for p in (SOURCE/'textures').rglob('*.png'):copy(p,ASSET/'textures/menagerie/herbal'/p.relative_to(SOURCE/'textures'))
@@ -27,7 +34,7 @@ def main():
             write(ASSET/f'models/block/{id}.json',{'textures':{'all':f'jugcraft:menagerie/herbal/block/gravestone_{style}_{material}','particle':f'jugcraft:menagerie/herbal/block/gravestone_{style}_{material}'},'elements':elements})
             write(ASSET/f'blockstates/{id}.json',{'variants':{f'facing={direction}':{'model':'jugcraft:block/'+id,'y':rotation} for direction,rotation in [('north',0),('east',90),('south',180),('west',270)]}})
             write(DATA/f'loot_table/blocks/{id}.json',{'type':'minecraft:block','pools':[{'rolls':1,'entries':[{'type':'minecraft:item','name':'jugcraft:'+id}]}]})
-            write(DATA/f'recipe/{id}.json',{'type':'minecraft:crafting_shaped','pattern':[' S ','SSS',' S '],'key':{'S':'minecraft:mossy_cobblestone' if material=='mossy' else 'minecraft:stone'},'result':{'id':'jugcraft:'+id}})
+            write(DATA/f'recipe/{id}.json',gravestone_recipe(style, material))
     wheel=read(ASSET/'models/block/spinning_wheel.json')
     wheel['textures']={k:'jugcraft:menagerie/herbal/block/spinning_wheel' for k in wheel['textures']}
     write(ASSET/'models/block/herbal_spinning_wheel.json',wheel)

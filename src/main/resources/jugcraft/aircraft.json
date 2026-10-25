@@ -1,0 +1,1541 @@
+{
+  "craft": {
+    "airship": {
+      "properties": {
+        "stabilizer": 0.1,
+        "yawSpeed": 5.0,
+        "engineSpeed": 0.02,
+        "verticalSpeed": 0.025,
+        "glideFactor": 0.0,
+        "driftDrag": 0.01,
+        "lift": 0.1,
+        "rollFactor": 5.0,
+        "wind": 0.05,
+        "mass": 3.0,
+        "groundFriction": 0.5,
+        "horizontalDecay": 0.97,
+        "verticalDecay": 0.925
+      },
+      "inventorySlots": [
+        {
+          "type": "weapon",
+          "x": 50,
+          "y": 24
+        },
+        {
+          "type": "upgrade",
+          "x": 72,
+          "y": 24
+        },
+        {
+          "type": "upgrade",
+          "x": 50,
+          "y": 46
+        },
+        {
+          "type": "upgrade",
+          "x": 72,
+          "y": 46
+        },
+        {
+          "type": "banner",
+          "x": 50,
+          "y": 68
+        },
+        {
+          "type": "dye",
+          "x": 72,
+          "y": 68
+        },
+        {
+          "type": "boiler",
+          "x": 17,
+          "y": 54
+        },
+        {
+          "type": "inventory",
+          "x": 98,
+          "y": 18,
+          "cols": 4,
+          "rows": 4
+        }
+      ],
+      "weaponMounts": [
+        {
+          "ROTATING": [
+            {
+              "x": 0,
+              "y": 0.3875,
+              "z": 1.001
+            }
+          ],
+          "FRONT": [
+            {
+              "x": -0.5,
+              "y": 0.375,
+              "z": 0.0,
+              "roll": 90
+            },
+            {
+              "x": 0.5,
+              "y": 0.375,
+              "z": 0.0,
+              "roll": -90
+            }
+          ],
+          "DROP": [
+            {
+              "x": -0.5,
+              "y": 0.375,
+              "z": 0.0,
+              "roll": -90
+            },
+            {
+              "x": 0.5,
+              "y": 0.375,
+              "z": 0.0,
+              "roll": 90
+            }
+          ]
+        }
+      ],
+      "passengerPositions": [
+        [
+          {
+            "x": 0.0,
+            "y": 0.125,
+            "z": 0.0
+          }
+        ],
+        [
+          {
+            "x": 0.0,
+            "y": 0.125,
+            "z": 0.3
+          },
+          {
+            "x": 0.0,
+            "y": 0.125,
+            "z": -0.3
+          }
+        ]
+      ],
+      "boundingBoxes": [],
+      "trails": [
+        {
+          "x": 0.0,
+          "y": 0.4,
+          "z": -1.2,
+          "size": 0.15,
+          "rotate": 50.0,
+          "gray": 0.5,
+          "length": 15
+        }
+      ]
+    },
+    "bamboo_hopper": {
+      "properties": {
+        "fuel": 1.5,
+        "yawSpeed": 3.5,
+        "pitchSpeed": 3.5,
+        "engineSpeed": 0.025,
+        "acceleration": 0.8,
+        "friction": 0.001,
+        "horizontalDecay": 0.99,
+        "verticalDecay": 0.985,
+        "brakeFactor": 0.96,
+        "pushSpeed": 0.02,
+        "glideFactor": 0.075,
+        "driftDrag": 0.01,
+        "lift": 0.18,
+        "rollFactor": 30.0,
+        "groundPitch": 1.0,
+        "wind": 0.04,
+        "mass": 2.0,
+        "fraction": 0.01,
+        "groundFriction": 0.85,
+        "wasterFriction": 0.95
+      },
+      "inventorySlots": [
+        {
+          "type": "boiler",
+          "x": 80,
+          "y": 42
+        },
+        {
+          "type": "booster",
+          "x": 80,
+          "y": 70
+        },
+        {
+          "type": "weapon",
+          "x": 48,
+          "y": 21
+        },
+        {
+          "type": "weapon",
+          "x": 112,
+          "y": 21
+        },
+        {
+          "type": "upgrade",
+          "x": 48,
+          "y": 44
+        },
+        {
+          "type": "upgrade",
+          "x": 112,
+          "y": 44
+        },
+        {
+          "type": "upgrade",
+          "x": 48,
+          "y": 67
+        },
+        {
+          "type": "upgrade",
+          "x": 112,
+          "y": 67
+        },
+        {
+          "type": "inventory",
+          "x": 8,
+          "y": 18,
+          "cols": 2,
+          "rows": 4
+        },
+        {
+          "type": "inventory",
+          "x": 134,
+          "y": 18,
+          "cols": 2,
+          "rows": 4
+        }
+      ],
+      "weaponMounts": [
+        {
+          "ROTATING": [
+            {
+              "x": 3.4375,
+              "y": 2.0625,
+              "z": 0.75
+            },
+            {
+              "x": -3.4375,
+              "y": 2.0625,
+              "z": 0.75
+            }
+          ],
+          "FRONT": [
+            {
+              "x": -2.0,
+              "y": 1.5,
+              "z": 1.5,
+              "roll": 180.0
+            },
+            {
+              "x": 2.0,
+              "y": 1.5,
+              "z": 1.5,
+              "roll": 180.0
+            }
+          ],
+          "DROP": [
+            {
+              "x": -2.0,
+              "y": 1.5,
+              "z": 1.5
+            },
+            {
+              "x": 2.0,
+              "y": 1.5,
+              "z": 1.5
+            }
+          ]
+        },
+        {
+          "ROTATING": [
+            {
+              "x": 3.4375,
+              "y": 1.9375,
+              "z": -1.5
+            },
+            {
+              "x": -3.4375,
+              "y": 1.9375,
+              "z": -1.5
+            }
+          ],
+          "FRONT": [
+            {
+              "x": -5.0,
+              "y": 1.5,
+              "z": 1.5,
+              "roll": 180.0
+            },
+            {
+              "x": 5.0,
+              "y": 1.5,
+              "z": 1.5,
+              "roll": 180.0
+            }
+          ],
+          "DROP": [
+            {
+              "x": -5.0,
+              "y": 1.5,
+              "z": 1.5
+            },
+            {
+              "x": 5.0,
+              "y": 1.5,
+              "z": 1.5
+            }
+          ]
+        }
+      ],
+      "passengerPositions": [
+        [
+          {
+            "x": 0.0,
+            "y": 0.625,
+            "z": 0.9375
+          }
+        ],
+        [
+          {
+            "x": 0.0,
+            "y": 0.625,
+            "z": 0.9375
+          },
+          {
+            "x": 0.4375,
+            "y": 0.625,
+            "z": -0.25
+          }
+        ],
+        [
+          {
+            "x": 0.0,
+            "y": 0.625,
+            "z": 0.9375
+          },
+          {
+            "x": 0.4375,
+            "y": 0.625,
+            "z": -0.25
+          },
+          {
+            "x": -0.4375,
+            "y": 0.625,
+            "z": -0.25
+          }
+        ]
+      ],
+      "boundingBoxes": [
+        {
+          "width": 1.1,
+          "height": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 2.0
+        },
+        {
+          "width": 1.1,
+          "height": 0.375,
+          "x": 1.0,
+          "y": 1.65,
+          "z": 1.0
+        },
+        {
+          "width": 1.1,
+          "height": 0.375,
+          "x": 2.0,
+          "y": 1.65,
+          "z": 1.0
+        },
+        {
+          "width": 1.1,
+          "height": 0.375,
+          "x": 3.0,
+          "y": 1.65,
+          "z": 1.0
+        },
+        {
+          "width": 1.1,
+          "height": 0.375,
+          "x": 4.0,
+          "y": 1.65,
+          "z": 1.0
+        },
+        {
+          "width": 1.1,
+          "height": 0.375,
+          "x": 5.0,
+          "y": 1.65,
+          "z": 1.0
+        },
+        {
+          "width": 1.1,
+          "height": 0.375,
+          "x": 6.0,
+          "y": 1.65,
+          "z": 1.0
+        },
+        {
+          "width": 1.1,
+          "height": 0.375,
+          "x": -1.0,
+          "y": 1.65,
+          "z": 1.0
+        },
+        {
+          "width": 1.1,
+          "height": 0.375,
+          "x": -2.0,
+          "y": 1.65,
+          "z": 1.0
+        },
+        {
+          "width": 1.1,
+          "height": 0.375,
+          "x": -3.0,
+          "y": 1.65,
+          "z": 1.0
+        },
+        {
+          "width": 1.1,
+          "height": 0.375,
+          "x": -4.0,
+          "y": 1.65,
+          "z": 1.0
+        },
+        {
+          "width": 1.1,
+          "height": 0.375,
+          "x": -5.0,
+          "y": 1.65,
+          "z": 1.0
+        },
+        {
+          "width": 1.1,
+          "height": 0.375,
+          "x": -6.0,
+          "y": 1.65,
+          "z": 1.0
+        },
+        {
+          "width": 0.8,
+          "height": 0.8,
+          "x": -3.5,
+          "y": 1.65,
+          "z": 0.0
+        },
+        {
+          "width": 0.8,
+          "height": 0.8,
+          "x": -3.5,
+          "y": 1.65,
+          "z": -1.0
+        },
+        {
+          "width": 0.8,
+          "height": 0.8,
+          "x": -3.5,
+          "y": 1.65,
+          "z": -2.0
+        },
+        {
+          "width": 0.8,
+          "height": 0.8,
+          "x": -3.5,
+          "y": 1.65,
+          "z": -3.0
+        },
+        {
+          "width": 0.8,
+          "height": 0.8,
+          "x": -3.5,
+          "y": 1.65,
+          "z": -4.0
+        },
+        {
+          "width": 0.8,
+          "height": 0.8,
+          "x": -3.5,
+          "y": 1.65,
+          "z": -5.0
+        },
+        {
+          "width": 0.8,
+          "height": 0.8,
+          "x": -3.5,
+          "y": 1.65,
+          "z": -6.0
+        },
+        {
+          "width": 0.8,
+          "height": 0.8,
+          "x": 3.5,
+          "y": 1.65,
+          "z": 0.0
+        },
+        {
+          "width": 0.8,
+          "height": 0.8,
+          "x": 3.5,
+          "y": 1.65,
+          "z": -1.0
+        },
+        {
+          "width": 0.8,
+          "height": 0.8,
+          "x": 3.5,
+          "y": 1.65,
+          "z": -2.0
+        },
+        {
+          "width": 0.8,
+          "height": 0.8,
+          "x": 3.5,
+          "y": 1.65,
+          "z": -3.0
+        },
+        {
+          "width": 0.8,
+          "height": 0.8,
+          "x": 3.5,
+          "y": 1.65,
+          "z": -4.0
+        },
+        {
+          "width": 0.8,
+          "height": 0.8,
+          "x": 3.5,
+          "y": 1.65,
+          "z": -5.0
+        },
+        {
+          "width": 0.8,
+          "height": 0.8,
+          "x": 3.5,
+          "y": 1.65,
+          "z": -6.0
+        }
+      ],
+      "trails": [
+        {
+          "x": 0.0,
+          "y": 0.75,
+          "z": -2.25,
+          "size": 0.5,
+          "gray": 1.0,
+          "length": 20,
+          "rotate": 48.0
+        }
+      ]
+    },
+    "biplane": {
+      "properties": {
+        "fuel": 1.25,
+        "yawSpeed": 5.0,
+        "pitchSpeed": 4.0,
+        "engineSpeed": 0.0275,
+        "friction": 0.001,
+        "horizontalDecay": 0.995,
+        "verticalDecay": 0.995,
+        "groundFriction": 0.85,
+        "brakeFactor": 0.98,
+        "pushSpeed": 0.03,
+        "glideFactor": 0.05,
+        "driftDrag": 0.01,
+        "lift": 0.15,
+        "rollFactor": 45.0,
+        "groundPitch": 4.0,
+        "wind": 0.025,
+        "mass": 1.0
+      },
+      "inventorySlots": [
+        {
+          "type": "booster",
+          "x": 17,
+          "y": 66
+        },
+        {
+          "type": "weapon",
+          "x": 50,
+          "y": 24
+        },
+        {
+          "type": "banner",
+          "x": 72,
+          "y": 24
+        },
+        {
+          "type": "upgrade",
+          "x": 50,
+          "y": 46
+        },
+        {
+          "type": "upgrade",
+          "x": 72,
+          "y": 46
+        },
+        {
+          "type": "upgrade",
+          "x": 50,
+          "y": 68
+        },
+        {
+          "type": "upgrade",
+          "x": 72,
+          "y": 68
+        },
+        {
+          "type": "boiler",
+          "x": 17,
+          "y": 40
+        },
+        {
+          "type": "inventory",
+          "x": 98,
+          "y": 18,
+          "cols": 4,
+          "rows": 4
+        }
+      ],
+      "weaponMounts": [
+        {
+          "ROTATING": [
+            {
+              "x": 0,
+              "y": 0.9,
+              "z": -1.1875,
+              "blocking": true
+            }
+          ],
+          "FRONT": [
+            {
+              "x": -1.0,
+              "y": 0.3375,
+              "z": 1.125
+            },
+            {
+              "x": 1.0,
+              "y": 0.3375,
+              "z": 1.125
+            }
+          ],
+          "DROP": [
+            {
+              "x": -1.25,
+              "y": 0.3,
+              "z": 1.125
+            },
+            {
+              "x": 1.25,
+              "y": 0.3,
+              "z": 1.125
+            }
+          ]
+        }
+      ],
+      "passengerPositions": [
+        [
+          {
+            "x": 0.0,
+            "y": 0.375,
+            "z": -0.6
+          }
+        ]
+      ],
+      "boundingBoxes": [
+        {
+          "width": 1.0,
+          "height": 0.7,
+          "x": 0.75,
+          "y": 0.65,
+          "z": 1.125
+        },
+        {
+          "width": 1.0,
+          "height": 0.7,
+          "x": 1.5,
+          "y": 0.65,
+          "z": 1.125
+        },
+        {
+          "width": 1.0,
+          "height": 0.7,
+          "x": 2.25,
+          "y": 0.65,
+          "z": 1.125
+        },
+        {
+          "width": 1.0,
+          "height": 0.7,
+          "x": 3.0,
+          "y": 0.65,
+          "z": 1.125
+        },
+        {
+          "width": 1.0,
+          "height": 0.7,
+          "x": 0.0,
+          "y": 0.65,
+          "z": 1.125
+        },
+        {
+          "width": 1.0,
+          "height": 0.7,
+          "x": -0.75,
+          "y": 0.65,
+          "z": 1.125
+        },
+        {
+          "width": 1.0,
+          "height": 0.7,
+          "x": -1.5,
+          "y": 0.65,
+          "z": 1.125
+        },
+        {
+          "width": 1.0,
+          "height": 0.7,
+          "x": -2.25,
+          "y": 0.65,
+          "z": 1.125
+        },
+        {
+          "width": 1.0,
+          "height": 0.7,
+          "x": -3.0,
+          "y": 0.65,
+          "z": 1.125
+        },
+        {
+          "width": 0.8,
+          "height": 0.6,
+          "x": 0.0,
+          "y": 0.65,
+          "z": -1.0
+        },
+        {
+          "width": 0.8,
+          "height": 0.6,
+          "x": 0.0,
+          "y": 0.65,
+          "z": -1.5
+        },
+        {
+          "width": 0.6,
+          "height": 0.5,
+          "x": 0.0,
+          "y": 0.65,
+          "z": -2.0
+        },
+        {
+          "width": 0.6,
+          "height": 0.5,
+          "x": 0.0,
+          "y": 0.65,
+          "z": -2.5
+        },
+        {
+          "width": 1.2,
+          "height": 0.2,
+          "x": 0.0,
+          "y": 0.7,
+          "z": -2.6
+        }
+      ],
+      "trails": [
+        {
+          "x": -3.75,
+          "y": 0.25,
+          "z": 0.6,
+          "size": 0.15,
+          "rotate": 0.0,
+          "gray": 1.0,
+          "length": 40
+        },
+        {
+          "x": 3.75,
+          "y": 0.25,
+          "z": 0.6,
+          "size": 0.15,
+          "rotate": 0.0,
+          "gray": 1.0,
+          "length": 40
+        }
+      ]
+    },
+    "cargo_airship": {
+      "properties": {
+        "stabilizer": 0.1,
+        "fuel": 1.25,
+        "yawSpeed": 5.0,
+        "engineSpeed": 0.0175,
+        "verticalSpeed": 0.02,
+        "glideFactor": 0.0,
+        "driftDrag": 0.01,
+        "lift": 0.1,
+        "rollFactor": 5.0,
+        "wind": 0.05,
+        "mass": 8.0
+      },
+      "inventorySlots": [
+        {
+          "type": "upgrade",
+          "x": 50,
+          "y": 24
+        },
+        {
+          "type": "upgrade",
+          "x": 72,
+          "y": 24
+        },
+        {
+          "type": "upgrade",
+          "x": 50,
+          "y": 46
+        },
+        {
+          "type": "upgrade",
+          "x": 72,
+          "y": 46
+        },
+        {
+          "type": "banner",
+          "x": 50,
+          "y": 68
+        },
+        {
+          "type": "dye",
+          "x": 72,
+          "y": 68
+        },
+        {
+          "type": "boiler",
+          "x": 17,
+          "y": 54
+        },
+        {
+          "type": "inventory",
+          "x": 98,
+          "y": 18,
+          "cols": 4,
+          "rows": 4
+        },
+        {
+          "type": "inventory",
+          "x": -80,
+          "y": 18,
+          "cols": 4,
+          "rows": 4,
+          "boxed": true
+        },
+        {
+          "type": "inventory",
+          "x": 186,
+          "y": 18,
+          "cols": 4,
+          "rows": 4,
+          "boxed": true
+        },
+        {
+          "type": "inventory",
+          "x": -80,
+          "y": 106,
+          "cols": 4,
+          "rows": 4,
+          "boxed": true
+        },
+        {
+          "type": "inventory",
+          "x": 186,
+          "y": 106,
+          "cols": 4,
+          "rows": 4,
+          "boxed": true
+        }
+      ],
+      "weaponMounts": [],
+      "passengerPositions": [
+        [
+          {
+            "x": 0.0,
+            "y": 0.1875,
+            "z": 0.0
+          }
+        ],
+        [
+          {
+            "x": 0.0,
+            "y": 0.1875,
+            "z": 0.3
+          },
+          {
+            "x": 0.0,
+            "y": 0.1875,
+            "z": -0.3
+          }
+        ]
+      ],
+      "boundingBoxes": [],
+      "trails": [
+        {
+          "x": 0.0,
+          "y": 0.45,
+          "z": -1.2,
+          "size": 0.15,
+          "rotate": 50.0,
+          "gray": 0.5,
+          "length": 15
+        },
+        {
+          "x": 1.15625,
+          "y": 2.65,
+          "z": -1.2,
+          "size": 0.125,
+          "rotate": 65.0,
+          "gray": 0.5,
+          "length": 10
+        },
+        {
+          "x": -1.15625,
+          "y": 2.65,
+          "z": -1.2,
+          "size": 0.125,
+          "rotate": 65.0,
+          "gray": 0.5,
+          "length": 10
+        }
+      ]
+    },
+    "gyrodyne": {
+      "properties": {
+        "stabilizer": 0.3,
+        "yawSpeed": 5.0,
+        "pitchSpeed": 5.0,
+        "engineSpeed": 0.3,
+        "pushSpeed": 0.3,
+        "verticalSpeed": 0.04,
+        "driftDrag": 0.01,
+        "lift": 0.1,
+        "rollFactor": 30.0,
+        "wind": 0.05,
+        "mass": 4.0,
+        "groundFriction": 0.8,
+        "horizontalDecay": 0.925,
+        "verticalDecay": 0.9
+      },
+      "inventorySlots": [
+        {
+          "type": "weapon",
+          "x": 14,
+          "y": 24
+        },
+        {
+          "type": "upgrade",
+          "x": 36,
+          "y": 24
+        },
+        {
+          "type": "upgrade",
+          "x": 14,
+          "y": 46
+        },
+        {
+          "type": "upgrade",
+          "x": 36,
+          "y": 46
+        },
+        {
+          "type": "inventory",
+          "x": 62,
+          "y": 18,
+          "cols": 6,
+          "rows": 3
+        }
+      ],
+      "weaponMounts": [
+        {
+          "ROTATING": [
+            {
+              "x": 0,
+              "y": 0.075,
+              "z": -1.0
+            }
+          ],
+          "FRONT": [
+            {
+              "x": 0,
+              "y": 0.2,
+              "z": 1.375
+            }
+          ],
+          "DROP": [
+            {
+              "x": -1.0,
+              "y": 0.23125,
+              "z": 0.0625
+            },
+            {
+              "x": 1.0,
+              "y": 0.23125,
+              "z": 0.0625
+            }
+          ]
+        }
+      ],
+      "passengerPositions": [
+        [
+          {
+            "x": 0.0,
+            "y": 0.125,
+            "z": 0.275
+          }
+        ],
+        [
+          {
+            "x": 0.0,
+            "y": 0.125,
+            "z": 0.3
+          },
+          {
+            "x": 0.0,
+            "y": 0.125,
+            "z": -0.6
+          }
+        ]
+      ],
+      "boundingBoxes": [
+        {
+          "width": 1.0,
+          "height": 0.1,
+          "x": 1.0,
+          "y": 0.25,
+          "z": 0.125
+        },
+        {
+          "width": 1.0,
+          "height": 0.1,
+          "x": 1.85,
+          "y": 0.25,
+          "z": 0.125
+        },
+        {
+          "width": 1.0,
+          "height": 0.1,
+          "x": 0.0,
+          "y": 0.25,
+          "z": 0.125
+        },
+        {
+          "width": 1.0,
+          "height": 0.1,
+          "x": -1.0,
+          "y": 0.25,
+          "z": 0.125
+        },
+        {
+          "width": 1.0,
+          "height": 0.1,
+          "x": -1.85,
+          "y": 0.25,
+          "z": 0.125
+        },
+        {
+          "width": 0.8,
+          "height": 0.4,
+          "x": 0.0,
+          "y": 0.2,
+          "z": 1.1
+        },
+        {
+          "width": 0.4,
+          "height": 0.3,
+          "x": 0.0,
+          "y": 0.15,
+          "z": 1.6
+        },
+        {
+          "width": 0.4,
+          "height": 0.3,
+          "x": 0.0,
+          "y": 0.15,
+          "z": 2.1
+        }
+      ]
+    },
+    "quadrocopter": {
+      "properties": {
+        "fuel": 0.5,
+        "stabilizer": 0.1,
+        "yawSpeed": 0.15,
+        "pitchSpeed": 1.5,
+        "engineSpeed": 0.0325,
+        "verticalSpeed": 0.0325,
+        "glideFactor": 0.0,
+        "driftDrag": 0.005,
+        "lift": 0.1,
+        "rollFactor": 15.0,
+        "wind": 0.0125,
+        "mass": 1.0,
+        "groundFriction": 0.25,
+        "horizontalDecay": 0.9,
+        "verticalDecay": 0.8
+      },
+      "inventorySlots": [
+        {
+          "type": "boiler",
+          "x": 17,
+          "y": 32
+        },
+        {
+          "type": "weapon",
+          "x": 50,
+          "y": 24
+        },
+        {
+          "type": "upgrade",
+          "x": 72,
+          "y": 24
+        },
+        {
+          "type": "inventory",
+          "x": 98,
+          "y": 18,
+          "cols": 3,
+          "rows": 2
+        }
+      ],
+      "weaponMounts": [
+        {
+          "ROTATING": [
+            {
+              "x": 0,
+              "y": 0.875,
+              "z": -0.5,
+              "blocking": true
+            }
+          ],
+          "FRONT": [
+            {
+              "x": 0,
+              "y": 0.375,
+              "z": 1.0
+            }
+          ],
+          "DROP": [
+            {
+              "x": 0,
+              "y": 0.375,
+              "z": 0
+            }
+          ]
+        }
+      ],
+      "passengerPositions": [
+        [
+          {
+            "x": 0.0,
+            "y": 0.5,
+            "z": -0.1
+          }
+        ]
+      ],
+      "boundingBoxes": []
+    },
+    "warship": {
+      "properties": {
+        "fuel": 0.8,
+        "durability": 3.0,
+        "stabilizer": 0.1,
+        "yawSpeed": 2.5,
+        "engineSpeed": 0.035,
+        "verticalSpeed": 0.025,
+        "glideFactor": 0.0,
+        "driftDrag": 0.01,
+        "lift": 0.1,
+        "rollFactor": 3.0,
+        "wind": 0.01,
+        "mass": 10.0,
+        "groundFriction": 0.5,
+        "horizontalDecay": 0.97,
+        "verticalDecay": 0.925
+      },
+      "inventorySlots": [
+        {
+          "type": "upgrade",
+          "x": 32,
+          "y": 70
+        },
+        {
+          "type": "upgrade",
+          "x": 54,
+          "y": 70
+        },
+        {
+          "type": "upgrade",
+          "x": 76,
+          "y": 70
+        },
+        {
+          "type": "weapon",
+          "x": 102,
+          "y": 70
+        },
+        {
+          "type": "dye",
+          "x": 128,
+          "y": 70
+        },
+        {
+          "type": "upgrade",
+          "x": 32,
+          "y": 92
+        },
+        {
+          "type": "upgrade",
+          "x": 54,
+          "y": 92
+        },
+        {
+          "type": "upgrade",
+          "x": 76,
+          "y": 92
+        },
+        {
+          "type": "weapon",
+          "x": 102,
+          "y": 92
+        },
+        {
+          "type": "booster",
+          "x": 128,
+          "y": 92
+        },
+        {
+          "type": "boiler",
+          "x": 40,
+          "y": 40
+        },
+        {
+          "type": "boiler",
+          "x": 80,
+          "y": 40
+        },
+        {
+          "type": "boiler",
+          "x": 120,
+          "y": 40
+        },
+        {
+          "type": "inventory",
+          "x": -62,
+          "y": 8,
+          "cols": 3,
+          "rows": 11,
+          "boxed": true
+        },
+        {
+          "type": "inventory",
+          "x": 186,
+          "y": 8,
+          "cols": 3,
+          "rows": 11,
+          "boxed": true
+        }
+      ],
+      "weaponMounts": [
+        {
+          "ROTATING": [
+            {
+              "x": -3.875,
+              "y": 4.625,
+              "z": 1.825,
+              "yaw": 90,
+              "pitch": -90
+            },
+            {
+              "x": 3.875,
+              "y": 4.625,
+              "z": 1.825,
+              "yaw": -90,
+              "pitch": -90
+            },
+            {
+              "x": -3.875,
+              "y": 4.625,
+              "z": -1.825,
+              "yaw": 90,
+              "pitch": -90
+            },
+            {
+              "x": 3.875,
+              "y": 4.625,
+              "z": -1.825,
+              "yaw": -90,
+              "pitch": -90
+            }
+          ],
+          "FRONT": [
+            {
+              "x": -3.875,
+              "y": 4.625,
+              "z": 1.825,
+              "roll": 90,
+              "pitch": 0
+            },
+            {
+              "x": 3.875,
+              "y": 4.625,
+              "z": 1.825,
+              "roll": -90,
+              "pitch": 0
+            },
+            {
+              "x": -3.875,
+              "y": 4.625,
+              "z": -1.825,
+              "roll": 90,
+              "pitch": 0
+            },
+            {
+              "x": 3.875,
+              "y": 4.625,
+              "z": -1.825,
+              "roll": -90,
+              "pitch": 0
+            }
+          ],
+          "DROP": [
+            {
+              "x": -3.875,
+              "y": 4.625,
+              "z": 1.825,
+              "yaw": 90,
+              "pitch": 90
+            },
+            {
+              "x": 3.875,
+              "y": 4.625,
+              "z": 1.825,
+              "yaw": -90,
+              "pitch": 90
+            },
+            {
+              "x": -3.875,
+              "y": 4.625,
+              "z": -1.825,
+              "yaw": 90,
+              "pitch": 90
+            },
+            {
+              "x": 3.875,
+              "y": 4.625,
+              "z": -1.825,
+              "yaw": -90,
+              "pitch": 90
+            }
+          ]
+        },
+        {
+          "ROTATING": [
+            {
+              "x": -2.375,
+              "y": 4.625,
+              "z": 4.625,
+              "yaw": 0,
+              "pitch": 90
+            },
+            {
+              "x": 2.375,
+              "y": 4.625,
+              "z": 4.625,
+              "yaw": 0,
+              "pitch": 90
+            }
+          ],
+          "FRONT": [
+            {
+              "x": -2.375,
+              "y": 4.875,
+              "z": 4.375,
+              "yaw": 0,
+              "pitch": 0
+            },
+            {
+              "x": 2.375,
+              "y": 4.875,
+              "z": 4.375,
+              "yaw": 0,
+              "pitch": 0
+            }
+          ],
+          "DROP": [
+            {
+              "x": -2.375,
+              "y": 4.25,
+              "z": 4.25,
+              "yaw": 0,
+              "pitch": 0
+            },
+            {
+              "x": 2.375,
+              "y": 4.25,
+              "z": 4.25,
+              "yaw": 0,
+              "pitch": 0
+            }
+          ]
+        }
+      ],
+      "passengerPositions": [
+        [
+          {
+            "x": 0.0,
+            "y": 0.8125,
+            "z": 0.6
+          }
+        ],
+        [
+          {
+            "x": 0.0,
+            "y": 0.8125,
+            "z": 0.6
+          },
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        ],
+        [
+          {
+            "x": 0.0,
+            "y": 0.8125,
+            "z": 0.6
+          },
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          {
+            "x": 0.0,
+            "y": 0.8125,
+            "z": -0.3
+          }
+        ],
+        [
+          {
+            "x": 0.0,
+            "y": 0.8125,
+            "z": 0.6
+          },
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          {
+            "x": 0.3,
+            "y": 0.8125,
+            "z": -0.25
+          },
+          {
+            "x": -0.3,
+            "y": 0.8125,
+            "z": -0.35
+          }
+        ]
+      ],
+      "boundingBoxes": [],
+      "trails": [
+        {
+          "x": 0.0,
+          "y": 1.4,
+          "z": -2.5,
+          "size": 0.25,
+          "rotate": 40.0,
+          "gray": 0.25,
+          "length": 15
+        },
+        {
+          "x": 2.5,
+          "y": 4.6,
+          "z": -5.5,
+          "size": 0.25,
+          "rotate": 40.0,
+          "gray": 0.25,
+          "length": 14
+        },
+        {
+          "x": 0.0,
+          "y": 4.6,
+          "z": -5.5,
+          "size": 0.25,
+          "rotate": 40.0,
+          "gray": 0.25,
+          "length": 16
+        },
+        {
+          "x": -2.5,
+          "y": 4.6,
+          "z": -5.5,
+          "size": 0.25,
+          "rotate": 40.0,
+          "gray": 0.25,
+          "length": 14
+        }
+      ]
+    }
+  },
+  "upgrades": {
+    "eco_engine": {
+      "engineSpeed": -0.2,
+      "fuel": -0.75
+    },
+    "enhanced_propeller": {
+      "engineSpeed": 0.05,
+      "friction": -0.75
+    },
+    "gyroscope": {
+      "wind": -1.0,
+      "stabilizer": 0.03
+    },
+    "gyroscope_dials": {
+      "wind": -1.0,
+      "stabilizer": 0.03,
+      "dials": -1.0
+    },
+    "gyroscope_hud": {
+      "wind": -1.0,
+      "stabilizer": 0.03,
+      "hud": -1.0
+    },
+    "hull_reinforcement": {
+      "durability": 1.0
+    },
+    "improved_landing_gear": {
+      "acceleration": 0.75
+    },
+    "industrial_gears": {
+      "fuel": -0.2
+    },
+    "nether_engine": {
+      "engineSpeed": 0.3,
+      "fuel": 0.3
+    },
+    "steel_boiler": {
+      "engineSpeed": 0.2,
+      "fuel": 0.5
+    },
+    "sturdy_pipes": {
+      "engineSpeed": 0.08
+    }
+  }
+}

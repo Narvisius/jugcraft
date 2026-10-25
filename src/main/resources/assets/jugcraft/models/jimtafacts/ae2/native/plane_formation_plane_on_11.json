@@ -1,0 +1,42 @@
+{
+  "textures": {
+    "front": "jugcraft:jimtafacts/ae2/part/formation_plane_on",
+    "back": "jugcraft:jimtafacts/ae2/part/transition_plane_back",
+    "sides": "jugcraft:jimtafacts/ae2/part/plane_sides",
+    "particle": "#front"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        1,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#front"
+        },
+        "south": {
+          "texture": "#back"
+        },
+        "east": {
+          "texture": "#sides"
+        },
+        "west": {
+          "texture": "#sides"
+        },
+        "up": {
+          "texture": "#sides"
+        },
+        "down": {
+          "texture": "#sides"
+        }
+      }
+    }
+  ]
+}

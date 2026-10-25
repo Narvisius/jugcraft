@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " G ",
+    "GQG",
+    " G "
+  ],
+  "key": {
+    "G": "minecraft:glowstone_dust",
+    "Q": "jugcraft:jimta_quartz_glass"
+  },
+  "result": {
+    "id": "jugcraft:jimta_quartz_vibrant_glass",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

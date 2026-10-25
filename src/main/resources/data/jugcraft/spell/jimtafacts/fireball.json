@@ -1,0 +1,84 @@
+{
+  "school": "spell_power:fire",
+  "range": 40,
+  "tier": 1,
+  "group": "jimtafacts_spellbooks",
+  "type": "ACTIVE",
+  "active": {
+    "cast": {
+      "duration": 2,
+      "animation": {
+        "id": "jugcraft:long_cast"
+      }
+    }
+  },
+  "release": {
+    "animation": {
+      "id": "jugcraft:long_cast_finish"
+    }
+  },
+  "target": {
+    "type": "AIM",
+    "aim": {
+      "required": false
+    }
+  },
+  "deliver": {
+    "type": "PROJECTILE",
+    "projectile": {
+      "launch_properties": {
+        "velocity": 0.8
+      },
+      "projectile": {
+        "homing_angle": 0,
+        "perks": {
+          "pierce": 0
+        },
+        "client_data": {
+          "light_level": 12,
+          "composite_model": {
+            "models": [
+              {
+                "orientation": "TOWARDS_CAMERA",
+                "fx": {
+                  "model_id": "jugcraft:spell_projectile/jimtafacts/fireball",
+                  "scale": 1,
+                  "light_emission": "RADIATE"
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "CUSTOM",
+        "custom": {
+          "handler": "jugcraft:jimtafacts_combat",
+          "intent": "HARMFUL"
+        }
+      }
+    }
+  ],
+  "cost": {
+    "exhaust": 0,
+    "durability": 0,
+    "cooldown": {
+      "duration": 25,
+      "hosting_item": false
+    }
+  },
+  "area_impact": {
+    "radius": 3,
+    "triggering_action_type": "CUSTOM",
+    "execute_action_type": "CUSTOM",
+    "force_indirect": true,
+    "area": {
+      "distance_dropoff": "NONE",
+      "include_caster": false
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:crafted_jungle_desk",
+          "modifier": [
+            {
+              "block": "jugcraft:crafted_jungle_desk",
+              "properties": [
+                "color"
+              ],
+              "type": "minecraft:copy_state"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

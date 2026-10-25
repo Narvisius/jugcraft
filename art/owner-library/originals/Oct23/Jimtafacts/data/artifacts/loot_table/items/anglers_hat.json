@@ -1,0 +1,30 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "artifacts:config_value",
+                  "value": "items.anglers_hat.generateAsLoot"
+                }
+              ],
+              "name": "artifacts:anglers_hat"
+            },
+            {
+              "type": "minecraft:empty"
+            }
+          ]
+        }
+      ],
+      "name": "main",
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "artifacts:items/anglers_hat"
+}

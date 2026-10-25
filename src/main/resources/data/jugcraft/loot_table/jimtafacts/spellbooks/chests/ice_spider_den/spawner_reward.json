@@ -1,0 +1,48 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:book",
+          "modifier": [
+            {
+              "levels": 15.0,
+              "options": "#minecraft:on_random_loot",
+              "type": "minecraft:enchant_with_levels"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "jugcraft:jimtafacts/spellbooks/magic_items/decent_ink"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:jimta_spellbooks_scroll_firebolt",
+          "modifier": [
+            {
+              "spells": [
+                "ice_block",
+                "summon_polar_bear",
+                "icicle",
+                "ray_of_frost",
+                "frostwave",
+                "blizzard",
+                "cone_of_cold",
+                "snowball",
+                "frost_step",
+                "frostbite",
+                "ice_spikes",
+                "ice_tomb"
+              ],
+              "type": "jugcraft:jimtafacts_spell_scroll"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

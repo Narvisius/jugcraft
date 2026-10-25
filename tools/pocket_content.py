@@ -9,6 +9,19 @@ def ingredient(v):
     if isinstance(v,dict) and set(v)=={'tag'}:return '#'+v['tag']
     return v
 
+# Preserve the shared diamond/emerald tier; one nugget is replaced by a species token.
+PET_TOKENS = {"pocket_pet_cheetah": "minecraft:rabbit_foot", "pocket_pet_meta": "minecraft:ender_pearl",
+              "pocket_pet_ocelot": "minecraft:cod", "pocket_pet_spider": "minecraft:spider_eye",
+              "pocket_pet_squid": "minecraft:ink_sac"}
+
+
+def fallback_recipe(id):
+    return {'type': 'minecraft:crafting_shaped', 'pattern': ['WTW', 'WGW', 'WDW'],
+            'key': {'W': 'minecraft:gold_nugget', 'G': 'minecraft:diamond', 'D': 'minecraft:emerald', 'T': PET_TOKENS[id]},
+            'result': {'id': 'jugcraft:' + id},
+            'fabric:load_conditions': [{'condition': 'jugcraft:feature_enabled', 'feature': 'agriculture'}]}
+
+
 def main():
     catalog={};lang=read(ASSET/'lang/en_us.json');names=read(PETS/'lang/en_us.json')
     omitted={}
@@ -44,8 +57,10 @@ def main():
         ids=re.findall(r'jugcraft:(pocket_[a-z0-9_]+)',json.dumps(j))
         if all(id in catalog for id in ids):write(DATA/f'recipe/pocket_{p.name}',j)
     for id,e in catalog.items():
-        if e['pet'] and not any(read(p).get('result',{}).get('id')=='jugcraft:'+id for p in (DATA/'recipe').glob('pocket_*.json')):
-            write(DATA/f'recipe/{id}.json',{'type':'minecraft:crafting_shaped','pattern':['WWW','WGW','WDW'],'key':{'W':'minecraft:gold_nugget','G':'minecraft:diamond','D':'minecraft:emerald'},'result':{'id':'jugcraft:'+id}})
+        if id in PET_TOKENS:
+            write(DATA/f'recipe/{id}.json', fallback_recipe(id))
+        elif e['pet'] and not any(read(p).get('result',{}).get('id')=='jugcraft:'+id for p in (DATA/'recipe').glob('pocket_*.json')):
+            raise ValueError(f'Pocket pet needs a distinct authored recipe: {id}')
     write(ASSET/'lang/en_us.json',lang);write(RES/'jugcraft/menagerie/pockets.json',catalog)
     write(ROOT/'art/owner-library/catalog/edited-2026-10-18/pocket-adaptation.json',{'registeredItems':len(catalog),'excludedDuplicateOrPresentationEntries':omitted,'runtimeFiles':PROVENANCE})
     print('Adapted',len(catalog),'pocket items; legacy temporary inventories are not separate objects.')

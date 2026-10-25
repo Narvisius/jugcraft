@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DID",
+    "ILI",
+    "DID"
+  ],
+  "key": {
+    "D": "jugcraft:jimta_spellbooks_arcane_essence",
+    "I": "#c:ingots/iron",
+    "L": "minecraft:soul_lantern"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_wayward_compass",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

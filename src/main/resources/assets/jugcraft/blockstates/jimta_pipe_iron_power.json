@@ -1,0 +1,113 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "limit": "0"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_iron_power_limit_0"
+      }
+    },
+    {
+      "when": {
+        "limit": "1"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_iron_power_limit_1"
+      }
+    },
+    {
+      "when": {
+        "limit": "2"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_iron_power_limit_2"
+      }
+    },
+    {
+      "when": {
+        "limit": "3"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_iron_power_limit_3"
+      }
+    },
+    {
+      "when": {
+        "limit": "4"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_iron_power_limit_4"
+      }
+    },
+    {
+      "when": {
+        "limit": "5"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_iron_power_limit_5"
+      }
+    },
+    {
+      "when": {
+        "limit": "6"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_iron_power_limit_6"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_iron_power_arm"
+      },
+      "when": {
+        "north": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_iron_power_arm",
+        "y": 90
+      },
+      "when": {
+        "east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_iron_power_arm",
+        "y": 180
+      },
+      "when": {
+        "south": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_iron_power_arm",
+        "y": 270
+      },
+      "when": {
+        "west": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_iron_power_arm",
+        "x": 270
+      },
+      "when": {
+        "up": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_iron_power_arm",
+        "x": 90
+      },
+      "when": {
+        "down": "true"
+      }
+    }
+  ]
+}

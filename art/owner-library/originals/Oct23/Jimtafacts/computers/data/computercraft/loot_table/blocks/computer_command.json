@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:any_of",
+        "terms": [
+          {"type": "computercraft:block_named"},
+          {"type": "computercraft:has_id"},
+          {"type": "minecraft:inverted", "term": {"type": "computercraft:player_creative"}}
+        ]
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {"type": "minecraft:copy_components", "source": "block_entity"},
+          "name": "computercraft:computer_command"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "computercraft:blocks/computer_command"
+}

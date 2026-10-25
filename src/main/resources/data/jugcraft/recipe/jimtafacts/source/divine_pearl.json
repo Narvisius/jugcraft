@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "#c:ingots/gold",
+    "#c:gems/amethyst"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_divine_pearl"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

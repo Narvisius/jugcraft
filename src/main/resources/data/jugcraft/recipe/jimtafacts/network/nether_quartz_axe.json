@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CC",
+    "CS",
+    " S"
+  ],
+  "key": {
+    "C": "minecraft:quartz",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "jugcraft:jimta_nether_quartz_axe"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

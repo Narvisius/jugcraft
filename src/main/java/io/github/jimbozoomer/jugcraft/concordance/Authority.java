@@ -103,6 +103,19 @@ public final class Authority {
 	}
 
 	/** A stand-in may answer protection questions but must not acquire personal progression or payment state. */
+	public static ServerPlayer remoteModemActor(ServerLevel target, ServerPlayer sender) {
+		if (target.getServer() != sender.level().getServer()) throw new IllegalArgumentException("Modem cannot cross servers");
+		if (sender.level() == target) return sender;
+		// Used only to authorize delivery to loaded computers, never to execute a program or issue commands.
+		return FakePlayer.get(target, new GameProfile(sender.getUUID(), "[Workshop modem]"));
+	}
+
+	/** Unowned TNT can query protection as an unprivileged identity; it gains no claim or town exemption. */
+	public static ServerPlayer unownedTinyTntActor(ServerLevel level) {
+		return FakePlayer.get(level, new GameProfile(new UUID(0, 46123), "[Tiny TNT]"));
+	}
+
+	/** A stand-in may answer protection questions but must not acquire personal progression or payment state. */
 	public static boolean isStandIn(Player actor) {
 		return actor instanceof FakePlayer;
 	}
@@ -118,6 +131,14 @@ public final class Authority {
 		}
 		BlockState state = level.getBlockState(pos);
 		return PlayerBlockBreakEvents.BEFORE.invoker().beforeBlockBreak(level, player, pos, state, level.getBlockEntity(pos));
+	}
+
+	/** Shared item/block hooks may run on both sides. Client approval only predicts the interaction;
+	 * the server always performs the complete claim/event checks above before changing anything. */
+	public static boolean mayChange(net.minecraft.world.level.Level level, @Nullable Player player, BlockPos pos) {
+		if (level instanceof ServerLevel server) return mayChange(server, player, pos);
+		return player != null && player.isAlive() && !player.isSpectator() && level.isInWorldBounds(pos)
+				&& level.getWorldBorder().isWithinBounds(pos);
 	}
 
 	/** Whether a device of {@code owner} may change the block at {@code pos} now, as whoever answers for them. */

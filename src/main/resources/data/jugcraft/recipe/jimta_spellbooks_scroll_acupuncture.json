@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:paper",
+    "jugcraft:jimta_spellbooks_common_ink",
+    "jugcraft:jimta_spellbooks_blood_rune",
+    "minecraft:pointed_dripstone"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_scroll_acupuncture",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

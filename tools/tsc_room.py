@@ -895,7 +895,7 @@ CRAFTING = {
                                      "X": "jugcraft:geiger_counter", "R": "minecraft:redstone"}, 1),
     FR_KEY: (["X", "S"], {"X": "jugcraft:geiger_counter", "S": "minecraft:smooth_stone_slab"}, 1),
     "tsc_procedure_shelf": (["PBP", "PBP", "PBP"], {"P": "#c:plates/iron", "B": "minecraft:book"}, 2),
-    "tsc_plan_file": (["PPP", "PDP", "PPP"], {"P": "#c:plates/iron", "D": "minecraft:paper"}, 1),
+    "tsc_plan_file": (["PPP", "PDP", "PHP"], {"P": "#c:plates/iron", "D": "minecraft:paper", "H": "minecraft:iron_nugget"}, 1),
     "tsc_card_reader": (["P", "C"], {"P": "#c:plates/iron", "C": "jugcraft:basic_circuit"}, 2),
 }
 

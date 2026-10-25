@@ -450,7 +450,7 @@ def write_all(write, assets, data, lang, condition, self_drop):
         "mortar": {"type": "minecraft:crafting_shapeless", "category": "equipment",
                    "ingredients": ["minecraft:bowl", "minecraft:flint", "minecraft:stone"],
                    "result": {"id": rid("mortar"), "count": 1}},
-        "stirring_rod": {"type": "minecraft:crafting_shaped", "category": "equipment", "pattern": ["  C", " S ", "S  "],
+        "stirring_rod": {"type": "minecraft:crafting_shaped", "category": "equipment", "pattern": [" C", "SS"],
                          "key": {"C": "minecraft:copper_ingot", "S": "minecraft:stick"},
                          "result": {"id": rid("stirring_rod"), "count": 1}},
         "sampling_spoon": {"type": "minecraft:crafting_shaped", "category": "equipment", "pattern": ["C", "S"],

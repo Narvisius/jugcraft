@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FFF",
+    "FEF",
+    "FFF"
+  ],
+  "key": {
+    "E": "minecraft:echo_shard",
+    "F": "jugcraft:jimta_spellbooks_ancient_knowledge_fragment"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_eldritch_manuscript",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

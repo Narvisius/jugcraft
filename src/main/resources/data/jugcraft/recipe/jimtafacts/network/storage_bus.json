@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:jimta_interface",
+    "minecraft:sticky_piston",
+    "jugcraft:jimta_fluix_glass_cable"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_storage_bus",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

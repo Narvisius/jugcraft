@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": "jugcraft:jimta_fluix_upgrade_smithing_template",
+  "base": "jugcraft:jimta_nether_quartz_hoe",
+  "addition": "jugcraft:jimta_fluix_crystal",
+  "result": {
+    "id": "jugcraft:jimta_fluix_hoe"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

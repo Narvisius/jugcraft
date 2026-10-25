@@ -1,0 +1,16 @@
+{
+  "name": "jugcraft:jimtafacts/spellbooks/pyromancer_cellar_fallback_pool_thin",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/pyromancer_tower/cellar_dungeon/wall_thin",
+        "processors": "jugcraft:jimtafacts/spellbooks/pyromancer_tower_randomization",
+        "projection": "rigid",
+        "element_type": "jugcraft:jimtafacts_individual_terrain",
+        "terrain_adjustment": "bury"
+      }
+    }
+  ]
+}

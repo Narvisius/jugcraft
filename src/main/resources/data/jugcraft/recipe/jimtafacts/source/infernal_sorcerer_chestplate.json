@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "P P",
+    "WAW",
+    " D "
+  ],
+  "key": {
+    "A": "jugcraft:jimta_spellbooks_pyromancer_chestplate",
+    "D": "jugcraft:jimta_spellbooks_divine_soulshard",
+    "W": "jugcraft:jimta_spellbooks_mithril_weave",
+    "P": "#c:ingots/pyrium"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_infernal_sorcerer_chestplate",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

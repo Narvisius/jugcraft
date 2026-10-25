@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "artifacts:item/pocket_piston"
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "artifacts:item/pocket_piston_broken"
+    },
+    "property": "artifacts:needs_repair"
+  }
+}

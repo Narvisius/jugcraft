@@ -1,0 +1,20 @@
+{
+  "structures": [
+    {
+      "structure": "jugcraft:jimtafacts/spellbooks/mangrove_hut",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "salt": 169476080,
+    "spacing": 25,
+    "separation": 18,
+    "type": "minecraft:random_spread"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

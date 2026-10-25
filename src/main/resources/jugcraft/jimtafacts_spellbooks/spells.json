@@ -1,0 +1,680 @@
+{
+  "spectral_hammer": {
+    "school": "evocation",
+    "focus": 3,
+    "cooldown": 40,
+    "description": "Swing a spectral hammer through an eighteen-block section of natural terrain. Original hammer animation; normal drops and claims respected."
+  },
+  "ice_block": {
+    "school": "ice",
+    "focus": 8,
+    "cooldown": 300,
+    "description": "Form a tracking ice block overhead, then drop it for seven contact damage and up to fourteen impact damage with freezing."
+  },
+  "sculk_tentacles": {
+    "school": "eldritch",
+    "focus": 30,
+    "cooldown": 600,
+    "description": "Raise six animated sculk tentacles for fifteen seconds. Their eight-damage strikes blind nearby enemies."
+  },
+  "heal": {
+    "school": "holy",
+    "focus": 6,
+    "cooldown": 600,
+    "description": "Restore five health to yourself."
+  },
+  "greater_heal": {
+    "school": "holy",
+    "focus": 30,
+    "cooldown": 2400,
+    "description": "Restore all of your missing health."
+  },
+  "cleanse": {
+    "school": "holy",
+    "focus": 10,
+    "cooldown": 600,
+    "description": "Remove harmful effects from yourself, party members and your pets within three blocks."
+  },
+  "fortify": {
+    "school": "holy",
+    "focus": 12,
+    "cooldown": 1200,
+    "description": "Give yourself and nearby allies four temporary absorption hearts for two minutes."
+  },
+  "haste": {
+    "school": "holy",
+    "focus": 8,
+    "cooldown": 600,
+    "description": "Increase spell casting speed by ten percent for thirty seconds. Aim at an ally to help them."
+  },
+  "slow": {
+    "school": "evocation",
+    "focus": 8,
+    "cooldown": 400,
+    "description": "Reduce the target’s spell casting speed by ten percent for twenty seconds."
+  },
+  "teleport": {
+    "school": "ender",
+    "focus": 6,
+    "cooldown": 200,
+    "description": "Blink up to sixteen blocks along your view to a clear, permitted position."
+  },
+  "summon_ender_chest": {
+    "school": "ender",
+    "focus": 5,
+    "cooldown": 100,
+    "description": "Open your own ender chest wherever you are."
+  },
+  "touch_dig": {
+    "school": "nature",
+    "focus": 3,
+    "cooldown": 20,
+    "description": "Break one mineable block within eight blocks, with normal drops and claim protection."
+  },
+  "wololo": {
+    "school": "evocation",
+    "focus": 2,
+    "cooldown": 60,
+    "description": "Change a permitted sheep to a different wool colour."
+  },
+  "angel_wings": {
+    "school": "holy",
+    "focus": 20,
+    "cooldown": 2400,
+    "description": "Fly for thirty seconds using Jugcraft’s shared temporary flight system."
+  },
+  "charge": {
+    "school": "lightning",
+    "focus": 10,
+    "cooldown": 900,
+    "description": "Gain five percent movement, melee and lightning power for thirty seconds."
+  },
+  "oakskin": {
+    "school": "nature",
+    "focus": 8,
+    "cooldown": 900,
+    "description": "Reduce incoming damage by twenty percent for thirty seconds; move twenty-five percent slower."
+  },
+  "blight": {
+    "school": "nature",
+    "focus": 8,
+    "cooldown": 400,
+    "description": "Reduce the target’s damage by ten percent and healing by twenty percent for twenty seconds."
+  },
+  "gluttony": {
+    "school": "nature",
+    "focus": 8,
+    "cooldown": 1200,
+    "description": "Eating restores shared Focus for one minute. Reusable food is excluded."
+  },
+  "root": {
+    "school": "nature",
+    "focus": 9,
+    "cooldown": 700,
+    "description": "Trap a permitted target in breakable forty-health roots for five seconds. Destroying the roots releases the target."
+  },
+  "wisp": {
+    "school": "holy",
+    "focus": 3,
+    "cooldown": 60,
+    "description": "Send an animated pursuing wisp toward a permitted target for five damage. Blocks and attacks can stop it."
+  },
+  "blessing_of_life": {
+    "school": "holy",
+    "focus": 2,
+    "cooldown": 300,
+    "description": "Restore six health to the ally or owned pet you are aiming at, up to sixty-four blocks away."
+  },
+  "counterspell": {
+    "school": "ender",
+    "focus": 10,
+    "cooldown": 200,
+    "description": "Interrupt a permitted target’s active spell, dispel spellbook statuses, or destroy a Wisp or Root."
+  },
+  "spider_aspect": {
+    "school": "nature",
+    "focus": 7,
+    "cooldown": 1800,
+    "description": "Deal five percent additional damage to poisoned, withered or blighted targets for twenty seconds."
+  },
+  "summon_vex": {
+    "school": "evocation",
+    "focus": 12,
+    "cooldown": 3000,
+    "description": "Summon three protective vexes for ten minutes. Shared summon limit: eight. Sneak-use the book to dismiss."
+  },
+  "summon_polar_bear": {
+    "school": "ice",
+    "focus": 10,
+    "cooldown": 3000,
+    "description": "Summon a twenty-four-health polar bear defender for ten minutes. Sneak-use the book to dismiss."
+  },
+  "summon_horse": {
+    "school": "evocation",
+    "focus": 8,
+    "cooldown": 1200,
+    "description": "Summon a saddled spectral steed for ten minutes. Only its summoner can ride it; sneak-use the book to dismiss."
+  },
+  "summon_swords": {
+    "school": "ender",
+    "focus": 16,
+    "cooldown": 3000,
+    "description": "Summon a sword, a quick rapier and a durable claymore for ten minutes. Each uses its supplied animated model and distinct combat stats. Sneak-use the book to dismiss."
+  },
+  "raise_dead": {
+    "school": "blood",
+    "focus": 10,
+    "cooldown": 3000,
+    "description": "Raise three protective zombies or skeletons for ten minutes. They drop no equipment. Sneak-use the book to dismiss."
+  },
+  "firebolt": {
+    "school": "fire",
+    "focus": 2,
+    "cooldown": 20,
+    "description": "Launch a firebolt for 6 damage; ignites targets. Respects claims, parties and PvP; never destroys terrain."
+  },
+  "magic_missile": {
+    "school": "ender",
+    "focus": 2,
+    "cooldown": 20,
+    "description": "Launch a magic missile for 6 damage. Respects claims, parties and PvP; never destroys terrain."
+  },
+  "icicle": {
+    "school": "ice",
+    "focus": 2,
+    "cooldown": 20,
+    "description": "Launch a icicle for 6 damage; freezes targets. Respects claims, parties and PvP; never destroys terrain."
+  },
+  "fireball": {
+    "school": "fire",
+    "focus": 12,
+    "cooldown": 500,
+    "description": "Launch a fireball for 10 damage; ignites targets in a 3-block radius. Respects claims, parties and PvP; never destroys terrain."
+  },
+  "magic_arrow": {
+    "school": "ender",
+    "focus": 8,
+    "cooldown": 160,
+    "description": "Launch a magic arrow for 10 damage. Respects claims, parties and PvP; never destroys terrain."
+  },
+  "fire_arrow": {
+    "school": "fire",
+    "focus": 8,
+    "cooldown": 160,
+    "description": "Launch a fire arrow for 11 damage; ignites targets in a 3-block radius. Respects claims, parties and PvP; never destroys terrain."
+  },
+  "poison_arrow": {
+    "school": "nature",
+    "focus": 8,
+    "cooldown": 300,
+    "description": "Launch a poison arrow for 5 damage; poisons targets. Respects claims, parties and PvP; never destroys terrain."
+  },
+  "lightning_lance": {
+    "school": "lightning",
+    "focus": 10,
+    "cooldown": 160,
+    "description": "Launch a lightning lance for 14 damage. Respects claims, parties and PvP; never destroys terrain."
+  },
+  "wither_skull": {
+    "school": "blood",
+    "focus": 4,
+    "cooldown": 20,
+    "description": "Launch a wither skull for 6 damage; withers targets. Respects claims, parties and PvP; never destroys terrain."
+  },
+  "guiding_bolt": {
+    "school": "holy",
+    "focus": 4,
+    "cooldown": 160,
+    "description": "Launch a guiding bolt for 3 damage; marks targets for your next critical strike. Respects claims, parties and PvP; never destroys terrain."
+  },
+  "acid_orb": {
+    "school": "nature",
+    "focus": 8,
+    "cooldown": 300,
+    "description": "Launch a acid orb; weakens armor in a 3-block radius. Respects claims, parties and PvP; never destroys terrain."
+  },
+  "ray_of_frost": {
+    "school": "ice",
+    "focus": 5,
+    "cooldown": 300,
+    "description": "Project a ray of frost for 12 damage; freezes targets. Respects claims, parties and PvP; never destroys terrain."
+  },
+  "sonic_boom": {
+    "school": "eldritch",
+    "focus": 22,
+    "cooldown": 500,
+    "description": "Project a sonic boom for 20 damage; pushes targets away. Respects claims, parties and PvP; never destroys terrain."
+  },
+  "shockwave": {
+    "school": "lightning",
+    "focus": 14,
+    "cooldown": 600,
+    "description": "Release a shockwave for 10 damage; pushes targets away in a 9-block radius. Respects claims, parties and PvP; never destroys terrain."
+  },
+  "frostwave": {
+    "school": "ice",
+    "focus": 10,
+    "cooldown": 900,
+    "description": "Release a frostwave; slows and chills targets in a 6.75-block radius. Respects claims, parties and PvP; never destroys terrain."
+  },
+  "heat_surge": {
+    "school": "fire",
+    "focus": 10,
+    "cooldown": 900,
+    "description": "Release a heat surge; weakens armor and ignites targets in a 6.5-block radius. Respects claims, parties and PvP; never destroys terrain."
+  },
+  "blood_needles": {
+    "school": "blood",
+    "focus": 5,
+    "cooldown": 200,
+    "description": "Release a blood needles for 2 damage; five converging needles restore a quarter of the health actually removed. Respects claims, parties and PvP; never destroys terrain."
+  },
+  "acupuncture": {
+    "school": "blood",
+    "focus": 5,
+    "cooldown": 300,
+    "description": "Surround the aimed enemy with five inward-flying needles for two damage each. Walls can intercept them. Respects claims, parties and PvP."
+  },
+  "blood_slash": {
+    "school": "blood",
+    "focus": 5,
+    "cooldown": 200,
+    "description": "Release a blood slash for 10 damage; a widening slash restores fifteen percent of the health actually removed. Respects claims, parties and PvP; never destroys terrain."
+  },
+  "healing_circle": {
+    "school": "holy",
+    "focus": 8,
+    "cooldown": 500,
+    "description": "Place a five-block healing circle for ten seconds; heals nearby allies every two seconds."
+  },
+  "blizzard": {
+    "school": "ice",
+    "focus": 8,
+    "cooldown": 440,
+    "description": "Send a slowly moving blizzard that freezes and swirls enemies for eleven seconds."
+  },
+  "earthquake": {
+    "school": "nature",
+    "focus": 10,
+    "cooldown": 320,
+    "description": "Shake a chosen eight-block area for twelve seconds, damaging and slowing grounded enemies without breaking terrain."
+  },
+  "thunderstorm": {
+    "school": "lightning",
+    "focus": 14,
+    "cooldown": 2400,
+    "description": "Carry a twenty-second storm that strikes visible enemies within twenty blocks every two seconds; no world-damaging lightning."
+  },
+  "scorch": {
+    "school": "fire",
+    "focus": 10,
+    "cooldown": 240,
+    "description": "Scorch a chosen circle for eight damage, leaving a damaging burning field for ten seconds; never places fire blocks."
+  },
+  "poison_splash": {
+    "school": "nature",
+    "focus": 8,
+    "cooldown": 400,
+    "description": "Erupt poison at the aimed location for eight damage, then leave a seven-second poison cloud."
+  },
+  "blaze_storm": {
+    "school": "fire",
+    "focus": 1,
+    "cooldown": 300,
+    "description": "Hold the casting control to launch a stream of original animated fireballs for up to 2.75 seconds. Costs 1 Focus per 0.25-second pulse; release to stop. A loose scroll produces one pulse."
+  },
+  "starfall": {
+    "school": "ender",
+    "focus": 1,
+    "cooldown": 700,
+    "description": "Hold the casting control to rain pairs of original animated comets over the first aimed location for up to 8 seconds. Costs 1 Focus per 0.2-second pulse; release to stop. A loose scroll produces one pulse."
+  },
+  "fire_breath": {
+    "school": "fire",
+    "focus": 1,
+    "cooldown": 400,
+    "description": "Hold the casting control to sweep a short cone in front of you for up to 5 seconds. Costs 1 Focus per 0.5-second pulse; release to stop. A loose scroll produces one pulse."
+  },
+  "dragon_breath": {
+    "school": "ender",
+    "focus": 1,
+    "cooldown": 400,
+    "description": "Hold the casting control to sweep a short cone in front of you for up to 5 seconds. Costs 1 Focus per 0.5-second pulse; release to stop. A loose scroll produces one pulse."
+  },
+  "poison_breath": {
+    "school": "nature",
+    "focus": 1,
+    "cooldown": 400,
+    "description": "Hold the casting control to sweep a short cone in front of you for up to 5 seconds. Costs 1 Focus per 0.5-second pulse; release to stop. A loose scroll produces one pulse."
+  },
+  "cone_of_cold": {
+    "school": "ice",
+    "focus": 1,
+    "cooldown": 400,
+    "description": "Hold the casting control to sweep a short cone in front of you for up to 5 seconds. Costs 1 Focus per 0.5-second pulse; release to stop. A loose scroll produces one pulse."
+  },
+  "electrocute": {
+    "school": "lightning",
+    "focus": 1,
+    "cooldown": 400,
+    "description": "Hold the casting control to sweep a short cone in front of you for up to 5 seconds. Costs 1 Focus per 0.5-second pulse; release to stop. A loose scroll produces one pulse."
+  },
+  "ray_of_siphoning": {
+    "school": "blood",
+    "focus": 2,
+    "cooldown": 500,
+    "description": "Hold the casting control to drain health from the aimed enemy for up to 5 seconds. Costs 2 Focus per 0.5-second pulse; release to stop. A loose scroll produces one pulse."
+  },
+  "cloud_of_regeneration": {
+    "school": "holy",
+    "focus": 2,
+    "cooldown": 700,
+    "description": "Hold the casting control to heal nearby allies for up to 10 seconds. Costs 2 Focus per 0.5-second pulse; release to stop. A loose scroll produces one pulse."
+  },
+  "divine_smite": {
+    "school": "holy",
+    "focus": 6,
+    "cooldown": 200,
+    "description": "Smite a small area just ahead with eight damage plus the melee damage of your offhand weapon."
+  },
+  "flaming_strike": {
+    "school": "fire",
+    "focus": 6,
+    "cooldown": 200,
+    "description": "Sweep enemies in a short forward arc for five damage plus your offhand weapon damage, igniting them."
+  },
+  "shadow_slash": {
+    "school": "ender",
+    "focus": 6,
+    "cooldown": 300,
+    "description": "Slash the nearest enemy ahead and nearby foes, parry incoming projectiles, then surge toward the strike."
+  },
+  "burning_dash": {
+    "school": "fire",
+    "focus": 8,
+    "cooldown": 300,
+    "description": "Dash forward, striking each contacted enemy once and leaving them burning. Terrain and claims constrain the dash."
+  },
+  "volt_strike": {
+    "school": "lightning",
+    "focus": 6,
+    "cooldown": 200,
+    "description": "Surge forward in lightning, striking contacted enemies once for six damage."
+  },
+  "ascension": {
+    "school": "lightning",
+    "focus": 10,
+    "cooldown": 300,
+    "description": "Launch upward in a lightning blast. Damage decreases away from you; brief fall protection follows."
+  },
+  "chain_lightning": {
+    "school": "lightning",
+    "focus": 5,
+    "cooldown": 400,
+    "description": "Strike an aimed enemy for six damage, then arc to up to three more enemies within four blocks of each link."
+  },
+  "lightning_bolt": {
+    "school": "lightning",
+    "focus": 15,
+    "cooldown": 500,
+    "description": "Call lightning at an aimed location. Ten damage at the centre falls away across four blocks; never starts fires."
+  },
+  "fang_strike": {
+    "school": "evocation",
+    "focus": 5,
+    "cooldown": 200,
+    "description": "Send eight evoker fangs forward in a travelling line. Fangs respect claims, allies and PvP."
+  },
+  "fang_ward": {
+    "school": "evocation",
+    "focus": 7,
+    "cooldown": 300,
+    "description": "Raise two expanding rings of evoker fangs around yourself."
+  },
+  "stomp": {
+    "school": "nature",
+    "focus": 10,
+    "cooldown": 300,
+    "description": "Send a five-block ground shock forward, striking grounded enemies and throwing up harmless terrain particles."
+  },
+  "soulfire_ray": {
+    "school": "fire",
+    "focus": 10,
+    "cooldown": 240,
+    "description": "Strike the first target along a thirty-block soulfire ray for twelve damage."
+  },
+  "eldritch_blast": {
+    "school": "eldritch",
+    "focus": 18,
+    "cooldown": 300,
+    "description": "Cast three fifteen-damage beams within four seconds. Pay once; subsequent beams have no extra Focus cost."
+  },
+  "flaming_barrage": {
+    "school": "fire",
+    "focus": 16,
+    "cooldown": 300,
+    "description": "Launch five cursor-steered fireballs within six seconds, for three damage each. Pay once for the volley."
+  },
+  "gust": {
+    "school": "evocation",
+    "focus": 6,
+    "cooldown": 300,
+    "description": "Push enemies in a forward eight-block gust; targets hurled into walls take collision damage. Casting against a nearby wall gives a small kickback."
+  },
+  "throw": {
+    "school": "evocation",
+    "focus": 2,
+    "cooldown": 100,
+    "description": "Throw a spectral copy of your offhand item for one damage plus its weapon damage. The original stays in your hand."
+  },
+  "sacrifice": {
+    "school": "blood",
+    "focus": 5,
+    "cooldown": 600,
+    "description": "Consume an owned summoned defender to explode for twelve plus half its remaining health. No terrain damage or equipment drops."
+  },
+  "snowball": {
+    "school": "ice",
+    "focus": 8,
+    "cooldown": 360,
+    "description": "Lob a snowball that chills nearby foes and leaves a four-block frost field for ten seconds."
+  },
+  "magma_bomb": {
+    "school": "fire",
+    "focus": 6,
+    "cooldown": 300,
+    "description": "Lob an eight-damage magma bomb that leaves a four-block burning field for ten seconds."
+  },
+  "lob_creeper": {
+    "school": "evocation",
+    "focus": 4,
+    "cooldown": 160,
+    "description": "Throw an explosive creeper head for up to six damage. Explosions respect claims and never damage terrain."
+  },
+  "chain_creeper": {
+    "school": "evocation",
+    "focus": 8,
+    "cooldown": 500,
+    "description": "Scatter three creeper heads at the aimed location. A killing blast can create another ring, capped at two additional generations."
+  },
+  "firecracker": {
+    "school": "evocation",
+    "focus": 4,
+    "cooldown": 160,
+    "description": "Burst a firework at your aimed location for four damage to nearby foes."
+  },
+  "arrow_volley": {
+    "school": "evocation",
+    "focus": 8,
+    "cooldown": 400,
+    "description": "Rain five rows of five spectral arrows over the aimed location. Each arrow deals two damage and cannot be collected."
+  },
+  "raise_hell": {
+    "school": "fire",
+    "focus": 18,
+    "cooldown": 600,
+    "description": "Cast three expanding ground eruptions within four seconds. Each reaches eight blocks and adds your offhand weapon damage. Pay once."
+  },
+  "thunder_step": {
+    "school": "lightning",
+    "focus": 15,
+    "cooldown": 600,
+    "description": "Launch a moving thunder orb, then cast again within five seconds to teleport to it and strike foes along your path. Maximum travel: thirty-two blocks."
+  },
+  "blood_step": {
+    "school": "blood",
+    "focus": 10,
+    "cooldown": 240,
+    "description": "Blink up to eight blocks, or behind an aimed enemy, and gain five seconds of true invisibility."
+  },
+  "frost_step": {
+    "school": "ice",
+    "focus": 6,
+    "cooldown": 240,
+    "description": "Blink eight blocks, leaving a frozen copy that distracts enemies and shatters into eight ice shards."
+  },
+  "frostbite": {
+    "school": "ice",
+    "focus": 16,
+    "cooldown": 1200,
+    "description": "For thirty seconds, killing a fully frozen foe leaves a frozen copy that taunts enemies and shatters into damaging ice."
+  },
+  "echoing_strikes": {
+    "school": "ender",
+    "focus": 10,
+    "cooldown": 1200,
+    "description": "Your next three melee or arrow hits within two minutes summon a sword or arrow echo for seventy-five percent of that hit’s damage."
+  },
+  "devour": {
+    "school": "blood",
+    "focus": 6,
+    "cooldown": 400,
+    "description": "A spectral jaw bites the aimed enemy for six damage and returns fifteen percent as health. Kills grant two maximum health for one minute, stacking to twenty."
+  },
+  "ice_spikes": {
+    "school": "ice",
+    "focus": 6,
+    "cooldown": 300,
+    "description": "Raise eight growing ice spikes along the ground. Small spikes deal six damage; the final spike deals twelve. They launch and freeze enemies."
+  },
+  "abyssal_shroud": {
+    "school": "eldritch",
+    "focus": 30,
+    "cooldown": 4000,
+    "description": "For six seconds, dodge incoming attacks into nearby clear, permitted ground. Fall and bypass damage still apply."
+  },
+  "arcane_shackle": {
+    "school": "ender",
+    "focus": 4,
+    "cooldown": 900,
+    "description": "Launch an ender chain that tethers a permitted enemy to a breakable fifteen-health anchor for eleven seconds."
+  },
+  "heartstop": {
+    "school": "blood",
+    "focus": 10,
+    "cooldown": 2400,
+    "description": "Defer post-armour damage for ten seconds, then repay the entire accumulated debt. Cleansing or logout cannot erase the debt."
+  },
+  "planar_sight": {
+    "school": "eldritch",
+    "focus": 15,
+    "cooldown": 4000,
+    "description": "See nearby living creatures through terrain for forty seconds. Only your view changes."
+  },
+  "pocket_dimension": {
+    "school": "eldritch",
+    "focus": 30,
+    "cooldown": 1200,
+    "description": "Leave combat and enter your own persistent room. Touch its portal frame to return. The original room is built only on first entry."
+  },
+  "telekinesis": {
+    "school": "eldritch",
+    "focus": 1,
+    "cooldown": 700,
+    "description": "Hold a permitted enemy along your gaze for up to seven seconds. Each tenth-second pulse costs one Focus; releasing stops the force."
+  },
+  "evasion": {
+    "school": "ender",
+    "focus": 4,
+    "cooldown": 3600,
+    "description": "Dodge the next incoming attack to safe ground. Lasts one minute; fall and bypass damage are excluded."
+  },
+  "portal": {
+    "school": "ender",
+    "focus": 20,
+    "cooldown": 3600,
+    "description": "Cast twice within two minutes to link two locations for five minutes, or two crafted Portal Frames permanently. Both endpoints must be loaded and permitted. Dye frames to recolour; sneak-use an empty hand to unlink."
+  },
+  "recall": {
+    "school": "ender",
+    "focus": 10,
+    "cooldown": 6000,
+    "description": "Outside combat, return to your bed or respawn anchor, or world spawn when no valid respawn point remains."
+  },
+  "invisibility": {
+    "school": "evocation",
+    "focus": 4,
+    "cooldown": 900,
+    "description": "Hide yourself and your equipment for ten seconds. Nearby enemies lose their target; attacking breaks the concealment."
+  },
+  "scapegoat": {
+    "school": "evocation",
+    "focus": 3,
+    "cooldown": 900,
+    "description": "Send an animated twenty-health decoy running toward your aim for fifteen seconds. Nearby permitted enemies chasing you follow it."
+  },
+  "shield": {
+    "school": "evocation",
+    "focus": 4,
+    "cooldown": 160,
+    "description": "Place a fifteen-health magical shield in front of you for twenty seconds. Its original animated surface intercepts projectiles and attacks crossing the shield."
+  },
+  "black_hole": {
+    "school": "ender",
+    "focus": 60,
+    "cooldown": 2400,
+    "description": "Create a six-block gravity well for thirty seconds. It draws permitted foes inward and deals two damage near the core every half-second. Terrain stays intact."
+  },
+  "gravity_fissure": {
+    "school": "ender",
+    "focus": 30,
+    "cooldown": 900,
+    "description": "Send a moving gravity well forward for three seconds, drawing permitted foes with it without direct damage."
+  },
+  "ball_lightning": {
+    "school": "lightning",
+    "focus": 4,
+    "cooldown": 20,
+    "description": "Launch a five-damage lightning orb that can hit again after half a second. It bounces off six surfaces or expires after five seconds."
+  },
+  "firefly_swarm": {
+    "school": "nature",
+    "focus": 8,
+    "cooldown": 400,
+    "description": "Send a pursuing swarm after your target for ten seconds. Its two-block cloud deals two damage every three-quarters of a second."
+  },
+  "fang_swirl": {
+    "school": "evocation",
+    "focus": 11,
+    "cooldown": 560,
+    "description": "Send fangs toward your aimed point, then sweep an eight-second, five-block ring of four-damage fangs around it."
+  },
+  "sunbeam": {
+    "school": "holy",
+    "focus": 8,
+    "cooldown": 400,
+    "description": "Mark a two-block area with a narrowing column of sunlight. After three-quarters of a second it strikes for twelve damage."
+  },
+  "wall_of_fire": {
+    "school": "fire",
+    "focus": 6,
+    "cooldown": 600,
+    "description": "Choose up to four ground anchors within two seconds to draw a thirteen-block fire wall. It lasts twelve seconds, burns foes and never ignites terrain."
+  },
+  "ice_tomb": {
+    "school": "ice",
+    "focus": 6,
+    "cooldown": 600,
+    "description": "Enclose yourself in breakable ice for five seconds, healing one health each second. Sneak to leave early; attacks break the shell."
+  }
+}

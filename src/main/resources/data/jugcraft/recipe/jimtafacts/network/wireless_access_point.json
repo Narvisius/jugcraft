@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " W ",
+    "ICI"
+  ],
+  "key": {
+    "W": "jugcraft:jimta_wireless_receiver",
+    "I": "minecraft:iron_ingot",
+    "C": "jugcraft:jimta_calculation_processor"
+  },
+  "result": {
+    "id": "jugcraft:jimta_wireless_access_point",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

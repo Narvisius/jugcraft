@@ -1,0 +1,123 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "jugcraft:crafted/block/base/statue_trophy_block",
+  "render_type": "cutout",
+  "texture_size": [
+    128,
+    128
+  ],
+  "textures": {
+    "0": "jugcraft:crafted/block/trophy/evoker_trophy",
+    "particle": "minecraft:block/stone"
+  },
+  "elements": [],
+  "groups": [
+    {
+      "name": "bone",
+      "origin": [
+        -8,
+        0,
+        -8
+      ],
+      "color": 0,
+      "children": [
+        {
+          "name": "body",
+          "origin": [
+            23.04536,
+            23.78564,
+            12.5
+          ],
+          "color": 0,
+          "children": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "name": "feet",
+          "origin": [
+            0,
+            0,
+            4
+          ],
+          "color": 0,
+          "children": [
+            3,
+            4
+          ]
+        },
+        {
+          "name": "head",
+          "origin": [
+            0,
+            0,
+            4
+          ],
+          "color": 0,
+          "children": [
+            5,
+            6
+          ]
+        },
+        {
+          "name": "monsterthing",
+          "origin": [
+            -5.0349,
+            11.71644,
+            5
+          ],
+          "color": 0,
+          "children": [
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        {
+          "name": "base",
+          "origin": [
+            8.5,
+            2,
+            0.5
+          ],
+          "color": 0,
+          "children": [
+            12,
+            13
+          ]
+        },
+        {
+          "name": "alley",
+          "origin": [
+            21,
+            23,
+            12
+          ],
+          "color": 0,
+          "children": [
+            14,
+            15,
+            16,
+            17
+          ]
+        },
+        {
+          "name": "totem",
+          "origin": [
+            -4,
+            23,
+            11.5
+          ],
+          "color": 0,
+          "children": [
+            18
+          ]
+        }
+      ]
+    }
+  ]
+}

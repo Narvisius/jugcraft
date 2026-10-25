@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " P ",
+    " CP",
+    "N  "
+  ],
+  "key": {
+    "C": "jugcraft:jimta_spellbooks_magic_cloth",
+    "N": "#c:ingots/netherite",
+    "P": "#c:ingots/pyrium"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_pyrium_staff",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

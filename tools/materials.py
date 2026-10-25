@@ -271,6 +271,63 @@ def all_items():
 
 def feature_of(entry_id):
     """The feature switch that owns a registered ID."""
+    import jimtafacts
+    if entry_id in jimtafacts.items():
+        return "concordance"
+    import jimtafacts_network
+    import jimtafacts_robots
+    import jimtafacts_gear
+    import jimtafacts_crops
+    if entry_id in jimtafacts_crops.items() or entry_id in jimtafacts_crops.blocks():
+        return "agriculture"
+    import jimtafacts_automation
+    import jimtafacts_transport
+    if entry_id in jimtafacts_transport.items():
+        return 'machines'
+    import jimtafacts_production
+    import jimtafacts_reactor
+    import jimtafacts_infrastructure
+    import jimtafacts_upgrades
+    if entry_id in jimtafacts_upgrades.items():
+        return "jimtafacts"
+    if entry_id in jimtafacts_infrastructure.items() or entry_id in jimtafacts_infrastructure.blocks():
+        return "jimtafacts"
+    import jimtafacts_civil
+    if entry_id in jimtafacts_civil.items() or entry_id in jimtafacts_civil.blocks():
+        return "jimtafacts"
+    import jimtafacts_matter
+    if entry_id in jimtafacts_matter.items() or entry_id in jimtafacts_matter.blocks():
+        return 'machines'
+    if entry_id in jimtafacts_reactor.items():
+        return 'machines'
+    if entry_id in jimtafacts_production.items():
+        return 'machines'
+    if entry_id in jimtafacts_automation.items():
+        return 'machines'
+    if entry_id in jimtafacts_gear.items():
+        return 'machines'
+    if entry_id in jimtafacts_robots.items():
+        return 'machines'
+    if entry_id in jimtafacts_network.ids():
+        return "machines"
+    import jimtafacts_industry
+    if entry_id in jimtafacts_industry.items():
+        return "machines"
+    import jimtafacts_tables, jimtafacts_utilities, jimtafacts_services, jimtafacts_personal, jimtafacts_engines, jimtafacts_factory
+    if entry_id in jimtafacts_tables.items() or entry_id in jimtafacts_utilities.items() or entry_id in jimtafacts_services.items() or entry_id in jimtafacts_personal.items() or entry_id in jimtafacts_engines.items() or entry_id in jimtafacts_factory.items():
+        return "machines"
+    import jimtafacts_cables
+    if entry_id in jimtafacts_cables.items():
+        return "machines"
+    import jimtafacts_terraforming
+    if entry_id in jimtafacts_terraforming.items():
+        return "machines"
+    import jimtafacts_computers
+    if entry_id in jimtafacts_computers.items() or entry_id in jimtafacts_computers.blocks():
+        return "machines"
+    import jimtafacts_spellbooks
+    if entry_id in jimtafacts_spellbooks.items():
+        return "concordance"
     if entry_id == "deep_drilling_assembly":
         return "machines"
     import vehicle_bays

@@ -1,0 +1,15 @@
+{
+  "type": "artifacts:replace_with_table",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:archaeology/ocean_ruin_warm"
+    },
+    {
+      "condition": "artifacts:config_value_chance",
+      "config": "archaeology"
+    }
+  ],
+  "priority": 500,
+  "table": "artifacts:inject/archaeology/ocean_ruin_warm"
+}

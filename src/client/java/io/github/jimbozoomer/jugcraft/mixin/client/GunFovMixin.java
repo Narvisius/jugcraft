@@ -18,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class GunFovMixin {
 	@Inject(method = "getFieldOfViewModifier", at = @At("RETURN"), cancellable = true, require = 0)
 	private void jugcraft$aimZoom(CallbackInfoReturnable<Float> info) {
-		info.setReturnValue(GunView.fov((AbstractClientPlayer) (Object) this, info.getReturnValueF()));
+		var player=(AbstractClientPlayer)(Object)this;
+		info.setReturnValue(io.github.jimbozoomer.jugcraft.client.AircraftClient.fov(player,GunView.fov(player, info.getReturnValueF())));
 	}
 }

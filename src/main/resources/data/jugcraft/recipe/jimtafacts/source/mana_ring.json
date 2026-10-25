@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DA ",
+    "A A",
+    " A "
+  ],
+  "key": {
+    "A": "jugcraft:jimta_spellbooks_arcane_ingot",
+    "D": "#c:gems/diamond"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_mana_ring",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

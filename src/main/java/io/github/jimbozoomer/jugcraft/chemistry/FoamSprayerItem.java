@@ -86,7 +86,7 @@ public class FoamSprayerItem extends ConstructionChemistry.Described {
 		BlockState foam = ConstructionChemistry.CONSTRUCTION_FOAM.defaultBlockState();
 		while (!queue.isEmpty() && out.size() < limit) {
 			BlockPos pos = queue.poll();
-			if (!level.getBlockState(pos).canBeReplaced() || !mayBuild(level, player, pos)) {
+			if (!mayBuild(level, player, pos) || !level.getBlockState(pos).canBeReplaced()) {
 				continue;
 			}
 			if (level.isUnobstructed(foam, pos, CollisionContext.empty())) {
@@ -103,13 +103,14 @@ public class FoamSprayerItem extends ConstructionChemistry.Described {
 	}
 
 	private static boolean mayBuild(ServerLevel level, Player player, BlockPos pos) {
-		return level.isInWorldBounds(pos) && level.mayInteract(player, pos) && player.mayUseItemAt(pos, Direction.UP, ItemStack.EMPTY)
+		return level.hasChunkAt(pos) && level.isInWorldBounds(pos) && io.github.jimbozoomer.jugcraft.concordance.Authority.mayChange(level,player,pos)
+                && level.mayInteract(player, pos) && player.mayUseItemAt(pos, Direction.UP, ItemStack.EMPTY)
 				&& !TownProtection.denies(player, level, pos);
 	}
 
 	/** Foam left in every canister the player carries. */
 	public static int foamLeft(Player player) {
-		int total = 0;
+		int total = io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialBackpacks.wornFoam(player);
 		for (ItemStack stack : canisters(player)) {
 			total += stack.getMaxDamage() - stack.getDamageValue();
 		}
@@ -118,6 +119,7 @@ public class FoamSprayerItem extends ConstructionChemistry.Described {
 
 	/** Uses {@code blocks} points of foam from the player's canisters; an emptied canister is used up. */
 	public static void useFoam(Player player, int blocks) {
+		blocks -= io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialBackpacks.consumeWornFoam(player, blocks);
 		for (ItemStack stack : canisters(player)) {
 			if (blocks <= 0) {
 				return;

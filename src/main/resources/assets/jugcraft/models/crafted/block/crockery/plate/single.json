@@ -1,0 +1,117 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "block/block",
+  "render_type": "cutout",
+  "texture_size": [
+    32,
+    32
+  ],
+  "textures": {
+    "0": "#texture",
+    "particle": "#texture"
+  },
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#0",
+          "uv": [
+            12,
+            3.5,
+            8,
+            7.5
+          ]
+        },
+        "east": {
+          "texture": "#0",
+          "uv": [
+            0,
+            7.5,
+            4,
+            8
+          ]
+        },
+        "north": {
+          "texture": "#0",
+          "uv": [
+            4,
+            7.5,
+            8,
+            8
+          ]
+        },
+        "south": {
+          "texture": "#0",
+          "uv": [
+            12,
+            7.5,
+            16,
+            8
+          ]
+        },
+        "up": {
+          "texture": "#0",
+          "uv": [
+            8,
+            7.5,
+            4,
+            3.5
+          ]
+        },
+        "west": {
+          "texture": "#0",
+          "uv": [
+            8,
+            7.5,
+            12,
+            8
+          ]
+        }
+      },
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "rotation": {
+        "angle": -45,
+        "axis": "y",
+        "origin": [
+          8,
+          0.5,
+          8
+        ]
+      },
+      "to": [
+        12,
+        1,
+        12
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "name": "plates",
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "color": 0,
+      "children": [
+        {
+          "name": "singe_plate",
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "color": 0,
+          "children": [
+            0
+          ]
+        }
+      ]
+    }
+  ]
+}

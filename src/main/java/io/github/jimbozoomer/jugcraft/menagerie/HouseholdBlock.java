@@ -37,6 +37,7 @@ public class HouseholdBlock extends Block {
         BUILDING.set(d);
         try {
             String kind=d.get("kind").getAsString(), name=d.get("source").getAsString();
+            if(d.has("collection")&&d.get("collection").getAsString().equals("crafted"))return kind.equals("seat")?new CraftedBlock.Seat(p,d):kind.equals("storage")?new CraftedBlock.Storage(p,d):new CraftedBlock(p,d);
             if(kind.equals("cavern"))return CavernControl.CAVE.contains(name)||CavernDevice.KINDS.contains(name)
                     ?new CavernBlock.WithEntity(p,d):new CavernBlock(p,d);
             if(kind.equals("beast"))return CavernControl.BEAST.contains(name)||name.equals("capsid")

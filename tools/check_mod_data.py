@@ -97,6 +97,34 @@ import town_assets
 import graveyard as gy
 import diagonal_connections as dg
 import menagerie_registry as menagerie
+import jimtafacts
+import jimtafacts_catalog
+import jimtafacts_network
+import jimtafacts_robots
+import jimtafacts_gear
+import jimtafacts_automation
+import jimtafacts_transport
+import jimtafacts_crops
+import jimtafacts_production
+import jimtafacts_reactor
+import jimtafacts_matter
+import jimtafacts_civil
+import jimtafacts_infrastructure
+import jimtafacts_upgrades
+import jimtafacts_construction
+import jimtafacts_heat
+import jimtafacts_laser
+import jimtafacts_tables
+import jimtafacts_utilities
+import jimtafacts_services
+import jimtafacts_personal
+import jimtafacts_engines
+import jimtafacts_factory
+import jimtafacts_cables
+import jimtafacts_terraforming
+import jimtafacts_spellbooks
+import jimtafacts_industry
+import jimtafacts_computers
 
 ROOT = Path(__file__).resolve().parents[1]
 RES = ROOT / "src" / "main" / "resources"
@@ -163,6 +191,7 @@ def tag_exists(registry, ref):
 @cache
 def texture(ref):
     ns, path = split(ref)
+    if ref == 'jugcraft:crafted/vanilla_bow': return  # Alias of vanilla's bow sprite in the blocks atlas.
     if ns == "minecraft":
         return
     png = RES / "assets" / ns / "textures" / f"{path}.png"
@@ -179,11 +208,14 @@ def texture(ref):
         # Animated textures are a vertical strip of square frames of 16x16, 32x32, 48x48 or 64x64 with an .mcmeta beside
         # them.
         width, height = img.size
+        if not animated and max(img.size) <= 1024 and jimtafacts_catalog.original_texture(png):
+            return  # Supplied rectangular face atlases retain their original pixels and mapped UVs.
         if not animated and ref == "jugcraft:menagerie/rotten/block/treasure_chest" and img.size == (48, 32):
             return  # Supplied chest atlas; its original block-model UVs are normalized to 0..16.
+        if not animated and ref.startswith("jugcraft:crafted/") and all(0 < v <= 1024 for v in img.size): return  # Authored rectangular trophy skins retain their supplied UV dimensions.
         if not animated and ref.startswith(("jugcraft:household/", "jugcraft:menagerie/")) and all(v > 0 and v <= 1024 and v & (v-1) == 0 for v in img.size):
             return  # supplied model atlases use rectangular UV sheets
-        if animated and not (width in (16, 32, 48, 64) and height % width == 0 and height > width):
+        if animated and not (width in (16, 32, 48, 64) and height % width == 0 and height >= width):
             err(f"Animated texture {ref} is {img.size}, expected a strip of 16x16, 32x32, 48x48 or 64x64 frames")
         elif not animated and not (ref in {"jugcraft:nouveau/entity/signs/archwood", "jugcraft:nouveau/entity/signs/hanging/archwood"} and img.size == (64,32)) and img.size not in ((16, 16), (32, 32), (48, 48), (64, 64), (128, 128)) \
                 and not (img.size in ((256, 256), (512, 512), (1024, 1024)) and _sharp(png.stem)):
@@ -253,7 +285,8 @@ def check_assets(registered):
     for block in (all_blocks() + machine_blocks() + ag.all_blocks() + petro.petro_blocks() + deposits.all_blocks()
                   + list(tank_display.BLOCKS) + plastic.blocks() + ph.blocks() + (town_assets.blocks() + styx.blocks()) + seasons.BLOCKS
                   + construction.blocks() + control_electronics.blocks() + rocketry.blocks() + dieselworks.blocks() + kaiserworks.blocks() + trenchworks.blocks() + fortifications.blocks() + bunkerworks.blocks() + aged_wood.blocks() + fire_control.blocks()
-                  + concordance.blocks() + guns.blocks() + industrial_forms.blocks() + list(vehicle_bays.BLOCKS) + menagerie.blocks() + starter_workshop.STATIONS):
+                  + concordance.blocks() + guns.blocks() + industrial_forms.blocks() + list(vehicle_bays.BLOCKS) + menagerie.blocks() + starter_workshop.STATIONS
+                  + sorted(jimtafacts_catalog.blocks() & jimtafacts_catalog.items())):
         state = load(ASSETS / "blockstates" / f"{block}.json")
         if state:
             for variant in state.get("variants", {}).values():
@@ -275,7 +308,7 @@ def check_assets(registered):
         definition = load(ASSETS / "items" / f"{item}.json")
         if definition:
             item_models(definition["model"])
-        if item not in (all_blocks() + machine_blocks() + ag.all_blocks() + petro.petro_blocks() + deposits.all_blocks()
+        if item not in jimtafacts_catalog.blocks() and item not in (all_blocks() + machine_blocks() + ag.all_blocks() + petro.petro_blocks() + deposits.all_blocks()
                         + list(tank_display.BLOCKS) + plastic.blocks() + ph.blocks() + (town_assets.blocks() + styx.blocks())
                         + construction.blocks() + control_electronics.blocks() + rocketry.blocks() + dieselworks.blocks() + kaiserworks.blocks() + trenchworks.blocks() + fortifications.blocks() + bunkerworks.blocks() + aged_wood.blocks() + fire_control.blocks()
                         + concordance.blocks() + guns.blocks() + industrial_forms.blocks() + list(vehicle_bays.BLOCKS) + menagerie.blocks() + starter_workshop.STATIONS
@@ -384,6 +417,8 @@ def item_units(ref):
     """Returns {metal: units} for an item or tag reference."""
     import vehicle_bays
     ns, path = split(ref.lstrip("#"))
+    if ns == MOD and path in {'jimta_' + name for name in jimtafacts.FOOD}:
+        return {}  # Reusable food; neither cooking route contains or recovers metal.
     if ns == MOD and path == "deep_drilling_assembly":
         return {}  # Assembled machinery: no ingot-recovery recipe, like the deposit drill itself.
     if ns == MOD and path in vehicle_bays.BLOCKS:
@@ -392,7 +427,7 @@ def item_units(ref):
     # metal-recovery recipe. Acquiring them consumes inputs; none yields ingots.
     if ns == MOD and path in menagerie.entries() or ref == '#c:eggs':
         return {}
-    if ref.startswith('#') and ns == MOD and path.startswith(('cavern_','beast_','household_','ecology_','fauna_','mutant_','landscape_','walnut_compat/')):
+    if ref.startswith('#') and ns == MOD and (path == 'compact_fermentable' or path.startswith(('cavern_','beast_','household_','ecology_','fauna_','mutant_','landscape_','walnut_compat/'))):
         tag = load(DATA / MOD / 'tags' / 'item' / (path+'.json')) or {}
         values = [v if isinstance(v,str) else v['id'] for v in tag.get('values',[])]
         # Ingredients select one member. Conservatively use the least valuable
@@ -476,6 +511,16 @@ def item_units(ref):
             return {}
         pieces = ("pickaxe", "axe", "shovel") if piece == "paxel" else (piece,)
         return {tier: 9 * sum("".join(gear.PATTERNS[p]).count("#") for p in pieces)}
+    if path in jimtafacts_catalog.items():
+        # Finished devices follow the existing no-salvage convention. Reversible
+        # industrial metal forms retain the shared plate mass instead of gaining it.
+        from fractions import Fraction
+        for metal in jimtafacts_industry.CASING_METALS:
+            if path == f'jimta_{metal}_casing': return {metal: Fraction(PART_UNITS['plate'], 2)}
+            if path == f'jimta_dense_{metal}_plate': return {metal: 9 * PART_UNITS['plate']}
+        if path == 'jimta_gold_plate': return {'gold': 9}
+        if path == 'jimta_iron_turning_blank': return {'iron': 9}
+        return {}
     err(f"No metal content known for {ref}")
     return {}
 
@@ -640,12 +685,17 @@ def check_fluid_recipes(registered):
             err(f"MachineKind.recipeType() has no \"{spec['recipe_type']}\" for {machine}")
         if spec["recipe_type"] in RECIPE_TYPES.values():
             err(f"Fluid recipe type {spec['recipe_type']} is also an item machine's")
+    import jimtafacts_fluid_recipes
+    collection_recipes = jimtafacts_fluid_recipes.recipes()
+    for name, recipe in collection_recipes.items():
+        if load(DATA / MOD / 'recipe/chemical_reaction' / (name+'.json')) != recipe:
+            err(f'{name}: shared reactor recipe differs from its canonical finite-fluid definition')
     expected = (sum(len(r) for r in petro.FLUID_RECIPES.values()) + sum(len(r) for r in drones.DRONE_FLUID_RECIPES.values())
-                + sum(len(r) for r in industrial_forms.FORM_RECIPES.values()))
+                + sum(len(r) for r in industrial_forms.FORM_RECIPES.values()) + len(collection_recipes))
     types = {spec["recipe_type"] for spec in petro.FLUID_MACHINES.values() if spec["recipe_type"]}
     files = [p for p in (DATA / MOD / "recipe").glob("*/*.json") if p.parent.name in types]
     if len(files) != expected:
-        err(f"{len(files)} fluid recipe files, but tools/petro.py, tools/drones.py and tools/industrial_forms.py define {expected}")
+        err(f"{len(files)} fluid recipe files, but the canonical petro/drone/form/collection recipes define {expected}")
     for machine, recipes in petro.FLUID_RECIPES.items():
         spec = petro.FLUID_MACHINES[machine]
         for recipe in recipes:
@@ -731,6 +781,51 @@ def check_tags():
         known = set(known)
         if registry == 'block': known.update(starter_workshop.STATIONS)
         if registry == 'item': known.update(starter_workshop.NAMES)
+        if registry == 'item': known.update(jimtafacts.items())
+        if registry == 'item': known.update(jimtafacts_network.ids()); known.update(jimtafacts_spellbooks.items()); known.update(jimtafacts_industry.items())
+        if registry == 'block': known.update('jimta_' + n for n in jimtafacts_network.BLOCKS); known.update(jimtafacts_spellbooks.blocks()); known.update(jimtafacts_industry.blocks())
+        if registry == 'entity_type': known.update({'jimta_mimic', 'jimta_tiny_tnt'})
+        if registry == 'entity_type': known.add('jimta_workshop_robot')
+        if registry == 'entity_type': known.update('jimta_'+kind+'_boat' for kind in ('rubber','carbon','electric'))
+        if registry == 'item': known.update(jimtafacts_robots.items())
+        if registry == 'item': known.update(jimtafacts_gear.items()); known.update(jimtafacts_crops.items()); known.update(jimtafacts_production.items())
+        if registry == 'block': known.update(jimtafacts_crops.blocks())
+        if registry == 'block': known.update(jimtafacts_reactor.blocks())
+        if registry == 'item': known.update(jimtafacts_reactor.items())
+        if registry == 'item': known.update(jimtafacts_infrastructure.items())
+        if registry == 'item': known.update(jimtafacts_upgrades.items())
+        if registry == 'item': known.update(jimtafacts_construction.items())
+        if registry == 'block': known.update(jimtafacts_construction.blocks()); known.update(jimtafacts_heat.blocks()); known.update(jimtafacts_laser.blocks())
+        if registry == 'item': known.update(jimtafacts_heat.items()); known.update(jimtafacts_laser.items())
+        if registry == 'item': known.update(jimtafacts_tables.items()); known.update(jimtafacts_utilities.items())
+        if registry == 'block': known.update(jimtafacts_tables.blocks()); known.update(jimtafacts_utilities.blocks())
+        if registry == 'block': known.update(jimtafacts_services.blocks())
+        if registry == 'item': known.update(jimtafacts_services.items())
+        if registry == 'fluid': known.update(jimtafacts_services.fluids())
+        if registry == 'block': known.update(jimtafacts_personal.blocks())
+        if registry == 'item': known.update(jimtafacts_personal.items())
+        if registry == 'block': known.update(jimtafacts_engines.blocks())
+        if registry == 'item': known.update(jimtafacts_engines.items())
+        if registry == 'block': known.update(jimtafacts_factory.blocks())
+        if registry == 'item': known.update(jimtafacts_factory.items())
+        if registry == 'item': known.update(jimtafacts_cables.items())
+        if registry == 'block': known.update(jimtafacts_cables.blocks())
+        if registry == 'item': known.update(jimtafacts_terraforming.items())
+        if registry == 'block': known.update(jimtafacts_terraforming.blocks())
+        if registry == 'block': known.update(jimtafacts_infrastructure.blocks())
+        if registry == 'item': known.update(jimtafacts_civil.items())
+        if registry == 'block': known.update(jimtafacts_civil.blocks())
+        if registry == 'item': known.update(jimtafacts_matter.items())
+        if registry == 'block': known.update(jimtafacts_matter.blocks())
+        if registry == 'fluid': known.update(jimtafacts_matter.fluids()); known.update(jimtafacts_heat.fluids())
+        if registry == 'item': known.update(jimtafacts_automation.items())
+        if registry == 'block': known.update(jimtafacts_automation.blocks())
+        if registry == 'item': known.update(jimtafacts_transport.items())
+        if registry == 'block': known.update(jimtafacts_transport.blocks())
+        if registry == 'mob_effect': known.update(jimtafacts_spellbooks.effects())
+        if registry == 'entity_type': known.update(jimtafacts_spellbooks.entities())
+        if registry == 'item': known.update(jimtafacts_computers.items()); known.update(jimtafacts_computers.blocks())
+        if registry == 'block': known.update(jimtafacts_computers.blocks())
         if registry in {'item', 'block'}: known.update(vehicle_bays.BLOCKS)
         if registry in {'item','block'}:known.update(menagerie.entries())
         if registry == 'entity_type':known.update(menagerie.entities())
@@ -14689,7 +14784,7 @@ def check_ember_regalia(co, root, lang):
         if f"textures/gui/sprites/container/slots/{info['icon']}.png" not in em.OWNER_FILES:
             err(f"slot {slot}: its icon is not the owner's (OWNER_FILES)")
         held = set((load(DATA / "trinkets" / "tags" / "item" / group / f"{name}.json") or {}).get("values", []))
-        if held != {f"{MOD}:{item}" for item, worn in em.TRINKETS.items() if worn == slot}:
+        if held != ({f"{MOD}:{item}" for item, worn in em.TRINKETS.items() if worn == slot} | jimtafacts.slot_links(slot)):
             err(f"data/trinkets/tags/item/{slot}.json holds {sorted(held)}")
         if f"trinkets.slot.{group}.{name}" not in lang:
             err(f"slot {slot}: missing lang trinkets.slot.{group}.{name}")
@@ -14907,6 +15002,7 @@ def check_wayfaring(co, root, lang):
             expected.update(f"{MOD}:{item}" for item in concordance_ee_artifacts.CHARMS)
         if slot == "legs/belt":
             expected.update({"jugcraft:nouveau_belt_of_levitation", "jugcraft:nouveau_belt_of_unstable_gifts"})
+        expected.update(jimtafacts.slot_links(slot))
         if held != expected:
             err(f"data/trinkets/tags/item/{slot}.json holds {sorted(held)}")
     # Two items with one English name cannot be told apart (the kinetic belt is the Drive Belt for this reason).
@@ -17011,6 +17107,27 @@ def registered_items():
                   | set(guns.items()) | set(guns.blocks()) | set(concordance.items()) | set(concordance.blocks()) | set(industrial_forms.blocks()))
     import starter_workshop
     registered |= menagerie.entries() | set(vehicle_bays.BLOCKS) | set(starter_workshop.NAMES)
+    registered |= set(jimtafacts.items())
+    registered |= set(jimtafacts_network.ids()) | set(jimtafacts_spellbooks.items()) | set(jimtafacts_industry.items())
+    registered |= set(jimtafacts_robots.items())
+    registered |= set(jimtafacts_gear.items()) | set(jimtafacts_crops.items()) | set(jimtafacts_production.items())
+    registered |= set(jimtafacts_automation.items())
+    registered |= set(jimtafacts_transport.items())
+    registered |= set(jimtafacts_reactor.items())
+    registered |= set(jimtafacts_matter.items())
+    registered |= set(jimtafacts_civil.items())
+    registered |= set(jimtafacts_infrastructure.items())
+    registered |= set(jimtafacts_upgrades.items())
+    registered |= set(jimtafacts_construction.items())
+    registered |= set(jimtafacts_heat.items()) | jimtafacts_laser.items()
+    registered |= jimtafacts_tables.items() | jimtafacts_utilities.items()
+    registered |= jimtafacts_services.items()
+    registered |= jimtafacts_personal.items()
+    registered |= jimtafacts_engines.items()
+    registered |= jimtafacts_factory.items()
+    registered |= jimtafacts_cables.items()
+    registered |= jimtafacts_terraforming.items()
+    registered |= set(jimtafacts_computers.items()) | set(jimtafacts_computers.blocks())
     return registered
 
 
@@ -17221,7 +17338,9 @@ def check_aluminum_bootstrap():
         return ns == MOD and "aluminum" in path and ref not in NOT_ALUMINUM_METAL
 
     tags = {}
-    reachable = set()
+    # Vanilla smelts mined clay balls into bricks independently of Jugcraft's
+    # newly-added reversible brick/block compressor and extractor recipes.
+    reachable = {'minecraft:clay_ball', 'minecraft:brick'}
 
     def ok(choice):
         if choice.startswith("#"):

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " AC",
+    " CG",
+    "CG "
+  ],
+  "key": {
+    "C": "minecraft:crimson_planks",
+    "G": "#c:ingots/gold",
+    "A": "#c:gems/amethyst"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_artificer_cane",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

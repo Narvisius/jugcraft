@@ -1,0 +1,404 @@
+{
+  "jimta_re_battery": {
+    "label": "Rechargeable Battery",
+    "icon": "itemBatRE",
+    "behavior": "battery",
+    "capacity": 10000,
+    "frames": 5
+  },
+  "jimta_advanced_battery": {
+    "label": "Advanced Battery",
+    "icon": "itemAdvBat",
+    "behavior": "battery",
+    "capacity": 100000,
+    "frames": 5
+  },
+  "jimta_energy_crystal": {
+    "label": "Energy Crystal",
+    "icon": "itemBatCrystal",
+    "behavior": "battery",
+    "capacity": 1000000,
+    "frames": 5
+  },
+  "jimta_lapotron_crystal": {
+    "label": "Lapotron Crystal",
+    "icon": "itemBatLamaCrystal",
+    "behavior": "battery",
+    "capacity": 10000000,
+    "frames": 5
+  },
+  "jimta_charging_re_battery": {
+    "label": "Charging Re Battery",
+    "icon": "itemBatChargeRE",
+    "behavior": "auto_battery",
+    "capacity": 40000,
+    "frames": 5,
+    "base": "re_battery"
+  },
+  "jimta_charging_advanced_battery": {
+    "label": "Charging Advanced Battery",
+    "icon": "itemBatChargeAdv",
+    "behavior": "auto_battery",
+    "capacity": 400000,
+    "frames": 5,
+    "base": "advanced_battery"
+  },
+  "jimta_charging_energy_crystal": {
+    "label": "Charging Energy Crystal",
+    "icon": "itemBatChargeCrystal",
+    "behavior": "auto_battery",
+    "capacity": 4000000,
+    "frames": 5,
+    "base": "energy_crystal"
+  },
+  "jimta_charging_lapotron_crystal": {
+    "label": "Charging Lapotron Crystal",
+    "icon": "itemBatChargeLamaCrystal",
+    "behavior": "auto_battery",
+    "capacity": 40000000,
+    "frames": 5,
+    "base": "lapotron_crystal"
+  },
+  "jimta_single_use_battery": {
+    "label": "Single-use Battery",
+    "icon": "itemBatSU",
+    "behavior": "single_battery"
+  },
+  "jimta_nano_saber": {
+    "label": "Nano Saber",
+    "icon": "itemNanoSaber.off",
+    "behavior": "saber",
+    "capacity": 200000,
+    "icons": [
+      "itemNanoSaber.off",
+      "itemNanoSaber.active"
+    ]
+  },
+  "jimta_battery_pack": {
+    "label": "Battery Pack",
+    "icon": "itemArmorBatpack",
+    "behavior": "battery_pack",
+    "asset": "batpack",
+    "slot": "CHESTPLATE",
+    "capacity": 60000
+  },
+  "jimta_advanced_battery_pack": {
+    "label": "Advanced Battery Pack",
+    "icon": "itemArmorAdvBatpack",
+    "behavior": "battery_pack",
+    "asset": "advbatpack",
+    "slot": "CHESTPLATE",
+    "capacity": 600000
+  },
+  "jimta_lap_pack": {
+    "label": "LapPack",
+    "icon": "itemArmorLappack",
+    "behavior": "battery_pack",
+    "asset": "lappack",
+    "slot": "CHESTPLATE",
+    "capacity": 2000000
+  },
+  "jimta_energy_pack": {
+    "label": "Energy Pack",
+    "icon": "itemArmorEnergypack",
+    "behavior": "battery_pack",
+    "asset": "energypack",
+    "slot": "CHESTPLATE",
+    "capacity": 10000000
+  },
+  "jimta_electric_jetpack": {
+    "label": "Electric Jetpack",
+    "icon": "itemArmorJetpackElectric",
+    "behavior": "jetpack",
+    "asset": "jetpack",
+    "slot": "CHESTPLATE",
+    "capacity": 200000
+  },
+  "jimta_biogas_jetpack": {
+    "label": "Biogas Jetpack",
+    "icon": "itemArmorJetpack",
+    "behavior": "fuel_jetpack",
+    "asset": "jetpack",
+    "slot": "CHESTPLATE"
+  },
+  "jimta_construction_foam_pack": {
+    "label": "Construction Foam Backpack",
+    "icon": "itemArmorCFPack",
+    "behavior": "foam_pack",
+    "asset": "batpack",
+    "slot": "CHESTPLATE"
+  },
+  "jimta_nano_helmet": {
+    "label": "Nano Helmet",
+    "icon": "itemArmorNanoHelmet",
+    "behavior": "powered_armor",
+    "asset": "nano",
+    "slot": "HELMET",
+    "capacity": 1000000,
+    "family": "nano"
+  },
+  "jimta_nano_chestplate": {
+    "label": "Nano Chestplate",
+    "icon": "itemArmorNanoChestplate",
+    "behavior": "powered_armor",
+    "asset": "nano",
+    "slot": "CHESTPLATE",
+    "capacity": 1000000,
+    "family": "nano"
+  },
+  "jimta_nano_leggings": {
+    "label": "Nano Leggings",
+    "icon": "itemArmorNanoLegs",
+    "behavior": "powered_armor",
+    "asset": "nano",
+    "slot": "LEGGINGS",
+    "capacity": 1000000,
+    "family": "nano"
+  },
+  "jimta_nano_boots": {
+    "label": "Nano Boots",
+    "icon": "itemArmorNanoBoots",
+    "behavior": "powered_armor",
+    "asset": "nano",
+    "slot": "BOOTS",
+    "capacity": 1000000,
+    "family": "nano"
+  },
+  "jimta_quantum_helmet": {
+    "label": "Quantum Helmet",
+    "icon": "itemArmorQuantumHelmet",
+    "behavior": "powered_armor",
+    "asset": "quantum",
+    "slot": "HELMET",
+    "capacity": 10000000,
+    "family": "quantum"
+  },
+  "jimta_quantum_chestplate": {
+    "label": "Quantum Chestplate",
+    "icon": "itemArmorQuantumChestplate",
+    "behavior": "powered_armor",
+    "asset": "quantum",
+    "slot": "CHESTPLATE",
+    "capacity": 10000000,
+    "family": "quantum"
+  },
+  "jimta_quantum_leggings": {
+    "label": "Quantum Leggings",
+    "icon": "itemArmorQuantumLegs",
+    "behavior": "powered_armor",
+    "asset": "quantum",
+    "slot": "LEGGINGS",
+    "capacity": 10000000,
+    "family": "quantum"
+  },
+  "jimta_quantum_boots": {
+    "label": "Quantum Boots",
+    "icon": "itemArmorQuantumBoots",
+    "behavior": "powered_armor",
+    "asset": "quantum",
+    "slot": "BOOTS",
+    "capacity": 10000000,
+    "family": "quantum"
+  },
+  "jimta_industrial_bronze_helmet": {
+    "label": "Industrial Bronze Helmet",
+    "icon": "itemArmorBronzeHelmet",
+    "behavior": "armor",
+    "asset": "bronze",
+    "slot": "HELMET"
+  },
+  "jimta_industrial_bronze_chestplate": {
+    "label": "Industrial Bronze Chestplate",
+    "icon": "itemArmorBronzeChestplate",
+    "behavior": "armor",
+    "asset": "bronze",
+    "slot": "CHESTPLATE"
+  },
+  "jimta_industrial_bronze_leggings": {
+    "label": "Industrial Bronze Leggings",
+    "icon": "itemArmorBronzeLegs",
+    "behavior": "armor",
+    "asset": "bronze",
+    "slot": "LEGGINGS"
+  },
+  "jimta_industrial_bronze_boots": {
+    "label": "Industrial Bronze Boots",
+    "icon": "itemArmorBronzeBoots",
+    "behavior": "armor",
+    "asset": "bronze",
+    "slot": "BOOTS"
+  },
+  "jimta_hazmat_hood": {
+    "label": "Industrial Hazmat Hood",
+    "icon": "itemArmorHazmatHelmet",
+    "behavior": "hazmat",
+    "asset": "hazmat",
+    "slot": "HELMET"
+  },
+  "jimta_hazmat_jacket": {
+    "label": "Industrial Hazmat Jacket",
+    "icon": "itemArmorHazmatChestplate",
+    "behavior": "hazmat",
+    "asset": "hazmat",
+    "slot": "CHESTPLATE"
+  },
+  "jimta_hazmat_trousers": {
+    "label": "Industrial Hazmat Trousers",
+    "icon": "itemArmorHazmatLeggings",
+    "behavior": "hazmat",
+    "asset": "hazmat",
+    "slot": "LEGGINGS"
+  },
+  "jimta_hazmat_boots": {
+    "label": "Industrial Hazmat Boots",
+    "icon": "itemArmorRubBoots",
+    "behavior": "hazmat",
+    "asset": "rubber",
+    "slot": "BOOTS"
+  },
+  "jimta_alloy_chestplate": {
+    "label": "Composite Chestplate",
+    "icon": "itemArmorAlloyChestplate",
+    "behavior": "armor",
+    "asset": "alloy",
+    "slot": "CHESTPLATE"
+  },
+  "jimta_industrial_night_vision_goggles": {
+    "label": "Industrial Night Vision Goggles",
+    "icon": "itemNightvisionGoggles",
+    "behavior": "nightvision",
+    "asset": "nightvision",
+    "slot": "HELMET",
+    "capacity": 200000
+  },
+  "jimta_solar_helmet": {
+    "label": "Solar Helmet",
+    "icon": "itemSolarHelmet",
+    "behavior": "solar",
+    "asset": "solar",
+    "slot": "HELMET"
+  },
+  "jimta_static_boots": {
+    "label": "Static Boots",
+    "icon": "itemStaticBoots",
+    "behavior": "static",
+    "asset": "rubber",
+    "slot": "BOOTS"
+  },
+  "jimta_industrial_drill": {
+    "label": "Industrial Drill",
+    "icon": "itemToolDrill",
+    "behavior": "drill",
+    "capacity": 30000
+  },
+  "jimta_diamond_drill": {
+    "label": "Diamond Drill",
+    "icon": "itemToolDDrill",
+    "behavior": "drill",
+    "capacity": 100000
+  },
+  "jimta_iridium_drill": {
+    "label": "Iridium Drill",
+    "icon": "itemToolIridiumDrill",
+    "behavior": "drill",
+    "capacity": 500000
+  },
+  "jimta_industrial_chainsaw": {
+    "label": "Industrial Chainsaw",
+    "icon": "itemToolChainsaw",
+    "behavior": "chainsaw",
+    "capacity": 100000
+  },
+  "jimta_electric_hoe": {
+    "label": "Electric Hoe",
+    "icon": "itemToolHoe",
+    "behavior": "hoe",
+    "capacity": 10000
+  },
+  "jimta_mining_laser": {
+    "label": "Mining Laser",
+    "icon": "itemToolMiningLaser",
+    "behavior": "laser",
+    "capacity": 200000
+  },
+  "jimta_electric_wrench": {
+    "label": "Electric Wrench",
+    "icon": "itemToolWrenchElectric",
+    "behavior": "wrench",
+    "capacity": 10000
+  },
+  "jimta_electric_treetap": {
+    "label": "Electric Treetap",
+    "icon": "itemTreetapElectric",
+    "behavior": "tap",
+    "capacity": 10000
+  },
+  "jimta_crop_analyzer": {
+    "label": "Crop Analyzer",
+    "icon": "itemCropnalyzer",
+    "behavior": "analyzer",
+    "capacity": 10000
+  },
+  "jimta_ore_scanner": {
+    "label": "Ore Scanner",
+    "icon": "itemScanner",
+    "behavior": "scanner",
+    "capacity": 10000
+  },
+  "jimta_advanced_ore_scanner": {
+    "label": "Advanced Ore Scanner",
+    "icon": "itemScannerAdv",
+    "behavior": "scanner",
+    "capacity": 100000
+  },
+  "jimta_industrial_wrench": {
+    "label": "Industrial Wrench",
+    "icon": "itemToolWrench",
+    "behavior": "wrench"
+  },
+  "jimta_hand_treetap": {
+    "label": "Hand Treetap",
+    "icon": "itemTreetap",
+    "behavior": "tap"
+  },
+  "jimta_energy_meter": {
+    "label": "Energy Meter",
+    "icon": "itemToolMEter",
+    "behavior": "meter"
+  },
+  "jimta_wind_meter": {
+    "label": "Wind Meter",
+    "icon": "windmeter",
+    "behavior": "wind"
+  },
+  "jimta_industrial_bronze_pickaxe": {
+    "label": "Industrial Bronze Pickaxe",
+    "icon": "itemToolBronzePickaxe",
+    "behavior": "bronze_tool",
+    "kind": "pickaxe"
+  },
+  "jimta_industrial_bronze_axe": {
+    "label": "Industrial Bronze Axe",
+    "icon": "itemToolBronzeAxe",
+    "behavior": "bronze_tool",
+    "kind": "axe"
+  },
+  "jimta_industrial_bronze_shovel": {
+    "label": "Industrial Bronze Shovel",
+    "icon": "itemToolBronzeSpade",
+    "behavior": "bronze_tool",
+    "kind": "shovel"
+  },
+  "jimta_industrial_bronze_hoe": {
+    "label": "Industrial Bronze Hoe",
+    "icon": "itemToolBronzeHoe",
+    "behavior": "bronze_tool",
+    "kind": "hoe"
+  },
+  "jimta_industrial_bronze_sword": {
+    "label": "Industrial Bronze Sword",
+    "icon": "itemToolBronzeSword",
+    "behavior": "bronze_tool",
+    "kind": "sword"
+  }
+}

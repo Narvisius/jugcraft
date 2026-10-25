@@ -1,0 +1,76 @@
+{
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "entries": [
+      {
+        "threshold": 0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:jimtafacts/spellbooks/item/affinity_ring_evocation"
+        }
+      },
+      {
+        "threshold": 1,
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:jimtafacts/spellbooks/item/affinity_ring_fire"
+        }
+      },
+      {
+        "threshold": 2,
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:jimtafacts/spellbooks/item/affinity_ring_ice"
+        }
+      },
+      {
+        "threshold": 3,
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:jimtafacts/spellbooks/item/affinity_ring_lightning"
+        }
+      },
+      {
+        "threshold": 4,
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:jimtafacts/spellbooks/item/affinity_ring_holy"
+        }
+      },
+      {
+        "threshold": 5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:jimtafacts/spellbooks/item/affinity_ring_ender"
+        }
+      },
+      {
+        "threshold": 6,
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:jimtafacts/spellbooks/item/affinity_ring_blood"
+        }
+      },
+      {
+        "threshold": 7,
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:jimtafacts/spellbooks/item/affinity_ring_nature"
+        }
+      },
+      {
+        "threshold": 8,
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:jimtafacts/spellbooks/item/affinity_ring_eldritch"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "jugcraft:jimtafacts/spellbooks/item/affinity_ring_evocation"
+    }
+  }
+}

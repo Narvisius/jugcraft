@@ -1,0 +1,266 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "trunk": "jugcraft:block/jimtafacts/engines/trunk_blue",
+    "chamber": "jugcraft:block/jimtafacts/engines/chamber",
+    "back": "jugcraft:block/jimtafacts/engines/stirling_engine_back",
+    "side": "jugcraft:block/jimtafacts/engines/stirling_engine_side",
+    "particle": "#side"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        4,
+        16
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#back"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#back"
+        },
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            4
+          ],
+          "texture": "#side"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            4
+          ],
+          "texture": "#side"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            4
+          ],
+          "texture": "#side"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            4
+          ],
+          "texture": "#side"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        7.198,
+        0
+      ],
+      "to": [
+        16,
+        11.198,
+        16
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#back"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#back"
+        },
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            4
+          ],
+          "texture": "#side"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            4
+          ],
+          "texture": "#side"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            4
+          ],
+          "texture": "#side"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            4
+          ],
+          "texture": "#side"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        4,
+        4
+      ],
+      "to": [
+        12,
+        16,
+        12
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "texture": "#trunk"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "texture": "#trunk"
+        },
+        "north": {
+          "uv": [
+            8,
+            0,
+            16,
+            12
+          ],
+          "texture": "#trunk"
+        },
+        "south": {
+          "uv": [
+            8,
+            0,
+            16,
+            12
+          ],
+          "texture": "#trunk"
+        },
+        "west": {
+          "uv": [
+            8,
+            0,
+            16,
+            12
+          ],
+          "texture": "#trunk"
+        },
+        "east": {
+          "uv": [
+            8,
+            0,
+            16,
+            12
+          ],
+          "texture": "#trunk"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        4,
+        3
+      ],
+      "to": [
+        13,
+        7.198,
+        13
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            3.1980000000000004,
+            13,
+            0
+          ],
+          "texture": "#chamber"
+        },
+        "south": {
+          "uv": [
+            3,
+            3.1980000000000004,
+            13,
+            0
+          ],
+          "texture": "#chamber"
+        },
+        "west": {
+          "uv": [
+            3,
+            3.1980000000000004,
+            13,
+            0
+          ],
+          "texture": "#chamber"
+        },
+        "east": {
+          "uv": [
+            3,
+            3.1980000000000004,
+            13,
+            0
+          ],
+          "texture": "#chamber"
+        }
+      }
+    }
+  ]
+}

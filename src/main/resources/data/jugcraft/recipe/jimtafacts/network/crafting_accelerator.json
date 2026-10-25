@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:jimta_crafting_unit",
+    "jugcraft:jimta_engineering_processor",
+    "jugcraft:jimta_calculation_processor"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_crafting_accelerator",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

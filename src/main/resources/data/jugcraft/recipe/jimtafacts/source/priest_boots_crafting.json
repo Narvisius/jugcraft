@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#jugcraft:jimtafacts/spellbooks/wizard_base_boots",
+    "jugcraft:jimta_spellbooks_holy_rune",
+    "jugcraft:jimta_spellbooks_arcane_essence"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:jimta_spellbooks_priest_boots"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GMM",
+    "GHH",
+    "GMM"
+  ],
+  "key": {
+    "G": "#c:ingots/gold",
+    "M": "jugcraft:jimta_spellbooks_arcane_essence",
+    "H": "jugcraft:jimta_spellbooks_hogskin"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_gold_spell_book",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

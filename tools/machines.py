@@ -986,3 +986,14 @@ MACHINES.update({name:dict(display=label, lit=False) for name,label in battery_e
 STATS['lead_acid_battery_bank'] = dict(capacity=2_000_000, io_per_tick=1_024)
 STATS['flow_tank_module'] = dict(capacity=0, io_per_tick=0)
 STATS['flow_stack_module'] = dict(capacity=0, io_per_tick=0)
+
+# Canonical processors added by the owner-supplied industrial port. Their final art comes from jimtafacts_industry.
+for _id,_label,_capacity,_input,_use in [
+    ('jimta_compressor','Compressor',16000,128,16),
+    ('jimta_extractor','Extractor',16000,128,12),
+    ('jimta_thermal_centrifuge','Thermal Centrifuge',40000,256,32),
+    ('jimta_recycler','Recycler',16000,128,4),
+    ('jimta_metal_cutter','Metal Former: Cutting',16000,128,16),
+]:
+    MACHINES[_id]={'display':_label,'lit':True}
+    STATS[_id]={'capacity':_capacity,'input_per_tick':_input,'use_per_tick':_use}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:jimta_spellbooks_ancient_knowledge_fragment",
+    "minecraft:paper"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_weapon_schematics",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

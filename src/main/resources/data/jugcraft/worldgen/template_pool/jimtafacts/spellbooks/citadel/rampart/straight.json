@@ -1,0 +1,42 @@
+{
+  "name": "jugcraft:jimtafacts/spellbooks/citadel_start_pool",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 3,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/citadel/rampart/straight",
+        "processors": "jugcraft:jimtafacts/spellbooks/citadel_randomization",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 3,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/citadel/rampart/straight_destroyed_01",
+        "processors": "jugcraft:jimtafacts/spellbooks/citadel_randomization",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 3,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/citadel/rampart/straight_destroyed_02",
+        "processors": "jugcraft:jimtafacts/spellbooks/citadel_randomization",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/citadel/rampart/straight_overgrown",
+        "processors": "jugcraft:jimtafacts/spellbooks/citadel_randomization",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

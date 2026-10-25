@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:paper",
+    "jugcraft:jimta_spellbooks_uncommon_ink",
+    "jugcraft:jimta_spellbooks_fire_rune",
+    "minecraft:fire_charge",
+    "minecraft:gunpowder"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_scroll_flaming_barrage",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

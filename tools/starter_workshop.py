@@ -108,7 +108,7 @@ def write_all(write, assets, data, lang):
     craft('workshop_bench',['minecraft:crafting_table']+['#minecraft:planks']*4+['minecraft:cobblestone']*2)
     shaped('workshop_hammer',['II',' S'],dict(I='minecraft:iron_ingot',S='minecraft:stick'))
     shaped('wire_cutters',['I I','S S'],dict(I='minecraft:iron_ingot',S='minecraft:stick'))
-    craft('soldering_tool',['minecraft:copper_ingot','minecraft:stick'])
+    craft('soldering_tool',['minecraft:copper_ingot','minecraft:stick','minecraft:clay_ball'])
     shaped('small_ceramic_kiln',[' B ','BFB',' B '],dict(B='minecraft:bricks',F='minecraft:furnace'))
     shaped('small_crucible_furnace',['B B','BFB'],dict(B='minecraft:bricks',F='minecraft:furnace'))
     shaped('unfired_ceramic_lining',['CCC',' C '],dict(C='minecraft:clay_ball'))

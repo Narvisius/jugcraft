@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IFI",
+    " I "
+  ],
+  "key": {
+    "F": "minecraft:soul_campfire",
+    "I": "#c:nuggets/iron"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_brazier_soul",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/jimtafacts/cables/blockIronCableIIII.cyan",
+    "wire": "jugcraft:block/jimtafacts/cables/blockIronCableIIII.cyan"
+  },
+  "elements": [
+    {
+      "from": [
+        2.0,
+        2.0,
+        0
+      ],
+      "to": [
+        14.0,
+        14.0,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wire"
+        },
+        "south": {
+          "texture": "#wire"
+        },
+        "east": {
+          "texture": "#wire"
+        },
+        "west": {
+          "texture": "#wire"
+        },
+        "up": {
+          "texture": "#wire"
+        },
+        "down": {
+          "texture": "#wire"
+        }
+      }
+    }
+  ]
+}

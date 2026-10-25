@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IGI",
+    "RCR",
+    "III"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "G": "jugcraft:jimta_quartz_glass",
+    "R": "minecraft:redstone",
+    "C": "jugcraft:jimta_spatial_cell_component_16"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spatial_storage_cell_16",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

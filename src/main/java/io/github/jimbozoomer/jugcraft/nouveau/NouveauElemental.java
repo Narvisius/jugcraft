@@ -87,6 +87,8 @@ public final class NouveauElemental {
     }
     private static void bolt(ServerLevel l,Vec3 at){var bolt=net.minecraft.world.entity.EntityTypes.LIGHTNING_BOLT.create(l,EntitySpawnReason.TRIGGERED);if(bolt!=null){bolt.setVisualOnly(true);bolt.snapTo(at);l.addFreshEntity(bolt);}}
     private static void fangs(ServerLevel l,ServerPlayer p,Vec3 at,float yaw){var f=new EvokerFangs(l,at.x,at.y,at.z,yaw,0,p);f.setAttached(VISUAL_FANG,true);l.addFreshEntity(f);}
+    /** Original vanilla animation only; shared callers apply separately protected damage. */
+    public static void displayFang(ServerLevel l,ServerPlayer p,Vec3 at,float yaw,int warmup){var f=new EvokerFangs(l,at.x,at.y,at.z,yaw,warmup,p);f.setAttached(VISUAL_FANG,true);l.addFreshEntity(f);}
     private static void fangLine(ConcordanceEffects.Context c,EffectSpec e,ServerPlayer p,Vec3 target){boolean ring=p.distanceToSqr(target)<4;var direction=target.subtract(c.origin()).multiply(1,0,1).normalize();int count=Math.min(16,8+e.augment("radius")*2);
         for(int i=0;i<count&&FANGS.size()<128;i++){double angle=Math.PI*2*i/count;var at=ring?p.position().add(Math.cos(angle)*2.5,0,Math.sin(angle)*2.5):target.add(direction.scale(i));var ground=BlockPos.containing(at);for(int down=0;down<3&&c.level().hasChunkAt(ground.below())&&!c.level().getBlockState(ground.below()).isSolidRender();down++)ground=ground.below();if(!c.level().hasChunkAt(ground)||!Authority.mayChange(c.level(),p,ground))continue;var point=Vec3.atBottomCenterOf(ground);fangs(c.level(),p,point,p.getYRot());FANGS.add(new Fang(c,point,Math.max(1,e.magnitude()),c.level().getGameTime()+8));}
     }

@@ -38,7 +38,7 @@ public class FluidTankBlockEntity extends BlockEntity {
 	/** Saved; a glass tank also sends its fluid to clients, which draw it (client/GlassTankRenderer). */
 	private void fluidChanged() {
 		setChanged();
-		if (level != null && !level.isClientSide() && getBlockState().is(JugcraftFluids.GLASS_TANK)) {
+		if (level != null && !level.isClientSide() && (getBlockState().is(JugcraftFluids.GLASS_TANK)||getBlockState().is(JugcraftFluids.JIMTA_GLASS_TANK))) {
 			level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
 		}
 	}

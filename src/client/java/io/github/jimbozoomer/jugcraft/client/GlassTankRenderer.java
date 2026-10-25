@@ -33,6 +33,7 @@ public class GlassTankRenderer implements BlockEntityRenderer<FluidTankBlockEnti
 	public static final class State extends BlockEntityRenderState {
 		float fill;
 		int color;
+		float inset;
 	}
 
 	public GlassTankRenderer(BlockEntityRendererProvider.Context context) {
@@ -47,7 +48,9 @@ public class GlassTankRenderer implements BlockEntityRenderer<FluidTankBlockEnti
 	public void extractRenderState(FluidTankBlockEntity tank, State state, float partialTick, Vec3 camera,
 			ModelFeatureRenderer.@Nullable CrumblingOverlay crumbling) {
 		BlockEntityRenderState.extractBase(tank, state, crumbling);
-		boolean glass = tank.getBlockState().is(JugcraftFluids.GLASS_TANK);
+		boolean original = tank.getBlockState().is(JugcraftFluids.JIMTA_GLASS_TANK);
+		boolean glass = original || tank.getBlockState().is(JugcraftFluids.GLASS_TANK);
+		state.inset = original ? 2.05F/16 : INSET;
 		state.fill = glass && !tank.storage.isResourceBlank()
 				? (float) tank.storage.amount / FluidTankBlockEntity.CAPACITY : 0;
 		state.color = glass ? color(tank.storage.variant.getFluid()) : 0;
@@ -72,8 +75,8 @@ public class GlassTankRenderer implements BlockEntityRenderer<FluidTankBlockEnti
 		if (state.fill <= 0) {
 			return;
 		}
-		float lo = INSET;
-		float hi = 1 - INSET;
+		float lo = state.inset;
+		float hi = 1 - state.inset;
 		float top = lo + (hi - lo) * Math.min(1, state.fill);
 		int color = state.color;
 		int light = state.lightCoords;

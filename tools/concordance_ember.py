@@ -328,7 +328,7 @@ RECIPES = {
     "fire_bangle": {"pattern": ["GCG", "G G", " A "],
                     "key": {"G": "minecraft:gold_ingot", "C": "#minecraft:coals", "A": "minecraft:amethyst_shard"}},
     "pyromaniacs_hood": {"pattern": ["WWW", "W W"], "key": _WOOL},
-    "pyromaniacs_tunic": {"pattern": ["W W", "WWW", "WWW"], "key": _WOOL},
+    "pyromaniacs_tunic": {"pattern": ["W W", "WBW", "WWW"], "key": {**_WOOL, "B": "minecraft:charcoal"}},
     "pyromaniacs_pants": {"pattern": ["WWW", "W W", "W W"], "key": _WOOL},
     "pyromaniacs_shoes": {"pattern": ["W W", "W W"], "key": _WOOL},
     "pyromancers_hat": {"pattern": ["WGW", "W W"], "key": _WOOL_GOLD},

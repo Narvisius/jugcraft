@@ -83,6 +83,7 @@ public final class Menagerie {
         FableCreatures.register();
         CompanionCreatures.register();
         Household.register();
+        CraftedFurniture.register();
         Ecology.register();
         Mutations.register();
         Beasts.register();

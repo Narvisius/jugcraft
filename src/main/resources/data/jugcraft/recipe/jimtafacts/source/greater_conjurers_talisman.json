@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "V": "jugcraft:jimta_spellbooks_bloody_vellum",
+    "A": "jugcraft:jimta_spellbooks_arcane_rune",
+    "T": "jugcraft:jimta_spellbooks_conjurers_talisman"
+  },
+  "pattern": [
+    " V ",
+    "VTV",
+    "AV "
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:jimta_spellbooks_greater_conjurers_talisman"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

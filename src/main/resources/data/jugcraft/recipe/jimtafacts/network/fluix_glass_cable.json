@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "FGF"
+  ],
+  "key": {
+    "F": "jugcraft:jimta_fluix_crystal",
+    "G": "minecraft:glass"
+  },
+  "result": {
+    "id": "jugcraft:jimta_fluix_glass_cable",
+    "count": 4
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

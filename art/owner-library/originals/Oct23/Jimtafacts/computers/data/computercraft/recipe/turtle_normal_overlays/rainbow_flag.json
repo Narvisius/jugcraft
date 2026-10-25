@@ -1,0 +1,26 @@
+{
+  "type": "computercraft:transform_shapeless",
+  "category": "redstone",
+  "function": [
+    {
+      "type": "computercraft:copy_components",
+      "exclude": ["computercraft:overlay"],
+      "from": "computercraft:turtle_normal"
+    }
+  ],
+  "group": "computercraft:turtle_normal_overlay",
+  "ingredients": [
+    "#c:dyes/red",
+    "#c:dyes/orange",
+    "#c:dyes/yellow",
+    "#c:dyes/green",
+    "#c:dyes/blue",
+    "#c:dyes/purple",
+    "minecraft:stick",
+    "computercraft:turtle_normal"
+  ],
+  "result": {
+    "components": {"computercraft:overlay": "computercraft:rainbow_flag"},
+    "id": "computercraft:turtle_normal"
+  }
+}

@@ -1,5 +1,7 @@
 # Owner asset catalog
 
+**October 23 addition:** [Jimtafacts complete intake and native-port tracking](edited-2026-10-23-jimtafacts/README.md), 17,598 files. Its manifest and content CSV supplement the older collection-wide index below.
+
 [Reuse and import guide](../README.md) · [Complete searchable CSV](files.csv) · [Counts and preview checksums](summary.json)
 
 Every supplied file is listed, including large folders that GitHub's folder view may truncate. Lists are paginated at 250 files.

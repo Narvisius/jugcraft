@@ -36,7 +36,7 @@ ITEMS = {
 FORMS = {
     'precision_finisher': station('Precision Finishing Station', 3, 3,
         ['finishing_water'], ['finishing_return'], (1, 1), 'precision_finishing',
-        ['PGP', 'MCM', 'BKB'], sockets=[('finishing_head', 'jugcraft:finishing_heads')]),
+        ['PGP', 'MCM', 'BKB'], crafting_key={'G': 'minecraft:grindstone'}, sockets=[('finishing_head', 'jugcraft:finishing_heads')]),
 }
 # Earlier steel/circuits/motors start the machine: it never requires its own precision parts.
 RECIPES = {'precision_finisher': []}

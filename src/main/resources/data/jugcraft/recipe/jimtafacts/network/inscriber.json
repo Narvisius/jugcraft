@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IPI",
+    "F F",
+    "IPI"
+  ],
+  "key": {
+    "F": "jugcraft:jimta_fluix_crystal",
+    "I": "minecraft:iron_ingot",
+    "P": "minecraft:piston"
+  },
+  "result": {
+    "id": "jugcraft:jimta_inscriber",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

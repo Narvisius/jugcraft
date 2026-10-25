@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IGI",
+    "FCF",
+    "IGI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "G": "jugcraft:jimta_quartz_glass",
+    "F": "jugcraft:jimta_fluix_crystal",
+    "C": "jugcraft:jimta_quartz_block"
+  },
+  "result": {
+    "id": "jugcraft:jimta_growth_accelerator",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

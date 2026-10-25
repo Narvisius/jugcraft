@@ -1,0 +1,41 @@
+{
+  "school": "spell_power:arcane",
+  "range": 24,
+  "tier": 1,
+  "group": "jimtafacts_spellbooks",
+  "type": "ACTIVE",
+  "active": {
+    "cast": {
+      "duration": 0,
+      "animation": {
+        "id": "jugcraft:instant_self"
+      }
+    }
+  },
+  "release": {},
+  "target": {
+    "type": "CASTER"
+  },
+  "deliver": {
+    "type": "DIRECT"
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "CUSTOM",
+        "custom": {
+          "handler": "jugcraft:jimtafacts_spellbook",
+          "intent": "HELPFUL"
+        }
+      }
+    }
+  ],
+  "cost": {
+    "exhaust": 0,
+    "durability": 0,
+    "cooldown": {
+      "duration": 60,
+      "hosting_item": false
+    }
+  }
+}

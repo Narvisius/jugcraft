@@ -26,17 +26,20 @@ CAVERN_PATH=ROOT/'src/main/resources/jugcraft/menagerie/cavern.json'
 CAVERN=json.loads(CAVERN_PATH.read_text(encoding='utf-8')) if CAVERN_PATH.exists() else {'blocks':{},'items':{},'species':[],'fluids':{}}
 ROTTEN_PATH=ROOT/'src/main/resources/jugcraft/menagerie/rotten.json'
 ROTTEN=json.loads(ROTTEN_PATH.read_text(encoding='utf-8')) if ROTTEN_PATH.exists() else {'items':[],'species':[]}
+CRAFTED=json.loads((ROOT/'src/main/resources/jugcraft/menagerie/crafted.json').read_text(encoding='utf-8'))
+AIRCRAFT=json.loads((ROOT/'src/main/resources/jugcraft/aircraft.json').read_text(encoding='utf-8'))
+AIRCRAFT_ITEMS=['aircraft_'+n for n in list(AIRCRAFT['craft'])+list(AIRCRAFT['upgrades'])+['hull','engine','sail','propeller','boiler','rotary_cannon','heavy_crossbow','telescope','bomb_bay']]
 COLORS = 'white orange magenta light_blue yellow lime pink gray light_gray cyan purple blue brown green red black'.split()
 EXTRA_BLOCKS = ['pocket_cloud_block','pocket_sand_block','pocket_stone_block','mount_firebird_feather','mount_firebird_feather2','mount_firebird_feather3','mount_firebird_feather4','herbal_spinning_wheel','herbal_pumpkling_crop'] + [f'herbal_gravestone_{s}_{m}' for s in ('cross','upright') for m in ('stone','mossy')]
 EXTRA_ITEMS = ['mount_summoning_staff','menagerie_field_guide','herbal_ghost_spawn_egg','herbal_pumpkling_spawn_egg','herbal_pumpkling_seeds'] + [f'herbal_{c}_cloth' for c in COLORS] + ['herbal_'+s+'_'+p for s,parts in [('witch',['hat','robe','pants','boots']),('murder',['mask','coat','pants','boots'])] for p in parts]
 
 
 def blocks():
-    return list(CATALOG['blocks']) + EXTRA_BLOCKS + list(GROVE['blocks']) + list(FABLE['blocks']) + list(COMPANION['blocks']) + list(HOUSEHOLD['blocks']) + list(ECOLOGY['blocks']) + list(MUTANT['blocks']) + list(BEAST['blocks']) + list(LANDSCAPE['blocks']) + list(CAVERN['blocks']) + (['rotten_tnt_barrel','rotten_treasure_chest'] if ROTTEN['species'] else [])
+    return list(CRAFTED['blocks']) + ['death_gravestone','artisans_workstation','artisan_furniture'] + list(CATALOG['blocks']) + EXTRA_BLOCKS + list(GROVE['blocks']) + list(FABLE['blocks']) + list(COMPANION['blocks']) + list(HOUSEHOLD['blocks']) + list(ECOLOGY['blocks']) + list(MUTANT['blocks']) + list(BEAST['blocks']) + list(LANDSCAPE['blocks']) + list(CAVERN['blocks']) + (['rotten_tnt_barrel','rotten_treasure_chest'] if ROTTEN['species'] else [])
 
 
 def items():
-    return list(CATALOG['items']) + list(POCKETS) + EXTRA_ITEMS + list(GROVE['items']) + list(FABLE['items']) + list(COMPANION['items']) + list(HOUSEHOLD['items']) + list(ECOLOGY['items']) + list(MUTANT['items']) + list(BEAST['items']) + list(LANDSCAPE['items']) + list(CAVERN['items']) + [g+'_'+f+'_bucket' for g,c in [('landscape',LANDSCAPE),('cavern',CAVERN)] for f in c['fluids']] + ['rotten_'+i for i in ROTTEN['items']] + [s['id']+'_spawn_egg' for s in ROTTEN['species']] + (['rotten_hunter_wolf_spawn_egg'] if ROTTEN['species'] else [])
+    return ['furniture_material'] + list(CRAFTED['items']) + AIRCRAFT_ITEMS + list(CATALOG['items']) + list(POCKETS) + EXTRA_ITEMS + list(GROVE['items']) + list(FABLE['items']) + list(COMPANION['items']) + list(HOUSEHOLD['items']) + list(ECOLOGY['items']) + list(MUTANT['items']) + list(BEAST['items']) + list(LANDSCAPE['items']) + list(CAVERN['items']) + [g+'_'+f+'_bucket' for g,c in [('landscape',LANDSCAPE),('cavern',CAVERN)] for f in c['fluids']] + ['rotten_'+i for i in ROTTEN['items']] + [s['id']+'_spawn_egg' for s in ROTTEN['species']] + (['rotten_hunter_wolf_spawn_egg'] if ROTTEN['species'] else [])
 
 
 @cache
@@ -59,4 +62,4 @@ def feature():
 @cache
 def itemless_blocks():
     # These registrars create items only from their explicit item catalogs.
-    return frozenset(k for c in (ECOLOGY,MUTANT,LANDSCAPE,CAVERN) for k in c['blocks'] if k not in c['items'])
+    return frozenset({'death_gravestone'}) | frozenset(k for c in (ECOLOGY,MUTANT,LANDSCAPE,CAVERN) for k in c['blocks'] if k not in c['items'])

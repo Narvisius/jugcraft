@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  C",
+    " C ",
+    "CCC"
+  ],
+  "key": {
+    "C": "jugcraft:jimta_spellbooks_magic_cloth"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_wizard_hat",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

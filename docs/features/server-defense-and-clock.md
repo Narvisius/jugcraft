@@ -67,7 +67,8 @@ selection to take control of another owner's table or gun.
 ## Claim audit fixes
 
 - Actual player-caused living damage (including bullets and custom blast damage)
-  checks current land permission, not only the initial attack click.
+  to protected creatures checks current land permission, not only the initial
+  attack click. Wild hostile mobs are exempt from this land check as described below.
 - Display entities and the main vehicles/artillery additionally guard their
   overridden damage handlers.
 - Bucket raycast pickup and placement check the affected position.
@@ -84,6 +85,54 @@ Unattended machines have no trusted-player identity. Sharing a claim with a part
 lets friends operate machinery inside it, but does not open transfer across two
 different owners' boundaries. Build shared factories on one owner's shared land.
 This is consistent with the existing fluid/piston boundary policy.
+
+## Hostile combat on claimed land (23 October 2026)
+
+Owner-reported bug: visitors could not fight hostile mobs on another player's
+claim. Both the attack callback and final player-caused damage callback required
+building permission for every non-player entity. The combat exception now covers
+wild `Enemy` mobs in both paths, including arrows, bullets and player-attributed
+magic. A hostile does not need to acquire a target first; naming it does not make
+it a pet. Non-hostile animals, residents and decorations still require claim access.
+
+Owned creatures remain protected, including Menagerie creatures whose hostile
+class remains after taming, native owner references even while the keeper is
+offline, and Nouveau player summons. An evoker's native vex owner is another mob,
+so that reference does not turn the vex into player property. Player-summoned
+vexes remain protected by their summon ownership. Multipart hostile hitboxes use
+their parent's identity, ownership and claim position, including a body segment
+that crosses the boundary while its parent remains inside a claim.
+
+The exception grants combat access only. Entity use, building, containers, trust,
+party sharing and existing PvP/town protection keep their own checks. Neutral
+animals do not become attackable merely by acquiring a target. No save migration,
+new registry, dependency, progression gate, recipe, loot or damage-value change
+is introduced. Existing claims receive the correction when the server mod updates;
+reverting restores the previous combat restriction without changing saved claims.
+
+`ClaimCombatGameTests` exercises actual survival-player melee, an arrow crossing a
+claim border, loaded gunfire, player-attributed magic, hostile multipart damage,
+pet and summon protection, owner access, unclaimed animals, and retained use/build
+permissions. These use simulated server-player identities, not two authenticated
+clients. Implementation: OpenAI Codex (GPT-6), under direct owner authorization.
+
+Validation on 23 October, based on upstream `f904df3fd`, with unchanged Minecraft
+26.3, Fabric Loader 0.19.5, Fabric API 0.161.0+26.3, Java 25.0.4.1+1 and Gradle 9.6.0:
+
+- The corrected baseline ran the five new tests against the compiled pre-fix
+  production code. Four failed on blocked wild-hostile combat; livestock/pet
+  protection passed. The arena explicitly keeps both sides of a chunk boundary
+  active so projectile/entity lookups exercise real loaded entities.
+- `runGameTest compileClientJava --offline --console=plain` with
+  `fabric-api.gametest.filter=*:*claim*`: **all 21 required tests passed**, build
+  successful in 1m08s. Common/client/test compilation passed. The runs reused
+  unchanged production resources prepared by the first run (`-x processResources`).
+- After making the multipart boundary assertion explicit, the five focused
+  `ClaimCombatGameTests` passed again; build successful in 45s.
+- Repository/document links and whitespace checks passed.
+- Not run: the full GameTest suite, rendered-client play, two authenticated clients,
+  production-world installation, save/restart or server-load benchmarks. The fix
+  changes existing event checks only and introduces no per-tick scanning.
 
 ## Validation
 

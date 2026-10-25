@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CCC",
+    "CAC",
+    "CCC"
+  ],
+  "key": {
+    "C": "jugcraft:jimta_certus_quartz_crystal",
+    "A": "minecraft:amethyst_block"
+  },
+  "result": {
+    "id": "jugcraft:jimta_flawed_budding_quartz"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

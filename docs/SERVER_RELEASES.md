@@ -201,3 +201,8 @@ GitHub workflow enforces that gate. Changed source needs new validation/version.
 
 No credentials in chat, live deployment or existing player installation changes
 are required to prepare these files. AI assistance: OpenAI Codex (GPT-6).
+
+
+## Owner restart confirmation — October 22, 2026
+
+Always obtain the owner's explicit confirmation before stopping or restarting the live Jugcraft server. Permission to prepare or push updates is not restart permission. Prepare and validate the files first. After confirmation, notify connected players in-game that the server will restart in 30 seconds, wait the full 30 seconds, then stop/restart. The owner authorizes this maintenance warning.

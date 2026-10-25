@@ -1,0 +1,30 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "artifacts:config_value",
+                  "value": "items.golden_hook.generateAsLoot"
+                }
+              ],
+              "name": "artifacts:golden_hook"
+            },
+            {
+              "type": "minecraft:empty"
+            }
+          ]
+        }
+      ],
+      "name": "main",
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "artifacts:items/golden_hook"
+}

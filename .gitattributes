@@ -7,3 +7,8 @@
 art/owner-library/originals/** -text
 # Preserve archived source bytes/notices, including their original whitespace.
 art/owner-library/ports/jug-nouveau/ars_*/** -text -whitespace
+
+# Keep the October 22 source archive byte-for-byte, including source whitespace.
+art/owner-library/originals/Oct22/** -whitespace
+# Preserve the October 23 source collection's original formatting too.
+art/owner-library/originals/Oct23/** -whitespace

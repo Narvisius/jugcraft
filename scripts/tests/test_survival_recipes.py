@@ -38,7 +38,10 @@ class SurvivalGraphTests(unittest.TestCase):
         rows = {r['item']: r for r in report['items']}
         unresolved = [r['item'] for r in report['items'] if r['status'] in ('no_documented_route','recipe_chain_needs_review')]
         self.assertEqual([], unresolved, 'Every active survival chain needs a real source')
-        self.assertEqual(78, report['summary']['deferred_acquisition_design'])
+        from survival_jimtafacts_routes import DEFERRED_ACQUISITION
+        self.assertEqual(78+len(DEFERRED_ACQUISITION), report['summary']['deferred_acquisition_design'])
+        for name in DEFERRED_ACQUISITION:
+            self.assertEqual('deferred_acquisition_design', rows['jugcraft:jimta_spellbooks_'+name]['status'])
         for table in ('landscape_keep_loot_table','landscape_camp_loot_table','cavern_caveman_house','cavern_underground_cabin','cavern_gingerbread_town'):
             self.assertNotIn('jugcraft:chests/'+table, report['unbound_chest_tables'])
         for name in ('household_light_freezer', 'household_dark_freezer', 'household_package',

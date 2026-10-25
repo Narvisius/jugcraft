@@ -1,0 +1,24 @@
+{
+  "type": "jugcraft:circuit_assembly",
+  "ingredients": [
+    {
+      "ingredient": "jugcraft:silicon"
+    },
+    {
+      "ingredient": "minecraft:gold_ingot"
+    },
+    {
+      "ingredient": "minecraft:redstone"
+    }
+  ],
+  "result": {
+    "id": "jugcraft:jimta_logic_processor"
+  },
+  "time": 200,
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

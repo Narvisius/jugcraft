@@ -25,6 +25,7 @@ def station(display,depth,height,ins,outs,items,cap,pattern,**extra):
  ports += [(f'solid_in_{i}','ITEM_IN',i,2,0,i+1,'FRONT') for i in range(items[0])]
  ports += [(f'solid_out_{i}','ITEM_OUT',i,2,depth-1,i+1,'BACK') for i in range(items[1])]
  key={s:dict(P=P,M=M,C=C,T=T,K=K,G=G,W=W,B=B)[s] for s in sorted(set(''.join(pattern))) if s!=' '}
+ key.update(extra.pop('crafting_key', {}))
  return form(display,extra.pop('family','chemical_reactor'),3,depth,height,ins,outs,cap,ports,(pattern,key),items=items,**extra)
 
 FORMS={
@@ -35,7 +36,7 @@ FORMS={
  'magnesium_electrolysis_cell':station('Magnesium Electrolysis Cell',3,3,[],['chlorine'],(1,1),'magnesium_electrolysis',['WBW','BKB','PCP'],family='electrolytic_cell'),
  'titanium_chlorinator':station('Titanium Chlorination Vessel',4,4,['chlorine'],['crude_chloride','carbon_dioxide'],(2,0),'titanium_chlorination',['BTP','MCM','WKW']),
  'titanium_reduction_retort':station('Titanium Reduction Retort',4,3,['purified_chloride'],[],(1,2),'titanium_reduction',['PBP','TCT','MKM'],family='electrolytic_cell'),
- 'polymer_molding_press':station('Polymer Molding Press',4,3,[],[],(1,1),'polymer_molding',['PGP','MCM','BKB'],sockets=[('mold','jugcraft:polymer_molds')]),
+ 'polymer_molding_press':station('Polymer Molding Press',4,3,[],[],(1,1),'polymer_molding',['PGP','MCM','BKB'],crafting_key={'G':'jugcraft:housing_mold'},sockets=[('mold','jugcraft:polymer_molds')]),
 }
 FORMS['coastal_seawater_intake']['upgrades']=False
 FORMS['coastal_seawater_intake']['warmup']=0

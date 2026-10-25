@@ -1,0 +1,45 @@
+{
+  "school": "spell_power:fire",
+  "range": 24,
+  "tier": 1,
+  "group": "jimtafacts_spellbooks",
+  "type": "ACTIVE",
+  "active": {
+    "cast": {
+      "duration": 1,
+      "animation": {
+        "id": "jugcraft:charge_raised_hand"
+      }
+    }
+  },
+  "release": {
+    "animation": {
+      "id": "jugcraft:instant_projectile"
+    }
+  },
+  "target": {
+    "type": "CASTER"
+  },
+  "deliver": {
+    "type": "DIRECT"
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "CUSTOM",
+        "custom": {
+          "handler": "jugcraft:jimtafacts_spellbook",
+          "intent": "HELPFUL"
+        }
+      }
+    }
+  ],
+  "cost": {
+    "exhaust": 0,
+    "durability": 0,
+    "cooldown": {
+      "duration": 12,
+      "hosting_item": false
+    }
+  }
+}

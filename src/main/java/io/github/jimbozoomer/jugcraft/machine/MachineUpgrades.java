@@ -46,21 +46,25 @@ public final class MachineUpgrades {
 	}
 
 	public static boolean isUpgrade(ItemStack stack) {
-		return SPEED != null && (stack.is(SPEED) || stack.is(EFFICIENCY));
+		return stack.getItem() instanceof io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialUpgrades.Upgrade
+                || SPEED != null && (stack.is(SPEED) || stack.is(EFFICIENCY));
 	}
 
 	/** Automation is supported by formed processors only; extra cards have no stacking effect. */
     public static boolean isFormUpgrade(ItemStack stack) {
+        if (stack.getItem() instanceof io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialUpgrades.Upgrade upgrade)
+            return upgrade.kind == io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialUpgrades.Kind.OVERCLOCKER;
         return isUpgrade(stack) || (AUTOMATION != null && stack.is(AUTOMATION));
     }
 
 	/** What the cards in a machine's upgrade slots do. */
-	public record Effect(int speed, int efficiency) {
+	public record Effect(int speed, int efficiency, int overclockers) {
+		public Effect(int speed, int efficiency) { this(speed, efficiency, 0); }
 		public static final Effect NONE = new Effect(0, 0);
 
 		/** Ticks an operation takes. */
 		public int ticks(int base) {
-			return Math.max(1, (int) Math.ceil(base / (1 + 0.5 * speed)));
+			return Math.max(1, (int) Math.ceil(base / (1 + 0.5 * speed) * Math.pow(.7, overclockers)));
 		}
 
 		/** JE used per tick while working. */
@@ -68,20 +72,23 @@ public final class MachineUpgrades {
 			if (base <= 0) {
 				return 0;
 			}
-			return Math.max(1, Math.round(base * (1 + 0.5 * speed) * (1 + 0.25 * speed) * Math.pow(0.8, efficiency)));
+			return Math.max(1, Math.round(base * (1 + 0.5 * speed) * (1 + 0.25 * speed) * Math.pow(0.8, efficiency) * Math.pow(1.6, overclockers)));
 		}
 	}
 
 	public static Effect effect(List<ItemStack> slots) {
 		int speed = 0;
 		int efficiency = 0;
+		int overclockers = 0;
 		for (ItemStack stack : slots) {
+			if (stack.getItem() instanceof io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialUpgrades.Upgrade upgrade
+                    && upgrade.kind == io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialUpgrades.Kind.OVERCLOCKER) overclockers += stack.getCount();
 			if (SPEED != null && stack.is(SPEED)) {
 				speed += stack.getCount();
 			} else if (EFFICIENCY != null && stack.is(EFFICIENCY)) {
 				efficiency += stack.getCount();
 			}
 		}
-		return new Effect(Math.min(MAX_EFFECTIVE, speed), Math.min(MAX_EFFECTIVE, efficiency));
+		return new Effect(Math.min(MAX_EFFECTIVE, speed), Math.min(MAX_EFFECTIVE, efficiency), Math.min(MAX_EFFECTIVE, overclockers));
 	}
 }

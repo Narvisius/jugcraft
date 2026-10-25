@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    "jugcraft:jimta_computer_turtle_normal",
+    "minecraft:gold_block"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_computer_turtle_advanced"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

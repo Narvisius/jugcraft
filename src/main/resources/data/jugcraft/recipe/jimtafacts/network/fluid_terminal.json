@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:jimta_terminal",
+    "jugcraft:jimta_calculation_processor",
+    "minecraft:bucket"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_fluid_terminal",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

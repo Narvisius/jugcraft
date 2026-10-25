@@ -215,7 +215,7 @@ public class CoastalMetalsGameTests {
             {"jugcraft:copper_cable", "minecraft:bricks", "jugcraft:copper_cable", "minecraft:bricks", "jugcraft:machine_casing", "minecraft:bricks", "jugcraft:steel_plate", "jugcraft:basic_circuit", "jugcraft:steel_plate"},
             {"minecraft:bricks", "jugcraft:steel_tank", "jugcraft:steel_plate", "jugcraft:electric_motor", "jugcraft:basic_circuit", "jugcraft:electric_motor", "jugcraft:copper_cable", "jugcraft:machine_casing", "jugcraft:copper_cable"},
             {"jugcraft:steel_plate", "minecraft:bricks", "jugcraft:steel_plate", "jugcraft:steel_tank", "jugcraft:basic_circuit", "jugcraft:steel_tank", "jugcraft:electric_motor", "jugcraft:machine_casing", "jugcraft:electric_motor"},
-            {"jugcraft:steel_plate", "jugcraft:steel_gear", "jugcraft:steel_plate", "jugcraft:electric_motor", "jugcraft:basic_circuit", "jugcraft:electric_motor", "minecraft:bricks", "jugcraft:machine_casing", "minecraft:bricks"},
+            {"jugcraft:steel_plate", "jugcraft:housing_mold", "jugcraft:steel_plate", "jugcraft:electric_motor", "jugcraft:basic_circuit", "jugcraft:electric_motor", "minecraft:bricks", "jugcraft:machine_casing", "minecraft:bricks"},
         };
         for(int i=0;i<bills.length;i++) {
             var stacks=java.util.Arrays.stream(bills[i]).map(id->new ItemStack(BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.parse(id)))).toList();

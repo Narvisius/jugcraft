@@ -488,8 +488,10 @@ def write_all(write, assets, lang, machines):
     write(assets / "gui" / "machine_themes.json",
           {"themes": looks, "machines": {machine: look_of(machine) for machine in machines}, "forms": FORM_LOOK,
            "screens": SCREENS})
+    from jimtafacts_industry import TAGLINES as imported_taglines
+    taglines = TAGLINES | imported_taglines
     for machine in machines:
-        lang[f"container.jugcraft.tagline.{machine}"] = TAGLINES[machine]
+        lang[f"container.jugcraft.tagline.{machine}"] = taglines[machine]
     import industrial_forms
     for form in industrial_forms.FORMS:  # Every form needs a line: a KeyError names the one missing.
         lang[f"container.jugcraft.tagline.{form}"] = FORM_TAGLINES[form]

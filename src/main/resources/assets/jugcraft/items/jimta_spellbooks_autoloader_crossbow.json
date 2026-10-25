@@ -1,0 +1,26 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:charge_type",
+    "cases": [
+      {
+        "when": "arrow",
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:jimtafacts/spellbooks/item/autoloader_crossbow_arrow"
+        }
+      },
+      {
+        "when": "rocket",
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:jimtafacts/spellbooks/item/autoloader_crossbow_firework"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "jugcraft:jimtafacts/spellbooks/item/autoloader_crossbow"
+    }
+  }
+}

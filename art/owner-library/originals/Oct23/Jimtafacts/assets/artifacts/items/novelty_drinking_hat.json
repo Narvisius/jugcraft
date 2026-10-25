@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "artifacts:item/novelty_drinking_hat"
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "artifacts:item/novelty_drinking_hat_broken"
+    },
+    "property": "artifacts:needs_repair"
+  }
+}

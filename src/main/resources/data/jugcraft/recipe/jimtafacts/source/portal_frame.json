@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MEM",
+    "I I",
+    "I I"
+  ],
+  "key": {
+    "M": "#c:ingots/mithril",
+    "I": "jugcraft:jimta_spellbooks_arcane_ingot",
+    "E": "minecraft:ender_pearl"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_portal_frame",
+    "count": 2
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "jugcraft:crafted/block/base/statue_trophy_block",
+  "render_type": "cutout",
+  "texture_size": [
+    64,
+    32
+  ],
+  "textures": {
+    "0": "jugcraft:crafted/block/trophy/creeper_trophy",
+    "1": "jugcraft:crafted/block/trophy/large_trophy_wall",
+    "particle": "jugcraft:crafted/block/trophy/creeper_trophy"
+  },
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#0",
+          "uv": [
+            15.5,
+            10,
+            15.75,
+            11
+          ]
+        },
+        "east": {
+          "texture": "#0",
+          "uv": [
+            15.25,
+            9.5,
+            15.75,
+            11.5
+          ]
+        },
+        "north": {
+          "texture": "#0",
+          "uv": [
+            15.25,
+            9.5,
+            15.5,
+            11.5
+          ]
+        },
+        "south": {
+          "texture": "#0",
+          "uv": [
+            15.5,
+            9.5,
+            15.75,
+            11.5
+          ]
+        },
+        "up": {
+          "texture": "#0",
+          "uv": [
+            15.25,
+            10,
+            15.5,
+            11
+          ]
+        },
+        "west": {
+          "texture": "#0",
+          "uv": [
+            15.25,
+            9.5,
+            15.75,
+            11.5
+          ]
+        }
+      },
+      "from": [
+        5.5,
+        -4.5,
+        12.5
+      ],
+      "rotation": {
+        "angle": -45,
+        "axis": "x",
+        "origin": [
+          0,
+          0,
+          0
+        ]
+      },
+      "to": [
+        6.5,
+        -0.5,
+        14.5
+      ]
+    }
+  ]
+}

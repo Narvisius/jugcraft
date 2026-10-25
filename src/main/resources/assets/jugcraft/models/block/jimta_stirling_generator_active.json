@@ -1,0 +1,83 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "sheet": "jugcraft:block/jimtafacts/heat/stirling_generator",
+    "particle": "#sheet"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#sheet",
+          "uv": [
+            8.0,
+            0,
+            9.333333333333334,
+            16
+          ],
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#sheet",
+          "uv": [
+            9.333333333333334,
+            0,
+            10.666666666666666,
+            16
+          ],
+          "cullface": "up"
+        },
+        "north": {
+          "texture": "#sheet",
+          "uv": [
+            12.0,
+            0,
+            13.333333333333334,
+            16
+          ],
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#sheet",
+          "uv": [
+            14.666666666666666,
+            0,
+            16.0,
+            16
+          ],
+          "cullface": "south"
+        },
+        "west": {
+          "texture": "#sheet",
+          "uv": [
+            13.333333333333334,
+            0,
+            14.666666666666666,
+            16
+          ],
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#sheet",
+          "uv": [
+            10.666666666666666,
+            0,
+            12.0,
+            16
+          ],
+          "cullface": "east"
+        }
+      }
+    }
+  ]
+}

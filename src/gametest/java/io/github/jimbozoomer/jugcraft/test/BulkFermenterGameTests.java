@@ -181,9 +181,9 @@ public class BulkFermenterGameTests {
 		ServerLevel level = helper.getLevel();
 		FormMachineBlockEntity machine = place(helper, new BlockPos(6, 1, 1), Direction.NORTH);
 		List<FluidRecipes.Entry> own = machine.recipes(level.getServer());
-		helper.assertTrue(own.size() == 2 && own.get(0).id().equals(Jugcraft.id("chemical_reaction/fermenter_bioethanol"))
-				&& own.get(1).id().equals(Jugcraft.id("chemical_reaction/ferment_crop_mash")),
-				"The Fermenter's two recipes, bioethanol first: " + own.stream().map(FluidRecipes.Entry::id).toList());
+		helper.assertTrue(own.size() == 4 && own.get(0).id().equals(Jugcraft.id("chemical_reaction/fermenter_bioethanol"))
+				&& own.stream().map(FluidRecipes.Entry::id).collect(java.util.stream.Collectors.toSet()).equals(java.util.Set.of(Jugcraft.id("chemical_reaction/fermenter_bioethanol"), Jugcraft.id("chemical_reaction/ferment_crop_mash"), Jugcraft.id("jimtafacts_crops/ferment_hops"), Jugcraft.id("jimtafacts_production/ferment_biochaff"))),
+				"The Fermenter's four integrated recipes, bioethanol first: " + own.stream().map(FluidRecipes.Entry::id).toList());
 		helper.assertTrue(machine.form().vents(1) && machine.form().profile().lanes() == 4, "Four lanes, and its gas vents");
 		RecipeManager.CachedCheck<CraftingInput, CraftingRecipe> crafting = RecipeManager.createCheck(RecipeType.CRAFTING);
 		ItemStack tank = stack("steel_tank");

@@ -1,0 +1,97 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_wood_fluid"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_wood_fluid_arm"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_wood_fluid_arm",
+        "y": 90
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_wood_fluid_arm",
+        "y": 180
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_wood_fluid_arm",
+        "y": 270
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_wood_fluid_arm",
+        "x": 270
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_wood_fluid_arm",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_wood_fluid_port"
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_wood_fluid_port",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_wood_fluid_port",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_wood_fluid_port",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "up"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_wood_fluid_port",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "down"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_wood_fluid_port",
+        "x": 90
+      }
+    }
+  ]
+}

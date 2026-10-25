@@ -12,10 +12,10 @@ concurrency:
 jobs:
   mod:
     runs-on: ubuntu-latest
-    # Resource generation/model audits precede the complete server suite. The combined
-    # adventure run reached 2,196 passes with a long-running test still active at 45m.
-    # Preserve every check and assertion; budget for the expanded combined workload.
-    timeout-minutes: 60
+    # Resource generation/model audits precede the complete server suite. The expanded
+    # 2,476-test local run completed after 76m, including 71m in the game-test server.
+    # Preserve every check and assertion; allow that workload plus packaging overhead.
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -65,7 +65,7 @@ jobs:
     name: optional integrations absent
     runs-on: ubuntu-latest
     # Match mod's expanded full-suite budget; preserve every test and assertion.
-    timeout-minutes: 60
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:

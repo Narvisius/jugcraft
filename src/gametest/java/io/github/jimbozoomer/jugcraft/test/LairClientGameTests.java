@@ -193,11 +193,13 @@ public class LairClientGameTests implements FabricClientGameTest {
 			ServerLevel lair = minecraft.getLevel(ACRE.dimension);
 			ItemEntity dropped = new ItemEntity(lair, player.getX(), player.getY() + 1.0, player.getZ(), new ItemStack(Items.DIAMOND, 3));
 			lair.addFreshEntity(dropped);
+			io.github.jimbozoomer.jugcraft.grave.DeathGraves.duringDeath(player, () ->
+				io.github.jimbozoomer.jugcraft.grave.DeathGraves.capture(player, new ItemStack(Items.DIAMOND, 3)));
 			ExperienceOrb orb = new ExperienceOrb(lair, player.getX(), player.getY(), player.getZ(), 7);
 			lair.addFreshEntity(orb);
 			Lairs.died(player);
 			GraveGoods goods = player.getAttached(Lairs.GRAVE_GOODS);
-			check(goods != null && goods.count() == 3 && goods.experience() == 7 && dropped.isRemoved() && orb.isRemoved(),
+			check(goods != null && goods.count() == 3 && goods.experience() == 7 && !dropped.isRemoved() && orb.isRemoved(),
 					"The drops were not gathered as Grave Goods: " + goods);
 			check(player.getAttached(Lairs.VISIT) == null, "A death in a lair ends the visit");
 			player.teleportTo(minecraft.overworld(), outside.x, outside.y, outside.z, Set.of(), 0.0F, 0.0F, true);

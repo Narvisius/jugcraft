@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IPI",
+    "BEB",
+    "IFI"
+  ],
+  "key": {
+    "B": "minecraft:crafting_table",
+    "E": "jugcraft:jimta_engineering_processor",
+    "F": "jugcraft:jimta_fluix_crystal",
+    "I": "minecraft:iron_ingot",
+    "P": "minecraft:piston"
+  },
+  "result": {
+    "id": "jugcraft:jimta_molecular_assembler",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

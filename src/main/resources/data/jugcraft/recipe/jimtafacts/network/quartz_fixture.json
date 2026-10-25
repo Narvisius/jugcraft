@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "Q",
+    "I"
+  ],
+  "key": {
+    "Q": "jugcraft:jimta_certus_quartz_crystal",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "id": "jugcraft:jimta_quartz_fixture",
+    "count": 2
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

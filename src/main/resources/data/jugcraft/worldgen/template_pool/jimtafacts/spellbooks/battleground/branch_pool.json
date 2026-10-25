@@ -1,0 +1,60 @@
+{
+  "name": "jugcraft:jimtafacts/spellbooks/battleground_start_pool",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 4,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/battleground/branch_1",
+        "processors": "jugcraft:jimtafacts/spellbooks/ancient_battlegrounds_randomization",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 4,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/battleground/branch_2",
+        "processors": "jugcraft:jimtafacts/spellbooks/ancient_battlegrounds_randomization",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/battleground/branch_3",
+        "processors": "jugcraft:jimtafacts/spellbooks/ancient_battlegrounds_randomization",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/battleground/branch_4",
+        "processors": "jugcraft:jimtafacts/spellbooks/ancient_battlegrounds_randomization",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/battleground/branch_5",
+        "processors": "jugcraft:jimtafacts/spellbooks/ancient_battlegrounds_randomization",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 5,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/battleground/branch_dead_end",
+        "processors": "jugcraft:jimtafacts/spellbooks/ancient_battlegrounds_randomization",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

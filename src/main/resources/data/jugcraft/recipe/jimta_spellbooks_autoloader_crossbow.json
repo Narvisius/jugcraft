@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "minecraft:crossbow",
+    "jugcraft:jimta_spellbooks_arcane_ingot",
+    "jugcraft:jimta_spellbooks_rare_ink",
+    "minecraft:stick"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_autoloader_crossbow",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

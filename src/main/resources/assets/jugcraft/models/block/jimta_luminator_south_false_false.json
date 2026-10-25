@@ -1,0 +1,77 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "sheet": "jugcraft:block/jimtafacts/utilities/luminator_false",
+    "particle": "#sheet"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        1
+      ],
+      "faces": {
+        "down": {
+          "texture": "#sheet",
+          "uv": [
+            0.0,
+            15,
+            2.6666666666666665,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#sheet",
+          "uv": [
+            2.6666666666666665,
+            0,
+            5.333333333333333,
+            1
+          ]
+        },
+        "north": {
+          "texture": "#sheet",
+          "uv": [
+            8.0,
+            0,
+            10.666666666666666,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#sheet",
+          "uv": [
+            13.333333333333334,
+            0,
+            16.0,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#sheet",
+          "uv": [
+            10.666666666666666,
+            0,
+            10.833333333333334,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#sheet",
+          "uv": [
+            7.833333333333333,
+            0,
+            8.0,
+            16
+          ]
+        }
+      }
+    }
+  ]
+}

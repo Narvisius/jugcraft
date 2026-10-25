@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MCM",
+    "CMC",
+    "MCM"
+  ],
+  "key": {
+    "M": "#c:ingots/mithril",
+    "C": "minecraft:iron_chain"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_mithril_weave",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

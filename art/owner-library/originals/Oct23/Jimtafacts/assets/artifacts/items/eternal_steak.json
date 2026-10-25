@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "artifacts:item/eternal_steak"
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "artifacts:item/eternal_steak_broken"
+    },
+    "property": "artifacts:needs_repair"
+  }
+}

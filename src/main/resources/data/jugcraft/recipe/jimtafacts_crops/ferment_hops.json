@@ -1,0 +1,30 @@
+{
+  "type": "jugcraft:chemical_reaction",
+  "capability": "jugcraft:controlled_fermentation",
+  "items": [
+    {
+      "ingredient": "jugcraft:jimta_hops",
+      "count": 4
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 1000
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:ethanol_broth",
+      "amount": 1000,
+      "tank": 0
+    },
+    {
+      "fluid": "jugcraft:fermentation_exhaust",
+      "amount": 250,
+      "tank": 1
+    }
+  ],
+  "energy_per_tick": 8,
+  "time": 600
+}

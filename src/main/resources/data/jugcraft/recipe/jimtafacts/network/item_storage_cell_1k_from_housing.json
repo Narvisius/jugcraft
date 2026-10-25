@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:jimta_item_cell_housing",
+    "jugcraft:jimta_cell_component_1k"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_item_storage_cell_1k",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

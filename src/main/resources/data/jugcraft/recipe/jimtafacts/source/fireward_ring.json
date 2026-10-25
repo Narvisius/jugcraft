@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "M": "jugcraft:jimta_spellbooks_cinder_essence",
+    "X": "jugcraft:jimta_spellbooks_mithril_scrap"
+  },
+  "pattern": [
+    " M ",
+    "MXM",
+    " M "
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:jimta_spellbooks_fireward_ring"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

@@ -85,6 +85,105 @@ native render/event equivalents rather than being executed unchanged.
 
 ## Full-port validation and local playtest
 
+### Arrow pickup stacking correction (22 October 2026)
+
+The owner reported that five arrows fired from a bronze longbow returned as five
+separate inventory stacks. `NouveauEquipment.arrowTick` stores a unique
+`ARROW_SHOT` component on every player-fired arrow's internal pickup stack. That
+identity coordinates split/piercing spell accounting, but vanilla also copied it
+into recovered inventory items, making otherwise identical arrows incompatible.
+
+`NouveauArrowMixin` now removes only `ARROW_SHOT` from the copy returned by
+`AbstractArrow.getPickupItem`. The live projectile retains its identity, including
+when an inventory is full. Potion contents, custom names, arrow types and pickup
+restrictions are preserved. The same copy method covers arrows dropped after a
+failed hit. No balance values, registrations or dependencies change.
+
+Existing arrows in inventories are not rewritten automatically. Firing and
+recovering an affected ordinary arrow removes its old marker; arrows already in
+the world use the corrected pickup path. No world migration is needed.
+
+`ArrowPickupGameTests` covers five shots and recoveries for bronze/steel longbows
+and the vanilla bow; potion/name/spectral preservation; recovery of an old marked
+arrow; full inventories; and disallowed/creative-only pickup. These are automated
+server checks, not a two-client playtest. Implementation: OpenAI Codex (GPT-6),
+based on `8e375a0ba`, branch `codex/arrow-pickup-stacking`.
+
+Validation uses the pinned Java 25.0.4.1, Minecraft 26.3 and Fabric Loader 0.19.5
+in a disposable local game-test world. All four regression tests fail against
+the pre-fix compiled code because recovered items retain the extra component.
+The focused run sets `fabric-api.gametest.filter` to
+`*:arrow_pickup_game_tests*` on the `runGameTest` task through a local Gradle init
+script; the normal test manifest still includes every test class.
+After compiling the fix, all four tests pass (22 October 2026). This includes
+recovering five arrows back into the original stack of 16 for all three bows.
+The playable `jar` task also completed; the packaged class contains the pickup
+cleanup hook and the regression test classes are excluded from the mod.
+
+`python scripts/check_repository.py` passes. The broader
+`python tools/check_mod_data.py` audit could not run to completion because this
+shell has no configured DejaVu font directory (`DejaVuSansCondensed-Bold.ttf`
+missing). No asset or recipe data changed. Full server/client suites, a live
+server upgrade and a two-client human playtest have not been run for this fix.
+
+### Wilden Stalker visibility and contact correction (22 October 2026)
+
+Owner request: require line of sight to start the Stalker's special attack and
+deal its damage only when the projectile or leap connects. Implemented with
+OpenAI Codex (GPT-6), alongside the arrow-stacking correction above.
+
+The Stalker previously started its warning without checking visibility/range,
+then launched a leap and spine and also applied three damage directly to its
+target at release. That direct hit needed neither projectile impact nor contact.
+The release already checked line of sight and distance below fourteen blocks;
+this source analysis did not reproduce an unrestricted through-solid-wall cast.
+
+The Stalker's attack clock now advances only with a valid, visible target inside
+that existing range. Losing visibility/range cancels the windup, as does changing
+targets during it. Reacquiring the target requires a fresh cycle. The original
+60-tick preparation and 20-tick warning timing remain. Disabling the feature
+clears the pending Stalker attack.
+
+Release launches the existing leap/spine without applying direct damage. The
+leap checks actual overlapping body boxes after vanilla resolves movement and
+block collisions, with line of sight checked again at contact. It can attempt
+one three-damage contact hit against the launch target; landing, horizontal
+collision or forty ticks ends the contact window. Normal melee cannot add a
+second hit during that leap. The existing spine still deals four base damage
+only on projectile impact, stops at solid blocks and expires after forty ticks.
+Player protections and damage immunity still use the shared effect authority.
+
+Leap and windup tracking is transient: a reconstructed entity after unload or
+restart has no pending contact hit. No registrations, dependencies, assets,
+recipes, other Wilden species or Chimera attacks change. Ground melee is retained.
+
+`WildenStalkerGameTests` exercises real collision/visibility queries and projectile
+ticks with connected survival players that complete the loading handshake.
+The tests cover blocked and out-of-range starts, cover during windup, target
+changes, release without automatic damage, dodging, projectile wall blocking and
+successful impact, actual leap movement/contact, one-hit-only contact, wall
+blocking of a leap, and missed-leap expiry. Vanilla goals are held still while
+the production special-attack AI is stepped deterministically. These are local
+server checks, not a rendered-client or two-person multiplayer playtest.
+
+Validation on 22 October 2026: all ten focused Stalker server tests pass with
+Java 25.0.4.1, Minecraft 26.3 and Fabric Loader 0.19.5. The local invocation is
+`gradlew.bat runGameTest jar --offline --console=plain -I ../stalker-tests.init.gradle`;
+that init script sets the `runGameTest` JVM property `fabric-api.gametest.filter`
+to `*:wilden_stalker_game_tests*`. All tests remain in the normal test manifest.
+The command completed successfully, including the playable JAR. Archive
+inspection confirms both the Stalker and arrow fixes and excludes test classes.
+`python scripts/check_repository.py` and `git diff --check` also pass. Initial
+test-fixture failures were corrected: vanilla's deprecated mock-player helper
+always reports creative mode, a connected test player must complete its loading
+handshake before taking damage, and disabling mob AI also disables its travel.
+The final tests use targetable, loaded survival players and actual mob travel
+with unrelated goals removed. No pre-fix passing/failing comparison is claimed
+from those initial fixture runs. The full suites and live-server playtest remain
+unperformed; the unchanged data audit still needs the font setup noted above.
+
+### Original full-port validation
+
 Verified on 18 October 2026 with Minecraft 26.3, Fabric Loader 0.19.5, Java
 25.0.4.1 and the unchanged 18-library lock, including GeckoLib 5.5.7:
 

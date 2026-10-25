@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GCF",
+    " I ",
+    " I "
+  ],
+  "key": {
+    "G": "minecraft:glowstone_dust",
+    "C": "jugcraft:jimta_energy_cell",
+    "F": "jugcraft:jimta_fluix_crystal",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "id": "jugcraft:jimta_entropy_manipulator"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

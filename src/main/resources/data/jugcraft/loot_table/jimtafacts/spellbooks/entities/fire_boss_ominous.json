@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "rolls": 4,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:jimta_spellbooks_blank_rune",
+          "condition": {
+            "type": "minecraft:killed_by_player"
+          }
+        }
+      ]
+    }
+  ]
+}

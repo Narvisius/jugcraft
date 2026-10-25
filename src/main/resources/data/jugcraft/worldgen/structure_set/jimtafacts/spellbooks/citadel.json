@@ -1,0 +1,20 @@
+{
+  "structures": [
+    {
+      "structure": "jugcraft:jimtafacts/spellbooks/citadel",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "salt": 199995600,
+    "spacing": 100,
+    "separation": 80,
+    "type": "minecraft:random_spread"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

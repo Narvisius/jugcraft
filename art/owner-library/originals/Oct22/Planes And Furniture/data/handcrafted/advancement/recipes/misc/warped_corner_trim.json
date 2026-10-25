@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "handcrafted:warped_corner_trim"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_warped_corner_trim": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:warped_planks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_warped_corner_trim"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "handcrafted:warped_corner_trim"
+    ]
+  }
+}

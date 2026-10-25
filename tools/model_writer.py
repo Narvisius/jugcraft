@@ -909,7 +909,10 @@ def write_classic(root, machines, parts, fluid_blocks):
     write_dynamic_sockets(root, MODELS, FOOTPRINTS)
     if battery_machines:
         write_steampunk(root, battery_machines, {}, {})
+    import jimtafacts_industry
     for machine, info in machines.items():
+        if machine in jimtafacts_industry.MACHINES and jimtafacts_industry.MACHINES[machine][3] is None:
+            continue  # Original owner housing is written to both styles by its importer.
         if machine in ENLARGED:
             # The compact look (copies built before batch 44) is the old orientable cube.
             for suffix, front in (("", "front"), ("_on", "front_on")):
@@ -1001,7 +1004,10 @@ def write_steampunk(root, machines, parts, fluid_blocks):
     def glow_override(elements):
         return {name: rid(f"block/{GLOW[name]}") for name in texture_names(elements) if name in GLOW}
 
+    import jimtafacts_industry
     for machine, info in machines.items():
+        if machine in jimtafacts_industry.MACHINES and jimtafacts_industry.MACHINES[machine][3] is None:
+            continue  # Original owner housing is written to both styles by its importer.
         elements = with_sockets(MODELS[machine], permanent_ports(machine, FOOTPRINTS.get(machine, [(0, 0, 0)])))
         textures = textures_for(elements, machine)
         lit = info["lit"] and bool(glow_override(elements))

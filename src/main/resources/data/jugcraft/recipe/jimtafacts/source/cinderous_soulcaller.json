@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CNC",
+    "CEC",
+    "CNC"
+  ],
+  "key": {
+    "E": "minecraft:echo_shard",
+    "C": "jugcraft:jimta_spellbooks_cinder_essence",
+    "N": "minecraft:netherite_scrap"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_cinderous_soulcaller",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

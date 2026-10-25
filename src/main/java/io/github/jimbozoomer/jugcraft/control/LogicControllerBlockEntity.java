@@ -159,7 +159,7 @@ public class LogicControllerBlockEntity extends BlockEntity implements ExtendedM
 		int bit = 1 << channel.ordinal();
 		states ^= bit;
 		boolean on = (states & bit) != 0;
-		for (BlockPos device : ControlNetwork.find(level, worldPosition).switches()) {
+		for (BlockPos device : devicesFor(level, worldPosition).switches()) {
 			BlockState state = level.getBlockState(device);
 			if (state.getValue(Channels.CHANNEL) == channel && state.getBlock() instanceof ChannelSwitch block) {
 				block.switchTo(level, device, state, on);
@@ -172,7 +172,7 @@ public class LogicControllerBlockEntity extends BlockEntity implements ExtendedM
 
 	/** One pass: read the sensors, apply the rules, switch the relays and alarms. */
 	public void evaluate(ServerLevel level, BlockPos pos) {
-		ControlNetwork.Devices devices = ControlNetwork.find(level, pos);
+		ControlNetwork.Devices devices = devicesFor(level, pos);
 		int[] sum = new int[Channels.COUNT];
 		int[] count = new int[Channels.COUNT];
 		for (BlockPos sensor : devices.sensors()) {
@@ -190,6 +190,7 @@ public class LogicControllerBlockEntity extends BlockEntity implements ExtendedM
 			changed |= reading != readings[channel];
 			readings[channel] = reading;
 		}
+		changed |= prepareReadings(readings);
 		if (++sinceSample >= HISTORY_EVERY) {
 			sinceSample = 0;
 			for (int channel = 0; channel < Channels.COUNT; channel++) {
@@ -198,8 +199,34 @@ public class LogicControllerBlockEntity extends BlockEntity implements ExtendedM
 			}
 			changed = true;
 		}
-		int targeted = 0;
 		int before = states;
+		RuleResult result = evaluateRules(states, readings);
+		int targeted = result.targeted();
+		states = result.states();
+		for (BlockPos device : devices.switches()) {
+			BlockState deviceState = level.getBlockState(device);
+			int channel = deviceState.getValue(Channels.CHANNEL).ordinal();
+			if ((targeted & (1 << channel)) != 0 && deviceState.getBlock() instanceof ChannelSwitch block) {
+				block.switchTo(level, device, deviceState, (states & (1 << channel)) != 0);
+			}
+		}
+		if (states != before || changed) {
+			setChanged();
+			sync();
+		}
+	}
+
+	/** Alternative physical controllers share sensing, history, persistence and menus. */
+	protected boolean prepareReadings(int[] readings) { return false; }
+	public record RuleResult(int states, int targeted) {}
+
+	protected ControlNetwork.Devices devicesFor(ServerLevel level, BlockPos pos) {
+		return ControlNetwork.find(level, pos);
+	}
+
+	protected RuleResult evaluateRules(int previous, int[] readings) {
+		int states = previous;
+		int targeted = 0;
 		for (int rule = 0; rule < RULES; rule++) {
 			int base = rule * FIELDS;
 			if (rules[base + ENABLED] == 0) {
@@ -216,17 +243,7 @@ public class LogicControllerBlockEntity extends BlockEntity implements ExtendedM
 				states = rules[base + ACTION] == 1 ? states | (1 << target) : states & ~(1 << target);
 			}
 		}
-		for (BlockPos device : devices.switches()) {
-			BlockState deviceState = level.getBlockState(device);
-			int channel = deviceState.getValue(Channels.CHANNEL).ordinal();
-			if ((targeted & (1 << channel)) != 0 && deviceState.getBlock() instanceof ChannelSwitch block) {
-				block.switchTo(level, device, deviceState, (states & (1 << channel)) != 0);
-			}
-		}
-		if (states != before || changed) {
-			setChanged();
-			sync();
-		}
+		return new RuleResult(states, targeted);
 	}
 
 	/** Sends the readings, states and history to nearby clients, for control monitors. */

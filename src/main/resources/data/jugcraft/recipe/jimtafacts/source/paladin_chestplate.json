@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GDG",
+    "WAW",
+    "GWG"
+  ],
+  "key": {
+    "A": "jugcraft:jimta_spellbooks_priest_chestplate",
+    "D": "jugcraft:jimta_spellbooks_divine_soulshard",
+    "W": "jugcraft:jimta_spellbooks_mithril_weave",
+    "G": "#c:ingots/gold"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_paladin_chestplate",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

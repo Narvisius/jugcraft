@@ -1,0 +1,77 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "all": "jugcraft:block/jimtafacts/matter/jimta_fluid_bottler",
+    "particle": "#all"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#all",
+          "uv": [
+            8.0,
+            0,
+            9.333333333333334,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#all",
+          "uv": [
+            9.333333333333334,
+            0,
+            10.666666666666666,
+            16
+          ]
+        },
+        "north": {
+          "texture": "#all",
+          "uv": [
+            12.0,
+            0,
+            13.333333333333334,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#all",
+          "uv": [
+            14.666666666666666,
+            0,
+            16.0,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#all",
+          "uv": [
+            13.333333333333334,
+            0,
+            14.666666666666666,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#all",
+          "uv": [
+            10.666666666666666,
+            0,
+            12.0,
+            16
+          ]
+        }
+      }
+    }
+  ]
+}

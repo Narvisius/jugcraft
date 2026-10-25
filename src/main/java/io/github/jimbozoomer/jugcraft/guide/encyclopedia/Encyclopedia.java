@@ -73,6 +73,7 @@ public final class Encyclopedia {
         page("habitats", io.github.jimbozoomer.jugcraft.menagerie.MenagerieGuide::habitats);
         page("beasts", io.github.jimbozoomer.jugcraft.menagerie.MenagerieGuide::beasts);
         page("caverns", io.github.jimbozoomer.jugcraft.menagerie.MenagerieGuide::caverns);
+        page("jimta_network", io.github.jimbozoomer.jugcraft.jimtafacts.network.DigitalGuide::write);
 		PayloadTypeRegistry.serverboundPlay().register(EncyclopediaRequestPayload.TYPE, EncyclopediaRequestPayload.CODEC);
 		PayloadTypeRegistry.clientboundPlay().register(EncyclopediaPayload.TYPE, EncyclopediaPayload.CODEC);
 		ServerPlayNetworking.registerGlobalReceiver(EncyclopediaRequestPayload.TYPE, (payload, context) -> receive(context.player(), payload));

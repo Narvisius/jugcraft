@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DCD",
+    "COC",
+    "DCD"
+  ],
+  "key": {
+    "D": "minecraft:cobbled_deepslate",
+    "C": "jugcraft:jimta_certus_quartz_dust",
+    "O": "minecraft:obsidian"
+  },
+  "result": {
+    "id": "jugcraft:jimta_sky_stone_block",
+    "count": 8
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

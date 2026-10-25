@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "handcrafted:white_glazed_thin_pot"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_white_glazed_thin_pot": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:white_glazed_terracotta"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_white_glazed_thin_pot"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "handcrafted:white_glazed_thin_pot"
+    ]
+  }
+}

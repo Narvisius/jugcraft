@@ -1,0 +1,20 @@
+{
+  "structures": [
+    {
+      "structure": "jugcraft:jimtafacts/spellbooks/evoker_fort",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "salt": 684512,
+    "spacing": 85,
+    "separation": 50,
+    "type": "minecraft:random_spread"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

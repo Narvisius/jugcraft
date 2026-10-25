@@ -1,0 +1,18 @@
+{
+  "model": {
+    "type": "minecraft:composite",
+    "models": [
+      {
+        "type": "minecraft:model",
+        "model": "jugcraft:jimtafacts/ae2/item/facade_base"
+      },
+      {
+        "type": "minecraft:special",
+        "base": "jugcraft:jimtafacts/ae2/item/facade_base",
+        "model": {
+          "type": "jugcraft:jimta_facade"
+        }
+      }
+    ]
+  }
+}

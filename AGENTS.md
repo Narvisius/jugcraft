@@ -35,3 +35,8 @@ Before creating textures, sounds or animations, inspect the [shared owner asset 
 The library serves every content branch: blocks, ores, metals, machines, guns, planes/airships, sounds, animations, weapons, armor, trees, biomes, farming and food. It is not restricted to machinery.
 
 Preserve the source library. Copy selected files into the feature's runtime resources, keep required animation sidecars, record the source path and modifications, and follow [ART_DIRECTION.md](docs/ART_DIRECTION.md) plus [LICENSE_POLICY.md](LICENSE_POLICY.md). Test an actual runtime import as part of the feature that uses it.
+
+
+## Owner restart confirmation — October 22, 2026
+
+Always obtain the owner's explicit confirmation before stopping or restarting the live Jugcraft server. Permission to prepare or push updates is not restart permission. Prepare and validate the files first. After confirmation, notify connected players in-game that the server will restart in 30 seconds, wait the full 30 seconds, then stop/restart. The owner authorizes this maintenance warning.

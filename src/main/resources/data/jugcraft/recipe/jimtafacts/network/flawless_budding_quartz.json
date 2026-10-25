@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FDF",
+    "DBD",
+    "FDF"
+  ],
+  "key": {
+    "F": "jugcraft:jimta_fluix_crystal",
+    "D": "minecraft:diamond",
+    "B": "jugcraft:jimta_flawed_budding_quartz"
+  },
+  "result": {
+    "id": "jugcraft:jimta_flawless_budding_quartz"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

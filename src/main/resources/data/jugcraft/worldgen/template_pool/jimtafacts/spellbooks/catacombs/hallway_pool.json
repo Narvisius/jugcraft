@@ -1,0 +1,66 @@
+{
+  "name": "jugcraft:jimtafacts/spellbooks/catacombs_hallway_pool",
+  "fallback": "jugcraft:jimtafacts/spellbooks/catacombs/fallback_pool",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/catacombs/hallway/hallway_straight",
+        "processors": "jugcraft:jimtafacts/spellbooks/catacombs_randomization",
+        "projection": "rigid",
+        "element_type": "jugcraft:jimtafacts_individual_terrain",
+        "terrain_adjustment": "bury"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/catacombs/hallway/hallway_straight_2",
+        "processors": "jugcraft:jimtafacts/spellbooks/catacombs_randomization",
+        "projection": "rigid",
+        "element_type": "jugcraft:jimtafacts_individual_terrain",
+        "terrain_adjustment": "bury"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/catacombs/hallway/hallway_straight_trapped",
+        "processors": "jugcraft:jimtafacts/spellbooks/catacombs_randomization",
+        "projection": "rigid",
+        "element_type": "jugcraft:jimtafacts_individual_terrain",
+        "terrain_adjustment": "bury"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/catacombs/hallway/hallway_tee_1",
+        "processors": "jugcraft:jimtafacts/spellbooks/catacombs_randomization",
+        "projection": "rigid",
+        "element_type": "jugcraft:jimtafacts_individual_terrain",
+        "terrain_adjustment": "bury"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/catacombs/hallway/hallway_tee_2",
+        "processors": "jugcraft:jimtafacts/spellbooks/catacombs_randomization",
+        "projection": "rigid",
+        "element_type": "jugcraft:jimtafacts_individual_terrain",
+        "terrain_adjustment": "bury"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/catacombs/hallway/hallway_turn_1",
+        "processors": "jugcraft:jimtafacts/spellbooks/catacombs_randomization",
+        "projection": "rigid",
+        "element_type": "jugcraft:jimtafacts_individual_terrain",
+        "terrain_adjustment": "bury"
+      }
+    }
+  ]
+}

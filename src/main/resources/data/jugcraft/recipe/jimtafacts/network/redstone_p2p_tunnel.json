@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "III",
+    "EGE",
+    " C "
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "E": "jugcraft:jimta_engineering_processor",
+    "G": "minecraft:redstone",
+    "C": "jugcraft:jimta_fluix_glass_cable"
+  },
+  "result": {
+    "id": "jugcraft:jimta_redstone_p2p_tunnel",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IGI",
+    "CHC",
+    "ILI"
+  ],
+  "key": {
+    "C": "jugcraft:jimta_fluix_glass_cable",
+    "G": "minecraft:glass",
+    "H": "minecraft:chest",
+    "I": "minecraft:iron_ingot",
+    "L": "jugcraft:jimta_logic_processor"
+  },
+  "result": {
+    "id": "jugcraft:jimta_me_chest",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

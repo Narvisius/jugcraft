@@ -112,4 +112,13 @@ public final class QuadModel {
 			}
 		}
 	}
+
+    /** The supplied aircraft banner mesh with vanilla's dyed pattern atlas, in layer order. */
+    public void submitBanner(PoseStack pose, SubmitNodeCollector collector, int light,
+            net.minecraft.client.resources.model.sprite.SpriteId sprite, int color, int order) {
+        var atlasSprite=net.minecraft.client.Minecraft.getInstance().getAtlasManager().get(sprite);
+        for(var list:quads.values())collector.order(order).submitCustomGeometry(pose,
+            sprite.renderType(net.minecraft.client.renderer.rendertype.RenderTypes::bannerPattern),
+            (matrix,buffer)->emit(matrix,atlasSprite.wrap(buffer),list,light,color));
+    }
 }

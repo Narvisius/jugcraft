@@ -1,0 +1,115 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_iron_fluid"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_iron_fluid_arm"
+      },
+      "when": {
+        "north": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_iron_fluid_arm",
+        "y": 90
+      },
+      "when": {
+        "east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_iron_fluid_arm",
+        "y": 180
+      },
+      "when": {
+        "south": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_iron_fluid_arm",
+        "y": 270
+      },
+      "when": {
+        "west": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_iron_fluid_arm",
+        "x": 270
+      },
+      "when": {
+        "up": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_iron_fluid_arm",
+        "x": 90
+      },
+      "when": {
+        "down": "true"
+      }
+    },
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_iron_fluid_port"
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_iron_fluid_port",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_iron_fluid_port",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_iron_fluid_port",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "up"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_iron_fluid_port",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "down"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimta_pipe_iron_fluid_port",
+        "x": 90
+      }
+    }
+  ]
+}

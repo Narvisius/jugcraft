@@ -1,0 +1,38 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "jugcraft:jimta_plastic_drinking_hat",
+              "weight": 3
+            },
+            {
+              "type": "minecraft:empty",
+              "weight": 3
+            }
+          ]
+        },
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "jugcraft:jimta_novelty_drinking_hat"
+            },
+            {
+              "type": "minecraft:empty"
+            }
+          ]
+        }
+      ],
+      "name": "main",
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "jugcraft:jimtafacts/items/drinking_hat"
+}

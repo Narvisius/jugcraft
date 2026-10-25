@@ -83,6 +83,7 @@ public class FluidFilterBlock extends FluidPipeBlock implements EntityBlock {
 	private static @Nullable FluidVariant fluidBeside(Level level, BlockPos pos) {
 		for (Direction direction : Direction.values()) {
 			BlockPos neighbor = pos.relative(direction);
+            if(!level.hasChunkAt(neighbor)||!io.github.jimbozoomer.jugcraft.finance.ClaimTransfers.allowed(level,pos,neighbor))continue;
 			if (level.getBlockState(neighbor).getBlock() instanceof FluidPipeBlock) {
 				continue;
 			}
@@ -96,6 +97,7 @@ public class FluidFilterBlock extends FluidPipeBlock implements EntityBlock {
 	}
 
 	private static void set(Level level, BlockPos pos, BlockState state, FluidVariant fluid, Player player) {
+        if(!(level instanceof net.minecraft.server.level.ServerLevel server)||player.isSpectator()||!io.github.jimbozoomer.jugcraft.concordance.Authority.mayChange(server,player,pos))return;
 		if (level.getBlockEntity(pos) instanceof FluidFilterBlockEntity filter) {
 			filter.setFilter(fluid);
 			level.setBlock(pos, state.setValue(SET, !fluid.isBlank()), Block.UPDATE_ALL);

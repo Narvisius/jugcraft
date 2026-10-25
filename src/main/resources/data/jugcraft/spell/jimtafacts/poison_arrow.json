@@ -1,0 +1,74 @@
+{
+  "school": "spell_power:arcane",
+  "range": 40,
+  "tier": 1,
+  "group": "jimtafacts_spellbooks",
+  "type": "ACTIVE",
+  "active": {
+    "cast": {
+      "duration": 1,
+      "animation": {
+        "id": "jugcraft:charge_arrow"
+      }
+    }
+  },
+  "release": {
+    "animation": {
+      "id": "jugcraft:long_cast_finish"
+    }
+  },
+  "target": {
+    "type": "AIM",
+    "aim": {
+      "required": false
+    }
+  },
+  "deliver": {
+    "type": "PROJECTILE",
+    "projectile": {
+      "launch_properties": {
+        "velocity": 2
+      },
+      "projectile": {
+        "homing_angle": 0,
+        "perks": {
+          "pierce": 0
+        },
+        "client_data": {
+          "light_level": 12,
+          "composite_model": {
+            "models": [
+              {
+                "orientation": "TOWARDS_MOTION",
+                "fx": {
+                  "model_id": "jugcraft:spell_projectile/jimtafacts/poison_arrow",
+                  "scale": 2.08,
+                  "light_emission": "RADIATE"
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "CUSTOM",
+        "custom": {
+          "handler": "jugcraft:jimtafacts_combat",
+          "intent": "HARMFUL"
+        }
+      }
+    }
+  ],
+  "cost": {
+    "exhaust": 0,
+    "durability": 0,
+    "cooldown": {
+      "duration": 15,
+      "hosting_item": false
+    }
+  }
+}

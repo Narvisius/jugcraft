@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "#c:raw_materials/iron",
+    "#c:gems/amethyst"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_shriving_stone"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

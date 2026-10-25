@@ -115,7 +115,9 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	public static final int DATA_DRILL_DEPTH = DATA_BATTERY_MODE + 5;
 	public static final int DATA_DRILL_STAGE = DATA_DRILL_DEPTH + 1;
 	public static final int DATA_DRILL_USE = DATA_DRILL_STAGE + 1;
-	public static final int DATA_COUNT = DATA_DRILL_USE + 1;
+	public static final int DATA_INDUSTRIAL_HEAT = DATA_DRILL_USE + 1;
+	public static final int DATA_INDUSTRIAL_HEAT_TARGET = DATA_INDUSTRIAL_HEAT + 1;
+	public static final int DATA_COUNT = DATA_INDUSTRIAL_HEAT_TARGET + 1;
 	/** Fluid processors push their output tanks into pipes and neighbouring tanks every this many ticks... */
 	public static final int FLUID_PUSH_INTERVAL = 4;
 	/** ...up to this many mB from each output tank. */
@@ -177,6 +179,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	private NonNullList<ItemStack> items;
 	private int progress;
 	private int maxProgress;
+	private int industrialHeat, industrialHeatTarget;
 	private int burn;
 	private int maxBurn;
 	/**
@@ -225,6 +228,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		@Override
 		public int get(int index) {
 			return switch (index) {
+				case DATA_INDUSTRIAL_HEAT -> industrialHeat;
+				case DATA_INDUSTRIAL_HEAT_TARGET -> industrialHeatTarget;
 				case DATA_ENERGY_LOW -> (int) (energy.getAmount() & 0xFFFF);
 				case DATA_ENERGY_HIGH -> (int) ((energy.getAmount() >>> 16) & 0xFFFF);
 				case DATA_CAPACITY_LOW -> (int) (energy.getCapacity() & 0xFFFF);
@@ -280,7 +285,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 					this::setChanged, () -> kind == MachineKind.FLOW_BATTERY ? electrolyteCeiling() : kind.capacity,
 					() -> level == null ? 0 : level.getGameTime(), this::batteryRate,
 					() -> batteryMode, () -> batteryReserve, () -> batteryPriority, () -> batteryOutput, this::batteryAvailable)
-				: new SimpleEnergyStorage(kind.capacity, insert, extract, this::setChanged);
+				: kind.upgradeSlots() > 0 ? io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialUpgrades.buffer(this, kind.capacity, insert, extract)
+                    : new SimpleEnergyStorage(kind.capacity, insert, extract, this::setChanged);
 		this.reservoir = switch (kind) {
 			case STEEL_TANK -> SingleFluidStorage.withFixedCapacity(MachineKind.STEEL_TANK_CAPACITY * FluidNetworks.DROPLETS_PER_MB, this::setChanged);
 			case GAS_HOLDER -> gasReservoir(MachineKind.GAS_HOLDER_CAPACITY * FluidNetworks.DROPLETS_PER_MB);
@@ -557,6 +563,12 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	// ------------------------------------------------------------------ ticking
 
 	public void serverTick(ServerLevel level, BlockPos pos, BlockState state) {
+        io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialUpgrades.tick(this, level);
+		// Heat belongs to the machine, survives reloads, and decays when the heater is idle.
+		if (kind == MachineKind.JIMTA_THERMAL_CENTRIFUGE) {
+			industrialHeatTarget = 0;
+			if (industrialHeat > 0) { industrialHeat--; setChanged(); }
+		}
 		if (companionJobs.length > 0) companionStatus = local.peepo.CompanionStatus.NO_INPUT;
 		boolean active = switch (kind) {
 			case FLOW_TANK_MODULE, FLOW_STACK_MODULE -> false;
@@ -909,6 +921,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		}
 
 		Optional<Result> result = findResult(level);
+		if (kind == MachineKind.JIMTA_THERMAL_CENTRIFUGE) industrialHeatTarget = result.map(Result::minimumHeat).orElse(0);
 		boolean water = switch (kind) {
 			case ORE_WASHER -> tank >= MachineKind.WASHER_WATER_PER_OPERATION;
 			case HYDROPONIC_BAY -> tank >= MachineKind.HYDROPONIC_SOLUTION_PER_HARVEST;
@@ -936,6 +949,10 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		}
 		processorStatus(local.peepo.CompanionStatus.READY);
 		energy.setAmount(energy.getAmount() - use);
+		if (kind == MachineKind.JIMTA_THERMAL_CENTRIFUGE) {
+			industrialHeat = Math.min(5000, industrialHeat + 5);
+			if (industrialHeat < industrialHeatTarget) { setChanged(); return true; }
+		}
 		int steps = 1;
 		// Boost gas (oxygen in the foundry, argon in the arc furnace): a second step this tick, for the gas.
 		if (kind.boostPerTick() > 0 && tank >= kind.boostPerTick() && progress + steps < maxProgress) {
@@ -1900,10 +1917,10 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		Direction facing = state.getValue(MachineBlock.FACING);
 		for (int part = 0; part < footprint.size(); part++) {
 			if (level.hasNeighborSignal(footprint.partPos(pos, facing, part))) {
-				return true;
+				return io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialUpgrades.invertRedstone(this, true);
 			}
 		}
-		return false;
+		return io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialUpgrades.invertRedstone(this, false);
 	}
 
 	/**
@@ -1941,7 +1958,10 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	 * A matched recipe: what it makes, how long it takes, how many items it takes from each input slot
 	 * and what else it may make.
 	 */
-	private record Result(ItemStack stack, int ticks, int[] take, List<MachineRecipe.Byproduct> byproducts, int companionEffort) {
+	private record Result(ItemStack stack, int ticks, int[] take, List<MachineRecipe.Byproduct> byproducts, int companionEffort, int minimumHeat) {
+		Result(ItemStack stack, int ticks, int[] take, List<MachineRecipe.Byproduct> byproducts, int companionEffort) {
+			this(stack, ticks, take, byproducts, companionEffort, 0);
+		}
 		Result(ItemStack stack, int ticks, int[] take) {
 			this(stack, ticks, take, List.of(), 0);
 		}
@@ -1958,7 +1978,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			}
 			var input = new SingleRecipeInput(items.get(0));
 			if (selected instanceof MachineRecipe single && single.matches(input, level))
-				return Optional.of(new Result(single.output().create(), single.time(), TAKE_ONE, single.byproducts(), single.companionEffort()));
+				return Optional.of(new Result(single.output().create(), single.time(), new int[]{single.inputCount()}, single.byproducts(), single.companionEffort(), single.minimumHeat()));
 			if (selected instanceof net.minecraft.world.item.crafting.SmeltingRecipe smelting && smelting.matches(input, level))
 				return Optional.of(new Result(smelting.assemble(input), MachineKind.ELECTRIC_FURNACE_TICKS, TAKE_ONE));
 			return Optional.empty();
@@ -1978,7 +1998,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 					.map(holder -> new Result(holder.value().assemble(recipeInput), MachineKind.ELECTRIC_FURNACE_TICKS, TAKE_ONE));
 		}
 		return MachineRecipes.find(level, kind, input)
-				.map(recipe -> new Result(recipe.output().create(), recipe.time(), TAKE_ONE, recipe.byproducts(), recipe.companionEffort()));
+				.map(recipe -> new Result(recipe.output().create(), recipe.time(), new int[]{recipe.inputCount()}, recipe.byproducts(), recipe.companionEffort(), recipe.minimumHeat()));
 	}
 
 	/** Whether every byproduct this operation might make has room, so none is ever lost. */
@@ -2189,6 +2209,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		int savedOutput = input.getIntOr("batteryOutput", 100);
 		batteryOutput = savedOutput == 25 || savedOutput == 50 ? savedOutput : 100;
 		progress = input.getInt("progress").orElse(0);
+		industrialHeat = Math.clamp(input.getInt("industrialHeat").orElse(0), 0, 5000);
 		assistedArgonTicks = Math.clamp(input.getIntOr("CompanionArgonTicks", 0), 0, MachineKind.ASU_ARGON_INTERVAL - 1);
 		maxProgress = input.getInt("max_progress").orElse(0);
 		burn = input.getInt("burn").orElse(0);
@@ -2230,6 +2251,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		}
 		output.putLong("energy", energy.getAmount());
 		output.putInt("progress", progress);
+		if (kind == MachineKind.JIMTA_THERMAL_CENTRIFUGE) output.putInt("industrialHeat", industrialHeat);
 		if (kind == MachineKind.DEPOSIT_DRILL) {
 			output.putInt("depositDepth", depositDepth);
 			output.putInt("depositBoreProgress", depositBoreProgress);

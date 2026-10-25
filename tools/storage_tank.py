@@ -96,7 +96,7 @@ TEXTURES = ["st_primer", "st_wall", "st_band", "st_rim", "st_roof", "st_white", 
             "st_green", "st_blue", "st_brass", "st_copper", "st_fin", "st_shower_sign", "st_rubber", "st_rubber_end"]
 
 CRAFTING = {
-    "storage_tank_plate": (["PPP", "P P", "PPP"], {"P": "#c:plates/steel"}, 8),
+    "storage_tank_plate": (["PPP", "PPP", "PP "], {"P": "#c:plates/steel"}, 8),
     "storage_tank_outlet": (["SVS", " P "], {"S": "#c:plates/steel", "V": "jugcraft:fluid_valve", "P": "jugcraft:steel_fluid_pipe"}, 1),
     "storage_tank_inlet": (["SPS", " V "], {"S": "#c:plates/steel", "V": "jugcraft:fluid_valve", "P": "jugcraft:steel_fluid_pipe"}, 1),
     "storage_tank_fill_pipe": (["P", "P", "P"], {"P": "jugcraft:steel_fluid_pipe"}, 3),
@@ -119,7 +119,7 @@ CRAFTING = {
     "safety_shower_head": (["PPP", " G "], {"P": "jugcraft:steel_fluid_pipe", "G": "minecraft:green_dye"}, 1),
     "tank_relief_valves": (["V V", "PPP"], {"V": "jugcraft:fluid_valve", "P": "jugcraft:steel_fluid_pipe"}, 1),
     "cryogenic_vaporizer": (["APA", "APA", "APA"], {"A": "#c:plates/aluminum", "P": "jugcraft:steel_fluid_pipe"}, 2),
-    "tank_leg": (["S", "S", "S"], {"S": "#c:plates/steel"}, 2),
+    "tank_leg": (["S ", "SS"], {"S": "#c:plates/steel"}, 2),
     # The kits: a small tank from shell sections and its nozzles, ladder and railing; a bigger one from four of the
     # size below; a rated kit from a general kit and the rating's part; the cryogenic tank its own.
     "tank_kit_general_small": (["RLR", "SSS", "OSI"], {"R": "jugcraft:railing", "L": "jugcraft:caged_ladder", "S": "jugcraft:tank_shell_section",

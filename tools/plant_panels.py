@@ -184,16 +184,15 @@ RISERS.update({
 })
 
 CRAFTING = {
-    "edg_engine_panel": (["PGP", "PCP", "PRP"], {"P": "#c:plates/steel", "G": "minecraft:glass_pane", "C": "jugcraft:basic_circuit", "R": "minecraft:redstone"}, 1),
-    "edg_generator_panel": (["PGP", "CRC", "PPP"], {"P": "#c:plates/steel", "G": "minecraft:glass_pane", "C": "jugcraft:basic_circuit", "R": "minecraft:redstone"}, 1),
+    "edg_engine_panel": (["PGP", "PCP", "PRP"], {"P": "#c:plates/steel", "G": "minecraft:glass_pane", "C": "jugcraft:basic_circuit", "R": "minecraft:piston"}, 1),
+    "edg_generator_panel": (["PGP", "CRC", "PPP"], {"P": "#c:plates/steel", "G": "minecraft:glass_pane", "C": "jugcraft:basic_circuit", "R": "jugcraft:electric_motor"}, 1),
     "edg_voltage_regulator": (["PCP", "PRP", "PCP"], {"P": "#c:plates/steel", "C": "jugcraft:basic_circuit", "R": "minecraft:redstone"}, 1),
     "edg_protection_panel": (["PGP", "PCP", "PCP"], {"P": "#c:plates/steel", "G": "minecraft:glass_pane", "C": "jugcraft:basic_circuit"}, 1),
     "edg_load_sequencer": (["PXP", "PCP", "PRP"], {"P": "#c:plates/steel", "X": "jugcraft:processor", "C": "jugcraft:basic_circuit", "R": "minecraft:redstone"}, 1),
     "edg_battery_charger": (["PRP", "PCP", "PRP"], {"P": "#c:plates/steel", "C": "jugcraft:basic_circuit", "R": "minecraft:redstone"}, 1),
     "edg_battery_rack": (["S S", "BBB", "S S"], {"S": "#c:plates/steel", "B": "jugcraft:lead_acid_pack"}, 1),
     "station_battery": (["BBB", "BBB", "SSS"], {"S": "#c:plates/steel", "B": "jugcraft:lead_acid_pack"}, 1),
-    "dc_switchboard": (["PGP", "CRC", "PPP"], {"P": "#c:plates/steel", "G": "minecraft:glass_pane", "C": "jugcraft:basic_circuit",
-                                               "R": "minecraft:redstone"}, 1),
+    "dc_switchboard": (["PGP", "CRC", "PPP"], {"P": "#c:plates/steel", "G": "minecraft:glass_pane", "C": "jugcraft:basic_circuit", "R": "minecraft:lever"}, 1),
     "vital_inverter": (["PCP", "PXP", "PRP"], {"P": "#c:plates/steel", "C": "jugcraft:basic_circuit", "X": "jugcraft:processor",
                                                "R": "minecraft:redstone"}, 1),
     "station_charger": (["PMP", "CRC", "PLP"], {"P": "#c:plates/steel", "M": "minecraft:clock", "C": "jugcraft:basic_circuit",
@@ -2843,8 +2842,7 @@ def exhaust_fan_boxes():
 
 
 CRAFTING.update({
-    "h2_monitor": (["PGP", "CRC", "PPP"], {"P": "#c:plates/steel", "G": "minecraft:glass_pane", "C": "jugcraft:basic_circuit",
-                                           "R": "minecraft:redstone"}, 1),
+    "h2_monitor": (["PGP", "CRC", "PPP"], {"P": "#c:plates/steel", "G": "minecraft:glass_pane", "C": "jugcraft:basic_circuit", "R": "jugcraft:h2_sensor"}, 1),
     "exhaust_fan": (["PIP", "IRI", "PIP"], {"P": "#c:plates/steel", "I": "minecraft:iron_ingot", "R": "minecraft:redstone"}, 1),
 })
 

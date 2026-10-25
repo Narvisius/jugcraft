@@ -1,0 +1,49 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:crafted_berry_jam_jar",
+          "modifier": [
+            {
+              "count": 2,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:crafted_berry_jam_jar",
+                "state": {
+                  "jars": "2"
+                }
+              }
+            },
+            {
+              "count": 3,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:crafted_berry_jam_jar",
+                "state": {
+                  "jars": "3"
+                }
+              }
+            },
+            {
+              "count": 1,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:crafted_berry_jam_jar",
+                "state": {
+                  "jars": "1"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "name": "jugcraft:jimtafacts/spellbooks/citadel_start_pool",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 2,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/citadel/rampart/straight",
+        "processors": "jugcraft:jimtafacts/spellbooks/citadel_randomization",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/citadel/rampart/straight_destroyed_01",
+        "processors": "jugcraft:jimtafacts/spellbooks/citadel_randomization",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/citadel/rampart/straight_destroyed_02",
+        "processors": "jugcraft:jimtafacts/spellbooks/citadel_randomization",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/citadel/rampart/junction_four_tower",
+        "processors": "jugcraft:jimtafacts/spellbooks/citadel_randomization",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/citadel/rampart/tower",
+        "processors": "jugcraft:jimtafacts/spellbooks/citadel_randomization",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "jugcraft:jimtafacts/spellbooks/citadel/rampart/straight_overgrown",
+        "processors": "jugcraft:jimtafacts/spellbooks/citadel_randomization",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

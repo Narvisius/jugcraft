@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " H ",
+    "SES",
+    " B "
+  ],
+  "key": {
+    "H": "minecraft:honey_bottle",
+    "E": "jugcraft:jimta_spellbooks_ice_spider_egg",
+    "S": "minecraft:sweet_berries",
+    "B": "minecraft:bowl"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_prepared_ice_spider_egg",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

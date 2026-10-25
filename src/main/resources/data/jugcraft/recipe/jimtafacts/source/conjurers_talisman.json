@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "M": "minecraft:skeleton_skull",
+    "S": "minecraft:string",
+    "X": "jugcraft:jimta_spellbooks_mithril_scrap"
+  },
+  "pattern": [
+    " S ",
+    "SXS",
+    " M "
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:jimta_spellbooks_conjurers_talisman"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

@@ -74,7 +74,7 @@ RECIPES = [
     ("map_table", "map_table", ["MI", "LL"], {"M": "minecraft:map", "I": "minecraft:iron_nugget", "L": "#minecraft:planks"}, 1),
     ("gas_curtain", "gas_curtain", ["S", "W", "W"], {"S": "minecraft:stick", "W": "#minecraft:wool"}, 1),
     ("field_kitchen", "field_kitchen", ["PPP", "P P", "PFP"], {"P": PLATE, "F": "minecraft:furnace"}, 1),
-    ("corrugated_iron", "corrugated_iron", ["PP", "PP"], {"P": PLATE}, 8),
+    ("corrugated_iron", "corrugated_iron", ["PP ", " PP"], {"P": PLATE}, 8),
     ("timber_shoring", "timber_shoring", ["L", "I", "L"], {"L": "#minecraft:logs", "I": "minecraft:iron_ingot"}, 3),
     ("bunker_lamp", "bunker_lamp", [" N ", "NTN", " N "], {"N": "minecraft:iron_nugget", "T": "minecraft:torch"}, 1),
     ("bunker_bunk", "bunker_bunk", ["WW", "LL", "WW"], {"W": "#minecraft:wool", "L": "#minecraft:planks"}, 1),

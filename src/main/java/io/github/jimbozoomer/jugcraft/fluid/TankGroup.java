@@ -37,13 +37,14 @@ public final class TankGroup extends CombinedStorage<FluidVariant, SingleFluidSt
 		seen.add(start.immutable());
 		while (!queue.isEmpty() && found.size() < MAX_TANKS) {
 			BlockPos pos = queue.poll();
-			if (!(level.getBlockEntity(pos) instanceof FluidTankBlockEntity tank)) {
+			if (!level.hasChunkAt(pos) || !(level.getBlockEntity(pos) instanceof FluidTankBlockEntity tank)) {
 				continue;
 			}
 			found.add(tank);
 			for (Direction direction : Direction.values()) {
 				BlockPos next = pos.relative(direction);
-				if (seen.add(next) && level.getBlockEntity(next) instanceof FluidTankBlockEntity) {
+				if (seen.add(next) && io.github.jimbozoomer.jugcraft.finance.ClaimTransfers.allowed(level,pos,next)
+						&& level.getBlockEntity(next) instanceof FluidTankBlockEntity) {
 					queue.add(next);
 				}
 			}

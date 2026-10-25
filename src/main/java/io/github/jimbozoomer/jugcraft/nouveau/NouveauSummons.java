@@ -25,6 +25,7 @@ public final class NouveauSummons {
     private static AttachmentType<UUID> OWNER;
     private static AttachmentType<Long> UNTIL;
     private static AttachmentType<BlockState> BLOCK;
+    private static AttachmentType<String> SPELLBOOK;
     private static final Set<LivingEntity> LIVE=Collections.newSetFromMap(new WeakHashMap<>());
     private static final Map<LivingEntity,Deque<Memory>> HISTORY=new WeakHashMap<>();
     private record Memory(Vec3 position,float health){}
@@ -35,13 +36,16 @@ public final class NouveauSummons {
         OWNER=AttachmentRegistry.<UUID>builder().persistent(UUIDUtil.CODEC).buildAndRegister(Jugcraft.id("nouveau_summoner"));
         UNTIL=AttachmentRegistry.<Long>builder().persistent(Codec.LONG).buildAndRegister(Jugcraft.id("nouveau_summon_expiry"));
         BLOCK=AttachmentRegistry.<BlockState>builder().persistent(BlockState.CODEC).buildAndRegister(Jugcraft.id("nouveau_animated_block"));
+        SPELLBOOK=AttachmentRegistry.<String>builder().persistent(Codec.STRING).buildAndRegister(Jugcraft.id("nouveau_spellbook_summon"));
         ServerEntityEvents.ENTITY_LOAD.register((entity,level)->{if(entity instanceof LivingEntity living&&living.hasAttached(UNTIL)){if(living instanceof Mob mob&&living.hasAttached(OWNER))install(mob);else LIVE.add(living);}});
         ServerLifecycleEvents.SERVER_STOPPED.register(server->{LIVE.clear();HISTORY.clear();});
         net.fabricmc.fabric.api.event.player.UseEntityCallback.EVENT.register((player,level,hand,entity,hit)->ownedEntity(entity)&&(entity instanceof net.minecraft.world.entity.decoration.Mannequin||player.isShiftKeyDown())?net.minecraft.world.InteractionResult.FAIL:net.minecraft.world.InteractionResult.PASS);
         ServerTickEvents.END_SERVER_TICK.register(server->{
             for(var mob:List.copyOf(LIVE)){
-                if(mob.isRemoved()){LIVE.remove(mob);continue;}if(!(mob.level() instanceof ServerLevel level)||!level.hasChunkAt(mob.blockPosition()))continue;
-                if(level.getGameTime()>=mob.getAttachedOrElse(UNTIL,0L)||!JugNouveau.enabled()){mob.discard();LIVE.remove(mob);continue;}
+                if(mob.isRemoved()){LIVE.remove(mob);spellbookEnded(mob,false);continue;}if(!(mob.level() instanceof ServerLevel level)||!level.hasChunkAt(mob.blockPosition()))continue;
+                boolean enabled=mob.hasAttached(SPELLBOOK)?io.github.jimbozoomer.jugcraft.jimtafacts.spellbooks.JimtaSpellbooks.enabled():JugNouveau.enabled();
+                if(level.getGameTime()>=mob.getAttachedOrElse(UNTIL,0L)||!enabled){mob.discard();LIVE.remove(mob);spellbookEnded(mob,enabled);continue;}
+                if(mob.hasAttached(SPELLBOOK)&&mob.getType().builtInRegistryHolder().is(net.minecraft.tags.EntityTypeTags.UNDEAD))mob.clearFire();
                 if(mob instanceof net.minecraft.world.entity.decoration.Mannequin&&server.getTickCount()%20==0){
                     var p=Authority.answering(level,mob.getAttached(OWNER));if(p!=null)for(var foe:level.getEntitiesOfClass(Mob.class,mob.getBoundingBox().inflate(12),e->e instanceof Enemy&&ConcordanceEffects.mayHarm(p,e)&&Authority.mayStrike(p,e)).stream().limit(16).toList())foe.setTarget(mob);
                 }
@@ -53,12 +57,34 @@ public final class NouveauSummons {
         ServerLivingEntityEvents.ALLOW_DAMAGE.register((target,source,amount)->{
             if(source.getEntity() instanceof Mob mob&&mob.hasAttached(OWNER)){
                 var p=Authority.answering((ServerLevel)mob.level(),mob.getAttached(OWNER));
-                return p!=null&&ConcordanceEffects.mayHarm(p,target)&&Authority.mayStrike(p,target);
+                return p!=null&&ConcordanceEffects.mayHarm(p,target)&&Authority.mayStrike(p,target)&&io.github.jimbozoomer.jugcraft.weapons.TwoHanded.allowed(p,p.level(),target);
             }return true;
         });
         ServerLivingEntityEvents.ALLOW_DEATH.register((entity,source,amount)->{
             if(entity.hasAttached(OWNER)){if(entity.level() instanceof ServerLevel level){var player=Authority.answering(level,entity.getAttached(OWNER));if(player!=null&&NouveauGear.worn(player,"summon_focus")&&source.getEntity() instanceof LivingEntity killer&&ConcordanceEffects.mayHarm(player,killer)&&Authority.mayStrike(player,killer))killer.hurtServer(level,level.damageSources().indirectMagic(player,player),6);}entity.discard();return false;}return true;
         });
+    }
+    public static boolean hasSpellbookSummon(ServerPlayer owner,String spell){return LIVE.stream().anyMatch(m->m.isAlive()&&!m.isRemoved()&&ownedBy(m,owner.getUUID())&&spell.equals(m.getAttached(SPELLBOOK)));}
+    private static void spellbookEnded(LivingEntity mob,boolean timeout){
+        if(!mob.hasAttached(SPELLBOOK)||!(mob.level() instanceof ServerLevel level))return;
+        var p=Authority.answering(level,mob.getAttached(OWNER));if(p==null)return;String spell=mob.getAttached(SPELLBOOK);
+        if(hasSpellbookSummon(p,spell))return;
+        if(timeout&&io.github.jimbozoomer.jugcraft.jimtafacts.spellbooks.JimtaSpellbookCurios.has(p,"greater_conjurers_talisman"))return;
+        var working=io.github.jimbozoomer.jugcraft.jimtafacts.spellbooks.JimtaSpellcasting.SPELLS.get(spell);
+        if(working!=null)io.github.jimbozoomer.jugcraft.jimtafacts.spellbooks.JimtaSpellcasting.cooldown(p,spell,working.cooldown());
+    }
+    /** Adopt an already configured native summon into the shared persisted lease and combat controller. */
+    public static boolean adoptSpellbook(ServerPlayer owner,Mob mob,String spell,int duration){
+        var level=owner.level();
+        if(!level.hasChunkAt(mob.blockPosition())||!Authority.mayChange(level,owner,mob.blockPosition())||!level.noCollision(mob)
+                ||LIVE.stream().filter(m->m.isAlive()&&ownedBy(m,owner.getUUID())).count()>=8)return false;
+        mob.setAttached(OWNER,owner.getUUID());mob.setAttached(UNTIL,level.getGameTime()+Math.clamp(duration,100,12000));mob.setAttached(SPELLBOOK,spell);
+        mob.setPersistenceRequired();for(var slot:EquipmentSlot.VALUES)mob.setDropChance(slot,0);
+        if(!level.addFreshEntity(mob))return false;install(mob);return true;
+    }
+    /** Recasting a summon while sneaking dismisses that spell's surviving leases without drops. */
+    public static boolean dismissSpellbook(ServerPlayer owner,String spell){
+        boolean changed=false;for(var mob:List.copyOf(LIVE))if(ownedBy(mob,owner.getUUID())&&spell.equals(mob.getAttached(SPELLBOOK))){mob.discard();LIVE.remove(mob);spellbookEnded(mob,false);changed=true;}return changed;
     }
     public static void enemyWolf(ServerLevel l,Mob hunter,LivingEntity target){
         var wolf=net.minecraft.world.entity.EntityTypes.WOLF.create(l,EntitySpawnReason.MOB_SUMMONED);if(wolf==null)return;wolf.snapTo(hunter.getX()+1,hunter.getY(),hunter.getZ(),hunter.getYRot(),0);if(!l.noCollision(wolf))return;wolf.setAttached(UNTIL,l.getGameTime()+600);wolf.setTarget(target);if(l.addFreshEntity(wolf))LIVE.add(wolf);
@@ -109,15 +135,18 @@ public final class NouveauSummons {
                 if(!(mob.level() instanceof ServerLevel l)||++age%10!=0)return;
                 var p=Authority.answering(l,mob.getAttached(OWNER));if(p==null||p.level()!=l||!p.isAlive()){mob.getNavigation().stop();return;}
                 if(mob instanceof AbstractHorse||mob.isNoAi())return;
-                var enemy=l.getEntitiesOfClass(LivingEntity.class,mob.getBoundingBox().inflate(12),e->e instanceof Enemy&&e.isAlive()&&!e.hasAttached(OWNER)&&ConcordanceEffects.mayHarm(p,e)&&Authority.mayStrike(p,e)).stream().min(Comparator.comparingDouble(mob::distanceToSqr)).orElse(null);
+                var enemy=l.getEntitiesOfClass(LivingEntity.class,mob.getBoundingBox().inflate(12),e->e instanceof Enemy&&e.isAlive()&&!e.hasAttached(OWNER)&&ConcordanceEffects.mayHarm(p,e)&&Authority.mayStrike(p,e)&&io.github.jimbozoomer.jugcraft.weapons.TwoHanded.allowed(p,l,e)).stream().min(Comparator.comparingDouble(mob::distanceToSqr)).orElse(null);
                 var destination=enemy==null?p:enemy;mob.getLookControl().setLookAt(destination,30,30);
                 if(enemy!=null&&mob.getMainHandItem().is(Items.BOW)&&mob.distanceToSqr(enemy)<=144&&mob.hasLineOfSight(enemy)){
-                    mob.getNavigation().stop();if(age%30==0){var arrow=new net.minecraft.world.entity.projectile.arrow.Arrow(l,mob,new ItemStack(Items.ARROW),mob.getMainHandItem());var delta=enemy.getEyePosition().subtract(mob.getEyePosition());arrow.shoot(delta.x,delta.y+Math.sqrt(delta.horizontalDistanceSqr())*.15,delta.z,1.5F,2);arrow.pickup=net.minecraft.world.entity.projectile.arrow.AbstractArrow.Pickup.DISALLOWED;l.addFreshEntity(arrow);}return;
+                    mob.getNavigation().stop();if(age%30==0){var arrow=new net.minecraft.world.entity.projectile.arrow.Arrow(l,mob,new ItemStack(Items.ARROW),mob.getMainHandItem());var delta=enemy.getEyePosition().subtract(mob.getEyePosition());arrow.shoot(delta.x,delta.y+Math.sqrt(delta.horizontalDistanceSqr())*.15,delta.z,1.5F,2);arrow.pickup=net.minecraft.world.entity.projectile.arrow.AbstractArrow.Pickup.DISALLOWED;if(mob.hasAttached(SPELLBOOK))arrow.setBaseDamage(2.0*io.github.jimbozoomer.jugcraft.jimtafacts.spellbooks.JimtaSpellbookCurios.summonDamageMultiplier(p));l.addFreshEntity(arrow);}return;
                 }
                 if(mob.distanceToSqr(destination)>4){mob.getNavigation().moveTo(destination,1.1);mob.getMoveControl().setWantedPosition(destination.getX(),destination.getY(),destination.getZ(),1.1);}
-                else if(enemy!=null&&age%20==0){
+                else if(enemy!=null&&age%(mob instanceof io.github.jimbozoomer.jugcraft.jimtafacts.spellbooks.JimtaSummonedWeapon weapon?weapon.attackInterval():20)==0){
+                    if(mob instanceof io.github.jimbozoomer.jugcraft.jimtafacts.spellbooks.JimtaSummonedWeapon weapon)weapon.animateStrike();
                     var cause=Cause.of(p.getUUID(),Cause.Origin.CREATURE,"jugcraft:nouveau_summon",ConcordanceEffects.nextSerial());
-                    ConcordanceEffects.apply(new ConcordanceEffects.Context(l,cause,p,new Ledger(new Ledger.Limits(1,4,0)),"strike",mob.position()),EffectSpec.of(EffectKind.DAMAGE,Intent.HARMFUL,4,0),enemy);
+                    int damage=mob.hasAttached(SPELLBOOK)&&mob.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE)!=null?(int)Math.clamp(mob.getAttributeValue(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE),1,40):4;
+                    if(mob.hasAttached(SPELLBOOK))damage=(int)Math.clamp(Math.round(damage*io.github.jimbozoomer.jugcraft.jimtafacts.spellbooks.JimtaSpellbookCurios.summonDamageMultiplier(p)),1,40);
+                    ConcordanceEffects.apply(new ConcordanceEffects.Context(l,cause,p,new Ledger(new Ledger.Limits(1,4,0)),"strike",mob.position()),EffectSpec.of(EffectKind.DAMAGE,Intent.HARMFUL,damage,0),enemy);
                 }
             }
         });

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IQI",
+    " P ",
+    " C "
+  ],
+  "key": {
+    "C": "jugcraft:jimta_fluix_glass_cable",
+    "I": "minecraft:iron_ingot",
+    "P": "minecraft:piston",
+    "Q": "jugcraft:jimta_certus_quartz_crystal"
+  },
+  "result": {
+    "id": "jugcraft:jimta_import_bus",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

@@ -40,11 +40,11 @@ public class RocketPackItem extends Item implements Chargeable, Jetpack {
 	/** Whether this player wears a jetpack (a rocket pack or exosuit chestplate) with enough charge for a tick of thrust. */
 	public static boolean canThrust(Player player) {
 		ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
-		return wornJetpack(chest) && Chargeable.energy(chest) >= ENERGY_PER_TICK;
+		return wornJetpack(chest) && ((Jetpack) chest.getItem()).hasThrustFuel(chest);
 	}
 
 	private static boolean wornJetpack(ItemStack chest) {
-		return chest.getItem() instanceof Jetpack jetpack && jetpack.isJetpack(chest) && chest.getItem() instanceof Chargeable;
+		return chest.getItem() instanceof Jetpack jetpack && jetpack.isJetpack(chest);
 	}
 
 	/** Server side of one tick of thrust: pays for it and cancels the fall. At most once per tick per player. */
@@ -55,7 +55,7 @@ public class RocketPackItem extends Item implements Chargeable, Jetpack {
 			return;
 		}
 		ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
-		if (wornJetpack(chest) && Chargeable.drain(chest, ENERGY_PER_TICK)) {
+		if (player.isAlive() && !player.isSpectator() && wornJetpack(chest) && ((Jetpack) chest.getItem()).payThrust(chest)) {
 			player.resetFallDistance();
 		}
 	}

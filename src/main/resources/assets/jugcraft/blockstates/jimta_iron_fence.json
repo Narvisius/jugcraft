@@ -1,0 +1,91 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "jugcraft:block/jimta_iron_fence_post_ends"
+      }
+    },
+    {
+      "when": {
+        "north": "false",
+        "south": "false",
+        "east": "false",
+        "west": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimta_iron_fence_post"
+      }
+    },
+    {
+      "when": {
+        "north": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimta_iron_fence_side",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "east": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimta_iron_fence_side",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimta_iron_fence_side",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/jimta_iron_fence_side",
+        "y": 270
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/jimta_iron_fence"
+      },
+      "when": {
+        "north_east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/jimta_iron_fence",
+        "y": 90
+      },
+      "when": {
+        "south_east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/jimta_iron_fence",
+        "y": 180
+      },
+      "when": {
+        "south_west": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/jimta_iron_fence",
+        "y": 270
+      },
+      "when": {
+        "north_west": "true"
+      }
+    }
+  ]
+}

@@ -72,6 +72,13 @@ _STONE = "graveyard memorial built from open boxes; to be closed with the gravey
 _SOCKETS = ("sculpted sockets: the cranium's front is left out (\"_keep_open\") where the eye sockets look into hollows "
             "lined by the face round them and closed by a dark plate behind; the rest of the skull is closed")
 O1_ALLOW = {
+    'cable_arm': _ARM,
+    'turtle_crafting_table': 'attachment inner face is flush against the turtle body rendered with it',
+    'turtle_modem': 'attachment inner face is flush against the turtle body rendered with it',
+    'turtle_speaker': 'attachment inner face is flush against the turtle body rendered with it',
+    'level_emitter': 'status surfaces and housing are complementary parts drawn together on the cable fixture',
+    'p2p_tunnel': 'status surfaces and housing are complementary parts drawn together on the cable fixture',
+    'transition_plane': 'rim surrounds the separately drawn complete native plane panel',
     "aluminum_cable_arm": _ARM, "copper_cable_arm": _ARM, "silver_cable_arm": _ARM, "data_cable_arm": _ARM,
     "fluid_filter_arm": _ARM, "bronze_fluid_pipe_arm": _ARM, "brass_item_pipe_arm": _ARM,
     "bobbing_tub": _VESSEL, "bubbling_cauldron": _VESSEL, "candy_kettle": _VESSEL, "cider_press": _VESSEL,
@@ -382,7 +389,12 @@ def _model_faces(elements, lookup):
                 pts.append(point(_face_point(face, f, t, a, b)))
                 ra, rb = _uv_turn(a, b, spec.get("rotation"))
                 uvs.append(((u0 + ra * (u1 - u0)) / 16, (v0 + rb * (v1 - v0)) / 16))
-            faces.append(Face(pts, uvs, lookup(spec.get("texture", "")), _norm(turn_normal(_NORMAL[face])),
+            # Inward source shells reverse one tangent axis. Respect their winding
+            # so opposite-facing inside/outside surfaces are not reported as flicker.
+            tangent = {'north':(0,1),'south':(0,1),'east':(2,1),'west':(2,1),'up':(0,2),'down':(0,2)}[face]
+            winding = -1 if (t[tangent[0]]-f[tangent[0]])*(t[tangent[1]]-f[tangent[1]]) < 0 else 1
+            normal = tuple(winding * x for x in _NORMAL[face])
+            faces.append(Face(pts, uvs, lookup(spec.get("texture", "")), _norm(turn_normal(normal)),
                               emit=el.get("light_emission", 0), label=(index, face)))
             raw.append(uv)
     return faces, raw
@@ -501,7 +513,10 @@ def check_block_models(machines):
         count += 1
         name = str(path.relative_to(ROOT / "src" / "main" / "resources"))
         backwards = [i for i, el in enumerate(elements) if any(el["from"][k] > el["to"][k] + 1e-6 for k in range(3))]
-        if backwards:
+        import jimtafacts_catalog
+        if backwards and jimtafacts_catalog.original_inward_shell(path,elements):
+            allowed['I1'].add(name)
+        elif backwards:
             el = elements[backwards[0]]
             errors.append(f"I1 {name}: {len(backwards)} element(s) run backwards, e.g. element {backwards[0]} from {el['from']} "
                           f"to {el['to']}: write the low corner as \"from\"")

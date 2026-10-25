@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "O": "jugcraft:jimta_spellbooks_upgrade_orb",
+    "R": "jugcraft:jimta_spellbooks_arcane_rune"
+  },
+  "pattern": [
+    "RRR",
+    "ROR",
+    "RRR"
+  ],
+  "result": {
+    "count": 1,
+    "id": "jugcraft:jimta_spellbooks_mana_upgrade_orb"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

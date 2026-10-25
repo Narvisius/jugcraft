@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ICI",
+    "CSC",
+    "ICI"
+  ],
+  "key": {
+    "I": "jugcraft:jimta_spellbooks_arcane_ingot",
+    "C": "jugcraft:jimta_spellbooks_cinder_essence",
+    "S": "#jugcraft:jimtafacts/spellbooks/mithril_material"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_upgrade_orb",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

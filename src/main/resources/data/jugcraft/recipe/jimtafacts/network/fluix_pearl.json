@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "FFF",
+    "FEF",
+    "FFF"
+  ],
+  "key": {
+    "F": "jugcraft:jimta_fluix_dust",
+    "E": "minecraft:ender_pearl"
+  },
+  "result": {
+    "id": "jugcraft:jimta_fluix_pearl",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:paper",
+    "jugcraft:jimta_spellbooks_common_ink",
+    "jugcraft:jimta_spellbooks_ender_rune",
+    "minecraft:arrow"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_scroll_magic_arrow",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

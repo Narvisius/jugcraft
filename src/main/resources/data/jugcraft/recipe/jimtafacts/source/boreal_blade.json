@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  M",
+    "VI ",
+    "WV "
+  ],
+  "key": {
+    "M": "#c:ingots/mithril",
+    "V": "jugcraft:jimta_spellbooks_ice_venom_vial",
+    "W": "jugcraft:jimta_spellbooks_weapon_parts",
+    "I": "minecraft:ice"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_boreal_blade",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " QM",
+    " WQ",
+    "L  "
+  ],
+  "key": {
+    "M": "#c:ingots/mithril",
+    "L": "jugcraft:jimta_spellbooks_lightning_bottle",
+    "W": "jugcraft:jimta_spellbooks_weapon_parts",
+    "Q": "#jugcraft:jimtafacts/spellbooks/twilight_gale_crystal"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_twilight_gale",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

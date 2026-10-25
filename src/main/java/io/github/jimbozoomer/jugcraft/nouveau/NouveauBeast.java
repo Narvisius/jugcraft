@@ -35,6 +35,9 @@ public class NouveauBeast extends PathfinderMob implements GeoEntity {
     private @Nullable UUID owner;
     private @Nullable BlockPos guard;
     private int attackClock,attackIndex;
+    // Transient: unloading/restarting cancels a windup or leap instead of restoring a delayed hit.
+    private @Nullable LivingEntity stalkerWindupTarget,stalkerLeapTarget;
+    private int stalkerLeapTicks;
     private boolean converted;
     private Vec3 aimed=Vec3.ZERO;
     public NouveauBeast(EntityType<? extends PathfinderMob> t,Level l,String kind){super(t,l);species=kind;installGoals();if(boss())setPersistenceRequired();}
@@ -43,6 +46,7 @@ public class NouveauBeast extends PathfinderMob implements GeoEntity {
     }
     public String species(){return species;}
     public boolean boss(){return "wilden_chimera".equals(species);}
+    private boolean stalker(){return "wilden_stalker".equals(species);}
     public boolean weald(){return species.contains("weald");}
     public boolean mayCommand(ServerPlayer p){return owner!=null&&(owner.equals(p.getUUID())||io.github.jimbozoomer.jugcraft.party.JugcraftParties.sameParty(owner,p.getUUID()))&&Authority.mayChange(p.level(),p,blockPosition());}
     public boolean waddler(){return species.endsWith("waddler");}
@@ -62,17 +66,43 @@ public class NouveauBeast extends PathfinderMob implements GeoEntity {
         else targetSelector.addGoal(2,new NearestAttackableTargetGoal<>(this,Player.class,true));
     }
     @Override protected void customServerAiStep(ServerLevel level){
-        if(!JugNouveau.enabled()){setTarget(null);getNavigation().stop();return;}super.customServerAiStep(level);
+        if(!JugNouveau.enabled()){
+            setTarget(null);getNavigation().stop();
+            if(stalker()){attackClock=0;stalkerWindupTarget=null;entityData.set(ACTION,0);endStalkerLeap();}
+            return;
+        }super.customServerAiStep(level);
         if(boss()){bar.setProgress(getHealth()/getMaxHealth());bar.setName(Component.literal(getHealth()>getMaxHealth()*.66F?"Wilden Chimera · Hunter":getHealth()>getMaxHealth()*.33F?"Wilden Chimera · Defender":"Wilden Chimera · Stalker"));}
         if(weald()&&tickCount%100==0)heal(1);
         if(guard!=null&&blockPosition().distSqr(guard)>24*24){setTarget(null);getNavigation().moveTo(guard.getX()+.5,guard.getY(),guard.getZ()+.5,1);return;}
-        if(waddler()||getTarget()==null||!getTarget().isAlive()){entityData.set(ACTION,0);attackClock=0;return;}
+        if(waddler()||getTarget()==null||!getTarget().isAlive()){entityData.set(ACTION,0);attackClock=0;stalkerWindupTarget=null;return;}
         var target=getTarget();
-        if(++attackClock==60){aimed=target.position();entityData.set(ACTION,boss()?1+Math.floorMod(attackIndex++,getHealth()<getMaxHealth()*.33F?3:2):1);getNavigation().stop();}
-        if(attackClock>60&&attackClock<80){getNavigation().stop();if(attackClock%5==0)level.sendParticles(net.minecraft.core.particles.ParticleTypes.END_ROD,aimed.x,aimed.y+.2,aimed.z,8,1,.1,1,.01);}
-        if(attackClock>=80){attackClock=0;strike(level,target);entityData.set(ACTION,0);}
-        if(species.equals("wilden_stalker")&&!onGround())setDeltaMovement(getDeltaMovement().multiply(1,.8,1));
+        if(stalker()&&(!canAttack(target)||distanceToSqr(target)>=196||!hasLineOfSight(target)
+                ||(attackClock>=60&&stalkerWindupTarget!=target))){
+            attackClock=0;stalkerWindupTarget=null;entityData.set(ACTION,0);
+        }else{
+            if(++attackClock==60){aimed=target.position();if(stalker())stalkerWindupTarget=target;entityData.set(ACTION,boss()?1+Math.floorMod(attackIndex++,getHealth()<getMaxHealth()*.33F?3:2):1);getNavigation().stop();}
+            if(attackClock>60&&attackClock<80){getNavigation().stop();if(attackClock%5==0)level.sendParticles(net.minecraft.core.particles.ParticleTypes.END_ROD,aimed.x,aimed.y+.2,aimed.z,8,1,.1,1,.01);}
+            if(attackClock>=80){attackClock=0;stalkerWindupTarget=null;strike(level,target);entityData.set(ACTION,0);}
+        }
+        if(stalker()&&!onGround())setDeltaMovement(getDeltaMovement().multiply(1,.8,1));
     }
+    @Override public void tick(){
+        super.tick();
+        if(!(level() instanceof ServerLevel level)||stalkerLeapTicks==0)return;
+        if(!isAlive()||!JugNouveau.enabled()||stalkerLeapTicks>40){endStalkerLeap();return;}
+        var target=stalkerLeapTarget;
+        // Check after vanilla movement/collision resolution, never at the remote target's position.
+        if(target!=null&&target.isAlive()&&target.level()==level&&canAttack(target)
+                &&getBoundingBox().intersects(target.getBoundingBox())&&hasLineOfSight(target)){
+            stalkerLeapTarget=null; // One contact attempt per leap, including refused/immune hits.
+            var cause=Cause.of(getUUID(),Cause.Origin.CREATURE,"jugcraft:nouveau_wilden_stalker",ConcordanceEffects.nextSerial());
+            var hit=new ConcordanceEffects.Context(level,cause,this,new Ledger(new Ledger.Limits(1,4,0)),"leap",position());
+            ConcordanceEffects.apply(hit,EffectSpec.of(EffectKind.DAMAGE,Intent.HARMFUL,3,0),target);
+        }
+        if(horizontalCollision||(stalkerLeapTicks>1&&onGround()))endStalkerLeap();
+        else stalkerLeapTicks++;
+    }
+    private void endStalkerLeap(){stalkerLeapTicks=0;stalkerLeapTarget=null;}
     private void strike(ServerLevel l,LivingEntity target){
         ServerPlayer actor=owner==null?null:Authority.present(l,owner);if(owner!=null&&actor==null)return;
         var cause=Cause.of(owner==null?getUUID():owner,Cause.Origin.CREATURE,"jugcraft:nouveau_"+species,ConcordanceEffects.nextSerial());var ledger=new Ledger(new Ledger.Limits(8,32,0));
@@ -87,7 +117,12 @@ public class NouveauBeast extends PathfinderMob implements GeoEntity {
         }else if(hasLineOfSight(target)&&distanceToSqr(target)<196){
             if(species.equals("wilden_guardian")){NouveauSpine.launch(l,this,target.getEyePosition().subtract(getEyePosition()).normalize().scale(.65));return;}
             if(species.equals("wilden_hunter")&&tickCount%240<100&&l.getEntitiesOfClass(net.minecraft.world.entity.animal.wolf.Wolf.class,getBoundingBox().inflate(16),Entity::isAlive).size()<4)NouveauSummons.enemyWolf(l,this,target);
-            if(species.equals("wilden_stalker")){setDeltaMovement(target.position().subtract(position()).normalize().scale(.7).add(0,.7,0));NouveauSpine.launch(l,this,target.getEyePosition().subtract(getEyePosition()).normalize().scale(.6));}
+            if(stalker()){
+                stalkerLeapTarget=target;stalkerLeapTicks=1;
+                setDeltaMovement(target.position().subtract(position()).normalize().scale(.7).add(0,.7,0));
+                NouveauSpine.launch(l,this,target.getEyePosition().subtract(getEyePosition()).normalize().scale(.6));
+                return; // Only projectile impact or physical leap contact may deal this attack's damage.
+            }
             boolean applied=ConcordanceEffects.apply(hit,EffectSpec.of(EffectKind.DAMAGE,Intent.HARMFUL,weald()?5:3,0),target).applied();
             if(applied&&actor!=null){
                 if(species.startsWith("blazing")){target.igniteForSeconds(4);NouveauStatuses.give(target,"blasting",60,0,actor);}
@@ -103,6 +138,7 @@ public class NouveauBeast extends PathfinderMob implements GeoEntity {
     }
     @Override public boolean doHurtTarget(ServerLevel l,Entity target){
         if(waddler()||!JugNouveau.enabled()||!(target instanceof LivingEntity living))return false;
+        if(stalkerLeapTicks>0)return false; // The leap owns contact damage until it lands/expires.
         var actor=owner==null?null:Authority.present(l,owner);if(owner!=null&&actor==null)return false;
         var cause=Cause.of(owner==null?getUUID():owner,Cause.Origin.CREATURE,"jugcraft:nouveau_"+species,ConcordanceEffects.nextSerial());
         return ConcordanceEffects.apply(new ConcordanceEffects.Context(l,cause,actor==null?this:actor,new Ledger(new Ledger.Limits(1,4,0)),"melee",position()),EffectSpec.of(EffectKind.DAMAGE,Intent.HARMFUL,(int)getAttributeValue(Attributes.ATTACK_DAMAGE),0),living).applied();

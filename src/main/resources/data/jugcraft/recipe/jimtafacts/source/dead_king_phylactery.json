@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DDD",
+    "DLD",
+    "DDD"
+  ],
+  "key": {
+    "D": "jugcraft:jimta_spellbooks_dead_king_phylactery_shard",
+    "L": "minecraft:soul_lantern"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_dead_king_phylactery",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

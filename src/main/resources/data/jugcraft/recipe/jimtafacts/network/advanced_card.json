@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:jimta_basic_card",
+    "minecraft:diamond",
+    "jugcraft:jimta_engineering_processor"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_advanced_card",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

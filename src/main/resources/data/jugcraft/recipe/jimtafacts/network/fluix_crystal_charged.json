@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:jimta_charged_certus_quartz_crystal",
+    "minecraft:quartz",
+    "minecraft:redstone"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_fluix_crystal",
+    "count": 4
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

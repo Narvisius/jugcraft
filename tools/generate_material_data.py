@@ -1644,6 +1644,11 @@ def tags():
         tags.add("block", "minecraft:mineable/axe", f"peepo_companion:{colour}_companion_bed")
     for block in ("wooden_stool", "lunch_crate", "lunch_cover"):
         tags.add("block", "minecraft:mineable/axe", f"peepo_companion:{block}")
+    # Citrus belongs to acid extraction in the compact reactor. Other fermenters keep
+    # the broad crop tag; quantities alone must never choose the compact product.
+    for crop in tags.entries[("item", f"{MOD}:fermentable")]:
+        if crop not in {rid("lemon"), rid("orange")}:
+            tags.add("item", f"{MOD}:compact_fermentable", crop)
     tags.write()
 
 
@@ -1800,8 +1805,6 @@ def main():
     write(ASSETS / "handbook" / "en_us.json", book)
     import encyclopedia_routes
     write(ASSETS / "encyclopedia" / "en_us.json", encyclopedia_routes.build(book))
-    import recipe_view
-    write(ASSETS / "recipe_view.json", recipe_view.build())
     loot_tables()
     recipes()
     tags()
@@ -1824,10 +1827,81 @@ def main():
     vehicle_bays.write()
     import owner_resource_patches
     owner_resource_patches.apply()
+    import owner_workshop_shared
+    owner_workshop_shared.apply()
+    import jimtafacts
+    jimtafacts.generate()
+    import jimtafacts_wearables
+    jimtafacts_wearables.apply()
+    import jimtafacts_network
+    jimtafacts_network.generate()
+    import jimtafacts_industry
+    jimtafacts_industry.generate()
+    import jimtafacts_gear
+    jimtafacts_gear.generate()
+    import jimtafacts_robots
+    jimtafacts_robots.generate()
+    import jimtafacts_automation
+    jimtafacts_automation.generate()
+    import jimtafacts_transport
+    jimtafacts_transport.generate()
+    import jimtafacts_crops
+    jimtafacts_crops.generate()
+    import jimtafacts_production
+    jimtafacts_production.generate()
+    import jimtafacts_reactor
+    jimtafacts_reactor.generate()
+    import jimtafacts_matter
+    jimtafacts_matter.generate()
+    import jimtafacts_civil
+    jimtafacts_civil.generate()
+    import jimtafacts_infrastructure
+    jimtafacts_infrastructure.generate()
+    import jimtafacts_upgrades
+    jimtafacts_upgrades.generate()
+    import jimtafacts_construction
+    jimtafacts_construction.generate()
+    import jimtafacts_laser
+    jimtafacts_laser.generate()
+    import jimtafacts_heat
+    jimtafacts_heat.generate()
+    import jimtafacts_tables
+    jimtafacts_tables.generate()
+    import jimtafacts_utilities
+    jimtafacts_utilities.generate()
+    import jimtafacts_services
+    jimtafacts_services.generate()
+    import jimtafacts_personal
+    jimtafacts_personal.generate()
+    import jimtafacts_engines
+    jimtafacts_engines.generate()
+    import jimtafacts_factory
+    jimtafacts_factory.generate()
+    import jimtafacts_cables
+    jimtafacts_cables.generate()
+    import jimtafacts_terraforming
+    jimtafacts_terraforming.generate()
+    import jimtafacts_computers
+    jimtafacts_computers.apply()
+    import jimtafacts_spellbooks
+    spellbook_language = jimtafacts_spellbooks.generate()
+    # The source importer writes these independently; retain them in the shared
+    # manifest so stale-resource pruning cannot delete a freshly imported tag.
+    for instrument_tag in (RES / 'data/jugcraft/tags/instrument/jimtafacts/spellbooks').rglob('*.json'):
+        write(instrument_tag, json.loads(instrument_tag.read_text(encoding='utf-8')))
+    language = json.loads((ASSETS / "lang/en_us.json").read_text(encoding="utf-8"))
+    language.update(spellbook_language)
+    write(ASSETS / "lang/en_us.json", language)
+    # Imported walls/fences are generated after the shared pass and need the same connections.
+    import diagonal_connections
+    diagonal_connections.write_all(write, ASSETS, RES / 'assets/minecraft')
     import walnut_data
     walnut_data.reconcile(write)
     from generated_resource_cleanup import prune
     prune(RES, previous, WRITTEN_RESOURCES)
+    # Include finished server recipes after removing obsolete generated recipes.
+    import recipe_view
+    write(ASSETS / "recipe_view.json", recipe_view.build())
     RESOURCE_MANIFEST.write_text(json.dumps(sorted(WRITTEN_RESOURCES), indent=2) + "\n", encoding="utf-8")
 
 

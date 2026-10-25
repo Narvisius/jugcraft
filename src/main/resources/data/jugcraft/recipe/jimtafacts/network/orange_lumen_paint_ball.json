@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:jimta_orange_paint_ball",
+    "minecraft:glowstone_dust"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_orange_lumen_paint_ball",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

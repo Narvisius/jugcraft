@@ -2351,7 +2351,7 @@ SHAPELESS = [
     {"id": "ornamental_corn_bundle", "inputs": ["jugcraft:ornamental_corn", "jugcraft:ornamental_corn", "jugcraft:ornamental_corn",
                                                 "minecraft:string"], "result": "ornamental_corn_bundle", "count": 1, "category": "building"},
     {"id": "caramel_apple", "inputs": ["minecraft:apple", "jugcraft:caramel", "minecraft:stick"], "result": "caramel_apple", "count": 1},
-    {"id": "popcorn_ball", "inputs": ["jugcraft:popcorn", "jugcraft:popcorn", "jugcraft:caramel"], "result": "popcorn_ball", "count": 1},
+    {"id": "popcorn_ball", "inputs": ["jugcraft:caramel_popcorn"], "result": "popcorn_ball", "count": 1},
     {"id": "gourd_canteen", "inputs": ["jugcraft:dried_bottle_gourd", "minecraft:leather"], "result": "gourd_canteen", "count": 1,
      "category": "equipment"},
     {"id": "blank_stencil", "inputs": ["minecraft:paper", "minecraft:paper"], "result": "blank_stencil", "count": 1},
@@ -2361,7 +2361,7 @@ SHAPELESS = [
     {"id": "yellow_dye_from_yellow_mum", "inputs": ["jugcraft:yellow_mum"], "result": "minecraft:yellow_dye", "count": 1, "group": "yellow_dye"},
     {"id": "orange_dye_from_orange_mum", "inputs": ["jugcraft:orange_mum"], "result": "minecraft:orange_dye", "count": 1, "group": "orange_dye"},
     {"id": "red_dye_from_red_mum", "inputs": ["jugcraft:red_mum"], "result": "minecraft:red_dye", "count": 1, "group": "red_dye"},
-    {"id": "orange_dye_from_marigold", "inputs": ["jugcraft:marigold"], "result": "minecraft:orange_dye", "count": 1, "group": "orange_dye"},
+    {"id": "orange_dye_from_marigold", "inputs": ["jugcraft:marigold_petals"] * 4, "result": "minecraft:orange_dye", "count": 1, "group": "orange_dye"},
     {"id": "purple_dye_from_purple_mum", "inputs": ["jugcraft:purple_mum"], "result": "minecraft:purple_dye", "count": 1,
      "group": "purple_dye"},
     # Halloween festivities: a sheet ghost on a string, and a candle melted onto a bone skull.
@@ -2466,7 +2466,7 @@ SHAPED = [
      "result": "trebuchet", "count": 1, "category": "misc"},
     # Halloween decorations: an iron hook for string lights; a bowl of orange terracotta; a plank coffin lined in red
     # around a chest; a fog machine of iron with a bucket for its tank, copper heaters and a grille nozzle.
-    {"id": "string_light_hook", "pattern": ["N", "I"], "key": {"N": "minecraft:iron_nugget", "I": "#c:ingots/iron"},
+    {"id": "string_light_hook", "pattern": ["NS", "I "], "key": {"N": "minecraft:iron_nugget", "I": "#c:ingots/iron", "S": "minecraft:string"},
      "result": "string_light_hook", "count": 4, "category": "building"},
     {"id": "candy_bowl", "pattern": ["T T", " T "], "key": {"T": "minecraft:orange_terracotta"}, "result": "candy_bowl", "count": 1,
      "category": "misc"},

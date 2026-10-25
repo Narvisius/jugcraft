@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RLR",
+    "CSC",
+    "RCR"
+  ],
+  "key": {
+    "R": "minecraft:redstone",
+    "L": "jugcraft:jimta_calculation_processor",
+    "C": "jugcraft:jimta_cell_component_1k",
+    "S": "minecraft:quartz"
+  },
+  "result": {
+    "id": "jugcraft:jimta_cell_component_4k",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

@@ -338,6 +338,12 @@ public final class PetroFluids {
 		return fluid(id, 5, 4, 1, gauge, MapColor.WATER);
 	}
 
+	/** Additional contained owner-library gas; shared pipes, cylinders and tank gauges. */
+	public static Gas registerOwnerGas(String id, int color) {
+		if (GASES.containsKey(id)) throw new IllegalStateException("Duplicate gas " + id);
+		return gas(id, color);
+	}
+
 	private static Entry fluid(String id, int tickDelay, int slope, int dropOff, int gauge, MapColor color) {
 		Entry entry = new Entry(id, tickDelay, slope, dropOff, gauge);
 		entry.source = Registry.register(BuiltInRegistries.FLUID, Jugcraft.id(id), new OilFluid.Source(entry));

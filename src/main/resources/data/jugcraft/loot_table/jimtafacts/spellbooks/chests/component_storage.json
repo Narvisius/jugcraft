@@ -1,0 +1,49 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": {
+        "min": 2,
+        "max": 3,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 1,
+          "name": "jugcraft:jimta_spellbooks_arcane_essence",
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 1,
+          "name": "jugcraft:jimta_spellbooks_shriving_stone"
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "jugcraft:jimtafacts/spellbooks/magic_items/all_focuses",
+          "weight": 4,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 5,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

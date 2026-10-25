@@ -14,6 +14,33 @@ import net.minecraft.nbt.CompoundTag;
 
 /** Exercises the optional overlay against a real machine without changing its stored state. */
 public class FrameworkGameTests {
+    @GameTest
+    public void researchPacketKeepsSendTimeSnapshot(GameTestHelper helper) {
+        var source = new com.klikli_dev.modonomicon.research.state.PlayerResearchState();
+        var fact = io.github.jimbozoomer.jugcraft.Jugcraft.id("snapshot_fact");
+        var node = io.github.jimbozoomer.jugcraft.Jugcraft.id("snapshot_node");
+        source.grantFact(fact);
+        source.unlockNode(node);
+        source.setValue(fact, 7);
+        source.setNodeStageIndex(node, 3);
+        var packet = new com.klikli_dev.modonomicon.networking.SyncResearchStateMessage(source);
+        source.reset();
+        // Mutations after queueing must not reach Netty's later serialization.
+        for (int i = 0; i < 256; i++) source.grantFact(io.github.jimbozoomer.jugcraft.Jugcraft.id("later_" + i));
+        var buffer = new net.minecraft.network.RegistryFriendlyByteBuf(io.netty.buffer.Unpooled.buffer(), helper.getLevel().registryAccess());
+        try {
+            com.klikli_dev.modonomicon.networking.SyncResearchStateMessage.STREAM_CODEC.encode(buffer, packet);
+            var decoded = com.klikli_dev.modonomicon.networking.SyncResearchStateMessage.STREAM_CODEC.decode(buffer).state;
+            helper.assertTrue(decoded.factIds().equals(java.util.Set.of(fact)), "Queued facts are independent of later mutations");
+            helper.assertTrue(decoded.unlockedNodeIds().equals(java.util.Set.of(node)), "Queued unlocks retain send-time state");
+            helper.assertTrue(decoded.getValue(fact) == 7 && decoded.getNodeStageIndex(node) == 3, "Values and stages survive encoding unchanged");
+            helper.assertTrue(source.factIds().size() == 256 && !source.hasFact(fact), "Serialization must not change live research");
+        } finally {
+            buffer.release();
+        }
+        helper.succeed();
+    }
+
 	@GameTest
 	public void viewerBootstrapKeepsNormalWorldGenerationEnabled(GameTestHelper helper) {
 		helper.assertFalse(BiomeBootstrapScope.isVanillaOnly(), "Normal world generation starts enabled");

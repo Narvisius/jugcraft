@@ -86,7 +86,8 @@ public class HazmatLayer<S extends HumanoidRenderState, M extends HumanoidModel<
 	}
 
 	private static boolean worn(ItemStack stack) {
-		return stack.getItem() instanceof HazmatItem;
+		return stack.getItem() instanceof HazmatItem
+                && !(stack.getItem() instanceof io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialGear.SourceHazmat);
 	}
 
 	private void part(PoseStack pose, SubmitNodeCollector collector, int light, ModelPart part, Consumer<Geometry> draw) {

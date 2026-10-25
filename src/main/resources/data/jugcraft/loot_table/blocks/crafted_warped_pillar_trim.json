@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:crafted_warped_pillar_trim",
+          "modifier": [
+            {
+              "block": "jugcraft:crafted_warped_pillar_trim",
+              "properties": [
+                "trim",
+                "type"
+              ],
+              "type": "minecraft:copy_state"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

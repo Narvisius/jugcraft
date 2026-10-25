@@ -15,6 +15,19 @@ PREFIX = 'household_'
 ALIASES = {'sweet_berry_jam': 'sweet_berry_jam', 'plate': 'plate'}
 COPIES = []
 
+def resolve_slicing_conflict(data):
+    """Keep imported outputs/yields while separating native cutting operations."""
+    if data.get('type') != 'jugcraft:cutting':
+        return data
+    if data['ingredient'] == 'minecraft:pumpkin' and data['results'] == [{'count': 5, 'id': 'minecraft:pumpkin_seeds'}]:
+        # Four slices equal one pumpkin. Do not grant five seeds per slice.
+        return {'type': 'minecraft:crafting_shapeless',
+                'ingredients': ['jugcraft:pumpkin_slice'] * 4, 'result': data['results'][0]}
+    if data['ingredient'] == 'minecraft:dead_bush' and data['results'] == [{'count': 2, 'id': 'minecraft:stick'}]:
+        return {**data, 'ingredient': 'jugcraft:landscape_dead_branch'}
+    return data
+
+
 def ident(name):
     return 'jugcraft:'+ALIASES.get(name, PREFIX+name)
 
@@ -142,6 +155,7 @@ def main():
             appliance={'household_oven_baking':'oven','household_freezer_solidifying':'freezer','household_frying_pan_cooking':'pan','household_toaster_heating':'toaster','household_microwave_heating':'microwave'}[typ]
             d={'type':'jugcraft:household_'+appliance,'ingredient':d['ingredient'],'result':d['result'],'cookingtime':d.get('time',200),'experience':.1,'category':d.get('category','food')}
         elif typ=='household_crafting_special_door_mat_copy':d={'type':'jugcraft:household_door_mat_copy'}
+        d=resolve_slicing_conflict(d)
         d['fabric:load_conditions']=[{'condition':'jugcraft:feature_enabled','feature':'agriculture'}]
         counts[d['type']]+=1;write(DATA/'recipe'/out,d)
     # Workbench bootstrap must not require itself.

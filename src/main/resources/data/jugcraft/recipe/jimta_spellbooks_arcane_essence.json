@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:amethyst_shard",
+    "minecraft:lapis_lazuli",
+    "minecraft:glowstone_dust"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_arcane_essence",
+    "count": 4
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

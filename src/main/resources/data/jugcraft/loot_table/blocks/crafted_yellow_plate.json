@@ -1,0 +1,82 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:crafted_yellow_plate",
+          "modifier": [
+            {
+              "count": 4,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:crafted_yellow_plate",
+                "state": {
+                  "pieces": "4"
+                }
+              }
+            },
+            {
+              "count": 3,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:crafted_yellow_plate",
+                "state": {
+                  "pieces": "3"
+                }
+              }
+            },
+            {
+              "count": 6,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:crafted_yellow_plate",
+                "state": {
+                  "pieces": "6"
+                }
+              }
+            },
+            {
+              "count": 5,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:crafted_yellow_plate",
+                "state": {
+                  "pieces": "5"
+                }
+              }
+            },
+            {
+              "count": 2,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:crafted_yellow_plate",
+                "state": {
+                  "pieces": "2"
+                }
+              }
+            },
+            {
+              "count": 1,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:crafted_yellow_plate",
+                "state": {
+                  "pieces": "1"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

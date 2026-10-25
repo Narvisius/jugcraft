@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "artifacts:item/villager_hat"
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "artifacts:item/villager_hat_broken"
+    },
+    "property": "artifacts:needs_repair"
+  }
+}

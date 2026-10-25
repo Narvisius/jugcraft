@@ -67,7 +67,14 @@ public class LogicControllerScreen extends AbstractContainerScreen<LogicControll
 
 	@Override
 	public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
+		int availableRows=LogicControllerBlockEntity.RULES;
+		if(minecraft!=null&&minecraft.level!=null) {
+			var state=minecraft.level.getBlockState(menu.pos);
+			if(state.getBlock() instanceof io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialAutomation.Gate gate)
+				availableRows=Math.max(1,gate.rows/(state.getValue(io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialAutomation.Gate.MODIFIER)>=2?2:1));
+		}
 		for (int rule = 0; rule < LogicControllerBlockEntity.RULES; rule++) {
+			for(var button:buttons[rule])button.active=rule<availableRows;
 			boolean enabled = menu.rule(rule, LogicControllerBlockEntity.ENABLED) == 1;
 			buttons[rule][0].setMessage(Component.literal(String.valueOf(rule + 1)));
 			buttons[rule][0].setSelected(enabled);

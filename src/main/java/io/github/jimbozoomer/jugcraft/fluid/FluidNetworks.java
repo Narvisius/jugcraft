@@ -49,6 +49,9 @@ public final class FluidNetworks {
 	 * adjacent fluid storages, or through a pipe network. Returns the droplets actually moved.
 	 */
 	public static long pushToNeighbors(Level level, BlockPos pos, Storage<FluidVariant> source, long maxAmount, Iterable<Direction> sides) {
+		return pushToNeighbors(level,pos,source,maxAmount,sides,Set.of());
+	}
+	public static long pushToNeighbors(Level level,BlockPos pos,Storage<FluidVariant> source,long maxAmount,Iterable<Direction> sides,Set<BlockPos> excluded) {
 		long moved = 0;
 		for (Direction side : sides) {
 			long budget = maxAmount - moved;
@@ -63,10 +66,10 @@ public final class FluidNetworks {
 					continue;
 				}
 				Network network = network(level, neighbor);
-				moved += network.distribute(level, pos, source, Math.min(budget, network.rate));
+				moved += network.distribute(level, pos, source, Math.min(budget, network.rate),excluded);
 			} else {
 				Storage<FluidVariant> target = FluidStorage.SIDED.find(level, neighbor, side.getOpposite());
-				if (target != null) {
+				if (target != null && !excluded.contains(neighbor)) {
 					moved += StorageUtil.move(source, target, variant -> true, budget, null);
 				}
 			}
@@ -83,9 +86,8 @@ public final class FluidNetworks {
 		}
 		Network network = Network.discover(level, pipePos);
         network.revision = LandRegistry.revision(level);
-		for (BlockPos pipe : network.pipes) {
-			networks.put(pipe, network);
-		}
+		networks.put(pipePos.immutable(), network);
+		if(!network.directed)for(var pipe:network.pipes)networks.put(pipe,network);
 		return network;
 	}
 
@@ -96,6 +98,8 @@ public final class FluidNetworks {
 		/** Droplets one push may send: the slowest pipe's rate, so bronze pipes limit a steel line like cables do. */
 		private long rate = Long.MAX_VALUE;
         private long revision;
+		private boolean truncated;
+		private boolean directed;
 
 		static Network discover(Level level, BlockPos start) {
 			Network network = new Network();
@@ -107,13 +111,20 @@ public final class FluidNetworks {
 			queue.add(start.immutable());
 			network.pipes.add(start.immutable());
 
-			while (!queue.isEmpty() && network.pipes.size() < MAX_PIPES) {
+			while (!queue.isEmpty()) {
 				BlockPos pipe = queue.poll();
+				if (!level.hasChunkAt(pipe)) continue;
+				var own = level.getBlockState(pipe);
+				if (!(own.getBlock() instanceof FluidPipeBlock current)) continue;
+				network.directed |= current.directionalRouting();
 				for (Direction direction : Direction.values()) {
 					BlockPos next = pipe.relative(direction).immutable();
-                    if (!ClaimTransfers.allowed(level, pipe, next)) continue;
+                    if (!level.hasChunkAt(next) || !ClaimTransfers.allowed(level, pipe, next)) continue;
 					BlockState nextState = level.getBlockState(next);
+					if (!current.routesTo(own, direction, nextState)) continue;
 					if (nextState.getBlock() instanceof FluidPipeBlock nextPipe) {
+						if (!current.joins(own, nextState) || !nextPipe.joins(nextState, own)) continue;
+						if (nextPipe.carries(nextState) && !network.pipes.contains(next) && network.pipes.size() >= MAX_PIPES) { network.truncated=true;return network; }
 						// A closed valve ends the network: it is neither a pipe of it nor a storage on it.
 						if (nextPipe.carries(nextState) && network.pipes.add(next)) {
 							queue.add(next);
@@ -131,11 +142,14 @@ public final class FluidNetworks {
 		 * Splits fluid evenly across every storage that can accept it (each counted once), except the source. A storage
 		 * reached only through fluid filters takes only their fluids; one reached through an ordinary pipe takes any.
 		 */
-		long distribute(Level level, BlockPos sourcePos, Storage<FluidVariant> source, long budget) {
+		long distribute(Level level, BlockPos sourcePos, Storage<FluidVariant> source, long budget,Set<BlockPos> excluded) {
+			if(truncated) return 0;
 			Map<Storage<FluidVariant>, Predicate<FluidVariant>> receivers = new LinkedHashMap<>();
+			Set<Storage<FluidVariant>> preferred=new HashSet<>();
 			for (Endpoint endpoint : endpoints) {
+                if(!level.hasChunkAt(endpoint.pos)) continue;
                 if (!ClaimTransfers.allowed(level, sourcePos, endpoint.pos)) continue;
-				if (endpoint.pos.equals(sourcePos)) {
+				if (endpoint.pos.equals(sourcePos)||excluded.contains(endpoint.pos)) {
 					continue;
 				}
 				Storage<FluidVariant> storage = FluidStorage.SIDED.find(level, endpoint.pos, endpoint.side);
@@ -144,9 +158,14 @@ public final class FluidNetworks {
 				}
 				Predicate<FluidVariant> allowed = allowedThrough(level, endpoint.pipe);
 				receivers.merge(storage, allowed, Predicate::or);
+				if(level.getBlockState(endpoint.pipe).getBlock() instanceof FluidPipeBlock pipe&&pipe.prefersAdjacentInventory())preferred.add(storage);
 			}
 
 			long moved = 0;
+			for(var target:preferred) {
+				moved+=StorageUtil.move(source,target,receivers.get(target),budget-moved,null);
+				if(moved>=budget)return moved;
+			}
 			// Two passes: an even share first, then leftovers to whoever still has room.
 			for (int pass = 0; pass < 2 && moved < budget && !receivers.isEmpty(); pass++) {
 				long share = Math.max(1, (budget - moved) / receivers.size());

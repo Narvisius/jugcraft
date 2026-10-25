@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:paper",
+    "jugcraft:jimta_spellbooks_uncommon_ink",
+    "jugcraft:jimta_spellbooks_lightning_rune",
+    "minecraft:lightning_rod",
+    "minecraft:amethyst_shard"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_scroll_lightning_lance",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

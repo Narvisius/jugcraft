@@ -478,6 +478,12 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> implemen
 		int y = MachineSkin.wrap(graphics, font, Component.translatable("container.jugcraft.terminal." + status.key), STATUS_X, STATUS_Y,
 				STATUS_WIDTH, STATUS_BOTTOM, status.warning ? theme.warn() : theme.text());
 		y += 2;
+		if (kind == MachineKind.JIMTA_THERMAL_CENTRIFUGE) {
+			y = MachineSkin.wrap(graphics, font, Component.translatable("container.jugcraft.industrial_heat",
+					menu.data(MachineBlockEntity.DATA_INDUSTRIAL_HEAT), menu.data(MachineBlockEntity.DATA_INDUSTRIAL_HEAT_TARGET)),
+					STATUS_X, y, STATUS_WIDTH, STATUS_BOTTOM, theme.text());
+			y += 2;
+		}
 		if (kind == MachineKind.DEPOSIT_DRILL && menu.data(MachineBlockEntity.DATA_DRILL_STAGE) > 0) {
 			y = MachineSkin.wrap(graphics, font, Component.translatable(
 					menu.data(MachineBlockEntity.DATA_DRILL_STAGE) == 1 ? "container.jugcraft.drill.boring" : "container.jugcraft.drill.extracting",

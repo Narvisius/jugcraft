@@ -158,7 +158,7 @@ CRAFTING = {
     "pallet_rack": (["S S", "BBB", "S S"], {"S": STEEL_PLATE, "B": "minecraft:barrel"}, 4),
     "pallet_rack_drums": (["S S", "BDB", "S S"], {"S": STEEL_PLATE, "B": "minecraft:barrel", "D": "minecraft:cauldron"}, 4),
     "office_desk": (["GGG", "PPP", "P P"], {"G": "minecraft:black_stained_glass_pane", "P": "#minecraft:planks"}, 1),
-    "filing_cabinet": (["PP", "PP"], {"P": "#c:plates/iron"}, 1),
+    "filing_cabinet": (["PNP", "PBP"], {"P": "#c:plates/iron", "N": "minecraft:iron_nugget", "B": "minecraft:paper"}, 1),
     "whiteboard": (["QQQ", "P P"], {"Q": "minecraft:quartz", "P": "#c:plates/iron"}, 2),
     "water_cooler": (["G", "B", "P"], {"G": "minecraft:glass_bottle", "B": "minecraft:water_bucket", "P": "#c:plates/iron"}, 1),
     "guard_rail": (["YYY", "S S"], {"Y": "minecraft:yellow_dye", "S": "minecraft:iron_nugget"}, 8),

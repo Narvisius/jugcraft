@@ -47,6 +47,7 @@ public final class EnergyNetworks {
 				break;
 			}
 			BlockPos neighbor = pos.relative(side);
+            if (!level.hasChunkAt(neighbor)) continue;
             if (!ClaimTransfers.allowed(level, pos, neighbor)) continue;
 			if (level.getBlockState(neighbor).getBlock() instanceof CableBlock cable) {
 				Network network = network(level, neighbor);
@@ -100,12 +101,13 @@ public final class EnergyNetworks {
 	private static Network network(Level level, BlockPos cablePos) {
 		Map<BlockPos, Network> networks = CACHE.computeIfAbsent(level, l -> new HashMap<>());
 		Network cached = networks.get(cablePos);
-		if (cached != null && cached.revision == LandRegistry.revision(level) && cached.cables.stream().allMatch(level::hasChunkAt)) {
+		if (cached != null && cached.revision == LandRegistry.revision(level) && cached.cables.stream().allMatch(level::hasChunkAt)
+                && cached.endpoints.stream().allMatch(e -> level.hasChunkAt(e.pos))) {
 			return cached;
 		}
 		Network network = Network.discover(level, cablePos);
         network.revision = LandRegistry.revision(level);
-		for (BlockPos cable : network.cables) {
+		for (BlockPos cable : network.cacheable ? network.cables : Set.<BlockPos>of()) {
 			networks.put(cable, network);
 		}
 		return network;
@@ -115,25 +117,35 @@ public final class EnergyNetworks {
 	private static final class Network {
 		private final Set<BlockPos> cables = new HashSet<>();
 		private final List<Endpoint> endpoints = new ArrayList<>();
+        private final List<BlockPos> observers = new ArrayList<>();
+        private boolean cacheable = true;
 		/** JE per push: the slowest cable tier in the network sets it. */
 		private long rate = Long.MAX_VALUE;
         private long revision;
 
 		static Network discover(Level level, BlockPos start) {
 			Network network = new Network();
+            if (!level.hasChunkAt(start) || !(level.getBlockState(start).getBlock() instanceof CableBlock first)
+                    || !first.conducts(level.getBlockState(start))) { network.rate = 0; return network; }
 			ArrayDeque<BlockPos> queue = new ArrayDeque<>();
 			queue.add(start.immutable());
 			network.cables.add(start.immutable());
 
-			while (!queue.isEmpty() && network.cables.size() < MAX_CABLES) {
+			while (!queue.isEmpty()) {
 				BlockPos cable = queue.poll();
 				if (level.getBlockState(cable).getBlock() instanceof CableBlock block) {
-					network.rate = Math.min(network.rate, block.transferRate());
+					network.rate = Math.min(network.rate, block.transferRate(level.getBlockState(cable)));
+                    if (block.observesTransfers()) network.observers.add(cable);
 				}
 				for (Direction direction : Direction.values()) {
 					BlockPos next = cable.relative(direction).immutable();
+                    if (!level.hasChunkAt(next)) { network.cacheable = false; continue; }
                     if (!ClaimTransfers.allowed(level, cable, next)) continue;
-					if (level.getBlockState(next).getBlock() instanceof CableBlock) {
+					if (level.getBlockState(next).getBlock() instanceof CableBlock candidate) {
+                        if (!candidate.conducts(level.getBlockState(next))) continue;
+                        if (!network.cables.contains(next) && network.cables.size() >= MAX_CABLES) {
+                            network.endpoints.clear(); network.observers.clear(); network.rate = 0; return network;
+                        }
 						if (network.cables.add(next)) {
 							queue.add(next);
 						}
@@ -150,6 +162,7 @@ public final class EnergyNetworks {
 			List<EnergyStorage> receivers = new ArrayList<>();
 			Set<Object> identities = java.util.Collections.newSetFromMap(new java.util.IdentityHashMap<>());
 			for (Endpoint endpoint : endpoints) {
+                if (!level.hasChunkAt(endpoint.pos)) continue;
                 if (!ClaimTransfers.allowed(level, sourcePos, endpoint.pos)) continue;
 				if (endpoint.pos.equals(sourcePos)) {
 					continue;
@@ -176,6 +189,9 @@ public final class EnergyNetworks {
 					}
 				}
 			}
+			if (moved > 0) for (BlockPos pos : observers) {
+                if (level.hasChunkAt(pos) && level.getBlockState(pos).getBlock() instanceof CableBlock block) block.onEnergyTransferred(level, pos, moved);
+            }
 			return moved;
 		}
 	}

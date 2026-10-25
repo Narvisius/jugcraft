@@ -1,0 +1,76 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "base": "jugcraft:jimtafacts/ae2/block/spatial_pylon/base",
+    "dim": "jugcraft:jimtafacts/ae2/block/spatial_pylon/dim",
+    "particle": "jugcraft:jimtafacts/ae2/block/spatial_pylon/base"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "light_emission": 0,
+      "faces": {
+        "north": {
+          "texture": "#base"
+        },
+        "south": {
+          "texture": "#base"
+        },
+        "east": {
+          "texture": "#base"
+        },
+        "west": {
+          "texture": "#base"
+        },
+        "up": {
+          "texture": "#base"
+        },
+        "down": {
+          "texture": "#base"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "light_emission": 0,
+      "faces": {
+        "north": {
+          "texture": "#dim"
+        },
+        "south": {
+          "texture": "#dim"
+        },
+        "east": {
+          "texture": "#dim"
+        },
+        "west": {
+          "texture": "#dim"
+        },
+        "up": {
+          "texture": "#dim"
+        },
+        "down": {
+          "texture": "#dim"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  M",
+    "DM ",
+    "WD "
+  ],
+  "key": {
+    "M": "#c:ingots/mithril",
+    "D": "#c:gems/diamond",
+    "W": "jugcraft:jimta_spellbooks_weapon_parts"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_spellbreaker",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

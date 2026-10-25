@@ -1,0 +1,20 @@
+{
+  "type": "jugcraft:jimta_thermal_centrifuging",
+  "ingredient": "jugcraft:spent_fuel_assembly",
+  "input_count": 9,
+  "result": {
+    "id": "jugcraft:jimta_plutonium_pellet",
+    "count": 1
+  },
+  "byproducts": [
+    {
+      "result": {
+        "id": "jugcraft:uranium_dust",
+        "count": 4
+      },
+      "chance": 1
+    }
+  ],
+  "minimum_heat": 2000,
+  "time": 2400
+}

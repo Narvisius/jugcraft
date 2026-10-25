@@ -24,6 +24,16 @@ import net.minecraft.world.level.redstone.Orientation;
  * tubes and to any block with an item inventory on the touching face.
  */
 public class ItemPipeBlock extends PipeBlock implements ItemConnectable {
+	/** Shared routing hooks; ordinary brass tubing remains unrestricted. */
+	public boolean joins(BlockState own, BlockState other) { return true; }
+	public boolean routesTo(BlockState own, Direction direction, BlockState other) { return true; }
+	public long transferLimit() { return Long.MAX_VALUE; }
+	public boolean directionalRouting() { return false; }
+	public boolean prefersAdjacentInventory() { return false; }
+	/** Route-local colors never change the item's saved components. -1 is uncolored; -2 refuses entry. */
+	public boolean coloredRouting() { return false; }
+	public int routeColor(Level level, BlockPos pos, BlockState state,
+			net.fabricmc.fabric.api.transfer.v1.item.ItemVariant item, int incoming) { return incoming; }
 	public ItemPipeBlock(Properties properties) {
 		super(6.0F, properties);
 		BlockState state = this.stateDefinition.any();
@@ -55,6 +65,7 @@ public class ItemPipeBlock extends PipeBlock implements ItemConnectable {
 	@Override
 	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
 		ItemNetworks.invalidate(level);
+		if(!level.isClientSide()) level.scheduleTick(pos,this,1);
 	}
 
 	@Override
@@ -66,6 +77,11 @@ public class ItemPipeBlock extends PipeBlock implements ItemConnectable {
 	protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock,
 			Orientation orientation, boolean movedByPiston) {
 		ItemNetworks.invalidate(level);
+		if(!level.isClientSide()) level.scheduleTick(pos,this,1);
+	}
+	@Override protected void tick(BlockState state,ServerLevel level,BlockPos pos,RandomSource random) {
+		var connected=connections(level,pos,state);
+		if(connected!=state) level.setBlock(pos,connected,Block.UPDATE_ALL);
 	}
 
 	private static BlockState connections(BlockGetter level, BlockPos pos, BlockState state) {
@@ -83,6 +99,9 @@ public class ItemPipeBlock extends PipeBlock implements ItemConnectable {
 	 * World generation has no full level to query, so there only the marker interface counts.
 	 */
 	public static boolean connectsTo(BlockGetter level, BlockPos pos, Direction direction, BlockState neighbor) {
+		BlockState own = level.getBlockState(pos);
+		if (own.getBlock() instanceof ItemPipeBlock pipe && neighbor.getBlock() instanceof ItemPipeBlock next
+				&& (!pipe.joins(own, neighbor) || !next.joins(neighbor, own))) return false;
 		if (neighbor.getBlock() instanceof ItemConnectable) {
 			return true;
 		}

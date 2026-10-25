@@ -1,13 +1,15 @@
 {
-  "type": "jugcraft:cutting",
-  "ingredient": "minecraft:pumpkin",
-  "tool": "#jugcraft:knives",
-  "results": [
-    {
-      "count": 5,
-      "id": "minecraft:pumpkin_seeds"
-    }
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:pumpkin_slice",
+    "jugcraft:pumpkin_slice",
+    "jugcraft:pumpkin_slice",
+    "jugcraft:pumpkin_slice"
   ],
+  "result": {
+    "count": 5,
+    "id": "minecraft:pumpkin_seeds"
+  },
   "fabric:load_conditions": [
     {
       "condition": "jugcraft:feature_enabled",

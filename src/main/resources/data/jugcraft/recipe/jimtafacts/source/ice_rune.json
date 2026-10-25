@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FFF",
+    "FRF",
+    "FFF"
+  ],
+  "key": {
+    "F": "#jugcraft:jimtafacts/spellbooks/ice_focus",
+    "R": "jugcraft:jimta_spellbooks_blank_rune"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_ice_rune",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "school": "spell_power:frost",
+  "range": 32,
+  "tier": 1,
+  "group": "jimtafacts_spellbooks",
+  "type": "ACTIVE",
+  "active": {
+    "cast": {
+      "duration": 0,
+      "animation": {
+        "id": "jugcraft:instant_projectile"
+      }
+    }
+  },
+  "release": {},
+  "target": {
+    "type": "AIM",
+    "aim": {
+      "required": false
+    }
+  },
+  "deliver": {
+    "type": "PROJECTILE",
+    "projectile": {
+      "launch_properties": {
+        "velocity": 1.6
+      },
+      "projectile": {
+        "homing_angle": 0,
+        "perks": {
+          "pierce": 0
+        },
+        "client_data": {
+          "light_level": 12,
+          "composite_model": {
+            "models": [
+              {
+                "orientation": "TOWARDS_MOTION",
+                "fx": {
+                  "model_id": "jugcraft:spell_projectile/jimtafacts/icicle",
+                  "scale": 1,
+                  "light_emission": "RADIATE"
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "CUSTOM",
+        "custom": {
+          "handler": "jugcraft:jimtafacts_combat",
+          "intent": "HARMFUL"
+        }
+      }
+    }
+  ],
+  "cost": {
+    "exhaust": 0,
+    "durability": 0,
+    "cooldown": {
+      "duration": 1,
+      "hosting_item": false
+    }
+  }
+}

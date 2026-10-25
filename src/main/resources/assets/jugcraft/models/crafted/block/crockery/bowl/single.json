@@ -1,0 +1,195 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "block/block",
+  "render_type": "cutout",
+  "texture_size": [
+    32,
+    32
+  ],
+  "textures": {
+    "0": "#texture",
+    "particle": "#texture"
+  },
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#0",
+          "uv": [
+            12,
+            0,
+            8,
+            4
+          ]
+        },
+        "east": {
+          "texture": "#0",
+          "uv": [
+            0,
+            4,
+            4,
+            6
+          ]
+        },
+        "north": {
+          "texture": "#0",
+          "uv": [
+            4,
+            4,
+            8,
+            6
+          ]
+        },
+        "south": {
+          "texture": "#0",
+          "uv": [
+            12,
+            4,
+            16,
+            6
+          ]
+        },
+        "up": {
+          "texture": "#0",
+          "uv": [
+            8,
+            4,
+            4,
+            0
+          ]
+        },
+        "west": {
+          "texture": "#0",
+          "uv": [
+            8,
+            4,
+            12,
+            6
+          ]
+        }
+      },
+      "from": [
+        5,
+        0,
+        3.5
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          10.11898,
+          1.5,
+          9.10727
+        ]
+      },
+      "to": [
+        13,
+        4,
+        11.5
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#0",
+          "uv": [
+            6,
+            9,
+            3,
+            6
+          ]
+        },
+        "east": {
+          "texture": "#0",
+          "uv": [
+            3,
+            6,
+            0,
+            7.5
+          ]
+        },
+        "north": {
+          "texture": "#0",
+          "uv": [
+            0,
+            6,
+            3,
+            7.5
+          ]
+        },
+        "south": {
+          "texture": "#0",
+          "uv": [
+            0,
+            6,
+            3,
+            7.5
+          ]
+        },
+        "up": {
+          "texture": "#0",
+          "uv": [
+            3,
+            6,
+            0,
+            9
+          ]
+        },
+        "west": {
+          "texture": "#0",
+          "uv": [
+            3,
+            6,
+            0,
+            7.5
+          ]
+        }
+      },
+      "from": [
+        6,
+        1,
+        4.5
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          10.11898,
+          1.5,
+          9.10727
+        ]
+      },
+      "to": [
+        12,
+        4.1,
+        10.5
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "name": "bowls",
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "color": 0,
+      "children": [
+        {
+          "name": "single_bowl",
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "color": 0,
+          "children": [
+            0,
+            1
+          ]
+        }
+      ]
+    }
+  ]
+}

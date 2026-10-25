@@ -214,12 +214,12 @@ POTS = ["pi_pot_white", "pi_pot_grey", "pi_pot_terracotta"]
 # Collision is given in PlantInterior.java.
 CRAFTING = {
     "locker_open": (["PP", "PW", "PP"], {"P": "#c:plates/iron", "W": "minecraft:white_wool"}, 2),
-    "bookcase": (["PPP", "BBB", "PPP"], {"P": "#minecraft:planks", "B": "minecraft:book"}, 2),
+    "bookcase": (["SBS"], {"S": "minecraft:stick", "B": "minecraft:bookshelf"}, 2),
     "fridge": (["PP", "PI", "PP"], {"P": "#c:plates/iron", "I": "minecraft:packed_ice"}, 2),
     "fume_hood": (["PGP", "P P", "PPP"], {"P": "#c:plates/iron", "G": "minecraft:glass_pane"}, 2),
     "reception_desk": (["QQQ", "PPP", "P P"], {"Q": "minecraft:quartz_slab", "P": "#minecraft:planks"}, 3),
     "sofa": (["W  ", "WWW", "P P"], {"W": "minecraft:gray_wool", "P": "#minecraft:planks"}, 2),
-    "locker_bench": (["SSS", "N N"], {"S": "minecraft:oak_slab", "N": "minecraft:iron_nugget"}, 3),
+    "locker_bench": (["SSS", "NBN"], {"S": "minecraft:oak_slab", "N": "minecraft:iron_nugget", "B": "minecraft:oak_fence"}, 3),
     "kitchen_counter": (["SSS", "PPP", "PPP"], {"S": "minecraft:smooth_stone_slab", "P": "#minecraft:planks"}, 3),
     "kitchen_sink": (["SBS", "PPP"], {"S": "minecraft:smooth_stone_slab", "B": "minecraft:cauldron", "P": "#minecraft:planks"}, 1),
     "microwave_counter": (["SIS", "PPP"], {"S": "minecraft:smooth_stone_slab", "I": "minecraft:iron_ingot", "P": "#minecraft:planks"}, 1),

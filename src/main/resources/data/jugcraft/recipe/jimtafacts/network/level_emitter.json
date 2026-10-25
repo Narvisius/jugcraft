@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " LR",
+    " C "
+  ],
+  "key": {
+    "L": "jugcraft:jimta_logic_processor",
+    "R": "minecraft:redstone_torch",
+    "C": "jugcraft:jimta_fluix_glass_cable"
+  },
+  "result": {
+    "id": "jugcraft:jimta_level_emitter",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

@@ -57,10 +57,12 @@ def build_update(previous: Path, current: Path, output: Path) -> dict:
             'removeOldManagedModsManually': removals,
             'mergeChangedDefaultsManually': configs,
             'zipSha512': hashlib.sha512(target.read_bytes()).hexdigest(),
-            'instructions': 'Back up and stop the server. Extract into the server root. '
+            'instructions': 'Obtain the owner\'s explicit restart confirmation, notify players in-game, '
+                'and wait the full 30 seconds. Back up and stop the server. Extract into the server root. '
                 'Review listed removed managed mods before restart. Merge config defaults deliberately. '
                 'No worlds, inventories, server settings, deletions or configs are included in this ZIP. '
-                'Verify startup before selecting the matching player pack in Server Project compatibility.',
+                'Verify startup and a matching client join before promoting this release through '
+                'scripts/promote_player_update.py. Do not submit or select a public Modrinth Server Project pack.',
         }
         (output / 'UPDATE-PLAN.json').write_bytes(pack.json_bytes(report))
         return report

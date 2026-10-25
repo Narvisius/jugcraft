@@ -25,7 +25,8 @@ LISTS = {"crusher": ("crusher", "crushing"), "arc_furnace_controller": ("arc_fur
          "pulverizer": ("pulverizer", "pulverizing"), "ore_washer": ("ore_washer", "ore_washing"),
          "sieve": ("sieve", "sifting"), "sawmill": ("sawmill", "sawing"), "coke_oven": ("coke_oven", "coking"),
          "steel_foundry": ("steel_foundry", "steelmaking"), "tree_farm": ("tree_farm", "tree_growing"),
-         "hydroponic_bay": ("hydroponic_bay", "hydroponics"), "rocket_workshop": ("rocket_workshop", "rocket_assembly")}
+         "hydroponic_bay": ("hydroponic_bay", "hydroponics"), "rocket_workshop": ("rocket_workshop", "rocket_assembly"),
+         "gas_centrifuge_cascade": ("gas_centrifuge_cascade", "enrichment"), "fuel_fabricator": ("fuel_fabricator", "fuel_fabrication")}
 
 
 def build():
@@ -42,6 +43,21 @@ def build():
                 "ticks": recipe["ticks"],
             })
         machines.append({"block": f"{MOD}:{block}", "type": kind, "recipes": rows})
+    # These five native processors use the same MachineRecipe/JEI shape but
+    # retain their owner-authored industrial recipe catalog.
+    import jimtafacts_industry
+    industrial = jimtafacts_industry.recipes()
+    for block, kind in {'jimta_compressor':'jimta_compressing',
+                        'jimta_extractor':'jimta_extracting',
+                        'jimta_recycler':'jimta_recycling',
+                        'jimta_metal_cutter':'jimta_metal_cutting',
+                        'jimta_thermal_centrifuge':'jimta_thermal_centrifuging'}.items():
+        rows = [{"in":[[r['ingredient'],r.get('input_count',1)]],
+                 "out":[r['result']['id'],r['result'].get('count',1)],
+                 "extra":[[b['result']['id'],b['result'].get('count',1),b['chance']] for b in r.get('byproducts',[])],
+                 "ticks":r['time'], "minimum_heat":r.get('minimum_heat',0)}
+                for r in industrial.values() if r['type']=='jugcraft:'+kind]
+        machines.append({"block":"jugcraft:"+block,"type":kind,"recipes":rows})
     import petro
     fluid_machines = []
     for block, recipes in petro.FLUID_RECIPES.items():
@@ -70,6 +86,8 @@ def build():
         fluid_machines.append(dict(block='jugcraft:'+station,type='starter_'+station,recipes=rows))
     import concordance
     import acquisition
+    import station_recipe_view
     return {"machines": machines, "fluid_machines": fluid_machines, "concordance": concordance.recipe_view(),
+            "stations": station_recipe_view.build(),
             "concordance_stations": concordance.recipe_stations(),
             "alchemy_ingredients": concordance.alchemy.recipe_ingredients(), "acquisition_info": acquisition.rows()}

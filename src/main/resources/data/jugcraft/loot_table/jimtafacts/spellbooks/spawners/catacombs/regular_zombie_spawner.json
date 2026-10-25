@@ -1,0 +1,298 @@
+{
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:empty"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "modifier": [
+            {
+              "id": "jugcraft:jimta_spellbooks_instant_mana_one",
+              "type": "minecraft:set_potion"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "modifier": [
+            {
+              "id": "jugcraft:jimta_spellbooks_instant_mana_two",
+              "type": "minecraft:set_potion"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:tipped_arrow",
+          "modifier": [
+            {
+              "add": false,
+              "count": {
+                "min": 2,
+                "max": 5,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            },
+            {
+              "id": "minecraft:healing",
+              "type": "minecraft:set_potion"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 5,
+      "entries": [
+        {
+          "type": "minecraft:empty",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:bone",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:gold_ingot",
+          "weight": 3,
+          "modifier": [
+            {
+              "count": {
+                "min": 2,
+                "max": 5,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:emerald",
+          "weight": 1,
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 3,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:empty",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:jimta_spellbooks_scroll_firebolt",
+          "modifier": [
+            {
+              "spells": [
+                "spectral_hammer",
+                "ice_block",
+                "sculk_tentacles",
+                "heal",
+                "greater_heal",
+                "cleanse",
+                "fortify",
+                "haste",
+                "slow",
+                "teleport",
+                "summon_ender_chest",
+                "touch_dig",
+                "wololo",
+                "angel_wings",
+                "charge",
+                "oakskin",
+                "blight",
+                "gluttony",
+                "root",
+                "wisp",
+                "blessing_of_life",
+                "counterspell",
+                "spider_aspect",
+                "summon_vex",
+                "summon_polar_bear",
+                "summon_horse",
+                "summon_swords",
+                "raise_dead",
+                "firebolt",
+                "magic_missile",
+                "icicle",
+                "fireball",
+                "magic_arrow",
+                "fire_arrow",
+                "poison_arrow",
+                "lightning_lance",
+                "wither_skull",
+                "guiding_bolt",
+                "acid_orb",
+                "ray_of_frost",
+                "sonic_boom",
+                "shockwave",
+                "frostwave",
+                "heat_surge",
+                "blood_needles",
+                "acupuncture",
+                "blood_slash",
+                "healing_circle",
+                "blizzard",
+                "earthquake",
+                "thunderstorm",
+                "scorch",
+                "poison_splash",
+                "blaze_storm",
+                "starfall",
+                "fire_breath",
+                "dragon_breath",
+                "poison_breath",
+                "cone_of_cold",
+                "electrocute",
+                "ray_of_siphoning",
+                "cloud_of_regeneration",
+                "divine_smite",
+                "flaming_strike",
+                "shadow_slash",
+                "burning_dash",
+                "volt_strike",
+                "ascension",
+                "chain_lightning",
+                "lightning_bolt",
+                "fang_strike",
+                "fang_ward",
+                "stomp",
+                "soulfire_ray",
+                "eldritch_blast",
+                "flaming_barrage",
+                "gust",
+                "throw",
+                "sacrifice",
+                "snowball",
+                "magma_bomb",
+                "lob_creeper",
+                "chain_creeper",
+                "firecracker",
+                "arrow_volley",
+                "raise_hell",
+                "thunder_step",
+                "blood_step",
+                "frost_step",
+                "frostbite",
+                "echoing_strikes",
+                "devour",
+                "ice_spikes",
+                "abyssal_shroud",
+                "arcane_shackle",
+                "heartstop",
+                "planar_sight",
+                "pocket_dimension",
+                "telekinesis",
+                "evasion",
+                "portal",
+                "recall",
+                "invisibility",
+                "scapegoat",
+                "shield",
+                "black_hole",
+                "gravity_fissure",
+                "ball_lightning",
+                "firefly_swarm",
+                "fang_swirl",
+                "sunbeam",
+                "wall_of_fire",
+                "ice_tomb"
+              ],
+              "type": "jugcraft:jimtafacts_spell_scroll"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:empty",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:jimta_spellbooks_arcane_essence",
+          "modifier": [
+            {
+              "count": {
+                "min": 1,
+                "max": 16,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:jimta_spellbooks_dead_king_phylactery_shard"
+        }
+      ],
+      "rolls": 1.0,
+      "condition": {
+        "chance": 0.25,
+        "type": "minecraft:random_chance"
+      }
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:ominous_bottle",
+          "modifier": [
+            {
+              "add": false,
+              "count": 1.0,
+              "type": "minecraft:set_count"
+            },
+            {
+              "amplifier": {
+                "type": "minecraft:uniform",
+                "max": 4.0,
+                "min": 0.0
+              },
+              "type": "minecraft:set_ominous_bottle_amplifier"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0,
+      "condition": {
+        "chance": 0.15,
+        "type": "minecraft:random_chance"
+      }
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    "minecraft:iron_ingot",
+    "minecraft:dropper",
+    "minecraft:redstone"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_computer_printer"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

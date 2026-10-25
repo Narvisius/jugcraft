@@ -1,0 +1,64 @@
+{
+  "pools": [
+    {
+      "rolls": {
+        "min": 0,
+        "max": 2,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:jimta_spellbooks_fire_ale"
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 3,
+        "max": 9,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:glass_bottle"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "modifier": [
+            {
+              "id": "minecraft:water",
+              "type": "minecraft:set_potion"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:pumpkin"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:sugar"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:honeycomb"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:fermented_spider_eye"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:wheat"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:water_bucket"
+        }
+      ]
+    }
+  ]
+}

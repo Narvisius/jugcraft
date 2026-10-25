@@ -1,0 +1,989 @@
+{
+  "copper_spell_book": {
+    "kind": "book",
+    "capacity": 5
+  },
+  "iron_spell_book": {
+    "kind": "book",
+    "capacity": 6
+  },
+  "gold_spell_book": {
+    "kind": "book",
+    "capacity": 8
+  },
+  "diamond_spell_book": {
+    "kind": "book",
+    "capacity": 10
+  },
+  "netherite_spell_book": {
+    "kind": "book",
+    "capacity": 12
+  },
+  "rotten_spell_book": {
+    "kind": "book",
+    "capacity": 8
+  },
+  "blaze_spell_book": {
+    "kind": "book",
+    "capacity": 10
+  },
+  "dragonskin_spell_book": {
+    "kind": "book",
+    "capacity": 12
+  },
+  "druidic_spell_book": {
+    "kind": "book",
+    "capacity": 10
+  },
+  "villager_spell_book": {
+    "kind": "book",
+    "capacity": 10
+  },
+  "ice_spell_book": {
+    "kind": "book",
+    "capacity": 12
+  },
+  "cursed_doll_spell_book": {
+    "kind": "book",
+    "capacity": 10
+  },
+  "evoker_spell_book": {
+    "kind": "book",
+    "capacity": 10,
+    "fixed_spells": [
+      "fang_strike",
+      "fang_ward",
+      "summon_vex"
+    ]
+  },
+  "legendary_spell_book": {
+    "kind": "book",
+    "capacity": 12
+  },
+  "necronomicon_spell_book": {
+    "kind": "book",
+    "capacity": 10,
+    "fixed_spells": [
+      "blood_slash",
+      "blood_step",
+      "ray_of_siphoning",
+      "blaze_storm"
+    ]
+  },
+  "wimpy_spell_book": {
+    "kind": "book",
+    "capacity": 1
+  },
+  "arcane_essence": {
+    "kind": "material",
+    "capacity": 0
+  },
+  "magic_cloth": {
+    "kind": "material",
+    "capacity": 0
+  },
+  "arcane_ingot": {
+    "kind": "material",
+    "capacity": 0
+  },
+  "common_ink": {
+    "kind": "material",
+    "capacity": 0
+  },
+  "uncommon_ink": {
+    "kind": "material",
+    "capacity": 0
+  },
+  "rare_ink": {
+    "kind": "material",
+    "capacity": 0
+  },
+  "epic_ink": {
+    "kind": "material",
+    "capacity": 0
+  },
+  "legendary_ink": {
+    "kind": "material",
+    "capacity": 0
+  },
+  "blank_rune": {
+    "kind": "material",
+    "capacity": 0
+  },
+  "holy_rune": {
+    "kind": "material",
+    "capacity": 0
+  },
+  "nature_rune": {
+    "kind": "material",
+    "capacity": 0
+  },
+  "ender_rune": {
+    "kind": "material",
+    "capacity": 0
+  },
+  "evocation_rune": {
+    "kind": "material",
+    "capacity": 0
+  },
+  "lightning_rune": {
+    "kind": "material",
+    "capacity": 0
+  },
+  "fire_rune": {
+    "kind": "material",
+    "capacity": 0
+  },
+  "ice_rune": {
+    "kind": "material",
+    "capacity": 0
+  },
+  "blood_rune": {
+    "kind": "material",
+    "capacity": 0
+  },
+  "lesser_spell_slot_upgrade": {
+    "kind": "material",
+    "capacity": 0
+  },
+  "shriving_stone": {
+    "kind": "material",
+    "capacity": 0
+  },
+  "wizard_helmet": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "wizard",
+    "model": "wizard_armor",
+    "texture": "wizard",
+    "school": "arcane"
+  },
+  "wizard_chestplate": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "wizard",
+    "model": "wizard_armor",
+    "texture": "wizard",
+    "school": "arcane"
+  },
+  "wizard_leggings": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "wizard",
+    "model": "wizard_armor",
+    "texture": "wizard",
+    "school": "arcane"
+  },
+  "wizard_boots": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "wizard",
+    "model": "wizard_armor",
+    "texture": "wizard",
+    "school": "arcane"
+  },
+  "wandering_magician_helmet": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "wandering_magician",
+    "model": "wandering_magician_armor",
+    "texture": "wandering_magician",
+    "school": "arcane"
+  },
+  "wandering_magician_chestplate": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "wandering_magician",
+    "model": "wandering_magician_armor",
+    "texture": "wandering_magician",
+    "school": "arcane"
+  },
+  "wandering_magician_leggings": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "wandering_magician",
+    "model": "wandering_magician_armor",
+    "texture": "wandering_magician",
+    "school": "arcane"
+  },
+  "wandering_magician_boots": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "wandering_magician",
+    "model": "wandering_magician_armor",
+    "texture": "wandering_magician",
+    "school": "arcane"
+  },
+  "pyromancer_helmet": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "pyromancer",
+    "model": "pyromancer_armor",
+    "texture": "pyromancer",
+    "school": "fire"
+  },
+  "pyromancer_chestplate": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "pyromancer",
+    "model": "pyromancer_armor",
+    "texture": "pyromancer",
+    "school": "fire"
+  },
+  "pyromancer_leggings": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "pyromancer",
+    "model": "pyromancer_armor",
+    "texture": "pyromancer",
+    "school": "fire"
+  },
+  "pyromancer_boots": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "pyromancer",
+    "model": "pyromancer_armor",
+    "texture": "pyromancer",
+    "school": "fire"
+  },
+  "electromancer_helmet": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "electromancer",
+    "model": "electromancer_armor",
+    "texture": "electromancer",
+    "school": "lightning"
+  },
+  "electromancer_chestplate": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "electromancer",
+    "model": "electromancer_armor",
+    "texture": "electromancer",
+    "school": "lightning"
+  },
+  "electromancer_leggings": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "electromancer",
+    "model": "electromancer_armor",
+    "texture": "electromancer",
+    "school": "lightning"
+  },
+  "electromancer_boots": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "electromancer",
+    "model": "electromancer_armor",
+    "texture": "electromancer",
+    "school": "lightning"
+  },
+  "cultist_helmet": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "cultist",
+    "model": "cultist_armor",
+    "texture": "cultist",
+    "school": "blood"
+  },
+  "cultist_chestplate": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "cultist",
+    "model": "cultist_armor",
+    "texture": "cultist",
+    "school": "blood"
+  },
+  "cultist_leggings": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "cultist",
+    "model": "cultist_armor",
+    "texture": "cultist",
+    "school": "blood"
+  },
+  "cultist_boots": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "cultist",
+    "model": "cultist_armor",
+    "texture": "cultist",
+    "school": "blood"
+  },
+  "archevoker_helmet": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "archevoker",
+    "model": "archevoker_armor",
+    "texture": "archevoker",
+    "school": "evocation"
+  },
+  "archevoker_chestplate": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "archevoker",
+    "model": "archevoker_armor",
+    "texture": "archevoker",
+    "school": "evocation"
+  },
+  "archevoker_leggings": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "archevoker",
+    "model": "archevoker_armor",
+    "texture": "archevoker",
+    "school": "evocation"
+  },
+  "archevoker_boots": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "archevoker",
+    "model": "archevoker_armor",
+    "texture": "archevoker",
+    "school": "evocation"
+  },
+  "cryomancer_helmet": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "cryomancer",
+    "model": "cryomancer_armor",
+    "texture": "cryomancer",
+    "school": "ice"
+  },
+  "cryomancer_chestplate": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "cryomancer",
+    "model": "cryomancer_armor",
+    "texture": "cryomancer",
+    "school": "ice"
+  },
+  "cryomancer_leggings": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "cryomancer",
+    "model": "cryomancer_armor",
+    "texture": "cryomancer",
+    "school": "ice"
+  },
+  "cryomancer_boots": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "cryomancer",
+    "model": "cryomancer_armor",
+    "texture": "cryomancer",
+    "school": "ice"
+  },
+  "shadowwalker_helmet": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "shadowwalker",
+    "model": "shadowwalker_armor",
+    "texture": "shadowwalker",
+    "school": "ender"
+  },
+  "shadowwalker_chestplate": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "shadowwalker",
+    "model": "shadowwalker_armor",
+    "texture": "shadowwalker",
+    "school": "ender"
+  },
+  "shadowwalker_leggings": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "shadowwalker",
+    "model": "shadowwalker_armor",
+    "texture": "shadowwalker",
+    "school": "ender"
+  },
+  "shadowwalker_boots": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "shadowwalker",
+    "model": "shadowwalker_armor",
+    "texture": "shadowwalker",
+    "school": "ender"
+  },
+  "priest_helmet": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "priest",
+    "model": "priest_armor",
+    "texture": "priest",
+    "school": "holy"
+  },
+  "priest_chestplate": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "priest",
+    "model": "priest_armor",
+    "texture": "priest",
+    "school": "holy"
+  },
+  "priest_leggings": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "priest",
+    "model": "priest_armor",
+    "texture": "priest",
+    "school": "holy"
+  },
+  "priest_boots": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "priest",
+    "model": "priest_armor",
+    "texture": "priest",
+    "school": "holy"
+  },
+  "plagued_helmet": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "plagued",
+    "model": "plagued_armor",
+    "texture": "plagued",
+    "school": "nature"
+  },
+  "plagued_chestplate": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "plagued",
+    "model": "plagued_armor",
+    "texture": "plagued",
+    "school": "nature"
+  },
+  "plagued_leggings": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "plagued",
+    "model": "plagued_armor",
+    "texture": "plagued",
+    "school": "nature"
+  },
+  "plagued_boots": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "plagued",
+    "model": "plagued_armor",
+    "texture": "plagued",
+    "school": "nature"
+  },
+  "pumpkin_helmet": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "pumpkin",
+    "model": "pumpkin_armor",
+    "texture": "pumpkin",
+    "school": "evocation"
+  },
+  "pumpkin_chestplate": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "pumpkin",
+    "model": "pumpkin_armor",
+    "texture": "pumpkin",
+    "school": "evocation"
+  },
+  "pumpkin_leggings": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "pumpkin",
+    "model": "pumpkin_armor",
+    "texture": "pumpkin",
+    "school": "evocation"
+  },
+  "pumpkin_boots": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "pumpkin",
+    "model": "pumpkin_armor",
+    "texture": "pumpkin",
+    "school": "evocation"
+  },
+  "netherite_mage_helmet": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "netherite_mage",
+    "model": "netherite_armor",
+    "texture": "netherite",
+    "school": "arcane"
+  },
+  "netherite_mage_chestplate": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "netherite_mage",
+    "model": "netherite_armor",
+    "texture": "netherite",
+    "school": "arcane"
+  },
+  "netherite_mage_leggings": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "netherite_mage",
+    "model": "netherite_armor",
+    "texture": "netherite",
+    "school": "arcane"
+  },
+  "netherite_mage_boots": {
+    "kind": "armor",
+    "capacity": 0,
+    "family": "netherite_mage",
+    "model": "netherite_armor",
+    "texture": "netherite",
+    "school": "arcane"
+  },
+  "scroll_spectral_hammer": {
+    "kind": "scroll",
+    "spell": "spectral_hammer"
+  },
+  "scroll_ice_block": {
+    "kind": "scroll",
+    "spell": "ice_block"
+  },
+  "scroll_sculk_tentacles": {
+    "kind": "scroll",
+    "spell": "sculk_tentacles"
+  },
+  "scroll_heal": {
+    "kind": "scroll",
+    "spell": "heal"
+  },
+  "scroll_greater_heal": {
+    "kind": "scroll",
+    "spell": "greater_heal"
+  },
+  "scroll_cleanse": {
+    "kind": "scroll",
+    "spell": "cleanse"
+  },
+  "scroll_fortify": {
+    "kind": "scroll",
+    "spell": "fortify"
+  },
+  "scroll_haste": {
+    "kind": "scroll",
+    "spell": "haste"
+  },
+  "scroll_slow": {
+    "kind": "scroll",
+    "spell": "slow"
+  },
+  "scroll_teleport": {
+    "kind": "scroll",
+    "spell": "teleport"
+  },
+  "scroll_summon_ender_chest": {
+    "kind": "scroll",
+    "spell": "summon_ender_chest"
+  },
+  "scroll_touch_dig": {
+    "kind": "scroll",
+    "spell": "touch_dig"
+  },
+  "scroll_wololo": {
+    "kind": "scroll",
+    "spell": "wololo"
+  },
+  "scroll_angel_wings": {
+    "kind": "scroll",
+    "spell": "angel_wings"
+  },
+  "scroll_charge": {
+    "kind": "scroll",
+    "spell": "charge"
+  },
+  "scroll_oakskin": {
+    "kind": "scroll",
+    "spell": "oakskin"
+  },
+  "scroll_blight": {
+    "kind": "scroll",
+    "spell": "blight"
+  },
+  "scroll_gluttony": {
+    "kind": "scroll",
+    "spell": "gluttony"
+  },
+  "scroll_root": {
+    "kind": "scroll",
+    "spell": "root"
+  },
+  "scroll_wisp": {
+    "kind": "scroll",
+    "spell": "wisp"
+  },
+  "scroll_blessing_of_life": {
+    "kind": "scroll",
+    "spell": "blessing_of_life"
+  },
+  "scroll_counterspell": {
+    "kind": "scroll",
+    "spell": "counterspell"
+  },
+  "scroll_spider_aspect": {
+    "kind": "scroll",
+    "spell": "spider_aspect"
+  },
+  "scroll_summon_vex": {
+    "kind": "scroll",
+    "spell": "summon_vex"
+  },
+  "scroll_summon_polar_bear": {
+    "kind": "scroll",
+    "spell": "summon_polar_bear"
+  },
+  "scroll_summon_horse": {
+    "kind": "scroll",
+    "spell": "summon_horse"
+  },
+  "scroll_summon_swords": {
+    "kind": "scroll",
+    "spell": "summon_swords"
+  },
+  "scroll_raise_dead": {
+    "kind": "scroll",
+    "spell": "raise_dead"
+  },
+  "scroll_firebolt": {
+    "kind": "scroll",
+    "spell": "firebolt"
+  },
+  "scroll_magic_missile": {
+    "kind": "scroll",
+    "spell": "magic_missile"
+  },
+  "scroll_icicle": {
+    "kind": "scroll",
+    "spell": "icicle"
+  },
+  "scroll_fireball": {
+    "kind": "scroll",
+    "spell": "fireball"
+  },
+  "scroll_magic_arrow": {
+    "kind": "scroll",
+    "spell": "magic_arrow"
+  },
+  "scroll_fire_arrow": {
+    "kind": "scroll",
+    "spell": "fire_arrow"
+  },
+  "scroll_poison_arrow": {
+    "kind": "scroll",
+    "spell": "poison_arrow"
+  },
+  "scroll_lightning_lance": {
+    "kind": "scroll",
+    "spell": "lightning_lance"
+  },
+  "scroll_wither_skull": {
+    "kind": "scroll",
+    "spell": "wither_skull"
+  },
+  "scroll_guiding_bolt": {
+    "kind": "scroll",
+    "spell": "guiding_bolt"
+  },
+  "scroll_acid_orb": {
+    "kind": "scroll",
+    "spell": "acid_orb"
+  },
+  "scroll_ray_of_frost": {
+    "kind": "scroll",
+    "spell": "ray_of_frost"
+  },
+  "scroll_sonic_boom": {
+    "kind": "scroll",
+    "spell": "sonic_boom"
+  },
+  "scroll_shockwave": {
+    "kind": "scroll",
+    "spell": "shockwave"
+  },
+  "scroll_frostwave": {
+    "kind": "scroll",
+    "spell": "frostwave"
+  },
+  "scroll_heat_surge": {
+    "kind": "scroll",
+    "spell": "heat_surge"
+  },
+  "scroll_blood_needles": {
+    "kind": "scroll",
+    "spell": "blood_needles"
+  },
+  "scroll_acupuncture": {
+    "kind": "scroll",
+    "spell": "acupuncture"
+  },
+  "scroll_blood_slash": {
+    "kind": "scroll",
+    "spell": "blood_slash"
+  },
+  "scroll_healing_circle": {
+    "kind": "scroll",
+    "spell": "healing_circle"
+  },
+  "scroll_blizzard": {
+    "kind": "scroll",
+    "spell": "blizzard"
+  },
+  "scroll_earthquake": {
+    "kind": "scroll",
+    "spell": "earthquake"
+  },
+  "scroll_thunderstorm": {
+    "kind": "scroll",
+    "spell": "thunderstorm"
+  },
+  "scroll_scorch": {
+    "kind": "scroll",
+    "spell": "scorch"
+  },
+  "scroll_poison_splash": {
+    "kind": "scroll",
+    "spell": "poison_splash"
+  },
+  "scroll_blaze_storm": {
+    "kind": "scroll",
+    "spell": "blaze_storm"
+  },
+  "scroll_starfall": {
+    "kind": "scroll",
+    "spell": "starfall"
+  },
+  "scroll_fire_breath": {
+    "kind": "scroll",
+    "spell": "fire_breath"
+  },
+  "scroll_dragon_breath": {
+    "kind": "scroll",
+    "spell": "dragon_breath"
+  },
+  "scroll_poison_breath": {
+    "kind": "scroll",
+    "spell": "poison_breath"
+  },
+  "scroll_cone_of_cold": {
+    "kind": "scroll",
+    "spell": "cone_of_cold"
+  },
+  "scroll_electrocute": {
+    "kind": "scroll",
+    "spell": "electrocute"
+  },
+  "scroll_ray_of_siphoning": {
+    "kind": "scroll",
+    "spell": "ray_of_siphoning"
+  },
+  "scroll_cloud_of_regeneration": {
+    "kind": "scroll",
+    "spell": "cloud_of_regeneration"
+  },
+  "scroll_divine_smite": {
+    "kind": "scroll",
+    "spell": "divine_smite"
+  },
+  "scroll_flaming_strike": {
+    "kind": "scroll",
+    "spell": "flaming_strike"
+  },
+  "scroll_shadow_slash": {
+    "kind": "scroll",
+    "spell": "shadow_slash"
+  },
+  "scroll_burning_dash": {
+    "kind": "scroll",
+    "spell": "burning_dash"
+  },
+  "scroll_volt_strike": {
+    "kind": "scroll",
+    "spell": "volt_strike"
+  },
+  "scroll_ascension": {
+    "kind": "scroll",
+    "spell": "ascension"
+  },
+  "scroll_chain_lightning": {
+    "kind": "scroll",
+    "spell": "chain_lightning"
+  },
+  "scroll_lightning_bolt": {
+    "kind": "scroll",
+    "spell": "lightning_bolt"
+  },
+  "scroll_fang_strike": {
+    "kind": "scroll",
+    "spell": "fang_strike"
+  },
+  "scroll_fang_ward": {
+    "kind": "scroll",
+    "spell": "fang_ward"
+  },
+  "scroll_stomp": {
+    "kind": "scroll",
+    "spell": "stomp"
+  },
+  "scroll_soulfire_ray": {
+    "kind": "scroll",
+    "spell": "soulfire_ray"
+  },
+  "scroll_eldritch_blast": {
+    "kind": "scroll",
+    "spell": "eldritch_blast"
+  },
+  "scroll_flaming_barrage": {
+    "kind": "scroll",
+    "spell": "flaming_barrage"
+  },
+  "scroll_gust": {
+    "kind": "scroll",
+    "spell": "gust"
+  },
+  "scroll_throw": {
+    "kind": "scroll",
+    "spell": "throw"
+  },
+  "scroll_sacrifice": {
+    "kind": "scroll",
+    "spell": "sacrifice"
+  },
+  "scroll_snowball": {
+    "kind": "scroll",
+    "spell": "snowball"
+  },
+  "scroll_magma_bomb": {
+    "kind": "scroll",
+    "spell": "magma_bomb"
+  },
+  "scroll_lob_creeper": {
+    "kind": "scroll",
+    "spell": "lob_creeper"
+  },
+  "scroll_chain_creeper": {
+    "kind": "scroll",
+    "spell": "chain_creeper"
+  },
+  "scroll_firecracker": {
+    "kind": "scroll",
+    "spell": "firecracker"
+  },
+  "scroll_arrow_volley": {
+    "kind": "scroll",
+    "spell": "arrow_volley"
+  },
+  "scroll_raise_hell": {
+    "kind": "scroll",
+    "spell": "raise_hell"
+  },
+  "scroll_thunder_step": {
+    "kind": "scroll",
+    "spell": "thunder_step"
+  },
+  "scroll_blood_step": {
+    "kind": "scroll",
+    "spell": "blood_step"
+  },
+  "scroll_frost_step": {
+    "kind": "scroll",
+    "spell": "frost_step"
+  },
+  "scroll_frostbite": {
+    "kind": "scroll",
+    "spell": "frostbite"
+  },
+  "scroll_echoing_strikes": {
+    "kind": "scroll",
+    "spell": "echoing_strikes"
+  },
+  "scroll_devour": {
+    "kind": "scroll",
+    "spell": "devour"
+  },
+  "scroll_ice_spikes": {
+    "kind": "scroll",
+    "spell": "ice_spikes"
+  },
+  "scroll_abyssal_shroud": {
+    "kind": "scroll",
+    "spell": "abyssal_shroud"
+  },
+  "scroll_arcane_shackle": {
+    "kind": "scroll",
+    "spell": "arcane_shackle"
+  },
+  "scroll_heartstop": {
+    "kind": "scroll",
+    "spell": "heartstop"
+  },
+  "scroll_planar_sight": {
+    "kind": "scroll",
+    "spell": "planar_sight"
+  },
+  "scroll_pocket_dimension": {
+    "kind": "scroll",
+    "spell": "pocket_dimension"
+  },
+  "scroll_telekinesis": {
+    "kind": "scroll",
+    "spell": "telekinesis"
+  },
+  "scroll_evasion": {
+    "kind": "scroll",
+    "spell": "evasion"
+  },
+  "scroll_portal": {
+    "kind": "scroll",
+    "spell": "portal"
+  },
+  "scroll_recall": {
+    "kind": "scroll",
+    "spell": "recall"
+  },
+  "scroll_invisibility": {
+    "kind": "scroll",
+    "spell": "invisibility"
+  },
+  "scroll_scapegoat": {
+    "kind": "scroll",
+    "spell": "scapegoat"
+  },
+  "scroll_shield": {
+    "kind": "scroll",
+    "spell": "shield"
+  },
+  "scroll_black_hole": {
+    "kind": "scroll",
+    "spell": "black_hole"
+  },
+  "scroll_gravity_fissure": {
+    "kind": "scroll",
+    "spell": "gravity_fissure"
+  },
+  "scroll_ball_lightning": {
+    "kind": "scroll",
+    "spell": "ball_lightning"
+  },
+  "scroll_firefly_swarm": {
+    "kind": "scroll",
+    "spell": "firefly_swarm"
+  },
+  "scroll_fang_swirl": {
+    "kind": "scroll",
+    "spell": "fang_swirl"
+  },
+  "scroll_sunbeam": {
+    "kind": "scroll",
+    "spell": "sunbeam"
+  },
+  "scroll_wall_of_fire": {
+    "kind": "scroll",
+    "spell": "wall_of_fire"
+  },
+  "scroll_ice_tomb": {
+    "kind": "scroll",
+    "spell": "ice_tomb"
+  }
+}

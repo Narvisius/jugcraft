@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "I I",
+    "ICI",
+    "EFE"
+  ],
+  "key": {
+    "I": "#c:ingots/iron",
+    "E": "jugcraft:jimta_spellbooks_arcane_essence",
+    "F": "jugcraft:jimta_spellbooks_cinder_essence",
+    "C": "minecraft:cauldron"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_alchemist_cauldron",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

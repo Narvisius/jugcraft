@@ -1,0 +1,60 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:crafted_stackable_book",
+          "modifier": [
+            {
+              "count": 4,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:crafted_stackable_book",
+                "state": {
+                  "books": "4"
+                }
+              }
+            },
+            {
+              "count": 2,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:crafted_stackable_book",
+                "state": {
+                  "books": "2"
+                }
+              }
+            },
+            {
+              "count": 3,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:crafted_stackable_book",
+                "state": {
+                  "books": "3"
+                }
+              }
+            },
+            {
+              "count": 1,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:crafted_stackable_book",
+                "state": {
+                  "books": "1"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

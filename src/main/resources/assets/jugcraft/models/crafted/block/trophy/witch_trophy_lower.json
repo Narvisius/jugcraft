@@ -1,0 +1,92 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "jugcraft:crafted/block/base/statue_trophy_block",
+  "render_type": "cutout",
+  "texture_size": [
+    64,
+    128
+  ],
+  "textures": {
+    "0": "jugcraft:crafted/block/trophy/witch_trophy",
+    "particle": "minecraft:block/stone"
+  },
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#0",
+          "uv": [
+            15.25,
+            8.375,
+            13.25,
+            8.5
+          ]
+        },
+        "east": {
+          "texture": "#0",
+          "uv": [
+            11,
+            8.5,
+            11.25,
+            9.125
+          ]
+        },
+        "north": {
+          "texture": "#0",
+          "uv": [
+            11.25,
+            8.5,
+            13.25,
+            9.125
+          ]
+        },
+        "south": {
+          "texture": "#0",
+          "uv": [
+            13.5,
+            8.5,
+            15.5,
+            9.125
+          ]
+        },
+        "up": {
+          "texture": "#0",
+          "uv": [
+            13.25,
+            8.5,
+            11.25,
+            8.375
+          ]
+        },
+        "west": {
+          "texture": "#0",
+          "uv": [
+            13.25,
+            8.5,
+            13.5,
+            9.125
+          ]
+        }
+      },
+      "from": [
+        4,
+        -2,
+        1
+      ],
+      "rotation": {
+        "angle": 22.5,
+        "axis": "x",
+        "origin": [
+          19,
+          2.5,
+          8.5
+        ]
+      },
+      "to": [
+        12,
+        3,
+        2
+      ]
+    }
+  ]
+}

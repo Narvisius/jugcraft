@@ -1,0 +1,47 @@
+{
+  "school": "spell_power:frost",
+  "range": 24,
+  "tier": 1,
+  "group": "jimtafacts_spellbooks",
+  "type": "ACTIVE",
+  "active": {
+    "cast": {
+      "duration": 5,
+      "animation": {
+        "id": "jugcraft:continuous_thrust"
+      },
+      "type": "CHANNEL",
+      "haste_affected": false,
+      "channel": {
+        "ticks": 10,
+        "release_fx": false
+      }
+    }
+  },
+  "release": {},
+  "target": {
+    "type": "CASTER"
+  },
+  "deliver": {
+    "type": "DIRECT"
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "CUSTOM",
+        "custom": {
+          "handler": "jugcraft:jimtafacts_spellbook",
+          "intent": "HELPFUL"
+        }
+      }
+    }
+  ],
+  "cost": {
+    "exhaust": 0,
+    "durability": 0,
+    "cooldown": {
+      "duration": 20,
+      "hosting_item": false
+    }
+  }
+}

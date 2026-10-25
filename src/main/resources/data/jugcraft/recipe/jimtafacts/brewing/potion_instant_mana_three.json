@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:brewing",
+  "input": {
+    "item": "minecraft:potion",
+    "potion_contents": {
+      "potions": "jugcraft:jimta_spellbooks_instant_mana_two"
+    }
+  },
+  "output": {
+    "id": "minecraft:potion",
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "jugcraft:jimta_spellbooks_instant_mana_three"
+      }
+    }
+  },
+  "reagent": {
+    "item": "minecraft:amethyst_shard"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

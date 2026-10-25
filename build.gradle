@@ -196,8 +196,9 @@ tasks.named("runClientGameTest") {
 // it. Without them every class runs. Server game tests are never split.
 def clientTests = providers.gradleProperty("clientTests").getOrElse("")
 // The complete content/biome suite needs the same practical heap floor as a modded client.
-// Fail immediately on exhaustion so CI retains the cause instead of hanging for an hour.
-tasks.matching { it.name == "runClientGameTest" }.configureEach {
+// Bound both test JVMs explicitly: the full server suite also retains substantial
+// world state. Fail on exhaustion so CI preserves the cause instead of hanging.
+tasks.matching { it.name in ["runGameTest", "runClientGameTest"] }.configureEach {
 	maxHeapSize = "4G"
 	jvmArgs "-XX:+ExitOnOutOfMemoryError"
 }

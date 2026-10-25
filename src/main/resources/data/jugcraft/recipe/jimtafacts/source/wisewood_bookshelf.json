@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FFF",
+    "FRF",
+    "FFF"
+  ],
+  "key": {
+    "F": "#c:bookshelves",
+    "R": "jugcraft:jimta_spellbooks_arcane_essence"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_wisewood_bookshelf",
+    "count": 8
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

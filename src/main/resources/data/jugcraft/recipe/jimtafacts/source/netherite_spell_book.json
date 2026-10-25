@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "TNT",
+    "BRB",
+    "TLT"
+  ],
+  "key": {
+    "N": "#c:ingots/netherite",
+    "R": "jugcraft:jimta_spellbooks_ruined_book",
+    "T": "jugcraft:jimta_spellbooks_magic_cloth",
+    "B": "jugcraft:jimta_spellbooks_blood_vial",
+    "L": "jugcraft:jimta_spellbooks_lightning_bottle"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_netherite_spell_book",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

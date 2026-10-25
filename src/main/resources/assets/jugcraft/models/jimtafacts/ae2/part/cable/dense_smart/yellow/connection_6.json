@@ -1,0 +1,147 @@
+{
+  "textures": {
+    "base": "jugcraft:jimtafacts/ae2/part/cable/dense_smart/yellow",
+    "channels": "jugcraft:jimtafacts/ae2/part/cable/dense_smart/channels_04",
+    "channels_even": "jugcraft:jimtafacts/ae2/part/cable/dense_smart/channels_12"
+  },
+  "elements": [
+    {
+      "name": "Base",
+      "from": [
+        4.0,
+        4.0,
+        0.0
+      ],
+      "to": [
+        12.0,
+        12.0,
+        8.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#base",
+          "uv": [
+            5.5,
+            5.5,
+            10.5,
+            10.5
+          ]
+        },
+        "east": {
+          "texture": "#base",
+          "uv": [
+            11.0,
+            5.5,
+            16.0,
+            10.5
+          ]
+        },
+        "south": {
+          "texture": "#base",
+          "uv": [
+            10.5,
+            10.5,
+            5.5,
+            5.5
+          ]
+        },
+        "west": {
+          "texture": "#base",
+          "uv": [
+            16.0,
+            5.5,
+            11.0,
+            10.5
+          ]
+        },
+        "up": {
+          "texture": "#base",
+          "uv": [
+            5.5,
+            0.0,
+            10.5,
+            5.0
+          ]
+        },
+        "down": {
+          "texture": "#base",
+          "uv": [
+            5.5,
+            11.0,
+            10.5,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "Channels",
+      "from": [
+        4.0,
+        4.0,
+        0.0
+      ],
+      "to": [
+        12.0,
+        12.0,
+        8.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#channels_even",
+          "uv": [
+            5.5,
+            5.5,
+            10.5,
+            10.5
+          ]
+        },
+        "east": {
+          "texture": "#channels_even",
+          "uv": [
+            11.0,
+            5.5,
+            16.0,
+            10.5
+          ]
+        },
+        "south": {
+          "texture": "#channels",
+          "uv": [
+            10.5,
+            10.5,
+            5.5,
+            5.5
+          ]
+        },
+        "west": {
+          "texture": "#channels_even",
+          "uv": [
+            16.0,
+            5.5,
+            11.0,
+            10.5
+          ]
+        },
+        "up": {
+          "texture": "#channels",
+          "uv": [
+            5.5,
+            0.0,
+            10.5,
+            5.0
+          ]
+        },
+        "down": {
+          "texture": "#channels",
+          "uv": [
+            5.5,
+            11.0,
+            10.5,
+            16.0
+          ]
+        }
+      }
+    }
+  ]
+}

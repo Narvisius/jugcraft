@@ -267,7 +267,7 @@ ADVANCEMENTS = {
 PARTS = 4
 
 # The Stonemason's Chisel: an iron chisel struck with a mallet.
-CHISEL_RECIPE = {"pattern": ["I", "S"], "key": {"I": "minecraft:iron_ingot", "S": "minecraft:stick"}}
+CHISEL_RECIPE = {"pattern": ["FI", " S"], "key": {"F": "minecraft:flint", "I": "minecraft:iron_ingot", "S": "minecraft:stick"}}
 
 
 def parts(headstone):

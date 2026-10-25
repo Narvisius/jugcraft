@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SGS",
+    "G G",
+    "SGS"
+  ],
+  "key": {
+    "S": "jugcraft:jimta_sky_stone_block",
+    "G": "jugcraft:jimta_quartz_glass"
+  },
+  "result": {
+    "id": "jugcraft:jimta_sky_stone_tank"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

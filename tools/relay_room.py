@@ -608,7 +608,8 @@ CRAFTING = {
     "drawing_rack": (["SSS", "PPP", "S S"], {"S": "#c:plates/steel", "P": "minecraft:paper"}, 1),
     "soe_printer": (["PCP", "SXS", "S S"], {"P": "minecraft:paper", "C": "jugcraft:basic_circuit", "S": "#c:plates/steel", "X": "minecraft:dispenser"}, 1),
 }
-CRAFTING.update({k: (["PLP", " I "], {"P": "minecraft:paper", "L": "minecraft:blue_dye", "I": "minecraft:iron_nugget"}, 2) for k in ROW_SIGNS})
+ROW_DYES = {"a": "blue", "b": "cyan", "c": "purple", "d": "light_blue"}
+CRAFTING.update({k: (["PLP", " I "], {"P": "minecraft:paper", "L": f"minecraft:{ROW_DYES[k[-1]]}_dye", "I": "minecraft:iron_nugget"}, 2) for k in ROW_SIGNS})
 
 
 def register():

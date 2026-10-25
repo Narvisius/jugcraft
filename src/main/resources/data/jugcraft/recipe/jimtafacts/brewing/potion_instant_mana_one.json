@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:brewing",
+  "input": {
+    "item": "minecraft:potion",
+    "potion_contents": {
+      "potions": "minecraft:awkward"
+    }
+  },
+  "output": {
+    "id": "minecraft:potion",
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "jugcraft:jimta_spellbooks_instant_mana_one"
+      }
+    }
+  },
+  "reagent": {
+    "item": "jugcraft:jimta_spellbooks_arcane_essence"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

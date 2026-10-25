@@ -204,4 +204,9 @@ def extend(root, edge, evidence, items):
     import exchange_casino
     found(list(exchange_casino.SCRATCH_CARDS),
           java + 'finance/CasinoBlockEntity.java', 'Purchased as server-issued, single-use paid tickets at a lottery kiosk; alchemy blanks have no prize entitlement.')
+    if 'jugcraft:artisan_furniture' in items:
+        route(java + 'furniture/ArtisanFurniture.java', ['artisans_workstation', 'furniture_material'],
+              ['artisan_furniture'], 'design_at_workstation_and_pay_server_computed_material_cost')
+    from survival_jimtafacts_routes import extend as collection_routes
+    exclusions.update(collection_routes(root, edge, evidence, items))
     return exclusions

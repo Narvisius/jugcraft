@@ -1,0 +1,62 @@
+{
+  "parent": "minecraft:block/block",
+  "gui_light": "front",
+  "ambientocclusion": false,
+  "display": {
+    "gui": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    }
+  },
+  "textures": {
+    "blank": "jugcraft:item/jimtafacts/utilities/turnable_iron",
+    "particle": "#blank"
+  },
+  "elements": [
+    {
+      "from": [
+        12.5,
+        4.75,
+        8
+      ],
+      "to": [
+        15.5,
+        11.25,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#blank",
+          "uv": [
+            7.5,
+            0.1875,
+            6.0,
+            1.8125
+          ]
+        },
+        "south": {
+          "texture": "#blank",
+          "uv": [
+            6.0,
+            0.1875,
+            7.5,
+            1.8125
+          ]
+        }
+      }
+    }
+  ]
+}

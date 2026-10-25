@@ -1,0 +1,47 @@
+{
+  "school": "spell_power:soul",
+  "range": 32,
+  "tier": 1,
+  "group": "jimtafacts_spellbooks",
+  "type": "ACTIVE",
+  "active": {
+    "cast": {
+      "duration": 0,
+      "animation": {
+        "id": "jugcraft:instant_projectile"
+      }
+    }
+  },
+  "release": {},
+  "target": {
+    "type": "AIM",
+    "aim": {
+      "required": false
+    }
+  },
+  "deliver": {
+    "type": "CUSTOM",
+    "custom": {
+      "handler": "jugcraft:jimtafacts_blood"
+    }
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "CUSTOM",
+        "custom": {
+          "handler": "jugcraft:jimtafacts_combat",
+          "intent": "HARMFUL"
+        }
+      }
+    }
+  ],
+  "cost": {
+    "exhaust": 0,
+    "durability": 0,
+    "cooldown": {
+      "duration": 10,
+      "hosting_item": false
+    }
+  }
+}

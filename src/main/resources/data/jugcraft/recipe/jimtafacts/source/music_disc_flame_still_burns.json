@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FFF",
+    "FPF",
+    "FFF"
+  ],
+  "key": {
+    "F": "jugcraft:jimta_spellbooks_disc_fragment_flame_still_burns",
+    "P": "#c:ingots/pyrium"
+  },
+  "result": {
+    "count": 1,
+    "id": "jugcraft:jimta_spellbooks_music_disc_flame_still_burns"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    "jugcraft:jimta_computer_monitor_normal",
+    "minecraft:gold_ingot"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_computer_monitor_advanced"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

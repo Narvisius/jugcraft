@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:paper",
+    "jugcraft:jimta_spellbooks_common_ink",
+    "jugcraft:jimta_spellbooks_ender_rune",
+    "minecraft:chorus_fruit",
+    "minecraft:rabbit_foot"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_scroll_evasion",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

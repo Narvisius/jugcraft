@@ -50,6 +50,10 @@ public class FluidPipeBlock extends PipeBlock implements FluidConnectable {
 	public boolean carries(BlockState state) {
 		return true;
 	}
+	public boolean joins(BlockState own, BlockState other) { return true; }
+	public boolean routesTo(BlockState own, Direction direction, BlockState other) { return true; }
+	public boolean directionalRouting() { return false; }
+	public boolean prefersAdjacentInventory() { return false; }
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
@@ -111,6 +115,9 @@ public class FluidPipeBlock extends PipeBlock implements FluidConnectable {
 	 * World generation has no full level to query, so there only the marker interface counts.
 	 */
 	public static boolean connectsTo(BlockGetter level, BlockPos pos, Direction direction, BlockState neighbor) {
+		var own=level.getBlockState(pos);
+		if(own.getBlock() instanceof FluidPipeBlock pipe && neighbor.getBlock() instanceof FluidPipeBlock next
+				&&(!pipe.joins(own,neighbor)||!next.joins(neighbor,own))) return false;
 		if (neighbor.getBlock() instanceof FluidConnectable) {
 			return true;
 		}

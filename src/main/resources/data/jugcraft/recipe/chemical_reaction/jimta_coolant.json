@@ -1,0 +1,28 @@
+{
+  "type": "jugcraft:chemical_reaction",
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "items": [
+    {
+      "ingredient": "minecraft:lapis_lazuli",
+      "count": 2
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 1000
+    }
+  ],
+  "fluid_results": [
+    {
+      "fluid": "jugcraft:jimta_coolant",
+      "amount": 1000
+    }
+  ],
+  "time": 100
+}

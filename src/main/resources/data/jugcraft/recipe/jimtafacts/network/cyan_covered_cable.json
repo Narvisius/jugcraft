@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "jugcraft:jimta_fluix_glass_cable",
+    "minecraft:white_wool",
+    "minecraft:cyan_dye"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_cyan_covered_cable"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

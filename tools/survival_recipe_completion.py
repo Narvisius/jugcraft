@@ -100,7 +100,8 @@ def definitions():
                   ['minecraft:leather_' + base] + ['cavern_gingerbread_crumbs'] * amount)
     shaped('cavern_dough_block', ['DDD', 'DDD', 'DDD'], {'D': 'pastry_dough'})
     # No reverse recipe: this block is a decorative supply, not an infinite food loop.
-    cut('cavern_cake_layer', 'minecraft:cake', [('cavern_cake_layer', 4)])
+    # One whole cake yields seven slices; assembling all seven preserves four layers.
+    shapeless('cavern_cake_layer', ['cake_slice'] * 7, 4)
     shaped('cavern_rusty_rebar', ['I I', 'III', 'I I'], {'I': 'cavern_rusty_scrap_metal'}, 8)
     shaped('cavern_rusty_scaffolding', ['SSS', 'R R', 'R R'],
            {'S': 'minecraft:string', 'R': 'cavern_rusty_rebar'}, 6)

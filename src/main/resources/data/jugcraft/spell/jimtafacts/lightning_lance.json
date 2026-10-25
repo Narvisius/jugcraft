@@ -1,0 +1,74 @@
+{
+  "school": "spell_power:lightning",
+  "range": 48,
+  "tier": 1,
+  "group": "jimtafacts_spellbooks",
+  "type": "ACTIVE",
+  "active": {
+    "cast": {
+      "duration": 2,
+      "animation": {
+        "id": "jugcraft:charged_throw"
+      }
+    }
+  },
+  "release": {
+    "animation": {
+      "id": "jugcraft:long_cast_finish"
+    }
+  },
+  "target": {
+    "type": "AIM",
+    "aim": {
+      "required": false
+    }
+  },
+  "deliver": {
+    "type": "PROJECTILE",
+    "projectile": {
+      "launch_properties": {
+        "velocity": 2.4
+      },
+      "projectile": {
+        "homing_angle": 0,
+        "perks": {
+          "pierce": 4
+        },
+        "client_data": {
+          "light_level": 12,
+          "composite_model": {
+            "models": [
+              {
+                "orientation": "TOWARDS_CAMERA",
+                "fx": {
+                  "model_id": "jugcraft:spell_projectile/jimtafacts/lightning_lance",
+                  "scale": 0.5,
+                  "light_emission": "RADIATE"
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "CUSTOM",
+        "custom": {
+          "handler": "jugcraft:jimtafacts_combat",
+          "intent": "HARMFUL"
+        }
+      }
+    }
+  ],
+  "cost": {
+    "exhaust": 0,
+    "durability": 0,
+    "cooldown": {
+      "duration": 8,
+      "hosting_item": false
+    }
+  }
+}

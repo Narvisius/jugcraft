@@ -61,6 +61,8 @@ VANILLA_WALLS = [f"{stone}_wall" for stone in STONES]
 # Jugcraft's own walls (batch 55's bastion concrete wall): each gets a diagonal wall exactly as vanilla's do.
 JUGCRAFT_WALLS = ["bastion_concrete_wall", "wildlife_shellstone_wall", "wildlife_cut_shellstone_wall", "wildlife_smooth_shellstone_wall", "wildlife_shellstone_brick_wall"]
 JUGCRAFT_WALLS += sorted(OWNER_WALLS)
+from jimtafacts_network_decor import FAMILIES as JIMTA_WALL_FAMILIES
+JUGCRAFT_WALLS += ['jimta_' + stem + '_wall' for stem, _ in JIMTA_WALL_FAMILIES]
 JUGCRAFT_PANES = [f"wildlife_{color}_froglass_pane" for color in ["azure", "crimson", "verdant"]]
 # The block each wall becomes while it joins diagonally.
 DIAGONAL_WALL = "diagonal_{}"
@@ -74,7 +76,7 @@ def all_walls():
 def jugcraft_fences():
     """Jugcraft's own fences: every wood set's and the wrought-iron cemetery fence."""
     import agriculture
-    return [f"{wood}_fence" for wood in agriculture.WOOD_SETS] + [agriculture.CEMETERY_FENCE["fence"], "nouveau_archwood_fence"] + sorted(OWNER_FENCES)
+    return [f"{wood}_fence" for wood in agriculture.WOOD_SETS] + [agriculture.CEMETERY_FENCE["fence"], "nouveau_archwood_fence", "jimta_iron_fence"] + sorted(OWNER_FENCES)
 
 
 def blocks():
@@ -295,6 +297,10 @@ def write_all(write, assets_dir, minecraft_assets_dir):
     # Runtime walls use the supplied model family; aliases let the shared diagonal
     # generator inherit exactly those textures and standard wall geometry.
     for name in JUGCRAFT_WALLS:
+        if name.startswith('jimta_'):
+            for suffix in ('post','side','side_tall'):
+                write(assets_dir/'models/block'/f'{name}_{suffix}.json',
+                      {'parent':f'jugcraft:jimtafacts/ae2/block/{name[6:]}_{suffix}'})
         if name in OWNER_WALLS:
             group,source=name.split('_',1)
             for suffix in ('post','side','side_tall'):

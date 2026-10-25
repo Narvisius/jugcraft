@@ -1,0 +1,51 @@
+{
+  "school": "spell_power:lightning",
+  "range": 9,
+  "tier": 1,
+  "group": "jimtafacts_spellbooks",
+  "type": "ACTIVE",
+  "active": {
+    "cast": {
+      "duration": 0.8,
+      "animation": {
+        "id": "jugcraft:cross_arms"
+      }
+    }
+  },
+  "release": {
+    "animation": {
+      "id": "jugcraft:cast_t_pose"
+    }
+  },
+  "target": {
+    "type": "AREA",
+    "cap": 16,
+    "area": {
+      "distance_dropoff": "NONE",
+      "include_caster": false,
+      "angle_degrees": 360
+    }
+  },
+  "deliver": {
+    "type": "DIRECT"
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "CUSTOM",
+        "custom": {
+          "handler": "jugcraft:jimtafacts_combat",
+          "intent": "HARMFUL"
+        }
+      }
+    }
+  ],
+  "cost": {
+    "exhaust": 0,
+    "durability": 0,
+    "cooldown": {
+      "duration": 30,
+      "hosting_item": false
+    }
+  }
+}
