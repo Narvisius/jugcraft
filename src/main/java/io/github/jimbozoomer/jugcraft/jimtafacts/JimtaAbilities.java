@@ -89,9 +89,12 @@ public final class JimtaAbilities {
         LivingEntity mount = worn.contains("cowboy_hat") && p.getVehicle() instanceof LivingEntity living ? living : null;
         if (mount != state.mount && state.mount != null) modifier(state.mount, MOUNT_SPEED, .25, false);
         state.mount = mount;if(mount!=null)modifier(mount,MOUNT_SPEED,.25,true);
-        BlockPos under = p.blockPosition().below();
-        boolean snow=p.level().getBlockState(under).is(BlockTags.SNOW)||p.level().getBlockState(p.blockPosition()).is(Blocks.POWDER_SNOW);
-        modifier(p,SNOW_SPEED,.25,worn.contains("snowshoes")&&snow);
+        // Only snowshoes read the ground, and never through an unloaded chunk: getBlockState would load it synchronously.
+        // Game-test mock players stand unticked at the origin (tickCount stays 0), so this ran every tick for each of them.
+        BlockPos feet = p.blockPosition();
+        boolean snow=worn.contains("snowshoes")&&p.level().hasChunkAt(feet)
+                &&(p.level().getBlockState(feet.below()).is(BlockTags.SNOW)||p.level().getBlockState(feet).is(Blocks.POWDER_SNOW));
+        modifier(p,SNOW_SPEED,.25,snow);
         if (worn.contains("kitty_slippers") && Jimtafacts.ready(p,"repel",20)) {
             var nearby = new ArrayList<Mob>();
             p.level().getEntities(net.minecraft.world.level.entity.EntityTypeTest.forClass(Mob.class),p.getBoundingBox().inflate(12),

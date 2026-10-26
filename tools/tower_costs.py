@@ -88,7 +88,9 @@ def module_cost(tier, block_names):
 
 def _recipes():
     out = {}
-    for f in RECIPES.glob("**/*.json"):
+    # In name order: where several recipes make an item and none is named after it, the first one counts, and the
+    # file system's own order differs between Windows and Linux.
+    for f in sorted(RECIPES.glob("**/*.json")):
         d = json.loads(f.read_text(encoding="utf-8"))
         res = d.get("result")
         if not isinstance(res, dict) or d.get("type") not in ("minecraft:crafting_shaped", "minecraft:crafting_shapeless"):
