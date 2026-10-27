@@ -1,14 +1,17 @@
 package io.github.jimbozoomer.jugcraft.agriculture;
 
+import io.github.jimbozoomer.jugcraft.Jugcraft;
 import io.github.jimbozoomer.jugcraft.config.JugcraftConfig;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 
@@ -16,11 +19,13 @@ import net.minecraft.world.phys.AABB;
  * Where will-o'-wisps ({@link WillOWisp}) appear: on Halloween nights (the event running, the overworld between
  * {@link HarvestMoon#DUSK} and {@link HarvestMoon#DAWN}), over swamps and cornfields. Every {@link #SPAWN_TICKS}
  * ticks, for each player in the overworld, {@link #SPAWN_CHANCE} of the time the server tries one spot
- * {@link #MIN_DISTANCE} to {@link #MAX_DISTANCE} blocks away, in a loaded chunk, open to the sky: a swamp, or within
+ * {@link #MIN_DISTANCE} to {@link #MAX_DISTANCE} blocks away, in a loaded chunk, open to the sky: a swamp ({@link #HAUNTS}), or within
  * {@link #CORN_RADIUS} blocks of a corn plant. Fewer than {@link #NEAR_CAP} wisps may be near a player, and at most
  * {@link #LEVEL_CAP} in the world. Each try reads at most a few dozen blocks and never loads a chunk.
  */
 public final class Wisps {
+	/** The swamps wisps come out over: the common swamps and the landscape collection's (tools/agriculture.py WISPS). */
+	public static final TagKey<Biome> HAUNTS = TagKey.create(Registries.BIOME, Jugcraft.id("wisp_haunts"));
 	public static final int SPAWN_TICKS = 100;
 	public static final float SPAWN_CHANCE = 0.5F;
 	public static final int MIN_DISTANCE = 10;
@@ -103,7 +108,7 @@ public final class Wisps {
 		if (!level.getBlockState(spot).isAir() || !openSky(level, spot)) {
 			return false;
 		}
-		if (level.getBiome(spot).is(ConventionalBiomeTags.IS_SWAMP)) {
+		if (level.getBiome(spot).is(HAUNTS)) {
 			return true;
 		}
 		for (BlockPos pos : BlockPos.betweenClosed(spot.offset(-CORN_RADIUS, -4, -CORN_RADIUS), spot.offset(CORN_RADIUS, 0, CORN_RADIUS))) {

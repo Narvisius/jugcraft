@@ -5,7 +5,8 @@ import java.util.List;
 /**
  * A line of player-facing text from the compiler (a problem or a line of explanation), kept as a translation key and
  * its arguments so the game can show it in the player's language. The key is {@code compose.jugcraft.<key>};
- * arguments are numbers, plain strings (seconds, already formatted) or {@link Ref}s to named things.
+ * arguments are numbers, plain strings (seconds, already formatted), {@link Ref}s to named things, lists of those, or
+ * (a diagnostic's step and refusal, Concordance Chunk C, C-01) another line.
  */
 public record Text(String key, List<Object> args) {
 	public static final String PREFIX = "compose.jugcraft.";

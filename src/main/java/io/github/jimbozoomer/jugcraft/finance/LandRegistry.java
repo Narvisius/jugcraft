@@ -255,6 +255,22 @@ public final class LandRegistry extends SavedData {
 		return FinanceService.isAdmin(server);
 	}
 
+    /** Automation uses its owner's identity without requiring an online player or inheriting operator bypasses. */
+    public static boolean mayBuildFor(UUID owner, Level level, BlockPos pos) {
+        if (level.isClientSide() || level.dimension() != Level.OVERWORLD) return true;
+        MinecraftServer server = level.getServer();
+        if (server == null) return false;
+        LandRegistry land = get(server);
+        Claim claim = land.claims.get(keyOf(pos));
+        if (claim == null) return true;
+        if (owner == null) return false;
+        if (actsFor(server, owner, claim.owner)) return true;
+        Equities equities = Equities.get(server);
+        Equities.Corporation corp = equities.byTreasury(claim.owner);
+        UUID boss = corp == null ? claim.owner : equities.controller(corp);
+        return boss != null && land.trustedBy(boss).contains(owner);
+    }
+
     /** Explicit sharing is tied to one party ID; leaving/recreating a party cannot transfer access. */
     public static boolean partyMayBuild(Claim claim, UUID player) {
         return claim.sharedParty != null

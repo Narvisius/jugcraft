@@ -37,6 +37,24 @@ public final class JimtafactsComputersClientGameTests implements FabricClientGam
                     }
                 }
             });
+            world.getServer().runOnServer(server -> {
+                var player=server.getPlayerList().getPlayers().getFirst();
+                var pos=player.blockPosition().offset(2,0,0);
+                player.level().setBlockAndUpdate(pos,WorkshopComputers.BLOCKS.get("computer_normal").defaultBlockState());
+                var node=(io.github.jimbozoomer.jugcraft.jimtafacts.computers.ComputerNode)player.level().getBlockEntity(pos);
+                node.owner(player.getUUID());node.canvas().clear();node.canvas().write("JUGCRAFT ROM terminal");
+                player.openMenu(new net.minecraft.world.SimpleMenuProvider((id,inv,who)->new io.github.jimbozoomer.jugcraft.jimtafacts.computers.ComputerTerminal.Menu(id,inv,node),net.minecraft.network.chat.Component.literal("Workshop terminal")));
+            });
+            context.waitTicks(20);
+            context.runOnClient(mc->{
+                if(!(mc.gui.screen() instanceof io.github.jimbozoomer.jugcraft.client.jimtafacts.ComputerScreen))throw new AssertionError("Computer screen did not open");
+                var menu=(io.github.jimbozoomer.jugcraft.jimtafacts.computers.ComputerTerminal.Menu)mc.player.containerMenu;
+                if(!menu.canvasText.startsWith("JUGCRAFT ROM terminal"))throw new AssertionError("Server terminal canvas was not synchronized");
+                menu.terminalView=true;
+                if(menu.slots.stream().anyMatch(slot->slot.isActive()))throw new AssertionError("Inventory slots overlap terminal view");
+            });
+            context.waitTicks(5);context.takeScreenshot("jimtafacts_rom_terminal");
+            context.runOnClient(mc->mc.player.closeContainer());
         }
     }
 }

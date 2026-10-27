@@ -147,6 +147,7 @@ public final class IndustrialForms {
 			.port("product_out", FormPort.Kind.FLUID_OUT, 0, 1, 2, 1, FormSide.BACK)
 			.port("water_out", FormPort.Kind.FLUID_OUT, 1, 0, 2, 0, FormSide.BACK)
 			.port("power", FormPort.Kind.ENERGY_IN, 0, 1, 2, 0, FormSide.RIGHT)
+			.companionAssistance()
 			.build();
 
 	/**
@@ -173,6 +174,7 @@ public final class IndustrialForms {
 			.port("oxidant_in", FormPort.Kind.FLUID_IN, 0, 1, 0, 0, FormSide.RIGHT)
 			.port("product_out", FormPort.Kind.FLUID_OUT, 0, 1, 0, 2, FormSide.TOP)
 			.port("power", FormPort.Kind.ENERGY_IN, 0, 0, 1, 0, FormSide.LEFT)
+			.companionAssistance()
 			.build();
 
 	/**
@@ -204,6 +206,7 @@ public final class IndustrialForms {
 			.port("product_out", FormPort.Kind.FLUID_OUT, 0, 1, 0, 0, FormSide.FRONT)
 			.port("co2_out", FormPort.Kind.FLUID_OUT, 1, 1, 2, 3, FormSide.BACK)
 			.port("power", FormPort.Kind.ENERGY_IN, 0, 2, 2, 0, FormSide.BACK)
+			.companionAssistance()
 			.build();
 
 	/**
@@ -236,6 +239,7 @@ public final class IndustrialForms {
 			.alias("ethanol_broth", "product")
 			.alias("fermentation_exhaust", "co2")
 
+			.companionAssistance()
 			.build();
 
 	/**
@@ -271,6 +275,7 @@ public final class IndustrialForms {
             .capability("jugcraft:electronics_reagents")
 			.capability("jugcraft:phosphate_formulation")
 			.capability("jugcraft:storable_propellants")
+			.companionAssistance()
 			.build();
 
 	/**
@@ -302,6 +307,7 @@ public final class IndustrialForms {
 			.port("digestate_out", FormPort.Kind.ITEM_OUT, FormPort.ALL, 5, 2, 0, FormSide.RIGHT)
 			.port("power", FormPort.Kind.ENERGY_IN, 0, 3, 5, 0, FormSide.BACK)
 			.port("liquid_digestate_out", FormPort.Kind.FLUID_OUT, 1, 0, 5, 0, FormSide.BACK)
+			.companionAssistance()
 			.build();
 
 	/**
@@ -332,6 +338,7 @@ public final class IndustrialForms {
 			.port("syngas_out", FormPort.Kind.FLUID_OUT, 0, 3, 2, 5, FormSide.RIGHT)
 			.port("residue_out", FormPort.Kind.ITEM_OUT, FormPort.ALL, 3, 1, 0, FormSide.RIGHT)
 			.port("power", FormPort.Kind.ENERGY_IN, 0, 2, 3, 0, FormSide.BACK)
+			.companionAssistance()
 			.build();
 
 	/**
@@ -355,6 +362,7 @@ public final class IndustrialForms {
 			.port("product_out", FormPort.Kind.FLUID_OUT, 0, 2, 4, 3, FormSide.TOP)
 			.port("hydrogen_out", FormPort.Kind.FLUID_OUT, 1, 0, 4, 3, FormSide.TOP)
 			.port("power", FormPort.Kind.ENERGY_IN, 0, 1, 4, 0, FormSide.BACK)
+			.companionAssistance()
 			.build();
 
 	/**
@@ -405,6 +413,7 @@ public final class IndustrialForms {
 			.port("power", FormPort.Kind.ENERGY_IN, 0, 2, 0, 0, FormSide.FRONT)
 			.capability("jugcraft:electronics_peroxide")
 
+			.companionAssistance()
 			.build();
 
 	/**
@@ -434,6 +443,7 @@ public final class IndustrialForms {
 			.port("power", FormPort.Kind.ENERGY_IN, 0, 0, 2, 0, FormSide.LEFT)
 			.alias("product_gas", "product")
 
+			.companionAssistance()
 			.build();
 
 	/**
@@ -475,6 +485,7 @@ public final class IndustrialForms {
 			.alias("process_water", "water")
 			.waterDrainOutput(1)
 
+			.companionAssistance()
 			.build();
 
 	/**
@@ -582,6 +593,7 @@ public final class IndustrialForms {
 			.port("hydrogen_out", FormPort.Kind.FLUID_OUT, 1, 1, 0, 2, FormSide.FRONT)
 			.port("residue_out", FormPort.Kind.ITEM_OUT, 0, 1, 0, 0, FormSide.FRONT)
 			.port("power", FormPort.Kind.ENERGY_IN, 0, 2, 0, 0, FormSide.FRONT)
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock GAS_CLEANING_RACK;
 
@@ -602,6 +614,7 @@ public final class IndustrialForms {
 			.port("clean_out", FormPort.Kind.FLUID_OUT, 0, 1, 0, 2, FormSide.FRONT)
 			.port("wash_out", FormPort.Kind.FLUID_OUT, 1, 1, 0, 0, FormSide.FRONT)
 			.port("power", FormPort.Kind.ENERGY_IN, 0, 0, 0, 0, FormSide.FRONT)
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock BIOGAS_CLEANER;
 
@@ -620,6 +633,7 @@ public final class IndustrialForms {
 			.port("water_out", FormPort.Kind.FLUID_OUT, 0, 1, 2, 0, FormSide.BACK)
 			.port("fiber_out", FormPort.Kind.ITEM_OUT, 0, 1, 0, 0, FormSide.FRONT)
 			.port("power", FormPort.Kind.ENERGY_IN, 0, 0, 0, 0, FormSide.FRONT)
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock DIGESTATE_SEPARATOR;
 
@@ -638,6 +652,7 @@ public final class IndustrialForms {
 			.port("feed_0", FormPort.Kind.FLUID_IN, 0, 0, 2, 0, FormSide.BACK)
 			.port("product_0", FormPort.Kind.FLUID_OUT, 0, 1, 2, 0, FormSide.BACK)
 			.port("solid_in_0", FormPort.Kind.ITEM_IN, 0, 2, 0, 1, FormSide.FRONT)
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock MASHING_STATION;
 
@@ -661,6 +676,7 @@ public final class IndustrialForms {
 			.port("feed_0", FormPort.Kind.FLUID_IN, 0, 2, 3, 1, FormSide.BACK)
 			.port("product_0", FormPort.Kind.FLUID_OUT, 0, 0, 3, 1, FormSide.BACK)
 			.port("product_1", FormPort.Kind.FLUID_OUT, 1, 2, 3, 0, FormSide.BACK)
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock CHEMICAL_DISTILLATION_STATION;
 
@@ -681,6 +697,7 @@ public final class IndustrialForms {
 			.port("feed_1", FormPort.Kind.FLUID_IN, 1, 1, 3, 1, FormSide.BACK)
 			.port("product_0", FormPort.Kind.FLUID_OUT, 0, 2, 3, 0, FormSide.BACK)
 			.port("solid_in_0", FormPort.Kind.ITEM_IN, 0, 2, 0, 1, FormSide.FRONT)
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock BAUXITE_DIGESTER;
 
@@ -704,6 +721,7 @@ public final class IndustrialForms {
 			.port("product_1", FormPort.Kind.FLUID_OUT, 1, 1, 3, 0, FormSide.BACK)
 			.port("solid_out_0", FormPort.Kind.ITEM_OUT, 0, 2, 3, 1, FormSide.BACK)
 			.port("solid_out_1", FormPort.Kind.ITEM_OUT, 1, 2, 3, 2, FormSide.BACK)
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock ALUMINATE_FILTER_PRESS;
 
@@ -728,6 +746,7 @@ public final class IndustrialForms {
 			.capability("jugcraft:ceramic_firing")
 			.capability("jugcraft:battery_alumina_calciner")
 			.capability("jugcraft:phosphate_drying")
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock ALUMINA_CALCINER;
 
@@ -748,6 +767,7 @@ public final class IndustrialForms {
 			.port("solid_in_0", FormPort.Kind.ITEM_IN, 0, 2, 0, 1, FormSide.FRONT)
 			.port("solid_in_1", FormPort.Kind.ITEM_IN, 1, 2, 0, 2, FormSide.FRONT)
 			.port("solid_out_0", FormPort.Kind.ITEM_OUT, 0, 2, 2, 1, FormSide.BACK)
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock ALUMINUM_REDUCTION_CELL;
 
@@ -778,6 +798,7 @@ public final class IndustrialForms {
 			.port("feed_0", FormPort.Kind.FLUID_IN, 0, 0, 2, 1, FormSide.BACK)
 			.port("product_0", FormPort.Kind.FLUID_OUT, 0, 0, 2, 0, FormSide.BACK)
 			.port("product_1", FormPort.Kind.FLUID_OUT, 1, 1, 2, 0, FormSide.BACK)
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock BRINE_CONCENTRATOR;
 
@@ -807,6 +828,7 @@ public final class IndustrialForms {
 			.capability("jugcraft:synthetic_preparation")
 			.capability("jugcraft:process_recovery")
             .capability("jugcraft:propellant_recovery")
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock MINERAL_CONDITIONER;
 
@@ -825,6 +847,7 @@ public final class IndustrialForms {
 			.port("feed_0", FormPort.Kind.FLUID_IN, 0, 0, 2, 1, FormSide.BACK)
 			.port("product_0", FormPort.Kind.FLUID_OUT, 0, 0, 2, 0, FormSide.BACK)
 			.port("solid_out_0", FormPort.Kind.ITEM_OUT, 0, 2, 2, 1, FormSide.BACK)
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock CHLORIDE_DRYER;
 
@@ -842,6 +865,7 @@ public final class IndustrialForms {
 			.port("product_0", FormPort.Kind.FLUID_OUT, 0, 0, 2, 0, FormSide.BACK)
 			.port("solid_in_0", FormPort.Kind.ITEM_IN, 0, 2, 0, 1, FormSide.FRONT)
 			.port("solid_out_0", FormPort.Kind.ITEM_OUT, 0, 2, 2, 1, FormSide.BACK)
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock MAGNESIUM_ELECTROLYSIS_CELL;
 
@@ -865,6 +889,7 @@ public final class IndustrialForms {
 			.port("product_1", FormPort.Kind.FLUID_OUT, 1, 1, 3, 0, FormSide.BACK)
 			.port("solid_in_0", FormPort.Kind.ITEM_IN, 0, 2, 0, 1, FormSide.FRONT)
 			.port("solid_in_1", FormPort.Kind.ITEM_IN, 1, 2, 0, 2, FormSide.FRONT)
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock TITANIUM_CHLORINATOR;
 
@@ -883,6 +908,7 @@ public final class IndustrialForms {
 			.port("solid_in_0", FormPort.Kind.ITEM_IN, 0, 2, 0, 1, FormSide.FRONT)
 			.port("solid_out_0", FormPort.Kind.ITEM_OUT, 0, 2, 3, 1, FormSide.BACK)
 			.port("solid_out_1", FormPort.Kind.ITEM_OUT, 1, 2, 3, 2, FormSide.BACK)
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock TITANIUM_REDUCTION_RETORT;
 
@@ -899,6 +925,7 @@ public final class IndustrialForms {
 			.port("power", FormPort.Kind.ENERGY_IN, 0, 0, 0, 0, FormSide.FRONT)
 			.port("solid_in_0", FormPort.Kind.ITEM_IN, 0, 2, 0, 1, FormSide.FRONT)
 			.port("solid_out_0", FormPort.Kind.ITEM_OUT, 0, 2, 3, 1, FormSide.BACK)
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock POLYMER_MOLDING_PRESS;
 
@@ -919,6 +946,7 @@ public final class IndustrialForms {
 			.port("feed_1", FormPort.Kind.FLUID_IN, 1, 1, 3, 1, FormSide.BACK)
 			.port("product_0", FormPort.Kind.FLUID_OUT, 0, 0, 3, 0, FormSide.BACK)
 			.port("product_1", FormPort.Kind.FLUID_OUT, 1, 1, 3, 0, FormSide.BACK)
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock MONOMER_PREPARATION_UNIT;
 
@@ -937,6 +965,7 @@ public final class IndustrialForms {
 			.port("power", FormPort.Kind.ENERGY_IN, 0, 0, 0, 0, FormSide.FRONT)
 			.port("feed_0", FormPort.Kind.FLUID_IN, 0, 0, 2, 1, FormSide.BACK)
 			.port("solid_out_0", FormPort.Kind.ITEM_OUT, 0, 2, 2, 1, FormSide.BACK)
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock POLYMERIZATION_KETTLE;
 
@@ -954,6 +983,7 @@ public final class IndustrialForms {
 			.port("solid_in_0", FormPort.Kind.ITEM_IN, 0, 2, 0, 1, FormSide.FRONT)
 			.port("solid_out_0", FormPort.Kind.ITEM_OUT, 0, 2, 4, 1, FormSide.BACK)
 			.port("solid_out_1", FormPort.Kind.ITEM_OUT, 1, 2, 4, 2, FormSide.BACK)
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock POLYMER_EXTRUDER;
 
@@ -969,6 +999,7 @@ public final class IndustrialForms {
 			.port("power", FormPort.Kind.ENERGY_IN, 0, 0, 0, 0, FormSide.FRONT)
 			.port("solid_in_0", FormPort.Kind.ITEM_IN, 0, 2, 0, 1, FormSide.FRONT)
 			.port("solid_out_0", FormPort.Kind.ITEM_OUT, 0, 2, 2, 1, FormSide.BACK)
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock POLYMER_RECLAIMER;
 
@@ -988,6 +1019,7 @@ public final class IndustrialForms {
 			.port("feed_0", FormPort.Kind.FLUID_IN, 0, 0, 2, 1, FormSide.BACK)
 			.port("product_0", FormPort.Kind.FLUID_OUT, 0, 0, 2, 0, FormSide.BACK)
 			.port("product_1", FormPort.Kind.FLUID_OUT, 1, 1, 2, 0, FormSide.BACK)
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock ACID_CONCENTRATOR;
 
@@ -1008,6 +1040,7 @@ public final class IndustrialForms {
 			.port("product_0", FormPort.Kind.FLUID_OUT, 0, 0, 3, 0, FormSide.BACK)
 			.port("solid_in_0", FormPort.Kind.ITEM_IN, 0, 2, 0, 1, FormSide.FRONT)
 			.port("solid_out_0", FormPort.Kind.ITEM_OUT, 0, 2, 3, 1, FormSide.BACK)
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock CHEMICAL_DISSOLUTION_CHAMBER;
 
@@ -1029,6 +1062,7 @@ public final class IndustrialForms {
 			.port("feed_1", FormPort.Kind.FLUID_IN, 1, 1, 3, 1, FormSide.BACK)
 			.port("product_0", FormPort.Kind.FLUID_OUT, 0, 0, 3, 0, FormSide.BACK)
 			.port("product_1", FormPort.Kind.FLUID_OUT, 1, 1, 3, 0, FormSide.BACK)
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock FLUOROCARBON_REACTOR;
 
@@ -1047,6 +1081,7 @@ public final class IndustrialForms {
 			.port("feed_0", FormPort.Kind.FLUID_IN, 0, 0, 3, 1, FormSide.BACK)
 			.port("product_0", FormPort.Kind.FLUID_OUT, 0, 0, 3, 0, FormSide.BACK)
 			.port("product_1", FormPort.Kind.FLUID_OUT, 1, 1, 3, 0, FormSide.BACK)
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock FLUOROMONOMER_CRACKER;
 
@@ -1062,6 +1097,7 @@ public final class IndustrialForms {
 			.port("power", FormPort.Kind.ENERGY_IN, 0, 0, 0, 0, FormSide.FRONT)
 			.port("solid_in_0", FormPort.Kind.ITEM_IN, 0, 2, 0, 1, FormSide.FRONT)
 			.port("solid_out_0", FormPort.Kind.ITEM_OUT, 0, 2, 3, 1, FormSide.BACK)
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock PTFE_SINTERING_OVEN;
 
@@ -1084,6 +1120,7 @@ public final class IndustrialForms {
 			.port("feed_1", FormPort.Kind.FLUID_IN, 1, 1, 4, 1, FormSide.BACK)
 			.port("product_0", FormPort.Kind.FLUID_OUT, 0, 0, 4, 0, FormSide.BACK)
 			.port("product_1", FormPort.Kind.FLUID_OUT, 1, 1, 4, 0, FormSide.BACK)
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock LINED_FLUOROCHEMICAL_REACTOR;
 
@@ -1104,6 +1141,7 @@ public final class IndustrialForms {
 			.port("product_0", FormPort.Kind.FLUID_OUT, 0, 0, 2, 0, FormSide.BACK)
 			.port("solid_in_0", FormPort.Kind.ITEM_IN, 0, 2, 0, 1, FormSide.FRONT)
 			.port("solid_out_0", FormPort.Kind.ITEM_OUT, 0, 2, 2, 1, FormSide.BACK)
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock PRECISION_FINISHER;
 
@@ -1125,6 +1163,7 @@ public final class IndustrialForms {
 			.port("product_0", FormPort.Kind.FLUID_OUT, 0, 0, 2, 0, FormSide.BACK)
 			.port("solid_in_0", FormPort.Kind.ITEM_IN, 0, 2, 0, 1, FormSide.FRONT)
 			.port("solid_out_0", FormPort.Kind.ITEM_OUT, 0, 2, 2, 1, FormSide.BACK)
+			.companionAssistance()
 			.build();
 	public static FormMachineBlock WET_PROCESSING_BENCH;
 

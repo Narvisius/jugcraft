@@ -22,9 +22,9 @@ DEVICES={
  'manual_kinetic_generator':'kineticgenerator/blockManualKineticGenerator',
  'stirling_kinetic_generator':'kineticgenerator/blockStirlingKineticGenerator',
 }
-def blocks():return {'jimta_'+name for name in DEVICES}|{'jimta_coolant','jimta_hot_coolant'}
-def items():return {'jimta_'+name for name in DEVICES}|{'jimta_coolant_bucket','jimta_hot_coolant_bucket'}|{'jimta_'+n+'_rotor'+suffix for n in ('wood','iron','steel','carbon') for suffix in ('','_blade')}
-def fluids():return {'jimta_coolant','flowing_jimta_coolant','jimta_hot_coolant','flowing_jimta_hot_coolant','jimta_steam','jimta_superheated_steam'}
+def blocks():return {'jimta_'+name for name in DEVICES}|{'jimta_coolant','jimta_hot_coolant','jimta_hot_water','jimta_pahoehoe_lava','jimta_construction_foam_fluid'}
+def items():return {'jimta_'+name for name in DEVICES}|{'jimta_coolant_bucket','jimta_hot_coolant_bucket','jimta_hot_water_bucket','jimta_pahoehoe_lava_bucket','jimta_construction_foam_fluid_bucket'}|{'jimta_'+n+'_rotor'+suffix for n in ('wood','iron','steel','carbon') for suffix in ('','_blade')}
+def fluids():return {'jimta_coolant','flowing_jimta_coolant','jimta_hot_coolant','flowing_jimta_hot_coolant','jimta_steam','jimta_superheated_steam','jimta_hot_water','flowing_jimta_hot_water','jimta_pahoehoe_lava','flowing_jimta_pahoehoe_lava','jimta_construction_foam_fluid','flowing_jimta_construction_foam_fluid'}
 def dump(p,d):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(d,indent=2)+'\n',encoding='utf-8')
 def generate(shared=True):
  manifest=[];lang={}
@@ -61,15 +61,20 @@ def generate(shared=True):
   material={'wood':'minecraft:oak_planks','iron':'jugcraft:iron_plate','steel':'jugcraft:steel_plate','carbon':'jugcraft:jimta_carbon_plate'}[name]
   dump(RES/f'data/jugcraft/recipe/jimtafacts_heat/{name}_blade.json',{'type':'minecraft:crafting_shapeless','category':'misc','ingredients':[material]*3+['minecraft:iron_nugget'],'result':{'id':f'jugcraft:jimta_{name}_rotor_blade'}})
   dump(RES/f'data/jugcraft/recipe/jimtafacts_heat/{name}_rotor.json',{'type':'minecraft:crafting_shapeless','category':'misc','ingredients':[f'jugcraft:jimta_{name}_rotor_blade']*4+['jugcraft:iron_gear'],'result':{'id':f'jugcraft:jimta_{name}_rotor'}})
- for name,source,cell in [('coolant' ,'coolant','Coolant'),('hot_coolant','hotcoolant','HotCoolant')]:
+ for name,source,cell in [('coolant' ,'coolant','Coolant'),('hot_coolant','hotcoolant','HotCoolant'),('hot_water','hotwater','Water'),('pahoehoe_lava','pahoehoelava','Pahoehoelava'),('construction_foam_fluid','constructionfoam','CF')]:
   for kind in ('still','flow'):
-   for ext in ('.png','.png.mcmeta'):copy(SOURCE/f'textures/blocks/fluids/{source}_{kind}{ext}',RES/f'assets/jugcraft/textures/block/jimta_{name}_{kind}{ext}')
+   for ext in ('.png','.png.mcmeta'):
+    origin=SOURCE/f'textures/blocks/fluids/{source}_{kind}{ext}'
+    if not origin.exists():origin=SOURCE/f'textures/blocks/fluids/{source}_still{ext}'
+    copy(origin,RES/f'assets/jugcraft/textures/block/jimta_{name}_{kind}{ext}')
   ident='jimta_'+name
   copy(SOURCE/f'textures/items/cell/itemCell{cell}.png',RES/f'assets/jugcraft/textures/item/jimtafacts/heat/{ident}_bucket.png')
   dump(RES/f'assets/jugcraft/models/item/{ident}_bucket.json',{'parent':'minecraft:item/generated','textures':{'layer0':f'jugcraft:item/jimtafacts/heat/{ident}_bucket'}})
   dump(RES/f'assets/jugcraft/items/{ident}_bucket.json',{'model':{'type':'minecraft:model','model':'jugcraft:item/'+ident+'_bucket'}})
   dump(RES/f'assets/jugcraft/blockstates/{ident}.json',{'variants':{'':{'model':'minecraft:block/water'}}})
   lang['block.jugcraft.'+ident]=name.replace('_',' ').title();lang['item.jugcraft.'+ident+'_bucket']=name.replace('_',' ').title()+' Bucket'
+ lang['block.jugcraft.jimta_construction_foam_fluid']='Liquid Construction Foam'
+ lang['item.jugcraft.jimta_construction_foam_fluid_bucket']='Construction Foam Bucket'
  for ext in ('.png','.png.mcmeta'):
   src=SOURCE/f'textures/blocks/fluids/steam{ext}'
   if not src.exists():src=SOURCE/f'textures/blocks/fluids/steam_still{ext}'
@@ -78,6 +83,10 @@ def generate(shared=True):
  for ext in ('.png','.png.mcmeta'):
   copy(SOURCE/f'textures/blocks/fluids/superheatedsteam_still{ext}',RES/f'assets/jugcraft/textures/block/jimta_superheated_steam_still{ext}')
  lang['fluid.jugcraft.jimta_superheated_steam']='Superheated Steam'
+ dump(RES/'data/jugcraft/recipe/jimtafacts_heat/hot_water.json',{'type':'jugcraft:chemical_reaction','fluids':[{'fluid':'minecraft:water','amount':1000}],'fluid_results':[{'fluid':'jugcraft:jimta_hot_water','amount':1000}],'time':200,'energy_per_tick':16})
+ dump(RES/'data/jugcraft/recipe/jimtafacts_heat/pahoehoe_quench.json',{'type':'jugcraft:chemical_reaction','fluids':[{'fluid':'jugcraft:jimta_pahoehoe_lava','amount':1000},{'fluid':'minecraft:water','amount':250}],'results':[{'id':'minecraft:basalt'}],'fluid_results':[{'fluid':'jugcraft:jimta_hot_water','amount':250}],'time':100,'energy_per_tick':8})
+ # Match the existing one-powder canister yield: 32 blocks at 100 mB each.
+ dump(RES/'data/jugcraft/recipe/jimtafacts_heat/construction_foam.json',{'type':'jugcraft:chemical_reaction','items':[{'ingredient':'jugcraft:jimta_cf_powder','count':1}],'fluids':[{'fluid':'minecraft:water','amount':1000}],'fluid_results':[{'fluid':'jugcraft:jimta_construction_foam_fluid','amount':3200}],'time':100,'energy_per_tick':8})
  from jimtafacts_fluid_recipes import recipes as coolant_recipes
  dump(RES/'data/jugcraft/recipe/chemical_reaction/jimta_coolant.json',coolant_recipes()['jimta_coolant'])
  if shared:

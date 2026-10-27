@@ -2,6 +2,7 @@ package io.github.jimbozoomer.jugcraft.lair.yeti;
 
 import io.github.jimbozoomer.jugcraft.Jugcraft;
 import io.github.jimbozoomer.jugcraft.lair.Lair;
+import io.github.jimbozoomer.jugcraft.lair.LairRewards;
 import io.github.jimbozoomer.jugcraft.lair.Lairs;
 import io.github.jimbozoomer.jugcraft.weapons.DescribedItem;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
@@ -40,6 +41,8 @@ public final class JugcraftYeti {
 	}
 
 	public static void register() {
+		// Concordance Chunk B (B-01): his rewards may wait for a player, kept under his name.
+		LairRewards.payer(YetiKingLoot.BOSS, YetiKingLoot::pay);
 		YETI_KING = entity("yeti_king", EntityType.Builder.<YetiKingEntity>of(YetiKingEntity::new, MobCategory.MONSTER)
 				.sized(2.0F, 3.4F).eyeHeight(2.9F).fireImmune().noLootTable().clientTrackingRange(12));
 		FabricDefaultAttributeRegistry.register(YETI_KING, YetiKingEntity.createAttributes());

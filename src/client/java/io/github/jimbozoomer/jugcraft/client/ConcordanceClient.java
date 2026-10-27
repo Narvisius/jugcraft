@@ -18,6 +18,7 @@ import io.github.jimbozoomer.jugcraft.concordance.rules.FocusPool;
 import io.github.jimbozoomer.jugcraft.concordance.sky.Sky;
 import io.github.jimbozoomer.jugcraft.concordance.reliquary.Reliquary;
 import io.github.jimbozoomer.jugcraft.concordance.smithy.Artificery;
+import io.github.jimbozoomer.jugcraft.concordance.spirits.StolasRegard;
 import io.github.jimbozoomer.jugcraft.concordance.spirits.Workers;
 import io.github.jimbozoomer.jugcraft.concordance.sympathy.Sympathy;
 import io.github.jimbozoomer.jugcraft.concordance.vigil.Vigil;
@@ -45,8 +46,8 @@ import net.minecraft.world.level.Level;
 /**
  * The Arcane Concordance on the client: the Lampwright's Bench screen, the Focus line shown while an instrument is in
  * the main hand, specimen and lantern tooltips, the settings key, the journal ({@link JournalClient}), the Spell
- * Composer ({@link ComposerClient}), the two fire
- * sets as worn ({@link EmberClient}) and the render element Wayfaring's belt and boots are drawn through
+ * Composer ({@link ComposerClient}), the pact perch's screen ({@link PactClient}), the roster ({@link RosterClient}), the
+ * two fire sets as worn ({@link EmberClient}) and the render element Wayfaring's belt and boots are drawn through
  * ({@link WayfaringClient}). Everything here reads state the server sent
  * (the player's own Focus attachment, item components, menu data); nothing here decides an outcome.
  */
@@ -77,6 +78,8 @@ final class ConcordanceClient {
 		MenagerieClient.register();
 		JournalClient.register();
 		ComposerClient.register();
+		PactClient.register();
+		RosterClient.register();
 		SignClient.register();
 		EmberClient.register();
 		WayfaringClient.register();
@@ -126,6 +129,9 @@ final class ConcordanceClient {
 		}
 		if (stack.is(Workers.SPECIMENS)) {
 			lines.add(Component.translatable("tooltip.jugcraft.concordance.binding_specimen").withStyle(ChatFormatting.DARK_AQUA));
+		}
+		if (stack.is(StolasRegard.SPECIMENS)) {
+			lines.add(Component.translatable("tooltip.jugcraft.concordance.stolas_specimen").withStyle(ChatFormatting.DARK_AQUA));
 		}
 		if (stack.is(Artificery.SPECIMENS)) {
 			lines.add(Component.translatable("tooltip.jugcraft.concordance.artifice_specimen").withStyle(ChatFormatting.DARK_AQUA));

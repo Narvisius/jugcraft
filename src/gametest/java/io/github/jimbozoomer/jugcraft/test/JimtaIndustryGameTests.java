@@ -17,6 +17,22 @@ import net.minecraft.world.level.storage.TagValueInput;
 
 /** Real native-machine batches and component persistence; no supplied binaries are executed. */
 public class JimtaIndustryGameTests {
+    @GameTest public void cuttingBladesGateHardnessWithoutConsumingTheTool(GameTestHelper h){
+        var m=machine(h,"jimta_block_cutting_machine");m.setItem(0,new ItemStack(Items.IRON_BLOCK));
+        m.setItem(m.kind().slots,item("jimta_iron_cutting_blade",1));tick(h,m,500);
+        h.assertTrue(m.getItem(0).getCount()==1&&m.getItem(1).isEmpty()&&m.processingProgress()==0,"Soft iron blade cannot cut hardness-five iron blocks or bank progress");
+        m.setItem(m.kind().slots,item("jimta_steel_cutting_blade",1));tick(h,m,450);
+        h.assertTrue(m.getItem(0).isEmpty()&&m.getItem(1).is(item("iron_plate",1).getItem())&&m.getItem(1).getCount()==9,"Steel blade cuts one block to exactly nine native plates");
+        h.assertTrue(m.getItem(m.kind().slots).is(item("jimta_steel_cutting_blade",1).getItem()),"Blade is retained in the real upgrade inventory");
+        var saved=m.saveWithoutMetadata(h.getLevel().registryAccess());m.loadWithComponents(TagValueInput.create(ProblemReporter.DISCARDING,h.getLevel().registryAccess(),saved));
+        h.assertTrue(io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialCuttingBlade.installed(m)==5,"Installed blade strength survives the normal machine save path");h.succeed();
+    }
+    @GameTest public void diamondCuttingPreservesNativeObsidianCost(GameTestHelper h){
+        var m=machine(h,"jimta_block_cutting_machine");m.setItem(m.kind().slots,item("jimta_diamond_cutting_blade",1));m.setItem(0,new ItemStack(Items.OBSIDIAN,3));tick(h,m,500);
+        h.assertTrue(m.getItem(0).getCount()==3&&m.getItem(1).isEmpty(),"Less than four obsidian cannot produce a plate");
+        m.setItem(0,new ItemStack(Items.OBSIDIAN,4));tick(h,m,450);
+        h.assertTrue(m.getItem(0).isEmpty()&&m.getItem(1).is(item("jimta_obsidian_plate",1).getItem())&&m.getItem(1).getCount()==1,"Four obsidian makes one plate, preserving the native material budget");h.succeed();
+    }
     private static MachineBlockEntity machine(GameTestHelper h, String id) {
         h.setBlock(new BlockPos(1,1,1),JimtaIndustry.MACHINES.get(id));
         return (MachineBlockEntity)h.getLevel().getBlockEntity(h.absolutePos(new BlockPos(1,1,1)));

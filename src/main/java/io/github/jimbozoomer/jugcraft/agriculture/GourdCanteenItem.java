@@ -1,10 +1,13 @@
 package io.github.jimbozoomer.jugcraft.agriculture;
 
+import io.github.jimbozoomer.jugcraft.concordance.garden.VerdantBedBlock;
 import java.util.function.Consumer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -34,9 +37,10 @@ import net.minecraft.world.phys.HitResult;
  * The Gourd Canteen: a dried bottle gourd that holds {@link #CAPACITY} sips of water
  * ({@link JugcraftAgriculture#CANTEEN_WATER}). Use it on a water source to fill it. Each sip, used on a
  * block, does one thing: waters a giant pumpkin (it grows a point faster per tick for a day), moistens
- * farmland, puts out fire, or adds a level to a cauldron (as a water bottle does). Water is free in the
- * world already, so the canteen saves walking, nothing more. Every change is made on the server, where the
- * player must be allowed to build.
+ * farmland or (Concordance Chunk C) a Verdant Bed, puts out fire, or adds a level to a cauldron (as a water
+ * bottle does). Water is free in the world already, so the canteen saves walking, nothing more. Every change
+ * is made on the server, where the player must be allowed to build; a Verdant Bed also asks the Concordance's
+ * Authority and rate limit, as bone meal on it does (VerdantBedBlock.pour).
  */
 public class GourdCanteenItem extends Item {
 	public static final int CAPACITY = 3;
@@ -88,6 +92,8 @@ public class GourdCanteenItem extends Item {
 			pour = Pour.PUMPKIN;
 		} else if (state.is(Blocks.FARMLAND) && state.getValue(BlockStateProperties.MOISTURE) < 7) {
 			pour = Pour.FARMLAND;
+		} else if (state.getBlock() instanceof VerdantBedBlock && state.getValue(VerdantBedBlock.MOISTURE) < VerdantBedBlock.WET) {
+			pour = Pour.BED;
 		} else if (state.getBlock() instanceof BaseFireBlock) {
 			pour = Pour.FIRE;
 			firePos = pos;
@@ -114,6 +120,12 @@ public class GourdCanteenItem extends Item {
 				master.water(level);
 			}
 			case FARMLAND -> level.setBlock(pos, state.setValue(BlockStateProperties.MOISTURE, 7), Block.UPDATE_CLIENTS);
+			case BED -> {
+				// Concordance Chunk C (C-07, C-P56): the bed's own rule decides (RateGate, Authority); no sip is spent if it refuses.
+				if (!(level instanceof ServerLevel server) || !(player instanceof ServerPlayer gardener) || !VerdantBedBlock.pour(server, pos, gardener)) {
+					return InteractionResult.FAIL;
+				}
+			}
 			case FIRE -> {
 				level.removeBlock(firePos, false);
 				sound = SoundEvents.FIRE_EXTINGUISH;
@@ -131,7 +143,7 @@ public class GourdCanteenItem extends Item {
 	}
 
 	private enum Pour {
-		PUMPKIN, FARMLAND, FIRE, CAULDRON
+		PUMPKIN, FARMLAND, BED, FIRE, CAULDRON
 	}
 
 	@Override

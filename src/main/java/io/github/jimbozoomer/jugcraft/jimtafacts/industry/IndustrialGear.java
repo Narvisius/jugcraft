@@ -56,6 +56,7 @@ public final class IndustrialGear {
                     case "foam_pack"->new IndustrialBackpacks.FoamPack(p);
                     case "battery","auto_battery","battery_pack","nightvision","single_battery"->new PowerItem(p,behavior,capacity);
                     case "saber"->new NanoSaber(p.sword(ToolMaterial.DIAMOND,6,-2.4F),capacity);
+                    case "plasma"->new IndustrialPlasmaLauncher(p);
                     case "drill"->new MiningDrillItem(p.tool(ToolMaterial.DIAMOND,JugcraftTools.MINEABLE_WITH_DRILL,3,-2.8F,0).component(JugcraftTools.DRILL_MODE,MiningDrillItem.SINGLE),capacity,60);
                     case "chainsaw"->new ChainsawItem(p.tool(ToolMaterial.DIAMOND,JugcraftTools.MINEABLE_WITH_CHAINSAW,6,-3,5),capacity,40);
                     default->IndustrialHandTools.create(p,behavior,capacity);

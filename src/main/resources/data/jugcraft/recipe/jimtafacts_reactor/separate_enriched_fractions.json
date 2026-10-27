@@ -1,0 +1,19 @@
+{
+  "type": "jugcraft:jimta_thermal_centrifuging",
+  "ingredient": "jugcraft:enriched_uranium_cylinder",
+  "result": {
+    "id": "jugcraft:jimta_uranium_235",
+    "count": 1
+  },
+  "byproducts": [
+    {
+      "result": {
+        "id": "jugcraft:jimta_uranium_238",
+        "count": 7
+      },
+      "chance": 1
+    }
+  ],
+  "minimum_heat": 2000,
+  "time": 1200
+}

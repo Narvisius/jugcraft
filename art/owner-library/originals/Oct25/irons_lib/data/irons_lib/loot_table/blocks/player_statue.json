@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "irons_lib:player_statue",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "x_offset": "0",
+                "y_offset": "0",
+                "z_offset": "0"
+              }
+            }
+          ],
+          "functions": [
+            {
+              "function": "minecraft:copy_components",
+              "include": [
+                "irons_lib:statue_item_data"
+              ],
+              "source": "block_entity"
+            }
+          ],
+          "name": "irons_lib:player_statue"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ]
+}

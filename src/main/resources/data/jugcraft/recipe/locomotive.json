@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PGP",
+    "PEP",
+    "WMW"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "G": "minecraft:glass_pane",
+    "E": "jugcraft:diesel_engine",
+    "W": "#c:gears/steel",
+    "M": "minecraft:minecart"
+  },
+  "result": {
+    "id": "jugcraft:locomotive",
+    "count": 1
+  }
+}

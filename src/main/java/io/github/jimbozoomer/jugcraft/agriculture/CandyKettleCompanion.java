@@ -56,19 +56,32 @@ public final class CandyKettleCompanion extends SnapshotParticipant<List<ItemSta
         int n=0;for(var s:stacks)if(match.test(s))n+=s.getCount();return n;
     }
     public void prepare(Storage<ItemVariant> source){
+        prepare(source,s->Integer.MAX_VALUE,s->0);
+    }
+    public ItemStack stockProduct(){var kind=trayTarget!=null?trayTarget:active!=null?active:planned;return kind==null?ItemStack.EMPTY:new ItemStack(kind.item());}
+    public boolean stockBusy(){return staged() || kettle.batch() || trayBatch()!=null;}
+    public int stockPending(List<ItemStack> incoming){
+        var batch=trayBatch();if(batch!=null)return batch.pieces();
+        int sugar=kettle.sugar()+items[SUGAR].getCount()+count(incoming,s->s.is(Items.SUGAR));
+        return sugar*CandyKettleBlockEntity.PIECES_PER_SUGAR;
+    }
+    public void prepare(Storage<ItemVariant> source,java.util.function.ToIntFunction<ItemStack> goal,java.util.function.ToDoubleFunction<ItemStack> priority){
         if(!live() || active!=null || trayBatch()!=null || hasOutputs())return;
         if(returnInputs){if(staged())return;returnInputs=false;}
         if(planned!=null && (staged() || kettle.batch()) && filter.allows(new ItemStack(planned.item())))return;
         var available=new ArrayList<>(RecipeSupplies.available(source));
         for(int i=0;i<OUTPUT;i++)if(!items[i].isEmpty())available.add(items[i]);
         planned=null;
-        for(var kind:PREFERENCE){
+        var choices=new ArrayList<>(List.of(PREFERENCE));choices.sort(Comparator.comparingDouble((CandyKind k)->priority.applyAsDouble(new ItemStack(k.item()))).reversed());
+        for(var kind:choices){
             if(!filter.allows(new ItemStack(kind.item())))continue;
+            int wanted=goal.applyAsInt(new ItemStack(kind.item()));if(wanted<=0)continue;
             var base=baseFor(kind);
             if(kettle.base()!=null && kettle.base()!=base)continue;
             if(kettle.base()==null && count(available,s->baseOf(s)==base)==0)continue;
             if(count(available,s->s.getItem() instanceof CandyTrayItem && CandyTrayItem.batch(s)==null)==0)continue;
             int sugar=kettle.batch()?kettle.sugar():Math.min(CandyKettleBlockEntity.MAX_SUGAR,kettle.sugar()+count(available,s->s.is(Items.SUGAR)));
+            if(wanted!=Integer.MAX_VALUE && !kettle.batch())sugar=Math.min(sugar,(wanted+CandyKettleBlockEntity.PIECES_PER_SUGAR-1)/CandyKettleBlockEntity.PIECES_PER_SUGAR);
             if(kind==CandyKind.LOLLIPOP)sugar=Math.min(sugar,count(available,s->s.is(Items.STICK))/CandyKettleBlockEntity.PIECES_PER_SUGAR);
             if(sugar<=0 || kettle.batch() && sugar<kettle.sugar())continue;
             planned=kind;sugarGoal=sugar;changed();break;
@@ -192,14 +205,16 @@ public final class CandyKettleCompanion extends SnapshotParticipant<List<ItemSta
             if(trayTarget==CandyKind.LOLLIPOP && kind==CandyKind.HARD_CANDY && items[STICKS].getCount()>=batch.pieces())kind=CandyKind.LOLLIPOP;
             products=List.of(Candies.make(kind,batch.flavours(),batch.colors(),batch.pieces()));
         }else if(batch==null && !kettle.batch())products=remainders();
-        if(!store(products,false))return CompanionStatus.FULL;
+        boolean mutated=false;
         try(var tx=Transaction.openOuter()){
-            if(npc.extractEnergy(4,tx)!=4)return CompanionStatus.RECOVERING;tx.commit();
-        }
-        lastWorked=now();boolean mutated=false;
+            if(batch!=null && batch.ready(now()) && !batch.pullable(now()))products=npc.uniforms.chefResults(products,tx);
+            if(!store(products,false))return CompanionStatus.FULL;
+            if(npc.extractWorkEnergy(local.peepo.CompanionUniforms.Type.CHEF,4,tx)!=4)return CompanionStatus.RECOVERING;
+            updateSnapshots(tx);
+            lastWorked=now();
         if(batch!=null){
             if(batch.pullable(now())){
-                if(++pullTicks>=CandyTrayItem.PULL_TICKS){mutated=true;pullTicks=0;CandyTrayItem.fill(items[TRAY],batch.pull());sound(SoundEvents.HONEY_BLOCK_SLIDE);}
+                if(++pullTicks>=npc.uniforms.duration(local.peepo.CompanionUniforms.Type.CHEF,CandyTrayItem.PULL_TICKS)){mutated=true;pullTicks=0;CandyTrayItem.fill(items[TRAY],batch.pull());sound(SoundEvents.HONEY_BLOCK_SLIDE);}
             }else if(batch.ready(now())){
                 mutated=true;store(products,true);
                 if(products.getFirst().is(CandyKind.LOLLIPOP.item()))items[STICKS].shrink(batch.pieces());
@@ -222,6 +237,8 @@ public final class CandyKettleCompanion extends SnapshotParticipant<List<ItemSta
                 CandyTrayItem.fill(items[TRAY],new CandyBatch(kettle.makes(),kettle.flavours(),List.of(kettle.color()),kettle.sugar()*CandyKettleBlockEntity.PIECES_PER_SUGAR,now(),0));
                 kettle.clear();sound(SoundEvents.HONEY_BLOCK_PLACE);
             }
+        }
+            tx.commit();
         }
         if(mutated)changed();return CompanionStatus.WORKING;
     }

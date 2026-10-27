@@ -40,6 +40,10 @@ public final class ScaryMod implements ModInitializer {
         new SpawnEggItem(new Item.Properties().setId(ResourceKey.create(Registries.ITEM,id("black_knight_spawn_egg"))).spawnEgg(BLACK_KNIGHT)));
     public static final SoundEvent KNIGHT_AMBIENT=sound("black_knight.ambient"),KNIGHT_CHASE=sound("black_knight.chase"),
         KNIGHT_ATTACK=sound("black_knight.attack"),KNIGHT_HURT=sound("black_knight.hurt"),KNIGHT_DEATH=sound("black_knight.death"),KNIGHT_STEP=sound("black_knight.step");
+    /** The crook a beaten villain turns out to be (Unmasking). */
+    public static final EntityType<UnmaskedCrook> UNMASKED_CROOK=Registry.register(BuiltInRegistries.ENTITY_TYPE,id("unmasked_crook"),
+        EntityType.Builder.of(UnmaskedCrook::new,MobCategory.MISC).sized(.6F,1.95F).eyeHeight(1.62F)
+            .clientTrackingRange(8).build(ResourceKey.create(Registries.ENTITY_TYPE,id("unmasked_crook"))));
     private static SoundEvent sound(String path) {
         return Registry.register(BuiltInRegistries.SOUND_EVENT, id(path), SoundEvent.createVariableRangeEvent(id(path)));
     }
@@ -53,5 +57,7 @@ public final class ScaryMod implements ModInitializer {
         FabricDefaultAttributeRegistry.register(CAPTAIN_CUTLER, CaptainCutlerEntity.attributes());
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.SPAWN_EGGS).register(entries -> entries.accept(CUTLER_SPAWN_EGG));
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.SPAWN_EGGS).register(entries -> entries.accept(SPAWN_EGG));
+        FabricDefaultAttributeRegistry.register(UNMASKED_CROOK,UnmaskedCrook.attributes());
+        Unmasking.register();
     }
 }

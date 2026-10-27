@@ -1,5 +1,6 @@
 package io.github.jimbozoomer.jugcraft.agriculture;
 
+import io.github.jimbozoomer.jugcraft.concordance.strata.Brace;
 import io.github.jimbozoomer.jugcraft.tools.Chargeable;
 import io.github.jimbozoomer.jugcraft.tools.PoweredToolItem;
 import java.util.ArrayList;
@@ -169,6 +170,8 @@ public class LeafBlowerItem extends Item implements Chargeable {
 				// Other players only where they could be fought (PvP on, not a team-mate).
 				continue;
 			} else if (entity instanceof LivingEntity living) {
+				// A push: a Brace meets it and is spent, bracing only the rest of this tick (concordance/strata/Brace).
+				Brace.spend(living);
 				push = falloff(PUSH_MOBS, distance) * (1.0 - Mth.clamp(living.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE), 0.0, 1.0));
 			} else {
 				continue;

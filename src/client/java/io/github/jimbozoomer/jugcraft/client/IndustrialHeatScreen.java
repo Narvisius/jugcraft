@@ -2,19 +2,23 @@ package io.github.jimbozoomer.jugcraft.client;
 
 import io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialHeat;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
-/** Shared industrial panels; live tank/heat gauges and explicit piping directions without typed configuration. */
-public final class IndustrialHeatScreen extends AbstractContainerScreen<IndustrialHeat.Menu> {
+/**
+ * Shared industrial panels; live tank/heat gauges and explicit piping directions without typed configuration. In the
+ * electric look, with its key lit in superheated mode (docs/features/new-screen-styles.md).
+ */
+public final class IndustrialHeatScreen extends AbstractContainerScreen<IndustrialHeat.Menu> implements ScreenKit.Fitted {
     private final MachineScreenThemes.Theme theme=MachineScreenThemes.screen("logic_controller");
-    private net.minecraft.client.gui.components.Button steamMode;
+    private ScreenKit.TextButton steamMode;
     public IndustrialHeatScreen(IndustrialHeat.Menu menu,Inventory inv,Component title){super(menu,inv,title,320,226);}
     @Override protected void init(){super.init();titleLabelX=12;titleLabelY=7;inventoryLabelX=8;inventoryLabelY=131;
-        steamMode=addRenderableWidget(net.minecraft.client.gui.components.Button.builder(Component.literal("Change steam mode"),b->{if(minecraft.gameMode!=null)minecraft.gameMode.handleInventoryButtonClick(menu.containerId,0);}).bounds(leftPos+183,topPos+201,126,18).build());}
+        steamMode=addRenderableWidget(new ScreenKit.TextButton(leftPos+183,topPos+201,126,18,theme,Component.literal("Change steam mode"),b->{if(minecraft.gameMode!=null)minecraft.gameMode.handleInventoryButtonClick(menu.containerId,0);}));}
     private String kind(){return IndustrialHeat.KINDS.get(Math.clamp(menu.data.get(0),0,IndustrialHeat.KINDS.size()-1));}
-    @Override public void extractRenderState(GuiGraphicsExtractor g,int mx,int my,float dt){steamMode.visible=menu.data.get(0)==8;steamMode.active=menu.data.get(5)==0;steamMode.setMessage(Component.literal(menu.data.get(8)==1?"Mode: Superheated":"Mode: Steam"));extractBackground(g,mx,my,dt);super.extractRenderState(g,mx,my,dt);extractTooltip(g,mx,my);}
+    @Override public void extractRenderState(GuiGraphicsExtractor g,int mx,int my,float dt){steamMode.visible=menu.data.get(0)==8;steamMode.active=menu.data.get(5)==0;steamMode.setMessage(Component.literal(menu.data.get(8)==1?"Mode: Superheated":"Mode: Steam"));steamMode.setSelected(menu.data.get(8)==1);extractBackground(g,mx,my,dt);super.extractRenderState(g,mx,my,dt);extractTooltip(g,mx,my);}
     @Override public void extractBackground(GuiGraphicsExtractor g,int mx,int my,float dt){
         ScreenKit.body(g,theme,leftPos,topPos,imageWidth,imageHeight);
         ScreenKit.pane(g,theme,leftPos+9,topPos+24,302,98);
@@ -25,6 +29,7 @@ public final class IndustrialHeatScreen extends AbstractContainerScreen<Industri
         gauge(g,67,91,menu.data.get(5),16000,0xFF99B7C0);
         for(int row=0;row<4;row++)for(int col=0;col<9;col++){int x=leftPos+7+col*18,y=topPos+(row==3?200:142+row*18);g.fill(x,y,x+18,y+18,theme.slotDark());g.fill(x+1,y+1,x+17,y+17,theme.slotFace());}
     }
+    @Override public ScreenRectangle panelArea(){return new ScreenRectangle(leftPos,topPos,imageWidth,imageHeight);}
     private void gauge(GuiGraphicsExtractor g,int x,int y,int value,int max,int color){int px=leftPos+x,py=topPos+y;g.fill(px,py,px+192,py+6,theme.slotDark());g.fill(px+1,py+1,px+1+(int)(190L*Math.clamp(value,0,max)/max),py+5,color);}
     @Override protected void extractLabels(GuiGraphicsExtractor g,int mx,int my){
         g.text(font,title,12,7,theme.label());g.text(font,"Inventory",8,131,theme.label());

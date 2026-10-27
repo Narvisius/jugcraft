@@ -37,7 +37,7 @@ public final class SprinklerCompanion extends SnapshotParticipant<ItemStack> {
     private boolean available(PeepoEntity npc){return station.getLevel()==npc.level() && npc.level() instanceof ServerLevel
         && !station.isRemoved() && CompanionJobs.permitted(npc,station.getBlockPos()) && npc.level().getBlockEntity(station.getBlockPos())==station;}
     private int needed(ItemStack stack){
-        if(stack.is(PetroItems.FERTILIZER))return Math.max(0,FERTILIZER_STOCK-station.fertilizer());
+        if(SprinklerBlockEntity.acceptsFertilizer(stack))return station.canLoadFertilizer(stack)?Math.max(0,FERTILIZER_STOCK-station.fertilizer()):0;
         if(!stack.is(Items.WATER_BUCKET))return 0;
         var water=station.water();if(water.amount>0 && !water.variant.isOf(Fluids.WATER))return 0;
         return (int)Math.max(0,Math.min(BUCKET_BUFFER-buckets.getCount(),(SprinklerBlockEntity.TANK_MB*FluidNetworks.DROPLETS_PER_MB-water.amount)/BUCKET));
@@ -49,7 +49,7 @@ public final class SprinklerCompanion extends SnapshotParticipant<ItemStack> {
             public long insert(ItemVariant item,long amount,TransactionContext parent){
                 StoragePreconditions.notBlankNotNegative(item,amount);
                 int n=(int)Math.min(amount,needed(item.toStack(1)));if(n<=0)return 0;
-                if(item.isOf(PetroItems.FERTILIZER))return station.fertilizerInput().insert(item,n,parent);
+                if(SprinklerBlockEntity.acceptsFertilizer(item.toStack(1)))return station.fertilizerInput().insert(item,n,parent);
                 // Water, returned bucket and delivered item participate in the same outer transaction.
                 try(var tx=Transaction.openNested(parent)){
                     if(station.water().insert(FluidVariant.of(Fluids.WATER),BUCKET*n,tx)!=BUCKET*n)return 0;

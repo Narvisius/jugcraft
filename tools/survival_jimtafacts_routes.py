@@ -5,17 +5,8 @@ output capacity remain enforced by the referenced native implementations.
 """
 import json
 
-DEFERRED_ACQUISITION = {
-    'arcane_debris': 'Native ore exists, but the supplied arcane-debris placement has not been ported.',
-    'archevoker_logbook_untranslated': 'Readable source lore exists; encounter reward placement is unfinished.',
-    'archevoker_logbook_translated': 'Readable source lore exists; the translation interaction is unfinished.',
-    'furled_map_ancient': 'Map interaction exists; its ancient-site reward source is unfinished.',
-    'legendary_spell_book': 'Book functionality exists; its special encounter reward is not assigned.',
-    'lurker_ring': 'Trinket functionality exists; its special loot source is not assigned.',
-    'music_disc_whispers_of_ice': 'Disc and original sound exist; its rare loot source is not assigned.',
-    'tarnished_helmet': 'Wearable functionality exists; its encounter reward source is not assigned.',
-    'unchained_book': 'Original readable lore exists; its world placement is unfinished.',
-}
+DEFERRED_ACQUISITION = {}
+
 
 def extend(root, edge, evidence, items):
     base = 'src/main/java/io/github/jimbozoomer/jugcraft/jimtafacts/'
@@ -24,6 +15,7 @@ def extend(root, edge, evidence, items):
         edge(base+file+'.java', kind, [j(n) for n in ins], [j(n) for n in outs])
     def read(name):
         return json.loads((root/'src/main/resources/jugcraft/jimtafacts'/name).read_text(encoding='utf-8'))
+    route('spellbooks/JimtaSpellbookLore', ['jimta_spellbooks_archevoker_logbook_untranslated', 'jimta_spellbooks_ancient_knowledge_fragment', 'minecraft:enchanting_table'], ['jimta_spellbooks_archevoker_logbook_translated'], 'translate_logbook_consuming_one_fragment')
     for name, crop in read('crops.json').items():
         parents=['jimta_seed_'+p for p in crop['breed']]
         route('industry/IndustrialCrops', parents+['jimta_crop_sticks'], ['jimta_seed_'+name], 'crossbreed_two_mature_crops')
@@ -42,6 +34,12 @@ def extend(root, edge, evidence, items):
     route('network/DigitalPressMenu', ['jimta_certus_quartz_cutting_knife','minecraft:iron_ingot'], ['jimta_name_press'], 'engrave_ingot_with_knife')
     route('network/DigitalFacadeRecipe', ['jimta_certus_quartz_cutting_knife','minecraft:iron_ingot'], ['jimta_cable_anchor'], 'cut_ingot_consuming_knife_durability')
     route('network/DigitalFacadeRecipe', ['jimta_cable_anchor','minecraft:stone'], ['jimta_facade'])
+    route('industry/TransportFacades', ['jimta_facade'], ['jimta_pipe_facade_solid'], 'convert_sampled_facade_preserving_material')
+    route('industry/TransportFacades', ['jimta_pipe_facade_solid'], ['jimta_pipe_facade_hollow'], 'convert_sampled_facade_preserving_material')
+    route('industry/FactoryWaterGel', ['jimta_water_gel_seed','minecraft:water_bucket'], ['jimta_gelled_water'], 'seed_source_water_then_break_gel')
+    route('industry/IndustrialHeat', ['chemical_reactor','minecraft:water_bucket','minecraft:bucket'], ['jimta_hot_water_bucket'], 'heat_water_then_fill_bucket')
+    route('industry/IndustrialHeat', ['chemical_reactor','jimta_cf_powder','minecraft:water_bucket','minecraft:bucket'], ['jimta_construction_foam_fluid_bucket'], 'mix_foam_then_fill_bucket')
+    route('industry/IndustrialHeat', ['jimta_liquid_heat_exchanger','minecraft:lava_bucket','minecraft:bucket'], ['jimta_pahoehoe_lava_bucket'], 'recover_lava_heat_then_fill_bucket')
     for compact, full in [('cable_interface','interface'),('cable_energy_acceptor','energy_acceptor'),('cable_pattern_provider','pattern_provider')]:
         route('network/DigitalPartConversionRecipe',['jimta_'+full],['jimta_'+compact],'convert_compact_part_preserving_saved_components')
     route('network/DigitalCondenser', ['jimta_condenser','jimta_cell_component_64k','minecraft:cobblestone'], ['jimta_singularity'], 'condense_256000_material_units')
@@ -104,6 +102,8 @@ def extend(root, edge, evidence, items):
     route('spellbooks/JimtaWorkshops',['minecraft:glass_bottle','minecraft:trident'],['jimta_spellbooks_lightning_bottle'],'bottle_a_charged_creeper_once_per_lightning_charge')
     exclusions={'jugcraft:'+name:'Creative/admin-only collection entry; no survival acquisition intended.' for name in (
         'jimta_creative_engine','jimta_creative_storage_cell','jimta_computer_computer_command','jimta_spellbooks_gold_crown')}
+    exclusions['jugcraft:jimta_mining_tip']='Deployed mining-column state; basic miner places it from a Mining Pipe, and breaking or retracting returns that pipe. No separate survival item.'
+    exclusions['jugcraft:jimta_pipe_color_marker']='Render-only pipe-color model carrier; no recipe, creative entry or survival drop.'
     exclusions['jugcraft:jimta_paint']='World paint-splotch state, placed using a Color Applicator and consumed paint balls; no loose survival block item.'
     exclusions.update({'jugcraft:jimta_spellbooks_'+name:'Deferred acquisition design: '+reason+' See docs/features/jimtafacts-remaining.md.'
                        for name,reason in DEFERRED_ACQUISITION.items()})

@@ -86,11 +86,11 @@ public final class OwnerBatchClientGameTests implements FabricClientGameTest {
                 p.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);p.getInventory().clearContent();p.getInventory().setItem(0,new ItemStack(Items.DIAMOND,3));
                 p.setHealth(0);p.die(lair.damageSources().genericKill());
                 if(!GraveStore.get(s).owned(p.getUUID()).isEmpty())throw new AssertionError("Actual boss-dimension death made an ordinary grave");
-                var goods=p.getAttached(io.github.jimbozoomer.jugcraft.lair.Lairs.GRAVE_GOODS);
-                if(goods==null||goods.count()!=3)throw new AssertionError("Boss death did not retain exactly three diamonds as Grave Goods");
+                // A lair keeps everything in place (lair-keep-inventory.md): nothing drops, so nothing becomes Grave Goods.
+                if(p.getAttached(io.github.jimbozoomer.jugcraft.lair.Lairs.GRAVE_GOODS)!=null||p.getInventory().getItem(0).getCount()!=3)throw new AssertionError("Boss death did not keep exactly three diamonds in place: goods="+p.getAttached(io.github.jimbozoomer.jugcraft.lair.Lairs.GRAVE_GOODS));
             });
             c.waitTicks(15);c.runOnClient(mc->mc.player.respawn());c.waitTicks(30);
-            server.runOnServer(s->{var p=s.getPlayerList().getPlayers().getFirst();if(!p.isAlive()||p.getInventory().countItem(Items.DIAMOND)!=3)throw new AssertionError("Boss respawn did not restore exactly three diamonds: alive="+p.isAlive()+", diamonds="+p.getInventory().countItem(Items.DIAMOND)+", retained="+p.getAttached(io.github.jimbozoomer.jugcraft.lair.Lairs.GRAVE_GOODS));
+            server.runOnServer(s->{var p=s.getPlayerList().getPlayers().getFirst();if(!p.isAlive()||p.getInventory().countItem(Items.DIAMOND)!=3||!p.getInventory().getItem(0).is(Items.DIAMOND))throw new AssertionError("Boss respawn did not restore exactly three diamonds in their slot: alive="+p.isAlive()+", diamonds="+p.getInventory().countItem(Items.DIAMOND)+", retained="+p.getAttached(io.github.jimbozoomer.jugcraft.lair.Lairs.GRAVE_GOODS));
                 if(p.getAttached(io.github.jimbozoomer.jugcraft.lair.Lairs.GRAVE_GOODS)!=null)throw new AssertionError("Restored boss items remain claimable");});
         }
     }

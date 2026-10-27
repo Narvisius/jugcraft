@@ -471,14 +471,14 @@ public final class CompanionGarden extends SnapshotParticipant<CompanionGarden.S
                 return CompanionStatus.WORKING;
             }
             try(var tx=Transaction.openOuter()){
-                if(npc.extractEnergy(ENERGY_PER_TICK,tx)!=ENERGY_PER_TICK)return CompanionStatus.RECOVERING;
+                if(npc.extractWorkEnergy(action>0?CompanionUniforms.Type.GROUNDSKEEPER:target.orchard()?CompanionUniforms.Type.ORCHARD_KEEPER:!hanging(target)?CompanionUniforms.Type.FARMER:CompanionUniforms.Type.NONE,ENERGY_PER_TICK,tx)!=ENERGY_PER_TICK)return CompanionStatus.RECOVERING;
                 tx.commit();
             }
             float yaw=(float)Math.toDegrees(Math.atan2(-(cropPos.getX()+.5-npc.getX()),cropPos.getZ()+.5-npc.getZ()));
             npc.setYRot(yaw);npc.yBodyRot=yaw;npc.setYHeadRot(yaw);
             if(animation()==WorkAnimation.PLANT){int slot=seedSlot(target,cropPos);if(slot>=0)npc.setWorkPie(npc.belongings.getItem(slot));}
             else if(animation()==WorkAnimation.PICK)npc.setWorkPie(expected.getBlock() instanceof MushroomColonyBlock?npc.assignedHand():ItemStack.EMPTY);
-            if(++progress<(tool?HOE_TICKS:WORK_TICKS))return CompanionStatus.WORKING;
+            if(++progress<npc.uniforms.duration(action==0?(target.orchard()?CompanionUniforms.Type.ORCHARD_KEEPER:!hanging(target)?CompanionUniforms.Type.FARMER:CompanionUniforms.Type.NONE):CompanionUniforms.Type.NONE,tool?HOE_TICKS:WORK_TICKS))return CompanionStatus.WORKING;
             status=finish(cropPos);
             nextScan=npc.level().getGameTime()+(status==CompanionStatus.FULL?200:1);
             if(status==CompanionStatus.IDLE && tool){var held=npc.belongings.getItem(9);held.hurtAndBreak(1,npc,EquipmentSlot.MAINHAND);npc.belongings.setChanged();}
@@ -490,6 +490,12 @@ public final class CompanionGarden extends SnapshotParticipant<CompanionGarden.S
         private boolean fruitAllowed(BlockPos pos,BlockState state){
             var stem=CompanionGardenCrops.fruitStem(npc.level(),pos,state);
             return stem!=null && CompanionJobs.permitted(npc,stem) && (target.gardenZone()!=null?target.gardenZone().contains(stem):target.plot().contains(stem.below()));
+        }
+        private boolean storeCrop(List<ItemStack> drops,Item seed,TransactionContext tx){
+            for(var drop:drops)if(!storeHarvest(drop,target.at(),tx))return false;
+            if(target.orchard() || hanging(target))return true;
+            var produce=drops.stream().filter(s->!s.isEmpty() && (seed==null || !s.is(seed))).findFirst().orElseGet(()->drops.stream().filter(s->!s.isEmpty() && PeepoEntity.isEdible(s)).findFirst().orElse(ItemStack.EMPTY));
+            return produce.isEmpty() || !npc.uniforms.bonus(CompanionUniforms.Type.FARMER,tx) || storeHarvest(produce.copyWithCount(1),target.at(),tx);
         }
         private CompanionStatus finishSpecial(BlockPos pos){
             if(CompanionGardenCrops.fruit(expected) && !fruitAllowed(pos,expected))return CompanionStatus.FORBIDDEN;
@@ -504,7 +510,7 @@ public final class CompanionGarden extends SnapshotParticipant<CompanionGarden.S
                     replant=npc.food.takeCargo(i,npc.belongings.getItem(i),1,tx)==1;if(replant)break;
                 }
                 if(!replant)changes.set(0,new CompanionGardenCrops.Change(pos,expected,Blocks.AIR.defaultBlockState()));
-                for(var drop:plan.drops())if(!storeHarvest(drop,target.at(),tx))return CompanionStatus.FULL;
+                if(!storeCrop(plan.drops(),null,tx))return CompanionStatus.FULL;
                 int applied=0;
                 for(var change:changes){
                     if(change.before().equals(change.after())){applied++;continue;}
@@ -531,7 +537,7 @@ public final class CompanionGarden extends SnapshotParticipant<CompanionGarden.S
                 if(definition==null || !definition.crop() || drops.isEmpty())return CompanionStatus.GROWING;
                 // Native pick yields and data-defined regrowth; no seed charge, uprooting or player research practice.
                 try(var tx=Transaction.openOuter()){
-                    for(var drop:drops)if(!storeHarvest(drop,target.at(),tx))return CompanionStatus.FULL;
+                    if(!storeCrop(drops,null,tx))return CompanionStatus.FULL;
                     if(!server.setBlock(pos,magic.getStateForAge(definition.replant()),Block.UPDATE_CLIENTS))return CompanionStatus.BLOCKED;
                     tx.commit();
                 }
@@ -543,7 +549,7 @@ public final class CompanionGarden extends SnapshotParticipant<CompanionGarden.S
                 if(expected.getValue(FruitingLeavesBlock.FRUIT)!=FruitingLeavesBlock.RIPE)return CompanionStatus.GROWING;
                 var produce=leaves.harvestFruit(server.getRandom());
                 try(var tx=Transaction.openOuter()){
-                    if(!storeHarvest(produce,target.at(),tx))return CompanionStatus.FULL;
+                    if(!storeCrop(List.of(produce),null,tx))return CompanionStatus.FULL;
                     if(!server.setBlock(pos,expected.setValue(FruitingLeavesBlock.FRUIT,0),Block.UPDATE_CLIENTS))return CompanionStatus.BLOCKED;
                     tx.commit();
                 }
@@ -561,7 +567,7 @@ public final class CompanionGarden extends SnapshotParticipant<CompanionGarden.S
                 }
                 var produce=new ItemStack(tall.produce(previous.getFirst()),kind.pickMin+server.getRandom().nextInt(kind.pickMax-kind.pickMin+1));
                 try(var tx=Transaction.openOuter()){
-                    if(!storeHarvest(produce,target.at(),tx))return CompanionStatus.FULL;
+                    if(!storeCrop(List.of(produce),null,tx))return CompanionStatus.FULL;
                     // Retire the whole plant before shape updates can break its other sections and drop duplicate loot.
                     int flags=Block.UPDATE_CLIENTS | (sameCrop?0:Block.UPDATE_KNOWN_SHAPE);
                     for(int section=height-1;section>=0;section--){
@@ -581,7 +587,7 @@ public final class CompanionGarden extends SnapshotParticipant<CompanionGarden.S
                 var produce=new ItemStack(colony.mushroom(),MushroomColonyBlock.PICK_MIN+server.getRandom().nextInt(MushroomColonyBlock.PICK_MAX-MushroomColonyBlock.PICK_MIN+1));
                 var after=accepts(target,new ItemStack(colony.mushroom()))?expected.setValue(MushroomColonyBlock.AGE,MushroomColonyBlock.PICK_RESET):Blocks.AIR.defaultBlockState();
                 try(var tx=Transaction.openOuter()){
-                    if(!storeHarvest(produce,target.at(),tx))return CompanionStatus.FULL;
+                    if(!storeCrop(List.of(produce),null,tx))return CompanionStatus.FULL;
                     if(!server.setBlock(pos,after,Block.UPDATE_ALL))return CompanionStatus.BLOCKED;
                     tx.commit();
                 }
@@ -601,7 +607,7 @@ public final class CompanionGarden extends SnapshotParticipant<CompanionGarden.S
                     if(sameCrop && !replant)for(int i=0;i<8;i++)if(!npc.transport.reserved(i) && npc.belongings.getItem(i).is(seed)){
                         var stack=npc.belongings.getItem(i);replant=npc.food.takeCargo(i,stack,1,tx)==1;break;
                     }
-                    for(var drop:drops)if(!storeHarvest(drop,target.at(),tx))return CompanionStatus.FULL;
+                    if(!storeCrop(drops,seed,tx))return CompanionStatus.FULL;
                     if(!server.setBlock(pos,replant?crop.getStateForAge(0):Blocks.AIR.defaultBlockState(),Block.UPDATE_ALL))return CompanionStatus.BLOCKED;
                     tx.commit();
                 }

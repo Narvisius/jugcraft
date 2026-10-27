@@ -31,14 +31,34 @@ public final class JimtaSpellbookLore {
         for(var name:data.getAsJsonArray("potions")){String n=name.getAsString();Registry.registerForHolder(BuiltInRegistries.POTION,Jugcraft.id(JimtaSpellbooks.PREFIX+n),new Potion("jimta_spellbooks_"+n,new MobEffectInstance(INSTANT_MANA,1,amp++)));}
         for(var e:data.getAsJsonArray("materials"))registerItem(e.getAsString(),false);
         for(var e:data.getAsJsonArray("special"))registerItem(e.getAsString(),true);
+        JimtaGuides.register();
     }
     private static void registerItem(String name,boolean special){var key=ResourceKey.create(Registries.ITEM,Jugcraft.id(JimtaSpellbooks.PREFIX+name));var p=new Item.Properties().setId(key);Item item;
         if(name.startsWith("music_disc_")){String song=name.substring(11);p.stacksTo(1).jukeboxPlayable(ResourceKey.create(Registries.JUKEBOX_SONG,Jugcraft.id("jimtafacts/"+song)));item=new Item(p);}
-        else if(name.startsWith("archevoker_logbook")){var pages=new ArrayList<Filterable<Component>>();int[] days={2,14,31,73};for(int i=1;i<=4;i++){for(int part=1;part<=2;part++){var text=Component.empty();if(part==1)text.append(Component.translatable("item.jugcraft.jimta_spellbooks_archevoker_log.header")).append(days[i-1]+":\n\n");text.append(Component.translatable("item.jugcraft.jimta_spellbooks_archevoker_log.entry_"+i+"."+part));if(name.endsWith("untranslated"))text.withStyle(net.minecraft.ChatFormatting.OBFUSCATED);pages.add(Filterable.passThrough(text));}}item=new WrittenBookItem(p.stacksTo(1).component(DataComponents.WRITTEN_BOOK_CONTENT,new WrittenBookContent(Filterable.passThrough("Archevoker's Logbook"),"Archevoker",0,pages,true)));}
+        else if(name.startsWith("archevoker_logbook")){var pages=new ArrayList<Filterable<Component>>();int[] days={2,14,31,73};for(int i=1;i<=4;i++){for(int part=1;part<=2;part++){var text=Component.empty();if(part==1)text.append(Component.translatable("item.jugcraft.jimta_spellbooks_archevoker_log.header")).append(days[i-1]+":\n\n");text.append(Component.translatable("item.jugcraft.jimta_spellbooks_archevoker_log.entry_"+i+"."+part));if(name.endsWith("untranslated"))text.withStyle(net.minecraft.ChatFormatting.OBFUSCATED);pages.add(Filterable.passThrough(text));}}item=new Logbook(p.stacksTo(1).component(DataComponents.WRITTEN_BOOK_CONTENT,new WrittenBookContent(Filterable.passThrough("Archevoker's Logbook"),"Archevoker",0,pages,true)));}
         else if(name.equals("netherward_tincture"))item=new Netherward(p.stacksTo(16));
         else if(name.equals("tincture_of_forgetfulness"))item=new Forgetfulness(p.stacksTo(16));
         else item=new Item(p);
         JimtaSpellbooks.ITEMS.put(name,Registry.register(BuiltInRegistries.ITEM,key,item));
+    }
+    private static final class Logbook extends WrittenBookItem {
+        Logbook(Properties p){super(p);}
+        @Override public InteractionResult useOn(UseOnContext c){
+            if(!c.getItemInHand().is(JimtaSpellbooks.ITEMS.get("archevoker_logbook_untranslated"))
+                || !c.getLevel().getBlockState(c.getClickedPos()).is(net.minecraft.world.level.block.Blocks.ENCHANTING_TABLE))return InteractionResult.PASS;
+            if(!(c.getPlayer() instanceof ServerPlayer p))return InteractionResult.SUCCESS;
+            if(!JimtaSpellbooks.enabled()||!Authority.mayChange(p.level(),p,c.getClickedPos()))return InteractionResult.FAIL;
+            var other=c.getHand()==InteractionHand.MAIN_HAND?InteractionHand.OFF_HAND:InteractionHand.MAIN_HAND;
+            var fragment=p.getItemInHand(other);
+            if(!fragment.is(JimtaSpellbooks.ITEMS.get("ancient_knowledge_fragment"))){
+                p.sendOverlayMessage(Component.literal("Hold an Ancient Knowledge Fragment in your other hand to translate this logbook."));
+                return InteractionResult.FAIL;
+            }
+            fragment.consume(1,p);
+            p.setItemInHand(c.getHand(),new ItemStack(JimtaSpellbooks.ITEMS.get("archevoker_logbook_translated")));
+            p.level().playSound(null,c.getClickedPos(),SoundEvents.ENCHANTMENT_TABLE_USE,SoundSource.PLAYERS,1,1);
+            return InteractionResult.SUCCESS;
+        }
     }
     private static final class Mana extends MobEffect {
         Mana(){super(MobEffectCategory.BENEFICIAL,0x6fbce8);}

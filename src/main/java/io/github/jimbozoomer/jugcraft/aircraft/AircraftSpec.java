@@ -41,6 +41,7 @@ public record AircraftSpec(String name, JsonObject definition, List<Socket> sock
     }
     /** Source meshes use a cockpit pivot; lift their lowest authored point onto the ground. */
     public double groundOffset(){return switch(name){case "airship","cargo_airship"->.6875;case "biplane"->.5;case "gyrodyne"->.25;case "warship"->.78125;default->0;};}
+    public float cameraDistance(){return switch(name){case "warship"->20F;case "cargo_airship"->14F;case "airship"->11F;case "biplane"->8F;case "bamboo_hopper"->12F;default->6F;};}
     public boolean aeroplane() { return name.equals("biplane")||name.equals("bamboo_hopper"); }
     public int height() { return inventoryY+96; }
 }

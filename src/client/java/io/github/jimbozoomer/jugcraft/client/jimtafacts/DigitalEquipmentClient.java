@@ -20,6 +20,7 @@ public final class DigitalEquipmentClient {
         MenuScreens.register(DigitalPressMenu.TYPE, PressScreen::new);
         DigitalUtilityClient.register();
         DigitalFacadeRenderer.register();
+        TransportAttachmentRenderer.register();
         net.fabricmc.fabric.api.client.rendering.v1.BlockColorRegistry.register(java.util.List.of(new net.minecraft.client.color.block.BlockTintSource() {
             public int color(net.minecraft.world.level.block.state.BlockState state) { return 0xFF000000 | DigitalMatterAmmo.colors(state.getValue(DigitalPaint.COLOR)).get(state.getValue(DigitalPaint.LUMEN) ? 2 : 1); }
             public java.util.Set<net.minecraft.world.level.block.state.properties.Property<?>> relevantProperties() { return java.util.Set.of(DigitalPaint.COLOR, DigitalPaint.LUMEN); }

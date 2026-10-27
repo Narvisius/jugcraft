@@ -15,8 +15,9 @@ import io.github.jimbozoomer.jugcraft.agriculture.CookingPotBlockEntity;
 
 /** Home, four jobs, lunch, supply and output links. No chunk loads. */
 public final class CompanionAssignments {
-    public record Target(GlobalPos at,Identifier block,Direction face,List<BlockPos> plot,AnimalCareZone zone,GardenZone gardenZone){
-        public Target { if(gardenZone!=null && (!GardenZone.valid(gardenZone.first(),gardenZone.last()) || !gardenZone.first().equals(at.pos()) || !block.equals(gardenZone.orchard()?GardenZone.ORCHARD:GardenZone.FARM)))gardenZone=null;plot=CompanionGarden.sanitize(at.pos(),plot);if(zone!=null && (!block.equals(CompanionLivestock.CARE) || !AnimalCareZone.valid(zone.first(),zone.last()) || !zone.first().equals(at.pos())))zone=null; }
+    public record Target(GlobalPos at,Identifier block,Direction face,List<BlockPos> plot,AnimalCareZone zone,GardenZone gardenZone,BlockPos fishingWater){
+        public Target { if(fishingWater!=null)fishingWater=block.equals(CompanionFishing.ID) && CompanionFishing.validCast(at.pos(),fishingWater)?fishingWater.immutable():null;if(gardenZone!=null && (!GardenZone.valid(gardenZone.first(),gardenZone.last()) || !gardenZone.first().equals(at.pos()) || !block.equals(gardenZone.orchard()?GardenZone.ORCHARD:GardenZone.FARM)))gardenZone=null;plot=CompanionGarden.sanitize(at.pos(),plot);if(zone!=null && (!block.equals(CompanionLivestock.CARE) || !AnimalCareZone.valid(zone.first(),zone.last()) || !zone.first().equals(at.pos())))zone=null; }
+        public Target(GlobalPos at,Identifier block,Direction face,List<BlockPos> plot,AnimalCareZone zone,GardenZone gardenZone){this(at,block,face,plot,zone,gardenZone,null);}
         public Target(GlobalPos at,Identifier block,Direction face,List<BlockPos> plot,AnimalCareZone zone){this(at,block,face,plot,zone,null);}
         public Target(GlobalPos at,Identifier block,Direction face,List<BlockPos> plot){this(at,block,face,plot,null);}
         public Target(GlobalPos at,Identifier block,Direction face){this(at,block,face,List.of());}
@@ -31,12 +32,14 @@ public final class CompanionAssignments {
         public boolean livestock(){return shearing() || milking() || eggs() || care();}
         public AABB animalBox(){return zone!=null?zone.box():new AABB(at.pos().above()).inflate(CompanionLivestock.RADIUS,3,CompanionLivestock.RADIUS);}
         public boolean animalContains(Vec3 point){return zone!=null?zone.contains(point):Math.abs(point.y-at.pos().getY()-1)<=3 && point.distanceToSqr(Vec3.atBottomCenterOf(at.pos().above()))<=CompanionLivestock.RADIUS*CompanionLivestock.RADIUS;}
+        public boolean fishing(){return block.equals(CompanionFishing.ID);}
         public boolean water(){return block.equals(CompanionWater.WATER);}
+        public boolean treeTap(){return block.equals(io.github.jimbozoomer.jugcraft.Jugcraft.id("tree_tap"));}
         public boolean batHouse(){return block.equals(io.github.jimbozoomer.jugcraft.Jugcraft.id("bat_house"));}
-        public boolean carriesProduce(){return garden() || livestock() || batHouse() || water();}
-        public String name(){return water()?"Water collection":gardenZone!=null?(orchard()?"Orchard":"Farmland")+" ("+gardenZone.width()+" x "+gardenZone.depth()+")":care()?"Livestock Management"+(zone==null?"":" ("+zone.width()+" x "+zone.depth()+")"):shearing()?"Shearing (8-block radius)":milking()?"Milking (8-block radius)":eggs()?"Egg collection (8-block radius)":garden()?(CompanionGarden.hanging(this)?"Herb drying (":CompanionGarden.mushrooms(this)?"Mushroom garden (":"Garden (")+plot.size()+" blocks)":BuiltInRegistries.BLOCK.getValue(block).getName().getString();}
+        public boolean carriesProduce(){return fishing() || garden() || livestock() || batHouse() || water() || treeTap();}
+        public String name(){return fishing()?"Fishing":water()?"Water collection":gardenZone!=null?(orchard()?"Orchard":"Farmland")+" ("+gardenZone.width()+" x "+gardenZone.depth()+")":care()?"Livestock Management"+(zone==null?"":" ("+zone.width()+" x "+zone.depth()+")"):shearing()?"Shearing (8-block radius)":milking()?"Milking (8-block radius)":eggs()?"Egg collection (8-block radius)":garden()?(CompanionGarden.hanging(this)?"Herb drying (":CompanionGarden.mushrooms(this)?"Mushroom garden (":"Garden (")+plot.size()+" blocks)":BuiltInRegistries.BLOCK.getValue(block).getName().getString();}
         public boolean local(Level level){return at.dimension().equals(level.dimension());}
-        public boolean present(Level level){return local(level)&&level.hasChunkAt(at.pos())&&(!care() || zone!=null)&&(water() || gardenZone!=null || livestock() || BuiltInRegistries.BLOCK.getKey(level.getBlockState(at.pos()).getBlock()).equals(block));}
+        public boolean present(Level level){return local(level)&&level.hasChunkAt(at.pos())&&(!care() || zone!=null)&&(!fishing() || fishingWater!=null)&&(fishing() || water() || gardenZone!=null || livestock() || BuiltInRegistries.BLOCK.getKey(level.getBlockState(at.pos()).getBlock()).equals(block));}
     }
     private final PeepoEntity npc;
     public static final int LUNCH=5,SUPPLY=6,OUTPUT=7,COUNT=14;
@@ -83,16 +86,19 @@ public final class CompanionAssignments {
     public boolean transportAllowed(Target target,boolean supply){
         if(target==null)return false;
         int row=workPriority(target.at.pos());if(row>4 || !target.equals(targets[row]))return false;
-        int mode=transportMode(row,supply);if(mode==2)return false;if(mode==1)return true;
+        int mode=transportMode(row,supply);if(mode==2)return false;if(mode==1 || target.fishing())return true;
+        if(target.present(npc.level()) && npc.level().getBlockEntity(target.at.pos()) instanceof io.github.jimbozoomer.jugcraft.machine.form.FormMachineBlockEntity form)return !form.companionAutomation.external(supply);
         return !target.present(npc.level()) || !(npc.level().getBlockEntity(target.at.pos()) instanceof MachineBlockEntity machine) || !machine.itemAutomation.external(supply);
     }
     /** Menu-only status: 0 available, 1 off, 2 external automation, 3 unsupported, 4 unavailable, 5 no recipe. */
     public int transportDisplay(int row,boolean supply){
         int mode=transportMode(row,supply);var target=targets[row];int reason=0;
         if(target==null || !target.present(npc.level()))reason=4;
+        else if(target.fishing())reason=mode==2?1:0;
         else {
             var port=CompanionLogistics.resolve(npc,target);
             if(port==null)reason=3;
+            else if(npc.level().getBlockEntity(target.at.pos()) instanceof io.github.jimbozoomer.jugcraft.machine.form.FormMachineBlockEntity form && (supply?!form.companionPort.supportsSupply():!form.companionPort.supportsOutput()))reason=3;
             else if(!target.livestock() && npc.level().getBlockEntity(target.at.pos()) instanceof MachineBlockEntity machine
                 && (supply?!machine.companionPort.supportsSupply():!machine.companionPort.supportsOutput()))reason=3;
             else if(!supply && (npc.level().getBlockEntity(target.at.pos()) instanceof io.github.jimbozoomer.jugcraft.agriculture.FarmStandBlockEntity || ServingCompanion.of(npc.level().getBlockEntity(target.at.pos())) instanceof ServingCompanion serving && !serving.hasOutput()))reason=3;
@@ -120,6 +126,16 @@ public final class CompanionAssignments {
         long now=npc.level().getGameTime();if(npc.level().isClientSide() || now<nextLabelRefresh)return;nextLabelRefresh=now+20;boolean changed=false;
         for(int row=SUPPLY;row<COUNT;row++){var t=targets[row];String name=t==null?null:CompanionNames.container(npc.level(),t);if(!Objects.equals(name,containerNames[row])){containerNames[row]=name;changed=true;}}
         if(changed)changed();
+    }
+    public String assignFishing(BlockPos seat,BlockPos water){
+        if(npc.level().isClientSide() || !CompanionFishing.validCast(seat,water))return "Choose water within 10 blocks and no more than 3 blocks below the seat.";
+        if(!CompanionJobs.permitted(npc,seat) || !CompanionJobs.permitted(npc,water) || seat.distToCenterSqr(npc.position())>4096 || water.distToCenterSqr(npc.position())>4096)return "Keep both positions loaded, accessible and within 64 blocks of the companion.";
+        if(!CompanionWater.source(npc.level(),water) || !CompanionFishing.safeSeat(npc,seat,water))return "Choose source water and a clear, dry shore/dock edge with room to cast.";
+        var at=GlobalPos.of(npc.level().dimension(),seat);for(var t:targets)if(t!=null && t.at.equals(at))return "That seat is already assigned. Choose another block.";
+        int row=1;while(row<5 && targets[row]!=null)row++;if(row==5)return "All four work slots are full. Remove a job first.";
+        targets[row]=new Target(at,CompanionFishing.ID,Direction.UP,List.of(),null,null,water);
+        transportModes[row]=0;gardenSeeds[row]=null;gardenMaintenance[row]=0;names[row]=null;workManaged=true;changed();npc.orders.assigned(false,at);
+        return "Fishing assigned. Equip a rod or enable Tools on Supply; link Output for catches.";
     }
     public String assignZone(BlockPos first,BlockPos last){
         if(npc.level().isClientSide() || !AnimalCareZone.valid(first,last))return "Choose corners at most 16 x 16 blocks, with at most 3 blocks of ground-height difference.";
@@ -159,13 +175,14 @@ public final class CompanionAssignments {
         }
         if(state.getBlock() instanceof ChestBlock && state.getValue(ChestBlock.TYPE)==ChestType.RIGHT)return pos.relative(ChestBlock.getConnectedDirection(state));
         if(state.getBlock() instanceof io.github.jimbozoomer.jugcraft.agriculture.FarmStandBlock stand)return stand.masterPos(pos,state);
+        if(state.getBlock() instanceof io.github.jimbozoomer.jugcraft.workshop.WorkshopBlock workshop)return workshop.master(pos,state);
         if(state.getBlock() instanceof WheelBlock)return WheelBlock.master(pos,state);
         if(state.getBlock() instanceof MachineBlock machine)return machine.masterPos(pos,state);
         if(state.getBlock() instanceof BedBlock && state.getValue(BlockStateProperties.BED_PART)==BedPart.FOOT)return pos.relative(state.getValue(BlockStateProperties.HORIZONTAL_FACING));
         return pos;
     }
     public static boolean bed(Level level,BlockPos pos){var b=level.getBlockState(pos).getBlock();return b instanceof CompanionBedBlock || b instanceof BedBlock;}
-    public static boolean work(Level level,BlockPos pos){if(CompanionWater.source(level,pos))return true;if(CompanionGarden.gardenAnchor(level,pos) || level.getBlockState(pos).getBlock() instanceof net.minecraft.world.level.block.ComposterBlock)return true;var be=level.getBlockEntity(pos);if(be instanceof io.github.jimbozoomer.jugcraft.machine.form.FormMachineBlockEntity form)return form.form().companionAssistance();return be instanceof io.github.jimbozoomer.jugcraft.farming.SprinklerBlockEntity || ServingCompanion.of(be)!=null || MagicGardenCompanion.supports(be) || be instanceof io.github.jimbozoomer.jugcraft.agriculture.BatHouseBlockEntity || be instanceof io.github.jimbozoomer.jugcraft.agriculture.FarmStandBlockEntity || be instanceof io.github.jimbozoomer.jugcraft.concordance.CrucibleBlockEntity || VanillaCompanionPort.supports(be) || KitchenCompanionPort.of(be)!=null || be instanceof WheelBlockEntity || be instanceof MachineBlockEntity || be instanceof CookingPotBlockEntity || be instanceof io.github.jimbozoomer.jugcraft.agriculture.CiderPressBlockEntity || be instanceof io.github.jimbozoomer.jugcraft.agriculture.CiderBarrelBlockEntity || be instanceof io.github.jimbozoomer.jugcraft.agriculture.CandyKettleBlockEntity || be instanceof io.github.jimbozoomer.jugcraft.agriculture.SpinningWheelBlockEntity || be instanceof io.github.jimbozoomer.jugcraft.agriculture.CanningKettleBlockEntity || be instanceof io.github.jimbozoomer.jugcraft.agriculture.HearthOvenBlockEntity || be instanceof io.github.jimbozoomer.jugcraft.kinetic.HandCrankBlockEntity;}
+    public static boolean work(Level level,BlockPos pos){if(CompanionWater.source(level,pos) || level.getBlockState(pos).getBlock() instanceof io.github.jimbozoomer.jugcraft.agriculture.TreeTapBlock)return true;if(CompanionGarden.gardenAnchor(level,pos) || level.getBlockState(pos).getBlock() instanceof net.minecraft.world.level.block.ComposterBlock)return true;var be=level.getBlockEntity(pos);if(be instanceof io.github.jimbozoomer.jugcraft.machine.form.FormMachineBlockEntity form)return form.form().companionAssistance();return be instanceof CraftingTableCompanionBlockEntity || be instanceof io.github.jimbozoomer.jugcraft.workshop.WorkshopBlockEntity || be instanceof io.github.jimbozoomer.jugcraft.farming.SprinklerBlockEntity || ServingCompanion.of(be)!=null || MagicGardenCompanion.supports(be) || be instanceof io.github.jimbozoomer.jugcraft.agriculture.BatHouseBlockEntity || be instanceof io.github.jimbozoomer.jugcraft.agriculture.FarmStandBlockEntity || be instanceof io.github.jimbozoomer.jugcraft.concordance.CrucibleBlockEntity || VanillaCompanionPort.supports(be) || KitchenCompanionPort.of(be)!=null || be instanceof WheelBlockEntity || be instanceof MachineBlockEntity || be instanceof CookingPotBlockEntity || be instanceof io.github.jimbozoomer.jugcraft.agriculture.CiderPressBlockEntity || be instanceof io.github.jimbozoomer.jugcraft.agriculture.CiderBarrelBlockEntity || be instanceof io.github.jimbozoomer.jugcraft.agriculture.CandyKettleBlockEntity || be instanceof io.github.jimbozoomer.jugcraft.agriculture.SpinningWheelBlockEntity || be instanceof io.github.jimbozoomer.jugcraft.agriculture.CanningKettleBlockEntity || be instanceof io.github.jimbozoomer.jugcraft.agriculture.HearthOvenBlockEntity || be instanceof io.github.jimbozoomer.jugcraft.kinetic.HandCrankBlockEntity;}
     public String assignContainer(Level level,BlockPos clicked,Direction face,boolean output){
         var pos=canonical(level,clicked);
         if(!level.hasChunkAt(pos) || pos.distToCenterSqr(npc.position())>64*64)return "Keep a loaded container within 64 blocks of the companion.";
@@ -194,6 +211,7 @@ public final class CompanionAssignments {
     public String assign(Level level,BlockPos clicked){
         var pos=canonical(level,clicked);
         if(!level.hasChunkAt(pos))return "That target is not loaded.";
+        if(!CompanionJobs.permitted(npc,clicked) || !CompanionJobs.permitted(npc,pos))return "The companion owner cannot access this claim.";
         if(ServingCompanion.of(level.getBlockEntity(pos)) instanceof ServingCompanion serving && !serving.allowed(npc))return "This serving station does not allow this companion.";
         if(level.getBlockEntity(pos) instanceof io.github.jimbozoomer.jugcraft.agriculture.FarmStandBlockEntity stand && !npc.orders.foodAccess(stand.owner(),false))return "Only the Farm Stand owner's companion can restock it.";
         if(level.getBlockEntity(pos) instanceof io.github.jimbozoomer.jugcraft.concordance.garden.LivingDeviceBlockEntity device && MagicGardenCompanion.supports(device) && !MagicGardenCompanion.keeperAccess(npc,device.keeper()))return "Only the keeper or their party can assign this garden device.";
@@ -293,7 +311,7 @@ public final class CompanionAssignments {
     public void save(ValueOutput out){
         supplies.save(out);
         out.putBoolean("AssignedHomeManaged",homeManaged);out.putBoolean("AssignedWorkManaged",workManaged);
-        for(int i=0;i<COUNT;i++)if(targets[i]!=null){var child=out.child("Assignment"+i);child.putInt("GardenMaintenance",gardenMaintenance[i]);child.store("At",GlobalPos.CODEC,targets[i].at);child.putString("Block",targets[i].block.toString());child.putInt("Face",targets[i].face.ordinal());child.putInt("SupplyMode",transportMode(i,true));child.putInt("OutputMode",transportMode(i,false));if(targets[i].zone!=null)targets[i].zone.save(child);if(targets[i].gardenZone!=null)targets[i].gardenZone.save(child);if(names[i]!=null)child.putString("JobName",names[i]);if(targets[i].garden())child.store("Plot",BlockPos.CODEC.listOf(),targets[i].plot);if(gardenSeeds[i]!=null)child.store("GardenSeed",Identifier.CODEC,gardenSeeds[i]);}
+        for(int i=0;i<COUNT;i++)if(targets[i]!=null){var child=out.child("Assignment"+i);if(targets[i].fishingWater!=null)child.store("FishingWater",BlockPos.CODEC,targets[i].fishingWater);child.putInt("GardenMaintenance",gardenMaintenance[i]);child.store("At",GlobalPos.CODEC,targets[i].at);child.putString("Block",targets[i].block.toString());child.putInt("Face",targets[i].face.ordinal());child.putInt("SupplyMode",transportMode(i,true));child.putInt("OutputMode",transportMode(i,false));if(targets[i].zone!=null)targets[i].zone.save(child);if(targets[i].gardenZone!=null)targets[i].gardenZone.save(child);if(names[i]!=null)child.putString("JobName",names[i]);if(targets[i].garden())child.store("Plot",BlockPos.CODEC.listOf(),targets[i].plot);if(gardenSeeds[i]!=null)child.store("GardenSeed",Identifier.CODEC,gardenSeeds[i]);}
     }
     public void load(ValueInput in){
         homeManaged=in.getBooleanOr("AssignedHomeManaged",false);workManaged=in.getBooleanOr("AssignedWorkManaged",false);
@@ -302,7 +320,7 @@ public final class CompanionAssignments {
         for(int i=0;i<COUNT;i++){
             var child=in.child("Assignment"+i);if(child.isEmpty())continue;
             var at=child.get().read("At",GlobalPos.CODEC).orElse(null);var id=Identifier.tryParse(child.get().getStringOr("Block",""));
-            if(at!=null && id!=null)targets[i]=new Target(at,id,Direction.values()[Math.clamp(child.get().getIntOr("Face",Direction.UP.ordinal()),0,5)],i>=1 && i<=4?child.get().read("Plot",BlockPos.CODEC.listOf()).orElse(List.of()):List.of(),AnimalCareZone.load(child.get()),i>=1 && i<=4?GardenZone.load(child.get()):null);
+            if(at!=null && id!=null)targets[i]=new Target(at,id,Direction.values()[Math.clamp(child.get().getIntOr("Face",Direction.UP.ordinal()),0,5)],i>=1 && i<=4?child.get().read("Plot",BlockPos.CODEC.listOf()).orElse(List.of()):List.of(),AnimalCareZone.load(child.get()),i>=1 && i<=4?GardenZone.load(child.get()):null,child.get().read("FishingWater",BlockPos.CODEC).orElse(null));
             if(i>=1 && i<=4)names[i]=CompanionNames.clean(child.get().getStringOr("JobName",""));
             gardenMaintenance[i]=child.get().getIntOr("GardenMaintenance",0)&(REPAIR|FERTILIZE);
             var savedSeed=child.get().read("GardenSeed",Identifier.CODEC).orElse(null);
@@ -316,7 +334,7 @@ public final class CompanionAssignments {
     }
     private String encode(){
         var array=new JsonArray();
-        for(int row=0;row<COUNT;row++){var t=targets[row];if(t==null){array.add(JsonNull.INSTANCE);continue;}var o=new JsonObject();o.addProperty("gm",gardenMaintenance[row]);o.addProperty("d",t.at.dimension().identifier().toString());o.addProperty("p",t.at.pos().asLong());o.addProperty("b",t.block.toString());o.addProperty("f",t.face.ordinal());String label=row>=SUPPLY?containerNames[row]:names[row];if(label!=null)o.addProperty("n",label);if(t.zone!=null){o.addProperty("za",t.zone.first().asLong());o.addProperty("zb",t.zone.last().asLong());o.addProperty("zt",t.zone.tasks());var rules=new JsonArray();for(var rule:t.zone.populations()){var r=new JsonObject();r.addProperty("id",rule.type().toString());r.addProperty("target",rule.target());r.addProperty("keep",rule.keep());rules.add(r);}o.add("zp",rules);}if(t.gardenZone!=null){o.addProperty("ga",t.gardenZone.first().asLong());o.addProperty("gb",t.gardenZone.last().asLong());o.addProperty("go",t.gardenZone.orchard());}if(!t.plot.isEmpty()){var cells=new JsonArray();for(var cell:t.plot)cells.add(cell.asLong());o.add("g",cells);}array.add(o);}
+        for(int row=0;row<COUNT;row++){var t=targets[row];if(t==null){array.add(JsonNull.INSTANCE);continue;}var o=new JsonObject();if(t.fishingWater!=null)o.addProperty("fw",t.fishingWater.asLong());o.addProperty("gm",gardenMaintenance[row]);o.addProperty("d",t.at.dimension().identifier().toString());o.addProperty("p",t.at.pos().asLong());o.addProperty("b",t.block.toString());o.addProperty("f",t.face.ordinal());String label=row>=SUPPLY?containerNames[row]:names[row];if(label!=null)o.addProperty("n",label);if(t.zone!=null){o.addProperty("za",t.zone.first().asLong());o.addProperty("zb",t.zone.last().asLong());o.addProperty("zt",t.zone.tasks());var rules=new JsonArray();for(var rule:t.zone.populations()){var r=new JsonObject();r.addProperty("id",rule.type().toString());r.addProperty("target",rule.target());r.addProperty("keep",rule.keep());rules.add(r);}o.add("zp",rules);}if(t.gardenZone!=null){o.addProperty("ga",t.gardenZone.first().asLong());o.addProperty("gb",t.gardenZone.last().asLong());o.addProperty("go",t.gardenZone.orchard());}if(!t.plot.isEmpty()){var cells=new JsonArray();for(var cell:t.plot)cells.add(cell.asLong());o.add("g",cells);}array.add(o);}
         return array.toString();
     }
     public List<Target> view(){
@@ -329,7 +347,7 @@ public final class CompanionAssignments {
             if(o.has("n"))clientNames[i]=CompanionNames.clean(o.get("n").getAsString());
             AnimalCareZone zone=null;if(o.has("za") && o.has("zb")){var a=BlockPos.of(o.get("za").getAsLong());var b=BlockPos.of(o.get("zb").getAsLong());if(AnimalCareZone.valid(a,b)){var rules=new ArrayList<AnimalCareZone.Population>();if(o.has("zp")){var ps=o.getAsJsonArray("zp");for(int j=0;j<Math.min(AnimalCareZone.MAX_SPECIES,ps.size());j++){var r=ps.get(j).getAsJsonObject();rules.add(new AnimalCareZone.Population(Identifier.parse(r.get("id").getAsString()),r.get("target").getAsInt(),r.get("keep").getAsInt()));}}zone=new AnimalCareZone(a,b,o.has("zt")?o.get("zt").getAsInt():7,rules);}}
             GardenZone gardenZone=null;if(o.has("ga") && o.has("gb")){var a=BlockPos.of(o.get("ga").getAsLong());var b=BlockPos.of(o.get("gb").getAsLong());if(GardenZone.valid(a,b))gardenZone=new GardenZone(a,b,o.has("go") && o.get("go").getAsBoolean());}
-            list.set(i,new Target(GlobalPos.of(dim,BlockPos.of(o.get("p").getAsLong())),Identifier.parse(o.get("b").getAsString()),Direction.values()[Math.clamp(o.has("f")?o.get("f").getAsInt():Direction.UP.ordinal(),0,5)],plot,zone,gardenZone));
+            list.set(i,new Target(GlobalPos.of(dim,BlockPos.of(o.get("p").getAsLong())),Identifier.parse(o.get("b").getAsString()),Direction.values()[Math.clamp(o.has("f")?o.get("f").getAsInt():Direction.UP.ordinal(),0,5)],plot,zone,gardenZone,o.has("fw")?BlockPos.of(o.get("fw").getAsLong()):null));
         }}catch(RuntimeException ignored){}clientTargets=Collections.unmodifiableList(list);return clientTargets;
     }
 }

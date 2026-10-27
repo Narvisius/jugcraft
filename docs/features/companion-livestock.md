@@ -125,3 +125,31 @@ Focused validation on Minecraft 26.3 / Java 25 / Fabric Loader 0.19.5:
   between these two validation runs.
 - Repository/document links and whitespace checks passed. No full local mod,
   server, Python or client-suite rerun, new preview world, or next tree batch.
+
+## Breeding test enclosure correction (23 October 2026)
+
+Implemented with OpenAI Codex (GPT-6). PR #452 at `c5a4a9393` passed
+Foundation, both server build configurations and 15 of 16 client shards.
+The remaining shard timed out in the roaming turkey breeding scenario:
+the parents were about 9.5 blocks apart in opposite corners of its 8 by 8
+test pen, outside the existing 8-block partner range, with all four seeds
+still in cargo. The unchanged focused suite passed locally (36 assertions),
+confirming that a successful rerun alone does not address this random layout.
+
+The supplied cow/turkey breeding scenarios now use temporary 6 by 6 pen
+walls, keeping the roaming parents within partner range. Normal movement,
+Supply collection, feeding, mating, offspring, food conservation and cooldown
+checks remain active with the same timeouts. The original enclosure is restored
+before slaughter and Output checks, preserving the Supply chest and Output
+barrel. A separate fixed-position case recreates the distant CI pair and checks
+that an admitted population search rejects it without feeding or consuming
+seeds. No production behavior, breeding range, population limits or CI gates
+changed.
+
+Validation: Windows, Java 25, Minecraft 26.3 / Fabric Loader 0.19.5, new flat
+test world. `runClientGameTest -PclientTests=PeepoPopulationClientTests` passed
+**41 assertions in 2m33s** (`build/population-pr452-fix.log`), including the
+new distance checks, actual calf/poult births, slaughter/Output and menu edits.
+The baseline run is recorded in `build/population-pr452-before.log`.
+Repository/documentation links and whitespace checks passed. No unrelated
+local suites, new multiplayer playtest or production-code changes.

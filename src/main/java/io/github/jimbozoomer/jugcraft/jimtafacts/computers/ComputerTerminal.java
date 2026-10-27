@@ -25,6 +25,7 @@ public final class ComputerTerminal {
             + "readvar <name> <dye> | energyvar/mailvar <name> | countvar <name> <port> <item id>\n"
             + "print/display/write accept $name words. 32 integer registers, values bounded to +/-1 billion.\n"
             + "programs | store/runfile/deletefile <name> — 16 local programs / 65536 characters, saved in the computer.\n"
+            + "Programs button: browse, store the editor, load without running, or delete with confirmation.\n"
             + "if <side> <minimum redstone 0..15> <line>\n"
             + "signal <side> <0..15> | read <dye colour>\n"
             + "channel <dye colour> on/off | relay <0..15>\n"
@@ -55,7 +56,7 @@ public final class ComputerTerminal {
             + "Modems: channel 0 open initially; 16 channels and 16 queued messages, text <=512 chars.\n"
             + "Wireless: 64 blocks; two advanced ends: 256 or cross-dimension while loaded (+10 JE/remote modem).\n"
             + "command <Minecraft command>: Command Computer only; present operator, 100 JE, at most once/second, level 2.\n"
-            + "No Lua/CraftOS, host files or HTTP are executed.\n"
+            + "Lua example selects the isolated Lua runtime. Save then Run. Four workers maximum, 64 MB heap each.\nLua: print, sleep, turtle movement/dig/place/select/detect/count, jugcraft.exec/read/write/files/receive.\nLua stops on reload; press Run to restart explicitly. ROM shell, editor, colors, vector, parallel, JSON, virtual files and connected peripherals are available. Terminal offers direct keys or line input. Disks hold one program.lua document. No host files, HTTP or unrestricted external APIs.\n"
             + "Sneak-use pocket on an owned computer to link; use within 64 loaded blocks for remote hardware control.\n"
             + "Sneak-use pocket in air opens its offline program editor.\n"
             + "Owner permission is checked every action; no chunk loading.";
@@ -63,13 +64,30 @@ public final class ComputerTerminal {
     public static void register() {
         TYPE = Registry.register(BuiltInRegistries.MENU, Jugcraft.id("jimta_computer_terminal"), new MenuType<>(Menu::new, FeatureFlags.DEFAULT_FLAGS));
         PayloadTypeRegistry.serverboundPlay().register(Edit.TYPE, Edit.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(FileEdit.TYPE, FileEdit.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(Snapshot.TYPE, Snapshot.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(CanvasSnapshot.TYPE,CanvasSnapshot.CODEC);
         ServerPlayNetworking.registerGlobalReceiver(Edit.TYPE, (packet, context) -> {
             var p = context.player();
             if (!(p.containerMenu instanceof Menu m) || m.containerId != packet.menu || !m.stillValid(p)
-                    || !RateGate.allow(p, "jimta_terminal", 4)) return;
+                    || !RateGate.allow(p, packet.action==10?packet.text.startsWith("char\t")?"jimta_terminal_char":packet.text.startsWith("key_up\t")?"jimta_terminal_up":"jimta_terminal_key":"jimta_terminal", packet.action==10?1:4)) return;
             m.action(p, packet.action, packet.text); m.send(true);
         });
+        ServerPlayNetworking.registerGlobalReceiver(FileEdit.TYPE,(packet,context)->{
+            var p=context.player();
+            if(!(p.containerMenu instanceof Menu m)||m.containerId!=packet.menu||!m.stillValid(p)
+                    ||!RateGate.allow(p,"jimta_terminal_files",4))return;
+            m.fileAction(packet.action,packet.name,packet.text);m.send(true);
+        });
+    }
+    /** Explicit limits on both filename and source; no client path ever reaches the host filesystem. */
+    public record FileEdit(int menu,int action,String name,String text) implements CustomPacketPayload {
+        public static final Type<FileEdit> TYPE=new Type<>(Jugcraft.id("jimta_computer_file"));
+        public static final StreamCodec<RegistryFriendlyByteBuf,FileEdit> CODEC=new StreamCodec<>(){
+            public FileEdit decode(RegistryFriendlyByteBuf b){return new FileEdit(b.readVarInt(),b.readVarInt(),b.readUtf(32),b.readUtf(WorkshopComputers.MAX_PROGRAM));}
+            public void encode(RegistryFriendlyByteBuf b,FileEdit p){b.writeVarInt(p.menu);b.writeVarInt(p.action);b.writeUtf(p.name,32);b.writeUtf(p.text,WorkshopComputers.MAX_PROGRAM);}
+        };
+        public Type<? extends CustomPacketPayload> type(){return TYPE;}
     }
     public record Edit(int menu, int action, String text) implements CustomPacketPayload {
         public static final Type<Edit> TYPE = new Type<>(Jugcraft.id("jimta_computer_edit"));
@@ -79,11 +97,23 @@ public final class ComputerTerminal {
         };
         public Type<? extends CustomPacketPayload> type() { return TYPE; }
     }
-    public record Snapshot(int menu, String program, String output, boolean running, long energy, boolean hardware, boolean readonly, boolean turtle) implements CustomPacketPayload {
+    public record CanvasSnapshot(int menu,String text,String foreground,String background) implements CustomPacketPayload {
+        public static final Type<CanvasSnapshot> TYPE=new Type<>(Jugcraft.id("jimta_computer_canvas"));
+        public static final StreamCodec<RegistryFriendlyByteBuf,CanvasSnapshot> CODEC=new StreamCodec<>(){
+            public CanvasSnapshot decode(RegistryFriendlyByteBuf b){return new CanvasSnapshot(b.readVarInt(),b.readUtf(1152),b.readUtf(1152),b.readUtf(1152));}
+            public void encode(RegistryFriendlyByteBuf b,CanvasSnapshot p){b.writeVarInt(p.menu);b.writeUtf(p.text,1152);b.writeUtf(p.foreground,1152);b.writeUtf(p.background,1152);}
+        };
+        public Type<? extends CustomPacketPayload> type(){return TYPE;}
+    }
+    public record Snapshot(int menu, String program, String output, boolean running, long energy, boolean hardware, boolean readonly, boolean turtle,boolean fileStorage,int loadRevision,List<String> files) implements CustomPacketPayload {
         public static final Type<Snapshot> TYPE = new Type<>(Jugcraft.id("jimta_computer_snapshot"));
         public static final StreamCodec<RegistryFriendlyByteBuf, Snapshot> CODEC = new StreamCodec<>() {
-            public Snapshot decode(RegistryFriendlyByteBuf b) { return new Snapshot(b.readVarInt(), b.readUtf(WorkshopComputers.MAX_PROGRAM), b.readUtf(8192), b.readBoolean(), b.readVarLong(), b.readBoolean(), b.readBoolean(), b.readBoolean()); }
-            public void encode(RegistryFriendlyByteBuf b, Snapshot p) { b.writeVarInt(p.menu); b.writeUtf(p.program, WorkshopComputers.MAX_PROGRAM); b.writeUtf(p.output, 8192); b.writeBoolean(p.running); b.writeVarLong(p.energy); b.writeBoolean(p.hardware); b.writeBoolean(p.readonly); b.writeBoolean(p.turtle); }
+            public Snapshot decode(RegistryFriendlyByteBuf b) {
+                int menu=b.readVarInt();String program=b.readUtf(WorkshopComputers.MAX_PROGRAM),output=b.readUtf(8192);boolean running=b.readBoolean();long energy=b.readVarLong();boolean hardware=b.readBoolean(),readonly=b.readBoolean(),turtle=b.readBoolean(),fileStorage=b.readBoolean();
+                int loadRevision=b.readVarInt();int count=b.readVarInt();if(count<0||count>16)throw new IllegalArgumentException("Invalid program shelf size");var files=new java.util.ArrayList<String>(count);for(int i=0;i<count;i++)files.add(b.readUtf(32));
+                return new Snapshot(menu,program,output,running,energy,hardware,readonly,turtle,fileStorage,loadRevision,List.copyOf(files));
+            }
+            public void encode(RegistryFriendlyByteBuf b, Snapshot p) { b.writeVarInt(p.menu); b.writeUtf(p.program, WorkshopComputers.MAX_PROGRAM); b.writeUtf(p.output, 8192); b.writeBoolean(p.running); b.writeVarLong(p.energy); b.writeBoolean(p.hardware); b.writeBoolean(p.readonly); b.writeBoolean(p.turtle);b.writeBoolean(p.fileStorage);b.writeVarInt(p.loadRevision);b.writeVarInt(p.files.size());for(String name:p.files)b.writeUtf(name,32); }
         };
         public Type<? extends CustomPacketPayload> type() { return TYPE; }
     }
@@ -99,7 +129,11 @@ public final class ComputerTerminal {
         private long lastSent = -20;
         public String program = "", output = "Connecting to the workshop terminal…";
         public long energy;
-        public boolean running, hardware, readOnly, turtle;
+        public boolean running, hardware, readOnly, turtle, fileStorage;
+        public boolean terminalView;
+        public String canvasText="",canvasForeground="",canvasBackground="";
+        public List<String> files=List.of();
+        public int loadRevision;
         public Menu(int id, Inventory inventory) { this(id, inventory, null, null, ItemStack.EMPTY, false); }
         public Menu(int id, Inventory inventory, ComputerNode node) { this(id, inventory, node, null, ItemStack.EMPTY, false); }
         public Menu(int id, Inventory inventory, InteractionHand hand, ItemStack held, boolean readonly) { this(id, inventory, null, hand, held, readonly); }
@@ -114,10 +148,10 @@ public final class ComputerTerminal {
                 }
                 @Override public int getMaxStackSize() { return (Menu.this.node != null ? Menu.this.node.turtle() : turtle) && getContainerSlot() >= 16 ? 1 : super.getMaxStackSize(); }
                 @Override public boolean mayPickup(Player player) { return stillValid(player) && (Menu.this.node != null || player.level().isClientSide() && hardware); }
-                @Override public boolean isActive() { return Menu.this.node != null || hardware; }
+                @Override public boolean isActive() { return !terminalView&&(Menu.this.node != null || hardware); }
             });
-            for (int row = 0; row < 3; row++) for (int col = 0; col < 9; col++) addSlot(new Slot(inventory, 9 + row * 9 + col, 188 + col * 18, 204 + row * 18));
-            for (int i = 0; i < 9; i++) addSlot(new Slot(inventory, i, 188 + i * 18, 262));
+            for (int row = 0; row < 3; row++) for (int col = 0; col < 9; col++) addSlot(new Slot(inventory, 9 + row * 9 + col, 188 + col * 18, 204 + row * 18){@Override public boolean isActive(){return !terminalView;}});
+            for (int i = 0; i < 9; i++) addSlot(new Slot(inventory, i, 188 + i * 18, 262){@Override public boolean isActive(){return !terminalView;}});
         }
         @Override public boolean stillValid(Player player) {
             if (player.level().isClientSide()) return true;
@@ -130,12 +164,25 @@ public final class ComputerTerminal {
             return hand != null && player.isAlive() && !player.isSpectator() && player.getItemInHand(hand) == held;
         }
         private String text() { return node != null ? node.program() : held.getOrDefault(WorkshopComputers.DOCUMENT, ""); }
+        private void fileAction(int action,String name,String text){
+            if(readonly||node==null||!node.computer())return;
+            try{
+                switch(action){
+                    case 0->{node.storeProgram(name,text);notice="Stored "+name+". The running program is unchanged.";}
+                    case 1->{node.loadProgram(name);loadRevision++;notice="Loaded "+name+". Press Run when ready.";}
+                    case 2->{node.deleteProgram(name);notice="Deleted "+name+" from this computer's shelf.";}
+                    default->notice="Unknown program action.";
+                }
+            }catch(IllegalArgumentException failure){notice=failure.getMessage();}
+        }
         private void action(ServerPlayer player, int action, String text) {
             if (!stillValid(player)) return;
             if (action == 6) { notice = HELP; return; }
             if (printed() && (action==7 || action==8)) { page += action==7?-1:1; notice=""; return; }
             if (readonly) { notice = "This document is read-only."; return; }
             try {
+                if(action==10){if(node==null)throw new IllegalArgumentException("Keys need connected hardware");node.submitKey(text);return;}
+                if(action==9){if(node==null)throw new IllegalArgumentException("Input needs connected hardware");node.submitInput(text);notice="Input sent.";return;}
                 if (action == 0) {
                     if (text.split("\\R", -1).length > ComputerNode.MAX_LINES) throw new IllegalArgumentException("Program limit: 128 lines.");
                     if (node != null) node.saveProgram(text); else held.set(WorkshopComputers.DOCUMENT, text);
@@ -193,7 +240,8 @@ public final class ComputerTerminal {
             // A single maximum-length pocket line plus its preview prefix must still fit the packet.
             if (result.length() > 8192) result = result.substring(0, 8192);
             ServerPlayNetworking.send(player, new Snapshot(containerId, shownProgram, result, node != null && node.running(),
-                    node == null ? 0 : node.energy.getAmount(), node != null, readonly, node != null && node.turtle()));
+                    node == null ? 0 : node.energy.getAmount(), node != null, readonly, node != null && node.turtle(),node!=null&&node.computer(),loadRevision,node==null?List.of():node.savedPrograms()));
+            if(node!=null)ServerPlayNetworking.send(player,new CanvasSnapshot(containerId,node.canvas().text(),node.canvas().foreground(),node.canvas().background()));
         }
         @Override public void broadcastChanges() { super.broadcastChanges(); send(false); }
         @Override public ItemStack quickMoveStack(Player player, int index) {

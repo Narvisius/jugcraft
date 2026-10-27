@@ -65,7 +65,10 @@ public final class GunRenderer extends GeoItemRenderer<GunItem> {
 	public static final DataTicket<View> VIEW = DataTicket.create("jugcraft_gun_view", View.class);
 	/** The gun's fitted attachments. */
 	public static final DataTicket<Fitted> FITTED = DataTicket.create("jugcraft_gun_attachments", Fitted.class);
-	/** A muzzle flash to draw: the shot was moments ago and nothing fitted hides it. */
+	/**
+	 * A muzzle flash to draw: the shot was moments ago, and neither a fitted silencer nor the gun's own build
+	 * ({@link JugcraftGuns#SILENCED}) hides it.
+	 */
 	public static final DataTicket<Flash> FLASH = DataTicket.create("jugcraft_gun_flash", Flash.class);
 	/** How far a rotary gun's barrels have turned (radians, slice 8C). */
 	public static final DataTicket<Float> BARREL_TURN = DataTicket.create("jugcraft_gun_barrel_turn", Float.class);
@@ -118,7 +121,8 @@ public final class GunRenderer extends GeoItemRenderer<GunItem> {
 				state.addGeckolibData(BARREL_TURN, GunEffects.barrelTurn(owner.getId(), owner.level().getGameTime(), partialTick, spinUp));
 			}
 			float age = GunEffects.flashAge(owner.getId(), hand, owner.level().getGameTime(), partialTick);
-			if (age >= 0.0F && inHand(context) && fitted.stream().noneMatch(GunLooks.HIDE_FLASH::contains)) {
+			if (age >= 0.0F && inHand(context) && fitted.stream().noneMatch(GunLooks.HIDE_FLASH::contains)
+					&& !JugcraftGuns.SILENCED.contains(gun.name())) {
 				// From the muzzle, or from the front of a barrel attachment that lengthens it.
 				String locator = fitted.stream().filter(name -> JugcraftGuns.ATTACHMENTS.get(name).slot().equals("barrel")).findFirst()
 						.map(name -> "muzzle_" + name).orElse("muzzle");

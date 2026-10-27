@@ -83,7 +83,7 @@ public class ConcordanceEmberGameTests {
 
 	/** A survival player with the Initiate's Wand on {@code standAt}, facing south (+Z), looking down {@code pitch} degrees. */
 	private static ServerPlayer player(GameTestHelper helper, BlockPos standAt, float pitch) {
-		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		ServerPlayer player = TestPlayers.mock(helper);
 		player.setGameMode(GameType.SURVIVAL);
 		BlockPos absolute = helper.absolutePos(standAt);
 		player.snapTo(absolute.getX() + 0.5, absolute.getY(), absolute.getZ() + 0.5, 0.0F, pitch);

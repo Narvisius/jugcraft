@@ -21,7 +21,7 @@ import net.minecraft.world.phys.Vec3;
 
 /** Real inventory/world operations, claim callbacks and persisted robot cargo. Deferred until combined validation. */
 public final class JimtaRobotGameTests {
-    static ServerPlayer player(GameTestHelper h){
+    public static ServerPlayer player(GameTestHelper h){
         var id=UUID.randomUUID();var profile=new com.mojang.authlib.GameProfile(id,"jimta-"+id.toString().substring(0,8));
         var p=new ServerPlayer(h.getLevel().getServer(),h.getLevel(),profile,ClientInformation.createDefault());
         var connection=new net.minecraft.network.Connection(net.minecraft.network.protocol.PacketFlow.SERVERBOUND);

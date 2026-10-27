@@ -1,6 +1,7 @@
 package io.github.jimbozoomer.jugcraft.weapons;
 
 import io.github.jimbozoomer.jugcraft.Jugcraft;
+import io.github.jimbozoomer.jugcraft.concordance.rime.Rime;
 import io.github.jimbozoomer.jugcraft.gear.TraitTooltips;
 import io.github.jimbozoomer.jugcraft.town.TownProtection;
 import java.util.ArrayList;
@@ -239,14 +240,20 @@ public class ArmItem extends Item {
 
 	/**
 	 * An Arms VII boon, on the server, when its arm has struck `target`: each effect refreshed by another hit, never
-	 * stacked; a puff of particles shows it. SHOCK arcs only from a player, to a foe that player may strike.
+	 * stacked; a puff of particles shows it. SHOCK arcs only from a player, to a foe that player may strike. A Frost
+	 * boon's slow that takes is also Rimekeeping's elective practice for its wielder ({@link Rime#frostBoon}); the slow
+	 * itself is unchanged.
 	 */
 	static void boon(ServerLevel level, ArmVariants.Boon boon, LivingEntity target, LivingEntity attacker) {
 		double y = target.getY() + target.getBbHeight() * 0.6;
 		switch (boon) {
 			case FROST -> {
-				target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, ArmVariants.FROST_TICKS, ArmVariants.FROST_AMPLIFIER), attacker);
+				boolean slowed = target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, ArmVariants.FROST_TICKS, ArmVariants.FROST_AMPLIFIER), attacker);
 				level.sendParticles(ParticleTypes.SNOWFLAKE, target.getX(), y, target.getZ(), 8, 0.3, 0.4, 0.3, 0.02);
+				if (slowed) {
+					// Concordance Chunk B (B-P26): the boon's own slow, unchanged, is Rimekeeping's elective cold work.
+					Rime.frostBoon(attacker, target);
+				}
 			}
 			case EMBER -> {
 				target.igniteForSeconds(ArmVariants.EMBER_SECONDS);
@@ -267,6 +274,7 @@ public class ArmItem extends Item {
 			case SHOCK -> shock(level, target, attacker);
 			case HARVEST -> HarvestBoon.struck(level, target, attacker);
 			case STITCH -> StitchBoon.struck(level, target, attacker);
+			case FRIGHT -> FrightBoon.struck(level, target, attacker);
 			case GALE -> {
 				target.knockback(ArmVariants.GALE_KNOCKBACK, attacker.getX() - target.getX(), attacker.getZ() - target.getZ(),
 						level.damageSources().mobAttack(attacker), 0.0F);

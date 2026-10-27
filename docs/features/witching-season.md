@@ -360,7 +360,7 @@ Both bosses live in their own small pocket dimension. Everything in this section
 5. **The fixtures can't be destroyed**: lair-only blocks can't be broken and are also in the `wither_immune` and `dragon_immune` block tags.
 6. **The edges**: fly or fall off the island and the mist throws you back to the arrival point, for 4 damage, never below half a heart. Ender pearls and chorus fruit work within the bounds.
 
-**Dying in a lair costs no belongings.** What a player drops when they die in a lair (items and experience) is gathered up at once as their **Grave Goods** and handed back when they respawn, in their own world. This is kept in saved data until they claim it, across logouts and restarts. Without it, a reset instance would destroy the items. Respawning always happens outside the lair.
+**Dying in a lair costs nothing.** As with vanilla's keepInventory rule, but only in lairs (the owner's decision, 22 October 2026): a player who dies in a lair drops no items and no experience, and respawns with every slot as it was (armour and offhand still worn), the same held slot and all their experience. Respawning always happens outside the lair. Anything still dropped there at death (by another mod, say) is gathered up at once as their **Grave Goods** and handed back when they respawn, in their own world; this is kept in saved data until they claim it, across logouts and restarts. Without it, a reset instance would destroy the items. Dying anywhere else is unchanged.
 
 **When an instance ends.** An instance closes:
 - when its boss is dead and every player has left;
@@ -610,6 +610,6 @@ She keeps to the arena: more than 30 blocks from the doily's centre, she climbs 
 These have defaults in the plan, so work can start; say if you'd like them otherwise.
 
 1. **Season**: rituals work all year at night, with a Halloween bonus. Should they instead only work during the Halloween event, as the Headless Horseman does?
-2. **Death in a lair**: belongings come back as Grave Goods. Should death in a lair cost the items instead, as dying elsewhere does?
+2. **Death in a lair**: answered by the owner on 22 October 2026: players do not lose their inventory on death in boss fights. A death in a lair keeps everything, as keepInventory does, there only.
 3. **Animation library**: Minecraft's own keyframe animations, no dependency. GeckoLib would need a version built for 26.3 and a platform PR to pin it.
 4. **Party size**: four players per instance, eight instances per lair.

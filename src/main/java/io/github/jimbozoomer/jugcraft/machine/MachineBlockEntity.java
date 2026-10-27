@@ -117,7 +117,9 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	public static final int DATA_DRILL_USE = DATA_DRILL_STAGE + 1;
 	public static final int DATA_INDUSTRIAL_HEAT = DATA_DRILL_USE + 1;
 	public static final int DATA_INDUSTRIAL_HEAT_TARGET = DATA_INDUSTRIAL_HEAT + 1;
-	public static final int DATA_COUNT = DATA_INDUSTRIAL_HEAT_TARGET + 1;
+	public static final int DATA_BLADE_REQUIRED=DATA_INDUSTRIAL_HEAT_TARGET+1;
+    public static final int DATA_BLADE_INSTALLED=DATA_BLADE_REQUIRED+1;
+    public static final int DATA_COUNT=DATA_BLADE_INSTALLED+1;
 	/** Fluid processors push their output tanks into pipes and neighbouring tanks every this many ticks... */
 	public static final int FLUID_PUSH_INTERVAL = 4;
 	/** ...up to this many mB from each output tank. */
@@ -180,6 +182,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	private int progress;
 	private int maxProgress;
 	private int industrialHeat, industrialHeatTarget;
+    private int bladeRequired;
 	private int burn;
 	private int maxBurn;
 	/**
@@ -230,6 +233,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			return switch (index) {
 				case DATA_INDUSTRIAL_HEAT -> industrialHeat;
 				case DATA_INDUSTRIAL_HEAT_TARGET -> industrialHeatTarget;
+                case DATA_BLADE_REQUIRED -> bladeRequired;
+                case DATA_BLADE_INSTALLED -> io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialCuttingBlade.installed(MachineBlockEntity.this);
 				case DATA_ENERGY_LOW -> (int) (energy.getAmount() & 0xFFFF);
 				case DATA_ENERGY_HIGH -> (int) ((energy.getAmount() >>> 16) & 0xFFFF);
 				case DATA_CAPACITY_LOW -> (int) (energy.getCapacity() & 0xFFFF);
@@ -921,6 +926,10 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 		}
 
 		Optional<Result> result = findResult(level);
+        bladeRequired=result.map(Result::bladeHardness).orElse(0);
+        if(bladeRequired>io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialCuttingBlade.installed(this)){
+            if(progress!=0){progress=0;setChanged();}return processorStopped(local.peepo.CompanionStatus.MACHINE_TOOL);
+        }
 		if (kind == MachineKind.JIMTA_THERMAL_CENTRIFUGE) industrialHeatTarget = result.map(Result::minimumHeat).orElse(0);
 		boolean water = switch (kind) {
 			case ORE_WASHER -> tank >= MachineKind.WASHER_WATER_PER_OPERATION;
@@ -1958,7 +1967,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 	 * A matched recipe: what it makes, how long it takes, how many items it takes from each input slot
 	 * and what else it may make.
 	 */
-	private record Result(ItemStack stack, int ticks, int[] take, List<MachineRecipe.Byproduct> byproducts, int companionEffort, int minimumHeat) {
+	private record Result(ItemStack stack, int ticks, int[] take, List<MachineRecipe.Byproduct> byproducts, int companionEffort, int minimumHeat,int bladeHardness) {
+        Result(ItemStack stack,int ticks,int[] take,List<MachineRecipe.Byproduct> byproducts,int companionEffort,int minimumHeat){this(stack,ticks,take,byproducts,companionEffort,minimumHeat,0);}
 		Result(ItemStack stack, int ticks, int[] take, List<MachineRecipe.Byproduct> byproducts, int companionEffort) {
 			this(stack, ticks, take, byproducts, companionEffort, 0);
 		}
@@ -1978,7 +1988,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 			}
 			var input = new SingleRecipeInput(items.get(0));
 			if (selected instanceof MachineRecipe single && single.matches(input, level))
-				return Optional.of(new Result(single.output().create(), single.time(), new int[]{single.inputCount()}, single.byproducts(), single.companionEffort(), single.minimumHeat()));
+				return Optional.of(new Result(single.output().create(), single.time(), new int[]{single.inputCount()}, single.byproducts(), single.companionEffort(), single.minimumHeat(),single.bladeHardness()));
 			if (selected instanceof net.minecraft.world.item.crafting.SmeltingRecipe smelting && smelting.matches(input, level))
 				return Optional.of(new Result(smelting.assemble(input), MachineKind.ELECTRIC_FURNACE_TICKS, TAKE_ONE));
 			return Optional.empty();
@@ -1998,7 +2008,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 					.map(holder -> new Result(holder.value().assemble(recipeInput), MachineKind.ELECTRIC_FURNACE_TICKS, TAKE_ONE));
 		}
 		return MachineRecipes.find(level, kind, input)
-				.map(recipe -> new Result(recipe.output().create(), recipe.time(), new int[]{recipe.inputCount()}, recipe.byproducts(), recipe.companionEffort(), recipe.minimumHeat()));
+				.map(recipe -> new Result(recipe.output().create(), recipe.time(), new int[]{recipe.inputCount()}, recipe.byproducts(), recipe.companionEffort(), recipe.minimumHeat(),recipe.bladeHardness()));
 	}
 
 	/** Whether every byproduct this operation might make has room, so none is ever lost. */
@@ -2112,7 +2122,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity implements Worl
 					|| MachineRecipes.isMultiIngredient(server.getServer(), kind, stack));
 		}
 		if (slot >= kind.slots) {
-			return MachineUpgrades.isUpgrade(stack); // Upgrade slots: menus only; no face exposes them.
+			return MachineUpgrades.accepts(kind,stack); // Upgrade slots: menus only; no face exposes them.
 		}
 		return kind.isProcessor() && slot < kind.outputSlot();
 	}

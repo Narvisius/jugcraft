@@ -26,7 +26,7 @@ def generate(copy,texture,dump,RES,ART,lang):
         copy(ART/f'geo/{name}.geo.json',RES/f'assets/jugcraft/geckolib/models/entity/jimtafacts/{name}.geo.json')
         copy(ART/f'animations/{name}_animations.animation.json',RES/f'assets/jugcraft/geckolib/animations/entity/jimtafacts/{name}.animation.json')
         texture('irons_spellbooks:entity/'+name)
-    for path in ('entity/shield/shield_overlay','entity/shield/shield_trim','entity/ender_chain','entity/portal/portal_round','entity/portal/portal_square','entity/portal/portal_square_color','entity/portal/pocket_dimension_portal_round','entity/portal/pocket_dimension_portal_square','environment/pocket_dimension_sky','environment/pocket_clouds'):
+    for path in ('entity/shield/shield_overlay','entity/shield/shield_trim','entity/ender_chain','entity/portal/portal_round','entity/portal/portal_square','entity/portal/portal_square_color','entity/portal/pocket_dimension_portal_round','entity/portal/pocket_dimension_portal_square','environment/pocket_dimension_sky','environment/pocket_clouds','environment/single_cloud','environment/noise_tile'):
         texture('irons_spellbooks:'+path)
     for name in ('abyssal_shroud','heartstop','planar_sight','evasion','true_invisibility'):
         original=ART/f'textures/mob_effect/{name}.png'

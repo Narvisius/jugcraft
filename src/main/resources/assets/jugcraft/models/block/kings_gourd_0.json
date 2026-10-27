@@ -1,0 +1,112 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/kings_gourd_green",
+    "rind": "jugcraft:block/kings_gourd_green",
+    "top": "jugcraft:block/kings_gourd_green_top",
+    "vine": "jugcraft:block/kings_gourd_vine"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        10,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#rind",
+          "uv": [
+            2,
+            2,
+            14,
+            12
+          ]
+        },
+        "south": {
+          "texture": "#rind",
+          "uv": [
+            2,
+            2,
+            14,
+            12
+          ]
+        },
+        "east": {
+          "texture": "#rind",
+          "uv": [
+            2,
+            2,
+            14,
+            12
+          ]
+        },
+        "west": {
+          "texture": "#rind",
+          "uv": [
+            2,
+            2,
+            14,
+            12
+          ]
+        },
+        "up": {
+          "texture": "#top",
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ]
+        },
+        "down": {
+          "texture": "#top",
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        10,
+        7
+      ],
+      "to": [
+        9,
+        13,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#vine"
+        },
+        "south": {
+          "texture": "#vine"
+        },
+        "east": {
+          "texture": "#vine"
+        },
+        "west": {
+          "texture": "#vine"
+        },
+        "up": {
+          "texture": "#vine"
+        },
+        "down": {
+          "texture": "#vine"
+        }
+      }
+    }
+  ]
+}

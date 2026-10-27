@@ -13,13 +13,17 @@ import org.jspecify.annotations.Nullable;
  * <pre>
  * {"schema": 1, "kind": "familiar", "follow": 8, "support": {"effect": "minecraft:regeneration", "amplifier": 0, "duration": 100}}
  * {"schema": 1, "kind": "spirit", "work": "gather", "radius": 8, "from": 13000, "to": 23000, "quota": 64, "carry": 16}
+ * {"schema": 1, "kind": "spirit", "work": "courier", "radius": 12, "from": 0, "to": 12000, "quota": 32, "carry": 64}
  * {"schema": 1, "kind": "construct", "integrity": 64, "wear": 1, "repair": {"item": "minecraft:copper_ingot", "amount": 16},
  *  "energy": 64, "trip_energy": 2, "carry": 16}
  * </pre>
  */
 public final class WorkerParser {
-	/** The kinds of work a spirit can agree to (each needs its own server behaviour). */
-	public static final List<String> WORK = List.of("gather");
+	/**
+	 * The kinds of work a spirit can agree to (each needs its own server behaviour: gather is the Gathering Shade's, courier
+	 * the Workshop Hand's, Concordance Chunk D, D-08).
+	 */
+	public static final List<String> WORK = List.of("gather", "courier");
 	public static final int MAX_RADIUS = 12;
 	public static final int MAX_CARRY = 64;
 	public static final int MAX_QUOTA = 256;

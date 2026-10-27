@@ -392,10 +392,11 @@ public class LaboratoryLarderDiningGameTests {
 		GrandfatherClockBlockEntity copy = new GrandfatherClockBlockEntity(abs, helper.getBlockState(clock));
 		copy.loadWithComponents(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), saved));
 		helper.assertTrue(copy.lastHour() == GrandfatherClockBlock.hourIndex(next), "It remembers the hour it last saw");
-		// (Its own ticking then sees the world's hour again and pulses once more, so the pulse is checked well after.)
+		// Its own ticker can see the world's hour after the synthetic transition and pulse again.
+		// Wait for the scheduled block tick instead of assuming it ran on one exact test tick.
 		helper.runAfterDelay(GrandfatherClockBlock.PULSE_TICKS * 3, () -> {
-			helper.assertFalse(helper.getBlockState(clock).getValue(GrandfatherClockBlock.POWERED), "The pulse ends");
-			helper.succeed();
+			helper.succeedWhen(() -> helper.assertFalse(
+					helper.getBlockState(clock).getValue(GrandfatherClockBlock.POWERED), "The pulse ends"));
 		});
 	}
 

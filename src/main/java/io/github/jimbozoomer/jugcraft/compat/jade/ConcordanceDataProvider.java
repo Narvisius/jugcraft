@@ -3,26 +3,35 @@ package io.github.jimbozoomer.jugcraft.compat.jade;
 import io.github.jimbozoomer.jugcraft.Jugcraft;
 import io.github.jimbozoomer.jugcraft.concordance.CircleAnchorBlockEntity;
 import io.github.jimbozoomer.jugcraft.concordance.CrucibleBlockEntity;
+import io.github.jimbozoomer.jugcraft.concordance.CrucibleStandBlockEntity;
 import io.github.jimbozoomer.jugcraft.concordance.JugcraftConcordance;
 import io.github.jimbozoomer.jugcraft.concordance.KindledLanternItem;
 import io.github.jimbozoomer.jugcraft.concordance.LampwrightBenchBlockEntity;
 import io.github.jimbozoomer.jugcraft.concordance.LeyPylonBlockEntity;
 import io.github.jimbozoomer.jugcraft.concordance.LumenSconceBlockEntity;
 import io.github.jimbozoomer.jugcraft.concordance.alchemy.Formula;
+import io.github.jimbozoomer.jugcraft.concordance.alchemy.Heat;
 import io.github.jimbozoomer.jugcraft.concordance.celestial.Pattern;
+import io.github.jimbozoomer.jugcraft.concordance.diagnostic.Diagnostic;
 import io.github.jimbozoomer.jugcraft.concordance.ecology.Habitat;
+import io.github.jimbozoomer.jugcraft.concordance.garden.Garden;
 import io.github.jimbozoomer.jugcraft.concordance.garden.GleanerBlockEntity;
 import io.github.jimbozoomer.jugcraft.concordance.garden.HabitatGaugeBlockEntity;
 import io.github.jimbozoomer.jugcraft.concordance.garden.LivingDeviceBlockEntity;
 import io.github.jimbozoomer.jugcraft.concordance.garden.MulchMawBlockEntity;
 import io.github.jimbozoomer.jugcraft.concordance.garden.VerdantBedBlockEntity;
 import io.github.jimbozoomer.jugcraft.concordance.garden.VerdantHeartBlockEntity;
+import io.github.jimbozoomer.jugcraft.concordance.ritual.Offerings;
+import io.github.jimbozoomer.jugcraft.concordance.ritual.Readiness;
+import io.github.jimbozoomer.jugcraft.concordance.ritual.RitualMachine;
 import io.github.jimbozoomer.jugcraft.concordance.ritual.StructurePattern;
 import io.github.jimbozoomer.jugcraft.concordance.ritual.StructureValidator;
 import io.github.jimbozoomer.jugcraft.concordance.sky.ObservatoryBlockEntity;
+import io.github.jimbozoomer.jugcraft.config.JugcraftConfig;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
@@ -34,8 +43,8 @@ import snownee.jade.api.IServerDataProvider;
  * The Concordance's blocks for Jade: the Lampwright's Bench (how far its study has come, whether notes wait for
  * someone, the Radiance in the lantern on it), the Lumen Sconce (its Radiance), the Circle Anchor (its ritual's phase
  * and progress and the circle's first faults), the Ley Pylon (its Ley Charge), the Alembic Crucible (its heat,
- * volume and formula step), the garden (roadmap step 14: a bed's moisture, nutrients and habitat; each living
- * device's status and store) and the Orrery Observatory (roadmap step 15: its resonance, status and visible patterns). Bounded snapshots of the one block looked at; they name no player, reveal no one's
+ * volume, tank, formula step and, since Concordance Chunk C (C-01), its own reason for waiting), the garden (roadmap
+ * step 14: a bed's moisture, nutrients and habitat, and since Concordance Chunk C its harvest strain (C-08); each living device's status and store), the Orrery Observatory (roadmap step 15: its resonance, status and visible patterns) and the Crucible Stand (Concordance Chunk C, C-05: its JE, heat and draw, and why it gives none). Bounded snapshots of the one block looked at; they name no player, reveal no one's
  * research and change nothing (a bed's habitat comes from its sample, taken again no more often than a plant would).
  */
 public enum ConcordanceDataProvider implements IServerDataProvider<BlockAccessor> {
@@ -49,13 +58,17 @@ public enum ConcordanceDataProvider implements IServerDataProvider<BlockAccessor
 	MAW("mulch_maw"),
 	GAUGE("habitat_gauge"),
 	GLEANER("gleaner"),
-	OBSERVATORY("observatory");
+	OBSERVATORY("observatory"),
+	STAND("crucible_stand");
 
 	/** The most patterns an observatory's tooltip names. */
 	public static final int SHOWN_PATTERNS = 3;
 
 	/** The most structural faults the anchor's tooltip lists (the command lists them all). */
 	public static final int SHOWN_FAULTS = 3;
+
+	/** The most offerings the anchor's tooltip lists (Concordance Chunk C, C-03). */
+	public static final int SHOWN_OFFERINGS = 3;
 
 	public final Identifier id;
 	public final String dataKey;
@@ -81,7 +94,7 @@ public enum ConcordanceDataProvider implements IServerDataProvider<BlockAccessor
 				&& accessor.getLevel() instanceof ServerLevel level) {
 			data.put(dataKey, snapshot(anchor, level));
 		} else if (this == CRUCIBLE && accessor.getBlockEntity() instanceof CrucibleBlockEntity crucible) {
-			data.put(dataKey, snapshot(crucible));
+			data.put(dataKey, snapshot(crucible, now));
 		} else if (this == BED && accessor.getBlockEntity() instanceof VerdantBedBlockEntity bed && accessor.getLevel() instanceof ServerLevel level) {
 			data.put(dataKey, bedSnapshot(bed, level));
 		} else if (accessor.getBlockEntity() instanceof LivingDeviceBlockEntity device
@@ -94,7 +107,40 @@ public enum ConcordanceDataProvider implements IServerDataProvider<BlockAccessor
 			CompoundTag snapshot = new CompoundTag();
 			snapshot.putInt("ley", (int) pylon.ley());
 			data.put(dataKey, snapshot);
+		} else if (this == STAND && accessor.getBlockEntity() instanceof CrucibleStandBlockEntity stand
+				&& accessor.getLevel() instanceof ServerLevel level) {
+			data.put(dataKey, standSnapshot(stand, level));
 		}
+	}
+
+	/**
+	 * A Crucible Stand (Concordance Chunk C, C-05): its JE and store, whether a formula decides its heat, the band ("aim")
+	 * and target it aims at, the JE a tick it pays now, and, when it gives no heat for a reason, that reason
+	 * (Diagnostic.encode, worded on the client) and whether it is its crucible's. Read only: it never pays, lights, sets or
+	 * changes the crucible.
+	 */
+	public static CompoundTag standSnapshot(CrucibleStandBlockEntity stand, ServerLevel level) {
+		CompoundTag snapshot = new CompoundTag();
+		if (!JugcraftConfig.isFeatureEnabled(JugcraftConcordance.FEATURE)) {
+			snapshot.putBoolean("disabled", true);
+			return snapshot;
+		}
+		CrucibleStandBlockEntity.Plan plan = stand.plan(level);
+		snapshot.putLong("energy", stand.energy.getAmount());
+		snapshot.putLong("capacity", CrucibleStandBlockEntity.CAPACITY);
+		snapshot.putBoolean("following", plan.following());
+		if (plan.band() != null) {
+			snapshot.putString("aim", plan.band().id);
+			snapshot.putInt("target", Heat.standTarget(plan.band()));
+		}
+		if (plan.heats()) {
+			snapshot.putInt("draw", (int) CrucibleStandBlockEntity.rate(plan.band()));
+		}
+		if (plan.reason() != null) {
+			snapshot.putString("reason", plan.reason().encode());
+			snapshot.putBoolean("waits", plan.waits());
+		}
+		return snapshot;
 	}
 
 	public static CompoundTag snapshot(LampwrightBenchBlockEntity bench, long now) {
@@ -114,7 +160,10 @@ public enum ConcordanceDataProvider implements IServerDataProvider<BlockAccessor
 
 	/**
 	 * The anchor: its phase and progress, how many have joined, and its first faults as {@code role|problem|x,y,z}
-	 * (from the anchor's cached report: looking at it never rescans the circle more than the anchor would).
+	 * (from the anchor's cached report: looking at it never rescans the circle more than the anchor would). Since
+	 * Concordance Chunk C (C-03) also the participants the rite holding it needs, what lies in its slots as
+	 * {@code item|count}, and while a rite holds it the Focus and Ley Charge spent apart from the offerings held: never the
+	 * rite's name, nobody's Focus held and nobody's research.
 	 */
 	public static CompoundTag snapshot(CircleAnchorBlockEntity anchor, ServerLevel level) {
 		CompoundTag snapshot = new CompoundTag();
@@ -122,6 +171,26 @@ public enum ConcordanceDataProvider implements IServerDataProvider<BlockAccessor
 		snapshot.putInt("joined", anchor.run().joined().size());
 		snapshot.putInt("done", anchor.run().done());
 		snapshot.putInt("steps", anchor.steps());
+		if (anchor.phase() != RitualMachine.Phase.IDLE) {
+			snapshot.putInt("needed", anchor.participantsNeeded());
+		}
+		int offered = 0;
+		for (ItemStack stack : anchor.offerings()) {
+			if (!stack.isEmpty()) {
+				snapshot.putString("offering" + offered, BuiltInRegistries.ITEM.getKey(stack.getItem()) + "|" + stack.getCount());
+				offered++;
+			}
+		}
+		if (offered > 0) {
+			snapshot.putInt("offerings", offered);
+		}
+		Readiness.Spent spent = anchor.phase().reserving() ? anchor.spent() : null;
+		Offerings.Plan plan = anchor.run().plan();
+		if (spent != null && plan != null) {
+			snapshot.putInt("spent_focus", spent.focus());
+			snapshot.putInt("spent_ley", spent.ley());
+			snapshot.putInt("reserved", plan.total());
+		}
 		StructureValidator.Report report = anchor.report(level);
 		if (report != null) {
 			snapshot.putInt("faults", report.faults().size());
@@ -136,14 +205,20 @@ public enum ConcordanceDataProvider implements IServerDataProvider<BlockAccessor
 	}
 
 	/**
-	 * The crucible: temperature and band, volume, and, following a formula, its step and what it waits for (the next
-	 * operation's text). Never the mixture's makeup: that takes sampling.
+	 * The crucible: temperature and band, the seconds Preserve still holds the band (Chunk B unit 3), volume, the tank's
+	 * whole parts, and, following a formula, its step and next operation, and the crucible's own reason (Concordance Chunk
+	 * C, C-01: Diagnostic.encode, its code and parameters, worded on the client). Never the makeup: that takes sampling.
 	 */
-	public static CompoundTag snapshot(CrucibleBlockEntity crucible) {
+	public static CompoundTag snapshot(CrucibleBlockEntity crucible, long now) {
 		CompoundTag snapshot = new CompoundTag();
 		snapshot.putInt("temperature", crucible.temperature());
 		snapshot.putString("band", crucible.band().id);
+		int held = crucible.held(now);
+		if (held > 0) {
+			snapshot.putInt("held", (held + 19) / 20);
+		}
 		snapshot.putInt("parts", crucible.parts());
+		snapshot.putInt("tank", crucible.tankParts());
 		Formula program = crucible.program();
 		if (program != null) {
 			snapshot.putInt("step", crucible.step());
@@ -152,10 +227,18 @@ public enum ConcordanceDataProvider implements IServerDataProvider<BlockAccessor
 				snapshot.putString("next", program.operations().get(crucible.step()).text());
 			}
 		}
+		Diagnostic reason = crucible.waiting();
+		if (reason != null) {
+			snapshot.putString("reason", reason.encode());
+		}
 		return snapshot;
 	}
 
-	/** A Verdant Bed: moisture, nutrients, whether it is awake, and its habitat (from its sample). */
+	/**
+	 * A Verdant Bed: moisture, nutrients, whether it is awake, and its habitat (from its sample: the five factors); since
+	 * Concordance Chunk C also its harvest strain, a harvest not yet counted included (C-08, read and never counted here), and
+	 * the graft it carries when the rules know it (C-09).
+	 */
 	public static CompoundTag bedSnapshot(VerdantBedBlockEntity bed, ServerLevel level) {
 		CompoundTag snapshot = new CompoundTag();
 		snapshot.putInt("nutrients", bed.nutrients());
@@ -168,6 +251,14 @@ public enum ConcordanceDataProvider implements IServerDataProvider<BlockAccessor
 		}
 		snapshot.putString("growth", bed.growth());
 		snapshot.putString("reasons", String.join("\n", bed.reasons()));
+		int strain = bed.strainNow();
+		if (strain > 0) {
+			snapshot.putInt("strain", strain);
+		}
+		// Concordance Chunk C (C-09): the graft it carries, when the rules know it (named on the client).
+		if (Garden.catalog().graft(bed.graft()) != null) {
+			snapshot.putString("graft", bed.graft());
+		}
 		return snapshot;
 	}
 

@@ -76,18 +76,21 @@ MATRIX = {
         "Animated blocks and creatures driven by the status the server sends: Circle Anchor, Alembic Crucible (with "
         "its liquid at its volume), Verdant Heart, Mulch Maw, Gleaner, Orrery Observatory, Reliquary Shrine, Spire "
         "Heart, Oneiric Censer; Hearthling, Gathering Shade, Clockwork Porter and dream wisps; the two fire sets "
-        "worn as the owner's armour model, each in its own texture (Jugcraft's first GeckoLib armour)",
+        "and the three water sets worn as the owner's armour models, each in its own texture (Jugcraft's first GeckoLib "
+        "armour; Winterguard's on its own model)",
         "required",
-        ["ConcordancePresentationClientGameTests", "aPorterShowsOnceWhatItLacks", "ConcordanceEmberGearClientGameTests"],
-        "Seen only in CI's small screenshot previews; frame cost of a large installation not measured; the sets' glint "
-        "is a Jugcraft layer, and vanilla trims are not drawn on them"),
+        ["ConcordancePresentationClientGameTests", "aPorterShowsOnceWhatItLacks", "ConcordanceEmberGearClientGameTests",
+         "ConcordanceWinterClientGameTests"],
+        "Seen only in CI's small screenshot previews, the water sets since unit 4's client test passed in CI (run "
+        "38549876709, Chunk B, not merged); frame cost of a large installation not measured; the sets' glint is a "
+        "Jugcraft layer, and vanilla trims are not drawn on them"),
     "player-animation-library": (
         "Original cast and release gestures for the invocations; the circle participants' channelling gesture; the "
         "Vigil's offering gesture, sent by the server when an offering is made; none of them plays over a gun or an "
         "arm in the main hand, on any player the client sees (CastPoses)",
         "required",
         ["aCastGivesWayToAGunOrAnArm"],
-        "No person has looked at the gestures; giving way has a test, added but not yet run, for Spell Engine's "
+        "No person has looked at the gestures; giving way has a test, passed in CI since Chunk A, for Spell Engine's "
         "release clip and the Vigil's gesture on the client's own player; it does not cover the fade of an ended "
         "cast, another player's view (a second client, not run) or the circle's gesture"),
     "modonomicon": (
@@ -126,15 +129,19 @@ MATRIX = {
     "spell-power": (
         "Schools name each Principle's damage type, so resistances apply once; the Lance scales with arcane Spell "
         "Power, Cinderbolt and Hearthflare with fire; Resonant Rings can carry arcane Spell Power, the Ember foci and "
-        "the two fire sets fire; Spell Power's attribute enchantments are refused on the sets",
+        "the two fire sets fire; Spell Power's attribute enchantments are refused on the sets; the water sets carry "
+        "none, and Spell Power's attribute enchantments are refused on them too",
         "required",
         ["lanceStrikesAndScalesWithSpellPower", "everyStatisticIsARealAttribute", "cinderboltBurnsAndGrowsWithFireSpellPower",
-         "theRegaliaRaisesTheFireToItsCeiling", "spellPowerEnchantmentsAreRefusedOnTheSet"],
-        "Concordance damage adds Spell Power's points only, not its critical hits"),
+         "theRegaliaRaisesTheFireToItsCeiling", "spellPowerEnchantmentsAreRefusedOnTheSet",
+         "spellPowerEnchantmentsAreRefusedOnTheWaterSets"],
+        "Concordance damage adds Spell Power's points only, not its critical hits; unit 4's water-set test passed in "
+        "CI (run 38549876709, Chunk B, not merged)"),
     "trinkets-updated": (
         "Resonant Rings in the ring slot and the Hearthstone in the necklace slot, both given by data; the owner's "
-        "Spell Focus and Bracelet slots, ported from their Curios data, for the Ember foci and the Fire Bangle; a ring's "
-        "and a focus's modifiers through Trinkets' callback; relics and the bangle read from the slots on the server; "
+        "Spell Focus and Bracelet slots, ported from their Curios data, for the Ember foci, the Fire Bangle, the water "
+        "foci and the Water Bangle; a ring's and a focus's modifiers through Trinkets' callback; relics and the bangle "
+        "read from the slots on the server; "
         "Wayfaring's Belt, Charm and Feet slots, with named callback modifiers, a slot-count attribute and Relic Lore's "
         "canEquip; the Leather Belt and Amphibian Boot drawn on the wearer by Trinkets' data-driven renderer (a render "
         "definition and block models from the owner's worn sheets), through Jugcraft's own render element, which hides "
@@ -142,9 +149,11 @@ MATRIX = {
         "required",
         ["relicsAreFoundInTrinketSlots", "gemsRunesAndBondsKeepTheirRules", "theFociGiveFireSpellPowerThroughTrinkets",
          "theBangleLeavesAHearthbindersBlowSmouldering", "ConcordanceEmberGearClientGameTests",
-         "theTrinketsAreMadeAndWornAsDesigned", "ConcordanceWayfaringClientGameTests"],
+         "theTrinketsAreMadeAndWornAsDesigned", "ConcordanceWayfaringClientGameTests", "theWaterFociLengthenPreservesHold",
+         "theWaterBangleBracesARimekeeperEveryThirtySeconds"],
         "Cosmetic slots count as worn for show only; of the worn things only the belt and boot are drawn on the body, "
-        "in third person only, and seen so far only in CI's client screenshots"),
+        "in third person only, and seen so far only in CI's client screenshots; unit 4's foci and bangle tests passed "
+        "in CI (run 38549876709, Chunk B, not merged), but no shot shows them in their slots"),
     "cloth-config": (
         "The Concordance settings screen: the Focus line, reduced motion, exact values, the simple journal, visual "
         "intensity and whether your worn trinkets are shown",
@@ -154,20 +163,27 @@ MATRIX = {
         "choice, which the client sends to the server"),
     "jade": (
         "Readouts from server snapshots: bench study, lantern Radiance, sconce charge, circle phase and faults, pylon "
-        "charge, crucible state, beds and crops, living devices, observatory, workers, courier posts, shrines",
+        "charge, crucible state and Preserve's hold, beds and crops, living devices, observatory, workers, courier posts, "
+        "shrines; since Concordance Chunk C (not merged), a crucible's reason and tank, a circle's needs, spending and "
+        "held offerings, the Crucible Stand, a bed's strain and graft",
         "nothing shown on looking; the same facts come from the journal, the commands and each device's own messages",
-        ["benchStudyUnderstandsFirstLight"],
-        "Server tests run without Jade in CI's optional-absent job; its overlay has not been seen in a client"),
+        ["benchStudyUnderstandsFirstLight", "preserveHoldsOneBandAndExpires", "jadeIsToldTheTankAndWhyNeverTheMakeup",
+         "EncyclopediaClientGameTests", "ConcordanceWorkshopClientGameTests"],
+        "Server tests run without Jade in CI's optional-absent job; CI runs no client test without it; the client tests "
+        "are written to photograph its overlay on a crucible, a stand, an anchor and a crop (Concordance Chunk C, not "
+        "merged; they pass in CI, run 38774859294); the one Jade shot viewed, the anchor's in that run, shows no Jade box "
+        "at the log's 480x270 preview size, though its snapshot assertion passed, so the overlay is still not seen in a "
+        "client; Preserve's hold, as Jade reads it, passed its test in CI's mod job (run 38519234934, Chunk B unit 3, not "
+        "merged)"),
     "jei": (
         "Recipe categories for the Lampwright's Bench, the Circle Anchor and the Resonant Ring; alchemy ingredients' "
         "properties as information (never outcomes); since Concordance Chunk A, an information page each on where the "
-        "Adept's Wand and Vesperine's and Madame Tatterlace's loot come from (tools/acquisition.py), with the default "
-        "data's chances and offerings",
+        "Adept's Wand and the lair bosses' loot come from (tools/acquisition.py: Vesperine's and Madame Tatterlace's, "
+        "and the Yeti King's and the Cinder Tyrant's since Chunk B), with the default data's chances and offerings",
         "no JEI pages; the codex's recipe pages remain",
         [],
         "Its pages have not been seen in a client; the information pages are written from the default data, so a "
-        "server data pack that changes a recipe, a boss's loot table or the Adept's Attunement is not shown; Chunk A's "
-        "information pages are not compiled yet"),
+        "server data pack that changes a recipe, a boss's loot table or the Adept's Attunement is not shown"),
     "modmenu": (
         "Opens the Concordance settings screen from the mod list",
         "the Concordance settings key (unbound by default, in Controls) opens the same screen",

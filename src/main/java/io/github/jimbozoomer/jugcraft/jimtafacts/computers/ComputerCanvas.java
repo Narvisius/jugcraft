@@ -12,13 +12,27 @@ public final class ComputerCanvas {
     private boolean active;
     public ComputerCanvas(){Arrays.fill(text,' ');Arrays.fill(foreground,'0');Arrays.fill(background,'f');}
     public boolean active(){return active;}
+    public int cursorX(){return x+1;}
+    public int cursorY(){return y+1;}
+    public int foregroundColor(){return ink;}
+    public int backgroundColor(){return paper;}
     public String text(){return new String(text);}
     public String foreground(){return new String(foreground);}
     public String background(){return new String(background);}
     public void deactivate(){active=false;}
+    /** Lua terminals may put their cursor outside the screen; drawing clips instead of wrapping. */
+    public void terminalCursor(int x,int y){this.x=Math.clamp(x,-32767,32767)-1;this.y=Math.clamp(y,-32767,32767)-1;active=true;}
     public void cursor(int x,int y){if(x<1||x>WIDTH||y<1||y>HEIGHT)throw new IllegalArgumentException("Cursor: 1..48 columns, 1..24 rows.");this.x=x-1;this.y=y-1;active=true;}
     public void ink(int foreground,int background){ink=Math.clamp(foreground,0,15);paper=Math.clamp(background,0,15);}
     public void clear(){Arrays.fill(text,' ');Arrays.fill(foreground,Character.forDigit(ink,16));Arrays.fill(background,Character.forDigit(paper,16));x=y=0;active=true;}
+    public void clearLine(){if(y<0||y>=HEIGHT)return;int start=y*WIDTH;Arrays.fill(text,start,start+WIDTH,' ');Arrays.fill(foreground,start,start+WIDTH,Character.forDigit(ink,16));Arrays.fill(background,start,start+WIDTH,Character.forDigit(paper,16));active=true;}
+    public void terminalWrite(String value){
+        if(value.length()>512)throw new IllegalArgumentException("Write at most 512 characters.");
+        for(char c:value.toCharArray()){
+            if(x>=0&&x<WIDTH&&y>=0&&y<HEIGHT){int i=y*WIDTH+x;text[i]=c>=32&&c<=126?c:'?';foreground[i]=Character.forDigit(ink,16);background[i]=Character.forDigit(paper,16);}
+            x=Math.min(32767,x+1);
+        }active=true;
+    }
     public void scroll(int rows){
         if(rows<-HEIGHT||rows>HEIGHT)throw new IllegalArgumentException("Scroll: -24..24 rows.");
         if(rows==0)return;
@@ -39,7 +53,7 @@ public final class ComputerCanvas {
     public void blit(String value,String front,String back){
         if(value.length()>WIDTH||front.length()!=value.length()||back.length()!=value.length())throw new IllegalArgumentException("Blit needs text and two equal-length hexadecimal color strings (max 48).");
         for(int i=0;i<value.length();i++)if(Character.digit(front.charAt(i),16)<0||Character.digit(back.charAt(i),16)<0)throw new IllegalArgumentException("Blit colors must be hexadecimal 0..f.");
-        for(int i=0;i<value.length()&&x<WIDTH;i++){int cell=y*WIDTH+x++;char c=value.charAt(i);text[cell]=c>=32&&c<=126?c:'?';foreground[cell]=Character.toLowerCase(front.charAt(i));background[cell]=Character.toLowerCase(back.charAt(i));}active=true;
+        for(int i=0;i<value.length();i++){if(x>=0&&x<WIDTH&&y>=0&&y<HEIGHT){int cell=y*WIDTH+x;char c=value.charAt(i);text[cell]=c>=32&&c<=126?c:'?';foreground[cell]=Character.toLowerCase(front.charAt(i));background[cell]=Character.toLowerCase(back.charAt(i));}x=Math.min(32767,x+1);}active=true;
     }
     public void save(ValueOutput out){out.putBoolean("canvas_active",active);out.putString("canvas_text",text());out.putString("canvas_fore",foreground());out.putString("canvas_back",background());out.putInt("canvas_x",x);out.putInt("canvas_y",y);out.putInt("canvas_ink",ink);out.putInt("canvas_paper",paper);}
     public void load(ValueInput in){

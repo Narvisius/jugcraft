@@ -138,7 +138,8 @@ readability judged by a person at other GUI scales (the screenshots are there).
 ### Known defects and limits
 
 - The Yeti King and the Cinder Tyrant (on main through #320) credit damage only: no support credit, no rewards kept
-  for the fallen or the away, no encyclopedia dossier, no JEI acquisition pages (Deferrals).
+  for the fallen or the away, no encyclopedia dossier, no JEI acquisition pages (Deferrals). (Taken up in Concordance
+  Chunk B, unit 1: [record](concordance-chunk-b.md).)
 - Outside this chunk: Jugcraft's older keys Party (P) and Reload (G) share their defaults with vanilla 26.3's Social
   Interactions (P) and Quick Actions (G).
 
@@ -157,7 +158,8 @@ encounter credit, the dossiers and JEI's pages, which Chunk B's B3 (Yeti rewards
 - The Yeti King and the Cinder Tyrant, which reached main after this chunk began, are not yet part of it: they credit
   damage alone (no support credit, no rewards kept for the fallen or the away), the encyclopedia has no dossier for the
   Glacier Hall or the Cinder Kiln, and JEI has no acquisition pages for their loot. Bringing them in is the natural
-  next step (a decision for the owner at the checkpoint).
+  next step (a decision for the owner at the checkpoint). (Taken up in Concordance Chunk B, unit 1:
+  [record](concordance-chunk-b.md).)
 
 ## Decisions
 

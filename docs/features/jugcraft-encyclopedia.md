@@ -102,7 +102,11 @@ No reward economy, repeatable material farm or new currency is approved by this 
 - **Return:** opened from the game, Esc, the key and Done return to the game; opened from the inventory, Esc, the key
   and Back open a fresh inventory.
 - **Pages:** Discover (the First Light route, then the journal's research and stage reports), Spellcraft, Expeditions
-  (lair dossiers), Inspect (a Circle Anchor or Ley Pylon looked at) and Keys. A page with nothing to show is left out.
+  (lair dossiers), Inspect (a Circle Anchor or Ley Pylon looked at, or, since Concordance Chunk C, an Alembic Crucible,
+  or a Verdant Bed or a crop, within reach; on an anchor, since Chunk C, the readiness of the rite its offerings answer,
+  what a running one has spent and holds, the last attempt, and the stage and payment table; on a bed or a crop, since
+  Chunk C unit 4 (not merged), each factor of the habitat against the plant's niche with how far its reading reaches,
+  and a graft the bed carries) and Keys. A page with nothing to show is left out.
 - **The route's honesty:** steps and ways are labelled in words and shapes as well as colour; required, recommended,
   trade and after-a-boss ways are kept apart; every recipe shown is the server's own, and one the server lacks is never
   advertised.
@@ -173,3 +177,28 @@ no research or items. Modonomicon and the journal retain their own server-unlock
 The community prototype was authored with Claude; reconciliation and testing fixes use OpenAI Codex (GPT-6).
 Combined verification is recorded in the October 13 integration record. Route canvas, quests, and human multiplayer
 acceptance remain future work.
+
+Concordance Chunk B, unit 5 (B-11, B-P58; [the contract](concordance-chunk-b.md); not merged): the guides' home shows
+each route card whole. In run 38519234934 (CI's 427×240 GUI) the Magic card's link was cut to "Open Magic: the Arcane
+Concorda…" and both cards' overviews stopped mid-line, and by the layout's arithmetic (not seen) 1920×1080 at the
+automatic GUI scale stops the overviews too. Now each card is as tall as its whole overview and its whole "Open" link,
+the link wraps to the card, and the cards scroll (the wheel, a scroll bar in the panel's right margin, or Tab, which
+shows the card it reaches from its top) in the shared `ComposerScroll` when they are taller than the room below the
+introduction; windows where they fitted look as before (`d22a55830`). `check_encyclopedia_routes` requires the wrapped
+link, no scissor in the card and the scrolling body.
+`EncyclopediaRoutesClientGameTests` checks every card's lines against its height, its whole title and link, and its foot
+within the body's reach, on opening, after Tab, scrolled to the end and at GUI scale 1, with the shots
+`jugcraft_encyclopedia_home`, `jugcraft_encyclopedia_home_end` and `jugcraft_encyclopedia_home_scale1`; it passed in CI
+(run 38591108210 on `25644502a`, shard 1). At CI's size the first of them still shows text cut at the scrolling body's
+edge beside a scroll bar: that is the scrolling. In that run's previews `_home_end` shows each card's last paragraph and
+its link whole, "Open Magic: the Arcane Concordance ›" wrapped onto two lines, and `_home_scale1` both cards whole with
+each link on one line and no scroll bar to be seen. The
+stacked layout (a GUI narrower than 384) is not exercised. AI-assisted implementation with Claude Code; the model is named in the commit trailers.
+
+**Merge note (23 October 2026).** Merging main f904df3fd (#415's book-style guides directory) into Chunk B replaced
+these cards; the card fix (`d22a55830`), its `check_mod_data` check and the `_home_end`/`_home_scale1` shots were dropped
+in the merge, and the paragraph above is history. On main's directory the home is two title tabs and a route's overview
+is a wrapped paragraph in a scrolling page; `check_encyclopedia_routes` now requires that scrolling page and paragraph.
+Known limit, calculated and not yet seen in a screenshot: the home tab (`BookArt.Tab`) cuts its label with "…", and at
+CI's 427×240 GUI it leaves 134 pixels for a title, so "Magic: the Arcane Concordance" (about 158 by the font's widths)
+will be cut there.

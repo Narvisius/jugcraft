@@ -59,7 +59,7 @@ public final class FluidNetworks {
 				break;
 			}
 			BlockPos neighbor = pos.relative(side);
-            if (!ClaimTransfers.allowed(level, pos, neighbor)) continue;
+            if (!ClaimTransfers.allowed(level, pos, neighbor) || !io.github.jimbozoomer.jugcraft.jimtafacts.industry.TransportAttachments.openEdge(level, pos, side)) continue;
 			BlockState neighborState = level.getBlockState(neighbor);
 			if (neighborState.getBlock() instanceof FluidPipeBlock pipe) {
 				if (!pipe.carries(neighborState)) {
@@ -119,7 +119,7 @@ public final class FluidNetworks {
 				network.directed |= current.directionalRouting();
 				for (Direction direction : Direction.values()) {
 					BlockPos next = pipe.relative(direction).immutable();
-                    if (!level.hasChunkAt(next) || !ClaimTransfers.allowed(level, pipe, next)) continue;
+                    if (!level.hasChunkAt(next) || !ClaimTransfers.allowed(level, pipe, next) || !io.github.jimbozoomer.jugcraft.jimtafacts.industry.TransportAttachments.openEdge(level, pipe, direction)) continue;
 					BlockState nextState = level.getBlockState(next);
 					if (!current.routesTo(own, direction, nextState)) continue;
 					if (nextState.getBlock() instanceof FluidPipeBlock nextPipe) {

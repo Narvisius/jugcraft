@@ -99,6 +99,9 @@ public class ItemPipeBlock extends PipeBlock implements ItemConnectable {
 	 * World generation has no full level to query, so there only the marker interface counts.
 	 */
 	public static boolean connectsTo(BlockGetter level, BlockPos pos, Direction direction, BlockState neighbor) {
+        if(io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialTransport.BLOCKS.containsValue(neighbor.getBlock())
+                &&!net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(neighbor.getBlock()).getPath().endsWith("_item"))return false;
+        if(!io.github.jimbozoomer.jugcraft.jimtafacts.industry.TransportAttachments.openEdge(level,pos,direction))return false;
 		BlockState own = level.getBlockState(pos);
 		if (own.getBlock() instanceof ItemPipeBlock pipe && neighbor.getBlock() instanceof ItemPipeBlock next
 				&& (!pipe.joins(own, neighbor) || !next.joins(neighbor, own))) return false;

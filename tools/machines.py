@@ -677,7 +677,7 @@ def _crusher():
                                 "count": 1, "ticks": 200, "features": [FEATURE, info["feature"]]})
             continue
         for ore in (f"jugcraft:{mineral}_ore", f"jugcraft:deepslate_{mineral}_ore"):
-            recipes.append({"input": ore, "output": f"jugcraft:{mineral}", "count": info["drops"][1] + 1,
+            recipes.append({"input": ore, "output": info.get("vanilla_item", f"jugcraft:{mineral}"), "count": info["drops"][1] + 1,
                             "ticks": 160, "features": [FEATURE, info["feature"]], "ore": True})
     recipes += [
         {"input": "minecraft:sulfur", "output": "jugcraft:sulfur_dust", "count": 6, "ticks": 100,

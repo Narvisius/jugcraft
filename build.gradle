@@ -52,7 +52,16 @@ if (frameworkLock.minecraft != project.minecraft_version || frameworkLock.fabric
 }
 def withOptionalIntegrations = providers.gradleProperty("jugcraftOptionalIntegrations").getOrElse("true").toBoolean()
 
+// Embedded runtimes share exact pins with the framework lock; they are not separate player mods.
+frameworkLock.embeddedLibraries?.each { library ->
+    repositories.maven { url = library.repository; content { includeGroup library.maven.split(':')[0] } }
+}
+
 dependencies {
+    frameworkLock.embeddedLibraries?.each { library ->
+        implementation(library.maven) { transitive = false }
+        include(library.maven) { transitive = false }
+    }
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
@@ -276,3 +285,24 @@ jar {
 		rename { "${it}_${inputs.properties.archivesName}" }
 	}
 }
+
+// Verify embedded runtime bytes before either resource packaging or Java compilation.
+tasks.register('verifyEmbeddedLibraries') {
+    doLast {
+        frameworkLock.embeddedLibraries?.each { library ->
+            def dependency = dependencies.create(library.maven) { transitive = false }
+            def artifact = configurations.detachedConfiguration(dependency).singleFile
+            def digest = java.security.MessageDigest.getInstance('SHA-256')
+            artifact.withInputStream { stream ->
+                byte[] buffer = new byte[65536]
+                int count
+                while ((count = stream.read(buffer)) != -1) { digest.update(buffer, 0, count) }
+            }
+            if (digest.digest().encodeHex().toString() != library.sha256) {
+                throw new GradleException("Embedded runtime checksum mismatch: ${library.key}")
+            }
+        }
+    }
+}
+tasks.named('compileJava') { dependsOn 'verifyEmbeddedLibraries' }
+tasks.named('processResources') { dependsOn 'verifyEmbeddedLibraries' }

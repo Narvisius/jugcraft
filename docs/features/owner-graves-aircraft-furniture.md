@@ -17,7 +17,8 @@ The town fixes below already shipped in `0.1.0-alpha.20261022.3`. This candidate
 The original owner's marker model/textures are retained. Jugcraft captures native death drops after Minecraft has applied death rules, rather than clearing inventories in a generic death event.
 
 - Personal `/jugcraft keepinventory`, global keep-inventory, spectator deaths and boss-lair dimensions bypass ordinary graves.
-- Boss-lair item recovery uses the same exact native death-stack interception, routing stacks into the existing Grave Goods attachment instead of a grave. It no longer relies on finding newly spawned item entities nearby, and cannot collect an unrelated nearby item as the dead player's belongings.
+- A boss-lair death keeps everything in place, as keepInventory does, there only ([lair-keep-inventory.md](lair-keep-inventory.md)). Armour, offhand, Trinkets slots, hotbar layout and all experience stay with the player, so nothing normally drops there.
+- Anything still dropped in a lair (by another mod, say) goes through the same exact native death-stack interception. It is routed into the existing Grave Goods attachment instead of a grave. It does not rely on finding newly spawned item entities nearby, and cannot collect an unrelated nearby item as the dead player's belongings.
 - Grave Goods are returned on the server tick after respawn, once Fabric has copied the player's death-persistent attachments. This also recovers retained goods on an alive player's reconnect outside a lair; clearing the attachment prevents repeat collection.
 - Totem saves do not run the death-drop capture. Vanishing and accessory drop rules still run before capture.
 - Main inventory, equipment, offhand and actual dropped accessories are stored in world saved data with their complete item components.

@@ -812,6 +812,8 @@ def crop_textures():
     out.update(iron_dreadnought_textures())
     from alpha_werewolf_art import alpha_werewolf_textures  # and the Alpha Werewolf, and his loot
     out.update(alpha_werewolf_textures())
+    from pumpkin_king_art import pumpkin_king_textures  # and the Pumpkin King, his Jacks, head and pumpkin, and his loot
+    out.update(pumpkin_king_textures())
     from cydonian_sentinel_art import cydonian_sentinel_textures  # and the Cydonian Sentinel, its sentries, shards,
     out.update(cydonian_sentinel_textures())                      # spikes and meteors, and its loot
     from orchard_textures import orchard_textures  # and the orchards' fruit trees

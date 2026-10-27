@@ -1,0 +1,38 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:alembic/winter_brine",
+  "category": "jugcraft:alembic",
+  "x": 4,
+  "y": 2,
+  "name": "book.jugcraft.arcane_concordance.alembic.winter_brine.name",
+  "description": "book.jugcraft.arcane_concordance.alembic.winter_brine.description",
+  "icon": "minecraft:snowball",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/square_gray",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:research_node_unlocked",
+    "node_id": "jugcraft:concordance/alembic_arts_observed",
+    "tooltip": {
+      "translate": "book.jugcraft.arcane_concordance.locked.alembic_arts.observed"
+    }
+  },
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "id": "p0",
+      "title": "book.jugcraft.arcane_concordance.alembic.winter_brine.p0.title",
+      "text": "book.jugcraft.arcane_concordance.alembic.winter_brine.p0.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p1",
+      "title": "book.jugcraft.arcane_concordance.alembic.winter_brine.p1.title",
+      "text": "book.jugcraft.arcane_concordance.alembic.winter_brine.p1.text",
+      "show_title_separator": true
+    }
+  ]
+}

@@ -40,6 +40,76 @@ public final class ComputerPeripherals {
         if (port == null) throw new IllegalArgumentException("Unknown, disconnected or protected port. Run ports to list names.");
         return port;
     }
+    /** Stable slot indices are exposed only by actual slotted adapters, not arbitrary storage iteration order. */
+    private static SlottedStorage<ItemVariant> slots(Port port,ServerPlayer player){
+        var storage=ItemStorage.SIDED.find(player.level(),port.pos,port.side);
+        if(!(storage instanceof SlottedStorage<ItemVariant> slotted)||slotted.getSlotCount()>128)
+            throw new IllegalArgumentException("Peripheral requires a slotted inventory with at most 128 slots");
+        return slotted;
+    }
+    public static String lua(ComputerNode computer,ServerPlayer player,String request){
+        var args=request.split("\t",-1);
+        if(args.length==1&&args[0].equals("names"))return String.join("\n",ports(computer,player).keySet());
+        if(args.length<2||args.length>6)throw new IllegalArgumentException("Invalid peripheral call");
+        var source=port(computer,player,args[0]);String method=args[1];
+        if(method.equals("type"))return ItemStorage.SIDED.find(player.level(),source.pos,source.side) instanceof SlottedStorage<?>?"inventory":FluidStorage.SIDED.find(player.level(),source.pos,source.side)!=null?"fluid_storage":"item_storage";
+        if(method.equals("tanks")){
+            var fluid=FluidStorage.SIDED.find(player.level(),source.pos,source.side);if(fluid==null)throw new IllegalArgumentException("Not a fluid peripheral");
+            var result=new StringBuilder();int slot=0;
+            for(var view:fluid){if(++slot>128)throw new IllegalArgumentException("Tank has more than 128 views");if(view.isResourceBlank()||view.getAmount()==0)continue;
+                String row=slot+"\t"+BuiltInRegistries.FLUID.getKey(view.getResource().getFluid())+"\t"+(view.getAmount()/81)+"\n";
+                if(result.length()+row.length()>4096)throw new IllegalArgumentException("Tank listing exceeds reply budget");result.append(row);
+            }return result.toString();
+        }
+        if(method.equals("pushFluid")||method.equals("pullFluid")){
+            if(args.length<3||args.length>5)throw new IllegalArgumentException("Fluid transfer requires another port, optional millibuckets and fluid id");
+            var other=port(computer,player,args[2]);
+            if(source.pos.equals(other.pos)||!ClaimTransfers.allowed(player.level(),source.pos,other.pos))throw new IllegalArgumentException("Protected or identical transfer endpoints");
+            var fromPort=method.equals("pushFluid")?source:other;var toPort=method.equals("pushFluid")?other:source;
+            var from=FluidStorage.SIDED.find(player.level(),fromPort.pos,fromPort.side);var to=FluidStorage.SIDED.find(player.level(),toPort.pos,toPort.side);
+            if(from==null||to==null)throw new IllegalArgumentException("Both endpoints need fluid storage");
+            int amount=args.length>=4?Integer.parseInt(args[3]):1000;if(amount<1||amount>1000)throw new IllegalArgumentException("Transfer 1..1000 mB per call");
+            if(computer.energy.getAmount()<10)throw new IllegalArgumentException("Fluid transfer needs 10 JE");
+            int scanned=0;for(var view:from){if(++scanned>128)throw new IllegalArgumentException("Tank has more than 128 views");if(view.isResourceBlank())continue;
+                var fluid=view.getResource();if(args.length==5&&!BuiltInRegistries.FLUID.getKey(fluid.getFluid()).toString().equals(args[4]))continue;
+                try(var tx=Transaction.openOuter()){
+                    long fit;try(var probe=tx.openNested()){fit=to.insert(fluid,Math.min(amount*81L,view.getAmount()),probe);}
+                    fit=fit/81*81;if(fit==0)continue;
+                    long taken=view.extract(fluid,fit,tx);if(taken!=fit||to.insert(fluid,taken,tx)!=taken||computer.energy.extract(10,tx)!=10)continue;
+                    tx.commit();return Long.toString(taken/81);
+                }
+            }return "0";
+        }
+        var storage=slots(source,player);
+        if(method.equals("size"))return Integer.toString(storage.getSlotCount());
+        if(method.equals("list")){
+            var result=new StringBuilder();
+            for(int i=0;i<storage.getSlotCount();i++){
+                var slot=storage.getSlot(i);if(slot.isResourceBlank()||slot.getAmount()<=0)continue;
+                String row=(i+1)+"\t"+BuiltInRegistries.ITEM.getKey(slot.getResource().getItem())+"\t"+slot.getAmount()+"\n";
+                if(result.length()+row.length()>4096)throw new IllegalArgumentException("Inventory listing exceeds Lua reply budget");result.append(row);
+            }
+            return result.toString();
+        }
+        if(!method.equals("pushItems")&&!method.equals("pullItems")||args.length<4)throw new IllegalArgumentException("Unknown inventory method");
+        var other=port(computer,player,args[2]);
+        if(source.pos.equals(other.pos)||!ClaimTransfers.allowed(player.level(),source.pos,other.pos))throw new IllegalArgumentException("Protected or identical transfer endpoints");
+        var otherStorage=slots(other,player);
+        var from=method.equals("pushItems")?storage:otherStorage;var to=method.equals("pushItems")?otherStorage:storage;
+        int index=Integer.parseInt(args[3])-1,limit=args.length>=5?Integer.parseInt(args[4]):64;
+        int destination=args.length>=6?Integer.parseInt(args[5])-1:-1;
+        if(index<0||index>=from.getSlotCount()||limit<1||limit>64||destination< -1||destination>=to.getSlotCount())throw new IllegalArgumentException("Invalid slot/count; maximum 64 items per call");
+        if(computer.energy.getAmount()<10)throw new IllegalArgumentException("Inventory transfer needs 10 JE");
+        var input=from.getSlot(index);if(input.isResourceBlank())return "0";var item=input.getResource();
+        Storage<ItemVariant> output=destination<0?to:to.getSlot(destination);
+        try(var tx=Transaction.openOuter()){
+            long fit;try(var probe=tx.openNested()){fit=output.insert(item,Math.min(limit,input.getAmount()),probe);}
+            if(fit==0)return "0";
+            long taken=input.extract(item,fit,tx);
+            if(taken==0||output.insert(item,taken,tx)!=taken||computer.energy.extract(10,tx)!=10)return "0";
+            tx.commit();return Long.toString(taken);
+        }
+    }
     public static long count(ComputerNode computer,ServerPlayer player,String name,String itemId){
         var port=port(computer,player,name);var id=net.minecraft.resources.Identifier.tryParse(itemId);
         if(id==null||!BuiltInRegistries.ITEM.containsKey(id))throw new IllegalArgumentException("Unknown item identifier.");

@@ -36,6 +36,8 @@ saved data. `true` keeps inventory, armour, offhand, XP and worn Trinkets slots
 uses the ordinary server gamerule. It does not force drops when global
 keep-inventory is already enabled. The global gamerule is never changed, even
 temporarily, so two players can have different death outcomes at the same time.
+Everyone keeps everything when they die in a lair (a boss fight), whatever their
+personal setting: the same rule answers for lairs too ([lair-keep-inventory.md](lair-keep-inventory.md)).
 
 ## Solo and party land
 

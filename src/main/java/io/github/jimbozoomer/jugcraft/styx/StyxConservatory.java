@@ -4,6 +4,7 @@ import com.google.gson.JsonParser;
 import io.github.jimbozoomer.jugcraft.town.Town;
 import io.github.jimbozoomer.jugcraft.town.TownBuilder;
 import io.github.jimbozoomer.jugcraft.town.TownData;
+import io.github.jimbozoomer.jugcraft.town.TownState;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -89,6 +90,30 @@ public final class StyxConservatory {
 			if(!state.isAir() && !state.canBeReplaced() && !(y==0 && (state.is(BlockTags.DIRT) || state.is(Blocks.GRASS_BLOCK)))) return "Clear a level "+WIDTH+" x "+DEPTH+" area with "+HEIGHT+" blocks of headroom first. Obstruction: "+BuiltInRegistries.BLOCK.getKey(state.getBlock())+" at "+p.toShortString()+" (floor "+origin.getY()+").";
 		}
 		return "";
+	}
+	/**
+	 * Concordance Chunk D, D-04 (D-S15): whether {@code pos} lies in Styx's home: the conservatory's whole footprint
+	 * (whichever layout it was built in, from a block below its floor to its roof) or, for a home the town built, the
+	 * district and road the town protects. No pact perch is placed there. Saved data only: no chunk is read or loaded.
+	 */
+	public static boolean covers(ServerLevel level, BlockPos pos) {
+		if (level.dimension() != Level.OVERWORLD) {
+			return false;
+		}
+		StyxState state = StyxState.get(level);
+		if (state.origin.isEmpty()) {
+			return false;
+		}
+		BlockPos origin = state.origin.get();
+		Blueprint plan = blueprint(state.layout);
+		int x = pos.getX() - origin.getX(), y = pos.getY() - origin.getY(), z = pos.getZ() - origin.getZ();
+		if (x >= 0 && x < plan.width() && y >= -1 && y < plan.height() && z >= 0 && z < plan.depth()) {
+			return true;
+		}
+		BlockPos town = state.townHome ? TownState.get(level).origin() : null;
+		int dy = town == null ? 0 : pos.getY() - town.getY();
+		return town != null && dy >= -Town.PROTECT_BELOW && dy <= Town.PROTECT_ABOVE
+				&& StyxTownDistrict.contains(pos.getX() - town.getX(), pos.getZ() - town.getZ());
 	}
 	public static boolean begin(ServerLevel level,BlockPos origin) {
 		if(!canPlace(level,origin).isEmpty()) return false;

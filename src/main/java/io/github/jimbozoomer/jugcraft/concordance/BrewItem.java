@@ -1,5 +1,8 @@
 package io.github.jimbozoomer.jugcraft.concordance;
 
+import io.github.jimbozoomer.jugcraft.concordance.alchemy.Product;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -12,6 +15,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Prediction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -26,10 +31,27 @@ import net.minecraft.world.level.Level;
  * A draught is drunk (its container is a glass bottle); a salve is used on a creature, or on oneself while sneaking,
  * and leaves its bowl. Either way the effects go through the shared effect executor ({@link Alchemy#apply}): someone
  * applying a salve to another is its actor (friendly-fire rules apply); a draught drunk, or a salve on oneself, has no
- * actor, so a harmful dose reaches the one who takes it, as a potion would.
+ * actor, so a harmful dose reaches the one who takes it, as a potion would. A Stillroot Poultice put on another player
+ * tells the {@link Observer}s when its Regeneration takes (Concordance Chunk C, C-02).
  */
 public class BrewItem extends Item {
+	private static final List<Observer> OBSERVERS = new CopyOnWriteArrayList<>();
 	private final boolean salve;
+
+	/**
+	 * Told when a Stillroot Poultice one player put on another player took (Concordance Chunk C, C-02): that player's
+	 * Regeneration began, or grew stronger or longer. Lair fights credit its heals to the one who put it on; the salve
+	 * itself knows nothing of them.
+	 */
+	@FunctionalInterface
+	public interface Observer {
+		void mended(ServerPlayer helper, ServerPlayer patient);
+	}
+
+	/** Adds an observer (at registration). */
+	public static void observe(Observer observer) {
+		OBSERVERS.add(observer);
+	}
 
 	public BrewItem(Properties properties, boolean salve) {
 		super(properties);
@@ -78,7 +100,21 @@ public class BrewItem extends Item {
 		if (brew == null || !RateGate.allow(user, "salve", 10)) {
 			return;
 		}
+		// C-02 (C-P8): a Stillroot Poultice put on another player, known before the dose is used up, and their Regeneration
+		// as it was, kept as numbers (a stronger or longer dose updates the same instance in place).
+		Product product = actor instanceof ServerPlayer && target instanceof ServerPlayer && actor != target ? Alchemy.product(stack) : null;
+		boolean poultice = product != null && Alchemy.STILLROOT_POULTICE.equals(product.id());
+		MobEffectInstance had = poultice ? target.getEffect(MobEffects.REGENERATION) : null;
+		int hadLevel = had == null ? -1 : had.getAmplifier();
+		int hadTicks = had == null ? 0 : had.isInfiniteDuration() ? Integer.MAX_VALUE : had.getDuration();
 		int applied = Alchemy.apply(level, brew, target, actor);
+		MobEffectInstance has = poultice ? target.getEffect(MobEffects.REGENERATION) : null;
+		if (has != null && !has.isInfiniteDuration()
+				&& (has.getAmplifier() > hadLevel || has.getAmplifier() == hadLevel && has.getDuration() > hadTicks)) {
+			for (Observer observer : OBSERVERS) {
+				observer.mended((ServerPlayer) actor, (ServerPlayer) target);
+			}
+		}
 		stack.shrink(1);
 		user.getInventory().placeItemBackInInventory(new ItemStack(Items.BOWL), Prediction.SERVER_ONLY);
 		level.playSound(null, target.blockPosition(), SoundEvents.HONEY_BLOCK_SLIDE, SoundSource.PLAYERS, 0.6F, 1.2F);

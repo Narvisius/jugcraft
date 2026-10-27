@@ -69,17 +69,19 @@ public class PneumaticExtractorBlock extends Block implements ItemConnectable {
 		}
 		Direction facing = state.getValue(FACING);
 		BlockPos intake = pos.relative(facing);
-		if (!io.github.jimbozoomer.jugcraft.finance.ClaimTransfers.allowed(level, pos, intake)) return;
+		if (!io.github.jimbozoomer.jugcraft.jimtafacts.industry.TransportAttachments.openEdge(level,pos,facing)||!io.github.jimbozoomer.jugcraft.finance.ClaimTransfers.allowed(level, pos, intake)) return;
 		Storage<ItemVariant> source = ItemStorage.SIDED.find(level, intake, facing.getOpposite());
 		if (source == null || !source.supportsExtraction()) {
 			return;
 		}
 		long moved = 0;
+        long budget=io.github.jimbozoomer.jugcraft.jimtafacts.industry.TransportAttachments.boostedLimit(level,pos,itemsPerPull,1);
 		for (Direction side : Direction.values()) {
 			if (side != facing) {
-				moved += ItemNetworks.push(level, pos, side, source, itemsPerPull - moved, Set.of(intake));
+				moved += ItemNetworks.push(level, pos, side, source, budget - moved, Set.of(intake));
 			}
 		}
+		io.github.jimbozoomer.jugcraft.jimtafacts.industry.TransportAttachments.payBoost(level,pos,moved,itemsPerPull,1);
 	}
 
 	@Override

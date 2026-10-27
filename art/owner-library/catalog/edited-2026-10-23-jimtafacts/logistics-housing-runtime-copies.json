@@ -1,0 +1,17 @@
+{
+  "copies": [
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/industrialcraft reborn by jimbo/assets/ic2/textures/blocks/machine/blockSortingMachine.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/jimtafacts/logistics/jimta_sorting_machine.png",
+      "sha256": "52602f9c1f89c22fa54300d3b5f779114dcbec0c4761d6f68c015b17b62695be",
+      "changes": "Original atlas pixels; inactive six-face tiles selected by model UVs. No invented lit state."
+    },
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/industrialcraft reborn by jimbo/assets/ic2/textures/blocks/machine/blockItemBuffer.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/jimtafacts/logistics/jimta_item_buffer.png",
+      "sha256": "7a41eed3af095fad073128b5bbf17c70873f5d8deb3b027e0239e00b9128d18f",
+      "changes": "Original atlas pixels; inactive six-face tiles selected by model UVs. No invented lit state."
+    }
+  ],
+  "adaptation": "Sorter uses existing nine-sample native sorter and one directional destination; no legacy six-face independent sorting GUI. Buffer uses shared owned nine-slot chute, configurable outputs/intake, redstone pause and finite JE boost. Both retain native menus/claim and cargo rules."
+}

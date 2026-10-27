@@ -26,15 +26,19 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.*;
 import net.minecraft.world.phys.*;
 
-/** Saved computer state with a finite native instruction interpreter. No host files, Lua/JVM loading or HTTP. */
+/** Saved computer state with bounded native instructions and isolated Lua. No host filesystem or HTTP API. */
 public final class ComputerNode extends BlockEntity implements Container {
     public static final int MAX_LINES = 128, MAX_NETWORK = 128, INTERVAL = 5;
     private static final Map<MinecraftServer, Budget> BUDGET = new WeakHashMap<>();
     private static final Set<ComputerNode> LOADED_MODEMS = Collections.newSetFromMap(new WeakHashMap<>());
     private UUID owner;
+    private UUID computerIdentity=UUID.randomUUID();
+    private String computerLabel="";
     private NonNullList<ItemStack> items = NonNullList.withSize(18, ItemStack.EMPTY);
     private String program = "print Hello, Jugcraft!\nstop", output = "JUGCRAFT Workshop OS\nNative bounded instructions. Select Help to begin.";
     private boolean running, moving;
+    private io.github.jimbozoomer.jugcraft.jimtafacts.computers.lua.LuaProcess lua;
+    private boolean luaProgram(){return program.stripLeading().startsWith("--!lua");}
     private int cursor, waiting, selected;
     private long nextInstructionTick;
     private long animationStart = -100, nextMonitorReform;
@@ -47,8 +51,26 @@ public final class ComputerNode extends BlockEntity implements Container {
     private int displayColour=0xE5F4DF;
     private final ComputerCanvas canvas=new ComputerCanvas();
     private final ComputerWorkspace workspace=new ComputerWorkspace();
+    private String printerDraft="",printerTitle="";
+    private int printerX=1,printerY=1;
     private record Touch(BlockPos monitor,int x,int y) {}
     private final ArrayDeque<Touch> touches=new ArrayDeque<>();
+    private final ArrayDeque<String> terminalInput=new ArrayDeque<>();
+    private final ArrayDeque<String> terminalEvents=new ArrayDeque<>();
+    public void submitKey(String text){
+        if(!running||!luaProgram())throw new IllegalArgumentException("Run Lua before sending keys");
+        var parts=text.split("\t",2);if(parts.length!=2)throw new IllegalArgumentException("Invalid key event");
+        int value=Integer.parseInt(parts[1]);
+        if(!Set.of("key","key_up","char").contains(parts[0])||value<0||value>348||parts[0].equals("char")&&(value<32||value>126))throw new IllegalArgumentException("Unsupported terminal key");
+        if(terminalEvents.size()>=64)throw new IllegalArgumentException("Terminal key queue is full");
+        terminalEvents.addLast(parts[0]+"\t"+value+"\t0\t0");
+    }
+    public void submitInput(String text){
+        if(!running||!luaProgram())throw new IllegalArgumentException("Run a Lua program before sending input");
+        if(text.length()>256||text.indexOf('\n')>=0||text.indexOf('\r')>=0)throw new IllegalArgumentException("Input: one line, at most 256 characters");
+        if(terminalInput.size()>=16)throw new IllegalArgumentException("Terminal input queue is full");
+        terminalInput.addLast(text);
+    }
     private boolean visualModemActive;
     private long nextCommandTick;
     private long nextAudioTick;
@@ -61,6 +83,10 @@ public final class ComputerNode extends BlockEntity implements Container {
     public boolean turtle() { return kind().startsWith("turtle_"); }
     public boolean computer() { return kind().startsWith("computer_") || turtle(); }
     public String program() { return program; }
+    public List<String> savedPrograms(){return workspace.names();}
+    public void storeProgram(String name,String text){workspace.save(name,text);setChanged();}
+    public void loadProgram(String name){saveProgram(workspace.load(name));}
+    public void deleteProgram(String name){workspace.delete(name);setChanged();}
     public String output() {
         if (monitorAnchor != null && !monitorAnchor.equals(worldPosition) && level != null && level.isLoaded(monitorAnchor)
                 && level.getBlockEntity(monitorAnchor) instanceof ComputerNode origin) return origin.output;
@@ -128,9 +154,9 @@ public final class ComputerNode extends BlockEntity implements Container {
             throw new IllegalArgumentException("Program limit: 128 lines / 8192 characters.");
         stop(); program = text; cursor = 0; waiting = 0; setChanged();
     }
-    public void start() { if (computer()) { cursor = 0; waiting = 0; running = true; append("Program started."); setChanged(); } }
+    public void start() { if (computer()) { stop();cursor = 0; waiting = 0;running=true;try{if(luaProgram())lua=io.github.jimbozoomer.jugcraft.jimtafacts.computers.lua.LuaProcess.open(program);}catch(IllegalArgumentException failure){append(failure.getMessage());running=false;}append(running?"Program started.":"Program could not start.");setChanged(); } }
     public void stop() {
-        running = false; waiting = 0; Arrays.fill(signals, 0); setChanged();
+        running = false; waiting = 0;terminalInput.clear();terminalEvents.clear();if(lua!=null){lua.close();lua=null;} Arrays.fill(signals, 0); setChanged();
         if (level != null) {
             if (getBlockState().getValue(ComputerBlock.LIT)) level.setBlock(worldPosition, getBlockState().setValue(ComputerBlock.LIT, false), Block.UPDATE_CLIENTS);
             level.updateNeighborsAt(worldPosition, getBlockState().getBlock()); sync();
@@ -164,13 +190,14 @@ public final class ComputerNode extends BlockEntity implements Container {
         if (!running || !computer() || server.getGameTime() < nextInstructionTick
                 || Math.floorMod(server.getGameTime() + worldPosition.asLong(), INTERVAL) != 0) return;
         ServerPlayer actor = Authority.answering(server, owner);
-        if (actor == null || !permitted(actor)) return;
-        if (waiting > 0) { waiting -= INTERVAL; setChanged(); return; }
+        if (actor == null || !permitted(actor)) {if(lua!=null){append("Lua stopped because owner authority is unavailable.");stop();}return;}
+        if (waiting > 0) { waiting -= luaProgram()?1:INTERVAL; setChanged(); return; }
         Budget budget = BUDGET.computeIfAbsent(server.getServer(), ignored -> new Budget());
         if (budget.tick != server.getServer().getTickCount()) { budget.tick = server.getServer().getTickCount(); budget.operations = 0; budget.messages = 0;budget.audio=0; }
         if (budget.operations >= 64 || energy.getAmount() < 1) return;
         ++budget.operations;
-        nextInstructionTick = server.getGameTime() + INTERVAL;
+        nextInstructionTick = server.getGameTime() + (luaProgram()?1:INTERVAL);
+        if(luaProgram()){stepLua(actor);return;}
         String[] lines = program.split("\\R", -1);
         if (cursor >= lines.length || cursor >= MAX_LINES) { stop(); return; }
         String instruction = lines[cursor++].strip();
@@ -181,6 +208,147 @@ public final class ComputerNode extends BlockEntity implements Container {
             setChanged(); boolean lit = running;
             if (getBlockState().getValue(ComputerBlock.LIT) != lit) server.setBlock(worldPosition, getBlockState().setValue(ComputerBlock.LIT, lit), Block.UPDATE_CLIENTS);
         }
+    }
+
+    private void stepLua(ServerPlayer actor){
+        var worker=lua;if(worker==null){append("Lua was paused by reload. Press Run to restart explicitly.");stop();return;}
+        try{
+            var reply=worker.poll();if(reply==null)return;energy.setAmount(energy.getAmount()-1);
+            if(reply.status()==2){append("Lua finished.");stop();return;}
+            if(reply.status()==3){append("Lua: "+reply.text());stop();return;}
+            boolean success=true;String result="";
+            if(reply.status()==1){
+                var request=reply.text();
+                try{
+                    if(request.startsWith("print:"))append(request.substring(6));
+                    else if(request.equals("energy:"))result=Long.toString(energy.getAmount());
+                    else if(request.equals("kind:"))result=kind();
+                    else if(request.equals("identity:")){result=Integer.toString(computerIdentity.hashCode()&Integer.MAX_VALUE);setChanged();}
+                    else if(request.equals("label:"))result=computerLabel;
+                    else if(request.startsWith("label:")){computerLabel=bounded(request.substring(6),64);setChanged();}
+                    else if(request.equals("clock:"))result=Double.toString(level.getGameTime()/20.0);
+                    else if(request.startsWith("readfile:")){result=workspace.load(request.substring(9));if(result.length()>4096)throw new IllegalArgumentException("Lua file reads are limited to 4096 characters");}
+                    else if(request.startsWith("writefile:")){int delimiter=request.indexOf(':',10);if(delimiter<0)throw new IllegalArgumentException("Missing file content");workspace.save(request.substring(10,delimiter),request.substring(delimiter+1));setChanged();}
+                    else if(request.equals("files:"))result=String.join("\n",workspace.names());
+                    else if(request.startsWith("peripheral:"))result=luaPeripheral(actor,request.substring(11));
+                    else if(request.startsWith("terminal:"))result=luaCanvas(this,("terminal\t"+request.substring(9)).split("\t",-1));
+                    else if(request.startsWith("deletefile:")){workspace.delete(request.substring(11));setChanged();}
+                    else if(request.startsWith("existsfile:"))result=Boolean.toString(workspace.names().contains(request.substring(11)));
+                    else if(request.startsWith("signalread:")){var direction=side(request.substring(11));if(!allowed(actor,worldPosition.relative(direction)))throw new IllegalArgumentException("Protected or unloaded signal input");result=Integer.toString(actor.level().getSignal(worldPosition.relative(direction),direction));}
+                    else if(request.startsWith("signalout:"))result=Integer.toString(signals[side(request.substring(10)).ordinal()]);
+                    else if(request.equals("event:")){
+                        var key=terminalEvents.pollFirst();var line=key==null?terminalInput.pollFirst():null;var touch=key==null&&line==null?touches.pollFirst():null;
+                        if(key!=null)result=key;
+                        else if(line!=null)result="jugcraft_line\t0\t0\t"+line;
+                        else if(touch!=null)result="monitor_touch\t"+touch.monitor.toShortString()+"\t"+touch.x+"\t"+touch.y;
+                        else {var message=inbox.pollFirst();if(message!=null){replyChannel=message.reply;result="modem_message\t"+message.channel+"\t"+message.reply+"\t"+message.text;}}
+                    }
+                    else if(request.startsWith("count:")){requireTurtle();int slot=Integer.parseInt(request.substring(6));if(slot<1||slot>16)throw new IllegalArgumentException("Slot must be 1..16");result=Integer.toString(items.get(slot-1).getCount());}
+                    else if(request.equals("selected:")){requireTurtle();result=Integer.toString(selected+1);}
+                    else if(request.startsWith("detect:")){requireTurtle();var at=worldPosition.relative(side(request.substring(7)));if(!allowed(actor,at))throw new IllegalArgumentException("Protected or unloaded target");result=Boolean.toString(!level.getBlockState(at).isAir());}
+                    else if(request.equals("mail:")){var message=inbox.pollFirst();if(message==null){success=false;result="No message";}else{replyChannel=message.reply;result=message.text;}}
+
+                    else if(request.startsWith("sleep:")){double seconds=Double.parseDouble(request.substring(6));if(!Double.isFinite(seconds)||seconds<0||seconds>3600)throw new IllegalArgumentException("Invalid sleep duration");waiting=(int)Math.ceil(seconds*20);}
+                    else if(request.startsWith("exec:")){
+                        String command=request.substring(5);if(command.length()>512||command.indexOf('\n')>=0||command.indexOf('\r')>=0)throw new IllegalArgumentException("Invalid native request");
+                        String op=command.strip().split("\\s+",2)[0].toLowerCase(Locale.ROOT);
+                        if(java.util.Set.of("runfile","store","deletefile","set","add","subtract","multiply","divide","ifvar","goto","wait","if","ifmail","waittouch","receive","load").contains(op))throw new IllegalArgumentException("Use Lua control flow and explicit saved programs");
+                        execute(command,actor);
+                    }else throw new IllegalArgumentException("Unknown Lua host request");
+                }catch(IllegalArgumentException failure){success=false;result=failure.getMessage()==null?"Operation failed":failure.getMessage();}
+            }
+            if(running||moving)worker.resume(success,result.substring(0,Math.min(result.length(),4096)));
+            if(!isRemoved()){setChanged();if(running&&!getBlockState().getValue(ComputerBlock.LIT))level.setBlock(worldPosition,getBlockState().setValue(ComputerBlock.LIT,true),Block.UPDATE_CLIENTS);}
+        }catch(IllegalArgumentException|IllegalStateException failure){append("Lua stopped: "+failure.getMessage());stop();}
+    }
+
+    private Map<String,ComputerNode> luaDevices(ServerPlayer actor){
+        var result=new LinkedHashMap<String,ComputerNode>();
+        for(String prefix:List.of("monitor","speaker","wireless_modem","wired_modem","disk_drive","printer"))for(var node:devices(actor,prefix)){
+            var target=prefix.equals("monitor")?node.displayOrigin():node;
+            if(!target.permitted(actor))continue;
+            var pos=target.worldPosition;
+            result.put(prefix+"_"+pos.getX()+"_"+pos.getY()+"_"+pos.getZ(),target);
+            if(result.size()>=32)return result;
+        }
+        return result;
+    }
+    private String luaPeripheral(ServerPlayer actor,String request){
+        if(request.equals("names")){
+            var names=new LinkedHashSet<>(ComputerPeripherals.ports(this,actor).keySet());names.addAll(luaDevices(actor).keySet());return String.join("\n",names);
+        }
+        var args=request.contains("\twriteData\t")?request.split("\t",3):request.split("\t",-1);if(args.length<2)throw new IllegalArgumentException("Missing peripheral method");
+        var node=luaDevices(actor).get(args[0]);if(node==null)return ComputerPeripherals.lua(this,actor,request);
+        boolean monitor=node.kind().startsWith("monitor");String method=args[1];
+        String type=monitor?"monitor":node.kind().contains("modem")?"modem":node.kind().equals("disk_drive")?"drive":node.kind();
+        if(method.equals("type"))return type;
+        if(type.equals("modem")){
+            if(method.equals("isWireless"))return Boolean.toString(node.kind().startsWith("wireless"));
+            if(method.equals("closeAll")){channels.clear();setChanged();sync();return "";}
+            int channel=integer(args,2,0,65535);
+            switch(method){
+                case "isOpen":return Boolean.toString(channels.contains(channel));
+                case "open":if(!channels.contains(channel)&&channels.size()>=16)throw new IllegalArgumentException("At most 16 channels");channels.add(channel);break;
+                case "close":channels.remove(channel);break;
+                case "transmit":if(args.length!=5)throw new IllegalArgumentException("Channel, reply channel and message required");
+                    if(BUDGET.computeIfAbsent(actor.level().getServer(),ignored->new Budget()).messages>=8)throw new IllegalArgumentException("Radio busy; retry next tick");
+                    transmit(actor,channel,integer(args,3,0,65535),args[4]);break;
+                default:throw new IllegalArgumentException("Unknown modem method");
+            }setChanged();sync();return "";
+        }
+        if(type.equals("drive")){
+            ItemStack disk=ItemStack.EMPTY;int slot=-1;for(int i=0;i<node.items.size();i++)if(WorkshopComputers.disk(node.items.get(i))){disk=node.items.get(i);slot=i;break;}
+            if(method.equals("isDiskPresent")||method.equals("hasData"))return Boolean.toString(!disk.isEmpty());
+            if(method.equals("hasAudio"))return "false";
+            if(method.equals("getAudioTitle")||method.equals("playAudio")||method.equals("stopAudio"))return "";
+            if(method.equals("getDiskID")){
+                if(disk.isEmpty())return "";
+                var data=disk.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA,net.minecraft.world.item.component.CustomData.EMPTY).copyTag();
+                String identity=data.getStringOr("JimtaDiskIdentity","");if(identity.isEmpty()){identity=UUID.randomUUID().toString();data.putString("JimtaDiskIdentity",identity);disk.set(net.minecraft.core.component.DataComponents.CUSTOM_DATA,net.minecraft.world.item.component.CustomData.of(data));node.setChanged();}return identity;
+            }
+            if(method.equals("getMountPath"))return disk.isEmpty()?"":"disk_"+args[0];
+            if(method.equals("getDiskLabel"))return disk.isEmpty()?"":disk.getHoverName().getString();
+            if(method.equals("setDiskLabel")){if(disk.isEmpty()||args.length!=3||args[2].length()>64)throw new IllegalArgumentException("Insert a disk; labels have at most 64 characters");disk.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME,Component.literal(args[2]));node.setChanged();return "";}
+            if(method.equals("ejectDisk")){if(slot>=0){var at=node.worldPosition.relative(node.getBlockState().getValue(ComputerBlock.FACING));if(!allowed(actor,at))throw new IllegalArgumentException("Disk exit is protected or unloaded");Block.popResource(level,at,disk.copy());node.items.set(slot,ItemStack.EMPTY);node.setChanged();node.updatePeripheralLight();}return "";}
+            if(method.equals("readData")){var text=disk.isEmpty()?"":disk.getOrDefault(WorkshopComputers.DOCUMENT,"");if(text.length()>3500)throw new IllegalArgumentException("Disk data exceeds Lua mount budget; use From disk in editor instead");return text;}
+            if(method.equals("writeData")){if(disk.isEmpty()||args.length!=3||args[2].length()>3500)throw new IllegalArgumentException("Insert a disk; data limit 3500 characters");disk.set(WorkshopComputers.DOCUMENT,args[2]);node.setChanged();return "";}
+            throw new IllegalArgumentException("Unknown drive method");
+        }
+        if(type.equals("printer"))return node.luaPrinter(args);
+        if(!monitor){
+            if(!method.equals("playNote")||args.length!=5||!args[2].equals("harp"))throw new IllegalArgumentException("Speaker supports playNote('harp', volume, pitch)");
+            double volume=Double.parseDouble(args[3]);int pitch=Integer.parseInt(args[4]);
+            if(!Double.isFinite(volume)||volume<0||volume>1||pitch<0||pitch>24)throw new IllegalArgumentException("Volume 0..1; pitch 0..24");
+            var budget=BUDGET.get(actor.level().getServer());
+            if(budget.audio>=4||level.getGameTime()<nextAudioTick||energy.getAmount()<2)return "false";
+            budget.audio++;nextAudioTick=level.getGameTime()+2;energy.setAmount(energy.getAmount()-2);
+            actor.level().playSound(null,node.worldPosition,SoundEvents.NOTE_BLOCK_HARP.value(),SoundSource.BLOCKS,(float)volume,(float)Math.pow(2,(pitch-12)/12.0));return "true";
+        }
+        return luaCanvas(node,args);
+    }
+    private String luaCanvas(ComputerNode node,String[] args){
+        if(args.length<2)throw new IllegalArgumentException("Missing terminal method");
+        String method=args[1];var screen=node.canvas;
+        boolean colorDisplay=node.computer()||node.kind().equals("monitor_advanced");
+        switch(method){
+            case "getSize":return "48\t24";
+            case "getCursorPos":return screen.cursorX()+"\t"+screen.cursorY();
+            case "isColor", "isColour":return Boolean.toString(colorDisplay);
+            case "getTextColor", "getTextColour":return Integer.toString(1<<screen.foregroundColor());
+            case "getBackgroundColor", "getBackgroundColour":return Integer.toString(1<<screen.backgroundColor());
+            case "clear":node.draw(c->{int x=c.cursorX(),y=c.cursorY();c.clear();c.terminalCursor(x,y);});break;
+            case "clearLine":node.draw(ComputerCanvas::clearLine);break;
+            case "write":if(args.length!=3)throw new IllegalArgumentException("One text argument required");node.draw(c->c.terminalWrite(args[2]));break;
+            case "setCursorPos":int x=integer(args,2,-32767,32767),y=integer(args,3,-32767,32767);node.draw(c->c.terminalCursor(x,y));break;
+            case "scroll":int rows=integer(args,2,-24,24);node.draw(c->c.scroll(rows));break;
+            case "blit":if(args.length!=5||!colorDisplay)throw new IllegalArgumentException("Blit requires a color terminal and three strings");node.draw(c->c.blit(args[2],args[3],args[4]));break;
+            case "setTextColor", "setTextColour", "setBackgroundColor", "setBackgroundColour":
+                int value=integer(args,2,1,32768);if(Integer.bitCount(value)!=1)throw new IllegalArgumentException("Choose one color bit");int color=Integer.numberOfTrailingZeros(value);
+                if(!colorDisplay&&color!=0&&color!=15)throw new IllegalArgumentException("Basic monitors support white/black");
+                node.draw(c->c.ink(method.startsWith("setText")?color:c.foregroundColor(),method.startsWith("setBackground")?color:c.backgroundColor()));break;
+            default:throw new IllegalArgumentException("Unsupported monitor method");
+        }
+        return "";
     }
 
     /** One bounded instruction. Physical operations recheck owner permission at both endpoints on every call. */
@@ -512,6 +680,30 @@ public final class ComputerNode extends BlockEntity implements Container {
         }
         throw new IllegalArgumentException("Insert a floppy disk here or in a connected disk drive.");
     }
+    private String luaPrinter(String[] args){
+        String method=args[1];
+        if(method.equals("getPaperLevel")||method.equals("getInkLevel")){int total=0;for(int i=0;i<16;i++)if(items.get(i).is(method.equals("getPaperLevel")?Items.PAPER:Items.INK_SAC))total+=items.get(i).getCount();return Integer.toString(total);}
+        if(method.equals("getPageSize"))return "25\t21";
+        if(method.equals("getCursorPos"))return printerX+"\t"+printerY;
+        if(method.equals("newPage")){
+            if(!printerDraft.isEmpty())return "false";
+            var available=copyItems();if(!items.get(17).isEmpty()||!consume(available,Items.PAPER,1)||!consume(available,Items.INK_SAC,1))return "false";
+            printerDraft=" ".repeat(525);printerTitle="";printerX=printerY=1;setChanged();return "true";
+        }
+        if(printerDraft.isEmpty())throw new IllegalArgumentException("Start a page first");
+        switch(method){
+            case "setCursorPos":printerX=integer(args,2,1,25);printerY=integer(args,3,1,21);break;
+            case "setPageTitle":if(args.length!=3||args[2].length()>64)throw new IllegalArgumentException("Title limit 64 characters");printerTitle=args[2];break;
+            case "write":if(args.length!=3||args[2].length()>512)throw new IllegalArgumentException("Write limit 512 characters");
+                var page=new StringBuilder(printerDraft);for(char c:args[2].toCharArray()){if(printerX<=25)page.setCharAt((printerY-1)*25+printerX-1,c>=32&&c<=126?c:'?');printerX=Math.min(26,printerX+1);}printerDraft=page.toString();break;
+            case "endPage":
+                var lines=new ArrayList<String>();for(int y=0;y<21;y++)lines.add(printerDraft.substring(y*25,(y+1)*25).stripTrailing());
+                try{printDocument(String.join("\n",lines),"printpage");}catch(IllegalArgumentException unavailable){return "false";}
+                if(!printerTitle.isBlank())items.get(17).set(net.minecraft.core.component.DataComponents.CUSTOM_NAME,Component.literal(printerTitle));
+                printerDraft="";printerTitle="";setChanged();return "true";
+            default:throw new IllegalArgumentException("Unknown printer method");
+        }setChanged();return "";
+    }
     private void printDocument(String text, String operation) {
         int paperCount = ComputerDocuments.pages(text).size();
         if(operation.equals("printpage") && paperCount>1) throw new IllegalArgumentException("Text needs "+paperCount+" pages. Use printpages or printbook, or shorten it.");
@@ -586,6 +778,7 @@ public final class ComputerNode extends BlockEntity implements Container {
             destination.moving = true; level.setBlock(next, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL); moving = false;
             throw new IllegalArgumentException("Turtle move rolled back.");
         }
+        destination.lua=lua;destination.running=running;destination.terminalInput.addAll(terminalInput);terminalInput.clear();destination.terminalEvents.addAll(terminalEvents);terminalEvents.clear();lua=null;
     }
     private void dig(ServerPlayer actor, BlockPos target) {
         if (!allowed(actor, target)) throw new IllegalArgumentException("Protected or unloaded mining target.");
@@ -672,7 +865,7 @@ public final class ComputerNode extends BlockEntity implements Container {
     @Override public void preRemoveSideEffects(BlockPos pos, BlockState state) {
         if (!moving && level != null && !level.isClientSide()) { Containers.dropContents(level, pos, this); items.clear(); }
     }
-    @Override public void setRemoved() { LOADED_MODEMS.remove(this); super.setRemoved(); }
+    @Override public void setRemoved() { if(!moving&&lua!=null){lua.close();lua=null;} LOADED_MODEMS.remove(this); super.setRemoved(); }
     @Override public net.minecraft.network.protocol.Packet<net.minecraft.network.protocol.game.ClientGamePacketListener> getUpdatePacket() {
         return net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket.create(this);
     }
@@ -699,10 +892,13 @@ public final class ComputerNode extends BlockEntity implements Container {
         owner = in.read("owner", UUIDUtil.CODEC).orElse(null); program = bounded(in.getStringOr("program", ""), WorkshopComputers.MAX_PROGRAM);
         output = bounded(in.getStringOr("output", ""), 4096); cursor = Math.clamp(in.getIntOr("cursor", 0), 0, MAX_LINES);
         waiting = Math.clamp(in.getIntOr("waiting", 0), 0, 1200); selected = Math.clamp(in.getIntOr("selected", 0), 0, 15);
-        running = in.getBooleanOr("running", false); energy.setAmount(in.getLongOr("energy", 0));
+        running = in.getBooleanOr("running", false)&&!luaProgram(); energy.setAmount(in.getLongOr("energy", 0));
         loadMonitor(in);
         canvas.load(in);
         workspace.load(in);
+        computerIdentity=in.read("computer_identity",UUIDUtil.CODEC).orElseGet(UUID::randomUUID);computerLabel=bounded(in.getStringOr("computer_label",""),64);
+        printerDraft=in.getStringOr("printer_draft","");if(printerDraft.length()!=525)printerDraft="";
+        printerTitle=bounded(in.getStringOr("printer_title",""),64);printerX=Math.clamp(in.getIntOr("printer_x",1),1,26);printerY=Math.clamp(in.getIntOr("printer_y",1),1,21);
         channels.clear();
         for (int value : in.read("channels", com.mojang.serialization.Codec.intRange(0,65535).listOf(0,16)).orElse(List.of(0))) {
             if (value >= 0 && value <= 65535) channels.add(value); if (channels.size() == 16) break;
@@ -718,6 +914,8 @@ public final class ComputerNode extends BlockEntity implements Container {
         saveMonitor(out);
         canvas.save(out);
         workspace.save(out);
+        out.store("computer_identity",UUIDUtil.CODEC,computerIdentity);out.putString("computer_label",computerLabel);
+        out.putString("printer_draft",printerDraft);out.putString("printer_title",printerTitle);out.putInt("printer_x",printerX);out.putInt("printer_y",printerY);
         out.store("channels", com.mojang.serialization.Codec.intRange(0,65535).listOf(0,16), List.copyOf(channels));
         for (Direction side : Direction.values()) out.putInt("signal_" + side.getName(), signals[side.ordinal()]);
     }

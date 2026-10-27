@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:bricks",
+    "minecraft:bricks",
+    "jugcraft:basic_ceramic_lining"
+  ],
+  "result": {
+    "id": "jugcraft:crucible_heat_insert",
+    "count": 1
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ]
+}

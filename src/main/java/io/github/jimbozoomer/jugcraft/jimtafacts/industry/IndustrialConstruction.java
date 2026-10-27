@@ -32,8 +32,13 @@ public final class IndustrialConstruction {
     public static final Map<DyeColor, Block> WALLS = new EnumMap<>(DyeColor.class);
     public static Block FOAM, REINFORCED_FOAM, REINFORCED_STONE, ALLOY_GLASS, ALLOY_DOOR, IRON_FENCE;
     public static Item SPRAYER, PAINTER, POWDER;
+    public static net.minecraft.sounds.SoundEvent RUBBER_BOUNCE;
     private IndustrialConstruction() {}
     public static void register() {
+        var sound=Jugcraft.id("jimtafacts.rubber_trampoline");
+        RUBBER_BOUNCE=Registry.register(BuiltInRegistries.SOUND_EVENT,sound,net.minecraft.sounds.SoundEvent.createVariableRangeEvent(sound));
+        block("rubber_trampoline",BlockBehaviour.Properties.ofFullCopy(Blocks.SLIME_BLOCK).noOcclusion().strength(.8F,2).friction(.6F).bounceRestitution(.8F),IndustrialTrampoline::new);
+        block("resin_sheet",BlockBehaviour.Properties.ofFullCopy(Blocks.HONEY_BLOCK).noCollision().noOcclusion().strength(1.6F,.5F),IndustrialResinSheet::new);
         for (var color : DyeColor.values()) WALLS.put(color, block("cf_wall_" + color.getName(), BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).strength(3,30), Block::new));
         REINFORCED_STONE = block("reinforced_stone", BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(40,1200), Block::new);
         FOAM = block("construction_foam", BlockBehaviour.Properties.ofFullCopy(Blocks.WOOL.white()).noCollision().noOcclusion().strength(.01F), p -> new Foam(p, false));
@@ -47,11 +52,31 @@ public final class IndustrialConstruction {
         ALLOY_GLASS = block("alloy_glass", BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).strength(3,100).noOcclusion(), p -> new TransparentBlock(p) {});
         ALLOY_DOOR = block("alloy_door", BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_DOOR).strength(40,1200), p -> new DoorBlock(BlockSetType.IRON, p) {});
         IRON_FENCE = block("iron_fence", BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BARS).strength(3,30), p -> new IronBarsBlock(p) {});
+        block("mining_pipe",BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).noOcclusion().strength(6,10),MiningPipe::new);
+        block("mining_tip",BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(6,10),Block::new);
+        var furnace=block("iron_furnace",BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE).strength(4F,6F),IronFurnace::new);
+        ((net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityType)net.minecraft.world.level.block.entity.BlockEntityTypes.FURNACE).addValidBlock(furnace);
         SPRAYER = item("cf_sprayer", p -> new Sprayer(p.stacksTo(1)));
         PAINTER = item("painter", p -> new Painter(p.stacksTo(1)));
         POWDER = item("cf_powder", Item::new);
-        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.BUILDING_BLOCKS).register(out -> BLOCKS.values().forEach(out::accept));
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.BUILDING_BLOCKS).register(out -> BLOCKS.forEach((name,block)->{if(!name.equals("mining_tip"))out.accept(block);}));
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(out -> { out.accept(SPRAYER); out.accept(PAINTER); out.accept(POWDER); });
+    }
+    public static BlockState miningPipeState(BlockGetter level,BlockPos pos){
+        var state=BLOCKS.get("mining_pipe").defaultBlockState();
+        for(var direction:Direction.values())state=state.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction),MiningPipe.connects(level.getBlockState(pos.relative(direction))));
+        return state;
+    }
+    private static final class MiningPipe extends PipeBlock {
+        MiningPipe(Properties p){super(4.0F,p);var state=stateDefinition.any();for(var direction:Direction.values())state=state.setValue(PROPERTY_BY_DIRECTION.get(direction),direction.getAxis()==Direction.Axis.Y);registerDefaultState(state);}
+        @Override protected void createBlockStateDefinition(net.minecraft.world.level.block.state.StateDefinition.Builder<Block,BlockState> builder){builder.add(NORTH,EAST,SOUTH,WEST,UP,DOWN);}
+        static boolean connects(BlockState state){return state.getBlock() instanceof MiningPipe||state.is(BLOCKS.get("mining_tip"))||state.getBlock()==CivilWorkshops.BLOCKS.get("miner");}
+        @Override public BlockState getStateForPlacement(net.minecraft.world.item.context.BlockPlaceContext context){return miningPipeState(context.getLevel(),context.getClickedPos());}
+        @Override protected BlockState updateShape(BlockState state,LevelReader level,ScheduledTickAccess ticks,BlockPos pos,Direction direction,BlockPos neighbor,BlockState adjacent,RandomSource random){return state.setValue(PROPERTY_BY_DIRECTION.get(direction),connects(adjacent));}
+    }
+    /** Original iron housing, using the complete native furnace fuel/menu/XP implementation. */
+    private static final class IronFurnace extends FurnaceBlock {
+        IronFurnace(BlockBehaviour.Properties properties){super(properties);}
     }
     private static Block block(String name, BlockBehaviour.Properties properties, Function<BlockBehaviour.Properties, Block> factory) {
         String id = "jimta_" + name; var key = ResourceKey.create(Registries.BLOCK, Jugcraft.id(id));

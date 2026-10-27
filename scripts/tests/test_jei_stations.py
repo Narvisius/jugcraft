@@ -69,7 +69,7 @@ class StationRecipes(unittest.TestCase):
         # Non-processor crafting serializers and the workshop's per-station categories.
         covered |= {'jugcraft:' + x for x in ('starter_working', 'gun_attachment', 'gun_attachment_removal',
             'key_copying', 'beast_bison_upgrade', 'beast_mimicream_repair', 'household_door_mat_copy',
-            'jimta_cable_anchors', 'jimta_facade', 'jimta_compact_part')}
+            'jimta_cable_anchors', 'jimta_facade', 'jimta_factory_facade', 'jimta_factory_facade_phase', 'jimta_compact_part')}
         for path in (stations.RES / 'data/jugcraft/recipe').rglob('*.json'):
             kind = json.loads(path.read_text(encoding='utf-8'))['type']
             if kind.startswith('jugcraft:'):

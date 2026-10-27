@@ -38,18 +38,21 @@ import net.minecraft.world.phys.*;
 
 /** Supplied chute mesh with directional collection, selectable outputs and a finite engine-powered boost. */
 public final class WorkshopChute {
-    public static Block BLOCK;public static BlockEntityType<Node> TYPE;public static ExtendedMenuType<Menu,BlockPos> MENU;
+    public static Block BLOCK,ITEM_BUFFER;public static BlockEntityType<Node> TYPE;public static ExtendedMenuType<Menu,BlockPos> MENU;
     public static final EnumProperty<Direction> FACING=BlockStateProperties.FACING;
     public static final Map<Direction,BooleanProperty> CONNECTIONS=new EnumMap<>(Direction.class);
     static{for(Direction side:Direction.values())CONNECTIONS.put(side,BooleanProperty.create("connected_"+side.getName()));}
     private WorkshopChute(){}
     public static void register(){var key=ResourceKey.create(Registries.BLOCK,Jugcraft.id("jimta_chute"));BLOCK=Registry.register(BuiltInRegistries.BLOCK,key,new Chute(BlockBehaviour.Properties.ofFullCopy(Blocks.HOPPER).setId(key).noOcclusion()));
         var ik=ResourceKey.create(Registries.ITEM,key.identifier());Registry.register(BuiltInRegistries.ITEM,ik,new BlockItem(BLOCK,new Item.Properties().setId(ik).useBlockDescriptionPrefix()));
-        TYPE=Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE,Jugcraft.id("jimta_chute"),FabricBlockEntityTypeBuilder.create(Node::new,BLOCK).build());
+        var bufferKey=ResourceKey.create(Registries.BLOCK,Jugcraft.id("jimta_item_buffer"));
+        ITEM_BUFFER=Registry.register(BuiltInRegistries.BLOCK,bufferKey,new Chute(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(bufferKey)));
+        var bufferItemKey=ResourceKey.create(Registries.ITEM,bufferKey.identifier());Registry.register(BuiltInRegistries.ITEM,bufferItemKey,new BlockItem(ITEM_BUFFER,new Item.Properties().setId(bufferItemKey).useBlockDescriptionPrefix()));
+        TYPE=Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE,Jugcraft.id("jimta_chute"),FabricBlockEntityTypeBuilder.create(Node::new,BLOCK,ITEM_BUFFER).build());
         MENU=Registry.register(BuiltInRegistries.MENU,Jugcraft.id("jimta_chute"),new ExtendedMenuType<>(Menu::new,BlockPos.STREAM_CODEC));
         ItemStorage.SIDED.registerForBlockEntity(Node::port,TYPE);EnergyStorage.SIDED.registerForBlockEntity((n,side)->n.powerPort(),TYPE);
         PlayerBlockBreakEvents.BEFORE.register((l,p,pos,s,be)->!(be instanceof Node n)||n.identity(p));
-        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(out->out.accept(BLOCK));
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(out->{out.accept(BLOCK);out.accept(ITEM_BUFFER);});
     }
     static final class Chute extends Block implements EntityBlock,ItemConnectable,EnergyConnectable {
         Chute(Properties p){super(p);var state=defaultBlockState().setValue(FACING,Direction.DOWN);for(var property:CONNECTIONS.values())state=state.setValue(property,false);registerDefaultState(state);}
@@ -101,7 +104,7 @@ public final class WorkshopChute {
         @Override public int[] getSlotsForFace(Direction side){return automation()&&(side==intake()||(outputs&(1<<side.ordinal()))!=0)?new int[]{0,1,2,3,4,5,6,7,8}:new int[0];}
         @Override public boolean canPlaceItemThroughFace(int i,ItemStack stack,Direction side){return automation()&&side==intake();}
         @Override public boolean canTakeItemThroughFace(int i,ItemStack stack,Direction side){return automation()&&side!=intake()&&(outputs&(1<<side.ordinal()))!=0;}
-        @Override protected Component getDefaultName(){return Component.translatable("block.jugcraft.jimta_chute");}public BlockPos getScreenOpeningData(ServerPlayer p){return worldPosition;}
+        @Override protected Component getDefaultName(){return getBlockState().getBlock().getName();}public BlockPos getScreenOpeningData(ServerPlayer p){return worldPosition;}
         private final ContainerData data=new ContainerData(){public int get(int i){return switch(i){case 0->outputs;case 1->collect?1:0;case 2->(int)energy.getAmount();case 3->intake().ordinal();default->0;};}public void set(int i,int v){}public int getCount(){return 4;}};
         @Override protected AbstractContainerMenu createMenu(int id,Inventory inv){return new Menu(id,inv,worldPosition,this,data);}
         @Override public void preRemoveSideEffects(BlockPos p,BlockState s){if(level!=null&&!level.isClientSide()){Containers.dropContents(level,p,this);clearContent();}}

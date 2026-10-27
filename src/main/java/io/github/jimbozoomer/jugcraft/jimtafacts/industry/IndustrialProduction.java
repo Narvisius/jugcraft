@@ -32,13 +32,14 @@ public final class IndustrialProduction {
     public static final Map<String,Item> ITEMS=new LinkedHashMap<>();
     private IndustrialProduction(){}
     public static void register(){
-        for(String id:List.of("scrap","scrapbox","plant_ball","biochaff","fluid_cell","tin_can","filled_tin_can")){
+        for(String id:List.of("scrap","scrapbox","plant_ball","biochaff","fluid_cell","fragile_fluid_shard","tin_can","filled_tin_can")){
             var key=ResourceKey.create(Registries.ITEM,Jugcraft.id("jimta_"+id));var properties=new Item.Properties().setId(key);
             if(id.equals("filled_tin_can"))properties.food(new net.minecraft.world.food.FoodProperties.Builder().nutrition(2).saturationModifier(0.1F).build()).usingConvertsTo(ITEMS.get("jimta_tin_can"));
-            Item item=id.equals("fluid_cell")?new Cell(properties.stacksTo(1)):id.equals("scrapbox")?new Scrapbox(properties):new Item(properties);
+            Item item=id.equals("fragile_fluid_shard")?new FragileFluidShard(properties.stacksTo(1)):id.equals("fluid_cell")?new Cell(properties.stacksTo(1)):id.equals("scrapbox")?new Scrapbox(properties):new Item(properties);
             ITEMS.put("jimta_"+id,Registry.register(BuiltInRegistries.ITEM,key,item));
         }
         FluidStorage.ITEM.registerForItems((stack,context)->Cell.storage(context),ITEMS.get("jimta_fluid_cell"));
+        FluidStorage.ITEM.registerForItems((stack,context)->FragileFluidShard.storage(context),ITEMS.get("jimta_fragile_fluid_shard"));
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS).register(out->ITEMS.values().forEach(out::accept));
     }
     private static final class Scrapbox extends Item {
@@ -53,10 +54,11 @@ public final class IndustrialProduction {
             return InteractionResult.SUCCESS;
         }
     }
-    public static final class Cell extends Item {
+    public static class Cell extends Item {
         public static final long CAPACITY=1_000*FluidNetworks.DROPLETS_PER_MB;
         private static final List<String> SKINS=List.of("water","lava","distilled_water","coolant","hot_coolant","steam","superheated_steam","biogas","biomass","ethanol","crude_oil");
         public Cell(Properties p){super(p);}
+        protected boolean acceptsFluid(FluidVariant fluid){return true;}
         public static @Nullable StoredFluid contents(ItemStack stack){
             var value=stack.get(JugcraftFluids.STORED_FLUID);
             return value==null||value.amount()<=0||value.variant().isBlank()?null:new StoredFluid(value.variant(),Math.min(CAPACITY,value.amount()));
@@ -64,14 +66,14 @@ public final class IndustrialProduction {
         public static ItemStack filled(ItemStack stack,FluidVariant fluid,long amount){
             var result=stack.copyWithCount(1);float frame=0;
             if(amount<=0||fluid.isBlank())result.remove(JugcraftFluids.STORED_FLUID);
-            else{result.set(JugcraftFluids.STORED_FLUID,new StoredFluid(fluid,Math.min(amount,CAPACITY)));int index=SKINS.indexOf(BuiltInRegistries.FLUID.getKey(fluid.getFluid()).getPath());frame=index<0?12:index+1;}
+            else{result.set(JugcraftFluids.STORED_FLUID,new StoredFluid(fluid,Math.min(amount,CAPACITY)));int index=SKINS.indexOf(BuiltInRegistries.FLUID.getKey(fluid.getFluid()).getPath().replaceFirst("^jimta_", ""));frame=index<0?12:index+1;String path=BuiltInRegistries.FLUID.getKey(fluid.getFluid()).getPath();if(path.equals("jimta_pahoehoe_lava"))frame=13;else if(path.equals("jimta_hot_water"))frame=1;else if(path.equals("jimta_construction_foam_fluid"))frame=14;else if(path.equals("jimta_uu_matter"))frame=15;}
             result.set(DataComponents.CUSTOM_MODEL_DATA,new CustomModelData(List.of(frame),List.of(),List.of(),List.of()));return result;
         }
         public static Storage<FluidVariant> storage(ContainerItemContext context){return new SingleSlotStorage<>(){
             private StoredFluid held(){return contents(context.getItemVariant().toStack());}
             private boolean exchange(FluidVariant fluid,long amount,TransactionContext tx){var current=context.getItemVariant().toStack();return current.getItem() instanceof Cell&&context.exchange(ItemVariant.of(filled(current,fluid,amount)),1,tx)==1;}
             @Override public long insert(FluidVariant fluid,long maximum,TransactionContext tx){
-                if(fluid.isBlank()||maximum<=0)return 0;var held=held();if(held!=null&&!held.variant().equals(fluid))return 0;
+                if(fluid.isBlank()||maximum<=0||!(context.getItemVariant().toStack().getItem() instanceof Cell cell)||!cell.acceptsFluid(fluid))return 0;var held=held();if(held!=null&&!held.variant().equals(fluid))return 0;
                 long amount=held==null?0:held.amount(),moved=Math.min(maximum,CAPACITY-amount);return moved>0&&exchange(fluid,amount+moved,tx)?moved:0;
             }
             @Override public long extract(FluidVariant fluid,long maximum,TransactionContext tx){var held=held();if(held==null||maximum<=0||!held.variant().equals(fluid))return 0;long moved=Math.min(maximum,held.amount());return exchange(fluid,held.amount()-moved,tx)?moved:0;}

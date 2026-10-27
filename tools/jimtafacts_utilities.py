@@ -6,7 +6,7 @@ from PIL import Image
 ROOT=Path(__file__).resolve().parents[1]
 RES=ROOT/'src/main/resources'
 SOURCE=ROOT/'art/owner-library/originals/Oct23/Jimtafacts/industrialcraft reborn by jimbo/assets/ic2'
-TOOLS={'forge_hammer':'itemToolForgeHammer','wire_cutters':'itemToolCutter','toolbox':'itemToolbox','lathing_tool':'itemLathingTool'}
+TOOLS={'forge_hammer':'itemToolForgeHammer','wire_cutters':'itemToolCutter','toolbox':'itemToolbox','lathing_tool':'itemLathingTool','containment_box':'itemContainmentbox','obscurator':'obscurator','mfsu_upgrade_kit':'itemMFSUupgradekit'}
 DRINKS={'brew':'Brew','youngster':'Youngster','beer':'Beer','ale':'Ale','dragonblood':'Dragonblood','black_stuff':'Black Stuff','rum':None}
 BOATS={'rubber_boat':'boatRubber','carbon_boat':'boatCarbon','electric_boat':'boatElectric','broken_rubber_boat':'boatRubberBroken'}
 def blocks():return {'jimta_brewing_barrel','jimta_luminator','jimta_lathe'}
@@ -23,7 +23,8 @@ def generate(shared=True):
   dump(RES/f'assets/jugcraft/models/item/{name}.json',{'parent':'minecraft:item/handheld' if hand else 'minecraft:item/generated','textures':{'layer0':'jugcraft:item/jimtafacts/utilities/'+name}})
   if definition:dump(RES/f'assets/jugcraft/items/{name}.json',{'model':{'type':'minecraft:model','model':'jugcraft:item/'+name}})
  for name,source in TOOLS.items():
-  icon('jimta_'+name,source,name!='toolbox');lang['item.jugcraft.jimta_'+name]=name.replace('_',' ').title()
+  icon('jimta_'+name,source,name not in ('toolbox','containment_box'));lang['item.jugcraft.jimta_'+name]=name.replace('_',' ').title()
+ copy(SOURCE/'textures/gui/GUIContainmentbox.png',RES/'assets/jugcraft/textures/gui/jimtafacts/containment_box.png')
  icon('jimta_toolbox_open','itemToolbox.open',definition=False)
  dump(RES/'assets/jugcraft/items/jimta_toolbox.json',{'model':{'type':'minecraft:range_dispatch','property':'minecraft:custom_model_data','index':0,'fallback':{'type':'minecraft:model','model':'jugcraft:item/jimta_toolbox'},'entries':[{'threshold':1,'model':{'type':'minecraft:model','model':'jugcraft:item/jimta_toolbox_open'}}]}})
  for name,source in DRINKS.items():
@@ -113,6 +114,9 @@ def generate(shared=True):
   'carbon_boat':['jugcraft:jimta_carbon_plate']*5,
   'electric_boat':['jugcraft:jimta_carbon_boat','jugcraft:electric_motor','jugcraft:basic_circuit','jugcraft:copper_wire','jugcraft:steel_plate'],
   'toolbox':['minecraft:chest','jugcraft:bronze_plate','jugcraft:bronze_plate','jugcraft:bronze_plate'],
+  'containment_box':['minecraft:chest']+['jugcraft:lead_plate']*4+['jugcraft:rubber']*2,
+  'obscurator':['jugcraft:advanced_circuit','jugcraft:jimta_re_battery','minecraft:glass_pane']+['jugcraft:steel_plate']*2+['jugcraft:copper_wire']*2,
+  'mfsu_upgrade_kit':['jugcraft:advanced_circuit']*2+['jugcraft:jimta_advanced_alloy']*2+['jugcraft:lithium_cell']*4,
   'brewing_barrel':['minecraft:barrel','jugcraft:rubber','jugcraft:rubber'],
   'luminator':['minecraft:glass_pane']*3+['jugcraft:copper_wire']*2+['minecraft:glowstone_dust']*2+['jugcraft:tin_plate']}
  for name,ingredients in recipes.items():dump(RES/f'data/jugcraft/recipe/jimtafacts_utilities/{name}.json',{'type':'minecraft:crafting_shapeless','category':'misc','ingredients':distinct('jimtafacts_utilities/'+name,ingredients),'result':{'id':'jugcraft:jimta_'+name}})

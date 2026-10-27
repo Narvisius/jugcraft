@@ -15,9 +15,11 @@ import org.jspecify.annotations.Nullable;
  * </ul>
  * {@link #growth} scales a crop's chance per random tick as vanilla's growth time does (1.0 is wheat's pace for one
  * step).
+ * <p> A crop may declare {@link #neighbours} (Concordance Chunk C, C-08): the other crops whose company makes it step more
+ * often (a mixed bed); {@link Neighbours#NONE} otherwise, and always for a producer.
  */
 public record Organism(String id, Role role, String block, @Nullable String item, double growth, int cost, int fix,
-		int replant, int produce, int chaff, int thriving, int tolerating, Niche niche) {
+		int replant, int produce, int chaff, int thriving, int tolerating, Niche niche, Neighbours neighbours) {
 	/** A crop's steps from planted (age 0) to mature. The crop block's age property; keep equal to the generator. */
 	public static final int STAGES = 3;
 

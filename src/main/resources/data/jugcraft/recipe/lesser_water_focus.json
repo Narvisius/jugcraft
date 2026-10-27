@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SGS",
+    "NAN",
+    " G "
+  ],
+  "key": {
+    "S": "minecraft:string",
+    "G": "minecraft:gold_ingot",
+    "N": "minecraft:snowball",
+    "A": "minecraft:amethyst_shard"
+  },
+  "result": {
+    "id": "jugcraft:lesser_water_focus",
+    "count": 1
+  }
+}

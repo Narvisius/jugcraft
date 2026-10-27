@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP",
+    "GHG"
+  ],
+  "key": {
+    "P": "#jugcraft:heirloom_pumpkins",
+    "G": "minecraft:gold_ingot",
+    "H": "minecraft:hay_block"
+  },
+  "result": {
+    "id": "jugcraft:harvest_crown",
+    "count": 1
+  }
+}

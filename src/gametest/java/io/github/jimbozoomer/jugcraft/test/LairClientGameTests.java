@@ -1,5 +1,6 @@
 package io.github.jimbozoomer.jugcraft.test;
 
+import eu.pb4.trinkets.api.TrinketsApi;
 import io.github.jimbozoomer.jugcraft.Jugcraft;
 import io.github.jimbozoomer.jugcraft.agriculture.HeadstoneBlock;
 import io.github.jimbozoomer.jugcraft.config.JugcraftConfig;
@@ -7,10 +8,15 @@ import io.github.jimbozoomer.jugcraft.lair.GraveGoods;
 import io.github.jimbozoomer.jugcraft.lair.JugcraftLairs;
 import io.github.jimbozoomer.jugcraft.lair.Lair;
 import io.github.jimbozoomer.jugcraft.lair.LairInstance;
+import io.github.jimbozoomer.jugcraft.lair.LairRewards;
 import io.github.jimbozoomer.jugcraft.lair.LairRules;
 import io.github.jimbozoomer.jugcraft.lair.Lairs;
 import io.github.jimbozoomer.jugcraft.lair.LastRites;
 import io.github.jimbozoomer.jugcraft.lair.MistGateEntity;
+import io.github.jimbozoomer.jugcraft.lair.yeti.GlacierHall;
+import io.github.jimbozoomer.jugcraft.lair.yeti.JugcraftYeti;
+import io.github.jimbozoomer.jugcraft.lair.yeti.YetiKingEntity;
+import io.github.jimbozoomer.jugcraft.lair.yeti.YetiKingLoot;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -20,6 +26,8 @@ import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
 import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
 import net.fabricmc.fabric.api.client.gametest.v1.context.TestServerContext;
 import net.fabricmc.fabric.api.client.gametest.v1.context.TestSingleplayerContext;
+import net.minecraft.client.gui.screens.DeathScreen;
+import net.fabricmc.fabric.api.client.gametest.v1.world.TestWorldSave;
 import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -29,6 +37,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -45,13 +54,17 @@ import net.minecraft.world.phys.Vec3;
  * game-test server's, it has the lair dimensions. First the framework from end to end, with the one player in survival
  * ({@link #endToEnd}); then pictures: the Last Rites' grave at midnight with its candles, wreath and the mist gate open
  * over it, and, through the gate, the Hollow Acre from the arrival point, above the Mown Circle, before the bone
- * chapel's throne, at the lych gate's Grey Mist, and from off the island. CI job {@code client}.
+ * chapel's throne, at the lych gate's Grey Mist, and from off the island; last, a real restart with the player inside a
+ * Glacier Hall. CI job {@code client}.
  */
 public class LairClientGameTests implements FabricClientGameTest {
 	private static final Lair ACRE = Lair.HOLLOW_ACRE;
 
 	@Override
 	public void runTest(ClientGameTestContext context) {
+		TestWorldSave save;
+		AtomicReference<Vec3> returnPoint = new AtomicReference<>();
+		AtomicReference<int[]> held = new AtomicReference<>();
 		try (TestSingleplayerContext singleplayer = context.worldBuilder()
 				.adjustSettings(creator -> creator.setGameMode(WorldCreationUiState.SelectedGameMode.CREATIVE)).create()) {
 			singleplayer.getConnection().waitForChunksRender();
@@ -100,6 +113,13 @@ public class LairClientGameTests implements FabricClientGameTest {
 			shoot(context, singleplayer, acre, o.getX() + 32.0, o.getY() + 18, o.getZ() + 63.5, 0, 4, "jugcraft_hollow_acre_gate");
 			shoot(context, singleplayer, acre, o.getX() + 82.0, o.getY() + 12, o.getZ() + 75.0, 126, 2, "jugcraft_hollow_acre_island");
 			server.runOnServer(minecraft -> Lairs.reset());
+
+			// 9. A real restart: the world is saved with the player inside a Glacier Hall and opened again.
+			beforeRestart(context, server, new Vec3(x - 4.5, y, z + 2.5), returnPoint, held);
+			save = singleplayer.getWorldSave();
+		}
+		try (TestSingleplayerContext reopened = save.open()) {
+			afterRestart(reopened.getServer(), returnPoint.get(), held.get());
 		}
 	}
 
@@ -112,14 +132,20 @@ public class LairClientGameTests implements FabricClientGameTest {
 	 * over the grave and takes the ringer in, unable to build;</li>
 	 * <li>building and using blocks are refused, the lair's exit is not;</li>
 	 * <li>straying past the edge throws the player back for 4 damage, never below half a heart;</li>
-	 * <li>dying there gathers what was dropped as Grave Goods, handed back on respawning;</li>
+	 * <li>dying there drops nothing: the player respawns outside with every slot as it was (armour, offhand and a
+	 * Trinkets slot worn), the same held slot and all their experience, and goes back in; anything still dropped (by
+	 * another mod, say) is gathered as Grave Goods, handed back on respawning;</li>
 	 * <li>the gate takes the player back in, and leaving takes them back to exactly where they stood, facing the same
 	 * way, able to build again;</li>
 	 * <li>a full party lets nobody else in;</li>
 	 * <li>an instance left empty closes after 30 seconds, and its gate with it; a restart closes them all and sends
-	 * anyone inside home;</li>
+	 * anyone inside home; for a Glacier Hall its King goes with it, and a reward kept from before is paid at home, not in
+	 * the closed hall;</li>
 	 * <li>no more instances open than lairs.instances allows.</li>
 	 * </ol>
+	 * Then, after these, in {@link #runTest}: 9. a real restart (the world saved and opened again) with the player inside
+	 * a Glacier Hall: on joining they are sent home and a reward the world kept for them is paid once
+	 * ({@link #beforeRestart}, {@link #afterRestart}).
 	 */
 	private static void endToEnd(ClientGameTestContext context, TestServerContext server, BlockPos grave, Vec3 outside) {
 		server.runCommand("gamemode survival @a");
@@ -187,7 +213,65 @@ public class LairClientGameTests implements FabricClientGameTest {
 			player.setHealth(20.0F);
 		});
 
-		// 4. Grave Goods: what was dropped dying is gathered at once and handed back on respawning (outside).
+		// 4. A real death in the lair costs nothing: no items or experience fall, and the player respawns outside with
+		// every slot as it was, the same held slot and all their experience.
+		AtomicReference<ServerPlayer> fallen = new AtomicReference<>();
+		AtomicReference<float[]> experience = new AtomicReference<>();
+		server.runOnServer(minecraft -> {
+			ServerPlayer player = player(minecraft);
+			ServerLevel lair = minecraft.getLevel(ACRE.dimension);
+			check(Lairs.keepsBelongings(player), "A death in a lair would cost belongings");
+			player.getInventory().clearContent();
+			player.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
+			player.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.SHIELD));
+			player.getInventory().setItem(4, new ItemStack(Items.EMERALD, 9));
+			player.getInventory().setItem(20, new ItemStack(Items.BREAD, 5));
+			player.getInventory().setSelectedSlot(4);
+			TrinketsApi.getAttachment(player).getInventory("chest/spell_focus").setItem(0, new ItemStack(Items.AMETHYST_SHARD));
+			player.giveExperiencePoints(500);
+			experience.set(new float[] {player.experienceLevel, player.experienceProgress, player.totalExperience});
+			check(player.experienceLevel > 0, "No experience to keep");
+			fallen.set(player);
+			player.hurtServer(lair, lair.damageSources().genericKill(), Float.MAX_VALUE);
+			check(player.isDeadOrDying(), "The player did not die");
+			AABB around = player.getBoundingBox().inflate(8.0);
+			check(lair.getEntitiesOfClass(ItemEntity.class, around).isEmpty(), "A death in a lair dropped items");
+			check(lair.getEntitiesOfClass(ExperienceOrb.class, around).isEmpty(), "A death in a lair dropped experience");
+			check(player.getAttached(Lairs.GRAVE_GOODS) == null, "Nothing was dropped, yet there are Grave Goods");
+			check(player.getAttached(Lairs.VISIT) == null, "A death in a lair ends the visit");
+		});
+		context.waitTicks(10);
+		context.runOnClient(client -> client.player.respawn());
+		server.waitFor(minecraft -> player(minecraft) != fallen.get() && player(minecraft).isAlive(), 200);
+		context.waitTicks(40);
+		context.runOnClient(client -> {
+			if (client.gui.screen() instanceof DeathScreen) {
+				client.gui.setScreen(null);
+			}
+		});
+		server.runOnServer(minecraft -> {
+			ServerPlayer player = player(minecraft);
+			check(!Lairs.isLair(player.level()), "The player respawned in the lair: " + player.level().dimension());
+			check(player.getItemBySlot(EquipmentSlot.HEAD).is(Items.IRON_HELMET)
+					&& player.getItemBySlot(EquipmentSlot.OFFHAND).is(Items.SHIELD), "The armour and offhand were not kept worn");
+			check(player.getInventory().getItem(4).is(Items.EMERALD) && player.getInventory().getItem(4).getCount() == 9
+					&& player.getInventory().getItem(20).is(Items.BREAD) && player.getInventory().getItem(20).getCount() == 5,
+					"The inventory did not come back slot for slot");
+			check(player.getInventory().getSelectedSlot() == 4, "The held slot was not kept: " + player.getInventory().getSelectedSlot());
+			check(TrinketsApi.getAttachment(player).getInventory("chest/spell_focus").getItem(0).is(Items.AMETHYST_SHARD),
+					"The worn Trinkets slot was not kept");
+			float[] kept = experience.get();
+			check(player.experienceLevel == (int) kept[0] && player.experienceProgress == kept[1] && player.totalExperience == (int) kept[2],
+					"The experience was not kept: level " + player.experienceLevel + ", total " + player.totalExperience);
+			check(player.getAttached(Lairs.GRAVE_GOODS) == null, "Grave Goods were left over");
+			check(!Lairs.keepsBelongings(player), "Outside a lair, death would keep belongings");
+			player.getInventory().clearContent();
+			check(Lairs.enter(player, first.get()), "The player could not go back in");
+		});
+		context.waitTicks(40);
+
+		// 4 (continued). Grave Goods: anything still dropped dying (by another mod, say) is caught as it drops, even
+		// though the lair keeps everything else, and handed back on respawning (outside).
 		server.runOnServer(minecraft -> {
 			ServerPlayer player = player(minecraft);
 			ServerLevel lair = minecraft.getLevel(ACRE.dimension);
@@ -283,6 +367,58 @@ public class LairClientGameTests implements FabricClientGameTest {
 		});
 		context.waitTicks(40);
 
+		// 7b. The Glacier Hall at a restart: closed with its King asleep on his throne, he goes with it (04:13); the player found
+		// inside goes home; a reward kept for them from before is not paid in the closed hall but at home, once (07:155).
+		server.runCommand("difficulty normal");  // he is a monster: on Peaceful he would be gone whatever the restart did
+		AtomicReference<LairInstance> glacier = new AtomicReference<>();
+		server.runOnServer(minecraft -> {
+			ServerPlayer player = player(minecraft);
+			LairInstance hall = Lairs.open(minecraft, Lair.GLACIER_HALL);
+			check(hall != null, "No Glacier Hall opened");
+			glacier.set(hall);
+			home.set(player.position());
+			check(Lairs.enter(player, hall), "The player could not go into the Glacier Hall");
+			Vec3 dais = Vec3.atLowerCornerOf(hall.origin()).add(GlacierHall.roar());  // off his lake (no wake), near enough that he ticks
+			player.teleportTo(dais.x, dais.y, dais.z);
+		});
+		context.waitTicks(40);
+		AtomicReference<YetiKingEntity> king = new AtomicReference<>();
+		AtomicReference<int[]> held7 = new AtomicReference<>();
+		server.runOnServer(minecraft -> {
+			ServerPlayer player = player(minecraft);
+			ServerLevel level = minecraft.getLevel(Lair.GLACIER_HALL.dimension);
+			List<YetiKingEntity> kings = level.getEntitiesOfClass(YetiKingEntity.class, glacier.get().box(), YetiKingEntity::isAlive);
+			check(kings.size() == 1 && glacier.get().id.equals(kings.getFirst().instanceId()) && kings.getFirst().phase() == YetiKingEntity.Phase.WAITING,
+					"The Yeti King is not waiting on the new hall's throne: " + kings);
+			king.set(kings.getFirst());
+			held7.set(new int[] {player.getInventory().countItem(JugcraftYeti.YETI_FUR), player.totalExperience});
+			Lairs.reset();
+			LairRewards.Data.of(minecraft).owe(player.getUUID(), new LairRewards.Due(YetiKingLoot.BOSS, UUID.randomUUID(),
+					YetiKingEntity.centre(Lair.GLACIER_HALL.origin(0)), 30));
+			LairRewards.welcome(player);  // as on joining, before being sent home: LairRewards.handOver must keep it
+			check(player.hasAttached(LairRewards.OWED) && LairRewards.Data.of(minecraft).kept(player.getUUID()).isEmpty()
+					&& player.getInventory().countItem(JugcraftYeti.YETI_FUR) == held7.get()[0], "A kept reward was paid in a closed hall");
+		});
+		server.waitFor(minecraft -> king.get().isRemoved(), 20);  // YetiKingEntity.bound(): his instance is gone
+		server.runOnServer(minecraft -> {
+			ServerPlayer player = player(minecraft);
+			ServerLevel level = minecraft.getLevel(Lair.GLACIER_HALL.dimension);
+			Lairs.check(minecraft, level, Lair.GLACIER_HALL, level.getGameTime());
+			check(player.level() == minecraft.overworld() && player.position().distanceTo(home.get()) < 1.0E-6
+					&& player.getAttached(Lairs.VISIT) == null && player.getAbilities().mayBuild, "A player in a closed Glacier Hall was not sent home");
+		});
+		server.runCommand("difficulty peaceful");
+		context.waitTicks(40);  // a kept reward is handed over once a second (LairRewards.register)
+		server.runOnServer(minecraft -> {
+			ServerPlayer player = player(minecraft);
+			int trophies = player.getInventory().countItem(JugcraftYeti.glacierMaul()) + player.getInventory().countItem(JugcraftYeti.rimeclaw());
+			check(!player.hasAttached(LairRewards.OWED) && player.getInventory().countItem(JugcraftYeti.YETI_FUR) >= held7.get()[0] + 4
+					&& player.totalExperience == held7.get()[1] + 30 && trophies == 1 && !YetiKingLoot.firstKill(player),
+					"The reward kept from before the restart was not paid at home: fur " + player.getInventory().countItem(JugcraftYeti.YETI_FUR)
+							+ ", experience " + player.totalExperience + ", trophies " + trophies);
+			check(!LairRewards.handOver(player), "The kept reward was paid twice");
+		});
+
 		// 8. The cap: no more instances than lairs.instances.
 		server.runOnServer(minecraft -> {
 			String instances = JugcraftConfig.textOption("lairs.instances");
@@ -299,6 +435,51 @@ public class LairClientGameTests implements FabricClientGameTest {
 			}
 		});
 		Jugcraft.LOGGER.info("[lairs] client game test: the framework passed end to end");
+	}
+
+	/** 9, before the restart: the player inside a Glacier Hall as the world closes, a reward kept for them in the world's record. */
+	private static void beforeRestart(ClientGameTestContext context, TestServerContext server, Vec3 outside, AtomicReference<Vec3> returnPoint,
+			AtomicReference<int[]> held) {
+		server.runCommand("gamemode survival @a");
+		context.waitTicks(5);
+		server.runOnServer(minecraft -> {
+			ServerPlayer player = player(minecraft);
+			player.getAbilities().flying = false;
+			player.onUpdateAbilities();
+			player.teleportTo(minecraft.overworld(), outside.x, outside.y, outside.z, Set.of(), 0.0F, 0.0F, true);
+			returnPoint.set(player.position());
+			LairInstance hall = Lairs.open(minecraft, Lair.GLACIER_HALL);
+			check(hall != null && Lairs.enter(player, hall), "The player could not go into a Glacier Hall before the restart");
+			held.set(new int[] {player.getInventory().countItem(JugcraftYeti.YETI_FUR), player.totalExperience});
+			LairRewards.Data.of(minecraft).owe(player.getUUID(), new LairRewards.Due(YetiKingLoot.BOSS, UUID.randomUUID(),
+					YetiKingEntity.centre(Lair.GLACIER_HALL.origin(0)), 30));
+		});
+		context.waitTicks(40);
+		server.runOnServer(minecraft -> {
+			ServerPlayer player = player(minecraft);
+			check(Lairs.isLair(player.level()) && player.getAttached(Lairs.VISIT) != null
+					&& !LairRewards.Data.of(minecraft).kept(player.getUUID()).isEmpty(), "Before the restart the player is not in the hall with a reward kept");
+		});
+	}
+
+	/**
+	 * 9, after a real restart (the server's stop and start clear the instances; the real join event runs Lairs.joined and
+	 * then LairRewards.welcome, Lairs.register): the player who logged in inside the closed hall is home, and paid once.
+	 */
+	private static void afterRestart(TestServerContext server, Vec3 returnPoint, int[] held) {
+		server.waitFor(minecraft -> !minecraft.getPlayerList().getPlayers().isEmpty() && player(minecraft).level() == minecraft.overworld(), 200);
+		server.runOnServer(minecraft -> {
+			ServerPlayer player = player(minecraft);
+			check(Lairs.open(Lair.GLACIER_HALL).isEmpty(), "A Glacier Hall instance survived the restart");
+			check(player.position().distanceTo(returnPoint) < 1.0E-6 && player.getAttached(Lairs.VISIT) == null && player.getAbilities().mayBuild,
+					"Joining in a closed Glacier Hall did not send the player home: " + player.position());
+			check(LairRewards.Data.of(minecraft).kept(player.getUUID()).isEmpty() && !player.hasAttached(LairRewards.OWED)
+					&& player.getInventory().countItem(JugcraftYeti.YETI_FUR) >= held[0] + 4 && player.totalExperience == held[1] + 30,
+					"The reward kept over the restart was not paid on joining: fur " + player.getInventory().countItem(JugcraftYeti.YETI_FUR)
+							+ ", experience " + player.totalExperience);
+			check(!LairRewards.handOver(player), "The kept reward was paid twice");
+			Lairs.reset();
+		});
 	}
 
 	/** A Gothic headstone facing south, a Mourning Wreath before it, and four blocks of three lit candles round it. */

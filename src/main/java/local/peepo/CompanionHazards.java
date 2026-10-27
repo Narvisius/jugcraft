@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 
 /** Shared foot/body checks for paths and precise job positions, with no world scans or chunk loads. */
-final class CompanionHazards {
+public final class CompanionHazards {
     private static final TagKey<Block> ALWAYS=TagKey.create(Registries.BLOCK,PeepoMod.id("harmful_blocks"));
     private static final TagKey<Block> WHEN_LIT=TagKey.create(Registries.BLOCK,PeepoMod.id("harmful_when_lit"));
     private CompanionHazards(){}
@@ -17,12 +17,16 @@ final class CompanionHazards {
         return state.is(net.minecraft.world.level.block.Blocks.CACTUS) || state.is(net.minecraft.world.level.block.Blocks.SWEET_BERRY_BUSH) || npc.getType().isBlockDangerous(state) || state.getFluidState().is(FluidTags.LAVA) || state.is(ALWAYS)
             || state.is(WHEN_LIT) && state.hasProperty(BlockStateProperties.LIT) && state.getValue(BlockStateProperties.LIT);
     }
-    static boolean safeAt(PeepoEntity npc,Vec3 point){
+    public static boolean safeAt(PeepoEntity npc,Vec3 point){
         double radius=npc.getBbWidth()/2+.01;
         var min=BlockPos.containing(point.x-radius,point.y-.01,point.z-radius);
         var max=BlockPos.containing(point.x+radius,point.y+npc.getBbHeight()-.001,point.z+radius);
-        for(var pos:BlockPos.betweenClosed(min,max))
-            if(!npc.level().hasChunkAt(pos) || harmful(npc,npc.level().getBlockState(pos)))return false;
+        for(var pos:BlockPos.betweenClosed(min,max)){
+            if(!npc.level().hasChunkAt(pos))return false;
+            var state=npc.level().getBlockState(pos);
+            // The empty space under the tabletop is not a usable standing/delivery position.
+            if(harmful(npc,state) || StarterWorkshopJob.bench(state))return false;
+        }
         return true;
     }
 }

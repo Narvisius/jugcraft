@@ -163,7 +163,8 @@ ROM or supplied executable classes were run during this review.
 
 ## Local continuation — program storage, displays, audio and advanced hardware
 
-Implemented with OpenAI Codex, user-selected Astra High; **not compiled or tested**.
+Implemented with OpenAI Codex, user-selected Astra High. Sources now compile with
+the B–H batch; **runtime and visual tests remain deferred**.
 
 - `programs`, `store <name>`, `runfile <name>` and `deletefile <name>` use a virtual shelf inside the computer's saved block data. It holds at most 16 programs and 65,536 characters total, with the existing 128-line/8,192-character limit per program. Names are flat letters/numbers/underscores/dashes; they cannot resolve host paths. `runfile` replaces the current program rather than creating an unbounded call stack.
 - `set`, `add`, `subtract`, `multiply`, `divide` and `ifvar` provide actual integer control flow. There are at most 32 registers, each clamped to ±1 billion; division by zero stops with an error. `print`/`display`/`write` expand `$register` words. `readvar`, `energyvar`, `mailvar` and `countvar` expose current sensor, JE, message-count and permitted real-inventory values. Missing sensors return -1. No program/register content is sent in public block-render packets.
@@ -214,3 +215,21 @@ model baking and manual inspection of original turtle body/side upgrades and all
 eight-tick motions, monitor-wall text alignment, terminal editing/disk transfer,
 reloading saved computers, and multiplayer ownership/claims. All changes remain
 local until the owner has playtested them.
+
+
+## October 25 local program browser
+
+The terminal now has a Programs tab with four saved entries per page, a validated
+name field and Store / Load / Delete actions. It retains the existing sixteen-file,
+65,536-character shelf and per-program limits. Store copies the current editor to
+the shelf without replacing the running program. Load stops execution; it never
+runs automatically. Replacing a saved entry, deleting and discarding unsaved edits
+require a second button click. A successful server load acknowledgment replaces
+the editor; a failed load preserves the draft. Menu identity, distance and current
+owner/party/claim permission are rechecked for every operation. There are no host
+filesystem paths. The original terminal surround and existing player inventory
+remain in use. Lua/CraftOS compatibility is still unfinished.
+
+Deferred regression: saved program operations, invalid-path and oversized-write
+rejection, save/reload and deletion preserving the current editor. No runtime or
+visual tests have run for this continuation.

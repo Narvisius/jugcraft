@@ -1,7 +1,9 @@
 package io.github.jimbozoomer.jugcraft.concordance;
 
 import io.github.jimbozoomer.jugcraft.concordance.alchemy.AlchemyCatalog;
+import io.github.jimbozoomer.jugcraft.concordance.alchemy.Assay;
 import io.github.jimbozoomer.jugcraft.concordance.alchemy.Outcome;
+import io.github.jimbozoomer.jugcraft.concordance.alchemy.Product;
 import io.github.jimbozoomer.jugcraft.concordance.alchemy.Property;
 import io.github.jimbozoomer.jugcraft.concordance.compose.Text;
 import io.github.jimbozoomer.jugcraft.concordance.effect.Cause;
@@ -13,6 +15,7 @@ import io.github.jimbozoomer.jugcraft.concordance.effect.Stacking;
 import io.github.jimbozoomer.jugcraft.concordance.rules.ResearchState;
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -36,6 +39,11 @@ public final class Alchemy {
 	/** The practice a bottled outcome records ({@code Evidence.Practiced}); distinct outcomes count for mastery. */
 	public static final String ACTIVITY = "jugcraft:alchemy";
 	public static final String SOURCE = "jugcraft:brew";
+	/**
+	 * The Stillroot Poultice's product id (Concordance Chunk C, C-02): its consumers are a friend's healing and, in a lair
+	 * fight, its helper's share (C-P8).
+	 */
+	public static final String STILLROOT_POULTICE = "jugcraft:stillroot_poultice";
 
 	private Alchemy() {
 	}
@@ -53,7 +61,16 @@ public final class Alchemy {
 		return state(player).atLeast(ResearchState.UNDERSTOOD);
 	}
 
-	/** A draught or salve ({@code form}) carrying an outcome's effects. */
+	/**
+	 * What an Assay Glass tells this player ({@link Assay}'s levels): a master's prediction, the glass's measures with the
+	 * Alembic Arts understood, otherwise a spoon's. The crucible's glass and the encyclopedia's Inspect page ask this (C-01).
+	 */
+	public static int glassLevel(Player player) {
+		ResearchState state = state(player);
+		return state.atLeast(ResearchState.MASTERED) ? Assay.MASTERED : state.atLeast(ResearchState.UNDERSTOOD) ? Assay.GLASS : Assay.SPOON;
+	}
+
+	/** A draught or salve ({@code form}) carrying an outcome's effects, named when it is a workshop product (C-02, C-P2). */
 	public static ItemStack brew(Item form, Outcome outcome) {
 		List<Brew.Dose> doses = new ArrayList<>();
 		for (Outcome.Effect effect : outcome.effects()) {
@@ -62,7 +79,33 @@ public final class Alchemy {
 		}
 		ItemStack stack = new ItemStack(form);
 		stack.set(JugcraftConcordance.BREW, new Brew(doses, outcome.key()));
+		Product product = product(stack);
+		if (product != null) {
+			// Vanilla's item name, never a custom name: no identity (Eligibility.IDENTITY), an anvil can still rename it, and
+			// the stack stays a product by what it carries, never by this name.
+			stack.set(DataComponents.ITEM_NAME, Component.translatable(product.name()));
+		}
 		return stack;
+	}
+
+	/**
+	 * The workshop product {@code stack} is (Concordance Chunk C, C-02): by its form and what its brew carries, harm judged
+	 * by the server ({@link #harmful}), never by its name. Null if none. Server only: it reads the rules in force.
+	 */
+	public static @Nullable Product product(ItemStack stack) {
+		Brew brew = stack.get(JugcraftConcordance.BREW);
+		Product.Form form = stack.is(JugcraftConcordance.SALVE) ? Product.Form.SALVE
+				: stack.is(JugcraftConcordance.DRAUGHT) ? Product.Form.DRAUGHT : null;
+		if (brew == null || form == null) {
+			return null;
+		}
+		List<String> statuses = new ArrayList<>();
+		boolean harmful = false;
+		for (Brew.Dose dose : brew.effects()) {
+			statuses.add(dose.status());
+			harmful |= harmful(dose);
+		}
+		return catalog().product(form, statuses, harmful);
 	}
 
 	/**
@@ -93,9 +136,17 @@ public final class Alchemy {
 	 * can only make it stricter.
 	 */
 	public static boolean harmful(Brew.Dose dose) {
-		Identifier id = Identifier.tryParse(dose.status());
+		return dose.harmful() || harmfulStatus(dose.status());
+	}
+
+	/**
+	 * Whether a status harms as the server judges it: its category, or unknown (C-P29). The crucible's risk line asks this
+	 * too (Assay.risks), so a property whose data calls a harmful status helpful still shows its danger.
+	 */
+	public static boolean harmfulStatus(String status) {
+		Identifier id = Identifier.tryParse(status);
 		MobEffect effect = id == null ? null : BuiltInRegistries.MOB_EFFECT.getValue(id);
-		return dose.harmful() || effect == null || effect.getCategory() == MobEffectCategory.HARMFUL;
+		return effect == null || effect.getCategory() == MobEffectCategory.HARMFUL;
 	}
 
 	/** Sends a list of the simulation's lines (an assay, an outcome's reasons) to a player. */

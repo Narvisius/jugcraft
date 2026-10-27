@@ -49,6 +49,19 @@ public final class Benchmark {
 	 * (raw, before armour), and knocks nothing back. So three blows landing together hurt as one.
 	 */
 	public static final int HURT_IMMUNITY = 10;
+	/**
+	 * Rimebind's status (Chunk B; concordance/rime/Rimebind, tools/concordance_rime.py): the share of a foe's steps it
+	 * takes a level, and how long beyond the binding the foe then thaws, refusing Rimebind (the server's guard).
+	 */
+	public static final String RIMEBOUND = "jugcraft:rimebound";
+	public static final double RIMEBOUND_SLOW = 0.2;
+	public static final int RIME_GRACE = 40;
+	/**
+	 * Brace's status (Chunk B; concordance/strata/Brace, tools/concordance_strata.py): the knockback resistance it adds a
+	 * level, spent by the next blow.
+	 */
+	public static final String BRACED = "jugcraft:braced";
+	public static final double BRACE_RESISTANCE = 0.5;
 
 	private Benchmark() {
 	}
@@ -161,11 +174,12 @@ public final class Benchmark {
 	/**
 	 * What happened: won or not, when it ended, damage dealt (by spells and by weapons), damage taken (before
 	 * absorption), absorption and healing gained, Focus spent, casts by ability, the character's health at the end,
-	 * blocks moved by abilities, foe-ticks of control (slowed or pushed), and the health and absorption a spell that
-	 * chooses allies gave each of them (the character included).
+	 * blocks moved by abilities, foe-ticks of control (slowed or pushed), the health and absorption a spell that
+	 * chooses allies gave each of them (the character included), and the blocks of knockback the character took
+	 * (measured only: the model never moves the character for it).
 	 */
 	public record Outcome(boolean won, int ticks, double spellDamage, double weaponDamage, double taken, double absorbed, double healed,
-			int focusSpent, Map<String, Integer> casts, double health, double moved, double control, double support) {
+			int focusSpent, Map<String, Integer> casts, double health, double moved, double control, double support, double knocked) {
 		public double damage() {
 			return spellDamage + weaponDamage;
 		}
@@ -213,6 +227,8 @@ public final class Benchmark {
 		/** Runner state: 0 approaching, 1 retreating, then waiting while {@code wait} > 0. */
 		int phase;
 		int wait;
+		/** Ticks the foe still thaws after Rimebind: refused until then. */
+		int thaw;
 		boolean engaged;
 
 		Live(Foe spec) {
@@ -253,6 +269,7 @@ public final class Benchmark {
 		double moved;
 		double control;
 		double support;
+		double knocked;
 		final Map<String, Integer> casts = new LinkedHashMap<>();
 
 		State(Character character, Encounter encounter) {
@@ -314,7 +331,7 @@ public final class Benchmark {
 
 	private static Outcome outcome(State state, boolean won, int ticks) {
 		return new Outcome(won, ticks, state.spellDamage, state.weaponDamage, state.taken, state.absorbed, state.healed, state.focusSpent,
-				state.casts, Math.max(0.0, state.health), state.moved, state.control, state.support);
+				state.casts, Math.max(0.0, state.health), state.moved, state.control, state.support, state.knocked);
 	}
 
 	private static boolean ready(State state, Ability ability) {
@@ -387,11 +404,11 @@ public final class Benchmark {
 		for (Definitions.Role role : List.of(Definitions.Role.DEFENSE, Definitions.Role.SUPPORT, Definitions.Role.MOVEMENT,
 				Definitions.Role.DAMAGE)) {
 			for (Ability ability : state.character.abilities()) {
-				if (ability.role() != role || !ready(state, ability)) {
+				if (ability.role() != role || !ready(state, ability) || !lands(state, ability)) {
 					continue;
 				}
 				boolean use = switch (role) {
-					case DEFENSE -> threatened && state.absorption <= 0.0;
+					case DEFENSE -> controls(ability) ? nearest != null && reaches(ability, distance) : threatened && state.absorption <= 0.0;
 					case SUPPORT -> threatened && state.absorption <= 0.0 || state.health <= PLAYER_HEALTH - 4.0 && nearest != null;
 					case MOVEMENT -> nearest != null && distance <= 2.0 && hasRanged(state) && state.encounter.objective() <= 0.0;
 					case DAMAGE -> nearest != null && reaches(ability, distance) && state.focus - ability.focus() >= reserve(state);
@@ -403,6 +420,37 @@ public final class Benchmark {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Whether a cast would change anything, judged as the server does before it charges (a refused cast costs nothing): a
+	 * status already held by its stacking rule (Brace on the braced) or Rimebind on a thawing foe changes nothing, so it
+	 * is not started. An ability with any other effect is judged where it lands, as before (step 11).
+	 */
+	private static boolean lands(State state, Ability ability) {
+		for (Plan.Step step : ability.plan().root().steps()) {
+			EffectSpec effect = step.effect();
+			if (effect.kind() != EffectKind.STATUS || effect.status() == null) {
+				return true;
+			}
+			if (effect.intent() == Intent.HELPFUL) {
+				int[] has = state.statuses.getOrDefault(effect.status(), new int[] {0, 0});
+				if (effect.stacking().combine(has[0], has[1], effect.magnitude(), effect.duration()).changed()) {
+					return true;
+				}
+			} else {
+				Live nearest = state.nearest();
+				if (!RIMEBOUND.equals(effect.status()) || nearest != null && nearest.thaw <= 0) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/** Whether an ability holds foes off rather than shielding (a defense with a harmful effect: Rimebind). */
+	private static boolean controls(Ability ability) {
+		return ability.plan().root().steps().stream().anyMatch(step -> step.effect().intent() == Intent.HARMFUL);
 	}
 
 	/**
@@ -502,9 +550,9 @@ public final class Benchmark {
 				return state.health > before;
 			}
 			case STATUS -> {
-				// It lands by its stacking rule, as on the server (a recast that changes nothing fails, at no cost). The
-				// one helpful status, Hearthguard's Fire Resistance, wards against nothing these foes deal, so it changes
-				// nothing else here.
+				// It lands by its stacking rule, as on the server (a recast that changes nothing fails, at no cost).
+				// Hearthguard's Fire Resistance wards against nothing these foes deal; Brace's Braced is spent by the next
+				// fresh blow (hurt).
 				String status = effect.status();
 				if (status == null) {
 					return false;
@@ -551,7 +599,19 @@ public final class Benchmark {
 				return true;
 			}
 			case STATUS -> {
-				// Slowness: the foe loses its next steps for the effect's time, scaled by its level (15% a level).
+				if (RIMEBOUND.equals(effect.status())) {
+					// Rimebind: refused while the foe thaws (the server's guard); a fifth of its steps a level while bound.
+					if (foe.thaw > 0) {
+						return false;
+					}
+					foe.thaw = effect.duration() + RIME_GRACE;
+					int lost = (int) Math.round(effect.duration() * RIMEBOUND_SLOW * (effect.magnitude() + 1));
+					state.control += Math.max(0, lost - foe.wait);
+					foe.wait = Math.max(foe.wait, lost);
+					return true;
+				}
+				// Slowness, and every other harmful status as since step 11: the foe loses its next steps for the effect's
+				// time, scaled by its level (15% a level).
 				int lost = (int) Math.round(effect.duration() * 0.15 * (effect.magnitude() + 1));
 				state.control += Math.max(0, lost - foe.wait);
 				foe.wait = Math.max(foe.wait, lost);
@@ -587,6 +647,9 @@ public final class Benchmark {
 				continue;
 			}
 			foe.guard.tick();
+			if (foe.thaw > 0) {
+				foe.thaw--;
+			}
 			if (foe.cooldown > 0) {
 				foe.cooldown--;
 			}
@@ -657,11 +720,18 @@ public final class Benchmark {
 	}
 
 	private static void hurt(State state, double damage) {
+		boolean fresh = state.guard.ticks <= 0;
 		double after = afterArmour(state.guard.admit(damage), state.character.armour().points(), state.character.armour().toughness());
 		state.taken += after;
 		double soaked = Math.min(state.absorption, after);
 		state.absorption -= soaked;
 		state.health -= after - soaked;
+		if (fresh) {
+			// A fresh blow knocks the character back (KNOCKBACK, vanilla's 0.4 on the ground); a Brace takes its share off and
+			// is spent. Measured only: moving the character would change every encounter recorded since step 11.
+			int[] brace = state.statuses.remove(BRACED);
+			state.knocked += KNOCKBACK * (brace == null ? 1.0 : Math.max(0.0, 1.0 - BRACE_RESISTANCE * (brace[0] + 1)));
+		}
 	}
 
 	private static void tickDown(State state) {

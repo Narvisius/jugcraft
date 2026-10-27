@@ -17,7 +17,7 @@ public class TownPistonMixin {
 	@Inject(method = "isPushable", at = @At("HEAD"), cancellable = true)
 	private static void jugcraft$keepTown(BlockState state, Level level, BlockPos pos, Direction direction, boolean allowDestroy,
 			Direction pistonFacing, CallbackInfoReturnable<Boolean> cir) {
-		if (TownProtection.shieldsBlock(level, pos) || io.github.jimbozoomer.jugcraft.finance.LandRegistry.crossesBoundary(level, pos, pos.relative(direction))) {
+		if (io.github.jimbozoomer.jugcraft.jimtafacts.network.SpatialReservation.blocked(level,pos)||io.github.jimbozoomer.jugcraft.jimtafacts.network.SpatialReservation.blocked(level,pos.relative(direction))||TownProtection.shieldsBlock(level, pos) || io.github.jimbozoomer.jugcraft.finance.LandRegistry.crossesBoundary(level, pos, pos.relative(direction))) {
 			cir.setReturnValue(false);
 		}
 	}

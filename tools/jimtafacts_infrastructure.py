@@ -3,9 +3,12 @@ from pathlib import Path
 import json,shutil,hashlib
 ROOT=Path(__file__).resolve().parents[1];RES=ROOT/'src/main/resources';SOURCE=ROOT/'art/owner-library/originals/Oct23/Jimtafacts/industrialcraft reborn by jimbo/assets/ic2'
 DEVICES={'jimta_teleporter':'machine/blockTeleporter','jimta_tesla':'machine/blockTesla','jimta_chargepad_batbox':'wiring/blockChargepadBatBox','jimta_chargepad_cesu':'wiring/blockChargepadCESU','jimta_chargepad_mfe':'wiring/blockChargepadMFE','jimta_chargepad_mfsu':'wiring/blockChargepadMFSU'}
-DEVICES['jimta_magnetizer']='machine/blockMagnetizer'
-def items():return set(DEVICES)|{'jimta_frequency_transmitter'}
-def blocks():return set(DEVICES)
+DEVICES['jimta_cropmatron']='machine/blockCropmatron'
+DEVICES['jimta_civil_advanced_miner']='machine/blockAdvMiner'
+DEVICES['jimta_civil_miner']='machine/blockMiner'
+DEVICES['jimta_iron_furnace']='machine/blockIronFurnace'
+def items():return set(DEVICES)|{'jimta_magnetizer'}|{'jimta_frequency_transmitter'}
+def blocks():return set(DEVICES)|{'jimta_magnetizer'}
 def dump(p,v):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(v,indent=2)+'\n',encoding='utf-8')
 def generate(shared=True):
  manifest=[];lang={}
@@ -29,6 +32,10 @@ def generate(shared=True):
  craft('transmitter',['jugcraft:basic_circuit','minecraft:redstone','minecraft:ender_pearl'],'jimta_frequency_transmitter')
  craft('teleporter',['jugcraft:advanced_circuit']*2+['minecraft:ender_pearl']*2+['minecraft:diamond','jugcraft:steel_plate','jugcraft:machine_casing'],'jimta_teleporter')
  craft('tesla',['jugcraft:advanced_circuit','jugcraft:machine_casing','jugcraft:steel_plate']+['jugcraft:copper_wire']*4,'jimta_tesla')
+ craft('iron_furnace',['minecraft:furnace']+['minecraft:iron_ingot']*4,'jimta_iron_furnace')
+ craft('miner',['jugcraft:jimta_civil_mining_well','jugcraft:copper_wire'],'jimta_civil_miner')
+ craft('advanced_miner',['jugcraft:jimta_civil_quarry','jugcraft:advanced_circuit','jugcraft:jimta_item_filter'],'jimta_civil_advanced_miner')
+ craft('cropmatron',['jugcraft:machine_casing','jugcraft:basic_circuit','jugcraft:electric_motor','jugcraft:bronze_fluid_pipe','minecraft:dispenser'],'jimta_cropmatron')
  craft('magnetizer',['jugcraft:machine_casing','jugcraft:basic_circuit','jugcraft:jimta_iron_fence']+['jugcraft:copper_wire']*3,'jimta_magnetizer')
  dump(RES/'data/jugcraft/tags/item/magnetizer_boots.json',{'replace':False,'values':['minecraft:'+n+'_boots' for n in ('chainmail','iron','golden','diamond','netherite')]+['jugcraft:bronze_boots']+['jugcraft:jimta_'+n+'_boots' for n in ('industrial_bronze','nano','quantum')]})
  for tier,battery in [('batbox','jimta_bat_box'),('cesu','jimta_cesu'),('mfe','jimta_mfe'),('mfsu','jimta_mfsu')]:

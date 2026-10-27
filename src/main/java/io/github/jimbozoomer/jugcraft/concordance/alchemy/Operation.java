@@ -1,5 +1,6 @@
 package io.github.jimbozoomer.jugcraft.concordance.alchemy;
 
+import io.github.jimbozoomer.jugcraft.concordance.compose.Text;
 import java.util.regex.Pattern;
 import org.jspecify.annotations.Nullable;
 
@@ -13,6 +14,14 @@ public sealed interface Operation {
 
 	String text();
 
+	/** This step in the player's words (Concordance Chunk C, C-01); its canonical text() stays what a formula records. */
+	Text describe();
+
+	/** An ingredient in a step's words: the item and how it is prepared (Add.describe, and what a buffer holds instead). */
+	static Text ingredient(String item, String preparation) {
+		return Text.of("alchemy.op.add", new Text.Ref("item", item), new Text.Ref("preparation", preparation));
+	}
+
 	/** Pours in {@code parts} parts of water (a bottle each; a bucket is three). */
 	record Water(int parts) implements Operation {
 		public Water {
@@ -24,6 +33,11 @@ public sealed interface Operation {
 		@Override
 		public String text() {
 			return "water " + parts;
+		}
+
+		@Override
+		public Text describe() {
+			return Text.of("alchemy.op.water", parts);
 		}
 	}
 
@@ -39,6 +53,11 @@ public sealed interface Operation {
 		public String text() {
 			return "add " + item + " " + preparation;
 		}
+
+		@Override
+		public Text describe() {
+			return Operation.ingredient(item, preparation);
+		}
 	}
 
 	/** Stirs once at the temperature band the mixture is in. */
@@ -46,6 +65,11 @@ public sealed interface Operation {
 		@Override
 		public String text() {
 			return "stir " + band.id;
+		}
+
+		@Override
+		public Text describe() {
+			return Text.of("alchemy.op.stir", new Text.Ref("band", band.id));
 		}
 	}
 

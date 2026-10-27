@@ -20,13 +20,15 @@ public final class JugcraftWorkshop {
     public static final Map<String, Item> ITEMS = new LinkedHashMap<>();
     public static final WorkshopBlock[] BLOCKS = new WorkshopBlock[3];
     public static BlockEntityType<WorkshopBlockEntity> ENTITY;
+    public static BellowsBlock BELLOWS;
+    public static BlockEntityType<BellowsBlockEntity> BELLOWS_ENTITY;
     public static ExtendedMenuType<WorkshopMenu, WorkshopCatalog> MENU;
     public static RecipeType<WorkshopRecipe> RECIPES;
     public static RecipeSerializer<WorkshopRecipe> SERIALIZER;
     private JugcraftWorkshop() { }
     public static void register() {
         for (String name : new String[]{"workshop_hammer", "wire_cutters", "soldering_tool", "unfired_ceramic_lining",
-                "basic_ceramic_lining", "unfired_ceramic_crucible", "ceramic_crucible", "unfired_insulator"}) {
+                "basic_ceramic_lining", "unfired_ceramic_crucible", "ceramic_crucible", "unfired_insulator", "crucible_heat_insert"}) {
             var key = ResourceKey.create(Registries.ITEM, Jugcraft.id(name));
             var properties = new Item.Properties().setId(key);
             if (name.equals("workshop_hammer") || name.equals("wire_cutters") || name.equals("soldering_tool")) properties.stacksTo(1);
@@ -41,6 +43,15 @@ public final class JugcraftWorkshop {
             var ik = ResourceKey.create(Registries.ITEM, Jugcraft.id(name));
             ITEMS.put(name, Registry.register(BuiltInRegistries.ITEM, ik, new BlockItem(BLOCKS[i], new Item.Properties().setId(ik).useBlockDescriptionPrefix())));
         }
+        var bellowsKey = ResourceKey.create(Registries.BLOCK, Jugcraft.id("crucible_bellows"));
+        BELLOWS = Registry.register(BuiltInRegistries.BLOCK, bellowsKey, new BellowsBlock(
+            BlockBehaviour.Properties.ofFullCopy(Blocks.CRAFTING_TABLE).setId(bellowsKey).strength(2.5F).noOcclusion()
+                .pushReaction(net.minecraft.world.level.material.PushReaction.IMMOVEABLE)));
+        var bellowsItem = ResourceKey.create(Registries.ITEM, Jugcraft.id("crucible_bellows"));
+        ITEMS.put("crucible_bellows", Registry.register(BuiltInRegistries.ITEM,bellowsItem,
+            new BlockItem(BELLOWS,new Item.Properties().setId(bellowsItem).useBlockDescriptionPrefix())));
+        BELLOWS_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE,Jugcraft.id("crucible_bellows"),
+            FabricBlockEntityTypeBuilder.create(BellowsBlockEntity::new,BELLOWS).build());
         ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("starter_workshop"),
             FabricBlockEntityTypeBuilder.create(WorkshopBlockEntity::new, BLOCKS).build());
         MENU = Registry.register(BuiltInRegistries.MENU, Jugcraft.id("starter_workshop"),

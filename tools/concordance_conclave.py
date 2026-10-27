@@ -2,7 +2,7 @@
 
 The Starbound Conclave is the fellowship of the Concordance's traditions, which are its factions: every research entry
 already belongs to one (Lampwrights, Greenwardens, Alembists, Starwatchers, Circlewrights, Spiritbinders, Crimson Vigil,
-Runesmiths, Balancewrights, Hexweavers, Dreamwalkers, Hearthbinders). It replaces nothing: parties stay Jugcraft's
+Runesmiths, Balancewrights, Hexweavers, Dreamwalkers, Hearthbinders, Rimekeepers, Stratawrights). It replaces nothing: parties stay Jugcraft's
 parties, the town stays the town, Jugs stay the only coin. A player who understands First Light swears its oath at a
 Conclave Lectern (or with /jugcraft concordance conclave join) and earns RENOWN, which is standing and never a currency,
 from four kinds of contribution, each bounded (Java: conclave/Conclave.java):
@@ -59,7 +59,8 @@ MAX_PROJECT_RENOWN = 100
 TRADITIONS = {"lampwrights": "Lampwrights", "greenwardens": "Greenwardens", "alembists": "Alembists",
               "starwatchers": "Starwatchers", "circlewrights": "Circlewrights", "spiritbinders": "Spiritbinders",
               "crimson_vigil": "Crimson Vigil", "runesmiths": "Runesmiths", "balancewrights": "Balancewrights",
-              "hexweavers": "Hexweavers", "dreamwalkers": "Dreamwalkers", "hearthbinders": "Hearthbinders"}
+              "hexweavers": "Hexweavers", "dreamwalkers": "Dreamwalkers", "hearthbinders": "Hearthbinders",
+              "rimekeepers": "Rimekeepers", "stratawrights": "Stratawrights"}
 
 # The practices commissions and projects may ask for (each a Java ACTIVITY), and how they read.
 ACTIVITIES = {"jugcraft:observation": "an observation of the sky", "jugcraft:ritual": "a ritual completed",

@@ -51,6 +51,9 @@ public final class WorkshopRobot extends PathfinderMob {
     private String action="";
     private int charge,cursor,goalAge,blueprintCell;
     private boolean running=true;
+    private List<BlockPos> route=List.of();
+    private int routeStep;
+    private String routePurpose="";
     public final SimpleContainer cargo=new SimpleContainer(27){
         @Override public boolean stillValid(Player player){return isAlive()&&ownedBy(player)&&distanceToSqr(player)<64;}
     };
@@ -62,13 +65,43 @@ public final class WorkshopRobot extends PathfinderMob {
     @Override protected void defineSynchedData(SynchedEntityData.Builder b){super.defineSynchedData(b);b.define(PROGRAM,"clean");}
     public void configure(UUID owner,BlockPos home){this.owner=owner;this.home=home.immutable();this.area=home.above().immutable();}
     public String program(){return entityData.get(PROGRAM);}
-    public void program(String value){if(WorkshopRobots.PROGRAMS.contains(value)){entityData.set(PROGRAM,value);goal=null;cursor=0;}}
+    public void program(String value){if(WorkshopRobots.PROGRAMS.contains(value)){entityData.set(PROGRAM,value);goal=null;cursor=0;routeStep=0;routePurpose="";}}
     public boolean ownedBy(Player p){return owner!=null&&owner.equals(p.getUUID());}
     public int energy(){return charge;}
     public boolean link(int type,BlockPos pos,Direction face){
         if(pos.distSqr(home)>32*32)return false;
         if(type==0){output=pos.immutable();outputSide=face;}else if(type==1){input=pos.immutable();inputSide=face;}else{area=pos.immutable();cursor=0;}
-        goal=null;return true;
+        goal=null;routeStep=0;routePurpose="";return true;
+    }
+    /** Installs only a bounded, current-dimension route. Movement rechecks every crossed block. */
+    public boolean surveyRoute(ServerPlayer player,ItemStack survey){
+        if(!ownedBy(player)||!survey.is(FactoryFieldTools.MAP)||!(level() instanceof ServerLevel server))return false;
+        if(player.isShiftKeyDown()){route=List.of();routeStep=0;routePurpose="";goal=null;return true;}
+        var data=survey.getOrDefault(DataComponents.CUSTOM_DATA,CustomData.EMPTY).copyTag();
+        int count=data.getIntOr("points",0);
+        if(data.getIntOr("mode",0)!=2||count<2||count>16||!server.dimension().identifier().toString().equals(data.getStringOr("Dimension","")))return false;
+        var points=new ArrayList<BlockPos>();
+        for(int i=0;i<count;i++){
+            if(!data.contains("point"+i))return false;
+            var point=BlockPos.of(data.getLongOr("point"+i,0)).above();
+            if(point.distSqr(home)>1024||!server.isInWorldBounds(point)||!allowed(server,point))return false;
+            points.add(point);
+        }
+        route=List.copyOf(points);routeStep=0;routePurpose="";goal=null;return true;
+    }
+    private void routeTo(BlockPos target,String task){
+        if(!Set.of("carrier","delivery","fluid_carrier").contains(program())||route.isEmpty()){select(target,task);return;}
+        if(!routePurpose.equals(task)){routePurpose=task;routeStep=0;}
+        if(routeStep<route.size()){
+            boolean outward=task.equals("unload")||task.equals("fluid_out");
+            select(route.get(outward?routeStep:route.size()-1-routeStep),"route");
+        }else select(target,task);
+    }
+    private boolean mayMove(ServerLevel level,Vec3 motion){
+        var swept=getBoundingBox().expandTowards(motion);
+        for(var at:BlockPos.betweenClosed(BlockPos.containing(swept.minX,swept.minY,swept.minZ),BlockPos.containing(swept.maxX,swept.maxY,swept.maxZ)))
+            if(!allowed(level,at))return false;
+        return level.noCollision(this,getBoundingBox().move(motion));
     }
     private ServerPlayer actor(ServerLevel level){return Authority.answering(level,owner);}
     private boolean allowed(ServerLevel level,BlockPos pos){
@@ -86,9 +119,9 @@ public final class WorkshopRobot extends PathfinderMob {
                 else if(goal==null&&tickCount%10==0)choose(level);
                 if(goal!=null){
                     Vec3 destination=Vec3.atCenterOf(goal).add(0,action.equals("dock")?0:.75,0),delta=destination.subtract(position());
-                    if(!level.hasChunkAt(goal)||++goalAge>240){goal=null;goalAge=0;setDeltaMovement(Vec3.ZERO);}
+                    if(!allowed(level,goal)||++goalAge>240){goal=null;goalAge=0;setDeltaMovement(Vec3.ZERO);}
                     else if(delta.lengthSqr()<2.25){setDeltaMovement(Vec3.ZERO);if(tickCount%10==0){work(level);goal=null;goalAge=0;}}
-                    else if(charge>0){setDeltaMovement(delta.normalize().scale(.18));charge--;setYRot((float)(Math.atan2(-delta.x,delta.z)*180/Math.PI));}
+                    else if(charge>0){var motion=delta.normalize().scale(.18);if(mayMove(level,motion)){setDeltaMovement(motion);charge--;setYRot((float)(Math.atan2(-delta.x,delta.z)*180/Math.PI));}else setDeltaMovement(Vec3.ZERO);}
                 }else setDeltaMovement(Vec3.ZERO);
             }
         }
@@ -104,10 +137,10 @@ public final class WorkshopRobot extends PathfinderMob {
     private void select(BlockPos at,String task){goal=at.immutable();action=task;goalAge=0;}
     private void choose(ServerLevel level){
         String p=program();
-        if(output!=null&&carrying()&&!Set.of("builder","stripes","planter").contains(p)){select(output,"unload");return;}
-        if(fluid.amount>0&&output!=null){select(output,"fluid_out");return;}
-        if(p.equals("carrier")||p.equals("delivery")){if(input!=null)select(input,"load");return;}
-        if(p.equals("fluid_carrier")){if(input!=null)select(input,"fluid_in");return;}
+        if(output!=null&&carrying()&&!Set.of("builder","stripes","planter").contains(p)){routeTo(output,"unload");return;}
+        if(fluid.amount>0&&output!=null){routeTo(output,"fluid_out");return;}
+        if(p.equals("carrier")||p.equals("delivery")){if(input!=null)routeTo(input,"load");return;}
+        if(p.equals("fluid_carrier")){if(input!=null)routeTo(input,"fluid_in");return;}
         if(p.equals("crafter")){select(home.above(),"craft");return;}
         if(p.equals("builder")){chooseBlueprint(level);return;}
         if(p.equals("clean")||p.equals("picker")){var items=new ArrayList<ItemEntity>();
@@ -140,6 +173,7 @@ public final class WorkshopRobot extends PathfinderMob {
         if(goal==null||charge<STEP_COST||!allowed(level,goal)||!allowed(level,blockPosition()))return;
         boolean changed=switch(action){
             case "dock" -> false;
+            case "route" -> {routeStep++;yield true;}
             case "load" -> transfer(level,goal,inputSide,true);
             case "unload" -> transfer(level,goal,outputSide,false);
             case "fluid_in" -> transferFluid(level,goal,inputSide,true);
@@ -154,6 +188,7 @@ public final class WorkshopRobot extends PathfinderMob {
             case "pump" -> pump(level,goal);
             default -> mine(level,goal);
         };if(changed)charge-=STEP_COST;
+        if(!action.equals("route")&&!action.equals("dock")){routeStep=0;routePurpose="";}
     }
     private List<ItemStack> copy(){return new ArrayList<>(cargo.getItems().stream().map(ItemStack::copy).toList());}
     private void apply(List<ItemStack> stacks){for(int i=0;i<27;i++)cargo.setItem(i,stacks.get(i));}
@@ -271,6 +306,11 @@ public final class WorkshopRobot extends PathfinderMob {
         if(owner==null&&Authority.mayChange(level,player,blockPosition()))configure(player.getUUID(),blockPosition().below());
         if(!ownedBy(player)||!Authority.mayChange(level,player,blockPosition()))return InteractionResult.FAIL;
         var held=player.getItemInHand(hand);String board=WorkshopRobots.program(held);
+        if(held.is(FactoryFieldTools.MAP)){
+            boolean applied=player instanceof ServerPlayer p&&surveyRoute(p,held);
+            player.sendOverlayMessage(Component.literal(applied?(player.isShiftKeyDown()?"Robot route cleared.":"Carrier route installed: forward to output, reverse to input."):"Record 2–16 path points in this dimension, within 32 blocks of the charging point. Sneak-use clears."));
+            return applied?InteractionResult.SUCCESS:InteractionResult.FAIL;
+        }
         if(board!=null){program(board);player.sendOverlayMessage(Component.literal("Robot program: "+board+". Cards are reusable."));return InteractionResult.SUCCESS;}
         if(held.is(WorkshopRobots.LINKER)){CustomData.update(DataComponents.CUSTOM_DATA,held,t->t.putString("Robot",getUUID().toString()));player.sendOverlayMessage(Component.literal("Robot selected. Use on a block to link; shift-use in the air switches output/input/work area."));return InteractionResult.SUCCESS;}
         if(held.is(Items.REDSTONE)&&charge<CAPACITY){charge=Math.min(CAPACITY,charge+1000);held.consume(1,player);return InteractionResult.SUCCESS;}
@@ -288,6 +328,7 @@ public final class WorkshopRobot extends PathfinderMob {
         super.addAdditionalSaveData(out);if(owner!=null)out.store("RobotOwner",UUIDUtil.CODEC,owner);out.store("Home",BlockPos.CODEC,home);out.store("Area",BlockPos.CODEC,area);
         if(input!=null)out.store("Input",BlockPos.CODEC,input);if(output!=null)out.store("Output",BlockPos.CODEC,output);
         out.putInt("InputFace",inputSide.ordinal());out.putInt("OutputFace",outputSide.ordinal());out.putString("Program",program());out.putInt("Charge",charge);out.putBoolean("Running",running);
+        out.store("SurveyRoute",BlockPos.CODEC.listOf(0,16),route);
         ContainerHelper.saveAllItems(out,cargo.getItems());out.store("Fluid",FluidVariant.CODEC,fluid.variant);out.putLong("FluidAmount",fluid.amount);
     }
     @Override protected void readAdditionalSaveData(ValueInput in){
@@ -295,6 +336,8 @@ public final class WorkshopRobot extends PathfinderMob {
         input=in.read("Input",BlockPos.CODEC).filter(p->p.distSqr(home)<=1024).orElse(null);output=in.read("Output",BlockPos.CODEC).filter(p->p.distSqr(home)<=1024).orElse(null);
         inputSide=Direction.values()[Math.floorMod(in.getInt("InputFace").orElse(1),6)];outputSide=Direction.values()[Math.floorMod(in.getInt("OutputFace").orElse(1),6)];
         program(in.getStringOr("Program","clean"));charge=Math.clamp(in.getInt("Charge").orElse(0),0,CAPACITY);running=in.getBooleanOr("Running",true);
+        route=in.read("SurveyRoute",BlockPos.CODEC.listOf(0,16)).orElse(List.of());
+        if(route.stream().anyMatch(p->p.distSqr(home)>1024))route=List.of();routeStep=0;routePurpose="";
         ContainerHelper.loadAllItems(in,cargo.getItems());fluid.variant=in.read("Fluid",FluidVariant.CODEC).orElse(FluidVariant.blank());fluid.amount=fluid.variant.isBlank()?0:Math.clamp(in.getLong("FluidAmount").orElse(0L),0,16*FluidConstants.BUCKET);
     }
 }

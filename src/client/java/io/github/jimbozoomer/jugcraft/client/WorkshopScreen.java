@@ -41,7 +41,7 @@ public final class WorkshopScreen extends AbstractContainerScreen<WorkshopMenu> 
             press(working ? WorkshopMenu.PULSE : WorkshopMenu.RELEASE);
         })
             .bounds(leftPos + 8, topPos + 188, 105, 20).build());
-        work.visible = menu.catalog.station() == 0;
+        work.visible = menu.catalog.station() == 0 || menu.catalog.station() == 2;
         cancel = addRenderableWidget(Button.builder(Component.translatable("screen.jugcraft.workshop.cancel"), b -> { working = false; press(WorkshopMenu.RELEASE); press(WorkshopMenu.CANCEL); })
             .bounds(leftPos + 8, topPos + 211, 105, 16).build());
     }
@@ -49,10 +49,14 @@ public final class WorkshopScreen extends AbstractContainerScreen<WorkshopMenu> 
     @Override public void removed() { working = false; press(WorkshopMenu.RELEASE); super.removed(); }
     @Override protected void containerTick() {
         super.containerTick();
+        int selected = menu.data(5);
+        work.visible = menu.catalog.station() == 0 || selected >= 0 && selected < menu.catalog.entries().size()
+            && menu.catalog.entries().get(selected).recipe().highHeat();
+        if (!work.visible && working) { working = false; press(WorkshopMenu.RELEASE); }
         if (working) press(WorkshopMenu.PULSE);
         for (int i = 0; i < recipes.size(); i++) recipes.get(i).active = !menu.busy() && i != menu.data(5);
         cancel.active = menu.busy();
-        work.setMessage(Component.translatable(working ? "screen.jugcraft.workshop.working" : "screen.jugcraft.workshop.work"));
+        work.setMessage(Component.translatable("screen.jugcraft.workshop." + (menu.catalog.station()==2 ? (working ? "stop_pumping" : "pump") : (working ? "working" : "work"))));
     }
     @Override public void extractRenderState(GuiGraphicsExtractor g, int mx, int my, float delta) {
         extractBackground(g, mx, my, delta); super.extractRenderState(g, mx, my, delta); extractTooltip(g, mx, my);
@@ -86,10 +90,11 @@ public final class WorkshopScreen extends AbstractContainerScreen<WorkshopMenu> 
     }
     @Override protected void extractLabels(GuiGraphicsExtractor g, int mx, int my) {
         super.extractLabels(g, mx, my);
-        g.text(font, Component.translatable("screen.jugcraft.workshop.preview"), 132, 23, 0xFF453727, false);
+        g.text(font, Component.translatable(menu.catalog.station()==2 ? "screen.jugcraft.workshop.air."+menu.data(8) : "screen.jugcraft.workshop.preview"), 132, 23, 0xFF453727, false);
         g.text(font, Component.translatable("screen.jugcraft.workshop.heat", menu.heat() / 20), 171, 75, 0xFF453727, false);
         g.text(font, Component.translatable("screen.jugcraft.workshop.status." + menu.data(4)), 122, 122, 0xFF453727, false);
         if (menu.catalog.station() == 2) {
+            g.text(font, Component.translatable("screen.jugcraft.workshop.insert"), 128, 106, 0xFF453727, false);
             g.text(font, Component.translatable("screen.jugcraft.workshop.lining"), 207, 106, 0xFF453727, false);
             g.text(font, Component.translatable("screen.jugcraft.workshop.vessel"), 249, 106, 0xFF453727, false);
         }

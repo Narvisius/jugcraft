@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "jugcraft:jimta_spellbooks_player_statue",
+    "jugcraft:jimta_spellbooks_icy_fang"
+  ],
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_ice_spider_statue"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

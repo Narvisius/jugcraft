@@ -47,10 +47,14 @@ public class CiderBarrelBlockEntity extends BlockEntity {
     private long companionFillUntil;
     private final CompanionRecipeFilter filter = new CompanionRecipeFilter();
     public CompanionRecipeFilter filter() { return filter; }
+    private int stockStage;
+    public void stockStage(int stage){if(servings==0 && stockStage!=stage){stockStage=stage;changed();}}
     public int companionStage() {
+        if(stockStage>0 && filter.allows(new ItemStack(JugcraftAgriculture.item(STAGES.get(stockStage)))))return stockStage;
         return filter.allows(new ItemStack(JugcraftAgriculture.item("sparkling_cider"))) ? 1 : 2;
     }
     public void selectCompanionStage(boolean aged) {
+        stockStage=0;
         for(int i=0;i<9;i++)filter.set(i,ItemStack.EMPTY);
         filter.set(0,new ItemStack(JugcraftAgriculture.item(aged?"aged_cider":"sparkling_cider")));
         changed();
@@ -236,7 +240,7 @@ public class CiderBarrelBlockEntity extends BlockEntity {
 		started = input.getLongOr("started", 0L);
         companionBottles=Math.clamp(input.getIntOr("CompanionBottles",0),0,CAPACITY);
         companionFillUntil=input.getLongOr("CompanionFillUntil",0L);
-        filter.load(input);
+        filter.load(input);stockStage=Math.clamp(input.getIntOr("CompanionStockStage",0),0,2);
 	}
 
 	@Override
@@ -246,6 +250,6 @@ public class CiderBarrelBlockEntity extends BlockEntity {
 		output.putLong("started", started);
         output.putInt("CompanionBottles",companionBottles);
         output.putLong("CompanionFillUntil",companionFillUntil);
-        filter.save(output);
+        filter.save(output);output.putInt("CompanionStockStage",stockStage);
 	}
 }

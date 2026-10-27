@@ -843,5 +843,21 @@
       "requiredProjects": [],
       "embeddedProjects": {}
     }
+  ],
+  "embeddedLibraries": [
+    {
+      "key": "cobalt",
+      "name": "Cobalt",
+      "version": "0.9.9",
+      "maven": "cc.tweaked:cobalt:0.9.9",
+      "repository": "https://maven.squiddev.cc",
+      "url": "https://maven.squiddev.cc/cc/tweaked/cobalt/0.9.9/cobalt-0.9.9.jar",
+      "sha256": "aca9fe1a2cab3ea7e296a72a1a6f667e29ddfdbab7af7cee35420bc2cc6e6929",
+      "license": "MIT",
+      "purpose": "Isolated Lua worker runtime; embedded inside Jugcraft, not a separate pack mod.",
+      "contentSha256": "dda697a0d03823cc9df3370aae98916d9ba57c3ccb3ff85f9c96221cbe8a5f6c",
+      "nestedPath": "META-INF/jars/cobalt-0.9.9.jar",
+      "modId": "cc_tweaked_cobalt"
+    }
   ]
 }

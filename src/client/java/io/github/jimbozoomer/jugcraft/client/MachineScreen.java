@@ -484,7 +484,12 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> implemen
 					STATUS_X, y, STATUS_WIDTH, STATUS_BOTTOM, theme.text());
 			y += 2;
 		}
-		if (kind == MachineKind.DEPOSIT_DRILL && menu.data(MachineBlockEntity.DATA_DRILL_STAGE) > 0) {
+		if(kind==MachineKind.SAWMILL&&menu.data(MachineBlockEntity.DATA_BLADE_REQUIRED)>0){
+            int required=menu.data(MachineBlockEntity.DATA_BLADE_REQUIRED),installed=menu.data(MachineBlockEntity.DATA_BLADE_INSTALLED);
+            y=MachineSkin.wrap(graphics,font,Component.literal("Blade: "+installed+" / "+required+" required"),STATUS_X,y,STATUS_WIDTH,STATUS_BOTTOM,installed<required?theme.warn():theme.text());
+            if(installed<required)y=MachineSkin.wrap(graphics,font,Component.literal("Fit a "+io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialCuttingBlade.requiredName(required)+" blade in an upgrade slot."),STATUS_X,y,STATUS_WIDTH,STATUS_BOTTOM,theme.warn());
+        }
+        if (kind == MachineKind.DEPOSIT_DRILL && menu.data(MachineBlockEntity.DATA_DRILL_STAGE) > 0) {
 			y = MachineSkin.wrap(graphics, font, Component.translatable(
 					menu.data(MachineBlockEntity.DATA_DRILL_STAGE) == 1 ? "container.jugcraft.drill.boring" : "container.jugcraft.drill.extracting",
 					menu.data(MachineBlockEntity.DATA_DRILL_DEPTH)), STATUS_X, y, STATUS_WIDTH, STATUS_BOTTOM, theme.text());

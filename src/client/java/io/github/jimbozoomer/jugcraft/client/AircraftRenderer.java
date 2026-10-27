@@ -20,7 +20,7 @@ public final class AircraftRenderer extends EntityRenderer<Aircraft,AircraftRend
     private record Node(String name,float[] offset,float[] rotation,JsonObject animation,QuadModel plain,QuadModel tinted,List<Node> children) {}
     private static final Map<String,List<Node>> MODELS=new HashMap<>();
     public static final class State extends EntityRenderState {
-        AircraftSpec spec;float yaw,pitch,spin;int paint,weapons;float forward,turn,vertical;
+        AircraftSpec spec;float yaw,pitch,spin,bank;int paint,weapons;float forward,turn,vertical;
         float aimYaw,aimPitch,recoil;net.minecraft.world.item.ItemStack banner=net.minecraft.world.item.ItemStack.EMPTY;
     }
     public AircraftRenderer(EntityRendererProvider.Context context){super(context);shadowRadius=1.5F;}
@@ -44,7 +44,7 @@ public final class AircraftRenderer extends EntityRenderer<Aircraft,AircraftRend
     @Override public void extractRenderState(Aircraft a,State s,float delta){
         super.extractRenderState(a,s,delta);s.spec=a.spec();s.yaw=a.getYRot(delta);s.pitch=a.getXRot(delta);
         s.spin=Mth.lerp(delta,a.previousRotation,a.rotation);s.paint=a.paint();s.weapons=a.weapons();
-        s.forward=a.control(0);s.turn=a.control(1);s.vertical=a.control(2);
+        s.forward=a.animatedControl(0,delta);s.turn=a.animatedControl(1,delta);s.vertical=a.animatedControl(2,delta);s.bank=a.bank(delta);
         s.aimYaw=a.aimYaw();s.aimPitch=a.aimPitch();s.recoil=a.recoil();s.banner=a.banner().copy();
     }
     /** Only the arithmetic forms present in these owner files; never execute model-provided code. */
@@ -62,7 +62,8 @@ public final class AircraftRenderer extends EntityRenderer<Aircraft,AircraftRend
             case "(1-turret_cooldown)"->s.recoil;
             case "pitch","turret_pitch"->s.aimPitch;
             case "yaw","turret_yaw"->-s.aimYaw;
-            case "chest","roll"->0;
+            case "roll"->s.bank;
+            case "chest"->0;
             default->{try{yield Float.parseFloat(parts[0]);}catch(NumberFormatException ex){yield 0;}}
         };
         if(parts.length>1)base*=Float.parseFloat(parts[1]);return sign*base;
@@ -88,7 +89,7 @@ public final class AircraftRenderer extends EntityRenderer<Aircraft,AircraftRend
         }
     }
     @Override public void submit(State s,PoseStack pose,SubmitNodeCollector collector,CameraRenderState camera){
-        load();pose.pushPose();pose.translate(0,s.spec.groundOffset(),0);pose.rotateDegrees(Axis.YP,-s.yaw);pose.rotateDegrees(Axis.XP,s.pitch);
+        load();pose.pushPose();pose.translate(0,s.spec.groundOffset(),0);pose.rotateDegrees(Axis.YP,-s.yaw);pose.rotateDegrees(Axis.XP,s.pitch);pose.rotateDegrees(Axis.ZP,s.bank);
         draw(MODELS.getOrDefault(s.spec.name(),List.of()),s,pose,collector);
         var mounts=s.spec.definition().getAsJsonArray("weaponMounts");
         for(int i=0;i<mounts.size();i++){

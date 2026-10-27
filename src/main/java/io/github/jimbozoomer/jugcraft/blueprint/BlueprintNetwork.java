@@ -176,7 +176,8 @@ public final class BlueprintNetwork {
 		ServerPlayNetworking.registerGlobalReceiver(PrintPayload.TYPE, (payload, context) -> {
 			ServerPlayer player = context.player();
 			Blueprint blueprint = BlueprintLibrary.get(payload.id());
-			if (blueprint != null && near(player, payload.table()) && player.level().getBlockState(payload.table()).is(JugcraftBlueprints.TABLE)) {
+			if (blueprint != null && near(player, payload.table()) && (player.level().getBlockState(payload.table()).is(JugcraftBlueprints.TABLE)
+                    || player.level().getBlockState(payload.table()).is(io.github.jimbozoomer.jugcraft.jimtafacts.industry.FactoryPlanning.LIBRARY))) {
 				var stack = BlueprintItem.stack(blueprint);
 				if (!player.getInventory().add(stack)) {
 					net.minecraft.world.Containers.dropItemStack(player.level(), player.getX(), player.getY(), player.getZ(), stack);

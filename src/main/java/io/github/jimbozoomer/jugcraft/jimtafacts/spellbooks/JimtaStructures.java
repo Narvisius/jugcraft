@@ -30,6 +30,7 @@ public final class JimtaStructures {
         Registry.register(BuiltInRegistries.STRUCTURE_PROCESSOR,Jugcraft.id("jimtafacts_handle_lit"),Lit.CODEC);
         Registry.register(BuiltInRegistries.STRUCTURE_PROCESSOR,Jugcraft.id("jimtafacts_weather_copper"),Copper.CODEC);
         Registry.register(BuiltInRegistries.STRUCTURE_PROCESSOR,Jugcraft.id("jimtafacts_clear_vault"),FreshVault.CODEC);
+        Registry.register(BuiltInRegistries.STRUCTURE_PROCESSOR,Jugcraft.id("jimtafacts_randomize_statue"),StatuePose.CODEC);
         ServerLifecycleEvents.SERVER_STARTING.register(server->{
             if(!JimtaSpellbooks.enabled())return;
             var pools=server.registryAccess().lookupOrThrow(Registries.TEMPLATE_POOL);
@@ -84,6 +85,17 @@ public final class JimtaStructures {
             int stages=(int)((bias+(1-bias)*settings.getRandom(info.pos()).nextFloat())*4);
             for(int i=0;i<stages;i++){var next=copper.getNext(state);if(next.isPresent())state=next.get().getBlock().withPropertiesOf(state);}
             return new StructureTemplate.StructureBlockInfo(info.pos(),state,info.nbt());
+        }
+    }
+    public record StatuePose() implements StructureProcessor {
+        public static final MapCodec<StatuePose> CODEC=MapCodec.unit(StatuePose::new);
+        @Override public MapCodec<? extends StructureProcessor> codec(){return CODEC;}
+        @Override public StructureTemplate.StructureBlockInfo processBlock(LevelReader level,BlockPos origin,BlockPos center,BlockPos local,StructureTemplate.StructureBlockInfo info,StructurePlaceSettings settings){
+            if(!info.state().is(JimtaStatues.BLOCK)||info.state().getValue(JimtaStatues.Y)!=0)return info;
+            var tag=info.nbt()==null?new net.minecraft.nbt.CompoundTag():info.nbt().copy();
+            tag.putString("id",Jugcraft.id(JimtaStatues.ID).toString());
+            tag.putInt("pose",settings.getRandom(info.pos()).nextInt(JimtaStatues.POSES.size()));
+            return new StructureTemplate.StructureBlockInfo(info.pos(),info.state(),tag);
         }
     }
     public record FreshVault() implements StructureProcessor {

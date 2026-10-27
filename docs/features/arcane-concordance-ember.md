@@ -80,7 +80,10 @@ Combat (a fire bolt and a burst), defense (Fire Resistance) and utility (lightin
   point every 2 seconds).
 - Hearthspark makes nothing a system consumes: no fuel, no heat a machine reads, so there is no conversion loop. Lighting
   a campfire saves a flint and steel's wear or a fire charge.
-- Smoulder is vanilla burning: a point of damage a second, no attribution (like any fire), no spreading.
+- Smoulder is vanilla burning: a point of damage a second, no attribution (like any fire), no spreading. Since
+  Concordance Chunk B, unit 3, the Yeti King is resistant to Concordance control, so he smoulders half as long (30 ticks
+  where others take 60); the Cinder Tyrant is immune to fire and never smouldered
+  ([Rime and Strata](arcane-concordance-rime-strata.md#tolerance-of-the-lair-keepers)).
 
 ## Multiplayer and persistence
 

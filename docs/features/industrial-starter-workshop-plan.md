@@ -1,6 +1,8 @@
 # Industrial starter workshop and first electricity
 
 Status: owner-endorsed planning direction, recorded and updated 6 October 2026. This is the starter-route portion of planning step 7. The alloy station, manual tools, mechanical production arrangement, sustained shaft-source options, equal material-yield policy, basic-silicon route, manual-to-shaft bellows, optional reusable gear casting, moderate throughput target, early item handling and first-electricity checkpoint are selected below. The initial starter recipes/costs are accepted as a provisional playtesting baseline. Heat-upgrade and mechanical-station construction quantities remain proposals; exact structures, work rates and operating costs remain to balance. Conveyor performance and the conditional late-game pipe alternative need measurement. No gameplay is implemented by this document.
+
+Implementation follow-up, 21 October 2026: [starter tools, ceramics and alloys](starter-workshop-batch-1.md) are on main. [Overworld quartz and the crucible/bellows silicon upgrade](overworld-quartz-and-starter-silicon.md) implement the separately approved quartz distribution, upgrade costs and ten-second silicon process in draft PR #449, pending owner preview approval. Later mechanical stations, shaft-source expansion, gear casting and handling proposals below are outside that PR.
 Proposal issue: direct owner choices during industrial planning.
 Owner: jimbozoomer-byte.
 Target capability: a useful mechanical workshop and first electricity before mod steel, with steel developing in parallel.

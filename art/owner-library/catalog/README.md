@@ -19,7 +19,7 @@ Every supplied file is listed, including large folders that GitHub's folder view
 | [farming and food textures](farming-and-food-textures/README.md) | 421 | [Browse](../originals/Blocks/farming%20and%20food%20textures) |
 | [formulaic_assemblicator](formulaic-assemblicator/README.md) | 6 | [Browse](../originals/Blocks/formulaic_assemblicator) |
 | [General blocks, ores, metals, machinery and items](general-blocks--ores--metals--machinery-and-items/README.md) | 765 | [Browse](../originals/Blocks) |
-| [Guns](guns/README.md) | 3,808 | [Browse](../originals/Blocks/Guns) |
+| [Guns](guns/README.md) | 3,818 | [Browse](../originals/Blocks/Guns) |
 | [pigment_extractor](pigment-extractor/README.md) | 9 | [Browse](../originals/Blocks/pigment_extractor) |
 | [pigment_mixer](pigment-mixer/README.md) | 3 | [Browse](../originals/Blocks/pigment_mixer) |
 | [precision_sawmill](precision-sawmill/README.md) | 16 | [Browse](../originals/Blocks/precision_sawmill) |
@@ -31,6 +31,6 @@ Every supplied file is listed, including large folders that GitHub's folder view
 
 The CSV records each path, category, asset type, dimensions, companion file, byte count and SHA-256 checksum. Original bytes, names and relative folders are preserved.
 
-The complete catalog contains **26,965 source files**. The [magic collection's owner instructions](../MAGIC_ASSETS.md) explicitly authorize suitable files to be used as supplied, without mandatory redesigns or another permission request.
+The complete catalog contains **26,975 source files**. The [magic collection's owner instructions](../MAGIC_ASSETS.md) explicitly authorize suitable files to be used as supplied, without mandatory redesigns or another permission request.
 
 For old credit, author or supporter text, see the [metadata field inventory](legacy-metadata.csv) and [owner provenance clarification](../PROVENANCE.md). The inventory locates fields; it does not determine ownership or mark every credit as obsolete.

@@ -11,6 +11,23 @@ def value(item):
     v=VALUES[item];return Fraction(v['numerator'],v['denominator'])
 
 class AlchemyValueTests(unittest.TestCase):
+    def test_overworld_quartz_does_not_multiply_essence_by_mining_or_crushing(self):
+        for ore in ('quartz_ore','deepslate_quartz_ore'):
+            self.assertGreaterEqual(value('jugcraft:'+ore),4*value('minecraft:quartz'))
+    def test_storage_crate_routes_cannot_create_essence(self):
+        metals = ('bronze', 'steel', 'invar', 'stainless_steel', 'aluminum', 'titanium', 'tungsten')
+        previous = 'minecraft:chest'
+        for tier, metal in enumerate(metals):
+            crate = 'jugcraft:' + metal + '_crate'
+            plate = value('jugcraft:' + metal + '_plate')
+            self.assertLessEqual(value(crate), value(previous) + 4 * plate)
+            if tier:
+                kit = 'jugcraft:' + metal + '_storage_crate_upgrade'
+                self.assertLessEqual(value(crate), value('minecraft:chest') + 8 * plate)
+                self.assertLessEqual(value(kit), value('minecraft:iron_nugget') + 4 * plate)
+                self.assertLessEqual(value(crate), value(previous) + value(kit))
+            previous = crate
+
     def test_historical_roots_are_not_the_old_reduced_values(self):
         for item,expected in {'diamond':8192,'gold_ingot':2048,'iron_ingot':256,'coal':128,'oak_log':32,'oak_planks':8}.items():
             self.assertEqual(value('minecraft:'+item),expected,item)

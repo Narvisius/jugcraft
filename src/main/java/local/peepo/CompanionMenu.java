@@ -11,7 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.flag.FeatureFlags;
 
 public final class CompanionMenu extends AbstractContainerMenu {
-    public static final int DATA_COUNT=79, RECIPE_START=46, FILTER_START=50;
+    public static final int DATA_COUNT=80, RECIPE_START=46, FILTER_START=50;
     public static final int WIDTH=480, RECIPE_X=416, SEED_X=396;
     public static final int JOB_ROW_HEIGHT=28, STATUS_SPACE=40, HEIGHT=312+STATUS_SPACE;
     public static MenuType<CompanionMenu> TYPE;
@@ -20,7 +20,9 @@ public final class CompanionMenu extends AbstractContainerMenu {
     private final Inventory playerInventory;
     private final net.minecraft.world.SimpleContainer recipeIcons=new net.minecraft.world.SimpleContainer(4);
     private final net.minecraft.world.SimpleContainer filterIcons=new net.minecraft.world.SimpleContainer(9);
-    private int filterRow=-1;
+    private int filterRow=-1,stockSlot;
+    public CompanionStockPayload stockView;
+    private long nextStockRefresh,nextStockEdit;
     private CompanionAssignments.Target filterTarget;
     private final int[] recipeEnabled=new int[4];
     private final int[] transportDisplay=new int[8];
@@ -40,12 +42,46 @@ public final class CompanionMenu extends AbstractContainerMenu {
     public static int assignmentY(int row){return row==0?78:row>=5?168+STATUS_SPACE+(row-5)*18:94+(row-1)*JOB_ROW_HEIGHT;}
     public static int assignmentData(int row){return row<6?12+row:29+row-6;}
     public static void initialize(){TYPE=Registry.register(BuiltInRegistries.MENU,PeepoMod.id("companion_commands"),new MenuType<>(CompanionMenu::new,FeatureFlags.VANILLA_SET));
+        net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.serverboundPlay().register(CompanionStockEditPayload.TYPE,CompanionStockEditPayload.CODEC);
+        net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.clientboundPlay().register(CompanionStockPayload.TYPE,CompanionStockPayload.CODEC);
+        net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.registerGlobalReceiver(CompanionStockEditPayload.TYPE,(payload,context)->{if(context.player().containerMenu instanceof CompanionMenu menu)menu.editStock(context.player(),payload);});
         net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.serverboundPlay().register(CompanionEditPayload.TYPE,CompanionEditPayload.CODEC);
         net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.serverboundPlay().register(PopulationEditPayload.TYPE,PopulationEditPayload.CODEC);
         net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.clientboundPlay().register(PopulationTypesPayload.TYPE,PopulationTypesPayload.CODEC);
         net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.clientboundPlay().register(CompanionDetailsPayload.TYPE,CompanionDetailsPayload.CODEC);
         net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.registerGlobalReceiver(PopulationEditPayload.TYPE,(payload,context)->{if(context.player().containerMenu instanceof CompanionMenu menu)menu.editPopulation(context.player(),payload);});
         net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.registerGlobalReceiver(CompanionEditPayload.TYPE,(payload,context)->{if(context.player().containerMenu instanceof CompanionMenu menu && menu.containerId==payload.menu())menu.editDetails(context.player(),payload);});
+    }
+    public boolean editStock(Player player,CompanionStockEditPayload edit){
+        if(npc==null || player.containerMenu!=this || edit.menu()!=containerId || !stillValid(player) || filterRow<0 || filterRow>=4 || edit.row()!=filterRow || edit.slot()<0 || edit.slot()>=9 || edit.action()<0 || edit.action()>2 || npc.level().getGameTime()<nextStockEdit)return false;
+        var target=recipeTarget(filterRow);var block=recipeStation(filterRow);var stock=CompanionProductionStock.of(block);
+        if(target==null || !target.equals(filterTarget) || !target.at().pos().equals(edit.anchor()) || stock==null || edit.revision()!=stock.revision())return false;
+        var icon=CompanionFilters.get(block).get(edit.slot());
+        if(edit.action()!=2 && (!CompanionProductionStock.supportsProduct(block,icon) || edit.value()<0 || edit.value()>CompanionProductionStock.MAX_TARGET || edit.restock()<0 || edit.restock()>CompanionProductionStock.MAX_TARGET || edit.value()>0 && edit.restock()>=edit.value()))return false;
+        nextStockEdit=npc.level().getGameTime()+2;
+        if(edit.action()==2)stock.useOutputs(npc,target);
+        else {
+            if(edit.value()>0 && stock.outputs().isEmpty())stock.useOutputs(npc,target);
+            stock.set(icon,edit.value(),edit.restock());
+        }
+        block.setChanged();npc.readiness.clear();nextStockRefresh=0;broadcastChanges();return true;
+    }
+    private void refreshStock(){
+        if(npc==null || !(playerInventory.player instanceof net.minecraft.server.level.ServerPlayer player) || player.containerMenu!=this || !stillValid(player))return;
+        if(filterRow<0 || filterRow>=4){stockView=null;return;}
+        var block=recipeStation(filterRow);var target=recipeTarget(filterRow);var stock=CompanionProductionStock.of(block);
+        if(stock==null || target==null || !target.equals(filterTarget))return;
+        var entries=new java.util.ArrayList<CompanionStockPayload.Entry>(9);var filter=CompanionFilters.get(block);
+        for(int i=0;i<9;i++){
+            var icon=filter.get(i);var count=icon.isEmpty() || !stock.enabled()?new CompanionProductionStock.Count(0,0,true):stock.count(npc,block,icon);
+            entries.add(new CompanionStockPayload.Entry(icon.isEmpty() || CompanionProductionStock.supportsProduct(block,icon)?stock.target(icon):-1,stock.restock(icon),count.stored(),count.underway(),count.available()));
+        }
+        var labels=new java.util.ArrayList<String>();for(var out:stock.outputs()){
+            String label=CompanionProductionStock.countedStorage(npc,out)==null?"Unavailable":CompanionNames.container(npc.level(),out);
+            label+=" ("+out.at().pos().toShortString()+")";labels.add(label.length()>128?label.substring(0,128):label);
+        }
+        var snapshot=new CompanionStockPayload(containerId,filterRow,target.at().pos(),stock.revision(),java.util.List.copyOf(entries),java.util.List.copyOf(labels));
+        if(!snapshot.equals(stockView)){stockView=snapshot;net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.send(player,snapshot);}
     }
     public boolean editPopulation(Player player,PopulationEditPayload edit){
         if(npc==null || player.containerMenu!=this || edit.menu()!=containerId || !stillValid(player) || filterRow>=0 || edit.row()<1 || edit.row()>4 || edit.action()<0 || edit.action()>6 || npc.level().getGameTime()<nextPopulationEdit)return false;
@@ -83,6 +119,7 @@ public final class CompanionMenu extends AbstractContainerMenu {
         data=npc==null?new SimpleContainerData(DATA_COUNT):new ContainerData(){
             public int get(int i){
                 var supplies=npc.assignments.supplies;
+                if(i==79)return stockSlot;
                 if(i>=71)return npc.report.row(CompanionAssignments.containerSlot(i>=75,(i-71)%4));
                 if(i>=67)return supplies.route(i-67).keep;
                 if(i>=51){var r=supplies.route((i-51)/4);return switch((i-51)%4){case 0->r.source;case 1->r.destination;case 2->r.enabled?1:0;default->r.leave;};}
@@ -105,7 +142,7 @@ public final class CompanionMenu extends AbstractContainerMenu {
         var contents=npc==null?new net.minecraft.world.SimpleContainer(10):npc.belongings;
         for(int row=0;row<2;row++)for(int col=0;col<4;col++)addSlot(new Slot(contents,col+row*4,16+col*18,96+row*18));
         addSlot(new Slot(contents,8,16,54){
-            public boolean mayPlace(ItemStack stack){return stack.is(net.minecraft.world.item.Items.JACK_O_LANTERN);}
+            public boolean mayPlace(ItemStack stack){return CompanionUniforms.costume(stack);}
             public int getMaxStackSize(){return 1;}
         });
         addSlot(new Slot(contents,9,70,54){public int getMaxStackSize(){return 1;}});
@@ -140,16 +177,20 @@ public final class CompanionMenu extends AbstractContainerMenu {
         var target=npc.assignments.get(row+1);
         if(target==null || !target.present(npc.level()) || target.at().pos().distToCenterSqr(npc.position())>64*64
             || !CompanionJobs.permitted(npc,target.at().pos())
+            || !io.github.jimbozoomer.jugcraft.finance.LandRegistry.mayBuild(playerInventory.player,npc.level(),target.at().pos())
             || io.github.jimbozoomer.jugcraft.town.TownProtection.denies(playerInventory.player,npc.level(),target.at().pos()))return null;
         return target;
     }
     private net.minecraft.world.level.block.entity.BlockEntity recipeStation(int row){
-        var target=recipeTarget(row);if(target==null || target.livestock() || target.garden())return null;
+        var target=recipeTarget(row);if(target==null || target.fishing() || target.livestock() || target.garden())return null;
         var be=npc.level().getBlockEntity(target.at().pos());
-        var serving=ServingCompanion.of(be);if(serving!=null)return !serving.hasOutput() && serving.allowed(npc)?be:null;
+        if(be instanceof CraftingTableCompanionBlockEntity table)return table.accessible(npc)?be:null;
+        if(be instanceof io.github.jimbozoomer.jugcraft.machine.form.FormMachineBlockEntity form)return form.companionPort.accessible(npc) && form.companionPort.playerMayEdit(playerInventory.player) && form.companionPort.selectable()?be:null;
+        var serving=ServingCompanion.of(be);if(serving!=null)return serving.allowed(npc)?be:null;
         if(be instanceof io.github.jimbozoomer.jugcraft.agriculture.FarmStandBlockEntity stand)return stand.isOwner(playerInventory.player) && npc.orders.foodAccess(stand.owner(),false)?be:null;
         if(be instanceof io.github.jimbozoomer.jugcraft.concordance.garden.MulchMawBlockEntity maw)return playerInventory.player instanceof net.minecraft.server.level.ServerPlayer player && maw.mayChange(player) && MagicGardenCompanion.keeperAccess(npc,maw.keeper())?be:null;
-        return be instanceof io.github.jimbozoomer.jugcraft.concordance.CrucibleBlockEntity || KitchenCompanionPort.of(be)!=null || be instanceof io.github.jimbozoomer.jugcraft.agriculture.CandyKettleBlockEntity || be instanceof io.github.jimbozoomer.jugcraft.agriculture.CiderBarrelBlockEntity || be instanceof HearthOvenBlockEntity || be instanceof CookingPotBlockEntity pot && !pot.isLocked()
+        if(be instanceof io.github.jimbozoomer.jugcraft.workshop.WorkshopBlockEntity workshop)return workshop.companion.accessible(npc) && ((io.github.jimbozoomer.jugcraft.workshop.WorkshopBlock)workshop.getBlockState().getBlock()).mayUse(npc.level(),workshop.getBlockPos(),workshop.getBlockState(),playerInventory.player)?be:null;
+        return be instanceof io.github.jimbozoomer.jugcraft.agriculture.CiderPressBlockEntity || be instanceof io.github.jimbozoomer.jugcraft.agriculture.CanningKettleBlockEntity || be instanceof io.github.jimbozoomer.jugcraft.agriculture.SpinningWheelBlockEntity || be instanceof io.github.jimbozoomer.jugcraft.concordance.CrucibleBlockEntity || KitchenCompanionPort.of(be)!=null || be instanceof io.github.jimbozoomer.jugcraft.agriculture.CandyKettleBlockEntity || be instanceof io.github.jimbozoomer.jugcraft.agriculture.CiderBarrelBlockEntity || be instanceof HearthOvenBlockEntity || be instanceof CookingPotBlockEntity pot && !pot.isLocked()
             || VanillaCompanionPort.supports(be) && (!(be instanceof net.minecraft.world.level.block.entity.BaseContainerBlockEntity container) || !container.isLocked())
             || be instanceof io.github.jimbozoomer.jugcraft.machine.MachineBlockEntity machine && !machine.isLocked() && (machine.companionPort.selectable() || machine.companionPort.locked())?be:null;
     }
@@ -163,7 +204,7 @@ public final class CompanionMenu extends AbstractContainerMenu {
             var oven=station instanceof HearthOvenBlockEntity o?o:null;
             var machine=station instanceof io.github.jimbozoomer.jugcraft.machine.MachineBlockEntity m?m:null;
             var target=recipeTarget(row);boolean garden=target!=null && target.garden() && !target.orchard();
-            recipeEnabled[row]=ServingCompanion.of(station)!=null?13:station instanceof io.github.jimbozoomer.jugcraft.concordance.garden.MulchMawBlockEntity?12:station instanceof io.github.jimbozoomer.jugcraft.concordance.CrucibleBlockEntity?11:station instanceof io.github.jimbozoomer.jugcraft.agriculture.FarmStandBlockEntity?10:station instanceof net.minecraft.world.level.block.entity.BeehiveBlockEntity?9:VanillaCompanionPort.supports(station)?8:station instanceof io.github.jimbozoomer.jugcraft.agriculture.CandyKettleBlockEntity?7:station instanceof io.github.jimbozoomer.jugcraft.agriculture.CiderBarrelBlockEntity?6:garden?4:KitchenCompanionPort.of(station)!=null?5:machine!=null?3:oven!=null?2:pot!=null?1:0;
+            recipeEnabled[row]=station instanceof io.github.jimbozoomer.jugcraft.machine.form.FormMachineBlockEntity?15:station instanceof io.github.jimbozoomer.jugcraft.workshop.WorkshopBlockEntity?14:ServingCompanion.of(station)!=null?13:station instanceof io.github.jimbozoomer.jugcraft.concordance.garden.MulchMawBlockEntity?12:station instanceof io.github.jimbozoomer.jugcraft.concordance.CrucibleBlockEntity?11:station instanceof io.github.jimbozoomer.jugcraft.agriculture.FarmStandBlockEntity?10:station instanceof net.minecraft.world.level.block.entity.BeehiveBlockEntity?9:VanillaCompanionPort.supports(station)?8:station instanceof io.github.jimbozoomer.jugcraft.agriculture.CandyKettleBlockEntity?7:station instanceof io.github.jimbozoomer.jugcraft.agriculture.CiderBarrelBlockEntity?6:garden?4:KitchenCompanionPort.of(station)!=null?5:machine!=null?3:oven!=null?2:pot!=null?1:station!=null?16:0;
             var icon=ItemStack.EMPTY;
             if(garden){var seed=npc.assignments.gardenSeed(target);if(seed!=null)icon=new ItemStack(seed);}
             if(!ItemStack.matches(recipeIcons.getItem(row),icon))recipeIcons.setItem(row,icon);
@@ -181,6 +222,7 @@ public final class CompanionMenu extends AbstractContainerMenu {
         if(npc!=null && stillValid(playerInventory.player))npc.assignments.refreshLabels();
         if(npc!=null && npc.level().getGameTime()>=nextRecipeRefresh)refreshRecipes();
         super.broadcastChanges();
+        if(npc!=null && npc.level().getGameTime()>=nextStockRefresh){nextStockRefresh=npc.level().getGameTime()+20;refreshStock();}
         if(npc!=null && playerInventory.player.containerMenu==this && stillValid(playerInventory.player) && npc.level().getGameTime()>=nextDetailsRefresh){
             nextDetailsRefresh=npc.level().getGameTime()+20;
             var details=new java.util.ArrayList<CompanionDetailsPayload.Row>(4);
@@ -206,6 +248,10 @@ public final class CompanionMenu extends AbstractContainerMenu {
             }
             var target=recipeTarget(filterRow);var station=recipeStation(filterRow);long now=npc.level().getGameTime();
             if(target==null || !target.equals(filterTarget) || station==null || now<nextRecipeEdit)return;nextRecipeEdit=now+2;
+            if(CompanionProductionStock.supports(station)){
+                stockSlot=slot-FILTER_START;nextStockRefresh=0;
+                if(button==0 && getCarried().isEmpty()){refreshRecipes();broadcastChanges();return;}
+            }
             if(!CompanionFilters.set(station,slot-FILTER_START,button==1?ItemStack.EMPTY:getCarried()))player.sendOverlayMessage(net.minecraft.network.chat.Component.literal("Choose an output made by this workstation."));
             refreshRecipes();broadcastChanges();return;
         }
@@ -233,7 +279,7 @@ public final class CompanionMenu extends AbstractContainerMenu {
         if(npc==null || !stillValid(player))return false;
         if(id>=60 && id<=64){
             if(id==64){filterRow=-1;filterTarget=null;}
-            else {int row=id-60;var station=recipeStation(row);if(station==null || CompanionFilters.get(station)==null)return false;filterRow=row;filterTarget=recipeTarget(row);}
+            else {int row=id-60;var station=recipeStation(row);if(station==null || CompanionFilters.get(station)==null)return false;filterRow=row;filterTarget=recipeTarget(row);stockSlot=0;stockView=null;nextStockRefresh=0;}
             refreshRecipes();broadcastChanges();return true;
         }
         if((id==65 || id==66) && filterRow>=0 && filterRow<4){
@@ -290,7 +336,7 @@ public final class CompanionMenu extends AbstractContainerMenu {
         var stack=slot.getItem();var copy=stack.copy();
         if(index<10){if(!moveItemStackTo(stack,10,46,true))return ItemStack.EMPTY;}
         else {
-            if(stack.is(net.minecraft.world.item.Items.JACK_O_LANTERN) && !slots.get(8).hasItem())moveItemStackTo(stack,8,9,false);
+            if(CompanionUniforms.costume(stack) && !slots.get(8).hasItem())moveItemStackTo(stack,8,9,false);
             if(!stack.isEmpty())moveItemStackTo(stack,0,8,false);
             if(stack.getCount()==copy.getCount())return ItemStack.EMPTY;
         }

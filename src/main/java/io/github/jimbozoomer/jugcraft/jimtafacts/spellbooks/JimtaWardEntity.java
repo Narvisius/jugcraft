@@ -104,13 +104,86 @@ public final class JimtaWardEntity extends Entity {
     private void portal(ServerLevel level){
         if(destination==null||linked==null)return;var target=level.getServer().getLevel(destination.dimension());
         if(target==null||!target.hasChunkAt(destination.pos())||!(target.getEntity(linked) instanceof JimtaWardEntity other))return;
-        for(var player:level.getEntitiesOfClass(ServerPlayer.class,getBoundingBox(),e->e.isAlive()&&!e.isPassenger()).stream().limit(16).toList()){
-            if(TRAVEL.getOrDefault(player,0L)>level.getGameTime()||!Authority.mayChange(level,player,blockPosition()))continue;
-            var forward=Vec3.directionFromRotation(0,other.getYRot());var at=other.position().add(forward.scale(1.2));
-            if(!JimtaWardSpells.safe(player,target,at))continue;
-            TRAVEL.put(player,level.getGameTime()+40);if(player.teleportTo(target,at.x,at.y,at.z,Set.of(),other.getYRot(),player.getXRot(),true)){player.resetFallDistance();JimtaSpellbookCurios.afterTeleport(player);}
+        var forward=Vec3.directionFromRotation(0,other.getYRot());var at=other.position().add(forward.scale(1.2));
+        if(!getUUID().equals(other.linked)||!other.kind.equals("portal"))return;
+        for(var entity:level.getEntities((Entity)null,getBoundingBox(),JimtaWardEntity::portalCandidate).stream().limit(16).toList()){
+            var actor=transitActor(entity,level,owner);
+            if(actor==null||!Authority.mayChange(level,actor,blockPosition()))continue;
+            transfer(actor,entity,target,at,other.getYRot());
         }
     }
+    static boolean portalCandidate(Entity entity){
+        return entity.isAlive()&&!entity.isPassenger()
+            &&(entity instanceof LivingEntity||entity instanceof net.minecraft.world.entity.item.ItemEntity||vehicleKind(entity));
+    }
+    static ServerPlayer transitActor(Entity entity,ServerLevel level,UUID owner){
+        if(entity instanceof ServerPlayer player)return player;
+        if(entity.getControllingPassenger() instanceof ServerPlayer driver)return driver;
+        for(var passenger:entity.getPassengers())if(passenger instanceof ServerPlayer player)return player;
+        return owner==null?null:Authority.present(level,owner);
+    }
+    private static boolean vehicleKind(Entity e){
+        if(e instanceof net.minecraft.world.entity.vehicle.boat.AbstractBoat)return true;
+        return e instanceof net.minecraft.world.entity.vehicle.minecart.Minecart
+            ||e instanceof net.minecraft.world.entity.vehicle.minecart.MinecartChest
+            ||e instanceof net.minecraft.world.entity.vehicle.minecart.MinecartHopper
+            ||e instanceof net.minecraft.world.entity.vehicle.minecart.MinecartFurnace;
+    }
+    private static boolean authorizedLiving(ServerPlayer actor,LivingEntity living){
+        if(living instanceof Player)return living==actor;
+        if(living instanceof net.minecraft.world.entity.Leashable leash&&leash.isLeashed())return false;
+        if(living instanceof net.minecraft.world.entity.TamableAnimal pet&&pet.isTame()&&pet.getOwner()!=actor)return false;
+        if(living instanceof net.minecraft.world.entity.animal.equine.AbstractHorse horse&&horse.isTamed()&&horse.getOwner()!=actor)return false;
+        // Moving one's own companion is not an attack; friendly-fire hooks must not prevent travel.
+        if(living instanceof net.minecraft.world.entity.TamableAnimal pet&&pet.getOwner()==actor
+            ||living instanceof net.minecraft.world.entity.animal.equine.AbstractHorse horse&&horse.isTamed()&&horse.getOwner()==actor
+            ||io.github.jimbozoomer.jugcraft.nouveau.NouveauSummons.ownedBy(living,actor.getUUID()))return true;
+        return io.github.jimbozoomer.jugcraft.weapons.TwoHanded.allowed(actor,actor.level(),living)
+            &&io.github.jimbozoomer.jugcraft.concordance.ConcordanceEffects.mayHarm(actor,living);
+    }
+    /** One native move, never a manually cloned stack/entity. Private rooms have a separate entry protocol. */
+    public static boolean transfer(ServerPlayer actor,Entity entity,ServerLevel target,Vec3 at,float yaw){
+        if(!(entity.level() instanceof ServerLevel source)||actor.level()!=source||!actor.isAlive()||actor.isSpectator()
+            ||!portalCandidate(entity)||TRAVEL.getOrDefault(entity,0L)>source.getGameTime()
+            ||entity.isOnPortalCooldown()||!entity.canUsePortal(false)||!entity.canTeleport(source,target)
+            ||source.dimension().equals(JimtaPocketRooms.DIMENSION)||target.dimension().equals(JimtaPocketRooms.DIMENSION))return false;
+        var travelers=entity.getSelfAndPassengers().limit(9).toList();if(travelers.size()>8)return false;
+        if(entity.isVehicle()&&(actor.getRootVehicle()!=entity||!travelers.contains(actor)))return false;
+        if(vehicleKind(entity)&&!entity.isVehicle())return false; // Never sweep unattended vehicles/cargo into a portal.
+        for(var traveler:travelers){
+            if(!traveler.isAlive()||traveler.isOnPortalCooldown()||TRAVEL.getOrDefault(traveler,0L)>source.getGameTime()
+                ||!traveler.canUsePortal(true)||!traveler.canTeleport(source,target))return false;
+            if(traveler instanceof LivingEntity living){if(!authorizedLiving(actor,living))return false;}
+            else if(traveler instanceof net.minecraft.world.entity.item.ItemEntity item){if(item.getItem().isEmpty()||item.getOwner()!=actor)return false;}
+            else if(traveler!=entity||!vehicleKind(traveler))return false;
+            var sourceBox=traveler.getBoundingBox();
+            if(sourceBox.getXsize()>8||sourceBox.getYsize()>16||sourceBox.getZsize()>8)return false;
+            for(var pos:BlockPos.betweenClosed(BlockPos.containing(sourceBox.minX,sourceBox.minY,sourceBox.minZ),BlockPos.containing(sourceBox.maxX,sourceBox.maxY,sourceBox.maxZ)))
+                if(!source.hasChunkAt(pos)||!Authority.mayChange(source,actor,pos))return false;
+            // Vanilla retains each rider's offset when teleporting its root vehicle.
+            var arrival=at.add(traveler.position().subtract(entity.position()));
+            if(!safeArrival(actor,traveler,target,arrival))return false;
+        }
+        var moved=entity.teleport(new net.minecraft.world.level.portal.TeleportTransition(target,at,Vec3.ZERO,yaw,entity.getXRot(),net.minecraft.world.level.portal.TeleportTransition.DO_NOTHING));
+        if(moved==null)return false;
+        for(var original:travelers)TRAVEL.put(original,source.getGameTime()+40);
+        moved.getSelfAndPassengers().limit(8).forEach(traveler->{TRAVEL.put(traveler,target.getGameTime()+40);traveler.setPortalCooldown(40);traveler.resetFallDistance();if(traveler instanceof ServerPlayer player)JimtaSpellbookCurios.afterTeleport(player);});
+        return true;
+    }
+    public static boolean mayTransport(ServerPlayer actor,LivingEntity entity){
+        if(entity instanceof Player||entity.isPassenger()||entity.isVehicle()||entity instanceof net.minecraft.world.entity.Leashable leash&&leash.isLeashed())return false;
+        return authorizedLiving(actor,entity);
+    }
+    public static boolean safeArrival(ServerPlayer actor,Entity entity,ServerLevel target,Vec3 at){
+        var box=entity.getBoundingBox().move(at.subtract(entity.position()));
+        // Limit exceptionally large custom entities and inspect every occupied block, not just opposite corners.
+        if(box.getXsize()>8||box.getYsize()>16||box.getZsize()>8)return false;
+        for(var pos:BlockPos.betweenClosed(BlockPos.containing(box.minX,box.minY,box.minZ),BlockPos.containing(box.maxX,box.maxY,box.maxZ))){
+            if(!target.hasChunkAt(pos)||!target.isInWorldBounds(pos)||!target.getWorldBorder().isWithinBounds(pos)||!Authority.mayChange(target,actor,pos))return false;
+        }
+        return target.noCollision(entity,box)&&!target.containsAnyLiquid(box);
+    }
+
     /** Exact source 5-by-5 half-block shield plane; rotated with the caster. */
     public boolean intersects(Vec3 start,Vec3 end){
         Vec3 a=local(start),b=local(end);if(a.z*b.z>0)return false;double denominator=a.z-b.z;if(Math.abs(denominator)<1e-8)return false;double t=a.z/denominator;if(t<0||t>1)return false;Vec3 at=a.lerp(b,t);return Math.abs(at.x)<=1.25&&Math.abs(at.y)<=1.25;

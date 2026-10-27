@@ -8,20 +8,20 @@ import com.geckolib.animation.RawAnimation;
 import com.geckolib.animation.object.LoopType;
 import com.geckolib.util.GeckoLibUtil;
 import io.github.jimbozoomer.jugcraft.guns.JugcraftGuns;
+import io.github.jimbozoomer.jugcraft.lair.Encounter;
 import io.github.jimbozoomer.jugcraft.lair.JugcraftLairs;
 import io.github.jimbozoomer.jugcraft.lair.Lair;
 import io.github.jimbozoomer.jugcraft.lair.LairBosses;
 import io.github.jimbozoomer.jugcraft.lair.LairExitBlock;
 import io.github.jimbozoomer.jugcraft.lair.LairInstance;
+import io.github.jimbozoomer.jugcraft.lair.LairRewards;
 import io.github.jimbozoomer.jugcraft.lair.Lairs;
 import io.github.jimbozoomer.jugcraft.lair.SluiceGateBlock;
 import io.github.jimbozoomer.jugcraft.lair.TroughStoneBlock;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import net.minecraft.core.BlockPos;
@@ -81,11 +81,12 @@ import org.jspecify.annotations.Nullable;
  * <p>His fire (the breath, the wave, the fire patches) is the mod's flame damage and burning, which Fire Resistance stops;
  * his blows (the sweep, the slam, the gobs' and cinders' impact, his Cinderlings' bites) it never does. Every attack has a
  * wind-up you can read, a strike and a recovery ({@link Attack}); the numbers are here, in one place, and in
- * tools/cinder_tyrant.py. Each participant (whoever hurt him or his Cinderlings) gets their own loot
- * ({@link CinderTyrantLoot}); left alone he sinks back into the crucible, healed, the troughs drain, the sluices reset and
- * the slag ebbs. Bound to a lair instance he vanishes with it; one with no instance (a test's) keeps to the kiln laid out
- * from the origin he was given. The only blocks he changes are the kiln's own (the surge's slag, the choke, the troughs'
- * water, the cooled crucible), and every one comes back.
+ * tools/cinder_tyrant.py. Each player who qualified in his fight ({@link Encounter}: a blow to him or his Cinderlings, their
+ * own or a creature's they tamed, or healing or a ward on another player) gets their own loot ({@link CinderTyrantLoot}),
+ * once, paid through lair/LairRewards; left alone he sinks back into the crucible, healed, the troughs drain, the sluices
+ * reset and the slag ebbs. Bound to a lair instance he vanishes with it; one with no instance (a test's) keeps to the
+ * kiln laid out from the origin he was given. The only blocks he changes are the kiln's own (the surge's slag, the
+ * choke, the troughs' water, the cooled crucible), and every one comes back.
  */
 public class CinderTyrantEntity extends Monster implements GeoEntity {
 	// ---------------------------------------------------------------- numbers (tools/cinder_tyrant.py)
@@ -267,7 +268,8 @@ public class CinderTyrantEntity extends Monster implements GeoEntity {
 	/** Ticks left quenched, and of his seams flaring back after. */
 	private int quenched;
 	private int reheating;
-	private final Map<UUID, Float> damageBy = new HashMap<>();
+	/** This fight: who took part and how (Concordance Chunk B, on Chunk A's lair/Encounter); his arena is round his bowl. */
+	private final Encounter encounter = new Encounter(this, this::centre);
 	private final List<UUID> cinderlings = new ArrayList<>();
 	/** His spat and fallen things (gobs, cinders), gone with him. */
 	private final List<UUID> things = new ArrayList<>();
@@ -494,6 +496,9 @@ public class CinderTyrantEntity extends Monster implements GeoEntity {
 			leapTo = at(CinderKiln.out());
 			landed(level);
 		}
+		if (phase != Phase.WAITING && isAlive() && !encounter.underway()) {
+			encounter.begin();  // a fight back from a save keeps a fresh record of who takes part
+		}
 		resetFallDistance();
 		bossBar.setProgress(getHealth() / getMaxHealth());
 		prune(level);
@@ -575,6 +580,7 @@ public class CinderTyrantEntity extends Monster implements GeoEntity {
 		phase = Phase.WAKING;
 		phaseTicks = 0;
 		setAction(Action.RISE);
+		encounter.begin();
 		bossBar.setVisible(true);
 		level.playSound(null, getX(), getY(), getZ(), SoundEvents.WARDEN_ROAR, SoundSource.HOSTILE, 3.0F, 0.6F);
 		tell(level, "message.jugcraft.cinder_tyrant.wakes");
@@ -1529,28 +1535,38 @@ public class CinderTyrantEntity extends Monster implements GeoEntity {
 		things.removeIf(id -> level.getEntity(id) == null);
 	}
 
-	/** Whoever hurt him or his Cinderlings has taken part. */
+	/** Whoever hurt him or his Cinderlings, or whose tamed creature did, has taken part. */
 	public void took(ServerPlayer player, float amount) {
-		damageBy.merge(player.getUUID(), amount, Float::sum);
+		encounter.damage(player, amount);
 	}
 
-	/** His participants: everyone who hurt him or his Cinderlings and is still near his bowl. */
+	/**
+	 * His participants still near his bowl: everyone who hurt him or his Cinderlings (or whose tamed creature did), or
+	 * since Concordance Chunk B healed or warded enough to qualify ({@link Encounter}), and is alive within
+	 * {@value Encounter#REACH} blocks.
+	 */
 	public List<ServerPlayer> participants(ServerLevel level) {
 		List<ServerPlayer> out = new ArrayList<>();
 		Vec3 centre = centre();
-		for (ServerPlayer player : level.players()) {
-			if (player.isAlive() && damageBy.getOrDefault(player.getUUID(), 0.0F) > 0.0F && player.position().distanceTo(centre) <= 64.0) {
+		for (UUID id : encounter.qualified()) {
+			ServerPlayer player = level.getServer().getPlayerList().getPlayer(id);
+			if (player != null && player.isAlive() && player.level() == level && player.position().distanceTo(centre) <= Encounter.REACH) {
 				out.add(player);
 			}
 		}
 		return out;
 	}
 
+	/** This fight: who took part and how. */
+	public Encounter encounter() {
+		return encounter;
+	}
+
 	// ---------------------------------------------------------------- abandoned, and defeated
 
 	/**
 	 * Left alone: he sinks back into the crucible, healed; the troughs drain, the sluices reset, the slag ebbs, his
-	 * Cinderlings crumble, his things and fire are gone, and who hurt him is forgotten.
+	 * Cinderlings crumble, his things and fire are gone, and everyone's part in the fight is forgotten.
 	 */
 	public void reset(ServerLevel level) {
 		dismiss(level);
@@ -1567,7 +1583,7 @@ public class CinderTyrantEntity extends Monster implements GeoEntity {
 		foe = null;
 		nextSurge = -1L;
 		nextChoke = -1L;
-		damageBy.clear();
+		encounter.abandon();
 		Arrays.fill(cooldowns, 0);
 		setHealth(getMaxHealth());
 		noPhysics = true;
@@ -1602,20 +1618,30 @@ public class CinderTyrantEntity extends Monster implements GeoEntity {
 	public void die(DamageSource source) {
 		super.die(source);
 		if (level() instanceof ServerLevel level) {
+			// A killing blow gets here inside super.hurtServer, before hurtServer's own took(): its striker (or the owner of
+			// the tamed creature that struck) has taken part before his fall is paid. Any amount qualifies.
+			if (Encounter.striker(source) instanceof ServerPlayer player) {
+				took(player, Float.MIN_VALUE);
+			}
 			defeated(level);
 		}
 	}
 
 	/**
 	 * He has fallen: his Cinderlings crumble and his things are gone, the slag ebbs, the troughs drain and the sluices clear,
-	 * each participant gets their loot, his lair's instance ends (it closes once everyone has left), the crucible's slag
-	 * cools to obsidian, black volcanic glass, and a gate of Grey Mist opens in the middle of the bowl.
+	 * each player who qualified in his fight is paid once (lair/LairRewards: at once if alive within reach, later if they
+	 * fell or left the game in it), his lair's instance ends (it closes once everyone has left), the crucible's slag cools
+	 * to obsidian, black volcanic glass, and a gate of Grey Mist opens in the middle of the bowl.
 	 */
 	private void defeated(ServerLevel level) {
+		// However often his fall is reported, it is answered once: one reward each (Concordance Chunk A's claim).
+		if (!encounter.claim()) {
+			return;
+		}
 		dismiss(level);
 		ebb(level);
 		clearSluices(level);
-		CinderTyrantLoot.reward(level, this, participants(level));
+		LairRewards.pay(level, CinderTyrantLoot.BOSS, encounter, position(), centre(), EXPERIENCE);
 		coolCrucible(level);
 		LairInstance open = lairInstance(level);
 		if (open != null) {
@@ -1684,7 +1710,7 @@ public class CinderTyrantEntity extends Monster implements GeoEntity {
 		}
 		float taken = (float) (amount * taken());
 		boolean hurt = super.hurtServer(level, source, taken);
-		if (hurt && source.getEntity() instanceof ServerPlayer player) {
+		if (hurt && Encounter.striker(source) instanceof ServerPlayer player) {
 			took(player, taken);
 		}
 		return hurt;

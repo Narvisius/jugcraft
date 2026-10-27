@@ -7,7 +7,7 @@ BLOCKS=('ice_spider_egg','cooked_ice_spider_egg')
 ENTITIES=('ice_spider','citadel_keeper','spider_tomb','spider_ice_spike')
 def items():return ['jimta_spellbooks_'+name for name in ITEMS]
 def blocks():return ['jimta_spellbooks_'+name for name in BLOCKS]
-def entities():return ['jimtafacts_'+name for name in ENTITIES]
+def entities():return ['jimtafacts_'+name for name in ENTITIES]+['jimtafacts_spider_part']
 def j(name):return 'jugcraft:jimta_spellbooks_'+name
 
 def generate(copy,texture,dump,res,art,lang):

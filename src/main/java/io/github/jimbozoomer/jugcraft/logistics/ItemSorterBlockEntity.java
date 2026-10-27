@@ -7,6 +7,8 @@ import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.InsertionOnlyStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.core.BlockPos;
+import io.github.jimbozoomer.jugcraft.jimtafacts.industry.TransportAttachments;
+import io.github.jimbozoomer.jugcraft.jimtafacts.industry.TransportPortStorage;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
@@ -27,7 +29,13 @@ import org.jspecify.annotations.Nullable;
  * an insert-only item storage that forwards matching items into the inventory the outlet faces.
  * Hoppers and pipes cannot reach the filter slots themselves.
  */
-public class ItemSorterBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
+public class ItemSorterBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer,TransportAttachments.Host {
+    private final TransportAttachments.Fittings fittings=new TransportAttachments.Fittings(this);
+    @Override public TransportAttachments.Fittings attachments(){return fittings;}
+    @Override public net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket getUpdatePacket(){return net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket.create(this);}
+    @Override public net.minecraft.nbt.CompoundTag getUpdateTag(net.minecraft.core.HolderLookup.Provider lookup){return fittings.updateTag(lookup);}
+    @Override public void preRemoveSideEffects(BlockPos p,BlockState state){fittings.drop();super.preRemoveSideEffects(p,state);}
+
 	private static final int[] NO_SLOTS = {};
 	private NonNullList<ItemStack> filter = NonNullList.withSize(9, ItemStack.EMPTY);
 	private final Storage<ItemVariant> inlet = new Inlet();
@@ -38,13 +46,13 @@ public class ItemSorterBlockEntity extends BaseContainerBlockEntity implements W
 
 	/** The inlet for pipes on every side except the outlet; null on the outlet side. */
 	public @Nullable Storage<ItemVariant> itemsFor(@Nullable Direction side) {
-		return side == getBlockState().getValue(ItemSorterBlock.FACING) ? null : inlet;
+		return side == getBlockState().getValue(ItemSorterBlock.FACING) ? null : TransportPortStorage.guard(this,side,inlet);
 	}
 
 	/** Whether a sample of this item is in the filter. An empty filter matches nothing. */
 	public boolean matches(ItemVariant resource) {
 		for (ItemStack sample : filter) {
-			if (!sample.isEmpty() && resource.isOf(sample.getItem())) {
+			if (!sample.isEmpty() && io.github.jimbozoomer.jugcraft.jimtafacts.industry.FactoryFieldTools.matches(sample, resource.getItem())) {
 				return true;
 			}
 		}
@@ -55,11 +63,11 @@ public class ItemSorterBlockEntity extends BaseContainerBlockEntity implements W
 		@Override
 		public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction) {
 			StoragePreconditions.notBlankNotNegative(resource, maxAmount);
-			if (level == null || !matches(resource)) {
+			if (level == null || isRemoved() || !matches(resource)) {
 				return 0;
 			}
 			Direction facing = getBlockState().getValue(ItemSorterBlock.FACING);
-			if (!io.github.jimbozoomer.jugcraft.finance.ClaimTransfers.allowed(level, worldPosition, worldPosition.relative(facing))) return 0;
+			if (!TransportAttachments.openEdge(level,worldPosition,facing)||!io.github.jimbozoomer.jugcraft.finance.ClaimTransfers.allowed(level, worldPosition, worldPosition.relative(facing))) return 0;
 			Storage<ItemVariant> target = ItemStorage.SIDED.find(level, worldPosition.relative(facing), facing.getOpposite());
 			return target == null ? 0 : target.insert(resource, maxAmount, transaction);
 		}
@@ -107,14 +115,14 @@ public class ItemSorterBlockEntity extends BaseContainerBlockEntity implements W
 
 	@Override
 	protected void loadAdditional(ValueInput input) {
-		super.loadAdditional(input);
+		if(input.getBooleanOr("fittings_only",false)){fittings.load(input);return;}super.loadAdditional(input);fittings.load(input);
 		filter = NonNullList.withSize(9, ItemStack.EMPTY);
 		ContainerHelper.loadAllItems(input, filter);
 	}
 
 	@Override
 	protected void saveAdditional(ValueOutput output) {
-		super.saveAdditional(output);
+		super.saveAdditional(output);fittings.save(output);
 		ContainerHelper.saveAllItems(output, filter);
 	}
 }

@@ -13,6 +13,7 @@ public final class PeepoModel extends EntityModel<PeepoState> {
         leftLeg=root.getChild("left_leg");rightLeg=root.getChild("right_leg");
         workTorso=new ModelPart[]{head,body,hips,pumpkin,shorts};
     }
+    ModelPart uniformBone(String name){return root().getChild(name);}
     public void translateToHand(com.mojang.blaze3d.vertex.PoseStack pose){
         rightArm.translateAndRotate(pose);
         pose.translate(0,2.6F/16F,0);
@@ -36,8 +37,9 @@ public final class PeepoModel extends EntityModel<PeepoState> {
         }
         boolean jugheadClothes=s.jughead && !s.pumpkin;
         shorts.visible=jugheadClothes;jug.visible=jugheadClothes;
-        leftLeg.getChild("left_shorts_cuff").visible=jugheadClothes;
-        rightLeg.getChild("right_shorts_cuff").visible=jugheadClothes;
+        boolean uniformCuffs=local.peepo.CompanionUniforms.coversCuffs(s.uniform);
+        leftLeg.getChild("left_shorts_cuff").visible=jugheadClothes && !uniformCuffs;
+        rightLeg.getChild("right_shorts_cuff").visible=jugheadClothes && !uniformCuffs;
         body.visible=!s.pumpkin;hips.visible=!s.pumpkin;
         pumpkin.visible=s.pumpkin;hat.visible=s.pumpkin;
         leftArm.getChild("left_sleeve").visible=!s.pumpkin && !s.jughead;
@@ -79,7 +81,9 @@ public final class PeepoModel extends EntityModel<PeepoState> {
             head.xRot=.04F;
         }
         if(s.work!=local.peepo.WorkAnimation.NONE && !s.eating && !s.sleeping && !s.sitting && !s.wheelRunning){
-            if(s.work==local.peepo.WorkAnimation.STIR)CompanionWorkPose.stir(s,leftArm,rightArm,head,leftLeg,rightLeg,workTorso);
+            if(s.work.isFishing())FishingPose.apply(s,leftArm,rightArm,head,leftLeg,rightLeg,workTorso);
+            else if(s.work==local.peepo.WorkAnimation.CRAFT)CraftingBenchPose.apply(s,leftArm,rightArm,head,leftLeg,rightLeg,workTorso);
+            else if(s.work==local.peepo.WorkAnimation.STIR)CompanionWorkPose.stir(s,leftArm,rightArm,head,leftLeg,rightLeg,workTorso);
             else if(s.work==local.peepo.WorkAnimation.SPINNING)CompanionWorkPose.spinning(s,leftArm,rightArm,head,leftLeg,rightLeg,workTorso);
             else if(s.work==local.peepo.WorkAnimation.CRANK)CompanionWorkPose.crank(s,leftArm,rightArm,head,leftLeg,rightLeg,workTorso);
             else if(s.work.isPie())CompanionWorkPose.pie(s,leftArm,rightArm,head,leftLeg,rightLeg,workTorso);

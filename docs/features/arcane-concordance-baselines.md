@@ -2,7 +2,9 @@
 
 Status: merged to main ([#244](https://github.com/jimbozoomer-byte/jugcraft/pull/244), from branch
 `claude/awesome-davinci-iwv3b9`, integrated by [#263](https://github.com/jimbozoomer-byte/jugcraft/pull/263) on
-8 October 2026); see Verification for what has run.
+8 October 2026); see Verification for what has run. Concordance Chunk B, unit 3
+([Rime and Strata](arcane-concordance-rime-strata.md)) adds three rows, a knockback measure and two acceptance rules;
+not merged.
 Proposal issue: none; the owner's Arcane Concordance brief (roadmap step 11) is the scope approval.
 Owner: @jimbozoomer-byte. AI-assisted implementation with Claude Code; the model is named in the commit trailers.
 Target milestone and tier: Concordance milestone 4, Initiate stage. Roadmap step 11.
@@ -15,12 +17,12 @@ system](arcane-concordance-composition.md). Contract and checklist: [ARCANE_CONC
 ## What it is
 
 A deterministic benchmark (`concordance/balance`, pure Java) that runs a roster of characters through five controlled
-encounters and measures each one seven ways. It runs over the same compiled plans the server casts and the cast and
-cooldown times of the loaded Spell Engine spells. The same code runs in a standalone harness over the generated data
-and in a game test over what the server actually loaded (`ConcordanceBaselineGameTests.baselinesHoldOnTheLoadedRules`,
-which writes the tables to the server log). Calibration game tests check the rules the model applies against the
-server. Nothing here changes gameplay: it records where the Initiate stage stands and fails a build if a later change
-breaks the acceptance rules.
+encounters and measures each one eight ways (seven before Chunk B). It runs over the same compiled plans the server
+casts and the cast and cooldown times of the loaded Spell Engine spells. The same code runs in a standalone harness
+over the generated data and in a game test over what the server actually loaded
+(`ConcordanceBaselineGameTests.baselinesHoldOnTheLoadedRules`, which writes the tables to the server log). Calibration
+game tests check the rules the model applies against the server. Nothing here changes gameplay: it records where the
+Initiate stage stands and fails a build if a later change breaks the acceptance rules.
 
 **The model.** One line: the character, the foes and an objective on it; time in server ticks. Each tick the
 character finishes or starts an action by a fixed priority (shield, support, escape, ranged damage, melee, then close
@@ -57,19 +59,25 @@ inscribed `ray struck sear then here creatures dazzle`; leather); since Ember pa
 (Hearthbinding mastered: Hearthguard, Cinderbolt and Hearthflare, with +6 fire Spell Power, the most the
 [regalia](arcane-concordance-ember-regalia.md) gives; the Pyromancer's set, as leather; wooden sword). Then one
 bare-handed, unarmoured character per invocation, and the Initiate without Dawn Aegis. Kindle and Revelation have no
-combat effect, so the model never casts them; they are there because the Initiate carries them.
+combat effect, so the model never casts them; they are there because the Initiate carries them. Preserve, a utility,
+is never cast either (Chunk B), so its row is a bare-handed one's.
 
 **Measures.** Sustained output (damage a second over a minute against a dummy within reach), burst (damage in the
 first 5 seconds, Focus full), survivability (seconds lasted, at most 60, beside a brute that cannot be killed),
 movement (blocks its abilities carry it in a minute), control (foe-seconds slowed or pushed back in a minute),
-resource efficiency (spell damage per Focus) and support (health and absorption given to each ally in a minute under
-fire from an archer that cannot be killed; Lanternward gives every party member within 4 blocks the same).
+resource efficiency (spell damage per Focus), support (health and absorption given to each ally in a minute under
+fire from an archer that cannot be killed; Lanternward gives every party member within 4 blocks the same) and, since
+Chunk B, knockback (blocks knocked back beside the unkillable brute within the minute, or until the character falls;
+measured, never moved).
 
 ## Results
 
-From the generated data (`Step11Harness`, the standalone harness); the game test computes the same tables from the
-server's loaded rules and spells. Since Ember part 1 they include its four invocations; since Ember part 2, the geared
-hearthbinder, and helpful statuses land in the model (see Findings).
+From the game test's server log in CI run 38519234934 (commit `06dc5ea5f`, Concordance Chunk B, units 1 and 3; not
+merged), the same in its `mod` and `optional integrations absent` jobs; every row from before is unchanged. Earlier
+tables here came from the standalone harness (`Step11Harness`) over the generated data, which CI matched row for row;
+for unit 3 a scratch harness read the same Rimebind and Brace figures. Since Ember part 1 they include its four
+invocations; since Ember part 2, the geared hearthbinder, and helpful statuses land in the model (see Findings); since
+Chunk B, unit 3, Brace, Preserve and Rimebind alone and the Knockback column.
 
 | Character | Isolated target | Clustered group | Mobile opponent | Protected target | Objective defense |
 |---|---|---|---|---|---|
@@ -82,6 +90,7 @@ hearthbinder, and helpful statuses land in the model (see Findings).
 | Composer | won 6.1 s, 20 HP | won 10.9 s, 20 HP | won 4.3 s, 20 HP | won 12.9 s, 8 HP | lost 10.1 s |
 | Geared hearthbinder (+6 fire, Pyromancer's) | won 6.7 s, 18 HP | won 8.2 s, 11 HP | won 5.6 s, 17 HP | won 16.5 s, 3 HP | won 12.6 s, 20 HP |
 | Only jugcraft:aegis | lost 11.8 s | lost 6.7 s | won 49.8 s, 12 HP | lost 10.0 s | lost 8.8 s |
+| Only jugcraft:brace | lost 8.8 s | lost 5.2 s | lost 37.5 s | lost 7.6 s | lost 8.8 s |
 | Only jugcraft:cinderbolt | won 10.6 s, 8 HP | lost 10.9 s | won 10.6 s, 12 HP | lost 12.1 s | lost 9.1 s |
 | Only jugcraft:flashstep | lost 9.3 s | lost 8.4 s | won 40.4 s, 4 HP | lost 6.6 s | lost 8.8 s |
 | Only jugcraft:hearthflare | lost 8.7 s | lost 8.4 s | lost 35.6 s | lost 6.4 s | lost 8.5 s |
@@ -90,30 +99,35 @@ hearthbinder, and helpful statuses land in the model (see Findings).
 | Only jugcraft:kindle | lost 9.3 s | lost 8.4 s | won 40.4 s, 4 HP | lost 6.6 s | lost 8.8 s |
 | Only jugcraft:lance | won 8.1 s, 11 HP | lost 7.2 s | won 5.6 s, 16 HP | lost 13.6 s | lost 9.0 s |
 | Only jugcraft:lanternward | lost 10.4 s | lost 10.1 s | won 15.7 s, 20 HP | lost 9.6 s | lost 8.8 s |
+| Only jugcraft:preserve | lost 9.3 s | lost 8.4 s | won 40.4 s, 4 HP | lost 6.6 s | lost 8.8 s |
 | Only jugcraft:revelation | lost 9.3 s | lost 8.4 s | won 40.4 s, 4 HP | lost 6.6 s | lost 8.8 s |
+| Only jugcraft:rimebind | lost 11.0 s | lost 7.8 s | lost 40.5 s | lost 9.1 s | lost 8.8 s |
 | Initiate without Aegis | won 4.7 s, 15 HP | won 9.0 s, 4 HP | won 10.6 s, 17 HP | won 10.4 s, 5 HP | lost 9.1 s |
 
-| Character | Sustained (dmg/s) | Burst (5 s) | Survival (s) | Movement (blocks/min) | Control (foe-s/min) | Efficiency (dmg/Focus) | Support (per ally/min) |
-|---|---|---|---|---|---|---|---|
-| Fighter (no magic) | 9.15 | 47.2 | 19.3 | 0.0 | 0.0 | 0.00 | 0.0 |
-| Initiate (utility) | 6.10 | 31.5 | 20.4 | 0.0 | 0.0 | 0.00 | 0.0 |
-| Striker | 5.90 | 25.7 | 19.2 | 105.6 | 0.0 | 1.25 | 0.0 |
-| Geared striker (+4 arcane, iron) | 6.27 | 29.7 | 32.5 | 105.6 | 0.0 | 1.75 | 0.0 |
-| Warden | 5.95 | 25.7 | 16.4 | 0.0 | 0.0 | 1.25 | 21.1 |
-| Skirmisher | 8.57 | 35.5 | 17.4 | 105.6 | 0.0 | 1.00 | 0.0 |
-| Composer | 5.91 | 27.7 | 19.1 | 0.0 | 2.3 | 0.50 | 0.0 |
-| Geared hearthbinder (+6 fire, Pyromancer's) | 6.13 | 30.8 | 9.2 | 0.0 | 4.5 | 1.45 | 0.0 |
-| Only jugcraft:aegis | 1.88 | 9.4 | 9.9 | 0.0 | 0.0 | 0.00 | 0.0 |
-| Only jugcraft:cinderbolt | 2.05 | 11.6 | 6.5 | 0.0 | 4.1 | 0.60 | 0.0 |
-| Only jugcraft:flashstep | 1.88 | 9.4 | 7.5 | 105.6 | 0.0 | 0.00 | 0.0 |
-| Only jugcraft:hearthflare | 2.04 | 11.5 | 6.8 | 0.0 | 2.7 | 0.67 | 0.0 |
-| Only jugcraft:hearthguard | 1.88 | 9.4 | 6.6 | 0.0 | 0.0 | 0.00 | 0.0 |
-| Only jugcraft:hearthspark | 1.88 | 9.4 | 7.5 | 0.0 | 0.0 | 0.00 | 0.0 |
-| Only jugcraft:kindle | 1.88 | 9.4 | 7.5 | 0.0 | 0.0 | 0.00 | 0.0 |
-| Only jugcraft:lance | 2.50 | 15.6 | 6.5 | 0.0 | 0.0 | 1.25 | 0.0 |
-| Only jugcraft:lanternward | 1.88 | 9.4 | 8.5 | 0.0 | 0.0 | 0.00 | 14.0 |
-| Only jugcraft:revelation | 1.88 | 9.4 | 7.5 | 0.0 | 0.0 | 0.00 | 0.0 |
-| Initiate without Aegis | 6.10 | 31.5 | 11.5 | 0.0 | 0.0 | 0.00 | 0.0 |
+| Character | Sustained (dmg/s) | Burst (5 s) | Survival (s) | Movement (blocks/min) | Control (foe-s/min) | Efficiency (dmg/Focus) | Support (per ally/min) | Knockback (blocks/min) |
+|---|---|---|---|---|---|---|---|---|
+| Fighter (no magic) | 9.15 | 47.2 | 19.3 | 0.0 | 0.0 | 0.00 | 0.0 | 12.0 |
+| Initiate (utility) | 6.10 | 31.5 | 20.4 | 0.0 | 0.0 | 0.00 | 0.0 | 12.8 |
+| Striker | 5.90 | 25.7 | 19.2 | 105.6 | 0.0 | 1.25 | 0.0 | 8.0 |
+| Geared striker (+4 arcane, iron) | 6.27 | 29.7 | 32.5 | 105.6 | 0.0 | 1.75 | 0.0 | 15.2 |
+| Warden | 5.95 | 25.7 | 16.4 | 0.0 | 0.0 | 1.25 | 21.1 | 12.0 |
+| Skirmisher | 8.57 | 35.5 | 17.4 | 105.6 | 0.0 | 1.00 | 0.0 | 7.2 |
+| Composer | 5.91 | 27.7 | 19.1 | 0.0 | 2.3 | 0.50 | 0.0 | 12.8 |
+| Geared hearthbinder (+6 fire, Pyromancer's) | 6.13 | 30.8 | 9.2 | 0.0 | 4.5 | 1.45 | 0.0 | 7.2 |
+| Only jugcraft:aegis | 1.88 | 9.4 | 9.9 | 0.0 | 0.0 | 0.00 | 0.0 | 8.0 |
+| Only jugcraft:brace | 1.88 | 9.4 | 6.9 | 0.0 | 0.0 | 0.00 | 0.0 | 5.2 |
+| Only jugcraft:cinderbolt | 2.05 | 11.6 | 6.5 | 0.0 | 4.1 | 0.60 | 0.0 | 5.6 |
+| Only jugcraft:flashstep | 1.88 | 9.4 | 7.5 | 105.6 | 0.0 | 0.00 | 0.0 | 5.6 |
+| Only jugcraft:hearthflare | 2.04 | 11.5 | 6.8 | 0.0 | 2.7 | 0.67 | 0.0 | 5.6 |
+| Only jugcraft:hearthguard | 1.88 | 9.4 | 6.6 | 0.0 | 0.0 | 0.00 | 0.0 | 5.6 |
+| Only jugcraft:hearthspark | 1.88 | 9.4 | 7.5 | 0.0 | 0.0 | 0.00 | 0.0 | 5.6 |
+| Only jugcraft:kindle | 1.88 | 9.4 | 7.5 | 0.0 | 0.0 | 0.00 | 0.0 | 5.6 |
+| Only jugcraft:lance | 2.50 | 15.6 | 6.5 | 0.0 | 0.0 | 1.25 | 0.0 | 5.6 |
+| Only jugcraft:lanternward | 1.88 | 9.4 | 8.5 | 0.0 | 0.0 | 0.00 | 14.0 | 7.2 |
+| Only jugcraft:preserve | 1.88 | 9.4 | 7.5 | 0.0 | 0.0 | 0.00 | 0.0 | 5.6 |
+| Only jugcraft:revelation | 1.88 | 9.4 | 7.5 | 0.0 | 0.0 | 0.00 | 0.0 | 5.6 |
+| Only jugcraft:rimebind | 1.71 | 8.5 | 9.0 | 0.0 | 6.6 | 0.00 | 0.0 | 5.6 |
+| Initiate without Aegis | 6.10 | 31.5 | 11.5 | 0.0 | 0.0 | 0.00 | 0.0 | 7.2 |
 
 ## Acceptance
 
@@ -130,6 +144,11 @@ The game test fails the build unless all of these hold (`Baselines.report`):
    shield is the same. Since Ember part 2 ([regalia](arcane-concordance-ember-regalia.md)) the same holds for fire: the
    geared hearthbinder's Cinderbolt and Hearthflare deal more than the plain ones (6 and 7 against 3 and 4), and its
    Hearthguard does not change.
+5. **Rimebind holds foes only within its thaw** (since Chunk B, unit 3). Its control is at most one binding for each
+   binding and thaw in a minute, and one more: 7.8 foe-seconds a minute. CI measured 6.6.
+6. **Brace takes knockback off** (since Chunk B, unit 3). Beside the unkillable brute, Brace alone takes less knockback
+   than the same bare hands without it: 5.2 blocks in CI's table, against 5.6 bare-handed in the scratch harness (the
+   log has no bare-hands row).
 
 ## Findings
 
@@ -153,11 +172,13 @@ The game test fails the build unless all of these hold (`Baselines.report`):
 - **Initiate magic does not outclass iron.** The Fighter, with no magic at all, wins all five encounters and has the
   highest sustained output (9.15 a second). Casters trade sustained damage for reach, mobility, shields and support.
 - **No single invocation carries a fight.** Alone and bare-handed, the Lance and Cinderbolt win the isolated and mobile
-  encounters; Hearthflare and Hearthguard win none; every other invocation wins only against the runner, slowly.
+  encounters; Hearthflare, Hearthguard, Brace and Rimebind win none; every other invocation wins only against the
+  runner, slowly.
 - **Objective defense is where Initiate casters fall short.** The Striker, Warden, Composer and Initiate lose it: none
   of them can stop three brutes reaching the objective. The Skirmisher (an iron sword), the geared striker and the
   geared hearthbinder win it. At step 11 no invocation gave control and the composed `dazzle` was the only control (2.3
-  foe-seconds a minute); since Ember part 1, Smoulder's slow gives Cinderbolt 4.1 and Hearthflare 2.7.
+  foe-seconds a minute); since Ember part 1, Smoulder's slow gives Cinderbolt 4.1 and Hearthflare 2.7; since Chunk B,
+  Rimebind alone gives 6.6, the most of any character, and still loses objective defense.
 - **Gear matters as it should.** +4 arcane Spell Power raises the Lance's damage per Focus from 1.25 to 1.75; with
   iron armour the geared striker lasts far longer beside the brute (32.5 s against 19.2). It wins every encounter
   and comes closest to trivializing them (17 health left in the protected encounter, a point above the line): a watch
@@ -232,6 +253,10 @@ compare changes against, not predictions of every fight.
   of the fire kit in Findings are the same code with the fire Spell Power changed. CI run 37986172795 (commit
   `2da07f9c`): **"All 1177 required tests passed"**, and the tables the game test logged are identical, row for row, to
   the harness's above.
+- Concordance Chunk B, unit 3 (not merged): CI run 38519234934 (workflow_dispatch, commit `06dc5ea5f`): `mod` and
+  `optional integrations absent` each logged **"All 1639 required tests passed"**, `baselinesHoldOnTheLoadedRules`
+  (acceptance 1 to 6) among them, and the tables above, the same in both jobs. The push calibration logged 7.05 blocks
+  (7.050000011920929) against the model's 6.6.
 
 Not yet run: any client, a two-client dedicated server, a fight in a real world against these encounters, a trinket.
 

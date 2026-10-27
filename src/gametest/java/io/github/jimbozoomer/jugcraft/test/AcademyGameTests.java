@@ -84,6 +84,7 @@ public class AcademyGameTests {
 			for (int i = 0; i < palette.size(); i++) {
 				var entry = palette.getCompoundOrEmpty(i);
 				String name = entry.getStringOr("id", "");
+				helper.assertTrue(!name.equals("minecraft:snow"), "College template retains a snowcap");
 				var block = BuiltInRegistries.BLOCK.getValue(net.minecraft.resources.Identifier.parse(name));
 				helper.assertTrue(block != Blocks.AIR || name.equals("minecraft:air"), "Unregistered academy block: " + name);
 				var properties = entry.getCompoundOrEmpty("properties");
@@ -96,6 +97,28 @@ public class AcademyGameTests {
 		} catch (IOException e) {
 			throw helper.assertionException("Could not read academy template: " + e);
 		}
+		helper.succeed();
+	}
+
+	@GameTest(structure = "jugcraft:academy/winterhold", maxTicks = 20)
+	public void academyGateWingAndAutumnArePlaced(GameTestHelper helper) {
+		helper.assertBlockPresent(Blocks.AIR, new BlockPos(68, 33, 120));
+		helper.assertBlockPresent(Blocks.STONE_BRICKS, new BlockPos(62, 33, 120));
+		helper.assertBlockPresent(Blocks.STONE_BRICKS, new BlockPos(74, 33, 120));
+		helper.assertBlockPresent(Blocks.CHISELED_STONE_BRICKS, new BlockPos(68, 32, 126));
+		helper.assertBlockPresent(Blocks.STONE_BRICKS, new BlockPos(90, 36, 34));
+		helper.assertBlockPresent(Blocks.STONE_BRICKS, new BlockPos(133, 44, 34));
+		helper.assertBlockPresent(Blocks.POLISHED_DIORITE, new BlockPos(153, 36, 42));
+		helper.assertBlockPresent(BuiltInRegistries.BLOCK.getValue(net.minecraft.resources.Identifier.parse("minecraft:light_blue_stained_glass_pane")),
+				new BlockPos(169, 30, 34));
+		helper.assertBlockPresent(Blocks.AMETHYST_BLOCK, new BlockPos(68, 24, 25));
+		helper.assertBlockPresent(BuiltInRegistries.BLOCK.getValue(net.minecraft.resources.Identifier.parse("minecraft:red_terracotta")),
+				new BlockPos(43, 50, 33));
+		helper.assertBlockPresent(Blocks.CARVED_PUMPKIN, new BlockPos(51, 25, 99));
+		helper.assertBlockPresent(io.github.jimbozoomer.jugcraft.agriculture.JugcraftAgriculture.block("orange_leaf_pile"),
+				new BlockPos(48, 25, 80));
+		helper.assertBlockPresent(BuiltInRegistries.BLOCK.getValue(net.minecraft.resources.Identifier.parse("minecraft:blue_bed")),
+				new BlockPos(39, 51, 37));
 		helper.succeed();
 	}
 

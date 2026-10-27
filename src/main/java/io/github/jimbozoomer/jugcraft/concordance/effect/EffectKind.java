@@ -29,7 +29,9 @@ public enum EffectKind {
 	DETECTION("detection", On.CREATURE, 1),
 	/**
 	 * A limited, listed change to the world: putting out fire; or, in Ember's school ({@code spell_power:fire}),
-	 * kindling an unlit campfire, candle or candle cake (concordance/ember/Ember.java). It never places fire.
+	 * kindling an unlit campfire, candle or candle cake (concordance/ember/Ember.java); or, in Rime's school
+	 * ({@code spell_power:frost}), holding an Alembic Crucible's heat in its band (concordance/rime/Rime.java). It never
+	 * places fire and never removes anything but fire.
 	 */
 	ALTERATION("alteration", On.BLOCK, 3),
 	/** Owner-library operations use the same authority, budgets and composition grammar. */

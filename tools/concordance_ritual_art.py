@@ -1,7 +1,8 @@
-"""Textures for roadmap step 12, rituals (tools/concordance_rituals.py): the Adept's Wand (a 16x16 map in
-tools/item_icons/, docs/ITEM_ICONS.md), the Circle Anchor (its GeckoLib sheet and its item icon), the Ley Pylon and the
-Warding Stone (plain, and the 4x4 connected sheet the Fusion built-in pack uses). Original pixel art drawn from code;
-tools/concordance_art.py includes these in its textures().
+"""Textures for roadmap step 12, rituals (tools/concordance_rituals.py): the Adept's Wand and, since Concordance Chunk C
+(C-04), Root and Rivet's Rooted Thallite Foundation (each a 16x16 map in tools/item_icons/, docs/ITEM_ICONS.md), the
+Circle Anchor (its GeckoLib sheet and its item icon), the Ley Pylon and the Warding Stone (plain, and the 4x4 connected
+sheet the Fusion built-in pack uses). Original pixel art drawn from code; tools/concordance_art.py includes these in its
+textures().
 """
 
 import random
@@ -220,7 +221,9 @@ def circle_anchor_item():
 
 
 def textures():
-    return {("item", "adept_wand"): item_icons.draw("adept_wand"), ("item", "circle_anchor"): circle_anchor_item(),
+    return {("item", "adept_wand"): item_icons.draw("adept_wand"),
+            ("item", "rooted_thallite_foundation"): item_icons.draw("rooted_thallite_foundation"),
+            ("item", "circle_anchor"): circle_anchor_item(),
             ("block", "circle_anchor"): circle_anchor_sheet(), ("block", "ley_pylon_stone"): pylon_stone(),
             ("block", "ley_pylon_copper"): pylon_copper(), ("block", "ley_pylon_crystal"): pylon_crystal(),
             ("block", "warding_stone"): warding_stone(), ("block", "warding_stone_connected"): warding_stone_connected()}

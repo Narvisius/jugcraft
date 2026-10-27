@@ -16,15 +16,20 @@ public final class CompanionJobDetails {
         if(!CompanionJobs.permitted(npc,target.at().pos()) || status==CompanionStatus.FORBIDDEN)return "Access denied; check ownership, party access and protection.";
         String delivery=npc.transport.jobDetail(target);
         if(!delivery.isEmpty())return delivery;
+        var block=npc.level().getBlockEntity(target.at().pos());var stock=CompanionProductionStock.of(block);
+        if(stock!=null && stock.enabled() && (status==CompanionStatus.NO_INPUT || status==CompanionStatus.READY || status==CompanionStatus.STOCKED || status==CompanionStatus.STOCK_UNAVAILABLE)){String detail=stock.detail(npc,block);if(!detail.isEmpty())return detail;}
+        if(target.fishing() && status==CompanionStatus.WORKING)return npc.fishing.detail(target);
         String source=containers(npc,target,false),output=containers(npc,target,true);
         String tool=npc.assignments.supplies.handLocked()?"Unlock Hand to fetch a tool, or equip it manually.":"Equip it or enable Tools on a stocked Supply.";
         return switch(status){
             case NO_INPUT, SUPPLY_EMPTY, RECIPE_MISSING -> input(npc,row,target,status,source);
-            case FULL -> target.block().getPath().equals("generator_wheel")?"Wheel energy buffer full; use power from its side outputs.":
+            case FULL -> target.fishing() && npc.fishing.outputBlocked(target)?"Catch delivery blocked; "+transport(npc,row,false,output)+".":target.block().getPath().equals("generator_wheel")?"Wheel energy buffer full; use power from its side outputs.":
                 target.block().getPath().equals("hand_crank")?"Kinetic network is not accepting power; check flywheel capacity and connections.":
                 target.carriesProduce()?"Harvest/cargo capacity full; "+transport(npc,row,false,output)+".":
                 "Output needs collecting; "+transport(npc,row,false,output)+".";
             case BLOCKED -> "Cannot reach the work position; clear a safe path and standing space.";
+            case NEEDS_ROD -> "Needs a fishing rod. "+tool;
+            case FISHING_BLOCKED -> "Clear the dry seat, casting line and water surface; maximum cast is 10 blocks.";
             case NO_TOOL -> "Needs a knife. "+tool;
             case NEEDS_SHEARS -> "Needs shears. "+tool;
             case NEEDS_CUTTER -> "Needs shears or a knife. "+tool;
@@ -35,7 +40,7 @@ public final class CompanionJobDetails {
             case NEEDS_CONTAINERS -> "Needs empty bottles, buckets or a refillable canteen; "+transport(npc,row,true,source)+".";
             case NO_SEEDS -> "Needs suitable planting items; "+transport(npc,row,true,source)+".";
             case NO_BUNDLES -> "Needs ready-made herb bundles; "+transport(npc,row,true,source)+".";
-            case NEEDS_FERTILIZER -> "Needs bone meal, guano or Fertilizer; "+transport(npc,row,true,source)+".";
+            case NEEDS_FERTILIZER -> "Needs bone meal, guano or a fertilizer blend; "+transport(npc,row,true,source)+".";
             case NEEDS_BREEDING_FOOD -> "Needs food accepted by the selected animals; "+transport(npc,row,true,source)+".";
             case NO_POWER -> "Machine lacks power; check its energy supply and connections.";
             case NO_HEAT -> "Station lacks heat; check fuel or the heat source below it.";
@@ -58,15 +63,19 @@ public final class CompanionJobDetails {
             case AGING -> "Waiting for the selected cider stage; check Filter for Sparkling/Aged.";
             case DRYING -> "Herb bundles are drying; collection begins when ready.";
             case COOLING, CANDY_SETTING -> "Waiting for the station's cooling/setting step to finish.";
+            case LATEX_WAIT -> "No full bottle ready; the rubber tree fills its tap naturally.";
             case GUANO_WAIT -> "No guano ready; resident bats produce it naturally.";
             case STOCK_SETUP -> "Stock the Farm Stand sale slots first to set their restock items.";
             case SERVING_SETUP -> "Serve the desired dishes manually once to set restock items.";
             case MACHINE_UNFORMED -> "Complete the machine structure and keep all its parts loaded.";
-            case MACHINE_TOOL -> "Install the required tool in the machine's tool socket.";
+            case NEEDS_CERAMICS -> "Supply or install a Basic Ceramic Lining and Ceramic Crucible; both are reusable.";
+            case MACHINE_TOOL -> npc.level().getBlockEntity(target.at().pos()) instanceof io.github.jimbozoomer.jugcraft.workshop.WorkshopBlockEntity
+                ? "Supply or install the recipe's workshop tool; Output returns a tool that needs replacing."
+                : "Install the required tool in the machine's tool socket.";
             case MACHINE_PAUSED -> "Machine is paused; resume it using its own controls.";
             case DORMANT_GARDEN -> "Awaken the assigned magic bed/device through its native progression.";
             case NEEDS_VERDANCE -> "Magic device lacks Verdance; check its native supply.";
-            case MAGIC_DISABLED, BAT_HOUSE_DISABLED, GARDEN_DISABLED -> "Disabled by server/game rules; this job cannot run until enabled.";
+            case MAGIC_DISABLED, BAT_HOUSE_DISABLED, GARDEN_DISABLED, TAPS_DISABLED -> "Disabled by server/game rules; this job cannot run until enabled.";
             case SPOILED_INPUT -> "Remove spoiled jars and supply fresh ingredients.";
             case UNSUPPORTED -> "This target has no supported companion job; reassign it.";
             case READY -> npc.orders.mode()!=3?"Ready; select Work to perform assigned jobs.":"Ready; follows job priority, energy and Routine settings.";
@@ -80,7 +89,10 @@ public final class CompanionJobDetails {
         if(target.block().getPath().equals("hand_crank"))return "No kinetic demand; connect the crank to a machine or flywheel that can accept power.";
         String missing="No complete allowed recipe is ready; check ingredients and Filter";
         var block=npc.level().getBlockEntity(target.at().pos());
-        if(block instanceof CookingPotBlockEntity pot && !pot.isLocked()){
+        if(block instanceof CraftingTableCompanionBlockEntity table){
+            var plan=table.plan();
+            if(plan!=null){String needs=missingIngredients(plan.parts(),table.installed());if(!needs.isEmpty())missing="Needs "+needs+" at the crafting table";}
+        }else if(block instanceof CookingPotBlockEntity pot && !pot.isLocked()){
             var plan=pot.supplyPlan().orElse(null);
             if(plan!=null){
                 var installed=new ArrayList<ItemStack>();for(int i=0;i<CookingPotBlockEntity.INPUTS;i++)installed.add(pot.getItem(i));

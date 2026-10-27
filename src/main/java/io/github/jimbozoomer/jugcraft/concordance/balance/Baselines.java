@@ -26,7 +26,7 @@ import org.jspecify.annotations.Nullable;
 
 /**
  * The Concordance's combat and progression baselines (roadmap step 11): five encounter shapes, a roster of
- * characters built from the loaded rules, seven measures for each character, and the acceptance checks. The same code
+ * characters built from the loaded rules, eight measures for each character, and the acceptance checks. The same code
  * runs in the standalone harness over the generated data and in a game test over the rules and Spell Engine spells the
  * server actually loaded ({@code ConcordanceBaselineGameTests}), so the numbers recorded in
  * docs/features/arcane-concordance-baselines.md are the server's.
@@ -166,15 +166,16 @@ public final class Baselines {
 	// ----------------------------------------------------------------------------------------------- the measures
 
 	/**
-	 * The seven measures for a character: sustained output (damage a second over a minute against a dummy within
+	 * The eight measures for a character: sustained output (damage a second over a minute against a dummy within
 	 * reach), burst (damage in the first 5 seconds, Focus full), survivability (seconds lasted, at most 60, beside a
 	 * brute that cannot be killed), movement (blocks its abilities carry it in a minute), control (foe-seconds slowed or
 	 * pushed back in a minute against the dummy), resource efficiency (damage per Focus over the minute; 0 without
-	 * spells) and support (health and absorption a spell that chooses allies gives each of them, within a minute
-	 * under fire from an archer that cannot be killed).
+	 * spells), support (health and absorption a spell that chooses allies gives each of them, within a minute
+	 * under fire from an archer that cannot be killed) and, since Chunk B, knockback (blocks knocked back beside the
+	 * unkillable brute within the minute, or until the character falls; measured, not moved).
 	 */
 	public record Measures(double sustained, double burst, double survival, double movement, double control, double efficiency,
-			double support) {
+			double support, double knockback) {
 	}
 
 	private static final Foe DUMMY = new Foe("dummy", Behaviour.DUMMY, 1.0E9, 2, 0.0, 0.0, 20, 1.5, 2.5);
@@ -198,7 +199,7 @@ public final class Baselines {
 		}
 		return new Measures(sustained.damage() / 60.0, burst.damage(), survival.ticks() / (double) Benchmark.TICKS, movement,
 				sustained.control() / Benchmark.TICKS, sustained.focusSpent() == 0 ? 0.0 : sustained.spellDamage() / sustained.focusSpent(),
-				support.support());
+				support.support(), survival.knocked());
 	}
 
 	/** How often an ability alone can be cast in a minute: its cooldown, or its Focus (full, then regenerating). */
@@ -235,11 +236,11 @@ public final class Baselines {
 				out.append('\n');
 			}
 			out.append("\n| Character | Sustained (dmg/s) | Burst (5 s) | Survival (s) | Movement (blocks/min) | Control (foe-s/min) "
-					+ "| Efficiency (dmg/Focus) | Support (per ally/min) |\n|---|---|---|---|---|---|---|---|\n");
+					+ "| Efficiency (dmg/Focus) | Support (per ally/min) | Knockback (blocks/min) |\n|---|---|---|---|---|---|---|---|---|\n");
 			for (Map.Entry<Character, Measures> row : measures.entrySet()) {
 				Measures m = row.getValue();
-				out.append(String.format(Locale.ROOT, "| %s | %.2f | %.1f | %.1f | %.1f | %.1f | %.2f | %.1f |%n", row.getKey().name(),
-						m.sustained(), m.burst(), m.survival(), m.movement(), m.control(), m.efficiency(), m.support()));
+				out.append(String.format(Locale.ROOT, "| %s | %.2f | %.1f | %.1f | %.1f | %.1f | %.2f | %.1f | %.1f |%n", row.getKey().name(),
+						m.sustained(), m.burst(), m.survival(), m.movement(), m.control(), m.efficiency(), m.support(), m.knockback()));
 			}
 			return out.toString();
 		}
@@ -256,7 +257,10 @@ public final class Baselines {
 	 * it last longer beside the unkillable brute than the same kit without it;</li>
 	 * <li>Spell Power changes only what scales with it: the geared striker's Lance deals more than the plain
 	 * striker's, and its shield does not; the geared hearthbinder's Cinderbolt and Hearthflare deal more than the plain
-	 * ones, and its Hearthguard does not change.</li>
+	 * ones, and its Hearthguard does not change;</li>
+	 * <li>Rimebind holds foes only within its thaw (Chunk B): no more control than one binding for each binding and thaw
+	 * in a minute, and one more;</li>
+	 * <li>Brace takes knockback off (Chunk B): beside the unkillable brute, less than the same bare hands without it.</li>
 	 * </ol>
 	 */
 	public static Report report(Source source) {
@@ -317,6 +321,23 @@ public final class Baselines {
 		}
 		if (magnitude(hearthbinder, "jugcraft:hearthguard") != magnitude(named(roster, "Only jugcraft:hearthguard"), "jugcraft:hearthguard")) {
 			failures.add("Fire Spell Power should not change Hearthguard");
+		}
+		// 5. Rimebind holds foes only within its thaw: no more control than one binding per binding-and-thaw (plus one).
+		Character rimebind = named(roster, "Only jugcraft:rimebind");
+		int bind = rimebind.abilities().getFirst().plan().root().steps().getFirst().effect().duration();
+		double lost = Math.round(bind * Benchmark.RIMEBOUND_SLOW) / (double) Benchmark.TICKS;
+		double ceiling = (60.0 * Benchmark.TICKS / (bind + Benchmark.RIME_GRACE) + 1) * lost;
+		if (measures.get(rimebind).control() > ceiling) {
+			failures.add("Rimebind holds foes past its thaw: " + measures.get(rimebind).control() + " foe-seconds a minute, at most "
+					+ ceiling);
+		}
+		// 6. Brace takes knockback off: less than the same bare hands without it, beside the unkillable brute. Brace changes
+		// no damage, so both fall to the same blows; its cast costs a few punches, so it falls a little sooner, which is why
+		// the measure is the blocks taken, not a rate over the time lasted.
+		double unbraced = measure(new Character("Bare hands", Armour.NONE, Weapon.FIST, List.of())).knockback();
+		double braced = measures.get(named(roster, "Only jugcraft:brace")).knockback();
+		if (braced >= unbraced) {
+			failures.add("Brace takes no knockback off: " + braced + " blocks against " + unbraced + " bare-handed");
 		}
 		return new Report(encounters, outcomes, measures, failures);
 	}

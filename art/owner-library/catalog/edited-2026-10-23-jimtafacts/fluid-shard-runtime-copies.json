@@ -1,0 +1,17 @@
+{
+  "copies": [
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/buildcraft reborn by jimbo/assets/buildcraftcore/textures/items/fragile_fluid_shard_base.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/item/jimtafacts/production/fragile_shard_base.png",
+      "sha256": "70a5d160a934aa0cbd3badcef05cae110e5f0d4a1ba2bc2d93eaf4f31e8fd495",
+      "changes": "None; original layer pixels retained."
+    },
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/buildcraft reborn by jimbo/assets/buildcraftcore/textures/items/fragile_fluid_shard_fluid.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/item/jimtafacts/production/fragile_shard_fluid.png",
+      "sha256": "e5932257cdacbfe2109232fd1e41e868f6afa7c80b2e4bffbe4b1c63f14b212f",
+      "changes": "None; original layer pixels retained."
+    }
+  ],
+  "adaptation": "Original base/fluid layers and 500 mB capacity. Native craftable empty shell accepts one fill, then is extraction-only and disappears on final drain. No automatic replacement of tank drops: native tanks already preserve their complete fluid. Fluid appearance is a neutral original overlay; tooltip identifies contents. Transactional tanks and fluid bottler conserve partial transfers and aborted operations."
+}

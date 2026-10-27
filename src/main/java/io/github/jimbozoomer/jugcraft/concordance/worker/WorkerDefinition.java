@@ -14,7 +14,9 @@ public sealed interface WorkerDefinition {
 
 	/**
 	 * A spirit: the one {@code work} it may agree to, within {@code radius} of its anchor, in the world clock's hours
-	 * {@code from} to {@code to}, at most {@code quota} tasks a day, carrying at most {@code carry} items at a time.
+	 * {@code from} to {@code to}, at most {@code quota} tasks a day, carrying at most {@code carry} items at a time. A
+	 * courier (Concordance Chunk D, D-08) reserves at most {@code carry} at a source a trip; what it carries is the courier
+	 * ledger's, never its own.
 	 */
 	record Spirit(String id, String work, int radius, int from, int to, int quota, int carry) implements WorkerDefinition {
 	}

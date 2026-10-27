@@ -1,6 +1,6 @@
 # The Cinder Tyrant
 
-Status: implemented in source. CI builds it, and its game tests and client game test pass (below). This is part 2 of boss 4 in the [bosses plan](../branches/BOSSES.md#the-cinder-tyrant-the-plan-being-built), built by [the boss playbook](../branches/BOSS_PLAYBOOK.md): the boss of the Cinder Kiln, his Cinderlings and his spat and fallen things, and his loot. It is built on part 1, the kiln and the Kiln Seal that opens it ([cinder-kiln.md](cinder-kiln.md)), and on the lair framework ([hollow-acre.md](hollow-acre.md)). It has not been played by hand, and the two-client dedicated-server playtest is still to do. On 13 October 2026 his seams were widened and brightened, at the owner's choice ([Changes after review](#changes-after-review)); CI passes on that too, and the pictures below are from it.
+Status: implemented in source. CI builds it, and its game tests and client game test pass (below). This is part 2 of boss 4 in the [bosses plan](../branches/BOSSES.md#the-cinder-tyrant-the-plan-being-built), built by [the boss playbook](../branches/BOSS_PLAYBOOK.md): the boss of the Cinder Kiln, his Cinderlings and his spat and fallen things, and his loot. It is built on part 1, the kiln and the Kiln Seal that opens it ([cinder-kiln.md](cinder-kiln.md)), and on the lair framework ([hollow-acre.md](hollow-acre.md)). It has not been played by hand, and the two-client dedicated-server playtest is still to do. On 13 October 2026 his seams were widened and brightened, at the owner's choice ([Changes after review](#changes-after-review)); CI passes on that too, and the pictures below are from it. Since Concordance Chunk B (unit 1) his reward is the lairs' shared one ([lair-encounter-credit.md](lair-encounter-credit.md)); that change's game tests pass in CI (runs 38514144531 and 38519234934; below), not merged.
 Proposal issue: none. On 10 October 2026 the owner asked for "the next boss same way" as the Yeti King, and for the order he was made in to be saved as the plan for every boss (the playbook); the Cinder Tyrant is the next of the first eight in [branches/BOSSES.md](../branches/BOSSES.md).
 Owner: @jimbozoomer-byte
 
@@ -71,7 +71,7 @@ Meanwhile:
 - **the choke:** one sluice at a time is **choked** with slag. A glowing crust covers its panels, embers fall at its foot, and turned it only says "Slag chokes the sluice: it will not turn". Every 20 seconds the choke moves to the next gate (west, east, south, round again), never onto one that is open, so a flood a player has opened is not cut short and one or two gates always work;
 - **the surges:** every 30 seconds the channel surges again, announced as before.
 
-**Cinderlings:** little salamanders of glowing slag, 14 health, their bites 3 damage and 2 seconds of burning, quick. They go for the nearest player and are immune to fire. In a flooded trough they gutter out in a hiss of steam. They drop nothing, give no experience and are never saved, and they crumble to ash when he falls, resets or is gone. Whoever hurts one has taken part in his fight.
+**Cinderlings:** little salamanders of glowing slag, 14 health, their bites 3 damage and 2 seconds of burning, quick. They go for the nearest player and are immune to fire. In a flooded trough they gutter out in a hiss of steam. They drop nothing, give no experience and are never saved, and they crumble to ash when he falls, resets or is gone. Whoever hurts one, or whose tamed creature does, has taken part in his fight.
 
 ### The Molten Heart (below a fifth)
 
@@ -79,24 +79,31 @@ Meanwhile:
 
 ### Fire Resistance
 
-Fire Resistance, from a potion or the Ember invocation Hearthguard, stops his fire: the Kiln Breath, the Lava Wave, the fire patches, the slag and burning. It never stops his blows: the Tail Sweep, the Body Slam, the gobs' and cinders' impact and the Cinderlings' bites. It helps the prepared without emptying the fight.
+Fire Resistance, from a potion, the Ember invocation Hearthguard or (since Concordance Chunk C, C-02, not merged) the Alembic Crucible's Kiln Draught, stops his fire: the Kiln Breath, the Lava Wave, the fire patches, the slag and burning. It never stops his blows: the Tail Sweep, the Body Slam, the gobs' and cinders' impact and the Cinderlings' bites. It helps the prepared without emptying the fight.
 
 ### His fall
 
 When he falls:
 - his Cinderlings crumble, and his gobs, cinders and fire are gone;
 - the surge's slag ebbs, every sluice is clear and every trough drained;
-- each participant gets their loot (below) and Tempered;
+- each player who qualified in his fight is paid once (below): their loot and Tempered, however often his fall is reported;
 - "The Cinder Tyrant falls, and the crucible cools to black glass": the crucible's slag cools to **obsidian** you can walk on, and a gate of **Grey Mist** two blocks wide and two high opens in the middle of the bowl. It takes players home, as the arch beside the ledge does;
 - the instance is ended, and it closes once everyone has left. The next instance in that slot is placed fresh, its crucible molten, and he lies sunk in it again.
 
 ### Left alone
 
-If no player he can fight is within 38 blocks of the bowl's centre for 10 seconds: "The Cinder Tyrant sinks back into the crucible". He heals fully and is hot again, the slag ebbs, the troughs drain and the sluices reset, his Cinderlings crumble and his things are gone. Who hurt him is forgotten, so a fresh fight starts from nothing.
+If no player he can fight is within 38 blocks of the bowl's centre for 10 seconds: "The Cinder Tyrant sinks back into the crucible". He heals fully and is hot again, the slag ebbs, the troughs drain and the sluices reset, his Cinderlings crumble and his things are gone. Everyone's part in the fight is forgotten, so a fresh fight starts from nothing.
 
 ### His loot
 
-Each participant rolls their own loot. A participant is a player who hurt him or his Cinderlings and is within 64 blocks of the bowl's centre when he falls. The loot goes straight into their inventory, and what does not fit lands at their feet. "His molten hoard is yours".
+Each player who qualified in his fight is paid their own loot, once. Since Concordance Chunk B a player qualifies as at every lair boss on the shared credit ([lair-encounter-credit.md](lair-encounter-credit.md)), by any one of these:
+- a blow to him or a Cinderling, their own or their tamed creature's, however small; the blow that fells him counts, even if it is the striker's only one;
+- giving other players back 4 or more of the health his side's blows took from them, with the Concordance;
+- a Concordance ward on another player that soaks 4 or more of those blows.
+
+His side's blows are his own and his fire's: the Tail Sweep, the Body Slam, the gobs and cinders, his Cinderlings' bites, the Kiln Breath, the Lava Wave and the fire patches. The slag's heat and burning have no attacker, so they are not his fight's hurt, and healing what they took earns nothing (proposed, B-P5). He names no objective of his own (proposed, B-P4): a turned sluice records no one who turned it.
+
+Who is paid: everyone who qualified and is alive within 64 blocks of the bowl's centre when he falls, at once; one who died in his fight, once they are back on their feet, wherever they are; one who left the game in it and is still away when he falls, when they next join. Each fall pays each player once, and each share is rolled when it is handed over. The loot goes straight into their inventory, and what does not fit lands at their feet. "His molten hoard is yours".
 
 | Loot | Chance |
 | --- | --- |
@@ -104,10 +111,12 @@ Each participant rolls their own loot. A participant is a player who hurt him or
 | **A trophy:** the Cinderbrand or the Magmaw, Arms VII's (one of the two) | 15%; one is certain on a player's first kill (whoever has not yet earned Tempered) |
 | **Salamander Charm** | 25% |
 | **The Tyrant's Crest** | 20% |
-| 300 experience, shared out among the participants | always |
+| 300 experience, shared out among everyone paid, now or later | always |
 | The advancement **Tempered** (a challenge in the Adventure tab) | always |
 
 He is no Witching Season boss: the Halloween event adds nothing to his loot.
+
+With JEI installed, each of these has an information page with these numbers, "with the default data" (since Concordance Chunk B, B-02: [concordance-first-loadout.md](concordance-first-loadout.md)); `check_acquisition` holds the pages to this table and to `CinderTyrantLoot`, and their last sentence names a blow, healing or a ward, but no objective (B-P4).
 
 **What they are for:**
 - **Tyrant Scale:**
@@ -159,15 +168,16 @@ His settings are the ones every lair boss shares, in `config/jugcraft.properties
   - **the Salamander Charm** is an offhand charm for magma blocks, the Nether and the volcanic lands;
   - **the Tyrant's Crest** is a costume for trick-or-treating and the costume contest (`#jugcraft:trick_or_treat_costumes` and `#jugcraft:costume_hats`);
   - **the Cinderbrand and the Magmaw** are Arms VII's boss trophies: the second of its eight bosses to drop his.
-- **Technology and magic:** none required. Fire Resistance helps against his fire, from a potion or the Ember school's Hearthguard (the planning pack's Ember link); its Tide, Rime and Strata links wait for those schools.
+- **Technology and magic:** none required. Fire Resistance helps against his fire, from a potion or the Ember school's Hearthguard (the planning pack's Ember link); its Tide, Rime and Strata links wait for those schools (Rime and Strata now have research and spells, but nothing in his fight answers them yet). Since Concordance Chunk B, unit 3, he is resistant to Concordance control (`#jugcraft:concordance/resistant`): a harmful Concordance status (Rimebind's slow, Dazzle, the Ice Breaker's slow) lasts half as long on him; Smoulder already did nothing (he is immune to fire), nor did Concordance pushes (his knockback resistance is 1.0) ([Rime and Strata](arcane-concordance-rime-strata.md#tolerance-of-the-lair-keepers)).
 - **Trade and solo routes:** a solo player can do everything. The sluices are turned by hand, the bait is standing in a trough, and a hot Tyrant still takes half damage from any weapon. His health is lowest for one player, and the first kill always brings a trophy. His loot can be traded like any item.
 - **Reachable entry path:** the seal takes what a player who has reached the Nether has (part 1), and nothing he drops is needed to reach him.
+- **The encyclopedia and JEI (since Concordance Chunk B, B-02):** carrying a Kiln Seal shows the Cinder Kiln's dossier under Expeditions (its rite, the seal's recipe, that it works all year, and the party it holds); meeting or beating him adds how support earns a share (his Cinderlings, healing and wards; not what burning or his slag took), the two trophies of which a first win brings one, his loot with JEI's words, the cheaper seal and the way home. JEI has an information page for each of his five things. A first win over him completes the First Light route's lair step ([arcane-concordance-first-route.md](arcane-concordance-first-route.md)).
 
 ## Balance and automation
 
 - **Every fight costs a summoning:** a fresh Kiln Seal, as part 1 set it.
 - **No gain loop:** scales make a seal that still needs obsidian, a magma block, gold and a whole fight, and a scale crushes into two magma cream, while magma cream makes no scale. Nothing he drops turns into more of itself. Nothing he drops sells to a Jugcraft shop for Jugs.
-- **No leeching:** only participants get loot. A bystander who never struck him or a Cinderling gets nothing, and loot is rolled per participant, so nobody takes another's.
+- **No leeching:** only those who qualified get loot. A bystander who never struck him or a Cinderling gets nothing, and so does one who heals or wards only themselves, or heals only what his slag and burning took. Healing counts only the hurt his side's blows did to another player, and his fall pays each player once. Loot is rolled per player, so nobody takes another's.
 - **First kill once:** the trophy's first-kill guarantee is stored with the advancement, so it comes once per player.
 - **Abandoning resets him:** leaving him alone for 10 seconds heals him and forgets everyone's part. He cannot be worn down between visits.
 - **No automation:** he wakes only for a player, quenches only on his own slam, and his loot goes only to players. His Cinderlings drop nothing and give no experience. Only a player turns a sluice.
@@ -181,6 +191,9 @@ His settings are the ones every lair boss shares, in `config/jugcraft.properties
 - **Chunks:** nothing is force-loaded. His arena stays loaded while players stand in the kiln.
 - **The charm** is looked at only when hot ground would hurt its holder; nothing about it is stored.
 - **No griefing:** he cannot leave his lair, his attacks strike only players who can fight him, and the only blocks he changes are his own kiln's (the surge's slag, the sluices' choke and the troughs' water, the cooled crucible), every one of which comes back.
+- **His fight's record** (who took part and how, `lair/Encounter`) is in memory only and not saved with him. Loaded awake, he begins a fresh one, so after his chunk is reloaded mid-fight only what is done from then on counts.
+- **What he owes waits:** a share kept for a player who died or left the game in his fight is held in `jugcraft:lair_rewards` (with the player, or in the world's record while they are away) under the name `cinder_tyrant`, which is saved and so must not change. An older build has no payer for that name, and drops a kept Cinder Tyrant reward unpaid when it would hand it over.
+- **Slag and burning earn nothing (proposed, B-P5):** the slag's heat and burning have no attacking creature, so they are not his fight's hurt, and healing them earns no share.
 - **Still to do:** the two-client dedicated-server playtest.
 
 ## Dependencies and assets
@@ -235,7 +248,8 @@ Run locally (10 October 2026):
 
 The game tests (`CinderTyrantGameTests`) show what a game-test server can, with a Tyrant put down on his own (no lair) over a kiln laid out from the corner of an arena the kiln's width and length; each test lays the floor, troughs and gates it needs:
 1. sunk in his crucible, he takes no harm; a player's blow wakes him at full health, and he crawls out onto the floor south of the crucible, to fight;
-2. his health scales 1, 1.5 and 2.5 times for one, two and four or more players; in the Molten Heart his cooldowns are a third shorter and his breath wider;
+2. his health scales 1, 1.5 and 2.5 times for one, two and four or more players (at four, 1100 is held to the game's
+   own cap on a creature's health, 1024, a known limit found by Chunk B's four-player test in CI); in the Molten Heart his cooldowns are a third shorter and his breath wider;
 3. hot, a blow does him half its damage and fire none; quenched, a quarter more, and he crawls at half his pace; 8 seconds later his seams flare back, and a second after that he is hot again;
 4. his Tail Sweep strikes a player behind him and one beside him and sets them burning, and spares the one before his head;
 5. his Body Slam strikes a player within 3 blocks and only throws back one 4 blocks off; landing in a flooded trough quenches him; he counts as in it with its edge a fifth of a block from his feet, and not with its edge two fifths off, nor over dry trough stone;
@@ -259,6 +273,22 @@ The client game test (`CinderTyrantClientGameTests`, CI job `client`) runs his f
 
 It takes fifteen pictures: sunk, waking, the five Kiln attacks, quenched, the Eruption, the surge, the choked sluice, the Cinder Rain, the Lava Wave, the Molten Heart and after his fall.
 
+Concordance Chunk B, unit 1 (B-01), put his reward on the shared credit and added these game tests. They pass in CI (runs 38514144531 and 38519234934, by workflow_dispatch; not merged); in the first run, 38509414542, only `fourPlayersAreEachPaidOnce` failed (below).
+- `CinderTyrantGameTests.supportSharesHisHoardOnce`: a healer who mended 4 of what his Tail Sweep did is paid; a striker still down as he falls (marked, as Chunk A's tests mark a death; the Yeti King's test makes a real one) is kept their share and handed it on their feet; one who left the game (marked, on a stand-in player the server never listed) has it kept in the world; one who walked away, a bystander and the one he only hurt get nothing; and his fall reported again pays no one twice.
+- `aKillingBlowAloneIsPaid`; `aPetsBlowIsItsOwners` (a tamed wolf's bite on a Cinderling and the felling bite on him; a wild wolf's bite credits no one).
+- `healingHisSlagAndBurningEarnsNothing`: mending what his slag and burning took earns nothing, and mending what his Kiln Breath did qualifies the healer.
+- `fourPlayersAreEachPaidOnce`: woken by four, his health is two and a half times his own, held to the game's cap of 1024 (1100 asked), and each of the four is paid once, a quarter of the experience each. In run 38509414542 it still expected 1100 and failed; since `579ab5f6f` it expects the cap.
+- `aFightLoadedAwakeIsRecordedAfresh`: saved while waking and loaded again, he lands to fight, holds no one's part and begins a fresh record.
+- `LairEncounterGameTests.aKeptCinderTyrantRewardIsSavedAndPaid`: a reward kept under `cinder_tyrant` survives a save and is paid once by his payer.
+
+`python3 tools/check_mod_data.py` (whose `check_cinder_tyrant` now also holds his credit and reward to `Encounter` and `LairRewards`: the record begun, abandoned and claimed, the striker's credit on him and his Cinderlings, and the payment and payer under `cinder_tyrant`) and `python3 scripts/check_repository.py` pass locally at this commit. Five deliberate changes, each made in a scratch copy, each failed `check_cinder_tyrant`: the payer dropped, `BOSS` renamed, the claim guard dropped, the old damage map restored, and the Cinderling crediting `source.getEntity()`.
+
+Concordance Chunk B, unit 1 (B-02), added his dossier and JEI pages, with these game tests, which pass in the same runs (38509414542 included):
+- `CinderTyrantGameTests.hisLootIsWhatHisPagesSay`: a player who has already won Tempered rolls 400 shares; each holds 3 to 6 Tyrant Scales and never both trophies, and the counts of the Cinderbrand, the Magmaw, the Salamander Charm and the crest each lie within five standard deviations of 7.5%, 7.5%, 25% and 20%.
+- `EncyclopediaGameTests.theCinderKilnsDossier`, and his lair in `eachRiteSaysWhenItWorks`, `aWinOverAnyKeeperIsTheLairStep` and `theExpeditionsPageHoldsEveryKeeper`; `CinderKilnGameTests.theSealIsNoHalloweenRite`.
+
+Run 38519234934 also ran every client test class; `CinderTyrantClientGameTests`, unchanged by Chunk B, passed by its shard's success (shard 2).
+
 Not run: the two-client dedicated-server playtest, and play by hand.
 
 ## World and event applicability
@@ -267,4 +297,8 @@ The Cinder Kiln is its own dimension, so nothing here changes the Overworld or t
 
 ## Rollout and open questions
 
-The shared framework's defaults hold: four players and eight instances, Grave Goods on death. His settings are the shared boss settings above. Open: the two-client playtest, and whether the Tyrant's 440 health and the quench's 8 seconds feel right in play.
+The shared framework's defaults hold: four players and eight instances, nothing lost on death. His settings are the shared boss settings above. Open: the two-client playtest, and whether the Tyrant's 440 health and the quench's 8 seconds feel right in play.
+
+Proposed in Concordance Chunk B ([the contract](concordance-chunk-b.md)), for the owner:
+- **B-P4, no objective of his own.** Nothing records who turned a sluice (the gate keeps only its flow and its trough's flood, and the quench reads only the flood), so baiting his slam into a flooded trough is no deed in his fight. A deed would need the turner noted as the wheel turns, keyed for each turn, and given only to a player already in the fight.
+- **B-P5, slag and burning are no one's.** Healing what his slag's heat or burning took earns nothing, a known limit: in practice a healer still reaches 4 after any of his real blows, and the gap is a party hurt only by slag or burning, such as standing in a surge. Giving those harms him as their cause was rejected: it would scale the slag with difficulty, knock players away from him, turn their pets on him and count the crucible's permanent slag. If the owner wants them to count, a separate ticket could add an opt-in hazard rule to `Encounter`, narrowed to his surge's cells and to burning soon after one of his blows.

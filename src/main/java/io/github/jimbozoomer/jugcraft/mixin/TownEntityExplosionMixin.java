@@ -17,7 +17,7 @@ public class TownEntityExplosionMixin {
 	@Inject(method = "shouldBlockExplode", at = @At("HEAD"), cancellable = true)
 	private void jugcraft$keepTown(Explosion explosion, BlockGetter level, BlockPos pos, BlockState state, float power,
 			CallbackInfoReturnable<Boolean> cir) {
-		if (TownProtection.shieldsBlock(explosion.level(), pos) || io.github.jimbozoomer.jugcraft.finance.LandRegistry.isClaimed(explosion.level(), pos)) {
+		if (io.github.jimbozoomer.jugcraft.jimtafacts.network.SpatialReservation.blocked(explosion.level(),pos)||TownProtection.shieldsBlock(explosion.level(), pos) || io.github.jimbozoomer.jugcraft.finance.LandRegistry.isClaimed(explosion.level(), pos)) {
 			cir.setReturnValue(false);
 		}
 	}

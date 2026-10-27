@@ -39,7 +39,7 @@ public final class CostumedMobs {
 	public static final List<String> MOBS = List.of("zombie", "husk", "skeleton", "stray", "zombie_villager");
 	public static final List<String> COSTUMES = List.of("jugcraft:witch_hat", "jugcraft:ghost_sheet", "jugcraft:scarecrow_hat",
 			"minecraft:carved_pumpkin", "jugcraft:vampire_cape", "jugcraft:mummy_wraps", "jugcraft:skeleton_suit", "jugcraft:werewolf_mask",
-			"jugcraft:cat_ears_and_tail", "jugcraft:bat_wings");
+			"jugcraft:cat_ears_and_tail", "jugcraft:bat_wings", "jugcraft:chompa_costume");
 	public static final ResourceKey<LootTable> CANDY = ResourceKey.create(Registries.LOOT_TABLE, Jugcraft.id("entities/costumed_mob_candy"));
 
 	private CostumedMobs() {

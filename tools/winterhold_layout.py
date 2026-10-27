@@ -111,6 +111,38 @@ def apply_layout(legacy, layout):
 
     from academy_interiors import furnish
     furnish(cells, put)
+    from academy_architecture import (furnish_elements_hall, connect_academic_cluster, build_arcanaeum_reading_wing,
+                                      build_gatehouse, open_cloister_stairs, build_archmage_annex)
+    furnish_elements_hall(cells, put)
+    connect_academic_cluster(cells, put, layout["academic_wing"])
+    build_arcanaeum_reading_wing(cells, put, layout["library_wing"])
+    build_gatehouse(cells, put, layout["gatehouse"])
+    open_cloister_stairs(cells, put)
+    build_archmage_annex(cells, put, layout["archmage_annex"])
+    from academy_architecture import add_autumn
+    add_autumn(cells, put)
+    from academy_fonta59 import (enrich_hall_and_campus, furnish_academic_crosswing,
+                                 open_elements_gallery, furnish_reading_wing_from_donor,
+                                 plant_autumn_court, enrich_court_arcade,
+                                 distinguish_residence_halls)
+    enrich_hall_and_campus(cells, put)
+    furnish_academic_crosswing(cells, put)
+    open_elements_gallery(cells, put)
+    furnish_reading_wing_from_donor(cells, put)
+    plant_autumn_court(cells, put)
+    enrich_court_arcade(cells, put)
+    distinguish_residence_halls(cells, put)
+    from academy_craft import craft_elements_hall, craft_arcanaeum, landscape_autumn_court, craft_bridge_gate
+    craft_elements_hall(cells, put)
+    craft_arcanaeum(cells, put)
+    landscape_autumn_court(cells, put)
+    craft_bridge_gate(put)
+    from academy_monument import craft_monumental_elements
+    craft_monumental_elements(cells, put)
+    from academy_flagship import craft_flagship_rooms
+    craft_flagship_rooms(cells, put)
+    from academy_hall_masterwork import craft_hall_masterwork
+    craft_hall_masterwork(cells, put)
     final_palette = sorted(set(cells.values()))
     indices = {block: i for i, block in enumerate(final_palette)}
     blocks = []

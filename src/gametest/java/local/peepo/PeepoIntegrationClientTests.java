@@ -6,6 +6,10 @@ import io.github.jimbozoomer.jugcraft.farming.*;
 import io.github.jimbozoomer.jugcraft.chemistry.PetroItems;
 import io.github.jimbozoomer.jugcraft.machine.form.*;
 import io.github.jimbozoomer.jugcraft.concordance.*;
+import io.github.jimbozoomer.jugcraft.concordance.alchemy.Formula;
+import io.github.jimbozoomer.jugcraft.concordance.courier.*;
+import io.github.jimbozoomer.jugcraft.concordance.diagnostic.Code;
+import io.github.jimbozoomer.jugcraft.concordance.logistics.Logistics;
 import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
 import net.fabricmc.fabric.api.client.gametest.v1.context.*;
 import net.fabricmc.fabric.api.transfer.v1.fluid.*;
@@ -26,6 +30,7 @@ import net.minecraft.world.item.alchemy.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.levelgen.presets.WorldPresets;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.*;
 
 /** Recent integration regression: real world adapters, transaction aborts, save state and autonomous hauling. */
@@ -56,7 +61,7 @@ public final class PeepoIntegrationClientTests implements FabricClientGameTest {
         try(var world=context.worldBuilder().adjustSettings(c->{c.setGameMode(WorldCreationUiState.SelectedGameMode.CREATIVE);c.setWorldType(new WorldCreationUiState.WorldTypeEntry(c.getSettings().worldgenLoadContext().lookupOrThrow(Registries.WORLD_PRESET).getOrThrow(WorldPresets.FLAT)));c.setGenerateStructures(false);}).create()){
             world.getConnection().waitForChunksRender();var server=world.getServer();base=context.computeOnClient(c->c.player.blockPosition().above(5));
             server.runCommand("time set noon");server.runCommand("weather clear");server.runCommand("gamemode creative @a");server.runCommand("gamerule minecraft:random_tick_speed 0");
-            server.runOnServer(s->{var l=s.overworld();group("sprinkler transactions, limits and persistence",()->sprinkler(l));group("serving stations",()->serving(l));group("spinning and cider",()->craftStations(l));group("vanilla, brewing, hives and compost",()->vanilla(l));group("farm stand and crucible",()->commerce(l));group("solid fuel and special-machine logistics",()->machines(l));group("garden zones, maintenance and crop rules",()->garden(l));group("industrial, magic and bat house",()->special(l));});
+            server.runOnServer(s->{var l=s.overworld();group("sprinkler transactions, limits and persistence",()->sprinkler(l));group("serving stations",()->serving(l));group("spinning and cider",()->craftStations(l));group("vanilla, brewing, hives and compost",()->vanilla(l));group("farm stand and crucible",()->commerce(l));group("crucible demand: the exact shortage, nothing for an incompatible formula",()->crucibleDemand(l));group("crucible demand: noOverSupplyWithAnOpenCourierRequest",()->noOverSupplyWithAnOpenCourierRequest(l));group("solid fuel and special-machine logistics",()->machines(l));group("garden zones, maintenance and crop rules",()->garden(l));group("industrial, magic and bat house",()->special(l));});
             group("water collection Supply to Output",()->waterTrip(server));
             group("sprinkler Supply to Output",()->sprinklerTrip(server));
             group("water bucket and named canteen",()->waterVariants(server));
@@ -109,6 +114,43 @@ public final class PeepoIntegrationClientTests implements FabricClientGameTest {
         reset(l);var p=assign(l,block("farm_stand"));var stand=(FarmStandBlockEntity)l.getBlockEntity(base);stand.setOwner(l.getServer().getPlayerList().getPlayers().getFirst());stand.crates().setItem(0,new ItemStack(Items.APPLE));stand.setPrice(0,7);stand.companion.observe();stand.crates().setItem(0,ItemStack.EMPTY);
         check(p.needed(new ItemStack(Items.APPLE))==64,"farm stand remembers sold-out stock");check(insert(p.inputs(),new ItemStack(Items.APPLE),64,false)==64 && stand.crate(0).isEmpty(),"restock rollback");check(insert(p.inputs(),new ItemStack(Items.APPLE),64,true)==64 && stand.price(0)==7,"restock preserves price");check(extract(p.outputs(),Items.APPLE,64,true)==0,"sale inventory never output");
         reset(l);p=assign(l,block("crucible"));check(p.plan()==null && p.needed(new ItemStack(Items.GLASS_BOTTLE))==0,"unprogrammed crucible waits for formula");var crucible=(CrucibleCompanion)p;crucible.selectSalve(true);check(crucible.salve(),"salve selection");crucible.selectSalve(false);check(!crucible.salve(),"draught selection");
+    }
+    private static final String THREE_GLOW="water 3; add minecraft:glowstone_dust jugcraft:raw; add minecraft:glowstone_dust jugcraft:raw; add minecraft:glowstone_dust jugcraft:raw; stir hot; stir hot";
+    private CourierPostBlockEntity courierPost(ServerLevel l,UUID owner){l.setBlockAndUpdate(base.north(3),Couriers.COURIER_POST.defaultBlockState());var post=(CourierPostBlockEntity)l.getBlockEntity(base.north(3));post.setOwner(owner);return post;}
+    private void pour(CrucibleBlockEntity c,int parts){try(var tx=Transaction.openOuter()){c.water.insert(FluidVariant.of(Fluids.WATER),parts*FluidConstants.BOTTLE,tx);tx.commit();}}
+    /** Concordance Chunk C, C-06: the crucible's one demand as the Peepo port sees it: the exact shortage; nothing for a formula the rules cannot follow, which files no courier request either. */
+    private void crucibleDemand(ServerLevel l){
+        var owner=l.getServer().getPlayerList().getPlayers().getFirst().getUUID();var glow=new ItemStack(Items.GLOWSTONE_DUST);var ledger=CourierLedger.of(l.getServer());
+        reset(l);var p=assign(l,block("crucible"));var crucible=(CrucibleBlockEntity)l.getBlockEntity(base);
+        crucible.follow(Formula.parse(THREE_GLOW),owner);crucible.setItem(0,new ItemStack(Items.GLOWSTONE_DUST));
+        var reagent=new ItemStack(JugcraftConcordance.REAGENT_ITEM);reagent.set(JugcraftConcordance.REAGENT,new Reagent("minecraft:glowstone_dust","jugcraft:ground"));
+        check(p.needed(glow)==2 && p.needed(reagent)==0 && p.needed(new ItemStack(Items.SPIDER_EYE))==0,"the exact shortage: two plain glowstone, nothing else");
+        check(insert(p.inputs(),glow,64,false)==2 && count(crucible,Items.GLOWSTONE_DUST)==1,"a probe takes two and changes nothing");
+        check(insert(p.inputs(),glow,64,true)==2 && count(crucible,Items.GLOWSTONE_DUST)==3 && p.needed(glow)==0,"two delivered, then none wanted");
+        reset(l);p=assign(l,block("crucible"));crucible=(CrucibleBlockEntity)l.getBlockEntity(base);courierPost(l,owner);
+        crucible.follow(Formula.parse("water 1; add minecraft:glowstone_dust jugcraft:raw; add minecraft:dirt jugcraft:raw"),owner);pour(crucible,1);
+        long k=ledger.ledger().nextId();
+        check(crucible.incompatibility()!=null && p.needed(glow)==0 && p.status()==CompanionStatus.RECIPE_MISSING,"an incompatible formula asks for nothing");
+        var refused=crucible.automate(l);
+        check(refused!=null && refused.code()==Code.INCOMPATIBLE && crucible.request()==-1L && ledger.ledger().nextId()==k,"and files nothing");
+    }
+    /** Concordance Chunk C, C-06 (C-P50): beside the crucible's own courier request, a Peepo brings only what no courier holding it is bringing: never the same need twice, and nothing lost. */
+    private void noOverSupplyWithAnOpenCourierRequest(ServerLevel l){
+        var owner=l.getServer().getPlayerList().getPlayers().getFirst().getUUID();var glow=new ItemStack(Items.GLOWSTONE_DUST);var ledger=CourierLedger.of(l.getServer());
+        reset(l);var p=assign(l,block("crucible"));var crucible=(CrucibleBlockEntity)l.getBlockEntity(base);courierPost(l,owner);
+        crucible.follow(Formula.parse(THREE_GLOW),owner);pour(crucible,3);source.setItem(0,new ItemStack(Items.GLOWSTONE_DUST,2));
+        crucible.automate(l);var waits=crucible.automate(l);long id=crucible.request();var open=ledger.ledger().get(id);
+        check(waits!=null && waits.code()==Code.MISSING_INGREDIENT && open!=null && open.ticket().wanted()==3,"it asks a courier for three");
+        check(p.needed(glow)==3,"no courier holds the request yet, so the Peepo may bring all three");
+        long now=l.getGameTime();var courier=new UUID(61L,1L);var barrel=ItemStorage.SIDED.find(l,base.west(6),null);
+        check(ledger.claim(id,courier,now)==Logistics.Outcome.DONE && p.needed(glow)==0 && insert(p.inputs(),glow,3,true)==0,"claimed: the Peepo brings none");
+        check(ledger.reserve(id,courier,Couriers.place(l,base.west(6)),barrel,now)==Logistics.Outcome.DONE
+            && ledger.pickUp(id,courier,barrel,now)==Logistics.Outcome.DONE && p.needed(glow)==0,"reserved and carried: still none");
+        check(ledger.deliver(id,courier,ItemStorage.SIDED.find(l,base,null),now)==Logistics.Outcome.DONE && count(crucible,Items.GLOWSTONE_DUST)==2,"two delivered");
+        check(ledger.ledger().get(id)!=null && ledger.ledger().get(id).progress().worker()==null && p.needed(glow)==1,"the rest unheld: the Peepo may bring one");
+        check(insert(p.inputs(),glow,64,true)==1 && count(crucible,Items.GLOWSTONE_DUST)==3,"one brought, no over-supply");
+        crucible.automate(l);
+        check(ledger.ledger().get(id)==null && crucible.request()==-1L && count(source,Items.GLOWSTONE_DUST)==0 && ledger.problems().isEmpty(),"satisfied, the request is turned back; nothing lost");
     }
     private void garden(ServerLevel l){
         reset(l);var soil=base.below();l.setBlock(soil,Blocks.FARMLAND.defaultBlockState(),18);npc.assignments.assignGardenZone(soil,soil.east(2).south(2),false);var target=npc.assignments.get(1);check(target.gardenZone()!=null,"two-corner garden assigned");

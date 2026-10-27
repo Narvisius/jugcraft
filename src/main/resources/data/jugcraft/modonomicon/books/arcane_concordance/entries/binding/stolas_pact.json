@@ -1,0 +1,66 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:binding/stolas_pact",
+  "category": "jugcraft:binding",
+  "x": 2,
+  "y": 4,
+  "name": "book.jugcraft.arcane_concordance.binding.stolas_pact.name",
+  "description": "book.jugcraft.arcane_concordance.binding.stolas_pact.description",
+  "icon": "jugcraft:pact_perch",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/hexagon_purple",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:research_node_unlocked",
+    "node_id": "jugcraft:concordance/stolas_regard_understood",
+    "tooltip": {
+      "translate": "book.jugcraft.arcane_concordance.locked.stolas_regard.understood"
+    }
+  },
+  "pages": [
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p0",
+      "title1": "book.jugcraft.arcane_concordance.binding.stolas_pact.p0.title",
+      "recipe_id_1": "jugcraft:pact_perch",
+      "text": "book.jugcraft.arcane_concordance.binding.stolas_pact.p0.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p1",
+      "title": "book.jugcraft.arcane_concordance.binding.stolas_pact.p1.title",
+      "text": "book.jugcraft.arcane_concordance.binding.stolas_pact.p1.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p2",
+      "title": "book.jugcraft.arcane_concordance.binding.stolas_pact.p2.title",
+      "text": "book.jugcraft.arcane_concordance.binding.stolas_pact.p2.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p3",
+      "title": "book.jugcraft.arcane_concordance.binding.stolas_pact.p3.title",
+      "text": "book.jugcraft.arcane_concordance.binding.stolas_pact.p3.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p4",
+      "title": "book.jugcraft.arcane_concordance.binding.stolas_pact.p4.title",
+      "text": "book.jugcraft.arcane_concordance.binding.stolas_pact.p4.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p5",
+      "title": "book.jugcraft.arcane_concordance.binding.stolas_pact.p5.title",
+      "text": "book.jugcraft.arcane_concordance.binding.stolas_pact.p5.text",
+      "show_title_separator": true
+    }
+  ]
+}

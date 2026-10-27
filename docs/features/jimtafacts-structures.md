@@ -12,7 +12,15 @@ Original pool elements can request terrain adjustment per room. `JimtaStructures
 
 ## Explicit source gaps and adaptations
 
-The archive references `irons_lib:player_statue` and two old statue block-entity names, but supplies neither that library nor its original model/skin data. Those sixteen decorative statue cells become air, with every affected template and palette index recorded in `docs/audits/jimtafacts-spellbook-structures.json`. The rest of each original building remains. The missing statue randomizer is omitted rather than represented by invented replacement art.
+The initially missing `irons_lib` dependency was supplied by the owner on October
+25. Its original wide/slim/legacy player meshes, pedestal, fallback skin and all
+23 poses are now integrated locally. Fourteen palette entries across six templates
+map to `jugcraft:jimta_spellbooks_player_statue`, retaining source positions,
+rotation and vertical half. A seeded native pose processor replaces the source
+supporter-service randomizer. The [B–H ledger](jimtafacts-b-h-local.md) records the
+bounded native stone-skin conversion and online/default profile limitations.
+The audit now records restored palettes and no omitted statue palettes. This is
+implementation evidence; combined visual/runtime validation has not run.
 
 The source Ice Spider Den biome tag uses NeoForge tag subtraction. Its supplied vanilla result is represented explicitly as snowy plains, snowy taiga and ice spikes; additional modded snowy biome subtraction needs a native biome predicate before expansion. Original source per-level spell scrolls become the corresponding implemented native level-one spell scroll. Generated vaults use native per-player reward accounting and no author-world reward ledger.
 

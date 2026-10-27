@@ -21,10 +21,9 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 
-/** Camera-local snow and existing mist particles. Never rewrites weather, biome, sky or terrain. */
+/** Camera-local falling autumn leaves and low mist; no weather, biome or terrain edits. */
 public final class AcademyAtmosphere {
 	private static final List<Particle> OWN = new ArrayList<>();
 	private static List<AcademySite> sites = List.of();
@@ -85,9 +84,10 @@ public final class AcademyAtmosphere {
 			var random = world.getRandom();
 			double x = camera.x + (random.nextDouble()-0.5)*24;
 			double z = camera.z + (random.nextDouble()-0.5)*24;
-			double y = camera.y + 2 + random.nextDouble()*8;
+			double y = camera.y + 3 + random.nextDouble()*8;
 			if (random.nextDouble() > strength * influence(x, y, z) || !world.canSeeSky(BlockPos.containing(x,y,z))) continue;
-			spawn(client, ParticleTypes.SNOWFLAKE, x, y, z, 0.015, -0.06, 0.005);
+			spawn(client, JugcraftAgriculture.ACADEMY_LEAF, x, y, z,
+					(random.nextDouble()-0.5)*0.024, -0.045, (random.nextDouble()-0.5)*0.024);
 		}
 		if (OWN.size() < 512 && world.getGameTime() % (low ? 12 : 5) == 0) {
 			double x = camera.x+(world.getRandom().nextDouble()-0.5)*12, z = camera.z+(world.getRandom().nextDouble()-0.5)*12;

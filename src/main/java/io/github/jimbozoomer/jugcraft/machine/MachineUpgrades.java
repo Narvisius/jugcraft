@@ -50,6 +50,10 @@ public final class MachineUpgrades {
                 || SPEED != null && (stack.is(SPEED) || stack.is(EFFICIENCY));
 	}
 
+    public static boolean accepts(MachineKind machine,ItemStack stack){
+        return isUpgrade(stack)||machine==MachineKind.SAWMILL&&stack.getItem() instanceof io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialCuttingBlade;
+    }
+
 	/** Automation is supported by formed processors only; extra cards have no stacking effect. */
     public static boolean isFormUpgrade(ItemStack stack) {
         if (stack.getItem() instanceof io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialUpgrades.Upgrade upgrade)

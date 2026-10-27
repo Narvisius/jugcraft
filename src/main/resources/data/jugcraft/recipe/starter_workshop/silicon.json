@@ -1,0 +1,31 @@
+{
+  "type": "jugcraft:starter_working",
+  "station": 2,
+  "ingredients": [
+    {
+      "ingredient": "minecraft:quartz",
+      "count": 1
+    },
+    {
+      "ingredient": "minecraft:charcoal",
+      "count": 1
+    }
+  ],
+  "result": {
+    "id": "jugcraft:silicon",
+    "count": 1
+  },
+  "time": 200,
+  "heated": true,
+  "high_heat": true,
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "silicon"
+    }
+  ]
+}

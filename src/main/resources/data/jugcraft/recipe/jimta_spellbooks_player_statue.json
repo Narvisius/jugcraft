@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " S ",
+    " S ",
+    "BBB"
+  ],
+  "key": {
+    "S": "minecraft:stone",
+    "B": "minecraft:smooth_stone_slab"
+  },
+  "result": {
+    "id": "jugcraft:jimta_spellbooks_player_statue"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "concordance"
+    }
+  ]
+}

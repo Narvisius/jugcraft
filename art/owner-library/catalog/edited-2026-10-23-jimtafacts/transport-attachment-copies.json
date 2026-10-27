@@ -1,0 +1,17 @@
+{
+  "copies": [
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/buildcraft reborn by jimbo/assets/buildcrafttransport/textures/pipes/plug.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/jimtafacts/transport/plug.png",
+      "sha256": "95a563677eea1eb723065dfcf27647ab63617712c092da46b104acb62563b4ed",
+      "changes": "None"
+    },
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/buildcraft reborn by jimbo/assets/buildcrafttransport/models/plugs/blocker.json",
+      "runtime": "src/main/resources/assets/jugcraft/models/item/jimta_pipe_blocker.json",
+      "source_sha256": "5f31000790f761b802958b847f3cd6fb34527eb29fd523ed371695aa84fa143f",
+      "changes": "Texture namespace and source #all key corrected. Original parts/UV retained with a short connecting stem to the narrower native pipe core."
+    }
+  ],
+  "adaptation": "Six saved faces on factory item/fluid/power conduits, including active extraction, sorting and disposal endpoints. Blockers close visual arms and actual transfer edges; cached direct ports recheck fittings. Shared sampled facades retain appearance and inventories remain in their existing block entities."
+}

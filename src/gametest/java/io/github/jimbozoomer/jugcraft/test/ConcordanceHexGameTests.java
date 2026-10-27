@@ -47,7 +47,7 @@ public class ConcordanceHexGameTests {
 	private static final BlockPos STAND = new BlockPos(2, 2, 2);
 
 	private static ServerPlayer hexer(GameTestHelper helper) {
-		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		ServerPlayer player = TestPlayers.mock(helper);
         // Join listeners may supply welcome items. Each fixture below defines its own exact escrow.
         player.getInventory().clearContent();
 		player.setGameMode(GameType.SURVIVAL);
@@ -76,7 +76,7 @@ public class ConcordanceHexGameTests {
 		Sympathy.ward(other, WardCategory.LINKING);
 		String warded = TaglockItem.bind(hexer, level, new ItemStack(Sympathy.TAGLOCK), other);
 		helper.assertTrue(warded.equals("warded") || warded.equals("not_allowed"), "A linking ward (or the rules) refuses a link: " + warded);
-		ServerPlayer novice = helper.makeMockServerPlayerInLevel();
+		ServerPlayer novice = TestPlayers.mock(helper);
 		RateGate.forget(novice.getUUID());
 		helper.assertTrue(TaglockItem.bind(novice, level, new ItemStack(Sympathy.TAGLOCK), zombie).equals("unknown"), "Sympathy must be understood");
 		helper.succeed();
@@ -269,7 +269,7 @@ public class ConcordanceHexGameTests {
 		dreamer.setHealth(0.0F);
 		Dreaming.end(dreamer, DreamRules.End.DISCONNECTED);
 		helper.assertTrue(Dreaming.dreaming(dreamer) && dreamer.getInventory().isEmpty(), "Ending it on the dead body does nothing");
-		ServerPlayer respawned = helper.makeMockServerPlayerInLevel();
+		ServerPlayer respawned = TestPlayers.mock(helper);
         // This helper simulates a login; a real respawn starts with an empty body, without another join gift.
         respawned.getInventory().clearContent();
 		respawned.setGameMode(GameType.ADVENTURE);

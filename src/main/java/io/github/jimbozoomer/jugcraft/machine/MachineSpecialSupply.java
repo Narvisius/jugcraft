@@ -20,12 +20,21 @@ final class MachineSpecialSupply {
  private ItemStack craftResult(){if(!(machine.getLevel() instanceof ServerLevel level))return ItemStack.EMPTY;var grid=grid();return CrafterBlock.getPotentialResults(level,grid).map(r->r.value().assemble(grid)).orElse(ItemStack.EMPTY);}
  boolean acceptsFilter(ItemStack item){return item.isEmpty() || machine.kind()==MachineKind.ELECTROPLATING_BATH && Electroplating.platable(item) || machine.kind()==MachineKind.AUTO_CRAFTER && craftResult().is(item.getItem());}
  void prepare(Storage<ItemVariant> source){
+  prepare(source,null);
+ }
+ MachineCompanionPort.Plan stockPlan(){
+  if(machine.kind()!=MachineKind.ELECTROPLATING_BATH || tool.isEmpty() || metal.isEmpty())return null;
+  var result=Electroplating.plate(tool,Electroplating.metalOf(metal),machine.getLevel().registryAccess());
+  return result.isEmpty()?null:new MachineCompanionPort.Plan(plan(),List.of(new MachineCompanionPort.Part(Ingredient.of(tool.getItem()),1),new MachineCompanionPort.Part(Ingredient.of(metal.getItem()),1)),List.of(result),true,null);
+ }
+ void prepare(Storage<ItemVariant> source,java.util.function.ToDoubleFunction<ItemStack> priority){
   if(machine.kind()!=MachineKind.ELECTROPLATING_BATH || !(machine.getLevel() instanceof ServerLevel))return;
   tool=ItemStack.EMPTY;metal=ItemStack.EMPTY;var available=RecipeSupplies.available(source);
-  var tools=machine.getItem(0).isEmpty()?available:List.of(machine.getItem(0));var metals=machine.getItem(1).isEmpty()?available:List.of(machine.getItem(1));
+  var tools=new ArrayList<>(machine.getItem(0).isEmpty()?available:List.of(machine.getItem(0)));var metals=machine.getItem(1).isEmpty()?available:List.of(machine.getItem(1));
+  if(priority!=null)tools.sort(Comparator.comparingDouble(priority).reversed());
   var coatings=new LinkedHashMap<String,ItemStack>();for(var ingot:metals){var type=Electroplating.metalOf(ingot);if(type!=null)coatings.putIfAbsent(type,ingot);}
   // At most three coating types per bounded supply snapshot, regardless of chest stack count.
-  for(var candidate:tools){if(!Electroplating.platable(candidate) || !filter.allows(candidate))continue;
+  for(var candidate:tools){if(!Electroplating.platable(candidate) || !filter.allows(candidate) || priority!=null && priority.applyAsDouble(candidate)<=-2)continue;
    for(var ingot:coatings.values()){var coating=Electroplating.metalOf(ingot);if(coating==null || coating.equals(candidate.get(Electroplating.PLATING)) && !candidate.isDamaged())continue;
     if(!Electroplating.plate(candidate,coating,machine.getLevel().registryAccess()).isEmpty()){tool=candidate.copyWithCount(1);metal=ingot.copyWithCount(1);return;}
    }

@@ -12,5 +12,6 @@ public interface ProcessorHost {
     int companionHelperCount();
     boolean helperPositionAvailable(int slot, Vec3 point);
     void resetCompanionEffort();
+    default boolean companionPermitted(PeepoEntity npc){return CompanionJobs.permitted(npc,companionBlock().getBlockPos());}
     default boolean companionLocked(){return false;}
 }

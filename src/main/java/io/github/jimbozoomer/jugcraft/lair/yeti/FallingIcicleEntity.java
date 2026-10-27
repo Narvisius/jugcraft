@@ -51,6 +51,7 @@ public class FallingIcicleEntity extends Entity implements GeoEntity {
 		icicle.mark = mark;
 		icicle.snapTo(mark.x, mark.y + HEIGHT, mark.z, level.getRandom().nextFloat() * 360.0F, 0.0F);
 		level.addFreshEntity(icicle);
+		king.keep(icicle);
 		return icicle;
 	}
 
@@ -64,7 +65,7 @@ public class FallingIcicleEntity extends Entity implements GeoEntity {
 		if (!(level() instanceof ServerLevel level)) {
 			return;
 		}
-		YetiKingEntity king = owner != null && level.getEntity(owner) instanceof YetiKingEntity found && found.isAlive() ? found : null;
+		YetiKingEntity king = YetiKingEntity.owning(level, owner, getUUID());
 		if (king == null || tickCount > 60) {
 			discard();
 			return;

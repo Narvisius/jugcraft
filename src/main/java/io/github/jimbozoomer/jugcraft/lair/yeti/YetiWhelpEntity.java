@@ -6,6 +6,7 @@ import com.geckolib.animatable.manager.AnimatableManager;
 import com.geckolib.animation.AnimationController;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
+import io.github.jimbozoomer.jugcraft.lair.Encounter;
 import java.util.UUID;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.particles.ParticleTypes;
@@ -15,6 +16,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -34,7 +37,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * One of the Yeti King's kin: a young yeti out of the Glacier Hall's dens, {@value #HEALTH} health, whose blows deal
  * {@value #DAMAGE} damage, and quick. It goes for the nearest player. It flees into the snow when he falls, resets or is
- * gone, drops nothing and gives no experience, never freezes, and is never saved.
+ * gone, drops nothing and gives no experience, never freezes or floats, and is never saved.
  */
 public class YetiWhelpEntity extends Monster implements GeoEntity {
 	public static final float HEALTH = 16.0F;
@@ -80,12 +83,13 @@ public class YetiWhelpEntity extends Monster implements GeoEntity {
 	@Override
 	public void tick() {
 		super.tick();
-		if (!(level() instanceof ServerLevel level) || tickCount % 20 != 0) {
+		if (!(level() instanceof ServerLevel level)) {
 			return;
 		}
-		boolean serving = king != null && level.getEntity(king) instanceof YetiKingEntity found && found.isAlive()
-				&& found.phase() != YetiKingEntity.Phase.WAITING;
-		if (!serving) {
+		// Gone at once when its king is gone or no longer counts it his (loaded again after an unload); once a second
+		// when he is back on his throne.
+		YetiKingEntity found = YetiKingEntity.owning(level, king, getUUID());
+		if (found == null || tickCount % 20 == 0 && found.phase() == YetiKingEntity.Phase.WAITING) {
 			flee(level);
 		}
 	}
@@ -100,7 +104,7 @@ public class YetiWhelpEntity extends Monster implements GeoEntity {
 	@Override
 	public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
 		boolean hurt = super.hurtServer(level, source, amount);
-		if (hurt && source.getEntity() instanceof ServerPlayer player && king != null && level.getEntity(king) instanceof YetiKingEntity found) {
+		if (hurt && Encounter.striker(source) instanceof ServerPlayer player && king != null && level.getEntity(king) instanceof YetiKingEntity found) {
 			found.took(player, amount);
 		}
 		return hurt;
@@ -109,6 +113,12 @@ public class YetiWhelpEntity extends Monster implements GeoEntity {
 	@Override
 	public boolean canFreeze() {
 		return false;
+	}
+
+	/** No Levitation takes on it (an End gun's bullet, a shulker's, a potion): it keeps to the snow as he does. */
+	@Override
+	public boolean canBeAffected(MobEffectInstance effect) {
+		return !effect.is(MobEffects.LEVITATION) && super.canBeAffected(effect);
 	}
 
 	@Override

@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:adventure/root",
+  "display": {
+    "icon": {
+      "id": "jugcraft:hallowreap"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.uncrowned.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.uncrowned.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

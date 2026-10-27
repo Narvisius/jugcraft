@@ -2,6 +2,13 @@
 
 Local implementation by OpenAI Codex, 23 October 2026. Combined build, server and client tests are intentionally deferred until the complete Jimtafacts implementation pass ends. Nothing here has been playtested or published.
 
+## October 25 local follow-up
+
+The [B–H batch](jimtafacts-b-h-local.md) adds transient three-part spider hit regions,
+scoped prey-food consumption, synced Keeper rise and a separate compressed ghost
+pass. These additions compile but have not received the deferred combined runtime
+or visual tests. The original differences below describe the earlier baseline.
+
 ## Ice Spider
 
 Uses the supplied `ice_spider.geo.json`, complete `ice_spider.animation.json` and original skin without pixel or geometry changes. The eight-leg gait, ten-tick crouch transition, terrain lean, climbing, emergence, three timed melee attacks, pounce, backwards leap, ranged ice attack, grappling and hostile ice tomb are native implementations of the statically recovered behavior. Hunger thresholds, feeding, delayed regeneration and source combat attributes are retained. The supplied tomb and ice-spike shapes and skins render the attacks.

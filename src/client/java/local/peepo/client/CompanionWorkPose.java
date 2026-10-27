@@ -115,7 +115,7 @@ final class CompanionWorkPose {
         part.y=22.5F+part.x*sinZ+y*cosZ+bodyY;part.x=x+bodyX;part.z=z;
         part.xRot+=pitch;part.zRot+=roll;
     }
-    private static void reach(ModelPart arm,float x,float y,float z){
+    static void reach(ModelPart arm,float x,float y,float z){
         float dx=x-arm.x,dy=y-arm.y,dz=z-arm.z;
         float length=Mth.sqrt(dx*dx+dy*dy+dz*dz);
         arm.xRot=-(float)Math.acos(Mth.clamp(dy/length,-1,1));arm.yRot=(float)Math.atan2(-dx,-dz);arm.zRot=0;

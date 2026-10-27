@@ -189,11 +189,11 @@ public final class CompanionLivestock {
             if(progress==0 && npc.position().distanceToSqr(approach)>.025){npc.getMoveControl().setWantedPosition(approach.x,approach.y,approach.z,.65);return CompanionStatus.WORKING;}
             if(hold==null){hold=new Hold(a,npc.getUUID());a.getNavigation().stop();a.getGoalSelector().addGoal(-2,hold);}
             if(!hold.canUse())return CompanionStatus.IDLE;
-            try(var tx=Transaction.openOuter()){if(npc.extractEnergy(ENERGY_PER_TICK,tx)!=ENERGY_PER_TICK)return CompanionStatus.RECOVERING;tx.commit();}
+            try(var tx=Transaction.openOuter()){if(npc.extractWorkEnergy(CompanionUniforms.Type.RANCH_HAND,ENERGY_PER_TICK,tx)!=ENERGY_PER_TICK)return CompanionStatus.RECOVERING;tx.commit();}
             npc.setWorkAnimal(a.getId());float yaw=(float)Math.toDegrees(Math.atan2(-(a.getX()-npc.getX()),a.getZ()-npc.getZ()));
             npc.setYRot(yaw);npc.yBodyRot=yaw;npc.setYHeadRot(yaw);
             if((task==AnimalCareZone.SHEAR) && progress%15==0)npc.level().playSound(null,a.blockPosition(),SoundEvents.SHEEP_SHEAR,SoundSource.NEUTRAL,.45F,1.1F);
-            if(++progress<WORK_TICKS)return CompanionStatus.WORKING;
+            if(++progress<npc.uniforms.duration(CompanionUniforms.Type.RANCH_HAND,WORK_TICKS))return CompanionStatus.WORKING;
             var result=finish(a);release(npc);nextScan=now()+(result==CompanionStatus.FULL?100:1);status=result;return result;
         }
         private CompanionStatus finish(Animal a){

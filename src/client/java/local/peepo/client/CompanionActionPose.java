@@ -28,7 +28,9 @@ final class CompanionActionPose {
             }else if(s.work==WorkAnimation.PLANT || s.work==WorkAnimation.PICK || s.work==WorkAnimation.WATER_FILL){
                 var target=npc.workTarget();
                 if(level.hasChunkAt(target)){
-                    s.workPhase=s.work.phase(level.getGameTime()-npc.workStarted(),partial,0);
+                    s.workPhase=s.work==WorkAnimation.WATER_FILL
+                        ?(float)(((level.getGameTime()-npc.workStarted()+partial)%npc.uniforms.duration(CompanionUniforms.Type.GROUNDSKEEPER,CompanionWater.WORK_TICKS))*Mth.TWO_PI/npc.uniforms.duration(CompanionUniforms.Type.GROUNDSKEEPER,CompanionWater.WORK_TICKS))
+                        :s.work.phase(level.getGameTime()-npc.workStarted(),partial,0);
                     float t=s.workPhase/Mth.TWO_PI;
                     boolean water=s.work==WorkAnimation.WATER_FILL,plant=s.work==WorkAnimation.PLANT;
                     var point=relative(npc,water?Vec3.atBottomCenterOf(target).add(0,.86,0):nearSurface(npc,target,partial),partial);

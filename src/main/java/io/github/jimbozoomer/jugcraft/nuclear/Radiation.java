@@ -258,6 +258,9 @@ public final class Radiation {
 				&& blockItem.getBlock() instanceof ShieldedContainer.Block shielded) {
 			inside *= shielded.leakage();
 		}
+		if (stack.getItem() == io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialContainment.ITEM) {
+			inside *= io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialContainment.LEAKAGE;
+		}
 		return own + inside;
 	}
 

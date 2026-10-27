@@ -48,7 +48,7 @@ The fixtures, in part 1:
 - **A name-stone** cannot be used. It is dark, lit (the name the Lich answers to, burning with soul-fire at light 9) or erased (scraped to rough stone).
 - **The phylactery** cannot be used. It is whole or cracked.
 
-Everything else is the shared framework ([hollow-acre.md](hollow-acre.md#lairs-the-shared-rules)): an instance per opening, at most eight; at most four players; nothing can be built or broken (the seals and the lectern are the archive's fixtures besides the Grey Mist); the mist's toll at the edges; Grave Goods on death; closing after 30 seconds empty.
+Everything else is the shared framework ([hollow-acre.md](hollow-acre.md#lairs-the-shared-rules)): an instance per opening, at most eight; at most four players; nothing can be built or broken (the seals and the lectern are the archive's fixtures besides the Grey Mist); the mist's toll at the edges; nothing lost on death; closing after 30 seconds empty.
 
 ## Changes from the plan
 
@@ -184,7 +184,7 @@ The Archive of Last Names is its own dimension, so nothing here changes the Over
 
 ## Rollout and open questions
 
-The shared framework's defaults hold: four players and eight instances, Grave Goods on death.
+The shared framework's defaults hold: four players and eight instances, nothing lost on death.
 
 Part 2, the Crypt Lich ([crypt-lich.md](crypt-lich.md)), adds:
 - the fight in the hall: his ward, the soul chains from the seals to his phylactery, the lit name whose seal breaks, and the dead a wrong seal raises;

@@ -805,6 +805,149 @@ GUNS = {
         "damage": 6.0, "pellets": 1, "interval": 5, "auto": False, "capacity": 20,
         "reload": 53, "spread": (2.5, 0.3), "range": 104, "ammo": "rifle_round",
     },
+    # Slice 14D, three more of the owner's treated-brass guns: the Niami, a repeating crossbow-gun whose bow limbs
+    # throw each round, its strings snapping forward and drawn again; the Terra Incognita, a molten rifle with two
+    # prongs at its muzzle, whose two top lids flick open with each shot and whose magazine sits on its left side; and
+    # the Thunderhead, a drum-fed twin-barrelled automatic held by its spade grip and its fore-end, cocked by a
+    # lever-handle on its top.
+    "quarrel_carbine": {
+        "display": "Quarrel Carbine",
+        "source": "niami",
+        "tooltip": "A repeating crossbow-gun: its bow throws each round from a magazine of eight, its strings snapping "
+                   "forward and drawn again. Fires rifle rounds.",
+        "damage": 9.0, "pellets": 1, "interval": 10, "auto": False, "capacity": 8,
+        "reload": 51, "spread": (2.0, 0.2), "range": 112, "ammo": "rifle_round",
+    },
+    "hinterland_rifle": {
+        "display": "Hinterland Rifle",
+        "source": "terra_incognita",
+        "tooltip": "A two-pronged rifle of cracked black stone, still molten inside: its shots set what they hit "
+                   "alight. Fed from a magazine on its left side. Fires rifle rounds.",
+        "damage": 7.0, "pellets": 1, "interval": 8, "auto": False, "capacity": 10,
+        "reload": 51, "spread": (2.5, 0.35), "range": 96, "ammo": "rifle_round",
+    },
+    "cloudburst_gun": {
+        "display": "Cloudburst Gun",
+        "source": "thunderhead",
+        "tooltip": "A twin-barrelled automatic fed from a drum of thirty, cocked by the lever-handle on its top: it "
+                   "fires as long as the trigger is held. Fires rifle rounds.",
+        "damage": 5.0, "pellets": 1, "interval": 4, "auto": True, "capacity": 30,
+        "reload": 78, "spread": (4.5, 2.0), "range": 72, "ammo": "rifle_round",
+    },
+    # Slice 14E, two more of the owner's treated-brass guns, the last but the Grandle OG (an earlier make of slice 14B's
+    # Grandle): the Spitfire, a short flamethrower with two fuel tanks slung under it, a perforated shroud over its
+    # nozzle and a pilot flame burning at its mouth, held by a raised rear handle and its side, with the Gattaler's
+    # animations; and the Scratches, four barrels before a drum, a can under them and a crank on its left side, with
+    # the Kiln Gun's: each shot throws a burst of flame from its muzzle.
+    "firedrake": {
+        "display": "Firedrake",
+        "source": "spitfire",
+        "tooltip": "A short flamethrower with two fuel tanks slung under it and a pilot flame always lit at its mouth: "
+                   "a wide, close jet that sets creatures alight and never a block. Each blaze powder is four bursts.",
+        "damage": 1.5, "pellets": 1, "interval": 2, "auto": True, "capacity": 64,
+        "reload": 78, "spread": (12.0, 8.0), "range": 6, "ammo": "minecraft:blaze_powder", "shot": "flame",
+    },
+    "harrow": {
+        "display": "Harrow",
+        "source": "scratches",
+        "tooltip": "Four barrels before a drum: each pull throws four pellets in a close group with a burst of flame, "
+                   "and what they hit is set alight. Fed from a can of eight. Fires buckshot shells.",
+        "damage": 4.5, "pellets": 4, "interval": 11, "auto": False, "capacity": 8,
+        "reload": 60, "spread": (3.5, 2.0), "range": 32, "ammo": "buckshot_shell",
+    },
+    # Slice 14F, the last of the owner's treated-brass guns: the Grandle OG, an earlier make of slice 14B's Grandle with
+    # a barrel 3 px longer, loaded from the top with a stripper clip in place of a box magazine. The owner modelled it
+    # in GeckoLib (GEO_PARTS); its body is the Grandle's.
+    "old_grange_carbine": {
+        "display": "Old Grange Carbine",
+        "source": "grandle_og",
+        "tooltip": "The Grange Carbine's older make: a longer barrel, loaded from the top with a stripper clip of seven. "
+                   "Slower to fire, harder hitting and further reaching. Held in both hands. Fires rifle rounds.",
+        "damage": 8.0, "pellets": 1, "interval": 9, "auto": False, "capacity": 7,
+        "reload": 39, "spread": (2.0, 0.25), "range": 112, "ammo": "rifle_round",
+    },
+    # Slice 15A, the first three of the owner's diamond-steel guns, from their later GeckoLib models of them
+    # (GEO_PARTS): the MAS 55, a heavy marksman's rifle; the Prush Gun, a submachine gun; and the Valora, a rifle
+    # silenced the length of its barrel. Each fed from a box magazine; the MAS 55 and the Valora carry a wax seal with a
+    # strip of scripture under it, which swings as they fire.
+    "vesper_rifle": {
+        "display": "Vesper Rifle",
+        "source": "mas_55",
+        "tooltip": "A heavy marksman's rifle of stainless steel, a wax seal and a strip of scripture on its side. Eight "
+                   "rounds a magazine, one a pull: slow, hard hitting and far reaching. Fires rifle rounds.",
+        "damage": 13.0, "pellets": 1, "interval": 14, "auto": False, "capacity": 8,
+        "reload": 51, "spread": (2.0, 0.15), "range": 144, "ammo": "rifle_round",
+    },
+    "onrush_smg": {
+        "display": "Onrush SMG",
+        "source": "prush_gun",
+        "tooltip": "A submachine gun of stainless steel with a long magazine below: it fires as long as the trigger is "
+                   "held, ten rounds a second. Fires light rounds.",
+        "damage": 3.5, "pellets": 1, "interval": 2, "auto": True, "capacity": 23,
+        "reload": 51, "spread": (5.0, 2.5), "range": 48, "ammo": "light_round",
+    },
+    "gallant_rifle": {
+        "display": "Gallant Rifle",
+        "source": "valora",
+        "tooltip": "An automatic rifle silenced the length of its barrel: its shots are a muffled cough. Seventeen rounds "
+                   "a magazine. Fires rifle rounds.",
+        "damage": 6.0, "pellets": 1, "interval": 5, "auto": True, "capacity": 17,
+        "reload": 43, "spread": (3.0, 1.0), "range": 80, "ammo": "rifle_round",
+    },
+    # Slice 15B, the next three of the owner's diamond-steel guns, again from their later GeckoLib models (GEO_PARTS):
+    # the Krauser, a pistol whose magazine stands ahead of its trigger; the Soul Drummer, a machine pistol; and the
+    # Uppercut, a four-shot magnum. Each is held in one hand, and in both with a stock fitted, as a carbine (CARBINES).
+    "kreuzer_pistol": {
+        "display": "Kreuzer Pistol",
+        "source": "krauser",
+        "tooltip": "A stainless steel pistol, its magazine ahead of the trigger and a wax seal on its side. Thirteen "
+                   "rounds, one a pull. Held in one hand, or in both with a stock fitted. Fires light rounds.",
+        "damage": 5.0, "pellets": 1, "interval": 4, "auto": False, "capacity": 13,
+        "reload": 50, "spread": (2.0, 0.5), "range": 64, "ammo": "light_round",
+    },
+    "psalm_smg": {
+        "display": "Psalm SMG",
+        "source": "soul_drummer",
+        "tooltip": "A stainless steel machine pistol: it fires as long as the trigger is held, ten rounds a second, and "
+                   "strays even aimed. Held in one hand, or in both with a stock fitted. Fires light rounds.",
+        "damage": 3.0, "pellets": 1, "interval": 2, "auto": True, "capacity": 25,
+        "reload": 55, "spread": (5.5, 3.0), "range": 40, "ammo": "light_round",
+    },
+    "jawbreaker": {
+        "display": "Jawbreaker",
+        "source": "uppercut",
+        "tooltip": "A heavy stainless steel magnum of four rounds: slow to fire, hard hitting, knocking back what it hits "
+                   "and piercing armour. Held in one hand, or in both with a stock fitted. Fires rifle rounds.",
+        "damage": 12.0, "pellets": 1, "interval": 8, "auto": False, "capacity": 4,
+        "reload": 47, "spread": (2.5, 0.5), "range": 72, "ammo": "rifle_round",
+    },
+    # Slice 15C, three more of the owner's diamond-steel guns from their later GeckoLib models (GEO_PARTS), each held
+    # in both hands: the MAS Peddler, a rifle whose magazine stands out of its side; the Inertial, a shotgun fed from a
+    # box of six shells; and the Zilk 45, an automatic dart rifle silenced along its whole length (SILENCED).
+    "hawker_rifle": {
+        "display": "Hawker Rifle",
+        "source": "mas_peddler",
+        "tooltip": "A stainless steel rifle fed from a magazine of twelve that stands out of its side: one round a pull, "
+                   "piercing armour. Fires rifle rounds.",
+        "damage": 9.0, "pellets": 1, "interval": 8, "auto": False, "capacity": 12,
+        "reload": 50, "spread": (2.5, 0.25), "range": 112, "ammo": "rifle_round",
+    },
+    "impetus_shotgun": {
+        "display": "Impetus Shotgun",
+        "source": "inertial",
+        "tooltip": "A stainless steel shotgun fed from a box of six shells, a shell a pull, knocking back what it hits. "
+                   "Fires buckshot shells.",
+        "damage": 3.5, "pellets": 8, "interval": 13, "auto": False, "capacity": 6,
+        "reload": 48, "spread": (6.0, 4.5), "range": 28, "ammo": "buckshot_shell",
+    },
+    "quill_rifle": {
+        "display": "Quill Rifle",
+        "source": "zilk_45",
+        "tooltip": "A stainless steel dart rifle, silenced along its whole length: it fires as long as the trigger is "
+                   "held, from a magazine of thirteen, piercing armour. Fires light rounds.",
+        "damage": 5.0, "pellets": 1, "interval": 4, "auto": True, "capacity": 13,
+        "reload": 43, "spread": (3.0, 0.75), "range": 64, "ammo": "light_round",
+    },
 }
 
 # What a gun fires: bullets, or a slice 8C or 8D gun's "shot".
@@ -1047,6 +1190,50 @@ RECIPES = {
     "navvy_shotgun": (["SBS", " LB"], {"S": "#c:ingots/steel", "B": "#c:ingots/brass", "L": "minecraft:lever"}),
     "freeholder_rifle": (["SSE", "BLB"], {"S": "#c:ingots/steel", "E": "minecraft:emerald", "B": "#c:ingots/brass",
                                           "L": "minecraft:lever"}),
+    # Slice 14D: steel, brass and a lever, as slices 14A to 14C; the Quarrel Carbine a crossbow for its bow, the
+    # Hinterland Rifle a magma block for its molten core, the Cloudburst Gun a lightning rod for its thunder and a
+    # steel ingot more for its second barrel.
+    "quarrel_carbine": (["SSC", "BLB"], {"S": "#c:ingots/steel", "C": "minecraft:crossbow", "B": "#c:ingots/brass",
+                                         "L": "minecraft:lever"}),
+    "hinterland_rifle": (["SSS", "MLB"], {"S": "#c:ingots/steel", "M": "minecraft:magma_block", "B": "#c:ingots/brass",
+                                          "L": "minecraft:lever"}),
+    "cloudburst_gun": (["SSS", "SLR", "BB "], {"S": "#c:ingots/steel", "R": "minecraft:lightning_rod", "B": "#c:ingots/brass",
+                                               "L": "minecraft:lever"}),
+    # Slice 14E: steel, brass and a lever again, with a fire charge for each gun's fire; the Firedrake two buckets for
+    # its two fuel tanks, the Harrow five steel ingots for its four barrels and drum.
+    "firedrake": (["SSF", "BLB", "K K"], {"S": "#c:ingots/steel", "F": "minecraft:fire_charge", "B": "#c:ingots/brass",
+                                          "L": "minecraft:lever", "K": "minecraft:bucket"}),
+    "harrow": (["SSS", "SFS", "BLB"], {"S": "#c:ingots/steel", "F": "minecraft:fire_charge", "B": "#c:ingots/brass",
+                                       "L": "minecraft:lever"}),
+    # Slice 14F: the Grange Carbine's, with planks for the brass of its fore-end, as the owner's Grandle OG takes planks.
+    "old_grange_carbine": (["SSS", " LP", "  B"], {"S": "#c:ingots/steel", "L": "minecraft:lever",
+                                                   "P": "#minecraft:planks", "B": "#c:ingots/brass"}),
+    # Slice 15A, the diamond-steel guns: Jugcraft has no diamond steel, so stainless steel and a diamond. The owner's
+    # recipes give the MAS 55 and the Prush Gun planks for their furniture, and the Valora an advanced silencer: here
+    # the Baffled Silencer.
+    "vesper_rifle": (["SSS", "DLP", "  S"], {"S": "#c:ingots/stainless_steel", "D": "minecraft:diamond",
+                                             "L": "minecraft:lever", "P": "#minecraft:planks"}),
+    "onrush_smg": (["SS ", "DLP", " S "], {"S": "#c:ingots/stainless_steel", "D": "minecraft:diamond",
+                                           "L": "minecraft:lever", "P": "#minecraft:planks"}),
+    "gallant_rifle": (["BSS", "DL ", " S "], {"S": "#c:ingots/stainless_steel", "D": "minecraft:diamond",
+                                              "L": "minecraft:lever", "B": f"{MOD}:baffled_silencer"}),
+    # Slice 15B, as slice 15A's: stainless steel, a diamond and a lever. The owner's recipes give the Soul Drummer a
+    # rapid firing unit (here redstone, as for the Bronco SMG's sear) and the Uppercut a heavy barrel and a frame (here
+    # more stainless steel).
+    "kreuzer_pistol": (["SSS", "DL "], {"S": "#c:ingots/stainless_steel", "D": "minecraft:diamond",
+                                        "L": "minecraft:lever"}),
+    "psalm_smg": (["SSS", "DLR"], {"S": "#c:ingots/stainless_steel", "D": "minecraft:diamond", "L": "minecraft:lever",
+                                   "R": "minecraft:redstone"}),
+    "jawbreaker": (["SSS", "SDL"], {"S": "#c:ingots/stainless_steel", "D": "minecraft:diamond", "L": "minecraft:lever"}),
+    # Slice 15C, as before: stainless steel, a diamond and a lever. The owner's recipes give the MAS Peddler a heavy
+    # barrel and a wooden part (more stainless steel, planks), the Inertial two heavy barrels (more stainless steel
+    # still) and the Zilk 45 a rapid firing unit and treated iron (redstone and an iron ingot).
+    "hawker_rifle": (["SSS", "SDL", " P "], {"S": "#c:ingots/stainless_steel", "D": "minecraft:diamond",
+                                              "L": "minecraft:lever", "P": "#minecraft:planks"}),
+    "impetus_shotgun": (["SSS", "SDL", "SP "], {"S": "#c:ingots/stainless_steel", "D": "minecraft:diamond",
+                                                 "L": "minecraft:lever", "P": "#minecraft:planks"}),
+    "quill_rifle": (["SSS", "DLR", " I "], {"S": "#c:ingots/stainless_steel", "D": "minecraft:diamond",
+                                             "L": "minecraft:lever", "R": "minecraft:redstone", "I": "minecraft:iron_ingot"}),
 }
 # The switches beyond "guns" a gun's recipe needs (separate load conditions, all of which must hold): the energy weapons
 # and their cells are useless without the Charging Station, so they need the machines too (as the leaf blower does).
@@ -2614,6 +2801,301 @@ BUILDS = {
         "sight": (8.0, 7.0, 13.39),
         "eye_relief": 2.0,
     },
+    # Slice 14D. The Niami's strings are the 11th and 12th elements of its main part, each on its own bone turning about
+    # the tip of its bow limb, as the owner's groups have them: a shot snaps them forward and draws them again. Its
+    # bolt, magazine_2, default_mag and scriptures bones hold nothing: its model has no part for them.
+    "quarrel_carbine": {
+        "bones": [
+            ("gun_body", None, ["main-#10,11", "sights", "stan_grip"], (8.0, 0.0, 8.0)),
+            ("stringleft", "gun_body", ["main#10"], (2.25, 4.775, 8.35)),
+            ("stringright", "gun_body", ["main#11"], (13.75, 4.775, 8.35)),
+            ("bolt", "gun_body", [], (8.0, 5.0, 12.0)),
+            ("magazine", "gun_body", ["stan_mag"], (8.0, 1.6, 8.9)),
+            ("default_mag", "magazine", [], (8.0, 1.6, 8.9)),
+            ("magazine_2", "gun_body", [], (8.0, 1.6, 8.9)),
+            ("scriptures", "gun_body", [], (8.0, 5.0, 8.0)),
+        ],
+        "hands": {"right": (8.0, 2.0, 15.8), "left": (8.0, 2.0, 3.5)},
+        "arms": {"right": (0.1069, -0.5534, 0.826), "left": (0.8557, -0.054, 0.5146)},
+        "muzzle": (8.0, 5.0, 0.9),
+        "sight": (8.0, 6.75, 14.15),
+        "eye_relief": 2.0,
+    },
+    # The Terra Incognita's main part holds it all: its two top lids (the 17th and 18th elements, the 33rd to 35th),
+    # each hinged at its front edge so a shot lifts its back (the rear lid's slanted lip rises with it), and its
+    # magazine on its left side (the elements the owner named Mag). Its reload rolls the gun on the gun_body2 bone,
+    # under the rest. Its gun_body3, bolt and flame bones hold nothing: its model has no part for them.
+    "hinterland_rifle": {
+        "bones": [
+            ("gun_body2", None, [], (8.0, 0.0, 8.0)),
+            ("gun_body", "gun_body2", ["main-#16,17,29,30,31,32,33,34", "sights"], (8.0, 0.0, 8.0)),
+            ("Lid1", "gun_body", ["main#16,17"], (8.04, 11.87, 8.64)),
+            ("Lid2", "gun_body", ["main#32,33,34"], (8.04, 10.97, 1.44)),
+            ("mag", "gun_body", ["main@Mag"], (5.6, 8.3, 5.0)),
+            ("gun_body3", "gun_body", [], (8.0, 6.0, 8.0)),
+            ("bolt", "gun_body", [], (8.0, 6.0, 8.0)),
+            ("flame", "gun_body", [], (8.0, 6.0, -13.6)),
+        ],
+        "hands": {"right": (8.0, 3.2, 10.3), "left": (6.5, 2.0, 2.2)},
+        "arms": {"right": (0.3044, -0.3967, 0.866), "left": (0.5677, -0.4031, 0.7178)},
+        "muzzle": (8.04, 6.09, -13.64),
+        "sight": (4.3, 8.45, 4.98),
+        "eye_relief": 2.0,
+    },
+    # The Thunderhead's receiver is the Gattaler's (the Thresher's, slice 8C) less one side piece, with two barrels and
+    # its drum under it, and its animations are of the Gattaler's family. Its barrel is the owner's barrel
+    # part, which recoils with each shot; its drum is the four elements the owner named octagon, the magazine, which the
+    # left hand takes off below and puts back in the reload; its grip is the hoop-handle on its top (the 2nd to 5th and
+    # 16th elements), which the reload works like a lever about its feet. As the Thresher's: the body turns about the
+    # rear grip in the right hand, the left hand holds the front plate's left side, the arms run as the Thresher's
+    # in-game shots chose, and it has no sights (its knob and handle stand on the line of any sight; aiming only steadies
+    # it and narrows the view).
+    "cloudburst_gun": {
+        "bones": [
+            ("gun_body", None, ["main-#1,2,3,4,15,17,18,19,20"], (8.0, 9.0, 16.4)),
+            ("barrel", "gun_body", ["barrel"], (8.0, 7.9, -1.0)),
+            ("magazine", "gun_body", ["main@octagon"], (8.0, 3.16, 7.2)),
+            ("grip", "gun_body", ["main#1,2,3,4,15"], (8.0, 8.66, 11.5)),
+        ],
+        "hands": {"right": (8.0, 9.0, 16.4), "left": (5.5, 7.0, 9.8)},
+        "arms": {"right": (-0.0946, -0.1812, 0.9789), "left": (0.2172, -0.6757, 0.7044)},
+        "muzzle": (8.0, 7.9, -6.75),
+        "sight": None,
+    },
+    # Slice 14E. The Spitfire's animations are the Gattaler's family's, as the Thunderhead's are, and its first-person
+    # placement is the Gattaler's raised 5 px: its hoop (the main part's 3rd to 6th and 33rd elements) is the
+    # Gattaler's hoop 4.91 px lower, its feet at the same depth. So it is held as the Thresher is, 4.91 px lower: the
+    # right hand at the back of its body, where its raised rear handle rises, the left on the back of its left fuel tank,
+    # the arms as the Thresher's. Its magazine is its two fuel tanks (the 12th to 14th, 18th and 29th to 32nd elements),
+    # which the left hand takes off below and puts back, turning about the point the owner turned their elements about;
+    # its grip is the hoop, which the reload works like a lever about its feet. Its pilot flame (the 35th and 36th
+    # elements, the owner's spitfire_flame) burns at the nozzle's mouth on the body. No sights: aiming only steadies it
+    # and narrows the view.
+    "firedrake": {
+        "bones": [
+            ("gun_body", None, ["main-#2,3,4,5,11,12,13,17,28,29,30,31,32"], (8.0, 4.09, 16.4)),
+            ("magazine", "gun_body", ["main#11,12,13,17,28,29,30,31"], (8.0, 0.706, 7.8)),
+            ("grip", "gun_body", ["main#2,3,4,5,32"], (8.0, 4.37, 10.88)),
+        ],
+        "hands": {"right": (8.0, 4.09, 16.4), "left": (5.5, 2.09, 9.8)},
+        "arms": {"right": (-0.0946, -0.1812, 0.9789), "left": (0.2172, -0.6757, 0.7044)},
+        "muzzle": (8.0, 3.7, -0.75),
+        "sight": None,
+    },
+    # The Scratches' animations are the Kiln Gun's family's (the Stoker's, slice 8C). Its can is its magazine (the
+    # main part's 2nd, 3rd, 6th to 8th and 35th elements), which the left hand swings out and brings back; the knob
+    # behind it (the 31st and 33rd elements) is mag2, turned an eighth about the gun's line to let the can go; its drum
+    # (the 21st to 26th elements) is the cylinder_magazine, which no animation moves; the crank on its left side (the
+    # 36th to 38th elements) is the grip, swung about the point the owner turned it about. Each shot's burst of flame is
+    # the flame bone, as the Stoker's: a prop of the owner's pilot flame, slid 5.5 px back to the muzzle at twice its
+    # size, then out and shrinking. Its bolt bone holds nothing. Aimed, it looks along the rib on its drum's top, held
+    # 3 px further out: the top of its body came within 0.7 px of the eye; held there, it is 2.3 px away.
+    "harrow": {
+        "bones": [
+            ("gun_body", None, ["main-#1,2,5,6,7,20,21,22,23,24,25,30,32,34,35,36,37", "barrels"],
+             (8.0, 3.45, 7.9)),
+            ("cylinder_magazine", "gun_body", ["main#20,21,22,23,24,25"], (8.0, 7.95, 2.9)),
+            ("magazine", "gun_body", ["main#1,2,5,6,7,34"], (8.0, 2.14, -0.85)),
+            ("mag2", "gun_body", ["main#30,32"], (8.0, 2.05, 2.7)),
+            ("grip", "gun_body", ["main#35,36,37"], (4.825, 5.479, 1.146)),
+            ("bolt", "gun_body", [], (8.0, 5.0, 8.0)),
+            ("flame", "gun_body", ["@flame"], (8.0, 7.95, -15.6)),
+        ],
+        "hands": {"right": (8.0, 3.45, 7.9), "left": (8.0, 4.7, -3.35)},
+        "arms": {"right": (0.2706, -0.2706, 0.9239), "left": (0.733, -0.3036, 0.6088)},
+        "muzzle": (8.0, 7.95, -10.1),
+        "sight": (8.0, 11.2, 4.0),
+        "eye_relief": 3.0,
+    },
+    # Slice 14F. The Grandle OG is the owner's GeckoLib model (GEO_PARTS), and its bones are the model's, with the
+    # model's pivots (geo_pivot(); check_geo()): its body, sights and bolt are the Grange Carbine's, its barrel 3 px longer.
+    # gun_body3 and gun_body2 hold nothing and tip the gun in the reload. It has no magazine: the reload brings in a
+    # stripper clip on the clip bone, which hangs under left_arm2 with the left arm, so the hand carries it; the idle
+    # turns left_arm2 as the Grange Carbine's idle turns its left arm, and the clip is hidden but in the reload. The
+    # hands are the Grange Carbine's, the left placed in left_arm2's frame so its idle brings it there (carry()); there
+    # it holds the clip, within a pixel, from the clip's showing to its going into the gun. The left arm's way is its
+    # own: the reload tips the gun and brings that hand over the receiver near the eye, where the Grange Carbine's way
+    # ran the arm up across the view; this one keeps it rising from below the screen there (first-person previews of
+    # the reload; docs/features/guns.md), and at the hip runs it down and to the left. The magazine and magazine_2
+    # bones hold nothing. Its sight is the ring at the back; a scope stands on the owner's rail ahead of the receiver
+    # (no_sights), and the clip goes in just behind it: a quarter pixel into the Long Scope's eyepiece, the longest.
+    "old_grange_carbine": {
+        "bones": [
+            ("gun_body3", None, [], (8.23125, 3.1, 9.0)),
+            ("gun_body2", "gun_body3", [], (8.23125, 3.1, 9.0)),
+            ("gun_body", "gun_body2", ["main", "stan_barrel", "sights"], (8.23125, 3.1, 9.0)),
+            ("bolt", "gun_body", ["bolt"], (9.35771, 4.79816, 12.38542)),
+            ("magazine", "gun_body", [], (8.23125, 0.68624, 11.8287)),
+            ("magazine_2", "gun_body", [], (8.23125, 0.68624, 11.8287)),
+            ("left_arm2", "gun_body", [], (2.23125, 6.5068, 15.00305)),
+            ("clip", "left_arm2", ["clip"], (8.23125, 3.5068, 15.00305)),
+        ],
+        "hands": {"right": (8.0, 2.4, 16.0), "left": (8.0, 2.6, 7.4)},
+        "arm_parents": {"left": "left_arm2"},
+        "arms": {"right": (0.0653, -0.4957, 0.866), "left": (0.8924, -0.2391, 0.3827)},
+        "muzzle": (8.0, 4.9, -3.32),
+        "sight": (8.0, 6.47, 15.15),
+        "eye_relief": 4.0,
+    },
+    # Slice 15A. The MAS 55, the Prush Gun and the Valora are the owner's GeckoLib models (GEO_PARTS), their bones the
+    # models' own, turning about the models' pivots (check_geo()). Each one's magazine is the owner's default_mag, its
+    # standard stock their standard_grip; the seal (and on the MAS 55 and the Valora the scriptures under it) swings with
+    # each shot. The hands are placed from the owner's own arm bones: as the Old Grange Carbine's are from its model's,
+    # whose arms turn as these do. On the MAS 55 and the Valora the left arm hangs under the magazine, as in the owner's
+    # models, so the left hand takes it out and brings it back (carry()).
+    "vesper_rifle": {
+        "bones": [
+            ("gun_body", None, ["main", "stan_barrel", "sights", "stan_grip"], (8.225, 2.7, 8.5)),
+            ("bolt", "gun_body", ["bolt"], (9.35146, 4.39816, 11.88542)),
+            ("seal", "gun_body", ["seal"], (7.1, 5.4, 7.05)),
+            ("scriptures", "seal", ["scriptures"], (6.975, 5.35, 7.05)),
+            ("magazine", "gun_body", ["stan_mag"], (8.225, 0.28624, 11.3287)),
+            ("default_mag", "magazine", [], (8.225, 0.28624, 11.3287)),
+            ("magazine_2", "gun_body", [], (8.225, 0.28624, 11.3287)),
+        ],
+        "hands": {"right": (7.78, 2.0, 14.81), "left": (8.69, 2.7, 3.65)},
+        "arm_parents": {"left": "magazine"},
+        "arms": {"right": (0.0, -0.6088, 0.7934), "left": (0.5988, -0.1774, 0.781)},
+        "muzzle": (8.0, 4.8, -5.12),
+        "sight": (8.0, 6.47, 14.1),
+        "eye_relief": 4.0,
+    },
+    "onrush_smg": {
+        "bones": [
+            ("gun_body", None, ["main", "stan_barrel", "sights", "stan_grip"], (8.2155, 2.8, 9.25)),
+            ("bolt", "gun_body", ["bolt"], (9.34196, 4.49816, 12.63542)),
+            ("seal", "gun_body", ["seal"], (7.0655, 4.5, 8.65)),
+            ("magazine", "gun_body", ["stan_mag"], (8.2155, 0.38624, 12.0787)),
+            ("magazine_2", "gun_body", [], (8.2155, 0.38624, 12.0787)),
+        ],
+        "hands": {"right": (7.52, 2.1, 15.56), "left": (8.68, 2.3, 6.4)},
+        "arms": {"right": (0.0653, -0.4957, 0.866), "left": (0.5988, -0.1774, 0.781)},
+        "muzzle": (8.0, 4.9, 0.88),
+        "sight": (8.0, 6.35, 12.86),
+        "eye_relief": 1.0,
+    },
+    "gallant_rifle": {
+        "bones": [
+            ("gun_body", None, ["main", "sights"], (8.1125, 2.95, 8.75)),
+            ("bolt", "gun_body", ["bolt"], (9.23896, 4.64816, 12.13542)),
+            ("seal", "gun_body", ["seal"], (7.025, 4.925, 11.25)),
+            ("scriptures", "seal", ["scriptures"], (7.025, 4.7, 11.25)),
+            ("magazine", "gun_body", ["stan_mag"], (8.1125, 0.53624, 11.5787)),
+            ("magazine_2", "gun_body", [], (8.1125, 0.53624, 11.5787)),
+        ],
+        "hands": {"right": (7.42, 2.25, 15.06), "left": (7.71, 2.18, 7.45)},
+        "arm_parents": {"left": "magazine"},
+        "arms": {"right": (0.0653, -0.4957, 0.866), "left": (0.6871, -0.3967, 0.6088)},
+        "muzzle": (8.0, 5.0, -1.04),
+        "sight": (8.0, 6.1, 14.12),
+        "eye_relief": 1.0,
+    },
+    # Slice 15B. The Krauser, the Soul Drummer and the Uppercut are the owner's GeckoLib models, as slice 15A's, their
+    # bones the models' own about the models' pivots. Each is held in one hand: its idle hides the left arm, which hangs
+    # under the magazine in the owner's models (carry()), and each is a carbine (CARBINES), whose carbine_idle brings
+    # the left hand to the gun; the left hand point is given for that pose. The hands are placed from the owner's arm
+    # bones as slice 15A's are. The Krauser's gun_body3, which its animations move but its model lacks, holds nothing
+    # (so it moves nothing, as in the owner's model), as does its LeftArm. The Uppercut's shell holds a round that every
+    # one of its animations keeps hidden (its spent cases are the shots' casing cue, as every gun's); its Mag is its
+    # magazine.
+    "kreuzer_pistol": {
+        "bones": [
+            ("gun_body2", None, [], (8.4655, 2.875, 8.1384)),
+            ("gun_body", "gun_body2", ["main", "stan_barrel"], (8.4655, 2.875, 8.1384)),
+            ("bolt", "gun_body", ["bolt"], (9.59196, 4.57316, 11.52382)),
+            ("seal", "gun_body", ["seal"], (7.02497, 4.55, 10.6634)),
+            ("magazine", "gun_body", ["stan_mag"], (7.9905, 2.35, 10.6384)),
+            ("LeftArm", "gun_body", [], (3.4905, 1.475, 14.1384)),
+            ("gun_body3", "gun_body2", [], (8.4655, 2.875, 8.1384)),
+        ],
+        "hands": {"right": (7.47, 1.42, 14.45), "left": (9.08, 2.53, 8.15)},
+        "hand_pose": {"left": ("carbine_idle", None)},
+        "arm_parents": {"left": "magazine"},
+        "arms": {"right": (0.0653, -0.4957, 0.866), "left": (0.0, -0.7071, -0.7071)},
+        "muzzle": (7.97, 5.3, 3.21),
+        "sight": (8.0, 6.41, 14.75),
+    },
+    "psalm_smg": {
+        "bones": [
+            ("gun_body", None, ["main", "stan_barrel"], (8.4655, 2.825, 8.2)),
+            ("bolt", "gun_body", ["bolt"], (9.59196, 4.52316, 11.58542)),
+            ("seal", "gun_body", ["seal"], (7.17497, 4.65, 12.75)),
+            ("magazine", "gun_body", ["stan_mag"], (7.9655, 0.16124, 15.2787)),
+        ],
+        "hands": {"right": (7.37, 1.87, 15.51), "left": (7.93, 2.32, 9.6)},
+        "hand_pose": {"left": ("carbine_idle", None)},
+        "arm_parents": {"left": "magazine"},
+        "arms": {"right": (0.0653, -0.4957, 0.866), "left": (0.3044, -0.3967, 0.866)},
+        "muzzle": (7.97, 5.25, 5.71),
+        "sight": (8.0, 6.41, 15.75),
+        "eye_relief": 1.0,
+    },
+    "jawbreaker": {
+        "bones": [
+            ("gun_body", None, ["main", "stan_barrel", "sights", "stan_grip"], (8.4655, 3.275, 9.4)),
+            ("bolt", "gun_body", ["bolt"], (9.59196, 4.97316, 12.78542)),
+            ("seal", "gun_body", ["seal"], (7.03747, 4.85, 10.725)),
+            ("shell", "gun_body", ["shell"], (7.9905, 4.6568, 14.65305)),
+            ("Mag", "gun_body", ["stan_mag"], (7.9905, 1.025, 10.5375)),
+        ],
+        "hands": {"right": (7.47, 1.82, 15.96), "left": (7.81, 2.64, 6.75)},
+        "hand_pose": {"left": ("carbine_idle", None)},
+        "arm_parents": {"left": "Mag"},
+        "arms": {"right": (0.099, -0.3696, 0.9239), "left": (0.6871, -0.3967, 0.6088)},
+        "muzzle": (7.97, 5.38, 5.48),
+        "sight": (8.0, 6.42, 15.43),
+        "eye_relief": 1.0,
+    },
+    # Slice 15C. The MAS Peddler, the Inertial and the Zilk 45 are the owner's GeckoLib models, as slice 15A's and 15B's,
+    # their bones the models' own about the models' pivots, each held in both hands. The MAS Peddler is the owner's MAS
+    # 55 made over: its body, bolt, seal and magazine stand where the MAS 55's do, and its magazines stand out of its
+    # side, the owner's bones turned 135 degrees about the barrel (bone_turn()); its right arm hangs under the magazine
+    # in the owner's model, so the right hand carries it in the reload (carry()). The Inertial's magazine_2 is the box a
+    # reload brings in, empty here as slice 15A's are. The Zilk 45's animations move a magazine_2 and scriptures its
+    # model lacks: empty, they move nothing, as in the owner's model. Its left arm hangs under its magazine.
+    "hawker_rifle": {
+        "bones": [
+            ("gun_body", None, ["main", "stan_barrel", "sights", "stan_grip"], (8.225, 2.7, 8.5)),
+            ("bolt", "gun_body", ["bolt"], (9.35146, 4.39816, 11.88542)),
+            ("seal", "gun_body", ["seal"], (7.1, 5.4, 7.05)),
+            ("scriptures", "seal", ["scriptures"], (6.975, 5.35, 7.05)),
+            ("magazine", "gun_body", ["stan_mag"], (8.225, 0.28624, 11.3287)),
+        ],
+        "hands": {"right": (7.63, 2.9, 15.71), "left": (8.69, 2.7, 3.65)},
+        "arm_parents": {"right": "magazine"},
+        "arms": {"right": (0.0, -0.6088, 0.7934), "left": (0.5988, -0.1774, 0.781)},
+        "muzzle": (8.0, 4.8, -5.12),
+        "sight": (8.0, 6.47, 14.1),
+        "eye_relief": 1.0,
+    },
+    "impetus_shotgun": {
+        "bones": [
+            ("gun_body", None, ["main", "stan_barrel", "sights", "stan_grip"], (7.9905, 2.75, 9.0)),
+            ("bolt", "gun_body", ["bolt"], (8.61696, 4.44816, 12.38542)),
+            ("seal", "gun_body", ["seal"], (7.02497, 5.0, 6.5)),
+            ("magazine", "gun_body", ["stan_mag"], (7.9905, 0.33624, 11.8287)),
+            ("magazine_2", "gun_body", [], (7.9905, 0.33624, 11.8287)),
+        ],
+        "hands": {"right": (7.55, 2.05, 15.06), "left": (8.96, 2.55, 6.15)},
+        "arms": {"right": (0.0653, -0.4957, 0.866), "left": (0.5988, -0.1774, 0.781)},
+        "muzzle": (8.0, 5.13, -5.84),
+        "sight": (8.0, 6.6, 11.61),
+        "eye_relief": 1.0,
+    },
+    "quill_rifle": {
+        "bones": [
+            ("gun_body", None, ["main", "sights"], (8.475, 2.1, 8.75)),
+            ("bolt", "gun_body", ["bolt"], (9.60146, 4.29816, 15.63542)),
+            ("magazine", "gun_body", ["stan_mag"], (8.0, 1.95, 9.75)),
+            ("magazine_2", "gun_body", [], (8.0, 1.95, 9.75)),
+            ("scriptures", "gun_body", [], (8.475, 2.1, 8.75)),
+        ],
+        "hands": {"right": (7.53, 1.2, 15.36), "left": (8.07, 1.33, 7.45)},
+        "arm_parents": {"left": "magazine"},
+        "arms": {"right": (0.0653, -0.4957, 0.866), "left": (0.6871, -0.3967, 0.6088)},
+        "muzzle": (8.0, 4.2, -1.12),
+        "sight": (8.0, 5.75, 13.73),
+    },
 }
 
 # Props the animations move on bones that had no part ("@<name>" in a bone's parts): the rounds a reload carries in,
@@ -2696,6 +3178,9 @@ PROPS = {
                                "texture_at": (120, 120)}},
     "windlass_musket": {"flash": {"kind": "flash", "from": (8.7, 3.4, 12.8), "size": (1.0, 1.0, 1.0),
                                   "texture_at": (56, 56)}},
+    # Slice 14E: the Harrow's burst of flame, as the Stoker's: its back end at the flame bone's pivot, 5.5 px before the
+    # muzzle, which the shot's first offset brings to the muzzle.
+    "harrow": {"flame": {"kind": "flame", "from": (6.0, 5.95, -23.6), "size": (4.0, 4.0, 8.0), "texture_at": (120, 112)}},
 }
 # The owner's pilot flame (Guns/item/spitfire_flame.png): three 8 x 8 frames, one above the other; the first frame's
 # flame is 4 px wide (columns 2 to 5) and 8 tall, its tip at the top.
@@ -2811,16 +3296,19 @@ ATTACHMENTS = {
     # the two magnifying ones are clumsy from the hip.
     # "not_on" (slice 14A): the Holler Pistol's own texture is as big as the largest atlas, and beside it there is room
     # for the pieces of only three of the four sights; it goes without the marksman's long scope. So does slice 14C's
-    # Freeholder Rifle, for the same reason.
+    # Freeholder Rifle, for the same reason. Slice 14D's Hinterland Rifle has room for only two: it goes without the
+    # long scope and the Laser Sight. Slice 15A's Vesper Rifle has room for three, and goes without the medium scope; so
+    # does slice 15C's Hawker Rifle, the same owner's model made over.
     "long_scope": {
         "display": "Long Scope", "slot": "optic", "mount": True, "parts": [], "replaces": True,
         "effects": {"aim_spread": 0.5, "hip_spread": 1.25}, "model": "long_scope", "texture": "long_scope",
-        "not_on": ["holler_pistol", "freeholder_rifle"],
+        "not_on": ["holler_pistol", "freeholder_rifle", "hinterland_rifle"],
         "zoom": 0.3, "view": {"reticle": "long_scope_reticle2", "vignette": "scope_vignette"},
         "tooltip": "A long blackened-steel scope: a far closer view down the sights, clumsy from the hip.",
     },
     "medium_scope": {
         "display": "Medium Scope", "slot": "optic", "mount": True, "parts": [], "replaces": True,
+        "not_on": ["vesper_rifle", "hawker_rifle"],
         "effects": {"aim_spread": 0.7, "hip_spread": 1.1}, "model": "medium_scope", "texture": "medium_scope",
         "zoom": 0.5, "view": {"reticle": "long_scope_reticle2", "vignette": "scope_vignette"},
         "tooltip": "A short scope: a closer view down the sights, a little clumsy from the hip.",
@@ -2838,7 +3326,8 @@ ATTACHMENTS = {
     # (client/guns/GunLaser), and aimed, its dot is on the middle of the screen as the Reflex Sight's. "not_on": the
     # guns that do not take it although they take scopes. The Breacher's atlas, holding three scopes' pieces, has no
     # room left for its pieces. The Trench Lobber's has none either, and its grenades arc below a straight laser. On
-    # the Earthmover's rail, off the left side of its body (slice 10A), its housing would run into the drum.
+    # the Earthmover's rail, off the left side of its body (slice 10A), its housing would run into the drum. Slice 14D's
+    # Hinterland Rifle's atlas has room for only two sights' pieces (the long scope's "not_on").
     "tactical_grip": {
         "display": "Tactical Grip", "slot": "grip", "parts": ["tact_grip"], "replaces": False,
         "effects": {"hip_spread": 0.9, "kick": 0.8}, "model": "vertical_grip", "model_elements": [1, 3, 4],
@@ -2848,7 +3337,7 @@ ATTACHMENTS = {
     "laser_sight": {
         "display": "Laser Sight", "slot": "optic", "mount": True, "parts": [], "replaces": True,
         "effects": {"hip_spread": 0.7}, "model": "laser_sight", "texture": "laser_sight",
-        "more_textures": {"scguns:item/laser": "laser_beam"}, "not_on": ["breacher", "trench_lobber", "earthmover"],
+        "more_textures": {"scguns:item/laser": "laser_beam"}, "not_on": ["breacher", "trench_lobber", "earthmover", "hinterland_rifle"],
         "zoom": 0.9, "view": {"dot": "red_dot_reticle"},
         "tooltip": "A laser on the gun's top: a red dot marks where it points, so it is much steadier from the hip.",
     },
@@ -2918,10 +3407,19 @@ def attachment_part(gun, kind):
     if ATTACHMENTS[kind].get("mount"):
         return f"%{kind}" if takes_optics(gun) and gun not in ATTACHMENTS[kind].get("not_on", ()) else None
     for name in ATTACHMENTS[kind]["parts"]:
-        if (LIBRARY / "models" / "special" / GUNS[gun]["source"] / f"{name}.json").exists():
+        if has_part(gun, name):
             faces = [face for element in load_part(gun, name).get("elements", []) for face in element.get("faces", {}).values()]
             return name if faces and all(texture_file(face["_texture"]) for face in faces) else None
     return None
+
+
+def has_part(gun, name):
+    """Whether the owner made the gun a part of this name: a part file in its folder, or a bone of its GeckoLib model
+    (GEO_PARTS)."""
+    source = GUNS[gun]["source"]
+    if source in GEO_PARTS:
+        return name in GEO_PARTS[source] and any(b["name"] == GEO_PARTS[source][name] for b in geo_model(source)["bones"])
+    return (LIBRARY / "models" / "special" / source / f"{name}.json").exists()
 
 
 def fits(gun):
@@ -2932,8 +3430,7 @@ def fits(gun):
 def takes_optics(gun):
     """Whether the owner made the gun to take a scope: among its parts are iron sights and a "no_sights" stand-in (what
     shows under a scope: nothing, or a rail), and its bones carry the sights, so a scope can take their place."""
-    folder = LIBRARY / "models" / "special" / GUNS[gun]["source"]
-    return ((folder / "sights.json").exists() and (folder / "no_sights.json").exists()
+    return (has_part(gun, "sights") and has_part(gun, "no_sights")
             and any("sights" in parts for _, _, parts, _ in BUILDS[gun]["bones"]))
 
 
@@ -2948,7 +3445,9 @@ def attachment_parts(gun, kind):
 
 # Where a scope stands on a gun, in owner space, where optic_mount()'s reading of the parts would not do: the
 # Earthmover's sight and the rail under it stand off the left side of its body (slice 10A), so a scope stands there too.
-MOUNTS = {"earthmover": (4.875, 7.45, 9.675)}
+# Slice 15A's Gallant Rifle has no sights or rail part: its sights are on its body, and a scope stands on the flat of its
+# receiver's top, ahead of its rear sight.
+MOUNTS = {"earthmover": (4.875, 7.45, 9.675), "gallant_rifle": (8.0, 5.97, 11.75)}
 
 
 def optic_mount(gun):
@@ -3145,6 +3644,17 @@ ZOOM = {
     "holler_carbine": 0.85, "minuet_carbine": 0.88, "grange_carbine": 0.85,
     # Slice 14C: an automatic rifle, an automatic shotgun and a rifle.
     "sprocket_gun": 0.85, "navvy_shotgun": 0.9, "freeholder_rifle": 0.8,
+    "quarrel_carbine": 0.8, "hinterland_rifle": 0.85, "cloudburst_gun": 0.9,
+    # Slice 14E: a flamethrower and a shotgun.
+    "firedrake": 0.95, "harrow": 0.9,
+    # Slice 14F: a carbine, as the Grange Carbine.
+    "old_grange_carbine": 0.85,
+    # Slice 15A: a marksman's rifle, a submachine gun and a rifle.
+    "vesper_rifle": 0.75, "onrush_smg": 0.9, "gallant_rifle": 0.85,
+    # Slice 15B: a pistol, a machine pistol and a magnum, as the pistols before them.
+    "kreuzer_pistol": 0.9, "psalm_smg": 0.9, "jawbreaker": 0.9,
+    # Slice 15C: a rifle, a shotgun and a dart rifle.
+    "hawker_rifle": 0.8, "impetus_shotgun": 0.9, "quill_rifle": 0.85,
 }
 
 
@@ -3182,7 +3692,7 @@ CYLINDER_CUE = "rotate_cylinder"
 QUIET_CUES = ("loaded", "end_reload", "loop_end", "reload_end", "stop_mag_tracking", "reset_mag_position",
               "resume_mag_tracking")
 # The muzzle flash: the owner's four flash frames, copied to textures/item/guns/flash/flash_<n>.png; each shot shows
-# one, turned at random about the barrel. A silencer hides it ("hides_flash").
+# one, turned at random about the barrel. A silencer hides it ("hides_flash"), as does a gun's own build (SILENCED).
 FLASH_FRAMES = ["muzzleflash", "muzzleflash2", "muzzleflash3", "muzzleflash4"]
 FLASH_SOURCE = BLOCKS / "Big Cannons and Mounted Guns" / "textures"
 # How big the flash is, across, in the gun model's pixels, by the round: black powder flares widest. A grenade's
@@ -3387,6 +3897,30 @@ SHOT_SOUNDS = {
     "sprocket_gun": "item/scorched_rifle/fire.ogg",
     "navvy_shotgun": "item/combat_shotgun/fire.ogg",
     "freeholder_rifle": "item/scorched_sniper/fire.ogg",
+    "quarrel_carbine": "item/airgun/fire.ogg",
+    "hinterland_rifle": "item/heavy_rifle/fire.ogg",
+    "cloudburst_gun": "item/new_rifle/fire.ogg",
+    # Slice 14E: the longer of the two flamethrower sounds (the Stoker has the short burst) and the brass shotgun shot
+    # (the Coach Gun's, the Crackling's and the Waystation Shotgun's).
+    "firedrake": "item/flamethrower/fire.ogg",
+    "harrow": "item/brass_shotgun/fire.ogg",
+    # Slice 14F: the owner's Grandle OG fires with their new_rifle sound.
+    "old_grange_carbine": "item/new_rifle/fire.ogg",
+    # Slice 15A: the shots the owner's data names for each: the heavier rifle's (the Bulldog Pistol's), the greaser SMG's
+    # (the Riveter SMG's) and the bruiser's silenced shot.
+    "vesper_rifle": "item/heavier_rifle/fire.ogg",
+    "onrush_smg": "item/greaser_smg/fire.ogg",
+    "gallant_rifle": "item/bruiser/silenced_fire.ogg",
+    # Slice 15B: the shots the owner's data names: the brass pistol's for the Krauser and the Soul Drummer (the Holler
+    # Pistol's), the brass revolver's for the Uppercut (the Half-Crown Revolver's).
+    "kreuzer_pistol": "item/brass_pistol/fire.ogg",
+    "psalm_smg": "item/brass_pistol/fire.ogg",
+    "jawbreaker": "item/brass_revolver/fire.ogg",
+    # Slice 15C: the shots the owner's data names: the Bruiser's (the Haymaker's) for the MAS Peddler, the brass
+    # shotgun's (the Coach Gun's) for the Inertial and the air gun's second (the Bullfrog's) for the Zilk 45.
+    "hawker_rifle": "item/bruiser/fire.ogg",
+    "impetus_shotgun": "item/brass_shotgun/fire.ogg",
+    "quill_rifle": "item/airgun/fire_2.ogg",
 }
 SUBTITLES = {
     "fire": "Gun fires",
@@ -3524,9 +4058,25 @@ def one_handed():
 # Slice 13D: one-handed guns that, with a stock fitted, are held in both hands as carbines. Such a gun plays the owner's
 # carbine_ animations in place of its own (its draw, idle, shots, inspect and reload: client/guns/GunAnimations), its
 # holder's other arm comes up to it seen from outside (GunPose), and it is no longer one of two guns held at once
-# (JugcraftGuns.CARBINES, GunItem.carbine).
-CARBINES = ("parley_revolver", "half_crown_revolver")
+# (JugcraftGuns.CARBINES, GunItem.carbine). Slice 14A adds the Half-Crown Revolver, slice 15B the Kreuzer Pistol, the
+# Psalm SMG and the Jawbreaker, which the owner's data names one-handed carbines.
+CARBINES = ("parley_revolver", "half_crown_revolver", "kreuzer_pistol", "psalm_smg", "jawbreaker")
 CARBINE_ANIMATIONS = ("draw", "idle", "shoot", "aim_shoot", "inspect")
+
+
+def shoot_aimed():
+    """Slice 14D: the guns whose owner's animations have a shoot but no aim_shoot (the Borer and the Cloudburst Gun,
+    both held at the hip). Aimed, they play their shoot (GunAnimations.SHOOT_AIMED): a triggered aim_shoot GeckoLib
+    cannot find plays only the idle, and in a CI screenshot of 22 October 2026 the arms then eased toward their bones'
+    rest pose, one arm's sleeve across the left of the view."""
+    return [gun for gun in GUNS if "shoot" in (names := animations(gun)["animations"]) and "aim_shoot" not in names]
+
+
+def no_inspect():
+    """Slice 15C: the guns whose owner's animations have no inspect (the Impetus Shotgun: the owner made the Inertial
+    none). The inspect key does nothing with them (GunAnimations.NO_INSPECT): an inspect GeckoLib cannot find would play
+    only the idle, the arms easing toward their bones' rest pose, as an aim_shoot it cannot find did (shoot_aimed())."""
+    return [gun for gun in GUNS if "inspect" not in animations(gun)["animations"]]
 
 
 # ------------------------------------------------------------------ the Nether guns' fire (slices 11A and 11B)
@@ -3534,7 +4084,8 @@ CARBINE_ANIMATIONS = ("draw", "idle", "shoot", "aim_shoot", "inspect")
 # Each creature a Nether gun's bullet or pellets hurt is set alight for BURN_SECONDS, as the Stoker's flame sets it
 # alight (slice 8C, GunShots.BURN_SECONDS): fire's own damage, one a second, which fireproof creatures shrug off and
 # water puts out. No block is set alight (JugcraftGuns.INCENDIARY).
-INCENDIARY = ("tusker", "cinder_repeater", "bastion_rifle", "ashfall_pistol", "goldbristle_carbine", "crackling")
+INCENDIARY = ("tusker", "cinder_repeater", "bastion_rifle", "ashfall_pistol", "goldbristle_carbine", "crackling",
+              "hinterland_rifle", "harrow")
 BURN_SECONDS = 4
 
 
@@ -3545,6 +4096,28 @@ BURN_SECONDS = 4
 # It falls when it ends, and takes the fall's damage (JugcraftGuns.LEVITATING).
 LEVITATING = ("chitin_smg", "hermit_rifle", "borer")
 LIFT_TICKS = 20
+
+
+# ------------------------------------------------------------------ guns silenced by their build
+
+# Guns silenced along their own barrels, as a fitted silencer silences others: a shot shows no muzzle flash (client/
+# guns/GunRenderer, as for the "hides_flash" attachments), and no barrel attachment fits them (JugcraftGuns.SILENCED).
+# Slice 15A's Gallant Rifle, which fires the owner's silenced shot, is the first: in CI's third-person screenshot of
+# 23 October 2026 its shot still showed a flash.
+# Slice 15C's Quill Rifle, the owner's Zilk 45 ("isSilenced"), is the second.
+SILENCED = ("gallant_rifle", "quill_rifle")
+
+
+# ------------------------------------------------------------------ heavy bullets: knockback and armour piercing
+
+# A gun whose bullets knock back each creature they hurt (KNOCKBACK: the strength of a second push, after the 0.4 every
+# hit gives, as a sword's knockback is), and whose bullets pierce armour (PIERCING: a hit deals what it would if the target
+# wore that many points less armour; it deals no more to a creature without). The owner's data gives the Uppercut both
+# (knockbackStrength 0.6, armorPen 4.5): slice 15B's Jawbreaker is the first (JugcraftGuns.KNOCKBACK, PIERCING).
+# Slice 15C gives the Inertial's knockback (0.65) to the Impetus Shotgun, and the MAS Peddler's and the Zilk 45's
+# armour piercing (1.0, 1.5) to the Hawker Rifle and the Quill Rifle.
+KNOCKBACK = {"jawbreaker": 0.6, "impetus_shotgun": 0.65}
+PIERCING = {"jawbreaker": 4.5, "hawker_rifle": 1.0, "quill_rifle": 1.5}
 
 
 def cell_rack_model():
@@ -3751,6 +4324,8 @@ def load_part(gun, part):
     if part.startswith("%"):
         return optic_part(gun, part[1:])
     folder, name = part_source(gun, part)
+    if name in GEO_PARTS.get(folder, {}):
+        return geo_part(folder, GEO_PARTS[folder][name])
     data = json.loads((LIBRARY / "models" / "special" / folder / f"{name}.json").read_text())
     textures = data.get("textures", {})
     shift = PART_SHIFTS.get((folder, name))
@@ -3766,6 +4341,226 @@ def load_part(gun, part):
             if element.get("rotation"):
                 element["rotation"]["origin"] = [v + d for v, d in zip(element["rotation"].get("origin", [8, 8, 8]), shift)]
     return data
+
+
+# Slice 14F: guns the owner modelled whole in GeckoLib (geo/item/gun/<source>.geo.json), with no item-model parts: the
+# Grandle OG, whose clip and longer barrel are only there. Each part name the converter knows (BUILDS, the attachments'
+# "parts") is a bone of that model; its cubes are turned back into the item-model elements element_cube() would make
+# them from (geo_element()), so they go through the converter and its check face for face as every other part does.
+# The library's item-model parts in models/special/grandle_og are an earlier make: the Grandle's barrel and barrel
+# attachments moved 2 px forward where the model's stand 3 px forward, the barrel no longer than the Grandle's. The
+# model's are used.
+GEO = LIBRARY / "geo" / "item" / "gun"
+GEO_PARTS = {"grandle_og": {
+    "main": "gun_body", "bolt": "bolt", "sights": "sights", "no_sights": "no_sights", "stan_barrel": "standard_barrel",
+    "clip": "clip", "ext_barrel": "extended_barrel", "silencer": "silencer", "advanced_silencer": "advanced_silencer",
+    "muzzle_brake": "muzzle_brake", "light_stock": "light_stock", "heavy_stock": "weighted_stock",
+    "wooden_stock": "wooden_stock", "light_grip": "light_grip", "tact_grip": "vertical_grip",
+    "iron_bayonet": "iron_bayonet", "anthralite_bayonet": "anthralite_bayonet", "diamond_bayonet": "diamond_bayonet",
+    "netherite_bayonet": "netherite_bayonet"}}
+# Slice 15A: the MAS 55, the Prush Gun and the Valora, from the owner's later edits of them (the library's item-model
+# parts for them are earlier makes, in places other shapes). Their standard magazine, stock and barrel are the bones
+# the owner named default_mag, standard_grip and standard_barrel; seal and scriptures are a wax seal and the strip of
+# parchment under it, which the animations swing.
+GEO_PARTS.update({source: {
+    "main": "gun_body", "bolt": "bolt", "sights": "sights", "no_sights": "no_sights", "seal": "seal",
+    "scriptures": "scriptures", "stan_mag": "default_mag", "ext_mag": "extended_mag", "speed_mag": "speed_mag",
+    "stan_grip": "standard_grip", "stan_barrel": "standard_barrel", "ext_barrel": "extended_barrel",
+    "silencer": "silencer", "advanced_silencer": "advanced_silencer", "muzzle_brake": "muzzle_brake",
+    "light_stock": "light_stock", "heavy_stock": "weighted_stock", "wooden_stock": "wooden_stock",
+    "light_grip": "light_grip", "tact_grip": "vertical_grip", "iron_bayonet": "iron_bayonet",
+    "anthralite_bayonet": "anthralite_bayonet", "diamond_bayonet": "diamond_bayonet",
+    "netherite_bayonet": "netherite_bayonet"} for source in ("mas_55", "prush_gun", "valora")})
+# Slice 15B: the Krauser, the Soul Drummer and the Uppercut, from the owner's later edits of them. Their standard
+# magazines are the bones the owner named standard_mag (on the Uppercut, Mag), and their muzzle attachments and stocks
+# bones of the same names as slice 15A's. The Uppercut's shell is a round its animations keep hidden throughout, and
+# its standard_grip the butt a stock takes the place of. The Krauser's and the Soul Drummer's sights and standard_grip
+# bones hold nothing (their sights are on their bodies, and they have no butt), so they are left out.
+GEO_PARTS.update({source: {
+    "main": "gun_body", "bolt": "bolt", "seal": "seal", "ext_mag": "extended_mag", "speed_mag": "speed_mag",
+    "stan_barrel": "standard_barrel", "ext_barrel": "extended_barrel", "silencer": "silencer",
+    "advanced_silencer": "advanced_silencer", "muzzle_brake": "muzzle_brake", "light_stock": "light_stock",
+    "heavy_stock": "weighted_stock", "wooden_stock": "wooden_stock", **more} for source, more in {
+    "krauser": {"stan_mag": "standard_mag"},
+    "soul_drummer": {"stan_mag": "standard_mag"},
+    "uppercut": {"stan_mag": "Mag", "sights": "sights", "no_sights": "no_sights", "shell": "shell",
+                 "stan_grip": "standard_grip"}}.items()})
+# Slice 15C: the MAS Peddler, the Inertial and the Zilk 45, from the owner's later edits of them, with bones named as
+# slice 15A's. The MAS Peddler's model is the MAS 55's made over, bone for bone (its diamond bayonet holds nothing, so
+# it takes none). The Inertial and the Zilk 45 have no "no_sights" bone: the owner's no_sights parts for them are
+# empty (nothing shows under a scope), so their empty "body" bone stands in for it. The Zilk 45, silenced along its
+# whole length, has no barrel bones, and no butt but its stocks.
+GEO_PARTS.update({source: {
+    "main": "gun_body", "bolt": "bolt", "sights": "sights", "stan_mag": "default_mag", "ext_mag": "extended_mag",
+    "speed_mag": "speed_mag", "light_stock": "light_stock", "heavy_stock": "weighted_stock",
+    "wooden_stock": "wooden_stock", "light_grip": "light_grip", "tact_grip": "vertical_grip",
+    "iron_bayonet": "iron_bayonet", "anthralite_bayonet": "anthralite_bayonet", "diamond_bayonet": "diamond_bayonet",
+    "netherite_bayonet": "netherite_bayonet", **more} for source, more in {
+    "mas_peddler": {"no_sights": "no_sights", "seal": "seal", "scriptures": "scriptures", "stan_grip": "standard_grip",
+                    "stan_barrel": "standard_barrel", "ext_barrel": "extended_barrel", "silencer": "silencer",
+                    "advanced_silencer": "advanced_silencer", "muzzle_brake": "muzzle_brake"},
+    "inertial": {"no_sights": "body", "seal": "seal", "stan_grip": "standard_grip", "stan_barrel": "standard_barrel",
+                 "ext_barrel": "extended_barrel", "silencer": "silencer", "advanced_silencer": "advanced_silencer",
+                 "muzzle_brake": "muzzle_brake"},
+    "zilk_45": {"no_sights": "body"}}.items()})
+# Where each GeckoLib model stands from the item models' frame, in its own units (each cube's corners and pivot are
+# the item model's less this): the owner's Grandle OG model holds its Grandle's body, sights, bolt, stocks and grips
+# element for element at the same places less this, and its muzzle attachments and bayonets 3 px further forward on its
+# longer barrel (GEO_TWINS, check_geo()).
+GEO_OFFSETS = {"grandle_og": (0.00625, -8.15, -1.0), "mas_55": (0.0, -8.15, -0.8), "prush_gun": (-0.0095, -8.05, -1.25),
+               "valora": (0.0125, -8.2, -0.75), "krauser": (-0.0095, -8.1, -0.1384),
+               "soul_drummer": (-0.0095, -8.05, -0.2), "uppercut": (-0.0095, -8.5, -1.4),
+               "mas_peddler": (0.0, -8.15, -0.8), "inertial": (-0.0095, -8.1, -1.0), "zilk_45": (0.0, -7.95, -0.75)}
+# The bones of a GeckoLib model that are another of the owner's guns' item-model parts, moved by (x, y, z) px: the
+# converter must give back those parts' elements, face for face (check_geo()).
+GEO_TWINS = {"grandle_og": {
+    "gun_body": ("grandle/main", (0, 0, 0)), "sights": ("grandle/sights", (0, 0, 0)), "bolt": ("grandle/bolt", (0, 0, 0)),
+    "light_stock": ("grandle/light_stock", (0, 0, 0)), "weighted_stock": ("grandle/heavy_stock", (0, 0, 0)),
+    "wooden_stock": ("grandle/wooden_stock", (0, 0, 0)), "light_grip": ("grandle/light_grip", (0, 0, 0)),
+    "vertical_grip": ("grandle/tact_grip", (0, 0, 0)), "silencer": ("grandle/silencer", (0, 0, -3)),
+    "advanced_silencer": ("grandle/advanced_silencer", (0, 0, -3)), "muzzle_brake": ("grandle/muzzle_brake", (0, 0, -3)),
+    "anthralite_bayonet": ("grandle/anthralite_bayonet", (0, 0, -3)),
+    "diamond_bayonet": ("grandle/diamond_bayonet", (0, 0, -3)),
+    "netherite_bayonet": ("grandle/netherite_bayonet", (0, 0, -3))}}
+# Slice 15A: the bones of the owner's later MAS 55, Prush Gun and Valora that keep their earlier item-model parts'
+# shapes, in place. The owner laid those models' textures out anew (GEO_RELAID), so these are compared corner for corner
+# and turn for turn, not UV for UV.
+GEO_TWINS.update({source: {bone: (f"{source}/{part}", (0, 0, 0)) for bone, part in twins.items()} for source, twins in {
+    "mas_55": {"sights": "sights", "standard_barrel": "stan_barrel", "extended_barrel": "ext_barrel",
+               "silencer": "silencer", "advanced_silencer": "advanced_silencer", "muzzle_brake": "muzzle_brake",
+               "standard_grip": "stan_grip", "light_stock": "light_stock", "weighted_stock": "heavy_stock",
+               "wooden_stock": "wooden_stock", "light_grip": "light_grip", "vertical_grip": "tact_grip",
+               "anthralite_bayonet": "anthralite_bayonet"},
+    "prush_gun": {"bolt": "bolt", "standard_barrel": "stan_barrel", "advanced_silencer": "advanced_silencer",
+                  "muzzle_brake": "muzzle_brake", "standard_grip": "stan_grip", "light_stock": "light_stock",
+                  "weighted_stock": "heavy_stock", "wooden_stock": "wooden_stock", "light_grip": "light_grip",
+                  "vertical_grip": "tact_grip", "iron_bayonet": "iron_bayonet", "anthralite_bayonet": "anthralite_bayonet",
+                  "diamond_bayonet": "diamond_bayonet", "netherite_bayonet": "netherite_bayonet"},
+    "valora": {"bolt": "bolt", "light_stock": "light_stock", "weighted_stock": "heavy_stock",
+               "wooden_stock": "wooden_stock", "iron_bayonet": "iron_bayonet", "anthralite_bayonet": "anthralite_bayonet",
+               "diamond_bayonet": "diamond_bayonet", "netherite_bayonet": "netherite_bayonet"}}.items()})
+# Slice 15B: the same for the Krauser, the Soul Drummer and the Uppercut, whose textures the owner also laid out anew.
+GEO_TWINS.update({source: {bone: (f"{source}/{part}", (0, 0, 0)) for bone, part in twins.items()} for source, twins in {
+    "krauser": {"bolt": "receiver", "weighted_stock": "heavy_stock", "wooden_stock": "wooden_stock"},
+    "soul_drummer": {"bolt": "receiver", "standard_barrel": "stan_barrel", "muzzle_brake": "muzzle_brake",
+                     "advanced_silencer": "advanced_silencer", "silencer": "silencer"},
+    "uppercut": {"sights": "sights", "no_sights": "no_sights", "bolt": "receiver", "standard_barrel": "stan_barrel",
+                 "advanced_silencer": "advanced_silencer", "silencer": "silencer", "standard_grip": "stan_grip",
+                 "light_stock": "light_stock", "weighted_stock": "heavy_stock", "wooden_stock": "wooden_stock"}}.items()})
+# Slice 15C: the same for the Inertial and the Zilk 45; none of the MAS Peddler's bones keeps its earlier part's shape.
+GEO_TWINS.update({source: {bone: (f"{source}/{part}", (0, 0, 0)) for bone, part in twins.items()} for source, twins in {
+    "inertial": {"sights": "sights", "bolt": "bolt", "vertical_grip": "tact_grip", "light_grip": "light_grip",
+                 "iron_bayonet": "iron_bayonet", "anthralite_bayonet": "anthralite_bayonet",
+                 "diamond_bayonet": "diamond_bayonet", "netherite_bayonet": "netherite_bayonet",
+                 "standard_barrel": "stan_barrel", "extended_barrel": "ext_barrel", "muzzle_brake": "muzzle_brake",
+                 "advanced_silencer": "advanced_silencer", "silencer": "silencer"},
+    "zilk_45": {"sights": "sights", "bolt": "bolt", "vertical_grip": "tact_grip", "light_grip": "light_grip",
+                "iron_bayonet": "iron_bayonet", "anthralite_bayonet": "anthralite_bayonet",
+                "diamond_bayonet": "diamond_bayonet", "netherite_bayonet": "netherite_bayonet",
+                "weighted_stock": "heavy_stock", "wooden_stock": "wooden_stock", "light_stock": "light_stock",
+                "default_mag": "stan_mag", "extended_mag": "ext_mag", "speed_mag": "speed_mag"}}.items()})
+GEO_RELAID = ("mas_55", "prush_gun", "valora", "krauser", "soul_drummer", "uppercut", "mas_peddler", "inertial", "zilk_45")
+
+
+def geo_model(source):
+    return json.loads((GEO / f"{source}.geo.json").read_text())["minecraft:geometry"][0]
+
+
+def geo_part(source, bone):
+    """A bone of the owner's GeckoLib model as a part file: its cubes as elements, drawn from the model's texture. A
+    bone the owner turned as a whole (slice 15C: the MAS Peddler's magazines, 135 degrees about the barrel) passes its
+    turn on to each of its cubes (bone_turn())."""
+    geo = geo_model(source)
+    size_px = (geo["description"]["texture_width"], geo["description"]["texture_height"])
+    data = next(b for b in geo["bones"] if b["name"] == bone)
+    elements = [geo_element(cube, GEO_OFFSETS[source], size_px, f"scguns:animated/gun/{source}")
+                for cube in data.get("cubes", [])]
+    if any(data.get("rotation", [0, 0, 0])):
+        turn = geo_element({"origin": [0, 0, 0], "size": [0, 0, 0], "rotation": data["rotation"], "pivot": data["pivot"]},
+                           GEO_OFFSETS[source], size_px, "")["rotation"]
+        elements = [dict(element, rotation=bone_turn(element.get("rotation"), turn)) for element in elements]
+    return {"elements": elements}
+
+
+def bone_turn(own, turn):
+    """An element's turn within a bone the owner turned as a whole, then the bone's turn about its pivot, as one turn:
+    the bone's alone, or two about the same axis, which are one by their sum about the point both leave where it is."""
+    if not own or not own.get("angle"):
+        return dict(turn)
+    if own["axis"] != turn["axis"]:
+        raise ValueError(f"an element turned about {own['axis']} in a bone turned about {turn['axis']}")
+    i, j = [k for k in range(3) if "xyz"[k] != turn["axis"]]
+    total = own["angle"] + turn["angle"]
+    if abs(math.remainder(total, 360.0)) < 1e-9:
+        raise ValueError("an element turned back square by its bone")
+
+    def spin(angle, centre, point):
+        a = math.radians(angle)
+        u, v = point[0] - centre[0], point[1] - centre[1]
+        return (centre[0] + u * math.cos(a) - v * math.sin(a), centre[1] + u * math.sin(a) + v * math.cos(a))
+
+    # Right-handed in the plane of the other two axes taken in order (x-y about z, y-z about x, z-x about y), as
+    # turned_corners() turns; the point both turns leave in place solves (1 - R) o = t.
+    if turn["axis"] == "y":
+        i, j = j, i
+    first, then = own.get("origin", [8, 8, 8]), turn.get("origin", [8, 8, 8])
+    t = spin(turn["angle"], (then[i], then[j]), spin(own["angle"], (first[i], first[j]), (0.0, 0.0)))
+    a = math.radians(total)
+    m = ((1 - math.cos(a), math.sin(a)), (-math.sin(a), 1 - math.cos(a)))
+    det = m[0][0] * m[1][1] - m[0][1] * m[1][0]
+    origin = list(first)
+    origin[i] = rnd((t[0] * m[1][1] - m[0][1] * t[1]) / det)
+    origin[j] = rnd((m[0][0] * t[1] - t[0] * m[1][0]) / det)
+    return {"angle": rnd(math.remainder(total, 360.0)), "axis": turn["axis"], "origin": origin}
+
+
+def geo_pivot(source, bone):
+    """A bone's pivot in the owner's GeckoLib model, in owner space."""
+    x, y, z = (c - d for c, d in zip(next(b for b in geo_model(source)["bones"] if b["name"] == bone)["pivot"],
+                                      GEO_OFFSETS[source]))
+    return (rnd(8.0 - x), rnd(y), rnd(z + 8.0))
+
+
+def geo_element(cube, offset, size_px, texture):
+    """One cube of an owner GeckoLib model -> the item-model element element_cube() makes the same cube from: its
+    corners less the model's offset (GEO_OFFSETS), its one-axis turn, and for each face the vanilla uv and rotation
+    giving each corner the UV GeckoLib gives it (java_face())."""
+    ox, oy, oz = (c - d for c, d in zip(cube["origin"], offset))
+    sx, sy, sz = cube["size"]
+    lo = [8.0 - ox - sx, oy, oz + 8.0]
+    element = {"from": [rnd(v) for v in lo], "to": [rnd(v + s) for v, s in zip(lo, (sx, sy, sz))]}
+    turn = cube.get("rotation", [0, 0, 0])
+    axes = [k for k in range(3) if turn[k]]
+    if len(axes) > 1:
+        raise ValueError(f"a cube turned about more than one axis: {turn}")
+    if axes:
+        k = axes[0]
+        px, py, pz = (c - d for c, d in zip(cube["pivot"], offset))
+        element["rotation"] = {"angle": rnd(turn[k] if k == 2 else -turn[k]), "axis": "xyz"[k],
+                               "origin": [rnd(8.0 - px), rnd(py), rnd(pz + 8.0)]}
+    element["faces"] = {}
+    for face in FACES:
+        data = cube.get("uv", {}).get(face)
+        if data is not None:
+            corners = gecko_corner_uvs(face, data["uv"][0], data["uv"][1], data["uv_size"][0], data["uv_size"][1],
+                                       data.get("uv_rotation", 0), size_px)
+            element["faces"][face] = {**java_face(face, corners), "_texture": texture}
+    return element
+
+
+def java_face(face, corners):
+    """The vanilla face {"uv", "rotation"} giving each corner the UV in corners ({corner pick: (u, v)} in 0..16):
+    java_corner_uvs() run backwards."""
+    for rotation in (0, 90, 180, 270):
+        uv = [0.0] * 4
+        for i, pick in enumerate(JAVA_CORNERS[face]):
+            j = (i + rotation // 90) % 4
+            uv[0 if j in (0, 1) else 2], uv[1 if j in (0, 3) else 3] = corners[pick]
+        uv = [rnd(v) for v in uv]
+        got = java_corner_uvs(face, uv, rotation)
+        if all(close(got[k], corners[k]) for k in corners):
+            return {"uv": uv, "rotation": rotation} if rotation else {"uv": uv}
+    raise ValueError(f"no vanilla UV reproduces the {face} face {corners}")
 
 
 def flat_face(direction, size):
@@ -3788,11 +4583,13 @@ def face_texture(textures, ref):
 
 
 def texture_file(texture):
-    """The library file a texture id ("scguns:item/<name>") names, or None if the library lacks it."""
-    prefix = "scguns:item/"
-    if texture and texture.startswith(prefix):
-        path = LIBRARY / "item" / f"{texture[len(prefix):]}.png"
-        return path if path.exists() else None
+    """The library file a texture id names, or None if the library lacks it: "scguns:item/<name>" is item/<name>.png, and
+    "scguns:animated/gun/<name>" (slice 14F) animated/gun/<name>.png, the texture of the owner's GeckoLib model of a
+    gun (geo_part())."""
+    for prefix, folder in (("scguns:item/", LIBRARY / "item"), ("scguns:animated/gun/", LIBRARY / "animated" / "gun")):
+        if texture and texture.startswith(prefix):
+            path = folder / f"{texture[len(prefix):]}.png"
+            return path if path.exists() else None
     return None
 
 
@@ -3802,6 +4599,9 @@ OWN_TEXTURES = {"flatboat_gun": "punt_gun"}
 
 
 def own_texture(gun):
+    """The texture the gun's own parts draw on: its source's (or OWN_TEXTURES'), or its GeckoLib model's (slice 14F)."""
+    if GUNS[gun]["source"] in GEO_PARTS:
+        return f"scguns:animated/gun/{GUNS[gun]['source']}"
     return f"scguns:item/{OWN_TEXTURES.get(gun, GUNS[gun]['source'])}"
 
 
@@ -3824,7 +4624,7 @@ def atlas_layout(gun):
     the owner shares between guns (bayonets, stocks, grips), those packed into room the own texture leaves free:
     blocks that are clear and that no face's UVs or prop reaches (own_footprint()), largest first, on an 8-pixel grid.
     A square atlas, grown from the own texture's size to 128 at most (tools/check_mod_data.py's texture rule) only
-    when they do not fit.
+    when they do not fit; a gun whose own texture the owner painted larger keeps its size (atlas_limit()).
     The textures its scopes draw on come after, piece by piece (they would not fit whole): each rect of pixels their
     faces use (scope_islands()), a pixel apart, into what room is left, largest first, the atlas growing to 128 if
     they need the room.
@@ -3839,11 +4639,12 @@ def atlas_layout(gun):
     others = sorted((t for t in sizes if t != own and t not in islands), key=lambda t: (-sizes[t][0] * sizes[t][1], t))
     used = own_footprint(gun)
     side = max(ow, oh)
+    limit = atlas_limit(gun)
     while others:
-        if side > 128:
+        if side > limit:
             # Slice 10C: the Doublet's own texture is as big as the largest atlas, so the textures its hammer and
             # grips share with other guns cannot sit beside it whole; they go in piece by piece, as the scopes' do.
-            side = 128
+            side = limit
             islands.update(texture_islands(gun, lambda part, texture: texture in others))
             break
         taken = {}
@@ -3875,7 +4676,8 @@ def atlas_layout(gun):
 
 def pack_groups(gun, side, place, used, groups, sizes, joined_first):
     """Packs the groups of scope pieces in turn (atlas_layout()), each one by one, or joined (joined_rects()) when one
-    by one they do not fit or `joined_first` says so; the atlas grows to 128 if they need the room. Returns the side and
+    by one they do not fit or `joined_first` says so; the atlas grows to its limit (atlas_limit()) if they need the
+    room. Returns the side and
     the placements, the given ones with the pieces'."""
     place = dict(place)
     for group in groups:
@@ -3887,7 +4689,7 @@ def pack_groups(gun, side, place, used, groups, sizes, joined_first):
                 place.update(pack_islands(gun, side, place, used, group, sizes))
                 break
             except ValueError:
-                if side < 128:
+                if side < atlas_limit(gun):
                     side *= 2  # what is placed stays where it is in the bigger atlas
                 elif not joined:
                     # Slice 10B: the Solenoid Rifle's stocks, grips and bayonets draw on shared textures, which leave
@@ -3896,6 +4698,13 @@ def pack_groups(gun, side, place, used, groups, sizes, joined_first):
                 else:
                     raise
     return side, place
+
+
+def atlas_limit(gun):
+    """The largest atlas a gun may have: 128 px square (tools/check_mod_data.py's texture rule), or its own texture's
+    size where the owner painted that larger. Slice 15C's Impetus Shotgun keeps the owner's 256 px Inertial texture,
+    whose pieces are as small as one pixel: halved, they would run into each other."""
+    return max(128, *texture_size(own_texture(gun)))
 
 
 def joined_rects(rects):
@@ -3934,7 +4743,9 @@ FRAMED = {"scguns:item/rocket_rifle",
           # Slice 12C: the Forlorn Hope's whole texture, seven frames.
           "scguns:item/forlorn_hope",
           # Slice 13D: the Laser Musket's glowing core, three frames.
-          "scguns:item/animated_laser_musket"}
+          "scguns:item/animated_laser_musket",
+          # Slice 14D: the Hinterland Rifle's whole texture, two frames, its cracks glowing brighter and dimmer.
+          "scguns:item/terra_incognita"}
 
 
 def texture_size(texture):
@@ -4112,6 +4923,14 @@ def part_source(gun, part):
     another of the owner's guns (slice 14B: the Howler Conversion has no magazine of its own, and takes its Howler's)."""
     folder, _, name = part_file(part).rpartition("/")
     return folder or GUNS[gun]["source"], name
+
+
+def part_path(gun, part):
+    """The library file (under Guns/) a bone's part entry comes from."""
+    folder, name = part_source(gun, part)
+    if name in GEO_PARTS.get(folder, {}):
+        return str((GEO / f"{folder}.geo.json").relative_to(LIBRARY))
+    return f"models/special/{folder}/{name}.json"
 
 
 def part_elements(gun, part):
@@ -4302,6 +5121,9 @@ def key_value(channel, time=None):
         channel = channel[time if time is not None else min(channel, key=float)]
     if isinstance(channel, dict):
         channel = channel.get("post", channel.get("vector", channel.get("pre")))
+    if isinstance(channel, dict):
+        # A keyframe's "post" given as {"vector": [x, y, z]} (slice 15C's MAS Peddler), as GeckoLib also reads it.
+        channel = channel["vector"]
     return [float(v) for v in channel]
 
 
@@ -4314,10 +5136,44 @@ def arm_offset(gun, side):
 
 def arm_pivot(gun, side):
     """Owner-space rest pivot of an arm bone: the hand point less the pose's offset (GeckoLib moves a bone by
-    (-x, y, z) of its "position", BoneSnapshot.translate)."""
-    hx, hy, hz = BUILDS[gun]["hands"][side]
+    (-x, y, z) of its "position", BoneSnapshot.translate), and for an arm under a bone the pose moves, less that
+    bone's move (carry())."""
+    hx, hy, hz = carry(gun, side, BUILDS[gun]["hands"][side], back=True)
     ox, oy, oz = arm_offset(gun, side)
     return (hx + ox, hy - oy, hz - oz)
+
+
+def turn_matrix(rotation):
+    """GeckoLib's turn of a bone by a "rotation" [x, y, z] in degrees, in owner space: (-x, -y, z) about x, then y, then
+    z (RenderUtil.prepMatrixForBone; GeckoLib takes x and y the other way round, as for cubes)."""
+    x, y, z = (math.radians(v) for v in (-rotation[0], -rotation[1], rotation[2]))
+    cx, sx, cy, sy, cz, sz = math.cos(x), math.sin(x), math.cos(y), math.sin(y), math.cos(z), math.sin(z)
+    rz = [[cz, -sz, 0.0], [sz, cz, 0.0], [0.0, 0.0, 1.0]]
+    ry = [[cy, 0.0, sy], [0.0, 1.0, 0.0], [-sy, 0.0, cy]]
+    rx = [[1.0, 0.0, 0.0], [0.0, cx, -sx], [0.0, sx, cx]]
+    product = lambda a, b: [[sum(a[i][k] * b[k][j] for k in range(3)) for j in range(3)] for i in range(3)]
+    return product(product(rz, ry), rx)
+
+
+def carry(gun, side, point, back=False):
+    """Where the pose an arm's hand point is given for (arm_offset()) brings a point of the rest frame of the bone the
+    arm hangs under: unmoved under gun_body (the hands are given in its frame), or turned and moved as GeckoLib poses
+    that bone (to t + p + R (point - p), p its pivot) under another the pose moves (slice 14F: the Old Grange Carbine's
+    left_arm2, which carries its left hand and its clip). back=True: the point that pose brings here."""
+    parent = BUILDS[gun].get("arm_parents", {}).get(side, "gun_body")
+    anim, time = BUILDS[gun].get("hand_pose", {}).get(side, ("idle", None))
+    channels = animations(gun)["animations"][anim]["bones"].get(parent, {}) if parent != "gun_body" else {}
+    if not channels:
+        return tuple(point)
+    pivot = next(bone[3] for bone in BUILDS[gun]["bones"] if bone[0] == parent)
+    mx, my, mz = key_value(channels["position"], time) if "position" in channels else (0.0, 0.0, 0.0)
+    moved = (-mx, my, mz)
+    r = turn_matrix(key_value(channels["rotation"], time) if "rotation" in channels else (0.0, 0.0, 0.0))
+    if back:
+        d = [q - m - p for q, m, p in zip(point, moved, pivot)]
+        return tuple(p + sum(r[k][i] * d[k] for k in range(3)) for i, p in enumerate(pivot))
+    d = [q - p for q, p in zip(point, pivot)]
+    return tuple(m + p + sum(r[i][k] * d[k] for k in range(3)) for i, (m, p) in enumerate(zip(moved, pivot)))
 
 
 ARM_REACH = 10.0
@@ -4430,6 +5286,53 @@ def same_corners(got, exp):
     return len(got) == len(exp) and all(any(close(p, q) and close(a, b) for q, b in exp) for p, a in got)
 
 
+def check_geo():
+    """Slice 14F: the converter run backwards on the owner's GeckoLib models (geo_element()) must give back, face for
+    face, the item-model parts those models share with the owner's other guns (GEO_TWINS; corner for corner and turn
+    for turn only where the owner laid the model's texture out anew, GEO_RELAID); and a gun built from one must turn its
+    parts about the model's own pivots, where the model has the bone. Returns problems."""
+    problems = []
+    for source, twins in GEO_TWINS.items():
+        for bone, (part, shift) in twins.items():
+            folder, name = part.split("/")
+            data = json.loads((LIBRARY / "models" / "special" / folder / f"{name}.json").read_text())
+            textures = data.get("textures", {})
+            mine = geo_part(source, bone)["elements"]
+            if len(mine) != len(data["elements"]):
+                problems.append(f"{source}/{bone}: {len(mine)} cubes for {part}'s {len(data['elements'])} elements")
+                continue
+            for i, (got, want) in enumerate(zip(mine, data["elements"])):
+                lo = [min(a, b) + d for a, b, d in zip(want["from"], want["to"], shift)]
+                hi = [max(a, b) + d for a, b, d in zip(want["from"], want["to"], shift)]
+                turn = want.get("rotation") if want.get("rotation", {}).get("angle") else None
+                if not (close(got["from"], lo, 1e-4) and close(got["to"], hi, 1e-4)) or bool(turn) != ("rotation" in got) \
+                        or (turn and (turn["axis"] != got["rotation"]["axis"] or abs(turn["angle"] - got["rotation"]["angle"]) > 1e-4
+                                      or not close([v + d for v, d in zip(turn.get("origin", [8, 8, 8]), shift)],
+                                                   got["rotation"]["origin"], 1e-4))):
+                    problems.append(f"{source}/{bone} element {i}: not where {part}'s stands, or turned otherwise")
+                    continue
+                if set(got["faces"]) != set(want.get("faces", {})):
+                    problems.append(f"{source}/{bone} element {i}: faces differ from {part}'s")
+                    continue
+                if source in GEO_RELAID:
+                    continue
+                for face, data_face in want["faces"].items():
+                    uv = data_face.get("uv") or default_uv(face, lo, hi)
+                    a = java_corner_uvs(face, got["faces"][face]["uv"], got["faces"][face].get("rotation", 0))
+                    b = java_corner_uvs(face, uv, int(data_face.get("rotation", 0)) % 360)
+                    if not all(close(a[k], b[k], 1e-4) for k in a) \
+                            or face_texture(textures, data_face.get("texture", "")) is None:
+                        problems.append(f"{source}/{bone} element {i} {face}: UVs differ from {part}'s")
+    for gun, spec in GUNS.items():
+        if spec["source"] not in GEO_PARTS:
+            continue
+        model = {b["name"] for b in geo_model(spec["source"])["bones"]}
+        for name, _, _, pivot in BUILDS[gun]["bones"]:
+            if name in model and not close(pivot, geo_pivot(spec["source"], name), 1e-4):
+                problems.append(f"{gun}: its {name} bone does not turn about the owner's model's {name} pivot")
+    return problems
+
+
 def check():
     """Every owner face must come back from the GeckoLib model at the same corners with the same UVs and the same turn
     about the same pivot; the arm bones and locators must be where BUILDS puts them. Returns problems."""
@@ -4488,7 +5391,7 @@ def check():
                 continue
             ox, oy, oz = arm_offset(gun, side)
             px, py, pz = 8.0 - bone["pivot"][0], bone["pivot"][1], bone["pivot"][2] + 8.0
-            if not close((px - ox, py + oy, pz + oz), BUILDS[gun]["hands"][side], 1e-3):
+            if not close(carry(gun, side, (px - ox, py + oy, pz + oz)), BUILDS[gun]["hands"][side], 1e-3):
                 problems.append(f"{gun}: the {side} hand is not where BUILDS puts it in its pose")
             sx, sy, sz = bone.get("locators", {}).get(f"{side}_shoulder", (8.0, 0.0, -8.0))
             reach = (8.0 - sx - px, sy - py, sz + 8.0 - pz)
@@ -4532,6 +5435,7 @@ def check():
                             u0, v0, u1, v1 = (c * s / 16.0 for c, s in zip(face["uv"], layout[1][own_texture(gun)][2:] * 2))
                             if min(u0, u1) < tu + bw and max(u0, u1) > tu and min(v0, v1) < tv + bh and max(v0, v1) > tv:
                                 problems.append(f"{gun}: the {prop_name} prop's corner overlaps part {part}'s texture")
+    problems += check_geo()
     from PIL import Image, ImageChops
     for gun, spec in GUNS.items():
         size, place = atlas_layout(gun)
@@ -4556,15 +5460,15 @@ def check():
                         cover[row][col] += 1
         if any(n > 1 for row in cover for n in row):
             problems.append(f"{gun}: textures are packed over each other in its atlas")
-        if size[0] != size[1] or size[0] > 128:
-            problems.append(f"{gun}: its atlas is {size}, not a square of 128 or less")
+        if size[0] != size[1] or size[0] > atlas_limit(gun):
+            problems.append(f"{gun}: its atlas is {size}, not a square of {atlas_limit(gun)} or less")
         texture = ASSETS / "textures" / "item" / "guns" / f"{gun}.png"
         atlas = compose_atlas(gun)
         if not texture.exists():
             continue  # reported with the model
         if atlas is None:
-            if texture.read_bytes() != (LIBRARY / "item" / f"{spec['source']}.png").read_bytes():
-                problems.append(f"{gun}: its atlas is not the owner's {spec['source']}.png unchanged")
+            if texture.read_bytes() != texture_file(own_texture(gun)).read_bytes():
+                problems.append(f"{gun}: its atlas is not the owner's {texture_file(own_texture(gun)).name} unchanged")
         else:
             with Image.open(texture) as written:
                 if written.size != atlas.size or ImageChops.difference(written.convert("RGBA"), atlas).getbbox():
@@ -4834,7 +5738,7 @@ def write_files():
         if atlas is not None:
             atlas.save(texture)
         else:
-            shutil.copyfile(LIBRARY / "item" / f"{spec['source']}.png", texture)
+            shutil.copyfile(texture_file(own_texture(gun)), texture)
     for name, source in ATTACHMENT_TEXTURES.items():
         target = ASSETS / "textures" / "item" / "guns" / "attachments" / f"{name}.png"
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -4871,8 +5775,7 @@ def provenance():
         paths = [f"models/item/{src}.json", str(texture_file(own_texture(gun)).relative_to(LIBRARY)),
                  f"item/{src}.animation.json"]
         for _, _, parts, _ in effective_bones(gun):
-            paths += ["models/special/{}/{}.json".format(*part_source(gun, p)) for p in parts
-                      if not p.startswith(("@", "%"))]
+            paths += [part_path(gun, p) for p in parts if not p.startswith(("@", "%"))]
         paths.append(f"sounds/{SHOT_SOUNDS[gun]}")
         # The shared textures its attachments draw on, merged into its atlas (slice 7).
         paths += [str(texture_file(t).relative_to(LIBRARY)) for t in atlas_layout(gun)[1] if t != own_texture(gun)]

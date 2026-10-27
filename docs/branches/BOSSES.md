@@ -1,6 +1,6 @@
 # Bosses branch (brainstorm)
 
-Status: **a brainstorm; eight bosses are built.** On 10 October 2026 the owner chose to build a new boss "the same way" as Madame Tatterlace ([features/tatterlace.md](../features/tatterlace.md)); the Yeti King is first, to the plan below. The same day the owner asked for "the next boss same way" as him: the Cinder Tyrant, to his plan below. Both are built. On 13 October 2026 the owner chose the next: the Mire Hag, to her plan below, who is built too; and after her, the same day, the Crypt Lich, to his plan below, who is built too. On 14 October 2026 the owner chose the Iron Dreadnought, to his plan below, who is built too. The same day the owner chose the Alpha Werewolf, to his plan below. On 4 October 2026 the owner asked for variant weapons, many of them "drops from bosses ill make later", themed around those bosses ("example: Yeti King"), and to "brainstorm bosses we could make". This page is that brainstorm. The bosses' weapons already exist: Arms VII ([features/arms-vii.md](../features/arms-vii.md)) adds two trophies for each of the first eight bosses below, and their loot tables are ready (`data/jugcraft/loot_table/bosses/<boss>.json`, one of the two per roll). Building a boss is a separate, reviewed feature each time, in the order the Yeti King was built in: [BOSS_PLAYBOOK.md](BOSS_PLAYBOOK.md). Everything here is a proposal for the owner to pick from, change or drop.
+Status: **a brainstorm; nine bosses are built.** On 10 October 2026 the owner chose to build a new boss "the same way" as Madame Tatterlace ([features/tatterlace.md](../features/tatterlace.md)); the Yeti King is first, to the plan below. The same day the owner asked for "the next boss same way" as him: the Cinder Tyrant, to his plan below. Both are built. On 13 October 2026 the owner chose the next: the Mire Hag, to her plan below, who is built too; and after her, the same day, the Crypt Lich, to his plan below, who is built too. On 14 October 2026 the owner chose the Iron Dreadnought, to his plan below, who is built too. The same day the owner chose the Alpha Werewolf, to his plan below. On 23 October 2026 the owner chose a Halloween boss, the Pumpkin King, to his plan below, who is built too. On 4 October 2026 the owner asked for variant weapons, many of them "drops from bosses ill make later", themed around those bosses ("example: Yeti King"), and to "brainstorm bosses we could make". This page is that brainstorm. The bosses' weapons already exist: Arms VII ([features/arms-vii.md](../features/arms-vii.md)) adds two trophies for each of the first eight bosses below, and their loot tables are ready (`data/jugcraft/loot_table/bosses/<boss>.json`, one of the two per roll). Building a boss is a separate, reviewed feature each time, in the order the Yeti King was built in: [BOSS_PLAYBOOK.md](BOSS_PLAYBOOK.md). Everything here is a proposal for the owner to pick from, change or drop.
 
 The owner's Mars adventure, the Cydonian Sentinel, is also implemented: [feature record](../features/cydonian-sentinel.md).
 
@@ -9,8 +9,8 @@ The owner's Mars adventure, the Cydonian Sentinel, is also implemented: [feature
 From [CONTENT_BRANCHES.md](../CONTENT_BRANCHES.md) ("Caves, dungeons and bosses" and "Rare loot"):
 - **An arena with edges:** a lair, or a summoning that builds one. The boss does not wander out of it, and it resets when everyone leaves.
 - **Readable attacks:** every big attack is telegraphed (a wind-up, a sound, a shadow on the ground) and can be dodged or blocked.
-- **Recovery:** dying in the fight is not the end; gear can be fetched back, and the boss heals and resets rather than keeping its gains.
-- **Multiplayer:** its health scales with the players in the arena; every player who took part gets a roll of its loot table, not just the last hit. A blow to it, or to a creature that counts for it, is taking part; at Vesperine and Madame Tatterlace, since Concordance Chunk A, so is support: healing or warding another player against the fight, or one of its objectives ([lair encounter credit](../features/lair-encounter-credit.md)).
+- **Recovery:** dying in the fight is not the end; players retain their entire inventory and experience, and the boss heals and resets rather than keeping its gains.
+- **Multiplayer:** its health scales with the players in the arena; every player who took part gets a roll of its loot table, not just the last hit. A blow to it, or to a creature that counts for it, is taking part; at Vesperine and Madame Tatterlace since Concordance Chunk A, and the Yeti King and the Cinder Tyrant since Chunk B, so is support: healing or warding another player against the fight, or one of its objectives ([lair encounter credit](../features/lair-encounter-credit.md)).
 - **No griefing:** a summoned boss cannot be called inside a town's protection or another player's claim, and its attacks do not break player builds.
 - **No farming loop:** a long respawn timer per lair (or a costly summoning item), so a trophy stays a trophy.
 - **Optional:** no core progression needs a boss. Its trophies are side-grades with a boon, and each boss also drops something useful to non-fighters (a crafting material, a decoration, a trophy head).
@@ -27,8 +27,10 @@ From [CONTENT_BRANCHES.md](../CONTENT_BRANCHES.md) ("Caves, dungeons and bosses"
 | **The Crypt Lich** | The Archive of Last Names: the Writ of Exhumation | [crypt-archive.md](../features/crypt-archive.md), [crypt-lich.md](../features/crypt-lich.md) | #350 and #353, through #352 |
 | **The Iron Dreadnought** | The Foundry Trench: Sealed Orders | [foundry-trench.md](../features/foundry-trench.md), [iron-dreadnought.md](../features/iron-dreadnought.md) | Not yet |
 | **The Alpha Werewolf** | The Moonlit Ring: the Howling Totem | [moonlit-ring.md](../features/moonlit-ring.md), [alpha-werewolf.md](../features/alpha-werewolf.md) | Not yet |
+| **The Storm Roc** (part 1 so far) | The Crown of Thunder: the Thunder Vane | [crown-of-thunder.md](../features/crown-of-thunder.md) | Not yet |
+| **The Pumpkin King** | The Crowfield: the Harvest Crown | [crowfield.md](../features/crowfield.md), [pumpkin-king.md](../features/pumpkin-king.md) | Not yet |
 
-The first two are the Witching Season's ([features/witching-season.md](../features/witching-season.md)); all six, the Iron Dreadnought's trench and the Alpha Werewolf's ring are on the shared lair framework (`lair/`). Vesperine and Madame Tatterlace roll their own loot table, `loot_table/entities/<boss>.json`, for each player who took part: their trophies, the Vesper Scythe and the Needle Rapier (Arms VII's), come at 15% a share and always on a player's first win. The Arms VII trophy tables `bosses/vesperine` and `bosses/tatterlace` are written by `tools/arms_variants.py` as the others' are, but nothing rolls them. The Yeti King and the Cinder Tyrant roll theirs the same way, a trophy always on a player's first win; they still credit damage alone, without Concordance Chunk A's support credit ([lair-encounter-credit.md](../features/lair-encounter-credit.md)).
+The first two are the Witching Season's ([features/witching-season.md](../features/witching-season.md)); all six, the Iron Dreadnought's trench and the Alpha Werewolf's ring are on the shared lair framework (`lair/`). Vesperine and Madame Tatterlace roll their own loot table, `loot_table/entities/<boss>.json`, for each player who took part: their trophies, the Vesper Scythe and the Needle Rapier (Arms VII's), come at 15% a share and always on a player's first win. The Arms VII trophy tables `bosses/vesperine` and `bosses/tatterlace` are written by `tools/arms_variants.py` as the others' are, but nothing rolls them. The Yeti King and the Cinder Tyrant roll theirs the same way, a trophy always on a player's first win. Both have been on Concordance Chunk A's support credit since Chunk B ([lair-encounter-credit.md](../features/lair-encounter-credit.md)). JEI's information pages on their loot and the encyclopedia's lair dossiers cover the first four (the Yeti King and the Cinder Tyrant since Chunk B; [concordance-first-loadout.md](../features/concordance-first-loadout.md), [arcane-concordance-first-route.md](../features/arcane-concordance-first-route.md)).
 
 ## The first eight (trophies built)
 
@@ -99,15 +101,15 @@ The Yeti King: 420 health (scaled for the party: half as much again for each pla
 | Glacial Spikes | He drives a fist into the ice, and cracks race towards his foe (0.8 s) | Spikes of ice burst up along the cracks, 12 blocks: 10 damage, thrown up |
 | Kin Call | He beats his chest and howls (1 s) | Two Yeti Whelps climb out of the dens; at most four at a time |
 
-**Yeti Whelps:** young yetis, 16 health, their blows 3 damage, quick. They go for the nearest player, drop nothing, and flee into the snow when he falls, resets or is gone. Whoever hurts one has taken part in his fight.
+**Yeti Whelps:** young yetis, 16 health, their blows 3 damage, quick. They go for the nearest player, drop nothing, and flee into the snow when he falls, resets or is gone. Whoever hurts one, or whose tamed creature does, has taken part in his fight.
 
 **Below a fifth, "The Fury of the Peaks":** his crown blazes and his eyes burn blue. Every cooldown (and his pause between attacks) is a third shorter, his slam bares twice the ring, and a charge that does not stun him is followed at once by another.
 
-**Left alone** for 10 seconds, he climbs back to his throne, healed; the snow drifts back, his whelps flee, and who hurt him is forgotten.
+**Left alone** for 10 seconds, he climbs back to his throne, healed; the snow drifts back, his whelps flee, and who took part is forgotten.
 
 ### His loot (per participant)
 
-A participant is a player who hurt him or his whelps and is within 64 blocks of the lake's centre when he falls.
+A participant is a player who qualified in his fight: by a blow to him or a whelp (their own or their tamed creature's, the felling blow included), by healing or warding other players against 4 of his side's blows with the Concordance; by baiting his charge into an ice column, having already taken part; or by bracing another player who then takes one of his throws, a Brace on oneself or the Water Bangle's counting for no one (since Concordance Chunk B, [lair-encounter-credit.md](../features/lair-encounter-credit.md); the Brace since its unit 5, B-09). One alive within 64 blocks of the lake's centre when he falls is paid at once; one who died in the fight once back on their feet; one who left the game in it on joining again. Each fall pays each player once.
 
 | Loot | Chance |
 | --- | --- |
@@ -115,18 +117,18 @@ A participant is a player who hurt him or his whelps and is within 64 blocks of 
 | **A trophy:** the Glacier Maul or the Rimeclaw (his `bosses/yeti_king` table, one of the two) | 15%; certain on a player's first kill |
 | **Yeti Mitten** | 25% |
 | **The Yeti King's Crown** | 20% |
-| 300 experience, shared out | always |
+| 300 experience, shared out among everyone paid | always |
 | The advancement **Abominable** | always |
 
 - **Yeti Fur:** a cheaper Frost Horn (fur in place of the two leather and a gold ingot), his "part of what summons him again"; or two white wool.
-- **Yeti Mitten:** held in the offhand, you never freeze: powder snow, his Frost Breath and the blizzard leave you warm.
+- **Yeti Mitten:** held in the offhand, you never freeze: powder snow, his Frost Breath and the blizzard leave you warm. It stays the permanent prize; since Concordance Chunk B, Winter Brine (brewed at an Alembic Crucible) gives Frostward, the timed answer to his frost ([the winter record](../features/arcane-concordance-winter.md)).
 - **The Yeti King's Crown:** a costume worn on the head, his crown of blue ice in small.
-- **The trophies** are Arms VII's ([features/arms-vii.md](../features/arms-vii.md)), with their Frost boon; until now they were in the creative tab only.
+- **The trophies** are Arms VII's ([features/arms-vii.md](../features/arms-vii.md)), with their Frost boon; until now they were in the creative tab only. Since Concordance Chunk B, the boon's slow is also Rimekeeping practice (an elective), with no number changed.
 - When he falls, Grey Mist opens in the middle of the lake, the way home.
 
 ### Rules kept
 
-He follows the rules every boss follows (above): his hall is his arena and resets when everyone leaves; every big attack is read before it lands; dying there keeps everything as Grave Goods; his health scales with the party and every participant rolls his loot; nothing in his hall can be built or broken, and the only blocks he changes are his own lake's snow, which drifts back; every opening costs a Frost Horn. Nothing a tier needs comes only from him.
+He follows the rules every boss follows (above): his hall is his arena and resets when everyone leaves; every big attack is read before it lands; dying there keeps everything: nothing is dropped, and the player respawns with it all; his health scales with the party and every participant rolls his loot; nothing in his hall can be built or broken, and the only blocks he changes are his own lake's snow, which drifts back; every opening costs a Frost Horn. Nothing a tier needs comes only from him.
 
 ## The Cinder Tyrant: the plan (being built)
 
@@ -201,17 +203,17 @@ The slag never cools. The shelves and the dry troughs are firm footing.
 
 In this phase the sluices take turns: one at a time is choked with slag and will not turn. It is shown by the slag glowing in its gate, and the choke moves every 20 seconds, so one or two always work. Every 30 seconds the channel surges again, announced as before.
 
-**Cinderlings:** small salamanders of glowing slag. They have 14 health and bite for 3 damage, setting you burning for 2 s. They are quick and immune to fire, but in a flooded trough they gutter out. They go for the nearest player, drop nothing, and crumble to ash when he falls, resets or is gone. Whoever hurts one has taken part in his fight.
+**Cinderlings:** small salamanders of glowing slag. They have 14 health and bite for 3 damage, setting you burning for 2 s. They are quick and immune to fire, but in a flooded trough they gutter out. They go for the nearest player, drop nothing, and crumble to ash when he falls, resets or is gone. Whoever hurts one, or whose tamed creature does, has taken part in his fight.
 
 **Below a fifth, "The Molten Heart":** his cracks blaze white. Every cooldown, and his pause between attacks, is a third shorter. His Ember Spit throws five, and his Kiln Breath sweeps 90°. Quenching him still works as before.
 
-**Left alone** for 10 seconds, he sinks back into the crucible, healed. The troughs drain, the sluices reset, his Cinderlings crumble, and who hurt him is forgotten.
+**Left alone** for 10 seconds, he sinks back into the crucible, healed. The troughs drain, the sluices reset, his Cinderlings crumble, and who took part is forgotten.
 
 **Fire Resistance**, from a potion or the Ember invocation Hearthguard, stops his fire: the breath, the slag, the wave, the fire patches and burning. It never stops his blows: the Tail Sweep, the Body Slam, the gobs' and cinders' impact, and the Cinderlings' bites. It helps the prepared without emptying the fight. Hearthguard is the planning pack's Ember link; its Tide, Rime and Strata links wait for those schools.
 
 ### His loot (per participant)
 
-A participant is a player who hurt him or his Cinderlings and is within 64 blocks of the bowl's centre when he falls.
+A participant is a player who qualified in his fight: by a blow to him or a Cinderling (their own or their tamed creature's, the felling blow included), or by healing or warding other players against 4 of his side's blows with the Concordance (since Concordance Chunk B, [lair-encounter-credit.md](../features/lair-encounter-credit.md); his slag's heat and burning are no one's blows, and he names no objective of his own). One alive within 64 blocks of the bowl's centre when he falls is paid at once; one who died in the fight once back on their feet; one who left the game in it on joining again. Each fall pays each player once.
 
 | Loot | Chance |
 | --- | --- |
@@ -219,7 +221,7 @@ A participant is a player who hurt him or his Cinderlings and is within 64 block
 | **A trophy:** the Cinderbrand or the Magmaw (his `bosses/cinder_tyrant` table, one of the two) | 15%; certain on a player's first kill |
 | **Salamander Charm** | 25% |
 | **The Tyrant's Crest** | 20% |
-| 300 experience, shared out | always |
+| 300 experience, shared out among everyone paid | always |
 | The advancement **Tempered** | always |
 
 - **Tyrant Scale:** two magma cream, for Fire Resistance; or a cheaper Kiln Seal, his part of what summons him again.
@@ -243,7 +245,7 @@ The planning pack's chapter 04 asks each lair to answer these:
 - **Who fights:** players who may fight a lair's boss (`LairBosses`), with party health as above.
 - **Reset:** when no eligible player is left, or he is left alone for 10 seconds.
 - **Clean-up:** his gobs, cinders, waves, fire patches and Cinderlings are his, capped, and gone with him.
-- **Death, disconnect and restart:** as every lair. Grave Goods keep what a player falls with, and instances close on a restart. Each participant's loot is rolled once when he falls.
+- **Death, disconnect and restart:** as every lair. Players keep their entire inventory and experience; Grave Goods catch residual drops, and instances close on a restart. Each participant's share is paid once and rolled when it is handed over: at once, or kept for one who died or left the game in the fight.
 - **An ordinary player** can do everything: the sluices are turned by hand, the bait is standing in a trough, and a hot Tyrant still takes half damage from any weapon.
 
 ### Rules kept
@@ -251,7 +253,7 @@ The planning pack's chapter 04 asks each lair to answer these:
 He follows the rules every boss follows (above):
 - his kiln is his arena, and resets when everyone leaves;
 - every big attack is read before it lands;
-- dying there keeps everything as Grave Goods;
+- dying there keeps everything: nothing is dropped, and the player respawns with it all;
 - his health scales with the party, and every participant rolls his loot;
 - nothing in his kiln can be built or broken, and the only blocks that change are his own troughs and slag, which come back;
 - every opening costs a Kiln Seal.
@@ -356,7 +358,7 @@ The planning pack's chapter 04 asks each lair to answer these:
 - **Who fights:** players who may fight a lair's boss (`LairBosses`), with party health as above.
 - **Reset:** when no eligible player is left, or she is left alone for 10 seconds.
 - **Clean-up:** her Likenesses, the Root Knot, her brews' pools, roots and hands are hers, capped, and gone with her.
-- **Death, disconnect and restart:** as every lair. Grave Goods keep what a player falls with, and instances close on a restart. Each participant's loot is rolled once when she falls.
+- **Death, disconnect and restart:** as every lair. A player who falls drops nothing and respawns with everything they carried, and instances close on a restart. Each participant's loot is rolled once when she falls.
 - **An ordinary player** can do everything: a lamp is lit by hand, a Likeness bursts at any blow or anything thrown, her shadow shows with particles off, and her roots, pools and grasps are read before they land. Her poison never kills, and milk or the chemical reactor's Antidote cures it.
 
 Of the planning pack's magic links, Radiance's is already in the game: its Revelation makes a creature glow, so cast on her it shows her as a lamp does. The others (Verdance clearing a path through her roots, Tether cutting the knot, Tide thinning a pool) wait for spells of those schools. None of them will be needed.
@@ -366,7 +368,7 @@ Of the planning pack's magic links, Radiance's is already in the game: its Revel
 She follows the rules every boss follows (above):
 - her fen is her arena, and resets when everyone leaves;
 - every big attack is read before it lands;
-- dying there keeps everything as Grave Goods;
+- dying there keeps everything: nothing is dropped, and the player respawns with it all;
 - her health scales with the party, and every participant rolls her loot;
 - nothing in her fen can be built or broken, and the only blocks that change are her own lamps, which burn again;
 - every opening costs a Hag Stone.
@@ -474,7 +476,7 @@ The planning pack's chapter 04 asks each lair to answer these:
 - **Who fights:** players who may fight a lair's boss (`LairBosses`), with party health as above.
 - **Reset:** when no eligible player is left, or he is left alone for 10 seconds.
 - **Clean-up:** his dead, bolts, bone lanes and chains are his, capped, and gone with him.
-- **Death, disconnect and restart:** as every lair. Grave Goods keep what a player falls with, and instances close on a restart. Each participant's loot is rolled once when he falls.
+- **Death, disconnect and restart:** as every lair. A player who falls drops nothing and respawns with everything they carried, and instances close on a restart. Each participant's loot is rolled once when he falls.
 - **An ordinary player** can do everything: a seal is broken and a name read by using them, the lit name is shown by its rune, its glow and the words over the screen, his bolts are struck back with any weapon or arrow, and every attack is read before it lands. Alone, a player breaks two seals, reads the scraped name back, and breaks the third.
 
 Of the planning pack's magic links, Radiance's is already in the game: its Revelation makes him glow, though it does not break his ward. The others (Echo reading a scraped name back from afar, Hollow turning one of his bolts, the Circlewrights holding an alcove's chain) wait for spells of those schools. None of them will be needed.
@@ -484,7 +486,7 @@ Of the planning pack's magic links, Radiance's is already in the game: its Revel
 He follows the rules every boss follows (above):
 - his archive is his arena, and resets when everyone leaves;
 - every big attack is read before it lands, and he is never warded for good: every round of seals opens him;
-- dying there keeps everything as Grave Goods;
+- dying there keeps everything: nothing is dropped, and the player respawns with it all;
 - his health scales with the party, and every participant rolls his loot;
 - nothing in his archive can be built or broken, and the only blocks that change are his own seals, stones and phylactery, which are put back;
 - every opening costs a Writ of Exhumation.
@@ -593,7 +595,7 @@ The planning pack's chapter 04 asks each lair to answer these:
 - **Who fights:** players who may fight a lair's boss (`LairBosses`), with party health as above.
 - **Reset:** when no eligible player is left, or he is left alone for 10 seconds.
 - **Clean-up:** his Sparkers, rivets, shells and charges are his, capped, and gone with him.
-- **Death, disconnect and restart:** as every lair. Grave Goods keep what a player falls with, and instances close on a restart. Each participant's loot is rolled once when he falls.
+- **Death, disconnect and restart:** as every lair. A player who falls drops nothing and respawns with everything they carried, and instances close on a restart. Each participant's loot is rolled once when he falls.
 - **An ordinary player** can do everything: a breaker is thrown and cleared by using it, the live pylon is shown by its crackling crown, its amber lamp and the words over the screen, cover is there for anyone, and every attack is read before it lands. Alone, a player can reach the lit pylon in the charge's 3 seconds, since he picks the pylon nearest them.
 
 Of the planning pack's magic links (a Tempest spell priming a terminal, Strata bracing against a piston, Clockheart helpers working a breaker, Tide cooling a vent), none is in the game yet: they wait for spells of those schools. None of them will be needed.
@@ -603,7 +605,7 @@ Of the planning pack's magic links (a Tempest spell priming a terminal, Strata b
 He follows the rules every boss follows (above):
 - his trench is his arena, and resets when everyone leaves;
 - every big attack is read before it lands, and he is never plated for good: every routed discharge opens him, and so does a charge into cover;
-- dying there keeps everything as Grave Goods;
+- dying there keeps everything: nothing is dropped, and the player respawns with it all;
 - his health scales with the party, and every participant rolls his loot;
 - nothing in his trench can be built or broken, and the only blocks that change are his own pylons and breakers, which are put back;
 - every opening costs Sealed Orders.
@@ -714,7 +716,7 @@ The planning pack's chapter 04 asks each lair to answer these:
 - **Who fights:** players who may fight a lair's boss (`LairBosses`), with party health as above.
 - **Reset:** when no eligible player is left, or he is left alone for 10 seconds.
 - **Clean-up:** his Packmates are his, capped at three, and gone with him.
-- **Death, disconnect and restart:** as every lair. Grave Goods keep what a player falls with, and instances close on a restart. Each participant's loot is rolled once when he falls.
+- **Death, disconnect and restart:** as every lair. A player who falls drops nothing and respawns with everything they carried, and instances close on a restart. Each participant's loot is rolled once when he falls.
 - **An ordinary player** can do everything: a bell is rung by using it, his hiding place is shown by his trail and his eyes, every attack is read before it lands, and the flush opens him to any weapon. Alone, the quarry can reach his bell in time, and silver and wolfsbane only make it easier.
 
 Of the planning pack's magic links (Echo reading the hunt's target, a Verdance refuge, Tether interrupting a pack signal), none is in the game yet: they wait for spells of those schools. None of them will be needed. The planning pack's offered story of being turned into a werewolf is not part of this fight: no blow of his changes a player.
@@ -724,7 +726,7 @@ Of the planning pack's magic links (Echo reading the hunt's target, a Verdance r
 He follows the rules every boss follows (above):
 - his ring is his arena, and resets when everyone leaves;
 - every attack is read before it lands, and his hide is never his last word: every bell rung in time opens him to any weapon;
-- dying there keeps everything as Grave Goods;
+- dying there keeps everything: nothing is dropped, and the player respawns with it all;
 - his health scales with the party, and every participant rolls his loot;
 - nothing in his ring can be built or broken, and the only blocks that change are his own trail, which knits back;
 - every opening costs a Howling Totem, and a full moon is never required to make or use one.
@@ -857,7 +859,7 @@ A participant is a player who hurt it or its sentries, and is within 64 blocks o
 - **Who fights:** players who may fight a lair's boss (`LairBosses`), with party health as above.
 - **Reset:** when no eligible player is left, or it is left alone for 10 seconds.
 - **Clean-up:** its sentries, shards, spikes and meteors are its own, capped, and gone with it.
-- **Death, disconnect and restart:** as every lair. Grave Goods keep what a player falls with, and instances close on a restart. Each participant's loot is rolled once when it falls.
+- **Death, disconnect and restart:** as every lair. A player who falls drops nothing and respawns with everything they carried, and instances close on a restart. Each participant's loot is rolled once when it falls.
 - **An ordinary player** can do everything: dials are turned by using them, the storm's side is shown by the dust and the words over the screen, the stones are cover from it, its core is open to any weapon, and every attack is read before it lands.
 
 ### Rules kept
@@ -865,16 +867,273 @@ A participant is a player who hurt it or its sentries, and is within 64 blocks o
 It follows the rules every boss follows (above):
 - its crater is its arena, and resets when everyone leaves;
 - every big attack is read before it lands, and there is always shelter from its storm;
-- dying there keeps everything as Grave Goods;
+- dying there keeps everything: nothing is dropped, and the player respawns with it all;
 - its health scales with the party, and every participant rolls its loot;
 - nothing in the Sanctum can be built or broken;
 - every opening costs an Altar Keystone.
 
 Nothing a tier needs comes only from it. The valley in the Overworld is never an arena: nothing fights there, and nothing there is changed by the fight.
 
+## The Pumpkin King: the plan (being built)
+
+A Halloween boss, built by [the boss playbook](BOSS_PLAYBOOK.md) as the bosses before him were: first his field and the summoning that opens it, then the King himself, his Jacks and his loot, each its own pull request with tests and pictures. On 23 October 2026 the owner asked for the next Halloween work and chose him, after the seasonal biome audit.
+
+The design joins three sources:
+- this page's own idea for him (below, "More bosses to consider"): a giant scarecrow made of the harvest, summoned with heirloom pumpkins in a bounded field, tied to the giant pumpkins, the scarecrows and the Headless Horseman already in the world; never the only source of anything core, and his drops kept after the season;
+- the planning pack's later backlog ([chapter 05](../plans/concordance-expansion-2026-10-10/05-new-boss-compendium.md), section 5): "cooperative harvest preparation and protecting a bounded field", avoiding "seasonal-only core ingredients or crop destruction outside the instance";
+- the Halloween harvest already in the world ([features/halloween-harvest.md](../features/halloween-harvest.md), [features/halloween-nights.md](../features/halloween-nights.md)): the heirloom pumpkins, the scarecrows and their heads, the crows they keep off, and the Horseman's flaming pumpkins.
+
+**The season.** He is a Witching Season boss, as Vesperine and Madame Tatterlace are ([features/witching-season.md](../features/witching-season.md#multiplayer-persistence-and-seasons)): his crown works on any night of the year by default, and only during the Halloween event when the server sets `lairs.off_season=off`. During the event his kill adds the Witching Season's event loot (`lairs.event_loot`): a roll of seasonal candy and a better chance of his costume. Ending the event takes nothing away.
+
+The numbers here are the plan's. Each part's feature record says what changed in building it. Part 1, the field and the crown: [features/crowfield.md](../features/crowfield.md); part 2, the King, his Jacks and his loot: [features/pumpkin-king.md](../features/pumpkin-king.md#changes-from-the-plan).
+
+*A scarecrow three times the height of a man, stuffed with straw into a patched harvest coat of burlap and sacking, hands of twisted corn husk, a crown of dried vines and corn ears, and for a head a giant carved pumpkin with a fire inside that burns out through its eyes and grin.* He is the oldest scarecrow, the one the crows answer. His field is a pumpkin patch walled with corn under a dusk that never ends, where whatever is planted ripens for him.
+
+### The Crowfield
+
+A pumpkin field at dusk, walled all round with standing corn:
+- **The arrival:** the **farmyard**, at the field's south edge: a yard of trodden earth behind a split-rail fence with a farm gate open into the field, a hay cart, a lamp post, a water trough, a bench of pumpkins and a crow on its perch. Behind it a lane between the corn fills with Grey Mist: the way home. The yard is safe.
+- **The field, the arena:** a square of tilled earth 45 blocks across, its rows running north and south, ridges of rooted earth between furrows. Pumpkins lie along the ridges, heirlooms among them (white, Jarrahdale, Cinderella, red kuri and kabocha), with a few jack-o'-lanterns glowing; low cover from two stacks of hay bales and a tipped-over cart.
+- **The corn:** the field is walled by **Crowfield corn**, three blocks tall and too thick to pass, its tassels over the top.
+- **The King's hills:** eight hills of dark loam in a ring round the centre, in a three-by-three grid 13 blocks apart (the centre taken by his post), so each is 13 blocks from the next round the ring. On each grows a **King's Gourd**, a great green gourd on its vine. They are the field's fixtures (part 2 ripens them).
+- **The King's Post:** at the centre, a tall post with a crossbar on a mound of hay bales, where he hangs waiting like any scarecrow.
+- **The moon:** a vast harvest moon low over the north-western corn; the sky a deep violet, an ember haze along the horizon.
+
+The lair-only blocks are fixtures like the other lairs': unbreakable, no items, no drops. Only the King's Gourds can be used.
+
+### The summoning: the Harvest Crown
+
+1. Craft a **Harvest Crown**: three heirloom pumpkins (any) over two gold ingots and a hay bale.
+2. Use it on a **scarecrow** that wears a head (any pumpkin it can wear), **at night**, in the Overworld, with the scarecrow's head **under the open sky**, **among the harvest**: at least 8 pumpkins or gourds within 6 blocks of it (pumpkins carved or not, jack-o'-lanterns, the heirlooms, the squashes and gourds, giant pumpkins: `#jugcraft:crowfield_harvest`).
+3. The crown settles on the scarecrow's head, the crows burst up out of the field crying, and Grey Mist rises where the crowner stands: they come to in the Crowfield's farmyard. The crown is used up; the scarecrow and the crops are untouched. For 60 seconds anyone can walk into the mist and follow. Nobody is taken in by standing near it.
+4. By day, outside the Overworld, with the scarecrow bare-headed or roofed over, with too few pumpkins about, or off-season on a server that keeps the rituals to the Halloween event, the crown only says why, and nothing is used up; likewise if every field is taken.
+
+Heirloom pumpkins grow all year from seeds found wild or traded, so the crown is never seasonal.
+
+### The fight
+
+The Pumpkin King has 400 health, scaled for the party: half as much again for each player after the first, at most two and a half times. He has armour 6. Falls never harm him.
+
+**Straw burns:** fire (burning, a fire weapon, flaming arrows) hurts him half as much again. Fire is a help, never a need.
+
+He hangs on his post, arms out on the crossbar, his head dark. He wakes when a player who can fight him steps through the farm gate into the field, or strikes him: he tears free of the post (2.5 s, unhurt meanwhile), his head bursts into flame and the crows burst out of the corn. He keeps to the field: more than 26 blocks from its centre, he is set back.
+
+**His rule: the Harvest.** Every 22 seconds he calls the harvest:
+- **He calls it:** he raises his arms and the crows cry (1.5 s), and two King's Gourds start to ripen: the one nearest the player he is fighting, and its neighbour round the ring. A ripening gourd swells and turns from green to gold to orange over 10 seconds, glowing, crows circling over it.
+- **Pick a ripening gourd** (use it) before it ripens, and it comes off the vine. Its hill is bare until a new green gourd sprouts there 20 seconds later.
+- **A gourd that ripens** lights up with a burning face and splits open: a **Jack-o'-Straw** climbs out (at most four at a time; beyond that the gourd feeds him instead, healing 4% of his health).
+- **Pick every gourd of a harvest before any lights**, and he is **bereft**: his head's fire gutters, he sags on his straw legs (staggered 2 s), and for 8 seconds every blow does half as much again (fire twice), and his Jacks stand dazed.
+
+From anywhere in the field, a sprinting player reaches every gourd of a harvest well inside its 10 seconds, alone or not: part 1's audit walks the field round the cover, from every open cell to the three gourds of the longest harvest either way round the ring, and keeps that within 80% of the time.
+
+**Phase 1, "The Reaping"** (full to half health):
+
+| Attack | Read it by | What it does |
+| --- | --- | --- |
+| Scythe Sweep | He draws back his scythe of bound corn and a rusted blade (0.8 s) | A sweep across his front, 4.5 blocks: 8 damage. Step back |
+| Gourd Toss | He plucks a pumpkin from the rows and lifts it overhead; a ring of embers glows where it will land (1.0 s) | A flaming pumpkin (the Horseman's) at a player up to 20 blocks away: 7 damage within 3 blocks, and set alight for 3 s. Step off the ring |
+| Crow Storm | He flings his arms wide and the crows rise from the corn (1.2 s) | The crows stream along a line from him, 14 blocks long and 3 wide, for 2 s: 2 damage every half second and Blindness for 2 s. Step out of the line |
+| The Harvest | Arms raised, the crows' cry (1.5 s) | Above |
+
+**At half health, "The Crowning":** he climbs back onto his post and his head flares white (2 s, unhurt). Two Jacks climb out of the rows, and the fight changes.
+
+**Phase 2, "The Hallowed Harvest"** (half to a quarter): he keeps every attack, calls the harvest every 18 seconds, three gourds in a row round the ring from the one nearest his foe, and adds:
+
+| Attack | Read it by | What it does |
+| --- | --- | --- |
+| Vine Snare | He drives a hand into the earth and the vines ripple along a furrow toward a player (1.2 s) | Vines lash up where they stand: 5 damage, rooted for 1.5 s (Slowness IV). Step across the furrow |
+| Head Roll | He lifts his burning head from his shoulders and sets it rolling (1.5 s) | It rolls along a line toward a player, 18 blocks long and 2 wide: 10 damage, thrown aside. Step out of the line |
+
+**Below a quarter, "The Last Harvest":** he calls the harvest every 15 seconds, three gourds at a time; they still ripen in 10, and the bereft window and his tells stay as long as ever.
+
+**Left alone** for 10 seconds, he climbs back onto his post, healed. His Jacks crumble to straw, his gourds go green again, and who hurt him is forgotten.
+
+**His Jacks, the Jack-o'-Straws:** little straw men with carved gourds for heads, lit inside: 20 health, a 3-damage swipe, quick on their feet. Fire burns them twice as fast. At most four at a time. They drop nothing and give no experience, and crumble when he falls or resets.
+
+### His loot (per participant)
+
+A participant is a player who hurt him or his Jacks, or picked a gourd of a harvest that left him bereft, and is within 64 blocks of the field's centre when he falls.
+
+| Loot | Chance |
+| --- | --- |
+| **The King's Ember**, the coal of his head's fire | 1, always |
+| **A trophy:** one of two new Arms VII weapons for him, the **Hallowreap** (a scythe) or the **Crowbill** (a war pick), with a new boon, **Fright** (his `bosses/pumpkin_king` table, one of the two) | 15%; certain on a player's first kill |
+| **The Crowward Charm** | 25% |
+| **The Pumpkin King's Crown** | 20% |
+| 300 experience, shared out | always |
+| The advancement **Uncrowned** | always |
+
+- **The King's Ember:** for those who never fight, a fuel that burns as long as a block of coal (80 items), and with any heirloom pumpkin it makes a **King's Lantern**, a jack-o'-lantern whose fire never goes out. No loop: nothing makes an ember but him.
+- **The Crowward Charm:** held in the offhand, crows will not come down on crops within 12 blocks of its holder, as a lit scarecrow keeps them off (`CropGuard`).
+- **The Pumpkin King's Crown:** a costume worn on the head, his crown of dried vines and corn ears (in `#jugcraft:trick_or_treat_costumes`).
+- **The trophies** are new to Arms VII ([features/arms-vii.md](../features/arms-vii.md)), which made none for him: two weapons and the **Fright** boon (a struck monster, never a boss, panics and runs for 1.5 s, once every 6 s per target). They come with part 2, as the owner chose.
+- During the Halloween event (and `lairs.event_loot=on`), a roll of seasonal candy and 10% more for the crown, as at Vesperine's and Madame Tatterlace's.
+- When he falls, his head drops from his shoulders and rolls to a stop, its fire going out; his straw collapses, the crows settle, and Grey Mist opens at his post, the way home.
+
+### The shared lair contract
+
+The planning pack's chapter 04 asks each lair to answer these:
+- **Arrival, staging, waking and return:** the farmyard is safe. He wakes when a player steps through the farm gate into the field, or strikes him. Grey Mist fills the lane behind the yard, and opens at his post when he falls.
+- **Fixtures:** the eight King's Gourds, which any player in the field may pick when one ripens, and the Grey Mist. Nothing else can be used, built or broken.
+- **The floor:** the field owns it. Only his gourds change (green, ripening, lit, picked), and all of them go back when he resets; each instance is placed fresh.
+- **Who fights:** players who may fight a lair's boss (`LairBosses`), with party health as above.
+- **Reset:** when no eligible player is left, or he is left alone for 10 seconds.
+- **Clean-up:** his Jacks are his, capped at four, and gone with him.
+- **Death, disconnect and restart:** as every lair. Grave Goods keep what a player falls with, and instances close on a restart. Each participant's loot is rolled once when he falls.
+- **An ordinary player** can do everything: a gourd is picked by using it, a ripening gourd glows with crows over it, every attack is read before it lands, and the bereft window opens him to any weapon. Alone, a player can pick both gourds of a harvest in time; fire only makes it easier.
+- **Outside the instance:** nothing. The crown is used up, but the scarecrow, its head and every crop round it are left as they were, and no crow of his comes out.
+
+### Rules kept
+
+He follows the rules every boss follows (above):
+- his field is his arena, and resets when everyone leaves;
+- every attack is read before it lands, and every harvest can be picked in time by one player;
+- dying there keeps everything as Grave Goods;
+- his health scales with the party, and every participant rolls his loot;
+- nothing in his field can be built or broken, and the only blocks that change are his own gourds;
+- every opening costs a Harvest Crown, and it works all year unless the server keeps it to Halloween.
+
+Nothing a tier needs comes only from him: heirloom pumpkins, gold and hay come without him, and so does every crop he guards.
+
+## The Storm Roc: the plan (being built)
+
+The seventh of the first eight, built by [the boss playbook](BOSS_PLAYBOOK.md): first his lair and the summoning that opens it, then the Roc himself, his fledglings and his loot, each its own pull request with tests and pictures. On 26 October 2026 the owner chose him as the next boss to build ("Storm Roc boss").
+
+The design joins two sources:
+- this page's own idea for him: a thunderbird nesting on the tallest pinnacle of the Highland and the Karst Pinnacles, who dives with lightning and gusts that throw players off the peak, and whose nest's lightning rods can be turned against him;
+- the planning pack's "Crown of Thunder" ([chapter 05](../plans/concordance-expansion-2026-10-10/05-new-boss-compendium.md#storm-roc--the-crown-of-thunder)):
+  - a sheltered summit ring with four rods, ledges and recovery routes;
+  - a fall that costs no belongings;
+  - a marked rod charged before a dive, which grounds him when his dive is lined up with it;
+  - a one-second wing cone, a two-second dive lane, wind strips with ground arrows that stay, and widely spaced lightning marks;
+  - flights short enough that melee players get regular openings, and no flight equipment needed.
+
+The numbers here are the plan's. Each part's feature record says what changed in building it. Part 1, the summit and the vane: [features/crown-of-thunder.md](../features/crown-of-thunder.md). Part 2, the Roc, his fledglings and his loot, will have `features/storm-roc.md`.
+
+*An eagle as big as a cart, slate-grey with a storm-blue sheen, his flight feathers tipped white like lightning, a hooked beak of dark horn and eyes that burn electric blue. When he spreads his wings the air crackles.* He nests on the highest crag of the highest peak, and the storms follow him.
+
+### The Crown of Thunder
+
+The summit of a pinnacle above the clouds, under a storm that never breaks:
+- **The arrival:** a **terrace** below the summit's south edge, a few steps down from it. Behind it, in an arch of grey stone, the **Grey Mist**: the way home. The terrace is safe.
+- **The summit, the arena:** a ring of weathered stone, calcite and turf about 36 blocks across, rimmed by **boulders** with gaps between them. The boulders give shelter from the wind, and the gaps are where a gust can throw a player off.
+- **The four Storm Rods:** at the summit's north, east, south and west, 13 blocks from its middle: tall copper rods on stone plinths. A rod charged by the storm crackles and glows blue (part 2).
+- **The ledges:** below the summit's east and west edges, five blocks down, two ledges catch a player thrown off. From each, steps climb back up the cliff to the summit: the recovery routes.
+- **The nest:** on a crag beyond the summit's north edge, four blocks higher, a great nest of woven branches, where he waits.
+- **Below:** only cloud and sky. A fall past the ledges is caught by the mist, which throws you back to the arrival for the lair's toll. It is never a death and never a loss of belongings.
+
+The lair-only blocks are fixtures like the other lairs': unbreakable, no items, no drops. These are the **Storm Rods** and the **nest's woven branches**. Nothing in the Crown can be used, built or broken. Only the storm charges the rods.
+
+### The summoning: the Thunder Vane
+
+1. Craft a **Thunder Vane** from two feathers, a lightning rod, three copper ingots and a compass.
+2. Use it **under the open sky, while it rains or thunders**:
+   - **in the mountains:** the Highland, the Karst Pinnacles, or a mountain, peak or hill biome (biome tag `jugcraft:thunder_vane_lands`);
+   - **high up:** standing at y 120 or above.
+3. Lightning strikes beside you and the vane spins wild, and the wind takes you to the Crown of Thunder's terrace. The vane is used up, and Grey Mist rises where you stood: for 60 seconds anyone can walk into the mist and follow.
+4. In fair weather, under a roof, below y 120, outside the mountains or outside the Overworld, the vane only says why, and nothing is used up. The same happens if every Crown is taken.
+
+The bolt is only light and thunder: it hurts nobody and lights nothing.
+
+### The fight
+
+The Storm Roc has 400 health, scaled for the party: half as much again for each player after the first, at most two and a half times. He has armour 8. Lightning and falls never harm him, and knockback hardly moves him.
+
+He perches on his nest, wings folded. He wakes when a player who can fight him steps onto the summit, or strikes him: he rises screeching as lightning splits the sky (2.5 s, unhurt meanwhile). He keeps to the summit: more than 30 blocks from its middle, he is set back.
+
+He flies, but never for long: no flight lasts more than 6 seconds before he lands to strike, so melee players always get their openings.
+
+**His rule: the Storm Rods.** Every 16 seconds he dives:
+- **A rod charges:** one of the four Storm Rods crackles and glows blue (2 s). The bar over the screen says which ("The north rod is charged").
+- **He marks his lane:** he climbs over the summit's edge and fixes on the player he was fighting. A line of sparks runs from him through that player and follows them for 2 seconds, then holds still.
+- **He dives** down the lane: 12 damage, and a heavy shove aside, to everyone within 1.5 blocks of it.
+- **If his lane passes within 2.5 blocks of the charged rod,** the rod grounds him as he passes it. A bolt arcs from the rod into him, he crashes onto the summit and lies there stunned for 6 seconds, wings spread. Every blow does half as much again, and he cannot fly.
+  - So the player he marks puts the charged rod between him and themselves while the lane follows them.
+  - Then they step out of the lane as he comes.
+- A rod he passed far from discharges harmlessly.
+
+From anywhere on the summit, a sprinting player can reach a place that lines the charged rod up between him and themselves inside the 4 seconds of the tell. The audit will walk the summit to keep that true.
+
+**Phase 1, "The Gathering Storm"** (full to half health):
+
+| Attack | Read it by | What it does |
+| --- | --- | --- |
+| Wing Buffet | He lands, rears back and spreads his wings wide (1.0 s) | A gust in a cone in front of him, 6 blocks deep: 7 damage, and thrown 3 blocks back. Step behind him or to the side |
+| Storm Dive | A rod charges, and a line of sparks marks his lane (2.0 s) | Above |
+| Lightning Marks | Three crackling rings on the summit, at least 6 blocks apart (1.5 s) | A bolt strikes each ring: 8 damage within 1.5 blocks. Step out of the ring |
+
+**At half health, "The Squall Rises":** he climbs high and circles screaming (3 s, unhurt). The wind rises, and his fledglings leave the nest.
+
+**Phase 2, "The Squall"** (half to a fifth): he keeps every attack, dives every 14 seconds, and adds:
+
+| Attack | Read it by | What it does |
+| --- | --- | --- |
+| Wind Strips | Arrows appear on the summit floor in two strips 3 blocks wide, pointing the way the wind will blow (1.5 s) | For 4 seconds the wind blows along each strip and pushes everyone in it the way its arrows point, toward the summit's edge. Behind a boulder you are sheltered. The arrows stay until the wind drops |
+| Fledglings | He screams to the nest | Up to three Gale Fledglings |
+
+**Below a fifth, "The Eye of the Storm":** he dives every 12 seconds and marks five rings, not three. His tells stay as long as ever.
+
+**Left alone** for 10 seconds, he flies back to his nest, healed. The rods go quiet, the wind drops, his fledglings return to the nest, and who hurt him is forgotten.
+
+**His fledglings, the Gale Fledglings:** half-grown rocs, 20 health, a 3-damage peck, quick fliers that dart at his foe. He has at most three at a time. They come at half health and again every 30 seconds while he has fewer than three. They drop nothing and give no experience.
+
+### His loot (per participant)
+
+A participant is a player who hurt him or his fledglings, or stood within 2.5 blocks of the rod that grounded him, and is within 64 blocks of the summit's middle when he falls.
+
+| Loot | Chance |
+| --- | --- |
+| **Roc Feathers**, two or three | 1, always |
+| **A trophy:** Stormcaller or Galefeather (his `bosses/storm_roc` table, one of the two) | 15%; certain on a player's first kill |
+| **The Weather-Vane Lens** | 25% |
+| **The Roc's Crest** | 20% |
+| 300 experience, shared out | always |
+| The advancement **Eye of the Storm** | always |
+
+- **Roc Feathers** are for those who never fight: each makes four feathers, and two make the next Thunder Vane without its lightning rod. Neither recipe gains anything.
+- **The Weather-Vane Lens,** held in the offhand, tells its holder the coming weather every few seconds: "Rain in about 6 minutes", "Thunder now". It is a convenience: vanilla's lightning rods and plain watching of the sky still do the same work.
+- **The Roc's Crest:** a costume worn on the head, his slate-and-storm-blue crest of feathers.
+- **The trophies** are Arms VII's ([features/arms-vii.md](../features/arms-vii.md)), with their Gale boon. Until now they were in the creative tab only.
+- When he falls, he crashes onto the summit with a last thunderclap, and Grey Mist opens on his nest's crag, the way home.
+
+### The shared lair contract
+
+The planning pack's chapter 04 asks each lair to answer these:
+- **Arrival, staging, waking and return:** the terrace is safe. He wakes when a player steps onto the summit or strikes him. The Grey Mist stands in the terrace's arch, and opens on the nest's crag when he falls.
+- **Fixtures:** the Storm Rods, which only the storm charges, and the Grey Mist. Nothing else can be used, built or broken.
+- **The floor:** the summit owns it, and his fight changes no block of it. His wind arrows are laid over it and lifted when the wind drops, and each instance is placed fresh.
+- **Who fights:** players who may fight a lair's boss (`LairBosses`), with party health as above.
+- **Reset:** when no eligible player is left, or he is left alone for 10 seconds.
+- **Clean-up:** his fledglings, lightning marks and wind arrows are his, capped, and gone with him.
+- **Death, disconnect and restart:** as every lair. A player who falls drops nothing and respawns with everything they carried, and instances close on a restart. Each participant's loot is rolled once when he falls.
+- **An ordinary player** can do everything without flying gear:
+  - every attack is read before it lands;
+  - the charged rod is named and glows;
+  - a fall off the summit lands on a ledge with steps back up, or is caught by the mist;
+  - the grounding opens him to any weapon.
+
+Of the planning pack's magic links, none is needed:
+- Tempest handling the rods' charge more easily;
+- Radiance showing the rod to use;
+- Strata's Brace easing the wind's shove.
+
+They wait for those schools' spells. The Iron Dreadnought's Grounding Strap halves his lightning, as it halves all electric harm.
+
+### Rules kept
+
+He follows the rules every boss follows (above):
+- the summit is his arena, and resets when everyone leaves;
+- every attack is read before it lands, and every dive can be turned against him;
+- dying there keeps everything: nothing is dropped, and the player respawns with it all;
+- his health scales with the party, and every participant rolls his loot;
+- nothing on the summit can be built or broken, and his fight changes no block of it;
+- every opening costs a Thunder Vane, made from things players already make.
+
+Nothing a tier needs comes only from him: feathers, copper and weather all come without him.
+
 ## More bosses to consider (no trophies yet)
 
-- **The Pumpkin King** (Halloween nights): a giant scarecrow made of the harvest. It would be summoned with heirloom pumpkins in a bounded field, and it ties into the giant pumpkins, the scarecrows and the Headless Horseman already in the world. It must not be the only source of anything core, and what it drops must be kept after the season ends.
+- **The Pumpkin King** (Halloween nights): a giant scarecrow made of the harvest. It would be summoned with heirloom pumpkins in a bounded field, and it ties into the giant pumpkins, the scarecrows and the Headless Horseman already in the world. It must not be the only source of anything core, and what it drops must be kept after the season ends. *Now built, to [his plan above](#the-pumpkin-king-the-plan-being-built).*
 - **The Headless Horseman, as a boss fight:** it already exists as a Halloween-night encounter ([features/halloween-nights.md](../features/halloween-nights.md)). It could gain a lair and a trophy, such as a lantern-headed flail.
 - **The Marrow Colossus** (Nether, Marrow Heap): a giant made of bones that sheds parts of itself as it is hurt. Bone-themed trophies would fit the bonecarved style.
 - **The Chorus Sovereign** (End, Chorus Reef and Phantom Garden): a crowned shulker-like being that teleports with its arena. It suits levitation or void boons.

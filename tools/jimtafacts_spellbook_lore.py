@@ -3,8 +3,11 @@ import json
 MATERIALS=('frozen_bone','divine_pearl','dragonskin','arcane_rune','cooldown_rune','protection_rune','eldritch_manuscript','frosted_helve','permafrost_shard','energized_core','chained_book','mithril_weave','divine_soulshard','dead_king_phylactery','dead_king_phylactery_shard','disc_fragment_flame_still_burns')
 SPECIAL=('netherward_tincture','tincture_of_forgetfulness','archevoker_logbook_translated','archevoker_logbook_untranslated','music_disc_dead_king_lullaby','music_disc_flame_still_burns','music_disc_whispers_of_ice')
 POTIONS=('instant_mana_one','instant_mana_two','instant_mana_three','instant_mana_four')
-def items():return ['jimta_spellbooks_'+n for n in (*MATERIALS,*SPECIAL)]
+def items():return ['jimta_spellbooks_'+n for n in (*MATERIALS,*SPECIAL,'chronicle','workshop_guide')]
 def generate(copy,definition,texture,dump,RES,ART,lang):
+ import jimtafacts_guides
+ jimtafacts_guides.generate(False)
+ lang.update({'item.jugcraft.jimta_spellbooks_chronicle':'Workshop Chronicle','item.jugcraft.jimta_spellbooks_workshop_guide':'Workshop Guide'})
  source=ART.parents[1]/'data/irons_spellbooks';texts=json.loads((ART/'lang/en_us.json').read_text(encoding='utf-8'))
  for n in (*MATERIALS,*SPECIAL):
   dump(RES/f'assets/jugcraft/items/jimta_spellbooks_{n}.json',definition('irons_spellbooks:item/'+n,'jimta_spellbooks_'+n));lang['item.jugcraft.jimta_spellbooks_'+n]=texts.get('item.irons_spellbooks.'+n,n.replace('_',' ').title())

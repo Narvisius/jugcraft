@@ -18,6 +18,7 @@ SECTIONS = {
     "sky": "The Sky",
     "workers": "Workers",
     "logistics": "Deliveries",
+    "pacts": "Pacts",
     "relics": "Relics",
     "hexes": "Curses and Wards",
     "conclave": "The Conclave",
@@ -98,8 +99,8 @@ def codex():
              "Press **J** (Controls: Concordance Journal) to open your journal. It shows what the server knows of your "
              "work: your Focus and stage, every research entry you have met and what its next state asks, each route to "
              "the next stage and what it still needs, and, once you know their traditions, your Vitae, the sky's "
-             "forecast, your workers, deliveries, relics, the curses and wards on you, your Conclave standing, your "
-             "spires and your Prima Materia."),
+             "forecast, your workers and deliveries, what Stolas still waits for, relics, the curses and wards on you, "
+             "your Conclave standing, your spires and your Prima Materia."),
             ("text", "Reading It",
              "Each line says in words where you stand and what to do next. **Exact values** (in the journal, or in the "
              "Concordance settings) add the figures behind them: how many of what each way needs, limits and caps. "

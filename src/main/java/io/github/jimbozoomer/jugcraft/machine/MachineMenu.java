@@ -190,7 +190,7 @@ public class MachineMenu extends AbstractContainerMenu {
 				addSlot(new Slot(container, kind.slots + index, upgradeX(index), UPGRADE_Y) {
 					@Override
 					public boolean mayPlace(ItemStack stack) {
-						return MachineUpgrades.isUpgrade(stack);
+						return MachineUpgrades.accepts(kind,stack);
 					}
 				});
 			}
@@ -218,7 +218,7 @@ public class MachineMenu extends AbstractContainerMenu {
 	private boolean moveIntoMachine(ItemStack stack, int machineSlots) {
         if (kind.hasProcessTool() && kind.acceptsProcessTool(stack))
             return moveItemStackTo(stack, kind.slots, kind.slots + 1, false);
-		boolean upgrade = MachineUpgrades.isUpgrade(stack) && kind.upgradeSlots() > 0;
+		boolean upgrade = MachineUpgrades.accepts(kind,stack) && kind.upgradeSlots() > 0;
 		int from = upgrade ? kind.slots : 0;
 		int to = upgrade ? machineSlots : kind.slots;
 		for (int slot = from; slot < to; slot++) {

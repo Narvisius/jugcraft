@@ -2,10 +2,11 @@
 
 Status: approved. The owner chose this concept on 5 October 2026 and approved its numbers on 6 October 2026: "the
 Thallite numbers all look good carry on". It is built in slices, each its own PR (below).
-- **Slice 1 (ore and materials)** is implemented on `claude/thallite-ore` (PR
-  [#221](https://github.com/jimbozoomer-byte/jugcraft/pull/221)), awaiting review. Its CI passed; it has not been played.
-- **Slice 2 (gear)** is implemented on `claude/thallite-gear`, awaiting review. **It has not been compiled or played.**
-- Slices 3 to 5 are not built.
+- **Slice 1 (ore and materials)** is merged to main
+  ([#221](https://github.com/jimbozoomer-byte/jugcraft/pull/221), 6 October 2026). Its CI passed.
+- **Slice 2 (gear)** is merged to main with the October 7 integration
+  ([#239](https://github.com/jimbozoomer-byte/jugcraft/pull/239), 7 October 2026).
+- Neither slice has been recorded as played by a person. Slices 3 to 5 are not built.
 
 Proposal issue: none. On 5 October 2026 the owner drew a complete set for a new ore in one chartreuse palette and asked
 what it should be: "maybe something in the magic tier". The set covers:
@@ -124,16 +125,30 @@ Two bounded traits; neither adds damage, defense or speed.
   - Crusher and Pulverizer: 2 a block (the Pulverizer with a 10% iron dust byproduct);
   - Ore Washer: 3;
   - acid leaching: 4.
-- **Existing output consumer:** players' tools, armor and arms. Machines take thallite plates and dust through shared
-  `c:` tags.
+- **Existing output consumer:** players' tools, armor and arms; and Root and Rivet, which roots a Thallite plate into a
+  Rooted Thallite Foundation ([rituals](arcane-concordance-rituals.md)) (Concordance Chunk C, C-04; not merged; its
+  tests passed in CI, run 38693262154). The foundation is the base of the [Crucible Stand](crucible-stand.md) (C-05; not
+  merged; its tests passed in CI, run 38726242149), whose recipe
+  also loads only with the machines and thallite switches. No other recipe asks for a plate (`c:plates/thallite`). With
+  the machines or thallite switch off its plate cannot be made (a plate made earlier can still be offered). Thallite
+  dust smelts into ingots.
 - **Technology connection:**
   - a METALS entry with its `c:` tags, so the Ore Drill and Prospector find it;
   - ore processing as above;
   - a plate (Metal Press) with a dearer hand-made route.
   - **No alloy, on purpose:** thallite's technology role is narrow, as [DESIGN.md](../DESIGN.md) allows when the reason
     is stated.
-- **Magic connection:** the Earth school's metal. These come in the first magic-system PR, not here:
-  - **The Thallite Focus:** Earth's starting instrument; 1 raw thallite, 2 ingots, 1 stick.
+- **Magic connection:** the Earth school's metal, through the Arcane Concordance's Strata. Today (Concordance Chunk B,
+  unit 3; [Rime and Strata](arcane-concordance-rime-strata.md)): raw thallite is a Stratawrighting specimen (the ingot
+  is not), and taking a creature's blow in Earthbound armour on natural ground, where Rooted holds, counts as Strata
+  practice, an elective. Nothing here changed for it: no Thallite number, and nothing added to `earthen_ground`.
+  Unit 4 holds that (B-P28; [the winter record](arcane-concordance-winter.md)): nothing joins `earthen_ground`, no
+  Thallite number changes in Chunk B (`check_winter_links`, and a diff of the tables against unit 3), and snow and ice
+  are not natural ground, so Rooted and Regrowth do nothing in the Glacier Hall. The rest waits for slice 5 (the Chunk B
+  contract's B-P14):
+  - **The Thallite Focus:** Earth's starting instrument; 1 raw thallite, 2 ingots, 1 stick. The Concordance's Initiate's
+    Wand is every school's first instrument, so a focus with its limits would add nothing; it earns its place as the
+    instrument for earthwork.
   - **Two first spells** sharing one temporary block, both with tight limits:
     - **Earthen Steps:** a short stair or bridge;
     - **Earthen Bulwark:** a 3×2 wall.

@@ -67,7 +67,7 @@ public class ConcordanceWayfaringGameTests {
 
 	/** A survival player on {@code STAND}; with {@code lore}, one who understands Relic Lore. */
 	private static ServerPlayer wayfarer(GameTestHelper helper, boolean lore) {
-		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		ServerPlayer player = TestPlayers.mock(helper);
 		player.setGameMode(GameType.SURVIVAL);
 		BlockPos absolute = helper.absolutePos(STAND);
 		player.snapTo(absolute.getX() + 0.5, absolute.getY(), absolute.getZ() + 0.5, 0.0F, 0.0F);

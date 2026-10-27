@@ -21,6 +21,18 @@ import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraft.world.phys.*;
 
 public class StarterWorkshopGameTests {
+    @GameTest public void companionCraftingStateDoesNotAttachToSmithingTables(GameTestHelper h) {
+        var crafting = new BlockPos(1, 1, 1);
+        var smithing = new BlockPos(2, 1, 1);
+        h.setBlock(crafting, Blocks.CRAFTING_TABLE);
+        h.setBlock(smithing, Blocks.SMITHING_TABLE);
+        h.assertTrue(h.getLevel().getBlockEntity(h.absolutePos(crafting)) instanceof local.peepo.CraftingTableCompanionBlockEntity,
+            "Ordinary crafting tables retain companion work state");
+        h.assertTrue(h.getLevel().getBlockEntity(h.absolutePos(smithing)) == null,
+            "Smithing tables do not inherit an incompatible companion block entity");
+        h.succeed();
+    }
+
     @GameTest public void starterWorkshopExportsActualItemRegistry(GameTestHelper h) {
         new SurvivalRecipeGameTests().exportActualItemRegistryForTheAcquisitionAudit(h);
     }

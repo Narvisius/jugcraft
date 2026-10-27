@@ -64,6 +64,7 @@ public class HurledBoulderEntity extends Entity implements GeoEntity {
 		boulder.velocity = new Vec3(dx / ticks, (to.y - from.y + 0.5 * GRAVITY * ticks * ticks) / ticks, dz / ticks);
 		boulder.snapTo(from.x, from.y, from.z, king.getYRot(), 0.0F);
 		level.addFreshEntity(boulder);
+		king.keep(boulder);
 		level.playSound(null, from.x, from.y, from.z, SoundEvents.SNOWBALL_THROW, SoundSource.HOSTILE, 2.0F, 0.4F);
 		return boulder;
 	}
@@ -74,7 +75,7 @@ public class HurledBoulderEntity extends Entity implements GeoEntity {
 		if (!(level() instanceof ServerLevel level)) {
 			return;
 		}
-		YetiKingEntity king = owner != null && level.getEntity(owner) instanceof YetiKingEntity found && found.isAlive() ? found : null;
+		YetiKingEntity king = YetiKingEntity.owning(level, owner, getUUID());
 		if (king == null || tickCount > LIFE) {
 			discard();
 			return;

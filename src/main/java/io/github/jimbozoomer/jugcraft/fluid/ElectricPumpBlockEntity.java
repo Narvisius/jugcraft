@@ -60,6 +60,51 @@ public class ElectricPumpBlockEntity extends BlockEntity {
 	final SingleFluidStorage buffer;
 	private final Storage<FluidVariant> exposed;
 	private int lavaCooldown;
+    public java.util.UUID owner;
+    private BlockPos factoryIntake;
+    private long nextScan;
+    private int tubeDepth,scannedDepth;
+    private float oldTubeLength;
+    private long tubeChangedAt;
+    public float tubeLength(float partial){
+        float elapsed=level==null?5:Math.clamp(level.getGameTime()-tubeChangedAt+partial,0,5)/5F;
+        return oldTubeLength+(Math.max(0,tubeDepth-.5F)-oldTubeLength)*elapsed;
+    }
+    private void setTubeDepth(int depth){
+        depth=Math.clamp(depth,0,32);if(depth==tubeDepth)return;
+        oldTubeLength=tubeLength(0);tubeDepth=depth;tubeChangedAt=level==null?0:level.getGameTime();setChanged();
+        if(level!=null&&!level.isClientSide())level.sendBlockUpdated(worldPosition,getBlockState(),getBlockState(),net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+    }
+    public boolean factoryPump(){return getBlockState().is(JugcraftFluids.JIMTA_PUMP);}
+    /** Source pump reach adapted to shared fluids: a loaded 32-block tube and a bounded connected pool scan. */
+    private BlockPos findFactoryIntake(ServerLevel level){
+        scannedDepth=0;
+        var actor=io.github.jimbozoomer.jugcraft.concordance.Authority.answering(level,owner);
+        if(actor==null)return null;
+        for(int depth=1;depth<=32;depth++){
+            var at=worldPosition.below(depth);
+            if(!level.isInWorldBounds(at)||!level.hasChunkAt(at)||!io.github.jimbozoomer.jugcraft.finance.ClaimTransfers.allowed(level,worldPosition,at)
+                    ||!io.github.jimbozoomer.jugcraft.concordance.Authority.mayChange(level,actor,at))return null;
+            if(FluidStorage.SIDED.find(level,at,Direction.UP)!=null){scannedDepth=depth;return at;}
+            var state=level.getBlockState(at);var fluid=state.getFluidState();
+            if(!fluid.isEmpty()){
+                var queue=new java.util.ArrayDeque<BlockPos>();var seen=new java.util.HashSet<BlockPos>();queue.add(at);seen.add(at);
+                for(int inspected=0;!queue.isEmpty()&&inspected<64;inspected++){
+                    var next=queue.removeFirst();
+                    if(!level.hasChunkAt(next)||!io.github.jimbozoomer.jugcraft.finance.ClaimTransfers.allowed(level,worldPosition,next)
+                            ||!io.github.jimbozoomer.jugcraft.concordance.Authority.mayChange(level,actor,next))continue;
+                    var sample=level.getFluidState(next);
+                    if(!sample.getType().isSame(fluid.getType()))continue;
+                    if(sample.isSource()&&level.getBlockState(next).getBlock() instanceof LiquidBlock){scannedDepth=depth;return next;}
+                    for(var direction:Direction.values()){
+                        var candidate=next.relative(direction);
+                        if(candidate.distManhattan(at)<=8&&seen.size()<128&&seen.add(candidate))queue.addLast(candidate);
+                    }
+                }return null;
+            }
+            if(!state.isAir())return null;
+        }return null;
+    }
 
 	public ElectricPumpBlockEntity(BlockPos pos, BlockState state) {
 		super(JugcraftFluids.PUMP_ENTITY, pos, state);
@@ -91,10 +136,14 @@ public class ElectricPumpBlockEntity extends BlockEntity {
 		if (lavaCooldown > 0) {
 			lavaCooldown--;
 		}
-		if (energy.getAmount() < tier.energyPerTick()) {
-			return;
-		}
-		long moved = pull(level, pos.below());
+        BlockPos intake=pos.below();
+        if(factoryPump()){
+            // Re-scan the full path every pulse; a wall/claim added above a cached pool cannot be bypassed.
+            if(level.getGameTime()<nextScan)return;
+            nextScan=level.getGameTime()+5;factoryIntake=findFactoryIntake(level);intake=factoryIntake;setTubeDepth(scannedDepth);
+        }
+        if (energy.getAmount() < tier.energyPerTick()) return;
+		long moved = intake==null?0:pull(level, intake);
 		if (buffer.amount > 0) {
 			moved += FluidNetworks.pushToNeighbors(level, pos, buffer, pumpRate, OUTPUTS);
 		}
@@ -125,13 +174,12 @@ public class ElectricPumpBlockEntity extends BlockEntity {
 			// Water is treated as a spring: the source block is not removed, matching the steam generator.
 			return insert(Fluids.WATER, Math.min(room, pumpRate));
 		}
-		if (fluid.getType() == Fluids.LAVA && lavaCooldown == 0 && room >= FluidConstants.BUCKET) {
-			long taken = insert(Fluids.LAVA, FluidConstants.BUCKET);
-			if (taken == FluidConstants.BUCKET) {
-				level.setBlockAndUpdate(below, Blocks.AIR.defaultBlockState());
-				lavaCooldown = LAVA_COOLDOWN;
-			}
-			return taken;
+		if ((fluid.getType() == Fluids.LAVA || factoryPump()) && lavaCooldown == 0 && room >= FluidConstants.BUCKET) {
+            try(Transaction transaction=Transaction.openOuter()){
+                long taken=buffer.insert(FluidVariant.of(fluid.getType()),FluidConstants.BUCKET,transaction);
+                if(taken!=FluidConstants.BUCKET||!level.setBlockAndUpdate(below,Blocks.AIR.defaultBlockState()))return 0;
+                transaction.commit();lavaCooldown=LAVA_COOLDOWN;return taken;
+            }
 		}
 		return 0;
 	}
@@ -153,6 +201,8 @@ public class ElectricPumpBlockEntity extends BlockEntity {
 		energy.setAmount(input.getLong("energy").orElse(0L));
 		buffer.readValue(input);
 		lavaCooldown = input.getInt("lava_cooldown").orElse(0);
+        owner=input.read("factory_owner",net.minecraft.core.UUIDUtil.CODEC).orElse(null);
+        oldTubeLength=tubeLength(0);tubeDepth=Math.clamp(input.getIntOr("tube_depth",0),0,32);tubeChangedAt=level==null?0:level.getGameTime();
 	}
 
 	@Override
@@ -161,5 +211,9 @@ public class ElectricPumpBlockEntity extends BlockEntity {
 		output.putLong("energy", energy.getAmount());
 		buffer.writeValue(output);
 		output.putInt("lava_cooldown", lavaCooldown);
+        if(owner!=null)output.store("factory_owner",net.minecraft.core.UUIDUtil.CODEC,owner);
+        output.putInt("tube_depth",tubeDepth);
 	}
+    @Override public net.minecraft.nbt.CompoundTag getUpdateTag(net.minecraft.core.HolderLookup.Provider r){return saveWithoutMetadata(r);}
+    @Override public net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket getUpdatePacket(){return net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket.create(this);}
 }

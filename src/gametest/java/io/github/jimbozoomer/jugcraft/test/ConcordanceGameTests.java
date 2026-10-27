@@ -71,7 +71,10 @@ public class ConcordanceGameTests {
 	private static final List<String> FIRST_LOADOUT_RECIPES = List.of("initiate_wand", "lampwright_bench", "pyromaniacs_hood",
 			"pyromaniacs_tunic", "pyromaniacs_pants", "pyromaniacs_shoes", "pyromancers_hat", "pyromancers_robes",
 			"pyromancers_leggings", "pyromancers_boots", "lesser_fire_focus", "fire_bangle", "fire_focus", "leather_belt",
-			"angelic_feather", "kraken_shell", "infernal_claws", "angelheart_vial", "phoenix_down", "amphibian_boot", "ice_breaker");
+			"angelic_feather", "kraken_shell", "infernal_claws", "angelheart_vial", "phoenix_down", "amphibian_boot", "ice_breaker",
+			"lesser_water_focus", "water_focus", "water_bangle", "nereids_hood", "nereids_tunic", "nereids_pants", "nereids_shoes",
+			"aquamancers_hat", "aquamancers_robes", "aquamancers_leggings", "aquamancers_boots", "winterguards_helmet",
+			"winterguards_chestplate", "winterguards_leggings", "winterguards_boots");
 
 	private static void floor(GameTestHelper helper) {
 		for (int x = 0; x <= 7; x++) {
@@ -83,7 +86,7 @@ public class ConcordanceGameTests {
 
 	/** A survival player standing on {@code standAt} (relative), facing south (+Z), level. */
 	private static ServerPlayer player(GameTestHelper helper, BlockPos standAt) {
-		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		ServerPlayer player = TestPlayers.mock(helper);
 		player.setGameMode(GameType.SURVIVAL);
 		BlockPos absolute = helper.absolutePos(standAt);
 		player.snapTo(absolute.getX() + 0.5, absolute.getY(), absolute.getZ() + 0.5, 0.0F, 0.0F);
@@ -396,8 +399,9 @@ public class ConcordanceGameTests {
 
 	/**
 	 * Concordance Chunk A's first loadout (docs/features/concordance-first-loadout.md): every piece of it a crafting
-	 * recipe makes, the optional Wayfaring trinkets and the Focus of Fire included, has that recipe loaded on the server,
-	 * so survival makes the whole loadout with no new recipe. (The Kindled Lantern is the bench's, tested above.)
+	 * recipe makes, the optional Wayfaring trinkets, the Focus of Fire and (Concordance Chunk B, B-10) the Rime travel kit
+	 * included, has that recipe loaded on the server, so survival makes the whole loadout with no new recipe. (The Kindled
+	 * Lantern is the bench's, tested above.)
 	 */
 	@GameTest(maxTicks = 20)
 	public void theFirstLoadoutIsMadeInSurvival(GameTestHelper helper) {

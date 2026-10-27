@@ -28,6 +28,21 @@ with its own gesture, sound, particles and icon:
 | Flashstep | movement | carries you forward at 1.2 blocks a tick | 4 (3) | instant | 4 s | mastered | Intensify | walls; knockback resistance; 4 s cooldown |
 | Lanternward | support | restores 4 health and absorbs up to 4 damage for 10 s, for you and up to 3 party members within 4 blocks | 7 (6) | 1 s | 15 s | mastered | Widen, Prolong | allies must be close; party only; a long, interruptible cast |
 
+**Other Principles' invocations** are authored the same way and taught by their own research:
+[Ember](arcane-concordance-ember.md) added Hearthspark (utility), Hearthguard (defense), Cinderbolt and Hearthflare
+(damage), and Concordance Chunk B, unit 3 ([Rime and Strata](arcane-concordance-rime-strata.md)) adds Rimebind (defense:
+a 20% slow for 3 s, then a 2 s thaw), Brace (support: half the knockback of the next blow, for the caster's party) and
+Preserve (utility: an Alembic Crucible keeps its heat band for 60 s). That makes 13 of the 16 an instrument's tunings
+can hold (`Tunings.MAX`, which `check_mod_data` holds the invocations to), each signature still unique.
+
+**The spell bar's keys run out.** A player can hold 13 invocations and an inscribed spell, but Spell Engine's spell bar
+gives keys to its first 9 only (`SpellHotbar.update` skips the rest). The bar lists a player's invocations sorted by id,
+then the inscribed spell, so whatever comes after the ninth gets no key and is not on the bar. Which ones drop depends
+on what was learned: with First Light mastered and Hearthbinding and Rimekeeping understood, Revelation and Rimebind;
+Stratawrighting's Brace, second by id, pushes Preserve off too, and Hearthflare on top of that (Hearthbinding mastered)
+Lanternward. An inscribed spell, always last, is the first to go. The order, a cap or a loadout is the owner's open
+question from #250; `check_mod_data` keeps this paragraph to the count.
+
 **An instrument grants nothing by itself.** The spell bar offers only the invocations your research has taught; a
 second or better instrument does not add any. An instrument decides what an invocation may become: each invocation is
 compiled for each instrument, and one that does not fit an instrument cannot be cast with it.
@@ -200,4 +215,4 @@ No worldgen, creatures, loot or seasons. Effects obey spawn protection, protecte
   with "missing" reasons rather than misread.
 - Save compatibility: nothing saved changes form; worlds keep knowledge, Focus and inscriptions.
 - Open: a GuiLib tuning screen (the command is the interface every player has); invocations for the other Principles
-  arrive with their research.
+  arrive with their research (Ember's and Rime's and Strata's have; Tempest's and the rest have not), within the 16.

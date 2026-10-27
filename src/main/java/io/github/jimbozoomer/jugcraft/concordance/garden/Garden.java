@@ -76,6 +76,11 @@ public final class Garden {
 	public static final int AWAKEN_LIMIT = 64;
 	/** Water (or a wet sprinkler) this far round a bed keeps it wet. */
 	public static final int WATER_REACH = 4;
+	/**
+	 * A Greenwarden tends a strained bed at most once in this many ticks (Concordance Chunk C, C-08, C-P61). Keep equal to
+	 * tools/concordance_ecology.py.
+	 */
+	public static final int TEND_TICKS = 600;
 
 	/** What a Mulch Maw eats, by worth in quarters of a nutrient (data packs add to the tags). */
 	public static final List<TagKey<Item>> MULCH = List.of(
@@ -292,23 +297,29 @@ public final class Garden {
 
 	/**
 	 * Gives {@code amount} nutrients, one at a time, each to the poorest awake bed of {@code beds} with room (the first on a
-	 * tie). Returns how many were given: what has nowhere to go is never made.
+	 * tie). Returns how many were given: what has nowhere to go is never made. A gift is never compost: it eases no strain.
 	 */
 	public static int nourish(List<VerdantBedBlockEntity> beds, int amount) {
 		int given = 0;
 		for (int i = 0; i < amount; i++) {
-			List<Integer> stores = new ArrayList<>();
-			for (VerdantBedBlockEntity bed : beds) {
-				stores.add(bed.awake() ? bed.nutrients() : VerdantBedBlockEntity.CAPACITY);
-			}
-			int poorest = Nourishment.poorest(stores, VerdantBedBlockEntity.CAPACITY);
-			if (poorest < 0) {
+			VerdantBedBlockEntity bed = poorest(beds);
+			if (bed == null) {
 				break;
 			}
-			beds.get(poorest).give(1);
+			bed.give(1);
 			given++;
 		}
 		return given;
+	}
+
+	/** The poorest awake bed of {@code beds} with room (the first on a tie), or null when none has room. */
+	public static @Nullable VerdantBedBlockEntity poorest(List<VerdantBedBlockEntity> beds) {
+		List<Integer> stores = new ArrayList<>();
+		for (VerdantBedBlockEntity bed : beds) {
+			stores.add(bed.awake() ? bed.nutrients() : VerdantBedBlockEntity.CAPACITY);
+		}
+		int poorest = Nourishment.poorest(stores, VerdantBedBlockEntity.CAPACITY);
+		return poorest < 0 ? null : beds.get(poorest);
 	}
 
 	/**

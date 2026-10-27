@@ -251,9 +251,15 @@ RESEARCH = {
 # "counter" is how an opponent or the world answers it, for the codex.
 INVOCATION_MAX_TUNINGS = 3  # Java: RulesParser.MAX_TUNINGS
 INVOCATION_SCALING_MAX = 2.0  # Java: RulesParser.MAX_SCALING (damage per point of Spell Power)
+# Spell Engine's spell bar keys, spell_hotbar_1 to 9: SpellHotbar.update gives a key to the first nine options only and
+# skips the rest (Spell Engine 1.10.9). ConcordanceSpells offers learned invocations sorted by id and an inscribed spell
+# last, so past nine the last ones have no key until the owner chooses an order, a cap or a loadout (#250);
+# check_invocations holds the invocations record to say so while there are more.
+SPELL_BAR_KEYS = 9
 # The vanilla particles invocations show on release (Spell Engine skips an unknown id, so a typo would show nothing).
 INVOCATION_PARTICLES = ("minecraft:end_rod", "minecraft:wax_on", "minecraft:glow", "minecraft:electric_spark",
-                        "minecraft:cloud", "minecraft:flame", "minecraft:small_flame", "minecraft:lava")
+                        "minecraft:cloud", "minecraft:flame", "minecraft:small_flame", "minecraft:lava",
+                        "minecraft:snowflake", "minecraft:white_ash")
 INVOCATION_ROLES = {
     "damage": "Damage", "defense": "Defense", "movement": "Movement", "support": "Support",
     "investigation": "Investigation", "utility": "Utility",
@@ -364,7 +370,8 @@ EFFECT_KINDS = {
 }
 # Creatures that harmful control (pushes and statuses) does not move or slow, and those it reaches at half strength.
 EFFECT_IMMUNE = ["minecraft:ender_dragon", "minecraft:wither", "minecraft:warden", "minecraft:elder_guardian"]
-EFFECT_RESISTANT = ["minecraft:iron_golem", "minecraft:ravager", "minecraft:piglin_brute"]
+EFFECT_RESISTANT = ["minecraft:iron_golem", "minecraft:ravager", "minecraft:piglin_brute",
+                    f"{MOD}:yeti_king", f"{MOD}:cinder_tyrant"]  # B-P8: only these two lair keepers
 # Blocks an interaction effect may use as a player would, and plants a harvesting effect may gather (besides ripe
 # crops, which are always gathered and replanted).
 # Vanilla tags are optional entries, so a renamed tag in a later version empties the entry instead of breaking the list.
@@ -458,6 +465,8 @@ import concordance_journal as journal  # noqa: E402
 import concordance_composer as composer  # noqa: E402
 # Roadmap step 27 (tools/concordance_signs.py): signs of what really happened, the warnings' sounds and the codex page.
 import concordance_signs as signs  # noqa: E402
+# Concordance Chunk C, C-01 (tools/concordance_diagnostics.py): the shared diagnostic vocabulary's words.
+import concordance_diagnostics as diagnostics  # noqa: E402
 ITEMS.update(spire.ITEMS)
 BLOCKS.update(spire.BLOCKS)
 rituals.STRUCTURES.update(spire.STRUCTURES)
@@ -495,11 +504,32 @@ for _module in EE_MODULES:
                   for name, info in getattr(_module, "ITEMS", {}).items()})
     BLOCKS.update(getattr(_module, "BLOCKS", {}))
 BLOCKS.update(trinkets.BLOCKS)
+# Concordance Chunk B, unit 3 (tools/concordance_rime.py, tools/concordance_strata.py): Rimekeeping and Stratawrighting,
+# and their invocations, Rimebind, Preserve and Brace (their authored words join COMPONENTS below).
+import concordance_rime as rime  # noqa: E402
+import concordance_strata as strata  # noqa: E402
+RESEARCH.update(rime.RESEARCH)
+RESEARCH.update(strata.RESEARCH)
+INVOCATIONS.update(rime.INVOCATIONS)
+INVOCATIONS.update(strata.INVOCATIONS)
+# Concordance Chunk B unit 4 (tools/concordance_rime_kit.py, B-10): Rime's travel kit, and its foci and bangle in Ember's
+# two slots, whose item tags Ember writes (one writer for each file).
+import concordance_rime_kit as rime_kit  # noqa: E402
+ITEMS.update(rime_kit.ITEMS)
+ember.SLOT_ITEMS.update(rime_kit.TRINKETS)
+# Concordance Chunk D (tools/concordance_pacts.py): Stolas's Regard (D-03), the pact perch and Stolas (D-04, D-05).
+import concordance_pacts as pacts  # noqa: E402
+RESEARCH.update(pacts.RESEARCH)
+BLOCKS.update(pacts.BLOCKS)
+# Concordance Chunk D, D-07 (tools/concordance_roster.py): the roster's words, limits and icons, the journal's pacts lines
+# and the Ars Nouveau helpers' roster kinds (G13).
+import concordance_roster as roster  # noqa: E402
 # Everything a player can examine or study: each research entry's specimens (Java: JugcraftConcordance.SPECIMENS).
 SPECIMEN_TAGS = [SPECIMEN_TAG, rituals.CIRCLE_SPECIMEN_TAG, alchemy.ALCHEMY_SPECIMEN_TAG, ecology.GARDEN_SPECIMEN_TAG,
                  celestial.CELESTIAL_SPECIMEN_TAG, crimson.CRIMSON_SPECIMEN_TAG, workers.BINDING_SPECIMEN_TAG,
                  artifice.ARTIFICE_SPECIMEN_TAG, relics.RELIC_SPECIMEN_TAG, equivalence.ASSAY_SPECIMEN_TAG,
-                 hexes.SYMPATHY_SPECIMEN_TAG, hexes.DREAM_SPECIMEN_TAG, ember.EMBER_SPECIMEN_TAG]
+                 hexes.SYMPATHY_SPECIMEN_TAG, hexes.DREAM_SPECIMEN_TAG, ember.EMBER_SPECIMEN_TAG,
+                 rime.RIME_SPECIMEN_TAG, strata.STRATA_SPECIMEN_TAG, pacts.STOLAS_SPECIMEN_TAG]
 ALL_SPECIMENS_TAG = f"{MOD}:concordance_specimens"
 
 _UNDERSTOOD = {"research": f"{MOD}:first_light", "state": "understood"}
@@ -592,6 +622,8 @@ COMPONENTS = {
              "name": "Mend", "text": "Lanternward's healing light."},
 }
 COMPONENTS.update(ember.COMPONENTS)
+COMPONENTS.update(rime.COMPONENTS)
+COMPONENTS.update(strata.COMPONENTS)
 import nouveau_spells
 _nouveau_research, _nouveau_components = nouveau_spells.registry_definitions()
 RESEARCH.update(_nouveau_research)
@@ -721,7 +753,7 @@ def persistence(numbers):
 
 
 # Statuses invocations give, in the codex's words.
-STATUS_NAMES = dict(ember.STATUS_NAMES)
+STATUS_NAMES = {**ember.STATUS_NAMES, **rime.STATUS_NAMES, **strata.STATUS_NAMES}
 
 
 def school_name(school):
@@ -749,7 +781,12 @@ def operation_summary(op):
     if effect == "status":
         return f"{STATUS_NAMES.get(op['status'], op['status'])} for {seconds(op['duration'])} seconds"
     if effect == "alteration":
-        return "kindles a hearth" if op.get("school") == ember.COMPONENTS["kindling"]["operation"]["school"] else "puts out fire"
+        if op.get("school") == ember.COMPONENTS["kindling"]["operation"]["school"]:
+            return "kindles a hearth"
+        if op.get("school") == rime.COMPONENTS[rime.PRESERVE_WORD]["operation"]["school"]:
+            return (f"holds an Alembic Crucible's heat in its band for {seconds(rime.PRESERVE_HOLD_TICKS)} seconds (longer with "
+                    "a focus of water)")
+        return "puts out fire"
     return effect
 
 
@@ -774,10 +811,11 @@ def invocation_codex():
             ],
         },
     }
-    # First Light's invocations, then Hearthbinding's in a row below them.
+    # First Light's invocations, then Hearthbinding's in a row below them, then Rimekeeping's and Stratawrighting's.
     positions = {("first_light", "understood"): [(2, 0), (2, 2), (0, 2)],
                  ("first_light", "mastered"): [(4, 0), (4, 2), (4, 4)],
-                 ("hearthbinding", "understood"): [(0, 6), (2, 6), (4, 6)], ("hearthbinding", "mastered"): [(6, 6)]}
+                 ("hearthbinding", "understood"): [(0, 6), (2, 6), (4, 6)], ("hearthbinding", "mastered"): [(6, 6)],
+                 ("rimekeeping", "understood"): [(0, 8), (2, 8)], ("stratawrighting", "understood"): [(0, 10)]}
     for key, info in INVOCATIONS.items():
         research = info["research"].split(":")[1]
         teacher = RESEARCH[research]["name"]
@@ -814,7 +852,8 @@ def invocation_codex():
             "pages": [
                 ("text", info["name"], f"{info['description']}\\\n\\\n{stats} {learned}"),
                 ("text", "Tuning and Counters",
-                 "Tunings:\\\n" + "\\\n".join(tunings) + f"\\\n\\\n**Counter.** {info['counter']}"),
+                 "Tunings:\\\n" + ("\\\n".join(tunings) or "- none: it always does the same")
+                 + f"\\\n\\\n**Counter.** {info['counter']}"),
             ],
         }
     return entries
@@ -1030,6 +1069,7 @@ def codex():
         **celestial.codex(),
         **crimson.codex(),
         **workers.codex(),
+        **pacts.codex(),
         **jug_nouveau.codex(),
         **logistics.codex(),
         **artifice.codex(),
@@ -1040,6 +1080,9 @@ def codex():
         **progression.codex(),
         **spire.codex(),
         **ember.codex(),
+        **rime.codex(),
+        **rime_kit.codex(),
+        **strata.codex(),
         **trinkets.codex(),
         **alchemical_gear.codex(),
         **dark_matter.codex(),
@@ -1168,6 +1211,8 @@ CATEGORIES = {
     **conclave.CATEGORY,
     **spire.CATEGORY,
     **ember.CATEGORY,
+    **rime.CATEGORY,
+    **strata.CATEGORY,
 }
 
 ENTRY_BACKGROUNDS = {None: "square_gray", "encountered": "square_gray", "observed": "square_gray",
@@ -1508,15 +1553,24 @@ SOUND_EVENTS.update(rituals.SOUND_EVENTS)
 SOUND_EVENTS.update(alchemy.SOUND_EVENTS)
 SOUND_EVENTS.update(signs.SOUND_EVENTS)
 SOUND_EVENTS.update(ember.SOUND_EVENTS)
+SOUND_EVENTS.update(rime.SOUND_EVENTS)
+SOUND_EVENTS.update(strata.SOUND_EVENTS)
+# Concordance Chunk D, D-06 (D-S5): Stolas's cues (tools/concordance_pacts.py), played from runtime files.
+SOUND_EVENTS.update(pacts.SOUND_EVENTS)
+# Events that play the owner's recordings (copied by tools/owner_art.py), or runtime files, instead of a drawn cue:
+# event -> sound files.
+SOUND_FILES = {**ember.SOUND_FILES, **strata.SOUND_FILES, **pacts.SOUND_FILES}
 
 
 def sounds():
     """Each event plays its drawn cue (tools/concordance_sounds.py), or the owner's recordings it is given instead
-    (tools/concordance_ember.py SOUND_FILES), one picked at random."""
+    (SOUND_FILES: tools/concordance_ember.py's and tools/concordance_strata.py's), or, for Stolas's cues, runtime files
+    (tools/concordance_pacts.py's), one picked at random. The Exchange artifacts' events are
+    tools/concordance_ee_artifacts.py's."""
     return {**{event: {"subtitle": f"subtitles.{MOD}.{event}",
-                    "sounds": [{"name": f"{MOD}:{name}", "attenuation_distance": 16}
-                               for name in ember.SOUND_FILES.get(event, [f"concordance/{event.split('.', 1)[1]}"])]}
-            for event in SOUND_EVENTS}, **ee_artifacts.sounds()}
+                       "sounds": [{"name": f"{MOD}:{name}", "attenuation_distance": 16}
+                                  for name in SOUND_FILES.get(event, [f"concordance/{event.split('.', 1)[1]}"])]}
+               for event in SOUND_EVENTS}, **ee_artifacts.sounds()}
 
 
 MESSAGES = {
@@ -1586,9 +1640,13 @@ MESSAGES = {
     **equivalence.MESSAGES,
     **hexes.MESSAGES,
     **ember.MESSAGES,
+    **rime.MESSAGES,
+    **strata.MESSAGES,
+    **pacts.MESSAGES,
     **conclave.MESSAGES,
     **progression.MESSAGES,
     **spire.MESSAGES,
+    **roster.MESSAGES,
 }
 
 SCREEN_TEXT = {
@@ -1636,6 +1694,8 @@ TOOLTIPS = {
     **hexes.TOOLTIPS,
     **conclave.TOOLTIPS,
     **spire.TOOLTIPS,
+    **rime.TOOLTIPS,
+    **pacts.TOOLTIPS,
 }
 
 
@@ -1821,6 +1881,7 @@ def write_all(write, assets, data, lang, condition, self_drop):
     celestial.write_all(write, assets, data, lang, condition, self_drop)
     crimson.write_all(write, assets, data, lang, condition, self_drop)
     workers.write_all(write, assets, data, lang, condition, self_drop)
+    pacts.write_all(write, assets, data, lang, condition, self_drop)
     logistics.write_all(write, assets, data, lang, condition, self_drop)
     artifice.write_all(write, assets, data, lang, condition, self_drop)
     relics.write_all(write, assets, data, lang, condition, self_drop)
@@ -1830,6 +1891,9 @@ def write_all(write, assets, data, lang, condition, self_drop):
     progression.write_all(write, data, lang)
     spire.write_all(write, assets, data, lang, condition, self_drop)
     ember.write_all(write, assets, data, lang, condition, self_drop)
+    rime.write_all(write, assets, data, lang, condition, self_drop)
+    rime_kit.write_all(write, assets, data, lang, condition, self_drop)
+    strata.write_all(write, assets, data, lang, condition, self_drop)
     trinkets.write_all(write, assets, data, lang, condition, self_drop)
     alchemical_gear.write_all(write, assets, data, lang, condition, self_drop)
     dark_matter.write_all(write, assets, data, lang, condition, self_drop)
@@ -1840,6 +1904,9 @@ def write_all(write, assets, data, lang, condition, self_drop):
     journal.lang_entries(lang)
     composer.lang_entries(lang)
     signs.lang_entries(lang)
+    diagnostics.lang_entries(lang)
+    pacts.lang_entries(lang)
+    roster.lang_entries(lang)
     # Items.
     write(assets / "models" / "item" / "initiate_wand.json",
           {"parent": "minecraft:item/handheld", "textures": {"layer0": rid("item/initiate_wand")}})
@@ -1976,6 +2043,7 @@ def write_data(write, res):
     celestial.write_data(write, data)
     crimson.write_data(write, data)
     workers.write_data(write, data)
+    pacts.write_data(write, data)
     logistics.write_data(write, data)
     artifice.write_data(write, data)
     relics.write_data(write, data)
@@ -2009,6 +2077,10 @@ def tags(tags):
     artifice.tags(tags)
     relics.tags(tags)
     equivalence.tags(tags)
+    rime.tags(tags)
+    rime_kit.tags(tags)
+    strata.tags(tags)
+    pacts.tags(tags)
     hexes.tags(tags)
     conclave.tags(tags)
     spire.tags(tags)

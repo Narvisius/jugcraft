@@ -14,8 +14,12 @@ import java.util.function.Supplier;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
@@ -23,17 +27,20 @@ import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 /**
- * One fight with a lair boss (Concordance Chunk A, A-05): who took part and how, kept by the boss while it lives. A
- * player qualifies for the boss's reward by any one of these:
+ * One fight with a lair boss (Concordance Chunk A, A-05; the Yeti King's and the Cinder Tyrant's since Chunk B): who
+ * took part and how, kept by the boss while it lives. A player qualifies for the boss's reward by any one of these:
  * <ul>
  * <li><b>damage</b>: any blow to the boss or a creature that counts for it (Vesperine's skulls and harvest souls, Madame
- * Tatterlace's egg sacs and spiderlings; not Vesperine's Grave Thralls), as before Chunk A, or by a creature they
- * tamed;</li>
+ * Tatterlace's egg sacs and spiderlings, the Yeti King's whelps, the Cinder Tyrant's Cinderlings; not Vesperine's Grave
+ * Thralls), as before Chunk A, or by a creature they tamed;</li>
  * <li><b>healing</b>: at least {@value #HEALING} health given back to other players the fight had hurt, counting no
- * more than the hurt not yet healed;</li>
+ * more than the hurt not yet healed: by the Concordance's healing or (Concordance Chunk C, C-02) by the Regeneration of
+ * a Stillroot Poultice put on them in the fight, each of its heals credited as it comes, one health at most;</li>
  * <li><b>warding</b>: at least {@value #WARDING} of the fight's damage soaked by a ward they put on another player;</li>
- * <li><b>an objective</b>: a deed the boss names, such as a ward relit in Vesperine's Harvest or a fellow player cut
- * from Madame Tatterlace's thread, each counted once a fight.</li>
+ * <li><b>an objective</b>: a deed the boss names, such as a ward relit in Vesperine's Harvest, a fellow player cut from
+ * Madame Tatterlace's thread, the Yeti King's charge baited into an ice column by one already in his fight, or a Brace
+ * one player put on another that meets his push (B-09); each key counts once a fight (a Brace's names the braced player
+ * and the tick, so each Brace that meets his push is its own deed).</li>
  * </ul>
  * Healing yourself, healing hurt the fight did not do (a fall, another player's blow), healing past full health, a ward
  * that soaks nothing and a deed done again all count for nothing; past qualifying, more of anything adds nothing. The
@@ -41,7 +48,10 @@ import org.jspecify.annotations.Nullable;
  * {@value #REACH} blocks of the boss's arena while the fight was on, measured from their health and absorption before
  * and after each blow, and no more than the health they lack (what rest, food or a potion healed is no longer there to
  * heal); a ward's soak is the absorption a blow took, up to what the ward gave. Healing and wards are seen where the
- * Concordance applies them (its effect boundary), so a potion, food or another mod's healing is not counted. At most
+ * Concordance applies them (its effect boundary), and a poultice's Regeneration where it heals (read at each tick's end,
+ * each blow and each Concordance heal, from its own time left; no mixin), so a potion, food or another mod's healing is
+ * not counted, except that one landing in the same tick as one of a poultice's heals may count for that heal, up to one
+ * health. At most
  * {@value #MAX_PLAYERS} players are recorded a fight. Players who die within its reach while it is on are excused, and paid wherever they are if the boss
  * falls; players who leave the game there are paid later if they are still away when it falls, and otherwise like anyone
  * else (see {@link LairRewards}). Nothing here is saved: a boss that unloads mid-fight forgets who took part, as
@@ -56,6 +66,10 @@ public final class Encounter {
 	public static final float WARDING = 4.0F;
 	/** How far from the arena's centre a player counts as in the fight (the reward's own reach, as before). */
 	public static final double REACH = 64.0;
+	/** The status a Stillroot Poultice carries, whose heals its helper is credited for (Concordance Chunk C, C-02). */
+	public static final String POULTICE_STATUS = "minecraft:regeneration";
+	/** What one heal of vanilla Regeneration gives back (26.3's RegenerationMobEffect.applyEffectTick). */
+	public static final float REGENERATION_HEAL = 1.0F;
 
 	/** Fights in progress (server thread; one per awake boss). */
 	private static final List<Encounter> ACTIVE = new CopyOnWriteArrayList<>();
@@ -71,6 +85,8 @@ public final class Encounter {
 	private final Set<String> deeds = new HashSet<>();
 	private final Map<UUID, Float> hurt = new HashMap<>();
 	private final Map<UUID, Ward> wards = new HashMap<>();
+	/** Stillroot Poultices other players put on players in this fight, by patient (C-02); at most {@value #MAX_PLAYERS}. */
+	private final Map<UUID, Mending> mends = new HashMap<>();
 	private final Set<UUID> excused = new HashSet<>();
 	/** Left the game within reach while the fight was on (paid later only if still away when the boss falls). */
 	private final Set<UUID> away = new HashSet<>();
@@ -107,6 +123,13 @@ public final class Encounter {
 	private record Ward(UUID caster, float left, long until) {
 	}
 
+	/**
+	 * A Stillroot Poultice one player put on another (C-02): who put it on, the level of the Regeneration it gave, and that
+	 * Regeneration's time left and the patient's health when last read.
+	 */
+	private record Mending(UUID helper, int amplifier, int left, float health) {
+	}
+
 	/** A fight for {@code boss}, whose arena is round {@code centre}. */
 	public Encounter(Entity boss, Supplier<Vec3> centre) {
 		this.boss = boss;
@@ -136,6 +159,9 @@ public final class Encounter {
 			float soaked = Math.max(0.0F, before[1] - player.getAbsorptionAmount());
 			for (Encounter fight : ACTIVE) {
 				if (fight.contains(player)) {
+					// C-02: a poultice's heals before this blow are its helper's, judged from the health the blow found (before
+					// the hurt is settled below); its count starts again from the health the blow left.
+					fight.readMending(player, before[0], player.getHealth());
 					// Whatever healed them since the fight last hurt them (rest, food, a potion) is no longer the fight's.
 					fight.settle(player, before[0]);
 					if (fights) {
@@ -164,6 +190,13 @@ public final class Encounter {
 		ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
 			ACTIVE.clear();
 			BEFORE.clear();
+		});
+		// C-02: at each tick's end, after players' own ticks (where their Regeneration heals), each fight reads its
+		// poultices. Nothing is done while no fight is on.
+		ServerTickEvents.END_SERVER_TICK.register(server -> {
+			for (Encounter fight : ACTIVE) {
+				fight.readMendings(server);
+			}
 		});
 	}
 
@@ -201,14 +234,19 @@ public final class Encounter {
 
 	/**
 	 * The Concordance applied a helpful effect: {@code amount} health restored, or a ward that may soak {@code amount},
-	 * lasting {@code ticks}. Credited in every fight round the patient (the boundary's observer calls this).
+	 * lasting {@code ticks}. Credited in every fight round the patient (the boundary's observer calls this). A healing,
+	 * whoever gave it, also closes the reading of the patient's Stillroot Poultice (C-02): what it mended before is its
+	 * own, this healing is not.
 	 */
 	public static void helped(@Nullable ServerPlayer helper, LivingEntity patient, boolean healing, float amount, int ticks) {
-		if (helper == null || !(patient instanceof ServerPlayer player) || helper == player || amount <= 0.0F) {
+		if (!(patient instanceof ServerPlayer player)) {
 			return;
 		}
 		for (Encounter fight : around(player)) {
-			if (!fight.contains(helper)) {
+			if (healing) {
+				fight.readMending(player, player.getHealth() - amount, player.getHealth());
+			}
+			if (helper == null || helper == player || amount <= 0.0F || !fight.contains(helper)) {
 				continue;
 			}
 			if (healing) {
@@ -217,6 +255,41 @@ public final class Encounter {
 				fight.warded(helper, player, amount, ticks);
 			}
 		}
+	}
+
+	/**
+	 * Concordance Chunk C (C-02): {@code helper} put a Stillroot Poultice on {@code patient} and its Regeneration took
+	 * (began, or grew stronger or longer). In every fight round the patient that the helper is in, each heal it gives from
+	 * now is the helper's healing, until it runs out or is no longer the poultice's, the patient leaves the fight, or the
+	 * fight is forgotten. A later poultice that takes replaces the note, as a later ward does. The salve's observer calls
+	 * this (Lairs.register).
+	 */
+	public static void mended(ServerPlayer helper, ServerPlayer patient) {
+		MobEffectInstance regeneration = patient.getEffect(MobEffects.REGENERATION);
+		if (helper == patient || regeneration == null || regeneration.isInfiniteDuration()) {
+			return;
+		}
+		for (Encounter fight : around(patient)) {
+			boolean room = fight.mends.containsKey(patient.getUUID()) || fight.mends.size() < MAX_PLAYERS;
+			if (room && fight.contains(helper) && fight.share(helper.getUUID()) != null) {
+				fight.mends.put(patient.getUUID(), new Mending(helper.getUUID(), regeneration.getAmplifier(), regeneration.getDuration(),
+						patient.getHealth()));
+			}
+		}
+	}
+
+	/**
+	 * How many times vanilla Regeneration at {@code amplifier} healed while its time left ran from {@code was} down to
+	 * {@code now} ticks: once on each tick whose time left, before it counts down, is a multiple of 50 >> amplifier (every
+	 * tick if that is 0): 26.3's RegenerationMobEffect.shouldApplyEffectTickThisTick, given that time by
+	 * MobEffectInstance.tickServer. LairEncounterGameTests.regenerationHealsOnItsVanillaInterval measures it.
+	 */
+	public static int regenerationHeals(int amplifier, int now, int was) {
+		if (was <= now) {
+			return 0;
+		}
+		int interval = 50 >> amplifier;
+		return interval > 0 ? was / interval - now / interval : was - now;
 	}
 
 	/** This fight's own identity; a new one each time the boss wakes. */
@@ -257,6 +330,7 @@ public final class Encounter {
 		deeds.clear();
 		hurt.clear();
 		wards.clear();
+		mends.clear();
 		excused.clear();
 		away.clear();
 	}
@@ -308,12 +382,20 @@ public final class Encounter {
 	 * yet healed, which is at most what they lacked before it.
 	 */
 	public void healed(ServerPlayer healer, ServerPlayer patient, float gained) {
-		float lacked = Math.max(0.0F, patient.getMaxHealth() - (patient.getHealth() - gained));
+		creditHealing(healer.getUUID(), patient, patient.getHealth(), gained);
+	}
+
+	/**
+	 * {@code healer} gave {@code patient} back {@code gained} health, {@code health} being theirs just after it: credited up
+	 * to the fight's hurt not yet healed, which is at most what they lacked before it, and never to the patient.
+	 */
+	private void creditHealing(UUID healer, ServerPlayer patient, float health, float gained) {
+		float lacked = Math.max(0.0F, patient.getMaxHealth() - (health - gained));
 		float owed = Math.min(hurt.getOrDefault(patient.getUUID(), 0.0F), lacked);
-		if (owed <= 0.0F || healer == patient) {
+		if (owed <= 0.0F || healer.equals(patient.getUUID())) {
 			return;
 		}
-		Share share = share(healer.getUUID());
+		Share share = share(healer);
 		if (share == null) {
 			return;
 		}
@@ -345,6 +427,46 @@ public final class Encounter {
 		if (share != null) {
 			share.warding += credit;
 		}
+	}
+
+	/** Each tick's end: every poultice in this fight read (C-02); a note whose patient left the game or the fight ends. */
+	private void readMendings(MinecraftServer server) {
+		if (mends.isEmpty()) {
+			return;
+		}
+		for (UUID id : List.copyOf(mends.keySet())) {
+			ServerPlayer patient = server.getPlayerList().getPlayer(id);
+			if (patient == null || !contains(patient)) {
+				mends.remove(id);
+			} else {
+				readMending(patient, patient.getHealth(), patient.getHealth());
+			}
+		}
+	}
+
+	/**
+	 * {@code patient}'s poultice read (C-02), {@code health} being their health now and {@code after} the health to count
+	 * from next (lower after a blow that is landing). The heals its Regeneration gave since the last read credit its helper
+	 * what their health rose, at most one health a heal, within the fight's healing bounds. The note ends once their
+	 * Regeneration is gone, at another level, or longer than it was: no longer the poultice's.
+	 */
+	private void readMending(ServerPlayer patient, float health, float after) {
+		Mending mending = mends.get(patient.getUUID());
+		if (mending == null) {
+			return;
+		}
+		MobEffectInstance regeneration = patient.getEffect(MobEffects.REGENERATION);
+		if (regeneration == null || regeneration.isInfiniteDuration() || regeneration.getAmplifier() != mending.amplifier()
+				|| regeneration.getDuration() > mending.left()) {
+			mends.remove(patient.getUUID());
+			return;
+		}
+		int heals = regenerationHeals(mending.amplifier(), regeneration.getDuration(), mending.left());
+		float rose = health - mending.health();
+		if (heals > 0 && rose > 0.0F) {
+			creditHealing(mending.helper(), patient, health, Math.min(rose, heals * REGENERATION_HEAL));
+		}
+		mends.put(patient.getUUID(), new Mending(mending.helper(), mending.amplifier(), regeneration.getDuration(), after));
 	}
 
 	/** {@code player}'s part in this fight, if any. */

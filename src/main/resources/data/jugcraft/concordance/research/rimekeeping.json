@@ -1,0 +1,64 @@
+{
+  "schema": 1,
+  "principle": "rime",
+  "tradition": "rimekeepers",
+  "stage": "practitioner",
+  "icon": "minecraft:packed_ice",
+  "requires": [
+    {
+      "research": "jugcraft:first_light",
+      "state": "understood"
+    }
+  ],
+  "states": {
+    "encountered": {
+      "any": [
+        {
+          "type": "examine",
+          "specimens": "#jugcraft:rime_specimens"
+        }
+      ]
+    },
+    "observed": {
+      "any": [
+        {
+          "type": "examine",
+          "specimens": "#jugcraft:ember_specimens"
+        }
+      ]
+    },
+    "understood": {
+      "any": [
+        {
+          "type": "study",
+          "station": "jugcraft:lampwright_bench",
+          "specimens": "#jugcraft:rime_specimens"
+        },
+        {
+          "type": "practice",
+          "activity": "jugcraft:winter_survey"
+        },
+        {
+          "type": "notes"
+        }
+      ]
+    },
+    "mastered": {
+      "any": [
+        {
+          "type": "practice",
+          "activity": "jugcraft:rimework",
+          "distinct": 3
+        }
+      ]
+    }
+  },
+  "unlocks": {
+    "understood": {
+      "invocations": [
+        "jugcraft:rimebind",
+        "jugcraft:preserve"
+      ]
+    }
+  }
+}

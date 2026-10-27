@@ -6,6 +6,7 @@ import com.geckolib.animatable.manager.AnimatableManager;
 import com.geckolib.animation.AnimationController;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
+import io.github.jimbozoomer.jugcraft.lair.Encounter;
 import io.github.jimbozoomer.jugcraft.lair.TroughStoneBlock;
 import java.util.UUID;
 import net.minecraft.core.BlockPos;
@@ -40,7 +41,8 @@ import org.jspecify.annotations.Nullable;
  * A Cinderling, one of the Cinder Tyrant's: a shard of his mantle crawled off as a little salamander of glowing slag,
  * {@value #HEALTH} health, whose bite deals {@value #DAMAGE} damage and sets its foe burning for {@value #BURN_SECONDS}
  * seconds, and quick. It goes for the nearest player and is immune to fire (its type's). In a flooded trough it gutters
- * out. It crumbles to ash when he falls, resets or is gone, drops nothing, gives no experience, and is never saved.
+ * out. It crumbles to ash when he falls, resets or is gone, drops nothing, gives no experience, and is never saved. A
+ * blow to it, by a player or a creature they tamed, is that player's part in his fight.
  */
 public class CinderlingEntity extends Monster implements GeoEntity {
 	public static final float HEALTH = 14.0F;
@@ -135,7 +137,7 @@ public class CinderlingEntity extends Monster implements GeoEntity {
 	@Override
 	public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
 		boolean hurt = super.hurtServer(level, source, amount);
-		if (hurt && source.getEntity() instanceof ServerPlayer player && tyrant != null
+		if (hurt && Encounter.striker(source) instanceof ServerPlayer player && tyrant != null
 				&& level.getEntity(tyrant) instanceof CinderTyrantEntity found) {
 			found.took(player, amount);
 		}

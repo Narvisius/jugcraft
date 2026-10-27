@@ -1,6 +1,6 @@
 # Machine screens: the recipe page's look and a fit check
 
-Status: implemented (pending CI and review). Follows [the other machine screens in their looks](other-machine-screens.md) and [machine screens: five looks by tech level](machine-screens.md).
+Status: merged (PR #469). Follows [the other machine screens in their looks](other-machine-screens.md) and [machine screens: five looks by tech level](machine-screens.md).
 Proposal issue: none. The owner, 23 October 2026, picked two of the suggested polish items ("do 1 and 2"):
 1. the form machines' recipe page, still in its own teal, takes its machine screen's look;
 2. a check, at a second GUI size, that the machine screens fit a small window, after the logic controller had been cut off at a 240-high GUI.
@@ -30,14 +30,16 @@ Minecraft never gives a GUI smaller than 320 × 240 GUI pixels: whatever GUI sca
 - the recipe page of the form with the most recipes;
 - the prospector, rocket pad, logic controller, storage tank, reactor console, remote shutdown panel, drone depot terminal and drone tower.
 - since [the benches in the workshop look](bench-screens.md): the cooking pot, lampwright's bench, farm stand, cave survey desk and carving knife.
+- since Concordance Chunk D, D-07 (not merged; [the roster screen](arcane-concordance-workers.md#the-roster-screen-concordance-chunk-d-d-07)): the Concordance's roster, before its first state (its size and layout only; shot `jugcraft_fit_concordance_roster`). Passed in CI runs 40121823509 (on `040d73ece`) and 40133540741 (shard 13); the shot not viewed.
 
-For each screen it checks that the panel the screen reports (`ScreenKit.Fitted.panelArea`, after any scaling to fit) lies inside the window. It fails with a list of the screens that do not fit. It photographs one machine screen, the busiest form, the recipe page and the eight other screens at that size (`jugcraft_fit_*`), then puts the window and GUI scale back.
+For each screen it checks that the panel the screen reports (`ScreenKit.Fitted.panelArea`, after any scaling to fit) lies inside the window. It fails with a list of the screens that do not fit. It photographs one machine screen, the busiest form, the recipe page and the fourteen other screens at that size (`jugcraft_fit_*`), then puts the window and GUI scale back.
 
 The screens are opened on stand-in menus, with no block and no server round trip. That is enough to judge their size and layout; the other client tests show them working.
 
 ## Connections
 
 - `ScreenKit.Fitted`: each machine screen says where it draws its panel. A new machine screen should implement it and be added to the test.
+- Since Concordance Chunk D (D-07) the roster (`RosterScreen`) is checked too.
 - `ScreenKit.SMALLEST_GUI_WIDTH` and `SMALLEST_GUI_HEIGHT` (320, 240).
 - The recipe page uses the theme of the form screen it opens from (`FormMachineScreen.theme()`), the industrial look, through `ScreenKit`.
 - Two new strings in `tools/machine_consolidation.py`'s labels, generated into the language file: `container.jugcraft.form.recipes_of` ("%s: recipes") and `container.jugcraft.form.recipe_count` ("%s recipes", which was written in English in the code).

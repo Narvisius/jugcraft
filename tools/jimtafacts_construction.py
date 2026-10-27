@@ -8,12 +8,14 @@ BLOCKS={**{'cf_wall_'+c:'cf/blockWall.'+{'light_blue':'lightBlue','light_gray':'
  'construction_foam':'cf/blockFoam','reinforced_foam':'cf/blockReinforcedFoam','reinforced_stone':'blockAlloy',
  'wood_scaffold':'blockScaffold','wood_scaffold_reinforced':'blockScaffold.reinforced',
  'iron_scaffold':'blockIronScaffold','iron_scaffold_reinforced':'blockIronScaffold.reinforced',
- 'alloy_glass':'blockAlloyGlass','alloy_door':'blockDoorAlloy','iron_fence':'blockFenceIron'}
+ 'resin_sheet':'blockHarz','rubber_trampoline':'blockRubber','alloy_glass':'blockAlloyGlass','alloy_door':'blockDoorAlloy','iron_fence':'blockFenceIron'}
 ART={'cf_sprayer':'itemFoamSprayer','painter':'itemToolPainter','cf_powder':'itemPartCFPowder'}
-def blocks():return {'jimta_'+n for n in BLOCKS}
+def blocks():return {'jimta_'+n for n in BLOCKS}|{'jimta_mining_pipe','jimta_mining_tip'}
 def items():return blocks()|{'jimta_'+n for n in ART}
 def dump(p,v):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(v,indent=2)+'\n',encoding='utf-8')
 def generate(shared=True):
+ import jimtafacts_mining_pipes
+ jimtafacts_mining_pipes.generate(shared)
  manifest=[];lang={}
  def texture(source,relative):
   src=SOURCE/f'textures/{source}.png';dst=RES/f'assets/jugcraft/textures/jimtafacts/construction/{relative}.png';dst.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(src,dst)
@@ -45,6 +47,10 @@ def generate(shared=True):
     dump(RES/f'assets/jugcraft/models/block/{ident}_{variant}.json',{'parent':'minecraft:block/iron_bars_'+variant,'textures':{'bars':tex,'edge':tex,'particle':tex}})
    parts=[{'apply':{'model':f'jugcraft:block/{ident}_post_ends'}},{'when':{'north':'false','south':'false','east':'false','west':'false'},'apply':{'model':f'jugcraft:block/{ident}_post'}}]
    for direction,rotation in [('north',0),('east',90),('south',180),('west',270)]:parts.append({'when':{direction:'true'},'apply':{'model':f'jugcraft:block/{ident}_side','y':rotation}})
+   import diagonal_connections as diagonal
+   arm=f'jugcraft:block/diagonal/{ident}'
+   dump(RES/f'assets/jugcraft/models/block/diagonal/{ident}.json',{'parent':f'jugcraft:block/{ident}_side','elements':diagonal.bars_arm()})
+   parts+=diagonal.diagonal_parts(arm)
    dump(RES/f'assets/jugcraft/blockstates/{ident}.json',{'multipart':parts})
    dump(RES/f'assets/jugcraft/models/item/{ident}.json',{'parent':'minecraft:item/generated','textures':{'layer0':tex}})
    dump(RES/f'assets/jugcraft/items/{ident}.json',{'model':{'type':'minecraft:model','model':'jugcraft:item/'+ident}});continue
@@ -52,6 +58,8 @@ def generate(shared=True):
    # Source atlases have six authored faces; retain the original 96x16 pixels.
    faces={face:{'texture':'#all','uv':[16*index/6,0,16*(index+1)/6,16]} for index,face in enumerate(('down','up','north','south','west','east'))}
    model={'parent':'minecraft:block/block','textures':{'all':tex,'particle':tex},'elements':[{'from':[0,0,0],'to':[16,16,16],'faces':faces}]}
+  elif name in ('rubber_trampoline','resin_sheet'):
+   model={'parent':'minecraft:block/block','textures':{'all':tex,'particle':tex},'elements':[{'from':[0,0,0],'to':[16,2,16],'faces':{face:{'texture':'#all','uv':[0,0,16,16] if face in ('up','down') else [0,14,16,16]} for face in ('up','down','north','south','east','west')}}]}
   else:model={'parent':'minecraft:block/cube_all','textures':{'all':tex}}
   dump(RES/f'assets/jugcraft/models/block/{ident}.json',model);dump(RES/f'assets/jugcraft/blockstates/{ident}.json',{'variants':{'':{'model':'jugcraft:block/'+ident}}})
   dump(RES/f'assets/jugcraft/items/{ident}.json',{'model':{'type':'minecraft:model','model':'jugcraft:block/'+ident}})
@@ -67,6 +75,8 @@ def generate(shared=True):
    model={'type':'minecraft:range_dispatch','property':'minecraft:custom_model_data','index':0,'entries':variants,'fallback':model}
   dump(RES/f'assets/jugcraft/items/{ident}.json',{'model':model});lang['item.jugcraft.'+ident]={'cf_sprayer':'Construction Foam Sprayer','cf_powder':'Construction Foam Powder','painter':'Painter'}[name]
  def craft(name,parts,result,count=1):dump(RES/f'data/jugcraft/recipe/jimtafacts_construction/{name}.json',{'type':'minecraft:crafting_shapeless','category':'building','ingredients':parts,'result':{'id':result,'count':count}})
+ craft('resin_sheet',['jugcraft:latex_bottle'],'jugcraft:jimta_resin_sheet')
+ craft('rubber_trampoline',['jugcraft:rubber']*6,'jugcraft:jimta_rubber_trampoline',3)
  craft('powder',['minecraft:clay_ball','minecraft:sand','minecraft:redstone'],'jugcraft:jimta_cf_powder',3)
  craft('foam_canister',['jugcraft:jimta_cf_powder','jugcraft:tin_plate','minecraft:water_bucket'],'jugcraft:foam_canister')
  craft('sprayer',['jugcraft:tin_plate','jugcraft:iron_plate','minecraft:glass_bottle'],'jugcraft:jimta_cf_sprayer')
@@ -80,8 +90,13 @@ def generate(shared=True):
  craft('alloy_door',['jugcraft:steel_plate']*6+['minecraft:iron_door'],'jugcraft:jimta_alloy_door')
  craft('reinforced_stone',['jugcraft:blastproof_concrete','jugcraft:steel_plate'],'jugcraft:jimta_reinforced_stone')
  for color in COLORS:craft('wall_'+color,['jugcraft:concrete','minecraft:'+color+'_dye'],'jugcraft:jimta_cf_wall_'+color)
- tags={'mineable/pickaxe':[n for n in BLOCKS if 'wood_scaffold' not in n],'mineable/axe':[n for n in BLOCKS if 'wood_scaffold' in n],'climbable':[n for n in BLOCKS if 'scaffold' in n],'doors':['alloy_door']}
+ tags={'mineable/pickaxe':[n for n in BLOCKS if 'wood_scaffold' not in n and n!='rubber_trampoline'],'mineable/axe':[n for n in BLOCKS if 'wood_scaffold' in n],'climbable':[n for n in BLOCKS if 'scaffold' in n],'doors':['alloy_door']}
+ sound=SOURCE.parent.parent/'ic2/sounds/Tools/RubberTrampoline.ogg';target=RES/'assets/jugcraft/sounds/jimtafacts/industry/rubber_trampoline.ogg'
+ target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(sound,target)
+ manifest.append({'source':sound.relative_to(ROOT).as_posix(),'runtime':target.relative_to(ROOT).as_posix(),'sha256':hashlib.sha256(sound.read_bytes()).hexdigest()})
  if shared:
+  soundfile=RES/'assets/jugcraft/sounds.json';sounds=json.loads(soundfile.read_text());sounds['jimtafacts.rubber_trampoline']={'subtitle':'subtitles.jugcraft.rubber_trampoline','sounds':['jugcraft:jimtafacts/industry/rubber_trampoline']};dump(soundfile,sounds)
+  lang['subtitles.jugcraft.rubber_trampoline']='Rubber trampoline springs'
   path=RES/'assets/jugcraft/lang/en_us.json';data=json.loads(path.read_text(encoding='utf-8'));data.update(lang);dump(path,data)
   for tag,names in tags.items():
    path=RES/f'data/minecraft/tags/block/{tag}.json';data=json.loads(path.read_text(encoding='utf-8')) if path.exists() else {'replace':False,'values':[]};data['values']=list(dict.fromkeys(data.get('values',[])+['jugcraft:jimta_'+n for n in names]));dump(path,data)

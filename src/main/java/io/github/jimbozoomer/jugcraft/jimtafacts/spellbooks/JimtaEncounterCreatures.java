@@ -63,6 +63,7 @@ public final class JimtaEncounterCreatures {
         SpawnPlacements.register(ICE_SPIDER,SpawnPlacementTypes.ON_GROUND,Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,JimtaEncounterCreatures::canSpawn);
         SpawnPlacements.register(KEEPER,SpawnPlacementTypes.ON_GROUND,Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,JimtaEncounterCreatures::canSpawn);
         JimtaSpiderTomb.register();
+        JimtaSpiderPart.register();
     }
     private static void egg(String name,EntityType<?> type){var key=ResourceKey.create(Registries.ITEM,Jugcraft.id("jimta_spellbooks_"+name+"_spawn_egg"));EGGS.put(name,Registry.register(BuiltInRegistries.ITEM,key,new SpawnEggItem(new Item.Properties().setId(key).spawnEgg(type))));}
     public static boolean canSpawn(EntityType<? extends Monster> type,ServerLevelAccessor world,EntitySpawnReason reason,BlockPos pos,RandomSource random){
@@ -95,22 +96,23 @@ public final class JimtaEncounterCreatures {
         @Override protected void readAdditionalSaveData(ValueInput in){super.readAdditionalSaveData(in);cooldown=Math.clamp(in.getIntOr("attack_cooldown",20),0,200);stopAction();}
     }
     public static final class Keeper extends Encounter {
+        private static final EntityDataAccessor<Integer> RISE=SynchedEntityData.defineId(Keeper.class,EntityDataSerializers.INT);
         private static final EntityDataAccessor<Boolean> RESTORED=SynchedEntityData.defineId(Keeper.class,EntityDataSerializers.BOOLEAN),SUMMONED=SynchedEntityData.defineId(Keeper.class,EntityDataSerializers.BOOLEAN);
         public static final String[] CLIPS={"sword_double_slash","sword_single_upward","sword_single_horizontal","sword_single_horizontal_fast","sword_stab","sword_lunge","keeper_kneeling_rise"};
         static final int[] LENGTHS={43,26,28,24,21,76};
         static final int[][] HITS={{13,29},{13},{12},{12},{11},{56,57,58,59,60,61,62,63,64}};
         private int attackIndex,rise;private boolean lunged,lungeHit,combo;private Vec3 lungeOrigin=Vec3.ZERO;
         public Keeper(EntityType<? extends Monster> t,Level l){super(t,l);xpReward=25;equip();}
-        @Override protected void defineSynchedData(SynchedEntityData.Builder b){super.defineSynchedData(b);b.define(RESTORED,false);b.define(SUMMONED,false);}
+        @Override protected void defineSynchedData(SynchedEntityData.Builder b){super.defineSynchedData(b);b.define(RESTORED,false);b.define(SUMMONED,false);b.define(RISE,0);}
         public boolean restored(){return entityData.get(RESTORED);}public boolean summoned(){return entityData.get(SUMMONED);}
         public void setRestored(boolean b){entityData.set(RESTORED,b);equip();}public void setSummoned(boolean b){entityData.set(SUMMONED,b);if(b)skipDropExperience();equip();}
-        public int riseTicks(){return rise;}
-        public void rise(){rise=25;start("keeper_kneeling_rise",25);}
+        public int riseTicks(){return entityData.get(RISE);}
+        public void rise(){rise=25;entityData.set(RISE,rise);start("keeper_kneeling_rise",25);}
         private void equip(){var item=JimtaSpellbooks.ITEMS.get(restored()?"legionnaire_flamberge":"keeper_flamberge");if(item!=null){setItemSlot(EquipmentSlot.MAINHAND,new ItemStack(item));setDropChance(EquipmentSlot.MAINHAND,summoned()?0:.085F);}}
         @Override public SpawnGroupData finalizeSpawn(ServerLevelAccessor l,net.minecraft.world.DifficultyInstance d,EntitySpawnReason reason,SpawnGroupData group){var result=super.finalizeSpawn(l,d,reason,group);equip();return result;}
         @Override protected void registerGoals(){goalSelector.addGoal(0,new FloatGoal(this));goalSelector.addGoal(2,new Fight(this));goalSelector.addGoal(6,new WaterAvoidingRandomStrollGoal(this,1));goalSelector.addGoal(8,new RandomLookAroundGoal(this));targetSelector.addGoal(1,new HurtByTargetGoal(this));targetSelector.addGoal(2,new NearestAttackableTargetGoal<>(this,Player.class,true));}
         @Override protected String[] animations(){return CLIPS;}
-        @Override public void tick(){super.tick();if(level().isClientSide())return;if(rise>0){rise--;getNavigation().stop();if(level() instanceof ServerLevel l)l.sendParticles(ParticleTypes.ASH,getX(),getY()+1,getZ(),5,.2,.2,.2,.05);}}
+        @Override public void tick(){super.tick();if(level().isClientSide())return;if(rise>0){rise--;entityData.set(RISE,rise);getNavigation().stop();if(level() instanceof ServerLevel l)l.sendParticles(ParticleTypes.ASH,getX(),getY()+1,getZ(),5,.2,.2,.2,.05);}}
         private void attack(LivingEntity target){
             if(!(level() instanceof ServerLevel l)||rise>0)return;double distance=distanceTo(target);if(!lunged)face(target);
             if(animating()){
@@ -132,7 +134,7 @@ public final class JimtaEncounterCreatures {
         @Override protected SoundEvent getHurtSound(DamageSource s){return SOUNDS.get("keeper_hurt");}
         @Override protected SoundEvent getDeathSound(){return SOUNDS.get("keeper_death");}
         @Override protected void addAdditionalSaveData(ValueOutput out){super.addAdditionalSaveData(out);out.putBoolean("restored",restored());out.putBoolean("summoned",summoned());out.putInt("rise",rise);}
-        @Override protected void readAdditionalSaveData(ValueInput in){super.readAdditionalSaveData(in);entityData.set(RESTORED,in.getBooleanOr("restored",false));entityData.set(SUMMONED,in.getBooleanOr("summoned",false));rise=Math.clamp(in.getIntOr("rise",0),0,25);}
+        @Override protected void readAdditionalSaveData(ValueInput in){super.readAdditionalSaveData(in);entityData.set(RESTORED,in.getBooleanOr("restored",false));entityData.set(SUMMONED,in.getBooleanOr("summoned",false));rise=Math.clamp(in.getIntOr("rise",0),0,25);entityData.set(RISE,rise);}
     }
     private static final class Fight extends Goal {
         private final Encounter mob;Fight(Encounter mob){this.mob=mob;setFlags(EnumSet.of(Flag.MOVE,Flag.LOOK));}
@@ -147,6 +149,7 @@ public final class JimtaEncounterCreatures {
         private static final AttributeModifier CROUCH_SPEED=new AttributeModifier(Jugcraft.id("jimta_spider_crouch"),-.3,AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
         public static final String[] CLIPS={"attack_bite","attack_fang_basic","attack_right_swipe","attack_grapple_pounce","leap_back","long_cast","emerge_from_ground"};
         private int satiation,grappleAge,pounceCooldown,emerge,crouchChanged,attackIndex;private boolean hungry=true,retreat,releasing;private UUID grapple;
+        private final JimtaSpiderPart[] bodyParts=new JimtaSpiderPart[3];
         public Vec3 normal=new Vec3(0,1,0),lastNormal=normal;
         public IceSpider(EntityType<? extends Monster> t,Level l){super(t,l);xpReward=15;}
         @Override protected void defineSynchedData(SynchedEntityData.Builder b){super.defineSynchedData(b);b.define(CROUCH,false);b.define(CLIMB,false);b.define(GRAPPLE,-1);}
@@ -167,6 +170,7 @@ public final class JimtaEncounterCreatures {
         @Override public void makeStuckInBlock(BlockState state,Vec3 slow){if(!state.is(Blocks.COBWEB))super.makeStuckInBlock(state,slow);}
         @Override public void tick(){
             super.tick();sampleGround();if(!(level() instanceof ServerLevel l))return;
+            if(isAlive())for(int i=0;i<bodyParts.length;i++){if(bodyParts[i]==null||bodyParts[i].isRemoved())bodyParts[i]=JimtaSpiderPart.create(this,i);else bodyParts[i].position(this);}
             if(pounceCooldown>0)pounceCooldown--;
             if(emerge>0){emerge--;getNavigation().stop();setDeltaMovement(Vec3.ZERO);if(emerge==0)setPose(Pose.STANDING);return;}
             if(!JimtaSpellbooks.enabled()){releaseGrapple(false);return;}
@@ -204,7 +208,6 @@ public final class JimtaEncounterCreatures {
         @Override public LivingEntity getControllingPassenger(){return null;}
         @Override protected boolean canAddPassenger(Entity p){return getPassengers().isEmpty()&&p instanceof LivingEntity living&&prey(this,living);}
         @Override protected void removePassenger(Entity p){super.removePassenger(p);if(p.getUUID().equals(grapple)){grapple=null;entityData.set(GRAPPLE,-1);}}
-        @Override public boolean doHurtTarget(ServerLevel l,Entity e){boolean hit=super.doHurtTarget(l,e);if(hit&&e instanceof Animal animal&&!animal.isAlive())addSatiation(Mth.ceil(animal.getMaxHealth()));return hit;}
         @Override public boolean hurtServer(ServerLevel l,DamageSource s,float amount){if(emerge>0||s.is(DamageTypeTags.IS_FALL))return false;if(s.getEntity()!=null&&s.getEntity().getUUID().equals(grapple))amount*=.2F;if(!isCrouching()&&grapple==null&&s.getDirectEntity()==s.getEntity()&&random.nextFloat()<Mth.lerp(Math.clamp(amount/12,0,1),.02F,.7F))retreat=true;return super.hurtServer(l,s,amount);}
         @Override public void die(DamageSource s){releaseGrapple(false);super.die(s);}
         @Override protected SoundEvent getAmbientSound(){return SOUNDS.get("ice_spider_ambient");}

@@ -57,6 +57,7 @@ public class Decor14ClientGameTests implements FabricClientGameTest {
 			shoot(context, singleplayer, x + 15, y + 1, z - 2, 180, 8, "jugcraft_outfits_on_mobs");
 			shoot(context, singleplayer, x + 15, y + 2, z - 14, 0, 12, "jugcraft_bat_wings_flying");
 			shoot(context, singleplayer, x - 2, y + 2, z - 2, 180, 45, "jugcraft_costume_trunk");
+			shoot(context, singleplayer, x + 13, y + 1, z - 2, 180, 10, "jugcraft_chompa_costume");
 			server.runCommand("time set midnight");
 			shoot(context, singleplayer, x + 6, y + 1, z, 180, 10, "jugcraft_outfits_night");
 		}

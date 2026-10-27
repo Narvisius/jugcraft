@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " H",
+    "P "
+  ],
+  "key": {
+    "H": "minecraft:tripwire_hook",
+    "P": "#c:plates/steel"
+  },
+  "result": {
+    "id": "jugcraft:coupler",
+    "count": 1
+  }
+}

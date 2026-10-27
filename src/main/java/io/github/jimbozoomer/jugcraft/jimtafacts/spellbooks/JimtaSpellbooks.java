@@ -82,6 +82,7 @@ public final class JimtaSpellbooks {
         JimtaEncounterItems.register();
         JimtaEncounterCreatures.register();
         JimtaWorkshops.register();
+        JimtaStatues.register();
         JimtaDungeonMobs.register();
         JimtaSpellbookLore.register();
         JimtaExploration.register();

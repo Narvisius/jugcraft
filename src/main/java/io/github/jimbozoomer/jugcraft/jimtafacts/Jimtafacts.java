@@ -143,7 +143,7 @@ public final class Jimtafacts {
         var state = STATES.computeIfAbsent(player, p -> new State());
         boolean stationary = state.lastPosition != null && state.lastPosition.distanceToSqr(player.position()) < .0001;
         state.lastPosition = player.position();
-        if (!equipped.contains("rooted_boots") || !player.onGround() || !stationary || !player.level().getBlockState(player.blockPosition().below()).is(Blocks.GRASS_BLOCK)) state.rootedSince = -1;
+        if (!equipped.contains("rooted_boots") || !player.onGround() || !stationary || !player.level().hasChunkAt(player.blockPosition()) || !player.level().getBlockState(player.blockPosition().below()).is(Blocks.GRASS_BLOCK)) state.rootedSince = -1;
         else if (state.rootedSince < 0) state.rootedSince = player.level().getGameTime();
         else if (player.level().getGameTime() - state.rootedSince >= 200) {
             if (player.getFoodData().needsFood()) { player.getFoodData().eat(1, 0); JimtaAbilities.growNearby(player); }

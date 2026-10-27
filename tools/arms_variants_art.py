@@ -10,7 +10,8 @@ tools/arms_pixel.py as a pixel-art icon on the diagonal and a 3D model in the ha
   venom (the Mire Hag), dark iron and soul fire (the Crypt Lich), gunmetal, copper coils and arcs (the Iron
   Dreadnought), silver and wolf fur (the Alpha Werewolf), storm steel, feathers and lightning (the Storm Roc), and
   sea-green bronze, pearl and a glowing tide line (the Abyssal Leviathan); and the Witching Season's: moon-pale steel,
-  silver and crimson (Vesperine), and needle steel, gold, red velvet and her amethyst (Madame Tatterlace);
+  silver and crimson (Vesperine), needle steel, gold, red velvet and her amethyst (Madame Tatterlace), and corn stalks,
+  straw, rust, a crow's black iron and his fire (the Pumpkin King);
 - the owner's armor sets' arms, in their set's palette: slate with light edges, a night-dark snath and blood-red wraps
   (the Hades Armor's scythe, after the owner's own design); gold, brown leather and jet (the Sentinel's longsword);
   frosted white and glowing ice (the Frost Knight's greatsword).
@@ -99,6 +100,16 @@ WIGHT_GEM = M((8, 56, 60), (20, 112, 118), (40, 178, 182), (100, 226, 222), (176
 REAPER_BONE = M((58, 54, 44), (102, 97, 84), (142, 136, 116), (186, 180, 156), (220, 214, 190), (244, 240, 222))
 REAPER_SLATE = M((10, 10, 14), (24, 24, 30), (44, 44, 50), (60, 60, 66), (80, 80, 86), (104, 105, 102), shine=False)
 
+# The Pumpkin King's (docs/features/pumpkin-king.md): pale corn stalks bound with twine, straw, his pumpkin's rind, a
+# rusted blade, a crow's black iron and feathers, and his fire.
+CORN_STALK = M((52, 48, 20), (86, 80, 36), (120, 112, 54), (158, 150, 80), (192, 184, 110), (222, 214, 150), shine=False)
+TWINE = M((40, 30, 16), (66, 50, 28), (92, 72, 42), (120, 96, 58), (148, 122, 78), (176, 150, 104), shine=False)
+STRAW_WRAP = M((70, 52, 14), (110, 86, 28), (150, 120, 44), (196, 164, 70), (228, 200, 104), (248, 230, 160), shine=False)
+RIND = M((90, 30, 4), (140, 52, 8), (190, 82, 16), (228, 112, 28), (246, 150, 52), (252, 196, 110), shine=False)
+RUSTED = M((30, 12, 6), (56, 26, 12), (92, 44, 20), (128, 66, 32), (164, 94, 52), (196, 130, 84))
+CROW_IRON = M((6, 6, 10), (18, 18, 24), (40, 40, 50), (58, 58, 72), (82, 80, 104), (118, 114, 146))
+CROW_FEATHER = M((8, 8, 12), (18, 16, 26), (28, 24, 40), (42, 36, 60), (62, 54, 88), (96, 84, 130), shine=False)
+
 # Style(blade, fitting, grip, haft, gem, accent, cloth)
 GILDED = Style(POLISHED, GOLD, ROYAL, px.DARK_WOOD, SAPPHIRE, GOLD, ROYAL)
 IRONCLAD = Style(GUNSTEEL, px.OLIVE, px.RUBBER, px.GUNMETAL, HAZARD, px.GUNMETAL, px.OLIVE)
@@ -115,6 +126,7 @@ LEVIATHAN = Style(SEABRONZE, SEABRONZE, px.LEATHER, px.DARK_WOOD, PEARL, PEARL, 
 HADES = Style(SLATE, ASHEN, BLOOD, NIGHT, BLOOD, SOOT, BLOOD)
 VESPER = Style(MOON, SILVER, BLOOD, OBSIDIAN, MOONSTONE, MOONSTONE, BLOOD)
 TATTER = Style(NEEDLE, GOLD, VELVET, px.DARK_WOOD, AMETHYST, VELVET, VELVET)
+KING = Style(RUSTED, CROW_IRON, STRAW_WRAP, CORN_STALK, MAGMA, MAGMA, STRAW_WRAP)
 SENTINEL_CORE = Style(CYDONIAN_CRYSTAL, RUST_IRON, DARK_IRON, MARS_STONE, MAGMA, MAGMA, RUST_IRON)
 
 SENTINEL = Style(SENTINEL_GOLD, SENTINEL_GOLD, SENTINEL_LEATHER, SENTINEL_LEATHER, SENTINEL_JET, SENTINEL_GOLD,
@@ -127,7 +139,7 @@ LINE_STYLES = {"gilded": GILDED, "ironclad": IRONCLAD, "bonecarved": BONECARVED,
                "yeti_king": YETI, "cinder_tyrant": CINDER, "mire_hag": HAG, "crypt_lich": LICH,
                "cydonian_sentinel": SENTINEL_CORE,
                "iron_dreadnought": DREADNOUGHT, "werewolf_alpha": WEREWOLF, "storm_roc": ROC,
-               "abyssal_leviathan": LEVIATHAN, "vesperine": VESPER, "tatterlace": TATTER, "hades": HADES, "sentinel": SENTINEL, "frost_knight": FROST_KNIGHT,
+               "abyssal_leviathan": LEVIATHAN, "vesperine": VESPER, "tatterlace": TATTER, "pumpkin_king": KING, "hades": HADES, "sentinel": SENTINEL, "frost_knight": FROST_KNIGHT,
                "wight_king": WIGHT_KING, "reaper": REAPER}
 
 
@@ -935,6 +947,58 @@ def needle_rapier():
     return d
 
 
+# ---------------------------------------------------------------- the Pumpkin King's (docs/features/pumpkin-king.md)
+
+
+def hallowreap():
+    """The Pumpkin King's scythe, his trophy: a scythe's length and hold, a snath of pale corn stalks bound with twine in
+    three places and wrapped in straw where the hand holds, a little carved pumpkin for its socket with its eyes lit, and a
+    long rusted blade whose cutting edge glows like his fire."""
+    st = KING
+    d = Design(53, grip=10.0)
+    d.disc(0.9, 0.0, 1.1, CORN_STALK, depth=2.2)
+    d.strip(0.8, 50.0, 0.8, material=CORN_STALK, depth=1.6, stripes=(5.0, DARK))   # the stalks, a node every few
+    for s in (24.0, 33.0, 41.0):
+        d.strip(s - 0.6, s + 0.6, 1.2, material=TWINE, depth=2.2, z=1)
+    grip(d, 6.0, 14.0, 0.95, st)
+    d.line(25.0, -0.8, 25.0, -3.6, 1.1, CORN_STALK, depth=1.8)   # the nib, a second handle
+    # The socket: a little carved pumpkin, its two eyes lit.
+    d.disc(49.0, 0.0, 2.1, RIND, depth=3.0, z=1)
+    for t in (-0.75, 0.75):
+        d.disc(49.4, t, 0.45, MAGMA, depth=3.2, z=2)
+    sickle(d, 40.0, -1.0, 12.0, 4.6, 0.0, -116.0, st, steps=18)
+    # The cutting edge, glowing: a band along the blade's inner curve, in his fire.
+    edge, inner = [], []
+    for i in range(19):
+        f = i / 18
+        a = math.radians(-116.0 * f)
+        width = 4.6 * (1 - f ** 2.2) + 0.45
+        inner.append((40.0 + math.cos(a) * (12.0 - width), -1.0 + math.sin(a) * (12.0 - width)))
+        edge.append((40.0 + math.cos(a) * (12.0 - width + 0.5), -1.0 + math.sin(a) * (12.0 - width + 0.5)))
+    d.poly(edge + inner[::-1], MAGMA, depth=1.0, z=2, part="ember_edge")
+    return d
+
+
+def crowbill():
+    """The Pumpkin King's war pick, his trophy: a war pick's length and hold, a haft of bound corn stalks wound with straw
+    at the grip, a crow's head of black iron for its socket with an ember for an eye, its long black beak the pick, and a
+    tuft of crow's feathers behind."""
+    st = KING
+    d = Design(31, grip=5.0)
+    d.disc(0.9, 0.0, 1.1, CROW_IRON, depth=2.2)
+    d.strip(0.8, 26.0, 0.85, material=CORN_STALK, depth=1.8, stripes=(5.0, DARK))
+    grip(d, 1.6, 9.0, 1.05, st, period=1.6)
+    d.strip(21.0, 27.5, 1.25, material=CROW_IRON, depth=2.9, part="head")
+    d.strip(21.0, 21.8, 1.65, material=CROW_IRON, depth=3.3, z=1)
+    # The beak: long and black, curving down to its point.
+    d.poly([(24.6, 1.25), (26.8, 1.25), (26.2, 6.8), (23.2, 12.0), (21.6, 11.6), (23.4, 6.0)], CROW_IRON, depth=1.8,
+           part="beak")
+    feathers(d, 24.0, -1.25, -1, n=3, length=4.0, material=CROW_FEATHER)
+    d.disc(25.4, 0.2, 0.55, MAGMA, depth=3.2, z=2)   # its ember eye
+    d.poly([(27.5, -0.9), (31.0, 0.0), (27.5, 0.9)], CROW_IRON, depth=1.6)
+    return d
+
+
 def sentinel_longsword():
     """The Sentinel's sword, after the owner's design: a broad gold blade, its edges pale and a brown groove down its
     middle, under a square-ended gold crossguard set with a jet square (the square ring on the set's arm), a brown
@@ -1063,7 +1127,7 @@ DESIGNS = {name: fn for name, fn in globals().items() if callable(fn) and name i
     "glacier_maul", "rimeclaw", "cinderbrand", "magmaw", "hagthorn", "bogfang", "soulreaver", "gravewarden",
     "corelance", "redstar_cleaver",
     "dynamo_halberd", "piston_hammer", "moonfang", "howler", "stormcaller", "galefeather", "tidebreaker",
-    "leviathans_hook", "vesper_scythe", "needle_rapier", "hades_scythe", "sentinel_longsword", "frost_knight_greatsword", "wight_king_zweihander",
+    "leviathans_hook", "vesper_scythe", "needle_rapier", "hallowreap", "crowbill", "hades_scythe", "sentinel_longsword", "frost_knight_greatsword", "wight_king_zweihander",
     "reaper_scythe")}
 
 

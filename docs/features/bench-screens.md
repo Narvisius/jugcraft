@@ -1,6 +1,6 @@
 # The benches in the workshop look
 
-Status: implemented (pending CI and review). Follows [the other machine screens in their looks](other-machine-screens.md) and [the screen fit check](screen-fit-check.md), whose PR it is stacked on.
+Status: merged (PR #471). Follows [the other machine screens in their looks](other-machine-screens.md) and [the screen fit check](screen-fit-check.md), whose PR it is stacked on.
 Proposal issue: none. The owner, 23 October 2026, picked suggestion 4: "now do 4, restyle the crafting benches". The suggestion was the cooking pot, carving, lampwright bench, cave workshop, farm stand and blueprint table in the workshop look.
 
 Owner: jimbozoomer-byte
@@ -70,7 +70,7 @@ The carving knife is seasonal (Halloween); its screen looks the same in any seas
 
 ## Rollout and open questions
 
-- The blueprint table is 410 to 440 wide and 250 high: taller than the 240-high GUI of a 16:9 window at the smallest size, and wider than a 4:3 window's 320. It is not in the fit check. Fitting it means scaling it with its text box and turning preview, or laying it out again. That is its own change.
+- The blueprint table is 410 to 440 wide and 250 high: taller than the 240-high GUI of a 16:9 window at the smallest size, and wider than a 4:3 window's 320. It is not in the fit check. Fitting it means scaling it with its text box and turning preview, or laying it out again. That is its own change. Done since: it scales to fit and is in the fit check ([blueprint-table-fit.md](blueprint-table-fit.md)).
 - The other non-machine screens (shops, bank, exchange, alchemy, journals) keep their own looks.
 
 ## History

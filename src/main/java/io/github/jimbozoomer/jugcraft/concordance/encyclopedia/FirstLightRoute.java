@@ -89,8 +89,6 @@ public final class FirstLightRoute {
 	public static final int MAX_INVOCATIONS = 8;
 	/** The most specimens shown as icons under the find step. */
 	public static final int MAX_SPECIMENS = 9;
-	/** The first win over each lair's keeper (VesperineLoot and TatterlaceLoot ADVANCEMENT). */
-	private static final List<Identifier> FIRST_WINS = List.of(Jugcraft.id("the_last_harvest"), Jugcraft.id("unravelled"));
 
 	private FirstLightRoute() {
 	}
@@ -123,8 +121,7 @@ public final class FirstLightRoute {
 		boolean understood = state.atLeast(ResearchState.UNDERSTOOD);
 		Identifier wandRecipe = Jugcraft.id("initiate_wand");
 		List<Inscription> inscriptions = inscriptions(player);
-		boolean lairs = JugcraftConfig.isFeatureEnabled(JugcraftLairs.FEATURE)
-				&& (out.present(Jugcraft.id("death_knell")) || out.present(Jugcraft.id("cursed_spindle")));
+		boolean lairs = JugcraftConfig.isFeatureEnabled(JugcraftLairs.FEATURE) && LairDossiers.canOpen(out);
 		boolean instrument = carries(player, stack -> stack.is(JugcraftConcordance.INSTRUMENTS));
 
 		List<Step> route = new ArrayList<>();
@@ -139,7 +136,7 @@ public final class FirstLightRoute {
 		route.add(new Step("support", EdgeKind.RECOMMENDED, inscriptions.stream().anyMatch(FirstLightRoute::supports), List.of("compose"), false));
 		route.add(new Step("equip", EdgeKind.RECOMMENDED, equipped(player), List.of("understand"), false));
 		if (lairs) {
-			route.add(new Step("lair", EdgeKind.OPTIONAL_BOSS, FIRST_WINS.stream().anyMatch(id -> done(player, id)), List.of("compose"), false));
+			route.add(new Step("lair", EdgeKind.OPTIONAL_BOSS, LairDossiers.anyBeaten(player), List.of("compose"), false));
 		}
 		Map<String, StepState> states = states(route);
 

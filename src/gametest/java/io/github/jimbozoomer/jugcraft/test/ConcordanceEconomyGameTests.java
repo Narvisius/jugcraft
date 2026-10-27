@@ -1,31 +1,47 @@
 package io.github.jimbozoomer.jugcraft.test;
 
 import io.github.jimbozoomer.jugcraft.concordance.ConcordanceProgress;
+import io.github.jimbozoomer.jugcraft.concordance.CrucibleBlockEntity;
+import io.github.jimbozoomer.jugcraft.concordance.CrucibleStandBlockEntity;
 import io.github.jimbozoomer.jugcraft.concordance.JugcraftConcordance;
 import io.github.jimbozoomer.jugcraft.concordance.KindledLanternItem;
 import io.github.jimbozoomer.jugcraft.concordance.LanternCharge;
 import io.github.jimbozoomer.jugcraft.concordance.LumenSconceBlock;
 import io.github.jimbozoomer.jugcraft.concordance.LumenSconceBlockEntity;
+import io.github.jimbozoomer.jugcraft.concordance.RateGate;
+import io.github.jimbozoomer.jugcraft.concordance.alchemy.Band;
+import io.github.jimbozoomer.jugcraft.concordance.alchemy.Heat;
+import io.github.jimbozoomer.jugcraft.concordance.diagnostic.Code;
+import io.github.jimbozoomer.jugcraft.concordance.diagnostic.Diagnostic;
+import io.github.jimbozoomer.jugcraft.energy.EnergyStorage;
+import java.util.List;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.AABB;
 
 /**
  * Roadmap step 29, interactions and economic loops (docs/features/arcane-concordance-economy.md), for the light the
  * Concordance burns: a measure begun is a measure spent. A Kindled Lantern put out, or a Lumen Sconce taken down,
  * keeps only the measures it had not begun, so lighting and putting out again (or breaking and placing again) never
  * gives light for nothing, and costs no more than a measure when done at once. The other loops are tested where their
- * systems are (the spire's field, the garden, a ritual and a porter sharing a pylon) and audited by check_economy.
+ * systems are (the spire's field, the garden, a ritual and a porter sharing a pylon) and audited by check_economy. Since
+ * Concordance Chunk C (C-05), a Crucible Stand turns JE into a crucible's heat and nothing else.
  */
 public class ConcordanceEconomyGameTests {
 	private static ServerPlayer player(GameTestHelper helper) {
-		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		ServerPlayer player = TestPlayers.mock(helper);
 		player.setGameMode(GameType.SURVIVAL);
 		return player;
 	}
@@ -96,5 +112,67 @@ public class ConcordanceEconomyGameTests {
 			helper.assertTrue(sconce.remaining(ConcordanceProgress.now(level)) == held, "though it still shows them all while it burns");
 			helper.succeed();
 		});
+	}
+
+	/**
+	 * Concordance Chunk C, C-05: a Crucible Stand turns JE into heat and nothing else. Set to each heat, it pays exactly its
+	 * rate on each tick it heats (8, 16 or 32 JE) until its store runs short, then nothing. Set off, under a crucible
+	 * already hotter than it aims, or with nothing to heat, it pays nothing. Nothing comes back out: no JE on any face (its
+	 * seat takes none), no fluid, no item, and the crucible's mixture is untouched.
+	 */
+	@GameTest(maxTicks = 20)
+	public void aStandTurnsElectricityIntoHeatOnly(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		BlockPos at = new BlockPos(2, 2, 2);
+		helper.setBlock(at.below(), JugcraftConcordance.CRUCIBLE_STAND);
+		helper.setBlock(at, JugcraftConcordance.CRUCIBLE);
+		CrucibleStandBlockEntity stand = helper.getBlockEntity(at.below(), CrucibleStandBlockEntity.class);
+		CrucibleBlockEntity crucible = helper.getBlockEntity(at, CrucibleBlockEntity.class);
+		ServerPlayer player = player(helper);
+		for (Band band : List.of(Band.WARM, Band.HOT, Band.SEARING)) {
+			RateGate.forget(player.getUUID());
+			stand.useEmpty(player, false);
+			long rate = CrucibleStandBlockEntity.rate(band);
+			stand.energy.setAmount(rate * 10 + rate / 2);
+			int paid = 0;
+			for (int tick = 0; tick < 12; tick++) {
+				paid += stand.heat(level) ? 1 : 0;
+			}
+			helper.assertTrue(stand.setting() == band && paid == 10 && stand.energy.getAmount() == rate / 2,
+					band.id + ": JE drawn is " + rate + " times the " + paid + " heated ticks; " + stand.energy.getAmount() + " left, short of a tick");
+		}
+		crucible.setTemperature(Heat.STAND_SEARING + 1);
+		stand.energy.setAmount(CrucibleStandBlockEntity.CAPACITY);
+		helper.assertTrue(!stand.heat(level) && stand.energy.getAmount() == CrucibleStandBlockEntity.CAPACITY, "A crucible hotter than it aims costs nothing");
+		crucible.setTemperature(Heat.AMBIENT);
+		RateGate.forget(player.getUUID());
+		stand.useEmpty(player, false);
+		int idle = 0;
+		for (int tick = 0; tick < 10; tick++) {
+			idle += stand.heat(level) ? 1 : 0;
+		}
+		helper.assertTrue(stand.setting() == Band.COLD && idle == 0 && stand.energy.getAmount() == CrucibleStandBlockEntity.CAPACITY, "Set off, it pays nothing");
+		helper.assertTrue(crucible.mixture().isEmpty(), "Heat alone puts nothing into a crucible");
+		helper.setBlock(at, Blocks.AIR);
+		RateGate.forget(player.getUUID());
+		stand.useEmpty(player, false);
+		for (int tick = 0; tick < 10; tick++) {
+			idle += stand.heat(level) ? 1 : 0;
+		}
+		helper.assertTrue(stand.setting() == Band.WARM && idle == 0 && stand.energy.getAmount() == CrucibleStandBlockEntity.CAPACITY
+				&& Diagnostic.of(Code.NO_CRUCIBLE).equals(stand.plan(level).reason()), "Set warm with nothing on it, it pays nothing");
+		BlockPos standAt = helper.absolutePos(at.below());
+		try (Transaction transaction = Transaction.openOuter()) {
+			helper.assertTrue(!stand.energy.supportsExtraction() && stand.energy.extract(1_000, transaction) == 0, "Its store gives nothing back");
+		}
+		for (Direction side : Direction.values()) {
+			EnergyStorage face = EnergyStorage.SIDED.find(level, standAt, side);
+			helper.assertTrue(side == Direction.UP ? face == null : face == stand.energy && !face.supportsExtraction(),
+					"The " + side + " face: " + (side == Direction.UP ? "its seat takes no JE" : "takes JE, gives none"));
+		}
+		helper.assertTrue(FluidStorage.SIDED.find(level, standAt, null) == null && ItemStorage.SIDED.find(level, standAt, null) == null,
+				"It holds no fluid and no items to give");
+		helper.assertTrue(level.getEntitiesOfClass(ItemEntity.class, new AABB(standAt).inflate(2.0)).isEmpty(), "and drops nothing");
+		helper.succeed();
 	}
 }

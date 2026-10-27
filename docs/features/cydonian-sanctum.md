@@ -201,7 +201,7 @@ a04d2f980.*
 
 ## World and event applicability
 - The rite works only in the Overworld, at the Ancient Altar (which generates only there). The Sanctum is its own
-  dimension, a lair: no spawns, no beds or respawn anchors, Grave Goods on death, home through the Red Mist.
+  dimension, a lair: no spawns, no beds or respawn anchors, nothing lost on death, home through the Red Mist.
 - No seasonal content. The Sanctum works all year.
 - Boss containment and loot are part 3's.
 

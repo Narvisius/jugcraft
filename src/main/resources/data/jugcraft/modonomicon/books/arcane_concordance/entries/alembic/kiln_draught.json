@@ -1,0 +1,38 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:alembic/kiln_draught",
+  "category": "jugcraft:alembic",
+  "x": 2,
+  "y": 4,
+  "name": "book.jugcraft.arcane_concordance.alembic.kiln_draught.name",
+  "description": "book.jugcraft.arcane_concordance.alembic.kiln_draught.description",
+  "icon": "minecraft:magma_cream",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/square_gray",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:research_node_unlocked",
+    "node_id": "jugcraft:concordance/alembic_arts_observed",
+    "tooltip": {
+      "translate": "book.jugcraft.arcane_concordance.locked.alembic_arts.observed"
+    }
+  },
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "id": "p0",
+      "title": "book.jugcraft.arcane_concordance.alembic.kiln_draught.p0.title",
+      "text": "book.jugcraft.arcane_concordance.alembic.kiln_draught.p0.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p1",
+      "title": "book.jugcraft.arcane_concordance.alembic.kiln_draught.p1.title",
+      "text": "book.jugcraft.arcane_concordance.alembic.kiln_draught.p1.text",
+      "show_title_separator": true
+    }
+  ]
+}

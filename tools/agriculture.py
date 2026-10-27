@@ -7,6 +7,7 @@ See docs/branches/AGRICULTURE.md for the design.
 """
 
 import plants
+import landscape_kinds
 import graveyard
 import midway
 import ferris_wheel
@@ -28,6 +29,7 @@ import mire_hag
 import crypt_lich
 import iron_dreadnought
 import alpha_werewolf
+import pumpkin_king
 import cydonian_sentinel
 import vesperine
 import kitchen
@@ -889,7 +891,7 @@ CONTEST = {"stand": "judging_stand", "stand_display": "Judging Stand", "places":
 COSTUMED_MOBS = {"mobs": ["zombie", "husk", "skeleton", "stray", "zombie_villager"], "chance": 0.15,
                  "costumes": ["jugcraft:witch_hat", "jugcraft:ghost_sheet", "jugcraft:scarecrow_hat", "minecraft:carved_pumpkin",
                               "jugcraft:vampire_cape", "jugcraft:mummy_wraps", "jugcraft:skeleton_suit", "jugcraft:werewolf_mask",
-                              "jugcraft:cat_ears_and_tail", "jugcraft:bat_wings"],
+                              "jugcraft:cat_ears_and_tail", "jugcraft:bat_wings", "jugcraft:chompa_costume"],
                  "tag": "jugcraft.costumed", "table": "entities/costumed_mob_candy",
                  # (item, weight, count)
                  "candy": [("jugcraft:candy_corn", 40, [1, 2]), ("jugcraft:caramel", 20, [1, 1]), ("jugcraft:glow_gum", 10, [1, 1]),
@@ -945,10 +947,11 @@ CANDLE_SKULL = {"light": 12}
 
 # Will-o'-wisps (agriculture/WillOWisp.java, Wisps.java): on Halloween nights (the event running, overworld time
 # dusk to dawn), every spawn_ticks the server tries, spawn_chance of the time per player, one spot min..max
-# blocks away, open to the sky, over a swamp or within corn_radius of corn; at most near_cap within near_range of a
+# blocks away, open to the sky, over a swamp (biome tag haunts_tag) or within corn_radius of corn; at most near_cap within near_range of a
 # player and level_cap in the world. A wisp flees within flee (sneak_flee when sneaking); a glass bottle catches it.
 WISPS = {"spawn_ticks": 100, "spawn_chance": 0.5, "min": 10, "max": 32, "corn_radius": 2, "near_cap": 4, "near_range": 48,
-         "level_cap": 64, "flee": 6.0, "sneak_flee": 2.5, "jar": "wisp_in_a_jar", "jar_display": "Wisp in a Jar", "jar_light": 13}
+         "level_cap": 64, "flee": 6.0, "sneak_flee": 2.5, "jar": "wisp_in_a_jar", "jar_display": "Wisp in a Jar", "jar_light": 13,
+         "haunts_tag": "jugcraft:wisp_haunts", "haunts": ["#c:is_swamp", landscape_kinds.SWAMPS_TAG]}
 # The Harvest Moon (agriculture/HarvestMoon.java): the nights (dusk to dawn) of `day` (halloween.harvest_moon) while
 # the event runs; Jugcraft crops grow growth_bonus times as fast and giant pumpkins swell twice as fast.
 HARVEST_MOON = {"day": "10-31", "growth_bonus": 2.0, "dusk": 13000, "dawn": 23000, "check_ticks": 100}
@@ -1114,11 +1117,13 @@ BROOMSTICK = {"item": "flying_broomstick", "display": "Flying Broomstick", "char
 WEREWOLF = {"entity": "werewolf", "display": "Werewolf", "size": [0.9, 2.4], "hide_factor": 0.5, "silver_factor": 2.5,
             "regen_ticks": 40, "silver_wound_ticks": 100, "shun_ticks": 200, "spawn_ticks": 200, "spawn_chance": 0.3,
             "min_distance": 24, "max_distance": 40, "near_cap": 2, "level_cap": 8, "ward_reach": 6,
-            "haunts": ["#minecraft:is_forest", "#minecraft:is_taiga", "minecraft:grove"],
+            # The landscape collection's woods too, which lack vanilla's kind tags (tools/landscape_kinds.py).
+            "haunts": ["#minecraft:is_forest", "#minecraft:is_taiga", "minecraft:grove", landscape_kinds.WOODS_TAG],
             # Which kind comes out: a snow werewolf in snowy biomes; a shadow werewolf `shadow_haunt_chance` of the time
             # in its haunts and `shadow_chance` elsewhere; otherwise a brown one.
-            "snow_haunts": ["#c:is_snowy"],
-            "shadow_haunts": ["minecraft:dark_forest", "minecraft:pale_garden", "jugcraft:gloomweald", "jugcraft:ghost_forest"],
+            "snow_haunts": ["#c:is_snowy", landscape_kinds.SNOWY_TAG],
+            "shadow_haunts": ["minecraft:dark_forest", "minecraft:pale_garden", "jugcraft:gloomweald", "jugcraft:ghost_forest",
+                              "jugcraft:landscape_ominous_woods"],
             "shadow_chance": 0.08, "shadow_haunt_chance": 0.5,
             # Three kinds, three tiers of danger: their attributes, the experience they give and what they drop.
             "kinds": {
@@ -1162,7 +1167,7 @@ SQUIRRELS = {"entity": "squirrel", "display": "Squirrel", "health": 6, "speed": 
              "spawn_chance": 0.25, "min_distance": 20, "max_distance": 40, "near_cap": 6, "level_cap": 30, "seek_range": 10,
              "bury_ticks": 200, "sapling_chance": 0.25, "sapling_space": 3, "acorn_chance": 0.05,
              "acorn_leaves": ["oak_leaves", "dark_oak_leaves"], "acorn": "acorn", "acorn_display": "Acorn", "roasted": "roasted_acorns",
-             "habitat": ["#minecraft:is_forest", "#minecraft:is_taiga"],
+             "habitat": ["#minecraft:is_forest", "#minecraft:is_taiga", landscape_kinds.WOODS_TAG],
              "food": ["jugcraft:acorn", "jugcraft:chestnut", "jugcraft:roasted_chestnuts", "jugcraft:pine_nuts", "jugcraft:roasted_pine_nuts", "jugcraft:ecology_walnut", "jugcraft:roasted_walnuts"]}
 # The Pumpkling (Pumpkling): a hand-carved pumpkin woken by a spark into a pet; follows past `follow_start`, stops at
 # `follow_stop`, comes to its owner past `teleport`; treats heal `treat_heal`.
@@ -1535,7 +1540,7 @@ def decor13_items():
 # wearer while they sneak, the tails sway, and the bat wings spread and flap while their wearer is off the ground.
 OUTFITS = {"vampire_cape": {"display": "Vampire Cape"}, "mummy_wraps": {"display": "Mummy Wraps"},
            "skeleton_suit": {"display": "Skeleton Suit", "glow": True}, "werewolf_mask": {"display": "Werewolf Mask"},
-           "cat_ears_and_tail": {"display": "Cat Ears and Tail"}, "bat_wings": {"display": "Bat Wings"}}
+           "cat_ears_and_tail": {"display": "Cat Ears and Tail"}, "bat_wings": {"display": "Bat Wings"}, "chompa_costume": {"display": "Tony Tony Chompa Costume"}}
 # The Costume Trunk (CostumeTrunkBlock + entity): holds up to `slots` costumes (item tag COSTUME_TAG). A costume in hand
 # goes in; an empty hand changes into the next one (what you wore goes in at the back); sneaking with an empty hand takes
 # the last one out. Its lid opens for `open_ticks` when used.
@@ -2018,7 +2023,8 @@ TURKEYS = {"entity": "turkey", "display": "Wild Turkey", "health": 8, "speed": 0
            "strut_range": 6, "strut_ticks": 80, "strut_chance": 200, "egg_min": 6000, "egg_max": 12000,
            "spawn_ticks": 400, "spawn_chance": 0.25, "min_distance": 24, "max_distance": 48, "flock": [3, 5], "near_cap": 10,
            "near_range": 64, "level_cap": 40, "habitat_tag": "jugcraft:turkey_habitat",
-           "habitat": ["#minecraft:is_forest", "#minecraft:is_taiga", "minecraft:plains", "minecraft:sunflower_plains", "minecraft:meadow"],
+           "habitat": ["#minecraft:is_forest", "#minecraft:is_taiga", "minecraft:plains", "minecraft:sunflower_plains", "minecraft:meadow",
+                       landscape_kinds.WOODS_TAG, landscape_kinds.GRASSLANDS_TAG],
            "table": "entities/turkey", "feathers": [1, 3], "raw": "raw_turkey", "raw_food": [3, 0.3], "roast": "roast_turkey",
            "roast_display": "Roast Turkey", "slice": "turkey_slice", "servings": 6, "serving": [3, 0.6]}
 
@@ -2675,6 +2681,8 @@ SHAPED = [
     {"id": "werewolf_mask", "pattern": ["WLW", "WBW", "W W"], "key": {"W": "minecraft:brown_wool", "L": "minecraft:leather",
                                                                    "B": "minecraft:bone"},
      "result": "werewolf_mask", "count": 1, "category": "misc"},
+    {"id": "chompa_costume", "pattern": ["SPS", "LWL", "L L"], "key": {"S": "minecraft:stick", "P": "minecraft:pink_wool", "L": "minecraft:leather", "W": "minecraft:white_wool"},
+     "result": "chompa_costume", "count": 1, "category": "misc"},
     {"id": "bat_wings", "pattern": ["S S", "LDL", "L L"], "key": {"S": "minecraft:stick", "L": "minecraft:leather", "D": "minecraft:black_dye"},
      "result": "bat_wings", "count": 1, "category": "misc"},
     {"id": "costume_trunk", "pattern": ["PWP", "PCP", "PPP"], "key": {"P": "#minecraft:planks", "W": "minecraft:purple_wool",
@@ -2788,7 +2796,8 @@ def all_blocks():
             + decor4_blocks() + decor5_blocks() + decor6_blocks() + decor7_blocks() + decor8_blocks() + decor9_blocks() + decor10_blocks()
             + decor11_blocks() + decor12_blocks() + decor13_blocks() + decor14_blocks() + chandlery_blocks() + cider_blocks() + pantry_blocks()
             + firework_blocks() + feast_blocks() + maze_blocks() + candy_blocks() + foraging_blocks() + bat_blocks() + [KNITTING["wheel"]] + pie_blocks() + [SPIRIT_BOARD["block"], TURKEYS["roast"], THEREMIN["block"], OFRENDA["block"]] + list(OFRENDA["decor"]) + graveyard.blocks() + [WOLFSBANE["block"], potted(WOLFSBANE["block"])] + WEREWOLF_RUGS + midway.blocks() + ferris_wheel.blocks() + hot_air_balloon.blocks() + plants.blocks() + decor15.blocks() + decor16.blocks() + decor17.blocks() + decor18.blocks() + decor19.blocks() + decor20.blocks() + kitchen.blocks() + feasts.blocks() + menu.blocks() + rice.blocks() + soil.blocks() + orchard.blocks() + cakes.blocks() + pies_and_tarts.blocks() + milkshakes.blocks() + garden.blocks()
-            + herbs.blocks() + spices.blocks() + lairs.blocks() + vesperine.blocks() + adam_ondi_ahman.blocks_registered())
+            + herbs.blocks() + spices.blocks() + lairs.blocks() + vesperine.blocks() + pumpkin_king.blocks()
+            + adam_ondi_ahman.blocks_registered())
 
 
 def all_items():
@@ -2802,7 +2811,7 @@ def all_items():
             + lantern_items() + feast_blocks() + [MAZE["gate"]] + ghost_items() + face_paint_items() + candy_items() + foraging_items() + bat_items() + knitting_items() + pie_items() + [SPIRIT_BOARD["block"], TURKEYS["roast"], THEREMIN["block"], OFRENDA["block"]] + list(OFRENDA["decor"]) + graveyard.items() + [h["item"] for h in HEX["brews"].values()] + [BROOMSTICK["item"]] + [WOLFSBANE["block"], WEREWOLF["dagger"], WEREWOLF["arrow"]] + WEREWOLF_PELTS + WEREWOLF_RUGS + [SQUIRRELS["acorn"]] + midway.items() + ferris_wheel.items() + pinata.items() + hot_air_balloon.items() + leaf_blower.items() + plants.items() + decor15.items() + decor16.items() + decor17.items() + decor18.items() + decor19.items() + decor20.items() + kitchen.items() + feasts.items() + rice.items() + soil.items() + orchard.items() + [i for i in cakes.items() if i not in cakes.ITEMS] + pies_and_tarts.items() + garden.items()
             + herbs.items() + spices.items() + lairs.items() + vesperine.items() + tatterlace.items()
             + yeti_king.items() + cinder_tyrant.items() + mire_hag.items() + crypt_lich.items()
-            + iron_dreadnought.items() + alpha_werewolf.items() + cydonian_sentinel.items())
+            + iron_dreadnought.items() + alpha_werewolf.items() + pumpkin_king.items() + cydonian_sentinel.items())
 
 
 def owns(entry_id):

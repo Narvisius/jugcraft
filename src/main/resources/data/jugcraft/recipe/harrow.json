@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "guns"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SSS",
+    "SFS",
+    "BLB"
+  ],
+  "key": {
+    "S": "#c:ingots/steel",
+    "F": "minecraft:fire_charge",
+    "B": "#c:ingots/brass",
+    "L": "minecraft:lever"
+  },
+  "result": {
+    "id": "jugcraft:harrow"
+  }
+}

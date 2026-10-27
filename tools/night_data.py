@@ -230,3 +230,6 @@ def tags(tags):
         tags.add("item", CANDY_BAG["treat_tag"], item)
     tags.add("block", "minecraft:mineable/axe", rid(TREBUCHET["block"]))
     tags.add("block", "minecraft:mineable/pickaxe", rid(HORSEMAN["lantern"]))
+    # Where wisps come out over a swamp (Wisps.canSpawnAt): the common swamps and the landscape collection's.
+    for biome in WISPS["haunts"]:
+        tags.add("worldgen/biome", WISPS["haunts_tag"], biome)

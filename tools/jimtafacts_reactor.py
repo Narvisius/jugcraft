@@ -18,6 +18,12 @@ part('component_heat_vent','reactorVentSpread','spread_vent',neighbor=4)
 part('neutron_reflector','reactorReflector','reflector',life=10000);part('thick_neutron_reflector','reactorReflectorThick','reflector',life=40000)
 part('redstone_condensator','reactorCondensator','condensator',capacity=20000);part('lapis_condensator','reactorCondensatorLap','condensator',capacity=100000)
 part('lithium_cell','reactorLithiumCell','lithium');part('tritium_cell','itemTritiumCell','isotope');part('plutonium_pellet','itemPlutonium','plutonium');part('empty_fuel_rod','itemFuelRod','empty')
+part('uranium_fuel_material','itemUran','fuel_material')
+part('mox_fuel_material','itemMOX','mixed_fuel_material')
+part('small_plutonium','itemPlutoniumSmall','small_plutonium')
+part('uranium_235','itemUran235','fraction_235')
+part('small_uranium_235','itemUran235small','small_fraction_235')
+part('uranium_238','itemUran238','fraction_238')
 part('rtg_pellet','itemRTGPellet','rtg',life=20000)
 BLOCKS={'jimta_compact_reactor':'generator/blockNuclearReactor','jimta_reactor_chamber':'reactor/blockReactorChamber','jimta_reactor_vessel':'reactor/blockreactorvessel','jimta_reactor_fluid_port':'reactor/blockReactorFluidPort','jimta_reactor_access_hatch':'reactor/blockReactorAccessHatch','jimta_reactor_redstone_port':'reactor/blockReactorRedstonePort'}
 def items():return set(PARTS)|set(BLOCKS)
@@ -55,9 +61,20 @@ def generate(shared=True):
    if fuel=='mox':parts+=['jugcraft:jimta_plutonium_pellet']
    craft(f'{fuel}_{tier}',parts,f'jimta_{fuel}_rod_{tier}')
    craft(f'spent_{fuel}_{tier}',['jugcraft:'+f'jimta_{fuel}_rod_{tier}_depleted'],'spent_fuel_assembly',n)
+ craft('uranium_fuel_material',['jugcraft:leu_fuel_assembly'],'jimta_uranium_fuel_material')
+ craft('restore_uranium_assembly',['jugcraft:jimta_uranium_fuel_material'],'leu_fuel_assembly')
+ craft('mox_fuel_material',['jugcraft:jimta_uranium_fuel_material','jugcraft:jimta_plutonium_pellet'],'jimta_mox_fuel_material')
+ craft('uranium_material_rod',['jugcraft:jimta_uranium_fuel_material','jugcraft:jimta_empty_fuel_rod'],'jimta_uranium_rod_simple')
+ craft('mox_material_rod',['jugcraft:jimta_mox_fuel_material','jugcraft:jimta_empty_fuel_rod'],'jimta_mox_rod_simple')
+ craft('plutonium_small_combine',['jugcraft:jimta_small_plutonium']*9,'jimta_plutonium_pellet')
+ recipes['plutonium_small_divide']={'type':'minecraft:crafting_shapeless','category':'misc','ingredients':['jugcraft:jimta_plutonium_pellet'],'result':{'id':'jugcraft:jimta_small_plutonium','count':9}}
+ recipes['separate_enriched_fractions']={'type':'jugcraft:jimta_thermal_centrifuging','ingredient':'jugcraft:enriched_uranium_cylinder','result':{'id':'jugcraft:jimta_uranium_235','count':1},'byproducts':[{'result':{'id':'jugcraft:jimta_uranium_238','count':7},'chance':1}],'minimum_heat':2000,'time':1200}
+ craft('recombine_enriched_fractions',['jugcraft:jimta_uranium_235']+['jugcraft:jimta_uranium_238']*7,'enriched_uranium_cylinder')
+ craft('uranium_small_combine',['jugcraft:jimta_small_uranium_235']*9,'jimta_uranium_235')
+ craft('uranium_small_divide',['jugcraft:jimta_uranium_235'],'jimta_small_uranium_235',9)
  recipes['recover_plutonium']={'type':'jugcraft:jimta_thermal_centrifuging','ingredient':'jugcraft:spent_fuel_assembly','input_count':9,'result':{'id':'jugcraft:jimta_plutonium_pellet','count':1},'byproducts':[{'result':{'id':'jugcraft:uranium_dust','count':4},'chance':1}],'minimum_heat':2000,'time':2400}
  for id,p in PARTS.items():
-  if p['kind'] in ('uranium','mox','spent','plutonium','isotope','empty','rtg'):continue
+  if p['kind'] in ('uranium','mox','spent','plutonium','isotope','empty','rtg','fuel_material','mixed_fuel_material','small_plutonium','fraction_235','small_fraction_235','fraction_238'):continue
   if id=='jimta_lithium_cell':parts=['jugcraft:lithium_carbonate','jugcraft:jimta_empty_fuel_rod']
   elif p['kind']=='coolant':parts=['jugcraft:tin_plate']*(p['capacity']//10000)+['minecraft:water_bucket']
   elif p['kind']=='plating':parts=['jugcraft:lead_plate','jugcraft:steel_plate']+(['jugcraft:copper_plate'] if p['plating']==2000 else ['minecraft:obsidian'] if p['plating']==500 else [])

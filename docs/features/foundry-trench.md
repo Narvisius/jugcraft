@@ -49,7 +49,7 @@ The fixtures, in part 1:
 - **A crown** and **a terminal** cannot be used. Each is dark, or live: a live crown burns violet and crackles (light 12), a live terminal burns violet and sparks (light 8), and a live breaker's lamp burns amber (light 10). Part 2 lights them.
 - **A breaker** can also be thrown, and fouled (a bent plate of armour jammed across its blade, smoking). Part 2 does both.
 
-Everything else is the shared framework ([hollow-acre.md](hollow-acre.md#lairs-the-shared-rules)): an instance per opening, at most eight; at most four players; nothing can be built or broken (the breakers are the trench's fixtures besides the Grey Mist); the mist's toll at the edges; Grave Goods on death; closing after 30 seconds empty.
+Everything else is the shared framework ([hollow-acre.md](hollow-acre.md#lairs-the-shared-rules)): an instance per opening, at most eight; at most four players; nothing can be built or broken (the breakers are the trench's fixtures besides the Grey Mist); the mist's toll at the edges; nothing lost on death; closing after 30 seconds empty.
 
 ## Changes from the plan
 
@@ -188,7 +188,7 @@ The Foundry Trench is its own dimension, so nothing here changes the Overworld. 
 
 ## Rollout and open questions
 
-The shared framework's defaults hold: four players and eight instances, Grave Goods on death.
+The shared framework's defaults hold: four players and eight instances, nothing lost on death.
 
 Part 2, the Iron Dreadnought ([iron-dreadnought.md](iron-dreadnought.md)), adds:
 - the fight in the pit: his plating, the discharge he charges every 20 seconds into the pylon nearest his foe, the breaker thrown to route it and overload him, and the lane it runs down if it is not;

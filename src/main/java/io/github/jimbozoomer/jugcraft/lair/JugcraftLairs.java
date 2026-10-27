@@ -24,9 +24,11 @@ import net.minecraft.world.level.material.PushReaction;
 /**
  * The lairs' registrations (docs/features/hollow-acre.md, docs/features/spindle-loft.md, docs/features/glacier-hall.md,
  * docs/features/cinder-kiln.md, docs/features/lantern-fen.md, docs/features/crypt-archive.md,
- * docs/features/foundry-trench.md, docs/features/moonlit-ring.md, docs/features/cydonian-sanctum.md): the lair-only blocks (unbreakable, no items, no
+ * docs/features/foundry-trench.md, docs/features/moonlit-ring.md, docs/features/cydonian-sanctum.md,
+ * docs/features/crowfield.md): the lair-only blocks (unbreakable, no items, no
  * drops), the Mourning Wreath and the Death Knell of the Last Rites, the Cursed Spindle, the Frost Horn, the Kiln Seal,
- * the Hag Stone, the Writ of Exhumation, Sealed Orders, the Howling Totem, the Altar Keystone, the Mist Gate, and the lairs' events, rules,
+ * the Hag Stone, the Writ of Exhumation, Sealed Orders, the Howling Totem, the Altar Keystone, the Harvest Crown, the Thunder Vane, the Mist
+ * Gate, and the lairs' events, rules,
  * rituals and commands. Registered whatever the
  * feature switch says, so saved worlds keep them; the switch
  * ({@value #FEATURE}) stops the rituals.
@@ -81,6 +83,11 @@ public final class JugcraftLairs {
 	public static Block STAR_DIAL;
 	public static Block STAR_DOOR;
 	public static Block DUST_VENT;
+	public static Block CROWFIELD_CORN;
+	public static Block KINGS_GOURD;
+	public static Block STORM_ROD;
+	public static Block ROC_NEST;
+	public static Block STORM_CLOUD;
 	public static Block MOURNING_WREATH;
 	public static Item MOURNING_WREATH_ITEM;
 	public static Item DEATH_KNELL;
@@ -92,6 +99,8 @@ public final class JugcraftLairs {
 	public static Item SEALED_ORDERS;
 	public static Item HOWLING_TOTEM;
 	public static Item ALTAR_KEYSTONE;
+	public static Item HARVEST_CROWN;
+	public static Item THUNDER_VANE;
 	public static EntityType<MistGateEntity> MIST_GATE;
 
 	private JugcraftLairs() {
@@ -163,6 +172,16 @@ public final class JugcraftLairs {
 		STAR_DOOR = fixture("star_door", p -> new StarDoorBlock(p.lightLevel(StarDoorBlock::light)), MapColor.TERRACOTTA_RED,
 				SoundType.STONE, 0, Fit.SOLID);
 		DUST_VENT = fixture("dust_vent", Block::new, MapColor.TERRACOTTA_RED, SoundType.STONE, 0, Fit.SOLID);
+		// The Crowfield's (docs/features/crowfield.md): the corn that walls the field, and the King's Gourds.
+		CROWFIELD_CORN = fixture("crowfield_corn", CrowfieldCornBlock::new, MapColor.COLOR_YELLOW, SoundType.CROP, 0, Fit.SEE_THROUGH);
+		KINGS_GOURD = fixture("kings_gourd", p -> new KingsGourdBlock(p.lightLevel(KingsGourdBlock::light)), MapColor.COLOR_ORANGE,
+				SoundType.WOOD, 0, Fit.SEE_THROUGH);
+		// The Crown of Thunder's (docs/features/crown-of-thunder.md): its Storm Rods (one burns as the storm gathers on it),
+		// the Roc's nest of woven branches, and the storm clouds round the pinnacle's foot.
+		STORM_ROD = fixture("storm_rod", p -> new StormRodBlock(p.lightLevel(StormRodBlock::light)), MapColor.COLOR_ORANGE,
+				SoundType.COPPER, 0, Fit.SEE_THROUGH);
+		ROC_NEST = fixture("roc_nest", Block::new, MapColor.COLOR_GRAY, SoundType.MANGROVE_ROOTS, 0, Fit.SOLID);
+		STORM_CLOUD = fixture("storm_cloud", Block::new, MapColor.COLOR_GRAY, SoundType.WOOL, 0, Fit.PASSABLE);
 
 		ResourceKey<Block> wreathKey = ResourceKey.create(Registries.BLOCK, Jugcraft.id("mourning_wreath"));
 		MOURNING_WREATH = Registry.register(BuiltInRegistries.BLOCK, wreathKey, new MourningWreathBlock(BlockBehaviour.Properties.of()
@@ -194,6 +213,12 @@ public final class JugcraftLairs {
 		ResourceKey<Item> keystoneKey = ResourceKey.create(Registries.ITEM, Jugcraft.id("altar_keystone"));
 		ALTAR_KEYSTONE = Registry.register(BuiltInRegistries.ITEM, keystoneKey, new AltarKeystoneItem(new Item.Properties()
 				.stacksTo(16).setId(keystoneKey)));
+		ResourceKey<Item> crownKey = ResourceKey.create(Registries.ITEM, Jugcraft.id("harvest_crown"));
+		HARVEST_CROWN = Registry.register(BuiltInRegistries.ITEM, crownKey, new HarvestCrownItem(new Item.Properties().stacksTo(16)
+				.setId(crownKey)));
+		ResourceKey<Item> vaneKey = ResourceKey.create(Registries.ITEM, Jugcraft.id("thunder_vane"));
+		THUNDER_VANE = Registry.register(BuiltInRegistries.ITEM, vaneKey, new ThunderVaneItem(new Item.Properties().stacksTo(16)
+				.setId(vaneKey)));
 
 		ResourceKey<EntityType<?>> gateKey = ResourceKey.create(Registries.ENTITY_TYPE, Jugcraft.id("mist_gate"));
 		MIST_GATE = Registry.register(BuiltInRegistries.ENTITY_TYPE, gateKey, EntityType.Builder.<MistGateEntity>of(MistGateEntity::new,
@@ -219,6 +244,8 @@ public final class JugcraftLairs {
 			output.accept(SEALED_ORDERS);
 			output.accept(HOWLING_TOTEM);
 			output.accept(ALTAR_KEYSTONE);
+			output.accept(HARVEST_CROWN);
+			output.accept(THUNDER_VANE);
 		});
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output -> output.accept(MOURNING_WREATH_ITEM));
 	}

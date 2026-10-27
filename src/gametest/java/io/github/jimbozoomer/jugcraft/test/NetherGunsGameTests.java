@@ -42,16 +42,17 @@ public class NetherGunsGameTests {
 			"long_scope", "medium_scope", "reflex_sight", "laser_sight");
 
 	/**
-	 * Each is registered with its numbers and its recipe loads, and fires bullets that set what they hurt alight; no other
-	 * gun's do. The Tusker fires eight pellets from six buckshot shells loaded a shell at a time; the Cinder Repeater fires
-	 * light rounds for as long as the trigger is held, from a magazine of twenty; the Bastion Rifle fires one rifle round a
-	 * pull from five loaded a round at a time. The Ashfall Pistol, held in one hand, fires one light round a pull from a
-	 * tank of eight; the Goldbristle Carbine one rifle round a pull from a magazine of twelve; the Crackling six pellets
-	 * from five buckshot shells loaded a shell at a time. The Tusker, the Cinder Repeater, the Bastion Rifle and the
-	 * Goldbristle Carbine take the stocks, the grips, the bayonets, the barrels' attachments, the scopes and the Laser
-	 * Sight, and the Cinder Repeater and the Goldbristle Carbine the magazines too. The Ashfall Pistol takes the stocks, the
-	 * scopes and the Laser Sight only; the Crackling the stocks, the grips and the bayonets only, the barrels' attachments
-	 * the owner made for it being too short for its barrel.
+	 * Each is registered with its numbers and its recipe loads, and fires bullets that set what they hurt alight; no
+	 * other gun's do but slice 14D's Hinterland Rifle ({@link BrassGunsIVGameTests}) and slice 14E's Harrow
+	 * ({@link BrassGunsVGameTests}). The Tusker fires eight pellets from six buckshot shells loaded a shell at a time;
+	 * the Cinder Repeater fires light rounds for as long as the trigger is held, from a magazine of twenty; the Bastion
+	 * Rifle fires one rifle round a pull from five loaded a round at a time. The Ashfall Pistol, held in one hand,
+	 * fires one light round a pull from a tank of eight; the Goldbristle Carbine one rifle round a pull from a magazine
+	 * of twelve; the Crackling six pellets from five buckshot shells loaded a shell at a time. The Tusker, the Cinder
+	 * Repeater, the Bastion Rifle and the Goldbristle Carbine take the stocks, the grips, the bayonets, the barrels'
+	 * attachments, the scopes and the Laser Sight, and the Cinder Repeater and the Goldbristle Carbine the magazines
+	 * too. The Ashfall Pistol takes the stocks, the scopes and the Laser Sight only; the Crackling the stocks, the
+	 * grips and the bayonets only, the barrels' attachments the owner made for it being too short for its barrel.
 	 */
 	@GameTest
 	public void netherGunsAreRegistered(GameTestHelper helper) {
@@ -68,8 +69,11 @@ public class NetherGunsGameTests {
 			helper.assertTrue(JugcraftGuns.ACCEPTS.getOrDefault(name, List.of()).containsAll(FULL),
 					"The " + name + " does not take the stocks, grips, barrels, bayonets and scopes");
 		}
-		helper.assertTrue(JugcraftGuns.INCENDIARY.equals(Set.copyOf(GUNS)), "Guns besides the Nether guns set what they hit alight: "
-				+ JugcraftGuns.INCENDIARY);
+		List<String> incendiary = new ArrayList<>(GUNS);
+		incendiary.add("hinterland_rifle");
+		incendiary.add("harrow");
+		helper.assertTrue(JugcraftGuns.INCENDIARY.equals(Set.copyOf(incendiary)),
+				"Guns besides the Nether guns, the Hinterland Rifle and the Harrow set what they hit alight: " + JugcraftGuns.INCENDIARY);
 		GunSpec tusker = JugcraftGuns.SPECS.get("tusker");
 		GunSpec cinder = JugcraftGuns.SPECS.get("cinder_repeater");
 		GunSpec bastion = JugcraftGuns.SPECS.get("bastion_rifle");

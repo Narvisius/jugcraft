@@ -325,7 +325,9 @@ def codex():
                 ("text", "Recall",
                  f"A master may attune when nothing is up, by **recalling** the pattern they last observed: it costs "
                  f"the pattern's recall price and lasts {RECALL_TICKS // 1200} minutes, once each time the pattern "
-                 f"comes round. Stored resonance is the alternative to waiting, never a way round the sky's count.",
+                 f"comes round. A holder of Stolas's pact may also recall, at his perch, any pattern they observed (the "
+                 f"Binding category's pact entry); every recall of a pattern's rising is the same one. Stored resonance is "
+                 f"the alternative to waiting, never a way round the sky's count.",
                  (art, "mastered")),
             ],
         },

@@ -55,9 +55,9 @@ These are built here and reused by Boss 2's Spindle Loft.
   - inside, players lose the build ability, as in Adventure mode, and get it back on leaving.
   - Ender pearls, chorus fruit, food, potions and weapons work as anywhere. The lair-only blocks can't be broken or blown up at all, and they are in the `wither_immune` and `dragon_immune` tags.
 - **The edges:** fly or fall off the island, and the mist throws you back to the arrival point for 4 damage, never below half a heart. The toll comes straight off health (armour and effects don't turn it aside); creative and spectator players pay nothing. Players in a lair are checked once a second.
-- **Grave Goods:** dying in a lair costs no belongings.
-  - What you drop (items and experience) is gathered at once and kept with you, across logouts and restarts.
-  - You get it back when you respawn, outside the lair: into your inventory, the rest at your feet.
+- **Death costs nothing:** dying in a lair is like vanilla's keepInventory rule, there only ([lair-keep-inventory.md](lair-keep-inventory.md)).
+  - Nothing is dropped, items or experience. You respawn outside the lair with every slot as it was (armour and offhand still worn), the same held slot and all your experience.
+  - **Grave Goods** catch anything still dropped there at death (by another mod, say): it is gathered at once and kept with you, across logouts and restarts, and you get it back when you respawn: into your inventory, the rest at your feet.
 - **Closing:** an instance closes when its boss is dead and everyone has left, or when nobody has been inside for 30 seconds. A server restart closes every instance. Anyone who logs in inside a closed instance goes back to their return point.
 - **Commands:** `/jugcraft lair leave` for anyone in a lair; for operators, `/jugcraft lair list` and `/jugcraft lair close <lair> <slot>`.
 - **Settings** in `config/jugcraft.properties`:
@@ -148,13 +148,19 @@ The client game test (`LairClientGameTests`, CI job `client`) runs the framework
 1. the knell rung at the prepared grave opens an instance in the Hollow Acre's own dimension (from y 0, no ceiling), places the island (throne, Grey Mist, ward brazier, moon), takes the wreath, opens a gate over the grave and takes the ringer to the arrival point, unable to build;
 2. placing a block, emptying a bucket and using a block are refused; ender pearls and the lair's exit are not;
 3. flying off the island throws the player back for 4 damage; falling off at 2 health leaves half a heart;
-4. dying there gathers the drops (3 diamonds, 7 experience) as Grave Goods and ends the visit; respawned outside, the player gets them all back;
+4. a real death there (a helmet and shield worn, 9 emeralds held in slot 5, bread in slot 21, some 500 experience) drops no items or experience and ends the visit; respawned outside through the client, the player has every slot, the held slot and all the experience back, and goes back in; drops dying there anyway (3 diamonds, 7 experience) are gathered as Grave Goods; respawned outside, the player gets them all back;
 5. the gate takes the player back in; leaving puts them back exactly where they stood, facing the same way, able to build;
 6. a full party lets nobody else in;
-7. an instance empty for 30 seconds closes, and its gate with it; after a restart, a player found in a closed instance is sent home;
+7. an instance empty for 30 seconds closes, and its gate with it; after a restart, a player found in a closed instance is sent home; (since Concordance Chunk B, unit 2) for a Glacier Hall, its King goes with it, and a reward kept from before is paid at home, not in the closed hall;
 8. no more instances open than `lairs.instances` allows, and a closed one's slot is free again.
 
 Then it takes the six pictures above.
+
+Last (since Concordance Chunk B, unit 2):
+
+9. a real restart: the world is saved with the player inside a Glacier Hall and a Yeti King reward kept for them in the world's record, and opened again. The game's own server stops and starts, which clears the instances, and on the real join the player is back at their return point, able to build, and is then paid once.
+
+Step 7's restart is simulated (`Lairs.reset()`, as the server's start and stop do); step 9's is real, so "a server restart closes every instance, and anyone who logs in inside a closed instance goes back to their return point" is now shown. Step 2 of `GlacierHallClientGameTests` shows the edges' toll whole under Resistance IV and a Brace ([glacier-hall.md](glacier-hall.md#verification)). Both pass in CI (run 38543250503, by workflow_dispatch; not merged), each by its shard's success: `LairClientGameTests` in shard 0, `GlacierHallClientGameTests` in shard 4. No disconnect or leave event is checked.
 
 Not run: the two-client dedicated-server playtest the plan asks for, and play by hand.
 
@@ -166,7 +172,7 @@ The Hollow Acre is its own dimension, so nothing here changes the Overworld but 
 
 The plan's open questions keep their defaults:
 - rites all year at night;
-- Grave Goods on death;
+- nothing lost on death (answered by the owner: keepInventory, in lairs only);
 - four players and eight instances.
 
 GeckoLib now carries part 2's animations, as above.

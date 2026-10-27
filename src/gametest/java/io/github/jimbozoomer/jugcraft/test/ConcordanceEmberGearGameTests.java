@@ -95,7 +95,7 @@ public class ConcordanceEmberGearGameTests {
 
 	/** A survival player with the Initiate's Wand on {@code standAt}, facing south (+Z). */
 	private static ServerPlayer player(GameTestHelper helper, BlockPos standAt) {
-		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		ServerPlayer player = TestPlayers.mock(helper);
 		player.setGameMode(GameType.SURVIVAL);
 		BlockPos absolute = helper.absolutePos(standAt);
 		player.snapTo(absolute.getX() + 0.5, absolute.getY(), absolute.getZ() + 0.5, 0.0F, 0.0F);
@@ -193,7 +193,7 @@ public class ConcordanceEmberGearGameTests {
 		if (!in(new ItemStack(EmberGear.FIRE_BANGLE), "trinkets:hand/bracelet") || in(new ItemStack(EmberGear.FIRE_BANGLE), "trinkets:hand/ring")) {
 			wrong.add("the Fire Bangle is not worn in a Bracelet slot only");
 		}
-		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		ServerPlayer player = TestPlayers.mock(helper);
 		var focusSlot = TrinketsApi.getAttachment(player).getInventory("chest/spell_focus");
 		var bracelets = TrinketsApi.getAttachment(player).getInventory("hand/bracelet");
 		if (focusSlot == null || focusSlot.getContainerSize() != 1) {
@@ -264,7 +264,7 @@ public class ConcordanceEmberGearGameTests {
 	/** Worn, the foci give 2 and 4 fire Spell Power through Trinkets (one modifier for each slot); the bangle gives none. */
 	@GameTest(maxTicks = 20)
 	public void theFociGiveFireSpellPowerThroughTrinkets(GameTestHelper helper) {
-		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		ServerPlayer player = TestPlayers.mock(helper);
 		ItemStack lesser = new ItemStack(EmberGear.LESSER_FIRE_FOCUS);
 		ItemStack focus = new ItemStack(EmberGear.FIRE_FOCUS);
 		List<String> lesserWorn = trinketModifiers(lesser, player, "chest/spell_focus", 0);

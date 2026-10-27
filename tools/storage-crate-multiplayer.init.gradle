@@ -1,0 +1,12 @@
+// Explicit local opt-in. Never reuse a world or write into the normal runServer directory.
+// ./gradlew runClientGameTest -PclientTests=StorageCrateMultiplayerClientGameTests -I tools/storage-crate-multiplayer.init.gradle
+gradle.projectsEvaluated {
+    allprojects {
+        tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+            def evidence = layout.buildDirectory.dir('storage-crate-multiplayer-' + System.currentTimeMillis()).get().asFile
+            systemProperty 'jugcraft.crate.multiplayer', 'true'
+            systemProperty 'jugcraft.crate.testDir', evidence.absolutePath
+            doFirst { logger.lifecycle('Storage crate multiplayer evidence: ' + evidence.absolutePath) }
+        }
+    }
+}

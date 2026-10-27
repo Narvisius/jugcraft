@@ -196,6 +196,8 @@ def build(registry_path=None):
             extra.append(['jugcraft:' + STATIONS[d['station']]])
             if d['station'] == 2:
                 extra += [['jugcraft:basic_ceramic_lining'], ['jugcraft:ceramic_crucible']]
+            if d.get('high_heat'):
+                extra += [['jugcraft:crucible_heat_insert'], ['jugcraft:crucible_bellows']]
         elif typ in stations: extra.append(stations[typ])
         if d.get('form'): extra.append([d['form']])
         for fluid in d.get('fluids', []): extra.append(['fluid:' + fluid['fluid']])

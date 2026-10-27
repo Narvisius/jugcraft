@@ -43,7 +43,7 @@ A drowned fen floating in a night of mist, an island of mud about 75 blocks acro
 - **Round the marsh:** banks of moss, podzol and grass, more of them toward the rim, with reeds and cattails along their shores, ferns, ghost ferns, withered grass, brambles and nightshade. Sixteen dead willows stand on them, their branches bare to the twigs, shroud moss hanging from them and ivy on their trunks. A bank all round the rim holds the water in.
 - **The light:** hidden light blocks over the boardwalks' height, the lamps, and the hut's lanterns and cauldron. Every open cell of the marsh has block light 8 or more.
 
-Everything else is the shared framework ([hollow-acre.md](hollow-acre.md#lairs-the-shared-rules)): an instance per opening, at most eight; at most four players; nothing can be built or broken (the fen lamps are the fen's one fixture besides the Grey Mist); the mist's toll at the edges; Grave Goods on death; closing after 30 seconds empty.
+Everything else is the shared framework ([hollow-acre.md](hollow-acre.md#lairs-the-shared-rules)): an instance per opening, at most eight; at most four players; nothing can be built or broken (the fen lamps are the fen's one fixture besides the Grey Mist); the mist's toll at the edges; nothing lost on death; closing after 30 seconds empty.
 
 ## Changes from the plan
 
@@ -180,7 +180,7 @@ The Lantern Fen is its own dimension, so nothing here changes the Overworld but 
 
 ## Rollout and open questions
 
-The shared framework's defaults hold: four players and eight instances, Grave Goods on death.
+The shared framework's defaults hold: four players and eight instances, nothing lost on death.
 
 Part 2, the Mire Hag, adds:
 - the fight in the marsh: her Likenesses, which the lamps' light betrays, and her shadow and ripple, which tell her from them;

@@ -46,6 +46,13 @@ public final class CookingPotJob implements CompanionJob {
     private PeepoEntity occupant() {
         return pot.getLevel() instanceof ServerLevel level && worker != null && level.getEntity(worker) instanceof PeepoEntity npc ? npc : null;
     }
+    /** Only the present, permitted cook can earn a recipe bonus; no nearby-entity search. */
+    public PeepoEntity productiveChef(){
+        var npc=occupant();
+        return npc!=null && mounted && isOccupant(npc) && npc.isAlive() && npc.preferences.canWork()
+            && npc.isUsingJobAt(stationPosition()) && npc.orders.station(this) && CompanionJobs.permitted(npc,stationPosition())
+            && npc.uniforms.wearing(CompanionUniforms.Type.CHEF)?npc:null;
+    }
     private void expire() {
         if (worker == null) return;
         var npc = occupant();
@@ -77,7 +84,12 @@ public final class CookingPotJob implements CompanionJob {
         if (!availableTo(npc)) return CompanionStatus.OCCUPIED;
         if (pot.isLocked() || !npc.orders.tamed() || !npc.assignments.assignedWork(stationPosition()) || !CompanionJobs.permitted(npc, stationPosition())) return CompanionStatus.FORBIDDEN;
         if (entrance == null || !roomFor(npc)) return CompanionStatus.BLOCKED;
-        return planning?CompanionReadiness.shared(pot,pot::cookingStatus):pot.cookingStatus();
+        var status=planning?CompanionReadiness.shared(pot,pot::cookingStatus):pot.cookingStatus();
+        if(status==CompanionStatus.NO_HEAT && pot.filter().stock.enabled()){
+            boolean empty=true;for(int i=0;i<CookingPotBlockEntity.INPUTS;i++)if(!pot.getItem(i).isEmpty()){empty=false;break;}
+            if(empty){var stocked=pot.filter().stock.idleStatus(npc,pot);if(stocked!=CompanionStatus.NO_INPUT)return stocked;}
+        }
+        return status==CompanionStatus.NO_INPUT?pot.filter().stock.idleStatus(npc,pot):status;
     }
     private boolean roomFor(PeepoEntity npc) {
         long now=npc.level().getGameTime();

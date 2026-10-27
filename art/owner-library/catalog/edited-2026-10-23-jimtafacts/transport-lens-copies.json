@@ -1,0 +1,23 @@
+{
+  "copies": [
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/buildcraft reborn by jimbo/assets/buildcraftsilicon/textures/plugs/lens.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/jimtafacts/transport/lens.png",
+      "sha256": "3a4b816aad2068a98ee46dc0958feb6edc37e8ec5cd6a8742d1e4f40d37bbe09",
+      "changes": "None"
+    },
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/buildcraft reborn by jimbo/assets/buildcraftsilicon/textures/plugs/overlay_lens.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/jimtafacts/transport/overlay_lens.png",
+      "sha256": "8f1ae021f522609b81d770acc6b5a5f99fdfdc313cc93288279a18f53d4bcca7",
+      "changes": "None"
+    },
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/buildcraft reborn by jimbo/assets/buildcraftsilicon/models/plugs/lens.json",
+      "source_sha256": "0fff48edace18eab10df7cffe9f77f8a06b07e8826c68d11d91b487e0d8ccf29",
+      "runtime_family": "models/item/jimta_[filter_]lens_*.json",
+      "changes": "Original bounds/UVs retained; source dynamic expressions resolved to 17 explicit route colors, rotation quarters converted to degrees, native item tint and inventory display added. Clear filter omits the source-disabled glass pane."
+    }
+  ],
+  "adaptation": "34 removable colored/clear lenses and matching route filters on through-routing factory item pipes, including lapis, daizuli and emzuli. Exit and entry faces apply in order, including injection. Buffered extraction/disposal endpoints accept blockers, facades and applicable power adaptors, not route-color lenses. Cargo components remain unchanged."
+}

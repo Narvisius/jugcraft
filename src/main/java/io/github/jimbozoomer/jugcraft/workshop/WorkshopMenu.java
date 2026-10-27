@@ -10,7 +10,7 @@ import org.jspecify.annotations.Nullable;
 /** Uses vanilla menu buttons/slot synchronization; no client-supplied recipes or work amounts. */
 public final class WorkshopMenu extends AbstractContainerMenu {
     public static final int PULSE = 0, RELEASE = 1, CANCEL = 2, SELECT = 16;
-    public static final int[][] POSITIONS = {{132,55},{152,55},{172,55},{132,87},{172,87},{252,55},{212,87},{252,87}};
+    public static final int[][] POSITIONS = {{132,55},{152,55},{172,55},{132,87},{172,87},{252,55},{212,87},{252,87},{132,87}};
     private final Container container;
     private final ContainerData data;
     private final @Nullable WorkshopBlockEntity machine;
@@ -59,7 +59,7 @@ public final class WorkshopMenu extends AbstractContainerMenu {
         Slot slot = slots.get(index);
         if (!slot.hasItem() || !slot.mayPickup(player)) return ItemStack.EMPTY;
         ItemStack stack = slot.getItem(), original = stack.copy();
-        boolean moved = index < 8 ? moveItemStackTo(stack, 8, 44, true) : moveItemStackTo(stack, 3, 8, false) || moveItemStackTo(stack, 0, 3, false);
+        boolean moved = index < WorkshopBlockEntity.SLOTS ? moveItemStackTo(stack, WorkshopBlockEntity.SLOTS, slots.size(), true) : moveItemStackTo(stack, 3, WorkshopBlockEntity.SLOTS, false) || moveItemStackTo(stack, 0, 3, false);
         if (!moved) return ItemStack.EMPTY;
         if (stack.isEmpty()) slot.setByPlayer(ItemStack.EMPTY); else slot.setChanged();
         slot.onTake(player, stack); return original;

@@ -19,6 +19,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
@@ -34,6 +35,9 @@ import org.jspecify.annotations.Nullable;
  * badly hurt it mends them through the shared effect boundary, as often as its bond allows. It never crosses into
  * another dimension or teleports into an unloaded place: when its person is offline it waits where it is ("owner
  * offline"), and when they are in another dimension it waits ("other dimension") until they come back or recall it.
+ * Its bond fades only for its person's own play time away (Concordance Chunk D, D-S17), and not for play while the
+ * Concordance is switched off and it is loaded; one not loaded meanwhile counts that play at its first look once the
+ * switch is on (D-P13).
  */
 public class HearthlingEntity extends WorkerEntity<HearthlingEntity> {
 	public static final String DEFINITION = "jugcraft:hearthling";
@@ -50,7 +54,10 @@ public class HearthlingEntity extends WorkerEntity<HearthlingEntity> {
 	public static final Codec<Bond> BOND_CODEC = RecordCodecBuilder.create(i -> i.group(
 			Codec.INT.fieldOf("strength").forGetter(Bond::strength), Codec.LONG.fieldOf("window").forGetter(Bond::window),
 			Codec.INT.fieldOf("gained_today").forGetter(Bond::gainedToday), Codec.LONG.fieldOf("last_support").forGetter(Bond::lastSupport),
-			Codec.LONG.fieldOf("last_seen").forGetter(Bond::lastSeen)).apply(i, Bond::new));
+			Codec.LONG.fieldOf("last_seen").forGetter(Bond::lastSeen),
+			// Concordance Chunk D (D-S17): absent from a bond saved before, and read leniently, so it never costs the bond
+			// (the bond reads with orElse(Bond.NEW), readAdditionalSaveData).
+			Codec.LONG.lenientOptionalFieldOf("seen_played", Bond.UNSEEN).forGetter(Bond::seenPlayed)).apply(i, Bond::new));
 
 	private Bond bond = Bond.NEW;
 
@@ -79,6 +86,11 @@ public class HearthlingEntity extends WorkerEntity<HearthlingEntity> {
 		return Workers.catalog().get(DEFINITION, WorkerDefinition.Familiar.class);
 	}
 
+	/** Its person's own play time in ticks: the game's statistic, which grows only while they are in the game, in any dimension. */
+	private static long played(ServerPlayer person) {
+		return person.getStats().getValue(Stats.CUSTOM.get(Stats.PLAY_TIME));
+	}
+
 	@Override
 	public Status think(ServerLevel level, long time, long gameTime) {
 		Status next = decide(level, gameTime);
@@ -89,6 +101,12 @@ public class HearthlingEntity extends WorkerEntity<HearthlingEntity> {
 	private Status decide(ServerLevel level, long gameTime) {
 		WorkerDefinition.Familiar terms = terms();
 		if (!Workers.enabled() || terms == null) {
+			// D-S16, D-S17: switched off, nothing fades. While its person is online, in this level or another, their play time
+			// meanwhile is not counted; a familiar not loaded meanwhile counts it at its first look after the switch is on.
+			ServerPlayer online = owner == null ? null : level.getServer().getPlayerList().getPlayer(owner);
+			if (online != null) {
+				bond = bond.restart(played(online));
+			}
 			stop();
 			return Status.DISABLED;
 		}
@@ -106,11 +124,13 @@ public class HearthlingEntity extends WorkerEntity<HearthlingEntity> {
 			stop();
 			return Status.OTHER_DIMENSION;
 		}
+		// D-S17: the bond fades by its person's own play time away (counted only while they are in the game), whenever they
+		// are here, before a visit counts: days logged out never count, loaded or not; days played elsewhere do.
+		long played = played(person);
+		bond = bond.neglected(played);
 		double distance = distanceTo(person);
 		if (distance <= terms.follow() && gameTime - bond.lastSeen() >= VISIT_TICKS) {
-			bond = bond.together(gameTime);
-		} else if (distance > terms.follow()) {
-			bond = bond.neglected(gameTime);
+			bond = bond.together(gameTime, played);
 		}
 		if (person.getHealth() <= person.getMaxHealth() * HURT && bond.mayMend(gameTime) && distance <= terms.follow()) {
 			if (mend(level, person, terms)) {

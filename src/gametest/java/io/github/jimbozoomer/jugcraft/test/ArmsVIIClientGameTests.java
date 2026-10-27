@@ -49,9 +49,9 @@ public class ArmsVIIClientGameTests implements FabricClientGameTest {
 			for (int i = 0; i < variants.size(); i++) {
 				frame(server, x + 1 + i % 8, y + 5 - i / 8, z - 11, variants.get(i));
 			}
-			// The patterns along the bottom row, below the variants' five rows of eight.
+			// The patterns along the bottom row, after the variants that spill onto it (the 41st to the 43rd).
 			for (int i = 0; i < ArmVariants.PATTERN_NAMES.size(); i++) {
-				frame(server, x + 3 + i, y, z - 11, ArmVariants.PATTERN_NAMES.get(i));
+				frame(server, x + 5 + i, y, z - 11, ArmVariants.PATTERN_NAMES.get(i));
 			}
 			context.waitTicks(20);
 			shoot(context, singleplayer, x + 4, y + 2, z - 6, 180, 8, "jugcraft_arms_vii_frames");

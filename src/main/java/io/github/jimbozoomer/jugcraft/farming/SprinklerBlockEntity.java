@@ -110,6 +110,10 @@ public class SprinklerBlockEntity extends BlockEntity {
 		return stack.is(PetroItems.FERTILIZER) || stack.getItem() instanceof SpecializedFertilizerItem;
 	}
 
+	public boolean canLoadFertilizer(ItemStack stack) {
+		return acceptsFertilizer(stack) && (fertilizerStack.isEmpty() || ItemStack.isSameItemSameComponents(stack,fertilizerStack));
+	}
+
 	public Component fertilizerName() {
 		return fertilizerStack.isEmpty() ? Component.translatable("message.jugcraft.no_fertilizer") : fertilizerStack.getHoverName();
 	}

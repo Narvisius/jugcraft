@@ -13,7 +13,6 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -22,9 +21,10 @@ import net.minecraft.world.entity.player.Inventory;
  * The Market Chest's screen, in the Exchange's walnut and brass: the chest's 27 slots and the player's inventory on the
  * left, and on the right the counter's ledger: which company it sells for, every kind of item it deals in (price,
  * how many are listed and how many still wait in the chest), a price box, Pause and Take back. Everything shown comes
- * from the server ({@link MarketChestPayload}); every change is checked there.
+ * from the server ({@link MarketChestPayload}); every change is checked there. It is the model for the trade look
+ * (docs/features/trade-look.md), and at 332 wide is scaled down to fit a narrower window.
  */
-public class MarketChestScreen extends AbstractContainerScreen<MarketChestMenu> {
+public class MarketChestScreen extends FittedContainerScreen<MarketChestMenu> {
 	private static final int CHEST_WIDTH = 176;
 	private static final int PANEL_WIDTH = 156;
 	private static final int ROW = 18;
@@ -175,7 +175,7 @@ public class MarketChestScreen extends AbstractContainerScreen<MarketChestMenu> 
 
 	@Override
 	public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
-		if (data != null && mouseX >= panelX()) {
+		if (data != null && mouseX / scale() >= panelX()) {
 			int before = scroll;
 			scroll = Math.max(0, Math.min(scroll - (int) Math.signum(scrollY), data.rows().size() - VISIBLE_ROWS));
 			if (scroll != before) {
@@ -197,40 +197,22 @@ public class MarketChestScreen extends AbstractContainerScreen<MarketChestMenu> 
 	}
 
 	@Override
-	public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float delta) {
-		extractBackground(g, mouseX, mouseY, delta);
-		super.extractRenderState(g, mouseX, mouseY, delta);
+	protected void foreground(GuiGraphicsExtractor g, int mouseX, int mouseY, float delta) {
 		extractPanelText(g);
-		extractTooltip(g, mouseX, mouseY);
 	}
 
 	@Override
-	public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float delta) {
+	protected void background(GuiGraphicsExtractor g, int mouseX, int mouseY, float delta) {
 		int x0 = leftPos;
 		int y0 = topPos;
 		int x1 = leftPos + imageWidth;
 		int y1 = topPos + imageHeight;
-		g.fill(x0 - 3, y0 - 3, x1 + 3, y1 + 3, WALNUT_DARK);
-		g.fill(x0 - 2, y0 - 2, x1 + 2, y1 + 2, BRASS);
-		g.fill(x0 - 1, y0 - 1, x1 + 1, y1 + 1, WALNUT_DARK);
-		raised(g, x0, y0, x1, y1, WALNUT, WALNUT_LIGHT, WALNUT_DARK);
+		TradeLook.frame(g, x0, y0, x1, y1);
 		// The chest's bay and the inventory: dark slots in a slate tray.
 		sunken(g, x0 + 5, y0 + 15, x0 + CHEST_WIDTH - 5, y0 + 15 + 3 * 18 + 6, SLATE, SLATE_DARK, SLATE_LIGHT);
 		sunken(g, x0 + 5, y0 + MarketChestMenu.INVENTORY_Y - 3, x0 + CHEST_WIDTH - 5, y0 + imageHeight - 5, SLATE, SLATE_DARK,
 				SLATE_LIGHT);
-		for (int row = 0; row < 3; row++) {
-			for (int col = 0; col < 9; col++) {
-				slot(g, x0 + MarketChestMenu.SLOTS_X + col * 18, y0 + MarketChestMenu.SLOTS_Y + row * 18);
-			}
-		}
-		for (int row = 0; row < 3; row++) {
-			for (int col = 0; col < 9; col++) {
-				slot(g, x0 + 8 + col * 18, y0 + MarketChestMenu.INVENTORY_Y + row * 18);
-			}
-		}
-		for (int col = 0; col < 9; col++) {
-			slot(g, x0 + 8 + col * 18, y0 + MarketChestMenu.INVENTORY_Y + 58);
-		}
+		TradeLook.slots(g, x0, y0, menu);
 		// The counter's ledger on the right: a brass rule down the join, then a slate page.
 		g.fill(x0 + CHEST_WIDTH - 1, y0 + 4, x0 + CHEST_WIDTH, y1 - 4, BRASS_DARK);
 		int px = panelX();
@@ -240,22 +222,12 @@ public class MarketChestScreen extends AbstractContainerScreen<MarketChestMenu> 
 			for (int i = 0; i < VISIBLE_ROWS && scroll + i < data.rows().size(); i++) {
 				int ry = y0 + ROWS_TOP + i * ROW;
 				if (data.rows().get(scroll + i).key().equals(selected)) {
-					g.fill(px, ry, px + w, ry + ROW, 0x55B8913F);
+					g.fill(px, ry, px + w, ry + ROW, TradeLook.SELECTED);
 				} else if (i % 2 == 1) {
 					g.fill(px, ry, px + w, ry + ROW, SLATE_STRIPE);
 				}
 			}
 		}
-		filigree(g, x0 - 2, y0 - 2, 1, 1);
-		filigree(g, x1 + 1, y0 - 2, -1, 1);
-		filigree(g, x0 - 2, y1 + 1, 1, -1);
-		filigree(g, x1 + 1, y1 + 1, -1, -1);
-	}
-
-	private static void slot(GuiGraphicsExtractor g, int x, int y) {
-		g.fill(x - 1, y - 1, x + 17, y + 17, SLATE_DARK);
-		g.fill(x, y, x + 17, y + 17, SLATE_LIGHT);
-		g.fill(x, y, x + 16, y + 16, 0xFF24211C);
 	}
 
 	@Override

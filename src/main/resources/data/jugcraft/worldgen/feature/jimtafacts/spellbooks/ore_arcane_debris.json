@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:scattered_ore",
+  "size": 2,
+  "discard_chance_on_air_exposure": 1.0,
+  "targets": [
+    {
+      "target": {
+        "predicate_type": "minecraft:tag_match",
+        "tag": "minecraft:base_stone_nether"
+      },
+      "state": {
+        "id": "jugcraft:jimta_spellbooks_arcane_debris"
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "copies": [
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/buildcraft reborn by jimbo/assets/buildcrafttransport/models/plugs/power_adapter.json",
+      "runtime": "src/main/resources/assets/jugcraft/models/item/jimta_pipe_power_adaptor.json",
+      "source_sha256": "8fb4a0abae53daf38484fd3ad281c4979a7754292ce9f2b718ff878f201e4c6a",
+      "changes": "Texture namespace/source #all key corrected; original parts/UV retained with a short connecting stem to the narrower native pipe core."
+    },
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/buildcraft reborn by jimbo/assets/buildcrafttransport/textures/pipes/power_adapter.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/jimtafacts/transport/power_adapter.png",
+      "sha256": "ae7b8bd769afbac2c601d9a1a10ac8928f301b2a89d719b486f3d42f0722f079",
+      "changes": "None"
+    }
+  ],
+  "adaptation": "One power-only face on wood/diamond-wood item/fluid extractors; original cable-driven extraction role with native JE. 2048 JE buffer, 256 JE per insertion; at most 4x pulse, 8 JE per extra item or 25 mB actually moved. Charge follows the removed fitting. No legacy MJ/RF currency."
+}

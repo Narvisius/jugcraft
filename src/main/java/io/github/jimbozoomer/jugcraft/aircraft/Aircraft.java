@@ -50,6 +50,9 @@ public final class Aircraft extends Entity {
     private final Map<Integer,String> loadedWeapon=new HashMap<>();
     private int lastRepair=-100;
     public float rotation,previousRotation;
+    private final float[] visualControls=new float[3], previousVisualControls=new float[3];
+    public float animatedControl(int axis,float partial){return Mth.lerp(partial,previousVisualControls[axis],visualControls[axis]);}
+    public float bank(float partial){return animatedControl(1,partial)*power()*(spec.aeroplane()?18F:spec.name().equals("warship")?2F:5F);}
     public Aircraft(EntityType<? extends Aircraft> type,Level level,AircraftSpec spec){
         super(type,level);this.spec=spec;inventory=new SimpleContainer(spec.sockets().size());
     }
@@ -128,6 +131,7 @@ public final class Aircraft extends Entity {
     @Override protected Vec3 getPassengerAttachmentPoint(Entity passenger,EntityDimensions d,float scale){return spec.seat(getPassengers().indexOf(passenger),getPassengers().size()).xRot(getXRot()*Mth.DEG_TO_RAD).yRot(-getYRot()*Mth.DEG_TO_RAD).add(0,spec.groundOffset(),0);}
     @Override public void tick(){
         super.tick();previousRotation=rotation;rotation+=power();
+        for(int axis=0;axis<3;axis++){previousVisualControls[axis]=visualControls[axis];visualControls[axis]=Mth.lerp(.2F,visualControls[axis],control(axis));}
         if(!(level() instanceof ServerLevel level))return;
         ServerPlayer pilot=getFirstPassenger() instanceof ServerPlayer p&&mayUse(p)?p:null;
         boolean listening=pilot!=null&&tickCount-inputTick<=10&&pilot.containerMenu==pilot.inventoryMenu;

@@ -42,6 +42,7 @@ public final class JugcraftMaterials {
 	public static MineralFamily SPODUMENE;
 	public static MineralFamily CHROMITE;
 	public static MineralFamily COBALTITE;
+	public static MineralFamily QUARTZ;
 	public static MineralFamily VANADIUM_IRON;
 
 	public static Block BAUXITE;
@@ -93,6 +94,7 @@ public final class JugcraftMaterials {
 		VANADIUM_IRON = MineralFamily.register("vanadium_iron");
 		CHROMITE = MineralFamily.register("chromite");
 		COBALTITE = MineralFamily.register("cobaltite");
+		QUARTZ = MineralFamily.register("quartz");
 
 		BAUXITE = JugcraftRegistry.block("bauxite", Blocks.GRANITE);
 		OIL_SAND = JugcraftRegistry.block("oil_sand", Blocks.SAND);
@@ -145,6 +147,8 @@ public final class JugcraftMaterials {
 		natural.add(BAUXITE);
 		natural.add(OIL_SAND);
 		natural.add(TINCAL);
+		natural.add(QUARTZ.ore);
+		natural.add(QUARTZ.deepslateOre);
 		natural.addAll(List.of(TITANIUM_SAND, ZIRCON_SAND, RARE_EARTH_SAND, GARNET_SAND));
 		ingredients.addAll(List.of(BITUMEN, SULFUR_DUST, SILICON, LITHIUM_CARBONATE, RARE_EARTH_OXIDE, COKE, BORAX,
 				BOROSILICATE_GLASS, OPTICAL_FIBRE, FERROBORON));

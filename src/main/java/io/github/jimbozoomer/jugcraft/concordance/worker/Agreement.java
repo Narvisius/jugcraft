@@ -8,7 +8,9 @@ import org.jspecify.annotations.Nullable;
  * one kind of work it agreed to, where (within {@link #radius} blocks of its anchor, in its anchor's dimension), when
  * (the world clock's hours {@link #from} to {@link #to}) and how much (at most {@link #quota} tasks a day of game time).
  * Its holder may suspend it (the spirit waits at its anchor) or release it (the spirit departs). A task outside any of
- * these terms is refused with the reason, never done.
+ * these terms is refused with the reason, never done. Since Concordance Chunk D (D-02) its {@code suspended} is kept only so
+ * that a save from before reads: suspension is the Bound Will's ({@code BoundWill.Pact.hold}). A holder block moves this
+ * flag onto the record when it first claims it, and writes it false after that.
  */
 public record Agreement(UUID record, UUID holder, String work, String dimension, int x, int y, int z, int radius, int from, int to,
 		int quota, long window, int doneToday, boolean suspended) {

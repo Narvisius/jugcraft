@@ -9,7 +9,9 @@ import java.util.Set;
 /**
  * What a dose does, worked out from what it carries, with a reason for each effect a player can check against their
  * own process: which property, how much of it a part holds against the threshold, and which ingredients (or searing
- * stirs) put it there. Below a threshold the property is named as too weak, so nothing is mysterious.
+ * stirs, or, for Rime, the warmer stirs that thawed it) put it there. Below a threshold the property is named as too
+ * weak, so nothing is mysterious. A property that declares fouling loses its share of the dose to the contaminant
+ * first, with a reason naming what fouled it (Concordance Chunk C, C-02, C-P7).
  */
 public record Outcome(List<Effect> effects, List<Text> reasons) {
 	public Outcome {
@@ -24,17 +26,29 @@ public record Outcome(List<Effect> effects, List<Text> reasons) {
 	public static Outcome of(Vector dose, long contaminant, AlchemyCatalog catalog, List<Operation> history) {
 		List<Effect> effects = new ArrayList<>();
 		List<Text> reasons = new ArrayList<>();
+		List<Text.Ref> fouledBy = null;
 		for (Axis axis : Axis.values()) {
 			Property property = catalog.property(axis.id);
 			long amount = dose.get(axis);
 			if (property == null || amount == 0) {
 				continue;
 			}
+			// The yield rule (Concordance Chunk C, C-02, C-P7): contaminant takes its share of a property that declares
+			// fouling before the level and duration are worked out, and the reason names what fouled it.
+			long taken = property.fouled(amount, contaminant);
+			if (taken > 0) {
+				if (fouledBy == null) {
+					fouledBy = foulers(catalog, history);
+				}
+				reasons.add(Text.of("alchemy.fouled", new Text.Ref("principle", axis.id), Vector.units(taken), Vector.units(contaminant), fouledBy));
+				amount -= taken;
+			}
 			judge(property, amount, new Text.Ref("principle", axis.id), sources(axis, catalog, history), effects, reasons);
 		}
 		Property fouling = catalog.property(Property.CONTAMINANT);
 		if (fouling != null && contaminant > 0) {
-			judge(fouling, contaminant, new Text.Ref("alchemy", Property.CONTAMINANT), foulers(catalog, history), effects, reasons);
+			judge(fouling, contaminant, new Text.Ref("alchemy", Property.CONTAMINANT), fouledBy != null ? fouledBy : foulers(catalog, history),
+					effects, reasons);
 		}
 		return new Outcome(effects, reasons);
 	}
@@ -52,18 +66,33 @@ public record Outcome(List<Effect> effects, List<Text> reasons) {
 				Vector.units(amount), Vector.units(property.threshold()), sources));
 	}
 
-	/** The items whose ingredients carry {@code axis}, in the order they first went in. */
+	/**
+	 * The items whose ingredients carry {@code axis}, in the order they first went in; for Rime, then the stirs above the
+	 * cold band that thawed some of it (B-08): only a stir after something carrying Rime went in, since a stir thaws only
+	 * Rime already in the mixture (Mixture.apply).
+	 */
 	private static List<Text.Ref> sources(Axis axis, AlchemyCatalog catalog, List<Operation> history) {
 		Set<String> items = new LinkedHashSet<>();
+		boolean rimeIn = false;
+		boolean thawed = false;
 		for (Operation operation : history) {
 			if (operation instanceof Operation.Add add) {
 				Ingredient ingredient = catalog.ingredient(add.item());
 				if (ingredient != null && ingredient.properties().get(axis) > 0) {
 					items.add(add.item());
 				}
+				if (ingredient != null && ingredient.properties().get(Axis.RIME) > 0) {
+					rimeIn = true;
+				}
+			} else if (axis == Axis.RIME && rimeIn && operation instanceof Operation.Stir stir && Mixture.rimeKeep(stir.band()) < 1000L) {
+				thawed = true;
 			}
 		}
-		return refs(items, false);
+		List<Text.Ref> out = refs(items, false);
+		if (thawed) {
+			out.add(new Text.Ref("alchemy", "thawed"));
+		}
+		return out;
 	}
 
 	/** What fouled it: ingredients that bring contaminant, and searing stirs. */

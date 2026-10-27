@@ -17,12 +17,15 @@ ITEMS = {
     'hydrazine_thruster': 'Loaded Hydrazine Thruster',
     'storable_bipropellant_motor': 'Loaded Storable Bipropellant Motor',
     'propellant_residue': 'Propellant Process Residue',
+    # MMH (docs/features/cola-and-mmh.md).
+    'mmh_tank': 'Sealed MMH Tank',
 }
 FLUIDS = {
     'liquid_methane': liquid('Liquid Methane', [(42,62,70),(72,101,109),(111,145,151),(161,184,187)]),
     'liquid_hydrogen': liquid('Liquid Hydrogen', [(46,55,78),(81,96,124),(125,145,172),(178,192,206)]),
     'hydrazine': liquid('Hydrazine', [(62,66,48),(96,103,73),(141,149,109),(183,190,150)]),
     'dinitrogen_tetroxide': liquid('Dinitrogen Tetroxide (N2O4)', [(72,44,33),(115,72,48),(158,110,72),(192,151,109)]),
+    'monomethylhydrazine': liquid('Monomethylhydrazine (MMH)', [(54,66,52),(86,106,84),(128,150,124),(174,194,168)]),
 }
 BLOCKS = {'insulated_fluid_tank':'Insulated Fluid Tank', 'vacuum_insulated_tank':'Vacuum-insulated Fluid Tank'}
 LIQUEFIER_RECIPES = [
@@ -36,7 +39,7 @@ LIQUEFIER_RECIPES = [
 TANK_RECIPES = [dict(name='cryo_'+tank,items=[('jugcraft:rocket_casing',1)],fluids=[('jugcraft:'+fluid,1000)],
     results=[('jugcraft:'+tank,1)],ticks=80,features=['machines'])
     for tank,fluid in [('methane_tank','liquid_methane'),('hydrogen_tank','liquid_hydrogen'),
-                      ('hydrazine_tank','hydrazine'),('n2o4_tank','dinitrogen_tetroxide')]]
+                      ('hydrazine_tank','hydrazine'),('n2o4_tank','dinitrogen_tetroxide'),('mmh_tank','monomethylhydrazine')]]
 
 def rec(name, cap, items=(), fluids=(), results=(), fluid_results=(), ticks=240, power=64):
     return dict(name='cryo_'+name,capability='jugcraft:'+cap,items=list(items),fluids=list(fluids),
@@ -50,6 +53,10 @@ RECIPES = {
         rec('n2o4','storable_propellants',[('minecraft:redstone',1)],
             [('jugcraft:nitric_acid',500)], [('jugcraft:propellant_residue',1)],
             [('jugcraft:dinitrogen_tetroxide',250,0)],ticks=320,power=96),
+        # MMH (docs/features/cola-and-mmh.md): hydrazine methylated with methyl chloride. Quantities for review.
+        rec('mmh','storable_propellants',[('minecraft:redstone',1)],
+            [('jugcraft:hydrazine',250),('jugcraft:methyl_chloride',250)], [('jugcraft:propellant_residue',1)],
+            [('jugcraft:monomethylhydrazine',250,0)],ticks=320,power=96),
     ],
     'mineral_conditioner': [
         rec('residue_recovery','propellant_recovery',[('jugcraft:propellant_residue',2)],
@@ -61,13 +68,15 @@ RECIPES = {
         for liquid_id,gas in [('liquid_oxygen','oxygen'),('liquid_methane','methane'),('liquid_hydrogen','hydrogen')]]
 }
 MACHINE_RECIPES = {'rocket_workshop': [
-    dict(name='cryo_'+motor,inputs=[('jugcraft:'+item,count) for item,count in ingredients],
+    dict(name='cryo_'+name,inputs=[('jugcraft:'+item,count) for item,count in ingredients],
          output='jugcraft:'+motor,count=yield_count,ticks=240,features=['machines'])
-    for motor,ingredients,yield_count in [
-        ('methalox_motor',[('methane_tank',1),('lox_tank',1),('rocket_nozzle',2)],3),
-        ('hydrolox_motor',[('hydrogen_tank',1),('lox_tank',1),('rocket_nozzle',2)],4),
-        ('hydrazine_thruster',[('hydrazine_tank',1),('rocket_nozzle',1),('porcelain_insulator',1)],1),
-        ('storable_bipropellant_motor',[('hydrazine_tank',1),('n2o4_tank',1),('rocket_nozzle',2)],3),
+    for name,motor,ingredients,yield_count in [
+        ('methalox_motor','methalox_motor',[('methane_tank',1),('lox_tank',1),('rocket_nozzle',2)],3),
+        ('hydrolox_motor','hydrolox_motor',[('hydrogen_tank',1),('lox_tank',1),('rocket_nozzle',2)],4),
+        ('hydrazine_thruster','hydrazine_thruster',[('hydrazine_tank',1),('rocket_nozzle',1),('porcelain_insulator',1)],1),
+        ('storable_bipropellant_motor','storable_bipropellant_motor',[('hydrazine_tank',1),('n2o4_tank',1),('rocket_nozzle',2)],3),
+        # MMH's extra methylation step buys a fourth motor (docs/features/cola-and-mmh.md).
+        ('mmh_bipropellant_motor','storable_bipropellant_motor',[('mmh_tank',1),('n2o4_tank',1),('rocket_nozzle',2)],4),
     ]
 ]}
 GUIDE_PAGES = [
@@ -85,7 +94,11 @@ GUIDE_PAGES = [
         'These are fictional game recipes. In the Bulk Chemical Reactor, one redstone, 500 mB ammonia and 250 mB nitrogen produce 250 mB hydrazine and one Propellant Process Residue. The N2O4 job uses one redstone and 500 mB nitric acid for 250 mB N2O4 and one residue.',
         'Both jobs use base 96 JE/t; hydrazine takes 400 ticks and N2O4 takes 320. The process outlet and solid output must both have room. Existing ammonia, nitrogen and acid production supplies this branch.',
         'Wash two residue with 500 mB water in the Mineral Conditioner to obtain 500 mB Process Recovery Concentrate. The existing clay stabilization and concrete-fill recipe then give it a construction use. Raw propellant residue is not fertilizer or fuel.',
-        'Hydrazine supplies the monopropellant thruster; N2O4 is only paired with hydrazine in the storable bipropellant assembly. MMH, orbital vehicles, destination progression and maneuvering simulation remain future work.']),
+        'Hydrazine supplies the monopropellant thruster; N2O4 is paired with hydrazine or MMH in the storable bipropellant assembly. Orbital vehicles, destination progression and maneuvering simulation remain future work.']),
+    dict(title='MMH: the second storable fuel',icon='jugcraft:mmh_tank',text=[
+        'Also fictional: in the Bulk Chemical Reactor, one redstone, 250 mB hydrazine and 250 mB methyl chloride produce 250 mB monomethylhydrazine (MMH) and one Propellant Process Residue, in 320 ticks at base 96 JE/t. Methyl chloride comes from methane and chlorine in the compact Chemical Reactor.',
+        'The compact Chemical Reactor seals 1000 mB MMH into one Rocket Casing as a Sealed MMH Tank. In the Rocket Workshop, one MMH tank, one N2O4 tank and two nozzles yield four Storable Bipropellant Motors, one more than hydrazine gives: the reward for the extra methylation step.',
+        'MMH is not a monopropellant here: the Hydrazine Thruster still needs hydrazine. The motors are the same item whichever fuel made them, with the same payload and range. Wash the residue as before.']),
     dict(title='Loaded motors for rockets you already have',icon='jugcraft:hydrolox_motor',text=[
         'The compact Chemical Reactor seals 1000 mB of liquid methane, liquid hydrogen, hydrazine or N2O4 into one Rocket Casing. These sealed items are manufacturing ingredients, not refillable fluid containers. Existing kerosene and LOX tank recipes remain available.',
         'Rocket Workshop: one methane tank, one LOX tank and two nozzles yield three loaded Methalox Motors. Replace methane with hydrogen to yield four Hydrolox Motors. One hydrazine tank, one N2O4 tank and two nozzles yield three Storable Bipropellant Motors.',
@@ -114,7 +127,7 @@ def write_extras(write, assets, data, lang, condition):
     lang['tooltip.jugcraft.hydrogen_cooling_module']='Retained Cryogenic Liquefier tool: enables liquid hydrogen and liquid methane.'
     lang['tooltip.jugcraft.cryogenic_insulation']='PTFE and ceramic insulation for cooling modules and shared insulated tanks.'
     lang['tooltip.jugcraft.propellant_residue']='Wash two with water in the Mineral Conditioner; stabilize the resulting Recovery Concentrate with clay.'
-    for name in ['methane_tank','hydrogen_tank','hydrazine_tank','n2o4_tank']:
+    for name in ['methane_tank','hydrogen_tank','hydrazine_tank','n2o4_tank','mmh_tank']:
         lang['tooltip.jugcraft.'+name]='Sealed 1,000 mB manufacturing charge. Consumed in a compatible Rocket Workshop assembly; not a refillable container.'
     for name in ['methalox_motor','hydrolox_motor','hydrazine_thruster','storable_bipropellant_motor']:
         lang['tooltip.jugcraft.'+name]='Fueled assembly: replaces one ordinary motor in survey, weather, delivery or line rocket crafting. Same payload range.'

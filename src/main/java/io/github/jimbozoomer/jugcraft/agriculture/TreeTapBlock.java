@@ -115,6 +115,20 @@ public final class TreeTapBlock extends Block {
         // Changing only properties retains the original scheduled tick, including time within a fill step.
         if (!level.getBlockTicks().hasScheduledTick(pos, this)) level.scheduleTick(pos, this, INTERVAL);
     }
+    /** Companion extraction shares the real fill state; aborted cargo transfers restore every fill step. */
+    public boolean collectBottles(ServerLevel level, BlockPos pos, int count,
+            net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext transaction) {
+        if (!level.hasChunkAt(pos) || count <= 0) return false;
+        BlockState state = level.getBlockState(pos);
+        if (!state.is(this) || count > state.getValue(LATEX) / STEPS_PER_BOTTLE) return false;
+        var snapshot = new net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant<BlockState>() {
+            @Override protected BlockState createSnapshot() { return state; }
+            @Override protected void readSnapshot(BlockState saved) { level.setBlock(pos, saved, Block.UPDATE_CLIENTS); }
+            @Override protected void onFinalCommit() { resume(level, pos); }
+        };
+        snapshot.updateSnapshots(transaction);
+        return level.setBlock(pos, state.setValue(LATEX, state.getValue(LATEX) - count * STEPS_PER_BOTTLE), Block.UPDATE_CLIENTS);
+    }
     private static void showFill(Player player, BlockState state) {
         player.sendOverlayMessage(Component.translatable("message.jugcraft.tree_tap.fill",
                 state.getValue(LATEX) / STEPS_PER_BOTTLE, capacity(state) / STEPS_PER_BOTTLE,

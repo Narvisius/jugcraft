@@ -1272,6 +1272,10 @@ def build():
     chapters.append(dict(title='Phosphate Processing and Fertilizers', icon='jugcraft:triple_superphosphate', pages=phosphate_processing.GUIDE_PAGES))
     import advanced_electronics
     chapters.append(dict(title='Advanced Electronics and Automation', icon='jugcraft:advanced_chip', pages=advanced_electronics.GUIDE_PAGES))
+    import trains
+    chapters.append(dict(title='Railways', icon='jugcraft:locomotive', pages=trains.GUIDE_PAGES))
     import starter_workshop
     chapters.insert(1, starter_workshop.chapter())
+    import storage_crates
+    chapters.insert(2, storage_crates.chapter())
     return {"chapters": chapters}

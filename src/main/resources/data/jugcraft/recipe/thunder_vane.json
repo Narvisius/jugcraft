@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "FLF",
+    "CKC",
+    " C "
+  ],
+  "key": {
+    "F": "minecraft:feather",
+    "L": "minecraft:lightning_rod",
+    "C": "minecraft:copper_ingot",
+    "K": "minecraft:compass"
+  },
+  "result": {
+    "id": "jugcraft:thunder_vane",
+    "count": 1
+  }
+}

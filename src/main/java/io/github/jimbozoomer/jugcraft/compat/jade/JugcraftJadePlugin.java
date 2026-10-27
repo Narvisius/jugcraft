@@ -2,6 +2,7 @@ package io.github.jimbozoomer.jugcraft.compat.jade;
 
 import io.github.jimbozoomer.jugcraft.concordance.CircleAnchorBlockEntity;
 import io.github.jimbozoomer.jugcraft.concordance.CrucibleBlockEntity;
+import io.github.jimbozoomer.jugcraft.concordance.CrucibleStandBlockEntity;
 import io.github.jimbozoomer.jugcraft.concordance.LampwrightBenchBlockEntity;
 import io.github.jimbozoomer.jugcraft.concordance.LeyPylonBlockEntity;
 import io.github.jimbozoomer.jugcraft.concordance.LumenSconceBlockEntity;
@@ -14,6 +15,8 @@ import io.github.jimbozoomer.jugcraft.concordance.garden.VerdantHeartBlockEntity
 import io.github.jimbozoomer.jugcraft.concordance.reliquary.ReliquaryShrineBlockEntity;
 import io.github.jimbozoomer.jugcraft.concordance.spire.SpireHeartBlockEntity;
 import io.github.jimbozoomer.jugcraft.concordance.sky.ObservatoryBlockEntity;
+import io.github.jimbozoomer.jugcraft.concordance.spirits.PactPerchBlockEntity;
+import io.github.jimbozoomer.jugcraft.concordance.spirits.SpiritAnchorBlockEntity;
 import io.github.jimbozoomer.jugcraft.concordance.spirits.WorkerEntity;
 import io.github.jimbozoomer.jugcraft.machine.MachineBlockEntity;
 import net.fabricmc.loader.api.FabricLoader;
@@ -28,11 +31,13 @@ public final class JugcraftJadePlugin implements IWailaPlugin {
 		// Jade 26.3 exposes picked-item naming through its common block operations, not the old client API.
 		registration.blockOperations().pick(io.github.jimbozoomer.jugcraft.nuclear.JugcraftNuclear.FRAME.builtInRegistryHolder().key());
 		registration.registerBlockDataProvider(MachineDataProvider.INSTANCE, MachineBlockEntity.class);
+		registration.registerBlockDataProvider(StorageCrateDataProvider.INSTANCE, io.github.jimbozoomer.jugcraft.storage.StorageCrateBlockEntity.class);
 		registration.registerBlockDataProvider(ConcordanceDataProvider.BENCH, LampwrightBenchBlockEntity.class);
 		registration.registerBlockDataProvider(ConcordanceDataProvider.SCONCE, LumenSconceBlockEntity.class);
 		registration.registerBlockDataProvider(ConcordanceDataProvider.ANCHOR, CircleAnchorBlockEntity.class);
 		registration.registerBlockDataProvider(ConcordanceDataProvider.PYLON, LeyPylonBlockEntity.class);
 		registration.registerBlockDataProvider(ConcordanceDataProvider.CRUCIBLE, CrucibleBlockEntity.class);
+		registration.registerBlockDataProvider(ConcordanceDataProvider.STAND, CrucibleStandBlockEntity.class);
 		registration.registerBlockDataProvider(ConcordanceDataProvider.BED, VerdantBedBlockEntity.class);
 		registration.registerBlockDataProvider(ConcordanceDataProvider.HEART, VerdantHeartBlockEntity.class);
 		registration.registerBlockDataProvider(ConcordanceDataProvider.MAW, MulchMawBlockEntity.class);
@@ -40,6 +45,9 @@ public final class JugcraftJadePlugin implements IWailaPlugin {
 		registration.registerBlockDataProvider(ConcordanceDataProvider.GLEANER, GleanerBlockEntity.class);
 		registration.registerBlockDataProvider(ConcordanceDataProvider.OBSERVATORY, ObservatoryBlockEntity.class);
 		registration.registerEntityDataProvider(WorkerDataProvider.INSTANCE, WorkerEntity.class);
+		// Concordance Chunk D, D-06 (G11): the pact perch and the Spirit Anchor, each the agreement it keeps (PactReading, read only).
+		registration.registerBlockDataProvider(PactDataProvider.PERCH, PactPerchBlockEntity.class);
+		registration.registerBlockDataProvider(PactDataProvider.ANCHOR, SpiritAnchorBlockEntity.class);
 		registration.registerBlockDataProvider(CourierDataProvider.INSTANCE, CourierPostBlockEntity.class);
 		registration.registerBlockDataProvider(ShrineDataProvider.INSTANCE, ReliquaryShrineBlockEntity.class);
 		registration.registerBlockDataProvider(SpireDataProvider.INSTANCE, SpireHeartBlockEntity.class);

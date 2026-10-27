@@ -14,7 +14,10 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * The Drone Depot Terminal screen, in the drone look (docs/features/machine-screens.md: the advanced look's hologram
@@ -22,14 +25,16 @@ import net.minecraft.network.chat.Component;
  * while drones are up, amber when something is missing, red on low power. Tab keys: OVERVIEW (platform, pickup, fleet,
  * power at a glance), FLEET (drones per tier, docked and airborne), JOBS (open build positions and missing materials)
  * and POWER. The PERSONAL / PARTY key switches who the depot works for (owner only; the server checks), and TOWER opens
- * the tower's screen. Everything shown comes from the terminal's live {@link DepotView}.
+ * the tower's screen. Everything shown comes from the terminal's live {@link DepotView}. Its words are in the language
+ * file ({@code screen.jugcraft.terminal.*}, from tools/drones.py; docs/features/drone-terminal-lang.md): tiers and
+ * missing materials go by their item names.
  */
 public class DroneTerminalScreen extends Screen implements ScreenKit.Fitted {
 	private static final int WIDTH = 260;
 	private static final int HEIGHT = 170;
 	private static final int AMBER = 0xFFFFC04A;
 	private static final int RED = 0xFFFF6A5A;
-	private static final String[] TABS = {"OVERVIEW", "FLEET", "JOBS", "POWER"};
+	private static final String[] TABS = {"overview", "fleet", "jobs", "power"};
 
 	private final BlockPos pos;
 	private final MachineScreenThemes.Theme theme = MachineScreenThemes.screen("drone_terminal");
@@ -56,10 +61,11 @@ public class DroneTerminalScreen extends Screen implements ScreenKit.Fitted {
 		top = (height - HEIGHT) / 2;
 		for (int i = 0; i < TABS.length; i++) {
 			int index = i;
-			tabs[i] = addRenderableWidget(new ScreenKit.TextButton(left + 6 + i * 62, top + 22, 60, 16, theme, Component.literal(TABS[i]),
+			tabs[i] = addRenderableWidget(new ScreenKit.TextButton(left + 6 + i * 62, top + 22, 60, 16, theme, Component.translatable("screen.jugcraft.terminal.tab." + TABS[i]),
 					button -> tab = index));
 		}
-		modeButton = addRenderableWidget(new ScreenKit.TextButton(left + WIDTH - 86, top + 4, 80, 14, theme, Component.literal("MODE"),
+		modeButton = addRenderableWidget(new ScreenKit.TextButton(left + WIDTH - 86, top + 4, 80, 14, theme,
+				Component.translatable("screen.jugcraft.terminal.mode", Component.translatable("message.jugcraft.drone.mode_name.personal")),
 				button -> ClientPlayNetworking.send(new TerminalModePayload(pos))));
 		towerButton = addRenderableWidget(new ScreenKit.TextButton(left + WIDTH - 130, top + 4, 42, 14, theme,
 				Component.translatable("screen.jugcraft.terminal.tower"), button -> {
@@ -99,12 +105,13 @@ public class DroneTerminalScreen extends Screen implements ScreenKit.Fitted {
 			boolean warning = view.layoutStatus() != PlatformLayout.Status.OK || view.pickups.isEmpty() || !view.packager || !view.missing.isEmpty();
 			lamp = view.lowPower ? RED : warning ? AMBER : view.flying() > 0 ? theme.ok() : theme.dim();
 		}
-		ScreenKit.title(graphics, font, theme, left, top + 5, Component.literal("DRONE DEPOT TERMINAL"), lamp, 132);
+		ScreenKit.title(graphics, font, theme, left, top + 5, Component.translatable("screen.jugcraft.terminal.title"), lamp, 132);
 		if (view == null) {
-			graphics.text(font, "LINKING…", left + 14, top + 50, AMBER, false);
+			graphics.text(font, text("linking"), left + 14, top + 50, AMBER, false);
 			return;
 		}
-		modeButton.setMessage(Component.literal(fit("▸ " + view.mode.toUpperCase(Locale.ROOT), 72)));
+		String mode = Component.translatable("message.jugcraft.drone.mode_name." + view.mode.toLowerCase(Locale.ROOT)).getString();
+		modeButton.setMessage(Component.literal(fit(text("mode", mode), 72)));
 		towerButton.visible = view.towerPos != null;
 		int x = left + 14;
 		int y = top + 50;
@@ -118,21 +125,22 @@ public class DroneTerminalScreen extends Screen implements ScreenKit.Fitted {
 
 	private void overview(GuiGraphicsExtractor g, DepotView v, int x, int y) {
 		PlatformLayout.Status status = v.layoutStatus();
-		line(g, "PLATFORM", status == PlatformLayout.Status.OK ? v.width + "×" + v.depth + " · " + v.pads.size() + " PADS" : status.name().replace('_', ' '),
-				status == PlatformLayout.Status.OK ? theme.text() : AMBER, x, y);
-		line(g, "SUPPLY", v.pickups.isEmpty() ? "NO PICKUP PAD" : !v.packager ? "NO CARGO PACKAGER"
-				: v.pickups.size() + (v.pickups.size() == 1 ? " PICKUP" : " PICKUPS") + " + PACKAGER READY",
+		line(g, text("platform"), status == PlatformLayout.Status.OK ? text("platform.ok", v.width, v.depth, v.pads.size())
+				: text("platform." + status.name().toLowerCase(Locale.ROOT)), status == PlatformLayout.Status.OK ? theme.text() : AMBER, x, y);
+		line(g, text("supply"), v.pickups.isEmpty() ? text("supply.no_pickup") : !v.packager ? text("supply.no_packager")
+				: text(v.pickups.size() == 1 ? "supply.ready" : "supply.ready_many", v.pickups.size()),
 				!v.pickups.isEmpty() && v.packager ? theme.text() : AMBER, x, y + 12);
 		int fleet = v.docks.size() + v.flights.size();
-		line(g, "FLEET", fleet + "/" + v.maxDrones + " · " + v.flying() + " UP · UP TO T" + v.maxTier
-				+ (v.towerTier > 0 ? " · TOWER T" + v.towerTier : ""), theme.text(), x, y + 24);
+		line(g, text("fleet"), v.towerTier > 0 ? text("fleet.value_tower", fleet, v.maxDrones, v.flying(), v.maxTier, v.towerTier)
+				: text("fleet.value", fleet, v.maxDrones, v.flying(), v.maxTier), theme.text(), x, y + 24);
 		bar(g, x, y + 36, fleet, v.maxDrones, theme.energy());
 		long percent = v.capacity <= 0 ? 0 : v.energy * 100 / v.capacity;
-		line(g, "POWER", percent + "%" + (v.lowPower ? " · LOW POWER, FLIGHTS SLOWED" : ""), v.lowPower ? RED : theme.text(), x, y + 50);
+		line(g, text("power"), text(v.lowPower ? "power.value_low" : "power.value", percent), v.lowPower ? RED : theme.text(), x, y + 50);
 		bar(g, x, y + 62, v.energy, v.capacity, v.lowPower ? RED : theme.energy());
-		line(g, "JOBS", v.openTargets + " OPEN" + (v.covered > 0 ? " · " + v.covered + " UNDER COVER" : ""), theme.text(), x, y + 76);
+		line(g, text("jobs"), v.covered > 0 ? text("jobs.value_covered", v.openTargets, v.covered) : text("jobs.value", v.openTargets), theme.text(),
+				x, y + 76);
 		if (!v.missing.isEmpty()) {
-			say(g, "⚠ MATERIALS NEEDED — SEE JOBS", x, y + 90, AMBER);
+			say(g, text("materials_needed"), x, y + 90, AMBER);
 		}
 	}
 
@@ -142,15 +150,17 @@ public class DroneTerminalScreen extends Screen implements ScreenKit.Fitted {
 		v.flights.forEach(f -> byTier.computeIfAbsent(f.tier(), k -> new int[2])[1]++);
 		int docked = contentRight() - 90;
 		int airborne = contentRight() - 44;
-		g.text(font, "TIER", x, y, theme.dim(), false);
-		g.text(font, "DOCKED", docked, y, theme.dim(), false);
-		g.text(font, "UP", airborne, y, theme.dim(), false);
+		g.text(font, text("fleet.tier"), x, y, theme.dim(), false);
+		g.text(font, text("fleet.docked"), docked, y, theme.dim(), false);
+		g.text(font, text("fleet.up"), airborne, y, theme.dim(), false);
 		int row = y + 12;
 		if (byTier.isEmpty()) {
-			paragraph(g, "NO DRONES LINKED — USE A DRONE ON A PAD", x, row, AMBER);
+			paragraph(g, text("fleet.none"), x, row, AMBER);
 		}
 		for (Map.Entry<Integer, int[]> entry : byTier.entrySet()) {
-			String name = DroneTier.byNumber(entry.getKey()).map(t -> "T" + t.number() + " " + t.name().replace('_', ' ')).orElse("T" + entry.getKey());
+			// The tier by its drone's item name.
+			String name = DroneTier.byNumber(entry.getKey()).map(t -> text("fleet.tier_name", t.number(),
+					Component.translatable("item.jugcraft." + t.id()).getString())).orElse("T" + entry.getKey());
 			g.text(font, fit(name, docked - x - 6), x, row, theme.text(), false);
 			g.text(font, String.valueOf(entry.getValue()[0]), docked, row, theme.text(), false);
 			g.text(font, String.valueOf(entry.getValue()[1]), airborne, row, entry.getValue()[1] > 0 ? theme.label() : theme.text(), false);
@@ -159,28 +169,40 @@ public class DroneTerminalScreen extends Screen implements ScreenKit.Fitted {
 	}
 
 	private void jobs(GuiGraphicsExtractor g, DepotView v, int x, int y) {
-		line(g, "OPEN POSITIONS", String.valueOf(v.openTargets), theme.text(), x, y);
-		line(g, "UNDER COVER", v.covered + (v.covered > 0 ? " (NEED OPEN SKY)" : ""), v.covered > 0 ? AMBER : theme.text(), x, y + 12);
-		say(g, "MISSING IN PACKAGER", x, y + 28, theme.dim());
+		line(g, text("jobs.open"), String.valueOf(v.openTargets), theme.text(), x, y);
+		line(g, text("jobs.covered"), v.covered > 0 ? text("jobs.covered_value", v.covered) : String.valueOf(v.covered), v.covered > 0 ? AMBER : theme.text(),
+				x, y + 12);
+		say(g, text("jobs.missing"), x, y + 28, theme.dim());
 		int row = y + 40;
 		if (v.missing.isEmpty()) {
-			say(g, "NOTHING — SUPPLY OK", x, row, theme.text());
+			say(g, text("jobs.nothing"), x, row, theme.text());
 		}
 		for (Map.Entry<String, Integer> entry : v.missing.entrySet()) {
-			say(g, entry.getValue() + "× " + entry.getKey().replaceFirst("^minecraft:", ""), x, row, AMBER);
+			say(g, text("jobs.item", entry.getValue(), itemName(entry.getKey())), x, row, AMBER);
 			row += 11;
 		}
 	}
 
 	private void power(GuiGraphicsExtractor g, DepotView v, int x, int y) {
-		line(g, "STORED", v.energy + " / " + v.capacity + " JE", theme.text(), x, y);
+		line(g, text("power.stored"), text("power.stored_value", v.energy, v.capacity), theme.text(), x, y);
 		bar(g, x, y + 12, v.energy, v.capacity, v.lowPower ? RED : theme.energy());
-		line(g, "DRAW NOW", (v.flying() > 0 ? v.workingDraw : v.standbyDraw) + " JE/t", theme.text(), x, y + 26);
-		line(g, "WORKING", v.workingDraw + " JE/t (all drone upkeep)", theme.text(), x, y + 38);
-		line(g, "STANDBY", v.standbyDraw + " JE/t", theme.text(), x, y + 50);
+		line(g, text("power.draw"), text("power.rate", v.flying() > 0 ? v.workingDraw : v.standbyDraw), theme.text(), x, y + 26);
+		line(g, text("power.working"), text("power.working_value", v.workingDraw), theme.text(), x, y + 38);
+		line(g, text("power.standby"), text("power.rate", v.standbyDraw), theme.text(), x, y + 50);
 		if (v.lowPower) {
-			paragraph(g, "⚠ LOW POWER: FLIGHTS SLOWED, NO NEW DEPARTURES", x, y + 66, RED);
+			paragraph(g, text("power.low_warning"), x, y + 66, RED);
 		}
+	}
+
+	/** The terminal's words for {@code key} ({@code screen.jugcraft.terminal.<key>}), with its values filled in. */
+	private static String text(String key, Object... values) {
+		return Component.translatable("screen.jugcraft.terminal." + key, values).getString();
+	}
+
+	/** An item id's name ("minecraft:stone": Stone), or the id itself if no such item is known. */
+	private static String itemName(String id) {
+		Identifier key = Identifier.tryParse(id);
+		return key == null ? id : BuiltInRegistries.ITEM.getOptional(key).map(item -> new ItemStack(item).getHoverName().getString()).orElse(id);
 	}
 
 	private void line(GuiGraphicsExtractor g, String label, String value, int color, int x, int y) {

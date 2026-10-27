@@ -83,7 +83,7 @@ public final class CuttingBoardJob implements CompanionJob {
     public CompanionStatus work(PeepoEntity p){
         if(!isOccupant(p) || !p.preferences.canWork() || !p.orders.station(this))return CompanionStatus.IDLE;
         var status=workStatus(p);if(status!=CompanionStatus.READY){effort=0;return status;}
-        if(++effort<40)return CompanionStatus.WORKING;effort=0;
-        return kitchen.cut(p)?CompanionStatus.WORKING:CompanionStatus.RECOVERING;
+        if(++effort<p.uniforms.duration(CompanionUniforms.Type.CHEF,40))return CompanionStatus.WORKING;effort=0;
+        return kitchen.cut(p)?CompanionStatus.WORKING:kitchen.cutStatus();
     }
 }

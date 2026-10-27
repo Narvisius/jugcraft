@@ -63,6 +63,7 @@ import mire_hag_data
 import crypt_lich_data
 import iron_dreadnought_data
 import alpha_werewolf_data
+import pumpkin_king_data
 import cydonian_sentinel_data
 import vesperine_data
 import decor18_data
@@ -316,6 +317,7 @@ def assets(root, write, lang):
     crypt_lich_data.assets(root, write, lang)
     iron_dreadnought_data.assets(root, write, lang)
     alpha_werewolf_data.assets(root, write, lang)
+    pumpkin_king_data.assets(root, write, lang)
     cydonian_sentinel_data.assets(root, write, lang)
     ofrenda_data.assets(root, write, lang)
     graveyard_data.assets(root, write, lang)
@@ -481,6 +483,7 @@ def loot(data, write):
     crypt_lich_data.loot(out, write)
     iron_dreadnought_data.loot(out, write)
     alpha_werewolf_data.loot(out, write)
+    pumpkin_king_data.loot(out, write)
     cydonian_sentinel_data.loot(out, write)
     ferris_wheel_data.loot(out, write)
     hot_air_balloon_data.loot(out, write)
@@ -569,6 +572,7 @@ def recipes(out, write):
     crypt_lich_data.recipes(out, write, conditions)
     iron_dreadnought_data.recipes(out, write, conditions)
     alpha_werewolf_data.recipes(out, write, conditions)
+    pumpkin_king_data.recipes(out, write, conditions)
     cydonian_sentinel_data.recipes(out, write, conditions)
     kitchen_data.recipes(out, write, conditions)
 
@@ -620,6 +624,7 @@ def tags(tags):
     crypt_lich_data.tags(tags)
     iron_dreadnought_data.tags(tags)
     alpha_werewolf_data.tags(tags)
+    pumpkin_king_data.tags(tags)
     cydonian_sentinel_data.tags(tags)
     ferris_wheel_data.tags(tags)
     hot_air_balloon_data.tags(tags)
@@ -683,6 +688,7 @@ def advancements(data, write):
     iron_dreadnought_data.advancements(data, write)
     iron_dreadnought_data.damage_types(data, write)
     alpha_werewolf_data.advancements(data, write)
+    pumpkin_king_data.advancements(data, write)
     cydonian_sentinel_data.advancements(data, write)
 
 

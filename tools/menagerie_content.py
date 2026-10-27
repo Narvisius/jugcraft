@@ -263,6 +263,9 @@ def main():
                     (DATA/'recipe'/rel.parent/('wildlife_'+rel.name)).unlink(missing_ok=True)
                     continue
                 if value.get('type')=='jugcraft:wildlife_net':continue
+            # The naturalist data's biome spawn tags (has_*, blacklist/) are left out: Menagerie places each species by
+            # its habitat (docs/features/landscape-wildlife.md), and nothing read the copies.
+            if kind=='tags' and rel.parts[:2]==('worldgen','biome'):continue
             destkind={'recipes':'recipe','loot_tables':'loot_table'}.get(kind,kind)
             # Prefix the leaf, preserving vanilla registry subdirectories.
             if kind=='tags':rel=Path(*[{'items':'item','blocks':'block','entity_types':'entity_type'}.get(x,x) for x in rel.parts])

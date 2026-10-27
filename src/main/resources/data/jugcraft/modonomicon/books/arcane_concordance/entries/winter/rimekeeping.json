@@ -1,0 +1,90 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:winter/rimekeeping",
+  "category": "jugcraft:winter",
+  "x": 0,
+  "y": 0,
+  "name": "book.jugcraft.arcane_concordance.winter.rimekeeping.name",
+  "description": "book.jugcraft.arcane_concordance.winter.rimekeeping.description",
+  "icon": "minecraft:packed_ice",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/square_gray",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "id": "p0",
+      "title": "book.jugcraft.arcane_concordance.winter.rimekeeping.p0.title",
+      "text": "book.jugcraft.arcane_concordance.winter.rimekeeping.p0.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p1",
+      "title": "book.jugcraft.arcane_concordance.winter.rimekeeping.p1.title",
+      "text": "book.jugcraft.arcane_concordance.winter.rimekeeping.p1.text",
+      "show_title_separator": true,
+      "condition": {
+        "type": "modonomicon:research_node_unlocked",
+        "node_id": "jugcraft:concordance/rimekeeping_encountered",
+        "tooltip": {
+          "translate": "book.jugcraft.arcane_concordance.locked.rimekeeping.encountered"
+        }
+      }
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p2",
+      "title": "book.jugcraft.arcane_concordance.winter.rimekeeping.p2.title",
+      "text": "book.jugcraft.arcane_concordance.winter.rimekeeping.p2.text",
+      "show_title_separator": true,
+      "condition": {
+        "type": "modonomicon:research_node_unlocked",
+        "node_id": "jugcraft:concordance/rimekeeping_observed",
+        "tooltip": {
+          "translate": "book.jugcraft.arcane_concordance.locked.rimekeeping.observed"
+        }
+      }
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p3",
+      "title1": "book.jugcraft.arcane_concordance.winter.rimekeeping.p3.title",
+      "recipe_id_1": "jugcraft:frost_horn",
+      "text": "book.jugcraft.arcane_concordance.winter.rimekeeping.p3.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p4",
+      "title": "book.jugcraft.arcane_concordance.winter.rimekeeping.p4.title",
+      "text": "book.jugcraft.arcane_concordance.winter.rimekeeping.p4.text",
+      "show_title_separator": true,
+      "condition": {
+        "type": "modonomicon:research_node_unlocked",
+        "node_id": "jugcraft:concordance/rimekeeping_understood",
+        "tooltip": {
+          "translate": "book.jugcraft.arcane_concordance.locked.rimekeeping.understood"
+        }
+      }
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p5",
+      "title": "book.jugcraft.arcane_concordance.winter.rimekeeping.p5.title",
+      "text": "book.jugcraft.arcane_concordance.winter.rimekeeping.p5.text",
+      "show_title_separator": true,
+      "condition": {
+        "type": "modonomicon:research_node_unlocked",
+        "node_id": "jugcraft:concordance/rimekeeping_mastered",
+        "tooltip": {
+          "translate": "book.jugcraft.arcane_concordance.locked.rimekeeping.mastered"
+        }
+      }
+    }
+  ]
+}

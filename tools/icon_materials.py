@@ -81,6 +81,11 @@ MARSH_LIGHT = Material((18, 44, 12), (30, 70, 20), (52, 116, 32), (96, 184, 56),
 # crown's fire, only ever a stone or an accent.
 OLD_BONE = Material((40, 37, 31), (60, 56, 48), (98, 92, 78), (140, 132, 114), (180, 172, 150), (214, 207, 186), shine=False)
 SOUL_FIRE = Material((8, 30, 44), (12, 48, 68), (18, 92, 132), (38, 152, 204), (112, 216, 246), (204, 246, 255), shine=False)
+# Thallite, the Earth school's metal (Concordance Chunk C, C-04: the Rooted Thallite Foundation, a Thallite plate): the
+# owner's chartreuse ramp (tools/material_icons.py METAL_RAMPS["thallite"]: its dark, mid, light and highlight), with the
+# icon's outline darkened from 303f12 (53 luma) to 263410 (44) so it stays at most 45 (ITEM_ICONS.md, rule 4); 303f12 is
+# kept as the lit-side outline. check_concordance holds its four tones to the metal's.
+THALLITE = Material((38, 52, 16), (48, 63, 18), (78, 97, 29), (124, 138, 55), (170, 176, 83), (219, 221, 133))
 PAPER = Material((80, 64, 40), (124, 104, 74), (170, 152, 116), (214, 200, 166), (236, 226, 198), (250, 246, 230),
                  shine=False)
 # The Greenwardens' garden (roadmap step 14; tools/item_icons/: the four crops, Verdant Chaff and the living devices).
@@ -136,6 +141,8 @@ MATERIALS = {
     "fen_flint": FEN_FLINT, "hagmoss": HAGMOSS, "marsh_light": MARSH_LIGHT,
     # the Crypt Lich's loot
     "old_bone": OLD_BONE, "soul_fire": SOUL_FIRE,
+    # the Earth school's metal (Concordance Chunk C)
+    "thallite": THALLITE,
 }
 
 # Materials meant to be vanilla's own metal: the distance test against copper, iron and gold is skipped for them.

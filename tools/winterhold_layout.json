@@ -1,8 +1,8 @@
 {
   "schema": 1,
   "size": [
-    145,
-    76,
+    176,
+    88,
     161
   ],
   "entry": [
@@ -200,12 +200,12 @@
       56
     ],
     "East Cloister": [
-      98,
+      95,
       25,
       85
     ],
     "West Cloister": [
-      38,
+      41,
       25,
       85
     ],
@@ -215,12 +215,12 @@
       115
     ],
     "West Cloister Roof": [
-      38,
+      41,
       33,
       85
     ],
     "East Cloister Roof": [
-      98,
+      95,
       33,
       85
     ],
@@ -283,6 +283,46 @@
       124,
       25,
       39
+    ],
+    "North Study": [
+      91,
+      25,
+      26
+    ],
+    "South Study": [
+      91,
+      25,
+      43
+    ],
+    "Gate Reception West": [
+      62,
+      25,
+      120
+    ],
+    "Gate Reception East": [
+      74,
+      25,
+      120
+    ],
+    "Arch-Mage Library Annex": [
+      43,
+      51,
+      34
+    ],
+    "Arch-Mage Bedroom": [
+      41,
+      51,
+      38
+    ],
+    "Grand Reading Hall": [
+      150,
+      25,
+      34
+    ],
+    "Upper Archive Gallery": [
+      153,
+      37,
+      42
     ]
   },
   "ops": [
@@ -292,7 +332,7 @@
         [
           68,
           85,
-          36
+          33
         ],
         [
           68,
@@ -342,7 +382,7 @@
         68,
         85
       ],
-      "radius": 33,
+      "radius": 30,
       "y": [
         24,
         24
@@ -358,7 +398,7 @@
         68,
         85
       ],
-      "radius": 33,
+      "radius": 30,
       "y": [
         25,
         37
@@ -374,8 +414,8 @@
         68,
         85
       ],
-      "inner": 25,
-      "radius": 33,
+      "inner": 23,
+      "radius": 30,
       "y": [
         32,
         32
@@ -391,8 +431,8 @@
         68,
         85
       ],
-      "inner": 32,
-      "radius": 33,
+      "inner": 29,
+      "radius": 30,
       "y": [
         33,
         34
@@ -408,8 +448,8 @@
         68,
         85
       ],
-      "inner": 24,
-      "radius": 25,
+      "inner": 22,
+      "radius": 23,
       "y": [
         33,
         33
@@ -427,7 +467,7 @@
         68,
         85
       ],
-      "radius": 33,
+      "radius": 30,
       "y": [
         25,
         31
@@ -442,7 +482,7 @@
         68,
         85
       ],
-      "radius": 25,
+      "radius": 23,
       "y": [
         31,
         31
@@ -1829,14 +1869,6 @@
       }
     },
     {
-      "op": "snow",
-      "court": [
-        68,
-        85
-      ],
-      "floor": 24
-    },
-    {
       "op": "paint",
       "shape": "box",
       "xz": [
@@ -1937,5 +1969,38 @@
         }
       }
     }
-  ]
+  ],
+  "academic_wing": {
+    "bounds": [
+      83,
+      20,
+      97,
+      48
+    ]
+  },
+  "gatehouse": {
+    "bounds": [
+      60,
+      114,
+      76,
+      126
+    ]
+  },
+  "archmage_annex": {
+    "center": [
+      43,
+      33
+    ],
+    "radius": 12
+  },
+  "library_wing": {
+    "center": [
+      147,
+      34
+    ],
+    "radii": [
+      22,
+      23
+    ]
+  }
 }

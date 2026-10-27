@@ -26,6 +26,7 @@ import jimtafacts_spellbook_lore as lore
 import jimtafacts_spellbook_exploration as exploration
 import jimtafacts_spellbook_loot as source_loot
 import jimtafacts_spellbook_structures as structures
+import jimtafacts_statues as statues
 import jimtafacts_spellbook_curios as curios
 import jimtafacts_spellbook_upgrades as upgrades
 import jimtafacts_spellbook_recipes as source_recipes
@@ -114,7 +115,7 @@ def dump(path, obj):
 def items():
     return [PREFIX + x for x in list(BOOKS) + MATERIALS + list(STATIONS)
             + [f'{family}_{part}' for family in ARMOR for part in ('helmet', 'chestplate', 'leggings', 'boots')]
-            + ['scroll_' + x for x in SPELLS] + ['portal_frame']] + mages.items() + gear.items() + encounters.items() + workshops.items() + lore.items() + exploration.items() + curios.items() + upgrades.items()
+            + ['scroll_' + x for x in SPELLS] + ['portal_frame']] + mages.items() + gear.items() + encounters.items() + workshops.items() + lore.items() + exploration.items() + curios.items() + upgrades.items() + list(statues.IDS)
 
 def entities():
     return ['jimtafacts_frozen_humanoid','jimtafacts_catacombs_zombie','jimtafacts_magehunter_vindicator','jimtafacts_root', 'jimtafacts_wisp', 'jimtafacts_spectral_steed', 'jimtafacts_shot','jimtafacts_blood_projectile','jimtafacts_spectral_hammer','jimtafacts_ice_block','jimtafacts_void_tentacle'] + ['jimtafacts_'+kind for kind in ('black_hole','gravity_fissure','firefly_swarm','fang_swirl','sunbeam','wall_of_fire','ice_tomb','ice_spike','devour_jaw','frozen_copy','echoing_sword','scapegoat','shield','portal','pocket_portal','arcane_shackle')] + ['jimtafacts_summoned_'+kind for kind in ('zombie','skeleton','sword','rapier','claymore')] + mages.entities() + encounters.entities()
@@ -123,7 +124,7 @@ def effects():
     return ['jimtafacts_' + name for name in ('immolate','instant_mana','hastened','slowed','charge','oakskin','blight','gluttony','rend','guided','chilled','spider_aspect','vigor','echoing_strikes','frostbitten_strikes','abyssal_shroud','heartstop','planar_sight','evasion','true_invisibility')]
 
 def blocks():
-    return [PREFIX+name for name in (*STATIONS,'voidstone','pocket_dimension_portal_frame','portal_frame')] + encounters.blocks() + workshops.blocks()
+    return [PREFIX+name for name in (*STATIONS,'voidstone','pocket_dimension_portal_frame','portal_frame')] + encounters.blocks() + workshops.blocks() + list(statues.IDS)
 
 def generate():
     copies, models = [], set()
@@ -240,6 +241,7 @@ def generate():
     exploration.generate(definition,model,dump,RES,ART,lang)
     source_loot.generate(dump,RES,ART,SPELLS)
     structures.generate(copy,texture,dump,RES,ART,lang)
+    lang.update(statues.generate(shared=False))
     gear.generate(definition,model,texture,dump,RES,ART,lang)
     curios.generate(definition,model,texture,dump,RES,ART,lang)
     upgrades.generate(copy,definition,texture,dump,RES,ART,lang)
@@ -386,7 +388,6 @@ def generate():
         '#c:barrels':['minecraft:barrel'],
         '#c:ingots/gold':['minecraft:gold_ingot'],
         '#curios:spellbook':[j(name) for name in BOOKS],
-        'jugcraft:jimta_spellbooks_chronicle':[],
         'jugcraft:jimtafacts/spellbooks/portal_frame':['jugcraft:jimta_spellbooks_portal_frame'],
     }
     for tag_path in (RES/'data/jugcraft/tags').rglob('*.json'):

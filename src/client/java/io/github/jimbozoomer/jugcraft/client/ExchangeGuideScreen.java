@@ -26,7 +26,7 @@ import net.minecraft.world.item.ItemStack;
  * (tools/exchange_guide.py). Opened by the Exchange Guide item and by the Guide button on the Exchange screen, which it
  * returns to when closed. Reading only.
  */
-public class ExchangeGuideScreen extends Screen {
+public class ExchangeGuideScreen extends Screen implements ScreenKit.Fitted {
 	private static final Identifier CONTENT = Jugcraft.id("exchange_guide/en_us.json");
 	private static final int MAX_WIDTH = 384;
 	private static final int MAX_HEIGHT = 236;
@@ -71,6 +71,12 @@ public class ExchangeGuideScreen extends Screen {
 			Jugcraft.LOGGER.warn("Could not read the Exchange guide", e);
 		}
 		page = Math.max(0, Math.min(page, pages.size() - 1));
+	}
+
+	/** The book, sized to the window (docs/features/trade-look.md). */
+	@Override
+	public net.minecraft.client.gui.navigation.ScreenRectangle panelArea() {
+		return new net.minecraft.client.gui.navigation.ScreenRectangle(left, top, panelWidth, panelHeight);
 	}
 
 	@Override

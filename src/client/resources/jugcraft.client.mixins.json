@@ -4,8 +4,11 @@
   "package": "io.github.jimbozoomer.jugcraft.mixin.client",
   "compatibilityLevel": "JAVA_21",
   "client": [
+    "JimtaRealmSkyMixin",
+    "JimtaRealmSkyStateMixin",
     "JimtaInvisibilityRendererMixin",
     "JimtaPlanarSightMixin",
+    "JimtaPlanarFogMixin",
     "JimtaInvisibleHandsMixin",
     "ArmsFirstPersonMixin",
     "ArmsHumanoidModelMixin",
@@ -24,7 +27,11 @@
     "HowitzerPilotHandsMixin",
     "HowitzerPilotRendererMixin",
     "NouveauScryPlayerMixin",
-    "JugcraftKeyMappingMixin"
+    "JugcraftKeyMappingMixin",
+    "AircraftCameraMixin",
+    "RetroTraderModelMixin",
+    "RetroTraderRendererMixin",
+    "RetroTraderRenderStateMixin"
   ],
   "injectors": {
     "defaultRequire": 1

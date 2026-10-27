@@ -1,6 +1,6 @@
 """Original spatial-cell/port models and recovered SpatialPylonModel cube/overlay geometry."""
 BLOCKS = ['spatial_io_port', 'spatial_pylon']
-ITEMS = [f'spatial_{kind}_{size}' for size in (2, 16) for kind in ('cell_component', 'storage_cell')]
+ITEMS = [f'spatial_{kind}_{size}' for size in (2, 16, 128) for kind in ('cell_component', 'storage_cell')]
 
 def generate(source, assets, res, model, texture, dump, recipe):
     variants = {f'facing={direction}': {'model': model('block/spatial_io_port'), 'y': angle}
@@ -26,6 +26,6 @@ def generate(source, assets, res, model, texture, dump, recipe):
         recipe(name, {'type': 'minecraft:crafting_shaped', 'pattern': pattern, 'key': keys, 'result': {'id': 'jugcraft:jimta_' + name, 'count': count}})
     shaped('spatial_pylon', ['QFQ', 'QEQ', 'QFQ'], {'Q': 'jugcraft:jimta_quartz_glass', 'F': 'jugcraft:jimta_fluix_crystal', 'E': 'jugcraft:jimta_engineering_processor'}, 4)
     shaped('spatial_io_port', ['GGG', 'IPI', 'ICI'], {'G': 'jugcraft:jimta_quartz_glass', 'I': 'minecraft:iron_ingot', 'P': 'jugcraft:jimta_io_port', 'C': 'jugcraft:jimta_engineering_processor'})
-    for size in (2, 16):
-        shaped(f'spatial_cell_component_{size}', ['FQF', 'QCQ', 'FEF'], {'F': 'jugcraft:jimta_fluix_pearl', 'Q': 'jugcraft:jimta_quartz_glass', 'E': 'jugcraft:jimta_engineering_processor', 'C': 'minecraft:ender_pearl' if size == 2 else 'jugcraft:jimta_spatial_cell_component_2'})
+    for size in (2, 16, 128):
+        shaped(f'spatial_cell_component_{size}', ['FQF', 'QCQ', 'FEF'], {'F': 'jugcraft:jimta_fluix_pearl', 'Q': 'jugcraft:jimta_quartz_glass', 'E': 'jugcraft:jimta_engineering_processor', 'C': 'minecraft:ender_pearl' if size == 2 else 'jugcraft:jimta_spatial_cell_component_'+('2' if size==16 else '16')})
         shaped(f'spatial_storage_cell_{size}', ['IGI', 'RCR', 'III'], {'I': 'minecraft:iron_ingot', 'G': 'jugcraft:jimta_quartz_glass', 'R': 'minecraft:redstone', 'C': f'jugcraft:jimta_spatial_cell_component_{size}'})

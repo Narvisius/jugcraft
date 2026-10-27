@@ -186,7 +186,7 @@ final class CompanionHusbandry {
             if(!npc.hasLineOfSight(animal) || npc.distanceToSqr(animal)>3)return CompanionStatus.BLOCKED;
             if(phase==0 && firstHold==null){heldFirst=animal;firstHold=CompanionLivestock.hold(animal,npc);}
             if(phase==1 && secondHold==null){heldSecond=animal;secondHold=CompanionLivestock.hold(animal,npc);}
-            int effort=kill?6:4;try(var tx=Transaction.openOuter()){if(npc.extractEnergy(effort,tx)!=effort)return CompanionStatus.RECOVERING;tx.commit();}
+            int effort=kill?6:4;try(var tx=Transaction.openOuter()){if(npc.extractWorkEnergy(CompanionUniforms.Type.RANCH_HAND,effort,tx)!=effort)return CompanionStatus.RECOVERING;tx.commit();}
             npc.setWorkAnimal(animal.getId());float yaw=(float)Math.toDegrees(Math.atan2(-(animal.getX()-npc.getX()),animal.getZ()-npc.getZ()));npc.setYRot(yaw);npc.yBodyRot=yaw;npc.setYHeadRot(yaw);
             if(++progress<(kill?40:60))return CompanionStatus.WORKING;
             if(!kill && phase==0){phase=1;progress=0;approach=CompanionLivestock.standing(npc,target,second());if(approach==null)return CompanionStatus.BLOCKED;return CompanionStatus.WORKING;}

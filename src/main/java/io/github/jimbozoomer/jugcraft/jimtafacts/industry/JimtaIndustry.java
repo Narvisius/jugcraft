@@ -54,7 +54,7 @@ public final class JimtaIndustry {
                 String id = entry.getAsString();
                 var key = ResourceKey.create(Registries.ITEM, Jugcraft.id(id));
                 var properties=new Item.Properties().setId(key);
-                MATERIALS.put(id, Registry.register(BuiltInRegistries.ITEM, key, id.endsWith("_turning_blank")?new IndustrialLathe.Blank(properties):new Item(properties)));
+                MATERIALS.put(id, Registry.register(BuiltInRegistries.ITEM, key, id.endsWith("_turning_blank")?new IndustrialLathe.Blank(properties):id.endsWith("_cutting_blade")?new IndustrialCuttingBlade(properties,id.contains("diamond")?8:id.contains("steel")?5:2):new Item(properties)));
             }
         } catch (java.io.IOException e) { throw new IllegalStateException("Cannot read industrial materials", e); }
         Block[] blocks = MACHINES.values().stream().filter(b -> b instanceof JimtaIndustryMachine).toArray(Block[]::new);

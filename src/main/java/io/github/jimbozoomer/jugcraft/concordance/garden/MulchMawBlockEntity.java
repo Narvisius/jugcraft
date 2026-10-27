@@ -92,8 +92,17 @@ public class MulchMawBlockEntity extends LivingDeviceBlockEntity implements GeoB
 		return status;
 	}
 
+	/**
+	 * Gives each whole nutrient it holds to the poorest awake bed in reach with room. The Maw's mulch is compost (Concordance
+	 * Chunk C, C-08, C-P61): each nutrient also eases that bed's strain by one. A fixer's gift does not.
+	 */
 	private void give(List<VerdantBedBlockEntity> beds) {
-		while (held >= Mulch.QUARTERS && Garden.nourish(beds, 1) == 1) {
+		while (held >= Mulch.QUARTERS) {
+			VerdantBedBlockEntity bed = Garden.poorest(beds);
+			if (bed == null || bed.give(1) != 1) {
+				return;
+			}
+			bed.compost();
 			held -= Mulch.QUARTERS;
 			setChanged();
 		}

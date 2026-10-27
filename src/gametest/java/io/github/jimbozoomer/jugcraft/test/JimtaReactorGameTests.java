@@ -11,6 +11,17 @@ import net.minecraft.world.item.component.CustomData;
 public final class JimtaReactorGameTests {
     private CompactReactor.Core reactor(GameTestHelper h){h.setBlock(new BlockPos(2,2,2),CompactReactor.CORE);return h.getBlockEntity(new BlockPos(2,2,2), CompactReactor.Core.class);}
     private ItemStack part(String name){return new ItemStack(CompactReactor.PARTS.get("jimta_"+name));}
+    @GameTest public void rawFuelCannotRunInTheGridAndSmallPiecesConserveRadiation(GameTestHelper h){
+        var r=reactor(h);
+        for(String name:java.util.List.of("uranium_fuel_material","mox_fuel_material","small_plutonium","uranium_235","small_uranium_235","uranium_238"))
+            h.assertTrue(!r.canPlaceItem(0,part(name)),"Raw feedstock must be assembled into rods first");
+        var component=io.github.jimbozoomer.jugcraft.nuclear.JugcraftNuclear.RADIOACTIVITY;
+        float whole=part("plutonium_pellet").getOrDefault(component,0F),small=part("small_plutonium").getOrDefault(component,0F);
+        h.assertTrue(Math.abs(whole-9*small)<.00001F&&small>0,"Splitting plutonium retains its total radiation rather than removing the hazard");
+        float u235=part("uranium_235").getOrDefault(component,0F),u238=part("uranium_238").getOrDefault(component,0F),tiny=part("small_uranium_235").getOrDefault(component,0F);
+        float cylinder=new ItemStack(io.github.jimbozoomer.jugcraft.nuclear.JugcraftNuclear.ENRICHED_URANIUM).getOrDefault(component,0F);
+        h.assertTrue(Math.abs(u235-9*tiny)<.00001F&&Math.abs(u235+7*u238-cylinder)<.00001F,"Subdivision and cylinder separation preserve aggregate radioactivity");h.succeed();
+    }
     @GameTest public void fuelProducesFiniteEnergyAndBecomesSpentExactlyOnce(GameTestHelper h){
         var r=reactor(h);var rod=part("uranium_rod_simple");CustomData.update(DataComponents.CUSTOM_DATA,rod,t->t.putInt("Used",19999));r.setItem(0,rod);r.enabled=true;r.step(h.getLevel());
         h.assertTrue(r.getItem(0).is(CompactReactor.PARTS.get("jimta_uranium_rod_simple_depleted")),"Last fuel second replaces rod with exactly one spent rod");

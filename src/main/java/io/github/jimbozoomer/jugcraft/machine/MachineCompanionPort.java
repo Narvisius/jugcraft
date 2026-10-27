@@ -28,12 +28,17 @@ public final class MachineCompanionPort implements CompanionLogistics.Port {
     public boolean acceptsFilter(ItemStack stack){return special.applies()?special.acceptsFilter(stack):stack.isEmpty() || catalog().values().stream().anyMatch(p->p.results.stream().anyMatch(s->s.is(stack.getItem())));}
     public void filterChanged(){selected=null;machine.companionRecipeChanged();}
     @Override public void prepare(Storage<ItemVariant> source){
-        if(special.applies()){special.prepare(source);return;}
+        prepare(source,null);
+    }
+    public void prepare(Storage<ItemVariant> source,java.util.function.ToDoubleFunction<ItemStack> priority){
+        if(special.applies()){special.prepare(source,priority);return;}
         var allowed=filter();var supplies=local.peepo.RecipeSupplies.available(source);
         var installed=new ArrayList<ItemStack>();for(int i=0;i<machine.kind().outputSlot();i++)installed.add(machine.getItem(i));
-        var choices=new ArrayList<>(catalog().values());choices.sort(Comparator.comparingInt(p->p.id.equals(selected)?0:1));
+        var choices=new ArrayList<>(catalog().values());
+        java.util.function.ToDoubleFunction<Plan> score=p->priority==null?0:p.results.stream().filter(allowed::allows).mapToDouble(priority).max().orElse(-2);
+        choices.sort(Comparator.<Plan>comparingDouble(score).reversed().thenComparingInt(p->p.id.equals(selected)?0:1));
         int inspected=0;for(var p:choices){if(++inspected>256)break;
-            if((!allowed.empty() && p.results.stream().noneMatch(allowed::allows)) || allocation(p)==null)continue;
+            if(score.applyAsDouble(p)<=-2 || (!allowed.empty() && p.results.stream().noneMatch(allowed::allows)) || allocation(p)==null)continue;
             if(p.recipe instanceof FluidRecipe fluid && (machine.tanks()==null || !fluid.fluidsMatch(machine.tanks())))continue;
             var parts=p.parts.stream().map(part->new local.peepo.RecipeSupplies.Part(part.ingredient,part.count)).toList();
             if(local.peepo.RecipeSupplies.completes(parts,installed,supplies)){select(p.id);return;}
@@ -66,9 +71,10 @@ public final class MachineCompanionPort implements CompanionLogistics.Port {
         var catalog=new LinkedHashMap<Identifier,Plan>();for(var plan:plans)catalog.put(plan.id,plan);return Collections.unmodifiableMap(catalog);
     }
     public boolean selectable(){return special.applies()?special.recipeCapable():catalog().values().stream().anyMatch(p->!p.results.isEmpty());}
+    public boolean supportsStockTargets(){return machine.kind()==MachineKind.AUTO_CRAFTER || machine.kind()==MachineKind.ELECTROPLATING_BATH || !special.applies() && catalog().values().stream().anyMatch(p->!p.parts.isEmpty() && !p.results.isEmpty());}
     public boolean supportsSupply(){return special.applies() || catalog().values().stream().anyMatch(p->!p.parts.isEmpty());}
     public boolean supportsOutput(){return machine.kind()!=MachineKind.COAL_GENERATOR && machine.kind().outputSlot()<machine.kind().slots;}
-    public Plan selection(){return selected==null?null:catalog().get(selected);}
+    public Plan selection(){return machine.kind()==MachineKind.ELECTROPLATING_BATH?special.stockPlan():selected==null?null:catalog().get(selected);}
     public boolean locked(){return selected!=null || !filter().empty();}
     private boolean ready(Plan p){
         var slots=allocation(p);if(slots==null)return false;

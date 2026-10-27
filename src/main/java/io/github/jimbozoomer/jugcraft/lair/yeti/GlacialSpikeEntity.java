@@ -6,6 +6,7 @@ import com.geckolib.animatable.manager.AnimatableManager;
 import com.geckolib.animation.AnimationController;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
+import java.util.UUID;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
@@ -19,11 +20,13 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A spike of ice bursting up from the Yeti King's lake in his Glacial Spikes: as it bursts, every player within
- * {@value #WIDTH} block of it takes {@value YetiKingEntity#SPIKE_DAMAGE} damage and is thrown up. It rises over
- * {@value #RISE_TICKS} ticks, stands {@value #HOLD_TICKS} more, and is gone. It cannot be harmed and is never saved.
+ * {@value #WIDTH} block of it takes {@value YetiKingEntity#SPIKE_DAMAGE} damage and is thrown up (half as high braced,
+ * B-09). It rises over {@value #RISE_TICKS} ticks, stands {@value #HOLD_TICKS} more, and is gone. It cannot be harmed and is
+ * never saved, and it goes at once when its king is gone or no longer counts it his ({@link YetiKingEntity#owning}).
  */
 public class GlacialSpikeEntity extends Entity implements GeoEntity {
 	public static final int RISE_TICKS = 4;
@@ -32,6 +35,7 @@ public class GlacialSpikeEntity extends Entity implements GeoEntity {
 	private static final RawAnimation BURST = RawAnimation.begin().thenPlayAndHold("animation.glacial_spike.burst");
 
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+	private @Nullable UUID owner;
 
 	public GlacialSpikeEntity(EntityType<? extends GlacialSpikeEntity> type, Level level) {
 		super(type, level);
@@ -42,8 +46,10 @@ public class GlacialSpikeEntity extends Entity implements GeoEntity {
 	/** A spike bursts up at {@code at} (on the lake's surface), for {@code king}: it strikes as it bursts. */
 	public static GlacialSpikeEntity burst(ServerLevel level, YetiKingEntity king, Vec3 at) {
 		GlacialSpikeEntity spike = new GlacialSpikeEntity(JugcraftYeti.GLACIAL_SPIKE, level);
+		spike.owner = king.getUUID();
 		spike.snapTo(at.x, at.y, at.z, level.getRandom().nextFloat() * 360.0F, 0.0F);
 		level.addFreshEntity(spike);
+		king.keep(spike);
 		spike.strike(level, king);
 		level.sendParticles(ParticleTypes.ITEM_SNOWBALL, at.x, at.y + 0.3, at.z, 8, 0.3, 0.3, 0.3, 0.1);
 		level.playSound(null, at.x, at.y, at.z, SoundType.GLASS.getPlaceSound(), SoundSource.HOSTILE, 1.0F, 0.6F);
@@ -60,7 +66,7 @@ public class GlacialSpikeEntity extends Entity implements GeoEntity {
 			if (dx * dx + dz * dz <= reach * reach && Math.abs(player.getY() - getY()) < 2.0
 					&& player.hurtServer(level, damageSources().mobAttack(king), YetiKingEntity.damage(YetiKingEntity.SPIKE_DAMAGE))) {
 				hit++;
-				YetiKingEntity.push(player, Vec3.ZERO, 0.0, YetiKingEntity.SPIKE_LIFT);
+				king.push(player, Vec3.ZERO, 0.0, YetiKingEntity.SPIKE_LIFT);
 			}
 		}
 		return hit;
@@ -69,7 +75,8 @@ public class GlacialSpikeEntity extends Entity implements GeoEntity {
 	@Override
 	public void tick() {
 		super.tick();
-		if (level() instanceof ServerLevel && tickCount > RISE_TICKS + HOLD_TICKS) {
+		if (level() instanceof ServerLevel level
+				&& (tickCount > RISE_TICKS + HOLD_TICKS || YetiKingEntity.owning(level, owner, getUUID()) == null)) {
 			discard();
 		}
 	}

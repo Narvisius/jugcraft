@@ -10,6 +10,9 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
 
 /**
  * The parts the other machine screens are drawn with (docs/features/machine-screens.md): the prospector, rocket pad,
@@ -149,6 +152,40 @@ public final class ScreenKit {
 		g.fill(x, y, x + w, y + h, c[1]);
 		bevel(g, x, y, w, h, c[3], c[0]);
 		g.outline(x, y, w, h, theme.frame().outline());
+	}
+
+	/** Where a menu's player inventory starts (its top slot's y), or -1 if it has none. */
+	public static int inventoryTop(AbstractContainerMenu menu) {
+		int top = Integer.MAX_VALUE;
+		for (Slot slot : menu.slots) {
+			if (slot.container instanceof Inventory) {
+				top = Math.min(top, slot.y);
+			}
+		}
+		return top == Integer.MAX_VALUE ? -1 : top;
+	}
+
+	/**
+	 * A container screen's frame from its menu: the casing over the machine's part, and the tray under the player's
+	 * inventory (or the casing over everything, if the menu has no inventory).
+	 */
+	public static void frame(GuiGraphicsExtractor g, MachineScreenThemes.Theme theme, int x, int y, int w, int h, AbstractContainerMenu menu) {
+		int inventory = inventoryTop(menu);
+		if (inventory < 0) {
+			body(g, theme, x, y, w, h);
+			return;
+		}
+		body(g, theme, x, y, w, inventory - 5);
+		tray(g, theme, x, y + inventory - 4, w, h - inventory + 4);
+	}
+
+	/** A frame in the look for every slot of the menu that is in use, at its place in the screen at (x, y). */
+	public static void slots(GuiGraphicsExtractor g, MachineScreenThemes.Theme theme, int x, int y, AbstractContainerMenu menu) {
+		for (Slot slot : menu.slots) {
+			if (slot.isActive()) {
+				MachineSkin.slot(g, theme, x + slot.x, y + slot.y);
+			}
+		}
 	}
 
 	/** The player's inventory slots, with the menu's usual top-left corner at (x, y) (8, 84 in a 166-high screen). */

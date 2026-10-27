@@ -45,6 +45,12 @@ public final class IndustrialAutomation {
         var itemFilter=new ItemSorterBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(ik).noOcclusion());
         put("jimta_item_filter",itemFilter);
         ((FabricBlockEntityType)JugcraftLogistics.SORTER_ENTITY).addValidBlock(itemFilter);
+        var sortingKey=ResourceKey.create(Registries.BLOCK,Jugcraft.id("jimta_sorting_machine"));
+        var sortingMachine=new ItemSorterBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(sortingKey));
+        put("jimta_sorting_machine",sortingMachine);
+        ((FabricBlockEntityType)JugcraftLogistics.SORTER_ENTITY).addValidBlock(sortingMachine);
+        net.fabricmc.fabric.api.transfer.v1.item.ItemStorage.SIDED.registerForBlocks(
+                (level,pos,state,entity,side)->entity instanceof ItemSorterBlockEntity node?node.itemsFor(side):null,itemFilter,sortingMachine);
         var fk=ResourceKey.create(Registries.BLOCK,Jugcraft.id("jimta_fluid_filter"));
         var fluidFilter=new FluidFilterBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(fk).noOcclusion(),1000);
         put("jimta_fluid_filter",fluidFilter);

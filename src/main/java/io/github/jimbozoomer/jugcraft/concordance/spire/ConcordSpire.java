@@ -77,7 +77,6 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -556,8 +555,8 @@ public final class ConcordSpire {
 
 	/**
 	 * Keeps two days of upkeep coming: while its store holds less, it files one courier request (its keeper's) at the
-	 * nearest Courier Post within {@value #REACH} blocks the keeper may use, for what is short, and files no other until
-	 * that one closes.
+	 * nearest Courier Post within {@value #REACH} blocks the keeper may use ({@code Couriers.nearestPost}, shared with the
+	 * crucible since Concordance Chunk C, C-06), for what is short, and files no other until that one closes.
 	 */
 	private static void restock(ServerLevel level, SpireHeartBlockEntity heart, SpireState state, SpireConfiguration configuration, long now) {
 		CourierLedger ledger = CourierLedger.of(level.getServer());
@@ -569,7 +568,7 @@ public final class ConcordSpire {
 			heart.setRequest(-1L);
 			return;
 		}
-		CourierPostBlockEntity post = nearestPost(level, heart.getBlockPos(), state.keeper());
+		CourierPostBlockEntity post = Couriers.nearestPost(level, heart.getBlockPos(), state.keeper(), REACH);
 		Item item = BuiltInRegistries.ITEM.getValue(Identifier.parse(configuration.upkeepItem()));
 		if (post == null) {
 			heart.setRequest(-1L);
@@ -578,28 +577,6 @@ public final class ConcordSpire {
 		Logistics.Filed filed = ledger.file(state.keeper(), Couriers.place(level, post.getBlockPos()), Couriers.place(level, heart.getBlockPos()),
 				new ItemStack(item), want, level.registryAccess(), now);
 		heart.setRequest(filed.outcome() == Logistics.Outcome.DONE ? filed.id() : -1L);
-	}
-
-	private static @Nullable CourierPostBlockEntity nearestPost(ServerLevel level, BlockPos heart, UUID keeper) {
-		CourierPostBlockEntity nearest = null;
-		double best = Double.MAX_VALUE;
-		int cx = heart.getX() >> 4;
-		int cz = heart.getZ() >> 4;
-		for (int dx = -1; dx <= 1; dx++) {
-			for (int dz = -1; dz <= 1; dz++) {
-				if (!level.hasChunk(cx + dx, cz + dz)) {
-					continue;
-				}
-				for (BlockEntity entity : List.copyOf(level.getChunk(cx + dx, cz + dz).getBlockEntities().values())) {
-					double distance = entity.getBlockPos().distSqr(heart);
-					if (entity instanceof CourierPostBlockEntity post && distance <= (double) REACH * REACH && distance < best && post.mayUse(keeper)) {
-						nearest = post;
-						best = distance;
-					}
-				}
-			}
-		}
-		return nearest;
 	}
 
 	// ---------------------------------------------------------------- the field

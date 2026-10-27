@@ -53,6 +53,13 @@ Primary specialty and supported player role: the Hearthbinders; casters who figh
   model's armour bones to the wearer; the renderer then hides the slim sleeves (vanilla draws the same sleeves for every
   arm width), draws nothing on babies and small armour stands, and adds vanilla's armour glint on an enchanted piece.
 - Nothing ticks: Spell Power is Trinkets' and vanilla's attribute modifiers; the blow is a damage event.
+- **Shared with Rime's travel kit** (Concordance Chunk B, unit 4; [the winter record](arcane-concordance-winter.md);
+  not yet merged): the Spell Focus and Bracelet slots also hold the Lesser Focus of Water, the Focus of Water and the
+  Water Bangle, so one Spell Focus slot holds a fire or a water focus, never both. Ember's writer writes both slices'
+  slot item tags from one table, `concordance_ember.SLOT_ITEMS` (Ember's own `TRINKETS` plus the kit's), and
+  `check_ember_regalia` keeps Ember's pieces in it. The three water sets are `EmberArmorItem`s drawn by `EmberClient`'s
+  renderer: Nereid's and Aquamancer's on this part's medium model, Winterguard's on its own. The Sunfire refusal covers
+  them too, and they carry no Spell Power.
 
 ## Connections
 

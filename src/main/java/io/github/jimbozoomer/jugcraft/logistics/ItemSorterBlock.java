@@ -1,6 +1,7 @@
 package io.github.jimbozoomer.jugcraft.logistics;
 
 import net.minecraft.core.BlockPos;
+import io.github.jimbozoomer.jugcraft.jimtafacts.industry.TransportAttachments;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
@@ -45,6 +46,7 @@ public class ItemSorterBlock extends BaseEntityBlock implements ItemConnectable 
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+        if(TransportAttachments.remove(level,pos,player,hit.getDirection()))return InteractionResult.SUCCESS;
 		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof MenuProvider provider) {
 			player.openMenu(provider);
 		}
@@ -70,6 +72,8 @@ public class ItemSorterBlock extends BaseEntityBlock implements ItemConnectable 
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}
+
+	@Override protected net.minecraft.world.phys.shapes.VoxelShape getShape(BlockState s,net.minecraft.world.level.BlockGetter l,BlockPos p,net.minecraft.world.phys.shapes.CollisionContext c){return TransportAttachments.shape(super.getShape(s,l,p,c),l,p);}
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {

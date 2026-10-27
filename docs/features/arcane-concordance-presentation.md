@@ -91,7 +91,9 @@ The events are wired as follows:
   warning at each part the circle's last check found at fault (the dry channel, the missing part, the lost boundary
   stone), and a draw that finds a channel short shows it there.
 - `CrucibleBlockEntity`: work or danger per step, success per bottle, and a shortage once when its formula starts
-  waiting.
+  waiting. Since Concordance Chunk C (C-01, C-P22; not merged) the sign follows the crucible's reason: a want sign once
+  when a shortage or a blockage begins, again for each new reason; a danger sign with the breaking sound when its
+  formula is incompatible or unreadable; nothing while it waits for heat or a hold.
 - `LeyPylonBlock`: a flow from the lantern when Radiance is poured; a shortage when the lantern holds too little.
 - `ConcordSpire` and `SpireHeartBlockEntity`: the upkeep's flows or its shortage, success at a phase, work per crop
   grown, flows of Focus, and a sign at each change of state.
@@ -229,7 +231,7 @@ every intensity with reduced motion off and on, and gets the same light, shell a
 - Hidden information: a sign goes only to players who can see its place. The crucible's colour is the spoon's reading,
   which anyone near it can take; its makeup stays on the server.
 - Rate: per level, at most 48 signs a tick plus 16 warnings; a worker's sign at most once every 200 ticks; a
-  crucible's shortage once per wait.
+  crucible's shortage once per wait (since Chunk C, once per reason).
 - Persistence: nothing new is saved in worlds. The spire's status and a worker's status were already saved; a sign is
   never saved. The intensity is this computer's setting (`concordance.visual_intensity` in
   `config/jugcraft-client.properties`).

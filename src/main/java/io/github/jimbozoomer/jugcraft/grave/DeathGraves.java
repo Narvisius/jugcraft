@@ -32,8 +32,9 @@ public final class DeathGraves {
 
     public static void duringDeath(ServerPlayer player, Runnable nativeDrops) {
         boolean bossLair = Lairs.isLair(player.level());
-        if (player.isSpectator() || player.level().getGameRules().get(GameRules.KEEP_INVENTORY)
-            || PlayerRules.keeps(player)) { nativeDrops.run(); return; }
+        // A lair keeps everything (PlayerRules.keeps); capture stays on there so stray drops become Grave Goods.
+        if (player.isSpectator() || !bossLair && (player.level().getGameRules().get(GameRules.KEEP_INVENTORY)
+            || PlayerRules.keeps(player))) { nativeDrops.run(); return; }
         Capture previous = ACTIVE.get();
         var capture = new Capture(player, UUID.randomUUID(), GlobalPos.of(player.level().dimension(),
             bossLair ? player.blockPosition() : findPosition(player)), bossLair);

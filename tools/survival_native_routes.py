@@ -192,6 +192,9 @@ def extend(root, edge, evidence, items):
             exclusions[j(variant)] = 'Natural finite reserve, not a survival block item: picks drop nothing; the deposit drill extracts coal or raw metal.'
     found(['rotten_spear'], java + 'menagerie/RottenCreatures.java',
           'Glacial Hunter equips this spear with setItemSlotAndDropWhenKilled; defeat the encounter for the equipment drop.')
+    found(['spectral_cosmonaut_helmet', 'drowned_diver_helmet', 'emerald_phantom_mask', 'onyx_warden_helm'],
+          java + 'creatures/scary/Unmasking.java',
+          'A costumed villain beaten by a player is unmasked and drops its mask (when mobs drop loot); the villains spawn at night in the Halloween season.')
     exclusions['jugcraft:rotten_treasure_chest'] = 'Preview encounter storage; Deadbeard treasure placement is still on the creature-recovery TODO. No survival acquisition is implemented yet.'
     # Full-yield extrusion no longer invents recyclable waste. Preserve saved
     # HDPE/rubber offcuts and their existing reclaim recipes as compatibility items.

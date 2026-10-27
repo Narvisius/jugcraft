@@ -26,12 +26,13 @@ import org.jspecify.annotations.Nullable;
 public final class WorkshopBlock extends BaseEntityBlock implements WorldlyContainerHolder, StructureGhost.Source {
     public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
     public static final IntegerProperty PART = IntegerProperty.create("part", 0, 1);
+    public static final BooleanProperty UPGRADED = BooleanProperty.create("upgraded");
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
     private static final ThreadLocal<Boolean> CHECKING_BREAK = ThreadLocal.withInitial(() -> false);
     public final int station;
     public WorkshopBlock(Properties properties, int station) {
         super(properties); this.station = station;
-        registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(PART, 0).setValue(LIT, false));
+        registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(PART, 0).setValue(LIT, false).setValue(UPGRADED, false));
     }
     public Footprint footprint() { return station == 0 ? Footprint.cuboid(2, 1, 1) : station == 2 ? Footprint.tall(2) : Footprint.SINGLE; }
     public BlockPos master(BlockPos pos, BlockState state) { return footprint().masterPos(pos, state.getValue(FACING), Math.min(state.getValue(PART), footprint().size() - 1)); }
@@ -109,7 +110,7 @@ public final class WorkshopBlock extends BaseEntityBlock implements WorldlyConta
         if (station == 0) return Shapes.or(Block.box(0, 12, 1, 16, 16, 15), Block.box(2, 0, 2, 5, 12, 5), Block.box(11, 0, 11, 14, 12, 14));
         return station == 2 && state.getValue(PART) == 1 ? Block.box(2, 0, 2, 14, 12, 14) : Shapes.block();
     }
-    @Override protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) { builder.add(FACING, PART, LIT); }
+    @Override protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) { builder.add(FACING, PART, LIT, UPGRADED); }
     @Override public StructureGhost ghost(BlockPlaceContext context) {
         var state = defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
         var cells = new ArrayList<StructureGhost.Cell>(); var blocked = new ArrayList<BlockPos>();

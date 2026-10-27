@@ -83,6 +83,7 @@ PAIR_FLOOR = 8.0
 
 # Every ore's own five tones, as the owner approved them: its overlay, and a mined metal's raw ore and raw block.
 ORE_RAMPS = {
+    "quartz": ramp("514c47 8c8378 bdb4a6 e1dace fffbf2"),
     "tin": ramp("1c120e 362216 4e3424 6e4e36 d6cab8"),         # cassiterite: glossy brown-black
     "zinc": ramp("4a2c0e 784a1c a86c28 c89646 f0d28c"),        # sphalerite: resin brown
     "lead": ramp("2e3038 4e525e 767a88 a2a6b4 dee2ee"),        # galena: lead grey, bright cleavage
@@ -105,7 +106,8 @@ ORE_RAMPS = {
 
 # The three overlay layouts, taken in turn down ORE_RAMPS, so neighbouring ores do not look alike.
 LAYOUTS = ("ore_a", "ore_b", "ore_c")
-LAYOUT = {ore: LAYOUTS[index % len(LAYOUTS)] for index, ore in enumerate(ORE_RAMPS)}
+LAYOUT = {ore: LAYOUTS[index % len(LAYOUTS)] for index, ore in enumerate(o for o in ORE_RAMPS if o != "quartz")}
+LAYOUT["quartz"] = "ore_b"
 
 # Our own host rock (host_stone, host_deepslate), dark to light: previews and the fallback only.
 ROCK = {"stone": {"r": hx("6a7076"), "s": hx("7c8288"), "t": hx("8c9298"), "u": hx("9ea3a8")},

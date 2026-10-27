@@ -76,6 +76,40 @@
     ],
     "subtitle": "subtitles.jugcraft.entity.villager.work_retro_trader"
   },
+  "entity.retro_trader.stomp": {
+    "sounds": [
+      {
+        "name": "jugcraft:entity/retro_trader/stomp1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "jugcraft:entity/retro_trader/stomp2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "jugcraft:entity/retro_trader/stomp3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.jugcraft.entity.retro_trader.stomp"
+  },
+  "entity.retro_trader.clap": {
+    "sounds": [
+      {
+        "name": "jugcraft:entity/retro_trader/clap1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "jugcraft:entity/retro_trader/clap2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "jugcraft:entity/retro_trader/clap3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.jugcraft.entity.retro_trader.clap"
+  },
   "singing_pumpkin.bass": {
     "subtitle": "subtitles.jugcraft.singing_pumpkin.bass",
     "sounds": [
@@ -406,6 +440,149 @@
       },
       {
         "name": "jugcraft:concordance/pyro_4",
+        "attenuation_distance": 16
+      }
+    ]
+  },
+  "concordance.rime_gather": {
+    "subtitle": "subtitles.jugcraft.concordance.rime_gather",
+    "sounds": [
+      {
+        "name": "jugcraft:concordance/rime_gather",
+        "attenuation_distance": 16
+      }
+    ]
+  },
+  "concordance.rimebind": {
+    "subtitle": "subtitles.jugcraft.concordance.rimebind",
+    "sounds": [
+      {
+        "name": "jugcraft:concordance/rimebind",
+        "attenuation_distance": 16
+      }
+    ]
+  },
+  "concordance.preserve": {
+    "subtitle": "subtitles.jugcraft.concordance.preserve",
+    "sounds": [
+      {
+        "name": "jugcraft:concordance/preserve",
+        "attenuation_distance": 16
+      }
+    ]
+  },
+  "concordance.strata_gather": {
+    "subtitle": "subtitles.jugcraft.concordance.strata_gather",
+    "sounds": [
+      {
+        "name": "jugcraft:concordance/strata_gather",
+        "attenuation_distance": 16
+      }
+    ]
+  },
+  "concordance.brace": {
+    "subtitle": "subtitles.jugcraft.concordance.brace",
+    "sounds": [
+      {
+        "name": "jugcraft:concordance/gaia_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "jugcraft:concordance/gaia_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "jugcraft:concordance/gaia_3",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "jugcraft:concordance/gaia_4",
+        "attenuation_distance": 16
+      }
+    ]
+  },
+  "stolas.arrive": {
+    "subtitle": "subtitles.jugcraft.stolas.arrive",
+    "sounds": [
+      {
+        "name": "jugcraft:menagerie/beast/flutter_flap_0",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "jugcraft:menagerie/beast/flutter_flap_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "jugcraft:menagerie/beast/flutter_flap_2",
+        "attenuation_distance": 16
+      }
+    ]
+  },
+  "stolas.listen": {
+    "subtitle": "subtitles.jugcraft.stolas.listen",
+    "sounds": [
+      {
+        "name": "jugcraft:menagerie/cavern/block/spelunkery_table/spelunkery_table_paper_insert",
+        "attenuation_distance": 16
+      }
+    ]
+  },
+  "stolas.inspect": {
+    "subtitle": "subtitles.jugcraft.stolas.inspect",
+    "sounds": [
+      {
+        "name": "jugcraft:menagerie/cavern/block/spelunkery_table/spelunkery_table_paper_remove",
+        "attenuation_distance": 16
+      }
+    ]
+  },
+  "stolas.assent": {
+    "subtitle": "subtitles.jugcraft.stolas.assent",
+    "sounds": [
+      {
+        "name": "jugcraft:household/block/doorbell/chime",
+        "attenuation_distance": 16
+      }
+    ]
+  },
+  "stolas.refuse": {
+    "subtitle": "subtitles.jugcraft.stolas.refuse",
+    "sounds": [
+      {
+        "name": "jugcraft:menagerie/beast/crow_idle_0",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "jugcraft:menagerie/beast/crow_idle_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "jugcraft:menagerie/beast/crow_idle_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "jugcraft:menagerie/beast/crow_idle_3",
+        "attenuation_distance": 16
+      }
+    ]
+  },
+  "stolas.depart": {
+    "subtitle": "subtitles.jugcraft.stolas.depart",
+    "sounds": [
+      {
+        "name": "jugcraft:menagerie/cavern/mob/vesper/vesper_flap_0",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "jugcraft:menagerie/cavern/mob/vesper/vesper_flap_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "jugcraft:menagerie/cavern/mob/vesper/vesper_flap_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "jugcraft:menagerie/cavern/mob/vesper/vesper_flap_3",
         "attenuation_distance": 16
       }
     ]
@@ -1396,6 +1573,141 @@
     "sounds": [
       {
         "name": "jugcraft:guns/scorched_sniper_fire",
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "guns.quarrel_carbine.fire": {
+    "subtitle": "subtitles.jugcraft.guns.fire",
+    "sounds": [
+      {
+        "name": "jugcraft:guns/airgun_fire",
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "guns.hinterland_rifle.fire": {
+    "subtitle": "subtitles.jugcraft.guns.fire",
+    "sounds": [
+      {
+        "name": "jugcraft:guns/heavy_rifle_fire",
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "guns.cloudburst_gun.fire": {
+    "subtitle": "subtitles.jugcraft.guns.fire",
+    "sounds": [
+      {
+        "name": "jugcraft:guns/new_rifle_fire",
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "guns.firedrake.fire": {
+    "subtitle": "subtitles.jugcraft.guns.fire",
+    "sounds": [
+      {
+        "name": "jugcraft:guns/flamethrower_fire",
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "guns.harrow.fire": {
+    "subtitle": "subtitles.jugcraft.guns.fire",
+    "sounds": [
+      {
+        "name": "jugcraft:guns/brass_shotgun_fire",
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "guns.old_grange_carbine.fire": {
+    "subtitle": "subtitles.jugcraft.guns.fire",
+    "sounds": [
+      {
+        "name": "jugcraft:guns/new_rifle_fire",
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "guns.vesper_rifle.fire": {
+    "subtitle": "subtitles.jugcraft.guns.fire",
+    "sounds": [
+      {
+        "name": "jugcraft:guns/heavier_rifle_fire",
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "guns.onrush_smg.fire": {
+    "subtitle": "subtitles.jugcraft.guns.fire",
+    "sounds": [
+      {
+        "name": "jugcraft:guns/greaser_smg_fire",
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "guns.gallant_rifle.fire": {
+    "subtitle": "subtitles.jugcraft.guns.fire",
+    "sounds": [
+      {
+        "name": "jugcraft:guns/bruiser_silenced_fire",
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "guns.kreuzer_pistol.fire": {
+    "subtitle": "subtitles.jugcraft.guns.fire",
+    "sounds": [
+      {
+        "name": "jugcraft:guns/brass_pistol_fire",
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "guns.psalm_smg.fire": {
+    "subtitle": "subtitles.jugcraft.guns.fire",
+    "sounds": [
+      {
+        "name": "jugcraft:guns/brass_pistol_fire",
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "guns.jawbreaker.fire": {
+    "subtitle": "subtitles.jugcraft.guns.fire",
+    "sounds": [
+      {
+        "name": "jugcraft:guns/brass_revolver_fire",
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "guns.hawker_rifle.fire": {
+    "subtitle": "subtitles.jugcraft.guns.fire",
+    "sounds": [
+      {
+        "name": "jugcraft:guns/bruiser_fire",
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "guns.impetus_shotgun.fire": {
+    "subtitle": "subtitles.jugcraft.guns.fire",
+    "sounds": [
+      {
+        "name": "jugcraft:guns/brass_shotgun_fire",
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "guns.quill_rifle.fire": {
+    "subtitle": "subtitles.jugcraft.guns.fire",
+    "sounds": [
+      {
+        "name": "jugcraft:guns/airgun_fire_2",
         "attenuation_distance": 64
       }
     ]
@@ -14930,6 +15242,12 @@
     "sounds": [
       "jugcraft:jimtafacts/fart1",
       "jugcraft:jimtafacts/fart2"
+    ]
+  },
+  "jimtafacts.rubber_trampoline": {
+    "subtitle": "subtitles.jugcraft.rubber_trampoline",
+    "sounds": [
+      "jugcraft:jimtafacts/industry/rubber_trampoline"
     ]
   },
   "jimtafacts.ice_spider_howl": {

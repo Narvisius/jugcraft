@@ -1,17 +1,39 @@
 package io.github.jimbozoomer.jugcraft.test;
 
 import com.mojang.serialization.JsonOps;
+import io.github.jimbozoomer.jugcraft.concordance.ConcordanceProgress;
+import io.github.jimbozoomer.jugcraft.concordance.JugcraftConcordance;
+import io.github.jimbozoomer.jugcraft.concordance.assay.Assaying;
+import io.github.jimbozoomer.jugcraft.concordance.celestial.Calendar;
+import io.github.jimbozoomer.jugcraft.concordance.celestial.Pattern;
+import io.github.jimbozoomer.jugcraft.concordance.garden.Garden;
+import io.github.jimbozoomer.jugcraft.concordance.rules.Evidence;
+import io.github.jimbozoomer.jugcraft.concordance.rules.Knowledge;
+import io.github.jimbozoomer.jugcraft.concordance.rules.ResearchState;
+import io.github.jimbozoomer.jugcraft.concordance.sky.AstralClaims;
+import io.github.jimbozoomer.jugcraft.concordance.sky.ObservatoryBlockEntity;
+import io.github.jimbozoomer.jugcraft.concordance.sky.Sky;
+import io.github.jimbozoomer.jugcraft.concordance.spirits.StolasRegard;
+import io.github.jimbozoomer.jugcraft.concordance.spirits.Workers;
+import io.github.jimbozoomer.jugcraft.config.JugcraftConfig;
 import io.github.jimbozoomer.jugcraft.styx.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealSource;
+import net.minecraft.world.phys.Vec3;
 
 public final class StyxGameTests {
 	@GameTest public void cuttingsAreAtomicPerPlayerAndRequireProximity(GameTestHelper h) {
@@ -118,5 +140,127 @@ public final class StyxGameTests {
 		home.getAsJsonObject().remove("town_home");
 		h.assertTrue(!StyxState.CODEC.parse(JsonOps.INSTANCE,home).getOrThrow().townHome,"Earlier manual homes keep manual construction");
 		h.succeed();
+	}
+
+	// ---------------------------------------------------------------- Concordance Chunk D, D-03: Stolas's Regard
+	private static final String FULL_MOON="jugcraft:full_moon";
+	/** Midnight of day 0: the full moon is up (as in ConcordanceSkyGameTests). */
+	private static final long NIGHT_ZERO=18000L;
+	/** A sky in which only the full moon can be seen, so no test waits on the weather or the other patterns. */
+	private static final Function<Pattern,String> ONLY_MOON=pattern -> pattern.id().equals(FULL_MOON) ? null : "no_sky";
+
+	/** Styxhexenhammer in the test's corner, placed as cuttingsAreAtomicPerPlayerAndRequireProximity places him. */
+	private static Styxhexenhammer wizard(GameTestHelper h) {
+		var level=h.getLevel();
+		var wizard=JugcraftStyx.WIZARD.create(level,EntitySpawnReason.COMMAND);
+		h.assertTrue(wizard!=null,"Wizard creates on a server");
+		BlockPos p=h.absolutePos(new BlockPos(1,2,1));wizard.snapTo(p.getX(),p.getY(),p.getZ(),0,0);level.addFreshEntity(wizard);
+		return wizard;
+	}
+
+	/** A listener a block from him who has had their cuttings, so he talks; they leave when the test ends. */
+	private static ServerPlayer listener(GameTestHelper h, Styxhexenhammer wizard) {
+		ServerPlayer player=TestPlayers.mock(h);
+		player.snapTo(wizard.getX()+1,wizard.getY(),wizard.getZ(),0,0);
+		StyxState.get(h.getLevel()).claim(player.getUUID());
+		return player;
+	}
+
+	/** What he says to {@code listener} after his own line, as translation keys; his line still comes first. */
+	private static List<String> hint(GameTestHelper h, Styxhexenhammer wizard, ServerPlayer listener) {
+		List<String> said=wizard.says(listener).stream().map(line -> line.getContents() instanceof TranslatableContents t ? t.getKey() : "").toList();
+		h.assertTrue(!said.isEmpty() && said.getFirst().startsWith("message.jugcraft.styx.line."),"His own line comes first: "+said);
+		return said.subList(1,said.size());
+	}
+
+	/**
+	 * Concordance Chunk D, D-03: after his line, Styx tells each listener their own next step toward Stolas's Regard, read
+	 * from their own research, and the sky step until they have recorded an observation. A stranger to binding hears his
+	 * line alone. Two listeners hear their own steps; the second, taking the assay first, is still asked to examine, and
+	 * the kept assay counts once the earlier steps are done.
+	 */
+	@GameTest(maxTicks = 20) public void styxHintsByTheListenersOwnProgress(GameTestHelper h) {
+		var wizard=wizard(h);
+		ServerPlayer first=listener(h,wizard), second=listener(h,wizard);
+		h.assertValueEqual(hint(h,wizard,first),List.of(),"A stranger to binding hears only his line");
+		ConcordanceProgress.grant(first,Workers.RESEARCH,ResearchState.ENCOUNTERED);
+		h.assertValueEqual(hint(h,wizard,first),List.of("message.jugcraft.styx.stolas.binding","message.jugcraft.styx.stolas.sky"),
+				"Begun the Binding Arts: understand them, and the sky");
+		ConcordanceProgress.grant(first,Workers.RESEARCH,ResearchState.UNDERSTOOD);
+		ConcordanceProgress.grant(second,Workers.RESEARCH,ResearchState.UNDERSTOOD);
+		h.assertValueEqual(hint(h,wizard,first),List.of("message.jugcraft.styx.stolas.examine","message.jugcraft.styx.stolas.sky"),"Understood: examine");
+		ConcordanceProgress.record(first,new Evidence.Examined("minecraft:feather",15));
+		h.assertValueEqual(hint(h,wizard,first).getFirst(),"message.jugcraft.styx.stolas.cultivate","A feather examined: harvest");
+		ConcordanceProgress.record(first,new Evidence.Practiced(Garden.ACTIVITY,"jugcraft:sunpetal"));
+		h.assertValueEqual(hint(h,wizard,first).getFirst(),"message.jugcraft.styx.stolas.assay","A crop harvested: dissolve");
+		h.assertValueEqual(hint(h,wizard,second),List.of("message.jugcraft.styx.stolas.examine","message.jugcraft.styx.stolas.sky"),
+				"The other listener hears their own step");
+		ConcordanceProgress.record(second,new Evidence.Practiced(Assaying.ACTIVITY,"minecraft:raw_iron"));
+		h.assertValueEqual(hint(h,wizard,second).getFirst(),"message.jugcraft.styx.stolas.examine","An early assay is kept, but the examination comes first");
+		ConcordanceProgress.record(second,new Evidence.Examined("jugcraft:stolas_starflower",15));
+		ConcordanceProgress.record(second,new Evidence.Practiced(Garden.ACTIVITY,"jugcraft:dewmoss"));
+		h.assertValueEqual(ConcordanceProgress.knowledge(second).state(StolasRegard.RESEARCH),ResearchState.UNDERSTOOD,
+				"The kept assay counts once the harvest is done");
+		h.assertValueEqual(hint(h,wizard,second),List.of("message.jugcraft.styx.stolas.serve","message.jugcraft.styx.stolas.sky"),"Understood: invite him");
+		AstralClaims.of(h.getLevel().getServer()).observe(second.getUUID(),FULL_MOON,h.getLevel().getGameTime());
+		h.assertValueEqual(hint(h,wizard,second),List.of("message.jugcraft.styx.stolas.serve"),"An observation recorded: the sky goes unsaid");
+		ConcordanceProgress.grant(second,StolasRegard.RESEARCH,ResearchState.MASTERED);
+		h.assertValueEqual(hint(h,wizard,second),List.of("message.jugcraft.styx.stolas.kept"),"Mastered: he has heard of it");
+		h.assertValueEqual(hint(h,wizard,first),List.of("message.jugcraft.styx.stolas.assay","message.jugcraft.styx.stolas.sky"),
+				"The first listener's step is still their own");
+		wizard.discard();h.succeed();
+	}
+
+	/**
+	 * Concordance Chunk D, D-03: talking teaches nothing. A listener with the Binding Arts understood and an assay already
+	 * kept talks to him through the game's own interaction: their research and evidence, the codex's advancement, their sky
+	 * record and their inventory are as before. With the Concordance off he says only his line.
+	 */
+	@GameTest(maxTicks = 20) public void talkingGrantsNoResearch(GameTestHelper h) {
+		var level=h.getLevel();var wizard=wizard(h);
+		ServerPlayer player=listener(h,wizard);
+		ConcordanceProgress.grant(player,Workers.RESEARCH,ResearchState.UNDERSTOOD);
+		ConcordanceProgress.record(player,new Evidence.Practiced(Assaying.ACTIVITY,"minecraft:raw_iron"));
+		Knowledge before=ConcordanceProgress.knowledge(player);
+		var inventory=player.getInventory();var carried=new java.util.ArrayList<net.minecraft.world.item.ItemStack>();
+		for(int i=0;i<inventory.getContainerSize();i++)carried.add(inventory.getItem(i).copy());
+		h.assertTrue(wizard.interact(player,InteractionHand.MAIN_HAND,Vec3.ZERO).consumesAction(),"He answers");
+		h.assertTrue(ConcordanceProgress.knowledge(player).equals(before),"Talking records nothing");
+		h.assertValueEqual(ConcordanceProgress.knowledge(player).state(StolasRegard.RESEARCH),ResearchState.NONE,"Stolas's Regard is not begun by talk");
+		AdvancementHolder begun=level.getServer().getAdvancements().get(ConcordanceProgress.advancementFor(StolasRegard.RESEARCH,ResearchState.ENCOUNTERED));
+		h.assertTrue(begun!=null && !player.getAdvancements().getOrStartProgress(begun).isDone(),"No codex page opens by talk");
+		h.assertTrue(AstralClaims.of(level.getServer()).observed(player.getUUID()).isEmpty(),"He records no sky observation");
+		boolean unchanged=true;for(int i=0;i<carried.size();i++)unchanged&=net.minecraft.world.item.ItemStack.matches(carried.get(i),inventory.getItem(i));
+		h.assertTrue(unchanged,"He gives nothing: the cuttings were given before (what they carry is as it was)");
+		boolean on=JugcraftConfig.isFeatureEnabled(JugcraftConcordance.FEATURE);
+		try {
+			JugcraftConfig.setFeatureEnabled(JugcraftConcordance.FEATURE,false);
+			h.assertValueEqual(hint(h,wizard,player),List.of(),"With the Concordance off he says only his line");
+		} finally {
+			JugcraftConfig.setFeatureEnabled(JugcraftConcordance.FEATURE,on);
+		}
+		wizard.discard();h.succeed();
+	}
+
+	/**
+	 * Concordance Chunk D, D-03: the sky step is no research, so Styx names it apart, whatever the listener's research,
+	 * until they have recorded an observation at an Orrery Observatory. Looking when nothing is up records nothing; the full
+	 * moon observed ends it.
+	 */
+	@GameTest(maxTicks = 20) public void styxNamesTheSkyStepUntilOneIsRecorded(GameTestHelper h) {
+		var level=h.getLevel();var wizard=wizard(h);
+		ServerPlayer player=listener(h,wizard);
+		ConcordanceProgress.grant(player,Workers.RESEARCH,ResearchState.UNDERSTOOD);
+		ConcordanceProgress.grant(player,StolasRegard.RESEARCH,ResearchState.UNDERSTOOD);
+		h.assertValueEqual(hint(h,wizard,player),List.of("message.jugcraft.styx.stolas.serve","message.jugcraft.styx.stolas.sky"),"Understood, no star seen");
+		BlockPos at=new BlockPos(3,1,3);
+		h.setBlock(at,Sky.OBSERVATORY);
+		var observatory=(ObservatoryBlockEntity)level.getBlockEntity(h.absolutePos(at));
+		long noon=Calendar.DAY+6000;
+		h.assertTrue(Sky.up(noon).isEmpty() && observatory.observe(player,level,noon,level.getGameTime(),pattern -> null)==0,"Nothing up at noon: nothing recorded");
+		h.assertTrue(hint(h,wizard,player).contains("message.jugcraft.styx.stolas.sky"),"He still names the sky");
+		h.assertTrue(observatory.observe(player,level,NIGHT_ZERO,level.getGameTime(),ONLY_MOON)==1,"The full moon observed");
+		h.assertValueEqual(hint(h,wizard,player),List.of("message.jugcraft.styx.stolas.serve"),"Then he names it no more");
+		wizard.discard();h.succeed();
 	}
 }

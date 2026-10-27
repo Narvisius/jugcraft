@@ -264,6 +264,9 @@ public class ComposerScreen extends Screen {
         return super.keyPressed(event);
     }
     @Override public boolean isPauseScreen() { return false; }
+    // Concordance Chunk D, D-09 (D-P122; unit 3's R10): an in-game screen, so the HUD defers its subtitles to
+    // extractBackground, which draws them over this screen's own fill (Hud.extractSubtitleOverlay), as the pact and roster screens do.
+    @Override public boolean isInGameUi() { return true; }
     @Override public void onClose() { minecraft.gui.setScreen(parent); }
     @Override public void removed() { ComposerClient.unlisten(listener); super.removed(); }
 
@@ -316,6 +319,7 @@ public class ComposerScreen extends Screen {
             int ty = mapTop + 20;
             for (var line : lines) { g.text(font, line, x + 18, ty, DIM, false); ty += 11; }
         }
+        minecraft.gui.hud.extractDeferredSubtitles(); // D-09 (D-P122): subtitles over the composer's fill
     }
 
     private final class Star extends Button {

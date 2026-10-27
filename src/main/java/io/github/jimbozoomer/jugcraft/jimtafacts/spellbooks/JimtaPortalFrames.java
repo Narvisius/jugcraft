@@ -65,9 +65,10 @@ public final class JimtaPortalFrames {
             var node=partner();boolean connected=node!=null;if(visibleConnected!=connected){visibleConnected=connected;level.sendBlockUpdated(worldPosition,getBlockState(),getBlockState(),Block.UPDATE_CLIENTS);}
             if(node==null||!(node.level instanceof ServerLevel target))return;
             var facing=node.getBlockState().getValue(FACING);Vec3 center=Vec3.atBottomCenterOf(node.worldPosition),exit=center.add(facing.getStepX()*.8,0,facing.getStepZ()*.8);
-            for(var p:l.getEntitiesOfClass(ServerPlayer.class,new AABB(worldPosition).expandTowards(0,1,0),p->p.isAlive()&&!p.isPassenger()).stream().limit(16).toList()){
-                if(JimtaWardEntity.travelCooling(p)||!Authority.mayChange(l,p,worldPosition)||!JimtaWardSpells.safe(p,target,exit))continue;
-                JimtaWardEntity.travelCooldown(p);if(p.teleportTo(target,exit.x,exit.y,exit.z,Set.of(),facing.toYRot(),p.getXRot(),true)){p.resetFallDistance();JimtaSpellbookCurios.afterTeleport(p);}
+            for(var entity:l.getEntities((net.minecraft.world.entity.Entity)null,new AABB(worldPosition).expandTowards(0,1,0),JimtaWardEntity::portalCandidate).stream().limit(16).toList()){
+                var actor=JimtaWardEntity.transitActor(entity,l,owner);
+                if(actor==null||!Authority.mayChange(l,actor,worldPosition)||!Authority.mayChange(l,actor,worldPosition.above()))continue;
+                JimtaWardEntity.transfer(actor,entity,target,exit,facing.toYRot());
             }
         }
         @Override protected void saveAdditional(ValueOutput out){super.saveAdditional(out);out.store("identity",UUIDUtil.CODEC,identity);if(owner!=null)out.store("owner",UUIDUtil.CODEC,owner);if(partner!=null)out.store("partner",UUIDUtil.CODEC,partner);if(link!=null)out.store("link",GlobalPos.CODEC,link);out.putInt("colour",colour);}

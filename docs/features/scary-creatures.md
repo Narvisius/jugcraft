@@ -37,6 +37,10 @@ Independent rolls, fixed chances (Looting does not increase them):
 
 Equipment has approximately 25–60% durability remaining; tanks start at zero oxygen. Vanilla recent-player-hit attribution applies. Death hooks respect the mob-drops gamerule. No duplicated loot tables for custom death-hook rewards. The low-rate titanium and steel rewards bypass some processing; deliberate contributor-requested balance, subject to maintainer review. Existing recipe progression remains available outside the season. Automated farms remain possible within vanilla caps and the local spawn limits; equipment needs player attribution.
 
+## Unmasking
+
+A villain a player beats is unmasked: a named crook stands caught where it fell until led away, and its mask drops as a trophy. See [costumed-villains-unmasking.md](costumed-villains-unmasking.md).
+
 ## Future AI handoff
 
 Space Kook is intended for future Moon/planet habitats. Extend the explicit dimension check and biome entries when those destinations exist; define their time/light policy separately rather than inheriting Earth's clock. Preserve season gating and local rarity. No extra dimension is enabled now.

@@ -10,6 +10,7 @@ Primary specialty and supported player role: engineering and logistics
 - Bank power in a **Capacitor Bank**.
 - Hold a lake's worth of fluid in a **Steel Tank**.
 - Keep bulk items in **Item Crates** that pipes and hoppers can feed.
+- Store mixed items in [seven tiers of metal storage crates](storage-crates.md), with a searchable scrolling inventory and plate-based upgrades.
 
 Details: [TECH_TREE.md → Storage](../TECH_TREE.md#storage).
 

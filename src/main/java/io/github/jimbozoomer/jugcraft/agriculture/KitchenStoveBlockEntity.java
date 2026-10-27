@@ -55,17 +55,18 @@ public class KitchenStoveBlockEntity extends BlockEntity {
 	private final NonNullList<ItemStack> items = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
 	private final int[] progress = new int[SLOTS];
 	private final int[] time = new int[SLOTS];
-	private final boolean[] companionLoaded = new boolean[SLOTS];
+	private final boolean[] companionLoaded = new boolean[SLOTS],chefLoaded=new boolean[SLOTS];
 	public int companionRoom(){int free=0;for(var s:items)if(s.isEmpty())free++;return free;}
-	public int companionInsert(ItemStack stack,int maximum){
+	public int companionInsert(ItemStack stack,int maximum){return companionInsert(stack,maximum,null,null);}
+    public int companionInsert(ItemStack stack,int maximum,local.peepo.PeepoEntity chef,net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext tx){
 		if(!(level instanceof ServerLevel server))return 0;var r=recipe(server,stack).orElse(null);if(r==null)return 0;
 		int moved=0;for(int i=0;i<SLOTS && moved<maximum;i++)if(items.get(i).isEmpty()){
-			items.set(i,stack.copyWithCount(1));progress[i]=0;time[i]=Math.max(1,r.value().cookingTime()/SPEED);companionLoaded[i]=true;moved++;
+			items.set(i,stack.copyWithCount(1));progress[i]=0;time[i]=Math.max(1,r.value().cookingTime()/SPEED);companionLoaded[i]=true;chefLoaded[i]=chef!=null && chef.uniforms.bonus(local.peepo.CompanionUniforms.Type.CHEF,tx);moved++;
 		}return moved;
 	}
-	private record CompanionSnapshot(List<ItemStack> items,int[] progress,int[] time,boolean[] managed){}
-	public Object companionSnapshot(){return new CompanionSnapshot(items.stream().map(ItemStack::copy).toList(),progress.clone(),time.clone(),companionLoaded.clone());}
-	public void companionRestore(Object value){var s=(CompanionSnapshot)value;for(int i=0;i<SLOTS;i++){items.set(i,s.items.get(i).copy());progress[i]=s.progress[i];time[i]=s.time[i];companionLoaded[i]=s.managed[i];}}
+	private record CompanionSnapshot(List<ItemStack> items,int[] progress,int[] time,boolean[] managed,boolean[] chef){}
+	public Object companionSnapshot(){return new CompanionSnapshot(items.stream().map(ItemStack::copy).toList(),progress.clone(),time.clone(),companionLoaded.clone(),chefLoaded.clone());}
+	public void companionRestore(Object value){var s=(CompanionSnapshot)value;for(int i=0;i<SLOTS;i++){items.set(i,s.items.get(i).copy());progress[i]=s.progress[i];time[i]=s.time[i];companionLoaded[i]=s.managed[i];chefLoaded[i]=s.chef[i];}}
 
 
 	public KitchenStoveBlockEntity(BlockPos pos, BlockState state) {
@@ -100,7 +101,7 @@ public class KitchenStoveBlockEntity extends BlockEntity {
 			return Placed.FULL;
 		}
 		items.set(slot, stack.copyWithCount(1));
-		companionLoaded[slot]=false;
+		companionLoaded[slot]=false;chefLoaded[slot]=false;
 		progress[slot] = 0;
 		time[slot] = Math.max(1, recipe.get().value().cookingTime() / SPEED);
 		stack.consume(1, player);
@@ -121,11 +122,12 @@ public class KitchenStoveBlockEntity extends BlockEntity {
 			}
 			if(companionLoaded[slot] && progress[slot]>time[slot] && level.getGameTime()%20!=0)continue;
 			SingleRecipeInput input = new SingleRecipeInput(food);
-			ItemStack cooked = recipe(level, food).map(holder -> holder.value().assemble(input)).orElse(food);
+			var recipe=recipe(level,food);
+			ItemStack cooked = recipe.map(holder -> holder.value().assemble(input)).orElse(food);
 			if(companionLoaded[slot]){
-				if(!companionKitchen.finish(cooked)){progress[slot]=time[slot]+1;continue;}
+				if(!companionKitchen.finish(cooked,recipe.isPresent() && chefLoaded[slot])){progress[slot]=time[slot]+1;continue;}
 			}else Containers.dropItemStack(level, pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5, cooked);
-			companionLoaded[slot]=false;
+			companionLoaded[slot]=false;chefLoaded[slot]=false;
 			items.set(slot, ItemStack.EMPTY);
 			done = true;
 		}
@@ -156,7 +158,7 @@ public class KitchenStoveBlockEntity extends BlockEntity {
 	protected void loadAdditional(ValueInput input) {
 		super.loadAdditional(input);
 		companionKitchen.load(input);
-		for(int i=0;i<SLOTS;i++)companionLoaded[i]=input.getBooleanOr("companionHob"+i,false);
+		for(int i=0;i<SLOTS;i++){companionLoaded[i]=input.getBooleanOr("companionHob"+i,false);chefLoaded[i]=companionLoaded[i] && input.getBooleanOr("chefHob"+i,false);}
 		items.clear();
 		for (Pan pan : input.read("hob", Pan.CODEC.listOf()).orElse(List.of())) {
 			if (pan.slot() >= 0 && pan.slot() < SLOTS) {
@@ -171,7 +173,7 @@ public class KitchenStoveBlockEntity extends BlockEntity {
 	protected void saveAdditional(ValueOutput output) {
 		super.saveAdditional(output);
 		companionKitchen.save(output);
-		for(int i=0;i<SLOTS;i++)output.putBoolean("companionHob"+i,companionLoaded[i]);
+		for(int i=0;i<SLOTS;i++){output.putBoolean("companionHob"+i,companionLoaded[i]);output.putBoolean("chefHob"+i,chefLoaded[i]);}
 		List<Pan> hob = new ArrayList<>();
 		for (int slot = 0; slot < SLOTS; slot++) {
 			if (!items.get(slot).isEmpty()) {

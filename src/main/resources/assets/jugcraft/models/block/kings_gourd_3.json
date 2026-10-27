@@ -1,0 +1,166 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "jugcraft:block/kings_gourd_orange",
+    "rind": "jugcraft:block/kings_gourd_orange",
+    "top": "jugcraft:block/kings_gourd_orange_top",
+    "vine": "jugcraft:block/kings_gourd_vine",
+    "face": "jugcraft:block/kings_gourd_face"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        3
+      ],
+      "to": [
+        14,
+        10,
+        14
+      ],
+      "faces": {
+        "south": {
+          "texture": "#rind",
+          "uv": [
+            2,
+            2,
+            14,
+            12
+          ]
+        },
+        "east": {
+          "texture": "#rind",
+          "uv": [
+            2,
+            2,
+            14,
+            12
+          ]
+        },
+        "west": {
+          "texture": "#rind",
+          "uv": [
+            2,
+            2,
+            14,
+            12
+          ]
+        },
+        "up": {
+          "texture": "#top",
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ]
+        },
+        "down": {
+          "texture": "#top",
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        10,
+        7
+      ],
+      "to": [
+        9,
+        13,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#vine"
+        },
+        "south": {
+          "texture": "#vine"
+        },
+        "east": {
+          "texture": "#vine"
+        },
+        "west": {
+          "texture": "#vine"
+        },
+        "up": {
+          "texture": "#vine"
+        },
+        "down": {
+          "texture": "#vine"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        10,
+        3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#face",
+          "uv": [
+            2,
+            2,
+            14,
+            12
+          ]
+        },
+        "east": {
+          "texture": "#rind",
+          "uv": [
+            2,
+            2,
+            3,
+            12
+          ]
+        },
+        "west": {
+          "texture": "#rind",
+          "uv": [
+            2,
+            2,
+            3,
+            12
+          ]
+        },
+        "up": {
+          "texture": "#rind",
+          "uv": [
+            2,
+            2,
+            14,
+            3
+          ]
+        },
+        "down": {
+          "texture": "#rind",
+          "uv": [
+            2,
+            2,
+            14,
+            3
+          ],
+          "cullface": "down"
+        }
+      },
+      "shade": false,
+      "light_emission": 12
+    }
+  ]
+}

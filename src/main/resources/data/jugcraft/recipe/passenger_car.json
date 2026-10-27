@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PGP",
+    "PWP",
+    " M "
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "G": "minecraft:glass_pane",
+    "W": "#minecraft:wool",
+    "M": "minecraft:minecart"
+  },
+  "result": {
+    "id": "jugcraft:passenger_car",
+    "count": 1
+  }
+}

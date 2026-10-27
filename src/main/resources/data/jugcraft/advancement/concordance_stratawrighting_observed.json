@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:concordance_stratawrighting_encountered",
+  "display": {
+    "icon": {
+      "id": "minecraft:tuff"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.concordance_stratawrighting_observed.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.concordance_stratawrighting_observed.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

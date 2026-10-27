@@ -27,8 +27,8 @@ public final class PeepoSpawns {
     private static void register(EntityType<PeepoEntity> type, String name) {
         var main = habitat(name + "_main_habitat");
         var secondary = habitat(name + "_secondary_habitat");
-        BiomeModifications.addSpawn(c -> c.hasTag(main), MobCategory.CREATURE, type, 8, 1, 4);
-        BiomeModifications.addSpawn(c -> c.hasTag(secondary) && !c.hasTag(main), MobCategory.CREATURE, type, 4, 1, 4);
+        BiomeModifications.addSpawn(c -> c.hasTag(main), MobCategory.CREATURE, type, 12, 1, 4);
+        BiomeModifications.addSpawn(c -> c.hasTag(secondary) && !c.hasTag(main), MobCategory.CREATURE, type, 8, 1, 4);
         SpawnPlacements.register(type, SpawnPlacementTypes.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, PeepoSpawns::canSpawn);
     }

@@ -80,7 +80,8 @@ the existing rocket motor. Survey, Cloud-seeding, Clear-sky, Delivery and Line
 Rocket recipes use this tag while retaining recipe IDs and all other inputs.
 Solid and kerosene/LOX manufacturing remains available. Fuel-pair compatibility is
 enforced by assembly ingredients. These items do not create new vehicles or alter
-payload flight, range, damage or destination access. Future MMH and orbital/station
+payload flight, range, damage or destination access. MMH has since joined as the
+second storable fuel ([cola-and-mmh.md](cola-and-mmh.md)); orbital/station
 systems remain TODO items. No live-server change or PR is part of this work.
 
 ## Release verification checklist

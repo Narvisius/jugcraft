@@ -2,6 +2,8 @@
 
 Status: implemented for Concordance Chunk A (unit 4: ticket A-04, the encyclopedia entry and first route); its server
 and client tests pass in CI (run [38435014953](https://github.com/jimbozoomer-byte/jugcraft/actions/runs/38435014953) on `aa4d06c4e`; see Verification).
+Concordance Chunk B, unit 1 extended it (B-02: the Glacier Hall's and the Cinder Kiln's dossiers), not merged; its new
+server tests pass in CI (runs 38509414542, 38514144531 and 38519234934; see Verification).
 Proposal issue: none. The owner chose Chunk A on 10 October 2026; [the chunk's contract](concordance-chunk-a.md) holds
 the scope, [the first-chunk tickets](../plans/concordance-expansion-2026-10-10/12-detailed-first-chunk-tickets.md) (A-04)
 the ask, and [the encyclopedia's own record](jugcraft-encyclopedia.md) the owner's requirements for the whole feature.
@@ -40,7 +42,11 @@ that has something to show this player:
   that far itself, past the crosshair's reach; the server checks the distance again). For an anchor, its own report
   (the same lines chat and `/jugcraft concordance circle` show, from the anchor's cached report; Jade shows its phase
   and first three faults its own way) and the rituals the player knows there; for a pylon, its charge, how it fills and
-  whose rituals it lends to.
+  whose rituals it lends to. Since Concordance Chunk C (C-01, not merged), also an Alembic Crucible within the player's
+  own block reach (the server allows 1.0 more, as for a use). Anyone sees its heat and what heats it, Preserve's hold,
+  its volume and tank, its formula's step, why it waits, the risk line and its slots. With an Assay Glass carried, the
+  page adds what the glass would tell this player: its measures with the Alembic Arts understood, and the formula's
+  outcome once mastered ([the alchemy record](arcane-concordance-alchemy.md)).
 - **Keys**: every Jugcraft key with its binding now, what it does, and any other key bound the same; the vanilla keys the
   route uses; and where to change them.
 
@@ -66,7 +72,7 @@ its own step).
 | compose | Required | a spell inscribed on a carried instrument | understand, wand | - | - | `composition/composing` (first_light understood) | `theRouteFollowsTheResearch`, `spellcraftShowsWhatIsHeld` |
 | support | Recommended | an inscription that wards someone other than its caster (ward, with or without modifiers, not delivered here) | compose | - | - | - | `theRouteFollowsTheResearch`, `aWardForAFriendIsComposedAndCast` |
 | equip | Recommended | a Kindled Lantern, a fire-set piece, a fire focus or the Fire Bangle carried or worn | understand | recommended: `jugcraft:lesser_fire_focus` (2 string, 2 gold ingot, 2 #coals, 1 amethyst shard)<br>recommended: `jugcraft:fire_bangle` (4 gold ingot, 1 #coals, 1 amethyst shard)<br>the sets, named when each of these exists: `jugcraft:pyromancers_hat`, `jugcraft:pyromancers_robes`, `jugcraft:pyromancers_leggings`, `jugcraft:pyromancers_boots`, `jugcraft:pyromaniacs_hood`, `jugcraft:pyromaniacs_tunic`, `jugcraft:pyromaniacs_pants`, `jugcraft:pyromaniacs_shoes` | general: `minecraft:lantern` | - | `theFirstLoadoutIsMadeInSurvival` |
-| lair | Optional: after a boss | The Last Harvest or Unravelled | compose | - | - | - | `aBossIsHiddenUntilDiscovered` |
+| lair | Optional: after a boss | a first win over any lair's keeper: The Last Harvest, Unravelled, Abominable or Tempered | compose | - | - | - | `aBossIsHiddenUntilDiscovered`, `aWinOverAnyKeeperIsTheLairStep` |
 <!-- first-route:end -->
 
 How a step is placed: done when the player's own state says so; otherwise waiting (Later) until the steps it waits for
@@ -89,12 +95,19 @@ What the player makes along the way, where everything the route touches comes fr
   has not met ("and 1 more, through research you have not met yet") without naming it. An item's own description is
   shown as its tooltip gives it.
 - A lair, and its rite, show once its token is carried (a Death Knell or a Mourning Wreath for the Hollow Acre, a
-  Cursed Spindle for the Spindle Loft); its keeper once met (inside her lair, or owed her reward) or beaten.
-- A boss's dossier then adds how support earns a share of her reward ([lair encounter credit](lair-encounter-credit.md)),
-  what she gives (the acquisition text JEI shows, "with the default data", exact chances included: A-D15), the cheaper
-  token her loot opens and the pieces made of it, how to leave, and, inside her lair, the player's own part in the
-  current fight. What counts towards a share is named for each lair: her own creatures (not Vesperine's Grave Thralls),
-  healing and warding friends, and her objective.
+  Cursed Spindle for the Spindle Loft, and since Concordance Chunk B a Frost Horn for the Glacier Hall and a Kiln Seal
+  for the Cinder Kiln); its keeper once met (inside the lair, or owed the keeper's reward) or beaten. The rite says when
+  it works: the Witching Season's two (the Last Rites and the spindle) wait for the Halloween event unless the server's
+  `lairs.off_season` lets them work on any night, while the horn and the seal work all year.
+- A keeper's dossier then adds how support earns a share of the reward
+  ([lair encounter credit](lair-encounter-credit.md)), the trophy a first win always brings (one, or for the Yeti King
+  and the Cinder Tyrant one of his two at random), what the keeper gives (the acquisition text JEI shows, "with the
+  default data", exact chances included: A-D15), the cheaper token the loot opens and the pieces made of it, how to
+  leave, and, inside the lair, the player's own part in the current fight. What counts towards a share is named for each
+  lair: the keeper's own creatures (not Vesperine's Grave Thralls), healing and warding friends (never what freezing,
+  burning or the Cinder Kiln's slag took: none is a blow), and the lair's objective (for the Yeti King, baiting his
+  charge into an ice column, by one already in his fight; the Cinder Tyrant has none). The words shared by every dossier
+  name no keeper's sex (B-P2).
 
 ## Connections
 
@@ -124,6 +137,10 @@ None: no recipe, item, trade, reward or saved state is added. A recipe a data pa
   it. Building a page reads the rules, the player's own records and inventory, the server's recipes and at most one
   block entity near the player; it writes nothing (`check_encyclopedia` forbids the writes).
 - Bounds: 6 pages, 96 rows a page (the last says there is more), 12 grids a page, 9 icons a row, 4 alternatives a slot.
+  With every lair found and its keeper beaten, the Expeditions page draws all 12 grids (since Concordance Chunk B,
+  B-02) in 71 rows, 79 at most (a town's three sales, a kept share for each keeper and one fight line);
+  `check_encyclopedia` refuses a dossier table that would draw more grids than `PageWriter.MAX_GRIDS`, so a fifth keeper
+  needs the page's bounds raised first.
 - Persistence: none. The page being read is remembered in memory only and forgotten on leaving a world; resuming
   where one left off is a proposed convenience, so nothing is saved.
 - Disable behaviour: with the Concordance off, its pages are left out and a notice says so; with the lairs off, no
@@ -169,6 +186,25 @@ not known here; the owner's 9 October declaration says the library was remade fr
   `_creative_button`, `_scale4` and `_small`, and, for the first loadout's A-07 view, `jugcraft_first_loadout_kindled_lantern`
   and `jugcraft_first_loadout_adept_wand` (each held in hand).
 
+Concordance Chunk B, unit 1 (B-02) adds the Glacier Hall's and the Cinder Kiln's dossiers and the lair step done by any
+keeper's first win, with these server game tests: `EncyclopediaGameTests.theGlacierHallsDossier`,
+`theCinderKilnsDossier`, `eachRiteSaysWhenItWorks`, `aWinOverAnyKeeperIsTheLairStep` and
+`theExpeditionsPageHoldsEveryKeeper` (all four keepers beaten: the 12 grids drawn in order and no row dropped);
+`GlacierHallGameTests.theHornIsNoHalloweenRite` and `CinderKilnGameTests.theSealIsNoHalloweenRite`. They pass in CI:
+runs 38514144531 and 38519234934 (by workflow_dispatch) passed every required test, these among them (the server logs
+name no test); the first run, 38509414542, failed only the two four-player boss tests, not these. The client test was
+unchanged and showed only the top of the Expeditions page: in run 38519234934 (shard 0, where it passed) the
+`_expedition` shot shows the Hollow Acre's dossier, so no shot showed the Glacier Hall's or the Cinder Kiln's; the
+server tests check their content. Since unit 5 (B-11) it scrolls Expeditions to each and pictures them
+(`jugcraft_encyclopedia_expedition_glacier_hall`, `_cinder_kiln`, their toasts cleared); the test passed in run
+38591108210 (shard 3), whose readable log part did not reach those two previews. That run's
+home shot shows the Magic card's link cut to "Open Magic: the Arcane Concorda…" and the body's last line clipped above
+it. It was first recorded as a Chunk A defect, but the home is #322's guide directory (`EncyclopediaRoutesScreen`), on
+main through #352; unit 5 fixed it (`d22a55830`; [the encyclopedia record](jugcraft-encyclopedia.md), and B-11 in
+[the Chunk B contract](concordance-chunk-b.md)). Run here: `check_mod_data.py` (with `check_encyclopedia` holding each
+dossier entry to the tool, its loot and trophy tables, its rite class's season and the grid bound) and
+`check_repository.py` pass.
+
 CI's history: the first run (38424079157) found Iris 1.11.7's *Shader pack selection* on the default key, I, so the
 default became B (A-D7); the test now also logs every loaded default. A later run (38433352364) failed once on the
 route step after R, because the test waited for the Spellcraft page, which is already there once First Light is
@@ -176,6 +212,15 @@ begun, and could read the pages from before the refresh; the test now waits for 
 
 Settled in CI by the client test: B is shared with no other loaded default; the button covers no slot or widget,
 beside the recipe book or on the creative Survival Inventory tab (below the slots Trinkets adds there).
+
+Concordance Chunk C, unit 1 (C-01, C-02; not merged) adds `EncyclopediaGameTests.theInspectPageReadsACrucibleByResearch`
+(a crucible read at the spoon's level, with the risk line, by anyone; the glass's level only with the research and the
+glass carried; the preview only for a master; nothing beyond reach or in an unloaded chunk; reading changes nothing).
+It also adds `theCinderKilnsRiteNamesTheKilnDraught` and `theDossiersNameThePoulticesCredit`. The client test's new
+step `crucibleInspection` takes the shots `jugcraft_encyclopedia_inspect_crucible`, `_inspect_crucible_scale4` and
+`_inspect_poultice`, and `jugcraft_concordance_crucible_jade` when Jade is loaded. They were written where no
+Minecraft jar is available; they passed in CI (run 38684732031, and again in run 38774859294), the client test by its
+shard (its shots not viewed).
 
 Not run: the full route by keys from a fresh world to a lair win as one test (the chunk's handoff maps each A-08 step
 to the separate tests that cover it: [Unit 5](concordance-chunk-a.md#unit-5-evidence-and-handoff-a-08)); a person
@@ -200,10 +245,10 @@ belongs to A-D9.
 
 Known limits:
 
-- Discovery is read, not saved: a player who entered a lair, left, and used up their token (a Cursed Spindle) reads as
-  not having found it until they carry one again or win.
-- The dossiers cover the Witching Season's two lairs. The Glacier Hall and the Cinder Kiln, on main since #320, have
-  none yet, and the lair step's token check names only the Death Knell and the Cursed Spindle.
+- Discovery is read, not saved: a player who entered a lair, left, and used up their token (a Cursed Spindle, a Frost
+  Horn or a Kiln Seal) reads as not having found it until they carry one again or win.
+- The dossiers cover all four lairs (the Glacier Hall and the Cinder Kiln since Chunk B, B-02); the lair step shows when
+  any token's recipe is on the server.
 - The Inspect page is read when the encyclopedia opens; refreshing keeps the block it was opened on.
 - The route's equip step is done by carrying or wearing a Kindled Lantern, a fire-set piece, a fire focus or the Fire
   Bangle (the wand and the bench are steps of their own).

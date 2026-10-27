@@ -233,6 +233,19 @@ public final class JugcraftAgriculture {
 	private static final Map<String, Item> ITEMS = new LinkedHashMap<>();
 	/** The mushroom colonies, by the mushroom that plants them (garden crops, tools/garden.py COLONIES). */
 	private static final Map<Item, MushroomColonyBlock> COLONIES = new LinkedHashMap<>();
+	/**
+	 * The landscape collection's kind tag beside each conventional tag the fall's wild patches and the graveyard flowers
+	 * read (tools/landscape_kinds.py BESIDE): the landscape biomes carry no conventional tags, so these patches reach them
+	 * through their kinds. The other wild crops keep to the conventional tags.
+	 */
+	private static final Map<TagKey<Biome>, TagKey<Biome>> LANDSCAPE_KINDS = Map.of(
+			ConventionalBiomeTags.IS_FOREST, landscapeKind("woods"),
+			ConventionalBiomeTags.IS_TAIGA, landscapeKind("woods"),
+			ConventionalBiomeTags.IS_BIRCH_FOREST, landscapeKind("woods"),
+			ConventionalBiomeTags.IS_PLAINS, landscapeKind("grasslands"),
+			ConventionalBiomeTags.IS_SWAMP, landscapeKind("swamps"),
+			ConventionalBiomeTags.IS_SNOWY, landscapeKind("snowy"),
+			ConventionalBiomeTags.IS_SPOOKY, landscapeKind("dark_woods"));
 	private static final List<Item> SEEDS_TAB = new ArrayList<>();
 	private static final List<Item> FOOD_TAB = new ArrayList<>();
 	private static final List<Item> INGREDIENT_TAB = new ArrayList<>();
@@ -463,7 +476,7 @@ public final class JugcraftAgriculture {
 	public static DataComponentType<JarContents> JAR_CONTENTS;
 	/** The outfits of decorations batch 14, worn on the head and drawn over the whole body (the client's CostumeLayer). */
 	public static final List<String> OUTFITS = List.of("vampire_cape", "mummy_wraps", "skeleton_suit", "werewolf_mask", "cat_ears_and_tail",
-			"bat_wings");
+			"bat_wings", "chompa_costume");
 	/** The Dust Sheet: its item, and the block it becomes over what it covers. */
 	public static final String DUST_SHEET = "dust_sheet";
 	/** What a Dust Sheet may cover (block tag). */
@@ -473,6 +486,7 @@ public final class JugcraftAgriculture {
 	/** Low ground fog from the Fog Machine (drawn by the client: client/FogParticle.java). */
 	public static final SimpleParticleType FOG = FabricParticleTypes.simple();
 	public static final SimpleParticleType SNOWPETAL = FabricParticleTypes.simple();
+	public static final SimpleParticleType ACADEMY_LEAF = FabricParticleTypes.simple();
 	/** What each kind of pumpkin becomes when first carved by hand, and the loot table its seeds come from. */
 	private static final Map<Block, Block> CARVED_FROM = new HashMap<>();
 	private static final Map<Block, ResourceKey<LootTable>> CARVE_LOOT = new HashMap<>();
@@ -684,6 +698,7 @@ public final class JugcraftAgriculture {
 				MapColor.COLOR_BROWN, MapColor.COLOR_LIGHT_GRAY);
 		registerWildPlants();
 		Registry.register(BuiltInRegistries.PARTICLE_TYPE, Jugcraft.id("snowpetal"), SNOWPETAL);
+		Registry.register(BuiltInRegistries.PARTICLE_TYPE, Jugcraft.id("academy_leaf"), ACADEMY_LEAF);
 		registerFoliage("snowpetal_cherry", "snowpetal_cherry_leaves", SNOWPETAL_CHERRY_GROWER, Blocks.CHERRY_SAPLING, Blocks.CHERRY_LEAVES,
 				props -> new net.minecraft.world.level.block.UntintedParticleLeavesBlock(0.1F, SNOWPETAL,
 						net.minecraft.world.level.block.sounds.AmbientLeavesBlockSoundPlayer.noAmbientSound(), props));
@@ -1603,7 +1618,7 @@ public final class JugcraftAgriculture {
 				.compostable(COMPOST_MEDIUM), SEEDS_TAB);
 		registerBlock("potted_" + Werewolves.WOLFSBANE, props -> new FlowerPotBlock(wolfsbane, props),
 				BlockBehaviour.Properties.ofFullCopy(Blocks.POTTED_DANDELION));
-		wildPatch("wolfsbane", ConventionalBiomeTags.IS_TAIGA, ConventionalBiomeTags.IS_FOREST);
+		fallPatch("wolfsbane", ConventionalBiomeTags.IS_TAIGA, ConventionalBiomeTags.IS_FOREST);
 		registerItem("silver_dagger", props -> new Item(props.sword(Werewolf.SILVER, 2.5F, -1.8F)), new Item.Properties(), TOOL_TAB);
 		registerItem(Werewolves.SILVER_ARROW, ArrowItem::new, new Item.Properties(), TOOL_TAB);
 		// Each kind of werewolf drops its own pelt, and two make its rug.
@@ -2977,13 +2992,14 @@ public final class JugcraftAgriculture {
 			if (!(block instanceof WaterPlantBlock) && !(block instanceof FloatingPlantBlock) && !id.equals("bramble") && !id.equals("blight_fungus")) {
 				fire.add(block, 60, 100);
 			}
-			// Scattered in vanilla's biomes too ("patch": conventional biome tags; placed feature patch_<id>).
+			// Scattered in vanilla's biomes too ("patch": conventional biome tags; placed feature patch_<id>), and in the
+			// landscape collection's of the same kinds (withLandscape): the graveyard's flowers belong to the fall.
 			if (plant.has("patch")) {
 				Predicate<BiomeSelectionContext> selector = context -> false;
 				for (JsonElement tag : plant.getAsJsonArray("patch")) {
 					String field = tag.getAsString().toLowerCase(Locale.ROOT);
 					TagKey<Biome> biomes = TagKey.create(Registries.BIOME, Identifier.parse("c:" + field));
-					selector = selector.or(BiomeSelectors.tag(biomes));
+					selector = selector.or(withLandscape(biomes));
 				}
 				BiomeModifications.addFeature(BiomeSelectors.foundInOverworld().and(selector), GenerationStep.Decoration.VEGETAL_DECORATION,
 						ResourceKey.create(Registries.PLACED_FEATURE, Jugcraft.id("patch_" + id)));
@@ -3385,15 +3401,15 @@ public final class JugcraftAgriculture {
 		wildPatch("wild_oats", ConventionalBiomeTags.IS_PLAINS, ConventionalBiomeTags.IS_TAIGA);
 		wildPatch("wild_barley", ConventionalBiomeTags.IS_SAVANNA, ConventionalBiomeTags.IS_HILL);
 		wildPatch("wild_turnip", ConventionalBiomeTags.IS_TAIGA, ConventionalBiomeTags.IS_BIRCH_FOREST);
-		wildPatch("wild_mandrake", ConventionalBiomeTags.IS_SPOOKY);
+		fallPatch("wild_mandrake", ConventionalBiomeTags.IS_SPOOKY);
 		// Festival crops found as themselves: gourds on grass, ripe cranberries in swamp shallows, chestnut trees.
-		wildPatch("butternut_squash", ConventionalBiomeTags.IS_PLAINS, ConventionalBiomeTags.IS_SAVANNA);
-		wildPatch("acorn_squash", ConventionalBiomeTags.IS_FOREST, ConventionalBiomeTags.IS_TAIGA);
-		wildPatch("warty_gourd", ConventionalBiomeTags.IS_SWAMP, ConventionalBiomeTags.IS_SPOOKY);
-		wildPatch("cranberry_bush", ConventionalBiomeTags.IS_SWAMP);
+		fallPatch("butternut_squash", ConventionalBiomeTags.IS_PLAINS, ConventionalBiomeTags.IS_SAVANNA);
+		fallPatch("acorn_squash", ConventionalBiomeTags.IS_FOREST, ConventionalBiomeTags.IS_TAIGA);
+		fallPatch("warty_gourd", ConventionalBiomeTags.IS_SWAMP, ConventionalBiomeTags.IS_SPOOKY);
+		fallPatch("cranberry_bush", ConventionalBiomeTags.IS_SWAMP);
 		// Rice and wet farming: wild rice in swamp and river shallows.
 		wildPatch("wild_rice", ConventionalBiomeTags.IS_SWAMP, ConventionalBiomeTags.IS_RIVER);
-		wildPatch("chestnut_tree", ConventionalBiomeTags.IS_FOREST);
+		fallPatch("chestnut_tree", ConventionalBiomeTags.IS_FOREST);
 		wildPatch("apple_tree", ConventionalBiomeTags.IS_PLAINS, ConventionalBiomeTags.IS_FLORAL);
 		// The orchards' fruit trees, in the biomes they grow in (tools/orchard.py TREES "biomes").
 		wildPatch("pear_tree", ConventionalBiomeTags.IS_FOREST, ConventionalBiomeTags.IS_BIRCH_FOREST);
@@ -3433,19 +3449,19 @@ public final class JugcraftAgriculture {
 		wildPatch("wild_saffron", ConventionalBiomeTags.IS_SAVANNA, ConventionalBiomeTags.IS_HILL);
 		wildPatch("cinnamon_tree", ConventionalBiomeTags.IS_JUNGLE);
 		// Halloween harvest: heirloom pumpkins and bottle gourds on grass, and mums in flower-rich places.
-		wildPatch("white_pumpkin", ConventionalBiomeTags.IS_BIRCH_FOREST, ConventionalBiomeTags.IS_SNOWY);
-		wildPatch("jarrahdale_pumpkin", ConventionalBiomeTags.IS_SAVANNA, ConventionalBiomeTags.IS_WINDSWEPT);
-		wildPatch("cinderella_pumpkin", ConventionalBiomeTags.IS_PLAINS, ConventionalBiomeTags.IS_FLORAL);
-		wildPatch("red_kuri_pumpkin", ConventionalBiomeTags.IS_TAIGA, ConventionalBiomeTags.IS_SPOOKY);
-		wildPatch("kabocha_pumpkin", ConventionalBiomeTags.IS_FOREST, ConventionalBiomeTags.IS_JUNGLE);
-		wildPatch("bottle_gourd", ConventionalBiomeTags.IS_JUNGLE, ConventionalBiomeTags.IS_SAVANNA);
-		wildPatch("mums", ConventionalBiomeTags.IS_FLORAL, ConventionalBiomeTags.IS_FOREST);
+		fallPatch("white_pumpkin", ConventionalBiomeTags.IS_BIRCH_FOREST, ConventionalBiomeTags.IS_SNOWY);
+		fallPatch("jarrahdale_pumpkin", ConventionalBiomeTags.IS_SAVANNA, ConventionalBiomeTags.IS_WINDSWEPT);
+		fallPatch("cinderella_pumpkin", ConventionalBiomeTags.IS_PLAINS, ConventionalBiomeTags.IS_FLORAL);
+		fallPatch("red_kuri_pumpkin", ConventionalBiomeTags.IS_TAIGA, ConventionalBiomeTags.IS_SPOOKY);
+		fallPatch("kabocha_pumpkin", ConventionalBiomeTags.IS_FOREST, ConventionalBiomeTags.IS_JUNGLE);
+		fallPatch("bottle_gourd", ConventionalBiomeTags.IS_JUNGLE, ConventionalBiomeTags.IS_SAVANNA);
+		fallPatch("mums", ConventionalBiomeTags.IS_FLORAL, ConventionalBiomeTags.IS_FOREST);
 		// Autumn foraging: wild mushrooms on forest floors.
-		wildPatch("chanterelle", ConventionalBiomeTags.IS_FOREST, ConventionalBiomeTags.IS_BIRCH_FOREST);
-		wildPatch("porcini", ConventionalBiomeTags.IS_TAIGA, ConventionalBiomeTags.IS_FOREST);
-		wildPatch("puffball", ConventionalBiomeTags.IS_PLAINS, ConventionalBiomeTags.IS_FOREST);
-		wildPatch("fly_agaric", ConventionalBiomeTags.IS_BIRCH_FOREST, ConventionalBiomeTags.IS_TAIGA);
-		wildPatch("jack_o_lantern_mushroom", ConventionalBiomeTags.IS_SPOOKY, ConventionalBiomeTags.IS_FOREST);
+		fallPatch("chanterelle", ConventionalBiomeTags.IS_FOREST, ConventionalBiomeTags.IS_BIRCH_FOREST);
+		fallPatch("porcini", ConventionalBiomeTags.IS_TAIGA, ConventionalBiomeTags.IS_FOREST);
+		fallPatch("puffball", ConventionalBiomeTags.IS_PLAINS, ConventionalBiomeTags.IS_FOREST);
+		fallPatch("fly_agaric", ConventionalBiomeTags.IS_BIRCH_FOREST, ConventionalBiomeTags.IS_TAIGA);
+		fallPatch("jack_o_lantern_mushroom", ConventionalBiomeTags.IS_SPOOKY, ConventionalBiomeTags.IS_FOREST);
 	}
 
 	@SafeVarargs
@@ -3454,6 +3470,34 @@ public final class JugcraftAgriculture {
 		for (int i = 1; i < biomes.length; i++) {
 			selector = selector.or(BiomeSelectors.tag(biomes[i]));
 		}
+		placePatch(name, selector);
+	}
+
+	/**
+	 * A fall or Halloween wild patch (tools/landscape_kinds.py FALL_PATCHES): in the conventional biomes {@code biomes},
+	 * and in the landscape collection's of the same kinds, which carry no conventional tags ({@link #withLandscape}).
+	 */
+	@SafeVarargs
+	private static void fallPatch(String name, TagKey<Biome>... biomes) {
+		Predicate<BiomeSelectionContext> selector = withLandscape(biomes[0]);
+		for (int i = 1; i < biomes.length; i++) {
+			selector = selector.or(withLandscape(biomes[i]));
+		}
+		placePatch(name, selector);
+	}
+
+	/** Biomes in {@code conventional}, and the landscape collection's of its kind, if it has one ({@link #LANDSCAPE_KINDS}). */
+	private static Predicate<BiomeSelectionContext> withLandscape(TagKey<Biome> conventional) {
+		TagKey<Biome> kind = LANDSCAPE_KINDS.get(conventional);
+		return kind == null ? BiomeSelectors.tag(conventional) : BiomeSelectors.tag(conventional).or(BiomeSelectors.tag(kind));
+	}
+
+	private static TagKey<Biome> landscapeKind(String kind) {
+		return TagKey.create(Registries.BIOME, Jugcraft.id("landscape_kind/" + kind));
+	}
+
+	private static void placePatch(String name, Predicate<BiomeSelectionContext> biomes) {
+		Predicate<BiomeSelectionContext> selector = biomes;
 		ResourceKey<PlacedFeature> key = ResourceKey.create(Registries.PLACED_FEATURE, Jugcraft.id("patch_" + name));
 		// Keep the shrub-steppe low without removing its plains crop/animal tags.
 		if (name.equals("apple_tree") || name.equals("peach_tree")) {

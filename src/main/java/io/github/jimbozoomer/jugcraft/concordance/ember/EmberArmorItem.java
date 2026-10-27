@@ -15,8 +15,10 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 
 /**
- * A piece of a fire set ({@link EmberGear}: the Pyromaniac's or the Pyromancer's): half a point of fire Spell Power, worn
- * as the owner's GeckoLib model (assets/jugcraft/geckolib/models/armor/{@link #model()}.geo.json) with its set's texture
+ * A piece of an owner set worn as their GeckoLib model: Ember's fire sets ({@link EmberGear}: the Pyromaniac's or the
+ * Pyromancer's, half a point of fire Spell Power a piece) and Rime's water sets (concordance/rime/RimeGear: Nereid's,
+ * Aquamancer's and Winterguard's, none; Concordance Chunk B, B-10). Each is worn as the owner's model
+ * (assets/jugcraft/geckolib/models/armor/{@link #model()}.geo.json) with its set's texture
  * (textures/armor/{@link #set()}.png), both imported as supplied, which the client's renderer draws through
  * {@link EmberHooks}. It has no animations: GeckoLib poses its bones to the wearer as vanilla armour moves.
  */

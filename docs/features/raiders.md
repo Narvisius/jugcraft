@@ -204,5 +204,5 @@ Their weapons never drop, but for the gunner's gun: a player's kill wins it abou
 - They never start in peaceful, while mobs don't spawn, or with the feature off.
 
 ## Rollout and open questions
-- **Next is idea 4, the armoured train.**
+- **Next is idea 4, the armoured train.** Its framework is now built: locomotives, coaches, wagons and coupling on any rails ([trains.md](trains.md)).
 - Raider camps, siege ladders, the war horn and the raid advancement are now done (above).

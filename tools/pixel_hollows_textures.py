@@ -3,11 +3,9 @@
 Deterministic: each texture draws from its own seed. Nothing is read, traced or recoloured from Mojang
 textures. Block textures are 16x16 and opaque; the shard and the map marker have transparent backgrounds.
 
-The Retro Trader's look follows the owner's reference picture: a bearded villager with brown hair, black
-rectangular glasses and green eyes, a red-and-black flannel shirt open over a white tee with a silver cross
-on a chain, backpack straps, navy plaid trousers and black sneakers with white soles. It is a villager
-profession overlay (64x64, drawn on the villager model's UV layout), so the villager's own face and nose
-stay underneath.
+The Retro Trader's look (a bearded millennial who runs the retro game shop) and his expression sheet are drawn
+in retro_trader_look.py. His overlay is a villager profession overlay (64x64, drawn on the villager model's UV
+layout), so the villager's own model stays underneath.
 """
 import json
 import random
@@ -16,6 +14,7 @@ from pathlib import Path
 from PIL import Image
 
 import block_style as bs
+import retro_trader_look
 
 TEX = Path(__file__).resolve().parents[1] / "src" / "main" / "resources" / "assets" / "jugcraft" / "textures"
 
@@ -358,183 +357,7 @@ def button(color, seed):
     return img
 
 
-# ---------------------------------------------------------------- the Retro Trader (64x64 villager overlay)
-
-CLEAR = (0, 0, 0, 0)
-HAIR = [(70, 42, 24), (96, 60, 34), (122, 80, 46)]
-BEARD = [(78, 48, 28), (100, 64, 38)]
-GLASSES = (18, 18, 20)
-EYE_WHITE, EYE_GREEN = (236, 236, 228), (52, 150, 60)
-SKIN = (196, 146, 116)
-FLANNEL = [(178, 34, 34), (112, 22, 24), (28, 22, 22)]
-TEE = [(236, 234, 228), (214, 212, 206)]
-CHAIN, CROSS = (112, 114, 122), (148, 152, 162)
-STRAP = [(70, 76, 48), (92, 100, 64)]
-PACK = [(60, 66, 42), (84, 92, 58), (104, 112, 72)]
-DENIM = [(42, 54, 96), (28, 34, 62), (74, 90, 136)]
-SHOE, SOLE = (34, 34, 38), (228, 228, 228)
-
-
-def strand(tones, x, y, period=5):
-    """Hair or beard in neat strands: the first tone, the second on a regular slant."""
-    return tones[1] if (x + 2 * y) % period == 0 else tones[0]
-
-
-def flannel(x, y):
-    """Buffalo check: red, black where the dark bands cross, dark red where they do not."""
-    a, b = (x // 2) % 2, (y // 2) % 2
-    return FLANNEL[2] if a and b else FLANNEL[0] if not a and not b else FLANNEL[1]
-
-
-def denim(x, y):
-    """Navy plaid trousers."""
-    if x % 4 == 3 and y % 4 == 3:
-        return DENIM[2]
-    if x % 4 == 3 or y % 4 == 3:
-        return DENIM[1]
-    return DENIM[0]
-
-
-def box_faces(u, v, w, h, d):
-    """Texture rectangles (x, y, width, height) of a model box at texture offset (u, v)."""
-    return {"top": (u + d, v, w, d), "bottom": (u + d + w, v, w, d),
-            "right": (u, v + d, d, h), "front": (u + d, v + d, w, h),
-            "left": (u + d + w, v + d, d, h), "back": (u + 2 * d + w, v + d, w, h)}
-
-
-def fill(img, rect, color_at):
-    x0, y0, w, h = rect
-    for y in range(h):
-        for x in range(w):
-            color = color_at(x, y)
-            if color is not None:
-                put(img, x0 + x, y0 + y, color if len(color) > 3 else tuple(color) + (255,))
-
-
-def retro_trader():
-    img = Image.new("RGBA", (64, 64), CLEAR)
-
-    # Head (texture offset 0,0; 8x10x8): hair on top and the back, brows, glasses with green eyes, beard.
-    head = box_faces(0, 0, 8, 10, 8)
-    fill(img, head["top"], lambda x, y: strand(HAIR[1:], x, y))
-    fill(img, head["bottom"], lambda x, y: strand(BEARD, x, y, 4))
-    fill(img, head["back"], lambda x, y: HAIR[1 + (x % 3 == 0)] if y < 7 else None)
-
-    def face(x, y):
-        if y == 0:
-            return HAIR[1]
-        if y == 2 and x in (1, 2, 5, 6):
-            return HAIR[0]
-        if y in (3, 5):
-            return GLASSES
-        if y == 4:
-            return {0: GLASSES, 1: EYE_WHITE, 2: EYE_GREEN, 3: GLASSES, 4: GLASSES, 5: EYE_WHITE, 6: EYE_GREEN,
-                    7: GLASSES}[x]
-        if y >= 7 or (y == 6 and x in (0, 7)):
-            return strand(BEARD, x, y, 4)
-        return None
-    fill(img, head["front"], face)
-
-    def side(front_at_high_u):
-        def paint(x, y):
-            toward_front = x if front_at_high_u else 7 - x
-            if y < 3 or (toward_front < 3 and y < 7):
-                return strand(HAIR[1:], x, y)
-            if y == 4 and toward_front >= 3:
-                return GLASSES  # the arm of the glasses
-            if y >= 5 and toward_front >= 4:
-                return strand(BEARD, x, y, 4)  # sideburns into the beard
-            return None
-        return paint
-    fill(img, head["right"], side(True))
-    fill(img, head["left"], side(False))
-
-    # Hat layer (32,0): fuller hair on top, a fringe at the front, longer at the back.
-    hat = box_faces(32, 0, 8, 10, 8)
-    fill(img, hat["top"], lambda x, y: HAIR[2] if (x + 2 * y) % 5 == 0 else HAIR[1])
-    fill(img, hat["front"], lambda x, y: strand(HAIR[1:], x, y) if y == 0 or (y == 1 and x not in (3, 4)) else None)
-    fill(img, hat["right"], lambda x, y: HAIR[1] if y < 2 else None)
-    fill(img, hat["left"], lambda x, y: HAIR[1] if y < 2 else None)
-    fill(img, hat["back"], lambda x, y: HAIR[1 + (x % 3 == 0)] if y < 6 else None)
-
-    # Nose (24,0; 2x4x2): a moustache along its bottom.
-    nose = box_faces(24, 0, 2, 4, 2)
-    for name in ("front", "right", "left"):
-        fill(img, nose[name], lambda x, y: BEARD[0] if y == 3 else None)
-    fill(img, nose["bottom"], lambda x, y: BEARD[0])
-
-    def torso_front(x, y):
-        """Flannel open over a white tee, backpack straps, a silver cross on a chain; trousers below the belt."""
-        if y >= 12:
-            return denim(x, y)
-        if x in (1, 6) and y <= 10:
-            return STRAP[y % 2]
-        if x in (0, 7):
-            return flannel(x, y)
-        chain = {(2, 0), (2, 1), (3, 2), (5, 0), (5, 1), (4, 2)}
-        cross = {(3, 3), (4, 3), (3, 4), (4, 4), (3, 5), (4, 5), (3, 6), (4, 6), (2, 4), (5, 4)}
-        if (x, y) in cross:
-            return CROSS
-        if (x, y) in chain:
-            return CHAIN
-        return TEE[1] if y == 11 else TEE[0]
-
-    def torso_back(x, y):
-        if y >= 12:
-            return denim(x, y)
-        if 1 <= x <= 6 and 1 <= y <= 10:
-            if y == 1 or x in (1, 6):
-                return PACK[2] if y == 1 else PACK[0]
-            if y == 6:
-                return PACK[0]  # the pocket's seam
-            return PACK[1]
-        return flannel(x, y)
-
-    def torso_side(x, y):
-        if y >= 12:
-            return denim(x, y)
-        return flannel(x, y)
-
-    # Body (16,20; 8x12x6) and the robe layer over it (0,38; 8x20x6): the robe becomes shirt and trousers.
-    for faces, height in ((box_faces(16, 20, 8, 12, 6), 12), (box_faces(0, 38, 8, 20, 6), 20)):
-        fill(img, faces["front"], torso_front)
-        fill(img, faces["back"], torso_back)
-        fill(img, faces["right"], torso_side)
-        fill(img, faces["left"], torso_side)
-        fill(img, faces["top"], lambda x, y: STRAP[0] if x in (1, 6) else flannel(x, y))
-        fill(img, faces["bottom"], lambda x, y: denim(x, y))
-
-    # Arms, folded (44,22; 4x8x4 each, the left mirrored) and the forearms across the chest (40,38; 8x4x4):
-    # flannel sleeves, hands clasped in the middle.
-    arm = box_faces(44, 22, 4, 8, 4)
-    for name in ("top", "front", "back", "right", "left"):
-        fill(img, arm[name], flannel)
-    fill(img, arm["bottom"], lambda x, y: SKIN)
-    forearms = box_faces(40, 38, 8, 4, 4)
-    for name in ("top", "bottom", "back", "right", "left"):
-        fill(img, forearms[name], flannel)
-    fill(img, forearms["front"], lambda x, y: SKIN if x in (3, 4) else flannel(x, y))
-
-    # Legs (0,22; 4x12x4): trousers, then black sneakers with white soles and toe caps.
-    leg = box_faces(0, 22, 4, 12, 4)
-
-    def leg_side(toe):
-        def paint(x, y):
-            if y < 8:
-                return denim(x, y)
-            if y == 11:
-                return SOLE
-            if toe and y == 10:
-                return SOLE
-            return shade(SHOE, 18) if y == 8 else SHOE
-        return paint
-    fill(img, leg["front"], leg_side(True))
-    for name in ("right", "left", "back"):
-        fill(img, leg[name], leg_side(False))
-    fill(img, leg["top"], denim)
-    fill(img, leg["bottom"], lambda x, y: SOLE)
-    return img
-
+# ---------------------------------------------------------------- the Retro Trader (see retro_trader_look.py)
 
 VILLAGER_META = {"villager": {"hat": "full"}}
 
@@ -559,7 +382,8 @@ def draw_all():
     save(button((200, 36, 36), 917), "block/rt_button_red")
     save(button((236, 196, 40), 918), "block/rt_button_yellow")
     save(button((44, 96, 220), 919), "block/rt_button_blue")
-    trader = retro_trader()
+    trader = retro_trader_look.overlay()
+    save(retro_trader_look.expressions(), "entity/retro_trader/expressions")
     for kind in ("villager", "zombie_villager"):
         save(trader, f"entity/{kind}/profession/retro_trader")
         (TEX / "entity" / kind / "profession" / "retro_trader.png.mcmeta").write_text(

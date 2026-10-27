@@ -25,19 +25,25 @@ import net.minecraft.world.level.levelgen.feature.OreFeature;
 
 /** A finite native ore pocket selected by its surface biome, with an optional, linked surface outcrop. */
 public record SurfaceLinkedOreFeature(OreFeature ore, TagKey<Biome> surfaceBiomes, BlockState outcrop,
-                                     int outcropChance, Optional<TagKey<Biome>> outcropBiomes) implements Feature {
+                                     int outcropChance, Optional<TagKey<Biome>> outcropBiomes, int outcropMax) implements Feature {
 	public static final MapCodec<SurfaceLinkedOreFeature> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
 			OreFeature.CODEC.codec().fieldOf("ore").forGetter(SurfaceLinkedOreFeature::ore),
 			TagKey.codec(Registries.BIOME).fieldOf("surface_biomes").forGetter(SurfaceLinkedOreFeature::surfaceBiomes),
 			BlockState.CODEC.fieldOf("outcrop").forGetter(SurfaceLinkedOreFeature::outcrop),
-			Codec.intRange(1, 1024).fieldOf("outcrop_chance").forGetter(SurfaceLinkedOreFeature::outcropChance),
-			TagKey.codec(Registries.BIOME).optionalFieldOf("outcrop_biomes").forGetter(SurfaceLinkedOreFeature::outcropBiomes)
+			Codec.intRange(0, 1024).fieldOf("outcrop_chance").forGetter(SurfaceLinkedOreFeature::outcropChance),
+			TagKey.codec(Registries.BIOME).optionalFieldOf("outcrop_biomes").forGetter(SurfaceLinkedOreFeature::outcropBiomes),
+            Codec.intRange(3, 8).optionalFieldOf("outcrop_max", 8).forGetter(SurfaceLinkedOreFeature::outcropMax)
 	).apply(i, SurfaceLinkedOreFeature::new));
 
 	/** Existing mineral definitions use the same biome policy above and below ground. */
 	public SurfaceLinkedOreFeature(OreFeature ore, TagKey<Biome> surfaceBiomes, BlockState outcrop, int outcropChance) {
-		this(ore, surfaceBiomes, outcrop, outcropChance, Optional.empty());
+		this(ore, surfaceBiomes, outcrop, outcropChance, Optional.empty(), 8);
 	}
+
+    public SurfaceLinkedOreFeature(OreFeature ore, TagKey<Biome> surfaceBiomes, BlockState outcrop,
+            int outcropChance, Optional<TagKey<Biome>> outcropBiomes) {
+        this(ore, surfaceBiomes, outcrop, outcropChance, outcropBiomes, 8);
+    }
 
 	@Override public MapCodec<SurfaceLinkedOreFeature> codec() { return CODEC; }
 
@@ -47,7 +53,7 @@ public record SurfaceLinkedOreFeature(OreFeature ore, TagKey<Biome> surfaceBiome
 		int surfaceY = level.getHeight(Heightmap.Types.OCEAN_FLOOR, origin.getX(), origin.getZ());
 		if (!level.getBiome(new BlockPos(origin.getX(), surfaceY, origin.getZ())).is(surfaceBiomes)) return false;
 		if (!ore.place(level, generator, random, origin)) return false;
-		if (random.nextInt(outcropChance) == 0
+		if (outcropChance > 0 && random.nextInt(outcropChance) == 0
 				&& level.getBiome(new BlockPos(origin.getX(), surfaceY, origin.getZ())).is(outcropBiomes.orElse(surfaceBiomes))) {
 			placeOutcrop(level, random, origin);
 		}
@@ -111,7 +117,7 @@ public record SurfaceLinkedOreFeature(OreFeature ore, TagKey<Biome> surfaceBiome
 			if (exposed.size() < 3) continue;
 			// Tops with an open side stay visible after snow settles. Every ore keeps a stone support.
 			int aboveGround = columns.stream().mapToInt(OutcropColumn::height).sum();
-			int count = Math.min(Math.min(exposed.size(), aboveGround / 3), 3 + random.nextInt(6));
+			int count = Math.min(Math.min(exposed.size(), aboveGround / 3), 3 + random.nextInt(outcropMax - 2));
 			for (int n = 0; n < count; n++) blocks.put(exposed.remove(random.nextInt(exposed.size())), outcrop);
 			blocks.forEach((pos, state) -> level.setBlock(pos, state, 2));
 			return;

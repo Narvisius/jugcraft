@@ -30,7 +30,9 @@ import org.jspecify.annotations.Nullable;
  * its holder to it (Celestial Attunement understood): its cost in resonance, and its effect is theirs while the pattern
  * is up, at most eight minutes. When nothing is up, a master may <b>recall</b> a pattern they have observed: dearer,
  * shorter ({@link Calendar#RECALL_TICKS} ticks), and once per occurrence of that pattern, by the same monotonic ledger,
- * so a recall never stands in for more alignments than the sky has had.
+ * so a recall never stands in for more alignments than the sky has had. There is one recall ({@link #recall}): since
+ * Concordance Chunk D (D-05, D-S1) Stolas's Star-reckoning makes it too, for a pact's holder at its perch, so one
+ * occurrence pays one recall whichever route asks.
  */
 public class AstrolabeItem extends Item {
 	public static final int CAPACITY = 32;
@@ -114,20 +116,56 @@ public class AstrolabeItem extends Item {
 			player.sendOverlayMessage(Component.translatable("message.jugcraft.concordance.sky.nothing_observed"));
 			return InteractionResult.FAIL;
 		}
-		if (held < recalled.recallCost()) {
-			player.sendOverlayMessage(Component.translatable("message.jugcraft.concordance.sky.too_little", recalled.recallCost()));
-			return InteractionResult.FAIL;
+		Recall recall = recall(player, level, astrolabe, recalled, time, gameTime);
+		player.sendOverlayMessage(told(recall, recalled));
+		return recall == Recall.RECALLED ? InteractionResult.SUCCESS : InteractionResult.FAIL;
+	}
+
+	/** How one recall went (Concordance Chunk D, D-05). */
+	public enum Recall {
+		RECALLED, TOO_LITTLE, RECALLED_ALREADY
+	}
+
+	/** The claim a recall of {@code pattern} makes on its recaller's own ledger, once an occurrence: the same for every route. */
+	public static String recallKey(Pattern pattern) {
+		return "recall:" + pattern.id();
+	}
+
+	/**
+	 * Recalls {@code pattern} for {@code player} with {@code astrolabe}'s resonance at world time {@code time} and game time
+	 * {@code gameTime}: its recall cost, claimed once per occurrence under {@link #recallKey} on {@code player}'s own ledger,
+	 * for {@link Calendar#RECALL_TICKS} ticks whatever the sky or season. The only recall there is (D-05, D-S1): a master's
+	 * fallback and Stolas's Star-reckoning both call it. Nothing is spent or attached unless the claim is granted; no
+	 * resonance is made here.
+	 */
+	public static Recall recall(ServerPlayer player, ServerLevel level, ItemStack astrolabe, Pattern pattern, long time, long gameTime) {
+		int held = charge(astrolabe);
+		if (held < pattern.recallCost()) {
+			return Recall.TOO_LITTLE;
 		}
-		AstralLedger.Outcome outcome = AstralClaims.of(level.getServer()).claim(player.getUUID(), "recall:" + recalled.id(),
-				Calendar.occurrence(recalled, time), gameTime, Calendar.minGap(recalled));
+		AstralLedger.Outcome outcome = AstralClaims.of(level.getServer()).claim(player.getUUID(), recallKey(pattern),
+				Calendar.occurrence(pattern, time), gameTime, Calendar.minGap(pattern));
 		if (outcome != AstralLedger.Outcome.GRANTED) {
-			player.sendOverlayMessage(Component.translatable("message.jugcraft.concordance.sky.recalled_already", Sky.patternName(recalled.id())));
-			return InteractionResult.FAIL;
+			return Recall.RECALLED_ALREADY;
 		}
-		setCharge(astrolabe, held - recalled.recallCost());
-		player.setAttached(Sky.ATTUNEMENT, new Attunement(recalled.id(), gameTime + Calendar.RECALL_TICKS, true));
-		player.sendOverlayMessage(Component.translatable("message.jugcraft.concordance.sky.recalled", Sky.patternName(recalled.id())));
-		return InteractionResult.SUCCESS;
+		setCharge(astrolabe, held - pattern.recallCost());
+		player.setAttached(Sky.ATTUNEMENT, new Attunement(pattern.id(), gameTime + Calendar.RECALL_TICKS, true));
+		return Recall.RECALLED;
+	}
+
+	/** Whether {@code player} could recall {@code pattern} now: the claim asked of their ledger's copy (AstralLedger.claim is pure); nothing is claimed, spent or attached. */
+	public static boolean mayRecall(ServerLevel level, ServerPlayer player, Pattern pattern, long time, long gameTime) {
+		return AstralClaims.of(level.getServer()).ledger(player.getUUID())
+				.claim(recallKey(pattern), Calendar.occurrence(pattern, time), gameTime, Calendar.minGap(pattern)).outcome() == AstralLedger.Outcome.GRANTED;
+	}
+
+	/** What a recall of {@code pattern} tells its player (the master's route's keys, unchanged). */
+	public static Component told(Recall recall, Pattern pattern) {
+		return switch (recall) {
+			case RECALLED -> Component.translatable("message.jugcraft.concordance.sky.recalled", Sky.patternName(pattern.id()));
+			case TOO_LITTLE -> Component.translatable("message.jugcraft.concordance.sky.too_little", pattern.recallCost());
+			case RECALLED_ALREADY -> Component.translatable("message.jugcraft.concordance.sky.recalled_already", Sky.patternName(pattern.id()));
+		};
 	}
 
 	/** The pattern the player observed most recently (by game time), if it is still loaded. */

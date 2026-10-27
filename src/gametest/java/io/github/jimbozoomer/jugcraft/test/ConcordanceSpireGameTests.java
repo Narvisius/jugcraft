@@ -73,7 +73,7 @@ public class ConcordanceSpireGameTests {
 
 	/** A Master who knows {@code configuration}'s research (and Circle Lore). */
 	private static ServerPlayer master(GameTestHelper helper, String configuration) {
-		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		ServerPlayer player = TestPlayers.mock(helper);
 		player.setGameMode(GameType.SURVIVAL);
 		RateGate.forget(player.getUUID());
 		player.setAttached(StageProgress.STAGE, "master");
@@ -180,7 +180,7 @@ public class ConcordanceSpireGameTests {
 		heart(helper);
 		ServerLevel level = helper.getLevel();
 		BlockPos heart = helper.absolutePos(HEART);
-		ServerPlayer novice = helper.makeMockServerPlayerInLevel();
+		ServerPlayer novice = TestPlayers.mock(helper);
 		helper.assertValueEqual(ConcordSpire.found(novice, level, heart, "jugcraft:lantern_spire"), "stage", "an Adept cannot found one");
 		novice.setAttached(StageProgress.STAGE, "master");
 		helper.assertValueEqual(ConcordSpire.found(novice, level, heart, "jugcraft:lantern_spire"), "research", "nor a Master without its research");

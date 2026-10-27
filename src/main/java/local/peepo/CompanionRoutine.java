@@ -28,6 +28,8 @@ final class CompanionRoutine extends Goal {
     boolean deferTransport(BlockPos pos){
         if(!active || !(station instanceof CompanionJob job)
             || !npc.preferences.canWork() || !npc.orders.station(station))return false;
+        if(station instanceof CompanionFishing.Job && npc.fishing.deferOutput(npc.assignments.get(npc.assignments.workPriority(station.stationPosition()))))
+            return npc.assignments.workPriority(pos)>=npc.assignments.workPriority(station.stationPosition());
         if(station instanceof CookingPotJob && job.planningStatus(npc)==CompanionStatus.READY)
             return npc.assignments.workPriority(pos)>=npc.assignments.workPriority(station.stationPosition());
         if(npc.level().getGameTime()>=sessionUntil)return false;
@@ -44,7 +46,7 @@ final class CompanionRoutine extends Goal {
     @Override public boolean requiresUpdateEveryTick(){return true;}
     private boolean needsRest(){return !npc.preferences.onShift() || npc.isRecovering() || npc.getEnergy()<npc.getEnergyCapacity()*95/100;}
     private boolean useful(CompanionStation s){
-        if(!npc.orders.station(s) || !s.availableTo(npc))return false;
+        if(!npc.orders.station(s) || !s.availableTo(npc) || !CompanionJobs.permitted(npc,s.stationPosition()))return false;
         if(s instanceof CompanionJob job)return npc.preferences.canWork() && CompanionJobs.permitted(npc,s.stationPosition())
             && job.planningStatus(npc)==CompanionStatus.READY;
         return switch(s.kind()){
@@ -198,7 +200,8 @@ final class CompanionRoutine extends Goal {
             // Vanilla considers a path node reached before a precise bank arrival is complete.
             // Finish that last short step under the same lease, without restarting its completed path.
             if(station.arrivalDistanceSquared()<.64 && npc.position().distanceToSqr(target)<=.64
-                && CompanionHazards.safeAt(npc,target)){
+                && CompanionHazards.safeAt(npc,target)
+                && npc.level().noCollision(npc,npc.getBoundingBox().expandTowards(target.subtract(npc.position())).deflate(1.0e-5))){
                 npc.getNavigation().stop();npc.getMoveControl().setWantedPosition(target.x,target.y,target.z,1);return;
             }
             if(npc.getNavigation().isDone() && CompanionNavigation.canFinishApproach(npc,target)){

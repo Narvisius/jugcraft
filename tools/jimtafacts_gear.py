@@ -10,6 +10,7 @@ for id,label,icon,capacity in [('re_battery','Rechargeable Battery','itemBatRE',
 for base,icon,capacity in [('re_battery','itemBatChargeRE',40000),('advanced_battery','itemBatChargeAdv',400000),('energy_crystal','itemBatChargeCrystal',4000000),('lapotron_crystal','itemBatChargeLamaCrystal',40000000)]:
  add('charging_'+base,'Charging '+base.replace('_',' ').title(),icon,'auto_battery',capacity=capacity,frames=5,base=base)
 add('single_use_battery','Single-use Battery','itemBatSU','single_battery')
+add('plasma_launcher','Plasma Launcher','plasmaLauncher','plasma',capacity=40000)
 add('nano_saber','Nano Saber','itemNanoSaber.off','saber',capacity=200000,icons=['itemNanoSaber.off','itemNanoSaber.active'])
 for id,label,icon,asset,capacity in [('battery_pack','Battery Pack','itemArmorBatpack','batpack',60000),('advanced_battery_pack','Advanced Battery Pack','itemArmorAdvBatpack','advbatpack',600000),('lap_pack','LapPack','itemArmorLappack','lappack',2000000),('energy_pack','Energy Pack','itemArmorEnergypack','energypack',10000000)]:
  add(id,label,icon,'battery_pack',asset=asset,slot='CHESTPLATE',capacity=capacity)
@@ -32,7 +33,9 @@ for id,label,icon,behavior,capacity in [('industrial_drill','Industrial Drill','
 for id,label,icon,behavior in [('industrial_wrench','Industrial Wrench','itemToolWrench','wrench'),('hand_treetap','Hand Treetap','itemTreetap','tap'),('energy_meter','Energy Meter','itemToolMEter','meter'),('wind_meter','Wind Meter','windmeter','wind')]:add(id,label,icon,behavior)
 for kind,icon in [('pickaxe','Pickaxe'),('axe','Axe'),('shovel','Spade'),('hoe','Hoe'),('sword','Sword')]:add('industrial_bronze_'+kind,'Industrial Bronze '+kind.title(),'itemToolBronze'+icon,'bronze_tool',kind=kind)
 
-def items():return set(GEAR)
+def items():
+ import jimtafacts_explosives
+ return set(GEAR)|jimtafacts_explosives.items()
 def item_tags():
  out={kind+'s':['jugcraft:jimta_industrial_bronze_'+kind] for kind in ('hoe','axe','pickaxe','shovel','sword')}
  out['hoes'].append('jugcraft:jimta_electric_hoe')
@@ -50,6 +53,7 @@ def recipes():
    'jimta_lapotron_crystal':['jugcraft:jimta_energy_crystal','jugcraft:advanced_circuit','minecraft:lapis_block','minecraft:diamond']}[id]
   elif b=='auto_battery':parts=['jugcraft:jimta_'+row['base']]*4+['jugcraft:copper_wire']
   elif b=='saber':parts=['jugcraft:jimta_carbon_plate','jugcraft:jimta_carbon_plate','jugcraft:jimta_energy_crystal','jugcraft:advanced_circuit','minecraft:diamond']
+  elif b=='plasma':parts=['jugcraft:jimta_mining_laser','jugcraft:jimta_energy_crystal','jugcraft:advanced_circuit','jugcraft:jimta_carbon_plate','minecraft:blaze_rod']
   elif b=='single_battery':parts=['jugcraft:tin_ingot','minecraft:redstone','minecraft:coal']
   elif b=='battery_pack':parts=['jugcraft:steel_plate','jugcraft:steel_plate','jugcraft:copper_wire','jugcraft:'+('jimta_re_battery' if row['capacity']<100000 else 'jimta_advanced_battery' if row['capacity']<1000000 else 'jimta_energy_crystal' if row['capacity']<10000000 else 'jimta_lapotron_crystal')]*1
   elif b=='powered_armor':parts=['minecraft:iron_'+id.rsplit('_',1)[1],'jugcraft:jimta_carbon_plate','jugcraft:advanced_circuit','jugcraft:jimta_energy_crystal']
@@ -75,6 +79,8 @@ def recipes():
  return out
 
 def generate(shared=True):
+ import jimtafacts_explosives
+ jimtafacts_explosives.generate(shared)
  manifest=[];seen=set();lang={}
  def copy(source,target):
   if target in seen:return

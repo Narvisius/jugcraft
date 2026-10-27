@@ -31,6 +31,12 @@ HISTORY = 32
 SOURCE_RADIUS = 8
 SHOWN_HISTORY = 8
 POST_SLOTS = 9
+# Concordance Chunk C, C-06 (C-P13; Java: courier/Couriers.FILING_REACH, CrucibleBlockEntity.FILING_BACKOFF and
+# MAX_FILING_BACKOFF): how far from a block that files its own requests (a Spire Heart, an Alembic Crucible) its post may
+# be, and the crucible's wait after finding no post or its setter's quota full, doubling to the most (ticks).
+FILING_REACH = 16
+CRUCIBLE_BACKOFF = 200
+CRUCIBLE_MAX_BACKOFF = 1200
 
 STATES = {
     "open": "waiting for a courier",
@@ -40,7 +46,7 @@ STATES = {
     "returning": "being taken back",
 }
 NOTES = {
-    "full": "the post is full",
+    "full": "where it was going is full",
     "lapsed": "its courier stopped answering",
     "worker_removed": "its courier was removed",
     "reassigned": "its courier was given other work",
@@ -51,8 +57,9 @@ NOTES = {
     "source_gone": "the container is gone",
     "blocked": "the courier's keeper may not open that container",
     "cancelled": "cancelled",
-    "destination_gone": "the post was broken",
+    "destination_gone": "where it was going was broken",
     "nowhere_to_return": "there is no room to take it back",
+    "agreement_ended": "its courier's agreement was ended",  # Concordance Chunk D, D-08: a Workshop Hand's
 }
 EVENTS = {
     "filed": "#%1$s filed: %2$s wanted",
@@ -97,7 +104,7 @@ MESSAGES = {
     "courier.cancelled": "Request #%s cancelled",
     "courier.returning": "Request #%s: its cargo is being taken back first",
     "courier.recovered": "Recovered request #%s's cargo",
-    "courier.key_post": "Courier Post at %s %s %s (now use the key on a porter)",
+    "courier.key_post": "Courier Post at %s %s %s (now use the key on a porter, or on a Spirit Anchor for a Workshop Hand)",
     "courier.assigned": "The porter now serves that Courier Post",
     "courier.still_carrying": "It still carries its route's load: let it deliver first",
     "courier.too_fast": "Wait a moment before asking the couriers again",
@@ -147,6 +154,13 @@ def codex():
                  "Use the post with an empty hand to read its last steps. **/jugcraft concordance logistics** lists "
                  "your requests; **request** asks for a number of what you hold; **cancel** and **recover** take a "
                  "request's number:\\\n" + states),
+                ("text", "A Crucible's Own Requests",
+                 "An Alembic Crucible following a formula asks the couriers itself when it waits for an ingredient: one "
+                 "request, as whoever set its formula (while they are here), at the nearest Courier Post within "
+                 f"{FILING_REACH} blocks they may use, for exactly what it lacks (a ground reagent stays a ground reagent). "
+                 "A Peepo working the same crucible brings only what no courier is already bringing. Clearing or "
+                 "changing the formula, or breaking the crucible, turns the request back; with its setter's requests all "
+                 "open it says so and asks again later."),
             ],
         },
     }

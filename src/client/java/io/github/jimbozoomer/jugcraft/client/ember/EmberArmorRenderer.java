@@ -17,9 +17,10 @@ import net.minecraft.world.entity.EquipmentSlot;
 import org.jspecify.annotations.Nullable;
 
 /**
- * A fire set as worn: GeckoLib's armour renderer over the owner's model (assets/jugcraft/geckolib/models/armor/
- * &lt;model&gt;.geo.json) and the set's texture (textures/armor/&lt;set&gt;.png), both imported as supplied, one renderer for
- * a set's four pieces. GeckoLib poses the model's armour bones to the wearer each frame; on top of that:
+ * One of the owner's sets (fire and water) as worn: GeckoLib's armour renderer over the owner's model
+ * (assets/jugcraft/geckolib/models/armor/&lt;model&gt;.geo.json) and the set's texture (textures/armor/&lt;set&gt;.png), both
+ * imported as supplied, one renderer for a set's four pieces. GeckoLib poses the model's armour bones to the wearer each
+ * frame; on top of that:
  * <ul>
  * <li>the slim-armed sleeves are hidden: the model carries both widths, one over the other, and vanilla armour draws the
  * same sleeves for every wearer;</li>

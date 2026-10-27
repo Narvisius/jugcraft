@@ -1,0 +1,22 @@
+{
+  "parent": "jugcraft:concordance_rimekeeping_encountered",
+  "display": {
+    "icon": {
+      "id": "minecraft:ice"
+    },
+    "title": {
+      "translate": "advancements.jugcraft.concordance_rimekeeping_observed.title"
+    },
+    "description": {
+      "translate": "advancements.jugcraft.concordance_rimekeeping_observed.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

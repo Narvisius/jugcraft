@@ -111,12 +111,13 @@ authoritative boundary that applies them on the server. In order, for every appl
 2. **Friendly fire** (harmful effects): never the effect's own actor; another player only where the actor may hurt
    them (`canHarmPlayer`, the server's PvP setting) and they share no party (Jugcraft parties); players in creative or
    spectator mode are immune. A sourceless effect (a shrine with no owner) may harm anyone else.
-3. **Tolerance** (harmful pushes and statuses only): `#jugcraft:concordance/immune` (ender dragon, wither, warden,
-   elder guardian) ignore them; `#jugcraft:concordance/resistant` (iron golem, ravager, piglin brute) take half the push
-   or half the time. Damage is not reduced here: its Spell Power damage type already carries Spell Power's rules (it
-   bypasses armour and shields, and Spell Power's magic resistance reduces it), and reducing it again would count
-   resistance twice. (An earlier version of this record said armour applied; Spell Power tags its damage types
-   `minecraft:bypasses_armor`, so it does not. Corrected with step 10.)
+3. **Tolerance** (harmful pushes and statuses only): `#jugcraft:concordance/immune` (ender dragon, wither, warden, elder
+   guardian) ignore them; `#jugcraft:concordance/resistant` (iron golem, ravager, piglin brute, and since Concordance
+   Chunk B the Yeti King and the Cinder Tyrant) take half the push or half the time. Damage is not reduced here: its
+   Spell Power damage type already carries Spell Power's rules (it bypasses armour and shields, and Spell Power's magic
+   resistance reduces it), and reducing it again would count resistance twice. (An earlier version of this record said
+   armour applied; Spell Power tags its damage types `minecraft:bypasses_armor`, so it does not. Corrected with
+   step 10.)
 4. **Protection** (block operations): the actor must be allowed to build there (spawn protection, protected towns,
    adventure mode); using a block needs a player actor and follows the town's usable-block rule. Without a player,
    only outside protected towns.
@@ -126,7 +127,8 @@ authoritative boundary that applies them on the server. In order, for every appl
    vanilla `addEffect` naming the actor as source; protection is Absorption (four points a level); detection is
    Glowing; light is a Kindled mote (`Illumination`); harvesting gathers ripe crops and replants them as the kama does
    (`ArmItem.reap`), or breaks a plant in `#jugcraft:concordance/harvestable`; interaction uses a block in
-   `#jugcraft:concordance/interactable` as the player would; alteration only puts out fire.
+   `#jugcraft:concordance/interactable` as the player would; alteration puts out fire, or, in Ember's school, kindles a
+   hearth, or, in Rime's, holds an Alembic Crucible's heat in its band (Preserve); it removes nothing but fire.
 7. **Presentation**: particles and sound sent to clients. They never apply anything, so a client cannot repeat an
    effect.
 

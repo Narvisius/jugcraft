@@ -3,15 +3,39 @@
   "pools": [
     {
       "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "jugcraft:jimta_spellbooks_pyrium_ingot"
-        }
-      ],
       "condition": {
         "type": "minecraft:survives_explosion"
-      }
+      },
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "jugcraft:jimta_spellbooks_arcane_debris",
+              "condition": {
+                "type": "minecraft:match_tool",
+                "predicate": {
+                  "predicates": {
+                    "minecraft:enchantments": [
+                      {
+                        "enchantments": "minecraft:silk_touch",
+                        "levels": {
+                          "min": 1
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "type": "minecraft:item",
+              "name": "jugcraft:jimta_spellbooks_pyrium_ingot"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -21,6 +21,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
 import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
@@ -129,6 +130,9 @@ public class GunsClientGameTests implements FabricClientGameTest {
 					throw new AssertionError("Aiming the " + gun + " does not narrow the view: modifier " + fovIn + " -> " + fovOut
 							+ (Float.isNaN(fovIn) ? " (GunFovMixin never ran: has AbstractClientPlayer.getFieldOfViewModifier moved?)" : ""));
 				}
+				// Each gun fires at the husk at its full health: together the guns' shots outlast its 1000 (a creature has no
+				// more than 1024), and with slice 14E's the last of them killed it.
+				heal(server, x, y, z);
 				float before = health(server, x, y, z);
 				long flashes = context.computeOnClient(client -> GunEffects.flashes());
 				long ejected = context.computeOnClient(client -> GunEffects.ejected());
@@ -146,8 +150,11 @@ public class GunsClientGameTests implements FabricClientGameTest {
 				}
 				long flashed = context.computeOnClient(client -> GunEffects.flashes()) - flashes;
 				Jugcraft.LOGGER.info("[guns] {} fired: {} muzzle flash frames drawn", gun, flashed);
-				if (flashed <= 0) {
-					throw new AssertionError("The " + gun + " showed no muzzle flash when fired");
+				// A gun silenced along its own barrel (JugcraftGuns.SILENCED) shows none, as a fitted silencer hides it.
+				boolean silenced = JugcraftGuns.SILENCED.contains(gun);
+				if (silenced ? flashed != 0 : flashed <= 0) {
+					throw new AssertionError("The " + gun + (silenced ? ", silenced, showed a muzzle flash" : " showed no muzzle flash")
+							+ " when fired");
 				}
 				context.waitTicks(11);
 				if (charge > 0) {
@@ -519,10 +526,18 @@ public class GunsClientGameTests implements FabricClientGameTest {
 		return minecraft.getPlayerList().getPlayers().getFirst();
 	}
 
-	/** The husk's health, on the server. */
+	/** The husk's health, on the server; -1 once it has died. */
 	private static float health(TestServerContext server, int x, int y, int z) {
-		return server.computeOnServer(minecraft -> minecraft.overworld().getEntitiesOfClass(LivingEntity.class,
-				new AABB(x - 4, y - 2, z - 10, x + 5, y + 4, z), entity -> BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()).getPath().equals("husk"))
-				.stream().findFirst().map(LivingEntity::getHealth).orElse(-1.0F));
+		return server.computeOnServer(minecraft -> husk(minecraft, x, y, z).map(LivingEntity::getHealth).orElse(-1.0F));
+	}
+
+	/** The husk back to its full health, on the server. */
+	private static void heal(TestServerContext server, int x, int y, int z) {
+		server.runOnServer(minecraft -> husk(minecraft, x, y, z).ifPresent(husk -> husk.setHealth(husk.getMaxHealth())));
+	}
+
+	private static Optional<LivingEntity> husk(MinecraftServer minecraft, int x, int y, int z) {
+		return minecraft.overworld().getEntitiesOfClass(LivingEntity.class, new AABB(x - 4, y - 2, z - 10, x + 5, y + 4, z),
+				entity -> BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()).getPath().equals("husk")).stream().findFirst();
 	}
 }

@@ -36,6 +36,7 @@ public final class WorkshopComputers {
     private WorkshopComputers() {}
 
     public static void register() {
+        net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STOPPING.register(server->io.github.jimbozoomer.jugcraft.jimtafacts.computers.lua.LuaProcess.closeAll());
         DOCUMENT = Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Jugcraft.id("jimta_computer_document"),
                 DataComponentType.<String>builder().persistent(Codec.string(0, MAX_PROGRAM))
                         .networkSynchronized(ByteBufCodecs.stringUtf8(MAX_PROGRAM)).build());

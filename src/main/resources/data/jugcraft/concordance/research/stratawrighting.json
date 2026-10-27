@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "principle": "strata",
+  "tradition": "stratawrights",
+  "stage": "practitioner",
+  "icon": "minecraft:tuff",
+  "requires": [
+    {
+      "research": "jugcraft:first_light",
+      "state": "understood"
+    }
+  ],
+  "states": {
+    "encountered": {
+      "any": [
+        {
+          "type": "examine",
+          "specimens": "#jugcraft:strata_specimens"
+        }
+      ]
+    },
+    "observed": {
+      "any": [
+        {
+          "type": "examine",
+          "specimens": "#jugcraft:strata_specimens",
+          "distinct": 3
+        }
+      ]
+    },
+    "understood": {
+      "any": [
+        {
+          "type": "study",
+          "station": "jugcraft:lampwright_bench",
+          "specimens": "#jugcraft:strata_specimens"
+        },
+        {
+          "type": "notes"
+        }
+      ]
+    },
+    "mastered": {
+      "any": [
+        {
+          "type": "practice",
+          "activity": "jugcraft:anchoring",
+          "distinct": 3
+        }
+      ]
+    }
+  },
+  "unlocks": {
+    "understood": {
+      "invocations": [
+        "jugcraft:brace"
+      ]
+    }
+  }
+}

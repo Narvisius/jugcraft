@@ -33,9 +33,17 @@ public final class Sampler {
 		int disturbance(int dx, int dy, int dz);
 	}
 
-	/** One sample of the area: its diversity and disturbance, and how many positions it read. */
-	public record Area(int diversity, int disturbance, int reads) {
-		public static final Area NONE = new Area(1, 0, 0);
+	/**
+	 * One sample of the area: its diversity and disturbance, how many positions it read, and the kinds of plant it found at
+	 * the plant's height (by block, the plant's own included; at most 25), which a mixed bed reads (Concordance Chunk C,
+	 * C-08) without reading anything again.
+	 */
+	public record Area(int diversity, int disturbance, int reads, Set<String> kinds) {
+		public static final Area NONE = new Area(1, 0, 0, Set.of());
+
+		public Area {
+			kinds = Set.copyOf(kinds);
+		}
 	}
 
 	public static Area sample(Probe probe) {
@@ -55,12 +63,16 @@ public final class Sampler {
 				}
 			}
 		}
-		return new Area(Math.clamp(kinds.size(), 1, MAX_DIVERSITY), Math.min(disturbance, MAX_DISTURBANCE), reads);
+		return new Area(Math.clamp(kinds.size(), 1, MAX_DIVERSITY), Math.min(disturbance, MAX_DISTURBANCE), reads, kinds);
 	}
 
-	/** The habitat at a plant: the bed's moisture and nutrients, the light at the plant, and the area's sample. */
-	public static Habitat habitat(int moisture, int light, int nutrients, Area area) {
+	/**
+	 * The habitat at a plant: the bed's moisture and nutrients, the light at the plant, the area's sample, and the strain
+	 * its bed's harvests left (Concordance Chunk C, C-08), carried beside the five factors.
+	 */
+	public static Habitat habitat(int moisture, int light, int nutrients, Area area, int strain) {
 		return new Habitat(Math.clamp(moisture, 0, Factor.MOISTURE.max), Math.clamp(light, 0, Factor.LIGHT.max),
-				Math.clamp(nutrients, 0, Habitat.MAX_NUTRIENTS), area.diversity(), area.disturbance());
+				Math.clamp(nutrients, 0, Habitat.MAX_NUTRIENTS), area.diversity(), area.disturbance(),
+				Math.clamp(strain, 0, Habitat.MAX_STRAIN));
 	}
 }

@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "guns"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SSS",
+    "SDL",
+    "SP "
+  ],
+  "key": {
+    "S": "#c:ingots/stainless_steel",
+    "D": "minecraft:diamond",
+    "L": "minecraft:lever",
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "id": "jugcraft:impetus_shotgun"
+  }
+}

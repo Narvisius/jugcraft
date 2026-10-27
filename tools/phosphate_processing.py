@@ -61,6 +61,12 @@ REACTOR_RECIPES = [
         results=[('jugcraft:nitrogen_fertilizer',2)],ticks=160),
     rec('battery_precursor','unused',fluids=[('jugcraft:phosphoric_acid',250),('jugcraft:hydrogen_fluoride',500)],
         results=[('jugcraft:fluorophosphate_precursor',1)],ticks=280,power=64),
+    # Cola (docs/features/cola-and-mmh.md): the industrial acid diluted and purified over charcoal into a food-grade vial,
+    # and cola syrup carbonated with water and carbon dioxide into three bottles of cola. Quantities for review.
+    rec('food_grade_acid','unused',[('minecraft:charcoal',1),('minecraft:glass_bottle',1)],
+        [('jugcraft:phosphoric_acid',250),('minecraft:water',250)],[('jugcraft:food_grade_phosphoric_acid',1)],ticks=200),
+    rec('cola','unused',[('jugcraft:cola_syrup',1),('minecraft:glass_bottle',2)],
+        [('minecraft:water',500),('jugcraft:carbon_dioxide',250)],[('jugcraft:cola',3)],ticks=120,power=32),
 ]
 for recipe in REACTOR_RECIPES: recipe.pop('capability')
 # Drying returns the 125 mB held in each wet intermediate, not newly created water.
@@ -88,7 +94,12 @@ GUIDE_PAGES = [
     dict(title='Gypsum and battery integration',icon='jugcraft:plasterboard',text=[
         'Condition two Gypsum-rich Residue with 500 mB water into one Washed Gypsum and 500 mB Spent Mineral Wash. The Industrial Oven prepares one washed gypsum into one existing Gypsum Binder. Keep the wash for the existing settling/recovery route; raw residue cannot be placed as a building block.',
         'Craft one binder with two sand into two Plaster blocks, or two binder, two paper and one Digestate Fiber into four Plasterboard blocks. Both have matching slabs and stairs. Existing calcium-sulfate binder and concrete recipes remain available.',
-        'The compact Chemical Reactor can also turn 250 mB Industrial Phosphoric Acid and 500 mB HF into one existing Fluorophosphate Precursor for the battery chain. The earlier direct phosphate route remains available. This industrial acid is not a food-grade cola ingredient.']),
+        'The compact Chemical Reactor can also turn 250 mB Industrial Phosphoric Acid and 500 mB HF into one existing Fluorophosphate Precursor for the battery chain. The earlier direct phosphate route remains available. This industrial acid is not a food-grade cola ingredient until it is purified: see Food-grade acid and cola.']),
+    dict(title='Food-grade acid and cola',icon='jugcraft:cola',text=[
+        'Purify the acid before it goes near food. The compact Chemical Reactor dilutes 250 mB Industrial Phosphoric Acid with 250 mB water and passes it over one charcoal into one glass bottle: a vial of Food-grade Phosphoric Acid, in 200 ticks at base 48 JE/t. These are game batches, not real food-processing instructions.',
+        'Craft the vial with one Caramel, two sugar (or glucose syrup made into sugar), one Cinnamon, one Vanilla Pods and one Lemon into a bottle of Cola Syrup. The syrup is mixed in the vial, so no bottle is left over.',
+        'The Chemical Reactor carbonates one Cola Syrup with 500 mB water and 250 mB carbon dioxide into three bottles of Cola, filling the syrup bottle and two more glass bottles, in 120 ticks at base 32 JE/t. Carbon dioxide comes from calcite dissolved in hydrochloric acid in the same reactor, cement burnt with its CO2 captured, or the Biogas Cleaner.',
+        'Cola gives 3 hunger, a little saturation and Speed for 45 seconds, and leaves its glass bottle. Industrial acid itself is never an ingredient: only the purified vial.']),
 ]
 
 def write_extras(write, assets, data, lang, condition):
@@ -104,6 +115,12 @@ def write_extras(write, assets, data, lang, condition):
         write(data/'recipe'/f'phosphate_{name}.json',{'fabric:load_conditions':condition('machines')+condition('phosphate'),
             'type':'minecraft:crafting_shapeless','category':'misc','ingredients':ingredients,
             'result':dict(id='jugcraft:'+result,count=count)})
+    # Cola syrup (docs/features/cola-and-mmh.md): the food-grade vial with the farm's caramel, spice, vanilla and lemon.
+    write(data/'recipe'/'phosphate_cola_syrup.json',{'fabric:load_conditions':condition('machines')+condition('phosphate')+condition('agriculture'),
+        'type':'minecraft:crafting_shapeless','category':'misc',
+        'ingredients':['jugcraft:food_grade_phosphoric_acid','jugcraft:caramel','minecraft:sugar','minecraft:sugar',
+                       'jugcraft:cinnamon','jugcraft:vanilla_pods','jugcraft:lemon'],
+        'result':dict(id='jugcraft:cola_syrup',count=1)})
     nitrogen = {'corn','ornamental_corn','sunflower','flax','cotton','cabbage','oats','barley','rice','lettuce','spinach'} | set(herbs.TALL_CROPS)
     roots = {'beans','peas','sweet_potato','onion','garlic','turnip','mandrake','tomato','pepper','cucumber','eggplant','zucchini','radish','ginger'} | set(fruit_crops.BUSHES)
     for group, names, vanilla in [('nitrogen',nitrogen,['wheat']),('phosphate',roots,['carrots','potatoes','beetroots','pumpkin_stem','melon_stem'])]:

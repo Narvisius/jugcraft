@@ -1,0 +1,52 @@
+{
+  "type": "modonomicon:content",
+  "id": "jugcraft:circles/root_and_rivet",
+  "category": "jugcraft:circles",
+  "x": 0,
+  "y": 4,
+  "name": "book.jugcraft.arcane_concordance.circles.root_and_rivet.name",
+  "description": "book.jugcraft.arcane_concordance.circles.root_and_rivet.description",
+  "icon": "jugcraft:rooted_thallite_foundation",
+  "background": {
+    "sprite": "modonomicon:modonomicon/themes/default/node/entry_backgrounds/hexagon_purple",
+    "width": 26,
+    "height": 26
+  },
+  "condition": {
+    "type": "modonomicon:research_node_unlocked",
+    "node_id": "jugcraft:concordance/circle_lore_understood",
+    "tooltip": {
+      "translate": "book.jugcraft.arcane_concordance.locked.circle_lore.understood"
+    }
+  },
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "id": "p0",
+      "title": "book.jugcraft.arcane_concordance.circles.root_and_rivet.p0.title",
+      "text": "book.jugcraft.arcane_concordance.circles.root_and_rivet.p0.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p1",
+      "title": "book.jugcraft.arcane_concordance.circles.root_and_rivet.p1.title",
+      "text": "book.jugcraft.arcane_concordance.circles.root_and_rivet.p1.text",
+      "show_title_separator": true
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "id": "p2",
+      "title1": "book.jugcraft.arcane_concordance.circles.root_and_rivet.p2.title",
+      "recipe_id_1": "jugcraft:thallite_plate_by_hand",
+      "text": "book.jugcraft.arcane_concordance.circles.root_and_rivet.p2.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "id": "p3",
+      "title": "book.jugcraft.arcane_concordance.circles.root_and_rivet.p3.title",
+      "text": "book.jugcraft.arcane_concordance.circles.root_and_rivet.p3.text",
+      "show_title_separator": true
+    }
+  ]
+}

@@ -64,3 +64,13 @@ Paths preserve the supplied collection. Follow the [reuse guide](../../README.md
 | [Guns/sounds/mass_destruction_extended.ogg](../../originals/Blocks/Guns/sounds/mass_destruction_extended.ogg) | sound | — | — |
 | [Guns/sounds/mass_production.ogg](../../originals/Blocks/Guns/sounds/mass_production.ogg) | sound | — | — |
 | [Guns/sounds/ui/weapon/attach.ogg](../../originals/Blocks/Guns/sounds/ui/weapon/attach.ogg) | sound | — | — |
+| [Guns/geo/item/gun/grandle_og.geo.json](../../originals/Blocks/Guns/geo/item/gun/grandle_og.geo.json) | model JSON | — | — |
+| [Guns/geo/item/gun/mas_55.geo.json](../../originals/Blocks/Guns/geo/item/gun/mas_55.geo.json) | model JSON | — | — |
+| [Guns/geo/item/gun/prush_gun.geo.json](../../originals/Blocks/Guns/geo/item/gun/prush_gun.geo.json) | model JSON | — | — |
+| [Guns/geo/item/gun/valora.geo.json](../../originals/Blocks/Guns/geo/item/gun/valora.geo.json) | model JSON | — | — |
+| [Guns/geo/item/gun/krauser.geo.json](../../originals/Blocks/Guns/geo/item/gun/krauser.geo.json) | model JSON | — | — |
+| [Guns/geo/item/gun/soul_drummer.geo.json](../../originals/Blocks/Guns/geo/item/gun/soul_drummer.geo.json) | model JSON | — | — |
+| [Guns/geo/item/gun/uppercut.geo.json](../../originals/Blocks/Guns/geo/item/gun/uppercut.geo.json) | model JSON | — | — |
+| [Guns/geo/item/gun/mas_peddler.geo.json](../../originals/Blocks/Guns/geo/item/gun/mas_peddler.geo.json) | model JSON | — | — |
+| [Guns/geo/item/gun/inertial.geo.json](../../originals/Blocks/Guns/geo/item/gun/inertial.geo.json) | model JSON | — | — |
+| [Guns/geo/item/gun/zilk_45.geo.json](../../originals/Blocks/Guns/geo/item/gun/zilk_45.geo.json) | model JSON | — | — |

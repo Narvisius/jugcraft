@@ -24,35 +24,31 @@ public final class ControlNetwork {
 	private ControlNetwork() {
 	}
 
-	public static Devices find(Level level, BlockPos controller) {
-		List<BlockPos> sensors = new ArrayList<>();
-		List<BlockPos> switches = new ArrayList<>();
-		List<BlockPos> controllers = new ArrayList<>();
-		Set<BlockPos> seen = new HashSet<>();
-		ArrayDeque<BlockPos> queue = new ArrayDeque<>();
-		seen.add(controller);
-		queue.add(controller);
-		int cables = 0;
-		while (!queue.isEmpty()) {
-			BlockPos at = queue.poll();
-			for (Direction direction : Direction.values()) {
-				BlockPos next = at.relative(direction);
-				if (!seen.add(next) || !level.isLoaded(next)) {
-					continue;
-				}
-				Block block = level.getBlockState(next).getBlock();
-				if (block instanceof DataCableBlock && cables < MAX_CABLES) {
-					cables++;
-					queue.add(next);
-				} else if (block instanceof SensorBlock) {
-					sensors.add(next);
-				} else if (block instanceof ChannelSwitch) {
-					switches.add(next);
-				} else if (block instanceof LogicControllerBlock) {
-					controllers.add(next);
-				}
-			}
-		}
-		return new Devices(sensors, switches, controllers, cables);
-	}
+	private record Step(BlockPos pos,int channels){}
+    public static Devices find(Level level,BlockPos controller) {
+        var sensors=new java.util.LinkedHashSet<BlockPos>();var switches=new java.util.LinkedHashSet<BlockPos>();var controllers=new java.util.LinkedHashSet<BlockPos>();
+        var seen=new java.util.HashMap<BlockPos,Integer>();var queue=new ArrayDeque<Step>();var cables=new HashSet<BlockPos>();
+        seen.put(controller,65535);queue.add(new Step(controller,65535));int visits=0;
+        while(!queue.isEmpty()&&visits++<MAX_CABLES*16+1){
+            var step=queue.removeFirst();
+            for(var direction:Direction.values()){
+                var next=step.pos.relative(direction);
+                if(!level.isLoaded(next)||!io.github.jimbozoomer.jugcraft.finance.ClaimTransfers.allowed(level,step.pos,next))continue;
+                var state=level.getBlockState(next);var block=state.getBlock();
+                int wire=io.github.jimbozoomer.jugcraft.jimtafacts.industry.FactoryWires.mask(level,next);
+                int channels=step.channels&(block instanceof DataCableBlock?65535:wire!=0?wire:state.hasProperty(Channels.CHANNEL)?1<<state.getValue(Channels.CHANNEL).ordinal():65535);
+                channels&=~seen.getOrDefault(next,0);if(channels==0)continue;
+                if(block instanceof DataCableBlock||wire!=0){
+                    if(!cables.contains(next)&&cables.size()>=MAX_CABLES)continue;
+                    cables.add(next);seen.merge(next,channels,(a,b)->a|b);queue.add(new Step(next,channels));
+                }else{
+                    seen.merge(next,channels,(a,b)->a|b);
+                    if(block instanceof SensorBlock)sensors.add(next);
+                    else if(block instanceof ChannelSwitch)switches.add(next);
+                    else if(block instanceof LogicControllerBlock)controllers.add(next);
+                }
+            }
+        }
+        return new Devices(List.copyOf(sensors),List.copyOf(switches),List.copyOf(controllers),cables.size());
+    }
 }

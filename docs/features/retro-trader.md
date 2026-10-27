@@ -7,7 +7,7 @@ Target milestone and tier: Discovery. Emeralds and a compass are all a player ne
 Primary specialty and supported player role: exploration and trade, supporting the [Pixel Hollows](pixel-hollows.md).
 
 ## Player experience
-Every new village has one small **Retro Game Shop**: an oak storefront with a false front and a lit "Retro Games" sign, display windows, a chequered floor, shelves of chunky cartridges, a counter, pixel lamps and a glowing **arcade cabinet**. The villager who takes that cabinet becomes the **Retro Trader**: a bearded villager with brown hair, black glasses and green eyes, in a red-and-black flannel shirt over a white tee with a silver cross, backpack straps, navy plaid trousers and black-and-white sneakers (drawn from the owner's reference picture).
+Every new village has one small **Retro Game Shop**: an oak storefront with a false front and a lit "Retro Games" sign, display windows, a chequered floor, shelves of chunky cartridges, a counter, pixel lamps and a glowing **arcade cabinet**. The villager who takes that cabinet becomes the **Retro Trader**: a bearded millennial who runs the shop, in a burgundy knit beanie, thick black glasses over green eyes and a full brown beard, a forest-green tartan flannel open over a charcoal tee with a little pixel gamepad on it, sleeves rolled up to show a calculator watch, light cuffed jeans and red canvas high-tops. His face is alive: he blinks, glances about, smiles when a player is near, chats while you trade and frowns when he shakes his head. Now and then, after a trade, he breaks into a folk **stomp-clap** (see [Stomp-clap and living face](#stomp-clap-and-living-face)). (His first look, drawn from the owner's reference picture, had a red-and-black flannel, a white tee with a silver cross, backpack straps and navy plaid trousers; the beard, the black glasses, the green eyes and the open flannel carry over.)
 
 He:
 - **always offers a Pixel Hollows map**, which is how most players will first find the rare cave;
@@ -61,17 +61,17 @@ Everything is original: no real shop names, logos, colours, uniforms, games or f
 - Purchases go through vanilla trading, validated by the server.
 
 ## Multiplayer and persistence
-- Server authority: vanilla trading and villager AI, no custom packets. The map search runs on the server, on a background thread.
+- Server authority: vanilla trading and villager AI. One small server-to-client message starts his cosmetic stomp-clap (below); nothing else is sent. The map search runs on the server, on a background thread.
 - The arcade cabinet cannot be pushed by pistons: moving one half of a two-block cabinet would break the other and drop a free cabinet. Breaking either half in creative drops nothing.
 - Ownership: vanilla villager rules; restock and prices per villager.
-- **Stable IDs:** `jugcraft:retro_trader` (profession), `jugcraft:arcade_cabinet` (block, item and job site point of interest), `jugcraft:pixel_hollows_map` (item), `jugcraft:pixel_hollows` (map decoration), the trades `jugcraft:retro_trader/*` and trade sets `jugcraft:retro_trader/level_1`–`3`, the shop template `jugcraft:village/plains/retro_game_shop`, the sound `jugcraft:entity.villager.work_retro_trader`.
+- **Stable IDs:** `jugcraft:retro_trader` (profession), `jugcraft:arcade_cabinet` (block, item and job site point of interest), `jugcraft:pixel_hollows_map` (item), `jugcraft:pixel_hollows` (map decoration), the trades `jugcraft:retro_trader/*` and trade sets `jugcraft:retro_trader/level_1`–`3`, the shop template `jugcraft:village/plains/retro_game_shop`, the sounds `jugcraft:entity.villager.work_retro_trader`, `jugcraft:entity.retro_trader.stomp` and `jugcraft:entity.retro_trader.clap`, the payload `jugcraft:retro_trader_jam`.
 - A marked map is an ordinary vanilla filled map; nothing about it depends on Jugcraft after it is made.
 - **Existing worlds:** villages already generated are unchanged; shops appear only in new ones.
 - **Disable switch:** `retro_trader.enabled=false` stops new shops, the map trade (for trades made from then on) and the cabinet recipe. The profession, the cabinet, the map item, existing traders and their saved offers stay. Trades that sell cave goods follow the `pixel_hollows` switch, and with `pixel_hollows` off no new shops are placed either, so no village gets a trader with nothing to sell.
 
 ## Dependencies and assets
 - Fabric API's `PoiHelper` registers the cabinet as a job site; trades are vanilla data. Fabric API has no village pool API, so a mixin accessor (`mixin/StructureTemplatePoolAccessor`) adds the shop to the five houses pools when the server starts, and three small mixins make it one per village: `StructureTemplatePoolMixin` reorders a houses pool's shuffled candidates, `JigsawPlacementMixin` wraps the jigsaw placer's run (marking where each structure begins and ends, and laying a village out again when it has no shop) and `PoolElementStructurePieceMixin` notes when the shop is placed.
-- Original assets: the trader's 64×64 villager overlay (also used for his zombie form) and the cabinet's textures are drawn by `tools/pixel_hollows_textures.py`; the cabinet model is in `tools/retro_models.py`; the shop is written by `tools/retro_game_shop.py` from vanilla blocks and Jugcraft's own; the work sound reuses the note block's "bit" sound by name. MIT.
+- Original assets: the trader's 64×64 villager overlay (also used for his zombie form) and his expression sheet are drawn by `tools/retro_trader_look.py` (called from `tools/pixel_hollows_textures.py`), the cabinet's textures by `tools/pixel_hollows_textures.py`; his stomp and clap sounds are synthesised by `tools/retro_trader_sounds.py`; the cabinet model is in `tools/retro_models.py`; the shop is written by `tools/retro_game_shop.py` from vanilla blocks and Jugcraft's own; the work sound reuses the note block's "bit" sound by name. MIT.
 - The shop template is written in 26.3's format with 26.3's DataVersion (5023), so the data fixer leaves it alone. A DataVersion above the game's made the whole template load as air; the game test `retroGameShopTemplateLoads` compares the two numbers, so after a platform bump `DATA_VERSION` in `tools/retro_game_shop.py` must follow.
 
 ## Verification
@@ -121,3 +121,42 @@ Build workflow run 36815372169 on commit 568409c (1 October 2026, merged with `m
 ### October 7 integration: rare exhausted layouts
 
 Full CI found normal desert and snowy villages that still had no shop after the old eight-layout limit. The bounded retry budget is now 32 layouts; generation still stops on success, excludes zombie villages and places at most one shop. The village regression now deliberately withholds the shop for the first eight layouts in its final round, requiring recovery beyond the old limit. This improves the rare-case fallback; a finite budget does not promise a suitable site for every possible world seed. Results of the combined validation are recorded in the integration PR.
+
+
+## Stomp-clap and living face
+
+Contributed as a community prototype (draft PR from a fork). Cosmetic only: no items, prices, reputation or progression change.
+
+**What the player sees.**
+- **A living face.** His eyes and mouth are drawn over the villager's face from an expression sheet (`textures/entity/retro_trader/expressions.png`): 9 eye frames (open, half, closed, looking left or right, happy, wide, squeezed shut, frowning) and 7 mouths (neutral, smile, grin, talking, shouting, "ooh", frown). He blinks every three to five seconds, out of step with other traders, and glances to the side now and then. He smiles when a player is within 6 blocks, moves his mouth while you have his trading screen open within 5 blocks, and frowns while he shakes his head (the vanilla unhappy shake).
+- **The stomp-clap.** After a trading session in which at least one trade completed, there is a 35% chance (`RetroTraderJam.CHANCE`), at most once every 30 seconds per trader, that once the screen closes he unfolds his arms and stomps and claps a little folk groove at 80 beats a minute. The pattern is stomp (right foot), clap, stomp (left foot), clap, twice over. A last clap follows, then arms flung wide ("ta-da"), then he folds his arms again: about 7.5 seconds. His foot rises and slams on each stomp, his body dips and his head nods on every beat, and he sways with the groove. He shouts with his whole face on the stomps (eyes squeezed shut on the first of each bar, wide on the second), grins with happy shut eyes in between, and shouts again at the finale. There are no words or voice; the stomp and clap sounds are original and synthesised (three takes of each), with subtitles "Retro Trader stomps" and "Retro Trader claps". The groove is a generic folk stomp-clap and uses no music, lyrics or recording from any song.
+
+**How it works.**
+- **Server:** `mixin/RetroTraderJamMixin` hooks `AbstractVillager#notifyTrade` (marks the trader) and `#stopTrading` (which `Villager#setTradingPlayer(null)` calls when the screen closes). Then `world/RetroTraderJam` rolls the chance, applies the cooldown, stops his navigation once, and sends `RetroTraderJam.Payload` (the entity id) to every player tracking him. The shared beat timeline (`RetroTraderJam.beat`, `LENGTH`) is in common code. Nothing is saved: the marks and cooldowns are weak maps, cleared when the server stops.
+- **Client:** `RetroTraderClient` keeps when each jam started (4 ticks after the message, so the screen has closed). It plays the stomps and claps on their ticks at the trader's position, including any ticks a lagging client skipped. It works out a `RetroTraderPose` when his render state is extracted (`mixin/client/RetroTraderRendererMixin`, carried on the state by `RetroTraderRenderStateMixin`).
+  - `RetroTraderModelMixin` (end of `VillagerModel#setupAnim`) hides the folded arms while he claps, and lifts the feet, dips the body and nods the head. It runs for every villager model posed with his state, so the base and profession layers stay together. The folded arms are shown again for every other villager, because the model is shared.
+  - `RetroTraderLayer` draws the face as two quads just in front of the head's front, turning with the head. It also draws his beanie as three boxes on his head: a ribbed cuff standing just off his hairline, a knit crown above the head and a smaller dome set back so it slouches. Painting a beanie on the villager's hat layer, which is the head's own box, made it read as hair. The overlay's hat layer is left empty, so his zombie form shows his hair. During the jam it also draws the free arms: 4×10×4 boxes textured like the game's own cubes, posed about the shoulders in the pose stack. His held item is hidden while he claps.
+  - Only villagers with the `jugcraft:retro_trader` profession and adults are touched. His zombie form keeps the overlay's neutral face.
+- **Performance:** one small allocation per visible Retro Trader per frame, and arithmetic only; no world scans. The client tick loops over current jams only.
+- **Multiplayer:** every client tracking him gets the same message and plays the same routine from the same timeline. A client that starts tracking him halfway through does not see that jam.
+- **Preview without the game:** `python3 tools/retro_trader_preview.py OUT_DIR [--base villager.png --type type/plains.png]` draws his look, every face and the routine as a sheet and a GIF. It mirrors `RetroTraderPose`; keep the two in step.
+
+**Verification (this branch).** See the PR for what ran and what did not.
+- Game test `retroTraderJamsAfterTrading`, with the chance forced. Through the game's own `Villager#setTradingPlayer`: closing the screen without a trade starts nothing; the jam waits for the screen to close after a trade, then starts; a second trade within the cooldown does not start another; a farmer never jams. It also checks the timeline (2 + 2 alternating stomps, 4 claps, a finale, nothing outside the routine).
+- Client game test `RetroTraderClientGameTests` (run alone with `./gradlew runClientGameTest -PclientTests=RetroTraderClientGameTests`): **passed locally** (22 October 2026, Windows 11, Temurin JDK 25.0.4, the development client with the complete optional set).
+  - It screenshots his look, his face up close and a three-quarter view.
+  - It then starts the jam as a trade would and screenshots the first stomp, the first clap, the ta-da and the end.
+  - Looked at:
+    - the modelled beanie (cuff, crown, dome) sits on his head;
+    - the face quads show the smile while the player is near;
+    - on the stomp, his shouting face and unfolded arms;
+    - on the clap, his hands together in front of his chest;
+    - at the ta-da, his arms flung wide;
+    - at the end, his folded arms back.
+  - The small light patch on his belt in these shots is the vanilla profession level badge.
+  - His nose is raised 2 pixels (`RetroTraderPose.NOSE_RAISE`, applied in `RetroTraderModelMixin`), so it sits under his glasses instead of hanging past his chin. His mouth is drawn on the row just below it, and the screenshots show it there.
+- **Not yet checked:**
+  - hearing the stomp and clap sounds in a running game (the test cannot judge audio);
+  - the face and arms with Iris shaders;
+  - two clients watching one trader on a dedicated server;
+  - a real trade by a human player.

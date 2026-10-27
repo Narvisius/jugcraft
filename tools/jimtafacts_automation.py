@@ -3,7 +3,7 @@ from pathlib import Path
 import copy,json,shutil,hashlib
 ROOT=Path(__file__).resolve().parents[1];RES=ROOT/'src/main/resources';SOURCE=ROOT/'art/owner-library/originals/Oct23/Jimtafacts/buildcraft reborn by jimbo/assets/buildcraftsilicon'
 GATES={f'jimta_gate_{m}_{logic}':(m,logic,rows) for m,rows in [('clay_brick',1),('nether_brick',2),('iron',4),('gold',8)] for logic in ('and','or')}
-def blocks():return set(GATES)|{'jimta_item_filter','jimta_fluid_filter','jimta_light_sensor','jimta_timer','jimta_pulsar'}
+def blocks():return set(GATES)|{'jimta_sorting_machine','jimta_item_filter','jimta_fluid_filter','jimta_light_sensor','jimta_timer','jimta_pulsar'}
 EXPANSIONS=('light_sensor','timer','pulsar','clock','fader')
 MODIFIERS=('lapis','quartz','diamond')
 def items():return blocks()|{'jimta_gate_copier'}|{'jimta_gate_expansion_'+x for x in EXPANSIONS}|{'jimta_gate_modifier_'+x for x in MODIFIERS}

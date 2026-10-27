@@ -1,7 +1,7 @@
 """Data-only migration of the complete supplied spellbook jigsaw layout collection.
 
-No source programs run. Missing third-party statue assets are recorded and only
-their decorative cells are omitted; building layouts and source originals stay.
+No source programs run. Recovered statue meshes are integrated as native blocks;
+building layouts and source originals stay intact.
 """
 from pathlib import Path
 import collections
@@ -13,7 +13,8 @@ from nouveau_nbt import read,write
 PREFIX='jugcraft:jimtafacts/spellbooks/'
 ENTITIES=set('pyromancer cryomancer archevoker cultist priest apothecarist necromancer cursed_armor_stand dead_king dead_king_corpse fire_boss ice_spider citadel_keeper catacombs_zombie magehunter_vindicator frozen_humanoid'.split())
 PROCESSORS={'foundation':'jimtafacts_foundation','handle_lit_blocks':'jimtafacts_handle_lit','clear_vault_data':'jimtafacts_clear_vault','weather_copper':'jimtafacts_weather_copper'}
-MISSING_STATUES={'irons_lib:player_statue','irons_lib:statue','irons_patreon_lib:statue'}
+STATUES={'irons_lib:player_statue','irons_lib:statue','irons_patreon_lib:statue'}
+STATUE_ID='jugcraft:jimta_spellbooks_player_statue'
 WORKSHOPS={'alchemist_cauldron','blood_cauldron','pedestal','bone_vault','cinderous_vault','wisewood_chiseled_bookshelf','cinderous_soul_rune'}
 ATTR_PREFIXES=('minecraft:generic.','minecraft:player.','minecraft:zombie.')
 
@@ -25,6 +26,8 @@ def load(path):
 def registry_ref(value,kind='item'):
     if not isinstance(value,str):return value
     if value=='minecraft:chain':return 'minecraft:iron_chain'
+    if value in STATUES:return STATUE_ID
+    if value=='irons_lib:randomize_player_statue':return 'jugcraft:jimtafacts_randomize_statue'
     if value.startswith('#'):return '#'+registry_ref(value[1:],'tag')
     if not value.startswith('irons_spellbooks:'):return value
     name=value.split(':',1)[1]
@@ -127,20 +130,23 @@ def adapt_template(raw,path,report):
     kind,name,root=read(raw);root=visit(kind,root)
     palettes=root.get('palettes')
     lists=[root['palette'][1][1]] if 'palette' in root else [v for v in palettes[1][1]] if palettes else []
-    missing=set()
     for palette in lists:
         for index,state in enumerate(palette):
             ident=state.get('id',string(''))[1]
-            if ident in MISSING_STATUES:
-                missing.add(index);palette[index]={'id':string('minecraft:air')}
-                report['omitted_statue_palettes'].append({'template':path,'palette_index':index,'missing_source':ident})
+            if ident==STATUE_ID:
+                properties=state.get('properties',compound({}))[1]
+                properties.pop('x_offset',None);properties.pop('z_offset',None)
+                report['restored_statue_palettes'].append({'template':path,'palette_index':index})
     for entry in root.get('blocks',sequence(10,[]))[1][1]:
         state=entry['state'][1]
-        if state in missing:entry.pop('nbt',None);continue
         nbt=entry.get('nbt',compound({}))[1]
         if not nbt:continue
         block=lists[0][state]['id'][1] if lists else ''
         short=block.removeprefix('jugcraft:jimta_spellbooks_')
+        if short=='player_statue':
+            nbt.clear();nbt['id']=string(STATUE_ID)
+            # Deterministic default for templates without the original randomization processor.
+            nbt['pose']=(3,int.from_bytes(hashlib.sha256((path+str(entry['pos'])).encode()).digest()[:4],'big')%23)
         if short in WORKSHOPS:
             nbt['id']=string('jugcraft:jimtafacts_spell_workshop')
             # Native nodes start unowned and unsolved. No author-world vault claim history survives.
@@ -181,12 +187,11 @@ def worldgen(value,key=''):
         if 'Properties' in out:out['properties']={k:str(v).lower() for k,v in out.pop('Properties').items()}
     if 'minCount' in out:
         low,high=out.pop('minCount'),out.pop('maxCount');out['count']=low if low==high else {'type':'minecraft:uniform','min_inclusive':low,'max_inclusive':high}
-    if 'processors' in out and isinstance(out['processors'],list):out['processors']=[p for p in out['processors'] if p.get('processor_type')!='irons_lib:randomize_player_statue']
     return out
 
 def generate(copy,texture,dump,res,art,lang):
     source=art.parents[1]/'data/irons_spellbooks'
-    report={'templates':[],'omitted_statue_palettes':[],'source':'Owner-supplied Oct23 Jimtafacts; original source notices retained.','validation':'Authored; combined runtime tests deferred.'}
+    report={'templates':[],'omitted_statue_palettes':[],'restored_statue_palettes':[],'source':'Owner-supplied Oct23 Jimtafacts and Oct25 irons_lib; original source notices retained.','validation':'Authored; combined runtime tests deferred.'}
     for path in sorted((source/'structure').rglob('*.nbt')):
         relative=path.relative_to(source/'structure').as_posix();out=res/'data/jugcraft/structure/jimtafacts/spellbooks'/relative
         out.parent.mkdir(parents=True,exist_ok=True);out.write_bytes(adapt_template(path.read_bytes(),relative,report))
@@ -207,5 +212,8 @@ def generate(copy,texture,dump,res,art,lang):
                 values=['minecraft:snowy_plains','minecraft:snowy_taiga','minecraft:ice_spikes']
                 if relative.as_posix()=='ice_spider_patrols.json':values+=['minecraft:grove','minecraft:snowy_slopes','minecraft:frozen_peaks','minecraft:jagged_peaks']
                 data={'replace':False,'values':values}
+            if folder=='block':
+                replacements={'#c:barrels':['minecraft:barrel'], '#minecraft:dripstone_replaceable_blocks':['#minecraft:base_stone_overworld'], '#minecraft:wart_blocks':['minecraft:nether_wart_block','minecraft:warped_wart_block'], 'jugcraft:jimtafacts/spellbooks/portal_frame':['jugcraft:jimta_spellbooks_portal_frame']}
+                data['values']=[entry for value in data.get('values',[]) for entry in (replacements.get(value,[value]) if isinstance(value,str) else [value])]
             dump(res/f'data/jugcraft/tags/{folder}/jimtafacts/spellbooks'/relative,data)
     dump(res.parents[2]/'docs/audits/jimtafacts-spellbook-structures.json',report)

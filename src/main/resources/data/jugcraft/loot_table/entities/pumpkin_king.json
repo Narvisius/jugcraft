@@ -1,0 +1,58 @@
+{
+  "type": "minecraft:gift",
+  "random_sequence": "jugcraft:entities/pumpkin_king",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:kings_ember"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.15
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:hallowreap"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:crowbill"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.25
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:crowward_charm"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.2
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:pumpkin_kings_crown"
+        }
+      ],
+      "rolls": 1
+    }
+  ]
+}

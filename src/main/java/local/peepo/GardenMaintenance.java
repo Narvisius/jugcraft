@@ -55,11 +55,14 @@ final class GardenMaintenance {
     }
     static boolean fertilizer(ItemStack stack){
         var id=BuiltInRegistries.ITEM.getKey(stack.getItem());return stack.is(Items.BONE_MEAL)
+            || stack.getItem() instanceof io.github.jimbozoomer.jugcraft.chemistry.SpecializedFertilizerItem
             || stack.is(io.github.jimbozoomer.jugcraft.chemistry.PetroItems.FERTILIZER)
             || id.getNamespace().equals("jugcraft") && id.getPath().equals("bat_guano");
     }
-    private static int radius(ItemStack stack){return stack.is(Items.BONE_MEAL)?0:stack.is(io.github.jimbozoomer.jugcraft.chemistry.PetroItems.FERTILIZER)?2:1;}
-    private static int doses(ItemStack stack){return radius(stack)==2?2:1;}
+    private static int radius(ItemStack stack){return stack.is(Items.BONE_MEAL)?0:stack.getItem() instanceof io.github.jimbozoomer.jugcraft.chemistry.SpecializedFertilizerItem || stack.is(io.github.jimbozoomer.jugcraft.chemistry.PetroItems.FERTILIZER)?2:1;}
+    private static int doses(ItemStack stack,BlockState crop){return stack.getItem() instanceof io.github.jimbozoomer.jugcraft.chemistry.SpecializedFertilizerItem blend?blend.doses(crop):radius(stack)==2?2:1;}
+    private boolean eligible(ItemStack stack,BlockPos pos){return radius(stack)==0 || npc.level().getBlockState(pos).is(BlockTags.CROPS)
+        || stack.getItem() instanceof io.github.jimbozoomer.jugcraft.chemistry.SpecializedFertilizerItem && npc.level().getBlockState(pos).getBlock() instanceof TallCropBlock;}
     int carried(){int n=0;for(int i=0;i<8;i++)if(!npc.transport.reserved(i) && fertilizer(npc.belongings.getItem(i)))n+=npc.belongings.getItem(i).getCount();return n;}
     private boolean cooled(BlockPos pos){var times=FED.get(npc.level());long until=times==null?0:times.getOrDefault(pos,0L),now=npc.level().getGameTime();return until<=now || until>now+CROP_COOLDOWN;}
     boolean crop(CompanionAssignments.Target target,BlockPos pos){
@@ -75,11 +78,14 @@ final class GardenMaintenance {
         return block instanceof BonemealableBlock grow && grow.isValidBonemealTarget(npc.level(),pos,state,BonemealSource.INTERACTION);
     }
     boolean fertilizable(CompanionAssignments.Target target,BlockPos pos){return npc.assignments.gardenMaintenance(target,CompanionAssignments.FERTILIZE) && ready(target) && crop(target,pos);}
-    boolean useful(CompanionAssignments.Target target,BlockPos pos,ItemStack stack){return fertilizer(stack) && fertilizable(target,pos) && (radius(stack)==0 || npc.level().getBlockState(pos).is(BlockTags.CROPS));}
+    boolean useful(CompanionAssignments.Target target,BlockPos pos,ItemStack stack){return fertilizer(stack) && fertilizable(target,pos) && eligible(stack,pos);}
     int slot(CompanionAssignments.Target target,BlockPos pos){
         if(!fertilizable(target,pos))return -1;
-        for(int i=0;i<8;i++){var stack=npc.belongings.getItem(i);if(!npc.transport.reserved(i) && useful(target,pos,stack))return i;}
-        return -1;
+        int best=-1,score=-1;
+        for(int i=0;i<8;i++){var stack=npc.belongings.getItem(i);if(!npc.transport.reserved(i) && useful(target,pos,stack)){
+            int strength=doses(stack,npc.level().getBlockState(pos));if(strength>score){best=i;score=strength;}
+        }}
+        return best;
     }
     private LinkedHashMap<BlockPos,Long> cooldowns(){
         var times=FED.computeIfAbsent(npc.level(),l->new LinkedHashMap<>());long now=npc.level().getGameTime();
@@ -89,18 +95,18 @@ final class GardenMaintenance {
     }
     boolean fertilize(CompanionAssignments.Target target,BlockPos center){
         int slot=slot(target,center);if(slot<0)return false;
-        var stack=npc.belongings.getItem(slot);int radius=radius(stack),doses=doses(stack);var server=(ServerLevel)npc.level();var times=cooldowns();
-        // At most 75 cells and two native growth doses. Exclude unauthorized/unloaded/out-of-zone cells.
+        var stack=npc.belongings.getItem(slot);int radius=radius(stack);var server=(ServerLevel)npc.level();var times=cooldowns();
+        // At most 75 cells and four native growth doses per crop. Exclude unauthorized/unloaded/out-of-zone cells.
         var candidates=new ArrayList<BlockPos>();
         for(var at:BlockPos.betweenClosed(center.offset(-radius,radius==0?0:-1,-radius),center.offset(radius,radius==0?0:1,radius)))
-            if(crop(target,at) && (radius==0 || server.getBlockState(at).is(BlockTags.CROPS)))candidates.add(at.immutable());
+            if(crop(target,at) && eligible(stack,at))candidates.add(at.immutable());
         int added=0;for(var at:candidates)if(!times.containsKey(at))added++;
         if(candidates.isEmpty() || times.size()+added>4096){nextUse.put(target,server.getGameTime()+ZONE_COOLDOWN);return false;}
         boolean grew=false;
         try(var tx=Transaction.openOuter()){
             if(npc.food.takeCargo(slot,stack,1,tx)!=1)return false;
             for(var at:candidates){boolean any=false;
-                for(int dose=0;dose<doses;dose++)if(BoneMealItem.growCrop(new ItemStack(Items.BONE_MEAL),server,at))any=true;
+                for(int dose=0,doses=doses(stack,server.getBlockState(at));dose<doses;dose++)if(BoneMealItem.growCrop(new ItemStack(Items.BONE_MEAL),server,at))any=true;
                 if(any){grew=true;times.put(at,server.getGameTime()+CROP_COOLDOWN);server.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH,at,15);}
             }
             if(grew)tx.commit();

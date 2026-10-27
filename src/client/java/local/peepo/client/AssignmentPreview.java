@@ -26,12 +26,25 @@ public final class AssignmentPreview {
             var first=AssignmentTool.firstCorner(stack);
             if(AssignmentTool.zoneMode(stack) && first!=null){
                 frames.add(new Frame(new AABB(first).inflate(.03).move(-camera.x,-camera.y,-camera.z),0xFFFFFF55));
-                if(mc.hitResult instanceof net.minecraft.world.phys.BlockHitResult hit){var end=hit.getBlockPos();boolean valid=AnimalCareZone.valid(first,end);var box=AssignmentTool.zoneKind(stack)==1?new AnimalCareZone(first,end,7).box():new GardenZone(first,end,AssignmentTool.zoneKind(stack)==3).box();frames.add(new Frame(box.move(-camera.x,-camera.y,-camera.z),valid?0xFF55FF88:0xFFFF5555));}
+                if(AssignmentTool.zoneKind(stack)==4){
+                    var start=mc.player.getEyePosition();var endPoint=start.add(mc.player.getViewVector(1).scale(6));
+                    var hit=mc.level.clip(new net.minecraft.world.level.ClipContext(start,endPoint,net.minecraft.world.level.ClipContext.Block.OUTLINE,net.minecraft.world.level.ClipContext.Fluid.SOURCE_ONLY,mc.player));
+                    var end=hit.getBlockPos();boolean valid=CompanionFishing.validCast(first,end) && CompanionWater.source(mc.level,end) && CompanionFishing.safeSeat(npc,first,end);
+                    frames.add(new Frame(new AABB(end).inflate(.025).move(-camera.x,-camera.y,-camera.z),valid?0xFF55FF88:0xFFFF5555));
+                    var from=CompanionFishing.seatPosition(first,end).add(0,.35,0).subtract(camera);var to=net.minecraft.world.phys.Vec3.atCenterOf(end).add(0,.4,0).subtract(camera);
+                    context.submitNodeCollector().submitCustomGeometry(context.poseStack(),RenderTypes.lines(),(pose,c)->line(pose,c,from.x,from.y,from.z,to.x,to.y,to.z,valid?0xFF55FF88:0xFFFF5555));
+                }else if(mc.hitResult instanceof net.minecraft.world.phys.BlockHitResult hit){var end=hit.getBlockPos();boolean valid=AnimalCareZone.valid(first,end);var box=AssignmentTool.zoneKind(stack)==1?new AnimalCareZone(first,end,7).box():new GardenZone(first,end,AssignmentTool.zoneKind(stack)==3).box();frames.add(new Frame(box.move(-camera.x,-camera.y,-camera.z),valid?0xFF55FF88:0xFFFF5555));}
             }
             var assignments=npc.assignments.view();
             for(int row=0;row<assignments.size();row++){
                 var target=assignments.get(row);
                 if(target==null || !target.local(mc.level) || !mc.level.hasChunkAt(target.at().pos()) || target.at().pos().distToCenterSqr(mc.player.position())>128*128)continue;
+                if(target.fishing() && target.fishingWater()!=null){
+                    frames.add(new Frame(new AABB(target.at().pos()).inflate(.025).move(-camera.x,-camera.y,-camera.z),0xFF55FF66));
+                    frames.add(new Frame(new AABB(target.fishingWater()).inflate(.025).move(-camera.x,-camera.y,-camera.z),CompanionWater.source(mc.level,target.fishingWater())?0xFF55FF66:0xFFFF8844));
+                    var from=CompanionFishing.seatPosition(target.at().pos(),target.fishingWater()).add(0,.35,0).subtract(camera);var to=net.minecraft.world.phys.Vec3.atCenterOf(target.fishingWater()).add(0,.4,0).subtract(camera);
+                    context.submitNodeCollector().submitCustomGeometry(context.poseStack(),RenderTypes.lines(),(pose,c)->line(pose,c,from.x,from.y,from.z,to.x,to.y,to.z,0xFF55FF88));continue;
+                }
                 if(target.care() && target.zone()!=null){frames.add(new Frame(target.zone().box().inflate(.015).move(-camera.x,-camera.y,-camera.z),0xFF55CC88));frames.add(new Frame(new AABB(target.at().pos()).inflate(.025).move(-camera.x,-camera.y,-camera.z),0xFF55FF66));continue;}
                 if(target.livestock()){
                     var anchor=target.at().pos();

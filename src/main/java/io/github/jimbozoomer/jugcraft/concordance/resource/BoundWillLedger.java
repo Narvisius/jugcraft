@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Bound Will records by id. Immutable: each operation returns the ledger after it with its outcome, and a refused
@@ -35,6 +36,23 @@ public record BoundWillLedger(Map<UUID, BoundWill> records) {
 			}
 		}
 		return held;
+	}
+
+	/** The record with {@code id}, or null. */
+	public @Nullable BoundWill get(UUID id) {
+		return records.get(id);
+	}
+
+	/** A record's next state (Concordance Chunk D, D-02): the same id and holder only; a record never changes hands this way. */
+	public Change update(BoundWill next) {
+		BoundWill record = records.get(next.id());
+		if (record == null) {
+			return new Change(this, Outcome.UNKNOWN);
+		}
+		if (!record.holder().equals(next.holder())) {
+			return new Change(this, Outcome.NOT_HOLDER);
+		}
+		return new Change(with(next), Outcome.DONE);
 	}
 
 	private BoundWillLedger with(BoundWill record) {

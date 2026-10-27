@@ -112,6 +112,7 @@ public class CableBlock extends PipeBlock implements EnergyConnectable {
 	 * World generation has no full level to query, so there only the marker interface counts.
 	 */
 	public static boolean connectsTo(BlockGetter level, BlockPos pos, Direction direction, BlockState neighbor) {
+        if(!io.github.jimbozoomer.jugcraft.jimtafacts.industry.TransportAttachments.openEnergyEdge(level,pos,direction))return false;
 		if (neighbor.getBlock() instanceof MachineBlock machine) {
 			// Only faces that really take power: a machine's power socket, never an unpowered machine.
 			return machine.acceptsPower(neighbor, direction.getOpposite());

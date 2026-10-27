@@ -126,6 +126,17 @@ SCREENS = {
     "farm_stand": "workshop",
     "cave_survey": "workshop",
     "carving": "workshop",
+    # The screens that came with the Jimtafacts workshops and the aircraft (docs/features/new-screen-styles.md).
+    "workshop_engine": "workshop",
+    "workshop_chute": "workshop",
+    "workshop_table": "workshop",
+    "artisan": "workshop",
+    "industrial_lathe": "industrial",
+    "industrial_fluid_service": "industrial",
+    "aircraft": "industrial",
+    "industrial_transformer": "electric",
+    "computer": "electric",
+    "compact_reactor": "advanced",
 }
 
 WORKSHOP = {"coal_generator", "steam_generator", "water_wheel", "wind_turbine", "crusher", "electric_furnace",

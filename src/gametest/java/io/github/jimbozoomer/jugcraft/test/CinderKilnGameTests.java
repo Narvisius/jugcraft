@@ -1,6 +1,7 @@
 package io.github.jimbozoomer.jugcraft.test;
 
 import io.github.jimbozoomer.jugcraft.Jugcraft;
+import io.github.jimbozoomer.jugcraft.agriculture.HalloweenSeason;
 import io.github.jimbozoomer.jugcraft.config.JugcraftConfig;
 import io.github.jimbozoomer.jugcraft.lair.JugcraftLairs;
 import io.github.jimbozoomer.jugcraft.lair.KilnSealRite;
@@ -8,6 +9,7 @@ import io.github.jimbozoomer.jugcraft.lair.Lair;
 import io.github.jimbozoomer.jugcraft.lair.Lairs;
 import io.github.jimbozoomer.jugcraft.lair.MoltenSlagBlock;
 import io.github.jimbozoomer.jugcraft.lair.SluiceGateBlock;
+import io.github.jimbozoomer.jugcraft.lair.SpindleRite;
 import io.github.jimbozoomer.jugcraft.lair.TroughStoneBlock;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,8 +51,9 @@ import net.minecraft.world.phys.Vec3;
 /**
  * The Cinder Kiln and the Kiln Seal (docs/features/cinder-kiln.md), as far as a game-test server can show them. Its world
  * is built from the flat preset alone, so it has no lair dimension: the kiln's own files load (dimension type, biome and
- * template), the seal's checks hold, a seal that can open no instance is not used up, the slag burns whom it should and
- * no one else, a flooded trough puts out the burning, and a sluice gate floods its own trough, drains it and fills again.
+ * template), the seal's checks hold and keep no season, a seal that can open no instance is not used up, the slag burns
+ * whom it should and no one else, a flooded trough puts out the burning, and a sluice gate floods its own trough, drains
+ * it and fills again.
  * Everything that needs the kiln itself (sinking in through the magma, the vent, following, the arch's Grey Mist, the
  * instance closing) runs in a real world, in {@link CinderKilnClientGameTests}.
  */
@@ -137,6 +140,34 @@ public class CinderKilnGameTests {
 		helper.assertTrue(!KilnSealRite.volcanic(Level.OVERWORLD, plains), "The Overworld's plains are volcanic land");
 		helper.assertTrue(!KilnSealRite.volcanic(Level.END, volcano), "The End is volcanic land");
 		helper.assertTrue(KilnSealRite.vent(level, at) == null, "A vent opened where nobody pressed a seal");
+		helper.succeed();
+	}
+
+	/**
+	 * The seal keeps no season (Concordance Chunk B, B-02, as the Cinder Kiln's dossier says): the Halloween event over
+	 * and lairs.off_season off, the spindle waits for the season but the seal takes on magma in a volcanic land.
+	 */
+	@GameTest
+	public void theSealIsNoHalloweenRite(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		BlockPos magma = helper.absolutePos(STAND.below());
+		helper.setBlock(STAND.below(), Blocks.MAGMA_BLOCK.defaultBlockState());
+		HalloweenSeason.Mode mode = HalloweenSeason.mode();
+		String offSeason = JugcraftConfig.textOption("lairs.off_season");
+		KilnSealRite.Missing seal;
+		SpindleRite.Missing spindle;
+		// Switched back at once: the server runs other tests.
+		try {
+			HalloweenSeason.setMode(HalloweenSeason.Mode.OFF);
+			JugcraftConfig.setTextOption("lairs.off_season", "off");
+			seal = KilnSealRite.check(level, magma, true);
+			spindle = SpindleRite.check(level, helper.absolutePos(STAND), true);
+		} finally {
+			HalloweenSeason.setMode(mode);
+			JugcraftConfig.setTextOption("lairs.off_season", offSeason);
+		}
+		helper.assertTrue(spindle == SpindleRite.Missing.OFF_SEASON, "Out of season the spindle should wait (the settings took): " + spindle);
+		helper.assertTrue(seal == null, "Out of season the seal was refused: " + seal);
 		helper.succeed();
 	}
 

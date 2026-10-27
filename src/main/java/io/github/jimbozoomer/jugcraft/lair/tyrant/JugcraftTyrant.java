@@ -2,6 +2,7 @@ package io.github.jimbozoomer.jugcraft.lair.tyrant;
 
 import io.github.jimbozoomer.jugcraft.Jugcraft;
 import io.github.jimbozoomer.jugcraft.lair.Lair;
+import io.github.jimbozoomer.jugcraft.lair.LairRewards;
 import io.github.jimbozoomer.jugcraft.lair.Lairs;
 import io.github.jimbozoomer.jugcraft.weapons.DescribedItem;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
@@ -39,6 +40,8 @@ public final class JugcraftTyrant {
 	}
 
 	public static void register() {
+		// Concordance Chunk B (B-01): his rewards may wait for a player, kept under his name.
+		LairRewards.payer(CinderTyrantLoot.BOSS, CinderTyrantLoot::pay);
 		CINDER_TYRANT = entity("cinder_tyrant", EntityType.Builder.<CinderTyrantEntity>of(CinderTyrantEntity::new, MobCategory.MONSTER)
 				.sized(2.6F, 2.2F).eyeHeight(1.4F).fireImmune().noLootTable().clientTrackingRange(12));
 		FabricDefaultAttributeRegistry.register(CINDER_TYRANT, CinderTyrantEntity.createAttributes());

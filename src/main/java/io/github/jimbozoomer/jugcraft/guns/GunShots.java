@@ -121,6 +121,8 @@ public final class GunShots {
 	public static final int BURN_SECONDS = 4;
 	/** Ticks an End gun's bullet makes what it hurts float (slice 12A, tools/guns.py LIFT_TICKS). */
 	public static final int LIFT_TICKS = 20;
+	/** The halvings {@link #pierced} takes to find a piercing hit (to well under a thousandth of a heart). */
+	private static final int PIERCE_STEPS = 24;
 	/** How hard a stab pushes its foe back (a sword's knockback is 0.4, and more for a sprinting strike). */
 	private static final float STAB_KNOCKBACK = 0.4F;
 
@@ -520,7 +522,8 @@ public final class GunShots {
 	/** Fires every pellet of one shot and deals what hit. */
 	private static void shoot(ServerLevel level, ServerPlayer player, GunItem gun, GunSpec spec, float spread) {
 		bullets(level, player, player.getEyePosition(), player.getLookAngle(), spec, spread, spec.damage(), JugcraftGuns.ignites(gun),
-				JugcraftGuns.levitates(gun), candidate -> target(player, candidate), candidate -> allowed(player, level, candidate));
+				JugcraftGuns.levitates(gun), JugcraftGuns.knockback(gun), JugcraftGuns.piercing(gun), candidate -> target(player, candidate),
+				candidate -> allowed(player, level, candidate));
 	}
 
 	/**
@@ -529,10 +532,13 @@ public final class GunShots {
 	 * {@code damage} a pellet to each creature it hits that {@code allowed} lets the shooter strike; a shotgun's pellets
 	 * on one creature land as one hit. A player's shots and, slice 10F, a raider gunner's ({@link MobGuns}) fire this way.
 	 * When {@code ignites} (slice 11A, a Nether gun), each creature the hit hurts is set alight for {@link #BURN_SECONDS};
-	 * when {@code lifts} (slice 12A, an End gun), it floats for {@link #LIFT_TICKS}.
+	 * when {@code lifts} (slice 12A, an End gun), it floats for {@link #LIFT_TICKS}. Each creature the hit hurts is knocked
+	 * back again by {@code knockback} after a hit's own push, and the hit passes through {@code pierce} points of its armour
+	 * ({@link #pierced}; the Jawbreaker's, {@link JugcraftGuns#KNOCKBACK} and {@link JugcraftGuns#PIERCING}).
 	 */
 	static void bullets(ServerLevel level, LivingEntity shooter, Vec3 eye, Vec3 look, GunSpec spec, float spread, float damage,
-			boolean ignites, boolean lifts, Predicate<LivingEntity> hittable, Predicate<LivingEntity> allowed) {
+			boolean ignites, boolean lifts, float knockback, float pierce, Predicate<LivingEntity> hittable,
+			Predicate<LivingEntity> allowed) {
 		RandomSource random = shooter.getRandom();
 		Map<LivingEntity, Float> hits = new LinkedHashMap<>();
 		for (int i = 0; i < spec.pellets(); i++) {
@@ -567,7 +573,10 @@ public final class GunShots {
 		// Guns fire faster than the half second a creature is shielded after a hit; the bullet damage type is tagged
 		// minecraft:bypasses_cooldown, so each shot counts.
 		hits.forEach((target, dealt) -> {
-			if (target.hurtServer(level, source, dealt)) {
+			if (target.hurtServer(level, source, pierced(target, dealt, pierce))) {
+				if (knockback > 0.0F) {
+					target.knockback(knockback, shooter.getX() - target.getX(), shooter.getZ() - target.getZ(), source, dealt);
+				}
 				if (ignites) {
 					target.igniteForSeconds(BURN_SECONDS);
 				}
@@ -577,6 +586,39 @@ public final class GunShots {
 			}
 		});
 		smoke(level, eye, look);
+	}
+
+	/**
+	 * What a hit of {@code damage} on {@code target} must be, before its armour, to deal what {@code damage} would through
+	 * {@code points} less armour. The game's own armour keeps off a share of each hit (4% a point, between a fifth of the
+	 * armour and 20 points' worth, less as the hit grows against the armour's toughness): what the lighter armour would
+	 * let through is worked out, and the hit found that the full armour lets that much of through, by halving (what
+	 * armour lets through only grows with the hit, and is at least a fifth of it). A creature without armour takes
+	 * {@code damage}, as from any gun.
+	 */
+	static float pierced(LivingEntity target, float damage, float points) {
+		float armor = target.getArmorValue();
+		if (points <= 0.0F || armor <= 0.0F) {
+			return damage;
+		}
+		float toughness = (float) target.getAttributeValue(Attributes.ARMOR_TOUGHNESS);
+		float wanted = damage * kept(damage, Math.max(0.0F, armor - points), toughness);
+		float low = damage;
+		float high = wanted / 0.2F;
+		for (int step = 0; step < PIERCE_STEPS; step++) {
+			float hit = (low + high) / 2.0F;
+			if (hit * kept(hit, armor, toughness) < wanted) {
+				low = hit;
+			} else {
+				high = hit;
+			}
+		}
+		return high;
+	}
+
+	/** The share of a hit of {@code damage} that the given armour and toughness let through. */
+	private static float kept(float damage, float armor, float toughness) {
+		return 1.0F - Math.clamp(armor - damage / (2.0F + toughness / 4.0F), armor * 0.2F, 20.0F) / 25.0F;
 	}
 
 	/** A shot's puff of smoke at the muzzle. */

@@ -39,15 +39,6 @@ final class CompanionPopulationChecks {
     void tasks(PeepoEntity p,int mask){for(int bit:new int[]{1,2,4,8,16})if(p.assignments.get(1).task(bit)!=((mask&bit)!=0))p.assignments.toggleAnimalTask(1,bit);}
     List<Animal> animals(ServerLevel level,Identifier type){return level.getEntitiesOfClass(Animal.class,npc.assignments.get(1).animalBox(),a->a.isAlive() && BuiltInRegistries.ENTITY_TYPE.getKey(a.getType()).equals(type));}
     void clearAnimals(ServerLevel level){for(var a:level.getEntitiesOfClass(Animal.class,npc.assignments.get(1).animalBox()))a.discard();}
-    void breedingPen(ServerLevel level,boolean closed){
-        // Free-roaming parents must remain within vanilla's eight-block mate search.
-        // The full slaughter fixture is wider: opposite corners exceed that range.
-        for(int n=0;n<=7;n++)for(int y=0;y<3;y++){
-            level.setBlockAndUpdate(base.offset(6,y,n),closed?Blocks.GLASS.defaultBlockState():Blocks.AIR.defaultBlockState());
-            // Preserve the output barrel at (0, 0, 6).
-            if(n!=0 || y!=0)level.setBlockAndUpdate(base.offset(n,y,6),closed?Blocks.GLASS.defaultBlockState():Blocks.AIR.defaultBlockState());
-        }
-    }
     void click(ClientGameTestContext context,String label){
         context.waitFor(c->c.gui.screen() instanceof CompanionScreen && c.gui.screen().children().stream().anyMatch(w->w instanceof Button b && b.visible && b.active && b.getMessage().getString().equals(label)),100);
         context.runOnClient(c->c.gui.screen().children().stream().filter(w->w instanceof Button b && b.visible && b.active && b.getMessage().getString().equals(label)).map(w->(Button)w).findFirst().orElseThrow(()->new AssertionError("Missing button: "+label)).onPress(null));context.waitTicks(2);
@@ -84,22 +75,24 @@ final class CompanionPopulationChecks {
             server.runOnServer(s->{var job=new CompanionHusbandry(npc,npc.assignments.get(1)).slaughter;check.accept(job.find() && job.claim(npc),"first worker reserves one surplus adult");reserved=job;});
             ticks(server,2);
             server.runOnServer(s->{var job=new CompanionHusbandry(other,other.assignments.get(1)).slaughter;check.accept(!job.find(),"other worker cannot reduce adults below the retention limit");reserved.release(npc);reserved=null;other.discard();});
+            distantTurkeyPair(server);
             preciseTurkeyApproach(server);
             server.runOnServer(s->{
-                breedingPen(s.overworld(),true);
-                clearAnimals(s.overworld());tasks(npc,AnimalCareZone.BREED);npc.assignments.population(1,TURKEY,3,2,true);npc.assignments.population(1,COW,3,2,false);supply.setItem(0,new ItemStack(Items.WHEAT,4));
+                clearAnimals(s.overworld());breedingPen(s.overworld(),true);tasks(npc,AnimalCareZone.BREED);npc.assignments.population(1,TURKEY,3,2,true);npc.assignments.population(1,COW,3,2,false);supply.setItem(0,new ItemStack(Items.WHEAT,4));
                 for(int i=0;i<8;i++)npc.belongings.setItem(i,ItemStack.EMPTY);
                 add(s.overworld(),EntityTypes.COW.create(s.overworld(),EntitySpawnReason.COMMAND),3.5,2.5);add(s.overworld(),EntityTypes.COW.create(s.overworld(),EntitySpawnReason.COMMAND),5.5,3.5);npc.setNoAi(false);
             });
             try{server.waitFor(s->animals(s.overworld(),COW).stream().anyMatch(Animal::isBaby),1400);}catch(AssertionError e){diagnostic(server,"cow breeding");throw e;}
             server.runOnServer(s->{org.slf4j.LoggerFactory.getLogger("peepo-population-test").info("Cow breeding completed");var cows=animals(s.overworld(),COW);check.accept(cows.size()==3 && cows.stream().filter(Animal::isBaby).count()==1,"automatic supplied breeding produces one real calf at target");check.accept(count(supply,Items.WHEAT)+count(npc.belongings,Items.WHEAT)==2,"breeding consumes exactly two real food items");check.accept(cows.stream().filter(a->!a.isBaby()).allMatch(a->a.getAge()>0 && !a.isInLove()),"normal parent breeding cooldowns apply");npc.setNoAi(true);npc.resetCompanionRoutine();
                 for(int i=0;i<8;i++)npc.belongings.setItem(i,ItemStack.EMPTY);supply.clearContent();clearAnimals(s.overworld());npc.assignments.population(1,COW,3,2,true);npc.assignments.population(1,TURKEY,3,2,false);supply.setItem(0,new ItemStack(Items.WHEAT_SEEDS,4));
-                add(s.overworld(),JugcraftAgriculture.TURKEY.create(s.overworld(),EntitySpawnReason.COMMAND),3.5,2.5);add(s.overworld(),JugcraftAgriculture.TURKEY.create(s.overworld(),EntitySpawnReason.COMMAND),5.5,3.5);npc.setNoAi(false);
+                var first=add(s.overworld(),JugcraftAgriculture.TURKEY.create(s.overworld(),EntitySpawnReason.COMMAND),3.5,2.5);
+                var second=add(s.overworld(),JugcraftAgriculture.TURKEY.create(s.overworld(),EntitySpawnReason.COMMAND),5.5,3.5);
+                check.accept(Math.hypot(6-first.getBbWidth(),6-first.getBbWidth())<CompanionHusbandry.PARTNER_RANGE,"roaming pen keeps even opposite-corner turkeys within partner range");
+                check.accept(!first.isNoAi() && !second.isNoAi(),"supplied turkey breeding retains normal roaming and mating AI");npc.setNoAi(false);
             });
             try{server.waitFor(s->animals(s.overworld(),TURKEY).stream().anyMatch(Animal::isBaby),1400);}catch(AssertionError e){diagnostic(server,"modded turkey breeding");throw e;}
             server.runOnServer(s->{org.slf4j.LoggerFactory.getLogger("peepo-population-test").info("Modded turkey breeding completed");check.accept(animals(s.overworld(),TURKEY).size()==3 && count(supply,Items.WHEAT_SEEDS)+count(npc.belongings,Items.WHEAT_SEEDS)==2,"selected modded species uses its own food and offspring");npc.setNoAi(true);npc.resetCompanionRoutine();clearAnimals(s.overworld());supply.clearContent();output.clearContent();for(int i=0;i<8;i++)npc.belongings.setItem(i,ItemStack.EMPTY);
-                breedingPen(s.overworld(),false);
-                npc.assignments.population(1,TURKEY,3,2,true);npc.assignments.population(1,COW,10,2,false);tasks(npc,AnimalCareZone.SLAUGHTER);
+                breedingPen(s.overworld(),false);npc.assignments.population(1,TURKEY,3,2,true);npc.assignments.population(1,COW,10,2,false);tasks(npc,AnimalCareZone.SLAUGHTER);
                 for(int i=0;i<3;i++){var a=add(s.overworld(),EntityTypes.COW.create(s.overworld(),EntitySpawnReason.COMMAND),i==0?2.5:i==1?4.5:6.5,i==0?5.5:i==1?2.5:4.5);a.setNoAi(true);if(i==0)a.setCustomName(Component.literal("Keep me"));}
                 var baby=add(s.overworld(),EntityTypes.COW.create(s.overworld(),EntitySpawnReason.COMMAND),5.5,5.5);baby.setBaby(true);baby.setNoAi(true);
                 var sheep=add(s.overworld(),EntityTypes.SHEEP.create(s.overworld(),EntitySpawnReason.COMMAND),3.5,5.5);sheep.setNoAi(true);
@@ -128,6 +121,27 @@ final class CompanionPopulationChecks {
             server.waitFor(s->npc.assignments.get(1).zone().population(COW).target()==11,100);
             server.runOnServer(s->{var p=s.getPlayerList().getPlayers().getFirst();var m=(CompanionMenu)p.containerMenu;check.accept(!m.editPopulation(p,new PopulationEditPayload(m.containerId+1,1,base.below(),2,COW)),"forged menu cannot remove a species");check.accept(npc.assignments.get(1).zone().population(COW).target()==11,"population controls synchronize through the open menu");p.closeContainer();p.setGameMode(GameType.SPECTATOR);});
         }finally{server.runOnServer(s->{if(reserved!=null)reserved.release(npc);if(npc!=null)clearAnimals(s.overworld());for(var e:created){if(e instanceof PeepoEntity p){p.resetCompanionRoutine();p.transport.stop();}e.discard();}var p=s.getPlayerList().getPlayers().getFirst();p.closeContainer();p.setGameMode(GameType.SPECTATOR);});}
+    }
+    /** Keep random strolling from separating a valid breeding pair beyond the real eight-block partner range. */
+    void breedingPen(ServerLevel level,boolean enclosed){
+        for(int x=0;x<=6;x++)for(int z=0;z<=6;z++)if(x==6 || z==6)for(int y=0;y<3;y++){
+            var at=base.offset(x,y,z);
+            if(!at.equals(base.offset(0,0,6)))level.setBlockAndUpdate(at,(enclosed?Blocks.GLASS:Blocks.AIR).defaultBlockState());
+        }
+    }
+    void distantTurkeyPair(TestServerContext server){
+        server.runOnServer(s->{
+            clearAnimals(s.overworld());npc.resetCompanionRoutine();tasks(npc,AnimalCareZone.BREED);
+            npc.assignments.population(1,COW,3,2,true);npc.assignments.population(1,TURKEY,3,2,false);
+            supply.clearContent();npc.belongings.setItem(0,new ItemStack(Items.WHEAT_SEEDS,4));
+            var first=add(s.overworld(),JugcraftAgriculture.TURKEY.create(s.overworld(),EntitySpawnReason.COMMAND),7.25,.5);first.setNoAi(true);
+            var second=add(s.overworld(),JugcraftAgriculture.TURKEY.create(s.overworld(),EntitySpawnReason.COMMAND),.75,7.45);second.setNoAi(true);
+            check.accept(!CompanionHusbandry.partners(first,second),"CI opposite-corner turkeys exceed the real partner range");
+            var job=new CompanionHusbandry(npc,npc.assignments.get(1)).breed;
+            check.accept(!job.find() && job.status==CompanionStatus.POPULATION_LIMIT,"out-of-range parents are not selected after an admitted population search");
+            check.accept(count(npc.belongings,Items.WHEAT_SEEDS)==4 && !first.isInLove() && !second.isInLove(),"waiting for a nearby pair preserves food and parent state");
+        });
+        ticks(server,3);
     }
     void preciseTurkeyApproach(TestServerContext server){
         server.runOnServer(s->{

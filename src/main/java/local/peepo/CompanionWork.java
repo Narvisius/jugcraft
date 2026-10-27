@@ -14,7 +14,7 @@ public final class CompanionWork {
         try(var tx=Transaction.openOuter()) {
             int accepted=wheel.insertEnergy(requested,tx);
             if(accepted<=0 || accepted>requested)return 0;
-            if(npc.extractEnergy(accepted,tx)!=accepted)return 0;
+            if(npc.extractWorkEnergy(CompanionUniforms.Type.RUNNER,accepted,tx)!=accepted)return 0;
             tx.commit();
             npc.setWheelRunning(true);
             return accepted;

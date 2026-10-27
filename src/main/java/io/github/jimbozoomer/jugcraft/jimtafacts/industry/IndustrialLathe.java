@@ -89,7 +89,7 @@ public final class IndustrialLathe {
         boolean identity(Player p){return owner==null||owner.equals(p.getUUID())||JugcraftParties.sameParty(owner,p.getUUID());}
         public boolean permitted(Player p){return !isRemoved()&&level!=null&&level.getBlockEntity(worldPosition)==this&&p.isAlive()&&!p.isSpectator()&&identity(p)&&Authority.mayChange(level,p,worldPosition);}
         private boolean automation(){var actor=level instanceof ServerLevel s?Authority.answering(s,owner):null;return actor!=null&&permitted(actor);}
-        @Override public long acceptKinetic(Direction side,long maximum){if(level==null||level.isClientSide()||isRemoved()||level.getBlockEntity(worldPosition)!=this||maximum<=0||level.hasNeighborSignal(worldPosition))return 0;int moved=(int)Math.min(maximum,10_000-kinetic);if(moved>0){kinetic+=moved;setChanged();}return moved;}
+        @Override public long acceptKinetic(Direction side,long maximum){if(level==null||level.isClientSide()||isRemoved()||level.getBlockEntity(worldPosition)!=this||maximum<=0||level.hasNeighborSignal(worldPosition)||io.github.jimbozoomer.jugcraft.jimtafacts.network.SpatialReservation.reserved(level,worldPosition))return 0;int moved=(int)Math.min(maximum,10_000-kinetic);if(moved>0){kinetic+=moved;setChanged();}return moved;}
         public void tick(){if(level==null||level.isClientSide())return;boolean lit=kinetic>500&&!level.hasNeighborSignal(worldPosition);if(getBlockState().getValue(LIT)!=lit)level.setBlockAndUpdate(worldPosition,getBlockState().setValue(LIT,lit));
             // Native flywheel drag once per second; bounded and saved, not an offline wall-clock charge.
             if(level.getGameTime()%20==0&&kinetic>0){kinetic=Math.max(0,kinetic-Math.max(1,kinetic/100));setChanged();}}

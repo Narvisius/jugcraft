@@ -773,6 +773,9 @@ def draw_all(save, save_animation):
     save(ammonium_nitrate(), "item", "ammonium_nitrate")
     save(citric_acid(), "item", "citric_acid")
     save(glucose_syrup(), "item", "glucose_syrup")
+    save(food_grade_phosphoric_acid(), "item", "food_grade_phosphoric_acid")
+    save(cola_syrup(), "item", "cola_syrup")
+    save(cola(), "item", "cola")
     save(pvac_glue(), "item", "pvac_glue")
     save(boric_acid(), "item", "boric_acid")
     save(control_rod_assembly(), "item", "control_rod_assembly")
@@ -847,6 +850,92 @@ def glucose_syrup():
             if ch in tones:
                 img.putpixel((x, y), tones[ch] + (255,))
     return img
+
+
+def _rows(tones, rows):
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    for y, row in enumerate(rows):
+        for x, ch in enumerate(row):
+            if ch in tones:
+                img.putpixel((x, y), tones[ch] + (255,))
+    return img
+
+
+def food_grade_phosphoric_acid():
+    """Food-grade phosphoric acid: a slim stoppered vial of clear, faintly green-white acid with a white label band,
+    outlined in each part's own dark (docs/features/cola-and-mmh.md)."""
+    tones = {"c": (60, 64, 70), "k": (128, 134, 142), "g": (86, 108, 116), "w": (196, 222, 228),
+             "o": (120, 146, 134), "s": (180, 206, 192), "y": (222, 238, 228), "h": (250, 255, 252),
+             "p": (150, 150, 156), "P": (236, 236, 240)}
+    return _rows(tones, [
+        "................",
+        "......cccc......",
+        "......ckkc......",
+        "......cccc......",
+        ".......gg.......",
+        "......gwwg......",
+        "......gwyg......",
+        ".....goyhyg.....",
+        ".....gpPPpg.....",
+        ".....gpPPpg.....",
+        ".....goyysg.....",
+        ".....gosssg.....",
+        ".....gooosg.....",
+        ".....goooog.....",
+        "......gggg......",
+        "................",
+    ])
+
+
+def cola_syrup():
+    """Cola syrup: a stoppered glass bottle of thick dark-brown syrup with a caramel shine, outlined in each part's own
+    dark (docs/features/cola-and-mmh.md)."""
+    tones = {"c": (92, 62, 36), "k": (150, 106, 64), "g": (86, 108, 116), "w": (196, 222, 228),
+             "o": (40, 20, 10), "s": (74, 38, 18), "y": (112, 60, 26), "h": (196, 128, 60)}
+    return _rows(tones, [
+        "................",
+        "......cccc......",
+        "......ckkc......",
+        "......cccc......",
+        ".......gg.......",
+        "......gwwg......",
+        ".....gwyyyg.....",
+        "....goyhyyyog...",
+        "...goyhyyyyyog..",
+        "...goyhyyyysog..",
+        "...goyyyyyysog..",
+        "...gosyyyyssog..",
+        "...goossssssog..",
+        "....gooooooog...",
+        ".....ggggggg....",
+        "................",
+    ])
+
+
+def cola():
+    """Cola: a tall glass bottle of fizzy dark cola with a red label and a crimped cap, bubbles rising in it, outlined in
+    each part's own dark (docs/features/cola-and-mmh.md)."""
+    tones = {"c": (90, 24, 24), "k": (170, 52, 44), "g": (86, 108, 116), "w": (196, 222, 228),
+             "o": (34, 16, 10), "s": (60, 28, 14), "y": (92, 46, 20), "b": (184, 150, 120),
+             "r": (120, 22, 22), "R": (204, 52, 44), "W": (240, 232, 226)}
+    return _rows(tones, [
+        "................",
+        "......cccc......",
+        "......ckkc......",
+        ".......gg.......",
+        ".......gg.......",
+        "......gwwg......",
+        "......gwbg......",
+        ".....gwyysg.....",
+        ".....gybysg.....",
+        ".....grRRrg.....",
+        ".....gRWWRg.....",
+        ".....grRRrg.....",
+        ".....gysbsg.....",
+        ".....gyssog.....",
+        ".....goooog.....",
+        "......gggg......",
+    ])
 
 
 def pvac_glue():

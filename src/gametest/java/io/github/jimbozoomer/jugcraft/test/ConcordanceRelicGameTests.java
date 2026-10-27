@@ -42,7 +42,7 @@ public class ConcordanceRelicGameTests {
 	private static final BlockPos FOE = new BlockPos(5, 2, 5);
 
 	private static ServerPlayer keeper(GameTestHelper helper) {
-		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		ServerPlayer player = TestPlayers.mock(helper);
 		player.setGameMode(GameType.SURVIVAL);
 		BlockPos absolute = helper.absolutePos(STAND);
 		player.snapTo(absolute.getX() + 0.5, absolute.getY(), absolute.getZ() + 0.5, 0.0F, 0.0F);
@@ -228,7 +228,7 @@ public class ConcordanceRelicGameTests {
 				"The Stormglass is not installed (and with no pylon, not recharged)");
 		helper.assertTrue(Reliquary.work(owner, new Reliquary.Found(Context.INSTALLED, "shrine", storm), false).reason().equals("cannot_install"),
 				"Installed is not one of its contexts, and it says so");
-		ServerPlayer novice = helper.makeMockServerPlayerInLevel();
+		ServerPlayer novice = TestPlayers.mock(helper);
 		RateGate.forget(novice.getUUID());
 		ItemStack wardlight = relic("wardlight", 5);
 		novice.setItemInHand(InteractionHand.MAIN_HAND, wardlight);

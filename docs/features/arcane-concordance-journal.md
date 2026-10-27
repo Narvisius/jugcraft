@@ -46,6 +46,11 @@ knows of this player now, in sections:
 - Once their research is met: **Vitae**, **the Sky** (the forecast), **Workers**, **Deliveries**, **Relics**, **Prima
   Materia**; **Curses and Wards** once Sympathy is met or while a curse or ward touches the player; **the Conclave**
   for its members; **Spires** for those who keep one.
+- **Pacts** (Concordance Chunk D, D-03; not merged), right after Deliveries: Stolas's Regard's next step, and the sky
+  step named apart; shown from the Binding Arts understood. Since D-07 (unit 3; not merged), after those lines, each pact
+  and agreement kept (named, where it is kept or "Without its place", its next obligation, and why it waits, as the
+  exact figure) and the last eight departures, newest first (D-P111); the [roster
+  screen](arcane-concordance-workers.md#the-roster-screen-concordance-chunk-d-d-07) reads the same rows.
 
 **Exact values** add, after a line, the figures behind it: how many of what each way to the next research state needs
 ("examined 1 of 3; or studied 0 of 1"), and caps. They are off by default; the journal's own switch (or **X**) and the
@@ -150,6 +155,12 @@ Kotlin). Cloth Config (required) holds the two new settings. No art: the screens
 
 Not yet run: the narrator reading the plain screen, the GuiLib workspace's keyboard navigation by hand, the screens at
 other GUI scales, and a two-client server. The screenshots above were looked at as CI's small previews only.
+
+Concordance Chunk D, unit 3 (D-07; not merged): `ConcordanceJournalGameTests.thePactsSectionListsPactsOnlyAfterTheBindingArts`
+(a pact kept by a player who has not understood the Binding Arts shows no section; understood, the section gives the
+Regard's step, the sky step, then the pact kept, named, without its perch, with its next offering and why it waits as
+the exact figure) is added; it passed in CI run 40121823509 on `040d73ece`, its first run, and in run 40133540741. `check_roster` holds the
+lines to the generator (`tools/concordance_roster.py`).
 
 ## World and event applicability
 

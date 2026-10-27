@@ -75,6 +75,13 @@ class AcademyTests(unittest.TestCase):
     def test_existing_stations_no_rewards_or_owners(self):
         expected = {block for _, block in STATIONS.values() if block.startswith("jugcraft:")}
         expected.add("jugcraft:academy_ward")
+        expected.update("jugcraft:" + colour + "_leaf_pile" for colour in ("red", "orange", "yellow"))
+        expected.add("jugcraft:ecology_maple_log")
+        expected.update("jugcraft:ecology_" + colour + "_maple_leaves" for colour in ("red", "orange", "yellow"))
+        # The crafted court adds only registered seasonal decoration, never a
+        # new academy station, reward block or owned progression object.
+        expected.update("jugcraft:" + colour + "_mum" for colour in ("red", "orange", "yellow", "purple"))
+        expected.add("jugcraft:autumn_wreath")
         self.assertEqual({s["id"] for s in self.palette if s["id"].startswith("jugcraft:")}, expected)
         for name, (pos, block) in STATIONS.items():
             self.assertEqual(self.block(pos), block, name)
@@ -85,6 +92,22 @@ class AcademyTests(unittest.TestCase):
             if data:
                 self.assertEqual(data["id"], "minecraft:sign")
                 self.assertEqual(len(data["front_text"]["messages"]), 4)
+
+    def test_selective_donor_roof_and_autumn_court(self):
+        # The adapted donor motif contributes only a bounded roof detail, while
+        # the existing Hall, stations, court and all room routes remain intact.
+        from pathlib import Path
+        import json
+        motif = json.loads(Path(__file__).with_name("fonta59_hall_roof_motif.json").read_text())
+        self.assertLess(sum(row.count("#") for row in motif["rows"]), 150)
+        self.assertEqual(self.block((68, 87, 33)), "minecraft:lantern")
+        self.assertEqual(self.block((151, 25, 19)), "minecraft:bookshelf")
+        self.assertEqual(self.block((64, 38, 29)), "minecraft:air")
+        self.assertNotEqual(self.block((68, 38, 33)), "minecraft:air")
+        self.assertEqual(self.block((52, 29, 75)), "jugcraft:ecology_maple_log")
+        self.assertEqual(self.block((46, 28, 65)), "minecraft:orange_stained_glass_pane")
+        self.assertIn("jugcraft:ecology_red_maple_leaves", {s["id"] for s in self.palette})
+        self.assertNotIn("minecraft:snow", {s["id"] for s in self.palette})
 
     def test_every_room_and_station_can_be_reached(self):
         # Two-block headroom navigation with one-block steps and hand-openable doors. This catches sealed rooms,
@@ -109,6 +132,8 @@ class AcademyTests(unittest.TestCase):
                         queue.append(p)
         for name, pos in ROOMS.items():
             self.assertTrue(pos in visited, f"Unreachable room: {name} at {pos}")
+        for pos in ((105, 35, 34), (112, 35, 27), (119, 35, 34)):
+            self.assertTrue(pos in visited, f"Unreachable Arcanaeum gallery: {pos}")
         for name, (pos, _) in STATIONS.items():
             x, y, z = pos
             self.assertTrue(any((x+dx, y, z+dz) in visited
@@ -126,8 +151,9 @@ class AcademyTests(unittest.TestCase):
                 self.assertEqual(s["properties"]["facing"], "south")
                 self.assertNotEqual(self.block((x, y, z-1)), "minecraft:air")
 
-    def test_doors_are_complete_and_snow_has_full_support(self):
+    def test_doors_and_autumn_groundcover_have_full_support(self):
         doors = []
+        piles = 0
         for (x, y, z), s in self.cells.items():
             if s["id"] == "minecraft:spruce_door":
                 props = s["properties"]
@@ -139,20 +165,36 @@ class AcademyTests(unittest.TestCase):
                 if lower:
                     doors.append((x, y, z))
                     self.assertNotEqual(self.block((x, y-1, z)), "minecraft:air")
-            if s["id"] == "minecraft:snow":
-                self.assertIn(self.block((x, y-1, z)), {
-                    "minecraft:stone_bricks", "minecraft:chiseled_stone_bricks", "minecraft:polished_andesite"})
+            self.assertNotEqual(s["id"], "minecraft:snow")
+            if s["id"].endswith("_leaf_pile"):
+                piles += 1
+                self.assertNotEqual(self.block((x, y-1, z)), "minecraft:air")
                 self.assertEqual(s["properties"]["layers"], "1")
         self.assertEqual(len(doors), 8)  # six bedrooms, archive, secret lab
+        self.assertGreaterEqual(piles, 12)
+        self.assertEqual(sum(s["id"] == "minecraft:carved_pumpkin" for s in self.cells.values()), 4)
 
-    def test_circular_enclosure_and_separate_library(self):
-        # The footprint must not regress to three detached towers on a rectangle.
-        for x, z in ((38, 85), (98, 85), (68, 115), (68, 56)):
+    def test_compact_court_gate_and_connected_academic_wing(self):
+        # The court has a defined edge, a framed open-sky bridge entrance,
+        # and an enclosed scholarly cross-wing joining Hall and library.
+        for x, z in ((38, 85), (98, 85), (68, 56)):
             self.assertNotEqual(self.block((x, 32, z)), "minecraft:air")
+        for z in (114, 120, 126):
+            self.assertEqual(self.block((68, 25, z)), "minecraft:air")
+            self.assertEqual(self.block((68, 33, z)), "minecraft:air")
+            self.assertNotEqual(self.block((62, 33, z)), "minecraft:air")
+            self.assertNotEqual(self.block((74, 33, z)), "minecraft:air")
+        for z in (114, 126):
+            self.assertEqual(self.block((68, 32, z)), "minecraft:chiseled_stone_bricks")
+        for z in (25, 34, 44):
+            self.assertNotEqual(self.block((90, 36, z)), "minecraft:air")
+        for x in (83, 97):
+            self.assertEqual(self.block((x, 27, 34)), "minecraft:air")
         self.assertEqual(self.block((32, 24, 121)), "minecraft:air")
         self.assertEqual(self.block((104, 24, 121)), "minecraft:air")
         self.assertEqual(self.block((68, 31, 85)), "minecraft:air")  # open-sky court
-        self.assertNotEqual(self.block((112, 36, 34)), "minecraft:air")  # low library roof
+        self.assertEqual(self.block((112, 36, 34)), "minecraft:air")  # opened Arcanaeum vault
+        self.assertNotEqual(self.block((112, 46, 34)), "minecraft:air")  # raised roof
         lecterns = [b for b in self.template["blocks"]
                     if self.palette[b["state"]]["id"] == "jugcraft:conclave_lectern"]
         self.assertEqual(len(lecterns), 1)
@@ -189,6 +231,54 @@ class AcademyTests(unittest.TestCase):
         self.assertFalse(any('glass' in s['id'] for (x, y, z), s in self.cells.items()
                              if 94 <= x <= 130 and 25 <= y <= 35 and 16 <= z <= 52))
         self.assertEqual(self.block((112, 24, 34)), 'minecraft:polished_diorite')
+
+    def test_grand_reading_wing_has_a_real_upper_route(self):
+        self.assertEqual(SIZE, (176, 88, 161))
+        self.assertEqual(self.block((134, 27, 34)), 'minecraft:air')
+        self.assertEqual(self.block((133, 44, 34)), 'minecraft:stone_bricks')
+        self.assertEqual(self.block((150, 24, 34)), 'minecraft:dark_oak_planks')
+        self.assertEqual(self.block((148, 36, 41)), 'minecraft:stone_brick_stairs')
+        self.assertEqual(self.block((153, 36, 42)), 'minecraft:polished_diorite')
+        self.assertEqual(self.block((147, 44, 34)), 'minecraft:stone_bricks')
+        self.assertEqual(self.block((169, 30, 34)), 'minecraft:light_blue_stained_glass_pane')
+        self.assertEqual(self.block((140, 26, 30)), 'minecraft:lantern')
+
+    def test_teaching_hall_and_private_suite_have_distinct_furnishings(self):
+        self.assertEqual(self.block((68, 24, 25)), 'minecraft:amethyst_block')
+        self.assertEqual(self.block((68, 24, 33)), 'minecraft:amethyst_block')
+        self.assertEqual(self.block((68, 26, 29)), 'minecraft:soul_lantern')
+        self.assertEqual(self.block((56, 25, 35)), 'minecraft:spruce_stairs')
+        self.assertEqual(self.block((43, 50, 33)), 'minecraft:red_terracotta')
+        self.assertEqual(self.block((45, 51, 32)), 'minecraft:spruce_stairs')
+        self.assertEqual(self.block((75, 65, 37)), 'minecraft:orange_stained_glass')
+        self.assertEqual(self.block((107, 34, 34)), 'minecraft:polished_tuff_stairs')
+        self.assertEqual(self.block((35, 52, 35)), 'minecraft:lantern')
+        self.assertEqual(self.block((62, 36, 116)), 'minecraft:lantern')
+
+    def test_hall_vault_and_teaching_zones_preserve_working_layout(self):
+        self.assertEqual(self.block((68, 48, 24)), 'minecraft:chiseled_stone_bricks')
+        self.assertEqual(self.block((68, 48, 42)), 'minecraft:chiseled_stone_bricks')
+        self.assertEqual(self.block((66, 47, 26)), 'minecraft:lantern')
+        self.assertEqual(self.block((60, 26, 31)), 'minecraft:cartography_table')
+        self.assertEqual(self.block((76, 26, 31)), 'minecraft:smithing_table')
+        self.assertEqual(self.block((65, 27, 21)), 'minecraft:lectern')
+        self.assertEqual(self.block((71, 27, 21)), 'minecraft:lectern')
+        self.assertEqual(self.block((68, 26, 20)), 'minecraft:enchanting_table')
+        self.assertEqual(self.block((68, 39, 33)), 'minecraft:air')
+        self.assertEqual(self.block((68, 38, 23)), 'minecraft:air')
+        self.assertEqual(self.block((68, 38, 43)), 'minecraft:air')
+        self.assertNotEqual(self.block((68, 38, 21)), 'minecraft:air')
+        self.assertNotEqual(self.block((68, 38, 45)), 'minecraft:air')
+        self.assertEqual(self.block((68, 34, 33)), 'minecraft:amethyst_block')
+        self.assertEqual(self.block((68, 38, 27)), 'minecraft:chiseled_stone_bricks')
+        self.assertEqual(self.block((65, 35, 33)), 'minecraft:iron_bars')
+        self.assertEqual(self.block((68, 49, 52)), 'minecraft:amethyst_block')
+        self.assertEqual(self.block((68, 26, 30)), 'minecraft:lectern')
+        self.assertEqual(self.block((65, 26, 29)), 'minecraft:amethyst_block')
+        self.assertEqual(self.block((71, 26, 29)), 'minecraft:waxed_cut_copper')
+        self.assertEqual(self.block((68, 25, 33)), 'minecraft:air')
+        for pos, block in STATIONS.values():
+            self.assertEqual(self.block(pos), block)
 
 
 if __name__ == "__main__":

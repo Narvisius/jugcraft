@@ -15,6 +15,9 @@ public final class PeepoClient implements ClientModInitializer {
         net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.registerGlobalReceiver(local.peepo.PopulationTypesPayload.TYPE,(payload,context)->{
             if(context.player().containerMenu instanceof local.peepo.CompanionMenu menu && menu.containerId==payload.menu()){menu.populationRow=payload.row();menu.populationAnchor=payload.anchor();menu.populationTypes=payload.types();}
         });
+        net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.registerGlobalReceiver(local.peepo.CompanionStockPayload.TYPE,(payload,context)->{
+            if(context.player().containerMenu instanceof local.peepo.CompanionMenu menu && menu.containerId==payload.menu() && payload.entries().size()==9)menu.stockView=payload;
+        });
         AssignmentPreview.initialize();
         net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.registerGlobalReceiver(local.peepo.CompanionDetailsPayload.TYPE,(payload,context)->{
             if(context.player().containerMenu instanceof local.peepo.CompanionMenu menu && menu.containerId==payload.menu())menu.receiveDetails(payload.rows());

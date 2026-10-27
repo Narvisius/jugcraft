@@ -11,10 +11,15 @@ import net.minecraft.world.item.ItemStack;
 final class CompanionDeliveryPlan {
     static List<ItemStack> create(Storage<ItemVariant> source,Storage<ItemVariant> destination,int slots,
             BiFunction<ItemStack,TransactionContext,Integer> needed,CompanionSupplies.Route limits){
+        return create(source,destination,slots,needed,limits,s->0);
+    }
+    static List<ItemStack> create(Storage<ItemVariant> source,Storage<ItemVariant> destination,int slots,
+            BiFunction<ItemStack,TransactionContext,Integer> needed,CompanionSupplies.Route limits,java.util.function.ToDoubleFunction<ItemStack> priority){
         var result=new ArrayList<ItemStack>();
         if(source==null || destination==null || slots<=0)return result;
         var views=new ArrayList<StorageView<ItemVariant>>();
         for(var view:source){if(views.size()==128)break;views.add(view);}
+        views.sort(Comparator.comparingDouble(v->v.isResourceBlank()?Double.MAX_VALUE:-priority.applyAsDouble(v.getResource().toStack(1))));
         var sourceCounts=limits!=null && limits.leave>0?counts(source):null;
         var destinationCounts=limits!=null && limits.keep>0?counts(destination):null;
         if(limits!=null && (limits.leave>0 && sourceCounts==null || limits.keep>0 && destinationCounts==null))return result;

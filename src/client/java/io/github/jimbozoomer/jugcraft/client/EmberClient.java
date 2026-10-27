@@ -11,8 +11,9 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * Ember on the client: the fire sets' GeckoLib renderers, handed to GeckoLib through {@link EmberHooks} (as the guns' are,
- * GunsClient). One renderer draws a set's four pieces; it is made the first time one of them is drawn.
+ * Ember on the client: the owner's sets' GeckoLib renderers (fire and water: Ember's regalia and, since Concordance Chunk
+ * B, Rime's travel kit), handed to GeckoLib through {@link EmberHooks} (as the guns' are, GunsClient). One renderer draws a
+ * set's four pieces, on the model the set is worn as; it is made the first time one of them is drawn.
  */
 final class EmberClient {
 	/** Each piece's GeoRenderProvider, made once. */

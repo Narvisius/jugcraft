@@ -43,6 +43,17 @@ def validate_lock(lock: dict) -> None:
     for field in ("minecraft", "fabricLoader", "kotlin"):
         require(isinstance(lock.get(field), str) and bool(lock[field]), f"Missing {field} pin")
     require(lock.get("java") == 25, "Unexpected Java platform; review platform changes explicitly")
+    runtime_paths = set()
+    for runtime in lock.get('embeddedLibraries', []):
+        path = runtime.get('nestedPath', '')
+        require(bool(re.fullmatch(r'META-INF/jars/[A-Za-z0-9._+-]+\.jar', path))
+                and path not in runtime_paths, 'Unsafe or duplicate embedded runtime path')
+        runtime_paths.add(path)
+        for field in ('sha256', 'contentSha256'):
+            require(bool(re.fullmatch(r'[0-9a-f]{64}', runtime.get(field, ''))),
+                    f'Missing embedded runtime {field}')
+        require(len(runtime.get('maven', '').split(':')) == 3 and bool(runtime.get('modId')),
+                'Missing embedded runtime identity')
     libraries = lock.get("dependencies", [])
     require(bool(libraries), "The pack must include its reviewed dependencies")
     for field in ("key", "modId", "filename"):
@@ -122,6 +133,16 @@ def verify_downloads(lock: dict, cache: Path) -> None:
         print(f"Verified {library['key']} {library['modVersion']}")
 
 
+def embedded_content_hash(archive: zipfile.ZipFile) -> str:
+    names = archive.namelist()
+    require(len(names) == len(set(names)), "Duplicate embedded archive entries")
+    # Loom adds fabric.mod.json to ordinary JVM libraries. Every original file
+    # must still match the reviewed, upstream-hash-verified content inventory.
+    entries = [[name, hashlib.sha256(archive.read(name)).hexdigest()]
+               for name in sorted(names) if not name.endswith('/') and name != 'fabric.mod.json']
+    return hashlib.sha256(json.dumps(entries, separators=(',', ':')).encode()).hexdigest()
+
+
 def inspect_jugcraft_jar(jar: Path, lock: dict) -> dict:
     with zipfile.ZipFile(jar) as archive:
         metadata = json.loads(archive.read("fabric.mod.json"))
@@ -133,8 +154,20 @@ def inspect_jugcraft_jar(jar: Path, lock: dict) -> dict:
             if library["requiredByJugcraft"]:
                 require(metadata["depends"].get(library["modId"]) == ">=" + library["modVersion"],
                         f"Built JAR is missing the locked {library['key']} requirement")
-        require(not any(name.endswith(".jar") and name != "jugcraft/updater-helper.jar" for name in archive.namelist()),
+        embedded = {entry['nestedPath']: entry for entry in lock.get('embeddedLibraries', [])}
+        require(not any(name.endswith(".jar") and name != "jugcraft/updater-helper.jar" and name not in embedded for name in archive.namelist()),
                 "Jugcraft must not bundle third-party mod JARs")
+        for name, entry in embedded.items():
+            if name not in archive.namelist():
+                continue
+            with zipfile.ZipFile(io.BytesIO(archive.read(name))) as library:
+                require(embedded_content_hash(library) == entry['contentSha256'],
+                        f"Embedded library content mismatch: {name}")
+                generated = json.loads(library.read('fabric.mod.json'))
+                require(generated == {'schemaVersion': 1, 'id': entry['modId'],
+                        'version': entry['version'], 'name': entry['maven'].split(':')[1],
+                        'custom': {'fabric-loom:generated': True}},
+                        f"Unexpected embedded library metadata: {name}")
         if "jugcraft/updater-helper.jar" in archive.namelist():
             with zipfile.ZipFile(io.BytesIO(archive.read("jugcraft/updater-helper.jar"))) as helper:
                 require(all(n.endswith('/') or n == 'META-INF/MANIFEST.MF' or

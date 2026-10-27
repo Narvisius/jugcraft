@@ -1,6 +1,8 @@
 package io.github.jimbozoomer.jugcraft.test;
 
+import io.github.jimbozoomer.jugcraft.compat.jade.ConcordanceDataProvider;
 import io.github.jimbozoomer.jugcraft.concordance.CircleAnchorBlockEntity;
+import io.github.jimbozoomer.jugcraft.concordance.ComposeText;
 import io.github.jimbozoomer.jugcraft.concordance.ConcordanceData;
 import io.github.jimbozoomer.jugcraft.concordance.ConcordanceProgress;
 import io.github.jimbozoomer.jugcraft.concordance.Inscription;
@@ -9,6 +11,13 @@ import io.github.jimbozoomer.jugcraft.concordance.KindledLanternItem;
 import io.github.jimbozoomer.jugcraft.concordance.LeyPylonBlockEntity;
 import io.github.jimbozoomer.jugcraft.concordance.RateGate;
 import io.github.jimbozoomer.jugcraft.concordance.Rituals;
+import io.github.jimbozoomer.jugcraft.concordance.compose.Text;
+import io.github.jimbozoomer.jugcraft.concordance.diagnostic.Code;
+import io.github.jimbozoomer.jugcraft.concordance.diagnostic.Diagnostic;
+import io.github.jimbozoomer.jugcraft.concordance.encyclopedia.InspectPage;
+import io.github.jimbozoomer.jugcraft.concordance.garden.Garden;
+import io.github.jimbozoomer.jugcraft.concordance.ritual.Choice;
+import io.github.jimbozoomer.jugcraft.concordance.ritual.Readiness;
 import io.github.jimbozoomer.jugcraft.concordance.ritual.RitualMachine;
 import io.github.jimbozoomer.jugcraft.concordance.ritual.StructurePattern;
 import io.github.jimbozoomer.jugcraft.concordance.ritual.StructureValidator;
@@ -17,16 +26,28 @@ import io.github.jimbozoomer.jugcraft.concordance.rules.ResearchState;
 import io.github.jimbozoomer.jugcraft.concordance.sign.Sign;
 import io.github.jimbozoomer.jugcraft.concordance.spirits.ClockworkPorterEntity;
 import io.github.jimbozoomer.jugcraft.concordance.spirits.Workers;
+import io.github.jimbozoomer.jugcraft.concordance.strata.Strata;
 import io.github.jimbozoomer.jugcraft.concordance.worker.Body;
 import io.github.jimbozoomer.jugcraft.concordance.worker.WorkerDefinition;
 import io.github.jimbozoomer.jugcraft.energy.EnergyStorage;
+import io.github.jimbozoomer.jugcraft.guide.encyclopedia.Encyclopedia;
+import io.github.jimbozoomer.jugcraft.guide.encyclopedia.EncyclopediaPayload;
+import io.github.jimbozoomer.jugcraft.guide.encyclopedia.EncyclopediaRequestPayload;
+import io.github.jimbozoomer.jugcraft.guide.encyclopedia.PageWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ProblemReporter;
@@ -53,6 +74,12 @@ import net.minecraft.world.phys.Vec3;
  * inscription; and every way a running ritual can stop (a broken channel, a lost boundary with its backlash, a dry
  * pylon, a participant gone, the leader calling it off, the anchor broken, the ritual saved mid-run, too much light),
  * each releasing the offerings and committing nothing. Also the two-person Lumen Vigil, pylon charging and refusals.
+ * Concordance Chunk C, C-03: an idle circle says everything a rite still needs at once, a run-level shortfall only warns,
+ * a refused start and a chat reading mark every faulted part (the Inspect page none), what a run has spent is shown apart
+ * from what it holds, an interruption is told in one line kept for the Inspect page, and a rite the reader has not
+ * learned is never named. Concordance Chunk C, C-04: Root and Rivet, a Thallite plate rooted into a foundation, completed
+ * once, stopped by a dry pylon, lapsed when saved mid-run, never chosen for the attunement's offerings, and a
+ * Stratawright's foundation laid.
  */
 public class ConcordanceRitualGameTests {
 	private static final String CIRCLE_LORE = "jugcraft:circle_lore";
@@ -129,7 +156,7 @@ public class ConcordanceRitualGameTests {
 
 	/** A survival player standing inside the circle who understands Circle Lore and has full Focus. */
 	private static ServerPlayer practitioner(GameTestHelper helper, BlockPos standAt) {
-		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		ServerPlayer player = TestPlayers.mock(helper);
 		player.setGameMode(GameType.SURVIVAL);
 		BlockPos absolute = helper.absolutePos(standAt);
 		player.snapTo(absolute.getX() + 0.5, absolute.getY(), absolute.getZ() + 0.5, 0.0F, 0.0F);
@@ -319,7 +346,7 @@ public class ConcordanceRitualGameTests {
 	public void aBreakerAnswersForTheBacklash(GameTestHelper helper) {
 		CircleAnchorBlockEntity anchor = build(helper, 64);
 		ServerPlayer player = startAttunement(helper, anchor);
-		ServerPlayer vandal = helper.makeMockServerPlayerInLevel();
+		ServerPlayer vandal = TestPlayers.mock(helper);
 		vandal.setGameMode(GameType.SURVIVAL);
 		boolean mayHarm = vandal.canHarmPlayer(player);
 		helper.runAfterDelay(PAST_SPAWN_GRACE, () -> vandal.gameMode.destroyBlock(helper.absolutePos(first(StructurePattern.Role.BOUNDARY))));
@@ -568,7 +595,7 @@ public class ConcordanceRitualGameTests {
 	@GameTest(maxTicks = 40)
 	public void refusalsTakeNothing(GameTestHelper helper) {
 		CircleAnchorBlockEntity anchor = build(helper, 64);
-		ServerPlayer novice = helper.makeMockServerPlayerInLevel();
+		ServerPlayer novice = TestPlayers.mock(helper);
 		novice.setGameMode(GameType.SURVIVAL);
 		BlockPos stand = helper.absolutePos(STAND);
 		novice.snapTo(stand.getX() + 0.5, stand.getY(), stand.getZ() + 0.5, 0.0F, 0.0F);
@@ -651,6 +678,578 @@ public class ConcordanceRitualGameTests {
 			helper.assertTrue(!signs.of(Sign.HARM).isEmpty(), "The backlash's harm shows on the participant: " + signs.all());
 			helper.assertTrue(signs.of(Sign.DONE).isEmpty() && signs.at(Sign.WANT, ANCHOR) == 0, "No success and no shortage: " + signs.all());
 			signs.close();
+		});
+	}
+
+	// ---------------------------------------------------------------- readiness (Concordance Chunk C, C-03)
+
+	private static final Text.Ref CIRCLE = new Text.Ref("structure", "jugcraft:lesser_circle");
+
+	private static String key(Component component) {
+		return component.getContents() instanceof TranslatableContents translatable ? translatable.getKey() : "";
+	}
+
+	private static Object[] args(Component component) {
+		return component.getContents() instanceof TranslatableContents translatable ? translatable.getArgs() : new Object[0];
+	}
+
+	/** Every translation key in a component, its arguments and its siblings. */
+	private static void keys(Component component, List<String> out) {
+		if (component.getContents() instanceof TranslatableContents translatable) {
+			out.add(translatable.getKey());
+			for (Object arg : translatable.getArgs()) {
+				if (arg instanceof Component inner) {
+					keys(inner, out);
+				}
+			}
+		}
+		component.getSiblings().forEach(sibling -> keys(sibling, out));
+	}
+
+	private static List<String> keys(List<EncyclopediaPayload.Row> rows) {
+		List<String> out = new ArrayList<>();
+		rows.forEach(row -> keys(row.text(), out));
+		return out;
+	}
+
+	private static EncyclopediaPayload.Row row(List<EncyclopediaPayload.Row> rows, String key) {
+		return rows.stream().filter(row -> key(row.text()).equals(key)).findFirst().orElse(null);
+	}
+
+	/** The Inspect page {@code reader} is given looking at the anchor; empty if none. */
+	private static List<EncyclopediaPayload.Row> inspect(GameTestHelper helper, ServerPlayer reader) {
+		return Encyclopedia.build(reader, new EncyclopediaRequestPayload(1, Optional.of(helper.absolutePos(ANCHOR))), PageWriter::of)
+				.pages().stream().filter(page -> page.id().equals(InspectPage.PAGE)).findFirst()
+				.map(EncyclopediaPayload.Page::rows).orElse(List.of());
+	}
+
+	/** A channel in readiness's words (Readiness.Channel.words): where its pylon stands, and where that is from the anchor. */
+	private static Text pylonAt(GameTestHelper helper, StructurePattern.Part part) {
+		BlockPos at = helper.absolutePos(at(part.offset()));
+		StructurePattern.Offset offset = part.offset();
+		return Text.of("ritual.pylon_at", at.getX() + ", " + at.getY() + ", " + at.getZ(), offset.x() + ", " + offset.y() + ", " + offset.z());
+	}
+
+	private static List<Diagnostic> diagnostics(Readiness readiness) {
+		return readiness.lines().stream().map(Readiness.Line::diagnostic).toList();
+	}
+
+	private static List<Boolean> blocking(Readiness readiness) {
+		return readiness.lines().stream().map(Readiness.Line::blocks).toList();
+	}
+
+	private static void snapTo(ServerPlayer player, BlockPos absolute) {
+		player.snapTo(absolute.getX() + 0.5, absolute.getY(), absolute.getZ() + 0.5, 0.0F, 0.0F);
+	}
+
+	private static List<BlockPos> pylons() {
+		return circle().channels().stream().map(part -> at(part.offset())).toList();
+	}
+
+	/** With Jade loaded, the anchor's snapshot names no rite (C-P38). */
+	private static void jadeNamesNoRite(GameTestHelper helper, CircleAnchorBlockEntity anchor) {
+		if (!FabricLoader.getInstance().isModLoaded("jade")) {
+			return;
+		}
+		CompoundTag shown = ConcordanceDataProvider.snapshot(anchor, helper.getLevel());
+		for (String name : shown.keySet()) {
+			helper.assertTrue(!name.contains("ritual") && !shown.getStringOr(name, "").contains("adept_attunement"),
+					"Jade's anchor names no rite: " + shown);
+		}
+	}
+
+	/**
+	 * An idle circle says everything a rite still needs at once, for its reader as the leader, in the shared vocabulary:
+	 * offerings short, a pylon short of the whole run (a warning only) or of a step, a pylon not lent, the reader too far,
+	 * short of Focus, too much light, the shape's faults. The Inspect page shows the same lines, names the rite and states
+	 * its stages, and a fault says where it is from the anchor; nothing is marked. Mended but for one pylon short of the
+	 * whole run, the rite begins (C-P10) and breaks off at the step the warning named.
+	 */
+	@GameTest(maxTicks = 300)
+	public void anIdleCircleSaysEverythingARiteStillNeeds(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		CircleAnchorBlockEntity anchor = build(helper, 64);
+		List<StructurePattern.Part> channels = circle().channels();
+		BlockPos stone = first(StructurePattern.Role.BOUNDARY);
+		pylon(helper, at(channels.get(0).offset())).setLey(level, 1);
+		pylon(helper, at(channels.get(1).offset())).setLey(level, 9);
+		pylon(helper, at(channels.get(2).offset())).setOwner(UUID.randomUUID());
+		helper.setBlock(stone, Blocks.AIR);
+		// A lamp beside the clearance, not a part: too bright above the anchor for the vigil.
+		helper.setBlock(new BlockPos(4, 3, 3), Blocks.GLOWSTONE);
+		helper.runAfterDelay(5, () -> { // the lamp's light has spread, as theVigilNeedsTheDark waits
+			SignWatch signs = new SignWatch(helper);
+			ServerPlayer player = practitioner(helper, STAND);
+			ConcordanceProgress.setFocus(player, 3);
+			snapTo(player, helper.absolutePos(ANCHOR).offset(10, 0, 0));
+			// A. The Lumen Vigil, half offered.
+			anchor.offer(player, new ItemStack(Items.GLOW_BERRIES, 2));
+			int light = level.getMaxLocalRawBrightness(helper.absolutePos(ANCHOR).above());
+			Readiness vigil = anchor.readiness(level, player);
+			helper.assertTrue(light > 7 && vigil != null && vigil.rite() != null && vigil.rite().id().equals("jugcraft:lumen_vigil")
+					&& !vigil.ready(), "The berries answer the vigil, which is not ready: " + vigil + " at light " + light);
+			helper.assertValueEqual(diagnostics(vigil), List.of(
+					Diagnostic.of(Code.MISSING_INGREDIENT, 2, new Text.Ref("item", "minecraft:glow_berries")),
+					Diagnostic.of(Code.UNAVAILABLE_POWER, pylonAt(helper, channels.get(0)), Text.of("ritual.ley", 1), Text.of("ritual.ley_run", 3, 2)),
+					Diagnostic.of(Code.NOT_LENT, pylonAt(helper, channels.get(2))),
+					Diagnostic.of(Code.TOO_FAR, 7, 3),
+					Diagnostic.of(Code.NEEDS_FOCUS, 3, 4),
+					Diagnostic.of(Code.TOO_BRIGHT, light, 7),
+					Diagnostic.of(Code.INCOMPLETE_PATTERN, CIRCLE, 1)), "every shortfall of the vigil, in readiness's order");
+			helper.assertValueEqual(blocking(vigil), List.of(true, false, true, true, true, true, true), "only the whole run's charge warns");
+			// B. The Adept's Attunement, two glowstone dust short.
+			use(anchor, player, true);
+			for (ItemStack stack : List.of(inscribedWand(), new ItemStack(Items.AMETHYST_SHARD, 4), new ItemStack(Items.GOLD_INGOT, 2),
+					new ItemStack(Items.GLOWSTONE_DUST, 2))) {
+				anchor.offer(player, stack);
+			}
+			List<Diagnostic> wanting = List.of(
+					Diagnostic.of(Code.MISSING_INGREDIENT, 2, new Text.Ref("item", "minecraft:glowstone_dust")),
+					Diagnostic.of(Code.UNAVAILABLE_POWER, pylonAt(helper, channels.get(0)), Text.of("ritual.ley", 1), Text.of("ritual.ley_step", 2)),
+					Diagnostic.of(Code.UNAVAILABLE_POWER, pylonAt(helper, channels.get(1)), Text.of("ritual.ley", 9), Text.of("ritual.ley_run", 10, 5)),
+					Diagnostic.of(Code.NOT_LENT, pylonAt(helper, channels.get(2))),
+					Diagnostic.of(Code.TOO_FAR, 7, 3),
+					Diagnostic.of(Code.NEEDS_FOCUS, 3, 6),
+					Diagnostic.of(Code.INCOMPLETE_PATTERN, CIRCLE, 1));
+			Readiness attunement = anchor.readiness(level, player);
+			helper.assertTrue(attunement != null, "the attunement is the closest rite");
+			helper.assertValueEqual(diagnostics(attunement), wanting, "every shortfall of the attunement");
+			helper.assertValueEqual(blocking(attunement), List.of(true, true, false, true, true, true, true), "a run's shortfall only warns");
+			List<EncyclopediaPayload.Row> rows = inspect(helper, player);
+			List<String> shown = rows.stream().map(row -> row.text().getString()).toList();
+			for (Diagnostic line : wanting) {
+				helper.assertTrue(shown.contains(ComposeText.show(line.text()).getString()), "The Inspect page says " + line + ": " + shown);
+			}
+			EncyclopediaPayload.Row heading = row(rows, "encyclopedia.jugcraft.inspect.readiness");
+			helper.assertTrue(heading != null && key((Component) args(heading.text())[0]).equals("ritual.jugcraft.adept_attunement")
+					&& keys(rows).contains("compose.jugcraft.ritual.stage.backlash"), "It names the rite and states its stages: " + shown);
+			BlockPos absolute = helper.absolutePos(stone);
+			EncyclopediaPayload.Row missing = row(rows, "message.jugcraft.concordance.circle.fault.missing");
+			Component where = missing == null ? Component.empty() : (Component) args(missing.text())[1];
+			helper.assertTrue(key(where).equals("message.jugcraft.concordance.circle.where")
+					&& List.of(args(where)).equals(List.of(absolute.getX() + ", " + absolute.getY() + ", " + absolute.getZ(), "3, 0, 0")),
+					"A fault says where it is, and where that is from the anchor: " + where);
+			signs.close();
+			helper.assertTrue(signs.all().isEmpty(), "Readiness and the Inspect page show no sign: " + signs.all());
+			// C. Everything mended but the second pylon's charge for the whole run: a warning, and the start agrees (C-P10).
+			ConcordanceProgress.setFocus(player, 20);
+			snapTo(player, helper.absolutePos(STAND));
+			helper.setBlock(stone, JugcraftConcordance.WARDING_STONE);
+			Rituals.changed(level, helper.absolutePos(stone));
+			pylon(helper, at(channels.get(0).offset())).setLey(level, 64);
+			pylon(helper, at(channels.get(2).offset())).setOwner(player.getUUID());
+			anchor.offer(player, new ItemStack(Items.GLOWSTONE_DUST, 2));
+			Readiness ready = anchor.readiness(level, player);
+			helper.assertTrue(ready != null && ready.ready() && blocking(ready).equals(List.of(false)), "only a warning is left: " + ready);
+			helper.assertValueEqual(diagnostics(ready), List.of(Diagnostic.of(Code.UNAVAILABLE_POWER, pylonAt(helper, channels.get(1)),
+					Text.of("ritual.ley", 9), Text.of("ritual.ley_run", 10, 5))), "the run's warning");
+			use(anchor, player, false);
+			helper.assertTrue(anchor.phase() == RitualMachine.Phase.CHANNELING && ConcordanceProgress.currentFocus(player) == 14,
+					"A run-level shortfall does not refuse the start: " + anchor.run());
+			BlockPos dry = at(channels.get(1).offset());
+			helper.succeedWhen(() -> {
+				helper.assertTrue(anchor.phase() == RitualMachine.Phase.IDLE && anchor.run().last() == RitualMachine.Interruption.POWER,
+						"It breaks off for power: " + anchor.run());
+				helper.assertValueEqual(anchor.ending(), new Readiness.Ending(RitualMachine.Interruption.POWER, new Readiness.Spent(6, 32, 4, 1, 8)),
+						"at step 5, as the warning said, having spent 6 Focus and 32 Ley Charge");
+				List<ItemStack> held = anchor.offerings();
+				helper.assertTrue(pylon(helper, dry).ley() == 1 && count(held, JugcraftConcordance.INITIATE_WAND) == 1
+						&& count(held, Items.AMETHYST_SHARD) == 4 && count(held, Items.GOLD_INGOT) == 2 && count(held, Items.GLOWSTONE_DUST) == 4,
+						"The dry pylon kept 1; every offering is kept: " + held);
+			});
+		});
+	}
+
+	/**
+	 * A refused start marks every part that refused it where it stands, with the sign its interruption would show: danger
+	 * for a broken boundary (and every other fault the check found), then, the boundary mended, a shortage at each channel
+	 * missing, short or not lent. Nothing else is marked, and nothing is taken.
+	 */
+	@GameTest(maxTicks = 40)
+	public void aRefusedStartMarksEveryFault(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		CircleAnchorBlockEntity anchor = build(helper, 64);
+		List<BlockPos> pylons = pylons();
+		BlockPos stone = first(StructurePattern.Role.BOUNDARY);
+		helper.setBlock(pylons.get(0), Blocks.AIR);
+		pylon(helper, pylons.get(1)).setLey(level, 1);
+		pylon(helper, pylons.get(2)).setOwner(UUID.randomUUID());
+		helper.setBlock(stone, Blocks.AIR);
+		ServerPlayer player = practitioner(helper, STAND);
+		offerAttunement(anchor, player);
+		SignWatch signs = new SignWatch(helper);
+		use(anchor, player, false); // containment broken: danger at every part that refused it
+		helper.assertTrue(anchor.phase() == RitualMachine.Phase.IDLE && ConcordanceProgress.currentFocus(player) == 20
+				&& count(anchor.offerings(), Items.GLOWSTONE_DUST) == 4, "Refused, it took nothing");
+		for (BlockPos part : List.of(pylons.get(0), pylons.get(1), pylons.get(2), stone)) {
+			helper.assertValueEqual(signs.at(Sign.PERIL, part), 1L, "danger where it refused: " + part);
+		}
+		helper.assertTrue(signs.of(Sign.PERIL).size() == 4 && signs.of(Sign.WANT).isEmpty() && signs.of(Sign.GATHER).isEmpty()
+				&& signs.at(Sign.PERIL, ANCHOR) == 0, "Only the faulted parts are marked: " + signs.all());
+		helper.setBlock(stone, JugcraftConcordance.WARDING_STONE);
+		use(anchor, player, false); // the channels alone: a shortage at each
+		for (BlockPos part : pylons.subList(0, 3)) {
+			helper.assertValueEqual(signs.at(Sign.WANT, part), 1L, "a shortage where it refused: " + part);
+		}
+		helper.assertTrue(signs.of(Sign.WANT).size() == 3 && signs.of(Sign.PERIL).size() == 4 && anchor.phase() == RitualMachine.Phase.IDLE,
+				"Nothing else is marked: " + signs.all());
+		signs.close();
+		helper.succeed();
+	}
+
+	/**
+	 * A reading in chat (an empty-hand use with nothing offered, the command) marks each faulted part, at most once a
+	 * second a player, and with offerings also a pylon short of a step for its reader; the Inspect page, the shared status
+	 * lines and readiness mark nothing.
+	 */
+	@GameTest(maxTicks = 40)
+	public void aStatusReadingMarksFaultsButTheInspectPageDoesNot(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		CircleAnchorBlockEntity anchor = build(helper, 64);
+		List<BlockPos> pylons = pylons();
+		BlockPos clearance = first(StructurePattern.Role.CLEARANCE);
+		helper.setBlock(pylons.get(0), Blocks.AIR);
+		helper.setBlock(clearance, Blocks.DIRT);
+		Rituals.changed(level, helper.absolutePos(clearance));
+		ServerPlayer player = practitioner(helper, STAND);
+		SignWatch signs = new SignWatch(helper);
+		helper.assertTrue(anchor.readiness(level, player) == null, "Nothing offered: no rite to speak of");
+		use(anchor, player, false); // nothing offered: the reading in chat
+		helper.assertTrue(signs.at(Sign.WANT, pylons.get(0)) == 1 && signs.at(Sign.WANT, clearance) == 1 && signs.of(Sign.WANT).size() == 2
+				&& signs.of(Sign.PERIL).isEmpty() && signs.at(Sign.WANT, ANCHOR) == 0, "The reading marks each faulted part: " + signs.all());
+		anchor.status(player, level);
+		helper.assertTrue(signs.all().size() == 2, "Once a second a player: " + signs.all());
+		helper.assertFalse(inspect(helper, player).isEmpty(), "The Inspect page reads the anchor");
+		anchor.status(level, line -> {
+		});
+		anchor.readiness(level, player);
+		helper.assertTrue(signs.all().size() == 2, "The Inspect page, the shared status and readiness mark nothing: " + signs.all());
+		offerAttunement(anchor, player);
+		pylon(helper, pylons.get(1)).setLey(level, 1);
+		RateGate.forget(player.getUUID());
+		anchor.status(player, level); // the command's path
+		helper.assertTrue(signs.at(Sign.WANT, pylons.get(1)) == 1 && signs.of(Sign.WANT).size() == 5,
+				"The shape again, and the pylon short of a step for this reader: " + signs.all());
+		inspect(helper, player);
+		helper.assertTrue(signs.all().size() == 5, "Still nothing from the Inspect page: " + signs.all());
+		signs.close();
+		helper.succeed();
+	}
+
+	/**
+	 * While a rite runs, what it has spent (six Focus, then 2 Ley Charge from each of four pylons a step) is shown apart
+	 * from what it still holds (its plan, the spare gold not), on the Inspect page and in Jade, and a pylon gone since the
+	 * last step is a blocking line (the unit review); called off, its ending is
+	 * kept with what it spent, and the one line for every interruption says why, where the offerings are and what was
+	 * lost. A new attempt clears the last; broken, the anchor drops everything once.
+	 */
+	@GameTest(maxTicks = 200)
+	public void spentAndReservedAreShownApart(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		CircleAnchorBlockEntity anchor = build(helper, 64);
+		ServerPlayer player = startAttunement(helper, anchor);
+		List<Readiness.Held> held = List.of(new Readiness.Held("jugcraft:initiate_wand", 1), new Readiness.Held("minecraft:amethyst_shard", 4),
+				new Readiness.Held("minecraft:gold_ingot", 2), new Readiness.Held("minecraft:glowstone_dust", 4));
+		helper.assertValueEqual(anchor.spent(), new Readiness.Spent(6, 0, 0, 5, 40), "begun: six Focus, no Ley Charge yet");
+		helper.assertValueEqual(Readiness.holding(anchor.run().plan()), held, "held: the plan, the spare gold not");
+		helper.runAfterDelay(AFTER_FIRST_STEP, () -> {
+			Readiness.Spent oneStep = new Readiness.Spent(6, 8, 1, 4, 32);
+			long drawn = 0;
+			for (BlockPos pylon : pylons()) {
+				drawn += 64 - pylon(helper, pylon).ley();
+			}
+			helper.assertTrue(oneStep.equals(anchor.spent()) && drawn == oneStep.ley(), "one step spent: " + anchor.spent() + ", " + drawn);
+			Readiness running = anchor.readiness(level, player);
+			helper.assertTrue(running != null && oneStep.equals(running.spent()) && held.equals(running.held()) && running.lines().isEmpty(),
+					"running: spent apart from held, nothing short: " + running);
+			// A pylon gone or unloaded since the last step: the shape shown is still that step's, so readiness says it,
+			// blocking, as the next step will (the unit review).
+			var rite = ConcordanceData.rules().ritual(anchor.run().ritual());
+			List<Readiness.Channel> oneGone = new ArrayList<>();
+			for (StructurePattern.Part part : ConcordanceData.rules().structure(rite.structure()).channels()) {
+				oneGone.add(new Readiness.Channel(part.offset(), "", !oneGone.isEmpty(), 64, true));
+			}
+			Readiness gone = Readiness.running(rite, anchor.run(), oneGone, 0L, 0);
+			helper.assertTrue(gone.lines().equals(List.of(new Readiness.Line(Diagnostic.of(Code.INCOMPLETE_PATTERN, CIRCLE, 1), true, null))),
+					"A pylon gone since the last step is said, and blocks: " + gone.lines());
+			List<EncyclopediaPayload.Row> rows = inspect(helper, player);
+			EncyclopediaPayload.Row heading = row(rows, "encyclopedia.jugcraft.inspect.under_way");
+			EncyclopediaPayload.Row spent = row(rows, "compose.jugcraft.ritual.spent");
+			EncyclopediaPayload.Row holding = row(rows, "encyclopedia.jugcraft.inspect.anchor.held");
+			helper.assertTrue(heading != null && key((Component) args(heading.text())[0]).equals("ritual.jugcraft.adept_attunement")
+					&& spent != null && List.of(args(spent.text())).equals(List.of(6, 8, 1, 5)) && holding != null
+					&& holding.icons().equals(List.of(JugcraftConcordance.INITIATE_WAND, Items.AMETHYST_SHARD, Items.GOLD_INGOT, Items.GLOWSTONE_DUST)),
+					"The Inspect page shows spent apart from held: " + rows.stream().map(row -> row.text().getString()).toList());
+			if (FabricLoader.getInstance().isModLoaded("jade")) {
+				CompoundTag jade = ConcordanceDataProvider.snapshot(anchor, level);
+				helper.assertTrue(jade.getIntOr("needed", -1) == 1 && jade.getIntOr("spent_focus", -1) == 6 && jade.getIntOr("spent_ley", -1) == 8
+						&& jade.getIntOr("reserved", -1) == 11 && jade.getIntOr("offerings", -1) == 4
+						&& jade.getStringOr("offering2", "").equals("minecraft:gold_ingot|3"), "Jade: " + jade);
+			}
+			use(anchor, player, true); // the leader calls it off
+			helper.assertValueEqual(anchor.ending(), new Readiness.Ending(RitualMachine.Interruption.CANCELLED, oneStep), "how it ended");
+			helper.assertTrue(anchor.spent() == null && keys(inspect(helper, player)).contains("encyclopedia.jugcraft.inspect.last"),
+					"Idle: nothing spent now; the last attempt is shown");
+			if (FabricLoader.getInstance().isModLoaded("jade")) {
+				helper.assertFalse(ConcordanceDataProvider.snapshot(anchor, level).keySet().contains("spent_focus"), "Jade: nothing spent while idle");
+			}
+			Readiness again = anchor.readiness(level, player);
+			helper.assertTrue(again != null && again.ready(), "The kept offerings stand ready again: " + again);
+			for (RitualMachine.Interruption reason : RitualMachine.Interruption.values()) {
+				Component line = CircleAnchorBlockEntity.endingLine(Component.literal("x"), new Readiness.Ending(reason, oneStep));
+				Object[] parts = args(line);
+				helper.assertTrue(key(line).equals("message.jugcraft.concordance.circle.ended.spent") && parts.length == 4
+						&& key((Component) parts[0]).equals("message.jugcraft.concordance.circle.interrupted." + reason.id)
+						&& key((Component) parts[1]).equals(reason == RitualMachine.Interruption.REMOVED
+								? "message.jugcraft.concordance.circle.release.dropped" : "message.jugcraft.concordance.circle.release.kept")
+						&& parts[2].equals(6) && parts[3].equals(8), "the one line for " + reason + ": " + line);
+			}
+			Component bare = CircleAnchorBlockEntity.endingLine(Component.literal("x"), new Readiness.Ending(RitualMachine.Interruption.FORGOTTEN, null));
+			helper.assertTrue(key(bare).equals("message.jugcraft.concordance.circle.ended") && args(bare).length == 2, "no loss when the rite is gone");
+			use(anchor, player, false);
+			helper.assertTrue(anchor.phase() == RitualMachine.Phase.CHANNELING && anchor.ending() == null, "A new attempt clears the last");
+			helper.runAfterDelay(AFTER_FIRST_STEP, () -> {
+				helper.destroyBlock(ANCHOR);
+				helper.assertValueEqual(anchor.ending(), new Readiness.Ending(RitualMachine.Interruption.REMOVED, oneStep), "broken");
+				List<ItemStack> dropped = new ArrayList<>();
+				for (ItemEntity item : level.getEntitiesOfClass(ItemEntity.class, new AABB(helper.absolutePos(ANCHOR)).inflate(3.0))) {
+					dropped.add(item.getItem());
+				}
+				helper.assertTrue(count(dropped, JugcraftConcordance.INITIATE_WAND) == 1 && count(dropped, Items.AMETHYST_SHARD) == 4
+						&& count(dropped, Items.GOLD_INGOT) == 3 && count(dropped, Items.GLOWSTONE_DUST) == 4, "dropped once: " + dropped);
+				helper.succeed();
+			});
+		});
+	}
+
+	/**
+	 * A dry pylon breaks the attunement off: the one line says why (power), that the offerings are kept and what the
+	 * attempt lost; the ending is kept in memory for the Inspect page, never saved, and forgotten on a load.
+	 */
+	@GameTest(maxTicks = 200)
+	public void theInterruptionReasonIsKept(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		CircleAnchorBlockEntity anchor = build(helper, 64);
+		ServerPlayer player = startAttunement(helper, anchor);
+		helper.runAfterDelay(AFTER_FIRST_STEP, () -> pylon(helper, first(StructurePattern.Role.CHANNEL)).setLey(level, 0));
+		helper.runAfterDelay(AFTER_FIRST_STEP + RitualMachine.STEP_TICKS + 10, () -> {
+			offeringsKept(helper, anchor, RitualMachine.Interruption.POWER);
+			helper.assertValueEqual(anchor.ending(), new Readiness.Ending(RitualMachine.Interruption.POWER, new Readiness.Spent(6, 8, 1, 4, 32)),
+					"how it ended");
+			Component line = anchor.endingLine();
+			Object[] parts = line == null ? new Object[0] : args(line);
+			helper.assertTrue(line != null && key(line).equals("message.jugcraft.concordance.circle.ended.spent") && parts.length == 4
+					&& key((Component) parts[0]).equals("message.jugcraft.concordance.circle.interrupted.power")
+					&& key((Component) args((Component) parts[0])[0]).equals("ritual.jugcraft.adept_attunement")
+					&& key((Component) parts[1]).equals("message.jugcraft.concordance.circle.release.kept") && parts[2].equals(6) && parts[3].equals(8),
+					"One line: the reason, the offerings kept, what was lost: " + line);
+			CompoundTag saved = anchor.saveWithoutMetadata(level.registryAccess());
+			helper.assertTrue(saved.keySet().stream().noneMatch(name -> name.contains("ending") || name.contains("spent")), "never saved: " + saved.keySet());
+			helper.assertTrue(keys(inspect(helper, player)).contains("encyclopedia.jugcraft.inspect.last"), "the Inspect page tells it");
+			anchor.loadWithComponents(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), saved));
+			helper.assertTrue(anchor.ending() == null, "forgotten on a load");
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * Offerings that answer only a rite the reader has not learned: readiness says nothing and names nothing, the Inspect
+	 * page says only that it is unlearned (no name, no stage table), and Jade names no rite. Once a practitioner begins it,
+	 * the novice sees it run, unnamed, with what it has spent; the practitioner sees it named, with its table.
+	 */
+	@GameTest(maxTicks = 100)
+	public void unknownRitesStayUnnamed(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		CircleAnchorBlockEntity anchor = build(helper, 64);
+		ServerPlayer novice = TestPlayers.mock(helper);
+		novice.setGameMode(GameType.SURVIVAL);
+		snapTo(novice, helper.absolutePos(STAND));
+		ConcordanceProgress.grant(novice, "jugcraft:first_light", ResearchState.UNDERSTOOD);
+		ConcordanceProgress.setFocus(novice, 20);
+		RateGate.forget(novice.getUUID());
+		offerAttunement(anchor, novice);
+		helper.assertValueEqual(anchor.readiness(level, novice), Readiness.UNKNOWN, "an unknown rite: nothing said, nothing named");
+		List<EncyclopediaPayload.Row> before = inspect(helper, novice);
+		EncyclopediaPayload.Row unknown = row(before, "encyclopedia.jugcraft.inspect.rituals_unknown");
+		helper.assertTrue(keys(before).contains("encyclopedia.jugcraft.inspect.readiness.unknown")
+				&& keys(before).stream().noneMatch(name -> name.startsWith("ritual.jugcraft.") || name.startsWith("compose.jugcraft.ritual.stage."))
+				&& unknown != null && args(unknown.text())[0].equals(ConcordanceData.rules().ritualsAt(CircleAnchorBlockEntity.ANCHOR).size()),
+				"Unnamed: " + keys(before));
+		jadeNamesNoRite(helper, anchor);
+		ServerPlayer practitioner = practitioner(helper, STAND_2);
+		use(anchor, practitioner, false);
+		helper.assertTrue(anchor.phase() == RitualMachine.Phase.CHANNELING, "The practitioner begins it: " + anchor.run());
+		List<EncyclopediaPayload.Row> theirs = inspect(helper, novice);
+		EncyclopediaPayload.Row heading = row(theirs, "encyclopedia.jugcraft.inspect.under_way");
+		EncyclopediaPayload.Row spent = row(theirs, "compose.jugcraft.ritual.spent");
+		helper.assertTrue(heading != null && key((Component) args(heading.text())[0]).equals("encyclopedia.jugcraft.inspect.unknown_rite")
+				&& keys(theirs).stream().noneMatch(name -> name.startsWith("ritual.jugcraft.") || name.startsWith("compose.jugcraft.ritual.stage."))
+				&& spent != null && List.of(args(spent.text())).equals(List.of(6, 0, 0, 5)), "The novice sees it run, unnamed: " + keys(theirs));
+		List<EncyclopediaPayload.Row> mine = inspect(helper, practitioner);
+		EncyclopediaPayload.Row named = row(mine, "encyclopedia.jugcraft.inspect.under_way");
+		helper.assertTrue(named != null && key((Component) args(named.text())[0]).equals("ritual.jugcraft.adept_attunement")
+				&& keys(mine).contains("compose.jugcraft.ritual.stage.backlash"), "The practitioner sees it named, with its table");
+		jadeNamesNoRite(helper, anchor);
+		helper.succeed();
+	}
+
+	// ---------------------------------------------------------------- Root and Rivet (Concordance Chunk C, C-04)
+
+	private static final String ROOT_AND_RIVET = "jugcraft:root_and_rivet";
+
+	/** The Thallite plate (registered by the materials, so it has no Java constant). */
+	private static Item thallitePlate() {
+		return BuiltInRegistries.ITEM.getValue(Identifier.parse("jugcraft:thallite_plate"));
+	}
+
+	private static List<ItemStack> plus(List<ItemStack> base, ItemStack... more) {
+		List<ItemStack> out = new ArrayList<>(base);
+		out.addAll(List.of(more));
+		return out;
+	}
+
+	/** Offers Root and Rivet's offerings, with one Mendvetch more than it needs. */
+	private static void offerRootAndRivet(CircleAnchorBlockEntity anchor, ServerPlayer player) {
+		for (ItemStack stack : List.of(new ItemStack(thallitePlate()), new ItemStack(Items.COPPER_INGOT, 4), new ItemStack(Garden.MENDVETCH, 5))) {
+			anchor.offer(player, stack);
+		}
+	}
+
+	/** Every Root and Rivet offering is still in the anchor, unlocked, and nothing was made. */
+	private static void rootAndRivetKept(GameTestHelper helper, CircleAnchorBlockEntity anchor, RitualMachine.Interruption reason) {
+		List<ItemStack> held = anchor.offerings();
+		helper.assertTrue(anchor.phase() == RitualMachine.Phase.IDLE && anchor.run().last() == reason && !anchor.run().completed()
+				&& ROOT_AND_RIVET.equals(anchor.run().ritual()), "Root and Rivet broke off for " + reason + ": " + anchor.run());
+		helper.assertTrue(count(held, thallitePlate()) == 1 && count(held, Items.COPPER_INGOT) == 4 && count(held, Garden.MENDVETCH) == 5,
+				"Every offering is still in the anchor after " + reason + ": " + held);
+		helper.assertTrue(anchor.output().isEmpty(), "Nothing was made after " + reason);
+	}
+
+	/** Starts Root and Rivet and checks it channels with six Focus paid. */
+	private static ServerPlayer startRootAndRivet(GameTestHelper helper, CircleAnchorBlockEntity anchor) {
+		helper.assertTrue(thallitePlate() != Items.AIR, "The Thallite plate is registered");
+		ServerPlayer player = practitioner(helper, STAND);
+		offerRootAndRivet(anchor, player);
+		use(anchor, player, false);
+		helper.assertTrue(anchor.phase() == RitualMachine.Phase.CHANNELING && ROOT_AND_RIVET.equals(anchor.run().ritual()),
+				"Root and Rivet starts: " + anchor.run());
+		helper.assertTrue(ConcordanceProgress.currentFocus(player) == 20 - 6, "It took six Focus");
+		return player;
+	}
+
+	/** Four steps of 40 ticks: one foundation, its offerings consumed once, 2 Ley Charge a step from each pylon; the spare Mendvetch makes nothing. */
+	@GameTest(maxTicks = 300)
+	public void rootAndRivetAttunesOnePlateOnce(GameTestHelper helper) {
+		CircleAnchorBlockEntity anchor = build(helper, 64);
+		ServerPlayer player = startRootAndRivet(helper, anchor);
+		helper.runAfterDelay(RitualMachine.STEP_TICKS * 4L + 20, () -> {
+			helper.assertTrue(anchor.phase() == RitualMachine.Phase.COMPLETE && anchor.output().is(JugcraftConcordance.ROOTED_THALLITE_FOUNDATION)
+					&& anchor.output().getCount() == 1, "One Rooted Thallite Foundation: " + anchor.run() + " " + anchor.output());
+			List<ItemStack> left = anchor.offerings();
+			helper.assertTrue(count(left, thallitePlate()) == 0 && count(left, Items.COPPER_INGOT) == 0 && count(left, Garden.MENDVETCH) == 1,
+					"Exactly its offerings were consumed; the spare Mendvetch stays: " + left);
+			for (BlockPos at : pylons()) {
+				helper.assertValueEqual(pylon(helper, at).ley(), 64L - 2 * 4, "2 Ley Charge a step for four steps at " + at);
+			}
+			helper.assertValueEqual(anchor.spent(), new Readiness.Spent(6, 32, 4, 0, 0), "spent in all: 6 Focus, 32 Ley Charge");
+			use(anchor, player, false);
+			helper.assertTrue(anchor.output().isEmpty() && anchor.phase() == RitualMachine.Phase.IDLE && anchor.run().completed()
+					&& player.getInventory().countItem(JugcraftConcordance.ROOTED_THALLITE_FOUNDATION) == 1, "The participant took it");
+			int focus = ConcordanceProgress.currentFocus(player);
+			use(anchor, player, false); // one Mendvetch: the vigil is closest (4 lacking), so nothing starts
+			helper.assertTrue(anchor.phase() == RitualMachine.Phase.IDLE && ConcordanceProgress.currentFocus(player) == focus
+					&& count(anchor.offerings(), Garden.MENDVETCH) == 1 && anchor.output().isEmpty(), "Nothing more is made of what is left");
+			helper.succeed();
+		});
+	}
+
+	@GameTest(maxTicks = 200)
+	public void aDryPylonStopsRootAndRivetAndKeepsTheOfferings(GameTestHelper helper) {
+		CircleAnchorBlockEntity anchor = build(helper, 64);
+		startRootAndRivet(helper, anchor);
+		helper.runAfterDelay(AFTER_FIRST_STEP, () -> pylon(helper, first(StructurePattern.Role.CHANNEL)).setLey(helper.getLevel(), 0));
+		helper.runAfterDelay(AFTER_FIRST_STEP + RitualMachine.STEP_TICKS + 10, () -> {
+			rootAndRivetKept(helper, anchor, RitualMachine.Interruption.POWER);
+			helper.assertValueEqual(anchor.ending(), new Readiness.Ending(RitualMachine.Interruption.POWER, new Readiness.Spent(6, 8, 1, 3, 24)),
+					"one step drawn, then a dry pylon");
+			for (BlockPos at : pylons()) {
+				long ley = pylon(helper, at).ley();
+				helper.assertTrue(ley == 0 || ley == 62, "The failed step drew from no pylon: " + ley);
+			}
+			helper.succeed();
+		});
+	}
+
+	@GameTest(maxTicks = 100)
+	public void rootAndRivetSavedMidRunLapses(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		CircleAnchorBlockEntity anchor = build(helper, 64);
+		startRootAndRivet(helper, anchor);
+		helper.runAfterDelay(AFTER_FIRST_STEP, () -> {
+			CompoundTag saved = anchor.saveWithoutMetadata(level.registryAccess());
+			anchor.loadWithComponents(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), saved));
+			helper.runAfterDelay(2, () -> {
+				rootAndRivetKept(helper, anchor, RitualMachine.Interruption.LAPSED);
+				helper.assertValueEqual(anchor.ending(), new Readiness.Ending(RitualMachine.Interruption.LAPSED, new Readiness.Spent(6, 8, 1, 3, 24)),
+						"the loaded run lapses, its ending worked out after the load");
+				helper.succeed();
+			});
+		});
+	}
+
+	@GameTest(maxTicks = 40)
+	public void theAttunementsOfferingsNeverChooseRootAndRivet(GameTestHelper helper) {
+		record Case(String name, List<ItemStack> offered, String chosen) {
+		}
+		CircleAnchorBlockEntity anchor = build(helper, 64);
+		ServerPlayer player = practitioner(helper, STAND);
+		Item plate = thallitePlate();
+		List<ItemStack> attunement = List.of(inscribedWand(), new ItemStack(Items.AMETHYST_SHARD, 4), new ItemStack(Items.GOLD_INGOT, 2),
+				new ItemStack(Items.GLOWSTONE_DUST, 4));
+		List<ItemStack> rootAndRivet = List.of(new ItemStack(plate), new ItemStack(Items.COPPER_INGOT, 4), new ItemStack(Garden.MENDVETCH, 4));
+		List<Case> cases = List.of(
+				new Case("the attunement's", attunement, "jugcraft:adept_attunement"),
+				new Case("the attunement's and copper", plus(attunement, new ItemStack(Items.COPPER_INGOT, 4)), "jugcraft:adept_attunement"),
+				new Case("the attunement's, a plate and Mendvetch (six slots)", plus(attunement, new ItemStack(plate), new ItemStack(Garden.MENDVETCH, 4)),
+						"jugcraft:adept_attunement"),
+				new Case("Root and Rivet's", rootAndRivet, ROOT_AND_RIVET),
+				new Case("Root and Rivet's and the vigil's (9 to 4)", plus(rootAndRivet, new ItemStack(Items.GLOW_BERRIES, 4)), ROOT_AND_RIVET),
+				new Case("Root and Rivet's and the Kindling's (11 to 9)", plus(rootAndRivet, new ItemStack(Items.GLOWSTONE_DUST, 8),
+						new ItemStack(Items.GOLD_INGOT, 2), new ItemStack(Items.ENDER_PEARL)), "jugcraft:spire_kindling"),
+				new Case("one Mendvetch short", List.of(new ItemStack(plate), new ItemStack(Items.COPPER_INGOT, 4), new ItemStack(Garden.MENDVETCH, 3)), ""));
+		for (Case each : cases) {
+			use(anchor, player, true); // the last case's offerings back
+			for (ItemStack stack : each.offered()) {
+				anchor.offer(player, stack.copy()); // offer() shrinks what it is given
+			}
+			Choice choice = anchor.choose(player);
+			helper.assertValueEqual(choice.chosen() == null ? "" : choice.chosen().id(), each.chosen(), each.name());
+		}
+		Choice wanting = anchor.choose(player);
+		helper.assertTrue(wanting.closest() != null && ROOT_AND_RIVET.equals(wanting.closest().id()) && wanting.missing().size() == 1
+				&& wanting.missing().getFirst().have() == 3, "Root and Rivet is closest, one Mendvetch short: " + wanting);
+		use(anchor, player, false);
+		helper.assertTrue(anchor.phase() == RitualMachine.Phase.IDLE && ConcordanceProgress.currentFocus(player) == 20
+				&& count(anchor.offerings(), Garden.MENDVETCH) == 3, "Short, nothing starts and nothing is taken");
+		helper.succeed();
+	}
+
+	@GameTest(maxTicks = 300)
+	public void rootAndRivetIsStrataFoundationWork(GameTestHelper helper) {
+		CircleAnchorBlockEntity anchor = build(helper, 64);
+		String foundation = "practice:" + Strata.ACTIVITY + ":" + Strata.KEY_FOUNDATION;
+		ServerPlayer bystander = practitioner(helper, STAND_2);
+		ConcordanceProgress.grant(bystander, Strata.RESEARCH, ResearchState.UNDERSTOOD);
+		ServerPlayer player = startRootAndRivet(helper, anchor);
+		ConcordanceProgress.grant(player, Strata.RESEARCH, ResearchState.UNDERSTOOD);
+		helper.assertFalse(ConcordanceProgress.knowledge(player).progress(Strata.RESEARCH).evidence().containsKey(foundation), "not before it completes");
+		helper.runAfterDelay(RitualMachine.STEP_TICKS * 4L + 20, () -> {
+			helper.assertTrue(anchor.phase() == RitualMachine.Phase.COMPLETE, "Complete: " + anchor.run());
+			helper.assertTrue(ConcordanceProgress.knowledge(player).progress(Strata.RESEARCH).evidence().containsKey(foundation),
+					"The participant laid a Stratawright's foundation");
+			helper.assertFalse(ConcordanceProgress.knowledge(bystander).progress(Strata.RESEARCH).evidence().containsKey(foundation),
+					"A bystander in the circle who took no part laid none");
+			helper.succeed();
 		});
 	}
 }

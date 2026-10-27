@@ -28,7 +28,10 @@ public enum Status {
 	NEEDS_REPAIR("needs_repair", false),
 	NO_ENERGY("no_energy", false),
 	FULL("full", false),
-	DISABLED("disabled", false);
+	DISABLED("disabled", false),
+	// Concordance Chunk D, D-02: a pact's upkeep (appended; ids are saved).
+	UPKEEP_DUE("upkeep_due", false),
+	UPKEEP_HELD("upkeep_held", false);
 
 	public final String id;
 	/** Whether it is acting (an intent) rather than waiting (a reason). */

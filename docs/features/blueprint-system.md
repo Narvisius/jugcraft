@@ -8,7 +8,9 @@ Owner: Narvisius
   - It is a drafting station two blocks wide (an MBS placed by one item, like a bed; it needs the block to your right free): steel trestle legs, a tilted drawing board with a blueprint taped on, a drafting arm and scales, a pencil ledge, a shelf of drawings and rolled plans, and a swing-arm lamp. Breaking either half breaks the whole table and drops it once.
   - The screen is a drafting sheet on a steel board, with folder tabs (below). The left is the drawing register; the selected blueprint turns slowly in the middle (drawn in blueprint blue with white ink, one turn every 14 seconds) over a dimension line, with its bill of materials and a title block (title, type, block count, source) on the right. The red **PRINT** stamp gives you the blueprint for free.
   - The board is 440 wide where the screen has room (410 on a narrow one, where the tabs take short names: SETS,
-    INDIVIDUAL, PARTIAL, IMPORT), so all four tabs sit on the board. Names too long for their space (in the drawing
+    INDIVIDUAL, PARTIAL, IMPORT), so all four tabs sit on the board. In a window too small for it (the smallest GUI
+    is 320 x 240) the whole board scales down to fit, the paste box, turning preview and mouse with it
+    ([blueprint-table-fit.md](blueprint-table-fit.md)). Names too long for their space (in the drawing
     register, the bill of materials and the title block) slide slowly to the left until their end shows, wait, and
     start again, so the whole name can be read.
   - **Importing:** paste the text of a blueprint (`.jugbp.json`, for example one an AI designed for you) under IMPORT, **+ NEW IMPORT**, and press IMPORT.

@@ -24,6 +24,7 @@ public final class CompanionReport {
             else if(!target.local(npc.level()))value=CompanionStatus.OTHER_DIMENSION;
             else if(!npc.level().hasChunkAt(target.at().pos()))value=CompanionStatus.UNLOADED;
             else if(!target.present(npc.level()))value=CompanionStatus.MISSING;
+            else if(!CompanionJobs.permitted(npc,target.at().pos()))value=CompanionStatus.FORBIDDEN;
             else if(i==CompanionAssignments.LUNCH){
                 value=npc.level().getBlockEntity(target.at().pos()) instanceof LunchBlockEntity food && food.feeds(npc)?lunch():CompanionStatus.FORBIDDEN;
             }else if(i>=CompanionAssignments.SUPPLY){

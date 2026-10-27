@@ -35,6 +35,7 @@ import net.minecraft.world.level.storage.ValueOutput;
  * ticks is sealed ({@link PreserveJarItem#seal}). Saved, and sent to clients to draw the water and the jars.
  */
 public class CanningKettleBlockEntity extends BlockEntity {
+    public final local.peepo.CompanionRecipeFilter companionFilter = new local.peepo.CompanionRecipeFilter(java.util.List.of(JugcraftAgriculture.SEALED));
 	public static final int JARS = 4;
 	public static final int BOIL_TICKS = 200;
 	public static final int PROCESS_TICKS = 400;
@@ -105,7 +106,9 @@ public class CanningKettleBlockEntity extends BlockEntity {
 		if (!water || returnedBucket > 0 || !heated()) return 0;
 		// Clear completed/rejected jars before supplying more when Output is blocked.
 		for (var jar : jars) if (readyOutput(jar)) return 0;
-		return PreserveJarItem.sealable(stack, level.getGameTime()) ? JARS - jars.size() : 0;
+		if(!PreserveJarItem.sealable(stack,level.getGameTime()))return 0;
+        var result=stack.copyWithCount(1);PreserveJarItem.seal(result);
+        return companionFilter.allows(result)?JARS-jars.size():0;
 	}
 	public local.peepo.CompanionStatus companionStatus() {
 		if (!live()) return local.peepo.CompanionStatus.UNLOADED;
@@ -292,6 +295,7 @@ public class CanningKettleBlockEntity extends BlockEntity {
 	@Override
 	protected void loadAdditional(ValueInput input) {
 		super.loadAdditional(input);
+        companionFilter.load(input);
 		water = input.getBooleanOr("water", false);
 		heat = Math.clamp(input.getIntOr("heat", 0), 0, BOIL_TICKS);
 		returnedBucket = Math.clamp(input.getIntOr("companionBucket", 0), 0, 1);
@@ -307,6 +311,7 @@ public class CanningKettleBlockEntity extends BlockEntity {
 	@Override
 	protected void saveAdditional(ValueOutput output) {
 		super.saveAdditional(output);
+        companionFilter.save(output);
 		output.putBoolean("water", water);
 		output.putInt("heat", heat);
 		output.putInt("companionBucket", returnedBucket);

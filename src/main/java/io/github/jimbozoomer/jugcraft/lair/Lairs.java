@@ -1,6 +1,7 @@
 package io.github.jimbozoomer.jugcraft.lair;
 
 import io.github.jimbozoomer.jugcraft.Jugcraft;
+import io.github.jimbozoomer.jugcraft.concordance.BrewItem;
 import io.github.jimbozoomer.jugcraft.concordance.ConcordanceEffects;
 import io.github.jimbozoomer.jugcraft.concordance.effect.EffectKind;
 import io.github.jimbozoomer.jugcraft.config.JugcraftConfig;
@@ -81,6 +82,8 @@ public final class Lairs {
 		Encounter.register();
 		ConcordanceEffects.observe((person, effect, target, amount) -> Encounter.helped(person, target,
 				effect.kind() == EffectKind.RESTORATION, amount, effect.duration()));
+		// Concordance Chunk C (C-02): a Stillroot Poultice put on another player in a fight credits its Regeneration's heals.
+		BrewItem.observe(Encounter::mended);
 		VISIT = AttachmentRegistry.<LairVisit>builder().persistent(LairVisit.CODEC).buildAndRegister(Jugcraft.id("lair_visit"));
 		GRAVE_GOODS = AttachmentRegistry.<GraveGoods>builder().persistent(GraveGoods.CODEC).copyOnDeath()
 				.buildAndRegister(Jugcraft.id("grave_goods"));
@@ -93,6 +96,11 @@ public final class Lairs {
 		ServerLivingEntityEvents.AFTER_DEATH.register((entity, source) -> {
 			if (entity instanceof ServerPlayer player) {
 				died(player);
+			}
+		});
+		ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
+			if (!alive && keepsBelongings(oldPlayer)) {
+				newPlayer.sendSystemMessage(Component.translatable("message.jugcraft.lair.belongings_kept"));
 			}
 		});
 		// Fabric copies death-persistent attachments in AFTER_RESPAWN too. Returning goods in that
@@ -398,6 +406,9 @@ public final class Lairs {
 	}
 
 	private static void joined(ServerPlayer player) {
+		if (!player.isAlive()) {
+			return; // logged out on the death screen: they respawn outside, keeping their belongings (keepsBelongings)
+		}
 		LairVisit visit = player.getAttached(VISIT);
 		if (!isLair(player.level())) {
 			if (visit != null) {
@@ -419,7 +430,19 @@ public final class Lairs {
 
 	// ---------------------------------------------------------------- death
 
-	/** Capture the exact native death stack before spawning it, including during chunk transitions. */
+	/**
+	 * Whether dying where the player is now costs nothing: in a lair (a boss fight) a death keeps everything, as the
+	 * keepInventory rule does, there only. The shared per-player rule (server/PlayerRules.keeps) asks this, so its
+	 * keep-inventory hooks drop nothing (items, experience or Trinkets slots) and the respawn restores it all.
+	 */
+	public static boolean keepsBelongings(Player player) {
+		return isLair(player.level());
+	}
+
+	/**
+	 * Anything still dropped dying in a lair (by another mod, say), caught as the exact native death stack before it
+	 * spawns (grave/DeathGraves), becomes Grave Goods instead of lying in an instance that will close.
+	 */
 	public static void retainDeathItem(ServerPlayer player, ItemStack stack) {
 		if (!isLair(player.level()) || stack.isEmpty()) return;
 		GraveGoods held = player.getAttached(GRAVE_GOODS);
@@ -427,7 +450,10 @@ public final class Lairs {
 		player.setAttached(GRAVE_GOODS, held == null ? new GraveGoods(items, 0) : held.plus(items, 0));
 	}
 
-	/** End the visit and retain experience; item stacks are captured directly by the native death hook. */
+	/**
+	 * A player has died in a lair. They keep what they carry (keepsBelongings); stray item stacks are caught by the
+	 * native death hook (retainDeathItem) and any experience orbs here. Their visit is over.
+	 */
 	public static void died(ServerPlayer player) {
 		if (!(player.level() instanceof ServerLevel level) || !isLair(level)) {
 			return;

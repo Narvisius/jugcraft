@@ -4,9 +4,10 @@ package io.github.jimbozoomer.jugcraft.academy;
 public final class AcademyClimate {
 	private AcademyClimate() {}
 	public static double influence(double x, double y, double z) {
-		double distance = Math.hypot(x, z)-36;
+		double distance = Math.hypot(x, z)-33;
 		distance = Math.min(distance, Math.hypot(x, z+52)-23);
 		distance = Math.min(distance, Math.hypot(x-44, z+51)-22);
+		distance = Math.min(distance, Math.hypot(x-79, z+51)-23);
 		distance = Math.min(distance, Math.hypot(x+41, z+9)-14);
 		distance = Math.min(distance, Math.hypot(x-41, z-7)-14);
 		// Bridge corridor, south of the court; avoid a giant circular aura over the valley.

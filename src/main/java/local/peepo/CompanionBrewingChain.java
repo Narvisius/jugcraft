@@ -56,6 +56,16 @@ final class CompanionBrewingChain {
         var current=recipe(step);return finished() || current!=null && !current.getReagent().test(item);
     }
     void prepare(Storage<ItemVariant> source){
+        prepare(source,s->Integer.MAX_VALUE,s->0);
+    }
+    ItemStack stockProduct(){var last=recipe(chain.size()-1);return last==null?ItemStack.EMPTY:last.getOutput().create();}
+    boolean stockBusy(){return count()>0;}
+    int stockPending(List<ItemStack> incoming){
+        if(finished())return 0;
+        return count()+incoming.stream().filter(s->ItemStack.isSameItemSameComponents(s,base)).mapToInt(ItemStack::getCount).sum();
+    }
+    boolean startingBottle(ItemStack item){return step==0 && ItemStack.isSameItemSameComponents(item,base);}
+    void prepare(Storage<ItemVariant> source,java.util.function.ToIntFunction<ItemStack> goal,java.util.function.ToDoubleFunction<ItemStack> priority){
         if(!idle())return;
         if(!chain.isEmpty()){
             // Never mutate this state from a transfer simulation; prepare runs before transport probes.
@@ -67,7 +77,7 @@ final class CompanionBrewingChain {
                 return;
             }
             if(loaded || step>0 || base.isEmpty()){if(!stand.getItem(3).isEmpty())return;clear();}
-            else return; // A reserved first delivery may still be on its way.
+            else if(goal.applyAsInt(stockProduct())<=0)clear();else return;
         }
         long now=stand.getLevel().getGameTime();if(now<nextSearch)return;nextSearch=now+40;
         var supplies=RecipeSupplies.available(source);
@@ -79,6 +89,8 @@ final class CompanionBrewingChain {
         boolean fuel=((CompanionBrewingAccessor)stand).peepo$fuel()>0 || stand.getItem(4).has(DataComponents.BREWING_FUEL) || supplies.stream().anyMatch(s->s.has(DataComponents.BREWING_FUEL));
         if(!fuel)return;
         record Node(ItemStack value,ItemStack base,List<Identifier> path,List<ItemStack> remaining,Set<ItemVariant> visited){}
+        record Choice(List<Identifier> path,ItemStack base,int bottles,double priority){}
+        Choice best=null;
         var queue=new ArrayDeque<Node>();
         for(var start:starts.values()){
             var stock=new ArrayList<ItemStack>();for(var s:supplies)stock.add(s.copy());
@@ -102,13 +114,16 @@ final class CompanionBrewingChain {
                 var out=edge.recipe.getOutput().create();var variant=ItemVariant.of(out);if(node.visited.contains(variant))continue;
                 var path=new ArrayList<>(node.path);path.add(edge.id);
                 if(filter.allows(out)){
-                    chain=List.copyOf(path);step=0;loaded=installed;base=node.base.copyWithCount(1);
-                    int available=installed?count():supplies.stream().filter(s->ItemStack.isSameItemSameComponents(s,base)).mapToInt(ItemStack::getCount).sum();
-                    bottles=Math.clamp(available,1,3);changed.run();return;
+                    int wanted=installed?count():goal.applyAsInt(out);
+                    int available=installed?count():supplies.stream().filter(s->ItemStack.isSameItemSameComponents(s,node.base)).mapToInt(ItemStack::getCount).sum();
+                    double score=priority.applyAsDouble(out);
+                    if(wanted==Integer.MAX_VALUE && score==0){chain=List.copyOf(path);step=0;loaded=installed;base=node.base.copyWithCount(1);bottles=Math.clamp(available,1,3);changed.run();return;}
+                    if(wanted>0 && (best==null || score>best.priority))best=new Choice(List.copyOf(path),node.base.copyWithCount(1),Math.clamp(Math.min(wanted,available),1,3),score);
                 }
                 if(!filter.empty() && queue.size()<256){var visited=new HashSet<>(node.visited);visited.add(variant);queue.addLast(new Node(out,node.base,path,remaining,visited));}
             }
         }
+        if(best!=null){chain=best.path;step=0;loaded=installed;base=best.base;bottles=best.bottles;changed.run();}
     }
     int[] needs(ItemStack item){
         int[] need=new int[9];var current=recipe(step);if(current==null || !idle() || finished())return need;

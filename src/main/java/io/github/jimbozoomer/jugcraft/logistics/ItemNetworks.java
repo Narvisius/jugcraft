@@ -2,6 +2,7 @@ package io.github.jimbozoomer.jugcraft.logistics;
 
 import io.github.jimbozoomer.jugcraft.finance.ClaimTransfers;
 import io.github.jimbozoomer.jugcraft.finance.LandRegistry;
+import io.github.jimbozoomer.jugcraft.jimtafacts.industry.TransportAttachments;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,7 +56,7 @@ public final class ItemNetworks {
 		}
 		BlockPos neighbor = pos.relative(side);
             if (!level.hasChunkAt(neighbor)) return 0;
-            if (!ClaimTransfers.allowed(level, pos, neighbor)) return 0;
+            if (!ClaimTransfers.allowed(level, pos, neighbor) || !io.github.jimbozoomer.jugcraft.jimtafacts.industry.TransportAttachments.openEdge(level, pos, side)) return 0;
 		if (level.getBlockState(neighbor).getBlock() instanceof ItemPipeBlock) {
 			return network(level, neighbor).distribute(level, source, maxItems, exclude, pos);
 		}
@@ -96,11 +97,15 @@ public final class ItemNetworks {
 			return discover(level, start, null);
 		}
 		static Network discover(Level level, BlockPos start, ItemVariant resource) {
+			return discover(level,start,resource,-1);
+		}
+		static Network discover(Level level, BlockPos start, ItemVariant resource,int initialColor) {
 			Network network = new Network();
 			network.entry = start.immutable();
+			if(initialColor < -1)return network;
 			ArrayDeque<Route> queue = new ArrayDeque<>();
 			Set<Route> visited = new HashSet<>();
-			queue.add(new Route(start.immutable(), -1));
+			queue.add(new Route(start.immutable(), initialColor));
 			visited.add(queue.peek());
 			network.pipes.add(start.immutable());
 			while (!queue.isEmpty()) {
@@ -111,17 +116,19 @@ public final class ItemNetworks {
 				if (!(own.getBlock() instanceof ItemPipeBlock current)) continue;
 				network.rate = Math.min(network.rate, current.transferLimit());
 				network.directed |= current.directionalRouting();
-				network.colored |= current.coloredRouting();
+				network.colored |= current.coloredRouting()||TransportAttachments.colored(level,pipe);
 				int color = resource == null ? -1 : current.routeColor(level, pipe, own, resource, route.color);
 				if (color < -1) continue;
 				for (Direction direction : Direction.values()) {
 					BlockPos next = pipe.relative(direction).immutable();
-                    if (!level.hasChunkAt(next) || !ClaimTransfers.allowed(level, pipe, next)) continue;
+                    if (!level.hasChunkAt(next) || !ClaimTransfers.allowed(level, pipe, next) || !io.github.jimbozoomer.jugcraft.jimtafacts.industry.TransportAttachments.openEdge(level, pipe, direction)) continue;
 					var neighbor = level.getBlockState(next);
 					if (!current.routesTo(own, direction, neighbor)) continue;
+					int crossing=resource==null?color:TransportAttachments.routeAcross(level,pipe,direction,color);
+					if(crossing < -1)continue;
 					if (neighbor.getBlock() instanceof ItemPipeBlock nextPipe) {
 						if (!current.joins(own, neighbor) || !nextPipe.joins(neighbor, own)) continue;
-						Route nextRoute = new Route(next, color);
+						Route nextRoute = new Route(next, crossing);
 						if (!visited.contains(nextRoute) && visited.size() >= MAX_PIPES) { network.truncated = true; return network; }
 						if (visited.add(nextRoute)) {
 							network.pipes.add(next);
@@ -174,7 +181,9 @@ public final class ItemNetworks {
 			for (ItemVariant resource : resources) {
 				if (colored && only == null) {
 					// Recompute with carried color for this resource. Filter inventories can change without block updates.
-					moved += discover(level, entry, resource).distribute(level,source,budget-moved,exclude,pusher,resource);
+					int initial=-1;
+					for(Direction direction:Direction.values())if(pusher.relative(direction).equals(entry)){initial=TransportAttachments.routeAcross(level,pusher,direction,-1);break;}
+					moved += discover(level, entry, resource,initial).distribute(level,source,budget-moved,exclude,pusher,resource);
 					if (moved >= budget) return moved;
 					continue;
 				}

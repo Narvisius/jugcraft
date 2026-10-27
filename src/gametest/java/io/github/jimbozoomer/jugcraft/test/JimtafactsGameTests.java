@@ -27,6 +27,18 @@ import java.util.*;
 
 /** Integration with real Trinkets slots, damage events, vanilla attributes and native grave capture. */
 public class JimtafactsGameTests {
+    @GameTest public void abilityTickNeverLoadsTerrainForSnowshoes(GameTestHelper h){
+        var player=JimtaRobotGameTests.player(h);
+        try{
+            var remote=new net.minecraft.core.BlockPos(27_500_000,100,27_500_000);
+            h.assertTrue(!h.getLevel().hasChunkAt(remote),"Fixture starts in unloaded terrain");
+            player.snapTo(net.minecraft.world.phys.Vec3.atCenterOf(remote));
+            io.github.jimbozoomer.jugcraft.jimtafacts.JimtaAbilities.tick(player,java.util.Set.of());
+            io.github.jimbozoomer.jugcraft.jimtafacts.JimtaAbilities.tick(player,java.util.Set.of("snowshoes"));
+            h.assertTrue(!h.getLevel().hasChunkAt(remote),"Passive accessories never load an absent chunk");
+        }finally{h.getLevel().getServer().getPlayerList().remove(player);}h.succeed();
+    }
+
     private static ServerPlayer player(GameTestHelper h) {
         var p = h.makeMockServerPlayerInLevel(); p.setGameMode(GameType.SURVIVAL); p.getInventory().clearContent();
         p.snapTo(Vec3.atCenterOf(h.absolutePos(new BlockPos(2, 2, 2)))); return p;

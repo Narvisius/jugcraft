@@ -1,0 +1,64 @@
+{
+  "copies": [
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/buildcraft reborn by jimbo/assets/buildcraftfactory/textures/blocks/gel/spread_0.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/jimtafacts/gel/spread_0.png",
+      "sha256": "3aa4763ca763ee1a11ab4f5d8f17391e8d2fbeb2b30d0616268ca478cb0c40aa",
+      "changes": "None"
+    },
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/buildcraft reborn by jimbo/assets/buildcraftfactory/textures/blocks/gel/spread_1.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/jimtafacts/gel/spread_1.png",
+      "sha256": "591aa55acc6e7f7d482b5b12f2dc36229ac618f602c6b8e4bcb7c68e695ceafb",
+      "changes": "None"
+    },
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/buildcraft reborn by jimbo/assets/buildcraftfactory/textures/blocks/gel/spread_2.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/jimtafacts/gel/spread_2.png",
+      "sha256": "1fbf8893275f4d56a611156ed2bff90945764dbd8556d385bdb4825a09abd473",
+      "changes": "None"
+    },
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/buildcraft reborn by jimbo/assets/buildcraftfactory/textures/blocks/gel/spread_3.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/jimtafacts/gel/spread_3.png",
+      "sha256": "f7b9a1618c17059d7c12d7bdced3ad537d541c86ac9b99dfc1e782ad52473e4e",
+      "changes": "None"
+    },
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/buildcraft reborn by jimbo/assets/buildcraftfactory/textures/blocks/gel/gelling_0.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/jimtafacts/gel/gelling_0.png",
+      "sha256": "be22d17567a57144c7c19f00dac722d5532401e366bd8d388ae06bff3b50b8d0",
+      "changes": "None"
+    },
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/buildcraft reborn by jimbo/assets/buildcraftfactory/textures/blocks/gel/gelling_1.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/jimtafacts/gel/gelling_1.png",
+      "sha256": "afdc0e542273b0560108593f3c97f628f7d3d45cf958208061d15c8d15222bf6",
+      "changes": "None"
+    },
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/buildcraft reborn by jimbo/assets/buildcraftfactory/textures/blocks/gel/gel.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/jimtafacts/gel/gel.png",
+      "sha256": "584f4aa6991e6bebd51f69d752071cfd6572c4ced3ff881491c481a3edee0fb7",
+      "changes": "None"
+    },
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/buildcraft reborn by jimbo/assets/buildcraftfactory/textures/items/water_gel.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/item/jimtafacts/gel/water_gel.png",
+      "sha256": "3de638db6860387e1f0ece913b6bd1c3ba439963bce6064ff6202e507d22ddde",
+      "changes": "None"
+    },
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/buildcraft reborn by jimbo/assets/buildcraftfactory/textures/items/gel.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/item/jimtafacts/gel/gel.png",
+      "sha256": "c58e0d8dfd0f4e856f531eaae1b68191db149047c670e7c48bd04c2a9726fc94",
+      "changes": "None"
+    }
+  ],
+  "adaptations": [
+    "Seven original stage textures, 200/400-tick stage pacing.",
+    "Native finite spread: at most 3 sources per node stage, 64 visited/128 discovered positions, 12-block radius from origin, claims and loaded-only access. Pauses for absent owner.",
+    "One portable gel per broken block; original random extra drops omitted. Existing asphalt binder replaces source oil-residue bucket.",
+    "No library programs executed. ItemWaterGel and BlockWaterGel classes read statically with CFR."
+  ]
+}

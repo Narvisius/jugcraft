@@ -9,8 +9,11 @@ import io.github.jimbozoomer.jugcraft.concordance.effect.Ledger;
 import io.github.jimbozoomer.jugcraft.concordance.effect.Stacking;
 import io.github.jimbozoomer.jugcraft.concordance.effect.Tolerance;
 import io.github.jimbozoomer.jugcraft.concordance.ember.Ember;
+import io.github.jimbozoomer.jugcraft.concordance.rime.Rime;
+import io.github.jimbozoomer.jugcraft.concordance.rime.Rimebind;
 import io.github.jimbozoomer.jugcraft.concordance.sign.Sign;
 import io.github.jimbozoomer.jugcraft.concordance.sign.Signs;
+import io.github.jimbozoomer.jugcraft.concordance.strata.Brace;
 import io.github.jimbozoomer.jugcraft.party.JugcraftParties;
 import io.github.jimbozoomer.jugcraft.town.TownProtection;
 import io.github.jimbozoomer.jugcraft.weapons.ArmItem;
@@ -219,7 +222,13 @@ public final class ConcordanceEffects {
 			case MOVEMENT -> push(target, context.origin(), effect);
 			case STATUS -> {
 				Holder<MobEffect> status = status(effect.status());
-				yield status == null ? Result.NOTHING : lasting(target, status, effect.magnitude(), effect, context.actor());
+				Result took = status == null ? Result.NOTHING : lasting(target, status, effect.magnitude(), effect, context.actor());
+				if (took.applied()) {
+					// Chunk B unit 3: a Rimebound that took starts its thaw; a Brace remembers who put it on.
+					Rimebind.bound(person, target, effect);
+					Brace.braced(person, target, effect);
+				}
+				yield took;
 			}
 			case PROTECTION -> lasting(target, MobEffects.ABSORPTION, effect.protectionAmplifier(), effect, context.actor());
 			case DETECTION -> lasting(target, MobEffects.GLOWING, 0, effect, context.actor());
@@ -281,6 +290,13 @@ public final class ConcordanceEffects {
 				if (Ember.kindles(spec)) {
 					yield Ember.kindle(level, person, pos) ? Result.APPLIED : Result.NOTHING;
 				}
+				// Rime's alteration holds a crucible's heat; it must never reach the dousing below, which removes the block.
+				if (Rime.preserves(spec)) {
+					yield Rime.preserve(level, person, pos) ? Result.APPLIED : Result.NOTHING;
+				}
+				if (!state.is(BlockTags.FIRE)) {
+					yield Result.NOTHING; // only fire is ever put out
+				}
 				level.removeBlock(pos, false);
 				level.playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.5F, 1.4F);
 				yield Result.APPLIED;
@@ -295,8 +311,8 @@ public final class ConcordanceEffects {
 
 	/**
 	 * Whether a block operation has something to act on at {@code pos}: open air for light, a listed block to use, a
-	 * ripe crop or listed plant to gather, fire to put out (or, for Ember's alteration, an unlit hearth to kindle).
-	 * Selections use this to choose blocks.
+	 * ripe crop or listed plant to gather, fire to put out (or, for Ember's alteration, an unlit hearth to kindle; for
+	 * Rime's, an Alembic Crucible to hold). Selections use this to choose blocks.
 	 */
 	public static boolean accepts(ServerLevel level, EffectSpec spec, BlockPos pos) {
 		BlockState state = level.getBlockState(pos);
@@ -305,7 +321,8 @@ public final class ConcordanceEffects {
 			case ILLUMINATION -> Illumination.open(state);
 			case INTERACTION -> state.is(INTERACTABLE);
 			case HARVESTING -> state.getBlock() instanceof CropBlock crop ? crop.isMaxAge(state) : state.is(HARVESTABLE);
-			case ALTERATION -> Ember.kindles(spec) ? Ember.kindleable(state) : state.is(BlockTags.FIRE);
+			case ALTERATION -> Ember.kindles(spec) ? Ember.kindleable(state)
+					: Rime.preserves(spec) ? Rime.preservable(level, pos, state) : state.is(BlockTags.FIRE);
 			default -> false;
 		};
 	}
@@ -404,7 +421,8 @@ public final class ConcordanceEffects {
 	/**
 	 * A push away from {@code origin}, level, slowed by the target's knockback resistance. From where the target itself
 	 * stands (a spell cast on oneself, such as Flashstep) there is no "away": it goes the way the target faces, level,
-	 * or straight up if it looks straight up or down.
+	 * or straight up if it looks straight up or down. A helpful push (one's own Flashstep) neither feels nor spends a
+	 * Brace; a harmful one is braced and spends it (B-P12).
 	 */
 	private static Result push(LivingEntity target, Vec3 origin, EffectSpec effect) {
 		Vec3 away = target.position().subtract(origin);
@@ -414,8 +432,12 @@ public final class ConcordanceEffects {
 			flat = new Vec3(look.x, 0.0, look.z);
 		}
 		Vec3 direction = flat.lengthSqr() < 1.0E-4 ? new Vec3(0.0, 1.0, 0.0) : flat.normalize();
-		double speed = Math.min(effect.magnitude(), EffectSpec.MAX_PUSH) / 10.0
-				* Math.max(0.0, 1.0 - target.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+		boolean braceable = effect.intent() == Intent.HARMFUL;
+		double resistance = braceable ? target.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE) : Brace.resistanceWithout(target);
+		if (braceable) {
+			Brace.spend(target);
+		}
+		double speed = Math.min(effect.magnitude(), EffectSpec.MAX_PUSH) / 10.0 * Math.max(0.0, 1.0 - resistance);
 		if (speed <= 0.0) {
 			return Result.NOTHING;
 		}

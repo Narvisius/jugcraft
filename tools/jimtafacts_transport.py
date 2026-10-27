@@ -10,7 +10,9 @@ KINDS = [m+'_'+flow for m in MATERIALS for flow in ('item','fluid','power') if n
 KINDS += ['clay_item','clay_fluid','iron_power','diamond_power','wood_power','diamond_wood_power','structure','void_item','void_fluid']
 KINDS += ['obsidian_item','stripes_item','diamond_wood_item','diamond_wood_fluid','lapis_item','daizuli_item','emzuli_item']
 def blocks(): return {'jimta_pipe_'+name for name in KINDS}
-def items(): return blocks()
+def items():
+    from jimtafacts_transport_attachments import items as attachments
+    return blocks() | attachments()
 def dump(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, indent=2, ensure_ascii=False)+'\n', encoding='utf-8')
@@ -56,7 +58,7 @@ def generate(shared=True):
                 parts.append({'when':{'limit':str(index)},'apply':{'model':'jugcraft:block/'+model}})
         for face,rot in directions:
             entry={'apply':{'model':'jugcraft:block/'+id+'_arm',**rot}}
-            if (material!='wood' or flow=='power') and name!='diamond_item' and material!='void' and not device: entry['when']={face:'true'}
+            entry['when']={face:'true'}
             parts.append(entry)
         if material in ('iron','wood','diamond_wood') and flow!='power' or name=='diamond_item':
             # The bright end marker makes the outlet (wood: intake) visible on every orientation.
@@ -92,5 +94,7 @@ def generate(shared=True):
         if '#jugcraft:jimtafacts_transport' not in data['values']: data['values'].append('#jugcraft:jimtafacts_transport')
         dump(path,data)
     dump(ROOT/'art/owner-library/catalog/edited-2026-10-23-jimtafacts/transport-runtime-copies.json',manifest)
+    import jimtafacts_transport_attachments
+    jimtafacts_transport_attachments.generate(shared)
     return items()
 if __name__=='__main__': print(f'Generated {len(generate())} native transport variants.')

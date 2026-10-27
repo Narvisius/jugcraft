@@ -98,8 +98,10 @@ One binder plus two sand crafts two Plaster blocks. Two binder, two paper and
 one Digestate Fiber craft four Plasterboard blocks. Both have slabs/stairs,
 block loot, placement models and editable native 16×16 surface generation.
 Existing calcium-sulfate binder and concrete consumers remain. Raw residue is
-an item, not a placeable construction block. Industrial acid is not food grade;
-cola/preservation chemistry remains a separate future task.
+an item, not a placeable construction block. Industrial acid is not food grade
+until it is purified into the food-grade vial that makes cola
+([cola-and-mmh.md](cola-and-mmh.md)); preservation chemistry remains a separate
+future task.
 
 ## Authoring and art
 

@@ -45,7 +45,7 @@ The attic of a colossal sewing room, seen at a spider's size: 81 blocks across, 
   - a silk spool stack on each spool's top;
   - cobwebs in the roof.
 
-Everything else is the shared framework ([hollow-acre.md](hollow-acre.md#lairs-the-shared-rules)): an instance per ritual, at most eight; at most four players; nothing can be built or broken; the mist's toll at the edges; Grave Goods on death; closing after 30 seconds empty.
+Everything else is the shared framework ([hollow-acre.md](hollow-acre.md#lairs-the-shared-rules)): an instance per ritual, at most eight; at most four players; nothing can be built or broken; the mist's toll at the edges; nothing lost on death; closing after 30 seconds empty.
 
 ## Changes from the plan
 
@@ -161,7 +161,7 @@ The Spindle Loft is its own dimension, so nothing here changes the Overworld. Th
 
 The plan's open questions keep their defaults:
 - the rite all year at night;
-- Grave Goods on death;
+- nothing lost on death;
 - four players and eight instances.
 
 Part 2, Madame Tatterlace ([tatterlace.md](tatterlace.md)), adds the fight on the doily (her unravelling floor uses the lace and the safe ring round each spool), her loot, and Gossamer Silk in the spindle.

@@ -1,0 +1,41 @@
+{
+  "copies": [
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/industrialcraft reborn by jimbo/assets/ic2/textures/items/itemDynamite.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/item/jimtafacts/gear/jimta_dynamite.png",
+      "sha256": "df2e2c37409b483004f1c871cf9af2039a22c7be74824f65af251a8d09c24eab",
+      "changes": "None; original pixels retained."
+    },
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/industrialcraft reborn by jimbo/assets/ic2/textures/items/itemDynamiteSticky.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/item/jimtafacts/gear/jimta_sticky_dynamite.png",
+      "sha256": "e42d9171ba6d256b9080f5bbc5ef343a5ee64b5843de58be5d8138dd7b31a7cc",
+      "changes": "None; original pixels retained."
+    },
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/industrialcraft reborn by jimbo/assets/ic2/textures/items/itemRemote.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/item/jimtafacts/gear/jimta_dynamite_remote.png",
+      "sha256": "ee853e719a3ded28097d84dad18f3a96b0628776153ae607664ca6723a639f0f",
+      "changes": "None; original pixels retained."
+    },
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/industrialcraft reborn by jimbo/assets/ic2/textures/blocks/blockDynamite.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/jimtafacts/dynamite.png",
+      "sha256": "ad9801777c1ea2fd15a938f94e53e71d093c8708031a3d831221cc5321ff5452",
+      "changes": "None; original pixels retained."
+    },
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/industrialcraft reborn by jimbo/assets/ic2/textures/blocks/blockDynamiteRemote.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/jimtafacts/dynamite_remote.png",
+      "sha256": "c48af4c4e91d12ecdf44e4761697aefafa8ff7725f97dcaab57910d520f65d85",
+      "changes": "None; original pixels retained."
+    },
+    {
+      "source": "art/owner-library/originals/Oct23/Jimtafacts/industrialcraft reborn by jimbo/assets/ic2/textures/blocks/blockITNT.png",
+      "runtime": "src/main/resources/assets/jugcraft/textures/block/jimtafacts/industrial_tnt.png",
+      "sha256": "9b799f9fbb3ea07a4a11f653c0eea4a1aab7cba963d90dc6d805b54801e69e9a",
+      "changes": "None; original pixels retained."
+    }
+  ],
+  "adaptation": "Original dynamite/sticky/remote roles and icons; original full six-face Industrial TNT atlas. Four-second thrown/manual fuse, two-second remote fuse; sixteen UUID-bound remote links with loaded same-dimension 64-block range. Industrial TNT has a four-block bounded burst rather than dynamite two-block burst, with retained block drops. Blasts recheck owner/claims, skip inventories, liquids, TNT and high resistance. Bound dynamite dispenser automation is supported. No unrestricted legacy explosion or nuclear-device parity."
+}

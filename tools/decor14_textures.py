@@ -228,10 +228,50 @@ def wing(face, x, y, w, h, g):
     return BAT[1 if g(x, y) > 0.6 else 0]
 
 
+CHOMPA_FUR = tuple(map(rgb, ("795132", "996b43", "b78c59", "d3b078")))
+CHOMPA_HAT = tuple(map(rgb, ("983b61", "bd527a", "d66a90")))
+
+
+def chompa_fur(face, x, y, w, h, g):
+    return CHOMPA_FUR[2 if g(x, y) > .7 else 1]
+
+
+def chompa_hood(face, x, y, w, h, g):
+    if face == "north" and 2 <= x <= w - 3 and 2 <= y <= h - 2:
+        return None  # exactly the bat outfit's open face, not a painted character face
+    return chompa_fur(face, x, y, w, h, g)
+
+
+def chompa_body(face, x, y, w, h, g):
+    if face == "north" and 2 <= x < w - 2:
+        return CHOMPA_FUR[3]
+    return chompa_fur(face, x, y, w, h, g)
+
+
+def chompa_boots(face, x, y, w, h, g):
+    if y >= h - 3:
+        return rgb("493d38") if x != w // 2 else rgb("302927")
+    return chompa_fur(face, x, y, w, h, g)
+
+
+def chompa_hat(face, x, y, w, h, g):
+    return CHOMPA_HAT[2 if face == "up" else 0 if y == h - 1 else 1]
+
+
+def chompa_hat_cross(face, x, y, w, h, g):
+    if face == "north" and 1 <= y <= h - 2 and abs(abs(x - (w - 1) / 2) - abs(y - (h - 1) / 2)) < .8:
+        return rgb("eee8dc")
+    return chompa_hat(face, x, y, w, h, g)
+
+
+def chompa_antler(face, x, y, w, h, g):
+    return CHOMPA_FUR[0 if face == "down" else 2 if face == "up" else 1]
+
+
 PAINTERS = {"cape": cape, "collar": collar, "wraps": wraps, "mummy_head": mummy_head, "strip": strip, "skull": skull, "ribs": ribs,
             "arm_bones": arm_bones, "leg_bones": leg_bones, "fur": fur, "wolf_head": wolf_head, "snout": snout, "wolf_ear": wolf_ear,
             "claw": claw, "tail_fur": tail_fur, "band": band, "cat_ear": cat_ear, "catsuit": catsuit, "bell": bell, "tail": tail,
-            "tail_tip": tail, "bat_hood": bat_hood, "bat_ear": bat_ear, "bat_suit": bat_suit, "wing": wing}
+            "tail_tip": tail, "bat_hood": bat_hood, "bat_ear": bat_ear, "bat_suit": bat_suit, "wing": wing, "chompa_fur": chompa_fur, "chompa_hood": chompa_hood, "chompa_body": chompa_body, "chompa_boots": chompa_boots, "chompa_hat": chompa_hat, "chompa_hat_cross": chompa_hat_cross, "chompa_antler": chompa_antler}
 
 
 def worn(name, seed):
@@ -382,6 +422,13 @@ def items():
         "werewolf_mask": icon(WOLF_ICON, {"F": FUR[2], "f": FUR[3], "p": rgb("8a5a5a"), "Y": rgb("f0c020"), "N": rgb("141010"),
                                           "W": BONE[2]}),
         "cat_ears_and_tail": icon(CAT_ICON, {"K": rgb("3a3a48"), "P": PINK}),
+        "chompa_costume": icon([
+            "..A.A......A.A..", "..AAA......AAA..", "....APPPPPP A...".replace(" ", "."),
+            "....PPWPPWPP....", "....PPPWWPPP....", "....PPWPPWPP....",
+            "...PPPPPPPPPP...", ".....FFFFFF.....", ".....F....F.....",
+            "....FFTTTTFF....", "...FFFTTTTFFF...", "...FFFTTTTFFF...",
+            ".....FFFFFF.....", ".....FF..FF.....", ".....KK..KK.....", "................"],
+            {"A": CHOMPA_FUR[1], "P": CHOMPA_HAT[1], "W": rgb("eee8dc"), "F": CHOMPA_FUR[2], "T": CHOMPA_FUR[3], "K": rgb("493d38")}),
         "bat_wings": icon(BAT_ICON, {"B": BAT[3], "b": BAT[1], "K": BAT[2]}),
     }
 

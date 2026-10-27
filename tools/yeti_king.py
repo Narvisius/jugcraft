@@ -40,6 +40,8 @@ YETI_KING = {
     # Kin Call: whelps out of the dens.
     "KIN": 2, "MAX_WHELPS": 4,
     "EXPERIENCE": 300,
+    # B-09: Rimebind holds one wind-up this much longer, once a thaw (untuned, 04:194).
+    "RIMEBOUND_WINDUP": 4,
 }
 # His attacks (YetiKingEntity.Attack): wind-up, active and recovery ticks, cooldown, the range he uses it from (blocks),
 # and in which phases ("hunt": the first; "blizzard": the second, after the King's Roar; "fury": below a fifth).

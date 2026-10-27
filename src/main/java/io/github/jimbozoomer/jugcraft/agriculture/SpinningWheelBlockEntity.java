@@ -35,6 +35,7 @@ import org.jspecify.annotations.Nullable;
  * saved, as a restart shuts the gate.
  */
 public class SpinningWheelBlockEntity extends BlockEntity {
+    public final local.peepo.CompanionRecipeFilter companionFilter = new local.peepo.CompanionRecipeFilter(java.util.List.of(net.minecraft.core.component.DataComponents.DYED_COLOR));
 	public static final int TURNS = 4;
 	/** How long (ticks) the wheel runs on after a turn of the treadle. */
 	public static final int SPIN_TICKS = 20;
@@ -80,7 +81,8 @@ public class SpinningWheelBlockEntity extends BlockEntity {
             public long getCapacity(){return Knitting.YARN_PER_WOOL;}
         };
     public int companionNeed(ItemStack item){
-        return !isRemoved() && level!=null && !isWild(level.getGameTime()) && wool==null && companionYarn.isEmpty() && Knitting.woolColor(item)!=null?1:0;
+        var color=Knitting.woolColor(item);
+        return !isRemoved() && level!=null && !isWild(level.getGameTime()) && wool==null && companionYarn.isEmpty() && color!=null && companionFilter.allows(Knitting.yarn(color.getTextureDiffuseColor(),1))?1:0;
     }
     public net.fabricmc.fabric.api.transfer.v1.storage.Storage<net.fabricmc.fabric.api.transfer.v1.item.ItemVariant> companionInputs(){return companionInput;}
     public net.fabricmc.fabric.api.transfer.v1.storage.Storage<net.fabricmc.fabric.api.transfer.v1.item.ItemVariant> companionOutputs(){return companionOutput;}
@@ -262,6 +264,7 @@ public class SpinningWheelBlockEntity extends BlockEntity {
 	@Override
 	protected void loadAdditional(ValueInput input) {
 		super.loadAdditional(input);
+        companionFilter.load(input);
         companionYarn=input.read("CompanionYarn",ItemStack.OPTIONAL_CODEC).orElse(ItemStack.EMPTY);
         companionTicks=0;companionBatch=input.getBooleanOr("CompanionBatch",false);
 		int color = input.getIntOr("wool", -1);
@@ -277,6 +280,7 @@ public class SpinningWheelBlockEntity extends BlockEntity {
 	@Override
 	protected void saveAdditional(ValueOutput output) {
 		super.saveAdditional(output);
+        companionFilter.save(output);
         output.store("CompanionYarn",ItemStack.OPTIONAL_CODEC,companionYarn);
         output.putBoolean("CompanionBatch",companionBatch);
 		output.putInt("wool", wool == null ? -1 : wool.ordinal());

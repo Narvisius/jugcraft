@@ -42,6 +42,17 @@ bone meal, relic charge, a Crimson Surge) were in no loop check.
   - Every conversion and every source driven by time is modelled, each figure tied to the Java or data it comes from,
     so the model cannot drift from the game.
   - No cycle of conversions comes back with as much as it started with.
+  - **Ritual sinks** (`RITUAL_SINKS`; Concordance Chunk C, C-04; not merged; passed in CI): Root and Rivet takes 32 Ley
+    Charge and 6 Focus a run for one Rooted Thallite Foundation, which nothing turns back; modelled as an edge into a
+    node with no way out, so a later conversion out of it is weighed with it. `check_economy` holds the sink's figures
+    to the ritual's data, and its offerings are worded from that data. The table's Root and Rivet row below is the same
+    C-04 addition (not merged).
+  - **JE → a crucible's heat** (Concordance Chunk C, C-05; not merged; passed in CI): a
+    [Crucible Stand](crucible-stand.md) pays 8, 16 or 32 JE a tick only on ticks it heats; heat goes nowhere else
+    (`je_to_heat`, at the cheapest band's 8 JE, an edge into a node with no way out). `check_economy` holds that heat
+    becomes nothing else and that the edge is modelled at the stand's cheapest rate, and anchors the rates and the
+    store's "never extracted" to `CrucibleStandBlockEntity`. The table's Crucible Stand row below (768,000 JE a day,
+    heating searing) is the same C-05 addition, pasted from the tool.
   - Every crop's regrow-and-compost loop is included, at its natural cost and when a spire hastens it.
 
 ## Bounded on purpose
@@ -65,11 +76,14 @@ The table is rendered by `python3 tools/concordance_economy.py`, and `check_econ
 |---|---|---|---|---|
 | Verdant Heart on a thriving bed, beside a Ley Pylon | 120 nutrients (60 bone meal) | 240 Verdance, poured as 160 Ley Charge | one beat every 200 ticks | the bed's nutrients fall; it stops on a starved bed |
 | Ley Pylon on Jugcraft Energy | 1,536,000 JE | 1,536 Ley Charge | 64 JE a tick | none; Ley Charge never becomes JE again |
+| Crucible Stand on Jugcraft Energy, heating searing all day | 768,000 JE | 24,000 ticks of one crucible's heat, no more | 32 JE a tick searing, 16 hot, 8 warm; nothing while its crucible waits for anything but heat, is held, or is hotter than it aims | none; heat is never stored, carried or turned back into JE, Ley Charge or anything else |
 | Gleaner on Concordance crops | 600 Verdance | 600 harvests, of ripe crops only | one every 40 ticks | each crop falls back to step 1 and must regrow at its cost |
 | Kindled Lantern, lit | 60 Radiance | light at its carrier | a measure every 400 ticks; a measure begun is spent | light |
 | Lumen Sconce | 20 Radiance | light 15 | a measure every 1200 ticks; a measure begun is spent | light |
 | Reliquary Shrine recharging | 2,400 Ley Charge | 9,600 relic charge | 8 charge a second | none; relic charge never becomes Ley Charge again |
 | Crimson Surge | 120 Vitae | 120 Focus | one every 1200 ticks | health given (offering exhaustion) |
+| Stolas's pact, kept and served every day | 1 offering every 7 game days (a Styx flower, which one bone meal grows back, or an amethyst shard), and 6 to 16 Astral Resonance a recall | 1 recalled attunement a game day, 2,400 ticks long | 1 a game day a pact; one recall an occurrence of each pattern, shared with a master's; at most 4 offerings held ahead | none; an offering paid becomes nothing, and no resonance is made |
+| Root and Rivet, worked again and again at one Lesser Circle | 4,800 Ley Charge, 900 Focus, and 1 Thallite Plate, 4 Copper Ingot and 4 Mendvetch a run | 150 Rooted Thallite Foundations | one run every 160 ticks; one player's Focus, back 1 every 40 ticks, pays for 100 runs | none; a foundation never becomes Ley Charge, Focus or a plate again |
 | Verdant Spire, kept | 8 bone meal and 6 Ley Charge | 1,440 crop steps | 6 a pulse, a pulse every 100 ticks | Concordance crops pay their beds |
 | Star Spire, kept | 2 glow ink sacs and 8 Ley Charge | 240 Focus a player | 6 a pulse, a pulse every 100 ticks | hostile creatures revealed |
 | Lantern Spire, kept | 4 glowstone dust and 8 Ley Charge | 960 lights | 4 a pulse, a pulse every 100 ticks | no hostile spawns in its light |
@@ -94,6 +108,10 @@ The table is rendered by `python3 tools/concordance_economy.py`, and `check_econ
 | sunpetal, hastened | 4 | 8 |
 <!-- economy:end -->
 
+Since Concordance Chunk D (D-05; not merged; [Stolas's pact](stolas-pact.md#costs-balance-and-automation)):
+Star-reckoning is a sink of resonance (modelled at the cheapest recall, 6), and Stolas's offerings are a sink of at most
+1/7 of an offering a day a pact. `tools/concordance_economy.py` still reports "gaining cycles: none".
+
 ## Interactions tested
 
 The brief's combinations, and the tests that exercise them (new in this step marked **new**):
@@ -108,6 +126,8 @@ The brief's combinations, and the tests that exercise them (new in this step mar
 | Remote storage with interrupted rituals | **new** `ConcordanceRitualGameTests.aPorterFuellingFromACircleStopsItCleanly`: a porter fuels itself from a channel's pylon mid-ritual; it took exactly what the pylons lost, the ritual stops for want of power with every offering kept, and neither its Focus nor the porter's Ley Charge comes back. `ConcordanceLogisticsGameTests.cancellingAndRecoveringGiveItemsBack`, `fullStorageRemovalAndRestartLoseNothing`, `aBrokenPostSendsItsCargoBack` |
 | Light burnt and relit | **new** `ConcordanceEconomyGameTests.aLanternPutOutHasSpentTheMeasureItBegan`, `aSconceTakenDownHasSpentTheMeasureItBegan` |
 | Automation of a formula | `ConcordanceAlchemyGameTests.machineryRunsAFormulaTwice` |
+| Electricity into a crucible's heat (Concordance Chunk C, C-05; not merged; passed in CI) | `ConcordanceEconomyGameTests.aStandTurnsElectricityIntoHeatOnly`: set to each heat, a Crucible Stand pays exactly its rate on each tick it heats until its store runs short; off, under a crucible already hotter than it aims or with nothing to heat, nothing; no JE comes back out on any face, and no fluid or item. `check_economy`: no gaining cycle through `je_to_heat` |
+| Two carriers for one demand (Concordance Chunk C, C-06; not merged; passed in CI) | `ConcordanceLogisticsGameTests`: `aCrucibleAsksOnceForItsExactShortage`, `aClearedOrReplacedFormulaCancelsItsRequest`, `aFullCourierQuotaWaitsAndBacksOff`, `aBrokenCrucibleTurnsItsRequestBack`, `aCourierFillsACrucibleUntilItIsFull`, `aPostTheSetterMayNotUseIsNeverAsked`, `anUnloadedCrucibleWaitsAndLosesNothing`, `aDiscardedPorterStrandsItsCargoOnce` and `anOfflineSetterPausesTheCourier`, each counting every item in containers and carried after every step; the Peepo client groups `noOverSupplyWithAnOpenCourierRequest` and "crucible demand" (`PeepoIntegrationClientTests`), a full crucible and an unloaded one (`CompanionAutomationChecks`). See [logistics](arcane-concordance-logistics.md) |
 
 The brief's library interactions:
 
@@ -162,6 +182,14 @@ No new dependency, art, sound or animation.
   which asserted that Focus stayed put although it returns with time. The other was a dream test whose wisps fell where
   creatures were not live. Build run 37680579216 on 9f50a1d: `mod` and `optional integrations absent` passed, with all
   1069 server tests. This step adds no client test.
+
+Concordance Chunk C, unit 3 (not merged): `ConcordanceEconomyGameTests` gains `aStandTurnsElectricityIntoHeatOnly`
+(3 in all), and `check_economy` the heat sink. It was written where no Minecraft jar is available; it passed in CI
+with unit 3's server tests (run 38720814268's `mod` job) and again in runs 38726242149, 38731825181 and 38774859294,
+every job passing in those three. `check_mod_data` passes with the new row and checks. Unit 2's Root and Rivet sink is
+held by `check_economy` and its ritual tests, which passed in run 38693262154. Concordance Chunk C, unit 5: the load
+card measures the workshop's server cost (C-10; in run 38774859294, +0.240 ms median and +0.550 ms p95 a tick, net, on
+CI's runner); it is a measurement, not an economy test.
 
 Not yet run:
 - a representative installation simulated over real world time in a running world (the tests advance their systems by

@@ -98,10 +98,18 @@ public final class Menagerie {
     private static boolean habitat(BiomeSelectionContext c,Species s){
         if(!io.github.jimbozoomer.jugcraft.config.JugcraftConfig.isFeatureEnabled("agriculture"))return false;
         String biome=c.getBiomeKey().identifier().getPath();
-        if(s.id().equals("grove_sporeling")&&c.hasTag(BiomeTags.IS_NETHER))return true;
-        if(s.id().equals("grove_lizard")&&(c.hasTag(BiomeTags.IS_JUNGLE)||biome.equals("mushroom_fields")))return true;
-        if(s.habitat().equals("nether"))return c.hasTag(BiomeTags.IS_NETHER);
-        if(s.habitat().equals("end"))return c.hasTag(BiomeTags.IS_END);
+        if(s.id().equals("grove_sporeling")&&(c.hasTag(BiomeTags.IS_NETHER)||landscape(c,"nether")))return true;
+        if(s.id().equals("grove_lizard")&&(c.hasTag(BiomeTags.IS_JUNGLE)||landscape(c,"jungle")||biome.equals("mushroom_fields")))return true;
+        if(s.habitat().equals("nether"))return c.hasTag(BiomeTags.IS_NETHER)||landscape(c,"nether");
+        if(s.habitat().equals("end"))return c.hasTag(BiomeTags.IS_END)||landscape(c,"end");
+        // The landscape collection has none of vanilla's biome tags: its habitats are its own (tools/landscape_habitats.py).
+        if(landscape(c,"overworld"))return switch(s.habitat()){
+            case "summoned","mushroom"->false;
+            case "storm","cave"->!landscape(c,"ocean");
+            case "snowy"->c.getBiome().getBaseTemperature()<.15F&&!landscape(c,"ocean");
+            case "beach"->landscape(c,"beach")||s.aquatic()&&landscape(c,"ocean");
+            default->landscape(c,s.habitat());
+        };
         if(!c.hasTag(BiomeTags.IS_OVERWORLD))return false;
         return switch(s.habitat()){
             case "summoned"->false;
@@ -116,6 +124,10 @@ public final class Menagerie {
             case "mountain"->c.hasTag(BiomeTags.IS_MOUNTAIN);case "badlands"->c.hasTag(BiomeTags.IS_BADLANDS);case "cave"->!c.hasTag(BiomeTags.IS_OCEAN);
             case "meadow"->biome.contains("meadow")||biome.contains("flower_forest");default->biome.contains("plains");
         };
+    }
+    /** Whether a landscape biome holds this habitat, or is of the Overworld ({@code #jugcraft:landscape_habitat/<habitat>}). */
+    private static boolean landscape(BiomeSelectionContext c,String habitat){
+        return c.hasTag(net.minecraft.tags.TagKey.create(Registries.BIOME,Jugcraft.id("landscape_habitat/"+habitat)));
     }
     static Item item(String id,Function<Item.Properties,Item> factory){
         var key=ResourceKey.create(Registries.ITEM,Jugcraft.id(id));var item=Registry.register(BuiltInRegistries.ITEM,key,factory.apply(new Item.Properties().setId(key)));ITEMS.put(id,item);return item;

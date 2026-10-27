@@ -16,9 +16,10 @@ public final class ComputerWorkspace {
     }
     private final Map<String,String> files=new TreeMap<>();
     private final Map<String,Integer> values=new TreeMap<>();
-    private static String fileName(String name){if(!name.matches("[a-zA-Z0-9_-]{1,32}"))throw new IllegalArgumentException("Program names: 1..32 letters, numbers, underscore or dash.");return name;}
+    private static String fileName(String name){if(!name.matches("[a-zA-Z0-9_.-]{1,32}")||name.equals(".")||name.equals("..")||name.equals("rom"))throw new IllegalArgumentException("File names: 1..32 letters, numbers, dot, underscore or dash; no paths or reserved names.");return name;}
     private static String registerName(String name){if(!name.matches("[a-zA-Z][a-zA-Z0-9_]{0,15}"))throw new IllegalArgumentException("Register names: letter first, up to 16 letters/numbers/underscores.");return name;}
     public String list(){return files.isEmpty()?"No saved programs.":String.join(", ",files.keySet());}
+    public List<String> names(){return List.copyOf(files.keySet());}
     public void save(String name,String text){
         name=fileName(name);if(text.length()>8192||text.split("\\R",-1).length>128)throw new IllegalArgumentException("Program: 128 lines / 8192 characters.");
         if(!files.containsKey(name)&&files.size()>=16)throw new IllegalArgumentException("Program shelf is full (16 programs).");

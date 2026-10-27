@@ -30,6 +30,7 @@ public final class IndustrialUtilityItems {
             if (!name.equals("toolbox")) props.durability(name.equals("forge_hammer") ? 80 : name.equals("lathing_tool") ? 50 : 60);
             ITEMS.put(name, Registry.register(BuiltInRegistries.ITEM, key, new Utility(props, name)));
         }
+        IndustrialContainment.register();
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(out -> ITEMS.values().forEach(out::accept));
     }
     public static ItemStack product(String tool, ItemStack input) {

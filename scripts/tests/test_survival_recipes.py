@@ -36,6 +36,15 @@ class SurvivalGraphTests(unittest.TestCase):
         self.assertEqual([], report['invalid_ingredients'])
         self.assertEqual([], report['invalid_template_loot_links'])
         rows = {r['item']: r for r in report['items']}
+        for tier, metal in enumerate(('bronze', 'steel', 'invar', 'stainless_steel', 'aluminum', 'titanium', 'tungsten')):
+            names = [metal + '_crate'] + ([metal + '_storage_crate_upgrade'] if tier else [])
+            for name in names:
+                row = rows['jugcraft:' + name]
+                # Metal processing depends on natural acquisition evidence in this audit.
+                self.assertIn(row['status'], ('recipe_chain_reachable', 'chain_with_acquisition_evidence'), name)
+                self.assertTrue(any('/recipe/storage_crates/' in route for route in row['routes']), name)
+                self.assertEqual([], row['blocked_by'], name)
+                self.assertNotIn('jugcraft:' + name, report['unregistered_model_definitions'])
         unresolved = [r['item'] for r in report['items'] if r['status'] in ('no_documented_route','recipe_chain_needs_review')]
         self.assertEqual([], unresolved, 'Every active survival chain needs a real source')
         from survival_jimtafacts_routes import DEFERRED_ACQUISITION

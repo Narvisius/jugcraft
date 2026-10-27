@@ -6,12 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.jimbozoomer.jugcraft.concordance.Authority;
 import io.github.jimbozoomer.jugcraft.concordance.ConcordanceProgress;
 import io.github.jimbozoomer.jugcraft.concordance.LeyPylonBlockEntity;
-import io.github.jimbozoomer.jugcraft.concordance.courier.CourierLedger;
-import io.github.jimbozoomer.jugcraft.concordance.courier.CourierPostBlockEntity;
-import io.github.jimbozoomer.jugcraft.concordance.courier.Couriers;
-import io.github.jimbozoomer.jugcraft.concordance.logistics.Logistics;
-import io.github.jimbozoomer.jugcraft.concordance.logistics.Place;
-import io.github.jimbozoomer.jugcraft.concordance.logistics.Progress;
 import io.github.jimbozoomer.jugcraft.concordance.logistics.Request;
 import io.github.jimbozoomer.jugcraft.concordance.rules.Evidence;
 import io.github.jimbozoomer.jugcraft.concordance.worker.Body;
@@ -19,13 +13,9 @@ import io.github.jimbozoomer.jugcraft.concordance.worker.Status;
 import io.github.jimbozoomer.jugcraft.concordance.worker.WorkerDefinition;
 import io.github.jimbozoomer.jugcraft.party.JugcraftParties;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -36,7 +26,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
@@ -46,11 +35,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -59,6 +45,7 @@ import org.jspecify.annotations.Nullable;
  * drawn at its source from a Ley Pylon its keeper's party may use, and wears it, and copper repairs it. It says why it
  * stops: no route, waiting for resources (an empty source), blocked by access (a container its keeper may not open),
  * full (the target), no energy, needs repair, unable to navigate, or a destination unloaded or in another dimension.
+ * Its courier decision is spirits/CourierWork, shared with the workshop hand (Concordance Chunk D, D-08).
  */
 public class ClockworkPorterEntity extends WorkerEntity<ClockworkPorterEntity> {
 	public static final String DEFINITION = "jugcraft:clockwork_porter";
@@ -86,7 +73,8 @@ public class ClockworkPorterEntity extends WorkerEntity<ClockworkPorterEntity> {
 	private @Nullable Route route;
 	/** Roadmap step 18: the Courier Post it serves (instead of a route), and the request it holds a claim on (0: none). */
 	private @Nullable GlobalPos post;
-	private long task;
+	/** Its courier work: the claim's id, and the decision it shares with the workshop hand (Concordance Chunk D, D-08). */
+	private final CourierWork courier = new CourierWork(this, REACH);
 	private final List<ItemStack> carried = new ArrayList<>();
 
 	public ClockworkPorterEntity(EntityType<? extends PathfinderMob> type, Level level) {
@@ -127,7 +115,7 @@ public class ClockworkPorterEntity extends WorkerEntity<ClockworkPorterEntity> {
 
 	/** The request it holds a claim on, or 0. */
 	public long task() {
-		return task;
+		return courier.task();
 	}
 
 	/**
@@ -147,10 +135,11 @@ public class ClockworkPorterEntity extends WorkerEntity<ClockworkPorterEntity> {
 
 	/** Gives up its claim, if any: the ledger keeps whatever was in transit, stranded at the post. */
 	private void leavePost() {
-		if (task != 0L && level() instanceof ServerLevel server) {
-			CourierLedger.of(server.getServer()).release(task, getUUID(), "reassigned", false, server.getGameTime());
+		if (level() instanceof ServerLevel server) {
+			courier.release(server, "reassigned");
+		} else {
+			courier.forget();
 		}
-		task = 0L;
 		post = null;
 	}
 
@@ -192,7 +181,7 @@ public class ClockworkPorterEntity extends WorkerEntity<ClockworkPorterEntity> {
 		}
 		ServerPlayer keeper = Authority.present(level, owner);
 		if (post != null) {
-			return courier(level, terms, keeper, gameTime);
+			return courier.serve(level, post, courierTerms(terms), keeper, gameTime);
 		}
 		if (route == null) {
 			stop();
@@ -222,7 +211,7 @@ public class ClockworkPorterEntity extends WorkerEntity<ClockworkPorterEntity> {
 		if (body.ready(terms) != null) {
 			return body.ready(terms);
 		}
-		Container container = container(level, source);
+		Container container = CourierWork.container(level, source);
 		if (container == null) {
 			return Status.WAITING_FOR_RESOURCES;
 		}
@@ -253,7 +242,7 @@ public class ClockworkPorterEntity extends WorkerEntity<ClockworkPorterEntity> {
 			return walkTo(centre(target), 1.0F, 1, gameTime) ? Status.TRAVELLING : Status.CANNOT_NAVIGATE;
 		}
 		arrived();
-		Container container = container(level, target);
+		Container container = CourierWork.container(level, target);
 		if (container == null) {
 			return Status.FULL;
 		}
@@ -283,235 +272,52 @@ public class ClockworkPorterEntity extends WorkerEntity<ClockworkPorterEntity> {
 	// ---------------------------------------------------------------- courier work (roadmap step 18)
 
 	/**
-	 * One decision as a courier of its post: take up stranded cargo at the post, take cargo back, deliver, pick up what
-	 * it reserved, or find a source and reserve there; with no claim, claim the post's next request. Each decision makes
-	 * at most one ledger step, and the items move in the same Transfer API transaction ({@link CourierLedger}); the
-	 * porter itself holds only the claim's id, never the items. It fuels at a pylon by its post.
+	 * The porter's part of the shared courier decision (Concordance Chunk D, D-08: CourierWork, extracted from here): its
+	 * body must be ready for a new claim; it serves every request at its post, from any container round it, with no cap of
+	 * its own; it fuels at a pylon there; each delivery is a trip that wears it and records a construct's service for its
+	 * keeper, present; its post gone, it forgets it and is idle.
 	 */
-	private Status courier(ServerLevel level, WorkerDefinition.Construct terms, @Nullable ServerPlayer keeper, long now) {
-		if (!level.dimension().equals(post.dimension())) {
-			stop();
-			return Status.OTHER_DIMENSION;
-		}
-		BlockPos at = post.pos();
-		if (!level.isLoaded(at)) {
-			stop();
-			return Status.DESTINATION_UNLOADED;
-		}
-		if (!(level.getBlockEntity(at) instanceof CourierPostBlockEntity postEntity)) {
-			// Its post is gone: it forgets it; its claim lapses by itself and the ledger keeps any cargo.
-			task = 0L;
-			post = null;
-			stop();
-			return Status.IDLE;
-		}
-		if (owner == null || !postEntity.mayUse(owner)) {
-			stop();
-			return Status.BLOCKED_BY_ACCESS;
-		}
-		CourierLedger ledger = CourierLedger.of(level.getServer());
-		Vec3 home = centre(at);
-		if (near(home, REACH + 0.5)) {
-			refuel(level, terms, at);
-		}
-		Request request = task == 0L ? null : ledger.ledger().get(task);
-		if (request == null || !request.claimedBy(getUUID(), now)) {
-			task = 0L;
-			Status ready = body.ready(terms);
-			if (ready != null) {
-				return homeward(home, now, ready);
+	private CourierWork.Terms courierTerms(WorkerDefinition.Construct terms) {
+		return new CourierWork.Terms() {
+			@Override
+			public @Nullable Status ready() {
+				return body.ready(terms);
 			}
-			Request next = ledger.ledger().next(Couriers.place(level, at), now);
-			// A request is served only while its requester could reach the sources themselves (step 28): it waits for them.
-			if (next != null && Authority.answering(level, next.ticket().requester()) == null) {
-				return homeward(home, now, Status.OWNER_OFFLINE);
+
+			@Override
+			public @Nullable Status refuses(Request request) {
+				return null;
 			}
-			if (next == null || ledger.claim(next.id(), getUUID(), now) != Logistics.Outcome.DONE) {
-				return homeward(home, now, Status.IDLE);
+
+			@Override
+			public boolean reaches(BlockPos pos) {
+				return true;
 			}
-			task = next.id();
-			request = ledger.ledger().get(task);
-		}
-		ledger.renew(task, getUUID(), now);
-		Status status = step(level, ledger, request, postEntity, home, terms, keeper, now);
-		// A request done, cancelled or handed back is no longer its task.
-		Request after = task == 0L ? null : ledger.ledger().get(task);
-		if (after == null || !after.claimedBy(getUUID(), now)) {
-			task = 0L;
-		}
-		return status;
-	}
 
-	private Status step(ServerLevel level, CourierLedger ledger, Request request, CourierPostBlockEntity postEntity, Vec3 home,
-			WorkerDefinition.Construct terms, @Nullable ServerPlayer keeper, long now) {
-		Progress progress = request.progress();
-		if (progress.carried() > 0 && !progress.aboard()) {
-			if (!near(home, REACH + 0.5)) {
-				return walkOrGiveUp(ledger, home, now);
+			@Override
+			public int load() {
+				return Integer.MAX_VALUE;
 			}
-			arrived();
-			ledger.takeUp(task, getUUID(), now);
-			return Status.WORKING;
-		}
-		if (progress.returning()) {
-			return takeBack(level, ledger, request, postEntity, now);
-		}
-		if (progress.carried() > 0) {
-			return deliver(level, ledger, request, terms, keeper, now);
-		}
-		if (progress.reserved() > 0 && progress.source() != null) {
-			return pickUp(level, ledger, request, now);
-		}
-		return reserve(level, ledger, request, postEntity.getBlockPos(), now);
-	}
 
-	private Status homeward(Vec3 home, long now, Status status) {
-		if (!near(home, REACH + 1.5)) {
-			walkTo(home, 1.0F, 1, now);
-		} else {
-			arrived();
-		}
-		return status;
-	}
-
-	/** Walks on, or, having given up, releases its claim (any cargo stays in the ledger, stranded at the post). */
-	private Status walkOrGiveUp(CourierLedger ledger, Vec3 target, long now) {
-		if (walkTo(target, 1.0F, 1, now)) {
-			return Status.TRAVELLING;
-		}
-		ledger.release(task, getUUID(), "cannot_navigate", true, now);
-		task = 0L;
-		return Status.CANNOT_NAVIGATE;
-	}
-
-	private Status deliver(ServerLevel level, CourierLedger ledger, Request request, WorkerDefinition.Construct terms,
-			@Nullable ServerPlayer keeper, long now) {
-		BlockPos to = Couriers.pos(request.ticket().destination());
-		if (!level.isLoaded(to)) {
-			stop();
-			return Status.DESTINATION_UNLOADED;
-		}
-		Storage<ItemVariant> destination = level.getBlockEntity(to) instanceof Container ? ItemStorage.SIDED.find(level, to, null) : null;
-		if (destination == null) {
-			ledger.destinationGone(request.ticket().destination(), now);
-			return Status.RETURNING;
-		}
-		if (!near(centre(to), REACH + 0.5)) {
-			return walkOrGiveUp(ledger, centre(to), now);
-		}
-		arrived();
-		Logistics.Outcome outcome = ledger.deliver(task, getUUID(), destination, now);
-		if (outcome == Logistics.Outcome.NOTHING_FREE) {
-			return Status.FULL;
-		}
-		if (outcome == Logistics.Outcome.DONE) {
-			body = body.trip(terms);
-			if (keeper != null) {
-				ConcordanceProgress.record(keeper, new Evidence.Practiced(Workers.ACTIVITY, "construct"));
+			@Override
+			public void atPost(ServerLevel level, BlockPos at) {
+				refuel(level, terms, at);
 			}
-		}
-		return Status.WORKING;
-	}
 
-	private Status pickUp(ServerLevel level, CourierLedger ledger, Request request, long now) {
-		BlockPos from = Couriers.pos(request.progress().source());
-		if (!level.isLoaded(from)) {
-			ledger.release(task, getUUID(), "source_unloaded", true, now);
-			task = 0L;
-			return Status.DESTINATION_UNLOADED;
-		}
-		Storage<ItemVariant> source = store(level, from);
-		if (source == null || !mayTake(level, request, from)) {
-			ledger.release(task, getUUID(), source == null ? "source_gone" : "blocked", true, now);
-			task = 0L;
-			return source == null ? Status.WAITING_FOR_RESOURCES : Status.BLOCKED_BY_ACCESS;
-		}
-		if (!near(centre(from), REACH + 0.5)) {
-			return walkOrGiveUp(ledger, centre(from), now);
-		}
-		arrived();
-		return ledger.pickUp(task, getUUID(), source, now) == Logistics.Outcome.DONE ? Status.WORKING : Status.WAITING_FOR_RESOURCES;
-	}
-
-	/** Finds the nearest plain container round the post holding the item asked for, and reserves there. */
-	private Status reserve(ServerLevel level, CourierLedger ledger, Request request, BlockPos at, long now) {
-		BlockPos destination = Couriers.pos(request.ticket().destination());
-		List<BlockPos> found = new ArrayList<>();
-		int radius = Couriers.SOURCE_RADIUS;
-		for (int cx = (at.getX() - radius) >> 4; cx <= (at.getX() + radius) >> 4; cx++) {
-			for (int cz = (at.getZ() - radius) >> 4; cz <= (at.getZ() + radius) >> 4; cz++) {
-				LevelChunk chunk = level.getChunkSource().getChunkNow(cx, cz);
-				if (chunk == null) {
-					continue;
-				}
-				for (BlockPos pos : chunk.getBlockEntities().keySet()) {
-					if (Math.abs(pos.getX() - at.getX()) <= radius && Math.abs(pos.getY() - at.getY()) <= radius
-							&& Math.abs(pos.getZ() - at.getZ()) <= radius && !pos.equals(destination) && !pos.equals(at)) {
-						found.add(pos.immutable());
-					}
+			@Override
+			public void delivered(ServerLevel level, @Nullable ServerPlayer keeper, boolean finished, long now) {
+				body = body.trip(terms);
+				if (keeper != null) {
+					ConcordanceProgress.record(keeper, new Evidence.Practiced(Workers.ACTIVITY, "construct"));
 				}
 			}
-		}
-		found.sort(Comparator.comparingDouble((BlockPos pos) -> pos.distSqr(at)).thenComparingInt(BlockPos::getY)
-				.thenComparingInt(BlockPos::getX).thenComparingInt(BlockPos::getZ));
-		for (BlockPos pos : found) {
-			Storage<ItemVariant> source = store(level, pos);
-			if (source != null && mayTake(level, request, pos) && ledger.available(task, source) > 0
-					&& ledger.reserve(task, getUUID(), Couriers.place(level, pos), source, now) == Logistics.Outcome.DONE) {
-				return Status.TRAVELLING;
-			}
-		}
-		ledger.release(task, getUUID(), "no_source", true, now);
-		task = 0L;
-		return Status.WAITING_FOR_RESOURCES;
-	}
 
-	/** Takes cancelled cargo back: to its source if it has room, otherwise into the post; with room in neither, it leaves it stranded for its requester. */
-	private Status takeBack(ServerLevel level, CourierLedger ledger, Request request, CourierPostBlockEntity postEntity, long now) {
-		ItemVariant item = ledger.item(task);
-		int carried = request.progress().carried();
-		Place source = request.progress().source();
-		BlockPos into = null;
-		Storage<ItemVariant> storage = null;
-		if (source != null && item != null) {
-			BlockPos from = Couriers.pos(source);
-			Storage<ItemVariant> back = level.isLoaded(from) ? store(level, from) : null;
-			if (back != null && Authority.mayChangeFor(level, owner, from) && CourierLedger.room(back, item, carried) > 0) {
-				into = from;
-				storage = back;
+			@Override
+			public Status postGone() {
+				post = null;
+				return Status.IDLE;
 			}
-		}
-		if (storage == null && item != null) {
-			Storage<ItemVariant> post = ItemStorage.SIDED.find(level, postEntity.getBlockPos(), null);
-			if (post != null && CourierLedger.room(post, item, carried) > 0) {
-				into = postEntity.getBlockPos();
-				storage = post;
-			}
-		}
-		if (storage == null) {
-			ledger.release(task, getUUID(), "nowhere_to_return", false, now);
-			task = 0L;
-			return Status.FULL;
-		}
-		if (!near(centre(into), REACH + 0.5)) {
-			return walkOrGiveUp(ledger, centre(into), now);
-		}
-		arrived();
-		ledger.giveBack(task, getUUID(), storage, now);
-		return Status.RETURNING;
-	}
-
-	/**
-	 * Whether a courier may take from {@code pos} for {@code request}: both its keeper (who works it) and the request's
-	 * requester (who gets the items) could reach it by hand, now (roadmap step 28).
-	 */
-	private boolean mayTake(ServerLevel level, Request request, BlockPos pos) {
-		return Authority.mayChangeFor(level, owner, pos) && Authority.mayChangeFor(level, request.ticket().requester(), pos);
-	}
-
-	/** A plain container's items through the Transfer API, as Jugcraft's item pipes reach them (null for anything else). */
-	private static @Nullable Storage<ItemVariant> store(ServerLevel level, BlockPos pos) {
-		return container(level, pos) == null ? null : ItemStorage.SIDED.find(level, pos, null);
+		};
 	}
 
 	/** Draws Ley Charge from a pylon near its source that its keeper's party may use, as much as it has room for. */
@@ -531,12 +337,6 @@ public class ClockworkPorterEntity extends WorkerEntity<ClockworkPorterEntity> {
 				}
 			}
 		}
-	}
-
-	/** A plain container at {@code pos} (not a furnace-like one, which takes items by side), or null. */
-	private static @Nullable Container container(ServerLevel level, BlockPos pos) {
-		BlockEntity entity = level.getBlockEntity(pos);
-		return entity instanceof Container container && !(entity instanceof WorldlyContainer) ? container : null;
 	}
 
 	/** Puts as much of {@code stack} into {@code container} as it takes; {@code stack} keeps the rest. */
@@ -592,11 +392,8 @@ public class ClockworkPorterEntity extends WorkerEntity<ClockworkPorterEntity> {
 			if (owner != null) {
 				WorkerRoster.of(server.getServer()).remove(owner, getUUID());
 			}
-			if (task != 0L) {
-				// Its cargo was never aboard it but in the ledger: released, it waits at the post for another courier.
-				CourierLedger.of(server.getServer()).release(task, getUUID(), "worker_removed", false, server.getGameTime());
-				task = 0L;
-			}
+			// Its cargo was never aboard it but in the ledger: released, it waits at the post for another courier.
+			courier.release(server, "worker_removed");
 		}
 		super.remove(reason);
 	}
@@ -622,7 +419,7 @@ public class ClockworkPorterEntity extends WorkerEntity<ClockworkPorterEntity> {
 		if (post != null) {
 			output.store("post", GlobalPos.CODEC, post);
 		}
-		output.putLong("task", task);
+		output.putLong("task", courier.task());
 		output.store("carried", ItemStack.CODEC.listOf(), List.copyOf(carried));
 	}
 
@@ -632,7 +429,7 @@ public class ClockworkPorterEntity extends WorkerEntity<ClockworkPorterEntity> {
 		body = input.read("body", BODY_CODEC).orElse(new Body(0, 0L));
 		route = input.read("route", Route.CODEC).orElse(null);
 		post = input.read("post", GlobalPos.CODEC).orElse(null);
-		task = input.getLongOr("task", 0L);
+		courier.restore(input.getLongOr("task", 0L));
 		carried.clear();
 		input.read("carried", ItemStack.CODEC.listOf()).ifPresent(list -> list.stream().filter(stack -> !stack.isEmpty()).limit(64)
 				.forEach(carried::add));

@@ -36,6 +36,8 @@ def generate(dump,RES,ART,SPELLS):
    if path.stem not in ('mithril_ore','deepslate_mithril_ore'):continue
    dump(RES/f'data/jugcraft/loot_table/blocks/jimta_spellbooks_{path.name}',loot(adapt(json.loads(path.read_text(encoding='utf-8')))));continue
   converted=loot(adapt(json.loads(path.read_text(encoding='utf-8'))))
+  from jimtafacts_survival_rewards import add_rewards
+  add_rewards(rel.as_posix(), converted)
   dump(RES/'data/jugcraft/loot_table/jimtafacts/spellbooks'/rel,converted);count+=1
   if rel.parts[0]=='entities' and not path.stem.startswith('additional_'):dump(RES/f'data/jugcraft/loot_table/entities/jimtafacts_{path.name}',converted)
  for path in sorted((source/'tags/item').rglob('*.json'),key=lambda p:p.as_posix()):

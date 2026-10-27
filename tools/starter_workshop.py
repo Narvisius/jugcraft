@@ -8,11 +8,12 @@ from machines import machine_recipes
 import model_writer
 
 STATIONS = ['workshop_bench', 'small_ceramic_kiln', 'small_crucible_furnace']
+BLOCKS = STATIONS + ['crucible_bellows']
 NAMES = dict(zip(STATIONS, ['Workshop Bench', 'Small Ceramic Kiln', 'Small Crucible Furnace'])) | {
     'workshop_hammer': 'Workshop Hammer', 'wire_cutters': 'Wire Cutters', 'soldering_tool': 'Soldering Tool',
     'unfired_ceramic_lining': 'Unfired Ceramic Lining', 'basic_ceramic_lining': 'Basic Ceramic Lining',
     'unfired_ceramic_crucible': 'Unfired Ceramic Crucible', 'ceramic_crucible': 'Ceramic Crucible',
-    'unfired_insulator': 'Unfired Insulator',
+    'unfired_insulator': 'Unfired Insulator', 'crucible_heat_insert':'Crucible Heat Insert', 'crucible_bellows':'Crucible Bellows',
 }
 
 def processes():
@@ -42,6 +43,10 @@ def processes():
             ingredients=[dict(ingredient='jugcraft:'+feed,count=2 if count==2 else 1)],
             result=dict(id='jugcraft:'+product,count=count),time=ticks,heated=True,
             **{'fabric:load_conditions': conditions(['machines'])})))
+    rows.append(('silicon',dict(type='jugcraft:starter_working',station=2,
+        ingredients=[dict(ingredient='minecraft:quartz',count=1),dict(ingredient='minecraft:charcoal',count=1)],
+        result=dict(id='jugcraft:silicon',count=1),time=200,heated=True,high_heat=True,
+        **{'fabric:load_conditions':conditions(['machines','silicon'])})))
     return rows
 
 def conditions(features):
@@ -55,7 +60,7 @@ def vessel(material, y=3, size=10):
             box((lo,y+2,lo),(lo+2,y+9,hi),material), box((hi-2,y+2,lo),(hi,y+9,hi),material),
             box((lo+2,y+2,lo),(hi-2,y+9,lo+2),material), box((lo+2,y+2,hi-2),(hi-2,y+9,hi),material)]
 
-def station_model(kind, lit):
+def station_model(kind, lit, upgraded=False):
     wood,iron,brick,clay = 'sp_wood','sp_iron','sp_firebrick','clay'
     fire = 'dr_amber' if lit else 'dp_gunmetal'
     if kind == 0:
@@ -79,10 +84,26 @@ def station_model(kind, lit):
         m += [box((3,25,3),(13,27,5),clay),box((3,25,11),(13,27,13),clay),
               box((3,25,5),(5,27,11),clay),box((11,25,5),(13,27,11),clay),
               box((1,20,6),(3,22,10),iron),box((13,20,6),(15,22,10),iron)]
+    if kind==2 and upgraded:
+        m += [box((0,17,0),(16,19,2),iron),box((0,17,14),(16,19,16),iron),
+              box((0,17,2),(2,19,14),iron),box((14,17,2),(16,19,14),iron)]
+    return m
+
+def bellows_model(stage):
+    top=12-stage
+    wood,iron,leather='sp_wood','sp_iron','balloon_leather'
+    m=[box((2,0,3),(5,4,14),wood),box((11,0,3),(14,4,14),wood),
+       box((1,4,3),(15,5,15),wood),box((2,5,4),(14,top,14),leather),
+       box((1,top,3),(15,top+1,15),wood),box((6,6,0),(10,9,4),iron),
+       box((6,6,14),(10,10,16),iron)]
+    for y in range(6,top,2):
+        m += [box((1.5,y,4),(2,y+.7,14),leather),box((14,y,4),(14.5,y+.7,14),leather),
+              box((2,y,14),(14,y+.7,14.5),leather)]
     return m
 
 def item_model(name):
     mat = 'clay' if name.startswith('unfired') else 'el_white'
+    if name == 'crucible_heat_insert': return vessel('sp_firebrick',2,14)
     if 'crucible' in name: return vessel(mat)
     if 'lining' in name: return [box((2,3,3),(14,6,13),mat),box((2,6,3),(4,11,13),mat),box((12,6,3),(14,11,13),mat)]
     if name == 'unfired_insulator': return [box((5,3,5),(11,5,11),mat),box((6,5,6),(10,12,10),mat),box((4,7,4),(12,9,12),mat)]
@@ -108,6 +129,8 @@ def write_all(write, assets, data, lang):
     craft('workshop_bench',['minecraft:crafting_table']+['#minecraft:planks']*4+['minecraft:cobblestone']*2)
     shaped('workshop_hammer',['II',' S'],dict(I='minecraft:iron_ingot',S='minecraft:stick'))
     shaped('wire_cutters',['I I','S S'],dict(I='minecraft:iron_ingot',S='minecraft:stick'))
+    craft('crucible_heat_insert',['minecraft:bricks']*2+['jugcraft:basic_ceramic_lining'])
+    craft('crucible_bellows',['#minecraft:planks']*4+['minecraft:leather']*2+['jugcraft:iron_shaft'])
     craft('soldering_tool',['minecraft:copper_ingot','minecraft:stick','minecraft:clay_ball'])
     shaped('small_ceramic_kiln',[' B ','BFB',' B '],dict(B='minecraft:bricks',F='minecraft:furnace'))
     shaped('small_crucible_furnace',['B B','BFB'],dict(B='minecraft:bricks',F='minecraft:furnace'))
@@ -117,26 +140,39 @@ def write_all(write, assets, data, lang):
     craft('insulated_copper_cable',['jugcraft:copper_wire']*6+['jugcraft:tin_ingot']+['jugcraft:ceramic_insulator']*2,result='copper_cable',count=8)
     for name, recipe in processes(): write(data/'recipe'/f'starter_workshop/{name}.json',recipe)
     for name, label in NAMES.items():
-        lang[('block.' if name in STATIONS else 'item.')+'jugcraft.'+name]=label
-        if name not in STATIONS:
+        lang[('block.' if name in BLOCKS else 'item.')+'jugcraft.'+name]=label
+        if name == 'crucible_bellows':
+            for stage in range(4):
+                elements=bellows_model(stage)
+                part=model_writer.split_model(name,elements,[(0,0,0)])[0]
+                model_writer.finish_closed(part)
+                write(assets/'models/block'/f'{name}_{stage}.json',dict(parent='minecraft:block/block',textures=textures(elements),elements=part))
+            elements=bellows_model(0)
+            write(assets/'models/item'/f'{name}.json',dict(parent='minecraft:block/block',textures=textures(elements),elements=model_writer.scaled_elements(elements)))
+            write(assets/'blockstates'/f'{name}.json',dict(variants={f'facing={face},pump={stage}':dict(model=f'jugcraft:block/{name}_{stage}',y=rotation)
+                for face,rotation in model_writer.FACING_Y.items() for stage in range(4)}))
+            write(data/'loot_table/blocks'/f'{name}.json',dict(type='minecraft:block',pools=[dict(rolls=1,
+                entries=[dict(type='minecraft:item',name='jugcraft:'+name)],condition=dict(type='minecraft:survives_explosion'))]))
+        elif name not in STATIONS:
             elements=item_model(name)
             write(assets/'models/item'/f'{name}.json',dict(parent='minecraft:block/block',textures=textures(elements),elements=model_writer.scaled_elements(elements)))
         else:
             kind=STATIONS.index(name); footprint=[(0,0,0),(-1,0,0)] if kind==0 else [(0,0,0),(0,1,0)] if kind==2 else [(0,0,0)]
-            for lit in (False,True):
-                elements=station_model(kind,lit); parts=model_writer.split_model(name,elements,footprint)
-                for index,part in enumerate(parts):
-                    model_writer.finish_closed(part)
-                    write(assets/'models/block'/f'{name}_part{index}{"_on" if lit else ""}.json',
-                        dict(parent='minecraft:block/block',textures=textures(elements),elements=part))
+            variants={}
+            for upgraded in (False,True):
+                suffix='_upgraded' if upgraded and kind==2 else ''
+                for lit in (False,True):
+                    elements=station_model(kind,lit,upgraded); parts=model_writer.split_model(name,elements,footprint)
+                    for index,part in enumerate(parts):
+                        model_writer.finish_closed(part)
+                        write(assets/'models/block'/f'{name}{suffix}_part{index}{"_on" if lit else ""}.json',
+                            dict(parent='minecraft:block/block',textures=textures(elements),elements=part))
+                    for facing,rotation in model_writer.FACING_Y.items():
+                        for part in (0,1):
+                            variants[f'facing={facing},lit={str(lit).lower()},part={part},upgraded={str(upgraded).lower()}']=dict(
+                                model=f'jugcraft:block/{name}{suffix}_part{min(part,len(footprint)-1)}'+('_on' if lit else ''),y=rotation)
             elements=station_model(kind,False)
             write(assets/'models/item'/f'{name}.json',dict(parent='minecraft:block/block',textures=textures(elements),elements=model_writer.scaled_elements(elements)))
-            variants={}
-            for facing,rotation in model_writer.FACING_Y.items():
-                for lit in (False,True):
-                    for part in (0,1):
-                        variants[f'facing={facing},lit={str(lit).lower()},part={part}']=dict(
-                            model=f'jugcraft:block/{name}_part{min(part,len(footprint)-1)}'+('_on' if lit else ''),y=rotation)
             write(assets/'blockstates'/f'{name}.json',dict(variants=variants))
             write(data/'loot_table/blocks'/f'{name}.json',dict(type='minecraft:block',pools=[dict(rolls=1,
                 entries=[dict(type='minecraft:item',name='jugcraft:'+name)],condition=dict(type='minecraft:survives_explosion'))]))
@@ -145,9 +181,10 @@ def write_all(write, assets, data, lang):
               'heat':'Heat: %s s','lining':'Lining','vessel':'Pot',
               'status.0':'Working','status.1':'Insert recipe ingredients','status.2':'Fit the matching tool',
               'status.3':'Install lining and crucible','status.4':'Add heating fuel','status.5':'Output is full',
-              'status.6':'Click Start Work','status.7':'Machines disabled','status.8':'Station is incomplete'}
+              'status.6':'Click Start Work','status.7':'Feature disabled','status.8':'Station is incomplete', 'status.9':'Install heat insert', 'status.10':'Attach bellows', 'status.11':'Supply airflow',
+              'pump':'Start Pumping','stop_pumping':'Stop Pumping','insert':'Insert','air.0':'Airflow: stopped','air.1':'Airflow: manual','air.2':'Airflow: shaft'}
     lang.update({'screen.jugcraft.workshop.'+k:v for k,v in labels.items()})
-    for tool, names in [('axe',[STATIONS[0]]),('pickaxe',STATIONS[1:])]:
+    for tool, names in [('axe',[STATIONS[0],'crucible_bellows']),('pickaxe',STATIONS[1:])]:
         path = data.parent/'minecraft/tags/block/mineable'/f'{tool}.json'
         tag = json.loads(path.read_text()) if path.exists() else dict(values=[])
         tag['values'] += ['jugcraft:'+n for n in names if 'jugcraft:'+n not in tag['values']]
@@ -162,7 +199,11 @@ def chapter():
         dict(title='A bench and three tools',icon='jugcraft:workshop_hammer',text=[
             'Make the two-block-wide bench with a crafting table, four planks and two cobblestone. A hammer needs two iron and a stick; cutters need two iron and two sticks; the soldering tool needs copper and a stick. Tools are reusable and never wear out.',
             'Choose a recipe on the left, follow the preview, insert ingredients and the matching tool, then click Start Work. Click Stop Work or leave the bench menu to pause; hoppers cannot work for you. One ingot makes one iron, copper, tin, zinc, lead, bronze or brass plate in 5 seconds. One copper ingot makes three wires in 5 seconds.',
-            'For a basic circuit, use existing silicon, three wires and one solder ingot with the soldering tool and fuel. A circuit takes 10 seconds. Work remains enabled until you click Stop Work or leave the menu. Powered machines keep the same yields and can run without a player at the bench. Silicon still comes from existing processing; a later batch will add the local quartz and upgraded-heat route.']),
-        dict(title='Connecting the first machine',icon='jugcraft:copper_cable',text=[
+            'For a basic circuit, use existing silicon, three wires and one solder ingot with the soldering tool and fuel. A circuit takes 10 seconds. Work remains enabled until you click Stop Work or leave the menu. Powered machines keep the same yields and can run without a player at the bench. Mine Overworld quartz and use the upgraded crucible described on the next page for silicon.']),
+        dict(title='Quartz and starter silicon',icon='jugcraft:quartz_ore',text=[
+            'Look beneath Highland, Shield, Basin, windswept hills, Stony Peaks and Stony Shore. Smaller veins occur beneath ordinary forests, birch forests, taigas, Woodland, Coniferous Forest, Maple Woods and Aspen Glade. Mine with a stone pickaxe or better; drops are ordinary quartz. Centers lie between Y -16 and 96, most often near 40. Rocky outcrops may mark a nearby vein.',
+            'Install a heat insert (two brick blocks and a fired lining) in the existing crucible. Make bellows from four planks, two leather and an iron shaft; place them on solid ground against the furnace lower block, with the nozzle touching it. Select silicon: one quartz and one charcoal make one silicon in ten seconds, plus separate furnace fuel.',
+            'Click Start Pumping once; click again or close the menu to stop. A rear shaft supplies 8 KE/t for unattended airflow, with the same yield and speed. Missing fuel or airflow and full output pause without wasting heating fuel. Parts never wear out. Alloys still work without airflow. The Blast Furnace fallback remains during preview review; the Arc Furnace gives two silicon per quartz.']),
+        dict(title='Connecting the first machine' ,icon='jugcraft:copper_cable',text=[
             'Six wires, a tin ingot and two fired insulators make eight copper cables. Two copper ingots and one tin make four directly; adding molded cable insulation makes sixteen. The bronze-blend recipe remains available. Starter ceramics need the machines feature, not drones.',
-            'Use these same alloys and components for existing casings, generators, shafts and powered machines. Nothing here requires a circuit just to make the first furnace, kiln or bench. Advanced ceramics, bellows and mechanical expansion remain separate.'])])
+            'Use these same alloys and components for existing casings, generators, shafts and powered machines. Nothing here requires a circuit just to make the first furnace, kiln or bench. Advanced ceramics and mechanical expansion remain separate.'])])

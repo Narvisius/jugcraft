@@ -1,5 +1,6 @@
 package io.github.jimbozoomer.jugcraft.concordance.alchemy;
 
+import io.github.jimbozoomer.jugcraft.concordance.diagnostic.Diagnostic;
 import java.util.ArrayList;
 import java.util.List;
 import org.jspecify.annotations.Nullable;
@@ -27,17 +28,28 @@ public record Formula(List<Operation> operations) {
 		return new Formula(mixture.history());
 	}
 
-	/** Replays every operation from an empty mixture: the mixture, or the first refusal. */
+	/** Replays every operation from an empty mixture: the mixture, or the first refusal with the index of its step. */
 	public Mixture.Step replay(AlchemyCatalog catalog) {
 		Mixture mixture = Mixture.EMPTY;
-		for (Operation operation : operations) {
-			Mixture.Step step = mixture.apply(operation, catalog);
-			if (step instanceof Mixture.Refused) {
-				return step;
+		for (int i = 0; i < operations.size(); i++) {
+			Mixture.Step step = mixture.apply(operations.get(i), catalog);
+			if (step instanceof Mixture.Refused refused) {
+				return new Mixture.Refused(refused.reason(), i);
 			}
 			mixture = ((Mixture.Applied) step).mixture();
 		}
 		return new Mixture.Applied(mixture);
+	}
+
+	/** Why these rules cannot follow this formula (plan 03:54; Chunk C, C-01): its first refused step and why; null if none. */
+	public @Nullable Diagnostic incompatibility(AlchemyCatalog catalog) {
+		return replay(catalog) instanceof Mixture.Refused refused ? incompatible(refused) : null;
+	}
+
+	/** A refusal of one of this formula's steps, as the shared diagnostic: the step counted from 1, in the player's words. */
+	public Diagnostic incompatible(Mixture.Refused refused) {
+		int at = Math.clamp(refused.step(), 0, operations.size() - 1);
+		return Diagnostic.incompatible(at + 1, operations.get(at).describe(), refused.reason());
 	}
 
 	/** The canonical text, operations joined by "; ". */

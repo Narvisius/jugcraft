@@ -86,12 +86,12 @@ public final class CrankJob implements CompanionJob {
         var status=workStatus(p);if(status!=CompanionStatus.READY)return status;
         long now=p.level().getGameTime();if(lastWorked==now)return CompanionStatus.WORKING;lastWorked=now;
         int offered;
-        try(var tx=Transaction.openOuter()){offered=p.extractEnergy((int)HandCrankBlockEntity.OUTPUT,tx);}
+        try(var tx=Transaction.openOuter()){offered=p.extractWorkEnergy(CompanionUniforms.Type.RUNNER,(int)HandCrankBlockEntity.OUTPUT,tx);}
         if(offered<=0)return CompanionStatus.RECOVERING;
         // Server callbacks are synchronous: simulation above reserves no items or energy between ticks.
         int taken=(int)KineticNetworks.push((ServerLevel)p.level(),stationPosition(),crank.getBlockState().getValue(HandCrankBlock.FACING),offered);
         if(taken<=0){idleUntil=now+80;return CompanionStatus.FULL;}
-        try(var tx=Transaction.openOuter()){p.extractEnergy(taken,tx);tx.commit();}
+        try(var tx=Transaction.openOuter()){p.extractWorkEnergy(CompanionUniforms.Type.RUNNER,taken,tx);tx.commit();}
         crank.companionTurned();return CompanionStatus.WORKING;
     }
 }

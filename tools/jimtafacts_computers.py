@@ -133,4 +133,7 @@ def apply():
     dump(ROOT / 'art/owner-library/catalog/edited-2026-10-23-jimtafacts/computer-copies.json', copies)
 
 
-if __name__ == '__main__': apply()
+if __name__ == '__main__':
+    apply()
+    from jimtafacts_computer_rom import generate as copy_rom
+    copy_rom()

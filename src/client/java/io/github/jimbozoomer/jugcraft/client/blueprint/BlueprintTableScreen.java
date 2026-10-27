@@ -5,11 +5,13 @@ import io.github.jimbozoomer.jugcraft.blueprint.BlueprintNetwork;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import io.github.jimbozoomer.jugcraft.client.ScreenKit;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.MultiLineEditBox;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.core.BlockPos;
@@ -30,8 +32,11 @@ import net.minecraft.world.level.block.Block;
  * The left of the sheet is the drawing register; the selected blueprint turns slowly in the middle
  * ({@link BlueprintTurntable}), with its bill of materials and a title block on the right. PRINT gives you the
  * blueprint (free).
+ * <p>
+ * The board is laid out at 410 or 440 x 250 and scaled down, with the mouse, to fit a smaller window (the smallest GUI
+ * is 320 x 240: docs/features/blueprint-table-fit.md).
  */
-public class BlueprintTableScreen extends Screen {
+public class BlueprintTableScreen extends Screen implements ScreenKit.Fitted {
 	/** The board's size: wider when the screen has room, so the four tabs fit with their full names. */
 	private static final int W_WIDE = 440, W_NARROW = 410;
 	private static final int H = 250;
@@ -57,6 +62,8 @@ public class BlueprintTableScreen extends Screen {
 	private int W = W_NARROW;
 	private int left;
 	private int top;
+	/** The board's scale: 1 when it fits, less in a smaller window. Positions are in the board's own (unscaled) space. */
+	private float scale = 1;
 	private int tab = INDIVIDUAL;
 	private int selected;
 	private int scroll;
@@ -108,9 +115,12 @@ public class BlueprintTableScreen extends Screen {
 	@Override
 	protected void init() {
 		open = this;
-		W = width >= W_WIDE + 8 ? W_WIDE : W_NARROW;
-		left = (width - W) / 2;
-		top = (height - H) / 2;
+		// Scaled to the window's height first; then the wide board if the scaled window has room for it.
+		float tall = Math.min(1F, (height - 8F) / H);
+		W = width / tall >= W_WIDE + 8 ? W_WIDE : W_NARROW;
+		scale = Math.min(tall, (width - 8F) / W);
+		left = Math.round((width / scale - W) / 2);
+		top = Math.round((height / scale - H) / 2);
 		history = ImportHistory.list();
 		if (turntable == null) {
 			turntable = new BlueprintTurntable(PREVIEW_W, PREVIEW_H);
@@ -299,7 +309,33 @@ public class BlueprintTableScreen extends Screen {
 	}
 
 	@Override
+	public ScreenRectangle panelArea() {
+		return new ScreenRectangle(Math.round(left * scale), Math.round(top * scale), Math.round(W * scale), Math.round(H * scale));
+	}
+
+	/** The mouse in the board's own space. */
+	private MouseButtonEvent scaled(MouseButtonEvent event) {
+		return new MouseButtonEvent(event.x() / scale, event.y() / scale, event.buttonInfo());
+	}
+
+	@Override
+	public boolean mouseReleased(MouseButtonEvent event) {
+		return super.mouseReleased(scaled(event));
+	}
+
+	@Override
+	public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
+		return super.mouseDragged(scaled(event), dragX / scale, dragY / scale);
+	}
+
+	@Override
+	public void mouseMoved(double x, double y) {
+		super.mouseMoved(x / scale, y / scale);
+	}
+
+	@Override
 	public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+		event = scaled(event);
 		double x = event.x(), y = event.y();
 		for (int i = 0; i < tabBounds.length; i++) {
 			int[] b = tabBounds[i];
@@ -334,6 +370,8 @@ public class BlueprintTableScreen extends Screen {
 
 	@Override
 	public boolean mouseScrolled(double x, double y, double dx, double dy) {
+		x /= scale;
+		y /= scale;
 		if (x < listRight()) {
 			scroll = Math.max(0, Math.min(Math.max(0, rowCount() - rows()), scroll - (int) Math.signum(dy)));
 			return true;
@@ -348,6 +386,8 @@ public class BlueprintTableScreen extends Screen {
 	@Override
 	public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float delta) {
 		super.extractBackground(g, mouseX, mouseY, delta);
+		g.pose().pushMatrix();
+		g.pose().scale(scale, scale);
 		drawBoard(g);
 		drawTabs(g);
 		drawSheet(g);
@@ -358,6 +398,7 @@ public class BlueprintTableScreen extends Screen {
 			g.fill(x0, y0, x1, y1, 0xFFD6DEE8);
 			g.fill(x0, y0, x1, y0 + 1, 0xFFF0F4F8);
 		}
+		g.pose().popMatrix();
 	}
 
 	/** The steel drawing board: a rim, four screws, the title and the drafting tools on the rail. */
@@ -442,7 +483,12 @@ public class BlueprintTableScreen extends Screen {
 	}
 
 	@Override
-	public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float delta) {
+	public void extractRenderState(GuiGraphicsExtractor g, int realMouseX, int realMouseY, float delta) {
+		// Everything is drawn in the board's own space, scaled; a tooltip (drawn after the screen, unscaled) goes at the
+		// real mouse.
+		int mouseX = Math.round(realMouseX / scale), mouseY = Math.round(realMouseY / scale);
+		g.pose().pushMatrix();
+		g.pose().scale(scale, scale);
 		super.extractRenderState(g, mouseX, mouseY, delta);
 		if (tab != IMPORT && !selectId.isEmpty()) {
 			List<Blueprint> all = library();
@@ -464,11 +510,12 @@ public class BlueprintTableScreen extends Screen {
 			g.text(font, new String[] {"No structure sets yet", "No blueprints yet", "No partial structures yet", ""}[tab],
 					listRight() + 16, py0() + 12, PALE, false);
 		} else {
-			drawDrawing(g, b, mouseX, mouseY);
+			drawDrawing(g, b, mouseX, mouseY, realMouseX, realMouseY);
 		}
 		for (Stamp stamp : stamps) {
 			drawStamp(g, stamp, stamp.over(mouseX, mouseY));
 		}
+		g.pose().popMatrix();
 	}
 
 	/** The drawing register: one numbered line per blueprint (or saved import), with its colour chip. */
@@ -504,7 +551,7 @@ public class BlueprintTableScreen extends Screen {
 	}
 
 	/** The selected blueprint: turning in the middle with a dimension line, materials and the title block. */
-	private void drawDrawing(GuiGraphicsExtractor g, Blueprint b, int mouseX, int mouseY) {
+	private void drawDrawing(GuiGraphicsExtractor g, Blueprint b, int mouseX, int mouseY, int realMouseX, int realMouseY) {
 		int vx = listRight() + 14, vy = py0() + 10;
 		if (turntable != null) {
 			turntable.draw(g, b, vx, vy);
@@ -532,7 +579,7 @@ public class BlueprintTableScreen extends Screen {
 			g.item(stack, rx, ly);
 			sliding(g, entry.getValue() + " x " + stack.getHoverName().getString(), rx + 18, ly + 4, rw - 20, INK, line * 211L);
 			if (mouseX >= rx && mouseX < rx + 16 && mouseY >= ly && mouseY < ly + 16) {
-				g.setTooltipForNextFrame(font, stack, mouseX, mouseY);
+				g.setTooltipForNextFrame(font, stack, realMouseX, realMouseY);
 			}
 			line++;
 		}

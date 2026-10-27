@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "guns"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SSS",
+    "SLR",
+    "BB "
+  ],
+  "key": {
+    "S": "#c:ingots/steel",
+    "R": "minecraft:lightning_rod",
+    "B": "#c:ingots/brass",
+    "L": "minecraft:lever"
+  },
+  "result": {
+    "id": "jugcraft:cloudburst_gun"
+  }
+}

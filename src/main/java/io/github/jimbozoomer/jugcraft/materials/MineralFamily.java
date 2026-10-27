@@ -19,8 +19,8 @@ public final class MineralFamily {
 		this.name = name;
 		this.ore = JugcraftRegistry.block(name + "_ore", Blocks.IRON_ORE);
 		this.deepslateOre = JugcraftRegistry.block("deepslate_" + name + "_ore", Blocks.DEEPSLATE_IRON_ORE);
-		this.item = JugcraftRegistry.item(name);
-		this.storageBlock = JugcraftRegistry.block(name + "_block", Blocks.CALCITE);
+		this.item = name.equals("quartz") ? net.minecraft.world.item.Items.QUARTZ : JugcraftRegistry.item(name);
+		this.storageBlock = name.equals("quartz") ? Blocks.QUARTZ_BLOCK : JugcraftRegistry.block(name + "_block", Blocks.CALCITE);
 	}
 
 	public static MineralFamily register(String name) {

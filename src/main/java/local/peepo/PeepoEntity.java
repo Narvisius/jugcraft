@@ -27,6 +27,7 @@ public final class PeepoEntity extends PathfinderMob {
     public String assignmentData(){return entityData.get(ASSIGNMENTS);}
     void syncAssignments(String value){if(!level().isClientSide())entityData.set(ASSIGNMENTS,value);}
     private static final EntityDataAccessor<Boolean> BLUSHING = SynchedEntityData.defineId(PeepoEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> UNIFORM = SynchedEntityData.defineId(PeepoEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> PUMPKIN = SynchedEntityData.defineId(PeepoEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Long> EATING_END = SynchedEntityData.defineId(PeepoEntity.class, EntityDataSerializers.LONG);
     private static final EntityDataAccessor<Integer> ENERGY = SynchedEntityData.defineId(PeepoEntity.class, EntityDataSerializers.INT);
@@ -40,6 +41,10 @@ public final class PeepoEntity extends PathfinderMob {
     private static final EntityDataAccessor<Long> WORK_STARTED=SynchedEntityData.defineId(PeepoEntity.class,EntityDataSerializers.LONG);
     private static final EntityDataAccessor<ItemStack> WORK_PIE=SynchedEntityData.defineId(PeepoEntity.class,EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<Integer> WORK_ANIMAL=SynchedEntityData.defineId(PeepoEntity.class,EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Long> CRAFT_STARTED=SynchedEntityData.defineId(PeepoEntity.class,EntityDataSerializers.LONG);
+    private static final EntityDataAccessor<ItemStack> CRAFT_FIRST=SynchedEntityData.defineId(PeepoEntity.class,EntityDataSerializers.ITEM_STACK);
+    private static final EntityDataAccessor<ItemStack> CRAFT_SECOND=SynchedEntityData.defineId(PeepoEntity.class,EntityDataSerializers.ITEM_STACK);
+    private static final EntityDataAccessor<ItemStack> CRAFT_RESULT=SynchedEntityData.defineId(PeepoEntity.class,EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<Integer> GESTURE=SynchedEntityData.defineId(PeepoEntity.class,EntityDataSerializers.INT);
     private static final EntityDataAccessor<Long> GESTURE_STARTED=SynchedEntityData.defineId(PeepoEntity.class,EntityDataSerializers.LONG);
     private static final EntityDataAccessor<net.minecraft.core.BlockPos> GESTURE_TARGET=SynchedEntityData.defineId(PeepoEntity.class,EntityDataSerializers.BLOCK_POS);
@@ -66,6 +71,18 @@ public final class PeepoEntity extends PathfinderMob {
     public int workAnimal(){return entityData.get(WORK_ANIMAL);}
     void setWorkAnimal(int id){if(!level().isClientSide())entityData.set(WORK_ANIMAL,id);}
     public long workStarted(){return entityData.get(WORK_STARTED);}
+    public long craftingStarted(){return entityData.get(CRAFT_STARTED);}
+    public ItemStack craftingIngredient(int index){return entityData.get(index==0?CRAFT_FIRST:CRAFT_SECOND);}
+    public ItemStack craftingResult(){return entityData.get(CRAFT_RESULT);}
+    /** Render-only recipe previews; changed-only metadata, never inventory or client-side recipes. */
+    void setCraftingVisuals(ItemStack first,ItemStack second,ItemStack result,long started){
+        if(level().isClientSide())return;
+        entityData.set(CRAFT_STARTED,started);
+        setCraftingItem(CRAFT_FIRST,first);setCraftingItem(CRAFT_SECOND,second);setCraftingItem(CRAFT_RESULT,result);
+    }
+    private void setCraftingItem(EntityDataAccessor<ItemStack> field,ItemStack item){
+        if(!ItemStack.isSameItemSameComponents(entityData.get(field),item))entityData.set(field,item.copyWithCount(item.isEmpty()?0:1));
+    }
     public ItemStack workPie(){return entityData.get(WORK_PIE);}
     void setWorkPie(ItemStack stack){
         if(!level().isClientSide() && !ItemStack.isSameItemSameComponents(workPie(),stack))entityData.set(WORK_PIE,stack.copyWithCount(stack.isEmpty()?0:1));
@@ -85,6 +102,7 @@ public final class PeepoEntity extends PathfinderMob {
         if(level().isClientSide())return;
         if(!isAlive() || isEating() || getRestMode()!=CompanionEnergy.Rest.NONE)action=WorkAnimation.NONE;
         if(action!=workAnimation() || action!=WorkAnimation.NONE && !target.equals(workTarget()))entityData.set(WORK_STARTED,level().getGameTime());
+        if(action!=WorkAnimation.CRAFT)setCraftingVisuals(ItemStack.EMPTY,ItemStack.EMPTY,ItemStack.EMPTY,0L);
         if(!action.isPie() && action!=WorkAnimation.PLANT && action!=WorkAnimation.PICK && action!=WorkAnimation.WATER_FILL)setWorkPie(ItemStack.EMPTY);
         if(action!=WorkAnimation.SHEAR && action!=WorkAnimation.MILK)setWorkAnimal(-1);
         if(action!=WorkAnimation.NONE)entityData.set(WORK_TARGET,target.immutable());
@@ -97,6 +115,7 @@ public final class PeepoEntity extends PathfinderMob {
         if(level().isClientSide())return;
         readiness.clear();
         entityData.set(PUMPKIN,belongings.getItem(8).is(Items.JACK_O_LANTERN));
+        entityData.set(UNIFORM,CompanionUniforms.type(belongings.getItem(8)).ordinal());
         syncHeldItem();
     }
     /** The Hand slot owns the item even while it is stowed; equipment is only its active copy. */
@@ -105,6 +124,7 @@ public final class PeepoEntity extends PathfinderMob {
         if(level().isClientSide() || isEating())return;
         var item=assignedHand();var action=workAnimation();
         boolean usingTool=switch(action){
+            case FISH_CAST, FISH_WAIT, FISH_BITE, FISH_REEL -> CompanionFishing.rod(item);
             case HARVEST -> item.is(net.minecraft.tags.ItemTags.HOES);
             case CHOP -> item.is(io.github.jimbozoomer.jugcraft.agriculture.JugcraftAgriculture.KNIVES);
             case SHEAR, HIVE_SHEAR -> item.is(Items.SHEARS);
@@ -116,15 +136,19 @@ public final class PeepoEntity extends PathfinderMob {
         boolean tool=item.is(net.minecraft.tags.ItemTags.SWORDS) || item.has(DataComponents.TOOL) || item.is(net.minecraft.tags.ItemTags.HOES) || item.is(Items.SHEARS)
             || item.is(io.github.jimbozoomer.jugcraft.agriculture.JugcraftAgriculture.KNIVES)
             || item.getItem() instanceof io.github.jimbozoomer.jugcraft.logistics.BrassWrenchItem
-            || item.is(Items.FLINT_AND_STEEL) || item.is(Items.FISHING_ROD) || item.is(Items.BRUSH);
+            || item.is(Items.FLINT_AND_STEEL) || CompanionFishing.rod(item) || item.is(Items.BRUSH);
         boolean busy=!isAlive() || editingSettings() || getRestMode()!=CompanionEnergy.Rest.NONE || isWheelRunning() || socialPose()!=0;
         var shown=busy || (!usingTool && (tool || action!=WorkAnimation.NONE))?ItemStack.EMPTY:item;
         if(!ItemStack.matches(getMainHandItem(),shown))setItemSlot(EquipmentSlot.MAINHAND,shown.copy());
     }
+    @Override public void remove(net.minecraft.world.entity.Entity.RemovalReason reason){
+        if(transport!=null && reason.shouldDestroy())transport.releaseStock();
+        super.remove(reason);
+    }
     @Override protected void dropCustomDeathLoot(ServerLevel server,DamageSource source,boolean playerKill){
         // The displayed hand is a copy; only the inventory owns the equipped item.
         if(!isEating())setItemSlot(EquipmentSlot.MAINHAND,ItemStack.EMPTY);
-        super.dropCustomDeathLoot(server,source,playerKill);
+        transport.releaseStock();super.dropCustomDeathLoot(server,source,playerKill);fishing.dropPending(server);
         for(int i=0;i<belongings.getContainerSize();i++){
             var stack=belongings.removeItemNoUpdate(i);
             if(!stack.isEmpty())spawnAtLocation(server,stack);
@@ -138,7 +162,11 @@ public final class PeepoEntity extends PathfinderMob {
     public final CompanionReport report=new CompanionReport(this);
     public final CompanionFood food=new CompanionFood(this);
     public final CompanionGarden garden=new CompanionGarden(this);
+    public final CompanionUniforms uniforms=new CompanionUniforms(this);
+    public CompanionUniforms.Type uniform(){return CompanionUniforms.fromId(entityData.get(UNIFORM));}
+    public final CompanionFishing fishing=new CompanionFishing(this);
     public final CompanionWater water=new CompanionWater(this);
+    public final CompanionTreeTap treeTaps=new CompanionTreeTap(this);
     public final CompanionLivestock livestock=new CompanionLivestock(this);
     public final CompanionSocial social=new CompanionSocial(this);
     public final CompanionOrders orders=new CompanionOrders(this);
@@ -150,7 +178,7 @@ public final class PeepoEntity extends PathfinderMob {
         holdForSettings();
     }
     void closeSettings(CompanionMenu menu){settingsMenus.remove(menu);}
-    private boolean editingSettings(){return !settingsMenus.isEmpty();}
+    boolean editingSettings(){return !settingsMenus.isEmpty();}
     private void holdForSettings(){
         getNavigation().stop();setSpeed(0);
         var movement=getDeltaMovement();setDeltaMovement(0,movement.y,0);
@@ -215,7 +243,7 @@ public final class PeepoEntity extends PathfinderMob {
         wheelRunningTicks=active?5:0;entityData.set(WHEEL_RUNNING,active);
         if(active)getNavigation().stop();
     }
-    private final CompanionEnergy energyStore = new CompanionEnergy(this);
+    final CompanionEnergy energyStore = new CompanionEnergy(this);
     private int storedEnergy=CompanionEnergy.CAPACITY,foodTicks,eatingTicks;
     private long nextEnergySync;
     public int getEnergy() { return level().isClientSide()?entityData.get(ENERGY):storedEnergy; }
@@ -235,6 +263,7 @@ public final class PeepoEntity extends PathfinderMob {
     public int extractEnergy(int requested, net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext transaction) {
         return energyStore.extract(requested,transaction);
     }
+    public int extractWorkEnergy(CompanionUniforms.Type job,int requested,net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext tx){return energyStore.extractDiscounted(requested,uniforms.saving(job),tx);}
     public boolean isRestNight() {
         if (!(level() instanceof ServerLevel server) || !level().dimension().equals(Level.OVERWORLD)) return false;
         long time=Math.floorMod(server.getOverworldClockTime(),24000L);
@@ -287,18 +316,19 @@ public final class PeepoEntity extends PathfinderMob {
     }
     private long nextGreeting;
     @Override protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);builder.define(ASSIGNMENTS,"[]"); builder.define(BLUSHING, false); builder.define(PUMPKIN, false); builder.define(EATING_END,0L);
+        super.defineSynchedData(builder);builder.define(ASSIGNMENTS,"[]"); builder.define(BLUSHING, false); builder.define(PUMPKIN, false); builder.define(UNIFORM,0); builder.define(EATING_END,0L);
         builder.define(ENERGY,CompanionEnergy.CAPACITY);builder.define(FOOD_BONUS,0);builder.define(FOOD_END,0L);builder.define(REST,0);
         builder.define(WHEEL_RUNNING,false);builder.define(SOCIAL_POSE,0);builder.define(SOCIAL_STARTED,0L);
         builder.define(RECOVERING,false);
         builder.define(WORK_ANIMATION,0);builder.define(WORK_TARGET,net.minecraft.core.BlockPos.ZERO);
         builder.define(WORK_STARTED,0L);builder.define(WORK_PIE,ItemStack.EMPTY);builder.define(WORK_ANIMAL,-1);
+        builder.define(CRAFT_STARTED,0L);builder.define(CRAFT_FIRST,ItemStack.EMPTY);builder.define(CRAFT_SECOND,ItemStack.EMPTY);builder.define(CRAFT_RESULT,ItemStack.EMPTY);
         builder.define(GESTURE,0);builder.define(GESTURE_STARTED,0L);builder.define(GESTURE_TARGET,net.minecraft.core.BlockPos.ZERO);builder.define(GESTURE_ITEM,ItemStack.EMPTY);
     }
     public boolean isJughead() { return getType()==PeepoMod.JUGHEAD || getType()==PeepoMod.LEGACY_JUGHEAD; }
     public boolean isWearingPumpkin() { return entityData.get(PUMPKIN); }
     @Override protected void addAdditionalSaveData(ValueOutput output) {
-        super.addAdditionalSaveData(output); orders.save(output);assignments.save(output);preferences.save(output);food.save(output);garden.save(output);transport.save(output);social.save(output); output.putBoolean("PumpkinCostume", isWearingPumpkin()); output.putInt("EatingTicks",getEatingTicks());
+        super.addAdditionalSaveData(output); orders.save(output);assignments.save(output);preferences.save(output);food.save(output);garden.save(output);transport.save(output);social.save(output);fishing.save(output);uniforms.save(output); output.putBoolean("PumpkinCostume", isWearingPumpkin()); output.putInt("EatingTicks",getEatingTicks());
         if(lunchOrigin!=null)output.store("LunchOrigin",net.minecraft.core.GlobalPos.CODEC,lunchOrigin);
         net.minecraft.world.ContainerHelper.saveAllItems(output.child("Belongings"),belongings.getItems());
         output.putBoolean("NaturallySpawned", naturallySpawned);
@@ -329,7 +359,8 @@ public final class PeepoEntity extends PathfinderMob {
         garden.load(input);
         // Client-only display entities have no AI goals/transport instance.
         if(transport!=null)transport.load(input);
-        social.load(input);
+        social.load(input);fishing.load(input);uniforms.load(input);
+        entityData.set(UNIFORM,CompanionUniforms.type(belongings.getItem(8)).ordinal());
         syncBelongings();
     }
     public boolean isBlushing() { return entityData.get(BLUSHING); }
@@ -341,7 +372,7 @@ public final class PeepoEntity extends PathfinderMob {
             if(editingSettings())holdForSettings();
         }
         if (!level().isClientSide() && bedExit != null && getRestMode() == CompanionEnergy.Rest.NONE
-                && workAnimation()!=WorkAnimation.STIR && workAnimation()!=WorkAnimation.CHOP) leaveCompanionBed();
+                && workAnimation()!=WorkAnimation.STIR && workAnimation()!=WorkAnimation.CHOP && workAnimation()!=WorkAnimation.CRAFT) leaveCompanionBed();
         super.tick();
         if(!level().isClientSide()) {
             if(editingSettings())holdForSettings();
@@ -349,6 +380,7 @@ public final class PeepoEntity extends PathfinderMob {
             if(editingSettings() || !isAlive() || isEating() || getRestMode()!=CompanionEnergy.Rest.NONE || isWheelRunning()){
                 if(gesture()!=CompanionGesture.NONE)showGesture(CompanionGesture.NONE,ItemStack.EMPTY,blockPosition());
             }else if(carryVisualTicks==0)clearCarryGesture();
+            fishing.tickPending();
             if(workAnimationTicks>0)--workAnimationTicks;
             if(workAnimationTicks==0 || !isAlive() || isEating() || getRestMode()!=CompanionEnergy.Rest.NONE)
                 setWorkAnimation(WorkAnimation.NONE,blockPosition());
@@ -356,7 +388,7 @@ public final class PeepoEntity extends PathfinderMob {
             if(wheelRunningTicks==0 || !isAlive() || getEnergy()==0 || isEating() || getRestMode()!=CompanionEnergy.Rest.NONE)
                 setWheelRunning(false);
         }
-        if(!level().isClientSide()){tickEnergy();food.tick();social.tick();report.tick();syncHeldItem();}
+        if(!level().isClientSide()){tickEnergy();food.tick();social.tick();report.tick();syncHeldItem();uniforms.tick();}
         if (!level().isClientSide() && blushTicks > 0 && --blushTicks == 0) entityData.set(BLUSHING, false);
         if (level() instanceof ServerLevel server && isEating()) {
             getNavigation().stop();
@@ -446,9 +478,9 @@ public final class PeepoEntity extends PathfinderMob {
             }
             return InteractionResult.SUCCESS;
         }
-        if (stack.is(Items.JACK_O_LANTERN)) {
+        if (CompanionUniforms.costume(stack)) {
             if(!level().isClientSide() && orders.tamed() && !orders.allowed(player))return InteractionResult.CONSUME;
-            if (!level().isClientSide() && !isWearingPumpkin()) {
+            if (!level().isClientSide() && belongings.getItem(8).isEmpty()) {
                 belongings.setItem(8,stack.copyWithCount(1));
                 stack.consume(1,player);
             }
@@ -518,7 +550,7 @@ public final class PeepoEntity extends PathfinderMob {
         FindFoodGoal() { setFlags(EnumSet.of(Flag.MOVE,Flag.LOOK)); }
         private boolean valid(ItemEntity item) {
             return item!=null && item.isAlive() && !item.hasPickUpDelay() && isEdible(item.getItem())
-                && distanceToSqr(item)<64 && orders.food(item.position());
+                && distanceToSqr(item)<64 && orders.food(item.position()) && CompanionJobs.permitted(PeepoEntity.this,item.blockPosition());
         }
         @Override public boolean canUse() {
             if (!needsAutomaticFood() || isEating() || food.meals()>0 || level().getGameTime()<nextSearch || !CompanionBudget.search(PeepoEntity.this)) return false;

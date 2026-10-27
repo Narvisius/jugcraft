@@ -32,7 +32,7 @@ public final class OreSurvey {
 			family("salt", "jugcraft:salt_ore"), family("phosphate", "jugcraft:phosphate_ore"),
 			family("lepidolite", "jugcraft:lepidolite_ore"), family("monazite", "jugcraft:monazite_ore"),
 			family("fluorite", "jugcraft:fluorite_ore"), family("spodumene", "jugcraft:spodumene_ore"),
-			family("chromite", "jugcraft:chromite_ore"), family("cobaltite", "jugcraft:cobaltite_ore"),
+			family("quartz", "jugcraft:quartz_ore"), family("chromite", "jugcraft:chromite_ore"), family("cobaltite", "jugcraft:cobaltite_ore"),
 			sand("titanium_sand"), sand("zircon_sand"), sand("rare_earth_sand"), sand("garnet_sand"),
 			family("vanadium_iron", "jugcraft:vanadium_iron_ore"),
 			bulk("coal"), bulk("iron"), bulk("copper"), bulk("tin"));

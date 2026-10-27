@@ -30,7 +30,7 @@ public final class ServingCompanion extends SnapshotParticipant<ServingCompanion
     public boolean hasOutput(){return station instanceof PunchBowlBlockEntity;}
     public boolean allowed(PeepoEntity npc){return !station.isRemoved() && station.getLevel() instanceof ServerLevel
         && (!(station instanceof CandyBowlBlockEntity bowl) || npc.orders.foodAccess(bowl.owner(),false));}
-    public boolean acceptsFilter(ItemStack stack){return stack.isEmpty() || (station instanceof FeastTableBlockEntity?FeastTableBlockEntity.food(stack):station instanceof CandyBowlBlockEntity && stack.is(CandyBagItem.TREATS));}
+    public boolean acceptsFilter(ItemStack stack){return stack.isEmpty() || station instanceof PunchBowlBlockEntity && stack.is(JugcraftAgriculture.item("witchs_brew_punch")) || (station instanceof FeastTableBlockEntity?FeastTableBlockEntity.food(stack):station instanceof CandyBowlBlockEntity && stack.is(CandyBagItem.TREATS));}
     public void observe(){if(station instanceof FeastTableBlockEntity table)for(int i=0;i<2;i++){
         var dish=table.dish(i);if(!dish.isEmpty())dishes[i]=dish.copyWithCount(1);
     }}
@@ -59,7 +59,7 @@ public final class ServingCompanion extends SnapshotParticipant<ServingCompanion
         else if(station instanceof CandyBowlBlockEntity bowl)bowl.companionChanged();
         station.setChanged();CompanionReadiness.invalidate(station);
     }
-    private int servings(){return hasOutput()?pendingServings>=0?pendingServings:station.getBlockState().getValue(PunchBowlBlock.SERVINGS_LEFT):0;}
+    public int servings(){return hasOutput()?pendingServings>=0?pendingServings:station.getBlockState().getValue(PunchBowlBlock.SERVINGS_LEFT):0;}
     private void servings(int count){pendingServings=count;}
     private int room(int slot,ItemStack candidate){
         var table=(FeastTableBlockEntity)station;var held=table.dish(slot);var template=dishes[slot];
@@ -75,7 +75,7 @@ public final class ServingCompanion extends SnapshotParticipant<ServingCompanion
         if(space==0)return 0;
         if(stack.is(Items.GLASS_BOTTLE))return Math.min(space,servings());
         // Never spend a berry for a truncated single serving.
-        return stack.is(PunchBowlBlock.INGREDIENTS)?Math.max(0,(Math.min(PunchBowlBlock.SERVINGS,space)-servings())/PunchBowlBlock.PER_BERRY):0;
+        return filter.allows(new ItemStack(JugcraftAgriculture.item("witchs_brew_punch"))) && stack.is(PunchBowlBlock.INGREDIENTS)?Math.max(0,(Math.min(PunchBowlBlock.SERVINGS,space)-servings())/PunchBowlBlock.PER_BERRY):0;
     }
     public CompanionLogistics.Port forCompanion(PeepoEntity npc){return new CompanionLogistics.Port(){
         public void prepare(Storage<ItemVariant> source){if(allowed(npc))observe();}

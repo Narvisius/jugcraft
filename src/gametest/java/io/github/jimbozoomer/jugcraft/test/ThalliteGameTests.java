@@ -4,6 +4,13 @@ import io.github.jimbozoomer.jugcraft.Jugcraft;
 import io.github.jimbozoomer.jugcraft.chemistry.FluidRecipe;
 import io.github.jimbozoomer.jugcraft.chemistry.FluidRecipes;
 import io.github.jimbozoomer.jugcraft.chemistry.PetroFluids;
+import io.github.jimbozoomer.jugcraft.concordance.ConcordanceData;
+import io.github.jimbozoomer.jugcraft.concordance.ConcordanceProgress;
+import io.github.jimbozoomer.jugcraft.concordance.JugcraftConcordance;
+import io.github.jimbozoomer.jugcraft.concordance.assay.Assaying;
+import io.github.jimbozoomer.jugcraft.concordance.rules.Evidence;
+import io.github.jimbozoomer.jugcraft.concordance.rules.ResearchState;
+import io.github.jimbozoomer.jugcraft.concordance.strata.Strata;
 import io.github.jimbozoomer.jugcraft.config.FeatureEnabledCondition;
 import io.github.jimbozoomer.jugcraft.config.JugcraftConfig;
 import io.github.jimbozoomer.jugcraft.energy.EnergyStorage;
@@ -30,6 +37,7 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
@@ -51,7 +59,8 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
  * Thallite, slice 1 (docs/features/thallite.md): the ore and its material forms, its smelting and 9-to-1 recipes, its
  * processing through the shared machines (crusher and pulverizer 2 a block with a 10% iron dust byproduct, ore washer 3,
  * acid leaching 4, the Metal Press and the dearer hand-made plate), its worldgen (veins everywhere and rich pockets in
- * Lush Caves and the Glowcap Grotto) and its feature switch. {@code ThalliteClientGameTests} shows it in game.
+ * Lush Caves and the Glowcap Grotto) and its feature switch; and, since Concordance Chunk B unit 3, raw thallite as a
+ * Stratawrighting specimen. {@code ThalliteClientGameTests} shows it in game.
  */
 public class ThalliteGameTests {
 	private static final List<String> BLOCKS = List.of("thallite_ore", "deepslate_thallite_ore", "raw_thallite_block", "thallite_block");
@@ -351,6 +360,28 @@ public class ThalliteGameTests {
 		for (String id : recipes) {
 			helper.assertTrue(level.recipeAccess().byKey(ResourceKey.create(Registries.RECIPE, Jugcraft.id(id))).isPresent(), "Recipe " + id + " does not load");
 		}
+		helper.succeed();
+	}
+
+	/**
+	 * Concordance Chunk B, unit 3: raw Thallite is a Stratawrighting specimen, and so Assay's and a Concordance specimen,
+	 * though it is never weighed (the equivalence catalogue has no worth for it); the ingot is no specimen. Examined after
+	 * First Light, raw Thallite begins both Assay and Stratawrighting.
+	 */
+	@GameTest
+	public void thalliteIsAStrataSpecimen(GameTestHelper helper) {
+		ItemStack raw = new ItemStack(item("raw_thallite"));
+		helper.assertTrue(raw.is(JugcraftConcordance.STRATA_SPECIMENS) && raw.is(Assaying.SPECIMENS) && raw.is(JugcraftConcordance.SPECIMENS),
+				"Raw thallite is not a Stratawrighting, Assay and Concordance specimen");
+		helper.assertTrue(ConcordanceData.rules().equivalence().material(Jugcraft.id("raw_thallite").toString()) == null,
+				"Raw thallite has a worth on the Assayer's Scale");
+		helper.assertTrue(!new ItemStack(item("thallite_ingot")).is(JugcraftConcordance.SPECIMENS), "The thallite ingot is a specimen");
+		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		ConcordanceProgress.grant(player, "jugcraft:first_light", ResearchState.UNDERSTOOD);
+		ConcordanceProgress.record(player, new Evidence.Examined(Jugcraft.id("raw_thallite").toString(), 15));
+		helper.assertTrue(ConcordanceProgress.knowledge(player).state(Assaying.RESEARCH) == ResearchState.ENCOUNTERED
+				&& ConcordanceProgress.knowledge(player).state(Strata.RESEARCH) == ResearchState.ENCOUNTERED,
+				"Examining raw thallite did not begin Assay and Stratawrighting: " + ConcordanceProgress.knowledge(player).entries());
 		helper.succeed();
 	}
 }

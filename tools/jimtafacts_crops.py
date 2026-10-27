@@ -20,6 +20,7 @@ CROPS={
  'stagnium':('jugcraft:tin_nugget','tin',0,6,'ferru','reed'),'plumbiscus':('jugcraft:lead_nugget','lead',0,6,'ferru','blackthorn'),
  'shining':('jugcraft:silver_nugget','silver',0,8,'aurelia','cyazint')}
 ART={'coffee_beans':'itemCofeeBeans','coffee_powder':'itemCofeePowder','hops':'itemHops','terra_wart':'itemTerraWart','weed':'itemWeed','empty_mug':'itemMugEmpty','coffee_mug':'itemMugCoffee_0','dark_coffee_mug':'itemMugCoffee_1','iced_coffee_mug':'itemMugCoffee_2','beer_mug':'ic2.itemMugBooze.beer.Beer','weed_ex':'itemWeedEx','weeding_trowel':'itemWeedingTrowel'}
+ART['hydrating_cell']='itemCellHydrant'
 def key(s):return ''.join('_'+c.lower() if c.isupper() else c for c in s)
 def blocks():return {'jimta_crop_'+key(c) for c in CROPS}|{'jimta_crop_cross_sticks'}
 def items():return {'jimta_seed_'+key(c) for c in CROPS}|{'jimta_'+c for c in ART}|{'jimta_crop_sticks'}
@@ -61,13 +62,14 @@ def generate(shared=True):
  recipes={}
  def craft(id,parts,out,count=1):recipes[id]={'type':'minecraft:crafting_shapeless','category':'misc','ingredients':parts,'result':{'id':out,'count':count}}
  for name,item in {'wheat':'wheat_seeds','pumpkin':'pumpkin_seeds','melon':'melon_seeds','carrots':'carrot','potato':'potato','reed':'sugar_cane','cocoa':'cocoa_beans','nether_wart':'nether_wart','red_mushroom':'red_mushroom','brown_mushroom':'brown_mushroom'}.items():craft('seed_'+name,['minecraft:'+item,'minecraft:paper','minecraft:stick'],'jugcraft:jimta_seed_'+name)
- craft('sticks',['minecraft:stick']*4,'jugcraft:jimta_crop_sticks',2)
+ craft('sticks',['minecraft:stick']*4+['minecraft:string'],'jugcraft:jimta_crop_sticks',2)
  craft('mug',distinct('jimtafacts_crops/mug',['minecraft:brick']*3),'jugcraft:jimta_empty_mug')
  craft('coffee',['jugcraft:jimta_coffee_powder','jugcraft:jimta_empty_mug','minecraft:water_bucket'],'jugcraft:jimta_coffee_mug')
  craft('dark_coffee',['jugcraft:jimta_coffee_mug','jugcraft:jimta_coffee_powder','minecraft:sugar'],'jugcraft:jimta_dark_coffee_mug')
  craft('iced_coffee',['jugcraft:jimta_coffee_mug','minecraft:snowball','minecraft:sugar'],'jugcraft:jimta_iced_coffee_mug')
  craft('weeding_trowel',['minecraft:iron_ingot','minecraft:stick','minecraft:stick'],'jugcraft:jimta_weeding_trowel')
  craft('weed_ex',['minecraft:glass_bottle','minecraft:bone_meal','minecraft:spider_eye'],'jugcraft:jimta_weed_ex')
+ craft('hydrating_cell',['jugcraft:tin_plate','minecraft:glass','jugcraft:rubber'],'jugcraft:jimta_hydrating_cell')
  recipes['coffee_powder']={'type':'jugcraft:crushing','ingredient':'jugcraft:jimta_coffee_beans','result':{'id':'jugcraft:jimta_coffee_powder','count':2},'time':100}
  recipes['brew_beer']={'type':'jugcraft:chemical_reaction','items':[{'ingredient':'jugcraft:jimta_hops'},{'ingredient':'jugcraft:jimta_empty_mug'}],'fluids':[{'fluid':'minecraft:water','amount':1000}],'results':[{'id':'jugcraft:jimta_beer_mug','count':1}],'energy_per_tick':4,'time':1200}
  recipes['ferment_hops']={'type':'jugcraft:chemical_reaction','capability':'jugcraft:controlled_fermentation','items':[{'ingredient':'jugcraft:jimta_hops','count':4}],'fluids':[{'fluid':'minecraft:water','amount':1000}],'fluid_results':[{'fluid':'jugcraft:ethanol_broth','amount':1000,'tank':0},{'fluid':'jugcraft:fermentation_exhaust','amount':250,'tank':1}],'energy_per_tick':8,'time':600}

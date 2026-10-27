@@ -6,6 +6,13 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.item.*;
 
 public final class JimtaMatterGameTests {
+    @GameTest public void bottlerConsumesDrainedShardWithoutRequiringAnEmptyOutput(GameTestHelper h){
+        var n=node(h,"fluid_bottler");n.tank.fill(net.minecraft.world.level.material.Fluids.WATER,500);n.energy.setAmount(800);
+        n.setItem(0,new ItemStack(IndustrialProduction.ITEMS.get("jimta_fragile_fluid_shard")));n.step(h.getLevel());
+        h.assertTrue(n.tank.millibuckets()==0&&FragileFluidShard.contents(n.getItem(4)).amount()==FragileFluidShard.CAPACITY,"Bottler seals exactly 500 mB in the shard");
+        n.setItem(0,n.removeItem(4,1));n.setItem(4,new ItemStack(Items.STONE,64));n.mode=1;n.step(h.getLevel());
+        h.assertTrue(n.getItem(0).isEmpty()&&n.getItem(4).is(Items.STONE)&&n.getItem(4).getCount()==64&&n.tank.millibuckets()==500&&n.energy.getAmount()==0,"Consumed shell needs no output slot; exact fluid returns with two paid operations");h.succeed();
+    }
     private MatterWorkshops.Node node(GameTestHelper h,String kind){var pos=new BlockPos(2,2,2);h.setBlock(pos,MatterWorkshops.BLOCKS.get(kind));return h.getBlockEntity(pos, MatterWorkshops.Node.class);}
     @GameTest public void scannerConsumesOneRealSampleAndBlankMemory(GameTestHelper h){
         var n=node(h,"matter_scanner");n.setItem(0,new ItemStack(Items.COBBLESTONE,2));n.setItem(1,new ItemStack(MatterWorkshops.MEMORY));n.energy.setAmount(10000);

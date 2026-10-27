@@ -61,11 +61,16 @@ public final class IndustrialCrops {
         }
         GENES=Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE,Jugcraft.id("jimta_crop_genes"),FabricBlockEntityTypeBuilder.create(Genes::new,CROPS.values().toArray(Block[]::new)).build());
         for(String id:List.of("coffee_beans","coffee_powder","hops","terra_wart","weed"))plain(id);
+        var hydrationKey=ResourceKey.create(Registries.ITEM,Jugcraft.id("jimta_hydrating_cell"));
+        var hydration=Registry.register(BuiltInRegistries.ITEM,hydrationKey,new HydratingCell(new Item.Properties().setId(hydrationKey).stacksTo(1)));
+        ITEMS.put("jimta_hydrating_cell",hydration);
+        net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage.ITEM.registerForItems((stack,context)->IndustrialProduction.Cell.storage(context),hydration);
         for(String id:List.of("coffee_mug","dark_coffee_mug","iced_coffee_mug","beer_mug","empty_mug","weed_ex","weeding_trowel")){
             var key=ResourceKey.create(Registries.ITEM,Jugcraft.id("jimta_"+id));
             Item item=id.endsWith("coffee_mug")||id.equals("beer_mug")?new Drink(new Item.Properties().setId(key).stacksTo(16),id):new FarmTool(new Item.Properties().setId(key).stacksTo(id.equals("empty_mug")?16:1),id);
             ITEMS.put("jimta_"+id,Registry.register(BuiltInRegistries.ITEM,key,item));
         }
+        CropMatron.register();
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.NATURAL_BLOCKS).register(out->ITEMS.values().forEach(out::accept));
     }
     private static void plain(String id){var key=ResourceKey.create(Registries.ITEM,Jugcraft.id("jimta_"+id));

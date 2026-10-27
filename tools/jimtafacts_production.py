@@ -3,10 +3,12 @@ from pathlib import Path
 import json,shutil,hashlib
 ROOT=Path(__file__).resolve().parents[1];RES=ROOT/'src/main/resources';SOURCE=ROOT/'art/owner-library/originals/Oct23/Jimtafacts/industrialcraft reborn by jimbo/assets/ic2/textures/items'
 ART={'scrap':'itemScrap','scrapbox':'itemScrapbox','plant_ball':'itemFuelPlantBall','biochaff':'itemBiochaff','fluid_cell':'cell/itemCellEmpty','tin_can':'itemTinCan','filled_tin_can':'itemTinCanFilled'}
-CELLS=['itemCellEmpty','itemCellWater','itemCellLava','itemCellDistilledWater','itemCellCoolant','itemCellHotCoolant','itemCellSteam','itemCellSuperheatedSteam','itemCellBiogas','itemCellBiomass','itemCellBioRef','itemCellCoal','itemFluidCell']
-def items():return {'jimta_'+key for key in ART}
+CELLS=['itemCellEmpty','itemCellWater','itemCellLava','itemCellDistilledWater','itemCellCoolant','itemCellHotCoolant','itemCellSteam','itemCellSuperheatedSteam','itemCellBiogas','itemCellBiomass','itemCellBioRef','itemCellCoal','itemFluidCell','itemCellPahoehoelava','itemCellCF','itemCellUuMatter']
+def items():return {'jimta_'+key for key in ART}|{'jimta_fragile_fluid_shard'}
 def dump(p,v):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 def generate(shared=True):
+ import jimtafacts_fluid_shards
+ jimtafacts_fluid_shards.generate(shared)
  manifest=[];lang={}
  def copy(source,name):
   src=SOURCE/(source+'.png');dest=RES/f'assets/jugcraft/textures/item/jimtafacts/production/{name}.png';dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(src,dest)

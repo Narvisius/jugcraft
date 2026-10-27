@@ -2,6 +2,7 @@ package io.github.jimbozoomer.jugcraft.server;
 
 import com.mojang.serialization.Codec;
 import io.github.jimbozoomer.jugcraft.Jugcraft;
+import io.github.jimbozoomer.jugcraft.lair.Lairs;
 import java.util.*;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.Commands;
@@ -23,7 +24,9 @@ public final class PlayerRules extends SavedData {
     public static PlayerRules get(MinecraftServer server) { return server.overworld().getDataStorage().computeIfAbsent(TYPE); }
     public boolean keeps(UUID id) { return keepInventory.contains(id); }
     public void set(UUID id, boolean enabled) { if (enabled ? keepInventory.add(id) : keepInventory.remove(id)) setDirty(); }
+    /** Whether a death keeps everything, as keepInventory does: the player's own rule, or dying in a lair (a boss fight). */
     public static boolean keeps(Player player) {
+        if (Lairs.keepsBelongings(player)) return true;
         var server = player.level().getServer();
         return server != null && get(server).keeps(player.getUUID());
     }

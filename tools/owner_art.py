@@ -5,7 +5,15 @@ textures, a GeckoLib model and sounds, each a byte-for-byte copy under a Jugcraf
 made LF), listed in tools/concordance_ember.py OWNER_FILES. The trinkets slice (tools/concordance_trinkets.py) adds its
 icons, their animation sidecars, two slot icons and (part 1b) the Leather Belt's and Amphibian Boot's worn sheets the
 same way: OWNER_FILES from the magic collection and OWNER_BLOCKS_FILES from the Blocks folder's Trinket Type Mod. The
-encyclopedia (tools/encyclopedia.py, Chunk A) adds its inventory button's scroll sprite.
+encyclopedia (tools/encyclopedia.py, Chunk A) adds its inventory button's scroll sprite. Concordance Chunk B, unit 3 adds
+Rime's and Strata's (tools/concordance_rime.py, tools/concordance_strata.py OWNER_FILES): the spell and status icons of
+Rimebind, Preserve and Brace, at their own sizes, and Brace's four earth recordings; unit 4 adds Frostward's status icon
+and the travel kit's icons, worn sheets and heavy model (tools/concordance_rime_kit.py OWNER_FILES). Concordance Chunk C,
+unit 3 adds the Crucible Stand's treated iron and copper coil from the Blocks folder (tools/concordance_alchemy.py
+OWNER_BLOCKS_FILES). Concordance Chunk D adds Stolas's body: the owner's Flashjack model copied unchanged under his name
+(tools/concordance_pacts.py OWNER_FILES), and (unit 3, D-06) his skin, glowmask and animations adapted from the rig's own
+files by tools/stolas_body.py (concordance_pacts.ADAPTED), written and checked here like the recolourings. Two tables may
+not import different files to one path.
 
 On 7 October 2026 the owner asked for their farming and food textures to be used ("I have already made a ton of custom
 textures and food ... I made all of the textures in there myself its all mine"). Each imported texture is a byte-for-byte
@@ -14,17 +22,20 @@ the mod's text files). The only changes are the recolourings listed in a feature
 steel knives: the owner's iron knife with its blade's tones swapped for the approved bronze and steel ramps) and the
 icons listed in a feature's COMPOSED table (a serving the owner drew no icon for: their bowl with a window of their
 whole-dish icon heaped in it), and ornamental corn's ripe stage (tools/garden.py ORNAMENTAL_EARS: their ripe corn with its
-ears in flint corn's colours). No generator draws over these files: tools/generate_textures.py runs this
-import last, and tools/check_mod_data.py fails if a runtime copy differs from what this import would write.
+ears in flint corn's colours), and Stolas's raven adaptation (tools/stolas_body.py). No generator draws over these
+files: tools/generate_textures.py runs this import last, and tools/check_mod_data.py fails if a runtime copy differs
+from what this import would write.
 
     python3 tools/owner_art.py                write every import (generate_textures.py also does)
     python3 tools/owner_art.py --check        report differences only
     python3 tools/owner_art.py --provenance   the magic imports' sources and SHA-256, for the feature record
     python3 tools/owner_art.py --provenance trinkets   the same for one slice's files (a tools/concordance_<slice>.py,
                                                        or another module with OWNER_FILES, such as encyclopedia)
+    python3 tools/owner_art.py --provenance pacts    Stolas's body: the copied model and the adapted files, marked
 """
 import hashlib
 import io
+import json
 import os
 import sys
 
@@ -35,6 +46,7 @@ ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 
 import arms_pixel  # noqa: E402
+import concordance_alchemy  # noqa: E402
 import concordance_workshops
 import jug_nouveau
 import concordance_ee_equipment
@@ -46,6 +58,10 @@ import concordance_elemental_gear
 import concordance_dark_matter
 import concordance_alchemical_gear
 import concordance_ember  # noqa: E402
+import concordance_pacts  # noqa: E402
+import concordance_rime  # noqa: E402
+import concordance_rime_kit  # noqa: E402
+import concordance_strata  # noqa: E402
 import concordance_trinkets  # noqa: E402
 import encyclopedia  # noqa: E402
 import feasts  # noqa: E402
@@ -54,6 +70,7 @@ import kitchen  # noqa: E402
 import menu  # noqa: E402
 import rice  # noqa: E402
 import soil  # noqa: E402
+import stolas_body  # noqa: E402
 
 LIBRARY = os.path.join(ROOT, "art", "owner-library", "originals", "Blocks")
 FOOD = "farming and food textures"
@@ -83,14 +100,58 @@ def imports():
 
 
 def magic_imports():
-    """(runtime path under assets/jugcraft, library path under Magic/) for every copied magic-collection file."""
-    return sorted({**jug_nouveau.OWNER_FILES, **concordance_ee_equipment.OWNER_FILES, **concordance_ee_machines.OWNER_FILES, **concordance_ee_storage.OWNER_FILES, **concordance_ee_expansion.OWNER_FILES, **concordance_ee_artifacts.OWNER_FILES, **concordance_workshops.OWNER_FILES, **concordance_elemental_gear.OWNER_FILES, **concordance_dark_matter.OWNER_FILES, **concordance_alchemical_gear.OWNER_FILES, **concordance_ember.OWNER_FILES, **concordance_trinkets.OWNER_FILES, **encyclopedia.OWNER_FILES}.items())
+    """(runtime path under assets/jugcraft, library path under Magic/) for every copied magic-collection file. Two slices
+    may not import different files to one path."""
+    merged = {}
+    for table in (jug_nouveau.OWNER_FILES, concordance_ee_equipment.OWNER_FILES, concordance_ee_machines.OWNER_FILES,
+                  concordance_ee_storage.OWNER_FILES, concordance_ee_expansion.OWNER_FILES,
+                  concordance_ee_artifacts.OWNER_FILES, concordance_workshops.OWNER_FILES,
+                  concordance_elemental_gear.OWNER_FILES, concordance_dark_matter.OWNER_FILES,
+                  concordance_alchemical_gear.OWNER_FILES, concordance_ember.OWNER_FILES,
+                  concordance_trinkets.OWNER_FILES, encyclopedia.OWNER_FILES, concordance_rime.OWNER_FILES,
+                  concordance_strata.OWNER_FILES, concordance_rime_kit.OWNER_FILES, concordance_pacts.OWNER_FILES):
+        for target, source in table.items():
+            if merged.setdefault(target, source) != source:
+                raise SystemExit(f"tools/owner_art.py: two slices import different files to {target}")
+    return sorted(merged.items())
 
 
 def block_asset_imports():
-    """(runtime path under assets/jugcraft, library path under Blocks/) for every Blocks-folder file copied to a path other
-    than textures/ (the trinkets slice's slot icon)."""
-    return sorted(concordance_trinkets.OWNER_BLOCKS_FILES.items())
+    """(runtime path under assets/jugcraft, library path under Blocks/) for every Blocks-folder file copied whole by path:
+    the trinkets slice's slot icon, and the Crucible Stand's treated iron and copper coil (tools/concordance_alchemy.py,
+    Concordance Chunk C, C-05). Two tables may not import different files to one path."""
+    merged = {}
+    for table in (concordance_trinkets.OWNER_BLOCKS_FILES, concordance_alchemy.OWNER_BLOCKS_FILES):
+        for target, source in table.items():
+            if merged.setdefault(target, source) != source:
+                raise SystemExit(f"tools/owner_art.py: two slices import different files to {target}")
+    return sorted(merged.items())
+
+
+def adaptations():
+    """(runtime path under assets/jugcraft, library path under Magic/, adapter) for every magic-collection file adapted
+    rather than copied: Stolas's skin, glowmask and animations (tools/concordance_pacts.py ADAPTED, made by
+    tools/stolas_body.py; Concordance Chunk D, D-06). None may share a path with a copied file."""
+    copied = dict(magic_imports())
+    out = []
+    for target, (source, adapter) in sorted(concordance_pacts.ADAPTED.items()):
+        if target in copied:
+            raise SystemExit(f"tools/owner_art.py: {target} is both copied and adapted")
+        out.append((target, source, getattr(stolas_body, adapter)))
+    return out
+
+
+def _read_magic(path):
+    with open(os.path.join(MAGIC, path), "rb") as handle:
+        return handle.read()
+
+
+def adapt(adapter):
+    """An adapted file's bytes: a PNG for an image; otherwise JSON with LF line ends and a 2-space indent."""
+    made = adapter(_read_magic)
+    if isinstance(made, Image.Image):
+        return _png_bytes(made)
+    return (json.dumps(made, indent=2) + "\n").encode("utf-8")
 
 
 def recolourings():
@@ -175,17 +236,23 @@ def expected():
             # Text (a model's JSON, an animation sidecar) is stored with LF like the mod's other resources; images and
             # sounds are copied as they are.
             files[os.path.join(ASSETS, target)] = data.replace(b"\r\n", b"\n") if target.endswith((".json", ".mcmeta")) else data
+    for target, _, adapter in adaptations():
+        # Stolas's body (D-06): adapted from the owner's Flashjack files, never drawn over by hand.
+        files[os.path.join(ASSETS, target)] = adapt(adapter)
     return files
 
 
 def provenance():
-    """(runtime path, library path, SHA-256 of the library file) for every magic-collection import and every Blocks-folder
-    file copied outside textures/."""
+    """(runtime path, library path, SHA-256 of the library file, and the adapter's name, None for a copy) for every
+    magic-collection import, every Blocks-folder file copied whole by path (block_asset_imports) and every adapted file
+    (adaptations)."""
     out = []
     for root, name, table in ((MAGIC, "Magic", magic_imports()), (LIBRARY, "Blocks", block_asset_imports())):
         for target, source in table:
             with open(os.path.join(root, source), "rb") as handle:
-                out.append((target, f"originals/{name}/{source}", hashlib.sha256(handle.read()).hexdigest()))
+                out.append((target, f"originals/{name}/{source}", hashlib.sha256(handle.read()).hexdigest(), None))
+    for target, source, adapter in adaptations():
+        out.append((target, f"originals/Magic/{source}", hashlib.sha256(_read_magic(source)).hexdigest(), adapter.__name__))
     return out
 
 
@@ -202,6 +269,7 @@ def errors():
     adapted = {_target(target) for target, *_ in recolourings()}
     adapted.update(_target(target) for target, _ in compositions())
     adapted.update(_target(target) for target in garden.ORNAMENTAL_EARS)
+    adapted.update(os.path.join(ASSETS, target) for target, _, _ in adaptations() if target.endswith(".png"))
     for path, data in expected().items():
         rel = os.path.relpath(path, ROOT)
         if not os.path.isfile(path):
@@ -235,10 +303,12 @@ if __name__ == "__main__":
             except ModuleNotFoundError:
                 # A slice outside the Concordance's modules (the encyclopedia: tools/encyclopedia.py).
                 module = __import__(rest[0])
-            only = set(getattr(module, "OWNER_FILES", {})) | set(getattr(module, "OWNER_BLOCKS_FILES", {}))
-        for target, source, digest in provenance():
+            only = set(getattr(module, "OWNER_FILES", {})) | set(getattr(module, "OWNER_BLOCKS_FILES", {})) \
+                | set(getattr(module, "ADAPTED", {}))
+        for target, source, digest, adapter in provenance():
             if only is None or target in only:
-                print(f"| `{target}` | `{source}` | `{digest}` |")
+                adapted = f" adapted by `tools/stolas_body.py` ({adapter}) |" if adapter else ""
+                print(f"| `{target}` | `{source}` | `{digest}` |" + adapted)
         sys.exit(0)
     if "--check" in sys.argv:
         problems = errors()

@@ -69,6 +69,11 @@ def build(jar):
                         'plastic_sheet': Fraction(1, 2), 'silicone': Fraction(9, 8)}.items():
         values['jugcraft:'+item] = price
         origins['jugcraft:'+item] = 'local chemistry/output/container accounting'
+    # These ores drop existing valuable quartz, including up to four with Fortune III.
+    # Do not assign a cheap fallback that can be transmuted and mined for profit.
+    for ore in ('quartz_ore', 'deepslate_quartz_ore'):
+        values['jugcraft:'+ore] = 4 * values['minecraft:quartz']
+        origins['jugcraft:'+ore] = 'local quartz mining/Fortune accounting'
     locked=set(values)
     edges=[]
     for rid,r in recipes.items():

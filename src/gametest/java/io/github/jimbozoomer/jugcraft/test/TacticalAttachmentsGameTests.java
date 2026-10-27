@@ -26,20 +26,23 @@ public class TacticalAttachmentsGameTests {
 	/**
 	 * The guns the owner made tactical grip parts for (slice 10A's launchers, slice 10B's rifles, slice 10D's Reverb,
 	 * slices 11A's and 11B's Nether guns, slices 13A's to 13C's frontier guns, slice 14A's Holler Pistol, slice 14B's
-	 * Grange Carbine and slice 14C's Sprocket Gun and Navvy Shotgun among them).
+	 * Grange Carbine, slice 14C's Sprocket Gun and Navvy Shotgun, slice 14F's Old Grange Carbine and slices 15A's and 15C's
+	 * diamond-steel guns among them).
 	 */
 	static final List<String> GRIPPED = List.of("drover_rifle", "coach_gun", "garrison_rifle", "breacher", "picket_rifle",
 			"ranger_rifle", "kestrel_rifle", "squall_rifle", "sledge", "highwayman", "earthmover", "skylark_rifle", "bullfrog",
 			"solenoid_rifle", "votive_rifle", "reverb", "tusker", "cinder_repeater", "bastion_rifle", "goldbristle_carbine",
 			"crackling", "conductor_carbine", "magpie_smg", "lookout_rifle", "fencepost_carbine", "waystation_shotgun",
 			"highball_rifle", "millstone_rifle", "holler_pistol", "grange_carbine", "sprocket_gun",
-			"navvy_shotgun");
+			"navvy_shotgun", "old_grange_carbine", "vesper_rifle", "onrush_smg", "gallant_rifle", "hawker_rifle", "impetus_shotgun",
+			"quill_rifle");
 	/** The guns that take the scopes but not the Laser Sight (tools/guns.py ATTACHMENTS laser_sight "not_on"). */
-	static final List<String> NO_LASER = List.of("breacher", "trench_lobber", "earthmover");
+	static final List<String> NO_LASER = List.of("breacher", "trench_lobber", "earthmover", "hinterland_rifle");
 
 	/**
-	 * Both recipes load. The Tactical Grip fits the thirty-two guns the owner made tactical grip parts for and no other.
-	 * The Laser Sight fits every gun that takes the scopes but the Breacher, the Trench Lobber and the Earthmover.
+	 * Both recipes load. The Tactical Grip fits the thirty-nine guns the owner made tactical grip parts for and no other.
+	 * The Laser Sight fits every gun that takes the scopes but the Breacher, the Trench Lobber, the Earthmover and the
+	 * Hinterland Rifle.
 	 */
 	@GameTest
 	public void tacticalAttachmentsFitTheirGuns(GameTestHelper helper) {

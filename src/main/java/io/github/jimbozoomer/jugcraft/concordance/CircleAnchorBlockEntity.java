@@ -12,7 +12,9 @@ import io.github.jimbozoomer.jugcraft.concordance.effect.EffectKind;
 import io.github.jimbozoomer.jugcraft.concordance.effect.EffectSpec;
 import io.github.jimbozoomer.jugcraft.concordance.effect.Intent;
 import io.github.jimbozoomer.jugcraft.concordance.effect.Ledger;
+import io.github.jimbozoomer.jugcraft.concordance.ritual.Choice;
 import io.github.jimbozoomer.jugcraft.concordance.ritual.Offerings;
+import io.github.jimbozoomer.jugcraft.concordance.ritual.Readiness;
 import io.github.jimbozoomer.jugcraft.concordance.ritual.RitualDefinition;
 import io.github.jimbozoomer.jugcraft.concordance.ritual.RitualMachine;
 import io.github.jimbozoomer.jugcraft.concordance.ritual.RitualRun;
@@ -22,10 +24,12 @@ import io.github.jimbozoomer.jugcraft.concordance.sign.Sign;
 import io.github.jimbozoomer.jugcraft.concordance.sign.Signs;
 import io.github.jimbozoomer.jugcraft.concordance.rules.ConcordanceRules;
 import io.github.jimbozoomer.jugcraft.concordance.rules.Evidence;
+import io.github.jimbozoomer.jugcraft.concordance.rules.Knowledge;
 import io.github.jimbozoomer.jugcraft.concordance.rules.ResearchEngine;
 import io.github.jimbozoomer.jugcraft.config.JugcraftConfig;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -86,6 +90,10 @@ import org.jspecify.annotations.Nullable;
  * leader calling it off, the anchor broken, the Concordance switched off or the ritual no longer defined. A ritual
  * saved mid-run (its chunk unloaded, the server stopped) lapses when it loads, and one whose anchor missed a whole step
  * lapses too: it never catches up. The offerings are released and nothing is made.</li>
+ * <li><b>Readiness</b> (Concordance Chunk C, C-03): one function chooses the rite for a start and for readiness
+ * ({@link #choose}); {@link #readiness} says every shortfall at once from the cached report and one reading of each
+ * channel, or what a running rite has spent apart from what it holds; a reading in chat and a refused start mark every
+ * faulted part where it stands; an interruption is told in one line.</li>
  * </ul>
  * Everything a ritual holds is saved with this block entity, in the same chunk, so a save or a crash can never keep the
  * result and the offerings both. Clients receive the phase, the participants and the linked channels (not the items),
@@ -94,6 +102,8 @@ import org.jspecify.annotations.Nullable;
 public class CircleAnchorBlockEntity extends BlockEntity implements GeoBlockEntity {
 	public static final int SLOTS = 6;
 	public static final int CACHE_TICKS = 100;
+	/** A reading in chat marks the circle's faulted parts at most this often per player (Concordance Chunk C, C-03). */
+	public static final int MARK_TICKS = 20;
 	public static final String ANCHOR = "jugcraft:circle_anchor";
 	/** The practice a completed ritual records ({@link Evidence.Practiced}): one per chunk counts for mastery. */
 	public static final String ACTIVITY = "jugcraft:ritual";
@@ -118,6 +128,8 @@ public class CircleAnchorBlockEntity extends BlockEntity implements GeoBlockEnti
 	private int steps;
 	/** Where the channels of the last checked circle are, {@code x,y,z;...} from the anchor (clients draw beams to them). */
 	private String channels = "";
+	/** How the last attempt here broke off (C-03), for the Inspect page until the next begins or the anchor loads. Not saved. */
+	private Readiness.@Nullable Ending ending;
 
 	public CircleAnchorBlockEntity(BlockPos pos, BlockState state) {
 		super(JugcraftConcordance.ANCHOR_ENTITY, pos, state);
@@ -296,42 +308,16 @@ public class CircleAnchorBlockEntity extends BlockEntity implements GeoBlockEnti
 			return;
 		}
 		ConcordanceRules rules = ConcordanceData.rules();
-		List<Offerings.Slot> slots = slots();
-		RitualDefinition chosen = null;
-		Offerings.Plan plan = null;
-		RitualDefinition unknown = null;
-		RitualDefinition closest = null;
-		Offerings.Shortfall shortfall = null;
-		int closestShort = Integer.MAX_VALUE;
-		for (RitualDefinition ritual : rules.ritualsAt(ANCHOR)) {
-			Offerings.Match match = Offerings.match(ritual, slots, ConcordanceProgress.TAG_LOOKUP);
-			if (!ResearchEngine.knowsRitual(ConcordanceProgress.knowledge(player), ritual)) {
-				if (match.plan() != null && unknown == null) {
-					unknown = ritual;
-				}
-			} else if (match.plan() != null) {
-				// The most specific match wins (the most items offered); ties go to the first by id.
-				if (chosen == null || ritual.offered() > chosen.offered()) {
-					chosen = ritual;
-					plan = match.plan();
-				}
-			} else {
-				int missing = 0;
-				for (Offerings.Shortfall each : match.missing()) {
-					missing += each.offering().count() - each.have();
-				}
-				if (missing < closestShort) {
-					closestShort = missing;
-					closest = ritual;
-					shortfall = match.missing().get(0);
-				}
-			}
-		}
-		if (chosen == null) {
-			if (unknown != null) {
-				player.sendOverlayMessage(Component.translatable("message.jugcraft.concordance.circle.unknown", ritualName(unknown.id())));
-			} else if (closest != null) {
-				player.sendOverlayMessage(Component.translatable("message.jugcraft.concordance.circle.missing", ritualName(closest.id()),
+		// Concordance Chunk C (C-03): the rite these offerings answer, chosen by the one function readiness also uses.
+		Choice choice = choose(player);
+		RitualDefinition chosen = choice.chosen();
+		Offerings.Plan plan = choice.plan();
+		if (chosen == null || plan == null) {
+			if (choice.unknown() != null) {
+				player.sendOverlayMessage(Component.translatable("message.jugcraft.concordance.circle.unknown", ritualName(choice.unknown().id())));
+			} else if (choice.closest() != null && !choice.missing().isEmpty()) {
+				Offerings.Shortfall shortfall = choice.missing().getFirst();
+				player.sendOverlayMessage(Component.translatable("message.jugcraft.concordance.circle.missing", ritualName(choice.closest().id()),
 						shortfall.offering().count() - shortfall.have(), offeringName(shortfall.offering())));
 			} else {
 				player.sendOverlayMessage(Component.translatable("message.jugcraft.concordance.circle.no_match"));
@@ -356,6 +342,11 @@ public class CircleAnchorBlockEntity extends BlockEntity implements GeoBlockEnti
 		RitualMachine.Interruption fault = RitualMachine.fault(seen);
 		if (fault != null) {
 			player.sendOverlayMessage(refusal(fault, seen.report(), chosen));
+			// Concordance Chunk C (C-03): every part that refused it, marked where it stands, as an interruption marks them.
+			Sign warning = warning(fault);
+			if (warning != null) {
+				markFaults(level, seen.report(), warning);
+			}
 			return;
 		}
 		if (apply(level, run.start(chosen, player.getUUID(), plan, now), chosen)) {
@@ -408,9 +399,16 @@ public class CircleAnchorBlockEntity extends BlockEntity implements GeoBlockEnti
 				ConcordanceData.rules().ritual(run.ritual()));
 	}
 
-	/** Tells the player how the anchor and its circle stand: the phase, then every fault (or that it is complete). */
+	/**
+	 * Tells the player how the anchor and its circle stand: the phase, then every fault (or that it is complete). Since
+	 * Concordance Chunk C (C-03) a reading in chat (an empty-hand use, the command) also marks every faulted part where it
+	 * stands, at most once every {@value #MARK_TICKS} ticks a player; status(level, out), which the Inspect page calls, never does.
+	 */
 	public void status(ServerPlayer player, ServerLevel level) {
 		status(level, player::sendSystemMessage);
+		if (RateGate.allow(player, "circle_marks", MARK_TICKS)) {
+			markReadiness(level, player);
+		}
 	}
 
 	/**
@@ -445,16 +443,17 @@ public class CircleAnchorBlockEntity extends BlockEntity implements GeoBlockEnti
 		};
 	}
 
-	private int participantsNeeded() {
+	public int participantsNeeded() {
 		RitualDefinition definition = run.ritual() == null ? null : ConcordanceData.rules().ritual(run.ritual());
 		return definition == null ? run.joined().size() : definition.participants();
 	}
 
-	/** One fault, said in words, with the position it is at. */
+	/** One fault, said in words, with where it is and where that is from the anchor (Concordance Chunk C, C-03). */
 	public Component faultText(StructureValidator.Fault fault) {
 		StructurePattern.Offset offset = fault.part().offset();
-		BlockPos at = worldPosition.offset(offset.x(), offset.y(), offset.z());
-		Component where = Component.literal(at.getX() + ", " + at.getY() + ", " + at.getZ());
+		BlockPos at = part(offset);
+		Component where = Component.translatable("message.jugcraft.concordance.circle.where", at.getX() + ", " + at.getY() + ", " + at.getZ(),
+				offset.x() + ", " + offset.y() + ", " + offset.z());
 		Component role = Component.translatable("message.jugcraft.concordance.circle.role." + fault.part().role().id);
 		String key = "message.jugcraft.concordance.circle.fault." + fault.problem().id;
 		return switch (fault.problem()) {
@@ -470,6 +469,134 @@ public class CircleAnchorBlockEntity extends BlockEntity implements GeoBlockEnti
 			case PARTICIPANTS -> Component.translatable("message.jugcraft.concordance.circle.too_far");
 			default -> seen.faults().isEmpty() ? Component.translatable("message.jugcraft.concordance.circle.no_match") : faultText(seen.faults().get(0));
 		};
+	}
+
+	/** The ritual these offerings answer for {@code player} (C-03): the one function a start and readiness share. */
+	public Choice choose(ServerPlayer player) {
+		Knowledge knowledge = ConcordanceProgress.knowledge(player);
+		return Choice.of(ConcordanceData.rules().ritualsAt(ANCHOR), slots(), ritual -> ResearchEngine.knowsRitual(knowledge, ritual),
+				ConcordanceProgress.TAG_LOOKUP);
+	}
+
+	/**
+	 * For the Inspect page (C-03): what {@code reader} would need before the rite these offerings answer can begin, or what
+	 * the rite holding the anchor has spent and still holds. From the cached report (report(), no second check), one reading
+	 * of each channel (at most StructurePattern.MAX_CHANNELS), the reader's Focus and place and the light. No sign, and no
+	 * change beyond the report's cache, which status() refreshes the same way. Null with no rite to speak of.
+	 */
+	public @Nullable Readiness readiness(ServerLevel level, ServerPlayer reader) {
+		ConcordanceRules rules = ConcordanceData.rules();
+		int light = level.getMaxLocalRawBrightness(worldPosition.above());
+		if (run.phase() != RitualMachine.Phase.IDLE) {
+			RitualDefinition running = run.ritual() == null ? null : rules.ritual(run.ritual());
+			StructurePattern pattern = running == null ? null : rules.structure(running.structure());
+			return pattern == null ? null
+					: Readiness.running(running, run, channels(level, pattern, run.joined()), ConcordanceProgress.now(level), light);
+		}
+		Choice choice = choose(reader);
+		RitualDefinition rite = choice.rite();
+		if (rite == null) {
+			return choice.unknown() != null ? Readiness.UNKNOWN : null;
+		}
+		StructurePattern pattern = rules.structure(rite.structure());
+		StructureValidator.Report shape = pattern == null ? null : report(level);
+		if (pattern == null || shape == null || !shape.pattern().equals(pattern.id()) || !resultExists(rite)) {
+			return null; // a start would answer "no ritual"; every rite here shares the idle structure (check_rituals)
+		}
+		return Readiness.before(choice, pattern, shape, channels(level, pattern, List.of(reader.getUUID())),
+				new Readiness.Reader(ConcordanceProgress.currentFocus(reader), near(reader, pattern), light));
+	}
+
+	/** One reading of each channel for readiness (C-03); an unloaded one, or no pylon, reads as none. */
+	private List<Readiness.Channel> channels(ServerLevel level, StructurePattern pattern, List<UUID> participants) {
+		List<Readiness.Channel> out = new ArrayList<>();
+		for (StructurePattern.Part channel : pattern.channels()) {
+			BlockPos at = part(channel.offset());
+			String where = at.getX() + ", " + at.getY() + ", " + at.getZ();
+			if (level.isLoaded(at) && level.getBlockEntity(at) instanceof LeyPylonBlockEntity pylon) {
+				out.add(new Readiness.Channel(channel.offset(), where, true, pylon.ley(), pylon.lends(participants)));
+			} else {
+				out.add(new Readiness.Channel(channel.offset(), where, false, 0L, false));
+			}
+		}
+		return out;
+	}
+
+	/** What the rite holding this anchor (or just completed in it) has spent (C-03); null while idle or if its rules are gone. */
+	public Readiness.@Nullable Spent spent() {
+		if (run.phase() == RitualMachine.Phase.IDLE || run.ritual() == null) {
+			return null;
+		}
+		ConcordanceRules rules = ConcordanceData.rules();
+		RitualDefinition definition = rules.ritual(run.ritual());
+		StructurePattern pattern = definition == null ? null : rules.structure(definition.structure());
+		return pattern == null ? null : Readiness.Spent.of(definition, run, pattern.channels().size());
+	}
+
+	/** How the last attempt here broke off (C-03); null if none has since the last start or load. Not saved. */
+	public Readiness.@Nullable Ending ending() {
+		return ending;
+	}
+
+	/** The last attempt's line (C-03), named as the anchor names its rite; null if none. */
+	public @Nullable Component endingLine() {
+		return ending == null ? null : endingLine(ritualName(run.ritual()), ending);
+	}
+
+	/**
+	 * The one line an interruption is told in (C-03; the reason and "kept" were sent one after the other, and the action bar
+	 * keeps only the last): why it broke off, where the offerings are, and what it spent and lost.
+	 */
+	public static Component endingLine(Component rite, Readiness.Ending ending) {
+		Component why = Component.translatable("message.jugcraft.concordance.circle.interrupted." + ending.reason().id, rite);
+		Component where = Component.translatable(ending.reason().consequence().offerings() == RitualMachine.Release.KEPT
+				? "message.jugcraft.concordance.circle.release.kept" : "message.jugcraft.concordance.circle.release.dropped");
+		Readiness.Spent spent = ending.spent();
+		return spent == null ? Component.translatable("message.jugcraft.concordance.circle.ended", why, where)
+				: Component.translatable("message.jugcraft.concordance.circle.ended.spent", why, where, spent.focus(), spent.ley());
+	}
+
+	/**
+	 * A reading in chat marks every faulted part where it stands (C-03): each part the report finds at fault, with the sign
+	 * its interruption would show (danger for a broken boundary, else a shortage), and each channel readiness finds short
+	 * of a step or unlent for {@code reader} (a blocking line; one only warned short of the run is not marked), a shortage.
+	 * One sign a part, within the Signs budget. Never from status(level, out).
+	 */
+	private void markReadiness(ServerLevel level, ServerPlayer reader) {
+		Map<BlockPos, Sign> marks = new LinkedHashMap<>();
+		StructureValidator.Report current = report(level);
+		if (current != null) {
+			StructureValidator.Report faults = run.phase().reserving() ? current
+					: new StructureValidator.Report(current.pattern(), Readiness.shapeFaults(current), current.linked(), current.channels());
+			RitualMachine.Interruption fault = RitualMachine.fault(new RitualMachine.Observation(faults, 0, 0, true));
+			Sign sign = fault == null ? null : warning(fault);
+			if (sign != null) {
+				for (StructureValidator.Fault each : faults.faults()) {
+					marks.put(part(each.part().offset()), sign);
+				}
+			}
+		}
+		Readiness readiness = readiness(level, reader);
+		if (readiness != null) {
+			for (Readiness.Line line : readiness.lines()) {
+				if (line.blocks() && line.at() != null) {
+					marks.putIfAbsent(part(line.at()), Sign.WANT);
+				}
+			}
+		}
+		marks.forEach((pos, sign) -> Signs.show(level, pos, sign));
+	}
+
+	/** Shows {@code sign} at every part {@code report} found at fault: where it fell short or broke (roadmap step 27; C-03). */
+	private void markFaults(ServerLevel level, StructureValidator.Report report, Sign sign) {
+		for (StructureValidator.Fault fault : report.faults()) {
+			Signs.show(level, part(fault.part().offset()), sign);
+		}
+	}
+
+	/** Where a part of the circle stands. */
+	private BlockPos part(StructurePattern.Offset offset) {
+		return worldPosition.offset(offset.x(), offset.y(), offset.z());
 	}
 
 	// ---------------------------------------------------------------- the ritual
@@ -646,14 +773,17 @@ public class CircleAnchorBlockEntity extends BlockEntity implements GeoBlockEnti
 		if (definition != null && run.phase().reserving()) {
 			steps = definition.steps();
 		}
+		if (run.phase().reserving() && !before.phase().reserving()) {
+			ending = null; // a new attempt: how the last one ended is no longer the anchor's news (C-03)
+		}
 		setChanged();
 		if (before.phase().reserving() && !run.phase().reserving() && run.last() != null) {
 			RitualMachine.Interruption reason = run.last();
-			Component name = ritualName(before.ritual());
-			tell(level, before.joined(), Component.translatable("message.jugcraft.concordance.circle.interrupted." + reason.id, name));
-			if (reason.consequence().offerings() == RitualMachine.Release.KEPT) {
-				tell(level, before.joined(), Component.translatable("message.jugcraft.concordance.circle.kept"));
-			}
+			// Concordance Chunk C (C-03): one line, so nothing replaces the reason on the action bar: why it broke off, where the
+			// offerings are and what the attempt spent and lost (plan 03:107). Kept, not saved, for the Inspect page.
+			StructurePattern pattern = definition == null ? null : ConcordanceData.rules().structure(definition.structure());
+			ending = new Readiness.Ending(reason, pattern == null ? null : Readiness.Spent.of(definition, before, pattern.channels().size()));
+			tell(level, before.joined(), endingLine(ritualName(before.ritual()), ending));
 			// Roadmap step 27: a shortage or a danger says which; a deliberate stop is only the circle's break.
 			Sign warning = warning(reason);
 			if (warning != null) {
@@ -661,10 +791,7 @@ public class CircleAnchorBlockEntity extends BlockEntity implements GeoBlockEnti
 				// And where it fell short or broke: each part the last check found at fault (a dry channel, a missing stone).
 				if (report != null && (reason == RitualMachine.Interruption.POWER || reason == RitualMachine.Interruption.STRUCTURE
 						|| reason == RitualMachine.Interruption.CONTAINMENT)) {
-					for (StructureValidator.Fault fault : report.faults()) {
-						StructurePattern.Offset offset = fault.part().offset();
-						Signs.show(level, worldPosition.offset(offset.x(), offset.y(), offset.z()), warning);
-					}
+					markFaults(level, report, warning);
 				}
 			} else {
 				sound(level, JugcraftConcordance.CIRCLE_BREAK_SOUND, 1.0F);
@@ -950,6 +1077,7 @@ public class CircleAnchorBlockEntity extends BlockEntity implements GeoBlockEnti
 		channels = input.getStringOr("channels", "");
 		// Saved while a ritual held its offerings: it did not run while unloaded, so it lapses on its next tick.
 		resumed = run.phase().reserving();
+		ending = null;
 	}
 
 	@Override

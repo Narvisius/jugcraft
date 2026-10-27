@@ -6,6 +6,7 @@ import io.github.jimbozoomer.jugcraft.world.PixelHollows;
 import io.github.jimbozoomer.jugcraft.world.PixelHollowsMaps;
 import io.github.jimbozoomer.jugcraft.world.RetroShopPlacement;
 import io.github.jimbozoomer.jugcraft.world.RetroTrader;
+import io.github.jimbozoomer.jugcraft.world.RetroTraderJam;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -29,6 +30,9 @@ import net.minecraft.tags.PoiTypeTags;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.villager.Villager;
+import net.minecraft.world.entity.npc.villager.VillagerProfession;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 import net.minecraft.world.item.ItemStack;
@@ -249,6 +253,64 @@ public class PixelHollowsGameTests {
 	private static MerchantOffer offer(GameTestHelper helper, List<MerchantOffer> offers, net.minecraft.world.item.Item gives) {
 		return offers.stream().filter(offer -> offer.getResult().is(gives)).findFirst()
 				.orElseThrow(() -> helper.assertionException("No trade giving " + gives + " in " + offers.size() + " offers"));
+	}
+
+	/**
+	 * The Retro Trader's stomp-clap (RetroTraderJam), with the chance forced: closing his screen after a completed
+	 * trade starts one, through the game's own Villager#setTradingPlayer and the mixin; closing it without a trade, a
+	 * second trade within the cooldown, and a villager of another profession do not. The routine's beats are four
+	 * stomps (right, left, right, left), four claps between them and a finale, all within its length.
+	 */
+	@GameTest
+	public void retroTraderJamsAfterTrading(GameTestHelper helper) {
+		Villager trader = spawnVillager(helper, new BlockPos(2, 1, 2));
+		trader.setVillagerData(trader.getVillagerData().withProfession(BuiltInRegistries.VILLAGER_PROFESSION.getOrThrow(RetroTrader.PROFESSION)));
+		Villager farmer = spawnVillager(helper, new BlockPos(4, 1, 2));
+		farmer.setVillagerData(farmer.getVillagerData().withProfession(BuiltInRegistries.VILLAGER_PROFESSION.getOrThrow(VillagerProfession.FARMER)));
+		Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+		MerchantOffer offer = trader.getOffers().get(0);
+		RetroTraderJam.alwaysForTests = true;
+		try {
+			trader.setTradingPlayer(player);
+			trader.setTradingPlayer(null);
+			helper.assertTrue(RetroTraderJam.lastJam(trader) == -1, "Closing his screen without trading should not start a jam");
+
+			trader.setTradingPlayer(player);
+			trader.notifyTrade(offer);
+			helper.assertTrue(RetroTraderJam.lastJam(trader) == -1, "The jam should wait for the screen to close");
+			trader.setTradingPlayer(null);
+			long first = RetroTraderJam.lastJam(trader);
+			helper.assertTrue(first == helper.getLevel().getGameTime(), "A trade and then closing the screen should start a jam");
+
+			trader.setTradingPlayer(player);
+			trader.notifyTrade(offer);
+			trader.setTradingPlayer(null);
+			helper.assertTrue(RetroTraderJam.lastJam(trader) == first, "A second jam within the cooldown should not start");
+
+			farmer.setTradingPlayer(player);
+			farmer.notifyTrade(offer);
+			farmer.setTradingPlayer(null);
+			helper.assertTrue(RetroTraderJam.lastJam(farmer) == -1, "A farmer should never jam");
+		} finally {
+			RetroTraderJam.alwaysForTests = false;
+		}
+
+		int[] counts = new int[RetroTraderJam.Beat.values().length];
+		RetroTraderJam.Beat last = RetroTraderJam.Beat.NONE;
+		for (int tick = 0; tick < RetroTraderJam.LENGTH; tick++) {
+			RetroTraderJam.Beat beat = RetroTraderJam.beat(tick);
+			counts[beat.ordinal()]++;
+			if (beat == RetroTraderJam.Beat.STOMP_RIGHT || beat == RetroTraderJam.Beat.STOMP_LEFT) {
+				helper.assertTrue(beat != last, "Stomps should alternate feet, two " + beat + " in a row at tick " + tick);
+				last = beat;
+			}
+		}
+		helper.assertTrue(counts[RetroTraderJam.Beat.STOMP_RIGHT.ordinal()] == 2 && counts[RetroTraderJam.Beat.STOMP_LEFT.ordinal()] == 2
+				&& counts[RetroTraderJam.Beat.CLAP.ordinal()] == 4 && counts[RetroTraderJam.Beat.FINALE.ordinal()] == 1,
+				"The routine should be 2 + 2 stomps, 4 claps and a finale");
+		helper.assertTrue(RetroTraderJam.beat(RetroTraderJam.LENGTH) == RetroTraderJam.Beat.NONE && RetroTraderJam.beat(-1) == RetroTraderJam.Beat.NONE,
+				"Nothing should play outside the routine");
+		helper.succeed();
 	}
 
 	/** Each level brings exactly the trades in tools/pixel_hollows.py; the map costs 12 emeralds and a compass. */

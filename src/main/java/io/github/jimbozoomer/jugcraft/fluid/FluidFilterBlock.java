@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.minecraft.core.BlockPos;
+import io.github.jimbozoomer.jugcraft.jimtafacts.industry.TransportAttachments;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -37,6 +38,8 @@ public class FluidFilterBlock extends FluidPipeBlock implements EntityBlock {
 		registerDefaultState(defaultBlockState().setValue(SET, false));
 	}
 
+	@Override protected net.minecraft.world.phys.shapes.VoxelShape getShape(BlockState s,net.minecraft.world.level.BlockGetter l,BlockPos p,net.minecraft.world.phys.shapes.CollisionContext c){return TransportAttachments.shape(super.getShape(s,l,p,c),l,p);}
+
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder);
@@ -64,6 +67,7 @@ public class FluidFilterBlock extends FluidPipeBlock implements EntityBlock {
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+        if(TransportAttachments.remove(level,pos,player,hit.getDirection()))return InteractionResult.SUCCESS;
 		if (!level.isClientSide()) {
 			if (player.isShiftKeyDown()) {
 				set(level, pos, state, FluidVariant.blank(), player);

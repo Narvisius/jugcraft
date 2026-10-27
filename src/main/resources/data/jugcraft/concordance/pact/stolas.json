@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "agreement": "jugcraft:stolas_pact",
+  "research": "jugcraft:stolas_regard",
+  "service": {
+    "work": "star_reckoning",
+    "radius": 8,
+    "from": 0,
+    "to": 24000,
+    "quota": 1
+  },
+  "upkeep": {
+    "offering": "jugcraft:stolas_offerings",
+    "count": 1,
+    "period_days": 7,
+    "grace_days": 1,
+    "cap": 4
+  },
+  "beneficiaries": "personal",
+  "compact": {
+    "items": [
+      {
+        "item": "minecraft:amethyst_shard",
+        "count": 2
+      },
+      {
+        "item": "minecraft:feather",
+        "count": 3
+      }
+    ],
+    "resonance": 8
+  },
+  "beats": [
+    "greeting",
+    "service",
+    "price"
+  ]
+}

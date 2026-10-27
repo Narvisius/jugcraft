@@ -5,6 +5,7 @@ are not. These are ordinary existing materials, not new recipe-selector items.
 The spell forge uses the same refined bill as the crafting-table route.
 """
 ADDITIONS = {
+    'jimtafacts_industry/jimta_induction_furnace_housing':['jugcraft:copper_wire'],
     'jimtafacts_crops/mug': ['minecraft:stick'],
     'jimtafacts_utilities/rubber_boat': ['minecraft:wooden_shovel'],
     'jimtafacts_industry/jimta_advanced_crafting_table_housing': ['jugcraft:advanced_circuit'],

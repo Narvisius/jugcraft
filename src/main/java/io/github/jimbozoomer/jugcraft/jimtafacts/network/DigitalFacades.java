@@ -43,6 +43,7 @@ public final class DigitalFacades {
         final boolean cover;
         CoverItem(Properties p, boolean cover) { super(p); this.cover = cover; }
         @Override public InteractionResult useOn(UseOnContext c) {
+            if(cover && io.github.jimbozoomer.jugcraft.jimtafacts.industry.TransportAttachments.cover(c))return InteractionResult.SUCCESS;
             if (!(c.getPlayer() instanceof ServerPlayer p) || !(c.getLevel().getBlockEntity(c.getClickedPos()) instanceof Covers be)) return InteractionResult.PASS;
             if (p.isSpectator() || !p.isAlive() || !Authority.mayChange(p.level(), p, be.getBlockPos())) return InteractionResult.FAIL;
             var side = c.getClickedFace(); var sample = c.getItemInHand().get(MATERIAL);
@@ -91,6 +92,11 @@ public final class DigitalFacades {
         private int anchors;
         public Covers(BlockPos pos, BlockState state) { super(TYPE, pos, state); }
         public BlockState material(Direction side) { return faces.get(side.ordinal()); }
+        /** Cosmetic resampling only: never installs a new facade or copies a block entity. */
+        public boolean retexture(Direction side,BlockState sample){
+            if(!valid(sample)||material(side).isAir()||material(side).equals(sample))return false;
+            faces.set(side.ordinal(),sample);changed();return true;
+        }
         public boolean anchored(Direction side) { return (anchors & 1 << side.ordinal()) != 0; }
         void changed() { setChanged(); if (level != null) level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS); }
         @Override public void setLevel(Level level){super.setLevel(level);parts.levelChanged();}

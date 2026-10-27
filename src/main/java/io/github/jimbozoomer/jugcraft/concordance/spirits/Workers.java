@@ -14,6 +14,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
+import net.fabricmc.fabric.api.menu.v1.ExtendedMenuType;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.commands.CommandSourceStack;
@@ -45,7 +46,9 @@ import net.minecraft.world.level.material.PushReaction;
  * separate models, each saved with its worker and never in its brain: the Hearthling familiar's bond, the Gathering
  * Shade's agreement (kept by its Spirit Anchor and sealed as a Bound Will) and the Clockwork Porter's body. Every worker
  * says what it is doing or why not; the {@code workers} command lists a player's workers from the saved roster,
- * loaded or not, without loading anything.
+ * loaded or not, without loading anything. Since Concordance Chunk D (D-08) a second spirit, the Workshop Hand, is sealed
+ * at a Spirit Anchor bound to its holder's Courier Post and carries that post's requests. Concordance Chunk D adds Stolas,
+ * the pact perch and its screen.
  */
 public final class Workers {
 	public static final String RESEARCH = "jugcraft:binding_arts";
@@ -58,6 +61,7 @@ public final class Workers {
 	public static EntityType<HearthlingEntity> HEARTHLING;
 	public static EntityType<GatheringShadeEntity> GATHERING_SHADE;
 	public static EntityType<ClockworkPorterEntity> CLOCKWORK_PORTER;
+	public static EntityType<WorkshopHandEntity> WORKSHOP_HAND;
 	public static Block SPIRIT_ANCHOR;
 	public static BlockEntityType<SpiritAnchorBlockEntity> ANCHOR_ENTITY;
 	public static Item BONDING_CHARM;
@@ -65,6 +69,12 @@ public final class Workers {
 	public static Item PORTER_KEY;
 	/** A Porter Key's route. */
 	public static DataComponentType<ClockworkPorterEntity.Route> PORTER_ROUTE;
+	/** Concordance Chunk D, D-04: Stolas (a pact's presence, or a visitor during a conversation), the pact perch and its screen. */
+	public static EntityType<StolasEntity> STOLAS;
+	public static Block PACT_PERCH;
+	public static BlockEntityType<PactPerchBlockEntity> PERCH_ENTITY;
+	public static Item PACT_PERCH_ITEM;
+	public static ExtendedMenuType<PactMenu, PactMenu.Opening> PERCH_MENU;
 
 	private Workers() {
 	}
@@ -79,9 +89,13 @@ public final class Workers {
 				.sized(0.6F, 1.6F).eyeHeight(1.35F).clientTrackingRange(8));
 		CLOCKWORK_PORTER = entity("clockwork_porter", EntityType.Builder.<ClockworkPorterEntity>of(ClockworkPorterEntity::new, MobCategory.MISC)
 				.sized(0.8F, 1.0F).eyeHeight(0.8F).clientTrackingRange(8));
+		// Concordance Chunk D, D-08: the Workshop Hand, a spirit on the shade's body (MISC: it never spawns, and transport crates refuse it).
+		WORKSHOP_HAND = entity("workshop_hand", EntityType.Builder.<WorkshopHandEntity>of(WorkshopHandEntity::new, MobCategory.MISC)
+				.sized(0.6F, 1.6F).eyeHeight(1.35F).clientTrackingRange(8));
 		FabricDefaultAttributeRegistry.register(HEARTHLING, HearthlingEntity.createAttributes());
 		FabricDefaultAttributeRegistry.register(GATHERING_SHADE, GatheringShadeEntity.createAttributes());
 		FabricDefaultAttributeRegistry.register(CLOCKWORK_PORTER, ClockworkPorterEntity.createAttributes());
+		FabricDefaultAttributeRegistry.register(WORKSHOP_HAND, WorkshopHandEntity.createAttributes());
 		ResourceKey<Block> anchorKey = ResourceKey.create(Registries.BLOCK, Jugcraft.id("spirit_anchor"));
 		SPIRIT_ANCHOR = Registry.register(BuiltInRegistries.BLOCK, anchorKey, new SpiritAnchorBlock(BlockBehaviour.Properties.of()
 				.mapColor(MapColor.COLOR_PURPLE).strength(2.0F, 6.0F).sound(SoundType.DEEPSLATE).requiresCorrectToolForDrops()
@@ -93,8 +107,27 @@ public final class Workers {
 		BONDING_CHARM = item("bonding_charm", BondingCharmItem::new, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 		PORTER = item("clockwork_porter", ClockworkPorterItem::new, new Item.Properties().stacksTo(1));
 		PORTER_KEY = item("porter_key", PorterKeyItem::new, new Item.Properties().stacksTo(1));
+		// Concordance Chunk D, D-04 (D-S7): MISC as every worker is, so a transport crate refuses him (MobTransportCrate.friendly).
+		STOLAS = entity("stolas", EntityType.Builder.<StolasEntity>of(StolasEntity::new, MobCategory.MISC).sized(0.7F, 1.45F).eyeHeight(1.2F)
+				.fireImmune().clientTrackingRange(8));
+		FabricDefaultAttributeRegistry.register(STOLAS, StolasEntity.createAttributes());
+		ResourceKey<Block> perchKey = ResourceKey.create(Registries.BLOCK, Jugcraft.id("pact_perch"));
+		PACT_PERCH = Registry.register(BuiltInRegistries.BLOCK, perchKey, new PactPerchBlock(BlockBehaviour.Properties.of()
+				.mapColor(MapColor.WOOD).strength(1.5F, 3.0F).sound(SoundType.WOOD).noOcclusion().pushReaction(PushReaction.IMMOVEABLE).setId(perchKey)));
+		PERCH_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("pact_perch"),
+				FabricBlockEntityTypeBuilder.create(PactPerchBlockEntity::new, PACT_PERCH).build());
+		PACT_PERCH_ITEM = item("pact_perch", properties -> new SkyItem(PACT_PERCH, properties), new Item.Properties().useBlockDescriptionPrefix());
+		PERCH_MENU = Registry.register(BuiltInRegistries.MENU, Jugcraft.id("pact_perch"), new ExtendedMenuType<>(PactMenu::new, PactMenu.Opening.STREAM_CODEC));
+		PactMenu.register();
+		// Concordance Chunk D, D-06: Stolas's cues (jugcraft:stolas.*; sounds.json and subtitles are the generator's).
+		StolasEntity.registerSounds();
+		// The unit review: his departures end on time, his chunk ticking him or not.
+		StolasEntity.registerSweep();
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> command(dispatcher));
-		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output -> output.accept(anchor));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output -> {
+			output.accept(anchor);
+			output.accept(PACT_PERCH_ITEM);
+		});
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(output -> {
 			output.accept(BONDING_CHARM);
 			output.accept(PORTER);

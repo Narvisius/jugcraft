@@ -40,11 +40,21 @@ class JimtaStructures(unittest.TestCase):
         self.assertNotIn('UUID',mob);self.assertNotIn('ArmorItems',mob)
         self.assertEqual(mob['equipment'][1]['mainhand'][1]['id'],(8,'jugcraft:jimta_spellbooks_keeper_flamberge'))
 
-    def test_no_missing_source_statue_is_silently_replaced_with_invented_art(self):
+    def test_supplied_statues_are_restored_with_pose_data_and_original_orientation(self):
         report=json.loads((ROOT/'docs/audits/jimtafacts-spellbook-structures.json').read_text())
-        self.assertTrue(report['omitted_statue_palettes'])
-        for row in report['omitted_statue_palettes']:
-            self.assertIn(row['missing_source'],adapter.MISSING_STATUES)
+        self.assertFalse(report['omitted_statue_palettes'])
+        self.assertTrue(report['restored_statue_palettes'])
+        for row in report['restored_statue_palettes']:
             path=ROOT/'src/main/resources/data/jugcraft/structure/jimtafacts/spellbooks'/row['template']
             data=read(path.read_bytes())[2]
-            self.assertEqual(data['palette'][1][1][row['palette_index']]['id'],(8,'minecraft:air'))
+            source=read((ROOT/'art/owner-library/originals/Oct23/Jimtafacts/data/irons_spellbooks/structure'/row['template']).read_bytes())[2]
+            before=source['palette'][1][1][row['palette_index']]
+            after=data['palette'][1][1][row['palette_index']]
+            self.assertEqual(after['id'],(8,'jugcraft:jimta_spellbooks_player_statue'))
+            for property in ('rotation','y_offset'):
+                self.assertEqual(before.get('properties',before.get('Properties'))[1][property],after['properties'][1][property])
+            for block in data['blocks'][1][1]:
+                if block['state'][1]!=row['palette_index'] or after['properties'][1]['y_offset'][1]!='0':continue
+                nbt=block['nbt'][1]
+                self.assertEqual(nbt['id'],(8,'jugcraft:jimta_spellbooks_player_statue'))
+                self.assertIn(nbt['pose'][1],range(23))

@@ -56,7 +56,7 @@ public final class MobTransportCrate extends Item {
             && (BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(mob.getType()).is(ALLOWED) || mob.getType().getCategory()!=MobCategory.MONSTER && mob.getType().getCategory()!=MobCategory.MISC);
     }
     private static boolean permitted(ServerPlayer p,BlockPos at){
-        var level=p.level();return !p.isSpectator() && p.mayBuild() && level.hasChunkAt(at) && level.mayInteract(p,at) && !TownProtection.denies(p,level,at);
+        var level=p.level();return !p.isSpectator() && p.mayBuild() && level.hasChunkAt(at) && level.mayInteract(p,at) && !TownProtection.denies(p,level,at) && io.github.jimbozoomer.jugcraft.finance.LandRegistry.mayBuild(p,level,at);
     }
     /** Visual-only fields; no inventories, brain memories, owner data or recursive passengers reach clients. */
     public static CompoundTag preview(CompoundTag mob){
@@ -136,7 +136,7 @@ public final class MobTransportCrate extends Item {
     @Override public InteractionResult use(Level level,Player player,InteractionHand hand){return action(player,level,hand,null,null);}
     @Override public void appendHoverText(ItemStack stack,TooltipContext context,TooltipDisplay display,Consumer<Component> out,TooltipFlag flag){
         out.accept(Component.literal(count(stack)+" / "+capacity(stack)+" friendly mobs").withColor(0xD6B57D));
-        for(var e:occupants(stack))if(!e.getStringOr("Claim","").isEmpty())out.accept(Component.literal("• "+e.getStringOr("Name","Mob")));
+        for(var e:occupants(stack))if(!e.getStringOr("Claim","").isEmpty())out.accept(Component.literal("â€¢ "+e.getStringOr("Name","Mob")));
         out.accept(Component.literal("Use on a mob to pick up; on ground to release one.").withColor(0xAAAAAA));
         out.accept(Component.literal("Sneak + use: choose a mob to release beside you.").withColor(0xAAAAAA));
     }

@@ -29,7 +29,11 @@ def model(name):
         path = TARGET / f'textures/aircraft/model/{name}_{i}.png';path.parent.mkdir(parents=True, exist_ok=True);path.write_bytes(raw)
         from PIL import Image
         with Image.open(path) as image: size = image.size
-        textures.append((f'aircraft/model/{name}_{i}', size))
+        # Blockbench UV coordinates use the logical atlas, not PNG pixel size.
+        resolution = doc.get('resolution', {})
+        uv_size = (texture.get('uv_width', resolution.get('width', size[0])),
+                   texture.get('uv_height', resolution.get('height', size[1])))
+        textures.append((f'aircraft/model/{name}_{i}', uv_size))
     elements = {e['uuid']: e for e in doc['elements']}
     animation = {}
     for clip in doc.get('animations', []):

@@ -1,6 +1,16 @@
 package io.github.jimbozoomer.jugcraft.test;
 
+import com.mojang.authlib.GameProfile;
+import io.github.jimbozoomer.jugcraft.agriculture.TrickOrTreat;
+import io.github.jimbozoomer.jugcraft.concordance.ConcordanceEffects;
+import io.github.jimbozoomer.jugcraft.concordance.effect.Cause;
+import io.github.jimbozoomer.jugcraft.concordance.effect.EffectKind;
+import io.github.jimbozoomer.jugcraft.concordance.effect.EffectSpec;
+import io.github.jimbozoomer.jugcraft.concordance.effect.Intent;
+import io.github.jimbozoomer.jugcraft.concordance.effect.Ledger;
+import io.github.jimbozoomer.jugcraft.lair.Encounter;
 import io.github.jimbozoomer.jugcraft.lair.JugcraftLairs;
+import io.github.jimbozoomer.jugcraft.lair.LairRewards;
 import io.github.jimbozoomer.jugcraft.lair.MoltenSlagBlock;
 import io.github.jimbozoomer.jugcraft.lair.SluiceGateBlock;
 import io.github.jimbozoomer.jugcraft.lair.TroughStoneBlock;
@@ -17,19 +27,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.phys.Vec3;
 
 /**
@@ -43,10 +60,18 @@ import net.minecraft.world.phys.Vec3;
  * is up a block or in the air, once a wave; the channel's surge spills over its banks and ebbs; the choke moves round the
  * sluices, never onto an open one; the Eruption; his gobs, cinders and fire patches; his Cinderlings, gutting out in water
  * and crumbling when he sinks; the Salamander Charm against the slag; and his loot is each participant's own. His fight
- * in the Cinder Kiln itself runs in a real world, in {@link CinderTyrantClientGameTests}.
+ * in the Cinder Kiln itself runs in a real world, in {@link CinderTyrantClientGameTests}. Since Concordance Chunk B
+ * (B-01) his fight's credit is the lairs' shared one: support and the absent share his hoard once, a healer is credited
+ * for mending his blows and his own fire but not his slag's heat or burning, a killing blow alone is paid, a tamed
+ * creature's blow is its owner's, four players are each paid once, and a fight loaded awake keeps a fresh record. Since
+ * B-02 his loot is what his JEI pages say.
  *
  * <p>He fights any player within 38 blocks of his bowl's centre; the arena keeps every other test's players farther off
- * than that. Each test sends him away before it ends, with his Cinderlings, and lets the slag ebb.
+ * than that. Each test sends him away before it ends, with his Cinderlings, and lets the slag ebb. His fight's record
+ * reaches farther, {@value Encounter#REACH} blocks (lair/Encounter), than the arena keeps other tests (at least 43.5
+ * blocks from his centre), so another test's player may take part in it while it is on: these tests assert exact counts
+ * and experience shares only for a fight begun and ended within one synchronous block, where nothing else runs, and
+ * otherwise only what their own players got.
  */
 public class CinderTyrantGameTests {
 	/** An arena of air the kiln's width and length (72 x 80), so everything of his fight is loaded and ticking. */
@@ -58,6 +83,15 @@ public class CinderTyrantGameTests {
 	private static final int LOADING_TICKS = 80;
 	/** A creature hurt shrugs off a blow no harder than the last for 10 ticks after (vanilla's); a test waits this long between blows. */
 	private static final int HURT_COOLDOWN = 12;
+	/** How many shares a page test rolls: each count then lies far inside five standard deviations of its chance's mean. */
+	private static final int SHARES = 400;
+
+	/** Whether {@code count} of {@value #SHARES} shares lies within five standard deviations of {@code chance}'s mean. */
+	private static boolean within(int count, double chance) {
+		double mean = SHARES * chance;
+		double deviation = 5.0 * Math.sqrt(SHARES * chance * (1.0 - chance));
+		return count >= mean - deviation && count <= mean + deviation;
+	}
 
 	/** The origin of a kiln laid out from the arena's corner, a block under it: its crucible's floor on the arena's. */
 	private static BlockPos origin(GameTestHelper helper) {
@@ -117,6 +151,18 @@ public class CinderTyrantGameTests {
 			tyrant.ebb(level);
 			tyrant.discard();
 		}
+	}
+
+	/** {@code healer} mends {@code patient} 4 through the Concordance's effect boundary, as the Mend word does. */
+	private static void mend(ServerLevel level, ServerPlayer healer, ServerPlayer patient) {
+		Cause cause = Cause.of(healer.getUUID(), Cause.Origin.SPELL, "test:mend", ConcordanceEffects.nextSerial());
+		ConcordanceEffects.apply(new ConcordanceEffects.Context(level, cause, healer, new Ledger(new Ledger.Limits(16, 256, 0)), "mend",
+				healer.position()), EffectSpec.of(EffectKind.RESTORATION, Intent.HELPFUL, 4, 0), patient);
+	}
+
+	/** How many of his trophies {@code player} holds. */
+	private static int trophies(ServerPlayer player) {
+		return player.getInventory().countItem(JugcraftTyrant.cinderbrand()) + player.getInventory().countItem(JugcraftTyrant.magmaw());
 	}
 
 	/**
@@ -661,6 +707,363 @@ public class CinderTyrantGameTests {
 				player.discard();
 			}
 		});
+		helper.succeed();
+	}
+
+	/**
+	 * Concordance Chunk B: support shares his hoard. A healer who mended 4 of what his Tail Sweep did is paid when he
+	 * falls; a striker still down as he falls has their share kept and handed over once on their feet, by his payer; one
+	 * who left the game in his fight has it kept in the world's record; one who walked away alive, a bystander and the one
+	 * he only hurt are not paid; and his fall reported again pays no one twice. Death and leaving are marked, as Chunk A's
+	 * tests mark them (the Yeti King's test makes a real death).
+	 */
+	@GameTest(structure = KILN, padding = 8, maxTicks = 160)
+	public void supportSharesHisHoardOnce(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		BlockPos origin = origin(helper);
+		CinderTyrantEntity tyrant = waiting(helper, origin);
+		floor(level, origin, 28, 30, 43, 48);
+		ServerPlayer patient = player(helper, tyrant, 0.0, -3.5);  // behind him: his tail's
+		ServerPlayer healer = player(helper, tyrant, 0.0, 7.0);  // before his head, past his tail's reach
+		ServerPlayer bystander = player(helper, tyrant, -3.0, 7.0);
+		ServerPlayer wanderer = player(helper, tyrant, 3.0, 7.0);
+		ServerPlayer fallen = player(helper, tyrant, 1.5, 8.5);
+		// Away from the game: a player the server's list never held, as one who has left is not held.
+		FakePlayer away = FakePlayer.get(level, new GameProfile(UUID.randomUUID(), "tyrant_away"));
+		List<ServerPlayer> players = List.of(patient, healer, bystander, wanderer, fallen);
+		players.forEach(player -> player.setGameMode(GameType.CREATIVE));  // he pays them no heed while they load
+		helper.runAfterDelay(LOADING_TICKS - CinderTyrantEntity.WAKE_TICKS - 2, () -> tyrant.wake(level));
+		helper.runAfterDelay(LOADING_TICKS, () -> {
+			players.forEach(player -> player.setGameMode(GameType.SURVIVAL));
+			LairRewards.Data data = LairRewards.Data.of(level.getServer());
+			ending(level, tyrant, () -> {
+				try {
+					Encounter fight = tyrant.encounter();
+					UUID receipt = fight.fight();
+					helper.assertTrue(tyrant.fighting() && fight.underway(), "Awake, his fight is not on: " + tyrant.phase());
+					middle(tyrant);
+					helper.assertTrue(tyrant.sweep(level) == 1, "His tail did not strike only the one behind him");
+					float lost = patient.getMaxHealth() - patient.getHealth();
+					mend(level, healer, patient);
+					Encounter.Share mended = fight.share(healer);
+					helper.assertTrue(lost >= Encounter.HEALING && mended != null && mended.healing() == Encounter.HEALING && mended.qualifies(),
+							"Mending 4 of his blow (" + lost + ") did not qualify the healer: " + (mended == null ? "nothing" : mended.healing()));
+					tyrant.took(wanderer, 2.0F);
+					tyrant.took(fallen, 2.0F);
+					tyrant.took(away, 2.0F);
+					fight.excuse(fallen.getUUID());  // as dying in his reach does (Encounter's AFTER_DEATH)
+					fight.left(away.getUUID());  // as leaving the game there does (Encounter's LEAVE): a test player cannot disconnect
+					wanderer.snapTo(wanderer.getX() + 100.0, wanderer.getY(), wanderer.getZ(), 0.0F, 0.0F);
+					fallen.setHealth(0.0F);  // still down as he falls (on their feet again below, in this tick)
+					List<UUID> qualified = fight.qualified();
+					helper.assertTrue(qualified.containsAll(List.of(healer.getUUID(), wanderer.getUUID(), fallen.getUUID(), away.getUUID()))
+							&& !qualified.contains(patient.getUUID()) && !qualified.contains(bystander.getUUID()),
+							"The healer and the three strikers should qualify, the one he only hurt and the bystander not: " + qualified);
+					int experience = healer.totalExperience;
+					tyrant.hurtServer(level, level.damageSources().genericKill(), Float.MAX_VALUE);
+					helper.assertTrue(!tyrant.isAlive() && !fight.underway(), "He did not fall");
+					int scales = healer.getInventory().countItem(JugcraftTyrant.TYRANT_SCALE);
+					helper.assertTrue(scales >= 3 && trophies(healer) == 1 && healer.totalExperience > experience && !CinderTyrantLoot.firstKill(healer),
+							"The healer was not paid in full: " + scales + " Tyrant Scales, " + trophies(healer) + " trophies");
+					for (ServerPlayer unpaid : List.of(patient, bystander, wanderer)) {
+						helper.assertTrue(unpaid.getInventory().countItem(JugcraftTyrant.TYRANT_SCALE) == 0 && CinderTyrantLoot.firstKill(unpaid),
+								"Paid: the one he only hurt, the bystander or the one who walked away");
+					}
+					LairRewards.Owed owed = fallen.getAttached(LairRewards.OWED);
+					helper.assertTrue(owed != null && owed.due().size() == 1 && owed.due().getFirst().boss().equals(CinderTyrantLoot.BOSS)
+							&& owed.due().getFirst().fight().equals(receipt) && fallen.getInventory().countItem(JugcraftTyrant.TYRANT_SCALE) == 0,
+							"The share of one still down as he fell was not kept for them: " + owed);
+					List<LairRewards.Due> kept = data.kept(away.getUUID());
+					helper.assertTrue(kept.size() == 1 && kept.getFirst().boss().equals(CinderTyrantLoot.BOSS) && kept.getFirst().fight().equals(receipt),
+							"The share of one who left the game was not kept in the world: " + kept);
+					// Back on their feet (AFTER_RESPAWN calls handOver).
+					fallen.setHealth(fallen.getMaxHealth());
+					helper.assertTrue(LairRewards.handOver(fallen) && fallen.getInventory().countItem(JugcraftTyrant.TYRANT_SCALE) >= 3
+							&& !fallen.hasAttached(LairRewards.OWED) && !CinderTyrantLoot.firstKill(fallen),
+							"Back on their feet, the fallen striker was not handed their share by his payer");
+					int fallenScales = fallen.getInventory().countItem(JugcraftTyrant.TYRANT_SCALE);
+					tyrant.die(level.damageSources().genericKill());
+					helper.assertTrue(healer.getInventory().countItem(JugcraftTyrant.TYRANT_SCALE) == scales && trophies(healer) == 1
+							&& fallen.getInventory().countItem(JugcraftTyrant.TYRANT_SCALE) == fallenScales && !fallen.hasAttached(LairRewards.OWED)
+							&& data.kept(away.getUUID()).size() == 1 && bystander.getInventory().countItem(JugcraftTyrant.TYRANT_SCALE) == 0,
+							"His fall reported again paid someone twice");
+				} finally {
+					data.take(away.getUUID());
+					players.forEach(ServerPlayer::discard);
+				}
+			});
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * Concordance Chunk B: a player whose only part in his fight is the blow that fells him has taken part before his
+	 * fall is paid (it gets there before hurtServer's own credit), and is paid: Tyrant Scales and Tempered.
+	 */
+	@GameTest(structure = KILN, padding = 8, maxTicks = 80)
+	public void aKillingBlowAloneIsPaid(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		BlockPos origin = origin(helper);
+		CinderTyrantEntity tyrant = waiting(helper, origin);
+		floor(level, origin, 31, 30, 40, 44);
+		ServerPlayer striker = player(helper, tyrant, 0.5, 6.0);
+		striker.setGameMode(GameType.CREATIVE);  // he pays them no heed; they are paid all the same
+		tyrant.wake(level);
+		helper.runAfterDelay(CinderTyrantEntity.WAKE_TICKS + 3, () -> {
+			ending(level, tyrant, () -> {
+				try {
+					helper.assertTrue(tyrant.fighting() && tyrant.encounter().underway(), "He did not crawl out to fight: " + tyrant.phase());
+					helper.assertTrue(tyrant.encounter().share(striker) == null, "The striker already had a part before the last blow");
+					// Hot he takes half of 10, and his armour leaves about 3.5 of that: more than the 1 he has left.
+					tyrant.setHealth(1.0F);
+					boolean felled = tyrant.hurtServer(level, level.damageSources().playerAttack(striker), 10.0F);
+					Encounter.Share share = tyrant.encounter().share(striker);
+					helper.assertTrue(felled && !tyrant.isAlive() && share != null && share.qualifies(),
+							"The blow that felled him was not the striker's part in his fight");
+					helper.assertTrue(striker.getInventory().countItem(JugcraftTyrant.TYRANT_SCALE) >= 3 && trophies(striker) == 1,
+							"The striker whose only blow felled him was not paid");
+					helper.assertFalse(CinderTyrantLoot.firstKill(striker), "Tempered is not the striker's");
+				} finally {
+					striker.discard();
+				}
+			});
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * Concordance Chunk B: a tamed wolf's bite on one of his Cinderlings, or on him (the felling bite too), is its owner's
+	 * part in his fight; a wild wolf's is no one's. Both owners are paid when he falls.
+	 */
+	@GameTest(structure = KILN, padding = 8, maxTicks = 80)
+	public void aPetsBlowIsItsOwners(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		BlockPos origin = origin(helper);
+		CinderTyrantEntity tyrant = waiting(helper, origin);
+		floor(level, origin, 28, 28, 43, 46);
+		ServerPlayer keeper = player(helper, tyrant, -2.0, 6.0);
+		ServerPlayer finisher = player(helper, tyrant, 2.0, 6.0);
+		List<ServerPlayer> owners = List.of(keeper, finisher);
+		owners.forEach(player -> player.setGameMode(GameType.CREATIVE));  // he pays them no heed
+		tyrant.wake(level);
+		helper.runAfterDelay(CinderTyrantEntity.WAKE_TICKS + 3, () -> {
+			var biting = helper.spawnWithNoFreeWill(EntityTypes.WOLF, new BlockPos(2, 2, 2));
+			var finishing = helper.spawnWithNoFreeWill(EntityTypes.WOLF, new BlockPos(4, 2, 2));
+			var wild = helper.spawnWithNoFreeWill(EntityTypes.WOLF, new BlockPos(6, 2, 2));
+			biting.tame(keeper);
+			finishing.tame(finisher);
+			Encounter fight = tyrant.encounter();
+			ending(level, tyrant, () -> {
+				try {
+					helper.assertTrue(tyrant.fighting() && fight.underway(), "He did not crawl out to fight: " + tyrant.phase());
+					helper.assertTrue(tyrant.shed(level, 1) == 1, "No Cinderling crawled off him");
+					CinderlingEntity ling = (CinderlingEntity) level.getEntity(tyrant.cinderlings().getFirst());
+					boolean bitten = ling.hurtServer(level, level.damageSources().mobAttack(biting), 2.0F);
+					Encounter.Share kept = fight.share(keeper);
+					helper.assertTrue(bitten && kept != null && kept.damage() == 2.0F && kept.qualifies(),
+							"A tamed wolf's bite on his Cinderling was not its owner's part");
+					List<UUID> before = fight.qualified();
+					tyrant.damageCooldownTime = 0;
+					helper.assertTrue(tyrant.hurtServer(level, level.damageSources().mobAttack(wild), 4.0F), "The wild wolf's bite did not land");
+					helper.assertTrue(fight.qualified().equals(before) && fight.share(finisher) == null, "A wild wolf's bite was credited to someone");
+					// The finishing bite: hot he takes half of 4, and his armour leaves about 1.3, more than the 1 he has left.
+					tyrant.setHealth(1.0F);
+					tyrant.damageCooldownTime = 0;
+					tyrant.hurtServer(level, level.damageSources().mobAttack(finishing), 4.0F);
+					helper.assertTrue(!tyrant.isAlive(), "The finishing wolf's bite did not fell him");
+					for (ServerPlayer owner : owners) {
+						helper.assertTrue(owner.getInventory().countItem(JugcraftTyrant.TYRANT_SCALE) >= 3 && !CinderTyrantLoot.firstKill(owner),
+								"An owner whose wolf fought him was not paid");
+					}
+				} finally {
+					biting.discard();
+					finishing.discard();
+					wild.discard();
+					owners.forEach(ServerPlayer::discard);
+				}
+			});
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * Concordance Chunk B: of his harm, his blows and his own fire are the fight's hurt (here his Kiln Breath), and a healer
+	 * who mends them is credited; his slag's heat and burning are no creature's (proposed default B-P5), and mending them
+	 * earns nothing.
+	 */
+	@GameTest(structure = KILN, padding = 8, maxTicks = 160)
+	public void healingHisSlagAndBurningEarnsNothing(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		BlockPos origin = origin(helper);
+		CinderTyrantEntity tyrant = waiting(helper, origin);
+		floor(level, origin, 28, 30, 43, 46);
+		ServerPlayer patient = player(helper, tyrant, 0.0, 4.0);  // before his head: his breath's
+		ServerPlayer healer = player(helper, tyrant, -6.0, -3.0);  // behind his flank, out of his breath
+		List<ServerPlayer> players = List.of(patient, healer);
+		players.forEach(player -> player.setGameMode(GameType.CREATIVE));  // he pays them no heed while they load
+		helper.runAfterDelay(LOADING_TICKS - CinderTyrantEntity.WAKE_TICKS - 2, () -> tyrant.wake(level));
+		helper.runAfterDelay(LOADING_TICKS, () -> {
+			players.forEach(player -> player.setGameMode(GameType.SURVIVAL));
+			ending(level, tyrant, () -> {
+				try {
+					Encounter fight = tyrant.encounter();
+					helper.assertTrue(tyrant.fighting() && fight.underway(), "Awake, his fight is not on: " + tyrant.phase());
+					middle(tyrant);
+					// The slag's heat and burning (no attacker, so not scaled by difficulty): 1 and 1, three times.
+					for (int i = 0; i < 3; i++) {
+						patient.damageCooldownTime = 0;
+						MoltenSlagBlock.burn(level, patient);
+						patient.damageCooldownTime = 0;
+						patient.hurtServer(level, level.damageSources().onFire(), 1.0F);
+					}
+					float scorched = patient.getMaxHealth() - patient.getHealth();
+					helper.assertTrue(scorched >= Encounter.HEALING, "The slag and burning did not hurt the patient: " + scorched);
+					mend(level, healer, patient);
+					Encounter.Share none = fight.share(healer);
+					helper.assertTrue(none == null || (none.healing() == 0.0F && !none.qualifies()),
+							"Mending what his slag and burning did was credited: " + (none == null ? "nothing" : none.healing()));
+					patient.heal(patient.getMaxHealth());
+					// His flame passes the hurt cooldown, so both pulses land.
+					helper.assertTrue(tyrant.breathe(level) == 1 && tyrant.breathe(level) == 1, "His breath did not burn the patient twice");
+					mend(level, healer, patient);
+					Encounter.Share share = fight.share(healer);
+					helper.assertTrue(share != null && share.healing() == Encounter.HEALING && share.qualifies(),
+							"Mending what his breath did was not credited: " + (share == null ? "nothing" : share.healing()));
+				} finally {
+					players.forEach(ServerPlayer::discard);
+				}
+			});
+			helper.succeed();
+		});
+	}
+
+	/** The game caps a creature's health at its max_health attribute's top (1024 in 26.3): a party's scale stops there. */
+	private static double capped(double health) {
+		return Attributes.MAX_HEALTH.value() instanceof RangedAttribute ranged ? Math.min(health, ranged.getMaxValue()) : health;
+	}
+
+	/**
+	 * Concordance Chunk B and the party cap: woken by four players his health is two and a half times his own, and when
+	 * he falls each of the four is paid once, a first kill's trophy and a quarter of the experience; his fall reported
+	 * again pays no one twice.
+	 */
+	@GameTest(structure = KILN, padding = 8)
+	public void fourPlayersAreEachPaidOnce(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		BlockPos origin = origin(helper);
+		CinderTyrantEntity tyrant = waiting(helper, origin);
+		floor(level, origin, 28, 30, 43, 44);
+		List<ServerPlayer> party = List.of(player(helper, tyrant, -3.0, 6.0), player(helper, tyrant, -1.0, 6.0), player(helper, tyrant, 1.0, 6.0),
+				player(helper, tyrant, 3.0, 6.0));
+		tyrant.wake(level);
+		ending(level, tyrant, () -> {
+			try {
+				helper.assertTrue(Math.abs(tyrant.getMaxHealth() - capped(CinderTyrantEntity.HEALTH * CinderTyrantEntity.partyScale(4))) < 0.01,
+						"Woken by four, his health is not " + CinderTyrantEntity.partyScale(4) + " times his own, at most the game's cap: " + tyrant.getMaxHealth());
+				int[] before = new int[party.size()];
+				for (int i = 0; i < party.size(); i++) {
+					tyrant.took(party.get(i), 5.0F);
+					before[i] = party.get(i).totalExperience;
+				}
+				tyrant.hurtServer(level, level.damageSources().genericKill(), Float.MAX_VALUE);
+				int[] gained = new int[party.size()];
+				for (int i = 0; i < party.size(); i++) {
+					ServerPlayer player = party.get(i);
+					gained[i] = player.totalExperience - before[i];
+					helper.assertTrue(player.getInventory().countItem(JugcraftTyrant.TYRANT_SCALE) >= 3 && trophies(player) == 1
+							&& gained[i] == CinderTyrantEntity.EXPERIENCE / 4, "A player of the four was not paid once: " + gained[i] + " experience");
+				}
+				tyrant.die(level.damageSources().genericKill());
+				for (int i = 0; i < party.size(); i++) {
+					ServerPlayer player = party.get(i);
+					helper.assertTrue(trophies(player) == 1 && player.totalExperience - before[i] == gained[i], "His fall reported again paid someone twice");
+				}
+			} finally {
+				party.forEach(ServerPlayer::discard);
+			}
+		});
+		helper.succeed();
+	}
+
+	/**
+	 * Concordance Chunk B: his fight's record is not saved. Saved while waking and loaded again, he holds no one's part,
+	 * lands to fight, and on his first ticks begins a fresh record, so who takes part from then on is counted.
+	 */
+	@GameTest(structure = KILN, padding = 8, maxTicks = 40)
+	public void aFightLoadedAwakeIsRecordedAfresh(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		BlockPos origin = origin(helper);
+		CinderTyrantEntity tyrant = waiting(helper, origin);
+		floor(level, origin, 31, 30, 40, 44);
+		ServerPlayer striker = player(helper, tyrant, 0.5, 6.0);
+		striker.setGameMode(GameType.CREATIVE);  // he pays them no heed
+		tyrant.wake(level);
+		tyrant.took(striker, 4.0F);
+		boolean before = tyrant.encounter().qualified().contains(striker.getUUID());
+		// Saved awake and loaded again, as his chunk unloading and loading would.
+		TagValueOutput out = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, level.registryAccess());
+		tyrant.saveWithoutId(out);
+		tyrant.discard();
+		CinderTyrantEntity loaded = new CinderTyrantEntity(JugcraftTyrant.CINDER_TYRANT, level);
+		loaded.load(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), out.buildResult()));
+		loaded.setUUID(UUID.randomUUID());
+		level.addFreshEntity(loaded);
+		boolean unsaved = loaded.encounter().share(striker) == null && !loaded.encounter().underway();
+		helper.runAfterDelay(3, () -> {
+			ending(level, loaded, () -> {
+				try {
+					helper.assertTrue(before && unsaved, "His record was saved with him, or the striker never had a part");
+					helper.assertTrue(loaded.phase() == CinderTyrantEntity.Phase.KILN, "Loaded waking, he did not land to fight: " + loaded.phase());
+					helper.assertTrue(loaded.encounter().underway() && loaded.encounter().share(striker) == null,
+							"Loaded awake, he did not begin a fresh record");
+					loaded.took(striker, 2.0F);
+					helper.assertTrue(loaded.encounter().qualified().contains(striker.getUUID()), "A blow after loading was not counted");
+				} finally {
+					striker.discard();
+				}
+			});
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * His JEI pages (tools/acquisition.py; Concordance Chunk B, B-02) say what the server rolls, with the default data: each
+	 * share holds 3 to 6 Tyrant Scales and has a 15% chance of one of his two trophies (7.5% each, never both), a 25%
+	 * chance of the Salamander Charm and a 20% chance of his Crest. A player who has already won Tempered (so no first-kill
+	 * trophy) rolls {@value #SHARES} shares: none holds both trophies, and each count lies within five standard deviations
+	 * of its chance (a pool's chance ignored, or his trophies split into two pools, falls outside). check_acquisition holds
+	 * the same table to the pages' words; the first kill's trophy is hisLootIsEachParticipantsOwn's.
+	 */
+	@GameTest(maxTicks = 20)
+	public void hisLootIsWhatHisPagesSay(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		ServerPlayer veteran = helper.makeMockServerPlayerInLevel();
+		TrickOrTreat.award(veteran, CinderTyrantLoot.ADVANCEMENT);
+		helper.assertFalse(CinderTyrantLoot.firstKill(veteran), "A player who has won Tempered rolls no first-kill trophy");
+		Vec3 origin = helper.absoluteVec(new Vec3(1.5, 2.0, 1.5));
+		int cinderbrand = 0;
+		int magmaw = 0;
+		int charm = 0;
+		int crest = 0;
+		try {
+			for (int share = 0; share < SHARES; share++) {
+				List<ItemStack> loot = CinderTyrantLoot.roll(level, origin, veteran);
+				int scales = loot.stream().filter(stack -> stack.is(JugcraftTyrant.TYRANT_SCALE)).mapToInt(ItemStack::getCount).sum();
+				helper.assertTrue(scales >= 3 && scales <= 6, scales + " Tyrant Scales in a share, not 3 to 6");
+				long trophies = loot.stream().filter(CinderTyrantLoot::trophy).count();
+				helper.assertTrue(trophies <= 1, "A share held " + trophies + " trophies: his two share one pool");
+				cinderbrand += (int) loot.stream().filter(stack -> stack.is(JugcraftTyrant.cinderbrand())).count();
+				magmaw += (int) loot.stream().filter(stack -> stack.is(JugcraftTyrant.magmaw())).count();
+				charm += (int) loot.stream().filter(stack -> stack.is(JugcraftTyrant.SALAMANDER_CHARM)).count();
+				crest += (int) loot.stream().filter(stack -> stack.is(JugcraftTyrant.TYRANT_CREST)).count();
+			}
+		} finally {
+			veteran.discard();
+		}
+		helper.assertTrue(within(cinderbrand + magmaw, 0.15), (cinderbrand + magmaw) + " trophies in " + SHARES + " shares, not about 15%");
+		helper.assertTrue(within(cinderbrand, 0.075) && within(magmaw, 0.075), cinderbrand + " Cinderbrands and " + magmaw + " Magmaws, not about 7.5% each");
+		helper.assertTrue(within(charm, 0.25), charm + " Salamander Charms, not about 25%");
+		helper.assertTrue(within(crest, 0.2), crest + " Crests, not about 20%");
 		helper.succeed();
 	}
 }

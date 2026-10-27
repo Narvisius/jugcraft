@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "slot": "operation",
+  "requires": {
+    "research": "jugcraft:rimekeeping",
+    "state": "understood"
+  },
+  "authored": true,
+  "capacity": 1,
+  "focus": 2,
+  "operation": {
+    "effect": "status",
+    "intent": "harmful",
+    "principle": "rime",
+    "magnitude": 0,
+    "duration": 60,
+    "status": "jugcraft:rimebound",
+    "stacking": "exclusive"
+  }
+}

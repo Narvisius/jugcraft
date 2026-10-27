@@ -13,6 +13,7 @@ import io.github.jimbozoomer.jugcraft.concordance.logistics.RequestState;
 import io.github.jimbozoomer.jugcraft.concordance.sky.SkyItem;
 import io.github.jimbozoomer.jugcraft.concordance.spirits.Workers;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
@@ -35,9 +36,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Logistics on the server (roadmap step 18, docs/features/arcane-concordance-logistics.md): the Courier Post, the
@@ -50,6 +53,8 @@ public final class Couriers {
 	public static final int SOURCE_RADIUS = 8;
 	/** How many history lines the post shows (it keeps {@value Logistics#HISTORY}). */
 	public static final int SHOWN_HISTORY = 8;
+	/** How far from a block that files its own requests (a Spire Heart's upkeep, an Alembic Crucible's formula, C-06) its post may be: the 3×3 chunks round it. */
+	public static final int FILING_REACH = 16;
 
 	public static Block COURIER_POST;
 	public static BlockEntityType<CourierPostBlockEntity> POST_ENTITY;
@@ -185,6 +190,34 @@ public final class Couriers {
 			}
 		}
 		return best;
+	}
+
+	/**
+	 * The nearest Courier Post within {@code reach} blocks of {@code from} (at most {@value #FILING_REACH}: the 3×3 chunks
+	 * round it are all it reads, each chunk's block entities once) that {@code user} may use, or null. Only loaded chunks
+	 * are read; nothing is loaded. Shared by the Spire Heart's upkeep and the crucible's supply (Concordance Chunk C, C-06).
+	 */
+	public static @Nullable CourierPostBlockEntity nearestPost(ServerLevel level, BlockPos from, UUID user, int reach) {
+		int radius = Math.min(reach, FILING_REACH);
+		CourierPostBlockEntity nearest = null;
+		double best = Double.MAX_VALUE;
+		int cx = from.getX() >> 4;
+		int cz = from.getZ() >> 4;
+		for (int dx = -1; dx <= 1; dx++) {
+			for (int dz = -1; dz <= 1; dz++) {
+				if (!level.hasChunk(cx + dx, cz + dz)) {
+					continue;
+				}
+				for (BlockEntity entity : List.copyOf(level.getChunk(cx + dx, cz + dz).getBlockEntities().values())) {
+					double distance = entity.getBlockPos().distSqr(from);
+					if (entity instanceof CourierPostBlockEntity post && distance <= (double) radius * radius && distance < best && post.mayUse(user)) {
+						nearest = post;
+						best = distance;
+					}
+				}
+			}
+		}
+		return nearest;
 	}
 
 	private static void command(CommandDispatcher<CommandSourceStack> dispatcher) {

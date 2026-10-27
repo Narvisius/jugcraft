@@ -55,7 +55,7 @@ public final class IndustrialHeat {
     public static final Map<String,Block> BLOCKS=new LinkedHashMap<>();
     public static BlockEntityType<Node> TYPE;
     public static ExtendedMenuType<Menu,BlockPos> MENU;
-    public static PetroFluids.Entry COOLANT,HOT_COOLANT;
+    public static PetroFluids.Entry COOLANT,HOT_COOLANT,HOT_WATER,PAHOEHOE_LAVA,CONSTRUCTION_FOAM;
     public static PetroFluids.Gas STEAM,SUPERHEATED_STEAM;
     private IndustrialHeat(){}
     public static void register(){
@@ -66,6 +66,9 @@ public final class IndustrialHeat {
         }
         COOLANT=PetroFluids.registerOwnerLiquid("jimta_coolant",0xFF467CB4);
         HOT_COOLANT=PetroFluids.registerOwnerLiquid("jimta_hot_coolant",0xFFDB6A35);
+        HOT_WATER=PetroFluids.registerOwnerLiquid("jimta_hot_water",0xFF6198C4);
+        PAHOEHOE_LAVA=PetroFluids.registerOwnerLiquid("jimta_pahoehoe_lava",0xFF9B542B);
+        CONSTRUCTION_FOAM=PetroFluids.registerOwnerLiquid("jimta_construction_foam_fluid",0xFFD8D4C6);
         STEAM=PetroFluids.registerOwnerGas("jimta_steam",0xFFD9E0E4);
         SUPERHEATED_STEAM=PetroFluids.registerOwnerGas("jimta_superheated_steam",0xFFD0DCE0);
         for(String kind:KINDS){var key=ResourceKey.create(Registries.BLOCK,Jugcraft.id("jimta_"+kind));var block=new Device(BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE).setId(key),kind);Registry.register(BuiltInRegistries.BLOCK,key,block);BLOCKS.put(kind,block);var item=ResourceKey.create(Registries.ITEM,key.identifier());Registry.register(BuiltInRegistries.ITEM,item,new BlockItem(block,new Item.Properties().setId(item).useBlockDescriptionPrefix()));}
@@ -74,7 +77,7 @@ public final class IndustrialHeat {
         EnergyStorage.SIDED.registerForBlockEntity((n,side)->n.energy,TYPE);
         FluidStorage.SIDED.registerForBlockEntity((n,side)->n.fluidStorage(side),TYPE);
         ItemStorage.SIDED.registerForBlockEntity((n,side)->n.usesFuel()?ContainerStorage.of(n,side):null,TYPE);
-        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(out->{BLOCKS.values().forEach(out::accept);out.accept(COOLANT.bucket());out.accept(HOT_COOLANT.bucket());ROTORS.values().forEach(out::accept);BLADES.values().forEach(out::accept);});
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(out->{BLOCKS.values().forEach(out::accept);out.accept(COOLANT.bucket());out.accept(HOT_COOLANT.bucket());out.accept(HOT_WATER.bucket());out.accept(PAHOEHOE_LAVA.bucket());out.accept(CONSTRUCTION_FOAM.bucket());ROTORS.values().forEach(out::accept);BLADES.values().forEach(out::accept);});
     }
     static final class Device extends Block implements EntityBlock,EnergyConnectable {
         static final EnumProperty<Direction> FACING=HorizontalDirectionalBlock.FACING;
@@ -132,13 +135,19 @@ public final class IndustrialHeat {
         public boolean hasFluids(){return switch(kind()){case "fluid_heat_generator","liquid_heat_exchanger","steam_generator","steam_kinetic_generator"->true;default->false;};}
         private boolean acceptsFluid(FluidVariant v){return switch(kind()){
             case "fluid_heat_generator"->fuelHeat(v)>0;
-            case "liquid_heat_exchanger"->v.isOf(HOT_COOLANT.source());
-            case "steam_generator"->v.isOf(Fluids.WATER)||IndustrialFluidServices.DISTILLED!=null&&v.isOf(IndustrialFluidServices.DISTILLED.source());
+            case "liquid_heat_exchanger"->cooledFluid(v)!=null;
+            case "steam_generator"->v.isOf(Fluids.WATER)||v.isOf(HOT_WATER.source())||IndustrialFluidServices.DISTILLED!=null&&v.isOf(IndustrialFluidServices.DISTILLED.source());
             case "steam_kinetic_generator"->v.isOf(STEAM.fluid())||v.isOf(SUPERHEATED_STEAM.fluid());default->false;};}
         public Storage<FluidVariant> fluidStorage(Direction side){
             if(!hasFluids())return null;
             if(side==null)return new CombinedStorage<>(List.of(input,output));
             return side==Direction.DOWN?output:input;
+        }
+        private static net.minecraft.world.level.material.Fluid cooledFluid(FluidVariant v){
+            if(v.isOf(HOT_COOLANT.source()))return COOLANT.source();
+            if(v.isOf(Fluids.LAVA))return PAHOEHOE_LAVA.source();
+            if(v.isOf(HOT_WATER.source()))return Fluids.WATER;
+            return null;
         }
         private static int fuelHeat(FluidVariant v){
             if(v.isBlank())return 0;
@@ -171,8 +180,9 @@ public final class IndustrialHeat {
                     int value=fuelHeat(input.variant);
                     if(value>0&&input.millibuckets()>=1&&heat<=4096-value){input.drain(1);heat+=value;active=true;}
                 }else if(kind().equals("liquid_heat_exchanger")){
-                    int count=Math.min(64,Math.min(input.millibuckets(),Math.min((4096-heat)/4,output.capacityMb()-output.millibuckets())));
-                    if(count>0&&input.has(HOT_COOLANT.source(),count)&&output.fits(COOLANT.source(),count)){input.drain(count);output.fill(COOLANT.source(),count);heat+=count*4;active=true;}
+                    var cooled=cooledFluid(input.variant);int perMb=input.variant.isOf(HOT_WATER.source())?1:4;
+                    int count=Math.min(64,Math.min(input.millibuckets(),Math.min((4096-heat)/perMb,output.capacityMb()-output.millibuckets())));
+                    if(cooled!=null&&count>0&&output.fits(cooled,count)){input.drain(count);output.fill(cooled,count);heat+=count*perMb;active=true;}
                 }else if(kind().equals("steam_generator")){
                     Node source=heatInput(l);
                     int heatCost=superheated?12:4;var produced=superheated?SUPERHEATED_STEAM.fluid():STEAM.fluid();

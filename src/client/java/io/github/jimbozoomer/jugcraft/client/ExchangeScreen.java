@@ -2332,13 +2332,16 @@ public class ExchangeScreen extends Screen {
 		}
 	}
 
-	/** A button drawn as a brass or walnut plate (or a tab). Minecraft's Button handles the mouse and keyboard. */
-	static final class Plate extends Button {
-		enum Kind { BRASS, WOOD, TAB, TAB_OPEN, ROW, CELL, MAP }
+	/**
+	 * A button drawn as a brass or walnut plate (or a tab). Minecraft's Button handles the mouse and keyboard. The trade
+	 * screens use it too ({@link TradeLook}).
+	 */
+	public static final class Plate extends Button {
+		public enum Kind { BRASS, WOOD, TAB, TAB_OPEN, ROW, CELL, MAP }
 
 		private final Kind kind;
 
-		Plate(int x, int y, int width, int height, String label, Kind kind, OnPress press) {
+		public Plate(int x, int y, int width, int height, String label, Kind kind, OnPress press) {
 			super(x, y, width, height, Component.literal(label), press, Button.DEFAULT_NARRATION);
 			this.kind = kind;
 		}

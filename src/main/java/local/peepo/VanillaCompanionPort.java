@@ -45,21 +45,33 @@ public final class VanillaCompanionPort implements CompanionLogistics.Port {
     private int scanCursor;
     private final ItemStack[] output=new ItemStack[12],pattern=new ItemStack[9];
     private boolean managed;
-    private record State(List<ItemStack> out,List<ItemStack> fire,int[] progress,int[] time,boolean managed,int bottles){}
+    private int fireInserted;
+    private record State(List<ItemStack> out,List<ItemStack> fire,int[] progress,int[] time,boolean managed,int bottles,int fireInserted){}
     private final SnapshotParticipant<State> snapshot=new SnapshotParticipant<>(){
         protected State createSnapshot(){
             var fire=block instanceof CampfireBlockEntity c?c:null;var access=fire==null?null:(CompanionCampfireAccessor)fire;
             return new State(Arrays.stream(output).map(ItemStack::copy).toList(),fire==null?List.of():fire.getItems().stream().map(ItemStack::copy).toList(),
-                access==null?null:access.peepo$progress().clone(),access==null?null:access.peepo$times().clone(),managed,hiveBottles);
+                access==null?null:access.peepo$progress().clone(),access==null?null:access.peepo$times().clone(),managed,hiveBottles,fireInserted);
         }
         protected void readSnapshot(State s){
-            for(int i=0;i<output.length;i++)output[i]=s.out.get(i).copy();managed=s.managed;hiveBottles=s.bottles;
+            for(int i=0;i<output.length;i++)output[i]=s.out.get(i).copy();managed=s.managed;hiveBottles=s.bottles;fireInserted=s.fireInserted;
             if(block instanceof CampfireBlockEntity fire){var access=(CompanionCampfireAccessor)fire;
                 for(int i=0;i<4;i++)fire.getItems().set(i,s.fire.get(i).copy());
                 System.arraycopy(s.progress,0,access.peepo$progress(),0,4);System.arraycopy(s.time,0,access.peepo$times(),0,4);
             }
         }
-        protected void onFinalCommit(){if(brewing!=null)brewing.transferred();changed();}
+        protected void onFinalCommit(){
+            if(block instanceof CampfireBlockEntity fire && fireInserted!=0){
+                int placed=fireInserted;fireInserted=0;
+                // Use native placement hooks only after commit. Lithium sleeps an empty campfire and
+                // wakes it from placeFood; directly changing its inventory leaves it asleep forever.
+                for(int i=0;i<4;i++)if((placed & 1<<i)!=0){
+                    var item=fire.getItems().get(i);fire.getItems().set(i,ItemStack.EMPTY);
+                    if(!fire.placeFood(level(),null,item.copy()))fire.getItems().set(i,item);
+                }
+            }
+            if(brewing!=null)brewing.transferred();changed();
+        }
     };
     public VanillaCompanionPort(BlockEntity block){this.block=block;filter=new CompanionRecipeFilter(block instanceof BrewingStandBlockEntity);Arrays.fill(output,ItemStack.EMPTY);Arrays.fill(pattern,ItemStack.EMPTY);brewing=block instanceof BrewingStandBlockEntity b?new CompanionBrewingChain(b,filter,this::changed):null;}
     private ServerLevel level(){return (ServerLevel)block.getLevel();}
@@ -75,26 +87,36 @@ public final class VanillaCompanionPort implements CompanionLogistics.Port {
     public boolean acceptsFilter(ItemStack stack){
         if(stack.isEmpty())return true;
         if(block instanceof BeehiveBlockEntity)return stack.is(Items.HONEY_BOTTLE) || stack.is(Items.HONEYCOMB);
-        if(block instanceof CrafterBlockEntity c){var r=CrafterBlock.getPotentialResults(level(),c.asCraftInput());return r.isPresent() && r.get().value().assemble(c.asCraftInput()).is(stack.getItem());}
+        if(block instanceof CrafterBlockEntity c){
+            var saved=craftingPattern();var grid=saved.isEmpty()?c.asCraftInput():CraftingInput.of(3,3,saved);
+            var r=CrafterBlock.getPotentialResults(level(),grid);return r.isPresent() && r.get().value().assemble(grid).is(stack.getItem());
+        }
         return catalog().stream().anyMatch(r->{var out=result(r.value());return out.is(stack.getItem()) && (!(block instanceof BrewingStandBlockEntity) || Objects.equals(out.get(DataComponents.POTION_CONTENTS),stack.get(DataComponents.POTION_CONTENTS)));});
     }
     public void filterChanged(){if(brewing!=null)brewing.filterChanged();if(!(block instanceof CrafterBlockEntity) && (!(block instanceof BrewingStandBlockEntity c) || c.isEmpty()))selected=null;changed();}
     public Identifier plan(){return block instanceof BeehiveBlockEntity?PeepoMod.id("hive_harvest"):brewing!=null?brewing.plan():selected;}
     public void prepare(Storage<ItemVariant> source){
+        prepare(source,null);
+    }
+    public void prepare(Storage<ItemVariant> source,java.util.function.ToDoubleFunction<ItemStack> priority){
         if(!live())return;
         if(block instanceof BeehiveBlockEntity)return;
         if(brewing!=null){brewing.prepare(source);return;}
         if(block instanceof CrafterBlockEntity crafter){prepareCrafter(crafter);return;}
         if(block instanceof CampfireBlockEntity fire && selected!=null && fire.getItems().stream().anyMatch(i->!i.isEmpty()))return;
         var supplies=RecipeSupplies.available(source);var installed=block instanceof AbstractFurnaceBlockEntity f?f.getItem(0):ItemStack.EMPTY;
-        if(fits(selection(),supplies,installed))return;
-        var catalog=catalog();int checks=Math.min(256,catalog.size());
+        if(priority==null && fits(selection(),supplies,installed))return;
+        var catalog=new ArrayList<>(catalog());
+        if(priority!=null)catalog.sort(Comparator.<RecipeHolder<?>>comparingDouble(r->filter.allows(result(r.value()))?priority.applyAsDouble(result(r.value())):-2).reversed()
+            .thenComparingInt(r->r.id().identifier().equals(selected)?0:1));
+        int checks=Math.min(256,catalog.size());
         for(int scan=0;scan<checks;scan++){
-            var holder=catalog.get(Math.floorMod(scanCursor++,catalog.size()));
-            if(fits(holder.value(),supplies,installed)){if(!holder.id().identifier().equals(selected)){selected=holder.id().identifier();changed();}return;}
+            var holder=catalog.get(priority==null?Math.floorMod(scanCursor++,catalog.size()):scan);
+            if((priority==null || priority.applyAsDouble(result(holder.value()))>-2) && fits(holder.value(),supplies,installed)){if(!holder.id().identifier().equals(selected)){selected=holder.id().identifier();changed();}return;}
         }
         if(installed.isEmpty() && !(block instanceof BrewingStandBlockEntity))selected=null;
     }
+    CompanionBrewingChain brewingStock(){return brewing;}
     private boolean fits(Recipe<?> recipe,List<ItemStack> supplies,ItemStack installed){
         if(recipe==null || !filter.allows(result(recipe)))return false;
         if(recipe instanceof AbstractCookingRecipe c)return (installed.isEmpty() || c.input().test(installed)) && (!installed.isEmpty() || supplies.stream().anyMatch(c.input()::test));
@@ -110,6 +132,14 @@ public final class VanillaCompanionPort implements CompanionLogistics.Port {
                 selected=recipe.get().id().identifier();managed=true;changed();
             }
         }
+    }
+    /** A remembered grid remains usable after the last native pulse consumes its real ingredients. */
+    List<ItemStack> craftingPattern(){
+        if(!(block instanceof CrafterBlockEntity c) || selected==null)return List.of();
+        for(int i=0;i<9;i++)if(c.isSlotDisabled(i) && !pattern[i].isEmpty()
+            || !c.getItem(i).isEmpty() && !ItemStack.isSameItemSameComponents(c.getItem(i),pattern[i]))return List.of();
+        var grid=CraftingInput.of(3,3,Arrays.asList(pattern));var recipe=CrafterBlock.getPotentialResults(level(),grid);
+        return recipe.isPresent() && recipe.get().id().identifier().equals(selected)?Arrays.stream(pattern).map(ItemStack::copy).toList():List.of();
     }
     private int missing(Container c,int slot,ItemStack item,int cap){var held=c.getItem(slot);return (held.isEmpty() || ItemStack.isSameItemSameComponents(held,item)) && c.canPlaceItem(slot,item)?Math.max(0,Math.min(cap,item.getMaxStackSize())-held.getCount()):0;}
     private int[] needs(ItemStack item){
@@ -133,17 +163,27 @@ public final class VanillaCompanionPort implements CompanionLogistics.Port {
         }
         return Arrays.stream(needs(item)).sum();
     }
-    public Storage<ItemVariant> inputs(){return new InsertionOnlyStorage<>(){
+    public int stockAuxiliaryNeed(ItemStack item){return block instanceof AbstractFurnaceBlockEntity?needs(item)[1]:0;}
+    public Storage<ItemVariant> inputs(){return stockInputs(null);}
+    public Storage<ItemVariant> stockInputs(java.util.function.ToIntFunction<ItemStack> ingredientRoom){return new InsertionOnlyStorage<>(){
         public long insert(ItemVariant item,long amount,TransactionContext tx){
             StoragePreconditions.notBlankNotNegative(item,amount);if(amount==0 || !live())return 0;var stack=item.toStack(1);long moved=0;
             if(block instanceof BeehiveBlockEntity){int count=(int)Math.min(amount,needed(stack));if(count>0){snapshot.updateSnapshots(tx);hiveBottles+=count;managed=true;}return count;}
             if(block instanceof CampfireBlockEntity fire){
                 int count=(int)Math.min(amount,needed(stack));if(count==0)return 0;var recipe=(CampfireCookingRecipe)selection();var access=(CompanionCampfireAccessor)fire;
                 snapshot.updateSnapshots(tx);managed=true;
-                for(int i=0;i<4 && moved<count;i++)if(fire.getItems().get(i).isEmpty()){fire.getItems().set(i,stack.copy());access.peepo$progress()[i]=0;access.peepo$times()[i]=recipe.cookingTime();moved++;}
+                for(int i=0;i<4 && moved<count;i++)if(fire.getItems().get(i).isEmpty()){fire.getItems().set(i,stack.copy());access.peepo$progress()[i]=0;access.peepo$times()[i]=recipe.cookingTime();fireInserted|=1<<i;moved++;}
             }else if(block instanceof Container c){
                 var inventory=ContainerStorage.of(c,null);var needs=needs(stack);
-                for(int i=0;i<c.getContainerSize() && i<needs.length && moved<amount;i++)if(needs[i]>0)moved+=inventory.getSlot(i).insert(item,Math.min(amount-moved,needs[i]),tx);
+                if(ingredientRoom!=null && block instanceof AbstractFurnaceBlockEntity && stack.has(DataComponents.COOKING_FUEL))needs[0]=Math.min(needs[0],ingredientRoom.applyAsInt(stack));
+                if(block instanceof CrafterBlockEntity){
+                    // Complete the first layer before filling the second. A one-batch target must not
+                    // put both copies in the first of several identical recipe slots and strand the rest.
+                    for(int layer=1;layer<=2 && moved<amount;layer++)for(int i=0;i<9 && moved<amount;i++)if(needs[i]>0){
+                        int room=Math.min(needs[i],Math.max(0,layer-c.getItem(i).getCount()));
+                        if(room>0){long n=inventory.getSlot(i).insert(item,Math.min(amount-moved,room),tx);needs[i]-=(int)n;moved+=n;}
+                    }
+                }else for(int i=0;i<c.getContainerSize() && i<needs.length && moved<amount;i++)if(needs[i]>0)moved+=inventory.getSlot(i).insert(item,Math.min(amount-moved,needs[i]),tx);
             }
             if(brewing!=null && moved>0)snapshot.updateSnapshots(tx);
             return moved;

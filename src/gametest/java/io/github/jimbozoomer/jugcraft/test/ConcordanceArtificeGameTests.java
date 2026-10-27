@@ -36,7 +36,7 @@ import net.minecraft.world.level.GameType;
  */
 public class ConcordanceArtificeGameTests {
 	private static ServerPlayer smith(GameTestHelper helper) {
-		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		ServerPlayer player = TestPlayers.mock(helper);
 		player.setGameMode(GameType.SURVIVAL);
 		ConcordanceProgress.grant(player, "jugcraft:first_light", ResearchState.UNDERSTOOD);
 		ConcordanceProgress.grant(player, Artificery.RESEARCH, ResearchState.UNDERSTOOD);

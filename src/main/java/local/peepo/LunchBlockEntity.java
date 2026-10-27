@@ -27,7 +27,14 @@ public final class LunchBlockEntity extends BaseContainerBlockEntity {
     public void toggleParty(){party=!party;setChanged();}
     public boolean allowed(Player p){return !p.isSpectator() && (isOwner(p) || owner!=null && party && JugcraftParties.sameParty(owner,p.getUUID()));}
     public boolean feeds(PeepoEntity npc){return !isRemoved() && owner!=null && npc.orders.foodAccess(owner,party) && !isLocked()
-        && CompanionJobs.permitted(npc,worldPosition) && CompanionJobs.permitted(npc,sourcePos());}
+        && CompanionJobs.permitted(npc,worldPosition) && sourceAllowed(npc);}
+    private boolean sourceAllowed(PeepoEntity npc){
+        var pos=sourcePos();if(!CompanionStorage.open(npc,pos))return false;
+        var state=npc.level().getBlockState(pos);
+        return !(state.getBlock() instanceof net.minecraft.world.level.block.ChestBlock)
+            || state.getValue(net.minecraft.world.level.block.ChestBlock.TYPE)==net.minecraft.world.level.block.state.properties.ChestType.SINGLE
+            || CompanionStorage.open(npc,pos.relative(net.minecraft.world.level.block.ChestBlock.getConnectedDirection(state)));
+    }
     public Storage<ItemVariant> source(){
         BlockPos pos=sourcePos();if(level==null || !level.hasChunkAt(pos))return null;
         if(!cover())return inventory;

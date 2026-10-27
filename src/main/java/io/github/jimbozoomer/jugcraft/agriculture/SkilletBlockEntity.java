@@ -42,20 +42,24 @@ public class SkilletBlockEntity extends BlockEntity {
 	private ItemStack raw = ItemStack.EMPTY;
 	private ItemStack fried = ItemStack.EMPTY;
 	private int progress;
+	private int chefMask;
 	private int time;
 	public int companionRoom(ItemStack stack,ItemStack result){
 		if(!raw.isEmpty() && !ItemStack.isSameItemSameComponents(raw,stack) || !fried.isEmpty() && !ItemStack.isSameItemSameComponents(fried,result))return 0;
 		return Math.max(0,Math.min(CAPACITY-raw.getCount(),result.getMaxStackSize()/Math.max(1,result.getCount())-raw.getCount()-fried.getCount()/Math.max(1,result.getCount())));
 	}
-	public int companionInsert(ItemStack stack,int maximum){
+	public int companionInsert(ItemStack stack,int maximum){return companionInsert(stack,maximum,null,null);}
+    public int companionInsert(ItemStack stack,int maximum,local.peepo.PeepoEntity chef,net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext tx){
 		if(!(level instanceof ServerLevel server))return 0;var r=recipe(server,stack).orElse(null);if(r==null)return 0;
 		var result=r.value().assemble(new SingleRecipeInput(stack));int count=Math.min(maximum,companionRoom(stack,result));if(count<=0)return 0;
+        int before=raw.getCount();chefMask&=(1<<Math.min(before,CAPACITY))-1;
+        if(chef!=null)for(int i=0;i<count;i++)if(chef.uniforms.bonus(local.peepo.CompanionUniforms.Type.CHEF,tx))chefMask|=1<<(before+i);
 		if(raw.isEmpty()){raw=stack.copyWithCount(count);progress=0;}else raw.grow(count);
 		time=Math.max(1,r.value().cookingTime()/SPEED);return count;
 	}
-	private record CompanionSnapshot(ItemStack raw,ItemStack fried,int progress,int time){}
-	public Object companionSnapshot(){return new CompanionSnapshot(raw.copy(),fried.copy(),progress,time);}
-	public void companionRestore(Object value){var s=(CompanionSnapshot)value;raw=s.raw.copy();fried=s.fried.copy();progress=s.progress;time=s.time;}
+	private record CompanionSnapshot(ItemStack raw,ItemStack fried,int progress,int time,int chefMask){}
+	public Object companionSnapshot(){return new CompanionSnapshot(raw.copy(),fried.copy(),progress,time,chefMask);}
+	public void companionRestore(Object value){var s=(CompanionSnapshot)value;raw=s.raw.copy();fried=s.fried.copy();progress=s.progress;time=s.time;chefMask=s.chefMask;}
 
 
 	public SkilletBlockEntity(BlockPos pos, BlockState state) {
@@ -94,6 +98,7 @@ public class SkilletBlockEntity extends BlockEntity {
 			return Added.FULL;
 		}
 		int moved = Math.min(room, stack.getCount());
+		chefMask&=(1<<Math.min(raw.getCount(),CAPACITY))-1;
 		if (raw.isEmpty()) {
 			raw = stack.copyWithCount(moved);
 			progress = 0;
@@ -108,16 +113,17 @@ public class SkilletBlockEntity extends BlockEntity {
 
 	/** Everything in the pan, fried and not, handed back; the pan is left empty. */
 	public ItemStack[] takeAll() {
-		ItemStack[] out = {fried, raw};
+		var out=new java.util.ArrayList<ItemStack>();out.add(fried);out.add(raw);out.addAll(companionKitchen.takeFinished());
+		chefMask=0;
 		fried = ItemStack.EMPTY;
 		raw = ItemStack.EMPTY;
 		progress = 0;
 		changed();
-		return out;
+		return out.toArray(ItemStack[]::new);
 	}
 
 	public boolean isEmpty() {
-		return raw.isEmpty() && fried.isEmpty();
+		return raw.isEmpty() && fried.isEmpty() && !companionKitchen.hasFinished();
 	}
 
 	void serverTick(ServerLevel level, BlockPos pos) {
@@ -127,17 +133,23 @@ public class SkilletBlockEntity extends BlockEntity {
 		if (++progress < time) {
 			return;
 		}
+        // A full base/bonus output waits without repeatedly copying the output inventory every tick.
+        if(progress>time && level.getGameTime()%20!=0)return;
 		progress = 0;
 		ItemStack one = raw.copyWithCount(1);
 		Optional<RecipeHolder<CampfireCookingRecipe>> recipe = recipe(level, one);
 		if (recipe.isEmpty()) {
 			// The recipe went away (a data pack reload): hand the food back rather than lose it.
 			Containers.dropItemStack(level, pos.getX() + 0.5, pos.getY() + 0.3, pos.getZ() + 0.5, raw);
-			raw = ItemStack.EMPTY;
+			raw = ItemStack.EMPTY;chefMask=0;
 			changed();
 			return;
 		}
 		ItemStack result = recipe.get().value().assemble(new SingleRecipeInput(one));
+        boolean doubled=(chefMask&1)!=0;
+        boolean bonusInPan=(fried.isEmpty() || ItemStack.isSameItemSameComponents(fried,result))
+            && fried.getCount()+2L*result.getCount()<=result.getMaxStackSize();
+        if(doubled && !bonusInPan && !companionKitchen.fits(java.util.List.of(result))){progress=time;return;}
 		if (fried.isEmpty()) {
 			fried = result;
 		} else if (ItemStack.isSameItemSameComponents(fried, result) && fried.getCount() + result.getCount() <= fried.getMaxStackSize()) {
@@ -147,6 +159,8 @@ public class SkilletBlockEntity extends BlockEntity {
 			progress = time;
 			return;
 		}
+		if(doubled){if(bonusInPan)fried.grow(result.getCount());else companionKitchen.finish(result.copy());}
+		chefMask>>>=1;
 		raw.shrink(1);
 		changed();
 	}
@@ -174,6 +188,7 @@ public class SkilletBlockEntity extends BlockEntity {
 		super.loadAdditional(input);
 		companionKitchen.load(input);
 		raw = input.read("raw", ItemStack.OPTIONAL_CODEC).orElse(ItemStack.EMPTY);
+		chefMask=input.getIntOr("ChefMask",0)&((1<<Math.min(raw.getCount(),CAPACITY))-1);
 		fried = input.read("fried", ItemStack.OPTIONAL_CODEC).orElse(ItemStack.EMPTY);
 		progress = input.getIntOr("progress", 0);
 		time = input.getIntOr("time", 1);
@@ -184,6 +199,7 @@ public class SkilletBlockEntity extends BlockEntity {
 		super.saveAdditional(output);
 		companionKitchen.save(output);
 		output.store("raw", ItemStack.OPTIONAL_CODEC, raw);
+		output.putInt("ChefMask",chefMask);
 		output.store("fried", ItemStack.OPTIONAL_CODEC, fried);
 		output.putInt("progress", progress);
 		output.putInt("time", time);

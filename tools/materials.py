@@ -116,6 +116,18 @@ MINERALS['cobaltite'] = {
                              'minecraft:windswept_forest','minecraft:stony_peaks','jugcraft:shield','jugcraft:highland']},
 }
 
+# Quartz shares the existing vanilla item and storage recipes; only the two host ores are new.
+MINERALS['quartz'] = {
+    'display':'Quartz', 'ore_display':'Quartz', 'feature':'silicon', 'drops':[1,1], 'tool':'stone',
+    'vanilla_item':'minecraft:quartz',
+    'gen':{'size':20,'rarity':4,'min_y':-16,'max_y':96,'outcrop_chance':3,'outcrop_max':6,
+        'surface_biomes':['jugcraft:highland','jugcraft:shield','jugcraft:basin','minecraft:windswept_hills',
+            'minecraft:windswept_gravelly_hills','minecraft:windswept_forest','minecraft:stony_peaks','minecraft:stony_shore']},
+    'secondary_gen':{'size':12,'rarity':12,'min_y':-16,'max_y':96,'outcrop_chance':0,
+        'surface_biomes':['minecraft:forest','minecraft:birch_forest','minecraft:taiga','minecraft:old_growth_pine_taiga',
+            'minecraft:old_growth_spruce_taiga','jugcraft:woodland','jugcraft:coniferous_forest','jugcraft:maple_woods','jugcraft:aspen_glade']},
+}
+
 # Surface rocks with their own blocks. copy: vanilla block whose properties are copied.
 ROCKS = {
     "bauxite": {"display": "Bauxite", "feature": "aluminum", "copy": "GRANITE", "tool": "pickaxe", "drop": None,
@@ -206,6 +218,8 @@ def ore_gens(name, info):
         out.append((name, info["gen"]))
     if "rich_gen" in info:
         out.append((f"{name}_rich", info["rich_gen"]))
+    if "secondary_gen" in info:
+        out.append((f"{name}_secondary", info["secondary_gen"]))
     return out
 
 
@@ -257,7 +271,7 @@ def metal_items(metal):
 
 
 def mineral_blocks(mineral):
-    return [f"{mineral}_ore", f"deepslate_{mineral}_ore", f"{mineral}_block"]
+    return [f"{mineral}_ore", f"deepslate_{mineral}_ore"] + ([] if MINERALS[mineral].get("vanilla_item") else [f"{mineral}_block"])
 
 
 def all_blocks():
@@ -266,7 +280,7 @@ def all_blocks():
 
 
 def all_items():
-    return [i for m in METALS for i in metal_items(m)] + list(MINERALS) + list(ITEMS) + part_items()
+    return [i for m in METALS for i in metal_items(m)] + [m for m in MINERALS if not MINERALS[m].get("vanilla_item")] + list(ITEMS) + part_items()
 
 
 def feature_of(entry_id):
@@ -422,6 +436,9 @@ def feature_of(entry_id):
         return "machines"
     import landship
     if entry_id in landship.ITEMS:
+        return "machines"
+    import trains
+    if entry_id in trains.ITEMS:
         return "machines"
     import artillery
     if entry_id in artillery.ITEMS:

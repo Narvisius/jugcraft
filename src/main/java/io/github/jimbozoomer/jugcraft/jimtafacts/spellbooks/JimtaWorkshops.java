@@ -44,6 +44,7 @@ public final class JimtaWorkshops {
     public static final BooleanProperty OMINOUS=BlockStateProperties.OMINOUS;
     public static void register(){
         net.fabricmc.fabric.api.biome.v1.BiomeModifications.addFeature(net.fabricmc.fabric.api.biome.v1.BiomeSelectors.foundInOverworld(),net.minecraft.world.level.levelgen.GenerationStep.Decoration.UNDERGROUND_ORES,ResourceKey.create(Registries.PLACED_FEATURE,Jugcraft.id("jimtafacts/spellbooks/ore_mithril_placement")));
+        net.fabricmc.fabric.api.biome.v1.BiomeModifications.addFeature(net.fabricmc.fabric.api.biome.v1.BiomeSelectors.foundInTheNether(),net.minecraft.world.level.levelgen.GenerationStep.Decoration.UNDERGROUND_ORES,ResourceKey.create(Registries.PLACED_FEATURE,Jugcraft.id("jimtafacts/spellbooks/ore_arcane_debris")));
         var data=JimtaSpellbooks.data("workshops");
         for(var e:data.getAsJsonArray("materials"))material(e.getAsString(),false);
         for(var e:data.getAsJsonArray("elixirs"))material(e.getAsString(),true);

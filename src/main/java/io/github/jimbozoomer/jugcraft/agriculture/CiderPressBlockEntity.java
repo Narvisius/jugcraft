@@ -34,6 +34,7 @@ import net.minecraft.world.level.storage.ValueOutput;
  * sent to clients for the renderer.
  */
 public class CiderPressBlockEntity extends BlockEntity {
+    public final local.peepo.CompanionRecipeFilter companionFilter = new local.peepo.CompanionRecipeFilter();
 	/** Apples and pulp together, and the juice the trough holds, in apples (servings). */
 	public static final int CAPACITY = 8;
 	public static final int TROUGH = 8;
@@ -89,7 +90,7 @@ public class CiderPressBlockEntity extends BlockEntity {
 		var status=companionStatus();if(status!=local.peepo.CompanionStatus.READY)return status;
 		long now=level.getGameTime();if(!ready(now))return local.peepo.CompanionStatus.WORKING;
 		try(var tx=net.fabricmc.fabric.api.transfer.v1.transaction.Transaction.openOuter()){
-			if(npc.extractEnergy(64,tx)<=0)return local.peepo.CompanionStatus.RECOVERING;
+			if(npc.extractWorkEnergy(local.peepo.CompanionUniforms.Type.ORCHARD_KEEPER,64,tx)<=0)return local.peepo.CompanionStatus.RECOVERING;
 			tx.commit();
 		}
 		if(apples>0 && !pressing())grind(now);
@@ -108,7 +109,7 @@ public class CiderPressBlockEntity extends BlockEntity {
 	/** Bottle existing juice before fetching another batch. Pending output must leave first. */
 	public int companionNeed(ItemStack stack) {
 		if (stack.is(Items.GLASS_BOTTLE)) return Math.min(juice, OUTPUT_CAPACITY - bottled);
-		if (stack.is(CiderPressBlock.APPLES) && !pressing() && juice == 0 && bottled == 0 && pomaceStored == 0)
+		if (companionFilter.allows(new ItemStack(JugcraftAgriculture.item("sweet_cider"))) && stack.is(CiderPressBlock.APPLES) && !pressing() && juice == 0 && bottled == 0 && pomaceStored == 0)
 			return CAPACITY - apples - pulp;
 		return 0;
 	}
@@ -158,6 +159,8 @@ public class CiderPressBlockEntity extends BlockEntity {
 		}
 		super.preRemoveSideEffects(pos, state);
 	}
+
+	public int pendingCider() { return apples + pulp - (pressing() ? pressing * turns / TURNS : 0) + juice; }
 
 	public int apples() {
 		return apples;
@@ -250,6 +253,7 @@ public class CiderPressBlockEntity extends BlockEntity {
 	@Override
 	protected void loadAdditional(ValueInput input) {
 		super.loadAdditional(input);
+        companionFilter.load(input);
 		apples = Math.clamp(input.getIntOr("apples", 0), 0, CAPACITY);
 		pulp = Math.clamp(input.getIntOr("pulp", 0), 0, CAPACITY - apples);
 		turns = Math.clamp(input.getIntOr("turns", 0), 0, TURNS - 1);
@@ -265,6 +269,7 @@ public class CiderPressBlockEntity extends BlockEntity {
 	@Override
 	protected void saveAdditional(ValueOutput output) {
 		super.saveAdditional(output);
+        companionFilter.save(output);
 		output.putInt("apples", apples);
 		output.putInt("pulp", pulp);
 		output.putInt("turns", turns);

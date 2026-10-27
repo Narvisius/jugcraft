@@ -72,4 +72,4 @@ Fork Build run [38824507444](https://github.com/mmme123-spec/jugcraftfork/action
 ## Rollout and open questions
 
 - The quantities, the Jump Boost effect and the syrup's three sugar await the owner's review.
-- Preservation and drinks for citric acid, the acetate/PVAc adhesives and phosphoric-acid cola are separate items.
+- Preservation and drinks for citric acid, and the acetate/PVAc adhesives, are separate items. Phosphoric-acid cola: [cola-and-mmh.md](cola-and-mmh.md).

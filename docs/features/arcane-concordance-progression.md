@@ -73,7 +73,8 @@ one player can take alone. The server logs what it finds wrong with the rules' o
 `tools/concordance_progression.py` builds the same graph over the generated data and follows it further, down to things
 at hand: each examination's specimens (with as many distinct ones as the rule asks), each study's station, each
 invocation's instrument, each ritual's structure (anchor and parts) and offerings, each practice's devices and the
-encounters it waits on (night, the open sky, creatures, days), each commission's and project's deliveries, and each
+encounters it waits on (night, the open sky, creatures, days), a pact's service its perch and Open Hand Compact
+(materials, and Astral Resonance only from an observatory its keeper fills: `RESONANCE_SOURCES`), each commission's and project's deliveries, and each
 Jugcraft item's recipes (or what makes it otherwise: the Adept's Wand from its ritual, dreamglass from dreams) down to
 what the world gives, every vanilla material listed with how it is had. `tools/check_mod_data.py` runs it.
 
@@ -92,7 +93,11 @@ a stage needs. This table is the graph's (`tools/check_mod_data.py` fails if it 
 | Architect | nothing new | `jugcraft:lampwright_bench`, `#minecraft:planks` | nothing new | nothing new | nothing new |
 <!-- mandatory: end -->
 
-Everything else has an alternative: another specimen, another tradition, another route.
+Everything else has an alternative: another specimen, another tradition, another route. Rimekeeping's Glacier Hall
+route (Concordance Chunk B, unit 3) understands Rimekeeping without a study, but its mastery does not avoid the bench:
+Preserve counts only a crucible holding a mixture, a crucible takes water by hand only from someone who understands the
+Alembic Arts, and they are understood at the bench (or from someone's notes). So the Lampwright's Bench stays
+unavoidable at Adept.
 
 ## Recovery routes
 

@@ -64,6 +64,10 @@ public final class SpecializedFertilizerItem extends Item {
         return InteractionResult.SUCCESS;
     }
 
+    public int doses(BlockState crop) {
+        return blend == Blend.MIXED ? 3 : crop.is(blend == Blend.NITROGEN ? NITROGEN : PHOSPHATE) ? 4 : 1;
+    }
+
     private static BlockPos bottom(ServerLevel level, BlockPos at) {
         BlockState state = level.getBlockState(at);
         return state.getBlock() instanceof TallCropBlock ? at.below(state.getValue(TallCropBlock.SECTION)) : at;
@@ -81,7 +85,7 @@ public final class SpecializedFertilizerItem extends Item {
             // Jugcraft's tall crops are intentionally separate from vanilla's low-crop tag.
             if (!(crop.is(BlockTags.CROPS) || crop.getBlock() instanceof TallCropBlock)
                     || !footprintAllowed(level, at, allowed)) continue;
-            int doses = blend == Blend.MIXED ? 3 : crop.is(blend == Blend.NITROGEN ? NITROGEN : PHOSPHATE) ? 4 : 1;
+            int doses = doses(crop);
             boolean any = false;
             for (int dose = 0; dose < doses; dose++) {
                 if (BoneMealItem.growCrop(new ItemStack(Items.BONE_MEAL), level, at)) any = true;

@@ -8,6 +8,11 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import io.github.jimbozoomer.jugcraft.weapons.DescribedItem;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.component.Consumables;
+import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 
 /** Plain items of the oil line (ITEMS in tools/petro.py). */
 public final class PetroItems {
@@ -55,6 +60,10 @@ public final class PetroItems {
 	/** Food chemistry (docs/features/sour-candy.md): citric acid, a candy flavour, and glucose syrup, which crafts into sugar. */
 	public static Item CITRIC_ACID;
 	public static Item GLUCOSE_SYRUP;
+	/** Cola (docs/features/cola-and-mmh.md): food-grade phosphoric acid, its syrup and the bottled drink. */
+	public static Item FOOD_GRADE_PHOSPHORIC_ACID;
+	public static Item COLA_SYRUP;
+	public static Item COLA;
 	/** PVAc wood glue (docs/features/pvac-glue.md): binds books and makes sticky pistons. */
 	public static Item PVAC_GLUE;
 	/** Boron in solar cells (docs/features/boron-solar.md): the Advanced Solar Panel's doped silicon. */
@@ -202,6 +211,7 @@ public final class PetroItems {
 	public static Item HYDRAZINE_THRUSTER;
 	public static Item STORABLE_BIPROPELLANT_MOTOR;
 	public static Item PROPELLANT_RESIDUE;
+	public static Item MMH_TANK;
 	public static Item COBALT_CONCENTRATE;
 	public static Item COBALT_INGOT;
 	public static Item COBALT_CATALYST_BED;
@@ -253,6 +263,14 @@ public final class PetroItems {
 		CITRIC_ACID = JugcraftRegistry.item("citric_acid");
 		GLUCOSE_SYRUP = JugcraftRegistry.item("glucose_syrup",
 				properties -> new Item(properties.stacksTo(16).craftRemainder(Items.GLASS_BOTTLE)));
+		// Cola (docs/features/cola-and-mmh.md): industrial phosphoric acid purified to food grade, a syrup, and the
+		// carbonated drink, which leaves its bottle.
+		FOOD_GRADE_PHOSPHORIC_ACID = JugcraftRegistry.item("food_grade_phosphoric_acid", properties -> new Item(properties.stacksTo(16)));
+		COLA_SYRUP = JugcraftRegistry.item("cola_syrup", properties -> new Item(properties.stacksTo(16)));
+		COLA = JugcraftRegistry.item("cola", properties -> new Item(properties
+				.food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.3F).alwaysEdible().build(),
+						Consumables.defaultDrink().onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.SPEED, 45 * 20))).build())
+				.usingConvertsTo(Items.GLASS_BOTTLE).stacksTo(16)));
 		PVAC_GLUE = JugcraftRegistry.item("pvac_glue");
 		BORON_DOPED_SILICON = JugcraftRegistry.item("boron_doped_silicon");
 		SILICONE = JugcraftRegistry.item("silicone");
@@ -402,6 +420,8 @@ public final class PetroItems {
 		HYDRAZINE_THRUSTER = JugcraftRegistry.item("hydrazine_thruster", DescribedItem::new);
 		STORABLE_BIPROPELLANT_MOTOR = JugcraftRegistry.item("storable_bipropellant_motor", DescribedItem::new);
 		PROPELLANT_RESIDUE = JugcraftRegistry.item("propellant_residue", DescribedItem::new);
+		// MMH (docs/features/cola-and-mmh.md): the storable bipropellant's second fuel.
+		MMH_TANK = JugcraftRegistry.item("mmh_tank", DescribedItem::new);
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS).register(output -> {
 			output.accept(HIGH_PURITY_SILICON);
@@ -427,6 +447,9 @@ public final class PetroItems {
 			output.accept(HYDRAZINE_THRUSTER);
 			output.accept(STORABLE_BIPROPELLANT_MOTOR);
 			output.accept(PROPELLANT_RESIDUE);
+			output.accept(MMH_TANK);
+			output.accept(FOOD_GRADE_PHOSPHORIC_ACID);
+			output.accept(COLA_SYRUP);
 			output.accept(COBALT_CONCENTRATE);
 			output.accept(COBALT_INGOT);
 			output.accept(COBALT_CATALYST_BED);
@@ -578,6 +601,7 @@ public final class PetroItems {
 			output.accept(RUTHENIUM_CATALYST_BED);
 			output.accept(VANADIUM_CONTACT_BED);
 		});
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS).register(output -> output.accept(COLA));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT).register(output -> {
 			output.accept(GRENADE);
 			output.accept(GRENADE_LAUNCHER);

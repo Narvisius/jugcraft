@@ -17,9 +17,10 @@ import net.minecraft.world.level.Level;
 
 /** Starter-only recipe family. Generated manual/alloy receipts reuse the powered recipe source. */
 public record WorkshopRecipe(Recipe.CommonInfo commonInfo, int station, List<MultiMachineRecipe.Part> parts,
-        ItemStackTemplate result, int time, Optional<ItemStackTemplate> tool, boolean heated) implements Recipe<MachineInput> {
+        ItemStackTemplate result, int time, Optional<ItemStackTemplate> tool, boolean heated, boolean highHeat) implements Recipe<MachineInput> {
     public WorkshopRecipe {
         parts = List.copyOf(parts);
+        if (highHeat && (station != 2 || !heated)) throw new IllegalArgumentException("High heat needs the heated crucible");
         if (station < 0 || station > 2 || parts.isEmpty() || parts.size() > 3 || time < 1 || time > 32767)
             throw new IllegalArgumentException("Invalid starter workshop recipe");
     }
@@ -30,7 +31,8 @@ public record WorkshopRecipe(Recipe.CommonInfo commonInfo, int station, List<Mul
         ItemStackTemplate.CODEC.fieldOf("result").forGetter(WorkshopRecipe::result),
         Codec.intRange(1, 32767).fieldOf("time").forGetter(WorkshopRecipe::time),
         ItemStackTemplate.CODEC.optionalFieldOf("tool").forGetter(WorkshopRecipe::tool),
-        Codec.BOOL.fieldOf("heated").forGetter(WorkshopRecipe::heated)
+        Codec.BOOL.fieldOf("heated").forGetter(WorkshopRecipe::heated),
+        Codec.BOOL.optionalFieldOf("high_heat", false).forGetter(WorkshopRecipe::highHeat)
     ).apply(i, WorkshopRecipe::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, WorkshopRecipe> STREAM_CODEC = new StreamCodec<>() {
         public WorkshopRecipe decode(RegistryFriendlyByteBuf b) {
@@ -40,14 +42,14 @@ public record WorkshopRecipe(Recipe.CommonInfo commonInfo, int station, List<Mul
             var parts = new java.util.ArrayList<MultiMachineRecipe.Part>();
             for (int i = 0; i < size; i++) parts.add(MultiMachineRecipe.Part.STREAM_CODEC.decode(b));
             return new WorkshopRecipe(info, station, parts, ItemStackTemplate.STREAM_CODEC.decode(b),
-                b.readVarInt(), ByteBufCodecs.optional(ItemStackTemplate.STREAM_CODEC).decode(b), b.readBoolean());
+                b.readVarInt(), ByteBufCodecs.optional(ItemStackTemplate.STREAM_CODEC).decode(b), b.readBoolean(), b.readBoolean());
         }
         public void encode(RegistryFriendlyByteBuf b, WorkshopRecipe r) {
             Recipe.CommonInfo.STREAM_CODEC.encode(b, r.commonInfo());
             b.writeVarInt(r.station()); b.writeVarInt(r.parts().size());
             for (var part : r.parts()) MultiMachineRecipe.Part.STREAM_CODEC.encode(b, part);
             ItemStackTemplate.STREAM_CODEC.encode(b, r.result()); b.writeVarInt(r.time());
-            ByteBufCodecs.optional(ItemStackTemplate.STREAM_CODEC).encode(b, r.tool()); b.writeBoolean(r.heated());
+            ByteBufCodecs.optional(ItemStackTemplate.STREAM_CODEC).encode(b, r.tool()); b.writeBoolean(r.heated()); b.writeBoolean(r.highHeat());
         }
     };
     public int[] take(MachineInput input) { return MultiMachineRecipe.take(parts, input); }

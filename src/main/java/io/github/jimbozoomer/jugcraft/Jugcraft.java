@@ -35,6 +35,7 @@ import io.github.jimbozoomer.jugcraft.weapons.JugcraftWeapons;
 import io.github.jimbozoomer.jugcraft.world.AlpineSpawn;
 import io.github.jimbozoomer.jugcraft.world.PixelHollows;
 import io.github.jimbozoomer.jugcraft.world.RetroTrader;
+import io.github.jimbozoomer.jugcraft.world.RetroTraderJam;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 import net.fabricmc.fabric.api.resource.v1.pack.PackActivationType;
@@ -78,6 +79,15 @@ public final class Jugcraft implements ModInitializer {
 		io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialUpgrades.register();
 		io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialConstruction.register();
         io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialHeat.register();
+        io.github.jimbozoomer.jugcraft.jimtafacts.industry.FactoryHeatExchanger.register();
+        io.github.jimbozoomer.jugcraft.jimtafacts.industry.FactoryPlanning.register();
+        io.github.jimbozoomer.jugcraft.jimtafacts.industry.FactoryFieldTools.register();
+        io.github.jimbozoomer.jugcraft.jimtafacts.industry.FactoryWaterGel.register();
+        io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialObscurator.register();
+        io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialDynamite.register();
+        io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialNuclearCharge.register();
+        io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialMagnetizer.register();
+        io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialStorageUpgrade.register();
         io.github.jimbozoomer.jugcraft.jimtafacts.industry.WorkshopLaser.register();
         io.github.jimbozoomer.jugcraft.jimtafacts.industry.WorkshopTables.register();
         io.github.jimbozoomer.jugcraft.jimtafacts.industry.IndustrialUtilityItems.register();
@@ -112,6 +122,7 @@ public final class Jugcraft implements ModInitializer {
         io.github.jimbozoomer.jugcraft.furniture.ArtisanFurniture.register();
 		io.github.jimbozoomer.jugcraft.walker.JugcraftWalkers.register();
 		io.github.jimbozoomer.jugcraft.landship.JugcraftLandships.register();
+		io.github.jimbozoomer.jugcraft.train.JugcraftTrains.register();
 		io.github.jimbozoomer.jugcraft.artillery.JugcraftArtillery.register();
 		io.github.jimbozoomer.jugcraft.artillery.JugcraftTowerGuns.register();
 		io.github.jimbozoomer.jugcraft.building.Fortifications.register();
@@ -143,6 +154,7 @@ public final class Jugcraft implements ModInitializer {
 		io.github.jimbozoomer.jugcraft.lair.lich.JugcraftLich.register();
 		io.github.jimbozoomer.jugcraft.lair.dreadnought.JugcraftDreadnought.register();
 		io.github.jimbozoomer.jugcraft.lair.alpha.JugcraftAlpha.register();
+		io.github.jimbozoomer.jugcraft.lair.king.JugcraftPumpkinKing.register();
 		io.github.jimbozoomer.jugcraft.lair.sentinel.JugcraftSentinel.register();
 		io.github.jimbozoomer.jugcraft.styx.JugcraftStyx.register();
 		JugcraftDrones.register();
@@ -158,6 +170,7 @@ public final class Jugcraft implements ModInitializer {
 		io.github.jimbozoomer.jugcraft.drone.CreativeSupplyCrateBlock.register();
 		PixelHollows.register();
 		RetroTrader.register();
+		RetroTraderJam.register();
 		AlpineSpawn.register();
 		io.github.jimbozoomer.jugcraft.world.AdamOndiAhman.register();
 		JugcraftRegions.register();

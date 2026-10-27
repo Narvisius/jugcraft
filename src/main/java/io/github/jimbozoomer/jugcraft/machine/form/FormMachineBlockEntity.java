@@ -177,7 +177,7 @@ public class FormMachineBlockEntity extends BlockEntity implements ExtendedMenuP
         return true;
     }
     /** Bounded local scan includes all lanes' promised matching products, preventing multi-lane overshoot. */
-    private boolean targetReached(Identifier id, FluidRecipe recipe) {
+    boolean targetReached(Identifier id, FluidRecipe recipe) {
         int target = stockTarget(id);
         if (!hasAutomation() || target == 0) return false;
         long stock = 0, batch = 0;
@@ -215,8 +215,8 @@ public class FormMachineBlockEntity extends BlockEntity implements ExtendedMenuP
 		return true;
 	}
 
-	private List<FluidRecipes.Entry> allowedRecipes(MinecraftServer server) {
-		var all = recipes(server);
+	List<FluidRecipes.Entry> allowedRecipes(MinecraftServer server) {
+		var all = companionPort.filtered(recipes(server));
 		if (recipeLock != null) return all.stream().filter(e -> e.id().equals(recipeLock)).toList();
         // Stable sort preserves the existing recipe priority/id ordering among equal local preferences.
         return hasAutomation() && !automationRules.isEmpty()
@@ -238,9 +238,12 @@ public class FormMachineBlockEntity extends BlockEntity implements ExtendedMenuP
 	/** JE a generator made on its last tick. Not saved. */
 	private int made;
 	private long lanePrice;
+	public final FormCompanionPort companionPort = new FormCompanionPort(this);
+	public final FormItemAutomation companionAutomation = new FormItemAutomation(this);
 	private final local.peepo.ProcessorJob[] companionJobs;
 	private final int[] assistQuarters;
 	private final WorkLane[] assistedLanes;
+	private final long[] assistancePrices;
 	private long lastContributed = Long.MIN_VALUE / 2;
 	private long lastAssistanceTick = Long.MIN_VALUE / 2;
 	private boolean companionStructureLoaded;
@@ -329,11 +332,13 @@ public class FormMachineBlockEntity extends BlockEntity implements ExtendedMenuP
 		this.lanes = new WorkLane[form.profile().lanes()];
 		this.assistQuarters = new int[lanes.length];
 		this.assistedLanes = new WorkLane[lanes.length];
+		this.assistancePrices = new long[lanes.length];
 		this.companionJobs = new local.peepo.ProcessorJob[form.companionAssistance() ? 2 : 0];
 		for (int i = 0; i < companionJobs.length; i++) companionJobs[i] = new local.peepo.ProcessorJob(this, i);
 	}
 
 	@Override public BlockEntity companionBlock() { return this; }
+	@Override public boolean companionPermitted(local.peepo.PeepoEntity npc) { return companionPort.permitted(npc); }
 	@Override public io.github.jimbozoomer.jugcraft.machine.MachineKind kind() { return form.family(); }
 	@Override public int companionHelperCount() { return companionJobs.length; }
 
@@ -396,7 +401,9 @@ public class FormMachineBlockEntity extends BlockEntity implements ExtendedMenuP
 		}
 		int count = Integer.bitCount(eligible);
 		// Reserve enough electrical headroom for all candidate lanes before spending companion reserve.
-		if (energy.getAmount() < lanePrice * count) {
+		long requiredPower = 0;
+		for (int i = 0; i < lanes.length; i++) if ((eligible & (1 << i)) != 0) requiredPower += assistancePrices[i];
+		if (energy.getAmount() < requiredPower) {
 			companionPowerLimited = true;
 			resetCompanionEffort();
 			return;
@@ -413,7 +420,7 @@ public class FormMachineBlockEntity extends BlockEntity implements ExtendedMenuP
 			assistQuarters[i] += quarters;
 			if (assistQuarters[i] >= 4) {
 				assistQuarters[i] -= 4;
-				energy.setAmount(energy.getAmount() - lanePrice);
+				energy.setAmount(energy.getAmount() - assistancePrices[i]);
 				lanes[i].advance(1);
 				setChanged();
 			}
@@ -639,7 +646,10 @@ public class FormMachineBlockEntity extends BlockEntity implements ExtendedMenuP
 				}
 				energy.setAmount(energy.getAmount() - lanePrice);
 				lane.advance(1);
-				if (requested && lane.progress() < required && resultSpace(lane) == null) eligible |= 1 << index;
+				if (requested && lane.progress() < required && resultSpace(lane) == null) {
+					eligible |= 1 << index;
+					assistancePrices[index] = lanePrice;
+				}
 				lastWorked = now;
 				if (firstPaid == null) {
 					firstPaid = lane;
@@ -1076,7 +1086,7 @@ public class FormMachineBlockEntity extends BlockEntity implements ExtendedMenuP
 	}
 
 	/** Whether everything in the input slots and tanks belongs where {@code recipe} would use it. */
-	private boolean consistent(FluidRecipe recipe, List<ItemStack> inputs) {
+	boolean consistent(FluidRecipe recipe, List<ItemStack> inputs) {
 		for (int tank = 0; tank < form.tanks().inputTanks().size(); tank++) {
 			FluidTank held = tanks.input(tank);
 			if (held.amount > 0 && (tank >= recipe.fluids().size() || !held.variant.isOf(recipe.fluids().get(tank).fluid()))) {
@@ -1296,7 +1306,7 @@ public class FormMachineBlockEntity extends BlockEntity implements ExtendedMenuP
 			}
 		}
 		Storage<ItemVariant> combined = new CombinedStorage<>(reached);
-		return input ? FilteringStorage.insertOnlyOf(combined) : FilteringStorage.extractOnlyOf(combined);
+		return companionAutomation.observe(input ? FilteringStorage.insertOnlyOf(combined) : FilteringStorage.extractOnlyOf(combined), input);
 	}
 
 	/** Pushes output tanks and output slots out of their ports, into pipes or the storage beyond. */
@@ -1395,6 +1405,8 @@ public class FormMachineBlockEntity extends BlockEntity implements ExtendedMenuP
 	@Override
 	protected void loadAdditional(ValueInput input) {
 		super.loadAdditional(input);
+		companionPort.filter.load(input);
+		companionPort.filterChanged();
 		resetCompanionEffort();
 		companionStructureLoaded = false;
 		nextCheck = 0;
@@ -1450,6 +1462,7 @@ public class FormMachineBlockEntity extends BlockEntity implements ExtendedMenuP
 	@Override
 	protected void saveAdditional(ValueOutput output) {
 		super.saveAdditional(output);
+		companionPort.filter.save(output);
 		ContainerHelper.saveAllItems(output, items);
 		output.putInt("inventory_layout", 2);
 		output.putInt("form_version", form.version());

@@ -49,8 +49,11 @@ public final class CompactReactor {
             if(stream==null)throw new IllegalStateException("Missing reactor catalog");
             for(var entry:JsonParser.parseReader(new InputStreamReader(stream,StandardCharsets.UTF_8)).getAsJsonObject().entrySet()){
                 var v=entry.getValue().getAsJsonObject();var s=new Spec(v.get("kind").getAsString(),v.get("cells").getAsInt(),v.get("capacity").getAsInt(),v.get("self").getAsInt(),v.get("hull").getAsInt(),v.get("neighbor").getAsInt(),v.get("plating").getAsInt(),v.get("life").getAsInt());
-                var key=ResourceKey.create(Registries.ITEM,Jugcraft.id(entry.getKey()));var p=new Item.Properties().setId(key).stacksTo(1);
+                var key=ResourceKey.create(Registries.ITEM,Jugcraft.id(entry.getKey()));var p=new Item.Properties().setId(key).stacksTo(s.kind.equals("small_plutonium")||s.kind.contains("fraction_")||s.kind.endsWith("fuel_material")?64:1);
                 if(s.kind.equals("uranium")||s.kind.equals("mox")||s.kind.equals("spent")||s.kind.equals("plutonium")||s.kind.equals("rtg"))p.component(JugcraftNuclear.RADIOACTIVITY,s.kind.equals("spent")?5F:1F);
+                if(s.kind.equals("small_plutonium"))p.component(JugcraftNuclear.RADIOACTIVITY,1F/9F);
+                if(s.kind.endsWith("fuel_material"))p.component(JugcraftNuclear.RADIOACTIVITY,s.kind.equals("mixed_fuel_material")?2F:1F);
+                if(s.kind.contains("fraction_"))p.component(JugcraftNuclear.RADIOACTIVITY,s.kind.equals("fraction_235")?.36F:s.kind.equals("small_fraction_235")?.04F:.02F);
                 PARTS.put(entry.getKey(),Registry.register(BuiltInRegistries.ITEM,key,new Part(p,s)));
             }
         }catch(java.io.IOException e){throw new IllegalStateException(e);}
@@ -63,6 +66,9 @@ public final class CompactReactor {
         public final Spec spec;Part(Properties p,Spec spec){super(p);this.spec=spec;}
         @Override public void appendHoverText(ItemStack stack,TooltipContext context,TooltipDisplay display,java.util.function.Consumer<Component> lines,TooltipFlag flag){
             super.appendHoverText(stack,context,display,lines,flag);int heat=stored(stack,"Heat"),life=stored(stack,"Used");
+            if(spec.kind.endsWith("fuel_material"))lines.accept(Component.literal("Craft with an empty fuel rod; raw material cannot run in the reactor grid."));
+            if(spec.kind.contains("fraction_"))lines.accept(Component.literal("Industrial fuel fraction: one U-235 plus seven U-238 repack one enriched cylinder. Nine small U-235 pieces equal one full piece."));
+            if(spec.kind.equals("small_plutonium"))lines.accept(Component.literal("Nine small pieces combine into one plutonium pellet. Keep shielded."));
             if(spec.capacity>0)lines.accept(Component.literal("Stored heat: "+heat+" / "+spec.capacity));
             if(spec.lifetime>0)lines.accept(Component.literal("Remaining: "+Math.max(0,spec.lifetime-life)+" reactor seconds"));
             if(spec.cells>0)lines.accept(Component.literal(spec.cells+" fuel cell(s); adjacent fuel or reflectors increase output and heat."));
@@ -100,7 +106,7 @@ public final class CompactReactor {
         @Override protected void setItems(NonNullList<ItemStack> list){grid=list;}
         @Override public int getContainerSize(){return 54;}
         @Override public int getMaxStackSize(){return 1;}
-        @Override public boolean canPlaceItem(int slot,ItemStack stack){return !enabled&&slot%9<columns&&spec(stack)!=null&&!spec(stack).kind.equals("plutonium")&&!spec(stack).kind.equals("rtg");}
+        @Override public boolean canPlaceItem(int slot,ItemStack stack){return !enabled&&slot%9<columns&&spec(stack)!=null&&!spec(stack).kind.equals("plutonium")&&!spec(stack).kind.equals("rtg")&&!spec(stack).kind.equals("small_plutonium")&&!spec(stack).kind.endsWith("fuel_material")&&!spec(stack).kind.contains("fraction_");}
         @Override protected AbstractContainerMenu createMenu(int id,Inventory inventory){return new Menu(id,inventory,worldPosition,this,data);}
         @Override public BlockPos getScreenOpeningData(ServerPlayer player){return worldPosition;}
         @Override public boolean stillValid(Player player){return super.stillValid(player)&&(!(level instanceof ServerLevel server)||Authority.mayChange(server,player,worldPosition));}
@@ -160,7 +166,7 @@ public final class CompactReactor {
         public final BlockPos pos;private final Container core;public final ContainerData data;
         public Menu(int id,Inventory inventory,BlockPos pos){this(id,inventory,pos,new SimpleContainer(54),new SimpleContainerData(10));}
         Menu(int id,Inventory inventory,BlockPos pos,Container core,ContainerData data){super(MENU,id);this.pos=pos;this.core=core;this.data=data;addDataSlots(data);
-            for(int row=0;row<6;row++)for(int col=0;col<9;col++){final int column=col;addSlot(new Slot(core,row*9+col,26+18*col,25+18*row){@Override public boolean mayPlace(ItemStack stack){return data.get(4)==0&&column<data.get(3)&&spec(stack)!=null&&!spec(stack).kind.equals("plutonium")&&!spec(stack).kind.equals("rtg");}@Override public boolean mayPickup(Player p){return data.get(4)==0;}@Override public int getMaxStackSize(){return 1;}});}
+            for(int row=0;row<6;row++)for(int col=0;col<9;col++){final int column=col;addSlot(new Slot(core,row*9+col,26+18*col,25+18*row){@Override public boolean mayPlace(ItemStack stack){return data.get(4)==0&&column<data.get(3)&&spec(stack)!=null&&!spec(stack).kind.equals("plutonium")&&!spec(stack).kind.equals("rtg")&&!spec(stack).kind.equals("small_plutonium")&&!spec(stack).kind.endsWith("fuel_material")&&!spec(stack).kind.contains("fraction_");}@Override public boolean mayPickup(Player p){return data.get(4)==0;}@Override public int getMaxStackSize(){return 1;}});}
             for(int row=0;row<3;row++)for(int col=0;col<9;col++)addSlot(new Slot(inventory,9+row*9+col,26+18*col,161+18*row));for(int col=0;col<9;col++)addSlot(new Slot(inventory,col,26+18*col,219));
         }
         @Override public boolean stillValid(Player player){return player.level().isClientSide()||player.level().getBlockEntity(pos)==core&&core.stillValid(player);}

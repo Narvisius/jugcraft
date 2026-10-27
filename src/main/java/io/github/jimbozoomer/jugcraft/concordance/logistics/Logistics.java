@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Predicate;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -136,11 +137,19 @@ public final class Logistics {
 	 * back), then the oldest open request not resting after a failed try.
 	 */
 	public @Nullable Request next(Place post, long now) {
+		return next(post, now, request -> true);
+	}
+
+	/**
+	 * As {@link #next(Place, long)}, among the requests {@code serves} accepts (Concordance Chunk D, D-08: a workshop hand
+	 * takes only its beneficiaries' requests inside its area and leaves the rest to other couriers).
+	 */
+	public @Nullable Request next(Place post, long now, Predicate<Request> serves) {
 		lapse(now);
 		Request oldest = null;
 		for (Request request : requests.values()) {
 			Progress progress = request.progress();
-			if (!request.ticket().post().equals(post) || progress.worker() != null) {
+			if (!request.ticket().post().equals(post) || progress.worker() != null || !serves.test(request)) {
 				continue;
 			}
 			if (progress.carried() > 0) {
@@ -198,11 +207,17 @@ public final class Logistics {
 		return reserved;
 	}
 
+	/** As {@link #reserve(long, UUID, Place, int, int, long)} with no cap of its own (a porter's: as much as the request needs). */
+	public Outcome reserve(long id, UUID worker, Place source, int available, long now) {
+		return reserve(id, worker, source, available, Integer.MAX_VALUE, now);
+	}
+
 	/**
 	 * The claiming courier reserves what it will take from {@code source}, which holds {@code available} of the item:
-	 * no more than the request still needs, and no more than other claims have left there.
+	 * no more than the request still needs, no more than {@code most} (a courier's load a trip; Concordance Chunk D, D-08)
+	 * and no more than other claims have left there.
 	 */
-	public Outcome reserve(long id, UUID worker, Place source, int available, long now) {
+	public Outcome reserve(long id, UUID worker, Place source, int available, int most, long now) {
 		Request request = mine(id, worker, now);
 		if (request == null) {
 			return requests.containsKey(id) ? Outcome.NOT_YOURS : Outcome.NOT_FOUND;
@@ -211,7 +226,7 @@ public final class Logistics {
 		if (p.carried() > 0 || p.returning()) {
 			return Outcome.WRONG_STATE;
 		}
-		int amount = Math.min(request.remaining(), available - reservedAt(source, request.ticket().item(), id));
+		int amount = Math.min(Math.min(request.remaining(), most), available - reservedAt(source, request.ticket().item(), id));
 		if (amount <= 0) {
 			return Outcome.NOTHING_FREE;
 		}

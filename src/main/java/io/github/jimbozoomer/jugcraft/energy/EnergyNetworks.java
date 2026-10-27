@@ -48,7 +48,7 @@ public final class EnergyNetworks {
 			}
 			BlockPos neighbor = pos.relative(side);
             if (!level.hasChunkAt(neighbor)) continue;
-            if (!ClaimTransfers.allowed(level, pos, neighbor)) continue;
+            if (!ClaimTransfers.allowed(level, pos, neighbor) || !io.github.jimbozoomer.jugcraft.jimtafacts.industry.TransportAttachments.openEnergyEdge(level, pos, side)) continue;
 			if (level.getBlockState(neighbor).getBlock() instanceof CableBlock cable) {
 				Network network = network(level, neighbor);
 				moved += network.distribute(level, pos, source, Math.min(budget, network.rate));
@@ -140,7 +140,7 @@ public final class EnergyNetworks {
 				for (Direction direction : Direction.values()) {
 					BlockPos next = cable.relative(direction).immutable();
                     if (!level.hasChunkAt(next)) { network.cacheable = false; continue; }
-                    if (!ClaimTransfers.allowed(level, cable, next)) continue;
+                    if (!ClaimTransfers.allowed(level, cable, next) || !io.github.jimbozoomer.jugcraft.jimtafacts.industry.TransportAttachments.openEnergyEdge(level, cable, direction)) continue;
 					if (level.getBlockState(next).getBlock() instanceof CableBlock candidate) {
                         if (!candidate.conducts(level.getBlockState(next))) continue;
                         if (!network.cables.contains(next) && network.cables.size() >= MAX_CABLES) {

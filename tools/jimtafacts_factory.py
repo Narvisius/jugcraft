@@ -4,8 +4,10 @@ import hashlib,json,shutil
 ROOT=Path(__file__).resolve().parents[1];RES=ROOT/'src/main/resources'
 SOURCE=ROOT/'art/owner-library/originals/Oct23/Jimtafacts/buildcraft reborn by jimbo/assets'
 DEVICES={'jimta_glass_tank':'tank','jimta_factory_pump':'pump','jimta_chute':'chute'}
-def blocks():return set(DEVICES)
-def items():return blocks()
+def blocks():
+ import jimtafacts_factory_decor,jimtafacts_logistics_housings
+ return jimtafacts_logistics_housings.blocks()|jimtafacts_factory_decor.blocks()|set(DEVICES)|{'jimta_factory_heat_'+p for p in ('start','middle','end')}|{'jimta_blueprint_library','jimta_zone_planner','jimta_water_gel','jimta_path_beacon','jimta_volume_beacon','jimta_power_tester'}
+def items():return (blocks()-{'jimta_water_gel'})|{'jimta_'+k+'_gear' for k in ('wood','stone','gold','diamond')}|{'jimta_factory_list','jimta_map_location','jimta_factory_goggles','jimta_paintbrush','jimta_pipe_color_marker','jimta_pipe_waterproofing','jimta_water_gel_seed','jimta_gelled_water'}
 def dump(path,value):path.parent.mkdir(parents=True,exist_ok=True);path.write_text(json.dumps(value,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
 def generate(shared=True):
  manifest=[];lang={};copied=set()
@@ -27,6 +29,7 @@ def generate(shared=True):
   dump(RES/f'assets/jugcraft/models/block/jimtafacts/factory/{name}.json',v)
   manifest.append({'source':source.relative_to(ROOT).as_posix(),'runtime':f'assets/jugcraft/models/block/jimtafacts/factory/{name}.json','adaptation':'Preserved original elements, UVs and texture pixels; native model identifiers and parent schema.'})
  for original in (*DEVICES.values(),'tank_joined_below','chute_connected'):model(original)
+ copy(SOURCE/'buildcraftfactory/textures/blocks/pump/tube.png',RES/'assets/jugcraft/textures/block/jimtafacts/factory/pump/tube.png')
  for ident,original in DEVICES.items():
   dump(RES/f'assets/jugcraft/items/{ident}.json',{'model':{'type':'minecraft:model','model':'jugcraft:block/jimtafacts/factory/'+original}})
   entry={'type':'minecraft:item','name':'jugcraft:'+ident}
@@ -51,5 +54,17 @@ def generate(shared=True):
   p=RES/'assets/jugcraft/lang/en_us.json';v=json.loads(p.read_text(encoding='utf-8'));v.update(lang);dump(p,v)
   p=RES/'data/minecraft/tags/block/mineable/pickaxe.json';v=json.loads(p.read_text(encoding='utf-8'));v['values']=sorted(set(v['values'])|{'jugcraft:'+n for n in blocks()});dump(p,v)
  dump(ROOT/'art/owner-library/catalog/edited-2026-10-23-jimtafacts/factory-runtime-copies.json',manifest)
+ import jimtafacts_factory_decor
+ jimtafacts_factory_decor.generate(shared)
+ import jimtafacts_logistics_housings
+ jimtafacts_logistics_housings.generate(shared)
+ import jimtafacts_factory_heat
+ jimtafacts_factory_heat.generate(shared)
+ import jimtafacts_planning
+ jimtafacts_planning.generate(shared)
+ import jimtafacts_field_tools
+ jimtafacts_field_tools.generate(shared)
+ import jimtafacts_water_gel
+ jimtafacts_water_gel.generate(shared)
  return len(DEVICES)
 if __name__=='__main__':print('Generated',generate(),'original factory housings')

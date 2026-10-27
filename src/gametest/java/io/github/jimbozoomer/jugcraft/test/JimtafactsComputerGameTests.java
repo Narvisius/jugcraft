@@ -14,6 +14,19 @@ import net.minecraft.world.phys.Vec3;
 
 /** Real server ticks, inventories and shared protection callbacks; no interpreter mocking. */
 public final class JimtafactsComputerGameTests {
+    @GameTest public void programShelfLoadsWithoutRunningAndPreservesDraftOnRejectedWrite(GameTestHelper h){
+        var p=player(h);var node=place(h,p,"computer_normal",new BlockPos(2,2,2));
+        node.saveProgram("print running draft\nstop");node.start();node.storeProgram("greenhouse","print stored greenhouse\nstop");
+        h.assertTrue(node.running()&&node.program().contains("running draft")&&node.savedPrograms().equals(java.util.List.of("greenhouse")),"Storing a draft does not unexpectedly replace the running program");
+        node.loadProgram("greenhouse");h.assertTrue(!node.running()&&node.program().contains("stored greenhouse"),"Explicit load stops hardware actions and never autoruns");
+        boolean path=false,tooLarge=false;
+        try{node.storeProgram("../outside","stop");}catch(IllegalArgumentException expected){path=true;}
+        try{node.storeProgram("greenhouse","print a\n".repeat(129));}catch(IllegalArgumentException expected){tooLarge=true;}
+        node.loadProgram("greenhouse");h.assertTrue(path&&tooLarge&&node.program().contains("stored greenhouse"),"Invalid path and overlong code leave saved program intact");
+        var data=node.saveWithoutMetadata(h.getLevel().registryAccess());node.loadWithComponents(TagValueInput.create(ProblemReporter.DISCARDING,h.getLevel().registryAccess(),data));
+        h.assertTrue(node.savedPrograms().equals(java.util.List.of("greenhouse")),"Shelf survives saving and reloading");node.deleteProgram("greenhouse");
+        h.assertTrue(node.savedPrograms().isEmpty()&&node.program().contains("stored greenhouse"),"Deleting a shelf entry does not erase the editor");h.succeed();
+    }
     private static final java.util.Map<ServerPlayer,Integer> PLAYERS=new java.util.IdentityHashMap<>();
     static{
         // Helpers' scheduled callbacks stop after a failed test; cleanup instead has a server-tick deadline.

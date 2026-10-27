@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "guns"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SSS",
+    " LP",
+    "  B"
+  ],
+  "key": {
+    "S": "#c:ingots/steel",
+    "L": "minecraft:lever",
+    "P": "#minecraft:planks",
+    "B": "#c:ingots/brass"
+  },
+  "result": {
+    "id": "jugcraft:old_grange_carbine"
+  }
+}

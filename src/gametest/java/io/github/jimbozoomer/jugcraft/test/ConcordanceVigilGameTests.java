@@ -38,7 +38,7 @@ import net.minecraft.world.level.GameType;
  */
 public class ConcordanceVigilGameTests {
 	private static ServerPlayer adept(GameTestHelper helper) {
-		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		ServerPlayer player = TestPlayers.mock(helper);
 		player.setGameMode(GameType.SURVIVAL);
 		ConcordanceProgress.grant(player, "jugcraft:first_light", ResearchState.UNDERSTOOD);
 		ConcordanceProgress.grant(player, Vigil.RESEARCH, ResearchState.UNDERSTOOD);
@@ -93,7 +93,7 @@ public class ConcordanceVigilGameTests {
 		ItemStack full = chalice(Vigil.CHALICE_CAPACITY - 1);
 		helper.assertTrue(Vigil.offer(adept, full, 2_000_000L).outcome() == Offerings.Outcome.FULL && adept.getHealth() == 20.0F,
 				"No health taken for a chalice with no room");
-		ServerPlayer novice = helper.makeMockServerPlayerInLevel();
+		ServerPlayer novice = TestPlayers.mock(helper);
 		novice.setGameMode(GameType.SURVIVAL);
 		novice.setHealth(20.0F);
 		helper.assertTrue(!CrimsonChaliceItem.use(novice, chalice(0), ItemStack.EMPTY, false, 2_000_000L).equals(InteractionResult.SUCCESS)

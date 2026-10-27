@@ -52,6 +52,14 @@ use it again to renew. Death ends an attunement. A charged astrolabe glows in ha
 may attune when nothing is up by recalling the pattern they last observed. It costs about three times as much, lasts 2
 minutes, and is allowed once each time that pattern comes round.
 
+Since Concordance Chunk D (D-05; not merged) every recall goes through `AstrolabeItem.recall`: a master's fallback, and
+Stolas's Star-reckoning for his pact's holder at the perch, under one `recall:<pattern>` claim, so one rising pays one
+recall whichever route asks first. Non-masters with the pact may recall any pattern they observed: the Harvest Moon as
+often as daily, the Winter Crown every other day. The once-a-day quota is the only hard limit: stockpiled or traded
+astrolabes pay too, and one keeper's own observatory averages about 2.09 resonance a day (3.59 with the Winter Crown)
+([Stolas's pact](stolas-pact.md#costs-balance-and-automation)). An observation while the pact is active keeps its first
+obligation.
+
 ## How it works
 
 **Data** (`data/<ns>/concordance/pattern/`, read by `CelestialCatalog` in `concordance/celestial`): a pattern's
@@ -94,6 +102,8 @@ not the world clock, ends it, so moving the clock neither stretches nor renews i
 - Input producer: First Light (Celestial Attunement needs it understood); vanilla instruments; the sky itself.
 - Output consumer: Astral Resonance is the Concordance's celestial-alignment resource (separate from Focus, Ley Charge,
   essences and Vitae); attunements now; later steps (relics, the endgame project) can draw on stored resonance.
+  Stolas's Open Hand Compact takes 8 from a carried astrolabe ([Stolas's pact](stolas-pact.md)), so a solo pact needs
+  a Starwatcher's observatory.
 - Technology connection: the observatory and astrolabe are crafted from copper, gold and vanilla instruments.
 - Magic connection: patterns carry Principles; attunements go through the shared effect boundary and its limits.
 - Reachable entry path: First Light understood → examine a spyglass, clock or compass → study at the bench → craft an
@@ -108,7 +118,12 @@ not the world clock, ends it, so moving the clock neither stretches nor renews i
   period of real play. The step 15 harness turns the clock back and forth at random for 2.4 million game ticks: 5 full
   moons pay (the most possible is 26).
 - **Stored, never better than the sky**: a recall costs about three times the attunement, lasts 2 minutes against up to
-  8, needs mastery and the pattern's last observation, and is allowed once per occurrence.
+  8, needs mastery and the pattern's last observation, and is allowed once per occurrence. Since Concordance Chunk D
+  (D-05; not merged), a holder of Stolas's pact may also recall, at the perch once a game day, any pattern they
+  observed, mastery or not, under the same once-per-occurrence claim: the Harvest Moon daily and the Winter Crown every
+  other day, outside their nights and season. The once-a-day quota is the only hard limit (stockpiled or traded
+  astrolabes pay too; one keeper's own observatory averages about 2.09 resonance a day, 3.59 with the Winter Crown,
+  which with seasons off is observable all year); a balance question for the owner's checkpoint.
 - Effects are vanilla potion effects at level I, no longer than vanilla's longest potion (8 minutes), only while the
   pattern is up; recalls 2 minutes.
 - Resonance: an observatory and an astrolabe hold 32 each. The rarest pattern (the comet, every 19 days) pays 8.
@@ -182,6 +197,14 @@ library file is read, never changed. The icons have not been shown to the owner 
 
 Not yet run: any client (the GeckoLib observatory, the icons, Jade lines, the dynamic light and the codex pages in game),
 a two-client dedicated server, and a real night of play.
+
+Concordance Chunk D (not merged; [Stolas's pact](stolas-pact.md)): `ConcordanceSkyGameTests` +7, passed in CI runs 40090825848, 40094972598 and 40133540741.
+D-03: `aRecordedObservationCountsWithoutAWindow` and `aTurnedClockMakesNoNewClaim`. D-05:
+`stolasRecallsAnObservedPatternOncePerOccurrence`, `aMastersRecallAndStolassShareOneClaim` (a full astrolabe in hand,
+so only the shared claim refuses), `aChangedClockGivesNoSecondRecall`, `theHarvestMoonRecallsOutsideItsEvent` (and the
+Winter Crown every other day) and `anUnobservedPatternIsRefused`. A master's recall gives the same messages and results
+as before through the shared `AstrolabeItem.recall`; `check_pacts` holds that it is the only recall. AI-assisted
+implementation with Claude Code; the model is named in the commit trailers.
 
 ## World and event applicability
 

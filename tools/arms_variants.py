@@ -9,7 +9,8 @@ own look, in three kinds of line:
   the first of them made, drop from them (docs/features/yeti-king.md, YetiKingLoot; docs/features/cinder-tyrant.md,
   CinderTyrantLoot); and of Vesperine, the Last Reaper
   (docs/features/vesperine.md), whose Vesper Scythe she drops (VesperineLoot; her trophy table lists it as theirs do),
-  and of Madame Tatterlace (docs/features/tatterlace.md), whose Needle Rapier she drops (TatterlaceLoot);
+  and of Madame Tatterlace (docs/features/tatterlace.md), whose Needle Rapier she drops (TatterlaceLoot), and of the
+  Pumpkin King (docs/features/pumpkin-king.md), whose Hallowreap and Crowbill he drops (PumpkinKingLoot);
 - the arms of the owner's armor sets, each in its set's look (the Hades Armor's scythe): no recipe and, until the owner
   settles how a set is won, no loot table either; creative only for now. Like a trophy, epic and twice as hard-wearing.
   A set may have a shield of its own shape too (SET_SHIELDS: the Sentinel's four-pointed star), which blocks as the
@@ -80,6 +81,9 @@ BOSSES = {
     "vesperine": {"display": "Vesperine, the Last Reaper", "lair": "hollow_acre"},
     # Its second (docs/features/tatterlace.md), fought in the Spindle Loft.
     "tatterlace": {"display": "Madame Tatterlace", "lair": "spindle_loft"},
+    # Its third (docs/features/pumpkin-king.md), fought in the Crowfield; Arms VII made none for him, so his two were made
+    # with him, with a boon of their own (Fright).
+    "pumpkin_king": {"display": "the Pumpkin King", "lair": "crowfield"},
 }
 # The owner's armor sets with an arm of their own ("I also want the scythe from my Hades Armor set", 7 October 2026).
 # How a set is won (a boss's drop, a recipe) is still the owner's to decide, so a set's arm has neither a recipe nor a
@@ -116,6 +120,7 @@ BOONS = {
                "a pale crescent.",
     "stitch": "Stitch: three hits on one foe within 4 s stitch it, slowing it (Slowness II, 2 s).",
     "rust": "Rust: a hit rusts the foe's armor, which counts for 30% less (Rusted, 4 s).",
+    "fright": "Fright: a hit sends a monster (never a boss) running in panic (1.5 s; once every 6 s each).",
 }
 FROST = (60, 1)        # Slowness: ticks, amplifier
 EMBER_SECONDS = 3
@@ -125,6 +130,14 @@ HOWL = (60, 0)         # Weakness
 MARK_TICKS = 80        # Glowing
 RUST = (80, 0)         # Rusted (jugcraft:rusted): ticks, amplifier
 RUST_ARMOR = 0.3       # the share of its armor a Rusted foe loses
+FRIGHT = (30, 120)     # a monster's panic, and how soon it can be frightened again (ticks)
+FRIGHT_RUN = 8.0       # how far it runs from the one who struck it (blocks)
+FRIGHT_MAX = 256       # the most creatures in a panic at once
+# The creatures Fright never frightens (#jugcraft:frightless, written by tools/pumpkin_king_data.py): the conventional
+# bosses, every lair boss (tools/check_mod_data.py checks each one with a boss bar is here) and the Headless Horseman.
+FRIGHTLESS = ("#c:bosses", "jugcraft:vesperine", "jugcraft:tatterlace", "jugcraft:yeti_king", "jugcraft:cinder_tyrant",
+              "jugcraft:mire_hag", "jugcraft:crypt_lich", "jugcraft:iron_dreadnought", "jugcraft:alpha_werewolf",
+              "jugcraft:cydonian_sentinel", "jugcraft:pumpkin_king", "jugcraft:headless_horseman")
 DRAIN_HEAL = 1.0
 SHOCK_SHARE = 0.3
 SHOCK_RANGE = 4.0
@@ -174,6 +187,8 @@ VARIANTS = [
     ("leviathans_hook", "bill", "abyssal_leviathan", "tide", "Leviathan's Hook"),
     ("vesper_scythe", "scythe", "vesperine", "harvest", "Vesper Scythe"),
     ("needle_rapier", "rapier", "tatterlace", "stitch", "Needle Rapier"),
+    ("hallowreap", "scythe", "pumpkin_king", "fright", "Hallowreap"),
+    ("crowbill", "war_pick", "pumpkin_king", "fright", "Crowbill"),
     ("hades_scythe", "scythe", "hades", "wither", "Hades Scythe"),
     ("sentinel_longsword", "longsword", "sentinel", "mark", "Sentinel Longsword"),
     ("frost_knight_greatsword", "greatsword", "frost_knight", "frost", "Frost Knight Greatsword"),

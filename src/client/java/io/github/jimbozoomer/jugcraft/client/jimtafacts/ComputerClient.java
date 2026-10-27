@@ -12,11 +12,17 @@ public final class ComputerClient {
         ComputerAudioClient.register();
         MenuScreens.register(ComputerTerminal.TYPE, ComputerScreen::new);
         BlockEntityRenderers.register(WorkshopComputers.NODE, ComputerMonitorRenderer::new);
+        ClientPlayNetworking.registerGlobalReceiver(ComputerTerminal.CanvasSnapshot.TYPE,(snapshot,context)->context.client().execute(()->{
+            var player=context.client().player;
+            if(player!=null&&player.containerMenu instanceof ComputerTerminal.Menu menu&&menu.containerId==snapshot.menu()){
+                menu.canvasText=snapshot.text();menu.canvasForeground=snapshot.foreground();menu.canvasBackground=snapshot.background();
+            }
+        }));
         ClientPlayNetworking.registerGlobalReceiver(ComputerTerminal.Snapshot.TYPE, (snapshot, context) -> context.client().execute(() -> {
             var player = context.client().player;
             if (player != null && player.containerMenu instanceof ComputerTerminal.Menu menu && menu.containerId == snapshot.menu()) {
                 menu.program = snapshot.program(); menu.output = snapshot.output(); menu.running = snapshot.running();
-                menu.energy = snapshot.energy(); menu.hardware = snapshot.hardware(); menu.readOnly = snapshot.readonly(); menu.turtle = snapshot.turtle();
+                menu.energy = snapshot.energy(); menu.hardware = snapshot.hardware(); menu.readOnly = snapshot.readonly(); menu.turtle = snapshot.turtle();menu.files=snapshot.files();menu.fileStorage=snapshot.fileStorage();menu.loadRevision=snapshot.loadRevision();
             }
         }));
     }

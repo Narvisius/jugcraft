@@ -1,0 +1,112 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.kings_pumpkin",
+        "texture_width": 64,
+        "texture_height": 64,
+        "visible_bounds_width": 1.0,
+        "visible_bounds_height": 1.0,
+        "visible_bounds_offset": [
+          0,
+          0.5,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "tumble",
+          "pivot": [
+            0.0,
+            4.5,
+            0.0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -5.0,
+                0.0,
+                -5.0
+              ],
+              "size": [
+                10,
+                9,
+                10
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -1.0,
+                9.0,
+                -1.0
+              ],
+              "size": [
+                2,
+                2,
+                2
+              ],
+              "uv": [
+                40,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -4.0,
+                5.0,
+                -5.05
+              ],
+              "size": [
+                3,
+                2,
+                0
+              ],
+              "uv": [
+                0,
+                19
+              ]
+            },
+            {
+              "origin": [
+                1.0,
+                5.0,
+                -5.05
+              ],
+              "size": [
+                3,
+                2,
+                0
+              ],
+              "mirror": true,
+              "uv": [
+                0,
+                19
+              ]
+            },
+            {
+              "origin": [
+                -3.0,
+                2.0,
+                -5.05
+              ],
+              "size": [
+                6,
+                2,
+                0
+              ],
+              "uv": [
+                48,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -107,7 +107,8 @@ public class HabitatGaugeBlockEntity extends LivingDeviceBlockEntity {
 				if (organism == null) {
 					status("idle");
 				} else {
-					Verdict verdict = Verdict.of(organism.niche(), habitat);
+					// Concordance Chunk C (C-09): the niche its bed gives that organism, a graft's when it carries one for it.
+					Verdict verdict = Verdict.of(bed.niche(organism), habitat);
 					value = switch (verdict.growth()) {
 						case THRIVING -> THRIVING;
 						case TOLERATING -> TOLERATING;

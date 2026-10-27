@@ -27,6 +27,8 @@ public final class JimtaSpellbooksClient {
         JimtaPyriumRenderer.register();
         JimtaEncounterClient.register();
         JimtaWorkshopRenderer.register();
+        JimtaStatueRenderer.register();
+        net.minecraft.client.gui.screens.MenuScreens.register(io.github.jimbozoomer.jugcraft.jimtafacts.spellbooks.JimtaStatues.MENU,JimtaStatueScreen::new);
         io.github.jimbozoomer.jugcraft.jimtafacts.spellbooks.JimtaAreaEntity.TYPES.values().forEach(t->EntityRendererRegistry.register(t,JimtaAreaRenderer::new));
         var apparitions=io.github.jimbozoomer.jugcraft.jimtafacts.spellbooks.JimtaApparition.TYPES;
         EntityRendererRegistry.register(apparitions.get("ice_spike"),c->new JimtaApparitionRenderer(c,false));

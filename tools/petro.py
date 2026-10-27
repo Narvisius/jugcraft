@@ -215,6 +215,11 @@ ITEMS = {
     # hydrochloric acid into a bottle of glucose syrup that crafts into sugar.
     "citric_acid": "Citric Acid",
     "glucose_syrup": "Glucose Syrup",
+    # Cola (docs/features/cola-and-mmh.md): industrial phosphoric acid purified over charcoal into a food-grade vial, a
+    # cola syrup crafted from it, and the bottled drink the Chemical Reactor carbonates (tools/phosphate_processing.py).
+    "food_grade_phosphoric_acid": "Food-grade Phosphoric Acid",
+    "cola_syrup": "Cola Syrup",
+    "cola": "Cola",
     # PVAc (docs/features/pvac-glue.md): vinyl acetate polymerized into a pot of white wood glue, which binds paper into
     # a book without leather and makes a piston sticky without slime.
     "pvac_glue": "PVAc Wood Glue",

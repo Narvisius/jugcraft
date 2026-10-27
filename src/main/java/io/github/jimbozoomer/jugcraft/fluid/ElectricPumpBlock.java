@@ -28,6 +28,10 @@ public class ElectricPumpBlock extends BaseEntityBlock implements EnergyConnecta
 	public ElectricPumpBlockEntity.Tier tier() {
 		return tier;
 	}
+    @Override public void setPlacedBy(Level level,BlockPos pos,BlockState state,net.minecraft.world.entity.LivingEntity placer,net.minecraft.world.item.ItemStack stack){
+        super.setPlacedBy(level,pos,state,placer,stack);
+        if(placer!=null&&level.getBlockEntity(pos) instanceof ElectricPumpBlockEntity pump){pump.owner=placer.getUUID();pump.setChanged();}
+    }
 
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
@@ -46,6 +50,8 @@ public class ElectricPumpBlock extends BaseEntityBlock implements EnergyConnecta
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
 		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof ElectricPumpBlockEntity pump) {
+            if(pump.factoryPump()&&pump.owner==null&&player instanceof net.minecraft.server.level.ServerPlayer server
+                    &&io.github.jimbozoomer.jugcraft.concordance.Authority.mayChange(server.level(),server,pos)){pump.owner=player.getUUID();pump.setChanged();}
 			player.sendOverlayMessage(Component.translatable("message.jugcraft.pump",
 					pump.energy().getAmount(), pump.energy().getCapacity(), pump.bufferedMb()));
 		}

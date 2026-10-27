@@ -238,7 +238,7 @@ She is confined to the Spindle Loft, her own dimension; nothing of hers reaches 
 
 ## Rollout and open questions
 
-The plan's open questions keep their defaults: rituals all year at night with a Halloween bonus, Grave Goods on death, four players and eight instances.
+The plan's open questions keep their defaults: rituals all year at night with a Halloween bonus, nothing lost on death, four players and eight instances.
 
 Known limits:
 - untested by hand and with two clients, so her numbers are the plan's and may need tuning once she is played;

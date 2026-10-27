@@ -73,7 +73,7 @@ The JSON keeps the original `scguns:` resource namespace in its references, as s
 
 The owner supplied **MAGIC ITEMS BLOCKS TEXTURES SOUNDS MODELS I MADE.rar** and explicitly instructed contributors to use its files freely without needing to change them. The original archive and all 7,909 extracted files are preserved with SHA-256 checksums. The [magic guide](MAGIC_ASSETS.md) documents direct use, necessary technical integration steps, and supplied format/companion-file issues. No runtime content is registered by this import.
 
-The combined searchable library now contains **26,965 source files**, excluding the six preview sheets and the preserved archive. The [global CSV](catalog/files.csv) and [summary](catalog/summary.json) include every upload.
+The combined searchable library now contains **26,975 source files**, excluding the six preview sheets and the preserved archive. The [global CSV](catalog/files.csv) and [summary](catalog/summary.json) include every upload.
 
 ### Effect textures (8 October 2026)
 
@@ -89,3 +89,17 @@ Two of the effect files carry embedded Photoshop metadata (XMP), which [summary.
 - `muzzle_flash.png`: created in Photoshop CC 2019 on 12 February 2021.
 
 Shown this and asked what the scopes should use, the owner answered that they made these files and to use them. Asked the same day about the "Big Cannons and Mounted Guns" folder, whose muzzle flash frames the guns use, they confirmed it is theirs. (It holds a file named `wariumlogo.png`; Warium is also the name of another weapons mod.)
+
+### Gun geometry (23 October 2026)
+
+On 23 October 2026, told that the Grandle OG's body had no model in the library, the owner re-sent their gun collection (`Jimbos Heavily Edited Guns.rar`, 18,411,320 bytes, SHA-256 `d381c075e40a35b93082a40c7292cd7c819a0bab944d106e4580b41986370b83`) with the message: "Here are the files again these are all ok to use and put in it has remenant names and stuff from what I used to heavily edit this is how we've been doing all of them just use the models that I created from here".
+- **Kept here,** each copied byte-for-byte into [originals/Blocks/Guns/geo/item/gun/](originals/Blocks/Guns/geo/item/gun):
+  - the Grandle OG's GeckoLib geometry, `grandle_og.geo.json` (60,919 bytes, SHA-256 `136305c294647d5402ac14a58bb657bc0e60413f08eefb760bb53ac7a8136821`). Guns slice 14F builds the gun from it.
+  - the MAS 55's, the Prush Gun's and the Valora's: `mas_55.geo.json` (69,029 bytes, SHA-256 `f279de6b94a2c214ce502840400b6314579e5e9e4efdb6116931f72f2bcdec80`), `prush_gun.geo.json` (67,304 bytes, SHA-256 `732ff89ffbd2be801e9f281f90632824a720650d6c220bbb69e2fbccab43313f`) and `valora.geo.json` (47,491 bytes, SHA-256 `2e5540135051e6a4eddd6c8db3d2bb3bc30b5f1273a6ab992d59a12221893062`). They are the owner's later edits of those guns: in places they differ from the guns' Java parts under `models/special/` (the Prush Gun's sights, silencer, grips and body most). Guns slice 15A builds the three guns from them.
+  - the Krauser's, the Soul Drummer's and the Uppercut's: `krauser.geo.json` (46,219 bytes, SHA-256 `7fb800e0313868d4ab6145630ddb8741bef798efa282dbe19486432c716f54b2`), `soul_drummer.geo.json` (46,752 bytes, SHA-256 `a5b24e90849dc1b6584cd21e87861a0a5880022e23abf67891b9c08c6e7816ab`) and `uppercut.geo.json` (46,862 bytes, SHA-256 `3186043f8738987758274d9d68fcf1247a35f8d09f0440f1051102face176612`). They too are the owner's later edits: each one's body differs from its Java parts, and the Krauser's and the Soul Drummer's magazines too; the Uppercut's magazine and the Soul Drummer's stocks have no Java parts at all. Guns slice 15B builds the three guns from them.
+  - the MAS Peddler's, the Inertial's and the Zilk 45's: `mas_peddler.geo.json` (70,696 bytes, SHA-256 `5c51ab04026ce22d2ef01c95ab8214f4ef6cb4285fcc369506f7860ac12686a6`), `inertial.geo.json` (75,351 bytes, SHA-256 `8a3272b54cfdebaa1565a9ca0c6d2f8529900cc4795b72422961c51c165b1c71`) and `zilk_45.geo.json` (51,939 bytes, SHA-256 `aca06aad8bb01edbc22dcc793a124e953558b72832496285deb0d201ba50cc3a`). The owner's later edits again: the MAS Peddler's takes barrel attachments, scopes, stocks, grips and bayonets that its Java parts (a body and magazines) never had. Guns slice 15C builds the three guns from them.
+
+  [docs/features/guns.md](../../docs/features/guns.md) records the four slices.
+- **Already here:** the archive's 2,589 gun models, 143 gun animations and 112 sounds are byte-identical to the files above; 978 of its textures are too.
+- **Not imported yet:** the archive's other GeckoLib geometry (150 files: the other 133 guns and armor), about 200 textures not in the library (armor, effects, paintings, mob effects), language files, particles and data (the original guns' stat files, recipes). Its `top` folder holds 1,449 compiled Java classes of the original mod; they are code, not the owner's assets, and are not kept.
+- **Sounds:** the archive's `sounds/SOUND-LICENSE.txt` reads: "All sounds are licensed under Creative Commons 0 https://creativecommons.org/publicdomain/zero/1.0/".

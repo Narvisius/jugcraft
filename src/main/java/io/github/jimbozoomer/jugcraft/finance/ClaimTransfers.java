@@ -7,7 +7,9 @@ import net.minecraft.world.level.Level;
 public final class ClaimTransfers {
     private ClaimTransfers() {}
     public static boolean allowed(Level level, BlockPos from, BlockPos to) {
-        return level.hasChunkAt(from) && level.hasChunkAt(to) && !LandRegistry.crossesBoundary(level, from, to)
+        return !io.github.jimbozoomer.jugcraft.jimtafacts.network.SpatialReservation.reserved(level,from)
+                &&!io.github.jimbozoomer.jugcraft.jimtafacts.network.SpatialReservation.reserved(level,to)
+                &&level.hasChunkAt(from) && level.hasChunkAt(to) && !LandRegistry.crossesBoundary(level, from, to)
                 && intactEndpoint(level, from) && intactEndpoint(level, to);
     }
     private static boolean intactEndpoint(Level level, BlockPos pos) {

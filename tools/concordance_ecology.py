@@ -13,6 +13,13 @@ and disturbance, read by Java's concordance/ecology); the area round a plant is 
 SAMPLES_PER_TICK a level a tick, and a sample is reused for FRESH_TICKS.
 
 tools/concordance.py merges these tables into its own. Numbers the Java repeats are checked by tools/check_mod_data.py.
+
+Concordance Chunk C, C-08: Dewmoss and Gloamcap make a mixed bed (each grows MIXED_BED_PERCENT per cent faster with the
+other in the 5x5; speed only, never cost); a harvest strains its bed (up to MAX_STRAIN), counted against a plant's
+disturbance limit, eased by rest, compost and a Greenwarden's tending (once every TEND_TICKS).
+
+Grafts (Concordance Chunk C, C-09) are data too (data/jugcraft/concordance/graft): one a bed, changing only the host's
+niche there.
 """
 
 MOD = "jugcraft"
@@ -58,6 +65,16 @@ GLEANER_CAPACITY = 16  # Verdance it holds
 GLEANER_DRAW = 8  # the most it draws from a Heart at once
 HEART_REACH = 4  # Hearts this far away feed it
 GLEAN_COST = 1  # Verdance a harvest costs
+# Concordance Chunk C, C-08 (C-P58 to C-P61; starting values). A mixed bed: a crop whose declared neighbours (other crops
+# that cost nutrients) grow in the 5x5 round it at plant height steps this many percent more often; never what a step
+# costs (Java: ecology/Neighbours.java). Harvest strain: each harvest its bed saw strains it by one, up to MAX_STRAIN,
+# counted against its plant's disturbance limit, never as disturbance it needs (ecology/Habitat.java, Verdict.java); a bed
+# rests one a random tick while no crop grows on it, a dose of compost (bone meal, fertilizer, a Maw's nutrient) eases
+# one, and a Greenwarden's tending one, at most once every TEND_TICKS ticks (garden/Garden.java).
+MIXED_BED_PERCENT = 25
+MAX_MIXED_BED_PERCENT = 50
+MAX_STRAIN = 3
+TEND_TICKS = 600
 # What the Mulch Maw eats, in quarters of a nutrient (item tags #jugcraft:mulch/<name>, so data packs can add more).
 # Roughly vanilla's composting chances times four, rounded down. Nothing composted gives back what it cost to grow.
 MULCH = {
@@ -128,10 +145,12 @@ ORGANISMS = {
                  "summary": "Wants bright sun (13 or more), a moist bed and different plants round it."},
     # Shade and wet: it drinks what the bed holds.
     "dewmoss": {"role": "crop", "name": "Dewmoss", "growth": 1.5, "cost": 1, "replant": 1, "produce": 2, "chaff": 1,
+                "neighbours": ["gloamcap"],
                 "niche": {"moisture": [5, 7, 7, 7], "light": [0, 0, 9, 12], "nutrients": [1, 2, 32, 32]},
                 "summary": "Wants shade (9 or less) and a soaking bed."},
     # Dark, and fed by working magic nearby.
     "gloamcap": {"role": "crop", "name": "Gloamcap", "growth": 2.5, "cost": 2, "replant": 1, "produce": 1, "chaff": 1,
+                 "neighbours": ["dewmoss"],
                  "niche": {"moisture": [2, 3, 7, 7], "light": [0, 0, 6, 9], "nutrients": [2, 4, 32, 32],
                            "disturbance": [1, 3, 10, 15]},
                  "summary": "Wants the dark (6 or less), a rich bed and working magic close by."},
@@ -148,6 +167,18 @@ ORGANISMS = {
                       "summary": "Wants light, a fed bed and at least two other kinds of plant round it."},
 }
 CROPS = [key for key, info in ORGANISMS.items() if info["role"] == "crop"]
+
+# Concordance Chunk C (C-09, C-P18, C-P62 to C-P65): grafts. A Greenwarden (Verdant Husbandry understood) uses the donor's
+# item on the host's crop, not sneaking: one donor is spent and the Verdant Bed beneath carries the graft, through every
+# harvest and replanting, until a crop of another organism grows there. On that bed the host grows by the graft's ranges
+# in place of its own: one useful property and one drawback (plan 03:76), and nothing else, never its cost, yield or
+# alchemy, so a graft makes nothing (03:81). The pilot holds one graft, and a bed carries one.
+GRAFT_CAP = 1
+GRAFTS = {
+    # Dewmoss's thirst in a Sunpetal: it bears shade, but wants a wetter bed.
+    "dewlit": {"name": "Dewlit", "host": "sunpetal", "donor": "dewmoss",
+               "niche": {"moisture": [4, 5, 7, 7], "light": [9, 11, 15, 15]}},
+}
 
 # What working magic gives off into the habitats round it (a sample sums the blocks round a plant, capped at 15).
 DISTURBANCE = {
@@ -220,6 +251,11 @@ MESSAGES = {
     "garden.gauge_attuned": "Now judging the habitat for %s",
     "garden.gleaner": "Gleaner: %s / %s Verdance, %s",
     "garden.not_owner": "Only its keeper (or their party) may change it",
+    "garden.tended": "Tended: strain %s of %s",
+    "garden.tended_lately": "It was tended lately: once every %s seconds",
+    # Concordance Chunk C (C-09): grafting.
+    "garden.grafted": "Grafted: this bed's %s is now %s",
+    "garden.graft_held": "This bed already carries %s: only another plant growing here clears it",
 }
 
 # The simulation's own words (compose.jugcraft.*, shown through ComposeText like the compiler's).
@@ -246,6 +282,32 @@ TEXT = {
     "ecology.status.waiting": "waiting for a reading",
     "ecology.status.keeper_away": "waiting for its keeper (it harvests only while they are here)",
     "ecology.gauge.suitability": "suitability",
+    # Concordance Chunk C, C-07 (Java: ecology/HabitatInspection.java): the encyclopedia's Inspect page on a bed or a
+    # crop: each factor with how far its reading reaches, light as its two sources (C-P14), judged against the plant's
+    # niche with all four of its bounds (least, ideal from, ideal to, most).
+    "ecology.inspect.moisture": "Moisture %s of %s, the bed's own (water within %s blocks, rain, a wet sprinkler or a canteen wets it)",
+    "ecology.inspect.light": "Light %s at the plant: sky %s, lamps %s (the greater counts, whatever the time of day)",
+    "ecology.inspect.nutrients": "Nutrients %s of %s, the bed's own",
+    "ecology.inspect.diversity": "Diversity %s: the kinds of plant within %s blocks at the plant's height, itself included",
+    "ecology.inspect.disturbance": "Disturbance %s: the working magic in the %s by %s round the plant, %s block above and below",
+    "ecology.inspect.judged": "%s: %s",
+    "ecology.inspect.any": "any will do",
+    "ecology.inspect.ideal": "ideal (best %s to %s; it lives with %s to %s)",
+    "ecology.inspect.tolerable": "only tolerable, so it grows at half pace (best %s to %s; it lives with %s to %s)",
+    "ecology.inspect.short": "too little: it stops below %s (best %s to %s; at most %s)",
+    "ecology.inspect.excess": "too much: it stops above %s (best %s to %s; at least %s)",
+    "ecology.inspect.verdict": "On this reading: %s",
+    "ecology.inspect.unplanted": "Nothing grows on it to judge these by",
+    # Concordance Chunk C, C-08 (Neighbours.line, VerdantBedBlockEntity.strainLine, Verdict.reasons, HabitatInspection.line).
+    "ecology.mixed": "Mixed bed: +%s%%",
+    "ecology.strain": "Recently harvested: strain %s of %s",
+    "ecology.strained.excess": "%s %s, recently harvested (+%s): too much (at most %s)",
+    "ecology.strained.tolerable": "%s %s, recently harvested (+%s): tolerable (best from %s to %s)",
+    "ecology.inspect.disturbance_strained": "Disturbance %s, and %s more from recent harvests counted against its limit: the "
+                                            "working magic in the %s by %s round the plant, %s block above and below",
+    # Concordance Chunk C (C-09): a graft named, then each range it changes against its host's own (Graft.lines).
+    "ecology.graft": "Grafted: %s (%s with %s)",
+    "ecology.graft.range": "%s %s to %s, best %s to %s (alone %s to %s, best %s to %s)",
 }
 for _factor in FACTORS:
     TEXT[f"factor.{_factor}"] = _factor.title()
@@ -261,6 +323,8 @@ TOOLTIPS = {
     "jade.gauge": "Reading %s: signal %s",
     "jade.maw": "%s quarters digested",
     "jade.dormant": "Dormant: a Greenwarden must wake it",
+    "jade.as_it_grew": "As it grew: %s",  # Concordance Chunk C, C-07: a ripe crop's last verdict
+    "jade.graft": "Grafted: %s",  # Concordance Chunk C, C-09: a bed's graft, and on its host's crop
 }
 
 
@@ -276,6 +340,8 @@ def lang_entries(lang):
     lang[f"jei.{MOD}.garden.compost"] = "Mulch Maw: %s quarters of a nutrient"
     for name in MULCH:
         lang[f"tag.item.{MOD}.mulch.{name}"] = "Mulch: " + name.replace("_", " ")
+    for key, info in GRAFTS.items():
+        lang[f"graft.{MOD}.{key}"] = info["name"]
 
 
 # ------------------------------------------------------------------------------------------------- codex
@@ -310,6 +376,30 @@ def _crop_table():
         rows.append(f"- **{info['name']}**: {niche_text(key)}. It {cost}; harvested, {info['produce']} and "
                     f"{info['chaff']} chaff.")
     return "\\\n".join(rows)
+
+
+def _mixed_and_strain_text():
+    """Concordance Chunk C, C-08: the codex's words for a mixed bed and harvest strain, from the numbers above."""
+    pairs = " and ".join(ORGANISMS[key]["name"] for key in CROPS if ORGANISMS[key].get("neighbours"))
+    return (f"**A mixed bed:** {pairs} grow {MIXED_BED_PERCENT} per cent faster with the other in the 5x5 round them. "
+            f"Copies of one plant never count, and a step costs what it always did.\\\n"
+            f"**Strain:** each harvest strains its bed by one, up to {MAX_STRAIN}. Strain counts against a plant's "
+            f"disturbance limit, never as the magic it needs. A bed rests it away while nothing grows on it; compost "
+            f"(bone meal, fertilizer, a Mulch Maw) and a Greenwarden's empty hand (once every {TEND_TICKS // 20} "
+            f"seconds) ease it too. It never kills.")
+
+
+def graft_text():
+    """The codex's grafting page (C-09): the gesture, then each graft and the ranges it changes."""
+    rows = []
+    for info in GRAFTS.values():
+        changes = "; ".join(_range(factor, info["niche"][factor]) or f"{factor} any"
+                            for factor in FACTORS if factor in info["niche"])
+        rows.append(f"- **{info['name']}**: {ORGANISMS[info['donor']]['name']} in a {ORGANISMS[info['host']]['name']}: "
+                    f"{changes}.")
+    return ("Use the donor on its host's crop, ripe or growing (not sneaking): the donor is spent, and the bed beneath "
+            "carries the graft through every harvest and replanting, until another plant grows there. A graft changes "
+            "only what its crop needs, never what it costs or yields.\\\n" + "\\\n".join(rows))
 
 
 def codex():
@@ -354,13 +444,14 @@ def codex():
                  f"**fertilizer**. A broken bed loses what it held.\\\n\\\nDisturbance: {disturbance}."),
                 ("text", "How It Grows",
                  "A crop grows on random ticks (and a sprinkler's) at full pace while every factor is ideal, at half "
-                 "pace while some are only tolerable, and not at all while one is outside its range. Look at it "
-                 "(or use it with an empty hand) to see which."),
+                 "pace while some are only tolerable, and not at all while one is outside its range. Look at it, use "
+                 "it with an empty hand, or open the encyclopedia while looking at it or its bed (the Inspect page "
+                 "says how far each reading reaches) to see which."),
             ],
         },
         ("garden", "organisms"): {
             "name": "Organisms", "x": 4, "y": 0, "icon": rid("gloamcap"), "condition": (art, "observed"),
-            "description": "Four crops and their niches",
+            "description": "Four crops, their niches and a graft",
             "pages": [
                 ("text", "Four Crops", _crop_table()),
                 ("text", "Harvest",
@@ -369,7 +460,8 @@ def codex():
                  f"speeds them, as legumes do."),
             ] + [("crafting_recipe", ORGANISMS[key]["name"],
                   f"Your first {ORGANISMS[key]['name']} comes from the crafting grid; after that, its harvests give "
-                  f"more.", rid(key)) for key in CROPS],
+                  f"more.", rid(key)) for key in CROPS] + [("text", "Mixed Beds and Strain", _mixed_and_strain_text()),
+                                                          ("text", "Grafting", graft_text(), (art, "understood"))],
         },
         ("garden", "devices"): {
             "name": "Living Devices", "x": 2, "y": 2, "icon": rid("verdant_heart"), "condition": (art, "understood"),
@@ -413,10 +505,18 @@ def organism_json(key):
         if info.get("fix"):
             out["fix"] = info["fix"]
         out.update({"replant": info["replant"], "produce": info["produce"], "chaff": info["chaff"]})
+        if info.get("neighbours"):
+            out["neighbours"] = {"organisms": [rid(name) for name in info["neighbours"]], "percent": MIXED_BED_PERCENT}
     else:
         out.update({"cost": info["cost"], "thriving": info["thriving"], "tolerating": info["tolerating"]})
     out["niche"] = info["niche"]
     return out
+
+
+def graft_json(key):
+    """data/jugcraft/concordance/graft/<key>.json (Java: ecology/EcologyParser.graft): a host, a donor and ranges only."""
+    info = GRAFTS[key]
+    return {"schema": 1, "host": rid(info["host"]), "donor": rid(info["donor"]), "niche": info["niche"]}
 
 
 def tags(tags):
@@ -549,11 +649,14 @@ def write_data(write, data):
         write(data / "concordance" / "organism" / f"{key}.json", organism_json(key))
     for key, info in DISTURBANCE.items():
         write(data / "concordance" / "disturbance" / f"{key}.json", dict({"schema": 1}, **info))
+    for key in GRAFTS:
+        write(data / "concordance" / "graft" / f"{key}.json", graft_json(key))
 
 
 def compost_view():
-    """For JEI (client/compat/JugcraftJeiPlugin "garden"): the organisms' items and chaff, and what the Maw makes of
-    them. Public numbers; never a habitat."""
+    """For JEI (client/compat/JugcraftJeiPlugin addCompostInfo; recipe_view.json "garden_compost", Concordance Chunk C,
+    C-07): each Mulch Maw tag and its worth in quarters of a nutrient; an item in several tags is worth its highest, as
+    Garden.mulch reads it. Public numbers; never a habitat."""
     return [{"tag": f"{MOD}:mulch/{name}", "quarters": quarters} for name, (quarters, _values) in MULCH.items()]
 
 

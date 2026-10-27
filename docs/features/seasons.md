@@ -48,7 +48,8 @@ Primary specialty and supported player role: exploration and building (looks), s
   - windswept forest, windswept hills and windswept gravelly hills;
   - swamp.
   - Not rivers: a river runs through jungles and deserts too, and its banks would turn autumn-gold there.
-- **Winter snow biomes** (`#jugcraft:has_winter_snow`): the same biomes, plus the pale garden.
+  - Jugcraft's four-season biomes (their `"seasons"` flag in `tools/biomes.py`) and the landscape collection's temperate woods, open country, hills and swamps (by their kind, `tools/landscape_kinds.py`; see the [seasonal biome audit](seasonal-biome-audit.md)). A new Jugcraft biome with no seasons decision fails the data check.
+- **Winter snow biomes** (`#jugcraft:has_winter_snow`): the same biomes, plus the pale garden, but for those with mild winters.
 - **Unchanged all year:**
   - the tropics (jungles, mangrove swamp);
   - dry lands (deserts, savannas, badlands);

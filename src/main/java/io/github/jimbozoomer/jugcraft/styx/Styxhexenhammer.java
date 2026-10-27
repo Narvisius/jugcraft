@@ -1,6 +1,8 @@
 package io.github.jimbozoomer.jugcraft.styx;
 
+import io.github.jimbozoomer.jugcraft.concordance.spirits.StolasRegard;
 import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -84,9 +86,20 @@ public final class Styxhexenhammer extends PathfinderMob {
 	@Override protected InteractionResult mobInteract(Player player, InteractionHand hand) {
 		if (player instanceof ServerPlayer server && hand==InteractionHand.MAIN_HAND && distanceToSqr(player)<=36 && tickCount>=nextTalk) {
 			nextTalk=tickCount+20; getLookControl().setLookAt(player);
-			if(!giveCuttings(server)) server.sendSystemMessage(Component.translatable("message.jugcraft.styx.line."+Math.floorMod(tickCount/100,4)));
+			if(!giveCuttings(server)) says(server).forEach(server::sendSystemMessage);
 		}
 		return InteractionResult.SUCCESS;
+	}
+	/**
+	 * What he says to {@code listener} when he has no cuttings to give: one of his four lines, by the clock as before; then,
+	 * for someone who has begun the Binding Arts, their own next step toward Stolas's Regard and, until they have recorded
+	 * one, the sky step (Concordance Chunk D, D-03; StolasRegard.hint). He only talks: nothing is recorded or granted.
+	 */
+	public List<Component> says(ServerPlayer listener) {
+		List<Component> lines=new ArrayList<>(3);
+		lines.add(Component.translatable("message.jugcraft.styx.line."+Math.floorMod(tickCount/100,4)));
+		lines.addAll(StolasRegard.hint(listener));
+		return lines;
 	}
 	@Override protected void addAdditionalSaveData(ValueOutput out) {
 		super.addAdditionalSaveData(out); out.store("home",BlockPos.CODEC,home); out.putBoolean("has_home",hasHome); out.putInt("home_layout",homeLayout);

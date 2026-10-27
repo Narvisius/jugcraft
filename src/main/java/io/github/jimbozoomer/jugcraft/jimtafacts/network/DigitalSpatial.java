@@ -49,13 +49,14 @@ public final class DigitalSpatial {
             var ik = ResourceKey.create(Registries.ITEM, key.identifier()); Registry.register(BuiltInRegistries.ITEM, ik, new BlockItem(block, new Item.Properties().setId(ik).useBlockDescriptionPrefix()));
             if (name.equals("spatial_io_port")) PORT = block; else PYLON = block;
         }
-        for (int size : new int[]{2,16}) for (boolean cell : new boolean[]{false,true}) {
+        for (int size : new int[]{2,16,128}) for (boolean cell : new boolean[]{false,true}) {
             String name = "spatial_" + (cell ? "storage_cell_" : "cell_component_") + size; var key = ResourceKey.create(Registries.ITEM, Jugcraft.id("jimta_" + name));
             DigitalStorage.ITEMS.put(name, Registry.register(BuiltInRegistries.ITEM, key, cell ? new Cell(new Item.Properties().setId(key).stacksTo(1), size) : new Item(new Item.Properties().setId(key))));
         }
         TYPE = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("jimta_spatial_port"), FabricBlockEntityTypeBuilder.create(Port::new, PORT).build());
         EnergyStorage.SIDED.registerForBlockEntity((port, side) -> port.energy, TYPE);
         ServerLifecycleEvents.SERVER_STARTED.register(DigitalSpatialJournal::recover);
+        LargeSpatialExchange.register();
     }
     public static final class Cell extends Item {
         public final int size;
@@ -69,8 +70,10 @@ public final class DigitalSpatial {
             held.set(CORNERS,next); p.sendOverlayMessage(Component.literal(next.size()==1 ? "First pylon selected. Select the opposite corner, with eight pylons around the box." : "Region selected. Insert this cell into the Spatial I/O Port, then sneak-use the port to exchange.")); return InteractionResult.SUCCESS;
         }
         @Override public void appendHoverText(ItemStack s, TooltipContext c, net.minecraft.world.item.component.TooltipDisplay d, java.util.function.Consumer<Component> out, TooltipFlag f) {
-            out.accept(Component.literal("Up to " + size + " × " + size + " × " + size + " static building blocks"));
-            out.accept(Component.literal("Select opposite corner pylons. No entities, containers, fluids or active blocks."));
+            if(size==128){out.accept(Component.literal("Paged building transfer: up to 128³ stable blocks. No live machines, containers or entities."));out.accept(Component.literal("Eight pylons; loaded region; port outside frame. Sneak-use again cancels and restores. Region is reserved until complete."));return;}
+            out.accept(Component.literal("Up to " + size + " × " + size + " × " + size + " building blocks; up to 64 supported containers retain contents"));
+            out.accept(Component.literal("Chests (both halves inside), barrels, hoppers, idle dispensers/droppers, furnaces (including iron), brewing stands and closed shulker boxes."));
+            out.accept(Component.literal("Select opposite corner pylons. No entities, other containers, free fluids or other mod machines. Processing contents and timers are preserved."));
             if (s.has(KEY)) out.accept(Component.literal("Stored plot revision " + s.get(KEY).revision()));
         }
     }
@@ -107,20 +110,21 @@ public final class DigitalSpatial {
     public static final class Port extends BlockEntity implements Container {
         UUID owner; boolean signal; String status="Eight corner pylons required";
         final NonNullList<ItemStack> inventory=NonNullList.withSize(2,ItemStack.EMPTY);
-        public final SimpleEnergyStorage energy=new SimpleEnergyStorage(1_000_000,4096,0,this::setChanged);
+        public final SimpleEnergyStorage energy=new SimpleEnergyStorage(128_000_000,65536,0,this::setChanged);
         Port(BlockPos p,BlockState s) { super(TYPE,p,s); }
         boolean permitted(ServerPlayer p) { return p.isAlive() && !p.isSpectator() && p.level()==level && owner!=null && (owner.equals(p.getUUID()) || io.github.jimbozoomer.jugcraft.party.JugcraftParties.sameParty(owner,p.getUUID())) && Authority.mayChange(level,p,worldPosition); }
-        void tick() { if (!(level instanceof ServerLevel server)) return; boolean powered=level.hasNeighborSignal(worldPosition); if (powered && !signal) { var p=Authority.answering(server,owner); if (p!=null && permitted(p)) exchange(p); } signal=powered; }
-        void exchange(ServerPlayer p) { if (!permitted(p)) return; status=DigitalSpatialJournal.exchange(this,p); p.sendOverlayMessage(Component.literal(status)); }
+        void tick() { if (!(level instanceof ServerLevel server)) return; boolean powered=level.hasNeighborSignal(worldPosition); if (powered && !signal&&!LargeSpatialExchange.busy(this)) { var p=Authority.answering(server,owner); if (p!=null && permitted(p)) exchange(p); } signal=powered; }
+        void exchange(ServerPlayer p) { if (!permitted(p)) return; status=LargeSpatialExchange.busy(this)||getItem(0).getItem() instanceof Cell cell&&cell.size==128?LargeSpatialExchange.start(this,p):LargeSpatialExchange.any()?"Wait for the large spatial operation to finish":DigitalSpatialJournal.exchange(this,p); p.sendOverlayMessage(Component.literal(status)); }
+        private boolean locked(){return LargeSpatialExchange.busy(this)&&!SpatialReservation.internalAccess();}
         @Override public int getContainerSize(){return 2;}
         @Override public boolean isEmpty(){return inventory.stream().allMatch(ItemStack::isEmpty);}
         @Override public ItemStack getItem(int slot){return inventory.get(slot);}
-        @Override public ItemStack removeItem(int slot,int amount){var item=ContainerHelper.removeItem(inventory,slot,amount);setChanged();return item;}
-        @Override public ItemStack removeItemNoUpdate(int slot){return ContainerHelper.takeItem(inventory,slot);}
-        @Override public void setItem(int slot,ItemStack stack){inventory.set(slot,stack);setChanged();}
-        @Override public boolean stillValid(Player player){return player instanceof ServerPlayer p && permitted(p) && Container.stillValidBlockEntity(this,p);}
-        @Override public void clearContent(){inventory.clear();setChanged();}
-        @Override public boolean canPlaceItem(int slot,ItemStack stack){return slot==0 && stack.getItem() instanceof Cell;}
+        @Override public ItemStack removeItem(int slot,int amount){if(locked())return ItemStack.EMPTY;var item=ContainerHelper.removeItem(inventory,slot,amount);setChanged();return item;}
+        @Override public ItemStack removeItemNoUpdate(int slot){return locked()?ItemStack.EMPTY:ContainerHelper.takeItem(inventory,slot);}
+        @Override public void setItem(int slot,ItemStack stack){if(locked())return;inventory.set(slot,stack);setChanged();}
+        @Override public boolean stillValid(Player player){return !locked()&&player instanceof ServerPlayer p && permitted(p) && Container.stillValidBlockEntity(this,p);}
+        @Override public void clearContent(){if(locked())return;inventory.clear();setChanged();}
+        @Override public boolean canPlaceItem(int slot,ItemStack stack){return !locked()&&slot==0 && stack.getItem() instanceof Cell;}
         @Override protected void saveAdditional(ValueOutput out){super.saveAdditional(out);ContainerHelper.saveAllItems(out,inventory);if(owner!=null)out.store("owner",UUIDUtil.CODEC,owner);out.putLong("energy",energy.getAmount());out.putBoolean("signal",signal);}
         @Override protected void loadAdditional(ValueInput in){super.loadAdditional(in);ContainerHelper.loadAllItems(in,inventory);owner=in.read("owner",UUIDUtil.CODEC).orElse(null);energy.setAmount(in.getLongOr("energy",0));signal=in.getBooleanOr("signal",false);}
         @Override public void preRemoveSideEffects(BlockPos p,BlockState s){if(level!=null&&!level.isClientSide()){Containers.dropContents(level,p,this);inventory.clear();}}

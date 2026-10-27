@@ -37,7 +37,7 @@ public class DataCableBlock extends PipeBlock implements DataConnectable {
 		BlockState state = defaultBlockState();
 		for (Map.Entry<Direction, BooleanProperty> entry : PROPERTY_BY_DIRECTION.entrySet()) {
 			BlockState neighbor = context.getLevel().getBlockState(context.getClickedPos().relative(entry.getKey()));
-			state = state.setValue(entry.getValue(), connectsTo(neighbor));
+			state = state.setValue(entry.getValue(), connectsTo(neighbor) || io.github.jimbozoomer.jugcraft.jimtafacts.industry.FactoryWires.mask(context.getLevel(),context.getClickedPos().relative(entry.getKey()))!=0);
 		}
 		return state;
 	}
@@ -45,7 +45,7 @@ public class DataCableBlock extends PipeBlock implements DataConnectable {
 	@Override
 	protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos,
 			Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
-		return state.setValue(PROPERTY_BY_DIRECTION.get(direction), connectsTo(neighborState));
+		return state.setValue(PROPERTY_BY_DIRECTION.get(direction), connectsTo(neighborState) || io.github.jimbozoomer.jugcraft.jimtafacts.industry.FactoryWires.mask(level,neighborPos)!=0);
 	}
 
 	private static boolean connectsTo(BlockState neighbor) {

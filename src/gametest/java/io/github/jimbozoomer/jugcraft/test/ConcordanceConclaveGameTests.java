@@ -42,7 +42,7 @@ import net.minecraft.world.level.GameType;
  */
 public class ConcordanceConclaveGameTests {
 	private static ServerPlayer member(GameTestHelper helper, boolean sworn) {
-		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		ServerPlayer player = TestPlayers.mock(helper);
 		player.setGameMode(GameType.SURVIVAL);
 		ConcordanceProgress.grant(player, "jugcraft:first_light", ResearchState.UNDERSTOOD);
 		RateGate.forget(player.getUUID());
@@ -68,7 +68,7 @@ public class ConcordanceConclaveGameTests {
 	/** The oath needs First Light understood; sworn once, its swearer is an Aspirant. */
 	@GameTest(maxTicks = 20)
 	public void theOathNeedsFirstLight(GameTestHelper helper) {
-		ServerPlayer novice = helper.makeMockServerPlayerInLevel();
+		ServerPlayer novice = TestPlayers.mock(helper);
 		helper.assertTrue(Starbound.swear(novice).equals("unknown") && !Starbound.standing(novice).member(), "Without First Light, no oath");
 		ConcordanceProgress.grant(novice, "jugcraft:first_light", ResearchState.UNDERSTOOD);
 		helper.assertTrue(Starbound.swear(novice).isEmpty() && Starbound.standing(novice).member()

@@ -10,6 +10,7 @@ public final class NouveauFilters {
     private NouveauFilters(){}
     public static boolean allows(ItemStack filter,ItemStack item){
         if(filter.isEmpty())return true;
+        if(filter.is(io.github.jimbozoomer.jugcraft.jimtafacts.industry.FactoryFieldTools.LIST))return io.github.jimbozoomer.jugcraft.jimtafacts.industry.FactoryFieldTools.matches(filter,item.getItem());
         if(filter.is(NouveauCatalog.item("allow_scroll"))||filter.is(NouveauCatalog.item("deny_scroll"))){boolean match=filter.getOrDefault(NouveauUtilities.FILTER,List.of()).contains(BuiltInRegistries.ITEM.getKey(item.getItem()).toString());return filter.is(NouveauCatalog.item("deny_scroll"))?!match:match;}
         return ItemStack.isSameItemSameComponents(filter,item);
     }

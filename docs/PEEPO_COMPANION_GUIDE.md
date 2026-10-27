@@ -1,10 +1,10 @@
 # Peepo and Jughead player guide
 
-Current controls and behavior on the `peepo-companion` branch, updated 9 October 2026. Peepo and Jughead share the same commands and jobs. Older feature records describe how individual features developed; use this guide for the current setup.
+Current controls and behavior on the `peepo-companion` branch, updated 25 October 2026. Peepo and Jughead share the same commands and jobs. Older feature records describe how individual features developed; use this guide for the current setup.
 
 ## Quick start
 
-1. Find a companion and right-click it with edible food once to tame it. Peepo's main habitats are swamps, lush swamps and bayous; Jughead's are beaches, dune beaches and overgrown beaches. Natural spawns are in the Overworld.
+1. Find a companion and right-click it with edible food once to tame it. Peepo's main habitats are swamps, lush swamps and bayous; Jughead's are beaches, dune beaches and overgrown beaches. Natural spawns are in the Overworld. Both use weight 12 in main habitats and 8 in secondary habitats, groups of 1–4, and a maximum of six naturally spawned companions of each type within 128 blocks. The normal passive-creature cap still applies.
 2. Shift-right-click the companion without the Planner to open its inventory and commands. It pauses while you edit.
 3. Craft a **Companion Planner**: an iron nugget above a row of three paper, with a stick below the paper. Right-click your companion with it to select that companion.
 4. Right-click a bed to set its home, then right-click a supported workstation to assign work. Assigning work selects **Work** mode.
@@ -12,6 +12,18 @@ Current controls and behavior on the `peepo-companion` branch, updated 9 October
 6. Assign another container, then right-click that same container again to change it from Supply to **Output**.
 7. Open the companion's **Supplies** page to check its containers and job links. For a job that needs a tool, either put it in **Hand** or mark its Supply container **Tools**.
 8. Keep walkways clear, give the companion food, and leave space in Output. Hover the job row to see what is stopping it if work does not begin.
+
+## Starter workshops, fertilizer blends and land claims
+
+Assign a **Workshop Bench**, **Small Ceramic Kiln** or **Small Crucible Furnace** with the Planner, including either part of a two-block station. Link Supply/Output normally. The **Filter** funnel in the companion menu accepts up to nine finished products; leaving it empty allows any available supported recipe.
+
+Put ingredients, ordinary furnace fuel and the required reusable workshop tools/ceramics in Supply. Peepo operates the bench at normal speed using 4 reserve JE per productive tick. The kiln and crucible cook automatically while Peepo handles deliveries. The crucible requires a **Basic Ceramic Lining** and **Ceramic Crucible**. Obsolete bench tools return through Output before a replacement is installed, so leave room for them as well as products. Workshop tools are installed in the station, not the companion's Hand slot.
+
+Garden Auto fertilizing now accepts **Nitrogen Field Fertilizer**, **Triple Superphosphate** and **Mixed-farm Fertilizer** with the existing carry limits and cooldowns. Sprinklers accept these blends through Supply too; an already loaded blend must run out or be removed manually before a different blend can be loaded.
+
+Companions respect their owner's current personal/company land permissions, including trust, while the owner is offline. Party command access alone does not grant permission to another player's claim. Revoking access stops work and storage transfers; cargo is retained. Land claims currently apply in the Overworld, matching the Exchange land system.
+
+See [workshop and compatibility details](features/companion-starter-workshop.md).
 
 ## Inventory and commands
 
@@ -37,7 +49,7 @@ Each companion can have **one home, four work assignments, one lunch source, fou
 | Right-click a tamed companion | Selects it. The Planner name shows the selection. |
 | Right-click a companion bed/bunk or vanilla bed | Sets or replaces its one home. |
 | Right-click a supported workstation | Adds a work assignment, up to four. |
-| Shift-right-click Planner → Farmland / Orchard | Select two opposite ground corners to assign a zone. |
+| Shift-right-click Planner â†’ Farmland / Orchard | Select two opposite ground corners to assign a zone. |
 | Right-click a sheep, cow or chicken | Assigns a fixed shearing, milking or egg-collection area at the ground beneath it. |
 | Right-click a lunch crate or lunch cover | Assigns its separate lunch source. |
 | Right-click a new ordinary container | Adds the next Supply, or an Output once all four Supplies are assigned. |
@@ -80,7 +92,7 @@ Deliveries can use all available cargo slots and normal stack sizes, including d
 
 ### Supply and Output controls on each job
 
-Each job has separate **Supply** and **Output** buttons cycling **Auto → On → Off**:
+Each job has separate **Supply** and **Output** buttons cycling **Auto â†’ On â†’ Off**:
 
 - **Auto:** allows companion transport unless supported machine automation is detected for that direction.
 - **On:** explicitly requests companion transport even when external automation is detected.
@@ -90,7 +102,7 @@ Unsupported directions remain unavailable. Use On if you want Peepo to back up c
 
 ## Workstation Filters
 
-On a recipe-capable job row, click the **funnel icon** (hover label **Filter**) to open a **3×3 grid of nine ghost slots** in the companion GUI.
+On a recipe-capable job row, click the **funnel icon** (hover label **Filter**) to open a **3Ã—3 grid of nine ghost slots** in the companion GUI.
 
 - Click a slot with a finished output item on your cursor to allow that output. Your real item is not consumed.
 - Right-click a slot, or click it with an empty cursor, to clear it.
@@ -98,25 +110,53 @@ On a recipe-capable job row, click the **funnel icon** (hover label **Filter**) 
 - The grid is an allow-list, not a crafting pattern or priority order. Put real ingredients in linked Supply containers.
 - Workstation filters belong to the station and are shared by companions assigned to it. Some filter changes reset processing progress, but do not discard stored ingredients.
 
-Filters are available for Cooking Pots, supported standard processors, Hearth Ovens, Cutting Boards, Skillets, Kitchen Stoves, Cider Barrels, Candy Kettles, vanilla cooking/brewing stations, Beehives/Bee Nests and both Crafters. The Electroplating Bath accepts the tool/armor type as its output filter. Hearth Ovens accept whole raw or baked pies/cakes as filter icons and display the baked result. Cider Presses and Canning Kettles use their fixed workflows without this selector. Gardens have a separate single crop/seed selector.
+Filters are available for Cooking Pots, supported standard processors, Hearth Ovens, Cutting Boards, Skillets, Kitchen Stoves, Cider Presses/Barrels, Candy and Canning Kettles, Spinning Wheels, Punch Bowls, vanilla cooking/brewing stations, Beehives/Bee Nests and both Crafters. The Electroplating Bath accepts the tool/armor type as its output filter. Hearth Ovens accept whole raw or baked pies/cakes as filter icons and display the baked result. Canning Kettles display sealed preserve jars; Spinning Wheels accept the yarn color produced by the desired wool. Gardens have a separate single crop/seed selector.
+
+### Production stock targets
+
+Cooking Pot, Hearth Oven, Cutting Board, Skillet, Kitchen Stove, vanilla Furnace/Smoker/Blast Furnace/Campfires, all three starter workshops, standard item-recipe processors, the vanilla Crafter and Auto-Crafter can maintain finished-product stock. Open **Filter**, select a ghost product with an empty-hand left-click, and switch **Unlimited** to **Maintain stock**. Set **Target** and **Restock at**; arrows apply immediately, while typed values use **Apply quantities** or Enter. Values count items, not stacks. For example, Target 64 / Restock at 32 refills to 64, then waits until 32 or fewer remain. Right-click clears a ghost; empty filters still allow any available recipe (Crafters retain their configured pattern).
+
+Targets are separate for each product and shared by helpers at that workstation. The initial counted containers are the job's linked Outputs. **Use linked Outputs** adopts the current job links as the shared list; its chest names/coordinates appear below. Supply is not counted. Products waiting at the station, in transit and committed to cooking also count, preventing duplicate orders by helpers. Whole batches and uniform bonuses can produce a small surplus. Unavailable counted storage pauses new replenishment rather than being treated as empty. Finished products and already committed batches are still handled normally.
+
+New filters and existing saves remain Unlimited. These controls manage companion replenishment; manual/native external production keeps its existing behavior. See [production stock targets](features/companion-production-stock.md) for shared helpers, counting and limits.
+
+Standard processors include machines such as the Electric Furnace, Crusher, Alloy Smelter, Metal Press and Wire Drawer. They retain their normal recipe sizes, electricity use and helper effort. Workshop batches already crafting count even after their ingredients leave the input slots; needed tools, ceramics and fuel can still be supplied to finish them. Native byproducts are retained and delivered, but uncertain bonus yields are not promised in advance.
+
+Stock targets also cover **Cider Press, Cider Barrel, Candy Kettle, Canning Kettle, Punch Bowl, Spinning Wheel, Brewing Stand, Alchemy Crucible, Electroplating Bath and industrial recipes with item inputs and outputs**. All use the same Filter controls and linked Supply/Output. Generators, collection zones and serving/restocking-only jobs keep their existing controls.
+
+- Cider Press targets count sweet cider; pomace is still delivered. Cider Barrels count the selected Sparkling/Aged batch throughout aging. If both stages are allowed, the next empty batch favors the greater relative shortage.
+- Canning targets count sealed jars of the selected preserve; unsealed or spoiled jars do not satisfy them. Spinning targets distinguish yarn colors and keep the native four-yarn wool batch.
+- Punch and candy keep whole ingredient yields. Bottles, reusable trays and recipe leftovers still use normal transport; candy already cooking or setting finishes before a new batch starts.
+- Brewing targets distinguish potion types, including strength/duration and splash/lingering forms. Peepo fetches only the missing number of bottles (up to three) and completes all intermediate steps before delivering the final potion.
+- Alchemy keeps the written formula and native heat/water requirements. A whole formula can exceed a small target. Draught/Salve selection follows the Filter; when both are allowed, an idle batch favors the greater relative shortage. Water still uses the native fluid supply.
+- Electroplating counts plated tools/armor of the selected item type; unplated items do not count. Coating metal, acid, repairs and electricity retain their normal rules. Different coatings of the same item share its goal.
+- Industrial item goals include native work-lane results already committed. Native recipe locks, pause controls, stock caps, tools and fluids remain authoritative. Fluid-only products keep the machine's own fluid targets; their bucket ghosts show **Machine controls** in the companion Filter.
+
+For both Crafters, configure the real recipe grid first, then select its finished product in **Filter** and set a target. Peepo keeps that pattern and stops fetching ingredients when enough products are stored, queued or in transit. The Auto-Crafter's retained last item in each slot is its pattern and does not count as pending stock. The vanilla Crafter remembers its pattern after the grid empties, including for editing its Filter target. Keep supplying redstone pulses to the vanilla Crafter and normal power to the Auto-Crafter. Whole crafts may exceed a target (for example, a four-stick recipe with a target of one); container remainders still go to Output.
 
 ## Supported jobs
+
+The regular **Crafting Table** now supports companion work. Assign it with the Planner, link Supply/Output, and put desired finished products into **Filter**; its usual stock targets apply. No seeded crafting grid is required. Peepo or Jughead chooses an available ordinary shaped/shapeless recipe, works for **three seconds per craft at 240 JE** (**180 JE with Mechanic's Coveralls**), and delivers the products and container leftovers. An empty Filter allows any supported available recipe. Only one companion works at a table at a time; custom special recipes remain manual.
+
+Normal right-click still opens the player's vanilla crafting menu. **Shift-right-click with an empty hand** recovers the companion's buffered ingredients/results; anything that will not fit stays at the table. Its saved companion workspace means crafting tables can no longer be moved by pistons. See [crafting-table work](features/companion-crafting-table.md).
 
 | Assignment | What to provide and expect |
 | --- | --- |
 | Generator Wheel | One companion runs the wheel using its energy reserve. It stops when the buffer is full or it needs rest. Electrical output is from the two sides. The GUI shows stored power, companion energy and its name. |
 | Hand Crank | One companion turns it and pauses when a connected flywheel is full. |
 | Standard processing machines | Peepo assists production. Full multiblocks generally support two helpers at **+25% speed each**; compact/single-block machines generally support one at **+50%**. Supported item recipes can fetch ingredients and collect outputs. Normal power, fluid, heat and machine-formation requirements remain. Electrical generators and storage are not processor assistance jobs. |
-| Electrolytic Separator | Assign the same machine to up to two companions, **+25% speed each**. Each spends **16 reserve JE per productive tick**. Extra processing pays normal machine electricity; supply water/brine and remove gases/lye with pipes. Uses the valve and wrench clips. Item Supply/Output and Filter are not applicable. |
+| Industrial processors (40 forms) | Assign up to two companions, **+25% speed each**. Includes entry/bulk chemistry, electrolysis, fermentation, metals, polymers, precision finishing and wet processing. Supply delivers ingredients and reusable socket tools; Output collects solid products/byproducts. Filter accepts product items or fluid-output buckets. Fluids still use pipes. |
 | Furnace / Smoker / Blast Furnace | Supply valid cooking inputs and ordinary furnace fuel. Output collects results and spent fuel containers; normal cooking speed is unchanged. |
 | Brewing Stand | Choose final potion(s) in Filter. Supply water bottles or other base potions, all intermediate reagents and brewing fuel. Peepo plans up to eight brewing steps, keeps intermediate potions in the stand, and delivers the finished batch to Output. Empty Filter performs any available single step. |
 | Beehive / Bee Nest | Choose Honey or Honeycomb in Filter. A full hive and campfire smoke are required. Honey uses empty glass bottles from Supply; Honeycomb uses equipped shears or a Tools chest. Results go to Output. |
+| Tree Tap | Fetches empty glass bottles, collects ready latex in batches, and delivers latex bottles to Output. Bucket upgrades stay manual. |
 | Bat House | Collects accumulated guano into normal cargo and delivers it to linked Output. No tools or Supply needed; bats and production timing stay unchanged. |
 | Campfire / Soul Campfire | Light it first. Supply brings up to four compatible cooking inputs and Output collects saved cooked results. Keep safe space beside the fire. |
 | Composter | Supply compostable items; Output takes ready bone meal. Normal compost yields and maturation apply. Use a dedicated supply to avoid composting wanted crops. |
 | Vanilla Crafter | Manually seed its complete grid, then assign and supply matching ingredients. Peepo remembers the pattern, refills it and collects results/remainders. A normal redstone clock is still required. |
+| Crafting Table | Choose finished products in Filter and supply their ingredients. One companion stands on the tabletop, gathers ingredients near its center, presses them together and inspects the result. Output receives results and every native container remainder. Uses companion energy and supports stock targets. |
 | Coal Generator / Steam Generator / Large Steam Engine | Supply the machine's accepted solid fuels. Boilers can also receive water buckets; Output returns empty buckets. Pipes/source-water operation still works. No production boost. |
-| Auto-Crafter | Seed the real 3×3 grid with one item in each required slot. Supply replenishes that pattern; Output collects products and container remainders. Normal energy/redstone rules apply. |
+| Auto-Crafter | Seed the real 3Ã—3 grid with one item in each required slot. Supply replenishes that pattern; Output collects products and container remainders. Normal energy/redstone rules apply. |
 | Electroplating Bath | Supply a compatible damageable item and nickel, silver or gold ingots; pipe in sulfuric acid. Output takes the actual plated/repaired item, preserving its other components. |
 | Cooking Pot | Provide heat and the recipe's ingredients/containers. Peepo brings balanced bulk ingredient loads, then stirs at **+50% cooking speed** until ingredients run out or the pot's result slots fill, before collecting and delivering the finished batch. Supply and Output use the existing links and controls. |
 | Cutting Board | Provide a knife and valid cutting inputs. Peepo stands at the board and makes a two-handed chop. The knife loses durability; all recipe results are retained for Output. |
@@ -136,11 +176,15 @@ The [processor list and effort table](features/companion-jobs.md#processor-assis
 
 ### Industrial machine assistance
 
-The Electrolytic Separator is the first supported machine using the new industrial framework. Select a tamed companion with the Planner and right-click any Separator part; repeat with a second companion for the full **+50% speed**. Keep two reachable standing spaces around its base. Helpers prefer the front, with side/rear alternatives when pipes or other obstacles block it. Each companion still uses one work assignment and its normal priorities, meals and rest settings.
+All 40 current industrial recipe processors support companions. Select a tamed companion with the Planner and right-click any machine part; repeat with a second companion for the full **+50% speed**. Keep two reachable standing spaces around its base. Helpers prefer the front, with side/rear alternatives when pipes or other obstacles block it. Deliveries also approach the outside of the full machine. Each companion still uses one work assignment and its normal priorities, meals and rest settings.
 
 One helper costs **16 reserve JE/t (320 JE/s)**; two cost 32 JE/t combined. These are gross work costs before any applicable regeneration. The Separator's unmodified electrical draw is 256 JE per processing step: assistance raises average demand to roughly **320 JE/t with one helper or 384 JE/t with two**, without reducing a batch's total electrical cost. Upgrades retain their native effects. Missing power for extra work limits assistance; full outputs, missing feed, pause and incomplete structures stop useful work. The Jobs display reports the blocking condition.
 
-There is no item hauling for this fluid-only machine. Its gases and lye still leave through native fluid ports. The new shared helper support is opt-in for future processing forms; the Gas Burning Generator is not enabled. See the [industrial companion record](features/companion-industrial-machines.md).
+For other industrial forms, the reserve cost is **10 JE/t per assisted lane per helper** for chemical, synthesis and distillation families, and **16 JE/t per lane** for electrolysis. Expanded machines have up to two lanes and Bulk machines up to four: a fully active bulk electrolyzer costs each helper 64 JE/t. Each lane's extra progress also pays its actual recipe/profile/upgrade electricity cost.
+
+Link normal Supply and Output containers. Peepo supplies up to eight batches of ingredients plus reusable catalyst beds, molds, dies and other socket tools, and collects solid products and byproducts. An obsolete idle tool can go to Output before replacement; running tools and upgrade cards stay protected. **Filter** accepts finished items or bucket icons for fluid products. Empty allows any available recipe, but the machine's own recipe lock and stock targets still apply. Required fluids must already be available through pipes. Output-only and fluid-only forms simply omit inapplicable item deliveries.
+
+**Auto** detects connected active hoppers/extractors and recent pipe/conveyor item transfers. Use **On** if Peepo should keep supplying socket tools alongside automated ingredient input. The Coastal Seawater Intake and gas/bio/combined-cycle generators remain outside this integration. See the [expanded industrial companion record](features/companion-expanded-industry.md).
 
 During Supply/Output trips, companions carry a visible example of their real cargo in both hands and reach to pick up or put down items. Ground planting and hand picking have their own motions; water collection holds the container in one hand and bends over to scoop, and Sprinkler filling tips the water bucket. Skillet and Kitchen Stove loading includes a brief spatula motion. These animations add no work delays, extra trips or energy costs. The existing pie/cake, hoe and overhead harvesting animations remain in use. See [task animations](features/companion-task-animations.md) for details.
 
@@ -215,7 +259,7 @@ A wheel acting as a cursed portal pauses companion input and work. This job spin
 
 ### Gardens
 
-Select your companion, shift-right-click the Planner, choose **Farmland: select two corners**, then right-click two opposite ground corners. Both corners are included, up to **16×16 blocks**, with up to three blocks of ground-height difference. One zone uses one of the four shared job slots. Peepo discovers farmland and planter boxes within those bounds, including newly tilled soil, without reassigning the zone. Gaps and paths are allowed. Existing saved eight-cell plots keep their exact boundaries, crop selection and Supply/Output links; remove and redraw them to use the new zones. Left-click either zone corner with the Planner, or remove its Jobs row, to delete it.
+Select your companion, shift-right-click the Planner, choose **Farmland: select two corners**, then right-click two opposite ground corners. Both corners are included, up to **16Ã—16 blocks**, with up to three blocks of ground-height difference. One zone uses one of the four shared job slots. Peepo discovers farmland and planter boxes within those bounds, including newly tilled soil, without reassigning the zone. Gaps and paths are allowed. Existing saved eight-cell plots keep their exact boundaries, crop selection and Supply/Output links; remove and redraw them to use the new zones. Left-click either zone corner with the Planner, or remove its Jobs row, to delete it.
 
 Use the garden row's ghost slot to choose a seed or supported raw crop; right-click/empty-cursor clears it to Automatic planting. Put real seeds in cargo or linked Supplies. Existing young crops finish growing before replacement. Harvests keep replanting material as needed and deliver surplus through Output.
 
@@ -226,7 +270,7 @@ Planter boxes share the Farmland zone and Supply/Output controls. Include plante
 
 ### Orchards
 
-For orchard harvesting, choose **Orchard: select two corners** in the Planner and click opposite ground corners. The 16×16 footprint includes fruit-bearing leaves up to **eight blocks above the higher corner**. Peepo picks ripe apples, chestnuts, pears, peaches, lemons, oranges, plums and bananas using the trees' normal yields, then leaves the foliage intact to regrow fruit. He works from safe ground below or beside the cluster, with an unobstructed overhead reach of up to eight blocks; fruit behind a trunk, floor or another canopy layer is skipped. Leave walkable space below the fruit-bearing leaves.
+For orchard harvesting, choose **Orchard: select two corners** in the Planner and click opposite ground corners. The 16Ã—16 footprint includes fruit-bearing leaves up to **eight blocks above the higher corner**. Peepo picks ripe apples, chestnuts, pears, peaches, lemons, oranges, plums and bananas using the trees' normal yields, then leaves the foliage intact to regrow fruit. He works from safe ground below or beside the cluster, with an unobstructed overhead reach of up to eight blocks; fruit behind a trunk, floor or another canopy layer is skipped. Leave walkable space below the fruit-bearing leaves.
 
 Orchards use the same real eight-slot cargo, job priorities and linked Output containers. Supply can stay linked, but this harvest-only job consumes no seeds, saplings or tools. It does not plant trees, cut logs, accelerate growth or collect unrelated ground items. Picking takes **80 ticks at 4 JE/t (320 JE)** plus hauling; a hoe gives no orchard bonus and suffers no wear. Full cargo leaves fruit on the tree until space is available.
 
@@ -244,7 +288,7 @@ Use the existing **Farmland: select two corners** option for sugar cane, bamboo,
 | Sweet berries | Picks fully mature bushes using normal harvesting loot, leaving bushes to regrow. Does not walk through them. |
 | Glow berries | Picks berries without cutting their vines. Replants remembered missing vine positions only when their support still permits it. No bone meal is used. |
 | Cocoa | Harvests mature pods and spends one bean from the harvest, or cargo, to replant on the same log face. With no bean available, the remembered position waits for Supply. |
-| Cranberries | Picks ripe bushes for their normal 2–3 cranberries and leaves them flowering in water. Planting uses cranberries in shallow source water above bog soil. |
+| Cranberries | Picks ripe bushes for their normal 2â€“3 cranberries and leaves them flowering in water. Planting uses cranberries in shallow source water above bog soil. |
 | Rice | Supply **Rice** for planting. Mature plants give **Rice Panicles**, reset to their native regrowth stage and keep their flooded base. Even replacing a ripe rice plant with a different selected crop leaves the water intact. |
 
 For a mixed garden with **Automatic planting**, plant the special crops once so Peepo discovers and remembers their positions. Up to 256 special planting positions per zone persist with the companion, including cocoa faces and vine locations. Existing bushes/stalks remain planted during picking. Clearing a remembered plant allows Peepo to replace it; remove/reassign the zone to forget its planting positions. Clearing the crop selector does not erase these positions.
@@ -275,6 +319,24 @@ Supply **glass bottles**, **empty buckets**, or **empty/partly filled Gourd Cant
 Bottles become ordinary water potions; canteens refill to all three charges and keep their custom components. Both preserve the source. Buckets use normal Minecraft pickup and **remove the source block**: use a renewable/infinite-water pool for continuous bucket filling. Flowing water, cauldrons and waterlogged blocks are not collection targets. A missing source pauses the assignment without losing already-filled cargo; it resumes when source water returns. Full cargo or Output pauses collection rather than discarding containers.
 
 A collection Output chest can also be Supply for brewing, cooking or another job. This collects portable water containers; it does not irrigate crops or fill machine tanks directly. Mob-griefing, town protection, job priorities, resting and settings-menu pauses apply. See the [water collection feature record](features/companion-water-collection.md).
+
+### Fishing
+
+Select Peepo or Jughead with the **Companion Planner**, shift-right-click to choose **Fishing: choose seat, then water**, then right-click a solid, dry shore/dock block and a source-water block. The cast can span **10 blocks horizontally**, with water at the seat block's height or up to three blocks below. Leave a clear casting line and space for the companion above the seat. Each seat uses one work slot; only one helper uses that seat at a time. The Planner shows both markers and their connecting line.
+
+Equip a **fishing rod in Hand**, or stock a Supply chest with rods and enable its **Tools** setting. Keep Hand unlocked for automatic replacement. Link **Output** and select **Work**. Existing job priorities, per-job Supply/Output modes, container links, owner permissions, schedules and energy recovery apply. Fishing has no recipe Filter: catches use Minecraft's normal random fishing loot table, including data-pack changes. Open-water treasure requires the normal clear 5-by-5 water footprint; smaller pools can yield fish and junk. Rain, sky cover, Lure and Luck of the Sea affect fishing. Rods wear down normally, Unbreaking applies, and Mending can repair the working rod from catch experience without spawning player XP. Player-triggered magical rod abilities are not automated.
+
+The companion sits facing the water with kicking feet, casts a full-size rod, waits with a visible line and bobber, reacts to a bite, and leans back to reel in. Up to **eight catches** are collected before delivery, or fewer when cargo space runs low. A linked Output that cannot accept accumulated catches pauses fishing. With Output disabled or unassigned, catches stay in cargo for manual collection. Landed catches that cannot fit are saved until space is available; changing orders or reloading does not reroll them.
+
+Fishing uses **1 reserve JE per tick**, plus **80 JE per completed cast/reel cycle**, and normal hauling effort. Sitting while fishing is work and does not grant chair-rest regeneration. A missing rod/source, blocked seat/cast, full cargo, occupied seat or blocked Output appears in job status. See the [fishing feature record](features/companion-fishing.md).
+
+### Tree Tap collection
+
+Select a companion with the Planner and right-click a placed **Tree Tap**. Each tap takes one work slot. Link **Supply** containing empty glass bottles and **Output**, then select Work. The companion keeps up to eight unreserved empty bottles in cargo and uses the general interaction animation to collect all currently fitting complete bottles in a batch: one from an ordinary full tap, up to eight from a bucket-upgraded tap. Partial bottle progress stays in the tap.
+
+Collection takes **40 ticks / 2 seconds at 4 reserve JE/t (160 JE per batch)** plus normal delivery effort. Leave clear ground in front of or beside the tap; reachable raised taps can be serviced from below. Empty taps show **Waiting for latex**; missing bottles and full cargo have their own statuses. Full or missing Output retains collected latex in cargo. The existing Supply/Output Auto/On/Off controls apply. Supply may also be provided directly in the eight cargo slots.
+
+Companions do not install bucket upgrades, grow rubber trees or speed up the native fill timer. Native tree requirements remain unchanged. Only one helper works at a tap at a time; claims, mob griefing, feature settings and live storage capacity are checked before collection. See the [tree-tap feature record](features/companion-tree-taps.md).
 
 ### Bat House collection
 
@@ -319,7 +381,7 @@ The magic feature must be enabled, and beds/devices must be awake. Companions us
 
 ### Animal pens
 
-For a combined **Livestock Management** zone, select your companion, shift-right-click with the Planner, choose **Livestock Management: select two corners**, then right-click two opposite ground corners. Both corners count toward the **16×16** maximum. Corners can differ by up to three blocks in height; the zone covers the space above the lower corner through three blocks above the higher corner. Each zone consumes **one work slot**, with Shearing, Milking and Eggs enabled initially. Open that job's **gear (Zone options)** button, and turn individual tasks On or Off. Breeding and Slaughter start **Off**. Turning all five tasks Off pauses new work; any overflow products already on the ground can still be recovered. Remove it through its job row or by left-clicking the first corner with the Planner.
+For a combined **Livestock Management** zone, select your companion, shift-right-click with the Planner, choose **Livestock Management: select two corners**, then right-click two opposite ground corners. Both corners count toward the **16Ã—16** maximum. Corners can differ by up to three blocks in height; the zone covers the space above the lower corner through three blocks above the higher corner. Each zone consumes **one work slot**, with Shearing, Milking and Eggs enabled initially. Open that job's **gear (Zone options)** button, and turn individual tasks On or Off. Breeding and Slaughter start **Off**. Turning all five tasks Off pauses new work; any overflow products already on the ground can still be recovered. Remove it through its job row or by left-clicking the first corner with the Planner.
 
 The enabled tasks take turns as work becomes available. Supply provides empty buckets; a linked Supply with **Tools** enabled provides shears. Output receives wool, milk and collected eggs. Missing equipment pauses that activity without stopping another ready activity. Existing action costs, milk cooldowns, inventory limits and gate handling still apply.
 
@@ -351,6 +413,50 @@ Place a **Lunch Crate**, or put a **Lunch Cover** over a compatible accessible c
 On **Routine**, set the work schedule, break/resume energy thresholds, food preference, carried meal target, alerts and social behavior. Auto works whenever energy allows; Day/Night shifts use Overworld time. Exhausted companions rest before resuming. Beds restore more energy than seats, but sleeping happens only at night in the Overworld. Other dimensions use seated/passive rest.
 
 Companion beds are small, come in the vanilla bed colors and stack into bunks. Assign the specific bunk as home and leave the bottom entrance accessible. Vanilla beds can also be homes. Stools, supported player seats, bed edges and supported fence rails provide sitting places. They close their eyes for sleep and kick their legs while sitting.
+
+## Job uniforms
+
+Farmer, Fisherman, Chef, Mechanic, Porter, Baker, Ranch Hand, Beekeeper, Runner, Alchemist, Orchard Keeper and Groundskeeper outfits fit **both Peepo and Jughead**. Put one in the existing **Costume** slot in the companion menu, or right-click the companion with it when that slot is empty. Remove the current costume through the menu before changing outfits. The Jack o'Lantern costume remains available; outfits cannot stack with it or each other. Tools still belong in **Hand**. Uniforms remain equipped during idle time, sleep, work and transport, and are saved with the companion. Jughead keeps his jug: brimmed hats have an opening, and his chef's hat sits on top of it. The Mechanic has a cap and tool belt, **no goggles**.
+
+| Uniform | Bonus |
+| --- | --- |
+| Farmer's Overalls | 15% faster crop planting/harvesting and 15% less crop-work energy. Each successful harvest has a **15% chance for one extra produce item**. Covers farmland, planter crops, mushroom colonies and magic crops; not orchards, dried bundles, repair or fertilizing. Replanting reserves are taken first, and separate seed drops are not increased. |
+| Fisherman's Outfit | **15% shorter bite waits**, 20% less fishing energy, and a **15% chance to double one fish stack** in a catch. Uses the fish item tag, including tagged modded fish. Treasure/junk are not doubled. |
+| Chef's Outfit | **15% chance to double a produced batch** from the cooking pot, skillet, stove, candy kettle or cutting board. **20% faster timed preparation** on the cutting board and while pulling candy; 10% less energy for cooking-pot/candy/cutting work and linked kitchen Supply/Output travel. Covers pot, skillet, stove, board, candy and canning routes. Native heating, baking, cooking and cooling times stay unchanged. Instantaneous transfers remain instantaneous. |
+| Mechanic's Coveralls | **25% less machine-assistance energy**, including standard/industrial processors and starter workshop benches. The two-helper limit and each helper's existing speed contribution remain unchanged. |
+| Porter's Outfit | **25% less delivery energy** and **25% faster movement while carrying an active delivery**. Works with ordinary job Supply/Output and general porter routes. Empty-hand trips do not receive the speed bonus. The backpack is cosmetic; storage remains eight slots. |
+| Baker's Outfit | **20% faster oven loading/unloading**, and **20% less Hearth Oven delivery/handling energy**, including pies, cakes and fuel. Native baking time is unchanged. |
+| Ranch Hand's Outfit | **20% faster shearing and milking**; **15% less livestock-work energy**, including egg collection, breeding and slaughter when enabled. Milk, breeding and wool-regrowth cooldowns are unchanged. |
+| Beekeeper's Suit | **20% less hive-harvest energy**. Smoke is still required. Successful smoked harvests retain the existing safe behavior and do not provoke bees; the suit does not grant general sting immunity. |
+| Runner's Kit | **15% less reserve energy** while working a Generator Wheel or Hand Crank. The same electricity/kinetic output and storage limits apply. |
+| Alchemist's Robe | **20% faster movement with loaded brewing-stand/crucible deliveries** and **20% less delivery energy**. Native brewing, formulas, fuel and research remain unchanged. |
+| Orchard Keeper's Outfit | **20% faster fruit/tree-tap collection** and loaded orchard, tap, cider-press and cider-barrel deliveries; **15% less corresponding work/delivery energy**. No extra fruit, latex or cider; native growing, pressing and fermentation intervals are unchanged. |
+| Groundskeeper's Raincoat | **20% faster water filling** and loaded water/sprinkler deliveries; **20% less water-work, water/sprinkler-delivery, farmland-repair and fertilizing energy**. Fertilizer cooldowns, dose limits and priorities stay unchanged. |
+
+Handling transfers that are instantaneous stay instantaneous: the Alchemist, Orchard Keeper and Groundskeeper get their handling-speed benefit during the loaded Supply/Output trip. It does not speed empty-hand trips, generic porter routes or tool fetching. The Baker's bonus instead shortens the actual reach into/out of the oven. Faster timed actions round up to a whole game tick. Work-energy percentages describe the discount per productive tick/debit; completing an action sooner also avoids the remaining work ticks.
+
+Chef bonuses duplicate the recipe's normal result quantities: a recipe making four items can make eight. Peepo/Jughead must wear the Chef outfit while actively cooking/cutting/finishing candy, or when supplying the skillet/stove's raw food. Bonus eligibility stays with that raw food through saves and reloads. Simply collecting finished food never rolls a bonus. Returned buckets, bottles, reusable trays and the act of sealing already-cooked preserves are excluded. Earned extras remain in the station's output or saved pending output if storage is full, and use normal Output deliveries.
+
+Extra crop/fish items use ordinary cargo and Output, including full-storage and interrupted-work handling. Uniforms add no extra crop-growth ticks or world scans. Energy discounts include fractional accounting, so even the Fisherman's one-JE waiting ticks receive the advertised saving over time. Hover a uniform item to read its bonus.
+
+Craft each outfit with **three matching wool, two string, one leather and one job item**. Arrange `string / job item / string` across the top, `wool / leather / wool` in the middle, and one wool in the bottom center:
+
+| Outfit | Wool | Job item |
+| --- | --- | --- |
+| Farmer | Blue | Wheat |
+| Fisherman | Brown | Raw cod |
+| Chef | White | Bowl |
+| Mechanic | Blue | Copper ingot |
+| Porter | Green | Chest |
+| Baker | White | Bread |
+| Ranch Hand | Brown | Shears |
+| Beekeeper | Yellow | Honeycomb |
+| Runner | Red | Sugar |
+| Alchemist | Purple | Glass bottle |
+| Orchard Keeper | Green | Apple |
+| Groundskeeper | Green | Water bucket (returns an empty bucket) |
+
+Recipes unlock when you obtain the job item. The outfits are also in Creative's Tools & Utilities tab. See the [uniform feature record](features/companion-uniforms.md).
 
 ## Personal touches and moving companions
 

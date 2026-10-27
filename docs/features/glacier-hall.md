@@ -39,7 +39,7 @@ A vast cavern in the heart of a glacier, 80 blocks across, 44 high and 88 long, 
 - **Overhead:** **giant icicles** hang from the vault, some in clusters, none lower than 15 blocks above the lake. A crack runs across the vault's crown, open to the pale sky.
 - **The light:** hidden light blocks, as if the daylight soaked through the ice: brightest under the crack and at the arrival. Snowflakes drift in the air.
 
-Everything else is the shared framework ([hollow-acre.md](hollow-acre.md#lairs-the-shared-rules)): an instance per opening, at most eight; at most four players; nothing can be built or broken; the mist's toll at the edges; Grave Goods on death; closing after 30 seconds empty.
+Everything else is the shared framework ([hollow-acre.md](hollow-acre.md#lairs-the-shared-rules)): an instance per opening, at most eight; at most four players; nothing can be built or broken; the mist's toll at the edges; nothing lost on death; closing after 30 seconds empty.
 
 ## Changes from the plan
 
@@ -58,8 +58,9 @@ Everything else is the shared framework ([hollow-acre.md](hollow-acre.md#lairs-t
   - snow blocks, from snowballs;
   - snow or ice to stand on, in the cold biomes or under Jugcraft's winter snow (`seasons.snow`).
 - **Outputs:** the way into the Glacier Hall, where the Yeti King will wait (part 2).
-- **Technology and magic:** none; the hall is an adventuring destination. Its fight's loot (part 2) brings Arms VII's two Yeti King trophies into survival.
+- **Technology and magic:** the hall is an adventuring destination, and arriving in it is Rimekeeping's field study: with First Light understood, it can understand Rimekeeping without a bench (Concordance Chunk B, unit 3; [Rime and Strata](arcane-concordance-rime-strata.md)). Nothing in the hall changed for it. Its fight's loot (part 2) brings Arms VII's two Yeti King trophies into survival.
 - **Reachable entry path:** every input is reachable in the Discovery tier without the hall: no circular unlock.
+- **The encyclopedia (since Concordance Chunk B, B-02):** carrying a Frost Horn shows the hall's dossier under Expeditions: the rite, the horn's recipe, the Seasonal Stall's snow blocks where a town sells them that day, that it works all year and the party it holds; the Yeti King's part follows once he is met ([yeti-king.md](yeti-king.md)). A first win over him completes the First Light route's lair step. Since unit 4 (B-08), the rite also names what readies a player for his frost: Winter Brine's Frostward (up to 120 seconds a draught, the data's) and the Yeti Mitten, as text and icons with no recipe grid (B-P29), with a link to the codex's Winter Brine once the Alembic Arts are observed; with the Concordance switched off, the Mitten only ([arcane-concordance-winter.md](arcane-concordance-winter.md)).
 
 ## Balance and automation
 
@@ -109,11 +110,13 @@ Nothing is renamed.
 
 *The client game test's pictures (CI, commit `ccdaca8`): the whirl where the horn was blown at midnight, then in the hall the view from the ledge, the lake from the ramp's foot, the throne, the vault, an ice column, the west den and the Grey Mist's arch. The test client renders at 480x270.*
 
-CI (10 October 2026, GitHub Actions, the pins in [PLATFORM.md](../PLATFORM.md)):
+CI (GitHub Actions, the pins in [PLATFORM.md](../PLATFORM.md); 10 October 2026, and 14 October 2026 for Concordance Chunk B):
 
 | Commit | What ran | Result |
 | --- | --- | --- |
 | `ccdaca8` | Build, data audit, game tests, client game tests (main merged in) | **All pass:** all 1283 required game tests and `GlacierHallClientGameTests`. The pictures above are from this commit |
+| `0e7de6bf1` (Concordance Chunk B, unit 2; run 38534127130, by workflow_dispatch; not merged) | Build, data audit, every server game test with and without the optional integrations, every client test class | 1656 of 1657 game tests passed in each server job, `GlacierHallGameTests` among them; the one failure was a Yeti King charge test ([yeti-king.md](yeti-king.md#verification)). `WorldDesignerClientGameTests` and `GlacierHallClientGameTests` passed by their log lines in shard 4, which then failed in `YetiKingClientGameTests` |
+| `1266c905a` (unit 2; run 38543250503, by workflow_dispatch; not merged) | The same | **All pass:** all 1658 required game tests in both server jobs, and every client test class: `GlacierHallClientGameTests` and `WorldDesignerClientGameTests` in shard 4, `LairClientGameTests` in shard 0 |
 
 Run locally:
 
@@ -132,15 +135,34 @@ The game tests (`GlacierHallGameTests`) show what a game-test server can:
 2. its template loads in the running game, at the size `Lair.GLACIER_HALL` gives, with all six of its own blocks and the Grey Mist, and the game's data version;
 3. the horn's checks: not by day; at night not on grass or stone, but on a snow block, packed or blue ice, Jugcraft's winter snow or in a snow layer;
 4. the horn blown in full when no instance can open: the hall is full, the horn is kept, nobody moves or is frosted; off the snow it is refused and kept;
-5. the hall's snow and ice: glare ice is as slick as blue ice and the snow is not; trampled snow is a whole block or a half one; the six blocks cannot be broken and have no item.
+5. the hall's snow and ice: glare ice is as slick as blue ice and the snow is not; trampled snow is a whole block or a half one; the six blocks cannot be broken and have no item;
+6. (since Concordance Chunk B, unit 2) every refusal keeps the horn: by day, with the lairs switched off, and through the item off the snow, which still rests it; nothing opens, moves or frosts;
+7. (unit 2) at night it is answered on every block of `#jugcraft:frost_horn_ground`, and on Peaceful, where the hall opens empty (proposed, B-P37). That it is answered out of the Witching Season with `lairs.off_season` off is unit 1's `theHornIsNoHalloweenRite` (below).
 
 The client game test (`GlacierHallClientGameTests`, CI job `client`) runs the horn from end to end in a real world, with its one player in survival:
 1. the horn blown on the snow at midnight opens an instance in the hall's own dimension and places the hall (the ledge under the arrival, the arch's mist, the lake's drift snow, glare ice and trampled ring, the ramp's half step, the throne). It uses up the horn and rests it, opens a whirl where it was blown, and lands the player on the ledge, frosted but not frozen through, unable to build;
-2. the arch's mist can be used, and a block cannot be placed on the lake; falling out of the hall throws the player back to the ledge for the mist's toll;
-3. leaving takes the player back to where they stood. A second horn at the open whirl is refused and kept, and using the whirl takes the player back into the same hall, frosted again;
+2. the arch's mist can be used, and a block cannot be placed on the lake; (since Concordance Chunk B, unit 2) a horn blown in the hall is refused and kept; falling out of the hall, or (unit 2) straying sideways past its bounds, throws the player back to the ledge for the mist's whole toll, which Resistance IV and a Brace do not turn aside;
+3. leaving, through the arch's Grey Mist used as a click uses it (unit 2), takes the player back to where they stood, able to build. Then:
+   - forty ticks standing in the whirl take nobody in (unit 2); a second horn blown there is refused and kept;
+   - (unit 2) by day, through the item and the world's own clock, the horn is refused, kept and rested;
+   - (unit 2) with every instance of the hall taken, it is refused and kept;
+   - (unit 2) a whirl into a full party takes nobody in and frosts nobody;
+   - using the whirl, (unit 2) as a click uses it, takes the player back into the same hall, frosted again;
 4. when the instance closes, the player goes home and the whirl is gone.
 
 Then it takes eight pictures: the whirl in the snow at midnight, and in the hall the view from the ledge, the lake from the ramp's foot, the throne, the vault, an ice column, a den and the Grey Mist's arch.
+
+Concordance Chunk B, unit 1 (B-02) adds `GlacierHallGameTests.theHornIsNoHalloweenRite`, for the dossier's "works all year": with the Halloween event over and `lairs.off_season` off, the Cursed Spindle waits for the season but the horn is still answered at night on snow. It passes in CI (runs 38509414542, 38514144531 and 38519234934, by workflow_dispatch; not merged).
+
+Concordance Chunk B, unit 2 ([its contract](concordance-chunk-b.md); not merged) adds the server tests 6 and 7 and the client steps marked above: tests only, with no change to the hall or the horn. They pass in CI (run 38543250503, above).
+
+**Designed worlds** (unit 2): `WorldDesignerClientGameTests` makes a world through the create-world screen with the World Designer's generator in place of the Overworld's. There, and again after reopening it, the Frost Horn blown on placed snow opens a Glacier Hall and takes the player in, and closing it sends the player back to where they stood; the Kiln Seal does the same for a Cinder Kiln. `tools/world-designer/model.test.cjs` checks that an exported preset names only the three vanilla dimensions and writes no dimension files, so the hall's dimension comes from the installed mod, as in any world. Not run: a world from an actual exported ZIP, which stays a check by hand ([WORLD_DESIGNER.md](../WORLD_DESIGNER.md)).
+
+The restart: `LairClientGameTests` closes a Glacier Hall with its King asleep (a restart simulated) and then restarts a world for real with the player inside a Glacier Hall ([hollow-acre.md](hollow-acre.md#verification)).
+
+Concordance Chunk B, unit 3 ([Rime and Strata](arcane-concordance-rime-strata.md); not merged) adds to `GlacierHallClientGameTests`: with First Light understood, arriving in the hall is Rimekeeping's field study; and a braced player is still moved by the mist's toll, the Grey Mist and the whirl, and neither the toll nor the whirl spends the Brace. In run 38519234934 the class passed with every other client class (shard 3). Its pictures there (480×270 previews) show the ledge, the lake, the throne, the vault, a column, a den and the Grey Mist's arch as described above; the whirl's (`jugcraft_frost_horn_whirl`) is barely visible, a faint dark smudge of particles at night.
+
+Concordance Chunk B, unit 4 ([Winter Brine and the travel kit](arcane-concordance-winter.md); not merged) adds `EncyclopediaGameTests.theGlacierHallsRiteNamesWinterBrine` for the preparation fact; nothing in the hall changed. It passes in CI (run 38549876709, by workflow_dispatch; not merged), where the hall's own tests and `GlacierHallClientGameTests` (shard 2) passed again.
 
 Not run: the two-client dedicated-server playtest, and play by hand.
 
@@ -150,6 +172,8 @@ The Glacier Hall is its own dimension, so nothing here changes the Overworld but
 
 ## Rollout and open questions
 
-The shared framework's defaults hold: four players and eight instances, Grave Goods on death.
+The shared framework's defaults hold: four players and eight instances, nothing lost on death.
+
+On Peaceful the horn is used up and opens the hall empty, since the Yeti King is a monster and Peaceful has none (proposed, B-P37 in [the Chunk B contract](concordance-chunk-b.md#decisions)). The alternative is to refuse the horn on Peaceful and keep it.
 
 Part 2, the Yeti King, adds the fight on the lake (his Ground Slam bares the drift snow to glare ice, never the trampled snow), his whelps from the dens, his loot (Yeti Fur, the Glacier Maul and Rimeclaw, the Yeti Mitten, his crown), and Yeti Fur in a cheaper horn.

@@ -90,6 +90,15 @@ public final class Vector {
 		return new Vector(out);
 	}
 
+	/** Each axis times {@code times} (a whole number, such as the doses a batch has left). */
+	public Vector times(int times) {
+		long[] out = new long[milli.length];
+		for (int i = 0; i < out.length; i++) {
+			out[i] = Math.multiplyExact(milli[i], (long) times);
+		}
+		return new Vector(out);
+	}
+
 	/** Each axis divided by {@code parts}, rounded down. */
 	public Vector divide(int parts) {
 		long[] out = new long[milli.length];

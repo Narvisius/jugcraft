@@ -112,7 +112,7 @@ final class CompanionEggCollection {
             if(npc.position().distanceToSqr(approach)>.0225){npc.getMoveControl().setWantedPosition(approach.x,approach.y,approach.z,.7);return CompanionStatus.WORKING;}
             if(npc.distanceToSqr(item)>1.5625 || !npc.hasLineOfSight(item))return CompanionStatus.BLOCKED;
             npc.getLookControl().setLookAt(item,20,30);
-            try(var tx=Transaction.openOuter()){if(npc.extractEnergy(ENERGY_PER_TICK,tx)!=ENERGY_PER_TICK)return CompanionStatus.RECOVERING;tx.commit();}
+            try(var tx=Transaction.openOuter()){if(npc.extractWorkEnergy(CompanionUniforms.Type.RANCH_HAND,ENERGY_PER_TICK,tx)!=ENERGY_PER_TICK)return CompanionStatus.RECOVERING;tx.commit();}
             if(++progress<WORK_TICKS)return CompanionStatus.WORKING;
             var result=collect(item);release(npc);status=result;nextScan=now()+(result==CompanionStatus.FULL?100:1);
             npc.transport.workChanged();return result;

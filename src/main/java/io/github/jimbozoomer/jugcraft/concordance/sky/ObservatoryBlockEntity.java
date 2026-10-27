@@ -16,6 +16,7 @@ import io.github.jimbozoomer.jugcraft.concordance.resource.RateBudget;
 import io.github.jimbozoomer.jugcraft.concordance.resource.Reservoir;
 import io.github.jimbozoomer.jugcraft.concordance.resource.Transfers;
 import io.github.jimbozoomer.jugcraft.concordance.rules.Evidence;
+import io.github.jimbozoomer.jugcraft.concordance.spirits.StarReckoning;
 import io.github.jimbozoomer.jugcraft.party.JugcraftParties;
 import java.util.HashSet;
 import java.util.List;
@@ -200,7 +201,8 @@ public class ObservatoryBlockEntity extends BlockEntity implements GeoBlockEntit
 
 	/**
 	 * Records the patterns up at {@code time} and visible here ({@code sky} as in {@link #gather}) as observed by
-	 * {@code player}: practice for the research, and what a master may later recall. Returns how many.
+	 * {@code player}: practice for the research, and what a master may later recall; and, while the observer's pact with
+	 * Stolas is active, its first obligation (Concordance Chunk D, D-05). Returns how many.
 	 */
 	public int observe(ServerPlayer player, ServerLevel level, long time, long gameTime, Function<Pattern, @Nullable String> sky) {
 		if (!Sky.enabled()) {
@@ -215,6 +217,10 @@ public class ObservatoryBlockEntity extends BlockEntity implements GeoBlockEntit
 			ConcordanceProgress.record(player, new Evidence.Practiced(Sky.ACTIVITY, pattern.id()));
 			player.sendSystemMessage(Component.translatable("message.jugcraft.concordance.sky.observed", Sky.patternName(pattern.id())));
 			seen++;
+		}
+		if (seen > 0) {
+			// Concordance Chunk D, D-05 (D-S12): the observer's own pact with Stolas, if active, keeps its first obligation.
+			StarReckoning.observed(player);
 		}
 		return seen;
 	}

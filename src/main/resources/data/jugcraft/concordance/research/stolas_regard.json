@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "principle": "tether",
+  "tradition": "spiritbinders",
+  "stage": "practitioner",
+  "icon": "jugcraft:stolas_starflower",
+  "requires": [
+    {
+      "research": "jugcraft:binding_arts",
+      "state": "understood"
+    }
+  ],
+  "states": {
+    "encountered": {
+      "any": [
+        {
+          "type": "examine",
+          "specimens": "#jugcraft:stolas_specimens"
+        }
+      ]
+    },
+    "observed": {
+      "any": [
+        {
+          "type": "practice",
+          "activity": "jugcraft:cultivation"
+        }
+      ]
+    },
+    "understood": {
+      "any": [
+        {
+          "type": "practice",
+          "activity": "jugcraft:assay"
+        }
+      ]
+    },
+    "mastered": {
+      "any": [
+        {
+          "type": "practice",
+          "activity": "jugcraft:pact_service"
+        }
+      ]
+    }
+  },
+  "unlocks": {}
+}

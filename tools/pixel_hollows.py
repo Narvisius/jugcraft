@@ -150,11 +150,20 @@ SOUNDS = {
     "entity.villager.work_retro_trader": {"sounds": [{"name": "minecraft:note/bit", "volume": 0.6, "pitch": p}
                                                      for p in (1.0, 1.19, 1.5)],
                                           "subtitle": f"subtitles.{MOD}.entity.villager.work_retro_trader"},
+    # His stomp-clap after a trade (tools/retro_trader_sounds.py writes the .ogg files; RetroTraderJam plays them).
+    "entity.retro_trader.stomp": {"sounds": [{"name": f"{MOD}:entity/retro_trader/stomp{i}", "attenuation_distance": 24}
+                                             for i in (1, 2, 3)],
+                                  "subtitle": f"subtitles.{MOD}.entity.retro_trader.stomp"},
+    "entity.retro_trader.clap": {"sounds": [{"name": f"{MOD}:entity/retro_trader/clap{i}", "attenuation_distance": 24}
+                                            for i in (1, 2, 3)],
+                                 "subtitle": f"subtitles.{MOD}.entity.retro_trader.clap"},
 }
 SUBTITLES = {
     "ambient.pixel_hollows.loop": "Circuitry hums",
     "ambient.pixel_hollows.additions": "Something beeps",
     "entity.villager.work_retro_trader": "Retro Trader plays",
+    "entity.retro_trader.stomp": "Retro Trader stomps",
+    "entity.retro_trader.clap": "Retro Trader claps",
 }
 
 

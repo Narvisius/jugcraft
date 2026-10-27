@@ -8,11 +8,18 @@ import io.github.jimbozoomer.jugcraft.concordance.celestial.Attunement;
 import io.github.jimbozoomer.jugcraft.concordance.celestial.Calendar;
 import io.github.jimbozoomer.jugcraft.concordance.celestial.Pattern;
 import io.github.jimbozoomer.jugcraft.concordance.resource.AstralLedger;
+import io.github.jimbozoomer.jugcraft.concordance.rules.Knowledge;
 import io.github.jimbozoomer.jugcraft.concordance.rules.ResearchState;
 import io.github.jimbozoomer.jugcraft.concordance.sky.AstralClaims;
 import io.github.jimbozoomer.jugcraft.concordance.sky.AstrolabeItem;
 import io.github.jimbozoomer.jugcraft.concordance.sky.ObservatoryBlockEntity;
 import io.github.jimbozoomer.jugcraft.concordance.sky.Sky;
+import io.github.jimbozoomer.jugcraft.concordance.spirits.PactPerchBlockEntity;
+import io.github.jimbozoomer.jugcraft.concordance.spirits.StarReckoning;
+import io.github.jimbozoomer.jugcraft.concordance.spirits.StolasRegard;
+import io.github.jimbozoomer.jugcraft.concordance.worker.Pacts;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
@@ -38,11 +45,16 @@ import net.minecraft.world.level.storage.TagValueInput;
  * event's Harvest Moon; an observatory gathers each occurrence once for its keeper, however the clock is turned back or
  * forward, and pays again only when enough of the world's own time has run; it says why it waits (unaligned, no sky,
  * full); an astrolabe attunes while a pattern is up and the effect stops when it sets or the attunement ends; a master's
- * recall pays once per occurrence; and claims and observatories keep what they hold through a save.
+ * recall pays once per occurrence; and claims and observatories keep what they hold through a save; and (Concordance Chunk
+ * D, D-05) a holder of Stolas's pact, no master, recalls at his perch any pattern they observed, through the one recall a
+ * master's shares, once an occurrence whatever the clock, as far as their resonance goes.
  */
 public class ConcordanceSkyGameTests {
 	private static final String FULL_MOON = "jugcraft:full_moon";
 	private static final String HARVEST_MOON = "jugcraft:harvest_moon";
+	private static final String LANTERN_STAR = "jugcraft:lantern_star";
+	private static final String WINTER_CROWN = "jugcraft:winter_crown";
+	private static final String ECHO_COMET = "jugcraft:echo_comet";
 	private static final long DAY = Calendar.DAY;
 	/** Midnight of day 0: the full moon is up (and nothing else that keeps to no season). */
 	private static final long NIGHT_ZERO = 18000L;
@@ -50,7 +62,7 @@ public class ConcordanceSkyGameTests {
 	private static final Function<Pattern, String> ONLY_MOON = pattern -> pattern.id().equals(FULL_MOON) ? null : "no_sky";
 
 	private static ServerPlayer player(GameTestHelper helper, ResearchState state) {
-		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		ServerPlayer player = TestPlayers.mock(helper);
 		player.setGameMode(GameType.SURVIVAL);
 		if (state != ResearchState.NONE) {
 			ConcordanceProgress.grant(player, "jugcraft:first_light", ResearchState.UNDERSTOOD);
@@ -253,6 +265,214 @@ public class ConcordanceSkyGameTests {
 		copy.loadWithComponents(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), tag));
 		helper.assertTrue(copy.resonance() == observatory.resonance() && starwatcher.getUUID().equals(copy.keeper())
 				&& copy.status().equals(observatory.status()), "The observatory keeps its resonance, keeper and status");
+		helper.succeed();
+	}
+
+	// ---------------------------------------------------------------- Concordance Chunk D, D-03: the sky step
+
+	/**
+	 * Concordance Chunk D, D-03: the sky step (the invitation's precondition) is the server's record of an observation, not a
+	 * window, and asks no research. A novice has none; looking when nothing is up records nothing; once the full moon is
+	 * observed, the step holds at noon with nothing up, and through a save of the claims.
+	 */
+	@GameTest(maxTicks = 20)
+	public void aRecordedObservationCountsWithoutAWindow(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		ServerPlayer novice = player(helper, ResearchState.NONE);
+		ObservatoryBlockEntity observatory = observatory(helper, new BlockPos(1, 1, 1), novice);
+		long noon = DAY + 6000;
+		helper.assertTrue(!StolasRegard.skySeen(novice), "No observation, no sky step");
+		helper.assertTrue(observatory.observe(novice, level, noon, 5_000_000L, ONLY_MOON) == 0 && !StolasRegard.skySeen(novice),
+				"Nothing up: nothing recorded");
+		helper.assertTrue(observatory.observe(novice, level, NIGHT_ZERO, 5_000_000L, ONLY_MOON) == 1
+				&& StolasRegard.observed(novice).containsKey(FULL_MOON), "A novice observes the full moon: no research asked");
+		helper.assertTrue(Sky.up(noon).isEmpty() && StolasRegard.skySeen(novice), "Read at noon, with nothing up, it still counts");
+		AstralClaims claims = AstralClaims.of(level.getServer());
+		AstralClaims loaded = AstralClaims.CODEC.parse(NbtOps.INSTANCE, AstralClaims.CODEC.encodeStart(NbtOps.INSTANCE, claims).getOrThrow()).getOrThrow();
+		helper.assertTrue(!loaded.observed(novice.getUUID()).isEmpty(), "And through a save of the claims");
+		helper.succeed();
+	}
+
+	/**
+	 * Concordance Chunk D, D-03 (10:53): turning the clock gives nothing new. An observation and a gathering made, the clock
+	 * turned back a week and the moon watched again from a second observatory adds no pattern, no research evidence and no
+	 * resonance: the ledger holds the occurrence once.
+	 */
+	@GameTest(maxTicks = 20)
+	public void aTurnedClockMakesNoNewClaim(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		ServerPlayer starwatcher = player(helper, ResearchState.UNDERSTOOD);
+		ObservatoryBlockEntity first = observatory(helper, new BlockPos(1, 1, 1), starwatcher);
+		ObservatoryBlockEntity second = observatory(helper, new BlockPos(4, 1, 1), starwatcher);
+		long game = 6_000_000L;
+		helper.assertTrue(first.observe(starwatcher, level, NIGHT_ZERO, game, ONLY_MOON) == 1
+				&& first.gather(level, NIGHT_ZERO, game, ONLY_MOON).equals("gathering"), "Observed and gathered once");
+		Knowledge knowledge = ConcordanceProgress.knowledge(starwatcher);
+		long resonance = first.resonance();
+		helper.assertTrue(second.observe(starwatcher, level, NIGHT_ZERO - 8 * DAY, game + 100, ONLY_MOON) == 1,
+				"The clock turned back a week: the moon is up again");
+		helper.assertValueEqual(StolasRegard.observed(starwatcher).keySet(), Set.of(FULL_MOON), "No new pattern");
+		helper.assertTrue(ConcordanceProgress.knowledge(starwatcher).equals(knowledge), "No new research evidence");
+		helper.assertTrue(second.gather(level, NIGHT_ZERO - 8 * DAY, game + 100, ONLY_MOON).equals("gathered") && second.resonance() == 0
+				&& first.resonance() == resonance, "No second claim of the occurrence");
+		helper.succeed();
+	}
+
+	// ---------------------------------------------------------------- Concordance Chunk D, D-05: Star-reckoning
+
+	private static Pacts.Reckoning reckon(ServerLevel level, ServerPlayer player, PactPerchBlockEntity perch, String pattern, long time, long gameTime) {
+		return StarReckoning.reckon(level, player, perch.holder(), pattern, time, gameTime);
+	}
+
+	/** D-05 (D-S1, E3): the pact's holder, no master, recalls at the perch a pattern they observed, at its recall cost, for 2,400 ticks, once an occurrence; the game day's quota stops a second; the next occurrence pays another. */
+	@GameTest(maxTicks = 20)
+	public void stolasRecallsAnObservedPatternOncePerOccurrence(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		ServerPlayer holder = ConcordanceWorkerGameTests.regarded(helper);
+		long g0 = ConcordanceWorkerGameTests.dayStart(level, 100);
+		PactPerchBlockEntity perch = ConcordanceWorkerGameTests.stolasPact(helper, holder, new BlockPos(2, 1, 2), g0);
+		ConcordanceWorkerGameTests.observed(level, holder, FULL_MOON, LANTERN_STAR);
+		ItemStack held = ConcordanceWorkerGameTests.holding(holder, AstrolabeItem.CAPACITY);
+		Pattern full = Sky.catalog().pattern(FULL_MOON);
+		long noon = DAY + 6000;
+		helper.assertTrue(!Sky.state(holder).atLeast(ResearchState.MASTERED) && Sky.up(noon).isEmpty(), "No master, and nothing up at noon on day 1");
+		helper.assertValueEqual(reckon(level, holder, perch, FULL_MOON, noon, g0), Pacts.Reckoning.RECALLED, "The pact's holder recalls the full moon they observed");
+		Attunement recalled = holder.getAttached(Sky.ATTUNEMENT);
+		helper.assertTrue(AstrolabeItem.charge(held) == AstrolabeItem.CAPACITY - full.recallCost() && recalled != null && recalled.recalled()
+				&& FULL_MOON.equals(recalled.pattern()) && recalled.until() == g0 + Calendar.RECALL_TICKS, "at its recall cost, for 2,400 ticks: " + recalled);
+		helper.assertTrue(Sky.pulse(holder, recalled, noon, g0 + 20) && holder.hasEffect(MobEffects.NIGHT_VISION), "its effect is theirs whatever the sky");
+		helper.assertTrue(ConcordanceWorkerGameTests.done(level, perch, g0) == 1 && new AstralLedger.Claim(0L, g0).equals(
+				AstralClaims.of(level.getServer()).ledger(holder.getUUID()).claims().get(AstrolabeItem.recallKey(full))),
+				"the day's one reckoning, claimed under recall:<pattern> for occurrence 0");
+		helper.assertValueEqual(reckon(level, holder, perch, LANTERN_STAR, noon + 1000, g0 + 1000), Pacts.Reckoning.QUOTA_SPENT, "A second the same game day is refused");
+		helper.assertTrue(AstrolabeItem.charge(held) == AstrolabeItem.CAPACITY - full.recallCost() && !ConcordanceWorkerGameTests.recalledEver(level, holder, LANTERN_STAR),
+				"and spends and claims nothing");
+		helper.assertValueEqual(reckon(level, holder, perch, FULL_MOON, noon + DAY, g0 + DAY), Pacts.Reckoning.RECALLED_ALREADY, "The next game day, the same occurrence is recalled already");
+		helper.assertTrue(AstrolabeItem.charge(held) == AstrolabeItem.CAPACITY - full.recallCost() && ConcordanceWorkerGameTests.done(level, perch, g0 + DAY) == 0,
+				"nothing spent, and the refusal uses no quota");
+		helper.assertValueEqual(reckon(level, holder, perch, FULL_MOON, 8 * DAY + 6000, g0 + Calendar.minGap(full)), Pacts.Reckoning.RECALLED,
+				"The next full moon's occurrence pays another");
+		helper.assertValueEqual(AstrolabeItem.charge(held), AstrolabeItem.CAPACITY - 2 * full.recallCost(), "at the same cost");
+		helper.succeed();
+	}
+
+	/**
+	 * D-05 (D-S1, E3): a master's own recall and Star-reckoning share one claim on one key: whichever asks first, the other is
+	 * refused for that occurrence and spends nothing (the astrolabe full each time, so only the shared claim can refuse it).
+	 */
+	@GameTest(maxTicks = 20)
+	public void aMastersRecallAndStolassShareOneClaim(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		ServerPlayer master = ConcordanceWorkerGameTests.regarded(helper);
+		ConcordanceProgress.grant(master, Sky.RESEARCH, ResearchState.MASTERED);
+		long g0 = ConcordanceWorkerGameTests.dayStart(level, 100);
+		PactPerchBlockEntity perch = ConcordanceWorkerGameTests.stolasPact(helper, master, new BlockPos(2, 1, 2), g0);
+		AstralClaims.of(level.getServer()).observe(master.getUUID(), FULL_MOON, g0);
+		ItemStack held = ConcordanceWorkerGameTests.holding(master, AstrolabeItem.CAPACITY);
+		Pattern full = Sky.catalog().pattern(FULL_MOON);
+		long noon = DAY + 6000;
+		helper.assertTrue(AstrolabeItem.attune(master, level, held, noon, g0, ONLY_MOON).equals(InteractionResult.SUCCESS)
+				&& AstrolabeItem.charge(held) == AstrolabeItem.CAPACITY - full.recallCost(), "A master recalls by their own route, nothing being up");
+		AstrolabeItem.setCharge(held, AstrolabeItem.CAPACITY);
+		helper.assertValueEqual(reckon(level, master, perch, FULL_MOON, noon + 1000, g0 + DAY), Pacts.Reckoning.RECALLED_ALREADY,
+				"Star-reckoning the same occurrence, a full astrolabe in hand, is recalled already");
+		helper.assertTrue(AstrolabeItem.charge(held) == AstrolabeItem.CAPACITY && ConcordanceWorkerGameTests.done(level, perch, g0 + DAY) == 0,
+				"and spends nothing");
+		long later = g0 + Calendar.minGap(full);
+		helper.assertValueEqual(reckon(level, master, perch, FULL_MOON, 8 * DAY + 6000, later), Pacts.Reckoning.RECALLED, "Star-reckoning the next occurrence first");
+		AstrolabeItem.setCharge(held, AstrolabeItem.CAPACITY);
+		helper.assertTrue(!AstrolabeItem.attune(master, level, held, 8 * DAY + 7000, later + 100, ONLY_MOON).equals(InteractionResult.SUCCESS)
+				&& AstrolabeItem.charge(held) == AstrolabeItem.CAPACITY, "the master's own recall of it, a full astrolabe in hand, is refused, spending nothing");
+		helper.assertTrue(new AstralLedger.Claim(1L, later).equals(AstralClaims.of(level.getServer()).ledger(master.getUUID()).claims().get(AstrolabeItem.recallKey(full))),
+				"One claim, on one key, for both routes");
+		helper.succeed();
+	}
+
+	/** D-05 (E3): the clock moved on the same game day does not reset the quota; turned back, forward or far forward the next game day, it pays no second recall; only the world's own time does. */
+	@GameTest(maxTicks = 20)
+	public void aChangedClockGivesNoSecondRecall(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		ServerPlayer holder = ConcordanceWorkerGameTests.regarded(helper);
+		long g0 = ConcordanceWorkerGameTests.dayStart(level, 100);
+		PactPerchBlockEntity perch = ConcordanceWorkerGameTests.stolasPact(helper, holder, new BlockPos(2, 1, 2), g0);
+		ConcordanceWorkerGameTests.observed(level, holder, FULL_MOON);
+		ItemStack held = ConcordanceWorkerGameTests.holding(holder, AstrolabeItem.CAPACITY);
+		Pattern full = Sky.catalog().pattern(FULL_MOON);
+		long noon = DAY + 6000;
+		int once = AstrolabeItem.CAPACITY - full.recallCost();
+		helper.assertValueEqual(reckon(level, holder, perch, FULL_MOON, noon, g0), Pacts.Reckoning.RECALLED, "Recalled once");
+		helper.assertValueEqual(reckon(level, holder, perch, FULL_MOON, 16 * DAY + 6000, g0 + 100), Pacts.Reckoning.QUOTA_SPENT,
+				"The clock moved on two weeks the same game day: the quota is the game day's");
+		helper.assertValueEqual(reckon(level, holder, perch, FULL_MOON, noon - 8 * DAY, g0 + DAY), Pacts.Reckoning.RECALLED_ALREADY,
+				"Turned back a week, the next game day: that occurrence has paid");
+		helper.assertValueEqual(reckon(level, holder, perch, FULL_MOON, 8 * DAY + 6000, g0 + DAY + 1), Pacts.Reckoning.RECALLED_ALREADY,
+				"Turned forward to the next full moon: too soon by the world's own time");
+		helper.assertValueEqual(reckon(level, holder, perch, FULL_MOON, 80 * DAY + 6000, g0 + DAY + 2), Pacts.Reckoning.RECALLED_ALREADY, "Nor far forward");
+		helper.assertValueEqual(AstrolabeItem.charge(held), once, "and none of it spent anything");
+		helper.assertValueEqual(reckon(level, holder, perch, FULL_MOON, 8 * DAY + 6000, g0 + Calendar.minGap(full)), Pacts.Reckoning.RECALLED,
+				"After enough of the world's own time, the next occurrence pays");
+		helper.succeed();
+	}
+
+	/** D-05 (the balance pinned): outside its event a holder who once observed the Harvest Moon recalls it every game day for 12 resonance until their astrolabe runs short; the Winter Crown every other day for 9. */
+	@GameTest(maxTicks = 20)
+	public void theHarvestMoonRecallsOutsideItsEvent(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		ServerPlayer holder = ConcordanceWorkerGameTests.regarded(helper);
+		long g0 = ConcordanceWorkerGameTests.dayStart(level, 200);
+		PactPerchBlockEntity perch = ConcordanceWorkerGameTests.stolasPact(helper, holder, new BlockPos(2, 1, 2), g0);
+		ConcordanceWorkerGameTests.observed(level, holder, HARVEST_MOON);
+		ItemStack held = ConcordanceWorkerGameTests.holding(holder, AstrolabeItem.CAPACITY);
+		Pattern harvest = Sky.catalog().pattern(HARVEST_MOON);
+		for (long day = 1; day <= 3; day++) {
+			helper.assertTrue(!Sky.inSeason(harvest, day * DAY + 6000) && !Sky.up(day * DAY + 6000).contains(harvest), "Outside its event at noon on day " + day);
+		}
+		helper.assertValueEqual(reckon(level, holder, perch, HARVEST_MOON, DAY + 6000, g0), Pacts.Reckoning.RECALLED, "Day 1: recalled");
+		Attunement recalled = holder.getAttached(Sky.ATTUNEMENT);
+		helper.assertTrue(Sky.pulse(holder, recalled, DAY + 6000, g0 + 20) && holder.hasEffect(MobEffects.HERO_OF_THE_VILLAGE),
+				"Hero of the Village, outside the Harvest Moon");
+		helper.assertValueEqual(reckon(level, holder, perch, HARVEST_MOON, 2 * DAY + 6000, g0 + DAY), Pacts.Reckoning.RECALLED,
+				"Day 2: recalled again, a new occurrence each day");
+		helper.assertTrue(AstrolabeItem.charge(held) == AstrolabeItem.CAPACITY - 2 * harvest.recallCost()
+				&& reckon(level, holder, perch, HARVEST_MOON, 3 * DAY + 6000, g0 + 2 * DAY) == Pacts.Reckoning.TOO_LITTLE
+				&& AstrolabeItem.charge(held) == AstrolabeItem.CAPACITY - 2 * harvest.recallCost(),
+				"Day 3: refused, this astrolabe holding too little (the quota is the only hard limit: another astrolabe would pay)");
+		AstrolabeItem.setCharge(held, AstrolabeItem.CAPACITY);
+		ConcordanceWorkerGameTests.observed(level, holder, WINTER_CROWN);
+		Pattern crown = Sky.catalog().pattern(WINTER_CROWN);
+		helper.assertValueEqual(reckon(level, holder, perch, WINTER_CROWN, 3 * DAY + 6000, g0 + 2 * DAY), Pacts.Reckoning.RECALLED,
+				"The Winter Crown on day 3 (the refused recall used no quota)");
+		helper.assertValueEqual(reckon(level, holder, perch, WINTER_CROWN, 4 * DAY + 6000, g0 + 3 * DAY), Pacts.Reckoning.RECALLED_ALREADY,
+				"day 4 is the same occurrence");
+		helper.assertValueEqual(reckon(level, holder, perch, WINTER_CROWN, 5 * DAY + 6000, g0 + 4 * DAY), Pacts.Reckoning.RECALLED, "day 5 another: every other day");
+		helper.assertValueEqual(AstrolabeItem.charge(held), AstrolabeItem.CAPACITY - 2 * crown.recallCost(), "at 9 resonance each");
+		helper.succeed();
+	}
+
+	/** D-05 (D-S1, E1): only a pattern the holder observed themself is recalled: not one unobserved, unknown or observed by another; once observed, it is. */
+	@GameTest(maxTicks = 20)
+	public void anUnobservedPatternIsRefused(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		ServerPlayer holder = ConcordanceWorkerGameTests.regarded(helper);
+		ServerPlayer other = ConcordanceWorkerGameTests.regarded(helper);
+		long g0 = ConcordanceWorkerGameTests.dayStart(level, 100);
+		PactPerchBlockEntity perch = ConcordanceWorkerGameTests.stolasPact(helper, holder, new BlockPos(2, 1, 2), g0);
+		ConcordanceWorkerGameTests.observed(level, holder, FULL_MOON);
+		ConcordanceWorkerGameTests.observed(level, other, LANTERN_STAR);
+		ItemStack held = ConcordanceWorkerGameTests.holding(holder, AstrolabeItem.CAPACITY);
+		long noon = DAY + 6000;
+		helper.assertTrue(reckon(level, holder, perch, ECHO_COMET, noon, g0) == Pacts.Reckoning.NOT_OBSERVED
+				&& reckon(level, holder, perch, LANTERN_STAR, noon, g0) == Pacts.Reckoning.NOT_OBSERVED
+				&& reckon(level, holder, perch, "jugcraft:no_such_pattern", noon, g0) == Pacts.Reckoning.NOT_OBSERVED,
+				"Never observed, observed only by another player, or unknown: refused");
+		helper.assertTrue(AstrolabeItem.charge(held) == AstrolabeItem.CAPACITY && !ConcordanceWorkerGameTests.recalledEver(level, holder, ECHO_COMET)
+				&& ConcordanceWorkerGameTests.done(level, perch, g0) == 0, "spending, claiming and counting nothing");
+		helper.assertValueEqual(StarReckoning.choices(level.getServer(), holder.getUUID()).stream().map(Pattern::id).toList(), List.of(FULL_MOON),
+				"Stolas offers what they observed");
+		AstralClaims.of(level.getServer()).observe(holder.getUUID(), ECHO_COMET, g0);
+		helper.assertTrue(reckon(level, holder, perch, ECHO_COMET, noon, g0) == Pacts.Reckoning.RECALLED
+				&& AstrolabeItem.charge(held) == AstrolabeItem.CAPACITY - Sky.catalog().pattern(ECHO_COMET).recallCost(),
+				"Once observed, the 19-day Echo Comet is recalled without waiting for it");
 		helper.succeed();
 	}
 }

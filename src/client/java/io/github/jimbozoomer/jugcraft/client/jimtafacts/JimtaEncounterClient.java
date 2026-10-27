@@ -20,7 +20,7 @@ public final class JimtaEncounterClient {
     private static final DataTicket<Float> WALK=DataTicket.create("jimta_enc_walk",Float.class),SPEED=DataTicket.create("jimta_enc_speed",Float.class),YAW=DataTicket.create("jimta_enc_yaw",Float.class),PITCH=DataTicket.create("jimta_enc_pitch",Float.class),CROUCH=DataTicket.create("jimta_enc_crouch",Float.class),AGE=DataTicket.create("jimta_enc_age",Float.class),FORWARD=DataTicket.create("jimta_enc_forward",Float.class),SIDE=DataTicket.create("jimta_enc_side",Float.class),HURT=DataTicket.create("jimta_enc_hurt",Float.class);
     private static final DataTicket<Boolean> RESTORED=DataTicket.create("jimta_enc_restored",Boolean.class),ACTING=DataTicket.create("jimta_enc_acting",Boolean.class);
     private static final DataTicket<Vec3> NORMAL=DataTicket.create("jimta_enc_normal",Vec3.class);
-    public static void register(){EntityRendererRegistry.register(JimtaEncounterCreatures.ICE_SPIDER,c->new CreatureRenderer(c,true));EntityRendererRegistry.register(JimtaEncounterCreatures.KEEPER,c->new CreatureRenderer(c,false));EntityRendererRegistry.register(JimtaSpiderTomb.TOMB,c->new JimtaSpiderHazardRenderer(c,false));EntityRendererRegistry.register(JimtaSpiderTomb.SPIKE,c->new JimtaSpiderHazardRenderer(c,true));}
+    public static void register(){EntityRendererRegistry.register(JimtaSpiderPart.TYPE,NoopRenderer::new);EntityRendererRegistry.register(JimtaEncounterCreatures.ICE_SPIDER,c->new CreatureRenderer(c,true));EntityRendererRegistry.register(JimtaEncounterCreatures.KEEPER,c->new CreatureRenderer(c,false));EntityRendererRegistry.register(JimtaSpiderTomb.TOMB,c->new JimtaSpiderHazardRenderer(c,false));EntityRendererRegistry.register(JimtaSpiderTomb.SPIKE,c->new JimtaSpiderHazardRenderer(c,true));}
     private static Identifier tex(String path){return Jugcraft.id("textures/jimtafacts/spellbooks/"+path+".png");}
     private static final class CreatureRenderer extends GeoEntityRenderer<JimtaEncounterCreatures.Encounter,EntityRenderState> {
         private final boolean spider;
@@ -32,9 +32,35 @@ public final class JimtaEncounterClient {
             });this.spider=spider;shadowRadius=spider?1.2F:.65F;
             if(!spider){withScale(1.3F);withRenderLayer(new ItemInHandGeoLayer<>(c,this,"rightItem","leftItem"));withRenderLayer(new TextureLayerGeoLayer<>(this,tex("entity/keeper/keeper_ghost")){
                 @Override protected RenderType getRenderType(EntityRenderState s){if(s.getOrDefaultGeckolibData(HURT,0F)<=0)return null;float time=s.getOrDefaultGeckolibData(AGE,0F);return RenderTypes.energySwirl(tex("entity/keeper/keeper_ghost"),time*.02F%1,time*.01F%1);}
+                @Override public void submitRenderTask(RenderPassInfo<EntityRenderState> main,net.minecraft.client.renderer.SubmitNodeCollector collector){
+                    var type=getRenderType(main.renderState());if(type==null||!main.willRender())return;
+                    float fade=Math.clamp(main.getOrDefaultGeckolibData(HURT,0F)/10F,0,1);
+                    // A separate snapshot pass prevents compressed ghost bones leaking into the body or held item.
+                    var ghost=new RenderPassInfo<EntityRenderState>(renderer,main.renderState(),main.poseStack(),main.model(),main.cameraState(),true){
+                        @Override public int packedLight(){return 0xF000F0;}
+                        @Override public int packedOverlay(){return net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY;}
+                        @Override public int renderColor(){return 0xFF000000|((int)(38*fade)<<16)|((int)(5*fade)<<8);}
+                    };
+                    ghost.getPreRenderMatrixPose().set(main.getPreRenderMatrixPose());
+                    ghost.getModelRenderMatrixPose().set(main.getModelRenderMatrixPose());
+                    ghost.addBoneUpdater((pass,bones)->{
+                        renderer.applyAnimationControllers(pass,bones);renderer.adjustModelBonesForRender(pass,bones);
+                        pass.model().getBone("body").ifPresent(body->{for(var child:body.children()){
+                            var snapshot=bones.get(child);if(child.name().equals("head"))snapshot.setScale(.75F,.75F,.75F);else snapshot.setScale(.95F,.99F,.95F);
+                        }});
+                    });
+                    renderer.submitRenderTasks(ghost,collector.order(1),type);
+                }
             });}
         }
         @Override public RenderType getRenderType(EntityRenderState s,Identifier texture){return RenderTypes.entityTranslucent(texture);}
+        @Override public int getRenderColor(JimtaEncounterCreatures.Encounter e,Void unused,float partial){
+            int color=super.getRenderColor(e,unused,partial);
+            if(e instanceof JimtaEncounterCreatures.Keeper keeper&&keeper.riseTicks()>0){
+                float alpha=Math.clamp((26-keeper.riseTicks()+partial)/25F,0,1);
+                return ((int)(((color>>>24)&255)*alpha)<<24)|(color&0xFFFFFF);
+            }return color;
+        }
         @Override public void captureDefaultRenderState(JimtaEncounterCreatures.Encounter e,Void unused,EntityRenderState s,float partial){
             super.captureDefaultRenderState(e,unused,s,partial);s.addGeckolibData(WALK,e.walkAnimation.position(partial));s.addGeckolibData(SPEED,Math.min(1,e.walkAnimation.speed(partial)));s.addGeckolibData(YAW,Mth.rotLerp(partial,e.yHeadRotO-e.yBodyRotO,e.yHeadRot-e.yBodyRot)*Mth.DEG_TO_RAD);s.addGeckolibData(PITCH,Mth.lerp(partial,e.xRotO,e.getXRot())*Mth.DEG_TO_RAD);s.addGeckolibData(AGE,e.tickCount+partial);s.addGeckolibData(ACTING,e.animating());s.addGeckolibData(HURT,(float)e.hurtTime);
             var facing=e.getForward().multiply(1,0,1).normalize();var momentum=e.getDeltaMovement().multiply(1,0,1).normalize();s.addGeckolibData(FORWARD,(float)facing.dot(momentum));s.addGeckolibData(SIDE,(float)new Vec3(-facing.z,0,facing.x).dot(momentum)*.35F);

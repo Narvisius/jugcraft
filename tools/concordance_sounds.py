@@ -39,6 +39,19 @@ pops through a band-pass) over warm low tones in the same D and A, and breaths o
   low thump as it lands (no bell, unlike the lance).
 Hearthflare's release is not drawn here: it plays the owner's own fire recordings (tools/concordance_ember.py
 SOUND_FILES, copied by tools/owner_art.py).
+
+Concordance Chunk B, unit 3: Rime's cues (tools/concordance_rime.py) ring like ice, thin glassy tones over cold wind, and
+Strata's (tools/concordance_strata.py) grind like stone, in the same D, A and E:
+
+- rime_gather (0.5 s, Rimebind's and Preserve's cast): a thin breath of high wind narrowing from 6 to 3.5 kHz under
+  detuned E6 and A5 voices that swell in;
+- rimebind (0.6 s, Rimebind): a crystalline crack, a glassy tone falling from E7 to A5, a short A5 chime, then ice ticks
+  settling;
+- preserve (0.8 s, Preserve): a soft held A5 and its fifth beating slowly, an E6 joining, an even fade: a hold, not a
+  blow;
+- strata_gather (0.4 s, Brace's cast): a dry grind climbing from 140 to 320 Hz with gravel ticks, a soft thud on D3.
+Brace's release is not drawn here either: it plays the owner's four earth recordings (tools/concordance_strata.py
+SOUND_FILES).
 Run from anywhere:  python3 tools/concordance_sounds.py [cue ...]  (with names, only those cues are written)
 """
 import os
@@ -450,6 +463,55 @@ def cinderbolt(seed):
     return (0.55 * rush + 0.4 * pops + 0.9 * thump) * fade(n, 0.001, 0.06)
 
 
+def rime_gather(seed):
+    """Frost gathering (Rimebind's and Preserve's cast): a thin breath of high wind narrowing from 6 to 3.5 kHz under
+    detuned E6 and A5 voices that swell in."""
+    n = samples(0.5)
+    t = times(n)
+    rng = np.random.default_rng(seed)
+    bp, _ = band(rng.normal(size=n), 6000.0 - 2500.0 * np.clip(t / 0.45, 0, 1), q=2.5)
+    wind = bp / rms(bp) * np.clip(t / 0.3, 0, 1) ** 1.5
+    voices = sum(level * np.sin(2 * np.pi * hz * 2 ** (cents / 1200) * t + 0.8 * j)
+                 for j, (hz, cents, level) in enumerate(((E6, 0.0, 1.0), (E6, 9.0, 0.45), (A5, -6.0, 0.5))))
+    voices = voices / rms(voices) * np.clip((t - 0.1) / 0.35, 0, 1) ** 2
+    return (0.45 * wind + 0.6 * voices) * fade(n, 0.01, 0.08)
+
+
+def rimebind(seed):
+    """Frost binds: a crystalline crack, a glassy tone falling from E7 to A5, a short A5 chime, then ice ticks settling."""
+    n = samples(0.6)
+    t = times(n)
+    rng = np.random.default_rng(seed)
+    crack, _ = band(rng.normal(size=n), np.full(n, 4800.0), q=1.6)
+    crack = crack / rms(crack) * strike(n, 0.0008, 0.02)
+    fall = np.sin(2 * np.pi * np.cumsum(glide(t - 0.02, E7, A5, 0.22)) / RATE) * strike(n, 0.002, 0.14, at=0.02)
+    bell = chime(n, A5, [(1.0, 1.0, 0.2), (2.76, 0.18, 0.06), (5.4, 0.05, 0.02)], attack=0.002, at=0.22, beat=3.0)
+    ticks = crackle(n, rng, np.where(t > 0.25, 60 * np.exp(-(t - 0.25) / 0.15), 0.0), centre=6500.0, q=2.0)
+    return (0.6 * crack + 0.5 * fall + 0.6 * bell / np.max(np.abs(bell)) + 0.2 * ticks) * fade(n, 0.0005, 0.08)
+
+
+def preserve():
+    """Cold settles: a soft held A5 and its fifth beating slowly, an E6 joining, an even fade: a hold, not a blow."""
+    n = samples(0.8)
+    held = chime(n, A5, [(1.0, 1.0, 0.45), (1.5, 0.45, 0.35), (2.0, 0.12, 0.18)], attack=0.08, beat=1.5)
+    upper = chime(n, E6, [(1.0, 0.5, 0.3)], attack=0.12, at=0.1, beat=2.0)
+    return (held + upper) * fade(n, 0.02, 0.15)
+
+
+def strata_gather(seed):
+    """Stone stirs (Brace's cast): a dry grind climbing from 140 to 320 Hz with gravel ticks, a soft thud on D3."""
+    n = samples(0.4)
+    t = times(n)
+    rng = np.random.default_rng(seed)
+    bp, lp = band(rng.normal(size=n), 140.0 + 180.0 * np.clip(t / 0.35, 0, 1), q=1.2)
+    grind = (bp / rms(bp) + 0.5 * lp / rms(lp)) * np.clip(t / 0.25, 0, 1) ** 1.5
+    gravel = crackle(n, rng, 80 + 120 * (t / 0.4), centre=1800.0, q=1.5)
+    thud = np.sin(2 * np.pi * np.cumsum(glide(t - 0.3, 95.0, 55.0, 0.08)) / RATE) * strike(n, 0.003, 0.05, at=0.3)
+    low = warm(t, (D3, 1.0))
+    low = low / rms(low) * strike(n, 0.02, 0.1, at=0.28)
+    return (0.5 * grind + 0.25 * gravel + 0.9 * thud + 0.3 * low) * fade(n, 0.005, 0.05)
+
+
 # name -> (signal, peak). Names follow concordance.SOUND_EVENTS ("concordance.<name>").
 def cues():
     return {
@@ -477,6 +539,10 @@ def cues():
         "hearthspark": (hearthspark(seed=83), PEAK * 0.9),
         "hearthguard": (hearthguard(seed=89), PEAK * 0.85),
         "cinderbolt": (cinderbolt(seed=97), PEAK),
+        "rime_gather": (rime_gather(seed=101), PEAK * 0.7),
+        "rimebind": (rimebind(seed=103), PEAK * 0.9),
+        "preserve": (preserve(), PEAK * 0.75),
+        "strata_gather": (strata_gather(seed=107), PEAK * 0.75),
     }
 
 
@@ -494,7 +560,7 @@ def write(name, signal, peak):
 def main():
     drawn = cues()
     # Every event has a drawn cue, except those that play the owner's recordings instead.
-    expected = {event.split(".", 1)[1] for event in concordance.SOUND_EVENTS if event not in concordance.ember.SOUND_FILES}
+    expected = {event.split(".", 1)[1] for event in concordance.SOUND_EVENTS if event not in concordance.SOUND_FILES}
     if set(drawn) != expected:
         sys.exit(f"concordance.SOUND_EVENTS and this script disagree: {sorted(expected ^ set(drawn))}")
     # Name cues to draw only those (an ffmpeg build other than the one that drew the rest may not encode them alike).

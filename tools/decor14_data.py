@@ -105,8 +105,26 @@ def bat_wings():
                piece("body", [b(-12, 0, 0, 0, 11, 0.25, "wing")], [(-1.5, 1, 2.3, "y", "wing_right")])])
 
 
+def chompa_costume():
+    """Bat-costume fit and open face, with a reindeer hood and attached hat/antlers."""
+    head = [b(-6, -10, -6, 6, -8.9, 6, "chompa_hat"),
+            b(-4.5, -15, -4.5, 4.5, -10, 4.5, "chompa_hat_cross")]
+    for side in (-1, 1):
+        def antler(x0, y0, z0, x1, y1, z1):
+            head.append(b(min(side*x0, side*x1), y0, z0,
+                          max(side*x0, side*x1), y1, z1, "chompa_antler"))
+        antler(4.5, -13, -.8, 8, -11.5, .8)
+        antler(7, -18, -.8, 8.5, -11.5, .8)
+        antler(8, -16, -.8, 10, -14.5, .8)
+        antler(9, -18, -.8, 10.5, -14.5, .8)
+        antler(5.5, -17, -.8, 7.5, -15.5, .8)
+    return ([hood("chompa_hood"), piece("head", head), torso("chompa_body", .3)]
+            + limbs("chompa_fur", .3, legs=False)
+            + limbs("chompa_boots", .3, arms=False))
+
+
 GEOMETRY = {"vampire_cape": vampire_cape, "mummy_wraps": mummy_wraps, "skeleton_suit": skeleton_suit, "werewolf_mask": werewolf_mask,
-            "cat_ears_and_tail": cat_ears_and_tail, "bat_wings": bat_wings}
+            "cat_ears_and_tail": cat_ears_and_tail, "bat_wings": bat_wings, "chompa_costume": chompa_costume}
 
 
 def texels(lo, hi):

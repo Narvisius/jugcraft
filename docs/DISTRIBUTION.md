@@ -96,3 +96,12 @@ Use a `.mrpack` server installer that honors the format's environment flags. Cli
 - [Official `.mrpack` specification](https://support.modrinth.com/en/articles/8802351-modrinth-modpack-format-mrpack)
 - [Modrinth dependency metadata](https://docs.modrinth.com/api/operations/getdependencies/)
 - [Framework catalog](FRAMEWORKS.md)
+
+
+### Embedded Lua runtime
+
+The Jimtafacts computer worker embeds the MIT-licensed Cobalt runtime declared in
+`embeddedLibraries` in the shared lock. Gradle verifies the upstream JAR SHA-256.
+Packaging verifies every original nested entry against its pinned content hash
+and permits only Loom's exact generated Fabric metadata. It does not allow
+arbitrary bundled mod JARs; Cobalt is not a separate player/server download.

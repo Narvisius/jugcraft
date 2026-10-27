@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MODULES = ('industry', 'gear', 'robots', 'automation', 'transport', 'crops',
            'production', 'reactor', 'matter', 'civil', 'infrastructure', 'upgrades',
            'construction', 'laser', 'heat', 'tables', 'utilities', 'services',
-           'personal', 'engines', 'factory', 'cables', 'terraforming', 'computers', 'spellbooks')
+           'personal', 'nuclear_charge', 'engines', 'factory', 'cables', 'terraforming', 'computers', 'spellbooks')
 
 @cache
 def blocks():
@@ -58,6 +58,18 @@ def original_texture(path):
 def original_inward_shell(path, elements):
     """Named source models deliberately use mirrored cubes for visible interior faces."""
     path=Path(path).resolve()
+    # These supplied hollow frame/exchanger shells intentionally render inward.
+    factory_models={
+        'block/jimta_factory_frame.json':'buildcraftbuilders/models/block/frame/base.json',
+        'block/jimta_factory_frame_arm.json':'buildcraftbuilders/models/block/frame/connection.json',
+        'block/jimtafacts/factory/heat_middle.json':'buildcraftfactory/models/item/heat_exchange_middle.json',
+    }
+    models=ROOT/'src/main/resources/assets/jugcraft/models'
+    if path.is_relative_to(models) and path.relative_to(models).as_posix() in factory_models:
+        source=ROOT/'art/owner-library/originals/Oct23/Jimtafacts/buildcraft reborn by jimbo/assets'/factory_models[path.relative_to(models).as_posix()]
+        original=json.loads(source.read_text())['elements']
+        backwards=[e for e in elements if any(e['from'][k]>e['to'][k] for k in range(3))]
+        return bool(backwards) and all(any(all(e.get(k)==o.get(k) for k in ('from','to','rotation')) for o in original) for e in backwards)
     base=ROOT/'src/main/resources/assets/jugcraft/models/jimtafacts/spellbooks'
     if not path.is_relative_to(base):return False
     names={'armor_pile','brazier','brazier_off','brazier_soul','brazier_template',

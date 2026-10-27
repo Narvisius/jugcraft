@@ -12,6 +12,18 @@ FLOWERS = {
     'inkvein_helleborine': 'Inkvein Helleborine', 'violet_lanternbloom': 'Violet Lanternbloom',
 }
 TALL = 'ravenquill_lupine'
+# Concordance Chunk D, D-03 (D-S12): what he tells each listener of Stolas, from their own progress (Java:
+# concordance/spirits/StolasRegard.Step, in this order; tools/concordance_pacts.py STEPS). He teaches nothing.
+STOLAS_LINES = {
+    'binding': "Stolas will not treat with a stranger to binding. Understand the Binding Arts first; your codex says how.",
+    'examine': "Stolas trusts what you have looked at closely. Examine one of my flowers, or a plain feather if I have none to spare.",
+    'cultivate': "He weighs what you have grown. Harvest a ripe crop from a Verdant Bed with your own hands.",
+    'assay': "He weighs what stones are worth, too. Dissolve a sample at an Assayer's Scale.",
+    'serve': "He has noticed you. Build him a perch where you live and invite him; he names his terms before you give anything.",
+    'kept': "Stolas speaks of you, I hear. Briefly. From him that is high praise.",
+    'journal': "Stolas wants something I cannot name for you. Your journal will know.",
+}
+STOLAS_SKY = "And he wants a star you have seen yourself: look through an Orrery Observatory while one is up."
 PALETTE = ['292435','352a44','453153','614271','735187','171923','232633','303445','424454',
            '38281c','4c3524','624731','7b593d','987256','b5886c','d5a588','e6b799',
            '333630','585b50','a1a695','efeee4','25201b','816b42','ad905b','42334f','634577',
@@ -200,6 +212,8 @@ def write_all(write,assets,data,lang):
            'These flowers are still a mystery. For now, let them grow.',
            'Rituals and pacts will come in time. Tonight, I study the stars.']
     for i,line in enumerate(lines):lang[f'message.jugcraft.styx.line.{i}']='Styxhexenhammer: '+line
+    for step,line in STOLAS_LINES.items(): lang[f'message.jugcraft.styx.stolas.{step}']='Styxhexenhammer: '+line
+    lang['message.jugcraft.styx.stolas.sky']='Styxhexenhammer: '+STOLAS_SKY
     write(assets/'styx_model.json',wizard_model())
     for name,display in FLOWERS.items():
         lang['block.jugcraft.'+name]=display

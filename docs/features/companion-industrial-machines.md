@@ -2,6 +2,8 @@
 
 Owner-requested on 12 October 2026, implemented with OpenAI Codex (GPT-6) on `peepo-companion`. Extends the existing job scheduler, processor reservations, Planner, animations and machine-based reserve effort. No new assets, dependencies, recipes, currencies or standalone worker ticker.
 
+**22 October extension:** The original first-form scope below is historical. [Expanded industrial support](companion-expanded-industry.md) now enables all 40 current recipe-processing forms, item/tool logistics and output filters, with per-lane electricity pricing. Generator forms and the dedicated coastal pump remain excluded.
+
 ## Player outcome and progression
 
 The steel-tier [Electrolytic Separator](industrial-electrolytic-separator.md) is the first opted-in industrial form. Select a tamed Peepo or Jughead and assign any part with the Planner. Each companion uses one of its four jobs; assign the same machine to two companions for two independent helper positions. Each contributes up to 25% speed, for a combined 50%. A third waits for a position. Helpers prefer clear front ground positions and can use exterior side/back positions if the front is obstructed, including ground one block lower. The first helper uses the existing valve clip, the second the wrench clip.

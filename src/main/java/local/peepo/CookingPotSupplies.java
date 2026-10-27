@@ -12,13 +12,19 @@ import net.minecraft.world.item.ItemStack;
 /** Balanced bulk pot loads, planned once at pickup with bounded, rolled-back storage snapshots. */
 final class CookingPotSupplies {
     static int missing(CookingPotBlockEntity pot,ItemStack candidate){
+        return missing(pot,candidate,null);
+    }
+    static int missing(CookingPotBlockEntity pot,ItemStack candidate,PeepoEntity npc){
         var plan=pot.supplyPlan().orElse(null);if(plan==null)return 0;
-        int[] counts=new int[CookingPotBlockEntity.INPUTS];
-        for(int i=0;i<counts.length;i++)counts[i]=pot.getItem(i).getCount();
+        var stock=pot.filter().stock;
+        if(npc!=null && !stock.wants(npc,pot,plan.output().create()))return 0;
+        var installed=new ArrayList<ItemStack>();for(int i=0;i<CookingPotBlockEntity.INPUTS;i++)installed.add(pot.getItem(i));
+        if(npc!=null)installed.addAll(stock.incoming());
+        int[] counts=installed.stream().mapToInt(ItemStack::getCount).toArray();
         int missing=0;
         for(var part:plan.ingredients()){
             int left=part.count();
-            for(int i=0;i<counts.length && left>0;i++)if(part.ingredient().test(pot.getItem(i))){
+            for(int i=0;i<counts.length && left>0;i++)if(part.ingredient().test(installed.get(i))){
                 int take=Math.min(left,counts[i]);left-=take;counts[i]-=take;
             }
             if(part.ingredient().test(candidate))missing=Math.min(candidate.getMaxStackSize(),missing+Math.min(candidate.getMaxStackSize(),left));
@@ -26,10 +32,15 @@ final class CookingPotSupplies {
         return missing;
     }
     static List<ItemStack> create(CookingPotBlockEntity pot,Storage<ItemVariant> source,Storage<ItemVariant> linked,int slots){
+        return create(pot,source,linked,slots,null);
+    }
+    static List<ItemStack> create(CookingPotBlockEntity pot,Storage<ItemVariant> source,Storage<ItemVariant> linked,int slots,PeepoEntity npc){
         var plan=pot.supplyPlan().orElse(null);
         if(plan==null || source==null || slots<=0 || plan.ingredients().size()>64)return List.of();
         var installed=new ArrayList<ItemStack>();
         for(int i=0;i<CookingPotBlockEntity.INPUTS;i++)installed.add(pot.getItem(i).copy());
+        var reserved=npc==null?List.<ItemStack>of():pot.filter().stock.incoming();
+        installed.addAll(reserved);
         for(var stack:installed)if(!stack.isEmpty() && plan.ingredients().stream().noneMatch(p->p.ingredient().test(stack)))return List.of();
         var available=RecipeSupplies.available(linked==null?source:linked);
         var local=RecipeSupplies.available(source);
@@ -43,17 +54,19 @@ final class CookingPotSupplies {
         List<ItemStack> best=List.of();
         // Six 64-item input slots bound the search to at most nine candidate batch sizes.
         int low=1,high=(int)(384/units);
+        if(npc!=null){int goal=pot.filter().stock.inputGoal(npc,pot,plan.output().create());if(goal==0)return List.of();if(goal<Integer.MAX_VALUE)high=Math.min(high,(goal+plan.output().create().getCount()-1)/plan.output().create().getCount());}
         while(low<=high){
             int batches=(low+high)/2;
             var wanted=allocate(parts,installed,available,batches);
             var pickup=wanted==null?null:localShare(wanted,local,slots);
-            if(pickup!=null && fits(inputs,wanted)){
+            if(pickup!=null && fits(inputs,concat(reserved,wanted))){
                 best=pickup;low=batches+1;
             }else high=batches-1;
         }
         // Keep partial, multi-visit recipes possible if another ingredient has just run out.
-        return best.isEmpty()?CompanionDeliveryPlan.create(source,inputs,slots,(stack,tx)->missing(pot,stack),null):best;
+        return best.isEmpty()?CompanionDeliveryPlan.create(source,inputs,slots,(stack,tx)->missing(pot,stack,npc),null):best;
     }
+    private static List<ItemStack> concat(List<ItemStack> a,List<ItemStack> b){var both=new ArrayList<ItemStack>(a);both.addAll(b);return both;}
     private static List<ItemStack> allocate(List<CookingPotRecipe.Part> parts,List<ItemStack> installed,List<ItemStack> available,int batches){
         var stock=new ArrayList<ItemStack>();
         for(var stack:installed)stock.add(stack.copy());

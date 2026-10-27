@@ -63,7 +63,7 @@ function verifyAcademy(t,spec) {
 
 
 function renderAcademy(t,mode) {
- const w=mode==="plan"?1080:1440,h=mode==="plan"?1220:1080,pix=new Uint8Array(w*h*3);
+ const w=mode==="plan"?1080:1440,h=mode==="plan"?1220:mode==="bridge"?900:1080,pix=new Uint8Array(w*h*3);
  for(let i=0;i<pix.length;i+=3){pix[i]=20;pix[i+1]=29;pix[i+2]=41;}
  const pixel=(x,y,c)=>{if(x<0||x>=w||y<0||y>=h)return;const p=(Math.floor(y)*w+Math.floor(x))*3;pix[p]=c[0];pix[p+1]=c[1];pix[p+2]=c[2];};
  const rect=(x,y,a,b,c)=>{for(let j=y;j<y+b;j++)for(let i=x;i<x+a;i++)pixel(i,j,c);};
@@ -72,21 +72,30 @@ function renderAcademy(t,mode) {
  A:["01110","10001","10001","11111","10001","10001","10001"],B:["11110","10001","10001","11110","10001","10001","11110"],C:["01111","10000","10000","10000","10000","10000","01111"],D:["11110","10001","10001","10001","10001","10001","11110"],E:["11111","10000","10000","11110","10000","10000","11111"],F:["11111","10000","10000","11110","10000","10000","10000"],G:["01111","10000","10000","10111","10001","10001","01111"],H:["10001","10001","10001","11111","10001","10001","10001"],I:["11111","00100","00100","00100","00100","00100","11111"],J:["00111","00010","00010","00010","10010","10010","01100"],K:["10001","10010","10100","11000","10100","10010","10001"],L:["10000","10000","10000","10000","10000","10000","11111"],M:["10001","11011","10101","10101","10001","10001","10001"],N:["10001","11001","10101","10011","10001","10001","10001"],O:["01110","10001","10001","10001","10001","10001","01110"],P:["11110","10001","10001","11110","10000","10000","10000"],Q:["01110","10001","10001","10001","10101","10010","01101"],R:["11110","10001","10001","11110","10100","10010","10001"],S:["01111","10000","10000","01110","00001","00001","11110"],T:["11111","00100","00100","00100","00100","00100","00100"],U:["10001","10001","10001","10001","10001","10001","01110"],V:["10001","10001","10001","10001","10001","01010","00100"],W:["10001","10001","10001","10101","10101","10101","01010"],X:["10001","10001","01010","00100","01010","10001","10001"],Y:["10001","10001","01010","00100","00100","00100","00100"],Z:["11111","00001","00010","00100","01000","10000","11111"],
  "0":["01110","10011","10101","10101","11001","10001","01110"],"1":["00100","01100","00100","00100","00100","00100","01110"],"2":["01110","10001","00001","00010","00100","01000","11111"],"3":["11110","00001","00001","01110","00001","00001","11110"],"4":["00010","00110","01010","10010","11111","00010","00010"],"5":["11111","10000","10000","11110","00001","00001","11110"],"6":["01110","10000","10000","11110","10001","10001","01110"],"7":["11111","00001","00010","00100","01000","01000","01000"],"8":["01110","10001","10001","01110","10001","10001","01110"],"9":["01110","10001","10001","01111","00001","00001","01110"],"-":["00000","00000","00000","11111","00000","00000","00000"],".":["00000","00000","00000","00000","00000","00100","00100"],":":["00000","00100","00100","00000","00100","00100","00000"],"/":["00001","00010","00010","00100","01000","01000","10000"]};
  const text=(s,x,y,scale=2,c=[226,235,241])=>{for(const ch of s.toUpperCase()){const g=font[ch];if(g)for(let j=0;j<7;j++)for(let i=0;i<5;i++)if(g[j][i]==="1")rect(x+i*scale,y+j*scale,scale,scale,c);x+=6*scale;}};
- const color=s=>{const n=s.id.split(":")[1];return n==="snow"?[235,245,250]:n==="andesite"?[99,111,118]:n==="tuff"?[101,117,107]:n.includes("deepslate")?[50,61,77]:n.includes("amethyst")?[166,123,212]:n.includes("glass")?[92,157,190]:n==="bookshelf"?[123,108,77]:s.id.startsWith("jugcraft:")?[179,128,207]:n.includes("lantern")||n==="soul_campfire"?[239,189,106]:n.includes("spruce")||n==="barrel"?[121,93,67]:n.includes("bed")||n==="blue_terracotta"?[70,111,148]:n==="moss_block"||["fern","poppy","dandelion"].includes(n)?[82,124,83]:n.includes("chiseled")?[128,144,157]:n.includes("cracked")?[124,136,145]:[155,168,178];};
+ const color=s=>{const n=s.id.split(":")[1];return n==="red_leaf_pile"?[142,58,48]:n==="orange_leaf_pile"?[206,113,51]:n==="yellow_leaf_pile"?[211,163,70]:n==="carved_pumpkin"?[191,108,42]:n==="snow"?[235,245,250]:n==="andesite"?[99,111,118]:n==="tuff"?[101,117,107]:n.includes("deepslate")?[50,61,77]:n.includes("amethyst")?[166,123,212]:n.includes("orange_stained_glass")?[202,116,61]:n.includes("glass")?[92,157,190]:n==="bookshelf"?[123,108,77]:n==="ecology_red_maple_leaves"?[146,52,45]:n==="ecology_orange_maple_leaves"?[207,104,39]:n==="ecology_yellow_maple_leaves"?[218,165,58]:n==="ecology_maple_log"?[87,63,40]:s.id.startsWith("jugcraft:")?[179,128,207]:n.includes("lantern")||n==="soul_campfire"?[239,189,106]:n.includes("spruce")||n==="barrel"?[121,93,67]:n.includes("bed")||n==="blue_terracotta"?[70,111,148]:n==="moss_block"||["fern","poppy","dandelion"].includes(n)?[82,124,83]:n.includes("chiseled")?[128,144,157]:n.includes("cracked")?[124,136,145]:[155,168,178];};
  const cells=new Map(t.blocks.filter(b=>t.palette[b.state].id!=="minecraft:air").map(b=>[b.pos.join(","),b]));
  const shade=(c,v)=>c.map(n=>Math.round(n*v));
  text("FROSTWARD COLLEGE",44,28,4);
- text(mode==="plan"?"REVISED GROUND FLOOR - CUT ABOVE DOORWAYS":"REVISED CAMPUS - GENERATED VOXEL PREVIEW",44,70,2,[137,192,212]);
+ text(mode==="plan"?"CORRECTED GROUND FLOOR - CUT ABOVE DOORWAYS":mode==="bridge"?"BRIDGE APPROACH - GENERATED VOXEL PREVIEW":"CORRECTED CAMPUS - GENERATED VOXEL PREVIEW",44,70,2,[137,192,212]);
  if(mode==="plan"){
-  const scale=6,ox=72,oz=100,top=new Map();
+  const scale=5,ox=72,oz=100,top=new Map();
   for(const b of cells.values()){const [x,y,z]=b.pos;if(y>28)continue;const k=x+","+z;if(!top.has(k)||top.get(k).pos[1]<y)top.set(k,b);}
   for(const b of top.values()){const [x,y,z]=b.pos;rect(ox+x*scale,oz+z*scale,scale,scale,shade(color(t.palette[b.state]),y<24?.55:y===24?.72:1));}
   const mark=(n,x,z)=>{const a=ox+x*scale,b=oz+z*scale;rect(a-11,b-12,24,25,[20,29,41]);text(String(n),a-5,b-8,2);};
-  for(const [n,x,z]of [[1,68,143],[2,68,94],[3,27,76],[4,109,92],[5,68,33],[6,112,34],[7,39,100]])mark(n,x,z);
+  for(const [n,x,z]of [[1,68,143],[2,68,94],[3,27,76],[4,109,92],[5,68,33],[6,43,33],[7,147,34]])mark(n,x,z);
   text("1 BRIDGE    2 COURTYARD    3 ATTAINMENT",44,1095,2);
-  text("4 COUNTENANCE    5 ELEMENTS    6 ARCANAEUM",44,1120,2);
-  text("7 CLOISTER - QUARTERS ABOVE MAIN HALL",44,1145,2,[137,192,212]);
+  text("4 COUNTENANCE    5 ELEMENTS    6 ARCH-MAGE ABOVE",44,1120,2);
+  text("7 ARCANAEUM - JOINED BY SCHOLARLY WING",44,1145,2,[137,192,212]);
   text("ACTUAL TEMPLATE CELLS - NOT A MINECRAFT SCREENSHOT",44,1190,2,[154,168,181]);
+ }else if(mode==="bridge"){
+  // A front-facing depth projection of the committed cells. This is an
+  // architectural visibility aid, not a Minecraft screenshot.
+  const blocks=[...cells.values()].filter(b=>b.pos[1]>=24).sort((a,b)=>a.pos[2]-b.pos[2]||a.pos[1]-b.pos[1]);
+  for(const b of blocks){const [x,y,z]=b.pos,s=t.palette[b.state],k=2.7+2.3*z/160;
+   const sx=Math.round(720+(x-68)*k),sy=Math.round(735-(161-z)*1.6-(y-24)*k);
+   rect(sx,sy,Math.ceil(k)+1,Math.ceil(k)+1,shade(color(s),.72+.28*z/160));}
+  text("BRIDGE / VAULTED GATE / OPEN COURT / DOMINANT HALL",44,825,2,[137,192,212]);
+  text("ACTUAL TEMPLATE CELLS - NOT A MINECRAFT SCREENSHOT",44,855,2,[154,168,181]);
  }else{
   const scale=3.7,ox=746,oy=245,project=(x,y,z)=>[ox+(x-z)*scale,oy+(x+z)*scale*.5-y*scale];
   const blocks=[...cells.values()].sort((a,b)=>a.pos[0]+a.pos[1]+a.pos[2]-(b.pos[0]+b.pos[1]+b.pos[2]));
@@ -98,9 +107,9 @@ function renderAcademy(t,mode) {
    if(!cells.has([x+1,y,z].join(",")))poly([pos(1,0,0),pos(1,0,1),pos(1,height,1),pos(1,height,0)],shade(c,.84));
    if(!cells.has([x,y+1,z].join(",")))poly([pos(0,height,0),pos(1,height,0),pos(1,height,1),pos(0,height,1)],c);
   }
-  text("CIRCULAR CLOISTER / ATTACHED WINGS / SEPARATE LOW LIBRARY",44,990,2,[137,192,212]);
+  text("CLOISTER / GATEHOUSE / CONNECTED READING WING",44,990,2,[137,192,212]);
   text("ACTUAL TEMPLATE CELLS - COLOURS AND BLOCK SHAPES APPROXIMATED",44,1020,2,[154,168,181]);
-  text("145 X 76 X 161 BLOCKS - NOT A MINECRAFT SCREENSHOT",44,1046,2,[154,168,181]);
+  text(`${t.size.join(" X ")} BLOCKS - NOT A MINECRAFT SCREENSHOT`,44,1046,2,[154,168,181]);
  }
  return {width:w,height:h,pixels:pix};
 }
@@ -126,9 +135,9 @@ for (const entry of template.palette) {
 const result = verifyAcademy(template, layout);
 assert.deepEqual(result.failures, []);
 assert.equal(result.doors, 8);
-assert.equal(result.beds, 14);
+assert.equal(result.beds, 16);
 const cells = new Map(template.blocks.map(b => [b.pos.join(","), template.palette[b.state].id]));
-for (const pos of [[38,32,85], [98,32,85], [68,32,115], [68,32,56], [112,36,34]]) {
+for (const pos of [[38,32,85], [98,32,85], [68,32,56], [112,46,34], [90,36,25], [133,44,34], [147,44,34], [153,36,42]]) {
   assert.notEqual(cells.get(pos.join(",")) ?? "minecraft:air", "minecraft:air", "enclosure/library");
 }
 for (const pos of [[32,24,121], [104,24,121], [68,31,85]]) {
@@ -141,7 +150,7 @@ if (!process.argv.includes("--check")) {
   const i = process.argv.indexOf("--output-dir");
   const out = i >= 0 ? path.resolve(process.argv[i + 1]) : path.join(root, "docs/images");
   fs.mkdirSync(out, {recursive: true});
-  for (const mode of ["overview", "plan"]) {
+  for (const mode of ["overview", "plan", "bridge"]) {
     const picture = renderAcademy(template, mode);
     fs.writeFileSync(path.join(out, "frostward-academy-revised-" + mode + ".png"),
       pngEncode(picture.width, picture.height, picture.pixels));

@@ -45,7 +45,7 @@ A kiln hollowed out of a volcano's roots, 72 blocks across, 46 high and 80 long.
 - **The shelves:** four raised shelves of smooth basalt, rimmed with polished basalt, round the bowl (north-west, north-east, south-west and south-east), a step up. The slag never reaches them.
 - **The light:** hidden light blocks, and the slag's own glow. A staggered lattice of lights at full strength hangs two blocks over the floor, so the Tyrant and whoever fights him are seen anywhere in the bowl: every cell of its floor has light 8 or more, 13 under a light. Another lattice lights the dome, and single lights hang over the bowl's middle, under the crown, on the ledge, before each sluice and in the forge.
 
-Everything else is the shared framework ([hollow-acre.md](hollow-acre.md#lairs-the-shared-rules)): an instance per opening, at most eight; at most four players; nothing can be built or broken (the sluice gates are the kiln's one fixture besides the Grey Mist); the mist's toll at the edges; Grave Goods on death; closing after 30 seconds empty.
+Everything else is the shared framework ([hollow-acre.md](hollow-acre.md#lairs-the-shared-rules)): an instance per opening, at most eight; at most four players; nothing can be built or broken (the sluice gates are the kiln's one fixture besides the Grey Mist); the mist's toll at the edges; nothing lost on death; closing after 30 seconds empty.
 
 ## Changes from the plan
 
@@ -76,8 +76,10 @@ Everything else is the shared framework ([hollow-acre.md](hollow-acre.md#lairs-t
   - a magma block, from the Nether or the volcanic lands, or crafted from magma cream;
   - a magma block to press the seal into, in the Nether (common there) or in the Volcano or the Cinder Barrens.
 - **Outputs:** the way into the Cinder Kiln, where the Cinder Tyrant will wait (part 2).
-- **Technology and magic:** none yet; the kiln is an adventuring destination. Part 2 brings Arms VII's two Cinder Tyrant trophies (the Cinderbrand and the Magmaw) into survival, and the plan's Ember link, Hearthguard's Fire Resistance, helps against the slag (as a potion does).
+- **Technology and magic:** none yet; the kiln is an adventuring destination. Part 2 brings Arms VII's two Cinder Tyrant trophies (the Cinderbrand and the Magmaw) into survival, and the plan's Ember link, Hearthguard's Fire Resistance, helps against the slag (as a potion does). Since Concordance Chunk C (C-02, not merged), so does the **Kiln Draught**, a Fire Resistance draught from an Alembic Crucible: one magma cream (a Tyrant Scale makes two) or two sugar in a part of water, stirred hot twice, for 76.55 or 86.1 seconds by the generator's model ([the alchemy record](arcane-concordance-alchemy.md)). Under it the slag does not burn and his flame does not take.
 - **Reachable entry path:** every input is reachable without the kiln, by a player who has reached the Nether: no circular unlock.
+- **Unlocks (since Concordance Chunk C, not merged):** nothing; the Kiln Draught is optional preparation for the slag and his flame, and the Salamander Charm the lasting answer.
+- **The encyclopedia (since Concordance Chunk B, B-02):** carrying a Kiln Seal shows the kiln's dossier under Expeditions: the rite, the seal's recipe, that it works all year and the party it holds; the Cinder Tyrant's part follows once he is met ([cinder-tyrant.md](cinder-tyrant.md)). A first win over him completes the First Light route's lair step. Since Concordance Chunk C (C-02, C-P9 and C-P31; not merged), the rite also names what readies a player for his slag and flame, as text and icons with no recipe grid, as the Glacier Hall's names Winter Brine. The fact names the Kiln Draught (magma cream or sugar stirred in an Alembic Crucible, Fire Resistance for up to the data's longest time, 120 seconds), which the slag and his flame respect though his blows, gobs and cinders still land. It also names the Salamander Charm from his loot, which keeps hot ground from burning its holder. Its icons are magma cream, sugar, the crucible, a draught and the Charm, with a link to the codex's Kiln Draught entry once the Alembic Arts are observed. With the Concordance off, or a data pack whose Ember brews something else, it names the Charm alone.
 
 ## Balance and automation
 
@@ -182,6 +184,12 @@ The client game test (`CinderKilnClientGameTests`, CI job `client`) runs the sea
 
 Then it takes ten pictures: the vent on the magma, and in the kiln the view from the ledge, the bowl from near the stair's foot, the crucible and channel under the forge mouth, the slag falling over the lip, the west sluice open over its flooded trough, a shelf, the dome and its vent, and the Grey Mist's arch. Since the brighter light it then reads the game's own block light on every cell of the bowl's floor, and fails under 8. Last, a seal pressed into a magma block in the Nether opens a second kiln, and the tenth picture is that vent.
 
+Concordance Chunk B, unit 1 (B-02) adds `CinderKilnGameTests.theSealIsNoHalloweenRite`, for the dossier's "works all year": with the Halloween event over and `lairs.off_season` off, the Cursed Spindle waits for the season but the seal still takes on magma in a volcanic land. It passes in CI (runs 38509414542, 38514144531 and 38519234934, by workflow_dispatch; not merged). In run 38519234934 `CinderKilnClientGameTests`, unchanged by Chunk B, passed with every other client class (shard 1).
+
+Concordance Chunk B, unit 2 (not merged): the Kiln Seal pressed into the Nether's magma opens a Cinder Kiln in a world made with the World Designer's generator, as created and again after reopening it, and closing it sends the player back (`WorldDesignerClientGameTests`, [world-designer.md](world-designer.md)). It passed in CI run 38543250503 by its shard's success (shard 4), where `CinderKilnClientGameTests`, unchanged, passed too (shard 2).
+
+Concordance Chunk C, unit 1 (C-02), not merged: `EncyclopediaGameTests.theCinderKilnsRiteNamesTheKilnDraught` covers the preparation fact. Carrying a Kiln Seal, the rite names the Kiln Draught as a fact with no grid, for the data's longest Fire Resistance, with its five icons; its codex link comes once the Alembic Arts are observed; and the draught is named only while Ember brews Fire Resistance. `ConcordanceAlchemyGameTests.aKilnDraughtCarriesItsDrinkerAcrossTheSlag` checks that the slag does not harm its drinker and that the bottle comes back. `check_workshop_products` holds the dossier to the Kiln Draught and its words. Both passed in CI (run 38684732031, through `0b1039312`, and again in run 38774859294 on `bb856f873`); they were written where no Minecraft jar is available, and CI was their first run.
+
 Not run: the two-client dedicated-server playtest, and play by hand.
 
 ## World and event applicability
@@ -190,7 +198,7 @@ The Cinder Kiln is its own dimension, so nothing here changes the Overworld or t
 
 ## Rollout and open questions
 
-The shared framework's defaults hold: four players and eight instances, Grave Goods on death.
+The shared framework's defaults hold: four players and eight instances, nothing lost on death.
 
 Part 2, the Cinder Tyrant, adds:
 - the fight in the bowl: hot, he takes half damage until his Body Slam lands in a flooded trough and quenches him;

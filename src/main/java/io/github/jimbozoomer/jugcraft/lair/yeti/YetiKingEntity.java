@@ -7,18 +7,21 @@ import com.geckolib.animation.AnimationController;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.animation.object.LoopType;
 import com.geckolib.util.GeckoLibUtil;
+import io.github.jimbozoomer.jugcraft.concordance.rime.Rime;
+import io.github.jimbozoomer.jugcraft.concordance.rime.Rimebind;
+import io.github.jimbozoomer.jugcraft.concordance.strata.Brace;
+import io.github.jimbozoomer.jugcraft.lair.Encounter;
 import io.github.jimbozoomer.jugcraft.lair.JugcraftLairs;
 import io.github.jimbozoomer.jugcraft.lair.Lair;
 import io.github.jimbozoomer.jugcraft.lair.LairBosses;
 import io.github.jimbozoomer.jugcraft.lair.LairExitBlock;
 import io.github.jimbozoomer.jugcraft.lair.LairInstance;
+import io.github.jimbozoomer.jugcraft.lair.LairRewards;
 import io.github.jimbozoomer.jugcraft.lair.Lairs;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import net.minecraft.core.BlockPos;
@@ -40,6 +43,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -72,10 +77,15 @@ import org.jspecify.annotations.Nullable;
  * does not stun him is followed at once by another.
  *
  * <p>Every attack has a wind-up you can read, a strike and a recovery ({@link Attack}); the numbers are here, in one place,
- * and in tools/yeti_king.py. Each participant (whoever hurt him or his whelps) gets their own loot ({@link YetiKingLoot});
- * left alone he climbs back to his throne, healed, and the snow drifts back. Bound to a lair instance he vanishes with
- * it; one with no instance (a test's) keeps to the hall laid out from the origin he was given. He walks on his own snow:
- * he does not slide on his ice, freeze, fall or stick in webs.
+ * and in tools/yeti_king.py. Each player who qualified in his fight ({@link Encounter}: a blow to him or his whelps,
+ * healing, a ward, or his charge baited into an ice column) gets their own loot ({@link YetiKingLoot}), paid once through
+ * lair/LairRewards; left alone he climbs back to his throne, healed, and the snow drifts back. Bound to a lair instance
+ * he vanishes with it; one with no instance (a test's) keeps to the hall laid out from the origin he was given. He walks
+ * on his own snow: he does not slide on his ice, freeze, fall, float or stick in webs.
+ * Since Concordance Chunk B unit 5 (B-09) only a Brace lessens his push, and a Brace one player put on another that
+ * meets it is that caster's deed in his fight; Rimebind's slow does not hold his steps, so a binding instead holds his
+ * next wind-up {@value #RIMEBOUND_WINDUP} ticks longer, once a thaw; and his charge broken on a column is Rimekeeping's
+ * elective cold work for its baiter.
  */
 public class YetiKingEntity extends Monster implements GeoEntity {
 	// ---------------------------------------------------------------- numbers (tools/yeti_king.py)
@@ -125,12 +135,19 @@ public class YetiKingEntity extends Monster implements GeoEntity {
 	public static final int KIN = 2;
 	public static final int MAX_WHELPS = 4;
 	public static final int EXPERIENCE = 300;
+	/**
+	 * Rimebind on him (Concordance Chunk B, B-09, B-P21, B-P54): how many ticks longer one wind-up of his holds, frost-locked,
+	 * for a binding that took; once a thaw. Untuned: a starting value until people play it (04:194).
+	 */
+	public static final int RIMEBOUND_WINDUP = 4;
 	/** How long a leap onto or off his dais takes, and how high a leap rises over the straight line. */
 	private static final int LEAP_TICKS = 16;
 	private static final double LEAP_RISE = 4.0;
 	/** How near his path a player must be for his charge to strike them, and how near a column's foot stuns him. */
 	private static final double CHARGE_REACH = 1.6;
 	private static final double COLUMN_REACH = GlacierHall.COLUMN_RADIUS + GlacierHall.COLUMN_FOOT + 1.2;
+	/** How far past COLUMN_REACH his body can still meet a column's foot (his corners reach past his sides). */
+	private static final double COLUMN_BODY = 1.0;
 	/** The most frost he leaves on anyone: a little past freezing them through, so the freeze bites for a moment. */
 	private static final int FROST_CAP = 200;
 
@@ -239,7 +256,8 @@ public class YetiKingEntity extends Monster implements GeoEntity {
 	private @Nullable UUID foe;
 	private int abandoned;
 	private int stunned;
-	private final Map<UUID, Float> damageBy = new HashMap<>();
+	/** This fight: who took part and how (lair/Encounter, since Concordance Chunk B); his arena is round his lake. */
+	private final Encounter encounter = new Encounter(this, this::centre);
 	private final List<UUID> whelps = new ArrayList<>();
 	/** His thrown and fallen things (boulders, icicles, spikes), gone with him. */
 	private final List<UUID> things = new ArrayList<>();
@@ -250,6 +268,15 @@ public class YetiKingEntity extends Monster implements GeoEntity {
 	private Vec3 charge = Vec3.ZERO;
 	private boolean chained;
 	private final Set<UUID> trampled = new HashSet<>();
+	/**
+	 * Whom his charge under way was aimed at as he set off, if they had already taken part in his fight then: a column it
+	 * ends in is their deed ({@link #baited}). Null for anyone else, such as a late arrival he turned on.
+	 */
+	private @Nullable UUID baiter;
+	/** Rimebind (B-09): his Thaw's ticks at his last tick; a Thaw that grew is a binding that took. Not saved. */
+	private int thawLeft;
+	/** Rimebind (B-09): ticks a wind-up of his still holds for a binding that took (none, or RIMEBOUND_WINDUP). Not saved. */
+	private int rimeHold;
 	private final List<Vec3> icicles = new ArrayList<>();
 	private final List<Vec3> spikes = new ArrayList<>();
 	/** Set when he is loaded from a save: the snow drifts back over what he had bared (saved with him) on his first tick. */
@@ -347,6 +374,11 @@ public class YetiKingEntity extends Monster implements GeoEntity {
 		return stunned;
 	}
 
+	/** Ticks a wind-up of his still holds for Rimebind (B-09): RIMEBOUND_WINDUP after a binding takes, none once shown. */
+	public int rimeHold() {
+		return rimeHold;
+	}
+
 	public Action action() {
 		int id = entityData.get(ACTION);
 		return id >= 0 && id < Action.values().length ? Action.values()[id] : Action.IDLE;
@@ -402,11 +434,15 @@ public class YetiKingEntity extends Monster implements GeoEntity {
 			driftOnLoad = false;
 			driftAll(level);
 		}
+		if (phase != Phase.WAITING && isAlive() && !encounter.underway()) {
+			encounter.begin();  // a fight back from a save keeps a fresh record of who takes part
+		}
 		resetFallDistance();
 		setTicksFrozen(0);
 		bossBar.setProgress(getHealth() / getMaxHealth());
 		prune(level);
 		driftDue(level);
+		rimebound(level);
 		for (int i = 0; i < cooldowns.length; i++) {
 			if (cooldowns[i] > 0) {
 				cooldowns[i]--;
@@ -473,6 +509,7 @@ public class YetiKingEntity extends Monster implements GeoEntity {
 		phase = Phase.WAKING;
 		phaseTicks = 0;
 		setAction(Action.WAKE);
+		encounter.begin();
 		bossBar.setVisible(true);
 		level.playSound(null, getX(), getY(), getZ(), SoundEvents.WARDEN_ROAR, SoundSource.HOSTILE, 3.0F, 0.7F);
 		tell(level, "message.jugcraft.yeti_king.wakes");
@@ -568,6 +605,16 @@ public class YetiKingEntity extends Monster implements GeoEntity {
 			return;
 		}
 		if (attack != null) {
+			// Rimebind (B-09): a binding that took holds this wind-up, frost-locked, before its last two ticks (where a
+			// charge fixes its line and a breath, slam or spike line turns to its strike); else it waits for the next.
+			if (rimeHold > 0 && attackTicks < attack.windup - 2) {
+				rimeHold--;
+				setDeltaMovement(0.0, floorY() - getY(), 0.0);
+				if (rimeHold % 2 == 0) {
+					level.sendParticles(ParticleTypes.SNOWFLAKE, getX(), getY() + 2.4, getZ(), 6, 0.7, 0.9, 0.7, 0.01);
+				}
+				return;
+			}
 			attackTicks++;
 			perform(level, target);
 			return;
@@ -772,7 +819,7 @@ public class YetiKingEntity extends Monster implements GeoEntity {
 					}
 				} else if (t == current.windup) {
 					setAction(Action.THROW);
-					things.add(HurledBoulderEntity.hurl(level, this, target).getUUID());
+					HurledBoulderEntity.hurl(level, this, target);
 				}
 			}
 			case GROUND_SLAM -> groundSlam(level, t);
@@ -825,10 +872,36 @@ public class YetiKingEntity extends Monster implements GeoEntity {
 		return hit;
 	}
 
-	/** Pushes {@code player} along {@code way} (flat) by {@code strength}, and up by {@code up}, and tells their client. */
-	static void push(ServerPlayer player, Vec3 way, double strength, double up) {
-		player.push(way.x * strength, up, way.z * strength);
+	/**
+	 * Pushes {@code player} along {@code way} (flat) by {@code strength}, and up by {@code up}, and tells their client: every
+	 * push of his, his blows', his slam's, his charge's and his spikes' (B-09, B-P20). Only a Brace takes any of it off
+	 * ({@link Brace#spend}: spent by the first push it meets, it braces the rest of that tick, so a blow and its push are
+	 * halved once); knockback resistance from anything else (netherite, Rooted, the Ice Breaker) changes nothing of it. A
+	 * blow's own small knockback, and his boulders' and icicles', are the game's, which knockback resistance lessens as
+	 * ever. A Brace another player put on them is that player's deed ({@link #braced}).
+	 */
+	void push(ServerPlayer player, Vec3 way, double strength, double up) {
+		double share = Brace.spend(player);
+		if (share < 1.0) {
+			braced(player);
+		}
+		player.push(way.x * strength * share, up * share, way.z * strength * share);
 		player.connection.send(new ClientboundSetEntityMotionPacket(player));
+	}
+
+	/**
+	 * A Brace took some of his push off {@code player} (B-09, B-P22, B-P55): if another player put it on them, that caster's
+	 * deed in his fight, one for each push it meets (keyed by the braced player and the tick, so two pushes in one tick are
+	 * one deed); the caster needs no part before it, as a ward's soak needs none, but must be in his fight and able to fight
+	 * him. A Brace one put on oneself, the Water Bangle's (nobody's cast) and one carried through a relog (its caster is not
+	 * saved, Brace.BRACER) credit no one, as healing oneself earns nothing.
+	 */
+	private void braced(ServerPlayer player) {
+		UUID id = Brace.caster(player);
+		ServerPlayer caster = id == null || id.equals(player.getUUID()) ? null : player.level().getServer().getPlayerList().getPlayer(id);
+		if (caster != null && LairBosses.eligible(caster) && encounter.contains(caster)) {
+			encounter.deed(caster, "brace " + player.getUUID() + " " + player.level().getGameTime());
+		}
 	}
 
 	/** Where his slam comes down: where the foe stood, kept within his leash. */
@@ -955,10 +1028,11 @@ public class YetiKingEntity extends Monster implements GeoEntity {
 
 	/**
 	 * Frost on {@code player}: {@code ticks} more of the ticks that freeze them (to {@code stack} past freezing them through,
-	 * or else never past just short of it), unless they hold a Yeti Mitten in their offhand.
+	 * or else never past just short of it), unless they hold a Yeti Mitten in their offhand or are under Frostward (Winter
+	 * Brine, Concordance Chunk B, B-08): the Mitten for as long as it is held, Frostward for as long as it lasts.
 	 */
 	public static void chill(ServerPlayer player, int ticks, boolean stack) {
-		if (YetiMitten.warm(player)) {
+		if (YetiMitten.warm(player) || io.github.jimbozoomer.jugcraft.concordance.rime.Frostward.warded(player)) {
 			return;
 		}
 		int frozen = player.getTicksFrozen();
@@ -969,8 +1043,8 @@ public class YetiKingEntity extends Monster implements GeoEntity {
 	/**
 	 * Avalanche Charge, {@code t} ticks into it: on all fours pawing the snow through the wind-up; then a straight run of up
 	 * to {@value #CHARGE_SPEED} blocks a tick, {@value #CHARGE_DAMAGE} damage and a heavy knockback to each player he passes.
-	 * Into an ice column he stuns himself for {@value #STUN_TICKS} ticks; in the Fury of the Peaks a charge that does not
-	 * stun him is followed at once by another.
+	 * Into an ice column (a step that would bring him near its centre, or his body against its flared foot) he stuns himself
+	 * for {@value #STUN_TICKS} ticks; in the Fury of the Peaks a charge that does not stun him is followed at once by another.
 	 */
 	private void charge(ServerLevel level, Player target, int t) {
 		Attack run = Attack.AVALANCHE_CHARGE;
@@ -985,6 +1059,9 @@ public class YetiKingEntity extends Monster implements GeoEntity {
 				double flat = Math.sqrt(to.x * to.x + to.z * to.z);
 				charge = flat < 1.0E-3 ? facing() : new Vec3(to.x / flat, 0.0, to.z / flat);
 				trampled.clear();
+				// Whom it is aimed at, if they have already taken part in his fight (any part, even short of qualifying): a
+				// late arrival he turns on with no part yet (target()'s fallback) earns nothing by where it ends.
+				baiter = target instanceof ServerPlayer player && encounter.share(player) != null ? player.getUUID() : null;
 				setAction(Action.CHARGE);
 				level.playSound(null, getX(), getY(), getZ(), SoundEvents.HORSE_GALLOP, SoundSource.HOSTILE, 2.0F, 0.5F);
 			}
@@ -997,8 +1074,10 @@ public class YetiKingEntity extends Monster implements GeoEntity {
 			}
 			return;
 		}
-		Vec3 next = position().add(charge.scale(CHARGE_SPEED));
-		if (GlacierHall.columnDistance(next.x - origin.getX(), next.z - origin.getZ()) <= COLUMN_REACH) {
+		Vec3 step = charge.scale(CHARGE_SPEED);
+		Vec3 next = position().add(step);
+		if (intoColumn(level, next, step)) {
+			baited(level);
 			stun(level);
 			return;
 		}
@@ -1043,6 +1122,38 @@ public class YetiKingEntity extends Monster implements GeoEntity {
 		}
 	}
 
+	/**
+	 * Whether this step of his charge runs him into an ice column: it would bring him within COLUMN_REACH of one's centre, or,
+	 * within COLUMN_BODY more, the game's own collision would stop his body against its flared foot (a glancing run would
+	 * otherwise slide him round it unstunned). No other block of the hall stands that near a column at his height.
+	 */
+	private boolean intoColumn(ServerLevel level, Vec3 next, Vec3 step) {
+		double near = GlacierHall.columnDistance(next.x - origin.getX(), next.z - origin.getZ());
+		if (near <= COLUMN_REACH) {
+			return true;
+		}
+		if (near > COLUMN_REACH + COLUMN_BODY) {
+			return false;
+		}
+		Vec3 free = Entity.collideBoundingBox(this, step, getBoundingBox(), level, List.of());
+		return Math.abs(free.x - step.x) > 1.0E-5 || Math.abs(free.z - step.z) > 1.0E-5;
+	}
+
+	/**
+	 * His charge ended in an ice column: a deed of his fight (Concordance Chunk B) for whom it was aimed at, if they had
+	 * taken part as he set off and are still in his fight. Keyed by the player, so each baiter earns it once a fight and
+	 * several may each earn theirs. It is also Rimekeeping's elective cold work for them (Rime's column, B-09; the kind a
+	 * Frost boon arm's slow is too, B-P56). A stun called directly ({@link #stun}) credits no one.
+	 */
+	private void baited(ServerLevel level) {
+		ServerPlayer player = baiter == null ? null : level.getServer().getPlayerList().getPlayer(baiter);
+		baiter = null;
+		if (player != null && LairBosses.eligible(player) && encounter.contains(player)) {
+			encounter.deed(player, "column " + player.getUUID());
+			Rime.column(player);   // B-09 (02:137): Rimekeeping's elective cold work for the one the deed names
+		}
+	}
+
 	/** Into an ice column: he crashes, reels for {@value #STUN_TICKS} ticks and takes a third more damage meanwhile. */
 	public void stun(ServerLevel level) {
 		attack = null;
@@ -1056,6 +1167,25 @@ public class YetiKingEntity extends Monster implements GeoEntity {
 		level.playSound(null, getX(), getY(), getZ(), SoundEvents.ANVIL_LAND, SoundSource.HOSTILE, 1.5F, 0.5F);
 		level.playSound(null, getX(), getY(), getZ(), SoundType.GLASS.getBreakSound(), SoundSource.HOSTILE, 2.0F, 0.6F);
 		tell(level, "message.jugcraft.yeti_king.stunned");
+	}
+
+	/**
+	 * Rimebind on him (Concordance Chunk B, B-09, B-P21, B-P54; 04:188): his steps are his own, so its slow does not hold
+	 * him; a binding shows as a wind-up held RIMEBOUND_WINDUP ticks longer, frost-locked. A Rimebound that takes starts its
+	 * Thaw (Rimebind.bound), which only counts down, so a Thaw longer than at his last tick is a binding that took, through
+	 * the effect boundary, which bears his resistance once (bound 30 ticks, thawing 70) and refuses another binding while
+	 * he thaws: once a thaw. The hold waits for his next wind-up however long he reels or roars; a binding before it is
+	 * shown sets it again and never adds. Waiting on his throne a binding holds nothing; left alone he forgets it (reset).
+	 */
+	private void rimebound(ServerLevel level) {
+		MobEffectInstance thaw = Rimebind.RIME_THAW == null ? null : getEffect(Rimebind.RIME_THAW);
+		int left = thaw == null ? 0 : thaw.getDuration();
+		if (left > thawLeft && phase != Phase.WAITING) {
+			rimeHold = RIMEBOUND_WINDUP;
+			level.sendParticles(ParticleTypes.SNOWFLAKE, getX(), getY() + 2.0, getZ(), 24, 0.9, 1.2, 0.9, 0.02);
+			level.playSound(null, getX(), getY(), getZ(), SoundType.GLASS.getPlaceSound(), SoundSource.HOSTILE, 1.5F, 0.5F);
+		}
+		thawLeft = left;
 	}
 
 	/**
@@ -1074,7 +1204,7 @@ public class YetiKingEntity extends Monster implements GeoEntity {
 		}
 		for (int i = 0; i < icicles.size(); i++) {
 			if (t == i * fall.active / icicles.size()) {
-				things.add(FallingIcicleEntity.drop(level, this, icicles.get(i)).getUUID());
+				FallingIcicleEntity.drop(level, this, icicles.get(i));
 			}
 		}
 	}
@@ -1102,7 +1232,7 @@ public class YetiKingEntity extends Monster implements GeoEntity {
 			return;
 		}
 		if (t < spikes.size()) {
-			things.add(GlacialSpikeEntity.burst(level, this, spikes.get(t)).getUUID());
+			GlacialSpikeEntity.burst(level, this, spikes.get(t));
 		}
 	}
 
@@ -1272,27 +1402,52 @@ public class YetiKingEntity extends Monster implements GeoEntity {
 		return List.copyOf(whelps);
 	}
 
+	/** Counts a block of ice, an icicle or a spike as his, gone with him: each one's own factory calls this as it is made. */
+	void keep(Entity thing) {
+		things.add(thing.getUUID());
+	}
+
+	/**
+	 * The living king {@code owner} names, if he counts {@code id} among his whelps and things; else null. None of them is
+	 * saved, nor is his count of them, so a king loaded again after an unload mid-fight counts none from before: a whelp or
+	 * a block of ice left in a chunk that stopped without unloading is gone on its next tick instead of serving him again.
+	 */
+	public static @Nullable YetiKingEntity owning(ServerLevel level, @Nullable UUID owner, UUID id) {
+		return owner != null && level.getEntity(owner) instanceof YetiKingEntity king && king.isAlive()
+				&& (king.whelps.contains(id) || king.things.contains(id)) ? king : null;
+	}
+
 	/** Forgets what is gone. */
 	private void prune(ServerLevel level) {
 		whelps.removeIf(id -> !(level.getEntity(id) instanceof YetiWhelpEntity whelp) || !whelp.isAlive());
 		things.removeIf(id -> level.getEntity(id) == null);
 	}
 
-	/** Whoever hurt him or his whelps has taken part. */
+	/** Whoever hurt him or his whelps, or whose tamed creature did, has taken part. */
 	public void took(ServerPlayer player, float amount) {
-		damageBy.merge(player.getUUID(), amount, Float::sum);
+		encounter.damage(player, amount);
 	}
 
-	/** His participants: everyone who hurt him or his whelps and is still near his lake. */
+	/**
+	 * His participants still near his lake: everyone who hurt him or his whelps, or since Concordance Chunk B healed,
+	 * warded or baited his charge into a column enough to qualify ({@link Encounter}), and is alive within
+	 * {@value Encounter#REACH} blocks.
+	 */
 	public List<ServerPlayer> participants(ServerLevel level) {
 		List<ServerPlayer> out = new ArrayList<>();
 		Vec3 centre = centre();
-		for (ServerPlayer player : level.players()) {
-			if (player.isAlive() && damageBy.getOrDefault(player.getUUID(), 0.0F) > 0.0F && player.position().distanceTo(centre) <= 64.0) {
+		for (UUID id : encounter.qualified()) {
+			ServerPlayer player = level.getServer().getPlayerList().getPlayer(id);
+			if (player != null && player.isAlive() && player.level() == level && player.position().distanceTo(centre) <= Encounter.REACH) {
 				out.add(player);
 			}
 		}
 		return out;
+	}
+
+	/** This fight: who took part and how. */
+	public Encounter encounter() {
+		return encounter;
 	}
 
 	/** Who is fighting him, as his whelps need to know. */
@@ -1313,7 +1468,9 @@ public class YetiKingEntity extends Monster implements GeoEntity {
 		abandoned = 0;
 		stunned = 0;
 		foe = null;
-		damageBy.clear();
+		baiter = null;
+		rimeHold = 0;
+		encounter.abandon();
 		Arrays.fill(cooldowns, 0);
 		setHealth(getMaxHealth());
 		Vec3 throne = throne();
@@ -1345,18 +1502,28 @@ public class YetiKingEntity extends Monster implements GeoEntity {
 	public void die(DamageSource source) {
 		super.die(source);
 		if (level() instanceof ServerLevel level) {
+			// A killing blow gets here inside super.hurtServer, before hurtServer's own took(): its striker (or the owner of
+			// the tamed creature that struck) has taken part before his fall is paid. Any amount qualifies.
+			if (Encounter.striker(source) instanceof ServerPlayer player) {
+				took(player, Float.MIN_VALUE);
+			}
 			defeated(level);
 		}
 	}
 
 	/**
-	 * He has fallen: his whelps flee and his things are gone, the snow drifts back, each participant gets their loot, his
-	 * lair's instance ends (it closes once everyone has left) and a gate of Grey Mist opens in the middle of the lake.
+	 * He has fallen: his whelps flee and his things are gone, the snow drifts back, each player who qualified in his fight
+	 * is paid their loot (lair/LairRewards: now, or kept for one who died or left the game in it), his lair's instance ends
+	 * (it closes once everyone has left) and a gate of Grey Mist opens in the middle of the lake.
 	 */
 	private void defeated(ServerLevel level) {
+		// However often his fall is reported, it is answered once: one reward each (Concordance Chunk A's claim).
+		if (!encounter.claim()) {
+			return;
+		}
 		dismiss(level);
 		driftAll(level);
-		YetiKingLoot.reward(level, this, participants(level));
+		LairRewards.pay(level, YetiKingLoot.BOSS, encounter, position(), centre(), EXPERIENCE);
 		LairInstance open = lairInstance(level);
 		if (open != null) {
 			Lairs.end(open);
@@ -1403,7 +1570,7 @@ public class YetiKingEntity extends Monster implements GeoEntity {
 		}
 		float taken = stunned > 0 ? (float) (amount * STUN_TAKEN) : amount;
 		boolean hurt = super.hurtServer(level, source, taken);
-		if (hurt && source.getEntity() instanceof ServerPlayer player) {
+		if (hurt && Encounter.striker(source) instanceof ServerPlayer player) {
 			took(player, taken);
 		}
 		return hurt;
@@ -1412,6 +1579,15 @@ public class YetiKingEntity extends Monster implements GeoEntity {
 	@Override
 	public boolean canFreeze() {
 		return false;
+	}
+
+	/**
+	 * No Levitation takes on him (an End gun's bullet, a shulker's, a potion): his steps keep him on his lake, but dying he
+	 * no longer takes them, and the spell would float him up.
+	 */
+	@Override
+	public boolean canBeAffected(MobEffectInstance effect) {
+		return !effect.is(MobEffects.LEVITATION) && super.canBeAffected(effect);
 	}
 
 	@Override

@@ -16,11 +16,15 @@ import io.github.jimbozoomer.jugcraft.concordance.compose.Instrument;
 import io.github.jimbozoomer.jugcraft.concordance.compose.Plan;
 import io.github.jimbozoomer.jugcraft.concordance.effect.Cause;
 import io.github.jimbozoomer.jugcraft.concordance.effect.Ledger;
+import io.github.jimbozoomer.jugcraft.concordance.rime.Rime;
+import io.github.jimbozoomer.jugcraft.concordance.rime.Rimebind;
 import io.github.jimbozoomer.jugcraft.concordance.rules.ConcordanceRules;
 import io.github.jimbozoomer.jugcraft.concordance.rules.Definitions;
 import io.github.jimbozoomer.jugcraft.concordance.rules.FocusPool;
 import io.github.jimbozoomer.jugcraft.concordance.rules.Knowledge;
 import io.github.jimbozoomer.jugcraft.concordance.rules.ResearchState;
+import io.github.jimbozoomer.jugcraft.concordance.strata.Brace;
+import io.github.jimbozoomer.jugcraft.concordance.strata.Strata;
 import io.github.jimbozoomer.jugcraft.party.JugcraftParties;
 import io.github.jimbozoomer.jugcraft.party.PartyManager;
 import java.util.ArrayList;
@@ -43,6 +47,7 @@ import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
@@ -80,7 +85,7 @@ public class ConcordanceInvocationGameTests {
 
 	/** A survival player with the Initiate's Wand, standing on {@code standAt} and facing south (+Z). */
 	private static ServerPlayer player(GameTestHelper helper, BlockPos standAt) {
-		ServerPlayer player = helper.makeMockServerPlayerInLevel();
+		ServerPlayer player = TestPlayers.mock(helper);
 		player.setGameMode(GameType.SURVIVAL);
 		BlockPos absolute = helper.absolutePos(standAt);
 		player.snapTo(absolute.getX() + 0.5, absolute.getY(), absolute.getZ() + 0.5, 0.0F, 0.0F);
@@ -394,5 +399,74 @@ public class ConcordanceInvocationGameTests {
 		Knowledge none = Knowledge.EMPTY;
 		helper.assertTrue(none.invocationCost("jugcraft:lance") < 0, "and knowing nothing teaches nothing");
 		helper.succeed();
+	}
+
+	/**
+	 * Concordance Chunk B, unit 3 (09:96): Focus is charged once a cast, however many it reaches. Rimebind on a villager
+	 * binds it and costs its 4 once; recast while the villager thaws, it is refused and costs nothing. Brace on the caster
+	 * and two party friends, not on a stranger as near, costs its 3 once for all three; recast while they are braced, it
+	 * fizzles and costs nothing.
+	 */
+	@GameTest(maxTicks = 40)
+	public void focusIsChargedOnce(GameTestHelper helper) {
+		floor(helper);
+		ServerPlayer caster = player(helper, new BlockPos(1, 2, 1));
+		ServerPlayer friend = player(helper, new BlockPos(3, 2, 1));
+		ServerPlayer other = player(helper, new BlockPos(2, 2, 2));
+		ServerPlayer stranger = player(helper, new BlockPos(3, 2, 3));
+		Mob villager = helper.spawnWithNoFreeWill(EntityTypes.VILLAGER, new BlockPos(1, 2, 5));
+		PartyManager parties = JugcraftParties.manager();
+		long now = System.currentTimeMillis();
+		try {
+			for (ServerPlayer member : List.of(friend, other)) {
+				helper.assertTrue(parties.invite(caster.getUUID(), member.getUUID(), now) == PartyManager.Result.OK
+						&& parties.accept(member.getUUID(), now) == PartyManager.Result.OK, "The caster and two friends form a party");
+			}
+			ConcordanceProgress.grant(caster, FIRST_LIGHT, ResearchState.UNDERSTOOD);
+			ConcordanceProgress.grant(caster, Rime.RESEARCH, ResearchState.UNDERSTOOD);
+			ConcordanceProgress.grant(caster, Strata.RESEARCH, ResearchState.UNDERSTOOD);
+			refreshSpells(caster);
+			cast(caster, "jugcraft:rimebind");
+			helper.assertTrue(villager.hasEffect(Rimebind.RIMEBOUND) && villager.hasEffect(Rimebind.RIME_THAW)
+					&& ConcordanceProgress.currentFocus(caster) == FocusPool.MAX - 4, "Rimebind binds the villager for its 4 Focus, once: "
+							+ ConcordanceProgress.currentFocus(caster));
+			cast(caster, "jugcraft:rimebind");
+			helper.assertTrue(ConcordanceProgress.currentFocus(caster) == FocusPool.MAX - 4, "Recast while it thaws, it is refused and costs nothing");
+			cast(caster, "jugcraft:brace");
+			for (ServerPlayer braced : List.of(caster, friend, other)) {
+				helper.assertTrue(braced.hasEffect(Brace.BRACED), braced.getName().getString() + " is braced");
+			}
+			helper.assertTrue(!stranger.hasEffect(Brace.BRACED) && ConcordanceProgress.currentFocus(caster) == FocusPool.MAX - 7,
+					"not the stranger, and Brace's 3 Focus is paid once for three: " + ConcordanceProgress.currentFocus(caster));
+			cast(caster, "jugcraft:brace");
+			helper.assertTrue(ConcordanceProgress.currentFocus(caster) == FocusPool.MAX - 7, "Recast while all are braced, it fizzles and costs nothing");
+		} finally {
+			parties.adminDisband(caster.getUUID());
+		}
+		helper.succeed();
+	}
+
+	/**
+	 * Concordance Chunk B, unit 3 (B-P12): a Brace gives knockback resistance 0.5, and one's own Flashstep, a helpful push,
+	 * neither feels it nor spends it: it still carries its caster 1.2 a tick, and the Brace is still there after.
+	 */
+	@GameTest(maxTicks = 20)
+	public void braceDoesNotShortenFlashstep(GameTestHelper helper) {
+		ServerPlayer player = player(helper, new BlockPos(1, 2, 1));
+		ConcordanceProgress.grant(player, FIRST_LIGHT, ResearchState.MASTERED);
+		ConcordanceProgress.grant(player, Strata.RESEARCH, ResearchState.UNDERSTOOD);
+		refreshSpells(player);
+		cast(player, "jugcraft:brace");
+		helper.assertTrue(player.hasEffect(Brace.BRACED) && Math.abs(player.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE) - 0.5) < 1.0E-9,
+				"Braced: knockback resistance 0.5: " + player.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+		player.setDeltaMovement(0.0, 0.0, 0.0);
+		cast(player, "jugcraft:flashstep");
+		var motion = player.getDeltaMovement();
+		helper.assertTrue(Math.abs(motion.z - 1.2) < 1.0E-6 && Math.abs(motion.x) < 1.0E-6, "Flashstep still carries the braced caster 1.2: " + motion);
+		helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE) - 0.5) < 1.0E-9, "and the Brace still holds");
+		helper.runAfterDelay(1, () -> {
+			helper.assertTrue(player.hasEffect(Brace.BRACED), "Flashstep did not spend the Brace");
+			helper.succeed();
+		});
 	}
 }

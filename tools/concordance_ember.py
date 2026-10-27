@@ -272,6 +272,9 @@ TRINKET_SLOTS = {
                       "source": "data/ars_jymbaumental/curios/slots/bracelet.json"},
 }
 TRINKETS = {"lesser_fire_focus": "chest/spell_focus", "fire_focus": "chest/spell_focus", "fire_bangle": "hand/bracelet"}
+# Everything worn in the owner's two slots, whose item tags write_all writes (one writer for each file): Ember's own, and
+# what other slices put in them (tools/concordance.py adds Rime's travel kit's foci and bangle, B-P51).
+SLOT_ITEMS = dict(TRINKETS)
 FIRE_POWER = {"lesser_fire_focus": LESSER_FOCUS_POWER, "fire_focus": FOCUS_POWER,
               **{piece: ROBE_PIECE_POWER for piece in ARMOR}}
 
@@ -475,7 +478,7 @@ def write_all(write, assets, data, lang, condition, self_drop):
         write(trinkets / "slots" / group / f"{name}.json", {"icon": rid(f"container/slots/{info['icon']}"),
                                                             "amount": info["amount"], "validator_predicates": ["trinkets:default"]})
         write(trinkets / "tags" / "item" / group / f"{name}.json",
-              {"replace": False, "values": [rid(item) for item, worn in TRINKETS.items() if worn == slot]})
+              {"replace": False, "values": [rid(item) for item, worn in SLOT_ITEMS.items() if worn == slot]})
     write(trinkets / "entities" / f"{MOD}_ember.json", {"entities": ["player"], "slots": sorted(TRINKET_SLOTS)})
 
 

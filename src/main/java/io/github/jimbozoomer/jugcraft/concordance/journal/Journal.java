@@ -18,6 +18,7 @@ import io.github.jimbozoomer.jugcraft.concordance.rules.ResearchEngine;
 import io.github.jimbozoomer.jugcraft.concordance.rules.ResearchState;
 import io.github.jimbozoomer.jugcraft.concordance.sky.Sky;
 import io.github.jimbozoomer.jugcraft.concordance.spire.ConcordSpire;
+import io.github.jimbozoomer.jugcraft.concordance.spirits.StolasRegard;
 import io.github.jimbozoomer.jugcraft.concordance.spirits.Workers;
 import io.github.jimbozoomer.jugcraft.concordance.stages.StageProgress;
 import io.github.jimbozoomer.jugcraft.concordance.starbound.Starbound;
@@ -41,8 +42,8 @@ import org.jspecify.annotations.Nullable;
  * The Concordance Journal (roadmap step 26): everything the server knows about one player's Concordance work and what
  * stands in its way, in one place. Research (each entry's state, what the next one asks in words and, as exact figures,
  * how far each way to it has come), the stage and every route onward, and each tradition's own report (Vitae, the sky,
- * workers, deliveries, relics, curses and wards, the Conclave, spires, Prima Materia), each shown once its research is
- * met (or, for curses, while one touches the player).
+ * workers, deliveries, what Stolas waits for, relics, curses and wards, the Conclave, spires, Prima Materia), each shown
+ * once its research is met (Stolas's, once the Binding Arts are understood; for curses, while one touches the player).
  * <p>
  * The reports are the same ones the chat commands print: each feature writes its lines once, and the commands and the
  * journal show them. Nothing here decides anything: the journal reads the server's own records when the player asks
@@ -90,6 +91,8 @@ public final class Journal {
 		contribute("sky", knows(Sky.RESEARCH), (player, out) -> Sky.forecast(Sky.time(player.level()), Sky.FORECAST_DAYS).forEach(out::line));
 		contribute("workers", knows(Workers.RESEARCH), (player, out) -> Workers.list(player, out::line));
 		contribute("logistics", knows(Workers.RESEARCH), (player, out) -> Couriers.list(player, out::line));
+		// Concordance Chunk D, D-03: what Stolas waits for, from the Binding Arts understood (D-07 adds the pacts kept).
+		contribute("pacts", Workers::knows, StolasRegard::report);
 		contribute("relics", knows(Reliquary.RESEARCH), (player, out) -> Reliquary.report(player, out::line));
 		contribute("hexes", knows(Sympathy.RESEARCH).or(Sympathy::touched), (player, out) -> Sympathy.report(player, out::line));
 		contribute("conclave", player -> Starbound.standing(player).member(), (player, out) -> {

@@ -41,7 +41,8 @@ import org.jspecify.annotations.Nullable;
  * container and the ledger never disagree.
  */
 public final class CourierLedger extends SavedData {
-	private static final Codec<Place> PLACE = RecordCodecBuilder.create(i -> i.group(
+	/** A place as the ledger saves it (Concordance Chunk D reuses it for a pact's place and a departure's). */
+	public static final Codec<Place> PLACE = RecordCodecBuilder.create(i -> i.group(
 			Codec.STRING.fieldOf("dimension").forGetter(Place::dimension), Codec.INT.fieldOf("x").forGetter(Place::x),
 			Codec.INT.fieldOf("y").forGetter(Place::y), Codec.INT.fieldOf("z").forGetter(Place::z)).apply(i, Place::new));
 	private static final Codec<Ticket> TICKET = RecordCodecBuilder.create(i -> i.group(
@@ -252,7 +253,12 @@ public final class CourierLedger extends SavedData {
 	}
 
 	public Logistics.Outcome reserve(long id, UUID worker, Place source, Storage<ItemVariant> storage, long now) {
-		Logistics.Outcome outcome = ledger.reserve(id, worker, source, (int) Math.min(Integer.MAX_VALUE, available(id, storage)), now);
+		return reserve(id, worker, source, storage, Integer.MAX_VALUE, now);
+	}
+
+	/** As reserve, at most {@code most} (a courier's load a trip; Concordance Chunk D, D-08). */
+	public Logistics.Outcome reserve(long id, UUID worker, Place source, Storage<ItemVariant> storage, int most, long now) {
+		Logistics.Outcome outcome = ledger.reserve(id, worker, source, (int) Math.min(Integer.MAX_VALUE, available(id, storage)), most, now);
 		setDirty();
 		return outcome;
 	}

@@ -133,7 +133,7 @@ public final class MatterWorkshops {
             var temporary=new SimpleContainer(input.copyWithCount(1));var context=net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext.ofSingleSlot(ContainerStorage.of(temporary,null).getSlot(0));var container=context.find(FluidStorage.ITEM);if(container==null){status=5;return;}
             try(var tx=net.fabricmc.fabric.api.transfer.v1.transaction.Transaction.openOuter()){
                 long moved=mode==0?net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil.move(tank,container,v->true,Long.MAX_VALUE,tx):net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil.move(container,tank,v->true,Long.MAX_VALUE,tx);
-                if(moved==0){status=6;return;}ItemStack result=temporary.getItem(0).copy();if(result.isEmpty()||!room(result)){status=2;return;}tx.commit();input.shrink(1);give(result);energy.setAmount(energy.getAmount()-400);status=4;setChanged();
+                if(moved==0){status=6;return;}ItemStack result=temporary.getItem(0).copy();if(!result.isEmpty()&&!room(result)){status=2;return;}tx.commit();input.shrink(1);if(!result.isEmpty())give(result);energy.setAmount(energy.getAmount()-400);status=4;setChanged();
             }
         }
         @Override public void preRemoveSideEffects(BlockPos pos,BlockState state){if(level!=null)Containers.dropContents(level,pos,this);clearContent();}

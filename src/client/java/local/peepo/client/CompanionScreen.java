@@ -12,7 +12,67 @@ public final class CompanionScreen extends AbstractContainerScreen<CompanionMenu
     private final Button[] buttons=new Button[9],remove=new Button[6],moveUp=new Button[5],moveDown=new Button[5],settings=new Button[9];
     private final Button[] transport=new Button[8],filters=new Button[4];
     private Button filterBack;
+    private Button stockMode,stockApply,stockOutputs;
+    private final Button[] stockAdjust=new Button[4];
+    private EditBox stockTarget,stockRestock;
+    private int shownStockSlot=-1,shownStockRevision=-1,shownStockRow=-1;
     private Button sparklingCider,agedCider,honey,honeycomb,draught,salve;
+    private boolean stockPanel(){
+        var view=menu.stockView;var n=npc();
+        return view!=null && view.entries().size()==9 && menu.filterRow()>=0 && menu.filterRow()<4 && view.row()==menu.filterRow() && n!=null
+            && n.assignments.view().get(view.row()+1)!=null && n.assignments.view().get(view.row()+1).at().pos().equals(view.anchor());
+    }
+    private int stockSlot(){return Math.clamp(menu.value(79),0,8);}
+    private int number(EditBox box){try{return Integer.parseInt(box.getValue());}catch(NumberFormatException ignored){return -1;}}
+    private void sendStock(int action,int target,int restock){
+        if(!stockPanel())return;var v=menu.stockView;
+        net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.send(new CompanionStockEditPayload(menu.containerId,v.row(),v.anchor(),v.revision(),stockSlot(),action,target,restock));
+    }
+    private void initStock(){
+        stockMode=addRenderableWidget(Button.builder(Component.literal("Unlimited"),b->{var e=menu.stockView.entries().get(stockSlot());sendStock(0,e.target()==0?64:0,e.target()==0?32:0);}).bounds(leftPos+105,topPos+118,139,18).build());
+        stockTarget=addRenderableWidget(new EditBox(font,leftPos+183,topPos+142,39,16,Component.literal("Production target")));
+        stockRestock=addRenderableWidget(new EditBox(font,leftPos+183,topPos+166,39,16,Component.literal("Restock at")));
+        for(var box:new EditBox[]{stockTarget,stockRestock}){box.setMaxLength(4);}
+        for(int i=0;i<4;i++){final int index=i;stockAdjust[i]=addRenderableWidget(Button.builder(Component.literal(i%2==0?"-":"+"),b->{
+            int target=Math.clamp(number(stockTarget)+(index<2?(index%2==0?-1:1):0),1,CompanionProductionStock.MAX_TARGET);
+            int restock=Math.clamp(number(stockRestock)+(index>=2?(index%2==0?-1:1):0),0,target-1);
+            stockTarget.setValue(Integer.toString(target));stockRestock.setValue(Integer.toString(restock));sendStock(1,target,restock);
+        }).bounds(leftPos+(i%2==0?163:226),topPos+141+(i/2)*24,17,18).build());}
+        stockApply=addRenderableWidget(Button.builder(Component.literal("Apply quantities"),b->sendStock(1,number(stockTarget),number(stockRestock))).bounds(leftPos+105,topPos+187,139,17).build());
+        stockOutputs=addRenderableWidget(Button.builder(Component.literal("Use linked Outputs"),b->sendStock(2,0,0)).bounds(leftPos+330,topPos+207,136,17).build());
+        tip(stockMode,"Per-product goal shared by helpers at this workstation. Unlimited preserves normal production.");
+        tip(stockApply,"Count items, not stacks (1-4096). Restock at must be lower than Target. Already committed batches finish.");
+        tip(stockOutputs,"Replace this workstation's shared counted-container list with this job's current linked Outputs. Configure links under Supplies.");
+    }
+    private void updateStock(){
+        boolean visible=stockPanel();stockMode.visible=stockApply.visible=stockOutputs.visible=visible;
+        stockTarget.visible=stockRestock.visible=visible;for(var b:stockAdjust)b.visible=visible;
+        if(!visible){stockTarget.setFocused(false);stockRestock.setFocused(false);shownStockRow=-1;return;}
+        var v=menu.stockView;int slot=stockSlot();var e=v.entries().get(slot);
+        boolean item=e.target()>=0 && !menu.getSlot(CompanionMenu.FILTER_START+slot).getItem().isEmpty();
+        if(shownStockRow!=v.row() || shownStockSlot!=slot || shownStockRevision!=v.revision()){
+            stockTarget.setValue(Integer.toString(e.target()<=0?64:e.target()));stockRestock.setValue(Integer.toString(e.target()<=0?32:e.restock()));
+            shownStockRow=v.row();shownStockSlot=slot;shownStockRevision=v.revision();
+        }
+        stockMode.active=item;stockMode.setMessage(Component.literal(e.target()<0?"Machine controls":e.target()==0?"Unlimited":"Maintain stock"));
+        boolean edit=item && e.target()>0;stockTarget.setEditable(edit);stockRestock.setEditable(edit);
+        for(var b:stockAdjust)b.active=edit;
+        stockApply.active=edit && number(stockTarget)>0 && number(stockTarget)<=CompanionProductionStock.MAX_TARGET && number(stockRestock)>=0 && number(stockRestock)<number(stockTarget);
+    }
+    private void stockLabels(GuiGraphicsExtractor g){
+        var v=menu.stockView;var item=menu.getSlot(CompanionMenu.FILTER_START+stockSlot()).getItem();var e=v.entries().get(stockSlot());
+        g.text(font,item.isEmpty()?"Select a product":fit(item.getHoverName().getString(),139),105,104,0xFF404040,false);
+        g.text(font,"Target",105,146,0xFF404040,false);g.text(font,"Restock at",105,170,0xFF404040,false);
+        g.text(font,"Stored: "+(e.available()?e.stored():"?"),320,108,0xFF404040,false);
+        g.text(font,"At station / on way:",320,122,0xFF404040,false);
+        g.text(font,Integer.toString(e.underway()),320,135,0xFF404040,false);
+        g.text(font,e.target()<0?"Use machine fluid target":e.available()?(e.target()==0?"Unlimited":e.stored()+e.underway()>=e.target()?"Target covered":"Restock when needed"):"Stock unavailable",320,152,e.available()?0xFF246535:0xFF994433,false);
+        g.text(font,fit("Left-click selects; right-click clears.",210),258,172,0xFF404040,false);
+        g.text(font,fit("Empty filter allows any available recipe.",210),258,185,0xFF404040,false);
+        g.text(font,"Count stock in (shared):",105,208,0xFF404040,false);
+        if(v.outputs().isEmpty())g.text(font,"Link Outputs, then use the button to adopt them.",105,222,0xFF555555,false);
+        for(int i=0;i<v.outputs().size();i++)g.text(font,fit(v.outputs().get(i),i==0?220:355),105,222+i*9,0xFF555555,false);
+    }
     private static final String[] MODES={"Follow","Stay","Home","Work"};
     private int panel; // Jobs and routine. Transport controls live on each job row.
     private Button tab,supplyTab;
@@ -136,7 +196,7 @@ public final class CompanionScreen extends AbstractContainerScreen<CompanionMenu
         super.init();inventoryLabelX=80;inventoryLabelY=218+CompanionMenu.STATUS_SPACE;
         tab=addRenderableWidget(Button.builder(Component.literal("Routine >"),b->{panel=panel==1?0:1;updateButtons();}).bounds(leftPos+imageWidth-84,topPos+6,76,16).build());
         supplyTab=addRenderableWidget(Button.builder(Component.literal("Supplies"),b->{panel=panel==2?0:2;updateButtons();}).bounds(leftPos+imageWidth-166,topPos+6,78,16).build());
-        initSupplies();initDetails();
+        initSupplies();initDetails();initStock();
         for(int i=0;i<4;i++){
             final int id=60+i;
             filters[i]=iconButton("Filter",CompanionMenu.RECIPE_X,CompanionMenu.assignmentY(i+1),FUNNEL,b->{
@@ -189,6 +249,10 @@ public final class CompanionScreen extends AbstractContainerScreen<CompanionMenu
     }
     @Override public boolean keyPressed(net.minecraft.client.input.KeyEvent event){
         if(panel==3 && nameBox.isFocused() && event.input()!=256){if(event.input()==257){if(nameSave.active)sendDetails(0);return true;}nameBox.keyPressed(event);return true;}
+        if(stockPanel() && (stockTarget.isFocused() || stockRestock.isFocused()) && event.input()!=256){
+            if(event.input()==257){if(stockApply.active)sendStock(1,number(stockTarget),number(stockRestock));return true;}
+            (stockTarget.isFocused()?stockTarget:stockRestock).keyPressed(event);return true;
+        }
         return super.keyPressed(event);
     }
     private PeepoEntity npc(){return minecraft==null || minecraft.player==null?null:menu.companion(minecraft.player);}
@@ -197,7 +261,7 @@ public final class CompanionScreen extends AbstractContainerScreen<CompanionMenu
         if(filtering)panel=menu.filterRow()>=4?2:0;
         menu.showRecipes=panel==0 || filtering;
         tab.visible=supplyTab.visible=!filtering;
-        updateSupplies(filtering);updateDetails(filtering);updatePopulation(filtering);filterBack.visible=filtering;
+        updateSupplies(filtering);updateDetails(filtering);updatePopulation(filtering);updateStock();filterBack.visible=filtering;
         boolean crucible=filtering && menu.filterRow()<4 && menu.value(25+menu.filterRow())==11;
         draught.visible=salve.visible=crucible;
         if(crucible){
@@ -273,6 +337,7 @@ public final class CompanionScreen extends AbstractContainerScreen<CompanionMenu
             if(row>0 && row<5 && target!=null)text+=". Priority "+row+" (top is highest).";
             if(target!=null && target.garden())text+=target.gardenZone()!=null?(target.orchard()?" Orchard fruit picking, with linked Output. Leave safe access below the canopy.":" Garden zone: farmland, planters, awakened Verdant Beds, cane, bamboo, cactus, berries, cocoa, pumpkins, melons and flooded rice. Supply brings planting items; Output takes surplus. Select a crop to establish new ground plantings. The gear opens optional farmland repair and limited fertilizing."):CompanionGarden.hanging(target)?" Up to 8 saved hanging spots. Supply brings ready-made bundles; Output takes dried herbs. Fresh bundles dry naturally.":CompanionGarden.mushrooms(target)?" Up to 8 connected mushroom soil blocks. Shears or a knife in Hand are required for picking. Supply brings mushrooms; Output takes surplus harvests.":" Up to 8 connected farmland or planter boxes. A hoe in Hand halves work time. Supply brings seeds; Output takes surplus harvests.";
             if(target!=null && target.block().equals(local.peepo.PeepoMod.id("sprinkler")))text+=" Supply water buckets and Fertilizer; Output receives empty buckets. Keeps up to four fertilizer stocked. Uses one work slot; pipe and hopper inputs still work.";
+            if(target!=null && target.treeTap())text+=" Supply empty glass bottles; Output receives latex bottles. Leave safe ground in front of the tap. Bucket upgrades remain manual.";
             if(target!=null && target.water())text+=" Supply empty bottles, buckets or partly filled gourd canteens; Output receives filled containers. Leave a dry bank. Buckets remove source water: use an infinite-water pool for repeated filling.";
             if(target!=null && target.care())text+=" Tasks can be enabled independently using this job's Zone options button. Uses the outlined rectangular area; missing shears or buckets do not stop other tasks.";
             if(target!=null && target.shearing())text+=" Adult woolly sheep within 8 blocks. Give shears in Hand or a Tools supply; Output receives wool.";
@@ -384,6 +449,11 @@ public final class CompanionScreen extends AbstractContainerScreen<CompanionMenu
         int x=leftPos,y=topPos;
         g.fill(x,y,x+imageWidth,y+imageHeight,0xFF373737);g.fill(x+1,y+1,x+imageWidth-2,y+imageHeight-2,0xFFFFFFFF);g.fill(x+3,y+3,x+imageWidth-1,y+imageHeight-1,0xFF555555);g.fill(x+4,y+4,x+imageWidth-4,y+imageHeight-4,0xFFC6C6C6);
         for(var slot:menu.slots){if(!slot.isActive())continue;int sx=x+slot.x,sy=y+slot.y;g.fill(sx-1,sy-1,sx+17,sy+17,0xFFFFFFFF);g.fill(sx-1,sy-1,sx+16,sy+16,0xFF373737);g.fill(sx,sy,sx+16,sy+16,0xFF8B8B8B);}
+        if(stockPanel()){
+            var slot=menu.getSlot(CompanionMenu.FILTER_START+stockSlot());int sx=x+slot.x,sy=y+slot.y;
+            g.fill(sx-2,sy-2,sx+18,sy-1,0xFF27863B);g.fill(sx-2,sy+17,sx+18,sy+18,0xFF27863B);
+            g.fill(sx-2,sy-1,sx-1,sy+17,0xFF27863B);g.fill(sx+17,sy-1,sx+18,sy+17,0xFF27863B);
+        }
         if(panel==0 && menu.filterRow()<0)for(int i=0;i<6;i++){
             int rowY=y+CompanionMenu.assignmentY(i);
             g.fill(x+99,rowY,x+(i==0 || i>=5?imageWidth-20:252),rowY+14,0xFFDADADA);
@@ -410,6 +480,17 @@ public final class CompanionScreen extends AbstractContainerScreen<CompanionMenu
         if(menu.filterRow()>=0){
             var companion=npc();var target=companion==null?null:companion.assignments.view().get(menu.filterRow()+1);
             g.text(font,"Filter: "+(target==null?"Workstation":fit(companion.assignments.label(menu.filterRow()+1),200)),105,82,0xFF404040,false);
+            if(stockPanel()){stockLabels(g);return;}
+            if(menu.value(25+menu.filterRow())==15){
+                g.text(font,"Choose products or fluid output buckets.",105,174,0xFF404040,false);
+                g.text(font,"Supply items/tools; fluids still use pipes.",105,187,0xFF404040,false);
+                g.text(font,"Machine recipe locks still apply.",105,200,0xFF404040,false);return;
+            }
+            if(menu.value(25+menu.filterRow())==14){
+                g.text(font,"Choose finished products. Empty allows any.",105,174,0xFF404040,false);
+                g.text(font,"Supply ingredients, fuel and reusable tools.",105,187,0xFF404040,false);
+                g.text(font,"Crucible furnace also needs ceramic parts.",105,200,0xFF404040,false);return;
+            }
             if(menu.value(25+menu.filterRow())==12){
                 g.text(font,"Choose compostable inputs for the Mulch Maw.",105,174,0xFF404040,false);
                 g.text(font,"Keeps up to 16 items; pauses when beds are full.",105,187,0xFF404040,false);

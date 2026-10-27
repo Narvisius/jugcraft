@@ -3,14 +3,16 @@ package io.github.jimbozoomer.jugcraft.client.jimtafacts;
 import io.github.jimbozoomer.jugcraft.Jugcraft;
 import io.github.jimbozoomer.jugcraft.jimtafacts.spellbooks.JimtaScribing;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import io.github.jimbozoomer.jugcraft.client.ScreenKit;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
 /** Source forge atlas, ingredient and result previews, finite selection buttons; no typed spell IDs. */
-public final class JimtaScribingScreen extends AbstractContainerScreen<JimtaScribing.Menu> {
+public final class JimtaScribingScreen extends AbstractContainerScreen<JimtaScribing.Menu> implements ScreenKit.Fitted {
     private Button back,next,apply;
     public JimtaScribingScreen(JimtaScribing.Menu menu,Inventory inventory,Component title){super(menu,inventory,title,216,166);}
     @Override protected void init(){super.init();back=button(0,108,50,22,"<");next=button(1,134,50,22,">");apply=button(2,105,18,51,"Create");}
@@ -29,6 +31,8 @@ public final class JimtaScribingScreen extends AbstractContainerScreen<JimtaScri
             g.fill(x-1,y-1,x+17,y+17,i>=5?0xFF80648F:0xFF18151D);g.fill(x,y,x+16,y+16,i>=5?0xFF352C40:0xFF5B5266);
         }
     }
+    /** The forge and its title, written just above it. */
+    @Override public ScreenRectangle panelArea(){return new ScreenRectangle(leftPos,topPos-12,imageWidth,imageHeight+12);}
     @Override protected void extractLabels(GuiGraphicsExtractor g,int mx,int my){
         String label=title.getString();if(font.width(label)>208)label=font.plainSubstrByWidth(label,204);
         g.text(font,label,6,-12,0xFFEBD4FF,true);

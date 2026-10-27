@@ -1,0 +1,40 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "phosphate"
+    }
+  ],
+  "type": "jugcraft:chemical_reaction",
+  "items": [
+    {
+      "ingredient": "jugcraft:cola_syrup",
+      "count": 1
+    },
+    {
+      "ingredient": "minecraft:glass_bottle",
+      "count": 2
+    }
+  ],
+  "fluids": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 500
+    },
+    {
+      "fluid": "jugcraft:carbon_dioxide",
+      "amount": 250
+    }
+  ],
+  "results": [
+    {
+      "id": "jugcraft:cola",
+      "count": 3
+    }
+  ],
+  "time": 120
+}

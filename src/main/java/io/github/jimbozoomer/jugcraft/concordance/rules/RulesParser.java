@@ -7,6 +7,7 @@ import com.google.gson.JsonPrimitive;
 import io.github.jimbozoomer.jugcraft.concordance.alchemy.Axis;
 import io.github.jimbozoomer.jugcraft.concordance.alchemy.Ingredient;
 import io.github.jimbozoomer.jugcraft.concordance.alchemy.Preparation;
+import io.github.jimbozoomer.jugcraft.concordance.alchemy.Product;
 import io.github.jimbozoomer.jugcraft.concordance.alchemy.Property;
 import io.github.jimbozoomer.jugcraft.concordance.alchemy.Vector;
 import io.github.jimbozoomer.jugcraft.concordance.compose.Component;
@@ -586,13 +587,14 @@ public final class RulesParser {
 
 	/**
 	 * What a property does: {@code {"schema": 1, "status": "minecraft:night_vision", "intent": "helpful",
-	 * "threshold": 0.5, "per_level": 1.0, "max_level": 1, "ticks_per_unit": 1200, "max_ticks": 2400}}. The file is named
-	 * for its axis, or {@code contaminant}.
+	 * "threshold": 0.5, "per_level": 1.0, "max_level": 1, "ticks_per_unit": 1200, "max_ticks": 2400}}, and optionally
+	 * {@code "fouling": 4.0}: the units of it each unit of contaminant a part takes from a dose (Concordance Chunk C, C-02,
+	 * C-P7; never on the contaminant itself). The file is named for its axis, or {@code contaminant}.
 	 */
 	public @Nullable Property property(String id, JsonElement json) {
 		try {
 			JsonObject object = object(json, "property");
-			only(object, "schema", "status", "intent", "threshold", "per_level", "max_level", "ticks_per_unit", "max_ticks");
+			only(object, "schema", "status", "intent", "threshold", "per_level", "max_level", "ticks_per_unit", "max_ticks", "fouling");
 			schema(object);
 			String name = id.substring(id.indexOf(':') + 1);
 			if (Axis.fromId(name) == null && !name.equals(Property.CONTAMINANT)) {
@@ -606,11 +608,51 @@ public final class RulesParser {
 			if (name.equals(Property.CONTAMINANT) && intent != Intent.HARMFUL) {
 				throw new Invalid("a contaminant is harmful");
 			}
+			long fouling = object.has("fouling") ? milli(object.get("fouling"), "fouling", MAX_PROPERTY) : 0L;
+			if (fouling > 0 && name.equals(Property.CONTAMINANT)) {
+				throw new Invalid("the contaminant fouls; it declares no fouling of its own");
+			}
 			return new Property(name, id(object, "status"), intent, milli(member(object, "threshold"), "threshold", MAX_PROPERTY),
 					milli(member(object, "per_level"), "per_level", MAX_PROPERTY), range(object, "max_level", 1, EffectSpec.MAX_AMPLIFIER + 1),
-					range(object, "ticks_per_unit", 1, EffectSpec.MAX_DURATION), range(object, "max_ticks", 1, EffectSpec.MAX_DURATION));
+					range(object, "ticks_per_unit", 1, EffectSpec.MAX_DURATION), range(object, "max_ticks", 1, EffectSpec.MAX_DURATION), fouling);
 		} catch (Invalid | IllegalStateException | UnsupportedOperationException | IllegalArgumentException problem) {
 			problems.add("property " + id + ": " + problem.getMessage());
+			return null;
+		}
+	}
+
+	private static final Pattern KEY = Pattern.compile("[a-z0-9_]+(\\.[a-z0-9_]+)+");
+	private static final Pattern CODEX = Pattern.compile("[a-z_]+/[a-z_]+");
+
+	/**
+	 * A workshop product (Concordance Chunk C, C-02): {@code {"schema": 1, "form": "salve", "status": "minecraft:regeneration",
+	 * "harmful": false, "name": "item.jugcraft.salve.stillroot_poultice", "codex": "alembic/stillroot_poultice"}}. A brew of
+	 * that form carrying that status and nothing harmful is named so; "harmful" must be given, and false.
+	 */
+	public @Nullable Product product(String id, JsonElement json) {
+		try {
+			JsonObject object = object(json, "product");
+			only(object, "schema", "form", "status", "harmful", "name", "codex");
+			schema(object);
+			String formName = string(object, "form");
+			Product.Form form = Product.Form.fromId(formName);
+			if (form == null) {
+				throw new Invalid("form must be draught or salve, not \"" + formName + "\"");
+			}
+			if (bool(object, "harmful", true)) {
+				throw new Invalid("\"harmful\" must be false: a product carries nothing harmful");
+			}
+			String name = string(object, "name");
+			if (!KEY.matcher(name).matches()) {
+				throw new Invalid("\"name\" is not a translation key: \"" + name + "\"");
+			}
+			String codex = string(object, "codex");
+			if (!CODEX.matcher(codex).matches()) {
+				throw new Invalid("\"codex\" is not a codex entry (category/entry): \"" + codex + "\"");
+			}
+			return new Product(id, form, id(object, "status"), name, codex);
+		} catch (Invalid | IllegalStateException | UnsupportedOperationException | IllegalArgumentException problem) {
+			problems.add("product " + id + ": " + problem.getMessage());
 			return null;
 		}
 	}

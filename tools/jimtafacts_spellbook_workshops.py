@@ -7,6 +7,8 @@ def items():return ['jimta_spellbooks_'+name for name in (*BLOCKS,*MATERIALS,*EL
 def blocks():return ['jimta_spellbooks_'+name for name in BLOCKS]
 def j(name):return 'jugcraft:jimta_spellbooks_'+name
 def generate(copy,definition,model,texture,dump,RES,ART,lang):
+ from jimtafacts_survival_rewards import generate_ore
+ generate_ore(dump, RES)
  source=ART.parents[1]/'data/irons_spellbooks'
  source_lang=json.loads((ART/'lang/en_us.json').read_text(encoding='utf-8'));shapes={}
  for name in BLOCKS:
@@ -36,6 +38,8 @@ def generate(copy,definition,model,texture,dump,RES,ART,lang):
  for name in (*MATERIALS,*ELIXIRS):
   dump(RES/f'assets/jugcraft/items/jimta_spellbooks_{name}.json',definition('irons_spellbooks:item/'+name,'jimta_spellbooks_'+name))
   lang['item.jugcraft.jimta_spellbooks_'+name]=source_lang.get('item.irons_spellbooks.'+name,name.replace('_',' ').title())
+ from jimtafacts_survival_rewards import debris_loot
+ dump(RES/"data/jugcraft/loot_table/blocks/jimta_spellbooks_arcane_debris.json", debris_loot())
  # Keep four independent fluid identities and the source's combined 1000mB cap.
  # The actual original recipes are data input, with only registry names migrated.
  recipes=[]

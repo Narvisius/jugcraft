@@ -15,7 +15,11 @@ Builds on [typed resources](arcane-concordance-sharing.md) (Prima Materia is the
 ## Player experience
 
 Once First Light is understood, examining raw matter (raw iron, copper or gold, calcite, clay) begins **Assay**;
-studying it at a Lampwright's Bench (or reading notes) understands it.
+studying it at a Lampwright's Bench (or reading notes) understands it. Since Concordance Chunk B, unit 3, stone
+(granite, diorite, andesite, tuff) and raw Thallite are raw matter too: `#jugcraft:assay_specimens` holds
+Stratawrighting's `#jugcraft:strata_specimens`, so one examination begins both
+([Rime and Strata](arcane-concordance-rime-strata.md)). They are examined, never weighed: the Scale weighs only what the
+equivalence catalogue holds, and they are not in it.
 
 **The Assayer's Scale** (gold, copper and iron on a dark-oak plinth) works with what you hold:
 
@@ -138,6 +142,19 @@ yet.
 - Concordance Chunk A ([first loadout](concordance-first-loadout.md)): the Adept's Wand had been left out of `EXCLUDED`,
   although the refusals above name wands (the scale refused a plain one as uncatalogued and an inscribed one as
   magical). It is excluded now, and `check_equivalence` requires every Concordance instrument to be.
+- Concordance Chunk B, unit 4 ([the winter record](arcane-concordance-winter.md); not yet merged): the Rimekeeper's
+  travel kit (the two water foci, the Water Bangle and the twelve pieces of the three water sets) joins `EXCLUDED`, as
+  Ember's regalia did; `check_rime_kit` requires each of the fifteen to be. Winter Brine's draughts and salves are
+  neither weighed nor ingredients (`check_winter_brine`).
+- Concordance Chunk C, unit 1 ([the alchemy record](arcane-concordance-alchemy.md); not merged): the workshop's products
+  (the Stillroot Poultice, the Kiln Draught and Winter Brine) are draughts and salves carrying `jugcraft:brew`, so the
+  Scale refuses them before it looks at what they are: as magical when this was written, and as stateful (a component
+  their item does not have by default) since the merge with main `f904df3fd`, whose Scale values every default item.
+  None is a Scale material or an ingredient, and no recipe or trade takes a brew (`check_workshop_products`). The
+  Tyrant Scale and Grave Dust reach the products' ingredients by recipes alone, as declared reward routes; the Scale's
+  priced exchange is not counted as a route. Since the same merge, Root and Rivet's Rooted Thallite Foundation (unit
+  2), in `EXCLUDED`, can be weighed and dissolved at its catalogued worth, and it is never formed (it is no tablet
+  output).
 - The pure core compiles with JDK 21 and the rules load the generated catalogue (45 materials, 42 transmutations) with
   no problems. The step 21 harness passes **31 checks** against it: exact fractions add and round as asked; nuggets
   dissolve at 256/9 rounded down once on the whole batch, and splitting never earns more; forming costs five quarters
@@ -150,8 +167,12 @@ yet.
   use; nine nuggets give 256; one gives 28); forming costs more than dissolving pays (an ingot formed for 320, the
   pattern kept, dissolved again for 256; too few grains form nothing); only plain catalogued matter is weighed (named,
   magical, glinting, changed, uncatalogued and excluded stacks are refused and nothing moves either way); the ledger
-  never passes its cap; every declared crafting and smelting conversion is the game's own recipe, output and count;
-  and the catalogue is balanced, this server's live recipes included.
+  never passes its cap; every declared crafting and smelting conversion is the game's own recipe, output and count; and
+  the catalogue is balanced, this server's live recipes included. A seventh since Concordance Chunk C,
+  `workshopProductsAreNeverWeighed` (passed in CI: run 38684732031, and again in run 38774859294): the three products,
+  refused as magical (as stateful since the merge with main `f904df3fd`), change nothing weighed or dissolved, and
+  nothing is formed from one as a pattern; a bare draught or salve is not catalogued (since that merge: valued like
+  every default item, and never formed).
 - CI: the first run on this step (commit fdf36745) found three faults, fixed in 65d98e8b (26.3's component patch
   has no entry set, so a stack's changes are compared component by component), 65870d7d (an item's nature is judged
   against a plain item's defaults, which already carry an empty enchantment list) and ca66a3e1 (a formed ingot may

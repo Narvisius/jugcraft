@@ -109,8 +109,10 @@ public final class HiveCompanionJob implements CompanionJob {
             }
             if(pending.size()>32 || !port.harvest(pending,false))return CompanionStatus.FULL;
         }
-        try(var tx=Transaction.openOuter()){if(p.extractEnergy(4,tx)!=4)return CompanionStatus.RECOVERING;tx.commit();}
+        try(var tx=Transaction.openOuter()){if(p.extractWorkEnergy(CompanionUniforms.Type.BEEKEEPER,4,tx)!=4)return CompanionStatus.RECOVERING;tx.commit();}
         if(++progress<60)return CompanionStatus.WORKING;
+        // Smoke is rechecked immediately above. Resetting honey never provokes or releases bees,
+        // including for the Beekeeper; the outfit does not grant general sting immunity.
         port.harvest(pending,true);
         ((BeehiveBlock)hive.getBlockState().getBlock()).resetHoneyLevel(level,hive.getBlockState(),stationPosition());
         if(comb){tool.hurtAndBreak(1,p,EquipmentSlot.MAINHAND);p.belongings.setChanged();}

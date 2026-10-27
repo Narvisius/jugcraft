@@ -123,10 +123,11 @@ public final class CompanionWater {
             if(!npc.preferences.canWork() || !npc.orders.station(this) || !occupy(other))return CompanionStatus.IDLE;
             var status=workStatus(other);if(status!=CompanionStatus.READY)return status;
             int displaySlot=slot();if(displaySlot>=0)npc.setWorkPie(npc.belongings.getItem(displaySlot));
-            boolean finishing=progress+1>=WORK_TICKS;boolean bucket=false;
+            int actionTicks=npc.uniforms.duration(CompanionUniforms.Type.GROUNDSKEEPER,WORK_TICKS);
+            boolean finishing=progress+1>=actionTicks;boolean bucket=false;
             int selected=finishing?fittingSlot():-1;if(finishing && selected<0)return CompanionStatus.FULL;
             try(var tx=Transaction.openOuter()){
-                if(npc.extractEnergy(ENERGY_PER_TICK,tx)!=ENERGY_PER_TICK)return CompanionStatus.RECOVERING;
+                if(npc.extractWorkEnergy(CompanionUniforms.Type.GROUNDSKEEPER,ENERGY_PER_TICK,tx)!=ENERGY_PER_TICK)return CompanionStatus.RECOVERING;
                 if(finishing){
                     int slot=selected;
                     bucket=npc.belongings.getItem(slot).is(Items.BUCKET);
@@ -139,7 +140,7 @@ public final class CompanionWater {
             }
             float yaw=(float)Math.toDegrees(Math.atan2(-(stationPosition().getX()+.5-npc.getX()),stationPosition().getZ()+.5-npc.getZ()));
             npc.setYRot(yaw);npc.yBodyRot=yaw;npc.setYHeadRot(yaw);
-            if(++progress<WORK_TICKS)return CompanionStatus.WORKING;
+            if(++progress<actionTicks)return CompanionStatus.WORKING;
             progress=0;nextRoom=0;
             npc.level().playSound(null,stationPosition(),bucket?SoundEvents.BUCKET_FILL:SoundEvents.BOTTLE_FILL,SoundSource.BLOCKS,.8F,1);
             npc.level().gameEvent(npc,GameEvent.FLUID_PICKUP,stationPosition());

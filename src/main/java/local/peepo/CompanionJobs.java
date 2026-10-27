@@ -15,10 +15,14 @@ public final class CompanionJobs {
     }
     static CompanionJob resolveFresh(PeepoEntity npc,BlockPos pos){
         if(!npc.level().hasChunkAt(pos))return null;
+        var fishing=npc.fishing.job(pos);if(fishing!=null)return fishing;
+        var tap=npc.treeTaps.job(pos);if(tap!=null)return tap;
         var water=npc.water.job(pos);if(water!=null)return water;
         var livestock=npc.livestock.job(pos);if(livestock!=null)return livestock;
         var garden=npc.garden.job(pos);if(garden!=null)return garden;
         var be=npc.level().getBlockEntity(pos);if(be==null || be.isRemoved())return null;
+        if(be instanceof CraftingTableCompanionBlockEntity table)return table.job.prepare(npc);
+        if(be instanceof io.github.jimbozoomer.jugcraft.workshop.WorkshopBlockEntity workshop)return workshop.station()==0?workshop.companion.job.prepare(npc):null;
         if(be instanceof io.github.jimbozoomer.jugcraft.agriculture.BatHouseBlockEntity house)return house.companionJob.prepare(npc);
         if(be instanceof net.minecraft.world.level.block.entity.BeehiveBlockEntity)return VanillaCompanionPort.of(be).hiveJob().prepare(npc);
         if(be instanceof io.github.jimbozoomer.jugcraft.kinetic.HandCrankBlockEntity crank)return crank.companionJob.prepare(npc);
@@ -36,7 +40,8 @@ public final class CompanionJobs {
         return null;
     }
     public static boolean permitted(PeepoEntity npc,BlockPos pos){
-        return npc.level().hasChunkAt(pos) && !TownProtection.shieldsBlock(npc.level(),pos);
+        return npc.level().hasChunkAt(pos) && !TownProtection.shieldsBlock(npc.level(),pos)
+            && io.github.jimbozoomer.jugcraft.finance.LandRegistry.mayBuildFor(npc.orders.ownerId(),npc.level(),pos);
     }
     public static CompanionStatus inspect(PeepoEntity npc,CompanionAssignments.Target target){
         if(target==null)return CompanionStatus.NONE;
@@ -44,7 +49,11 @@ public final class CompanionJobs {
         if(!npc.level().hasChunkAt(target.at().pos()))return CompanionStatus.UNLOADED;
         if(!target.present(npc.level()))return CompanionStatus.MISSING;
         if(!permitted(npc,target.at().pos()))return CompanionStatus.FORBIDDEN;
-        var job=resolve(npc,target.at().pos());if(job!=null)return npc.readiness.status(job);
+        var job=resolve(npc,target.at().pos());if(job!=null){
+            var state=npc.readiness.status(job);var block=npc.level().getBlockEntity(target.at().pos());
+            var stock=CompanionProductionStock.of(block);
+            return stock!=null && (CompanionStockRecipes.supports(block) || CompanionAdditionalStock.supports(block))?stock.idleStatus(npc,block,state):state;
+        }
         var port=CompanionLogistics.resolve(npc,target);return port==null?CompanionStatus.UNSUPPORTED:port.status();
     }
 }

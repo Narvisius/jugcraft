@@ -4,6 +4,15 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      load_card:
+        description: Also run the Concordance load cards, the workshop's and the pact hall's (docs/TESTING.md); ordinary runs never do
+        type: boolean
+        default: false
+      clients_without_optional:
+        description: Also run Chunk D's pact, roster and two-client tests without the optional integrations (docs/TESTING.md); ordinary runs never do
+        type: boolean
+        default: false
 permissions:
   contents: read
 concurrency:
@@ -76,6 +85,103 @@ jobs:
           java-version: '25'
       - name: Build and run server tests without optional integrations
         run: ./gradlew build --no-daemon -PjugcraftOptionalIntegrations=false
+
+  # Concordance Chunk C, C-10 (C-P20, C-P66): the measured small workshop, only when a manual run asks for it. Fabric's
+  # filter makes it the only server game test in its own job; its lines are repeated as one notice on the run.
+  # Concordance Chunk D, D-09 (D-P128): the pact hall's card runs after it in the same job, in a server of its own (a
+  # second runGameTest with its own filter), whether or not the workshop's passed; its lines are a notice of their own.
+  load-card:
+    name: Concordance load cards
+    if: github.event_name == 'workflow_dispatch' && inputs.load_card
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: gradle
+      - name: Run the workshop load card
+        env:
+          JAVA_TOOL_OPTIONS: -Dfabric-api.gametest.filter=jugcraft-test:concordance_workshop_load_game_tests_load_card
+        run: |
+          set -o pipefail
+          ./gradlew runGameTest --no-daemon 2>&1 | tee gametest.out
+      - name: Show the load card as a notice
+        if: always()
+        run: |
+          grep -F 'Concordance load card |' gametest.out | sed 's/^.*Concordance load card | //' > card.txt || true
+          if [ -s card.txt ]; then
+            echo "::notice title=Concordance load card::$(awk '{gsub(/%/, "%25"); printf "%s%%0A", $0}' card.txt)"
+          fi
+      - name: Run the pact hall load card
+        if: ${{ !cancelled() }}
+        env:
+          JAVA_TOOL_OPTIONS: -Dfabric-api.gametest.filter=jugcraft-test:concordance_pact_hall_load_game_tests_load_card
+        run: |
+          set -o pipefail
+          ./gradlew runGameTest --no-daemon 2>&1 | tee pacthall.out
+      - name: Show the pact hall load card as a notice
+        if: always()
+        run: |
+          grep -F 'Pact hall load card |' pacthall.out | sed 's/^.*Pact hall load card | //' > pacthall.txt || true
+          if [ -s pacthall.txt ]; then
+            echo "::notice title=Pact hall load card::$(awk '{gsub(/%/, "%25"); printf "%s%%0A", $0}' pacthall.txt)"
+          fi
+
+  # Concordance Chunk D, D-09 (08:175; D-P137): the pact's client tests in a build without the optional integrations (Jade
+  # among them), only when a manual run asks for it.
+  pact-clients-without-optional:
+    name: pact clients without optional integrations
+    if: github.event_name == 'workflow_dispatch' && inputs.clients_without_optional
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      LIBGL_ALWAYS_SOFTWARE: 'true'
+      SDL_VIDEO_FORCE_EGL: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: gradle
+      - name: Install Mesa (software rendering)
+        run: sudo apt-get update && sudo apt-get install -y mesa-vulkan-drivers libgl1-mesa-dri libglx-mesa0 libegl1 libegl-mesa0 mesa-utils xvfb
+      - name: Prepare run directory
+        run: |
+          mkdir -p run
+          echo "eula=true" > run/eula.txt
+      - name: Run the pact client tests without optional integrations
+        run: ./gradlew runClientGameTest --no-daemon -PjugcraftOptionalIntegrations=false "-PclientTests=ConcordancePactClientGameTests,ConcordanceRosterClientGameTests,ConcordancePactNetworkTests"
+      - name: Print small previews of the screenshots
+        if: always()
+        run: |
+          python3 -m pip install --quiet pillow
+          python3 - <<'PY'
+          import base64, glob, io, os
+          from PIL import Image
+          for path in sorted(glob.glob("**/screenshots/*.png", recursive=True)):
+              image = Image.open(path).convert("RGB")
+              image.thumbnail((480, 270))
+              buffer = io.BytesIO()
+              image.save(buffer, "JPEG", quality=60)
+              print(f"=== SCREENSHOT {os.path.basename(path)} {image.size}")
+              print(base64.b64encode(buffer.getvalue()).decode())
+              print("=== END")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: client-screenshots-without-optional
+          path: |
+            **/screenshots/*.png
+            **/owner-network-evidence/**/peer.log
 
   # Which client game test classes to run, shared out between sixteen client jobs (tools/select_client_tests.py).
   # A pull request runs the classes that show what it changed; main and a manual run of this workflow run them all.
@@ -153,7 +259,10 @@ jobs:
           cache: gradle
       - name: Install Mesa (software rendering)
         if: env.CLASSES != ''
-        run: sudo apt-get update && sudo apt-get install -y mesa-vulkan-drivers libgl1-mesa-dri libglx-mesa0 libegl1 libegl-mesa0 mesa-utils xvfb
+        # Two mirrors: 2m indexes + 5m downloads each, then 2m installation,
+        # plus kill grace and command overhead. The overall job remains 60m.
+        timeout-minutes: 18
+        run: bash scripts/install_client_graphics.sh
       - name: Prepare run directory
         if: env.CLASSES != ''
         run: |

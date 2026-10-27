@@ -34,7 +34,9 @@ public final class PeepoMod implements ModInitializer {
         new PeepoSummoner(new Item.Properties().setId(ResourceKey.create(Registries.ITEM, id("peepo_summoner"))).stacksTo(16)));
     @Override public void onInitialize() {
         CompanionBudget.initialize();
+        CompanionUniforms.initialize();
         VanillaCompanionPort.initialize();
+        CraftingTables.initialize();
         CompanionLivestock.initialize();
         GeneratorWheel.initialize();
         CompanionBeds.initialize();
