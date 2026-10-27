@@ -110,6 +110,12 @@ public final class WorkshopBlock extends BaseEntityBlock implements WorldlyConta
         if (station == 0) return Shapes.or(Block.box(0, 12, 1, 16, 16, 15), Block.box(2, 0, 2, 5, 12, 5), Block.box(11, 0, 11, 14, 12, 14));
         return station == 2 && state.getValue(PART) == 1 ? Block.box(2, 0, 2, 14, 12, 14) : Shapes.block();
     }
+    @Override protected boolean isPathfindable(BlockState state, net.minecraft.world.level.pathfinder.PathComputationType type) {
+        // Partial bench legs and the crucible's inset upper shell are solid equipment,
+        // not passages. Otherwise ground navigation can climb into the upper shell
+        // and repeatedly plan through a collision face while carrying an output.
+        return false;
+    }
     @Override protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) { builder.add(FACING, PART, LIT, UPGRADED); }
     @Override public StructureGhost ghost(BlockPlaceContext context) {
         var state = defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());

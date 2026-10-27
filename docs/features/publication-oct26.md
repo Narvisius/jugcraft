@@ -92,3 +92,15 @@ locally in 3m26s, including hand-picked gourds, all phases, loot, cleanup and a
 fresh instance. Production encounter timing is unchanged. These three client
 repairs are tracked in PR #500; no deployment has occurred.
 
+The next exact-main run passed those repaired client groups and both server
+builds, but exposed an intermittent Peepo crucible-output delivery stall.
+The inset upper crucible shell inherited a walkable-passage classification;
+the reported carrier position was against that shell's collision face.
+Workshop blocks now explicitly reject pathfinding through their parts, as the
+Hearth Oven already does. A regression checks every workshop footprint part;
+the existing full stock/delivery test still checks physical deliveries, exact
+output quantities and released reservations. The unchanged test passed locally
+(173 assertions), so this is not a claim of a reliable local reproduction.
+The repaired test and final release checks are pending. No server deployment
+or client channel promotion has occurred.
+

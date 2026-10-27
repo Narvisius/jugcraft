@@ -107,6 +107,12 @@ public final class PeepoStockStationsClientTests implements FabricClientGameTest
     }
     private void workshopChecks(ServerLevel level,int kind){
         workshop(level,kind);var w=(WorkshopBlockEntity)station;var r=w.selection().recipe();var planned=batch();
+        var block=(WorkshopBlock)w.getBlockState().getBlock();
+        for(int i=0;i<block.footprint().size();i++){
+            var part=block.footprint().partPos(base,w.getBlockState().getValue(WorkshopBlock.FACING),i);
+            check(!level.getBlockState(part).isPathfindable(net.minecraft.world.level.pathfinder.PathComputationType.LAND),
+                "workshop shell must not be a walking passage: station "+kind+" part "+i);
+        }
         for(var part:r.parts()){var item=part.ingredient().items().findFirst().orElseThrow().value();check(count(planned,item)==part.count(),"workshop ingredient bounded to one recipe batch");}
         check(!CompanionStockRecipes.busy(w),"workshop probe rolls back");
         other=helper(level,false);carry(npc,planned);
