@@ -216,7 +216,15 @@ public class VanadiumIronClientGameTests implements FabricClientGameTest {
 				check(!rocky.underground.isEmpty(), "Painted rocky land did not generate deposits");
 				var dry = sample(level, new BlockPos(176, 80, 0), 4, primary ? "Designed Volcano" : "Designed desert");
 				if (primary) {
-					check(!dry.underground.isEmpty() && dry.surface.isEmpty(), "Volcano must generate underground pockets without outcrops");
+					check(dry.surface.isEmpty(), "Volcano must not generate outcrops");
+					// A 1-in-12 placement attempt is not a guarantee within 64 chunks.
+					// Expand only inside the painted volcano, without forcing natural ore
+					// or changing production rarity. Keep the outcrop exclusion assertion.
+					if (dry.underground.isEmpty()) {
+						dry = sample(level, new BlockPos(176, 80, 0), 8, "Designed Volcano expanded survey");
+					}
+					check(!dry.underground.isEmpty(), "Volcano has no underground pockets in the bounded 256-chunk survey");
+					check(dry.surface.isEmpty(), "Expanded volcano survey found a forbidden outcrop");
 					var rich = (SurfaceLinkedOreFeature) level.registryAccess().lookupOrThrow(Registries.FEATURE).getValue(Jugcraft.id("ore_vanadium_iron_rich"));
 					var forced = new SurfaceLinkedOreFeature(rich.ore(), rich.surfaceBiomes(), rich.outcrop(), 1, rich.outcropBiomes());
 					var center = new BlockPos(176, -8, 0);

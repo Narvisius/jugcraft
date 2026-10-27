@@ -117,15 +117,23 @@ public class PumpkinKingClientGameTests implements FabricClientGameTest {
 				king.harvestIn(1);
 			});
 			boolean called = false;
-			for (int wait = 0; wait < 80 && !called; wait++) {
+			// He finishes an already-started attack before calling the harvest. Crow
+			// Storm alone lasts 76 ticks, followed by the 30-tick harvest call.
+			// Budget for that legitimate sequence instead of forcing/canceling his AI.
+			int harvestWait = java.util.Arrays.stream(Attack.values()).mapToInt(Attack::length).max().orElseThrow()
+					+ PumpkinKingEntity.CALL_TICKS + 40;
+			for (int wait = 0; wait < harvestWait && !called; wait++) {
 				context.waitTick();
 				called = server.computeOnServer(minecraft -> !king(minecraft).harvest().isEmpty());
 			}
-			check(called, "He did not call the harvest");
+			check(called, "He did not call the harvest after a full attack and call window: "
+					+ server.computeOnServer(minecraft -> king(minecraft).phase() + "/" + king(minecraft).action()));
 			server.runOnServer(minecraft -> {
 				PumpkinKingEntity king = king(minecraft);
 				check(king.harvest().equals(List.of(Hill.SOUTH, Hill.SOUTH_WEST)), "He called " + king.harvest() + ", not the south hills");
-				king.ripenTicks(PumpkinKingEntity.SWELL_TICKS + 20);
+				// Cross the real stage transition; jumping past it skips the game's
+				// equality-triggered swelling-to-ripening update entirely.
+				king.ripenTicks(PumpkinKingEntity.SWELL_TICKS - 1);
 			});
 			context.waitTicks(10);
 			server.runCommand("tick freeze");
@@ -177,7 +185,12 @@ public class PumpkinKingClientGameTests implements FabricClientGameTest {
 				king.harvestIn(2000);
 				king.setHealth(king.getMaxHealth() * PumpkinKingEntity.CROWN_AT - 1.0F);
 			});
-			context.waitTicks(26);
+			// The preceding Crow Storm must finish before the health-triggered phase
+			// change is evaluated. Observe the transition instead of assuming 26 ticks.
+			for (int wait = 0; wait < harvestWait
+					&& !server.computeOnServer(minecraft -> king(minecraft).phase() == Phase.CROWNING); wait++) {
+				context.waitTick();
+			}
 			server.runCommand("tick freeze");
 			server.runOnServer(minecraft -> {
 				PumpkinKingEntity king = king(minecraft);

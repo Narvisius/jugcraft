@@ -37,7 +37,12 @@ public final class AircraftFlightClientGameTests implements FabricClientGameTest
                         var field=AircraftSounds.class.getDeclaredField("ACTIVE");field.setAccessible(true);
                         var loops=(java.util.Map<?,?>)field.get(null);
                         var sound=(net.minecraft.client.resources.sounds.SoundInstance)loops.get(a);
-                        if(sound==null||!sound.isRelative()||sound.getX()!=0||sound.getVolume()<=0)throw new AssertionError("Engine loop missing/misplaced: "+kind);
+                        if(sound==null)throw new AssertionError("Engine loop missing: "+kind);
+                        // Headless CI may have no audio device, so play() can return before
+                        // resolving the resource. Resolve it before inspecting effective volume;
+                        // still require a registered event and the correct rider-relative loop.
+                        if(sound.getOrResolve(mc.getSoundManager())==null||sound.getSound()==net.minecraft.client.sounds.SoundManager.EMPTY_SOUND)throw new AssertionError("Engine sound resource missing: "+kind);
+                        if(!sound.isRelative()||sound.getX()!=0||sound.getVolume()<=0)throw new AssertionError("Engine loop misplaced/silent: "+kind);
                     }catch(ReflectiveOperationException e){throw new AssertionError(e);}
                 });
                 c.takeScreenshot("aircraft_oct25_"+kind+"_turning");
