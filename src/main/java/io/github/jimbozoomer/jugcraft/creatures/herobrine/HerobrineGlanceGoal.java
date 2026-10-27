@@ -12,8 +12,8 @@ import org.jspecify.annotations.Nullable;
  * A guard's glance (docs/features/herobrine.md): a guard who sees Herobrine within {@value #RANGE} blocks turns to look at
  * him for {@value #GLANCE_TICKS} game ticks (two seconds), once per encounter, and then goes back to what it was doing.
  * The glance is timed by the guard's own tick count, not by counting calls: goals are weighed only every other tick, and
- * a goal is ticked every tick only when it asks to be. It is a look only:
- * the goal never sets a target, never moves the guard, and gives way to any fight (it will not start while the guard
+ * a goal is ticked every tick only when it asks to be. The guard pauses its patrol to look:
+ * the goal never sets a target or moves toward him, and gives way to any fight (it will not start while the guard
  * has a target). Herobrine is neither a monster nor an enemy, so no guard's attack goal or gun ever picks him. Lines of
  * sight are only cast over loaded chunks.
  */
@@ -34,7 +34,9 @@ public final class HerobrineGlanceGoal extends Goal {
 	public HerobrineGlanceGoal(Mob guard, BooleanSupplier onDuty) {
 		this.guard = guard;
 		this.onDuty = onDuty;
-		setFlags(EnumSet.of(Goal.Flag.LOOK));
+		// A concurrent patrol turns the body and clamps the head away from the apparition.
+		// Own MOVE for these two seconds so the guard can actually finish its glance.
+		setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
 	}
 
 	@Override
@@ -54,6 +56,7 @@ public final class HerobrineGlanceGoal extends Goal {
 
 	@Override
 	public void start() {
+		guard.getNavigation().stop();
 		until = guard.tickCount + GLANCE_TICKS;
 		lastEncounter = seen.encounter();
 	}
