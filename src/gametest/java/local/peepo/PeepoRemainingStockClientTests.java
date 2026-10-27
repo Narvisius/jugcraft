@@ -97,6 +97,17 @@ public final class PeepoRemainingStockClientTests implements FabricClientGameTes
     private void plans(ServerLevel l){
         for(var kind:List.of("cider_press","cider_barrel","witchs_brew_punch_bowl","spinning_wheel","canning_kettle","candy_kettle")){
             phase("planning "+kind);prepareFood(l,kind);var product=filter().get(0);var plan=batch();check(!plan.isEmpty(),kind+" has bounded plan");
+            if(kind.equals("cider_press") || kind.equals("canning_kettle")){
+                check(!station.getBlockState().isPathfindable(net.minecraft.world.level.pathfinder.PathComputationType.LAND),kind+" shell blocks walking");
+                var previous=npc.position();npc.snapTo(base.getX()-2.5,base.getY(),base.getZ()+.5,0,0);npc.setOnGround(true);
+                var path=npc.getNavigation().createPath(base.east(3),0,64);
+                check(path!=null && path.canReach(),kind+" has a usable route around its shell");
+                for(int i=0;i<path.getNodeCount();i++){
+                    var point=path.getNode(i).asBlockPos();
+                    check(!point.equals(base) && !point.equals(base.above()),kind+" delivery route avoids the mechanism and its top");
+                }
+                npc.getNavigation().stop();npc.snapTo(previous.x,previous.y,previous.z,0,0);npc.setOnGround(true);
+            }
             if(kind.equals("cider_press"))check(count(plan,Items.APPLE)==2,"press only requests two apples");
             if(kind.equals("cider_barrel"))check(count(plan,JugcraftAgriculture.item("sweet_cider"))==2,"barrel only fills missing servings");
             if(kind.equals("witchs_brew_punch_bowl"))check(count(plan,Items.SWEET_BERRIES)==2 && count(plan,Items.GLASS_BOTTLE)==4,"punch retains whole two-serving berries and all bottles");

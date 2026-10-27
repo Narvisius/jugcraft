@@ -54,6 +54,9 @@ public class CanningKettleBlock extends BaseEntityBlock {
 	}
 
 	@Override
+	protected boolean isPathfindable(BlockState state, net.minecraft.world.level.pathfinder.PathComputationType type) { return false; }
+
+	@Override
 	public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return new CanningKettleBlockEntity(pos, state);
 	}

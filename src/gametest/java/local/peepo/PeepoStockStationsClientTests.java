@@ -113,6 +113,15 @@ public final class PeepoStockStationsClientTests implements FabricClientGameTest
             check(!level.getBlockState(part).isPathfindable(net.minecraft.world.level.pathfinder.PathComputationType.LAND),
                 "workshop shell must not be a walking passage: station "+kind+" part "+i);
         }
+        var previous=npc.position();npc.snapTo(base.getX()-2.5,base.getY(),base.getZ()+.5,0,0);npc.setOnGround(true);
+        var path=npc.getNavigation().createPath(base.east(3),0,64);
+        check(path!=null && path.canReach(),"workshop has an exterior delivery route");
+        for(int i=0;i<path.getNodeCount();i++)for(int part=0;part<block.footprint().size();part++){
+            var occupied=block.footprint().partPos(base,w.getBlockState().getValue(WorkshopBlock.FACING),part);
+            var point=path.getNode(i).asBlockPos();
+            check(!point.equals(occupied) && !point.equals(occupied.above()),"delivery route does not climb into workshop equipment");
+        }
+        npc.getNavigation().stop();npc.snapTo(previous.x,previous.y,previous.z,0,0);npc.setOnGround(true);
         for(var part:r.parts()){var item=part.ingredient().items().findFirst().orElseThrow().value();check(count(planned,item)==part.count(),"workshop ingredient bounded to one recipe batch");}
         check(!CompanionStockRecipes.busy(w),"workshop probe rolls back");
         other=helper(level,false);carry(npc,planned);

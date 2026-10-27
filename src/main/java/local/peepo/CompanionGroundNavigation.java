@@ -20,8 +20,8 @@ final class CompanionGroundNavigation extends GroundPathNavigation {
                         || context.getBlockState(pos.below()).getBlock() instanceof io.github.jimbozoomer.jugcraft.agriculture.SpinningWheelBlock
                         || context.getBlockState(pos).getBlock() instanceof io.github.jimbozoomer.jugcraft.agriculture.TreeTapBlock
                         || context.getBlockState(pos.below()).getBlock() instanceof io.github.jimbozoomer.jugcraft.agriculture.TreeTapBlock
-                        || StarterWorkshopJob.bench(context.getBlockState(pos))
-                        || StarterWorkshopJob.bench(context.getBlockState(pos.below())))return PathType.FENCE;
+                        || equipment(context.getBlockState(pos))
+                        || equipment(context.getBlockState(pos.below())))return PathType.FENCE;
                     if(CompanionHazards.harmful(npc,context.getBlockState(pos))
                         || CompanionHazards.harmful(npc,context.getBlockState(pos.below())))return PathType.BLOCKED;
                 }
@@ -33,6 +33,11 @@ final class CompanionGroundNavigation extends GroundPathNavigation {
             }
         };
         nodeEvaluator.setCanPassDoors(true);return new PathFinder(nodeEvaluator,range);
+    }
+    private static boolean equipment(net.minecraft.world.level.block.state.BlockState state){
+        return state.getBlock() instanceof io.github.jimbozoomer.jugcraft.workshop.WorkshopBlock
+            || state.getBlock() instanceof io.github.jimbozoomer.jugcraft.agriculture.CiderPressBlock
+            || state.getBlock() instanceof io.github.jimbozoomer.jugcraft.agriculture.CanningKettleBlock;
     }
     @Override public void tick(){
         // Recheck only the next few steps, so a stove lit after planning invalidates the route.

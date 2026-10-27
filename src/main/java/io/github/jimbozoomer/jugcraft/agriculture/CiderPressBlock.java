@@ -71,6 +71,9 @@ public class CiderPressBlock extends BaseEntityBlock {
 	}
 
 	@Override
+	protected boolean isPathfindable(BlockState state, net.minecraft.world.level.pathfinder.PathComputationType type) { return false; }
+
+	@Override
 	public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
 		return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
 	}

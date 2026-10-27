@@ -104,3 +104,13 @@ output quantities and released reservations. The unchanged test passed locally
 The repaired test and final release checks are pending. No server deployment
 or client channel promotion has occurred.
 
+PR #507 merged the workshop shell classification after all 178 local stock
+station assertions passed. Its main run then caught the same class of delivery
+stall at the Cider Press in the remaining-stock suite. Ground navigation now
+extends its existing bench/wheel/tap exclusion to every workshop, Cider Press
+and Canning Kettle, including the cell above each mechanism. Press and canning
+shells also explicitly reject walk-through paths. Tests require a reachable
+exterior route whose nodes do not cross or climb the equipment, followed by
+the real production/delivery cycles. Combined validation is pending; the live
+server and client channel remain unchanged.
+
