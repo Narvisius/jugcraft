@@ -70,6 +70,7 @@ import zeppelin
 import mech
 import landship
 import unmasking
+import herobrine
 import trains
 import artillery
 import tower_guns
@@ -1589,6 +1590,43 @@ def check_unmasking():
             err(f"Unmasking does not give {villain} the mask {mask} (tools/unmasking.py)")
         if len(crooks) != unmasking.CROOKS or not all(name and excuse for name, excuse in crooks):
             err(f"tools/unmasking.py: {villain} needs {unmasking.CROOKS} crooks, each with a name and an excuse")
+def check_herobrine():
+    """creatures/herobrine against tools/herobrine.py: his timings and distances, the server option, his name, and his
+    eyes texture (clear but for the four eye pixels). His body is the game's own default player texture, read at run
+    time: the renderer must name DefaultPlayerSkin, and no copied skin may ship."""
+    folder = JAVA_ROOT / "creatures" / "herobrine"
+    def read(path):
+        return path.read_text(encoding="utf-8") if path.is_file() else ""
+    entity = read(folder / "Herobrine.java")
+    encounters = read(folder / "HerobrineEncounters.java")
+    for const in ("VANISH_DISTANCE", "STARE_TICKS", "DISTANT_TICKS", "CLOSE_TICKS", "CLOSE_STARE_TICKS", "SEEN_TICKS"):
+        if f" {const} = {getattr(herobrine, const)};" not in entity:
+            err(f"Herobrine.{const} differs from tools/herobrine.py ({getattr(herobrine, const)})")
+    for const in ("GRACE_TICKS", "IDLE_TICKS", "CLOSE_DARKNESS_TICKS"):
+        if f" {const} = {getattr(herobrine, const)};" not in encounters:
+            err(f"HerobrineEncounters.{const} differs from tools/herobrine.py ({getattr(herobrine, const)})")
+    if f' ID = "{herobrine.ENTITY}";' not in encounters:
+        err(f"HerobrineEncounters.ID differs from tools/herobrine.py ({herobrine.ENTITY})")
+    config = (JAVA_ROOT / "config" / "JugcraftConfig.java").read_text(encoding="utf-8")
+    for key, default in herobrine.OPTIONS.items():
+        if f'Map.entry("{key}", "{default}")' not in config:
+            err(f"JugcraftConfig.TEXT_OPTIONS lacks {key} (default {default})")
+    renderer = read(CLIENT_JAVA_ROOT / "HerobrineRenderer.java")
+    if "DefaultPlayerSkin.getDefaultTexture()" not in renderer or f'"textures/entity/{herobrine.ENTITY}_eyes.png"' not in renderer:
+        err("HerobrineRenderer must draw the game's default player texture with textures/entity/herobrine_eyes.png over it")
+    if (ASSETS / "textures" / "entity" / f"{herobrine.ENTITY}.png").is_file():
+        err(f"textures/entity/{herobrine.ENTITY}.png must not exist: Herobrine's body is the game's own player texture")
+    eyes = ASSETS / "textures" / "entity" / f"{herobrine.ENTITY}_eyes.png"
+    if not eyes.is_file():
+        err(f"textures/entity/{herobrine.ENTITY}_eyes.png is missing: run tools/generate_textures.py")
+    else:
+        img = Image.open(eyes).convert("RGBA")
+        lit = {(x, y) for y in range(img.height) for x in range(img.width) if img.getpixel((x, y))[3]}
+        if img.size != (64, 64) or lit != set(herobrine.EYES):
+            err(f"textures/entity/{herobrine.ENTITY}_eyes.png should be 64x64 and clear but for {herobrine.EYES}")
+    lang = load(ASSETS / "lang" / "en_us.json") or {}
+    if lang.get(f"entity.{MOD}.{herobrine.ENTITY}") != herobrine.NAME:
+        err(f"entity.{MOD}.{herobrine.ENTITY} is not named {herobrine.NAME}: run tools/generate_material_data.py")
 def check_trains():
     """train/ against tools/trains.py: each vehicle's length, size and seats, the driving, fuel and coupling numbers, the
     seat heights and exhaust, and the renderer's wheels and axles."""
@@ -21764,6 +21802,7 @@ def main():
     check_howitzer_walker()
     check_landship()
     check_unmasking()
+    check_herobrine()
     check_trains()
     check_artillery()
     check_tower_guns()

@@ -1387,6 +1387,8 @@ def machines():
     landship.draw_all(save)
     import unmasking
     unmasking.draw_all(save)
+    import herobrine
+    herobrine.draw_all(save)
     import trains
     trains.draw_all(save)
     import artillery

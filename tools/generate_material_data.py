@@ -314,6 +314,8 @@ def assets():
     scary_data.write_all(write, RES, lang)
     import unmasking
     unmasking.write_all(write, ASSETS, DATA / MOD, lang)
+    import herobrine
+    herobrine.write_all(lang)
     import chima_data
     chima_data.write_all(write, RES, lang)
     import vanilla_logs

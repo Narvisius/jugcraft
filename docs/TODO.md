@@ -680,6 +680,17 @@ Owner-requested 7 October 2026. Independent briefs: [industrial chemistry and fu
 
 - [x] Unmasking: a beaten villain reveals a named crook, drops its mask as a trophy and awards Mystery Solved ([costumed-villains-unmasking.md](features/costumed-villains-unmasking.md)). Implemented; CI pending, not yet played in a client.
 - [ ] Still ideas, if the owner wants them: traps, and village mysteries with clues before the chase.
+## Herobrine — 27 October 2026
+
+- [x] Part 1, encounters: the entity, distant and close encounters, attentive witnesses, the `HerobrineDirector` seam and operator commands ([herobrine.md](features/herobrine.md)). Implemented on `claude/herobrine-haunting`; native game tests and automated rendered and two-client tests pass; CI and a human playtest pending.
+- [x] The schedule (OpenAI Codex/Astra, owner-approved split): event mode through 3 November inclusive, quiet mode from 4 November 00:00 America/New_York, active-time pacing and persistence. Implemented and installed at server start (`HerobrineScheduleDirector`); 393 scheduler assertions pass ([herobrine-scheduling.md](features/herobrine-scheduling.md)).
+- [x] Encounter variants: ridge, clearing and cave-mouth watcher, restrained follower, second-look reposition, eyes at the end of a tunnel, and a shared group sighting. Implemented; native game tests pass; the cave mouth in a rendered client and a human playtest pending.
+- [x] Part 2, world clues with terrain safeguards and reversible placement records: leafless groves, 2×2 tunnels, sand and mossy pyramids, torch shrines and cryptic signs (`HerobrineMarks`, `HerobrineMarkPlans`). Implemented; native game tests pass; CI and a human playtest pending.
+- [x] Linked investigations: a sighting across water, then a grove, then a torch tunnel whose sign points to a shoreline pyramid (raised if none is near). Implemented; native game tests pass; CI and a human playtest pending.
+- [x] Part 3, massive shoreline brick pyramids: checked sites, incremental building with revalidation, an authored interior and a modest journal (`HerobrinePyramids`). Implemented; native game tests pass; CI and a human playtest pending.
+- [x] Jugcraft connections: guards glancing at him (never targeting), Styx's lines, and the Cursed Mirror reflection seam (`HerobrineEncounters.reflection`). Implemented; native game tests pass; CI and a human playtest pending.
+- [ ] Wire the Cursed Mirror to call `HerobrineEncounters.reflection` once the mirror (https://github.com/jimbozoomer-byte/jugcraft/pull/498) and Herobrine are both on main.
+
 ## Trains — 26 October 2026
 
 - [x] The train framework: a diesel locomotive, a passenger coach, a cargo wagon and the Coupler, on any rails ([trains.md](features/trains.md)). Implemented; CI pending, not yet played in a client.
@@ -802,3 +813,9 @@ Recipe conflict and recipe-viewer regressions pass after repairs. Actual-registr
 survival audit, combined server/client checks and packaged runtime checks remain.
 Do not publish or alter the personal profile/server. Explicit native compatibility
 limits and exact results belong in features/jimtafacts-b-h-local.md.
+
+### Permanent world-building expansion — owner approved 27 October
+
+- [x] Codex underground/underwater half: nine cave layouts, four submerged glowstone patterns, depth-aware discovery cadence, permanent 3D spacing and excavation protections. Combined compilation, 70 native tests, 393 scheduler assertions and both rendered galleries passed; feature branches only ([herobrine-depths.md](features/herobrine-depths.md)).
+- [x] Claude sky/surface half: six floating-island castle/manor/monastery variants with interiors and three surface ruins; shared queue and named commands integrated. Full state/sign/undo checks and rendered gallery passed together with the underground half ([herobrine-sky.md](features/herobrine-sky.md)). Human playtesting and live deployment remain separate.
+- [x] Preserve all world structures indefinitely: no proximity/seasonal cleanup or resetting player modifications; only Herobrine disappears. Explicit operator undo remains a maintenance tool, preserving player edits and adopted containers. Persistence/approach/undo native regressions passed.

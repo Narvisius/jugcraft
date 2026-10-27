@@ -93,12 +93,17 @@ public final class Styxhexenhammer extends PathfinderMob {
 	/**
 	 * What he says to {@code listener} when he has no cuttings to give: one of his four lines, by the clock as before; then,
 	 * for someone who has begun the Binding Arts, their own next step toward Stolas's Regard and, until they have recorded
-	 * one, the sky step (Concordance Chunk D, D-03; StolasRegard.hint). He only talks: nothing is recorded or granted.
+	 * one, the sky step (Concordance Chunk D, D-03; StolasRegard.hint); and to anyone who has seen Herobrine, a line that
+	 * shows he knows what they saw and will not say. He only talks: nothing is recorded or granted.
 	 */
 	public List<Component> says(ServerPlayer listener) {
 		List<Component> lines=new ArrayList<>(3);
 		lines.add(Component.translatable("message.jugcraft.styx.line."+Math.floorMod(tickCount/100,4)));
 		lines.addAll(StolasRegard.hint(listener));
+		// He knows what watches from the treeline, and will not explain it (creatures/herobrine; tools/herobrine.py).
+		if (io.github.jimbozoomer.jugcraft.creatures.herobrine.HerobrineEncounters.hasSeen(listener.getUUID())) {
+			lines.add(Component.translatable("message.jugcraft.styx.herobrine." + Math.floorMod(tickCount / 100, 4)));
+		}
 		return lines;
 	}
 	@Override protected void addAdditionalSaveData(ValueOutput out) {

@@ -133,6 +133,13 @@ test {
 	failOnNoDiscoveredTests = false
 }
 
+tasks.register('herobrineScheduleTest', JavaExec) {
+    dependsOn tasks.named('testClasses')
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'io.github.jimbozoomer.jugcraft.herobrine.HerobrineScheduleTests'
+}
+tasks.named('check') { dependsOn tasks.named('herobrineScheduleTest') }
+
 tasks.register('gameUpdaterTest', JavaExec) {
     dependsOn tasks.named('testClasses')
     classpath = sourceSets.test.runtimeClasspath

@@ -95,6 +95,8 @@ public class Townsfolk extends PathfinderMob {
 				return isGuard() && super.canUse();
 			}
 		});
+		// A guard glances at Herobrine once in a while; it never targets him (creatures/herobrine/HerobrineGlanceGoal).
+		goalSelector.addGoal(1, new io.github.jimbozoomer.jugcraft.creatures.herobrine.HerobrineGlanceGoal(this, this::isGuard));
 		goalSelector.addGoal(2, new ReturnHomeGoal());
 		goalSelector.addGoal(3, new DecorateGoal());
 		goalSelector.addGoal(5, new StrollNearHomeGoal());
