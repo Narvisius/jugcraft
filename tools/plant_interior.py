@@ -206,7 +206,7 @@ def textures_used():
             for v in range(info["prints"]):
                 for part in range(2):
                     names |= _box_textures(plant_office2.lprint_boxes(part, v))
-        elif "multi" in info:
+        elif "multi" in info and not info.get("tv"):
             for v in range(info.get("versions", 1)):
                 for _, boxes in plant_office2.multi_parts(info, v):
                     names |= _box_textures(boxes)
@@ -399,7 +399,15 @@ def write_assets(write, rid, assets, lang):
         lang[f"block.{MOD}.{block}"] = info["display"]
         glow = info.get("glow", [])
         item_model = rid(f"block/{block}")
-        if info.get("plant"):
+        if info.get("tv"):
+            # The flat screen TV: a block of screen that joins its neighbours (tools/flat_tv.py); its flat icon.
+            import flat_tv
+            import tv_speaker_data
+            flat_tv.write_assets(write, rid, assets)
+            lang.update(tv_speaker_data.LANG)   # the surround speakers and the Sync Key (tools/tv_speaker.py writes their files)
+            write(assets / "models" / "item" / f"{block}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{block}")}})
+            item_model = rid(f"item/{block}")
+        elif info.get("plant"):
             for i in range(info["variants"]):
                 write(models / f"{block}_{i}.json", plant_office.plant_model(i, rid))
             write(assets / "blockstates" / f"{block}.json", {"variants": {
@@ -1020,6 +1028,8 @@ def draw_block_textures():
             out[name].putalpha(alpha)
     out.update(framed_glass.draw_textures())   # drawn at 64 px already; the glass keeps its partial alpha
     out.update(speed_gate.draw_textures())
+    import flat_tv
+    out.update(flat_tv.draw_textures())        # the flat screen TV's, drawn at their size
     return out
 
 

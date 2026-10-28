@@ -205,7 +205,8 @@ PIECES = {
     "training_screen": {"display": "Training Screen", "multi": (3, 2, True), "screen": "training"},
     "plant_map_screen": {"display": "Plant Overview Screen", "multi": (3, 2, True), "screen": "plant_map"},
     "status_screen": {"display": "Plant Status Screen", "multi": (3, 2, True), "screen": "status"},
-    "flat_tv": {"display": "Flat Screen TV", "multi": (3, 2, True), "screen": "blank"},
+    # The flat screen TV joins up (tools/flat_tv.py, tv/FlatTvBlock.java): "tv" has its own models; "multi" draws its icon.
+    "flat_tv": {"display": "Flat Screen TV", "multi": (3, 2, True), "screen": "blank", "tv": True},
     "oval_table": {"display": "Oval Meeting Table", "multi": (5, 3, False), "table": True, "versions": 3},
     "lounge_table": {"display": "Oval Glass Coffee Table", "multi": (3, 2, False), "lounge": True},
     # ---- the warehouse
@@ -696,7 +697,7 @@ CRAFTING = {
     "storage_rack": (["SBS", "SBS", "SBS"], {"S": "#c:plates/iron", "B": "minecraft:barrel"}, 1),
     "high_bay_light": ([" N ", "PGP", " L "], {"N": "minecraft:iron_chain", "P": "#c:plates/iron", "G": "minecraft:glowstone", "L": "minecraft:glass_pane"}, 2),
     "light_hanger": (["N", "N", "S"], {"N": "minecraft:iron_chain", "S": "minecraft:string"}, 4),
-    "flat_tv": (["GGG", "GRG"], {"G": "minecraft:black_stained_glass_pane", "R": "minecraft:redstone"}, 1),
+    "flat_tv": (["GGG", "GRG"], {"G": "minecraft:black_stained_glass_pane", "R": "minecraft:redstone"}, 6),   # six blocks: the old 3 x 2 screen
     "large_print": (["SSS", "SPS", "SSS"], {"S": "minecraft:dark_oak_planks", "P": "minecraft:painting"}, 1),
     "glass_coffee_table": (["GGG", "N N"], {"G": "minecraft:glass_pane", "N": "minecraft:iron_nugget"}, 1),
     "control_tray": (["P P", "PWP"], {"P": "#c:plates/iron", "W": "#c:wires/copper"}, 8),

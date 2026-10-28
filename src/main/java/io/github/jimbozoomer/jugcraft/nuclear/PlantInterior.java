@@ -93,7 +93,6 @@ public final class PlantInterior {
 			{"training_screen", 0, "multi:3:2:v", "metal", null},
 			{"plant_map_screen", 0, "multi:3:2:v", "metal", null},
 			{"status_screen", 0, "status", "metal", null},
-			{"flat_tv", 0, "multi:3:2:v", "metal", null},
 			{"oval_table", 0, "multi:5:3:h:3", "wood", null},
 			{"lounge_table", 0, "multi:3:2:c", "glass", null},
 			{"large_print", 0, "multi:2:1:v:12", "wood", null},
@@ -368,6 +367,11 @@ public final class PlantInterior {
 				return new FurnitureBlock(p, shape);
 			}, props);
 		}
+		// The flat screen TV (tv/FlatTvBlock.java): blocks that join into one screen up to 8 x 5, playing a video link for
+		// everyone near it (once a 3 x 2 piece, the "multi" furniture).
+		Block tv = block("flat_tv", io.github.jimbozoomer.jugcraft.tv.FlatTvBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+				.strength(1.5F).noOcclusion().sound(SoundType.METAL));
+		io.github.jimbozoomer.jugcraft.tv.JugcraftTv.register(tv);
 		// The desk with a coffee on it steams (its mug: tools/plant_office2.py MUG_AT).
 		((RowFurnitureBlock) BLOCKS.get("office_desk_long")).steam(2, 11.8, 15.6, 7.8);
 		((VariantFurnitureBlock) BLOCKS.get("cafe_table")).steam(5, 11.7, 15.3, 6.2);

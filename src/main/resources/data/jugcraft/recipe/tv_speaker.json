@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PNP",
+    "PCP",
+    " I "
+  ],
+  "key": {
+    "P": "#minecraft:planks",
+    "N": "minecraft:note_block",
+    "C": "minecraft:copper_ingot",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "id": "jugcraft:tv_speaker",
+    "count": 2
+  }
+}

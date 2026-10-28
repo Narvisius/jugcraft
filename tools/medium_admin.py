@@ -15,6 +15,13 @@ from medium_plant import (Building, entrance, furniture, sign, OPPOSITE, GLAZING
                           PAINTED, SMOOTH, BRICK, ANDESITE)
 
 
+def tv_state(facing, c, r, w, h):
+    """A block of a w x h flat screen TV at column c (to its viewer's right) and row r, hung on a wall (tv/FlatTvBlock.java:
+    the blocks join into one screen, each saying which ways the screen carries on)."""
+    b = lambda v: "true" if v else "false"
+    return MP.M(f"jugcraft:flat_tv[down={b(r > 0)},facing={facing},left={b(c > 0)},right={b(c < w - 1)},stand=false,up={b(r < h - 1)}]", (60, 60, 64))
+
+
 class Room:
     def __init__(self, b, x0, z0, x1, z1, y, win, door_u):
         self.b, self.x0, self.z0, self.x1, self.z1, self.y, self.win = b, x0, z0, x1, z1, y, win
@@ -158,7 +165,7 @@ class Room:
                     return False
                 cells.append((cx, cy, cz, r * 3 + c))
         for cx, cy, cz, part in cells:
-            self.b.p(cx, cy, cz, MP.multi_state(name, fw, part))
+            self.b.p(cx, cy, cz, tv_state(fw, part % 3, part // 3, 3, 2) if name == "flat_tv" else MP.multi_state(name, fw, part))
         return True
 
     def copier(self, u, v, f):

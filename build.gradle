@@ -84,6 +84,12 @@ dependencies {
 			}
 		}
 	}
+	// The flat screen TVs' video decoder (client/tv/TvFfmpeg.java): compile-only. Each game fetches JavaCV and Bytedeco's
+	// LGPL FFmpeg build from Maven Central the first time it plays a TV (client/tv/TvCodec.java, the same versions), so
+	// no third-party jar is nested in Jugcraft's (docs/FRAMEWORKS.md, docs/features/flat-screen-tv.md).
+	clientCompileOnly("org.bytedeco:javacv:1.5.14") { transitive = false }
+	clientCompileOnly("org.bytedeco:javacpp:1.5.14") { transitive = false }
+	clientCompileOnly("org.bytedeco:ffmpeg:8.1.2-1.5.14") { transitive = false }
 }
 
 def compileUpdateHelper = tasks.register('compileUpdateHelper', JavaCompile) {

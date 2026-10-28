@@ -1680,6 +1680,8 @@ def write_assets(write, rid, assets, lang):
 
 
 def write_loot(write, rid, out, self_drop):
+    import tv_speaker_data
+    write(out / f"{tv_speaker_data.ID}.json", tv_speaker_data.loot(rid))   # the surround speaker: its lower half drops it
     for block in BLOCKS:
         if block in plant_interior.NO_DROP:
             write(out / f"{block}.json", {"type": "minecraft:block", "pools": [], "random_sequence": rid(f"blocks/{block}")})

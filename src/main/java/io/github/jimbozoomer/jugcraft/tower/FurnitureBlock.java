@@ -35,7 +35,7 @@ public class FurnitureBlock extends HorizontalDirectionalBlock {
 	}
 
 	/** A box turned from north to {@code facing}, the way the blockstate turns the model (clockwise). */
-	static VoxelShape turned(double[] b, Direction facing) {
+	public static VoxelShape turned(double[] b, Direction facing) {
 		double x0 = b[0], z0 = b[2], x1 = b[3], z1 = b[5];
 		int turns = switch (facing) {
 			case EAST -> 1;

@@ -346,6 +346,14 @@ public class DroneDepotRenderer implements BlockEntityRenderer<DroneTerminalBloc
 			return this;
 		}
 
+		/** One vertex with its own colour and light (meshes such as client/ConsoleMesh's). */
+		void meshVertex(float x, float y, float z, float u, float v, float nx, float ny, float nz, int argb, int packedLight) {
+			matrix.transformPosition(position.set(x, y, z));
+			matrix.transformDirection(normal.set(nx, ny, nz)).normalize();
+			consumer.addVertex(pose, position.x, position.y, position.z).setColor(argb).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY)
+					.setLight(packedLight).setNormal(pose, normal.x, normal.y, normal.z);
+		}
+
 		Geometry scale(double s) {
 			matrix.scale((float) s);
 			return this;

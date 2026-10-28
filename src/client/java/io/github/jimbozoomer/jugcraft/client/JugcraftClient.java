@@ -225,6 +225,8 @@ public final class JugcraftClient implements ClientModInitializer {
 		WoodColors.register();
 		TreeLeafColors.register();
 		PartyClient.register();
+		// The flat screen TVs (tv/FlatTvBlock.java): their picture, sound and SCREEN window.
+		io.github.jimbozoomer.jugcraft.client.tv.TvClient.register();
 		ConcordanceClient.register();
 		GunsClient.register();
 		JugcraftKeyBindings.register();

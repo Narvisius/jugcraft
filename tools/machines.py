@@ -969,7 +969,7 @@ def machine_blocks():
             + list(ITEM_PIPES) + list(LOGISTICS_BLOCKS) + list(STORAGE_BLOCKS) + list(KINETIC_BLOCKS) + list(TOOL_BLOCKS)
             + list(SLOPE_BLOCKS) + list(ELECTRONICS_BLOCKS) + list(FARMING_BLOCKS) + list(CROPS)
             + drone_blocks() + tower_blocks() + list(__import__('blueprints').STAKE) + __import__('power_lines').blocks()
-            + list(__import__('nuclear').BLOCKS))
+            + list(__import__('nuclear').BLOCKS) + list(__import__('tv_speaker_data').BLOCKS))
 
 
 def machine_items():
@@ -979,7 +979,7 @@ def machine_items():
     return (list(TOOLS) + list(UPGRADES) + list(POWERED_TOOLS) + list(UPGRADE_MODULES)
             + [info[key] for info in CROPS.values() for key in ("seeds", "product")]
             + drone_items() + tower_items() + list(__import__('blueprints').ITEMS) + list(__import__('nuclear').ITEMS) + list(__import__('plant_interior').UNIFORMS)
-            + list(__import__('storage_tank').ITEMS))
+            + list(__import__('storage_tank').ITEMS) + list(__import__('tv_speaker_data').ITEMS))
 
 import battery_expansion
 MACHINES.update({name:dict(display=label, lit=False) for name,label in battery_expansion.BLOCKS.items()})

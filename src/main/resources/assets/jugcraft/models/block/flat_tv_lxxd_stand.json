@@ -1,0 +1,91 @@
+{
+  "textures": {
+    "glass": "jugcraft:block/tv_glass",
+    "body": "jugcraft:block/tv_body",
+    "back": "jugcraft:block/tv_back",
+    "particle": "jugcraft:block/tv_body"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0.0,
+        7.6
+      ],
+      "to": [
+        16,
+        16,
+        8.4
+      ],
+      "faces": {
+        "south": {
+          "texture": "#glass",
+          "uv": [
+            0,
+            0,
+            16,
+            16.0
+          ]
+        },
+        "north": {
+          "texture": "#back"
+        },
+        "east": {
+          "texture": "#body"
+        },
+        "up": {
+          "texture": "#body"
+        }
+      }
+    },
+    {
+      "from": [
+        15.75,
+        0.0,
+        8.4
+      ],
+      "to": [
+        16,
+        16,
+        8.52
+      ],
+      "faces": {
+        "south": {
+          "texture": "#body"
+        },
+        "east": {
+          "texture": "#body"
+        },
+        "west": {
+          "texture": "#body"
+        },
+        "up": {
+          "texture": "#body"
+        }
+      }
+    },
+    {
+      "from": [
+        0.0,
+        15.75,
+        8.4
+      ],
+      "to": [
+        15.75,
+        16,
+        8.52
+      ],
+      "faces": {
+        "south": {
+          "texture": "#body"
+        },
+        "up": {
+          "texture": "#body"
+        },
+        "down": {
+          "texture": "#body"
+        }
+      }
+    }
+  ]
+}

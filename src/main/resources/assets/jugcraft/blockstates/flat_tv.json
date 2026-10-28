@@ -1,93 +1,483 @@
 {
   "variants": {
-    "facing=north,part=0": {
-      "model": "jugcraft:block/flat_tv_0"
+    "down=false,facing=north,left=false,right=false,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_xxxx_wall"
     },
-    "facing=north,part=1": {
-      "model": "jugcraft:block/flat_tv_1"
-    },
-    "facing=north,part=2": {
-      "model": "jugcraft:block/flat_tv_2"
-    },
-    "facing=north,part=3": {
-      "model": "jugcraft:block/flat_tv_3"
-    },
-    "facing=north,part=4": {
-      "model": "jugcraft:block/flat_tv_4"
-    },
-    "facing=north,part=5": {
-      "model": "jugcraft:block/flat_tv_5"
-    },
-    "facing=east,part=0": {
-      "model": "jugcraft:block/flat_tv_0",
+    "down=false,facing=east,left=false,right=false,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_xxxx_wall",
       "y": 90
     },
-    "facing=east,part=1": {
-      "model": "jugcraft:block/flat_tv_1",
-      "y": 90
-    },
-    "facing=east,part=2": {
-      "model": "jugcraft:block/flat_tv_2",
-      "y": 90
-    },
-    "facing=east,part=3": {
-      "model": "jugcraft:block/flat_tv_3",
-      "y": 90
-    },
-    "facing=east,part=4": {
-      "model": "jugcraft:block/flat_tv_4",
-      "y": 90
-    },
-    "facing=east,part=5": {
-      "model": "jugcraft:block/flat_tv_5",
-      "y": 90
-    },
-    "facing=south,part=0": {
-      "model": "jugcraft:block/flat_tv_0",
+    "down=false,facing=south,left=false,right=false,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_xxxx_wall",
       "y": 180
     },
-    "facing=south,part=1": {
-      "model": "jugcraft:block/flat_tv_1",
-      "y": 180
-    },
-    "facing=south,part=2": {
-      "model": "jugcraft:block/flat_tv_2",
-      "y": 180
-    },
-    "facing=south,part=3": {
-      "model": "jugcraft:block/flat_tv_3",
-      "y": 180
-    },
-    "facing=south,part=4": {
-      "model": "jugcraft:block/flat_tv_4",
-      "y": 180
-    },
-    "facing=south,part=5": {
-      "model": "jugcraft:block/flat_tv_5",
-      "y": 180
-    },
-    "facing=west,part=0": {
-      "model": "jugcraft:block/flat_tv_0",
+    "down=false,facing=west,left=false,right=false,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_xxxx_wall",
       "y": 270
     },
-    "facing=west,part=1": {
-      "model": "jugcraft:block/flat_tv_1",
+    "down=false,facing=north,left=true,right=false,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_lxxx_wall"
+    },
+    "down=false,facing=east,left=true,right=false,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_lxxx_wall",
+      "y": 90
+    },
+    "down=false,facing=south,left=true,right=false,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_lxxx_wall",
+      "y": 180
+    },
+    "down=false,facing=west,left=true,right=false,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_lxxx_wall",
       "y": 270
     },
-    "facing=west,part=2": {
-      "model": "jugcraft:block/flat_tv_2",
+    "down=false,facing=north,left=false,right=true,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_xrxx_wall"
+    },
+    "down=false,facing=east,left=false,right=true,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_xrxx_wall",
+      "y": 90
+    },
+    "down=false,facing=south,left=false,right=true,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_xrxx_wall",
+      "y": 180
+    },
+    "down=false,facing=west,left=false,right=true,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_xrxx_wall",
       "y": 270
     },
-    "facing=west,part=3": {
-      "model": "jugcraft:block/flat_tv_3",
+    "down=false,facing=north,left=true,right=true,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_lrxx_wall"
+    },
+    "down=false,facing=east,left=true,right=true,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_lrxx_wall",
+      "y": 90
+    },
+    "down=false,facing=south,left=true,right=true,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_lrxx_wall",
+      "y": 180
+    },
+    "down=false,facing=west,left=true,right=true,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_lrxx_wall",
       "y": 270
     },
-    "facing=west,part=4": {
-      "model": "jugcraft:block/flat_tv_4",
+    "down=false,facing=north,left=false,right=false,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_xxux_wall"
+    },
+    "down=false,facing=east,left=false,right=false,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_xxux_wall",
+      "y": 90
+    },
+    "down=false,facing=south,left=false,right=false,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_xxux_wall",
+      "y": 180
+    },
+    "down=false,facing=west,left=false,right=false,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_xxux_wall",
       "y": 270
     },
-    "facing=west,part=5": {
-      "model": "jugcraft:block/flat_tv_5",
+    "down=false,facing=north,left=true,right=false,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_lxux_wall"
+    },
+    "down=false,facing=east,left=true,right=false,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_lxux_wall",
+      "y": 90
+    },
+    "down=false,facing=south,left=true,right=false,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_lxux_wall",
+      "y": 180
+    },
+    "down=false,facing=west,left=true,right=false,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_lxux_wall",
+      "y": 270
+    },
+    "down=false,facing=north,left=false,right=true,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_xrux_wall"
+    },
+    "down=false,facing=east,left=false,right=true,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_xrux_wall",
+      "y": 90
+    },
+    "down=false,facing=south,left=false,right=true,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_xrux_wall",
+      "y": 180
+    },
+    "down=false,facing=west,left=false,right=true,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_xrux_wall",
+      "y": 270
+    },
+    "down=false,facing=north,left=true,right=true,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_lrux_wall"
+    },
+    "down=false,facing=east,left=true,right=true,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_lrux_wall",
+      "y": 90
+    },
+    "down=false,facing=south,left=true,right=true,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_lrux_wall",
+      "y": 180
+    },
+    "down=false,facing=west,left=true,right=true,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_lrux_wall",
+      "y": 270
+    },
+    "down=true,facing=north,left=false,right=false,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_xxxd_wall"
+    },
+    "down=true,facing=east,left=false,right=false,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_xxxd_wall",
+      "y": 90
+    },
+    "down=true,facing=south,left=false,right=false,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_xxxd_wall",
+      "y": 180
+    },
+    "down=true,facing=west,left=false,right=false,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_xxxd_wall",
+      "y": 270
+    },
+    "down=true,facing=north,left=true,right=false,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_lxxd_wall"
+    },
+    "down=true,facing=east,left=true,right=false,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_lxxd_wall",
+      "y": 90
+    },
+    "down=true,facing=south,left=true,right=false,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_lxxd_wall",
+      "y": 180
+    },
+    "down=true,facing=west,left=true,right=false,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_lxxd_wall",
+      "y": 270
+    },
+    "down=true,facing=north,left=false,right=true,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_xrxd_wall"
+    },
+    "down=true,facing=east,left=false,right=true,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_xrxd_wall",
+      "y": 90
+    },
+    "down=true,facing=south,left=false,right=true,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_xrxd_wall",
+      "y": 180
+    },
+    "down=true,facing=west,left=false,right=true,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_xrxd_wall",
+      "y": 270
+    },
+    "down=true,facing=north,left=true,right=true,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_lrxd_wall"
+    },
+    "down=true,facing=east,left=true,right=true,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_lrxd_wall",
+      "y": 90
+    },
+    "down=true,facing=south,left=true,right=true,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_lrxd_wall",
+      "y": 180
+    },
+    "down=true,facing=west,left=true,right=true,stand=false,up=false": {
+      "model": "jugcraft:block/flat_tv_lrxd_wall",
+      "y": 270
+    },
+    "down=true,facing=north,left=false,right=false,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_xxud_wall"
+    },
+    "down=true,facing=east,left=false,right=false,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_xxud_wall",
+      "y": 90
+    },
+    "down=true,facing=south,left=false,right=false,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_xxud_wall",
+      "y": 180
+    },
+    "down=true,facing=west,left=false,right=false,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_xxud_wall",
+      "y": 270
+    },
+    "down=true,facing=north,left=true,right=false,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_lxud_wall"
+    },
+    "down=true,facing=east,left=true,right=false,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_lxud_wall",
+      "y": 90
+    },
+    "down=true,facing=south,left=true,right=false,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_lxud_wall",
+      "y": 180
+    },
+    "down=true,facing=west,left=true,right=false,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_lxud_wall",
+      "y": 270
+    },
+    "down=true,facing=north,left=false,right=true,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_xrud_wall"
+    },
+    "down=true,facing=east,left=false,right=true,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_xrud_wall",
+      "y": 90
+    },
+    "down=true,facing=south,left=false,right=true,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_xrud_wall",
+      "y": 180
+    },
+    "down=true,facing=west,left=false,right=true,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_xrud_wall",
+      "y": 270
+    },
+    "down=true,facing=north,left=true,right=true,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_lrud_wall"
+    },
+    "down=true,facing=east,left=true,right=true,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_lrud_wall",
+      "y": 90
+    },
+    "down=true,facing=south,left=true,right=true,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_lrud_wall",
+      "y": 180
+    },
+    "down=true,facing=west,left=true,right=true,stand=false,up=true": {
+      "model": "jugcraft:block/flat_tv_lrud_wall",
+      "y": 270
+    },
+    "down=false,facing=north,left=false,right=false,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_xxxx_stand"
+    },
+    "down=false,facing=east,left=false,right=false,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_xxxx_stand",
+      "y": 90
+    },
+    "down=false,facing=south,left=false,right=false,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_xxxx_stand",
+      "y": 180
+    },
+    "down=false,facing=west,left=false,right=false,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_xxxx_stand",
+      "y": 270
+    },
+    "down=false,facing=north,left=true,right=false,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_lxxx_stand"
+    },
+    "down=false,facing=east,left=true,right=false,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_lxxx_stand",
+      "y": 90
+    },
+    "down=false,facing=south,left=true,right=false,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_lxxx_stand",
+      "y": 180
+    },
+    "down=false,facing=west,left=true,right=false,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_lxxx_stand",
+      "y": 270
+    },
+    "down=false,facing=north,left=false,right=true,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_xrxx_stand"
+    },
+    "down=false,facing=east,left=false,right=true,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_xrxx_stand",
+      "y": 90
+    },
+    "down=false,facing=south,left=false,right=true,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_xrxx_stand",
+      "y": 180
+    },
+    "down=false,facing=west,left=false,right=true,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_xrxx_stand",
+      "y": 270
+    },
+    "down=false,facing=north,left=true,right=true,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_lrxx_stand"
+    },
+    "down=false,facing=east,left=true,right=true,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_lrxx_stand",
+      "y": 90
+    },
+    "down=false,facing=south,left=true,right=true,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_lrxx_stand",
+      "y": 180
+    },
+    "down=false,facing=west,left=true,right=true,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_lrxx_stand",
+      "y": 270
+    },
+    "down=false,facing=north,left=false,right=false,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_xxux_stand"
+    },
+    "down=false,facing=east,left=false,right=false,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_xxux_stand",
+      "y": 90
+    },
+    "down=false,facing=south,left=false,right=false,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_xxux_stand",
+      "y": 180
+    },
+    "down=false,facing=west,left=false,right=false,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_xxux_stand",
+      "y": 270
+    },
+    "down=false,facing=north,left=true,right=false,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_lxux_stand"
+    },
+    "down=false,facing=east,left=true,right=false,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_lxux_stand",
+      "y": 90
+    },
+    "down=false,facing=south,left=true,right=false,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_lxux_stand",
+      "y": 180
+    },
+    "down=false,facing=west,left=true,right=false,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_lxux_stand",
+      "y": 270
+    },
+    "down=false,facing=north,left=false,right=true,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_xrux_stand"
+    },
+    "down=false,facing=east,left=false,right=true,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_xrux_stand",
+      "y": 90
+    },
+    "down=false,facing=south,left=false,right=true,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_xrux_stand",
+      "y": 180
+    },
+    "down=false,facing=west,left=false,right=true,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_xrux_stand",
+      "y": 270
+    },
+    "down=false,facing=north,left=true,right=true,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_lrux_stand"
+    },
+    "down=false,facing=east,left=true,right=true,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_lrux_stand",
+      "y": 90
+    },
+    "down=false,facing=south,left=true,right=true,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_lrux_stand",
+      "y": 180
+    },
+    "down=false,facing=west,left=true,right=true,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_lrux_stand",
+      "y": 270
+    },
+    "down=true,facing=north,left=false,right=false,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_xxxd_stand"
+    },
+    "down=true,facing=east,left=false,right=false,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_xxxd_stand",
+      "y": 90
+    },
+    "down=true,facing=south,left=false,right=false,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_xxxd_stand",
+      "y": 180
+    },
+    "down=true,facing=west,left=false,right=false,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_xxxd_stand",
+      "y": 270
+    },
+    "down=true,facing=north,left=true,right=false,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_lxxd_stand"
+    },
+    "down=true,facing=east,left=true,right=false,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_lxxd_stand",
+      "y": 90
+    },
+    "down=true,facing=south,left=true,right=false,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_lxxd_stand",
+      "y": 180
+    },
+    "down=true,facing=west,left=true,right=false,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_lxxd_stand",
+      "y": 270
+    },
+    "down=true,facing=north,left=false,right=true,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_xrxd_stand"
+    },
+    "down=true,facing=east,left=false,right=true,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_xrxd_stand",
+      "y": 90
+    },
+    "down=true,facing=south,left=false,right=true,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_xrxd_stand",
+      "y": 180
+    },
+    "down=true,facing=west,left=false,right=true,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_xrxd_stand",
+      "y": 270
+    },
+    "down=true,facing=north,left=true,right=true,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_lrxd_stand"
+    },
+    "down=true,facing=east,left=true,right=true,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_lrxd_stand",
+      "y": 90
+    },
+    "down=true,facing=south,left=true,right=true,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_lrxd_stand",
+      "y": 180
+    },
+    "down=true,facing=west,left=true,right=true,stand=true,up=false": {
+      "model": "jugcraft:block/flat_tv_lrxd_stand",
+      "y": 270
+    },
+    "down=true,facing=north,left=false,right=false,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_xxud_stand"
+    },
+    "down=true,facing=east,left=false,right=false,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_xxud_stand",
+      "y": 90
+    },
+    "down=true,facing=south,left=false,right=false,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_xxud_stand",
+      "y": 180
+    },
+    "down=true,facing=west,left=false,right=false,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_xxud_stand",
+      "y": 270
+    },
+    "down=true,facing=north,left=true,right=false,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_lxud_stand"
+    },
+    "down=true,facing=east,left=true,right=false,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_lxud_stand",
+      "y": 90
+    },
+    "down=true,facing=south,left=true,right=false,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_lxud_stand",
+      "y": 180
+    },
+    "down=true,facing=west,left=true,right=false,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_lxud_stand",
+      "y": 270
+    },
+    "down=true,facing=north,left=false,right=true,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_xrud_stand"
+    },
+    "down=true,facing=east,left=false,right=true,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_xrud_stand",
+      "y": 90
+    },
+    "down=true,facing=south,left=false,right=true,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_xrud_stand",
+      "y": 180
+    },
+    "down=true,facing=west,left=false,right=true,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_xrud_stand",
+      "y": 270
+    },
+    "down=true,facing=north,left=true,right=true,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_lrud_stand"
+    },
+    "down=true,facing=east,left=true,right=true,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_lrud_stand",
+      "y": 90
+    },
+    "down=true,facing=south,left=true,right=true,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_lrud_stand",
+      "y": 180
+    },
+    "down=true,facing=west,left=true,right=true,stand=true,up=true": {
+      "model": "jugcraft:block/flat_tv_lrud_stand",
       "y": 270
     }
   }
