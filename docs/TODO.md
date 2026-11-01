@@ -2,6 +2,8 @@
 
 ## PRIORITY FIXES — October 31 release follow-up
 
+- [x] **P0 — Pebble world-generation crash:** use native waterlogging properties across shared household decorations; 34 focused server tests passed, including dry/underwater generation, bucket handling and saved states. [Hotfix evidence](features/twigworks-waterlogging-hotfix.md). Server/client rollout is tracked separately; this checkbox records the code repair and tests.
+
 Owner authorized publishing this update on October 31 with unfinished work kept visible here. This supersedes the earlier local-only publication hold; each live server restart still needs separate confirmation and a 30-second player warning.
 
 - [ ] **P1 — Cross-collection economy and catalog closure.** The October 31 pre-publication Python sweep exposed missing explicit essence values for new items, a rocking-chair conversion fixture valued at 80 essence against a 59-essence minimum bill, stale JEI station catalog/custom serializer coverage, the Encyclopedia audit's page-versus-handbook expectation, the iron-scaffold/iron-portcullis overlapping crafting bill and a survival-audit registry snapshot that does not recognize new collection IDs. Reconcile these against actual runtime registries and recipe selection; distinguish stale audit expectations from real acquisition or economy defects. Do not claim Foundation is green or broadly enable new tablet outputs before this is resolved. See the dated release preparation entry in the collection ledger.

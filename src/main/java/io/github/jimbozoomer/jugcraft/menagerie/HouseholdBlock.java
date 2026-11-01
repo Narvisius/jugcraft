@@ -100,7 +100,10 @@ public class HouseholdBlock extends Block {
     @Override protected void createBlockStateDefinition(StateDefinition.Builder<Block,BlockState> b){
         for(var entry:BUILDING.get().getAsJsonObject("properties").entrySet()){
             String name=entry.getKey();List<String> choices=new ArrayList<>();entry.getValue().getAsJsonArray().forEach(v->choices.add(v.getAsString()));
-            if(!choices.isEmpty()&&choices.stream().allMatch(v->v.equals("false")||v.equals("true")))b.add(BooleanProperty.create(name));
+            // 26.3 state access uses the property's identity, not just its name.
+            // World generation and SimpleWaterloggedBlock use this canonical instance.
+            if(name.equals("waterlogged"))b.add(BlockStateProperties.WATERLOGGED);
+            else if(!choices.isEmpty()&&choices.stream().allMatch(v->v.equals("false")||v.equals("true")))b.add(BooleanProperty.create(name));
             else if(name.equals("facing"))b.add(choices.size()==2?EnumProperty.create("facing",Direction.class,Direction.NORTH,Direction.EAST):choices.contains("up")?BlockStateProperties.FACING:HorizontalDirectionalBlock.FACING);
             else b.add(new Choice(name,choices));
         }
