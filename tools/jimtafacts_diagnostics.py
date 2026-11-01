@@ -5,9 +5,10 @@ from jimtafacts_factory import ROOT,RES,SOURCE,dump
 def generate(shared=True):
  manifest=[]
  for ident,source,block in [('jimta_power_tester','buildcraftcore/textures/blocks/power_tester.png',True),('jimta_factory_debugger','buildcraftlib/textures/items/debugger.png',False)]:
-  src=SOURCE/source;target=RES/f'assets/jugcraft/textures/item/jimtafacts/{ident}.png';target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(src,target)
+  texture=f'{"block" if block else "item"}/jimtafacts/{ident}'
+  src=SOURCE/source;target=RES/f'assets/jugcraft/textures/{texture}.png';target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(src,target)
   model='jugcraft:'+('block/' if block else 'item/')+ident
-  dump(RES/f'assets/jugcraft/models/{"block" if block else "item"}/{ident}.json',{'parent':'minecraft:block/cube_all' if block else 'minecraft:item/generated','textures':{'all' if block else 'layer0':'jugcraft:item/jimtafacts/'+ident}})
+  dump(RES/f'assets/jugcraft/models/{"block" if block else "item"}/{ident}.json',{'parent':'minecraft:block/cube_all' if block else 'minecraft:item/generated','textures':{'all' if block else 'layer0':'jugcraft:'+texture}})
   dump(RES/f'assets/jugcraft/items/{ident}.json',{'model':{'type':'minecraft:model','model':model}})
   if block:
    dump(RES/f'assets/jugcraft/blockstates/{ident}.json',{'variants':{'':{'model':model}}})

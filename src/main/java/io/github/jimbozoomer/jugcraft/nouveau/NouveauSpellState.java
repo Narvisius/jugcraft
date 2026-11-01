@@ -37,7 +37,12 @@ public final class NouveauSpellState extends SavedData {
         for(int n=0;n<16&&!data.changes.isEmpty();n++){
             data.cursor=Math.floorMod(data.cursor,data.changes.size());var c=data.changes.get(data.cursor);
             if(c.until>l.getGameTime()||!l.hasChunkAt(c.pos)){data.cursor++;continue;}
-            if(l.getBlockState(c.pos).equals(c.after)&&l.getBlockEntity(c.pos)==null)l.setBlock(c.pos,c.before,Block.UPDATE_ALL);
+            if(l.getBlockState(c.pos).equals(c.after)&&l.getBlockEntity(c.pos)==null){
+                // A tunneled passage must not restore solid terrain through a living occupant.
+                var shape=c.before.getCollisionShape(l,c.pos);
+                if(!shape.isEmpty()){var occupants=new ArrayList<net.minecraft.world.entity.LivingEntity>();l.getEntities(net.minecraft.world.level.entity.EntityTypeTest.forClass(net.minecraft.world.entity.LivingEntity.class),shape.bounds().move(c.pos),e->e.isAlive()&&!e.isSpectator(),occupants,1);if(!occupants.isEmpty()){data.cursor++;continue;}}
+                l.setBlock(c.pos,c.before,Block.UPDATE_ALL);
+            }
             data.changes.remove(data.cursor);data.setDirty();
         }
     }

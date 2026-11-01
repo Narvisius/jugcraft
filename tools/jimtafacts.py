@@ -5,7 +5,7 @@ import shutil
 import hashlib
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / 'art/owner-library/originals/Oct23/Jimtafacts'
+SOURCE = ROOT / 'art/owner-library/originals/Edited-2026-10-29/artifacts'
 RES = ROOT / 'src/main/resources'
 
 # Native implementations only. Unimplemented collection entries stay in the intake catalog.

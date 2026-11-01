@@ -1,0 +1,79 @@
+{
+  "type": "minecraft:selector",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "weight": 11,
+          "value": "jugcraft:jugtania_equipment/loonium/armorset/ward_iron"
+        },
+        {
+          "type": "minecraft:loot_table",
+          "weight": 5,
+          "value": "jugcraft:jugtania_equipment/loonium/armorset/ward_diamond"
+        },
+        {
+          "type": "minecraft:loot_table",
+          "weight": 3,
+          "value": "jugcraft:jugtania_equipment/loonium/armorset/silence_gold"
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "jugcraft:jugtania_equipment/loonium/armorset/silence_diamond"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:tipped_arrow",
+          "modifier": [
+            {
+              "components": {
+                "minecraft:potion_contents": {
+                  "custom_color": 2696993,
+                  "custom_effects": [
+                    {
+                      "id": "minecraft:darkness",
+                      "duration": 200,
+                      "amplifier": 0
+                    }
+                  ]
+                }
+              },
+              "type": "minecraft:set_components"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0,
+      "condition": {
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "entity": "this",
+            "predicate": {
+              "equipment": {
+                "mainhand": {
+                  "items": [
+                    "minecraft:bow"
+                  ]
+                }
+              }
+            },
+            "type": "minecraft:entity_properties"
+          },
+          {
+            "chance": 0.9,
+            "type": "minecraft:random_chance"
+          }
+        ]
+      }
+    }
+  ]
+}

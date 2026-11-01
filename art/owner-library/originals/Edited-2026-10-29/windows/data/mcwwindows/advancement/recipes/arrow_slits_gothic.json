@@ -1,0 +1,61 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+     "mcwwindows:stone_brick_gothic",
+	 "mcwwindows:end_brick_gothic",
+	 "mcwwindows:nether_brick_gothic",
+	 "mcwwindows:prismarine_brick_gothic",
+	 "mcwwindows:mud_brick_gothic",
+	 "mcwwindows:dark_prismarine_brick_gothic",
+	 "mcwwindows:blackstone_brick_gothic",
+
+	 "mcwwindows:stone_brick_arrow_slit",
+	 "mcwwindows:cobblestone_arrow_slit",
+	 "mcwwindows:nether_brick_arrow_slit",
+	 "mcwwindows:ender_brick_arrow_slit",
+	 "mcwwindows:mud_brick_arrow_slit",
+	 "mcwwindows:blackstone_brick_arrow_slit",
+	 "mcwwindows:prismarine_brick_arrow_slit",
+	 "mcwwindows:dark_prismarine_brick_arrow_slit"
+    ]
+  },
+  "criteria": {
+    "has_wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:stone"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": "mcwwindows:stone_brick_gothic"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wood",
+      "has_the_recipe"
+    ]
+  ]
+}
+
+
+
+
+
+
+
+
+
+
+
+

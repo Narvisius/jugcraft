@@ -16,13 +16,23 @@
       ],
       "milestones": [
         {
+          "title": "Start here: your first machine",
+          "icon": "jugcraft:coal_generator",
+          "text": "A short practical route from raw materials to a powered furnace, with live recipe grids and troubleshooting.",
+          "link": {
+            "type": "page",
+            "target": "technology_start"
+          }
+        },
+        {
           "title": "Bronze Age",
           "icon": "jugcraft:bronze_ingot",
           "link": {
             "type": "handbook",
             "chapter": 0,
             "page": 1
-          }
+          },
+          "text": "Get power running and double every ore. Mine copper and tin and smelt bronze. Build a machine casing, a coal generator and copper cable. Put the crusher first: every ore through it gives two raw ores, twice the ingots. Bronze armor protects like iron; a Steampunk Pattern at a smithing table makes it Steampunk armor (see Steampunk and Kaiser Armor)."
         },
         {
           "title": "Workshop",
@@ -31,7 +41,8 @@
             "type": "handbook",
             "chapter": 0,
             "page": 2
-          }
+          },
+          "text": "Plates, wires and circuits: the parts every later machine needs. Make plates in the metal press and wire in the wire drawer, then basic circuits. Store power in a battery box. The pulverizer and ore washer take ore to three ingots each. Find surface deposits with the prospector and put a deposit drill on them."
         },
         {
           "title": "Rotation and Logistics",
@@ -40,7 +51,8 @@
             "type": "handbook",
             "chapter": 0,
             "page": 3
-          }
+          },
+          "text": "Move power by shaft and items by pipe and belt. A steam engine or water wheel turns shafts; machines run on rotation directly, or a dynamo makes power. Item pipes, extractors and conveyors carry ore from drills to furnaces without you."
         },
         {
           "title": "Steel",
@@ -49,7 +61,8 @@
             "type": "handbook",
             "chapter": 0,
             "page": 4
-          }
+          },
+          "text": "Steel opens every heavy machine and the powered tools. Bake coal into coke, then refine iron with coke into steel in the steel foundry. The arc furnace melts what furnaces cannot. Advanced circuits need steel. Charge a mining drill at the charging station."
         },
         {
           "title": "Oil",
@@ -58,7 +71,8 @@
             "type": "handbook",
             "chapter": 0,
             "page": 5
-          }
+          },
+          "text": "Crude oil becomes fuel, plastic and asphalt. Prospect for a reservoir and pump it with a pumpjack. Steel pipes and tanks carry the oil. Distil it; burn diesel in a diesel generator. Crack heavy oil and reform naphtha in the cracker, make plastic, and run a gas turbine."
         },
         {
           "title": "Chemistry",
@@ -67,7 +81,8 @@
             "type": "handbook",
             "chapter": 0,
             "page": 6
-          }
+          },
+          "text": "Salt, sulfur and air become acids, metals and gases. Make brine and split it in the electrolytic cell into chlorine, hydrogen and lye. The chemical reactor makes sulfuric acid, titanium sponge, lithium and rare earths. Store a lot of power in a lithium battery bank. Split air for nitrogen and make ammonia and nitric acid."
         },
         {
           "title": "Electronics",
@@ -76,7 +91,8 @@
             "type": "handbook",
             "chapter": 0,
             "page": 7
-          }
+          },
+          "text": "Silicon becomes chips and processors. Pull silicon boules in the arc furnace, saw them into wafers and etch microchips in the lithography station. Four microchips and an advanced circuit make a processor, for the top machines."
         },
         {
           "title": "Late Game",
@@ -85,7 +101,8 @@
             "type": "handbook",
             "chapter": 0,
             "page": 8
-          }
+          },
+          "text": "Big, efficient power. Magnet dynamos and motors lose almost nothing. Fit a turbocharger to the advanced engine and give it coolant water; a flywheel smooths out a bursty shaft line. Solar trackers follow the sun; a field of heliostats around a tower boils water at a solar receiver. A flow battery stores 64 million JE."
         },
         {
           "title": "Special Materials",
@@ -94,10 +111,38 @@
             "type": "handbook",
             "chapter": 0,
             "page": 9
-          }
+          },
+          "text": "Rubber, glass and weapons from the chemistry you already run. Naphtha cracked to butadiene in the chemical reactor becomes rubber and gaskets, for sealed pipes and the turbocharger. Borax turns sand into borosilicate glass: glass tanks that join into big see-through stores, tank gauges and optical fibre for processors. Guncotton fills grenades."
         }
       ],
       "chapters": [
+        {
+          "title": "Start here: your first machine",
+          "icon": "jugcraft:coal_generator",
+          "text": "A short practical route from raw materials to a powered furnace, with live recipe grids and troubleshooting.",
+          "link": {
+            "type": "page",
+            "target": "technology_start"
+          }
+        },
+        {
+          "title": "Digital workshops",
+          "icon": "minecraft:redstone",
+          "text": "Storage networks, terminals and automation.",
+          "link": {
+            "type": "page",
+            "target": "jimta_network"
+          }
+        },
+        {
+          "title": "Imported workshop manuals",
+          "icon": "minecraft:book",
+          "text": "Reference for the supplied workshop systems.",
+          "link": {
+            "type": "page",
+            "target": "jimta_guides"
+          }
+        },
         {
           "title": "Progression",
           "icon": "jugcraft:engineers_handbook",
@@ -372,15 +417,59 @@
     },
     {
       "id": "magic",
-      "title": "Magic: the Arcane Concordance",
+      "title": "Magic and Magical Workshops",
       "icon": "jugcraft:initiate_wand",
       "accent": "8A6FD0",
       "summary": [
-        "The Arcane Concordance is research you earn by examining the world, and spells cast from your own Focus. It rises through five stages, Initiate to Architect, to a Concord Spire that changes the land round it.",
-        "Begin by sneaking and using something that glows: an amethyst shard, glow lichen or glow berries. Then take research in any order: cultivation, exploration and combat, and crafting and infrastructure each lead to a Spire.",
-        "The milestones and chapters open the codex, which shows each tradition's entries as you unlock them. Your Concordance Journal says what each step still needs."
+        "Choose casting, magical workshops, helpers or transmutation. They are independent specialties; no single branch is required before reading another.",
+        "Start here gives practical first-session goals. The chapters below gather all existing magic guides in this Encyclopedia; the Concordance reference remains available for deeper research."
       ],
       "milestones": [
+        {
+          "title": "Start here: choose your magic",
+          "icon": "jugcraft:initiate_wand",
+          "text": "Wands, research, magical workshops or transmutation: independent starting paths.",
+          "link": {
+            "type": "page",
+            "target": "magic_start"
+          }
+        },
+        {
+          "title": "First Light: your live route",
+          "icon": "minecraft:lantern",
+          "text": "Your own research progress and the server's available recipes.",
+          "link": {
+            "type": "page",
+            "target": "discover"
+          }
+        },
+        {
+          "title": "Spellcraft and constellation composer",
+          "icon": "jugcraft:initiate_wand",
+          "text": "Build, save and cast spells without typing commands.",
+          "link": {
+            "type": "page",
+            "target": "spellcraft"
+          }
+        },
+        {
+          "title": "Jug Nouveau: workshops and helpers",
+          "icon": "jugcraft:nouveau_novice_spell_book",
+          "text": "Glyphs, Source networks, enchanting, familiars and workers.",
+          "link": {
+            "type": "page",
+            "target": "nouveau"
+          }
+        },
+        {
+          "title": "Transmutation and magical gear",
+          "icon": "jugcraft:philosophers_stone",
+          "text": "Essence, learned building supplies, matter equipment and economy limits.",
+          "link": {
+            "type": "page",
+            "target": "alchemy_start"
+          }
+        },
         {
           "title": "Examine a glow",
           "icon": "minecraft:amethyst_shard",
@@ -431,6 +520,69 @@
         }
       ],
       "chapters": [
+        {
+          "title": "Start here: choose your magic",
+          "icon": "jugcraft:initiate_wand",
+          "text": "Wands, research, magical workshops or transmutation: independent starting paths.",
+          "link": {
+            "type": "page",
+            "target": "magic_start"
+          }
+        },
+        {
+          "title": "First Light: your live route",
+          "icon": "minecraft:lantern",
+          "text": "Your own research progress and the server's available recipes.",
+          "link": {
+            "type": "page",
+            "target": "discover"
+          }
+        },
+        {
+          "title": "Spellcraft and constellation composer",
+          "icon": "jugcraft:initiate_wand",
+          "text": "Build, save and cast spells without typing commands.",
+          "link": {
+            "type": "page",
+            "target": "spellcraft"
+          }
+        },
+        {
+          "title": "Jug Nouveau: workshops and helpers",
+          "icon": "jugcraft:nouveau_novice_spell_book",
+          "text": "Glyphs, Source networks, enchanting, familiars and workers.",
+          "link": {
+            "type": "page",
+            "target": "nouveau"
+          }
+        },
+        {
+          "title": "Transmutation and magical gear",
+          "icon": "jugcraft:philosophers_stone",
+          "text": "Essence, learned building supplies, matter equipment and economy limits.",
+          "link": {
+            "type": "page",
+            "target": "alchemy_start"
+          }
+        },
+        {
+          "title": "Spellbooks and imported guides",
+          "icon": "minecraft:book",
+          "text": "The supplied spellbook and workshop reference library.",
+          "link": {
+            "type": "page",
+            "target": "jimta_guides"
+          }
+        },
+        {
+          "title": "Expeditions and bestiary",
+          "icon": "minecraft:bone",
+          "text": "Discoveries and encounters you have met.",
+          "link": {
+            "type": "page",
+            "target": "expedition"
+          }
+        },
         {
           "title": "Your Concordance Journal",
           "icon": "minecraft:writable_book",

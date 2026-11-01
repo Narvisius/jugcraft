@@ -22,11 +22,17 @@ DATA = ROOT / "src" / "main" / "resources" / "data" / MOD
 
 # The pages, in the order the encyclopedia shows them (the last is the client's own).
 PAGES = {
+    "technology_start": "Start Technology",
+    "magic_start": "Start Magic",
+    "alchemy_start": "Transmutation & Equipment",
+    "mentors": "Town Mentors",
     "discover": "Discover",
     "spellcraft": "Spellcraft",
     "expedition": "Expeditions",
     "inspect": "Inspect",
     "nouveau": "Jug Nouveau",
+    "botanical": "Botanical Workshops",
+    "botanical_flowers": "Working Flowers",
     "menagerie": "Wildlife & Companions",
     "woodland": "Woodland & Fable Creatures",
     "household": "Furniture & Kitchens",
@@ -37,7 +43,7 @@ PAGES = {
     "jimta_guides": "Workshop Guides",
     "keys": "Keys",
 }
-SERVER_PAGES = ["discover", "spellcraft", "expedition", "inspect", "nouveau", "menagerie", "woodland", "household", "habitats", "beasts", "caverns", "jimta_network", "jimta_guides"]
+SERVER_PAGES = ["technology_start", "magic_start", "alchemy_start", "mentors", "discover", "spellcraft", "expedition", "inspect", "nouveau", "botanical", "botanical_flowers", "menagerie", "woodland", "household", "habitats", "beasts", "caverns", "jimta_network", "jimta_guides"]
 
 # Where a step of a route stands for a player (EncyclopediaPayload.StepState, NONE aside), in words.
 STATES = {
@@ -130,6 +136,14 @@ DOSSIERS = {
 
 # What each Jugcraft key does, for the Keys page (key.jugcraft.<name>; every key the client registers).
 KEY_HELP = {
+    "third_person_orbit": "Orbit the third-person camera",
+    "chat_animation_settings": "Configure the chat presentation on this computer",
+    "owner_zoom_settings": "Configure zoom strength, smoothing and overlays",
+    "owner_zoom_secondary": "Use the alternate zoom mode",
+    "owner_zoom_out": "Decrease zoom while zooming",
+    "owner_zoom_in": "Increase zoom while zooming",
+    "owner_zoom": "Hold to zoom without changing your saved field of view",
+    "owner_backpack": "Open the carried or equipped backpack",
     "nouveau_familiar": "Choose an owned familiar (not bound at first)",
     "nouveau_crown": "Use the worn Alchemist’s Crown (not bound at first)",
     "nouveau_spell_style": "Set the held spell instrument’s colors, particles and sound",
@@ -414,6 +428,13 @@ CLIENT = {
 
 
 def lang_entries(lang):
+    lang.update({
+        "encyclopedia.jugcraft.have_now": "%s - carrying now: %s",
+        "encyclopedia.jugcraft.server_recipe": "Server recipe: %s",
+        "encyclopedia.jugcraft.previous": "Back",
+        "screen.jugcraft.shop.mentor": "Ask mentor",
+        "message.jugcraft.mentor.lesson": "%s: Let's look at %s together. This lesson is free; nothing is consumed.",
+    })
     """Every word above, under its key."""
     for page, name in PAGES.items():
         lang[f"encyclopedia.{MOD}.page.{page}"] = name

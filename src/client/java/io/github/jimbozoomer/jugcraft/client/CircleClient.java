@@ -115,6 +115,12 @@ public final class CircleClient {
 			FabricLoader.getInstance().getModContainer(Jugcraft.MOD_ID).ifPresent(container -> ResourceLoader.registerBuiltinPack(
 					Jugcraft.id("fusion_textures"), container, Component.translatable("pack.jugcraft.fusion_textures"),
 					PackActivationType.ALWAYS_ENABLED));
+			FabricLoader.getInstance().getModContainer(Jugcraft.MOD_ID).ifPresent(container -> ResourceLoader.registerBuiltinPack(
+					Jugcraft.id("owner_connected_surfaces"), container, Component.literal("Jugcraft connected surfaces (original art)"),
+					PackActivationType.NORMAL));
+            FabricLoader.getInstance().getModContainer(Jugcraft.MOD_ID).ifPresent(container -> ResourceLoader.registerBuiltinPack(
+                    Jugcraft.id("owner_connected_surfaces_programmer"), container, Component.literal("Jugcraft connected surfaces (Programmer Art variants)"),
+                    PackActivationType.NORMAL));
 		}
 	}
 

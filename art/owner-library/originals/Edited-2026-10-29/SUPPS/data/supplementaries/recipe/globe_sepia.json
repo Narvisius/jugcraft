@@ -1,0 +1,35 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "supplementaries:flag",
+      "flag": "globe_sepia"
+    },
+    {
+      "condition": "supplementaries:flag",
+      "flag": "antique_ink"
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "supplementaries:flag",
+      "flag": "globe_sepia"
+    },
+    {
+      "type": "supplementaries:flag",
+      "flag": "antique_ink"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "supplementaries:globe"
+    },
+    {
+      "item": "supplementaries:antique_ink"
+    }
+  ],
+  "result": {
+    "id": "supplementaries:globe_sepia",
+    "count": 1
+  }
+}

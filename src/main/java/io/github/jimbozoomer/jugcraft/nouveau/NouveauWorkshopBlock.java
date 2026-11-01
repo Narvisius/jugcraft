@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
 
-public final class NouveauWorkshopBlock extends BaseEntityBlock {
+public class NouveauWorkshopBlock extends BaseEntityBlock {
     public static final EnumProperty<Direction> FACING=BlockStateProperties.FACING;
     public static final BooleanProperty ACTIVE=BlockStateProperties.LIT;
     public static final IntegerProperty FILL=IntegerProperty.create("fill",0,11);
@@ -28,7 +28,7 @@ public final class NouveauWorkshopBlock extends BaseEntityBlock {
         case "rune"->Block.box(0,0,0,16,1,16);
         case "arcane_platform"->switch(s.getValue(FACING)){case UP->Block.box(0,0,0,16,2,16);case DOWN->Block.box(0,14,0,16,16,16);case NORTH->Block.box(0,0,14,16,16,16);case SOUTH->Block.box(0,0,0,16,16,2);case EAST->Block.box(0,0,0,2,16,16);case WEST->Block.box(14,0,0,16,16,16);};
         case "arcane_pedestal"->net.minecraft.world.phys.shapes.Shapes.or(Block.box(5,0,5,11,13,11),Block.box(2,11,2,14,14,14));
-        case "source_jar","creative_source_jar","potion_jar","mob_jar","planarium"->Block.box(3,0,3,13,15,13);
+        case "source_jar","ender_source_jar","creative_source_jar","potion_jar","mob_jar","planarium"->Block.box(3,0,3,13,15,13);
         case "spell_prism","void_prism","relay","relay_collector","relay_deposit","relay_splitter","relay_warp","redstone_relay","brazier_relay"->Block.box(4,2,4,12,14,12);
         case "potion_diffuser","scryers_crystal","spell_sensor"->Block.box(3,0,3,13,12,13);
         default->super.getShape(s,l,p,c);};}
@@ -39,6 +39,7 @@ public final class NouveauWorkshopBlock extends BaseEntityBlock {
     @Override public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level l,BlockState s,BlockEntityType<T> t){return l.isClientSide()?null:createTickerHelper(t,NouveauWorkshops.ENTITY,NouveauWorkshop::tick);}
     @Override public void setPlacedBy(Level l,BlockPos p,BlockState s,@Nullable LivingEntity who,ItemStack item){super.setPlacedBy(l,p,s,who,item);if(who instanceof ServerPlayer player&&l.getBlockEntity(p) instanceof NouveauWorkshop be){be.placedBy(player);var name=item.get(net.minecraft.core.component.DataComponents.CUSTOM_NAME);if(name!=null)be.customName(name.getString());}}
     @Override protected InteractionResult useItemOn(ItemStack stack,BlockState s,Level l,BlockPos pos,Player player,InteractionHand hand,BlockHitResult hit){
+        if(stack.getItem() instanceof io.github.jimbozoomer.jugcraft.nouveau.additions.ArsAdditionCharms.Charm||stack.getItem() instanceof io.github.jimbozoomer.jugcraft.nouveau.additions.ArsMemoryCrystal||stack.getItem() instanceof io.github.jimbozoomer.jugcraft.nouveau.additions.ArsHaversack)return InteractionResult.PASS;
         if(l.getBlockEntity(pos) instanceof NouveauWorkshop jar&&jar.kind().equals("mob_jar")&&player instanceof ServerPlayer p){var result=NouveauContainment.interact(p,jar,hand);if(result!=InteractionResult.PASS)return result;}
         if(l.getBlockEntity(pos) instanceof NouveauWorkshop be&&be.kind().equals("potion_jar"))return player instanceof ServerPlayer p?NouveauAlchemy.interact(p,be,hand):InteractionResult.SUCCESS;
         if(player instanceof ServerPlayer p&&l.getBlockEntity(pos) instanceof NouveauWorkshop be)return NouveauWorkshopInteractions.use(p,be,hand);

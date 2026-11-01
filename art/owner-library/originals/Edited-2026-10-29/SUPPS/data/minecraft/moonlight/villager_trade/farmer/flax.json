@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "flag": "flax",
+      "condition": "supplementaries:flag"
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "supplementaries:flag",
+      "flag": "flax"
+    }
+  ],
+  "type": "simple",
+  "max_trades": 16,
+  "offer": {
+    "id": "minecraft:emerald",
+    "count": 1
+  },
+  "price": {
+    "id": "supplementaries:flax_seeds",
+    "count": 22
+  },
+  "level": 3
+}

@@ -1,0 +1,77 @@
+{
+  "textures": {
+    "still": "jugcraft:newest/forbidden/block/liquid/experience_still",
+    "flow": "jugcraft:newest/forbidden/block/liquid/experience_flow",
+    "particle": "#still"
+  },
+  "elements": [
+    {
+      "from": [
+        3.5,
+        0.5,
+        3.5
+      ],
+      "to": [
+        12.5,
+        5.0,
+        12.5
+      ],
+      "faces": {
+        "up": {
+          "texture": "#still",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#still",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "north": {
+          "texture": "#flow",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#flow",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#flow",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#flow",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    }
+  ]
+}

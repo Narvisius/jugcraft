@@ -15,6 +15,7 @@ public final class NouveauFixtures {
     public static final BooleanProperty LIT=BlockStateProperties.LIT;
     public static final IntegerProperty COLOR=IntegerProperty.create("color",0,7);
     public static boolean light(net.minecraft.server.level.ServerLevel level,BlockPos at,BlockState state,net.minecraft.server.level.ServerPlayer p,boolean on){
+        if(state.getBlock() instanceof io.github.jimbozoomer.jugcraft.nouveau.additions.ArsAdditionDecor.Magelight)return level.setBlock(at,state.setValue(io.github.jimbozoomer.jugcraft.nouveau.additions.ArsAdditionDecor.Magelight.LIGHT,on?15:0).setValue(COLOR,Math.clamp(p.getMainHandItem().getOrDefault(NouveauControls.COLOR,0),0,7)),Block.UPDATE_ALL);
         if(!(state.getBlock() instanceof Sconce)&&!(state.getBlock() instanceof Torch))return false;
         int color=p.getMainHandItem().getOrDefault(NouveauControls.COLOR,0);
         return level.setBlock(at,state.setValue(LIT,on).setValue(COLOR,Math.clamp(color,0,7)),Block.UPDATE_ALL);

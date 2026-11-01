@@ -1,0 +1,12 @@
+{
+  "description": {"translate":"enchantment.enchantmentsreforged.treasure_seeker"},
+  "supported_items":"#minecraft:enchantable/fishing",
+  "primary_items":"#minecraft:enchantable/fishing",
+  "weight":2,
+  "max_level":2,
+  "min_cost":{"base":1,"per_level_above_first":10},
+  "max_cost":{"base":31,"per_level_above_first":10},
+  "anvil_cost":2,
+  "slots":["mainhand"],
+  "effects":{"minecraft:fishing_luck_bonus":[{"effect":{"type":"minecraft:add","value":{"type":"minecraft:linear","base":1.0,"per_level_above_first":1.0}}}]}
+}

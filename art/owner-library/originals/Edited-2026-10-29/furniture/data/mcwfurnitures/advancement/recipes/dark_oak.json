@@ -1,0 +1,93 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+	  "mcwfurnitures:cabinet_door",
+	  "mcwfurnitures:cabinet_drawer",
+	
+      "mcwfurnitures:dark_oak_wardrobe",
+	  "mcwfurnitures:dark_oak_modern_wardrobe",
+	  "mcwfurnitures:dark_oak_double_wardrobe",
+	  "mcwfurnitures:dark_oak_bookshelf_cupboard",
+	  "mcwfurnitures:dark_oak_bookshelf",
+	  "mcwfurnitures:dark_oak_drawer",
+	  "mcwfurnitures:dark_oak_double_drawer",
+	  "mcwfurnitures:dark_oak_bookshelf_drawer",
+	  "mcwfurnitures:dark_oak_lower_bookshelf_drawer",
+	  "mcwfurnitures:dark_oak_large_drawer",
+	  "mcwfurnitures:dark_oak_lower_triple_drawer",
+	  "mcwfurnitures:dark_oak_triple_drawer",
+	  "mcwfurnitures:dark_oak_desk",
+	  "mcwfurnitures:dark_oak_covered_desk",
+	  "mcwfurnitures:dark_oak_modern_desk",
+	  "mcwfurnitures:dark_oak_table",
+	  "mcwfurnitures:dark_oak_end_table",
+	  "mcwfurnitures:dark_oak_coffee_table",
+	  "mcwfurnitures:dark_oak_glass_table",
+	  "mcwfurnitures:dark_oak_chair",
+	  "mcwfurnitures:dark_oak_modern_chair",
+	  "mcwfurnitures:dark_oak_striped_chair",
+	  "mcwfurnitures:dark_oak_stool_chair",
+	  "mcwfurnitures:dark_oak_counter",
+	  "mcwfurnitures:dark_oak_drawer_counter",
+	  "mcwfurnitures:dark_oak_double_drawer_counter",
+	  "mcwfurnitures:dark_oak_cupboard_counter",
+	  
+	  "mcwfurnitures:stripped_dark_oak_wardrobe",
+	  "mcwfurnitures:stripped_dark_oak_modern_wardrobe",
+	  "mcwfurnitures:stripped_dark_oak_double_wardrobe",
+	  "mcwfurnitures:stripped_dark_oak_bookshelf_cupboard",
+	  "mcwfurnitures:stripped_dark_oak_bookshelf",
+	  "mcwfurnitures:stripped_dark_oak_drawer",
+	  "mcwfurnitures:stripped_dark_oak_double_drawer",
+	  "mcwfurnitures:stripped_dark_oak_bookshelf_drawer",
+	  "mcwfurnitures:stripped_dark_oak_lower_bookshelf_drawer",
+	  "mcwfurnitures:stripped_dark_oak_large_drawer",
+	  "mcwfurnitures:stripped_dark_oak_lower_triple_drawer",
+	  "mcwfurnitures:stripped_dark_oak_triple_drawer",
+	  "mcwfurnitures:stripped_dark_oak_desk",
+	  "mcwfurnitures:stripped_dark_oak_covered_desk",
+	  "mcwfurnitures:stripped_dark_oak_modern_desk",
+	  "mcwfurnitures:stripped_dark_oak_table",
+	  "mcwfurnitures:stripped_dark_oak_end_table",
+	  "mcwfurnitures:stripped_dark_oak_coffee_table",
+	  "mcwfurnitures:stripped_dark_oak_glass_table",
+	  "mcwfurnitures:stripped_dark_oak_chair",
+	  "mcwfurnitures:stripped_dark_oak_modern_chair",
+	  "mcwfurnitures:stripped_dark_oak_striped_chair",
+	  "mcwfurnitures:stripped_dark_oak_stool_chair",
+	  "mcwfurnitures:stripped_dark_oak_counter",
+	  "mcwfurnitures:stripped_dark_oak_drawer_counter",
+	  "mcwfurnitures:stripped_dark_oak_double_drawer_counter",
+	  "mcwfurnitures:stripped_dark_oak_cupboard_counter",
+	  "mcwfurnitures:dark_oak_kitchen_sink",
+      "mcwfurnitures:stripped_dark_oak_kitchen_sink"
+    ]
+  },
+  "criteria": {
+    "has_wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:dark_oak_log"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": "mcwfurnitures:dark_oak_drawer"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wood",
+      "has_the_recipe"
+    ]
+  ]
+}

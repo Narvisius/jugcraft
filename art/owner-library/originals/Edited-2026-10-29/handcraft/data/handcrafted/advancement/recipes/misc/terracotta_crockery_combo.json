@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_terracotta_crockery_combo": {
+      "conditions": {
+        "items": [
+          {
+            "items": "handcrafted:terracotta_cup"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "handcrafted:terracotta_crockery_combo"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_terracotta_crockery_combo"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "handcrafted:terracotta_crockery_combo"
+    ]
+  }
+}

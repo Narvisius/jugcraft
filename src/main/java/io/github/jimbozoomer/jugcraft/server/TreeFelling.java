@@ -24,6 +24,9 @@ public final class TreeFelling {
             if (!(level instanceof ServerLevel serverLevel) || !(player instanceof ServerPlayer p) || BREAKING.contains(p.getUUID()) || JOBS.containsKey(p.getUUID())
                     || !p.isShiftKeyDown() || p.getAbilities().instabuild || !p.mayBuild() || !state.is(BlockTags.LOGS)) return;
             var axe = p.getMainHandItem();
+            // The supplied Lumberjack enchantment owns its smaller paid chain; never schedule both.
+            if (io.github.jimbozoomer.jugcraft.enchanting.OwnerEnchantmentMining.breaking(p)
+                    || io.github.jimbozoomer.jugcraft.enchanting.OwnerEnchantments.level(p, axe, "lumberjack") > 0) return;
             // Special powered/alchemical tools retain their own modes, charge costs and limits.
             if (!axe.is(ItemTags.AXES) || !axe.isDamageableItem()
                     || axe.getItem() instanceof io.github.jimbozoomer.jugcraft.tools.PoweredToolItem

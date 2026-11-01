@@ -38,6 +38,7 @@ public final class NouveauSource {
         for(var b:candidates){var owner=Authority.answering(l,b.owner());if(owner!=null&&b.permitted(owner)&&Authority.mayChange(l,owner,at)&&b.ley()<b.capacity()){b.fill(amount);b.setActive(true);b.status("Collecting nearby activity");break;}}
     }
     private record Donor(NouveauWorkshop workshop,LeyPylonBlockEntity pylon) {
+        Object identity(){return workshop!=null?workshop.sourceIdentity():pylon;}
         long held(){return workshop!=null?workshop.ley():pylon.ley();}
         void draw(ServerLevel level,long amount){if(workshop!=null)workshop.draw(amount);else pylon.draw(level,amount);}
     }
@@ -49,7 +50,7 @@ public final class NouveauSource {
             var be=l.getBlockEntity(p);
             if(be instanceof NouveauWorkshop n&&n.permitted(actor))result.add(new Donor(n,null));
             else if(be instanceof LeyPylonBlockEntity pyl&&(pyl.owner()==null||pyl.owner().equals(actor.getUUID())||io.github.jimbozoomer.jugcraft.party.JugcraftParties.sameParty(pyl.owner(),actor.getUUID())))result.add(new Donor(null,pyl));
-        }return result;
+        }Set<Object> seen=new HashSet<>();return result.stream().filter(d->seen.add(d.identity())).toList();
     }
     public static boolean canPay(ServerLevel l,ServerPlayer p,NouveauWorkshop n,long cost){return cost>=0&&n.permitted(p)&&donors(l,p,n).stream().mapToLong(Donor::held).sum()>=cost;}
     public static boolean pay(ServerLevel l,ServerPlayer p,NouveauWorkshop n,long cost){
@@ -81,6 +82,7 @@ public final class NouveauSource {
     private static int move(ServerLevel l,ServerPlayer actor,NouveauWorkshop relay,BlockPos at,int budget,boolean pull,boolean warp){
         if(at.equals(relay.getBlockPos())||!l.hasChunkAt(at)||!Authority.mayChange(l,actor,at))return 0;var entity=l.getBlockEntity(at);long moved=0;
         if(entity instanceof NouveauWorkshop other&&other.permitted(actor)){
+            if(other.sourceIdentity().equals(relay.sourceIdentity()))return 0;
             if(warp&&!other.kind().equals("relay_warp"))return 0;
             if(pull){moved=relay.fill(Math.min(budget,other.ley()));other.draw(moved);}
             else{long available=Math.min(budget,relay.ley());int lost=warp&&available>1&&l.getRandom().nextInt(10)==0?1:0;moved=other.fill(Math.max(0,available-lost));if(moved>0){relay.draw(moved+lost);moved+=lost;}}

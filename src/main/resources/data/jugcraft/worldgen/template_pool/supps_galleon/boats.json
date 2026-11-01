@@ -1,0 +1,87 @@
+{
+  "name": "jugcraft:supps_galleon/boats",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:feature_pool_element",
+        "feature": {
+          "feature": {
+            "type": "jugcraft:supps_galleon_crew",
+            "entity": "minecraft:dark_oak_boat",
+            "passengers": [
+              "jugcraft:supps_plunderer",
+              "minecraft:pillager"
+            ],
+            "spread": 4,
+            "attempts": 4
+          },
+          "placement": []
+        },
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:feature_pool_element",
+        "feature": {
+          "feature": {
+            "type": "jugcraft:supps_galleon_crew",
+            "entity": "minecraft:dark_oak_boat",
+            "passengers": [
+              "jugcraft:supps_plunderer"
+            ],
+            "spread": 4,
+            "attempts": 4
+          },
+          "placement": []
+        },
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:feature_pool_element",
+        "feature": {
+          "feature": {
+            "type": "jugcraft:supps_galleon_crew",
+            "entity": "jugcraft:supps_cannon_boat_dark_oak",
+            "passengers": [
+              "jugcraft:supps_plunderer"
+            ],
+            "spread": 4,
+            "attempts": 4
+          },
+          "placement": []
+        },
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:feature_pool_element",
+        "feature": {
+          "feature": {
+            "type": "jugcraft:supps_galleon_crew",
+            "entity": "minecraft:dark_oak_boat",
+            "passengers": [],
+            "spread": 4,
+            "attempts": 4
+          },
+          "placement": []
+        },
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:empty_pool_element"
+      }
+    }
+  ]
+}

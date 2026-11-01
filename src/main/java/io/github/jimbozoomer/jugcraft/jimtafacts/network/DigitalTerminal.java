@@ -193,8 +193,7 @@ public final class DigitalTerminal {
         @Override public boolean canTakeItemForPickAll(ItemStack stack, Slot slot) { return slot.container != catalog && slot.container != result && super.canTakeItemForPickAll(stack, slot); }
         @Override public void slotsChanged(Container changed) {
             if (!(inventory.player instanceof ServerPlayer p)) return;
-            var input = crafting.asCraftInput(); var recipe = p.level().getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, input, p.level()).orElse(null);
-            result.setRecipeUsed(recipe); result.setItem(0, recipe == null ? ItemStack.EMPTY : recipe.value().assemble(input)); broadcastChanges();
+            io.github.jimbozoomer.jugcraft.crafting.CraftingChoices.update(this,p,crafting,result,null); broadcastChanges();
         }
         @Override public void broadcastChanges() { if (inventory.player instanceof ServerPlayer && inventory.player.level().getGameTime() - refreshed >= 10) refresh(); super.broadcastChanges(); }
         @Override public boolean clickMenuButton(Player p, int id) {
@@ -227,7 +226,9 @@ public final class DigitalTerminal {
             int blank = -1;
             for (int i = 0; i < 36; i++) if (inventory.getItem(i).is(DigitalStorage.ITEMS.get("blank_pattern"))) { blank = i; break; }
             if (blank < 0) { player.sendOverlayMessage(net.minecraft.network.chat.Component.literal("Carry a blank pattern to encode this recipe.")); return false; }
-            var pattern = new DigitalPatterns.Pattern(java.util.stream.IntStream.range(0, 9).mapToObj(crafting::getItem).toList());
+            var chosen = io.github.jimbozoomer.jugcraft.crafting.CraftingChoices.state(result).selected();
+            if (chosen == null) return false;
+            var pattern = new DigitalPatterns.Pattern(java.util.stream.IntStream.range(0, 9).mapToObj(crafting::getItem).toList(),0,chosen.id().identifier().toString());
             if (pattern.output(player.level()).isEmpty()) return false;
             var encoded = new ItemStack(DigitalStorage.ITEMS.get("crafting_pattern")); encoded.set(DigitalPatterns.PATTERN, pattern);
             inventory.removeItem(blank, 1); inventory.placeItemBackInInventory(encoded, net.minecraft.util.Prediction.SERVER_ONLY); inventory.setChanged();

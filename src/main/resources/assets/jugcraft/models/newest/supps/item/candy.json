@@ -1,0 +1,20 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "jugcraft:newest/supps/item/candy"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "supplementaries:wrapping": 0.5
+      },
+      "model": "jugcraft:newest/supps/item/candy_halloween"
+    },
+    {
+      "predicate": {
+        "supplementaries:wrapping": 1
+      },
+      "model": "jugcraft:newest/supps/item/candy_christmas"
+    }
+  ]
+}

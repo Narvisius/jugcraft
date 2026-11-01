@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "supplementaries:flag",
+      "flag": "wrench"
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "supplementaries:flag",
+      "flag": "wrench"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "1 1",
+    " 1 ",
+    " 1 "
+  ],
+  "key": {
+    "1": {
+      "tag": "c:ingots/copper"
+    }
+  },
+  "result": {
+    "id": "supplementaries:wrench",
+    "count": 1
+  }
+}

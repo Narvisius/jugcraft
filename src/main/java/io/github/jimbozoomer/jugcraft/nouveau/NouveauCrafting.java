@@ -14,6 +14,27 @@ public final class NouveauCrafting {
     public static void invalidate(){cached=List.of();CURSORS.clear();SAMPLES.clear();}
     private static final Map<NouveauWorkshop,Integer> SAMPLES=new WeakHashMap<>();
     private NouveauCrafting(){}
+    /** Apparatus automation: conserve the actual reagent, all pedestals, remainders and shared Source charge. */
+    public static boolean enchantOne(ServerLevel level,ServerPlayer actor,NouveauWorkshop home){
+        home.setActive(false);if(home.sample().isEmpty()||!home.permitted(actor))return false;
+        var inputs=new ArrayList<Slot>();for(int i=1;i<9;i++)inputs.add(new Slot(home,i));
+        Set<Container> seen=Collections.newSetFromMap(new IdentityHashMap<>());seen.add(home);
+        for(var container:NouveauDevices.inventories(level,actor,home))if(seen.add(container))for(int i=0;i<Math.min(54,container.getContainerSize())&&inputs.size()<440;i++)inputs.add(new Slot(container,i));
+        var recipes=NouveauRecipes.forStation("enchanting_apparatus").stream().filter(r->r.operation().equals("enchanting_apparatus")&&ItemStack.isSameItemSameComponents(NouveauRecipes.preview(r,level.registryAccess()),home.sample())).toList();
+        if(recipes.isEmpty())return false;int cursor=CURSORS.getOrDefault(home,0);
+        for(int n=0;n<Math.min(8,recipes.size());n++){
+            var recipe=recipes.get(Math.floorMod(cursor++,recipes.size()));CURSORS.put(home,cursor%recipes.size());
+            var refs=new ArrayList<>(inputs);if(recipe.data().has("reagent")){
+                int reagent=-1;for(int i=0;i<refs.size();i++)if(NouveauRecipes.ingredient(recipe.data().get("reagent"),refs.get(i).container.getItem(refs.get(i).slot))){reagent=i;break;}
+                if(reagent<0)continue;Collections.swap(refs,0,reagent);
+            }
+            var match=NouveauRecipes.match(recipe,refs.stream().map(r->r.container.getItem(r.slot).copy()).toList(),actor);
+            if(match==null||!home.canOutput(match.output())||!NouveauSource.pay(level,actor,home,recipe.ley()+2L))continue;
+            for(int i=0;i<refs.size();i++)if(match.used()[i]>0){var ref=refs.get(i);ref.container.setItem(ref.slot,match.after().get(i));ref.container.setChanged();}
+            if(!actor.getAbilities().instabuild&&recipe.experience()>0)actor.giveExperiencePoints(-recipe.experience());
+            home.output(match.output());home.setActive(true);home.status("Wixie enchanting");return true;
+        }return false;
+    }
     private static boolean assign(List<Optional<Ingredient>> needs,int index,List<Slot> slots,int[] used,List<ItemStack> grid,int[] budget){
         if(--budget[0]<0)return false;if(index>=needs.size())return true;
         if(needs.get(index).isEmpty()){grid.set(index,ItemStack.EMPTY);return assign(needs,index+1,slots,used,grid,budget);}

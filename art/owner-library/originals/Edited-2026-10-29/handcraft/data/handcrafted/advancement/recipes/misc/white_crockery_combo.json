@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "handcrafted:white_crockery_combo"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_white_crockery_combo": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:white_dye"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_white_crockery_combo"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "handcrafted:white_crockery_combo"
+    ]
+  }
+}

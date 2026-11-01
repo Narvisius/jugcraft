@@ -1,0 +1,93 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+	  "mcwfurnitures:cabinet_door",
+	  "mcwfurnitures:cabinet_drawer",
+	
+      "mcwfurnitures:jungle_wardrobe",
+	  "mcwfurnitures:jungle_modern_wardrobe",
+	  "mcwfurnitures:jungle_double_wardrobe",
+	  "mcwfurnitures:jungle_bookshelf_cupboard",
+	  "mcwfurnitures:jungle_bookshelf",
+	  "mcwfurnitures:jungle_drawer",
+	  "mcwfurnitures:jungle_double_drawer",
+	  "mcwfurnitures:jungle_bookshelf_drawer",
+	  "mcwfurnitures:jungle_lower_bookshelf_drawer",
+	  "mcwfurnitures:jungle_large_drawer",
+	  "mcwfurnitures:jungle_lower_triple_drawer",
+	  "mcwfurnitures:jungle_triple_drawer",
+	  "mcwfurnitures:jungle_desk",
+	  "mcwfurnitures:jungle_covered_desk",
+	  "mcwfurnitures:jungle_modern_desk",
+	  "mcwfurnitures:jungle_table",
+	  "mcwfurnitures:jungle_end_table",
+	  "mcwfurnitures:jungle_coffee_table",
+	  "mcwfurnitures:jungle_glass_table",
+	  "mcwfurnitures:jungle_chair",
+	  "mcwfurnitures:jungle_modern_chair",
+	  "mcwfurnitures:jungle_striped_chair",
+	  "mcwfurnitures:jungle_stool_chair",
+	  "mcwfurnitures:jungle_counter",
+	  "mcwfurnitures:jungle_drawer_counter",
+	  "mcwfurnitures:jungle_double_drawer_counter",
+	  "mcwfurnitures:jungle_cupboard_counter",
+	  
+	  "mcwfurnitures:stripped_jungle_wardrobe",
+	  "mcwfurnitures:stripped_jungle_modern_wardrobe",
+	  "mcwfurnitures:stripped_jungle_double_wardrobe",
+	  "mcwfurnitures:stripped_jungle_bookshelf_cupboard",
+	  "mcwfurnitures:stripped_jungle_bookshelf",
+	  "mcwfurnitures:stripped_jungle_drawer",
+	  "mcwfurnitures:stripped_jungle_double_drawer",
+	  "mcwfurnitures:stripped_jungle_bookshelf_drawer",
+	  "mcwfurnitures:stripped_jungle_lower_bookshelf_drawer",
+	  "mcwfurnitures:stripped_jungle_large_drawer",
+	  "mcwfurnitures:stripped_jungle_lower_triple_drawer",
+	  "mcwfurnitures:stripped_jungle_triple_drawer",
+	  "mcwfurnitures:stripped_jungle_desk",
+	  "mcwfurnitures:stripped_jungle_covered_desk",
+	  "mcwfurnitures:stripped_jungle_modern_desk",
+	  "mcwfurnitures:stripped_jungle_table",
+	  "mcwfurnitures:stripped_jungle_end_table",
+	  "mcwfurnitures:stripped_jungle_coffee_table",
+	  "mcwfurnitures:stripped_jungle_glass_table",
+	  "mcwfurnitures:stripped_jungle_chair",
+	  "mcwfurnitures:stripped_jungle_modern_chair",
+	  "mcwfurnitures:stripped_jungle_striped_chair",
+	  "mcwfurnitures:stripped_jungle_stool_chair",
+	  "mcwfurnitures:stripped_jungle_counter",
+	  "mcwfurnitures:stripped_jungle_drawer_counter",
+	  "mcwfurnitures:stripped_jungle_double_drawer_counter",
+	  "mcwfurnitures:stripped_jungle_cupboard_counter",
+	  "mcwfurnitures:jungle_kitchen_sink",
+      "mcwfurnitures:stripped_jungle_kitchen_sink"
+    ]
+  },
+  "criteria": {
+    "has_wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:jungle_log"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": "mcwfurnitures:jungle_drawer"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wood",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -21,7 +21,8 @@ public abstract class JimtaCurioLivingMixin {
     }
     @Inject(method = "canBeAffected", at = @At("HEAD"), cancellable = true)
     private void jimta$wardedEffect(MobEffectInstance effect, CallbackInfoReturnable<Boolean> info) {
-        if (JimtaSpellbookCurios.preventsEffect((LivingEntity) (Object) this, effect)) info.setReturnValue(false);
+        if (JimtaSpellbookCurios.preventsEffect((LivingEntity) (Object) this, effect)
+                || io.github.jimbozoomer.jugcraft.nouveau.additions.ArsAdditionCharms.preventEffect((LivingEntity)(Object)this,effect)) info.setReturnValue(false);
     }
     @ModifyReturnValue(method = "getExperienceReward", at = @At("RETURN"))
     private int jimta$experienceRing(int amount, @Local(argsOnly = true) Entity killer) {

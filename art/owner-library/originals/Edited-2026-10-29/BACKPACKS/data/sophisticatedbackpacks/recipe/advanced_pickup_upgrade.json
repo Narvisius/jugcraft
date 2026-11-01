@@ -1,0 +1,23 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "sophisticatedcore:item_enabled",
+      "itemRegistryName": "sophisticatedbackpacks:advanced_pickup_upgrade"
+    }
+  ],
+  "type": "sophisticatedcore:upgrade_next_tier",
+  "key": {
+    "D": "#c:gems/diamond",
+    "G": "#c:ingots/gold",
+    "P": "sophisticatedbackpacks:pickup_upgrade",
+    "R": "#c:dusts/redstone"
+  },
+  "pattern": [
+    " D ",
+    "GPG",
+    "RRR"
+  ],
+  "result": {
+    "id": "sophisticatedbackpacks:advanced_pickup_upgrade"
+  }
+}

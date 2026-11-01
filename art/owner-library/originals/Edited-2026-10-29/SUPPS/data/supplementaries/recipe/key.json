@@ -1,0 +1,32 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "supplementaries:flag",
+      "flag": "key"
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "supplementaries:flag",
+      "flag": "key"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " 0 ",
+    " 1 ",
+    " 1 "
+  ],
+  "key": {
+    "0": {
+      "tag": "c:ingots/gold"
+    },
+    "1": {
+      "tag": "c:nuggets/gold"
+    }
+  },
+  "result": {
+    "id": "supplementaries:key",
+    "count": 1
+  }
+}

@@ -23,6 +23,7 @@ public abstract class ArmsHumanoidModelMixin {
 	private void jugcraft$applyArmsPose(HumanoidRenderState state, CallbackInfo info) {
 		ArmsMotion.apply((HumanoidModel<?>) (Object) this, state);
 		GunPose.apply((HumanoidModel<?>) (Object) this, state);
+        io.github.jimbozoomer.jugcraft.client.OwnerFlutePose.apply((HumanoidModel<?>) (Object) this,state);
 		FlailHeads.pose((HumanoidModel<?>) (Object) this, state);
 	}
 }

@@ -166,6 +166,11 @@ EXTERNAL_TAGS = ({"minecraft:substrate_overworld","minecraft:boat","c:ingots/cop
 EXTERNAL_TAGS |= {'minecraft:'+tag for tag in ('terracotta','beehives','coral_blocks','ice',
     'soul_fire_base_blocks','anvil','supports_vegetation','air','skeletons','zombies','illager','fishes')}
 
+# New collection references verified in pinned 26.3 vanilla/Fabric convention tags.
+EXTERNAL_TAGS |= {'minecraft:has_structure/ruined_portal_ocean', 'minecraft:is_savanna', 'minecraft:is_beach', 'minecraft:wool_carpets', 'minecraft:gold_ores', 'c:nuggets/iron', 'c:slime_balls', 'minecraft:emerald_ores', 'c:dyes', 'minecraft:has_structure/ruined_portal_jungle', 'c:ingots/gold', 'minecraft:lapis_ores', 'minecraft:is_ocean', 'minecraft:iron_ores', 'c:rods/wooden', 'minecraft:diamond_ores', 'c:strings', 'c:is_mountain', 'minecraft:redstone_ores', 'minecraft:is_deep_ocean', 'minecraft:coal_ores', 'minecraft:copper_ores', 'minecraft:is_river'}
+
+EXTERNAL_TAGS.add('c:music_discs')  # Verified in the pinned Fabric convention JAR.
+
 errors = []
 
 
@@ -238,6 +243,11 @@ def _owner_sized_gun_atlases():
 # The special item renderers registered by client/StructureItemRenderers.java.
 # The special item models: the 3D miniatures (client/StructureItemRenderers.java), and GeckoLib's animated items.
 SPECIAL_ITEM_RENDERERS = {f"{MOD}:equipment", f"{MOD}:power_line", f"{MOD}:drone", "geckolib:geckolib"}
+# Native codecs registered by the collection's client renderers.
+SPECIAL_ITEM_RENDERERS.update("jugcraft:" + name for name in (
+    "aquatic_station", "arcane_skull", "arcane_jar_souls", "botanical_gaia_head",
+    "botanical_mechanism", "botanical_potato", "botanical_pylon", "owner_home",
+    "supps_contents", "supps_altimeter", "personal_loot", "jimta_facade", "jimta_pyrium"))
 
 
 @cache
@@ -282,6 +292,8 @@ def item_models(definition):
             item_models(definition["model"])  # a special model's renderer (GeckoLib's guns) names no model of its own
     if definition.get("type") == "minecraft:special":
         model(definition["base"])  # the base model gives a special model its display transforms and particle
+    for child in definition.get("models", []):
+        item_models(child)
     for case in definition.get("cases", []):
         item_models(case["model"])
     for key in ("on_true", "on_false", "fallback"):
@@ -295,6 +307,8 @@ def check_assets(registered):
     import vehicle_bays
     import starter_workshop
     import storage_crates
+    import newest_registry
+    native_blocks = newest_registry.entries()["block"]
     crates = [metal + '_crate' for metal, _ in storage_crates.TIERS]
     lang = load(ASSETS / "lang" / "en_us.json") or {}
     for block in (all_blocks() + machine_blocks() + ag.all_blocks() + petro.petro_blocks() + deposits.all_blocks()
@@ -323,7 +337,9 @@ def check_assets(registered):
         definition = load(ASSETS / "items" / f"{item}.json")
         if definition:
             item_models(definition["model"])
-        if item not in jimtafacts_catalog.blocks() and item not in (all_blocks() + machine_blocks() + ag.all_blocks() + petro.petro_blocks() + deposits.all_blocks()
+        if item in native_blocks and f"block.{MOD}.{item}".replace("/", ".") not in lang:
+            err(f"Missing name for block {item}")
+        if item not in native_blocks and item not in jimtafacts_catalog.blocks() and item not in (all_blocks() + machine_blocks() + ag.all_blocks() + petro.petro_blocks() + deposits.all_blocks()
                         + list(tank_display.BLOCKS) + plastic.blocks() + ph.blocks() + (town_assets.blocks() + styx.blocks())
                         + construction.blocks() + control_electronics.blocks() + rocketry.blocks() + dieselworks.blocks() + kaiserworks.blocks() + trenchworks.blocks() + fortifications.blocks() + bunkerworks.blocks() + aged_wood.blocks() + fire_control.blocks()
                         + concordance.blocks() + guns.blocks() + industrial_forms.blocks() + list(vehicle_bays.BLOCKS) + menagerie.blocks() + starter_workshop.BLOCKS + ["cursed_mirror"]
@@ -432,6 +448,15 @@ def item_units(ref):
     """Returns {metal: units} for an item or tag reference."""
     import vehicle_bays
     ns, path = split(ref.lstrip("#"))
+    if ref in {'#c:ash','#c:crops/flax','#c:dyes','#c:rods/wooden','#c:slime_balls','#c:strings'}:
+        return {}  # Ordinary non-metal ingredients, verified native tags.
+    if ns == MOD and path.startswith(('supps_','amends_')):
+        import newest_registry
+        if path in newest_registry.entries()['item']:
+            # Native household outputs are finished devices/decor, with no
+            # ingot-recovery route, matching the existing machine convention.
+            # Shared metal inputs/outputs remain audited by the rules below.
+            return {}
     if ns == MOD and path in {'jimta_' + name for name in jimtafacts.FOOD}:
         return {}  # Reusable food; neither cooking route contains or recovers metal.
     if ns == MOD and path == "deep_drilling_assembly":
@@ -545,6 +570,11 @@ SPECIAL_RECIPES = {f"{MOD}:{decor18.KEY['recipe']}", f"{MOD}:gun_attachment", f"
                    f"{MOD}:household_door_mat_copy", f"{MOD}:beast_bison_upgrade", f"{MOD}:beast_mimicream_repair"}
 
 
+SPECIAL_RECIPES |= {'minecraft:smithing_trim'} | {'jugcraft:'+name for name in (
+    'amends_dye_bottle','supps_antique_book','supps_bubble_fill',
+    'supps_confetti_dye','supps_flag_patterns','supps_hidden_item','supps_rope_arrow_charge')}
+
+
 def ingredient_choices(value):
     """26.3 ingredients may be one item/tag or a nonempty alternative list."""
     if isinstance(value, str):
@@ -566,7 +596,10 @@ def check_recipes(registered):
         features = [c.get("feature") for c in switches]
         # Each condition is one switch, or several any one of which loads the recipe ("or": a wood's WOOD_SWITCHES).
         groups = [sorted([c.get("feature"), *c.get("or", [])]) for c in switches]
-        if not features:
+        # Owner household families register unconditionally, unlike the older
+        # switch-gated industrial recipes; do not require a nonexistent toggle.
+        always_on = name.startswith(('supps_', 'amends_'))
+        if not features and not always_on:
             err(f"{name}: missing feature switch condition")
         if "result" not in recipe:
             # A special recipe makes its result from what is in the grid (the Skeleton Key's copying).
@@ -795,6 +828,8 @@ def check_tags():
                                                     + guns.items() + guns.blocks() + concordance.items() + concordance.blocks() + concordance.itemless_blocks())
         import nouveau_content
         known = set(known)
+        import newest_registry
+        known.update(newest_registry.entries().get(registry, set()))
         if registry == 'block': known.update(starter_workshop.BLOCKS)
         if registry == 'block': known.add("cursed_mirror")
         if registry == 'item': known.update(starter_workshop.NAMES)
@@ -891,6 +926,8 @@ def check_tags():
 
 
 def check_worldgen():
+    import newest_registry
+    native_blocks = newest_registry.entries()["block"]
     if any((DATA / MOD / "worldgen" / "configured_feature").rglob('*.json')):
         err("worldgen/configured_feature/ is the pre-26.x layout; Minecraft 26.3 reads worldgen/feature/")
     for path in sorted((DATA / MOD / "worldgen" / "feature").glob("*.json")):
@@ -900,7 +937,8 @@ def check_worldgen():
         for target in feature.get("targets", []):
             state = target["state"]
             namespace, block = split(state.get("id", "") if isinstance(state, dict) else state)
-            if namespace == MOD and block not in all_blocks() + ph.blocks() + menagerie.blocks():
+            block = block.split("[", 1)[0]  # Native state strings may include property values.
+            if namespace == MOD and block not in native_blocks and block not in all_blocks() + ph.blocks() + menagerie.blocks():
                 err(f"{path.name}: places unknown block {block}")
     check_nested_features()
     for path in sorted((DATA / MOD / "worldgen" / "placed_feature").glob("*.json")):
@@ -4267,8 +4305,29 @@ def check_encyclopedia_routes(registered):
             elif link["type"] == "codex":
                 if split(link["category"])[0] != MOD or not (codex / f"{split(link['category'])[1]}.json").exists():
                     err(f"{name}: {entry['title']} links to a missing codex category {link['category']}")
+            elif link["type"] == "page":
+                import encyclopedia
+                if link.get("target") not in encyclopedia.SERVER_PAGES:
+                    err(f"{name}: unknown Encyclopedia page {link.get('target')}")
             elif link["type"] != "journal":
                 err(f"{name}: {entry['title']} has a link of unknown type {link['type']}")
+    import encyclopedia, starter_guidance
+    lessons = load(ROOT / "src/main/resources/jugcraft/starter_guidance.json")
+    if lessons != starter_guidance.LESSONS:
+        err("Encyclopedia starter lessons differ from their generator")
+    for page, topics in (lessons or {}).items():
+        if page not in encyclopedia.SERVER_PAGES:
+            err(f"Starter guide has unknown page {page}")
+        for topic in topics:
+            for item in topic.get("items", []):
+                if split(item)[0] == MOD and split(item)[1] not in registered:
+                    err(f"Starter guide {page}: unknown item {item}")
+            for recipe in topic.get("recipes", []):
+                if not (DATA / split(recipe)[0] / "recipe" / (split(recipe)[1] + ".json")).is_file():
+                    err(f"Starter guide {page}: missing recipe {recipe}")
+            for link in topic.get("links", []):
+                if link.get("page") not in encyclopedia.SERVER_PAGES and link.get("route") not in routes:
+                    err(f"Starter guide {page}: unknown link {link}")
     lang = load(ASSETS / "lang" / "en_us.json") or {}
     java = "".join((CLIENT_JAVA_ROOT / name).read_text(encoding="utf-8")
                    for name in ("EncyclopediaRoutesScreen.java",))
@@ -9634,6 +9693,9 @@ def check_model_textures():
         while model(root.get("parent")):
             root = model(root["parent"])
         parent = root.get("parent", "")
+        if not isinstance(parent,str):
+            err(f"{ref}: model parent must be an identifier string, got {type(parent).__name__}")
+            continue
         if parent.startswith("minecraft:block/") and parent.rsplit("/", 1)[1].endswith(VANILLA_TEXTURED_PARENTS):
             continue
         defined = textures(m)
@@ -17488,13 +17550,14 @@ def check_diagonal_connections():
         for part in parts:
             diagonals = set(part.get("when", {})) & set(dg.DIAGONAL_NAMES)
             if diagonals:
-                arms.setdefault(diagonals.pop(), []).append(part["apply"])
-        if sorted(arms) != sorted(dg.DIAGONAL_NAMES) or any(sorted(a["model"] for a in arms[d]) != sorted(models) for d in arms):
+                arms.setdefault(diagonals.pop(), []).extend(part["apply"] if isinstance(part["apply"], list) else [part["apply"]])
+        if sorted(arms) != sorted(dg.DIAGONAL_NAMES) or any(set(re.sub(r"_variant_\d+$", "", a["model"]) for a in arms[d]) != set(models) for d in arms):
             err(f"{block}: needs one diagonal arm part for each of {dg.DIAGONAL_NAMES} and each of {list(models)}, has {arms}")
             continue
         for diagonal, y in dg.DIAGONALS:
             if any(apply.get("y", 0) != y for apply in arms[diagonal]):
                 err(f"{block}: its {diagonal} arms should be turned y={y}")
+        models = sorted({a["model"] for values in arms.values() for a in values})
         for arm in models:
             model = load(ASSETS / "models" / "block" / "diagonal" / f"{arm.split('/')[-1]}.json") or {}
             elements = model.get("elements", [])
@@ -17514,11 +17577,25 @@ def check_diagonal_connections():
         if (RES / "assets" / "minecraft" / "blockstates" / f"{name}.json").exists():
             err(f"minecraft:{name}: its blockstate is overridden; vanilla's walls are left as they are")
         parts = (load(ASSETS / "blockstates" / f"{diagonal}.json") or {}).get("multipart", [])
-        if [p for p in parts if not set(p.get("when", {})) & set(dg.DIAGONAL_NAMES)] != dg.diagonal_wall(name, namespace):
+        expected = dg.diagonal_wall(name, namespace)
+        if name in dg.NEWEST_CONNECTIONS['wall']:
+            expected=[]
+            for original in (load(ASSETS/'blockstates'/f'{name}.json') or {}).get('multipart',[]):
+                condition=original.get('when',{})
+                if not condition or condition=={'up':'true'}:expected.append(original)
+                elif len(condition)==1:
+                    direction,height=next(iter(condition.items()))
+                    if direction in ('north','south','east','west') and height in ('low','tall'):
+                        expected.append(dict(original,when={direction:'true','tall':str(height=='tall').lower()}))
+        if [p for p in parts if not set(p.get("when", {})) & set(dg.DIAGONAL_NAMES)] != expected:
             err(f"{MOD}:{diagonal}: needs the wall's post and low sides, as tools/diagonal_connections.py writes them")
         if f"{MOD}:{diagonal}" not in walls:
             err(f"{MOD}:{diagonal} is not in #minecraft:walls, so walls, gates and bars would not join it")
+    authored_cardinal={name for name,d in (load(RES/'jugcraft/newest_building.json') or {}).get('blocks',{}).items()
+                       if d.get('kind','').startswith('authored_')}
     for path in sorted((ASSETS / "blockstates").glob("*.json")):
+        # Authored architectural assemblies have their own joining schema and meshes.
+        if path.stem in authored_cardinal or path.stem.startswith('fenceworks_') and path.stem.endswith(('_wired_fence','_cheval_de_frise')):continue
         # Household furniture and candy poles use custom cardinal joining, not FenceBlock/WallBlock.
         if path.stem.startswith('household_') or path.stem in ('cavern_candy_cane_pole','cavern_stripped_candy_cane_pole'):
             continue
@@ -19369,8 +19446,8 @@ def check_wayfaring(co, root, lang):
             or 'Jugcraft.id("wayfaring/" + kind + "/" + attribute.getPath())' not in worn or "slotIdentifier.withSuffix" in worn):
         err("concordance/trinket/WornTrinketItem.java: a worn item's attributes must be Trinkets modifiers named by its kind "
             "(never by slot: two of a kind would add up), never the item's own")
-    if "return entity instanceof Player player && Reliquary.knows(player);" not in worn:
-        err("concordance/trinket/WornTrinketItem.java: only someone who understands Relic Lore may put one on (canEquip)")
+    if "return entity instanceof Player;" not in worn or "Reliquary.knows(" in _java_body(worn, "public boolean canEquip("):
+        err("WornTrinketItem.canEquip must allow players without research, per owner instruction")
     if ("holdsAddedCharm(entity)" not in worn or "slot.get() == stack" not in worn
             or "TrinketCallback.super.canUnequip(stack, slot, entity)" not in worn):
         err("concordance/trinket/WornTrinketItem.java: the worn belt (not a cosmetic one) keeps its added charm (canUnequip), "
@@ -19392,7 +19469,7 @@ def check_wayfaring(co, root, lang):
             or re.search(r"ALLOW_DEATH\.register\((?!SAVE_PHASE)", way)):
         err("concordance/trinket/Wayfaring.java: the death saves must run in SAVE_PHASE, before Dreaming's default-phase listener")
     save = way[way.find("public static boolean save("):way.find("private static boolean holdsTotem(")]
-    for guard in ("DamageTypeTags.BYPASSES_INVULNERABILITY", "Dreaming.dreaming(player)", "holdsTotem(player)", "Reliquary.knows(player)",
+    for guard in ("DamageTypeTags.BYPASSES_INVULNERABILITY", "Dreaming.dreaming(player)", "holdsTotem(player)",
                   "Reliquary.enabled()"):
         if guard not in save:
             err(f"concordance/trinket/Wayfaring.java: a death save must decline unless {guard} allows it")
@@ -19467,6 +19544,12 @@ def check_wayfaring(co, root, lang):
             expected.update(f"{MOD}:{item}" for item in concordance_ee_artifacts.CHARMS)
         if slot == "legs/belt":
             expected.update({"jugcraft:nouveau_belt_of_levitation", "jugcraft:nouveau_belt_of_unstable_gifts"})
+        if slot == "legs/belt":
+            expected.update("jugcraft:jugtania_" + n for n in ("travel_belt", "super_travel_belt", "speed_up_belt", "knockback_belt"))
+        if slot == "legs/charm":
+            from newest_ars_additions import CHARMS
+            expected.update("jugcraft:ars_additions_" + n for n in CHARMS + ["warp_index", "stabilized_warp_index"])
+            expected.update({"jugcraft:jugtania_goddess_charm", "jugcraft:jugtania_diva_charm"})
         expected.update(jimtafacts.slot_links(slot))
         if held != expected:
             err(f"data/trinkets/tags/item/{slot}.json holds {sorted(held)}")
@@ -20045,7 +20128,13 @@ def _read_recipe_edges():
         data = load(path)
         made = results(data) if data is not None else set()
         if made:
-            recipes.append((frozenset(named(path.read_text(encoding="utf-8")) - made), frozenset(made)))
+            # Botanical infusion catalysts are installed beneath the pool, not
+            # consumed ingredients. Treating one as feed falsely made crafting
+            # the catalyst a route to every output, even snowball -> snowballs.
+            feed = data
+            if path.relative_to(DATA / MOD).parts[0] == 'jugtania_recipe' and data.get('type') == 'mana_infusion':
+                feed = {key:value for key,value in data.items() if key != 'catalyst'}
+            recipes.append((frozenset(named(json.dumps(feed)) - made), frozenset(made)))
     return recipes
 
 
@@ -20344,7 +20433,8 @@ def check_poultice_credit(co, lang):
         # spell statuses and JimtaCurioLivingMixin wards an effect off a curio's wearer. The credit counts at most the
         # health that rose (Encounter.readMending, held above). Each stays allowed only while it names nothing of the
         # fight's credit; any other heal() or effect mixin is refused.
-        mains = path.name in ("NouveauThreadMixin.java", "JimtaSpellStatusMixin.java", "JimtaCurioLivingMixin.java") \
+        mains = path.name in ("NouveauThreadMixin.java", "JimtaSpellStatusMixin.java", "JimtaCurioLivingMixin.java",
+                               "BotanicalAncientWillMixin.java", "BotanicalGaiaMinionMixin.java", "WildMoonEffectsMixin.java") \
             and not re.search(r'\b(Encounter|BrewItem|Mending|mended|poultice|Poultice)\b', text)
         if not mains and (re.search(r'RegenerationMobEffect|MobEffectInstance|tickEffects', text) or re.search(r'"heal', text)):
             err(f"{path.relative_to(ROOT)}: no mixin for the poultice's credit (CLAUDE.md; C-02 reads Regeneration's own time)")
@@ -20784,7 +20874,7 @@ def check_rime_kit(co, root, lang):
             "back on gives no Brace at once")
     for needle in ('Cause.of(null, Cause.Origin.ITEM, "jugcraft:water_bangle"', "new ConcordanceEffects.Context(level, cause, null,",
                    "ConcordanceEffects.apply(context, BANGLE_BRACE, player)", "Brace.STATUS", "Intent.HELPFUL",
-                   "Stacking.EXCLUSIVE", "Rime.understands(player)", "wearsBangle(player)", "END_SERVER_TICK",
+                   "Stacking.EXCLUSIVE", "wearsBangle(player)", "END_SERVER_TICK",
                    "% BANGLE_CHECK_TICKS", "JugcraftConfig.isFeatureEnabled(JugcraftConcordance.FEATURE)",
                    'buildAndRegister(Jugcraft.id("water_bangle_braced"))'):
         if needle not in flat:
@@ -20885,7 +20975,7 @@ def check_rime_kit(co, root, lang):
     for path in [*(ROOT / "src" / "main" / "java").rglob("*.java"), *(ROOT / "src" / "client" / "java").rglob("*.java"),
                  *(ROOT / "src" / "main" / "resources").glob("*.mixins.json"),
                  *(ROOT / "src" / "client" / "resources").glob("*.mixins.json")]:
-        if path != snowshoes and re.search(r"PowderSnowBlock|canEntityWalkOnPowderSnow", source(path)):
+        if path not in {snowshoes, JAVA_ROOT / "mixin" / "ArsCharmSnowMixin.java"} and re.search(r"PowderSnowBlock|canEntityWalkOnPowderSnow", source(path)):
             err(f"{path.relative_to(ROOT)}: no mixin or code makes other boots walk on powder snow (B-P46)")
     # 9. Codex and texts.
     pages = next(iter(kit.codex().values()))["pages"]
@@ -24229,6 +24319,8 @@ def registered_items():
     registered |= {metal + '_storage_crate_upgrade' for metal, _ in storage_crates.TIERS[1:]}
     import cursed_mirror
     registered |= {cursed_mirror.BLOCK, cursed_mirror.ITEM}
+    import newest_registry
+    registered |= newest_registry.entries()["item"]
     return registered
 
 
@@ -25071,7 +25163,9 @@ def check_encyclopedia(root, lang):
     mixins = load(ROOT / "src" / "client" / "resources" / "jugcraft.client.mixins.json") or {}
     for mixin in mixins.get("client", []) + mixins.get("mixins", []):
         source = text(ROOT / "src" / "client" / "java" / "io" / "github" / "jimbozoomer" / "jugcraft" / "mixin" / "client" / f"{mixin}.java")
-        if re.search(r"@Mixin\([^)]*(InventoryScreen|AbstractContainerScreen|CreativeModeInventoryScreen|RecipeBook)", source):
+        # Owner-requested recipe selector uses only left/top accessors, not encyclopedia rendering.
+        recipe_accessor = mixin == "CraftingScreenAccess" and "@Accessor(\"leftPos\")" in source and "@Accessor(\"topPos\")" in source and "@Inject" not in source
+        if not recipe_accessor and re.search(r"@Mixin\([^)]*(InventoryScreen|AbstractContainerScreen|CreativeModeInventoryScreen|RecipeBook)", source):
             err(f"mixin/client/{mixin}.java: the encyclopedia's button needs no mixin on the inventory screens")
     if 'Jugcraft.id("encyclopedia/inventory_button")' not in client_files["EncyclopediaInventoryButton.java"] \
             or "textures/gui/sprites/encyclopedia/inventory_button.png" not in en.OWNER_FILES:
@@ -25217,7 +25311,7 @@ def check_cast_poses():
 PERMISSION_QUERIES = {
     "PlayerBlockBreakEvents.BEFORE": {"concordance/Authority.java", "walker/DieselWalker.java"},
     # GunShots.allowed asks as the shooter before either a bullet or bayonet deals damage.
-    "AttackEntityCallback.EVENT": {"weapons/TwoHanded.java", "guns/GunShots.java"},
+    "AttackEntityCallback.EVENT": {"weapons/TwoHanded.java", "guns/GunShots.java", "menagerie/OwnerSupplementRotation.java"},
 }
 # What each indirect route asks Authority (relative to the concordance package): roadmap step 28's audit.
 AUTHORITY_ROUTES = {

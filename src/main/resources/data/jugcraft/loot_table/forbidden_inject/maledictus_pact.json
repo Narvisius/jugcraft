@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:forbidden_maledictus_pact"
+        }
+      ],
+      "rolls": 1.0,
+      "condition": {
+        "chance": 0.18,
+        "type": "minecraft:random_chance"
+      }
+    }
+  ],
+  "random_sequence": "jugcraft:forbidden_chests/additions/maledictus_pact_addition"
+}

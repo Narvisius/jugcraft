@@ -108,7 +108,8 @@ def write(path, obj):
         else:
             model_writer.finish_elements(obj["elements"])
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(obj, indent=2) + "\n", encoding="utf-8")
+    options = {"separators": (",", ":")} if path == RES / "jugcraft/newest_building.json" else {"indent": 2}
+    path.write_text(json.dumps(obj, **options) + "\n", encoding="utf-8")
 
 
 def rid(path):
@@ -272,6 +273,7 @@ def assets():
     encyclopedia.lang_entries(lang)
     import encyclopedia_routes
     encyclopedia_routes.lang(lang)
+    lang["screen.jugcraft.crafting.choose"] = "Choose crafting result"
     drone_assets(lang)
     import tower
     tower.write_assets(write, rid, ASSETS, lang)
@@ -1826,6 +1828,8 @@ def main():
     write(ASSETS / "handbook" / "en_us.json", book)
     import encyclopedia_routes
     write(ASSETS / "encyclopedia" / "en_us.json", encyclopedia_routes.build(book))
+    import starter_guidance
+    starter_guidance.generate(write)
     loot_tables()
     recipes()
     tags()
@@ -1920,6 +1924,11 @@ def main():
     diagonal_connections.write_all(write, ASSETS, RES / 'assets/minecraft')
     import walnut_data
     walnut_data.reconcile(write)
+    import newest_building
+    newest_building.generate(write)
+    diagonal_connections.write_all(write, ASSETS, RES / "assets/minecraft")
+    import model_atlas
+    model_atlas.generate(write)
     from generated_resource_cleanup import prune
     prune(RES, previous, WRITTEN_RESOURCES)
     # Include finished server recipes after removing obsolete generated recipes.

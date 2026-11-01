@@ -186,7 +186,12 @@ public final class RaiderRaids {
 	/** Open dry ground {@value #SPAWN_MIN} to {@value #SPAWN_MAX} blocks from {@code objective}, in a loaded chunk and outside the town. */
 	private static @Nullable BlockPos gatheringPoint(ServerLevel level, BlockPos objective, RandomSource random) {
 		for (int attempt = 0; attempt < 16; attempt++) {
-			double angle = random.nextDouble() * Math.PI * 2.0;
+            BlockPos town = Town.origin(level);
+            double angle;
+            if (town != null && objective.equals(Town.centre(town))) {
+                var gate = CityRaidRoute.gates(town).get(random.nextInt(3));
+                angle = Math.atan2(gate.dz(), gate.dx());
+            } else angle = random.nextDouble() * Math.PI * 2.0;
 			int distance = SPAWN_MIN + random.nextInt(SPAWN_MAX - SPAWN_MIN + 1);
 			int x = objective.getX() + (int) Math.round(Math.cos(angle) * distance);
 			int z = objective.getZ() + (int) Math.round(Math.sin(angle) * distance);

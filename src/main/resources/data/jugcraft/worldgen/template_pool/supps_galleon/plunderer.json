@@ -1,0 +1,46 @@
+{
+  "name": "jugcraft:supps_galleon/plunderer",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 4,
+      "element": {
+        "element_type": "minecraft:feature_pool_element",
+        "feature": {
+          "feature": {
+            "type": "jugcraft:supps_galleon_crew",
+            "entity": "jugcraft:supps_plunderer",
+            "passengers": [],
+            "spread": 0,
+            "attempts": 1
+          },
+          "placement": []
+        },
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:feature_pool_element",
+        "feature": {
+          "feature": {
+            "type": "jugcraft:supps_galleon_crew",
+            "entity": "minecraft:pillager",
+            "passengers": [],
+            "spread": 0,
+            "attempts": 1
+          },
+          "placement": []
+        },
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:empty_pool_element"
+      }
+    }
+  ]
+}

@@ -202,7 +202,12 @@ def constructor(src, name, case=None):
     for key,value in re.findall(r'(?:float|double|int) (\w+) = ([^;]+);',text):
         try:env[key]=num(value,env)
         except (ValueError,SyntaxError):pass
-    def number(x):return num(x,env)
+    def number(x):
+        # Original constructors sometimes adjust a previously authored pose.
+        def current(m):
+            part=parts[m[1]];index='XYZ'.index(m[3])+(3 if m[2]=='rotateAngle' else 0)
+            return str(part['pose'][index])
+        return num(re.sub(r'this\.(\w+)\.(rotateAngle|rotationPoint)([XYZ])',current,x),env)
     if name=='GumbeeperModel':text=re.sub(r'if \(f <= 0.0f\) \{([^{}]*)\}',r'\1',text)
     if name=='GalenaGauntletModel':text=re.sub(r'if \(!left\) \{([^{}]*)\} else \{([^{}]*)\}',lambda m:m[2] if case=='left' else m[1],text)
     if 'switch (' in text:
@@ -231,8 +236,11 @@ def constructor(src, name, case=None):
         if m:parts[m[2]]['parent']=m[1];continue
         m=re.fullmatch(r'this\.(?:setRotationAngle|setRotateAngle|setRotation)\(this\.(\w+), (.*)\)',stmt)
         if m:parts[m[1]]['pose'][3:]=[number(x) for x in split_args(m[2])];continue
-        m=re.fullmatch(r'this\.(\w+)\.rotateAngle([XYZ]) = (.*)',stmt)
-        if m:parts[m[1]]['pose'][3+'XYZ'.index(m[2])]=number(m[3]);continue
+        m=re.fullmatch(r'this\.(\w+)\.(rotateAngle|rotationPoint)([XYZ]) ([+\-]?=) (.*)',stmt)
+        if m:
+            index='XYZ'.index(m[3])+(3 if m[2]=='rotateAngle' else 0);value=number(m[5])
+            if m[4]!='=':value=parts[m[1]]['pose'][index]+(-value if m[4]=='-=' else value)
+            parts[m[1]]['pose'][index]=value;continue
         m=re.fullmatch(r'this\.(\w+)\.mirror = (true|false)',stmt)
         if m:mirrors[m[1]]=m[2]=='true';continue
         m=re.fullmatch(r'this\.(\w+)(.*\.addBox\(.*\))',stmt,re.S)

@@ -81,3 +81,7 @@ New worldgen must explain existing-world behavior: old chunks are not silently r
 Every gameplay addition identifies its primary specialty, player purpose, stage, reachable entry path, input producer, output consumer, connections to other specialties, balance costs, multiplayer rules, persistence, performance budget and test plan. Say which links are required, optional or obtainable through trade. Infrastructure, accessibility, cosmetic and pet additions can explain experiential/support value instead of inventing arbitrary resource gates.
 
 Ask: What choice does this add? Who benefits from producing or using it? How does it respect cozy homes, adventure boundaries and existing progression? If it disappears, what useful connection or experience is lost?
+
+## Equipment access (owner direction, October 29)
+
+Owning equipment is enough to equip and use it. Do not add research prerequisites to armor, weapons, tools, charms, accessories or their built-in abilities. Normal compatible slots, resources, ammunition, fuel, durability, cooldowns, ownership and land/PvP protections still apply. Research progression must not silently disable owned gear.

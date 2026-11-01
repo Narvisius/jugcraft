@@ -1,0 +1,64 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:ars_additions_exploration_warp_scroll",
+          "modifier": [
+            {
+              "components": {
+                "jugcraft:ars_exploration_target": "#jugcraft:ars_additions_on_explorer_warp_scroll"
+              },
+              "type": "minecraft:set_components"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:nouveau_sourcestone",
+          "modifier": [
+            {
+              "count": {
+                "type": "uniform",
+                "min": 4.0,
+                "max": 64.0
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:ars_additions_codex_entry",
+          "modifier": [
+            {
+              "count": {
+                "type": "uniform",
+                "min": 1.0,
+                "max": 4.0
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "jugcraft:ars_additions_chests/ruined_portal"
+}

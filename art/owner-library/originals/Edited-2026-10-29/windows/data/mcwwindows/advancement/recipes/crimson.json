@@ -1,0 +1,57 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+     "mcwwindows:crimson_stem_window",
+	 "mcwwindows:crimson_stem_window2",
+	 "mcwwindows:crimson_stem_four_window",
+	 "mcwwindows:stripped_crimson_stem_window",
+	 "mcwwindows:stripped_crimson_stem_window2",
+	 "mcwwindows:stripped_crimson_stem_four_window",
+	 "mcwwindows:crimson_planks_window",
+	 "mcwwindows:crimson_planks_window2",
+	 "mcwwindows:crimson_planks_four_window",
+	 "mcwwindows:crimson_pane_window",
+	 "mcwwindows:stripped_crimson_pane_window",
+	 "mcwwindows:crimson_plank_pane_window"
+    ]
+  },
+  "criteria": {
+    "has_wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:crimson_stem"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": "mcwwindows:window_base"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wood",
+      "has_the_recipe"
+    ]
+  ]
+}
+
+
+
+
+
+
+
+
+
+
+
+

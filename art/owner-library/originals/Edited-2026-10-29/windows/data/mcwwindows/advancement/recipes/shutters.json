@@ -1,0 +1,59 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "mcwwindows:oak_shutter",
+      "mcwwindows:pale_oak_shutter",
+      "mcwwindows:spruce_shutter",
+      "mcwwindows:birch_shutter",
+      "mcwwindows:jungle_shutter",
+      "mcwwindows:acacia_shutter",
+      "mcwwindows:dark_oak_shutter",
+      "mcwwindows:crimson_shutter",
+      "mcwwindows:warped_shutter",
+      "mcwwindows:mangrove_shutter",
+      "mcwwindows:bamboo_shutter",
+      "mcwwindows:iron_shutter",
+      "mcwwindows:oak_louvered_shutter",
+      "mcwwindows:spruce_louvered_shutter",
+      "mcwwindows:birch_louvered_shutter",
+      "mcwwindows:jungle_louvered_shutter",
+      "mcwwindows:acacia_louvered_shutter",
+      "mcwwindows:dark_oak_louvered_shutter",
+      "mcwwindows:crimson_louvered_shutter",
+      "mcwwindows:warped_louvered_shutter",
+      "mcwwindows:mangrove_louvered_shutter",
+      "mcwwindows:diorite_louvered_shutter",
+      "mcwwindows:andesite_louvered_shutter",
+      "mcwwindows:granite_louvered_shutter",
+      "mcwwindows:poplar_shutter",
+      "mcwwindows:poplar_louvered_shutter"
+    ]
+  },
+  "criteria": {
+    "has_wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:oak_planks"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": "mcwwindows:oak_shutter"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wood",
+      "has_the_recipe"
+    ]
+  ]
+}

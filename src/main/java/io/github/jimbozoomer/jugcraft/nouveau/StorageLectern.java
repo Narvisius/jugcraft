@@ -41,6 +41,20 @@ public final class StorageLectern extends BlockEntity implements GeoBlockEntity 
             &&Authority.mayChange(server,player,worldPosition);
     }
     /** A chain is resolved afresh, without loading chunks or retaining remote inventory references. */
+    public boolean mayUseRemote(ServerPlayer player){return JugNouveau.enabled()&&owner!=null&&(owner.equals(player.getUUID())||JugcraftParties.sameParty(owner,player.getUUID()))&&player.isAlive()&&!player.isSpectator()&&level instanceof ServerLevel server&&server.hasChunkAt(worldPosition)&&server.getBlockEntity(worldPosition)==this&&Authority.mayChange(server,player,worldPosition);}
+    public @Nullable StorageLectern remoteRoot(ServerPlayer player){
+        StorageLectern current=this;Set<BlockPos> seen=new HashSet<>();
+        for(int hop=0;hop<16;hop++){
+            if(!current.mayUseRemote(player)||!seen.add(current.worldPosition))return null;
+            if(current.proxy==null)return current;
+            if(current.proxy.distSqr(current.worldPosition)>RANGE*RANGE||!current.level.hasChunkAt(current.proxy)||!(current.level.getBlockEntity(current.proxy) instanceof StorageLectern next))return null;
+            current=next;
+        }return null;
+    }
+    public @Nullable Container remoteContainer(ServerPlayer player,int index){
+        if(!mayUseRemote(player)||index<0||index>=links.size()||index>=capacity()||links.get(index).distSqr(worldPosition)>RANGE*RANGE)return null;
+        return NouveauStorage.accessibleRemote((ServerLevel)level,player,links.get(index));
+    }
     public @Nullable StorageLectern root(ServerPlayer player){
         StorageLectern current=this;Set<BlockPos> seen=new HashSet<>();
         for(int hop=0;hop<16;hop++){

@@ -1,0 +1,23 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "sophisticatedcore:item_enabled",
+      "itemRegistryName": "sophisticatedbackpacks:pickup_upgrade"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "sophisticatedbackpacks:upgrade_base",
+    "P": "minecraft:sticky_piston",
+    "R": "#c:dusts/redstone",
+    "S": "#c:strings"
+  },
+  "pattern": [
+    " P ",
+    "SBS",
+    "RRR"
+  ],
+  "result": {
+    "id": "sophisticatedbackpacks:pickup_upgrade"
+  }
+}

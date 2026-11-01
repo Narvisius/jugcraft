@@ -1,0 +1,57 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+     "mcwwindows:acacia_window",
+	 "mcwwindows:acacia_window2",
+	 "mcwwindows:acacia_four_window",
+	 "mcwwindows:stripped_acacia_log_window",
+	 "mcwwindows:stripped_acacia_log_window2",
+	 "mcwwindows:stripped_acacia_log_four_window",
+	 "mcwwindows:acacia_plank_window",
+	 "mcwwindows:acacia_plank_window2",
+	 "mcwwindows:acacia_plank_four_window",
+	 "mcwwindows:acacia_pane_window",
+	 "mcwwindows:stripped_acacia_pane_window",
+	 "mcwwindows:acacia_plank_pane_window"
+    ]
+  },
+  "criteria": {
+    "has_wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:acacia_log"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": "mcwwindows:window_base"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wood",
+      "has_the_recipe"
+    ]
+  ]
+}
+
+
+
+
+
+
+
+
+
+
+
+

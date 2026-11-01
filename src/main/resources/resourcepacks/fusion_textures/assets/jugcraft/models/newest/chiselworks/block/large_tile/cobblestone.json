@@ -1,0 +1,12 @@
+{
+  "loader": "fusion:model",
+  "type": "connecting",
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "jugcraft:block/newest_connected/large_tile/cobblestone",
+    "particle": "jugcraft:newest/chiselworks/block/large_tile/cobblestone"
+  },
+  "connections": {
+    "type": "is_same_block"
+  }
+}

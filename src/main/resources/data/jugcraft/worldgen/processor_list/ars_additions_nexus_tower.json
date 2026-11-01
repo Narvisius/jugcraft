@@ -1,0 +1,973 @@
+{
+  "processors": [
+    {
+      "processor_type": "minecraft:rule",
+      "rules": [
+        {
+          "input_predicate": {
+            "block": "minecraft:stone_bricks",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.5
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "minecraft:mossy_stone_bricks"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "minecraft:stone_bricks",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.5
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "minecraft:cracked_stone_bricks"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "minecraft:stone_bricks",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "minecraft:stone"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "minecraft:stone_bricks",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "minecraft:andesite"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "minecraft:stone_bricks",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "minecraft:tuff"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "minecraft:stone_bricks",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "minecraft:cobblestone"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "jugcraft:nouveau_sourcestone_large_bricks",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.5
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "jugcraft:ars_additions_cracked_sourcestone_large_bricks"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "jugcraft:nouveau_sourcestone_large_bricks",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.2
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "jugcraft:nouveau_gilded_sourcestone_large_bricks",
+            "properties": {
+              "facing": "north"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "jugcraft:nouveau_sourcestone_large_bricks",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.2
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "minecraft:blue_terracotta"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "jugcraft:nouveau_sourcestone_large_bricks",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.2
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "jugcraft:nouveau_sourcestone_alternating"
+          }
+        },
+        {
+          "input_predicate": {
+            "block_state": {
+              "id": "minecraft:stone_brick_slab",
+              "properties": {
+                "type": "top",
+                "waterlogged": "false"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.2
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "minecraft:mossy_stone_brick_slab",
+            "properties": {
+              "type": "top",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "block_state": {
+              "id": "minecraft:stone_brick_slab",
+              "properties": {
+                "type": "bottom",
+                "waterlogged": "false"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.2
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "minecraft:mossy_stone_brick_slab",
+            "properties": {
+              "type": "bottom",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "jugcraft:nouveau_sourcestone_large_bricks",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.2
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "jugcraft:nouveau_sourcestone_alternating"
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "Items": [
+                {
+                  "count": 1,
+                  "id": "jugcraft:ars_additions_nexus_warp_scroll",
+                  "Slot": 0
+                }
+              ]
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "id": "jugcraft:ars_additions_warp_nexus",
+              "properties": {
+                "half": "lower",
+                "requires_source": "true",
+                "waterlogged": "true"
+              }
+            },
+            "predicate_type": "minecraft:blockstate_match"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "jugcraft:ars_additions_warp_nexus",
+            "properties": {
+              "half": "lower",
+              "requires_source": "false",
+              "waterlogged": "true"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "Items": [
+                {
+                  "count": 1,
+                  "id": "jugcraft:ars_additions_nexus_warp_scroll",
+                  "Slot": 0
+                }
+              ]
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "id": "jugcraft:ars_additions_warp_nexus",
+              "properties": {
+                "half": "lower",
+                "requires_source": "true",
+                "waterlogged": "false"
+              }
+            },
+            "predicate_type": "minecraft:blockstate_match"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "jugcraft:ars_additions_warp_nexus",
+            "properties": {
+              "half": "lower",
+              "requires_source": "false",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "Items": [
+                {
+                  "count": 1,
+                  "id": "jugcraft:ars_additions_nexus_warp_scroll",
+                  "Slot": 0
+                }
+              ]
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "id": "jugcraft:ars_additions_warp_nexus",
+              "properties": {
+                "half": "lower",
+                "requires_source": "false",
+                "waterlogged": "true"
+              }
+            },
+            "predicate_type": "minecraft:blockstate_match"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "jugcraft:ars_additions_warp_nexus",
+            "properties": {
+              "half": "lower",
+              "requires_source": "false",
+              "waterlogged": "true"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "Items": [
+                {
+                  "count": 1,
+                  "id": "jugcraft:ars_additions_nexus_warp_scroll",
+                  "Slot": 0
+                }
+              ]
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "id": "jugcraft:ars_additions_warp_nexus",
+              "properties": {
+                "half": "lower",
+                "requires_source": "false",
+                "waterlogged": "false"
+              }
+            },
+            "predicate_type": "minecraft:blockstate_match"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "jugcraft:ars_additions_warp_nexus",
+            "properties": {
+              "half": "lower",
+              "requires_source": "false",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {}
+          },
+          "input_predicate": {
+            "block_state": {
+              "id": "jugcraft:ars_additions_warp_nexus",
+              "properties": {
+                "half": "upper",
+                "requires_source": "true",
+                "waterlogged": "true"
+              }
+            },
+            "predicate_type": "minecraft:blockstate_match"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "jugcraft:ars_additions_warp_nexus",
+            "properties": {
+              "half": "upper",
+              "requires_source": "false",
+              "waterlogged": "true"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {}
+          },
+          "input_predicate": {
+            "block_state": {
+              "id": "jugcraft:ars_additions_warp_nexus",
+              "properties": {
+                "half": "upper",
+                "requires_source": "true",
+                "waterlogged": "false"
+              }
+            },
+            "predicate_type": "minecraft:blockstate_match"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "jugcraft:ars_additions_warp_nexus",
+            "properties": {
+              "half": "upper",
+              "requires_source": "false",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {}
+          },
+          "input_predicate": {
+            "block_state": {
+              "id": "jugcraft:ars_additions_warp_nexus",
+              "properties": {
+                "half": "upper",
+                "requires_source": "false",
+                "waterlogged": "true"
+              }
+            },
+            "predicate_type": "minecraft:blockstate_match"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "jugcraft:ars_additions_warp_nexus",
+            "properties": {
+              "half": "upper",
+              "requires_source": "false",
+              "waterlogged": "true"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {}
+          },
+          "input_predicate": {
+            "block_state": {
+              "id": "jugcraft:ars_additions_warp_nexus",
+              "properties": {
+                "half": "upper",
+                "requires_source": "false",
+                "waterlogged": "false"
+              }
+            },
+            "predicate_type": "minecraft:blockstate_match"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "jugcraft:ars_additions_warp_nexus",
+            "properties": {
+              "half": "upper",
+              "requires_source": "false",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "Items": [
+                {
+                  "components": {
+                    "ars_nouveau:starbuncle_data": {
+                      "bio": "Warning: Not to leave unsupervised",
+                      "color": "gray",
+                      "name": {
+                        "color": "#808080",
+                        "text": "Eru"
+                      }
+                    }
+                  },
+                  "count": 1,
+                  "id": "jugcraft:starbuncle_charm",
+                  "Slot": 0
+                }
+              ]
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "id": "jugcraft:nouveau_scribes_table",
+              "properties": {
+                "facing": "north"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.5
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "jugcraft:nouveau_scribes_table",
+            "properties": {
+              "facing": "north"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "Items": [
+                {
+                  "components": {
+                    "ars_nouveau:starbuncle_data": {
+                      "bio": "Warning: Not to leave unsupervised",
+                      "color": "gray",
+                      "name": {
+                        "color": "#808080",
+                        "text": "Eru"
+                      }
+                    }
+                  },
+                  "count": 1,
+                  "id": "jugcraft:starbuncle_charm",
+                  "Slot": 0
+                }
+              ]
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "id": "jugcraft:nouveau_scribes_table",
+              "properties": {
+                "facing": "south"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.5
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "jugcraft:nouveau_scribes_table",
+            "properties": {
+              "facing": "south"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "Items": [
+                {
+                  "components": {
+                    "ars_nouveau:starbuncle_data": {
+                      "bio": "Warning: Not to leave unsupervised",
+                      "color": "gray",
+                      "name": {
+                        "color": "#808080",
+                        "text": "Eru"
+                      }
+                    }
+                  },
+                  "count": 1,
+                  "id": "jugcraft:starbuncle_charm",
+                  "Slot": 0
+                }
+              ]
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "id": "jugcraft:nouveau_scribes_table",
+              "properties": {
+                "facing": "west"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.5
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "jugcraft:nouveau_scribes_table",
+            "properties": {
+              "facing": "west"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "Items": [
+                {
+                  "components": {
+                    "ars_nouveau:starbuncle_data": {
+                      "bio": "Warning: Not to leave unsupervised",
+                      "color": "gray",
+                      "name": {
+                        "color": "#808080",
+                        "text": "Eru"
+                      }
+                    }
+                  },
+                  "count": 1,
+                  "id": "jugcraft:starbuncle_charm",
+                  "Slot": 0
+                }
+              ]
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "id": "jugcraft:nouveau_scribes_table",
+              "properties": {
+                "facing": "east"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.5
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "jugcraft:nouveau_scribes_table",
+            "properties": {
+              "facing": "east"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "Items": [
+                {
+                  "components": {
+                    "ars_nouveau:starbuncle_data": {
+                      "bio": "A curious Starbuncle that likes to build and experiment with magic.",
+                      "color": "pink",
+                      "name": {
+                        "color": "#FF69B4",
+                        "text": "Rozeta"
+                      }
+                    }
+                  },
+                  "count": 1,
+                  "id": "jugcraft:starbuncle_charm",
+                  "Slot": 0
+                }
+              ]
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "id": "jugcraft:nouveau_scribes_table",
+              "properties": {
+                "facing": "north"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.5
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "jugcraft:nouveau_scribes_table",
+            "properties": {
+              "facing": "north"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "Items": [
+                {
+                  "components": {
+                    "ars_nouveau:starbuncle_data": {
+                      "bio": "A curious Starbuncle that likes to build and experiment with magic.",
+                      "color": "pink",
+                      "name": {
+                        "color": "#FF69B4",
+                        "text": "Rozeta"
+                      }
+                    }
+                  },
+                  "count": 1,
+                  "id": "jugcraft:starbuncle_charm",
+                  "Slot": 0
+                }
+              ]
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "id": "jugcraft:nouveau_scribes_table",
+              "properties": {
+                "facing": "south"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.5
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "jugcraft:nouveau_scribes_table",
+            "properties": {
+              "facing": "south"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "Items": [
+                {
+                  "components": {
+                    "ars_nouveau:starbuncle_data": {
+                      "bio": "A curious Starbuncle that likes to build and experiment with magic.",
+                      "color": "pink",
+                      "name": {
+                        "color": "#FF69B4",
+                        "text": "Rozeta"
+                      }
+                    }
+                  },
+                  "count": 1,
+                  "id": "jugcraft:starbuncle_charm",
+                  "Slot": 0
+                }
+              ]
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "id": "jugcraft:nouveau_scribes_table",
+              "properties": {
+                "facing": "west"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.5
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "jugcraft:nouveau_scribes_table",
+            "properties": {
+              "facing": "west"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "Items": [
+                {
+                  "components": {
+                    "ars_nouveau:starbuncle_data": {
+                      "bio": "A curious Starbuncle that likes to build and experiment with magic.",
+                      "color": "pink",
+                      "name": {
+                        "color": "#FF69B4",
+                        "text": "Rozeta"
+                      }
+                    }
+                  },
+                  "count": 1,
+                  "id": "jugcraft:starbuncle_charm",
+                  "Slot": 0
+                }
+              ]
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "id": "jugcraft:nouveau_scribes_table",
+              "properties": {
+                "facing": "east"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.5
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "jugcraft:nouveau_scribes_table",
+            "properties": {
+              "facing": "east"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "Items": [
+                {
+                  "components": {
+                    "ars_nouveau:starbuncle_data": {
+                      "bio": "A Starbuncle that sells the magic it salvages.",
+                      "color": "green",
+                      "name": {
+                        "color": "#00FF00",
+                        "text": "Pug"
+                      }
+                    }
+                  },
+                  "count": 1,
+                  "id": "jugcraft:starbuncle_charm",
+                  "Slot": 0
+                }
+              ]
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "id": "jugcraft:nouveau_scribes_table",
+              "properties": {
+                "facing": "north"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.5
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "jugcraft:nouveau_scribes_table",
+            "properties": {
+              "facing": "north"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "Items": [
+                {
+                  "components": {
+                    "ars_nouveau:starbuncle_data": {
+                      "bio": "A Starbuncle that sells the magic it salvages.",
+                      "color": "green",
+                      "name": {
+                        "color": "#00FF00",
+                        "text": "Pug"
+                      }
+                    }
+                  },
+                  "count": 1,
+                  "id": "jugcraft:starbuncle_charm",
+                  "Slot": 0
+                }
+              ]
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "id": "jugcraft:nouveau_scribes_table",
+              "properties": {
+                "facing": "south"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.5
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "jugcraft:nouveau_scribes_table",
+            "properties": {
+              "facing": "south"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "Items": [
+                {
+                  "components": {
+                    "ars_nouveau:starbuncle_data": {
+                      "bio": "A Starbuncle that sells the magic it salvages.",
+                      "color": "green",
+                      "name": {
+                        "color": "#00FF00",
+                        "text": "Pug"
+                      }
+                    }
+                  },
+                  "count": 1,
+                  "id": "jugcraft:starbuncle_charm",
+                  "Slot": 0
+                }
+              ]
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "id": "jugcraft:nouveau_scribes_table",
+              "properties": {
+                "facing": "west"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.5
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "jugcraft:nouveau_scribes_table",
+            "properties": {
+              "facing": "west"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "Items": [
+                {
+                  "components": {
+                    "ars_nouveau:starbuncle_data": {
+                      "bio": "A Starbuncle that sells the magic it salvages.",
+                      "color": "green",
+                      "name": {
+                        "color": "#00FF00",
+                        "text": "Pug"
+                      }
+                    }
+                  },
+                  "count": 1,
+                  "id": "jugcraft:starbuncle_charm",
+                  "Slot": 0
+                }
+              ]
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "id": "jugcraft:nouveau_scribes_table",
+              "properties": {
+                "facing": "east"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.5
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "id": "jugcraft:nouveau_scribes_table",
+            "properties": {
+              "facing": "east"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

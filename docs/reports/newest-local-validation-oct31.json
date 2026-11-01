@@ -1,0 +1,85 @@
+{
+  "status": "local candidate; not release-certified",
+  "artifact": {
+    "jar": "build\\libs\\jugcraft-0.1.0-alpha.jar",
+    "bytes": 346215956,
+    "sha256": "7a9a6ea9c3599c77638ad23b26bfa378aa332cb0ee2236a8b091378e7ec6bf23",
+    "zip_entries": 188949,
+    "resource_files_byte_compared": 49612,
+    "errors": [],
+    "crc_valid": true,
+    "archive_stable": true,
+    "test_classes_checked_absent": 830
+  },
+  "server_full_sweep": {
+    "total": 3263,
+    "passed": 3258,
+    "failed_old_expectations": 5,
+    "log": "build/newest-combined-server-repaired.log"
+  },
+  "server_repaired_followup": {
+    "passed": 58,
+    "failed": 0,
+    "includes_newest_regressions": 19,
+    "optional_integrations": false,
+    "log": "build/newest-final-followup.log"
+  },
+  "client": {
+    "result": "pass",
+    "accessory_slot_groups": 14,
+    "block_states_checked": 837276,
+    "log": "build/newest-client-tests-statue-fix.log"
+  },
+  "static_data": {
+    "result": "pass",
+    "material_ids": 15300,
+    "log": "build/newest-data-only-rerun.log"
+  },
+  "static_art": {
+    "result": "fail",
+    "unresolved_diagnostics": 708,
+    "report": "docs/reports/newest-original-art-oct31.json"
+  },
+  "limitations": [
+    "Missing originals recorded in feature ledger",
+    "No owner visual/playability acceptance",
+    "Full suite required a local 6 GB heap; default 4 GB run exhausted memory",
+    "Passing gameplay evidence is across the full sweep and focused repaired rerun, not one green unfiltered run"
+  ],
+  "publication": "None; no commits, pushes, profiles, updater channels or live server changes",
+  "publication_preparation": {
+    "owner_authorized": true,
+    "branch": "feature/newest-addition-oct31",
+    "candidate_artifact": {
+      "jar": "build\\release-oct31\\input\\jugcraft.jar",
+      "bytes": 341061226,
+      "sha256": "65af2d8bced3b9c5f3004a5343c76a52f0de8af3be313ec72b143e8c58d09b2d",
+      "zip_entries": 188949,
+      "resource_files_byte_compared": 49612,
+      "errors": [],
+      "crc_valid": true,
+      "archive_stable": true
+    },
+    "packaging_change": "Equivalent compact newest_building descriptor; all 188948 other ZIP entries identical",
+    "priority_fixes": "docs/TODO.md",
+    "deployment": "Not performed; restart confirmation outstanding; client channel unchanged",
+    "python_suite": {
+      "total": 290,
+      "passed": 282,
+      "failures": 8,
+      "errors": 0,
+      "log": "build/oct31-python-configured.log",
+      "failed_tests": [
+        "test_all_authored_item_types_have_explicit_records (test_alchemy_values.AlchemyValueTests.test_all_authored_item_types_have_explicit_records)",
+        "test_every_technology_link_resolves_to_a_real_page (test_encyclopedia.EncyclopediaCatalogTests.test_every_technology_link_resolves_to_a_real_page)",
+        "test_generated_catalog_is_current (test_jei_stations.StationRecipes.test_generated_catalog_is_current)",
+        "test_no_unaccounted_custom_processor_type (test_jei_stations.StationRecipes.test_no_unaccounted_custom_processor_type)",
+        "test_no_identical_concrete_bills_with_conflicting_shapeless_outputs (test_jimtafacts_crafting.JimtafactsCraftingTests.test_no_identical_concrete_bills_with_conflicting_shapeless_outputs)",
+        "test_compact_fermentation_is_distinct_and_viewer_is_current (test_recipe_conflicts.RecipeConflicts.test_compact_fermentation_is_distinct_and_viewer_is_current)",
+        "test_repaired_crafting_does_not_create_essence (test_recipe_conflicts.RecipeConflicts.test_repaired_crafting_does_not_create_essence)",
+        "test_repository_ingredients_and_known_entry_routes (test_survival_recipes.SurvivalGraphTests.test_repository_ingredients_and_known_entry_routes)"
+      ],
+      "environment": "Installed DejaVu fonts; mocked Git Bash tests outside sandbox"
+    }
+  }
+}

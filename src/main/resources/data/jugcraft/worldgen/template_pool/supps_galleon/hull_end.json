@@ -1,0 +1,24 @@
+{
+  "name": "jugcraft:supps_galleon/hull_end",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "jugcraft:supps_galleon/hull_front01",
+        "processors": "jugcraft:supps_galleon_data",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "jugcraft:supps_galleon/hull_front02",
+        "processors": "jugcraft:supps_galleon_data",
+        "projection": "rigid"
+      }
+    }
+  ]
+}

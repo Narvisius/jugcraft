@@ -24,7 +24,7 @@ public final class NouveauWorkshopInteractions {
         }
         if(kind.equals("spell_sensor")&&held.has(JugcraftConcordance.INSCRIPTION)){b.filter(held.copyWithCount(1));return InteractionResult.SUCCESS;}
         if(b.storage()&&(held.is(NouveauCatalog.item("allow_scroll"))||held.is(NouveauCatalog.item("deny_scroll")))){b.filter(held.copyWithCount(1));return InteractionResult.SUCCESS;}
-        if(kind.equals("wixie_cauldron")&&!held.isEmpty()){b.filter(held.copyWithCount(1));p.sendOverlayMessage(Component.literal("Wixie target: "+held.getHoverName().getString()));return InteractionResult.SUCCESS;}
+        if((kind.equals("wixie_cauldron")||kind.equals("enchanting_wixie_cauldron"))&&!held.isEmpty()){b.filter(held.copyWithCount(1));p.sendOverlayMessage(Component.literal("Wixie target: "+held.getHoverName().getString()));return InteractionResult.SUCCESS;}
         if(kind.equals("scribes_table")){
             var target=b.getItem(0);
             if(target.is(NouveauCatalog.item("void_jar"))&&!held.isEmpty()){NouveauVoiding.toggle(target,held);b.setChanged();return InteractionResult.SUCCESS;}
@@ -39,10 +39,10 @@ public final class NouveauWorkshopInteractions {
                 var result=blank?new ItemStack(NouveauCatalog.item("spell_parchment")):target.copy();result.set(JugcraftConcordance.INSCRIPTION,held.get(JugcraftConcordance.INSCRIPTION));b.setItem(0,result);p.sendOverlayMessage(Component.literal("Spell inscribed"));return InteractionResult.SUCCESS;
             }
         }
-        if(kind.equals("alteration_table")&&b.getItem(0).getItem() instanceof NouveauGear.Armor){
+        if(kind.equals("alteration_table")&&NouveauThreads.capacity(b.getItem(0))>0){
             var armor=b.getItem(0);var threads=new ArrayList<>(armor.getOrDefault(NouveauGear.THREADS,List.of()));
             if(held.getItem() instanceof NouveauGear.Gear thread&&thread.entry.kind().equals("thread")){
-                String name=thread.entry.source().substring(7);int slot=threads.size();if(slot>=1+armor.getOrDefault(NouveauGear.ARMOR_TIER,0)||threads.contains(name)||Set.of("gliding","undying").contains(name)&&NouveauThreads.socket(armor,slot)<3)return InteractionResult.FAIL;
+                String name=thread.entry.source().substring(7);int slot=threads.size();if(slot>=NouveauThreads.capacity(armor)||threads.contains(name)||Set.of("gliding","undying").contains(name)&&NouveauThreads.socket(armor,slot)<3)return InteractionResult.FAIL;
                 threads.add(name);armor.set(NouveauGear.THREADS,List.copyOf(threads));held.consume(1,p);b.setChanged();return InteractionResult.SUCCESS;
             }
             if(held.isEmpty()&&p.isShiftKeyDown()&&!threads.isEmpty()){String removed=threads.removeLast();armor.set(NouveauGear.THREADS,List.copyOf(threads));var thread=new ItemStack(NouveauCatalog.item("thread_"+removed));if(!p.getInventory().add(thread))p.drop(thread,false,net.minecraft.util.Prediction.SERVER_ONLY);b.setChanged();return InteractionResult.SUCCESS;}

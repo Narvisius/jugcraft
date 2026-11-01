@@ -1,0 +1,27 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"2": "minecraft:block/torch",
+		"particle": "minecraft:block/torch"
+	},
+	"elements": [
+		{
+			"from": [8, 15, 7],
+			"to": [8, 18, 9],
+			"rotation": {"angle": 45, "axis": "y", "origin": [8, -4, 8]},
+			"faces": {
+				"east": {"uv": [7, 6, 9, 9], "texture": "#2"},
+				"west": {"uv": [7, 6, 9, 9], "texture": "#2"}
+			}
+		},
+		{
+			"from": [8, 15, 7],
+			"to": [8, 18, 9],
+			"rotation": {"angle": -45, "axis": "y", "origin": [8, -4, 8]},
+			"faces": {
+				"east": {"uv": [9, 6, 7, 9], "texture": "#2"},
+				"west": {"uv": [9, 6, 7, 9], "texture": "#2"}
+			}
+		}
+	]
+}

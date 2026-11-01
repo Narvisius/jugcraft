@@ -341,8 +341,18 @@ public class FestivityGameTests {
 			helper.assertTrue(peddler.entityTags().contains(HalloweenPeddler.DRESSED) && peddler.getItemBySlot(EquipmentSlot.HEAD).is(item("witch_hat")),
 					"The trader arrives in a Witch Hat");
 			helper.assertTrue(Component.translatable("entity.jugcraft.halloween_peddler").equals(peddler.getCustomName()), "named the Halloween Peddler");
-			long halloween = peddler.getOffers().stream().map(MerchantOffer::getResult)
-					.filter(stack -> BuiltInRegistries.ITEM.getKey(stack.getItem()).getNamespace().equals(Jugcraft.MOD_ID)).count();
+            // Supplementaries now adds ordinary globe offers to this same trader.
+            // Count only results from the seasonal trade pool, not all Jugcraft IDs.
+            var context = new net.minecraft.world.level.storage.loot.LootContext.Builder(
+                new net.minecraft.world.level.storage.loot.LootParams.Builder(level)
+                    .withParameter(net.minecraft.world.level.storage.loot.parameters.LootContextParams.ORIGIN,peddler.position())
+                    .withParameter(net.minecraft.world.level.storage.loot.parameters.LootContextParams.THIS_ENTITY,peddler)
+                    .withParameter(net.minecraft.world.level.storage.loot.parameters.LootContextParams.ADDITIONAL_COST_COMPONENT_ALLOWED,net.minecraft.util.Unit.INSTANCE)
+                    .create(net.minecraft.world.level.storage.loot.parameters.LootContextParamSets.VILLAGER_TRADE)).create(set.randomSequence());
+            Set<Item> seasonal = new HashSet<>();
+            set.trades().forEach(trade->{var offer=trade.value().getOffer(context);if(offer!=null)seasonal.add(offer.getResult().getItem());});
+            long halloween = peddler.getOffers().stream().map(MerchantOffer::getResult)
+                    .filter(stack -> seasonal.contains(stack.getItem())).count();
 			helper.assertTrue(halloween == PEDDLER_WARES, "It brings the trade set's number of Halloween wares: " + halloween);
 			int offers = peddler.getOffers().size();
 			helper.assertTrue(HalloweenPeddler.visit(peddler, level) == 0 && peddler.getOffers().size() == offers, "and only once");

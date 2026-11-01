@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:forbidden_dragon_scale"
+        }
+      ],
+      "rolls": 1.0,
+      "modifier": [
+        {
+          "add": false,
+          "count": {
+            "type": "minecraft:uniform",
+            "max": 2.0,
+            "min": 1.0
+          },
+          "type": "minecraft:set_count"
+        }
+      ],
+      "condition": {
+        "chance": 0.56,
+        "type": "minecraft:random_chance"
+      }
+    }
+  ],
+  "random_sequence": "jugcraft:forbidden_chests/additions/dragon_scale_addition"
+}

@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "sophisticatedcore:item_enabled",
+      "itemRegistryName": "sophisticatedbackpacks:advanced_pump_upgrade"
+    }
+  ],
+  "type": "sophisticatedcore:upgrade_next_tier",
+  "key": {
+    "D": "#c:gems/diamond",
+    "G": "#c:ingots/gold",
+    "I": "minecraft:dispenser",
+    "P": "sophisticatedbackpacks:pump_upgrade",
+    "R": "#c:dusts/redstone"
+  },
+  "pattern": [
+    "DID",
+    "GPG",
+    "RRR"
+  ],
+  "result": {
+    "id": "sophisticatedbackpacks:advanced_pump_upgrade"
+  }
+}

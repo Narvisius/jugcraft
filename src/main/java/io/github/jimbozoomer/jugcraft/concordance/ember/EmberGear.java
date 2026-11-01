@@ -11,7 +11,6 @@ import io.github.jimbozoomer.jugcraft.concordance.effect.EffectSpec;
 import io.github.jimbozoomer.jugcraft.concordance.effect.Intent;
 import io.github.jimbozoomer.jugcraft.concordance.effect.Ledger;
 import io.github.jimbozoomer.jugcraft.concordance.effect.Stacking;
-import io.github.jimbozoomer.jugcraft.concordance.rules.ResearchState;
 import io.github.jimbozoomer.jugcraft.config.JugcraftConfig;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -156,15 +155,14 @@ public final class EmberGear {
 	 * The Fire Bangle's blow. After a player's own melee hit (vanilla's player-attack damage, dealt by the player in
 	 * person, within reach of the weapon in hand: their blows, its sweep and Spell Engine's melee weapon skills; not an
 	 * arrow, a spell of a school, a mount's or a machine's blow, nor a Shock arc or a skill landing beyond that reach), if
-	 * they wear a bangle where it works and understand Hearthbinding, the creature smoulders, wherever the shared effect
+	 * they wear a bangle where it works, the creature smoulders, wherever the shared effect
 	 * boundary lets them harm it. Cheapest checks first.
 	 */
 	private static void afterDamage(LivingEntity target, DamageSource source, float baseDamage, float damage, boolean blocked) {
 		if (damage <= 0.0F || blocked || !(target.level() instanceof ServerLevel level) || !source.is(DamageTypes.PLAYER_ATTACK)
 				|| !(source.getEntity() instanceof ServerPlayer player) || source.getDirectEntity() != player || player.isPassenger()
 				|| !player.isWithinAttackRange(player.getMainHandItem(), target.getBoundingBox(), BANGLE_REACH_MARGIN)
-				|| !JugcraftConfig.isFeatureEnabled(JugcraftConcordance.FEATURE) || !wearsBangle(player)
-				|| !ConcordanceProgress.knowledge(player).state(Ember.RESEARCH).atLeast(ResearchState.UNDERSTOOD)) {
+				|| !JugcraftConfig.isFeatureEnabled(JugcraftConcordance.FEATURE) || !wearsBangle(player)) {
 			return;
 		}
 		smoulder(level, player, target);

@@ -13,6 +13,9 @@
       "io.github.jimbozoomer.jugcraft.test.StorageCrateMultiplayerHarness"
     ],
     "fabric-gametest": [
+      "io.github.jimbozoomer.jugcraft.test.EquipmentAccessGameTests",
+      "io.github.jimbozoomer.jugcraft.test.CraftingChoicesGameTests",
+      "io.github.jimbozoomer.jugcraft.test.RaidApproachGameTests",
       "io.github.jimbozoomer.jugcraft.test.HerobrineScheduleGameTests",
       "io.github.jimbozoomer.jugcraft.test.JimtaFactoryExpansionGameTests",
       "io.github.jimbozoomer.jugcraft.test.JimtafactsGameTests",
@@ -401,12 +404,20 @@
       "io.github.jimbozoomer.jugcraft.test.JimtaPaintbrushGameTests",
       "io.github.jimbozoomer.jugcraft.test.JimtaTransitGameTests",
       "io.github.jimbozoomer.jugcraft.test.StorageCrateGameTests",
-      "io.github.jimbozoomer.jugcraft.town.LivingCityCommissionGameTests"
+      "io.github.jimbozoomer.jugcraft.town.LivingCityCommissionGameTests",
+      "io.github.jimbozoomer.jugcraft.test.StarterGuidanceGameTests",
+      "io.github.jimbozoomer.jugcraft.menagerie.NewestHouseholdGameTests",
+      "io.github.jimbozoomer.jugcraft.test.NewestManaGameTests",
+      "io.github.jimbozoomer.jugcraft.test.NewestBackpackGameTests",
+      "io.github.jimbozoomer.jugcraft.menagerie.NewestLumiseneGameTests"
     ],
     "jei_mod_plugin": [
       "io.github.jimbozoomer.jugcraft.test.JeiStationClientGameTests$WithJei$Probe"
     ],
     "fabric-client-gametest": [
+      "io.github.jimbozoomer.jugcraft.test.EquipmentAccessClientGameTests",
+      "io.github.jimbozoomer.jugcraft.test.CraftingChoicesClientGameTests",
+      "io.github.jimbozoomer.jugcraft.test.ImportedModelAtlasClientTests",
       "io.github.jimbozoomer.jugcraft.test.GeckoGlowClientGameTests",
       "io.github.jimbozoomer.jugcraft.test.JimtafactsClientGameTests",
       "io.github.jimbozoomer.jugcraft.test.JimtafactsWearablesClientGameTests",
@@ -699,7 +710,9 @@
       "io.github.jimbozoomer.jugcraft.test.HerobrineDepthsClientTests",
       "io.github.jimbozoomer.jugcraft.test.HerobrineLandmarksClientTests",
       "io.github.jimbozoomer.jugcraft.test.HerobrineNetworkTests",
-      "io.github.jimbozoomer.jugcraft.test.LivingCityClientGameTests"
+      "io.github.jimbozoomer.jugcraft.test.LivingCityClientGameTests",
+      "io.github.jimbozoomer.jugcraft.test.StarterGuidanceClientGameTests",
+      "io.github.jimbozoomer.jugcraft.test.NewestCollectionClientTests"
     ]
   },
   "depends": {

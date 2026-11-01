@@ -1,0 +1,48 @@
+{
+  "pools": [
+    {
+      "name": "barako",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "jugcraft:wilds_sol_visage",
+          "weight": 1
+        }
+      ],
+      "condition": {
+        "type": "killed_by_player"
+      }
+    },
+    {
+      "name": "umvuthana_feather",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "minecraft:feather",
+          "weight": 1,
+          "modifier": [
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 0,
+                "max": 4
+              },
+              "type": "minecraft:set_count"
+            },
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 0,
+                "max": 2
+              },
+              "type": "minecraft:enchanted_count_increase",
+              "enchantment": "minecraft:looting"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

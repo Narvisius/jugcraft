@@ -9,5 +9,5 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(NaturalSpawner.class)
 public abstract class NouveauSanctuaryMixin {
     @Inject(method="isValidPositionForMob",at=@At("HEAD"),cancellable=true)
-    private static void jugcraft$sanctuary(ServerLevel level,Mob mob,double distance,CallbackInfoReturnable<Boolean> cir){if(mob instanceof net.minecraft.world.entity.monster.Enemy&&NouveauRituals.deniesNaturalSpawn(level,mob.blockPosition()))cir.setReturnValue(false);}
+    private static void jugcraft$sanctuary(ServerLevel level,Mob mob,double distance,CallbackInfoReturnable<Boolean> cir){if(mob instanceof net.minecraft.world.entity.monster.Enemy&&(NouveauRituals.deniesNaturalSpawn(level,mob.blockPosition())||io.github.jimbozoomer.jugcraft.botany.BotanicalBrewing.preventsSpawn(level,mob.blockPosition())))cir.setReturnValue(false);}
 }

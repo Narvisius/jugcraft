@@ -23,7 +23,7 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 
 /**
- * A taglock (roadmap step 22). Touched to a creature (used on it) by someone who understands Sympathy, it takes a link
+ * A taglock (roadmap step 22). Touched to a creature (used on it) by its holder, it takes a link
  * to it: never to oneself, never to a player the multiplayer rules forbid harming, never through a linking ward. Held
  * with a curse's reagent in the other hand and used, it casts that curse through the link, once {@link Sympathy#cast}
  * allows. A link fades with time and is revalidated at every use.
@@ -50,8 +50,7 @@ public class TaglockItem extends Item {
 		String reason;
 		if (!Sympathy.enabled()) {
 			reason = "disabled";
-		} else if (!Sympathy.knows(player)) {
-			reason = "unknown";
+
 		} else {
 			reason = Hexes.link(player.getUUID(), target.getUUID(), Sympathy.warded(target, WardCategory.LINKING), Sympathy.allowed(player, target));
 		}
@@ -87,8 +86,7 @@ public class TaglockItem extends Item {
 		String reason;
 		if (!Sympathy.enabled()) {
 			reason = "disabled";
-		} else if (!Sympathy.knows(player)) {
-			reason = "unknown";
+
 		} else if (curse == null) {
 			reason = "no_reagent";
 		} else {

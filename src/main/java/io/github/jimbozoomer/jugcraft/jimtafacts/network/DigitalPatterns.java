@@ -30,7 +30,20 @@ public final class DigitalPatterns {
         @Override public boolean equals(Object other) { return other instanceof Pattern p && mode == p.mode && recipeId.equals(p.recipeId) && java.util.stream.IntStream.range(0, 9).allMatch(i -> ItemStack.matches(grid.get(i), p.grid.get(i))); }
         @Override public int hashCode() { int value = Objects.hash(mode, recipeId); for (var item : grid) value = 31 * value + ItemStack.hashItemAndComponents(item); return value; }
         public CraftingInput input() { return CraftingInput.of(3, 3, grid()); }
-        public ItemStack output(ServerLevel level) { var input = input(); return mode == 0 ? level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, input, level).map(r -> r.value().assemble(input)).orElse(ItemStack.EMPTY) : DigitalSpecialPatterns.output(this, level); }
+        public RecipeHolder<CraftingRecipe> recipe(ServerLevel level) {
+            if (mode != 0) return null;
+            var manager = level.getServer().getRecipeManager(); var input = input();
+            if (recipeId.isEmpty()) return manager.getRecipeFor(RecipeType.CRAFTING, input, level).orElse(null);
+            var id = net.minecraft.resources.Identifier.tryParse(recipeId);
+            if (id == null) return null;
+            var holder = manager.byKey(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.RECIPE, id)).orElse(null);
+            return holder != null && holder.value() instanceof CraftingRecipe r && r.matches(input, level)
+                ? new RecipeHolder<>(holder.id(), r) : null;
+        }
+        public ItemStack output(ServerLevel level) {
+            if (mode != 0) return DigitalSpecialPatterns.output(this, level);
+            var recipe = recipe(level); return recipe == null ? ItemStack.EMPTY : recipe.value().assemble(input());
+        }
     }
     public record Order(Pattern pattern, int remaining, UUID root) {
         public static final Codec<Order> CODEC = RecordCodecBuilder.create(i -> i.group(Pattern.CODEC.fieldOf("pattern").forGetter(Order::pattern), Codec.intRange(1, 64).fieldOf("remaining").forGetter(Order::remaining),net.minecraft.core.UUIDUtil.CODEC.optionalFieldOf("root",new UUID(0,0)).forGetter(Order::root)).apply(i, Order::new));
@@ -59,7 +72,7 @@ public final class DigitalPatterns {
     }
     private static boolean craftTree(Pattern pattern, DigitalNetwork network, ServerLevel level, List<Pattern> patterns, Set<Pattern> path, int[] remaining, Transaction parent) {
         if (--remaining[0] < 0 || path.size() >= 16 || !path.add(pattern)) return false;
-        var input = pattern.input(); var recipe = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, input, level).orElse(null);
+        var input = pattern.input(); var recipe = pattern.recipe(level);
         try (Transaction tx = parent.openNested()) {
             if (pattern.mode() == 0 && recipe == null) return false;
             var output = pattern.output(level); if (output.isEmpty()) return false;

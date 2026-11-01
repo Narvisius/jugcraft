@@ -23,8 +23,12 @@ public abstract class GunMouseMixin {
 
 	@Inject(method = "turnPlayer", at = @At("HEAD"), require = 0)
 	private void jugcraft$scopeTurn(double elapsed, CallbackInfo info) {
-		double scale = GunView.turnScale();
-		accumulatedDX *= scale;
-		accumulatedDY *= scale;
+		double scale = GunView.turnScale() * io.github.jimbozoomer.jugcraft.client.OwnerZoom.sensitivity();
+		accumulatedDX = io.github.jimbozoomer.jugcraft.client.OwnerZoom.smoothMouse(accumulatedDX * scale,elapsed,true);
+		accumulatedDY = io.github.jimbozoomer.jugcraft.client.OwnerZoom.smoothMouse(accumulatedDY * scale,elapsed,false);
 	}
+    @Inject(method="onScroll",at=@At("HEAD"),cancellable=true)
+    private void jugcraft$zoomScroll(long window,double horizontal,double vertical,CallbackInfo info){
+        if(window==net.minecraft.client.Minecraft.getInstance().getWindow().handle()&&io.github.jimbozoomer.jugcraft.client.OwnerZoom.scroll(vertical))info.cancel();
+    }
 }

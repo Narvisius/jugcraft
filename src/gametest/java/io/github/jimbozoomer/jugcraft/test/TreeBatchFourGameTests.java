@@ -125,7 +125,7 @@ public class TreeBatchFourGameTests {
 			}
 			int saplings = 0;
 			for (int i = 0; i < 512; i++) for (var drop : Block.getDrops(leaf.defaultBlockState(), level, at, null)) {
-				helper.assertTrue(drop.is(sapling) || drop.is(Items.STICK), "Incorrect leaf drop " + drop);
+				helper.assertTrue(drop.is(sapling) || drop.is(Items.STICK) || drop.is(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(io.github.jimbozoomer.jugcraft.Jugcraft.id("twigworks_twig"))), "Incorrect leaf drop " + drop);
 				if (drop.is(sapling)) saplings += drop.getCount();
 			}
 			helper.assertTrue(saplings > 0, "Missing renewable sapling drop");

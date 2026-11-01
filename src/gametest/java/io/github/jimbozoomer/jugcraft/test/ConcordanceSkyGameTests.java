@@ -175,7 +175,7 @@ public class ConcordanceSkyGameTests {
 
 	/**
 	 * An astrolabe attunes a Starwatcher to the full moon while it is up: it spends the cost, and the pulse gives night
-	 * vision while the moon is up and not once it has set; the attunement ends by game time. A novice cannot attune, and
+	 * vision while the moon is up and not once it has set; the attunement ends by game time. A novice can attune too, but
 	 * an astrolabe holding too little does not.
 	 */
 	@GameTest(maxTicks = 20)
@@ -185,8 +185,9 @@ public class ConcordanceSkyGameTests {
 		ServerPlayer novice = player(helper, ResearchState.NONE);
 		ItemStack held = astrolabe(10);
 		helper.assertTrue(held.has(Sky.RESONANT), "A charged astrolabe is resonant (what an optional dynamic light keys on)");
-		helper.assertTrue(!AstrolabeItem.attune(novice, level, held, NIGHT_ZERO, 100L, ONLY_MOON).equals(InteractionResult.SUCCESS)
-				&& AstrolabeItem.charge(held) == 10, "A novice cannot attune");
+		ItemStack noviceHeld = astrolabe(10);
+		helper.assertTrue(AstrolabeItem.attune(novice, level, noviceHeld, NIGHT_ZERO, 100L, ONLY_MOON).equals(InteractionResult.SUCCESS)
+				&& AstrolabeItem.charge(noviceHeld) == 10 - full.attuneCost(), "A novice attunes and pays the same resonance cost");
 		ServerPlayer starwatcher = player(helper, ResearchState.UNDERSTOOD);
 		ItemStack poor = astrolabe(full.attuneCost() - 1);
 		helper.assertTrue(!AstrolabeItem.attune(starwatcher, level, poor, NIGHT_ZERO, 100L, ONLY_MOON).equals(InteractionResult.SUCCESS),
@@ -212,7 +213,7 @@ public class ConcordanceSkyGameTests {
 
 	/**
 	 * A master recalls the pattern they last observed when nothing is up: dearer, shorter, and once per occurrence; the
-	 * next full moon allows another. A practitioner cannot recall, and nobody recalls what they never observed.
+	 * next full moon allows another. A fresh holder can recall too, but nobody recalls what they never observed.
 	 */
 	@GameTest(maxTicks = 20)
 	public void aMasterRecallsOncePerOccurrence(GameTestHelper helper) {
@@ -235,10 +236,10 @@ public class ConcordanceSkyGameTests {
 				&& AstrolabeItem.charge(held) == AstrolabeItem.CAPACITY - full.recallCost(), "Once per occurrence");
 		helper.assertTrue(AstrolabeItem.attune(master, level, held, noon + 8 * DAY, game + 10 + Calendar.minGap(full), ONLY_MOON).equals(InteractionResult.SUCCESS),
 				"After the next full moon, another");
-		ServerPlayer practitioner = player(helper, ResearchState.UNDERSTOOD);
+		ServerPlayer practitioner = player(helper, ResearchState.NONE);
 		AstralClaims.of(level.getServer()).observe(practitioner.getUUID(), FULL_MOON, game);
-		helper.assertTrue(!AstrolabeItem.attune(practitioner, level, astrolabe(AstrolabeItem.CAPACITY), noon, game, ONLY_MOON).equals(InteractionResult.SUCCESS),
-				"Only a master recalls");
+		helper.assertTrue(AstrolabeItem.attune(practitioner, level, astrolabe(AstrolabeItem.CAPACITY), noon, game, ONLY_MOON).equals(InteractionResult.SUCCESS),
+				"An owned astrolabe recalls an observed pattern without research");
 		helper.succeed();
 	}
 

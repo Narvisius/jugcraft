@@ -69,6 +69,11 @@ public class ShopScreen extends AbstractContainerScreen<ShopMenu> implements Scr
 					}));
 			sell.active = !selling;
 		}
+        if (!menu.opening.essentials() && !io.github.jimbozoomer.jugcraft.town.TownMentors.shopLesson(menu.opening.shop()).isEmpty()) {
+            addRenderableWidget(new Plate(leftPos + 116, topPos + 22, 128, 14,
+                Component.translatable("screen.jugcraft.shop.mentor").getString(), Plate.Kind.BRASS,
+                b -> click(io.github.jimbozoomer.jugcraft.town.TownMentors.LESSON_BUTTON)));
+        }
 		for (int row = 0; row < ROWS; row++) {
 			int index = page * ROWS + row;
 			if (index >= offers.size()) {

@@ -1,5 +1,5 @@
 """Wayfaring, the trinkets slice, part 1 (docs/features/arcane-concordance-trinkets.md): the owner's belt, boots and
-charms, worn in Trinkets slots once Relic Lore is understood.
+charms, worn in Trinkets slots without a research prerequisite.
 
 The owner made these from other Minecraft mods (a relics mod and a reliquary mod) as a base and redid them; their art is
 imported as supplied by tools/owner_art.py from OWNER_FILES below, under Jugcraft ids. Each item keeps the owner's
@@ -438,7 +438,7 @@ def codex():
             "description": "Worn things for the road",
             "pages": [
                 ("text", "Belts, Charms and Boots",
-                 "Once you understand **Relic Lore**, you can wear these: a belt in the Belt slot, a charm in a Charm "
+                 "If you own the item, you can wear it: a belt in the Belt slot, a charm in a Charm "
                  f"slot (a Leather Belt gives a second) and up to {FEET_SLOTS} on your feet. They hold no Focus or charge "
                  "and need no pylon. Two of a kind never add up; a second vial only waits its turn. The Leather Belt and "
                  "the Amphibian Boots show on you unless armour covers them, and the Concordance settings can hide them "

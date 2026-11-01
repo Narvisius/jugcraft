@@ -1,0 +1,88 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:ars_additions_codex_entry",
+          "modifier": [
+            {
+              "count": {
+                "type": "uniform",
+                "min": 1.0,
+                "max": 4.0
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:nouveau_bombegranate_pod",
+          "modifier": [
+            {
+              "count": {
+                "type": "uniform",
+                "min": 1.0,
+                "max": 8.0
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:nouveau_frostaya_pod",
+          "modifier": [
+            {
+              "count": {
+                "type": "uniform",
+                "min": 1.0,
+                "max": 8.0
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:nouveau_bastion_pod",
+          "modifier": [
+            {
+              "count": {
+                "type": "uniform",
+                "min": 1.0,
+                "max": 8.0
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:nouveau_mendosteen_pod",
+          "modifier": [
+            {
+              "count": {
+                "type": "uniform",
+                "min": 1.0,
+                "max": 8.0
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "jugcraft:ars_additions_chests/arcane_library"
+}

@@ -1,0 +1,33 @@
+{
+  "enhancers": "jugcraft:forbidden_elementarium",
+  "essences": {
+    "aureal": 200,
+    "blood": 1250,
+    "souls": 4
+  },
+  "inputs": [
+    {
+      "amount": 2,
+      "ingredient": {
+        "item": "minecraft:coal"
+      }
+    },
+    {
+      "amount": 4,
+      "ingredient": {
+        "item": "minecraft:blaze_powder"
+      }
+    }
+  ],
+  "magic_circle": "jugcraft:forbidden_create_item",
+  "main_ingredient": {
+    "item": "jugcraft:forbidden_arcane_crystal_block"
+  },
+  "result": {
+    "type": "jugcraft:forbidden_create_item",
+    "result_item": {
+      "count": 1,
+      "id": "jugcraft:forbidden_smelter_prism"
+    }
+  }
+}

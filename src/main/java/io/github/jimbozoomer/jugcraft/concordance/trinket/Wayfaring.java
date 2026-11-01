@@ -208,11 +208,11 @@ public final class Wayfaring {
 
 	/**
 	 * Whether a worn charm covers this harm to {@code player}: falling for the feather (and the down), drowning for the
-	 * shell, fire but not lava for the claws. Only while the food bar is not empty, and only once Relic Lore is
-	 * understood. Whether the bar can pay for a blow is {@link #absorb}'s to say.
+	 * shell, fire but not lava for the claws. Only while the food bar is not empty.
+	 * Whether the bar can pay for a blow is {@link #absorb}'s to say; research is not a use requirement.
 	 */
 	public static boolean absorbs(ServerPlayer player, DamageSource source) {
-		if (player.getFoodData().getFoodLevel() <= 0 || !Reliquary.enabled() || !Reliquary.knows(player)) {
+		if (player.getFoodData().getFoodLevel() <= 0 || !Reliquary.enabled()) {
 			return false;
 		}
 		for (var entry : ABSORBED.entrySet()) {
@@ -261,8 +261,7 @@ public final class Wayfaring {
 	 * would), or a blow a held totem answers. Returns whether it was answered.
 	 */
 	public static boolean save(ServerPlayer player, DamageSource source) {
-		if (source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) || !Reliquary.enabled() || Dreaming.dreaming(player) || holdsTotem(player)
-				|| !Reliquary.knows(player)) {
+		if (source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) || !Reliquary.enabled() || Dreaming.dreaming(player) || holdsTotem(player)) {
 			return false;
 		}
 		TrinketSlotAccess vial = worn(player, stack -> stack.is(ANGELHEART_VIAL));
@@ -309,7 +308,7 @@ public final class Wayfaring {
 	/** The Ice Breaker: after a plain fall that hurt its wearer (not an ender pearl's landing), on foot, the wave. */
 	private static void afterDamage(LivingEntity entity, DamageSource source, float baseDamage, float damage, boolean blocked) {
 		if (damage <= 0.0F || !source.is(DamageTypes.FALL) || !(entity instanceof ServerPlayer player) || player.isPassenger()
-				|| !Reliquary.enabled() || !wears(player, ICE_BREAKER) || !Reliquary.knows(player)) {
+				|| !Reliquary.enabled() || !wears(player, ICE_BREAKER)) {
 			return;
 		}
 		wave(player.level(), player, damage);

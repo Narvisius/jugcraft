@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "mcwdoors:bamboo_japanese_door",
+            "state": {
+              "half": "lower"
+            }
+          },
+          "name": "mcwdoors:bamboo_japanese_door"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "mcwdoors:blocks/bamboo_japanese_door"
+}

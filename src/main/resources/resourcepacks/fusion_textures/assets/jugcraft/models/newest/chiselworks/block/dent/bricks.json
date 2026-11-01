@@ -1,0 +1,12 @@
+{
+  "loader": "fusion:model",
+  "type": "connecting",
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "jugcraft:block/newest_connected/dent/bricks",
+    "particle": "jugcraft:newest/chiselworks/block/dent/bricks"
+  },
+  "connections": {
+    "type": "is_same_block"
+  }
+}

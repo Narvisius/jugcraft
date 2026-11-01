@@ -1,0 +1,26 @@
+{
+  "loader": "neoforge:separate_transforms",
+  "base": {
+    "parent": "jugcraft:newest/supps/item/quiver_in_hand"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "jugcraft:newest/supps/item/quiver_gui"
+    },
+    "ground": {
+      "parent": "jugcraft:newest/supps/item/quiver_gui"
+    },
+    "fixed": {
+      "parent": "jugcraft:newest/supps/item/quiver_gui"
+    }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "supplementaries:dyed": 1
+      },
+      "model": "jugcraft:newest/supps/item/quiver_dyed"
+    }
+  ],
+  "gui_light": "front"
+}

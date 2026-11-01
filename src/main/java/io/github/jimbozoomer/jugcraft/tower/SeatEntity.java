@@ -35,6 +35,11 @@ public class SeatEntity extends Entity {
 
 	/** As {@link #sit(Level, BlockPos, Player, Direction)}, for a seat whose top is {@code height} up the block. */
 	public static boolean sit(Level level, BlockPos pos, Player player, Direction facing, double height) {
+		return sit(level,pos,player,facing.toYRot(),height);
+	}
+
+	/** Preserve authored 16-way furniture headings instead of snapping the rider to cardinal directions. */
+	public static boolean sit(Level level, BlockPos pos, Player player, float yaw, double height) {
 		if (local.peepo.CompanionSeats.isReserved(level,pos)) return false;
 		if (player.isPassenger() || player.isShiftKeyDown()) {
 			return false;
@@ -44,12 +49,13 @@ public class SeatEntity extends Entity {
 			return false;
 		}
 		SeatEntity seat = new SeatEntity(JugcraftTower.SEAT, level);
-		float yaw = facing.toYRot();
 		seat.snapTo(at.x, at.y, at.z, yaw, 0);
 		level.addFreshEntity(seat);
 		player.setYRot(yaw);
 		player.setYHeadRot(yaw);
-		return player.startRiding(seat, true, true);
+		boolean mounted=player.startRiding(seat, true, true);
+		if(!mounted)seat.discard();
+		return mounted;
 	}
 
 	@Override

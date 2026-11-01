@@ -60,6 +60,7 @@ public final class NouveauGlyphs {
         if(!accepts(l,e,at)||!Authority.mayChange(l,p,at))return NOT_ALLOWED;
         if(l.getBlockEntity(at) instanceof NouveauWeaves.Weave weave&&weave.spell(op,power))return APPLIED;
         switch(op){
+            case "mark" -> {return io.github.jimbozoomer.jugcraft.nouveau.additions.ArsReliquary.mark(c,p,at,null)?APPLIED:NOTHING;}
             case "infuse" -> {return NouveauInfusion.cast(c,e,p,Vec3.atCenterOf(at),null)?APPLIED:NOTHING;}
             case "name" -> {var label=spellName(p);if(label==null)return NOTHING;if(l.getBlockEntity(at) instanceof NouveauWorkshop station&&station.permitted(p)){station.customName(label.getString());return APPLIED;}if(l.getBlockEntity(at) instanceof net.minecraft.world.level.block.entity.BaseContainerBlockEntity container&&container.canOpen(p)){((io.github.jimbozoomer.jugcraft.mixin.NouveauContainerNameAccess)container).jugcraft$setName(label);container.setChanged();return APPLIED;}for(var mob:l.getEntitiesOfClass(LivingEntity.class,new AABB(at).inflate(2),x->!(x instanceof Player)&&x.isAlive()).stream().limit(8).toList())if(Authority.mayChange(l,p,mob.blockPosition())&&c.ledger().admit(c.step(),"entity:"+mob.getUUID(),1).admitted())mob.setCustomName(label);return APPLIED;}
             case "fell" -> {return fell(c,e,p,at)?APPLIED:NOTHING;}
@@ -153,6 +154,7 @@ public final class NouveauGlyphs {
             if(op.equals("crush")){moved.change(Blocks.GRAVEL.defaultBlockState());return APPLIED;}
         }
         switch(op){
+            case "mark" -> {return io.github.jimbozoomer.jugcraft.nouveau.additions.ArsReliquary.mark(c,p,target.blockPosition(),target)?APPLIED:NOTHING;}
             case "conjure_water" -> {target.clearFire();NouveauStatuses.give(target,"soaked",duration,0,p);return APPLIED;}
             case "light" -> {target.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION,duration),p);if(target!=p||e.augment("sensitive")>0)target.addEffect(new MobEffectInstance(MobEffects.GLOWING,duration),p);return APPLIED;}
             case "ignite" -> {target.igniteForSeconds(Math.max(1,duration/20));return APPLIED;}
@@ -176,6 +178,7 @@ public final class NouveauGlyphs {
                 target.setDeltaMovement(target.getDeltaMovement().add(motion));if(target instanceof ServerPlayer client)client.connection.send(new ClientboundSetEntityMotionPacket(target));return APPLIED;
             }
             case "dispel" -> {
+                if(io.github.jimbozoomer.jugcraft.nouveau.additions.ArsAdditionCharms.preventDispel(target,p))return NOT_ALLOWED;
                 if(target instanceof BookWyrm wyrm)return wyrm.dispel(p)?APPLIED:NOT_ALLOWED;
                 if(target instanceof Starbuncle star&&star.mayServe(p)){star.discard();return APPLIED;}
                 if(target instanceof net.minecraft.world.entity.monster.Blaze&&target.isOnFire()&&ConcordanceEffects.mayHarm(p,target)&&Authority.mayStrike(l,p,p.getUUID(),target)){for(var recipe:NouveauRecipes.all())if(recipe.operation().equals("dispel_entity")&&recipe.data().get("entity").getAsString().equals("minecraft:blaze")){var key=net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.LOOT_TABLE,net.minecraft.resources.Identifier.parse(recipe.data().get("loot_table").getAsString()));target.dropFromLootTable(l,l.damageSources().playerAttack(p),true,key,item->target.spawnAtLocation(l,item));target.discard();NouveauAdvancements.award(p,"poof_mob");return APPLIED;}}

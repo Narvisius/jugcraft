@@ -1,0 +1,179 @@
+{
+  "implemented_blocks": [
+    "painted_acacia",
+    "painted_acacia_slab",
+    "thatch_block",
+    "clawed_log",
+    "raked_sand",
+    "red_raked_sand",
+    "gong",
+    "gong_part"
+  ],
+  "implemented_items": [
+    "earthrend_gauntlet",
+    "sculptor_staff",
+    "sculptor_spawn_egg",
+    "geomancer_beads",
+    "geomancer_robe",
+    "geomancer_belt",
+    "geomancer_sandals",
+    "grant_suns_blessing",
+    "foliaath_seed",
+    "sand_rake",
+    "foliaath_spawn_egg",
+    "captured_grottol",
+    "glowing_jelly",
+    "grottol_spawn_egg",
+    "lantern_spawn_egg",
+    "dart",
+    "blowgun",
+    "spear",
+    "naga_fang",
+    "naga_fang_dagger",
+    "naga_spawn_egg",
+    "wrought_helmet",
+    "wrought_axe",
+    "wroughtnaut_spawn_egg",
+    "ice_crystal",
+    "frostmaw_spawn_egg",
+    "music_disc_petiole",
+    "bluff_rod",
+    "bluff_spawn_egg",
+    "elokosa_howler_spawn_egg",
+    "elokosa_spawn_egg",
+    "umvuthi_spawn_egg",
+    "umvuthana_spawn_egg",
+    "umvuthana_raptor_spawn_egg",
+    "umvuthana_crane_spawn_egg",
+    "sol_visage",
+    "sunblock_staff",
+    "umvuthana_mask_fury",
+    "umvuthana_mask_fear",
+    "umvuthana_mask_rage",
+    "umvuthana_mask_bliss",
+    "umvuthana_mask_misery",
+    "umvuthana_mask_faith",
+    "elokosa_paw_full",
+    "elokosa_paw_gibbous",
+    "elokosa_paw_half",
+    "elokosa_paw_crescent",
+    "elokosa_paw_new"
+  ],
+  "recipes": [
+    "blowgun",
+    "charcoal_from_clawed_log",
+    "dart",
+    "grottol_blast",
+    "grottol_smelt",
+    "jungle_planks_from_clawed_log",
+    "naga_fang_dagger",
+    "painted_acacia_block",
+    "painted_acacia_block_from_slab",
+    "painted_acacia_slab",
+    "spear",
+    "thatch_block"
+  ],
+  "recovered_geometry": {
+    "GongRenderer": {
+      "parts": 3,
+      "actions": [
+        "native_damped_swing"
+      ]
+    },
+    "ModelFoliaath": {
+      "parts": 34,
+      "actions": [
+        "attack_animation",
+        "hurt_animation",
+        "die_animation"
+      ]
+    },
+    "ModelFoliaathBaby": {
+      "parts": 16,
+      "actions": [
+        "eat_animation"
+      ]
+    },
+    "ModelWroughtnaut": {
+      "parts": 74,
+      "actions": [
+        "attack_animation",
+        "attack_twice_animation",
+        "attack_thrice_animation",
+        "vertical_attack_animation",
+        "hurt_animation",
+        "die_animation",
+        "activate_animation",
+        "deactivate_animation",
+        "stomp_attack_animation"
+      ]
+    },
+    "ModelFrostmaw": {
+      "parts": 85,
+      "actions": [
+        "swipe_animation",
+        "swipe_twice_animation",
+        "roar_animation",
+        "ice_breath_animation",
+        "ice_ball_animation",
+        "activate_animation",
+        "activate_no_crystal_animation",
+        "deactivate_animation",
+        "land_animation",
+        "slam_animation",
+        "dodge_animation",
+        "die_animation"
+      ]
+    },
+    "ModelNaga": {
+      "parts": 97,
+      "actions": [
+        "flap_animation",
+        "spit_animation",
+        "swoop_animation",
+        "hurt_to_fall_animation",
+        "land_animation",
+        "get_up_animation",
+        "die_air_animation",
+        "die_ground_animation",
+        "tail_demo_animation"
+      ]
+    },
+    "ModelGrottol": {
+      "parts": 44,
+      "actions": [
+        "idle_animation",
+        "die_animation",
+        "burrow_animation"
+      ]
+    },
+    "ModelLantern": {
+      "parts": 20,
+      "actions": [
+        "puff_animation",
+        "die_animation"
+      ]
+    },
+    "ModelPoisonBall": {
+      "parts": 2,
+      "actions": []
+    },
+    "ModelIceBall": {
+      "parts": 3,
+      "actions": []
+    },
+    "ModelSuperNova": {
+      "parts": 4,
+      "actions": []
+    }
+  },
+  "recovery_limitations": {
+    "ModelNaga": [
+      {
+        "call": "this.animator.startKeyframe(phase1Time)",
+        "reason": "Unknown number phase1Time"
+      }
+    ]
+  },
+  "validated": false
+}

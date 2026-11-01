@@ -83,7 +83,7 @@ public final class NouveauGear {
     }
     public static Set<String> threads(Player p){
         Set<String> result=new HashSet<>();for(EquipmentSlot slot:List.of(EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET)){
-            var stack=p.getItemBySlot(slot);if(stack.getItem() instanceof Armor)result.addAll(stack.getOrDefault(THREADS,List.of()));
+            var stack=p.getItemBySlot(slot);if(NouveauThreads.capacity(stack)>0)result.addAll(stack.getOrDefault(THREADS,List.of()));
         }return result;
     }
     private static void pulse(ServerPlayer p){
@@ -135,9 +135,9 @@ public final class NouveauGear {
             if(name.equals("enchanters_eye")&&!p.isShiftKeyDown()&&stack.has(JugcraftConcordance.INSCRIPTION))return NouveauScrying.castEye(p,stack)?InteractionResult.SUCCESS:InteractionResult.FAIL;
             if(Set.of("spellbook","instrument").contains(entry.kind()))return cast(p,stack);
             if(entry.kind().equals("thread")){
-                var armor=p.getOffhandItem();if(!(armor.getItem() instanceof Armor)||hand!=InteractionHand.MAIN_HAND)return InteractionResult.PASS;
+                var armor=p.getOffhandItem();if(NouveauThreads.capacity(armor)==0||hand!=InteractionHand.MAIN_HAND)return InteractionResult.PASS;
                 var list=new ArrayList<>(armor.getOrDefault(THREADS,List.of()));String thread=name.substring(7);
-                if((Set.of("gliding","undying").contains(thread)&&armor.getOrDefault(ARMOR_TIER,0)<2)||list.contains(thread)||list.size()>=1+armor.getOrDefault(ARMOR_TIER,0))return InteractionResult.FAIL;
+                if((Set.of("gliding","undying").contains(thread)&&NouveauThreads.socket(armor,list.size())<3)||list.contains(thread)||list.size()>=NouveauThreads.capacity(armor))return InteractionResult.FAIL;
                 list.add(thread);armor.set(THREADS,List.copyOf(list));stack.consume(1,p);return InteractionResult.SUCCESS;
             }
             if(name.equals("experience_gem")||name.equals("greater_experience_gem")){

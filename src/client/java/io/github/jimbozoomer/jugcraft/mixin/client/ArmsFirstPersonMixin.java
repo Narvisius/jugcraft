@@ -14,6 +14,9 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
+import io.github.jimbozoomer.jugcraft.client.WildFirstPerson;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -31,6 +34,19 @@ public abstract class ArmsFirstPersonMixin {
 			+ "Lnet/minecraft/client/renderer/state/level/FirstPersonHandsAndItemsRenderState;FFLnet/minecraft/world/InteractionHand;"
 			+ "FLnet/minecraft/world/item/ItemStack;FLcom/mojang/blaze3d/vertex/PoseStack;"
 			+ "Lnet/minecraft/client/renderer/SubmitNodeCollector;I)V";
+
+    @Shadow private void renderPlayerArm(PoseStack pose,SubmitNodeCollector collector,int light,float equip,float swing,HumanoidArm arm,PlayerRenderState player){throw new AssertionError();}
+    @WrapMethod(method=SUBMIT_ARM)
+    private void jugcraft$originalWildsHands(PlayerRenderState player,FirstPersonHandsAndItemsRenderState hands,float partial,float pitch,InteractionHand hand,float swing,ItemStack stack,float equip,PoseStack pose,SubmitNodeCollector collector,int light,Operation<Void> original){
+        var local=Minecraft.getInstance().player;var frame=WildFirstPerson.frame(local,hand,stack,partial);
+        if(frame==null){original.call(player,hands,partial,pitch,hand,swing,stack,equip,pose,collector,light);return;}
+        if(frame.hide())return;
+        pose.pushPose();try{
+            frame.apply(pose,pitch);
+            if(frame.forceArm()&&hand==InteractionHand.OFF_HAND&&!local.isInvisible())renderPlayerArm(pose,collector,light,0,0,frame.arm(),player);
+            else original.call(player,hands,partial,pitch,hand,0F,stack,0F,pose,collector,light);
+        }finally{pose.popPose();}
+    }
 
 	@Inject(method = SUBMIT_ARM, at = @At("HEAD"))
 	private void jugcraft$beginArm(PlayerRenderState player, FirstPersonHandsAndItemsRenderState hands, float partialTick, float pitch,
@@ -51,6 +67,7 @@ public abstract class ArmsFirstPersonMixin {
 	@Inject(method = "applyItemArmTransform(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/entity/HumanoidArm;F)V", at = @At("TAIL"))
 	private void jugcraft$armPose(PoseStack poseStack, HumanoidArm arm, float equip, CallbackInfo info) {
 		ArmsMotion.firstPersonPose(poseStack, arm, equip);
+        io.github.jimbozoomer.jugcraft.client.OwnerFlutePose.firstPerson(poseStack,arm);
 		FlailHeads.firstPersonFrame(poseStack, arm);
 	}
 

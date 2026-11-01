@@ -121,7 +121,10 @@ public class RaiderInfantry extends Monster implements RangedAttackMob, Raider, 
 		goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 0.8));
 		goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 12.0F));
 		targetSelector.addGoal(1, new HurtByTargetGoal(this, RaiderInfantry.class, RaiderWalker.class, RaiderBlimp.class).setAlertOthers());
-		targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, io.github.jimbozoomer.jugcraft.town.Townsfolk.class, true));
+        // Melee troops must be able to reach a defender. A visible guard on a
+        // battlement must not divert the whole march into that wall forever.
+		targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, io.github.jimbozoomer.jugcraft.town.Townsfolk.class,
+                true, role() == Role.GRUNT || role() == Role.OFFICER));
 	}
 
 	@Override

@@ -1,0 +1,84 @@
+{
+  "type": "minecraft:selector",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "jugcraft:jugtania_equipment/loonium/weapon_axe",
+          "modifier": [
+            {
+              "type": "minecraft:enchant_randomly",
+              "condition": {
+                "chance": 0.3,
+                "type": "minecraft:random_chance"
+              }
+            }
+          ],
+          "condition": {
+            "entity": "this",
+            "predicate": {
+              "nbt": "{VillagerData:{profession:\"minecraft:butcher\"}}"
+            },
+            "type": "minecraft:entity_properties"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_hoe",
+          "condition": {
+            "entity": "this",
+            "predicate": {
+              "nbt": "{VillagerData:{profession:\"minecraft:farmer\"}}"
+            },
+            "type": "minecraft:entity_properties"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:fishing_rod",
+          "condition": {
+            "entity": "this",
+            "predicate": {
+              "nbt": "{VillagerData:{profession:\"minecraft:fisherman\"}}"
+            },
+            "type": "minecraft:entity_properties"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_pickaxe",
+          "condition": {
+            "entity": "this",
+            "predicate": {
+              "nbt": "{VillagerData:{profession:\"minecraft:toolsmith\"}}"
+            },
+            "type": "minecraft:entity_properties"
+          }
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "jugcraft:jugtania_equipment/loonium/weapon_sword",
+          "modifier": [
+            {
+              "type": "minecraft:enchant_randomly",
+              "condition": {
+                "chance": 0.3,
+                "type": "minecraft:random_chance"
+              }
+            }
+          ],
+          "condition": {
+            "entity": "this",
+            "predicate": {
+              "nbt": "{VillagerData:{profession:\"minecraft:weaponsmith\"}}"
+            },
+            "type": "minecraft:entity_properties"
+          }
+        }
+      ],
+      "rolls": 1.0
+    }
+  ]
+}

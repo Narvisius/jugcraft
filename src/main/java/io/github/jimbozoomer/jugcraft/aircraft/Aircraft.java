@@ -52,7 +52,9 @@ public final class Aircraft extends Entity {
     public float rotation,previousRotation;
     private final float[] visualControls=new float[3], previousVisualControls=new float[3];
     public float animatedControl(int axis,float partial){return Mth.lerp(partial,previousVisualControls[axis],visualControls[axis]);}
-    public float bank(float partial){return animatedControl(1,partial)*power()*(spec.aeroplane()?18F:spec.name().equals("warship")?2F:5F);}
+    // Source models face +Z: +X is the pilot's left wing. Positive Z roll
+    // raises that wing, so left input must produce a negative roll.
+    public float bank(float partial){return -animatedControl(1,partial)*power()*(spec.aeroplane()?18F:spec.name().equals("warship")?2F:5F);}
     public Aircraft(EntityType<? extends Aircraft> type,Level level,AircraftSpec spec){
         super(type,level);this.spec=spec;inventory=new SimpleContainer(spec.sockets().size());
     }

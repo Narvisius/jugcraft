@@ -48,13 +48,15 @@ public final class NouveauStorageTerminal {
     public static final class Menu extends AbstractContainerMenu {
         public static final int GRID=36,RESULT=45,PLAYER=46;
         private final Inventory inventory;private final StorageLectern lectern;
+        private final java.util.function.BooleanSupplier remoteAccess;
         private final SimpleContainer catalog=new SimpleContainer(GRID);
         private final TransientCraftingContainer grid=new TransientCraftingContainer(this,3,3);
         private final ResultContainer result=new ResultContainer();
         private final ContainerData data=new SimpleContainerData(3+GRID*2);
         private String search="",group="",sentGroup=null;public String visibleGroup="All inventories";private int page;private long refreshed=-1;
         public Menu(int id,Inventory inventory){this(id,inventory,null);}
-        public Menu(int id,Inventory inventory,StorageLectern lectern){super(TYPE,id);this.inventory=inventory;this.lectern=lectern;
+        public Menu(int id,Inventory inventory,StorageLectern lectern){this(id,inventory,lectern,null);}
+        public Menu(int id,Inventory inventory,StorageLectern lectern,java.util.function.BooleanSupplier remoteAccess){super(TYPE,id);this.inventory=inventory;this.lectern=lectern;this.remoteAccess=remoteAccess;
             for(int i=0;i<GRID;i++)addSlot(new Slot(catalog,i,18+i%9*18,50+i/9*18){public boolean mayPlace(ItemStack s){return false;}public boolean mayPickup(Player p){return false;}});
             for(int i=0;i<9;i++)addSlot(new Slot(grid,i,222+i%3*18,72+i/3*18));
             addSlot(new ResultSlot(inventory.player,grid,result,0,294,90){public boolean mayPickup(Player p){return stillValid(p);}});
@@ -65,10 +67,10 @@ public final class NouveauStorageTerminal {
         public int count(int i){return (data.get(3+i*2)&65535)|((data.get(4+i*2)&65535)<<16);}
         private List<Ref> references(){
             if(!(inventory.player instanceof ServerPlayer p)||!stillValid(p))return List.of();
-            var root=lectern.root(p);if(root==null)return List.of();Set<Container> containers=Collections.newSetFromMap(new IdentityHashMap<>());var ordered=new ArrayList<Container>();var controllers=new IdentityHashMap<Container,NouveauWorkshop>();
+            var root=remoteAccess==null?lectern.root(p):lectern.remoteRoot(p);if(root==null)return List.of();Set<Container> containers=Collections.newSetFromMap(new IdentityHashMap<>());var ordered=new ArrayList<Container>();var controllers=new IdentityHashMap<Container,NouveauWorkshop>();
             for(int i=0;i<root.links().size()&&i<root.capacity();i++){
-                var c=root.linkedContainer(p,i);if(c==null)continue;if(containers.add(c))ordered.add(c);
-                if(c instanceof NouveauWorkshop b&&b.kind().equals("repository_controller"))for(var child:b.connectedRepositories())if(child.permitted(p)&&containers.add(child)){ordered.add(child);controllers.put(child,b);}
+                var c=remoteAccess==null?root.linkedContainer(p,i):root.remoteContainer(p,i);if(c==null)continue;if(containers.add(c))ordered.add(c);
+                if(c instanceof NouveauWorkshop b&&b.kind().equals("repository_controller"))for(var child:b.connectedRepositories())if((remoteAccess==null?child.permitted(p):child.belongs(p.getUUID())&&child.getLevel() instanceof net.minecraft.server.level.ServerLevel remote&&remote.hasChunkAt(child.getBlockPos())&&io.github.jimbozoomer.jugcraft.concordance.Authority.mayChange(remote,p,child.getBlockPos()))&&containers.add(child)){ordered.add(child);controllers.put(child,b);}
                 if(ordered.size()>=128)break;
             }
             var refs=new ArrayList<Ref>();for(var c:ordered.stream().limit(128).toList())for(int i=0;i<Math.min(54,c.getContainerSize());i++)refs.add(new Ref(c,i,controllers.get(c)));return refs;
@@ -100,7 +102,7 @@ public final class NouveauStorageTerminal {
         }
         @Override public void clicked(int slot,int button,ContainerInput input,Player p){
             if(!stillValid(p))return;
-            if(slot>=0&&slot<54){
+            if(slot>=0&&slot<GRID){
                 if(!(p instanceof ServerPlayer server)||!RateGate.allow(server,"nouveau_storage_transfer",1))return;
                 if(input==ContainerInput.QUICK_MOVE){quickMoveStack(p,slot);return;}
                 if(input!=ContainerInput.PICKUP||button<0||button>1)return;
@@ -111,11 +113,10 @@ public final class NouveauStorageTerminal {
         }
         @Override public boolean canTakeItemForPickAll(ItemStack stack,Slot slot){return slot.container!=catalog&&slot.container!=result&&super.canTakeItemForPickAll(stack,slot);}
         @Override public void slotsChanged(Container changed){
-            if(!(inventory.player instanceof ServerPlayer p))return;var input=grid.asCraftInput();var recipe=p.level().getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING,input,p.level()).orElse(null);
-            result.setRecipeUsed(recipe);result.setItem(0,recipe==null?ItemStack.EMPTY:recipe.value().assemble(input));broadcastChanges();
+            if(!(inventory.player instanceof ServerPlayer p))return;io.github.jimbozoomer.jugcraft.crafting.CraftingChoices.update(this,p,grid,result,null); broadcastChanges();
         }
         @Override public void broadcastChanges(){if(inventory.player instanceof ServerPlayer&&inventory.player.level().getGameTime()-refreshed>=10)refresh();super.broadcastChanges();}
-        @Override public boolean stillValid(Player p){return p==inventory.player&&p.isAlive()&&!p.isSpectator()&&(!(p instanceof ServerPlayer sp)||lectern!=null&&!lectern.isRemoved()&&p.level().getBlockEntity(lectern.getBlockPos())==lectern&&p.distanceToSqr(Vec3.atCenterOf(lectern.getBlockPos()))<=64&&lectern.mayUse(sp));}
+        @Override public boolean stillValid(Player p){return p==inventory.player&&p.isAlive()&&!p.isSpectator()&&(!(p instanceof ServerPlayer sp)||lectern!=null&&!lectern.isRemoved()&&(remoteAccess!=null?remoteAccess.getAsBoolean()&&lectern.mayUseRemote(sp):p.level().getBlockEntity(lectern.getBlockPos())==lectern&&p.distanceToSqr(Vec3.atCenterOf(lectern.getBlockPos()))<=64&&lectern.mayUse(sp)));}
         @Override public boolean clickMenuButton(Player p,int button){if(!(p instanceof ServerPlayer server)||!stillValid(p)||!getCarried().isEmpty()||!RateGate.allow(server,"nouveau_storage_page",3))return false;
             if(button==0)page--;else if(button==1)page++;else if(button==2){for(int i=0;i<36;i++){var stack=inventory.getItem(i);if(!stack.isEmpty())deposit(stack);}inventory.setChanged();}else if(button==3){var groups=groups();group=groups.get(Math.floorMod(groups.indexOf(group)+1,groups.size()));page=0;}else return false;refresh();broadcastFullState();return true;
         }

@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "artifacts:item/lucky_scarf"
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "artifacts:item/lucky_scarf_broken"
+    },
+    "property": "artifacts:needs_repair"
+  }
+}

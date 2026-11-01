@@ -16,7 +16,7 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import java.util.function.Consumer;
 
-public final class NouveauItem extends Item {
+public class NouveauItem extends Item {
     public enum Kind { CHARM, WAND, STARBUNCLE }
     private final Kind kind;
     public NouveauItem(Properties properties,Kind kind){super(properties);this.kind=kind;}

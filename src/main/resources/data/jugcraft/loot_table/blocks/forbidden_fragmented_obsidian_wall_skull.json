@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:forbidden_fragmented_obsidian_skull",
+          "modifier": [
+            {
+              "source": "block_entity",
+              "include": [
+                "jugcraft:arcane_skull_ticks"
+              ],
+              "type": "minecraft:copy_components"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -16,7 +16,7 @@ public abstract class HowitzerPilotRendererMixin {
 	@Inject(method = "shouldRender", at = @At("HEAD"), cancellable = true)
 	private void jugcraft$hideEnclosedPilot(Entity entity, Frustum frustum, double x, double y, double z, float partialTick,
 			CallbackInfoReturnable<Boolean> info) {
-		if (entity instanceof Player && (entity.getVehicle() instanceof HowitzerWalker || entity.getVehicle() instanceof io.github.jimbozoomer.jugcraft.menagerie.CavernSubmarine submarine && submarine.hidesPilot())
+		if (entity instanceof Player && (entity.getVehicle() instanceof HowitzerWalker || entity.getVehicle() instanceof io.github.jimbozoomer.jugcraft.menagerie.OwnerCannonSeat || entity.getVehicle() instanceof io.github.jimbozoomer.jugcraft.menagerie.CavernSubmarine submarine && submarine.hidesPilot())
                 && entity.getVehicle().getFirstPassenger() == entity) {
 			info.setReturnValue(false);
 		}

@@ -1,0 +1,29 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "minecraft:has_component",
+    "component": "minecraft:potion_contents",
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "jugcraft:newest/supps/item/bamboo_spikes_tipped",
+      "tints": [
+        {
+          "type": "minecraft:constant",
+          "value": -1
+        },
+        {
+          "type": "minecraft:potion",
+          "default": 3694022
+        },
+        {
+          "type": "minecraft:potion",
+          "default": 3694022
+        }
+      ]
+    },
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "jugcraft:newest/supps/item/bamboo_spikes"
+    }
+  }
+}

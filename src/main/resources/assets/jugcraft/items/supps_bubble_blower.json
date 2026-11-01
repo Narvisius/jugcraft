@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "minecraft:using_item",
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "jugcraft:newest/supps/item/bubble_blower_using"
+    },
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "jugcraft:newest/supps/item/bubble_blower"
+    }
+  }
+}

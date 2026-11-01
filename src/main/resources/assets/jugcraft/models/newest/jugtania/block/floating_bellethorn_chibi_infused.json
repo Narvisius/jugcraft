@@ -1,0 +1,453 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "jugcraft:newest/jugtania/block/bellethorn_chibi",
+    "island_0": "jugcraft:newest/jugtania/block/infused_grass_side",
+    "island_1": "jugcraft:newest/jugtania/block/infused_grass_side",
+    "island_2": "jugcraft:newest/jugtania/block/infused_grass_side",
+    "island_3": "jugcraft:newest/jugtania/block/infused_grass_side",
+    "island_4": "jugcraft:newest/jugtania/block/infused_grass_top",
+    "island_5": "block/dirt",
+    "island_6": "block/dirt",
+    "island_7": "block/dirt",
+    "island_8": "block/dirt",
+    "island_9": "block/dirt",
+    "island_10": "block/dirt",
+    "island_11": "block/dirt",
+    "island_12": "block/dirt",
+    "island_13": "block/dirt",
+    "island_14": "block/dirt",
+    "island_15": "block/dirt",
+    "island_16": "block/dirt",
+    "island_17": "block/dirt",
+    "island_18": "block/dirt",
+    "island_19": "block/dirt",
+    "island_20": "block/dirt",
+    "island_21": "block/dirt",
+    "island_22": "block/dirt",
+    "island_23": "block/dirt",
+    "island_24": "block/dirt",
+    "island_25": "block/dirt",
+    "flower_26": "jugcraft:newest/jugtania/block/bellethorn_chibi",
+    "flower_27": "jugcraft:newest/jugtania/block/bellethorn_chibi",
+    "flower_28": "jugcraft:newest/jugtania/block/bellethorn_chibi",
+    "flower_29": "jugcraft:newest/jugtania/block/bellethorn_chibi"
+  },
+  "elements": [
+    {
+      "name": "Platform",
+      "from": [
+        4.0,
+        6.0,
+        4.0
+      ],
+      "to": [
+        12.0,
+        9.0,
+        12.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#island_0",
+          "uv": [
+            0.0,
+            0.0,
+            8.0,
+            3.0
+          ]
+        },
+        "east": {
+          "texture": "#island_1",
+          "uv": [
+            3.0,
+            0.0,
+            11.0,
+            3.0
+          ]
+        },
+        "south": {
+          "texture": "#island_2",
+          "uv": [
+            5.0,
+            0.0,
+            13.0,
+            3.0
+          ]
+        },
+        "west": {
+          "texture": "#island_3",
+          "uv": [
+            8.0,
+            0.0,
+            16.0,
+            3.0
+          ]
+        },
+        "up": {
+          "texture": "#island_4",
+          "uv": [
+            4.0,
+            4.0,
+            12.0,
+            12.0
+          ]
+        },
+        "down": {
+          "texture": "#island_5",
+          "uv": [
+            4.0,
+            4.0,
+            12.0,
+            12.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "Chunk1",
+      "from": [
+        7.0,
+        4.5,
+        7.0
+      ],
+      "to": [
+        10.0,
+        6.5,
+        11.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#island_6",
+          "uv": [
+            10.0,
+            10.0,
+            13.0,
+            12.0
+          ]
+        },
+        "east": {
+          "texture": "#island_7",
+          "uv": [
+            4.0,
+            10.0,
+            8.0,
+            12.0
+          ]
+        },
+        "south": {
+          "texture": "#island_8",
+          "uv": [
+            1.0,
+            3.0,
+            4.0,
+            5.0
+          ]
+        },
+        "west": {
+          "texture": "#island_9",
+          "uv": [
+            11.0,
+            11.0,
+            15.0,
+            13.0
+          ]
+        },
+        "down": {
+          "texture": "#island_10",
+          "uv": [
+            0.0,
+            0.0,
+            3.0,
+            4.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "Chunk2",
+      "from": [
+        5.0,
+        4.0,
+        7.0
+      ],
+      "to": [
+        8.0,
+        6.0,
+        10.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#island_11",
+          "uv": [
+            10.0,
+            3.0,
+            13.0,
+            5.0
+          ]
+        },
+        "east": {
+          "texture": "#island_12",
+          "uv": [
+            4.0,
+            11.0,
+            7.0,
+            13.0
+          ]
+        },
+        "south": {
+          "texture": "#island_13",
+          "uv": [
+            8.0,
+            6.0,
+            11.0,
+            8.0
+          ]
+        },
+        "west": {
+          "texture": "#island_14",
+          "uv": [
+            13.0,
+            2.0,
+            16.0,
+            4.0
+          ]
+        },
+        "down": {
+          "texture": "#island_15",
+          "uv": [
+            0.0,
+            0.0,
+            3.0,
+            3.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "Chunk3",
+      "from": [
+        6.0,
+        5.0,
+        5.0
+      ],
+      "to": [
+        11.0,
+        7.0,
+        8.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#island_16",
+          "uv": [
+            0.0,
+            0.0,
+            5.0,
+            2.0
+          ]
+        },
+        "east": {
+          "texture": "#island_17",
+          "uv": [
+            0.0,
+            0.0,
+            3.0,
+            2.0
+          ]
+        },
+        "south": {
+          "texture": "#island_18",
+          "uv": [
+            0.0,
+            0.0,
+            5.0,
+            2.0
+          ]
+        },
+        "west": {
+          "texture": "#island_19",
+          "uv": [
+            0.0,
+            0.0,
+            3.0,
+            2.0
+          ]
+        },
+        "down": {
+          "texture": "#island_20",
+          "uv": [
+            0.0,
+            0.0,
+            5.0,
+            3.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "Chunk4",
+      "from": [
+        7.0,
+        3.5,
+        6.0
+      ],
+      "to": [
+        9.0,
+        5.5,
+        8.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#island_21",
+          "uv": [
+            0.0,
+            0.0,
+            2.0,
+            2.0
+          ]
+        },
+        "east": {
+          "texture": "#island_22",
+          "uv": [
+            0.0,
+            0.0,
+            2.0,
+            2.0
+          ]
+        },
+        "south": {
+          "texture": "#island_23",
+          "uv": [
+            0.0,
+            0.0,
+            2.0,
+            2.0
+          ]
+        },
+        "west": {
+          "texture": "#island_24",
+          "uv": [
+            5.0,
+            5.0,
+            7.0,
+            7.0
+          ]
+        },
+        "down": {
+          "texture": "#island_25",
+          "uv": [
+            0.0,
+            0.0,
+            2.0,
+            2.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        4.4,
+        7.2,
+        8.0
+      ],
+      "to": [
+        11.6,
+        15.2,
+        8.0
+      ],
+      "rotation": {
+        "origin": [
+          8.0,
+          11.2,
+          8.0
+        ],
+        "axis": "y",
+        "angle": 45,
+        "rescale": true
+      },
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#flower_26"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#flower_27"
+        }
+      }
+    },
+    {
+      "from": [
+        8.0,
+        7.2,
+        4.4
+      ],
+      "to": [
+        8.0,
+        15.2,
+        11.6
+      ],
+      "rotation": {
+        "origin": [
+          8.0,
+          11.2,
+          8.0
+        ],
+        "axis": "y",
+        "angle": 45,
+        "rescale": true
+      },
+      "shade": false,
+      "faces": {
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#flower_28"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#flower_29"
+        }
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.75,
+        0.75,
+        0.75
+      ]
+    }
+  }
+}

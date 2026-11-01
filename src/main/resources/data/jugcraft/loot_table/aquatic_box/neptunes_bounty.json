@@ -1,0 +1,104 @@
+{
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "jugcraft:aquatic_box/neptunes_bounty_junk",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:aquatic_neptunium_ingot",
+          "weight": 2,
+          "modifier": [
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 4
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:aquatic_neptunium_axe",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:aquatic_neptunium_pickaxe",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:aquatic_neptunium_shovel",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:aquatic_neptunium_hoe",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:aquatic_neptunium_sword",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:aquatic_neptunium_helmet",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:aquatic_neptunium_chestplate",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:aquatic_neptunium_leggings",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:aquatic_neptunium_boots",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:aquatic_neptunium_fishing_rod",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:aquatic_neptunium_fillet_knife",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:aquatic_neptunium_bow",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "jugcraft:aquatic_box/neptunes_bounty_junk",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

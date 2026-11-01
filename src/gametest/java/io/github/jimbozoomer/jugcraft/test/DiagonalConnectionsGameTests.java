@@ -229,8 +229,8 @@ public class DiagonalConnectionsGameTests {
 		Block copperBars = BuiltInRegistries.BLOCK.getValue(Identifier.withDefaultNamespace("copper_bars"));
 		Block redPane = BuiltInRegistries.BLOCK.getValue(Identifier.withDefaultNamespace("red_stained_glass_pane"));
 		Object[][] pairs = {
-				{Blocks.OAK_FENCE, Blocks.SPRUCE_FENCE, true}, {Blocks.OAK_FENCE, aspen, true}, {Blocks.OAK_FENCE, Blocks.NETHER_BRICK_FENCE, false},
-				{cemetery, cemetery, true}, {cemetery, Blocks.OAK_FENCE, false}, {Blocks.GLASS_PANE, Blocks.IRON_BARS, true},
+				{Blocks.OAK_FENCE, Blocks.SPRUCE_FENCE, true}, {Blocks.OAK_FENCE, aspen, true}, {Blocks.OAK_FENCE, Blocks.NETHER_BRICK_FENCE, true},
+				{cemetery, cemetery, true}, {cemetery, Blocks.OAK_FENCE, true}, {Blocks.GLASS_PANE, Blocks.IRON_BARS, true},
 				{redPane, copperBars, true}, {Blocks.IRON_BARS, Blocks.OAK_FENCE, false},
 				{Blocks.BAMBOO_FENCE, Blocks.BAMBOO_FENCE, true}, {vanilla("cobblestone_wall"), vanilla("mossy_stone_brick_wall"), true},
 				{vanilla("tuff_brick_wall"), vanilla("tuff_brick_wall"), true}, {vanilla("cobblestone_wall"), Blocks.IRON_BARS, false},
@@ -504,6 +504,14 @@ public class DiagonalConnectionsGameTests {
 		int tagged = 0, eligible = 0, walls = 0;
 		for (Block block : BuiltInRegistries.BLOCK) {
 			BlockState state = block.defaultBlockState();
+            var id=BuiltInRegistries.BLOCK.getKey(block);String name=id.getPath();
+            // These supplied complete-junction/stacked meshes have explicit
+            // cardinal presentation limits; every other native family is audited.
+            if(id.getNamespace().equals("jugcraft")&&name.startsWith("fenceworks_")&&
+                    (name.endsWith("_wired_fence")||name.endsWith("_cheval_de_frise")||name.endsWith("_grass_topped_wall")||name.endsWith("_metal_fence"))){
+                helper.assertFalse(state.is(DiagonalConnections.TAG),"Authored compound/stacked fence retains cardinal meshes: "+id);
+                continue;
+            }
 			boolean crossing = block instanceof FenceBlock || block instanceof IronBarsBlock;
 			if (crossing || block instanceof WallBlock) {
 				eligible++;

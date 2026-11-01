@@ -1,0 +1,57 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+	  "mcwdoors:print_chevron",
+	  
+	  "mcwdoors:poplar_bark_glass_door",
+	  "mcwdoors:poplar_barn_door",
+	  "mcwdoors:poplar_barn_glass_door",
+	  "mcwdoors:poplar_beach_door",
+	  "mcwdoors:poplar_classic_door",
+	  "mcwdoors:poplar_cottage_door",
+	  "mcwdoors:poplar_four_panel_door",
+	  "mcwdoors:poplar_glass_door",
+	  "mcwdoors:poplar_japanese_door",
+	  "mcwdoors:poplar_japanese2_door",
+	  "mcwdoors:poplar_modern_door",
+	  "mcwdoors:poplar_mystic_door",
+	  "mcwdoors:poplar_nether_door",
+	  "mcwdoors:poplar_paper_door",
+	  "mcwdoors:poplar_stable_door",
+	  "mcwdoors:poplar_stable_head_door",
+	  "mcwdoors:poplar_swamp_door",
+	  "mcwdoors:poplar_western_door",
+	  "mcwdoors:poplar_waffle_door",
+	  "mcwdoors:poplar_whispering_door",
+	  "mcwdoors:poplar_tropical_door",
+	  "mcwdoors:poplar_bamboo_door"
+    ]
+  },
+  "criteria": {
+    "has_wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:poplar_log"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": ["mcwdoors:print_chevron"]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wood",
+      "has_the_recipe"
+    ]
+  ]
+}

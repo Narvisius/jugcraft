@@ -1,0 +1,23 @@
+{
+  "name": "jugcraft:ribbits_decor",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "jugcraft:ribbits_decor/lamp_post",
+        "processors": "jugcraft:ribbits_main",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "feature": "jugcraft:ribbits_veg_patch",
+        "projection": "rigid",
+        "element_type": "minecraft:feature_pool_element"
+      }
+    }
+  ]
+}

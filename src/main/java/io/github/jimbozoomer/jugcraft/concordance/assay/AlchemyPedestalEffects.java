@@ -31,10 +31,12 @@ public final class AlchemyPedestalEffects {
     private static boolean pay(AlchemyMachinesBlockEntity be,int amount){if(be.essence()<amount)return false;be.setEssence(be.essence()-amount);return true;}
     private static boolean visible(ServerPlayer p,BlockPos from,Vec3 to){return p.level().clip(new ClipContext(Vec3.atCenterOf(from).add(0,.5,0),to,ClipContext.Block.COLLIDER,ClipContext.Fluid.NONE,p)).getType()==HitResult.Type.MISS;}
     private static boolean pickup(AlchemyMachinesBlockEntity be,ServerPlayer p){
+        if(io.github.jimbozoomer.jugcraft.botany.BotanicalFields.magnetBlocked(p.level(),Vec3.atCenterOf(be.getBlockPos())))return false;
         var level=p.level();var center=Vec3.atCenterOf(be.getBlockPos());var drops=new ArrayList<ItemEntity>();
         level.getEntities(EntityTypeTest.forClass(ItemEntity.class),new AABB(be.getBlockPos()).inflate(be.range()),e->e.isAlive(),drops,24);
         int moved=0;
         for(var drop:drops){
+            if(io.github.jimbozoomer.jugcraft.botany.BotanicalFields.magnetBlocked(drop))continue;
             if(moved==4||be.essence()<1)break;UUID reserved=((AlchemicalItemAccess)drop).jugcraft$pickupTarget();
             if(drop.hasPickUpDelay()||reserved!=null&&!reserved.equals(p.getUUID())||drop.getOwner()!=null&&!drop.getOwner().getUUID().equals(p.getUUID())
                     ||drop.position().distanceToSqr(center)>be.range()*be.range()||!Authority.mayChange(level,p,drop.blockPosition())||!visible(p,be.getBlockPos(),drop.position()))continue;

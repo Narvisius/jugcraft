@@ -1,0 +1,78 @@
+{
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "entries": [
+      {
+        "threshold": 1,
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:newest/jugtania/item/brew_vial_1",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": 16777215
+            },
+            {
+              "type": "minecraft:custom_model_data",
+              "index": 0,
+              "default": 16777215
+            }
+          ]
+        }
+      },
+      {
+        "threshold": 2,
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:newest/jugtania/item/brew_vial_2",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": 16777215
+            },
+            {
+              "type": "minecraft:custom_model_data",
+              "index": 0,
+              "default": 16777215
+            }
+          ]
+        }
+      },
+      {
+        "threshold": 3,
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:newest/jugtania/item/brew_vial_3",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": 16777215
+            },
+            {
+              "type": "minecraft:custom_model_data",
+              "index": 0,
+              "default": 16777215
+            }
+          ]
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "jugcraft:newest/jugtania/item/brew_vial",
+      "tints": [
+        {
+          "type": "minecraft:constant",
+          "value": 16777215
+        },
+        {
+          "type": "minecraft:custom_model_data",
+          "index": 0,
+          "default": 16777215
+        }
+      ]
+    }
+  }
+}

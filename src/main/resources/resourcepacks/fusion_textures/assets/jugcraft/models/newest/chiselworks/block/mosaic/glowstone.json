@@ -1,0 +1,12 @@
+{
+  "loader": "fusion:model",
+  "type": "connecting",
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "jugcraft:block/newest_connected/mosaic/glowstone",
+    "particle": "jugcraft:newest/chiselworks/block/mosaic/glowstone"
+  },
+  "connections": {
+    "type": "is_same_block"
+  }
+}

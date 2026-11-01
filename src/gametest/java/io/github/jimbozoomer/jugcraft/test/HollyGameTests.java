@@ -128,7 +128,7 @@ public class HollyGameTests {
 		for(boolean clipped:List.of(false,true)) for(var season:SeasonalLeavesBlock.Foliage.values()) {
 			var state=block("holly_leaves").defaultBlockState().setValue(HollyLeavesBlock.CLIPPED,clipped).setValue(SeasonalLeavesBlock.SEASON,season);
 			for(var tool:List.of(silk,new ItemStack(Items.SHEARS))) { var drops=Block.getDrops(state,level,AT,null,null,tool); helper.assertTrue(drops.size()==1 && drops.getFirst().is(block("holly_leaves").asItem()),"Shears/Silk duplicate sprigs"); }
-			int saplings=0; for(int i=0;i<512;i++) for(var drop:Block.getDrops(state,level,AT,null)) { helper.assertTrue(drop.is(Items.STICK)||drop.is(block("holly_sapling").asItem()),"Unexpected sprig on break"); if(drop.is(block("holly_sapling").asItem())) saplings++; }
+			int saplings=0; for(int i=0;i<512;i++) for(var drop:Block.getDrops(state,level,AT,null)) { helper.assertTrue((drop.is(Items.STICK) || drop.is(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.parse("jugcraft:twigworks_twig"))))||drop.is(block("holly_sapling").asItem()),"Unexpected sprig on break"); if(drop.is(block("holly_sapling").asItem())) saplings++; }
 			helper.assertTrue(saplings>0,"Sapling unavailable");
 		}
 		var sprig=JugcraftAgriculture.item("holly_sprig"); PineWoodGameTests.craft(helper,block("holly_wreath").asItem(),1,3,3,sprig,sprig,sprig,sprig,Items.STRING,sprig,sprig,sprig,sprig);

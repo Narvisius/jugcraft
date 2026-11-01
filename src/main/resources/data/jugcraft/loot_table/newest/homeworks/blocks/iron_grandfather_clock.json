@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:homeworks_iron_grandfather_clock",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "jugcraft:homeworks_iron_grandfather_clock",
+            "state": {
+              "part": "bottom"
+            }
+          }
+        }
+      ],
+      "rolls": 1.0,
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
+    }
+  ]
+}

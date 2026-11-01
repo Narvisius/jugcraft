@@ -26,7 +26,7 @@ public final class NouveauPortals {
         TYPE=Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE,Jugcraft.id("nouveau_portal"),FabricBlockEntityTypeBuilder.create(Portal::new,NouveauCatalog.block("portal")).build());
         ServerTickEvents.END_SERVER_TICK.register(server->{if(!JugNouveau.enabled()||server.getTickCount()%20!=0)return;for(var p:server.getPlayerList().getPlayers()){
             int budget=4;for(var item:p.level().getEntitiesOfClass(ItemEntity.class,p.getBoundingBox().inflate(16),e->e.isAlive()&&e.getItem().has(NouveauUtilities.DESTINATION))){
-                if(budget--<=0)break;if(item.getOwner()!=p||!item.getItem().is(NouveauCatalog.item("warp_scroll")))continue;
+                if(budget--<=0)break;if(item.getOwner()!=p||!item.getItem().is(NouveauCatalog.item("warp_scroll"))&&!item.getItem().is(io.github.jimbozoomer.jugcraft.nouveau.additions.ArsAdditionRituals.EXPLORATION_SCROLL))continue;
                 if(create(p,item.blockPosition(),item.getItem().get(NouveauUtilities.DESTINATION))){item.getItem().shrink(1);if(item.getItem().isEmpty())item.discard();}
             }
         }});

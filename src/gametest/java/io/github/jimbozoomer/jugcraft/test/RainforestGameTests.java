@@ -164,7 +164,7 @@ public class RainforestGameTests {
             String leaves=tree.equals("tree_fern")?"tree_fern_fronds":"rubber_leaves";
             int young=0;
             for(int i=0;i<512;i++) for(var drop:Block.getDrops(block(leaves).defaultBlockState(),h.getLevel(),h.absolutePos(new BlockPos(2,2,2)),null)) {
-                h.assertTrue(drop.is(block(tree+"_sapling").asItem()) || (tree.equals("rubber_tree") && drop.is(Items.STICK)),"Wrong leaf loot");
+                h.assertTrue(drop.is(block(tree+"_sapling").asItem()) || (tree.equals("rubber_tree") && (drop.is(Items.STICK) || drop.is(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.parse("jugcraft:twigworks_twig"))))),"Wrong leaf loot");
                 if(drop.is(block(tree+"_sapling").asItem())) young++;
             }
             h.assertTrue(young>0,"No renewable saplings " + tree);

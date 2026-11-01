@@ -45,6 +45,7 @@ public final class EncyclopediaClient {
 	private static List<EncyclopediaPayload.Page> server = List.of();
 	private static List<Component> notices = List.of();
 	private static int sequence;
+    private static String pendingLesson = "";
 	/** The block named in the last request opened from the game, if any. */
 	private static Optional<BlockPos> looking = Optional.empty();
 	/** Whether the next answer should turn to the Inspect page (the encyclopedia was opened looking at a block). */
@@ -56,6 +57,10 @@ public final class EncyclopediaClient {
 	}
 
 	static void register() {
+		ClientPlayNetworking.registerGlobalReceiver(io.github.jimbozoomer.jugcraft.guide.encyclopedia.MentorOpenPayload.TYPE, (payload, context) -> {
+            if (!io.github.jimbozoomer.jugcraft.guide.encyclopedia.StarterGuides.IDS.contains(payload.page())&&!java.util.Set.of("botanical","botanical_flowers").contains(payload.page())) return;
+            openLesson(context.client(), payload.page());
+        });
 		ClientPlayNetworking.registerGlobalReceiver(EncyclopediaPayload.TYPE, (payload, context) -> received(context.client(), payload));
 		// The encyclopedia belongs to the world it came from (forgotten on the client thread, at its next tick).
 		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> left = true);
@@ -82,12 +87,20 @@ public final class EncyclopediaClient {
 
 	/** Opens the encyclopedia and asks the server for it; {@code back} says where Back and Esc lead. */
 	public static void open(Minecraft client, EncyclopediaScreen.Back back) {
+		pendingLesson = "";
 		looking = back.inventory() ? Optional.empty() : looked(client);
 		inspect = looking.isPresent();
 		request();
 		local(client);
 		client.gui.setScreen(new EncyclopediaScreen(back));
 	}
+
+    public static void openLesson(Minecraft client, String page) {
+        looking = Optional.empty(); inspect = false; pendingLesson = page;
+        local(client);
+        client.gui.setScreen(new EncyclopediaScreen(EncyclopediaScreen.Back.GAME));
+        request();
+    }
 
 	/** The inventory's scroll button: closes the inventory as Esc does, then opens the encyclopedia. */
 	public static void openFromInventory(Minecraft client) {
@@ -137,6 +150,12 @@ public final class EncyclopediaClient {
 			case EncyclopediaPayload.Link.CODEX -> CodexLinks.open(client, link.target());
 			case EncyclopediaPayload.Link.COMPOSER -> ComposerClient.open(client, from);
 			case EncyclopediaPayload.Link.JOURNAL -> JournalClient.open(client);
+            case EncyclopediaPayload.Link.ROUTE -> {
+                if (link.target().equals("technology") || link.target().equals("magic")) {
+                    var screen = new EncyclopediaRoutesScreen(from);
+                    client.gui.setScreen(screen); screen.showRoute(link.target().equals("technology") ? 0 : 1);
+                }
+            }
 			case EncyclopediaPayload.Link.PAGE -> {
 				from.showPage(link.target());
 			}
@@ -169,6 +188,9 @@ public final class EncyclopediaClient {
 			inspect = false;
 			if (NAVIGATOR.go(INSPECT) && client.gui.screen() instanceof EncyclopediaScreen screen) screen.showPage(INSPECT);
 		}
+        if (!pendingLesson.isEmpty() && payload.sequence() == sequence && client.gui.screen() instanceof EncyclopediaScreen screen) {
+            String target = pendingLesson; pendingLesson = ""; screen.showPage(target);
+        }
 		changed();
 	}
 
@@ -183,6 +205,7 @@ public final class EncyclopediaClient {
 	}
 
 	private static void reset() {
+		pendingLesson = "";
 		NAVIGATOR.reset();
 		server = List.of();
 		notices = List.of();

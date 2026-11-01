@@ -1,0 +1,57 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+     "mcwwindows:warped_stem_window",
+	 "mcwwindows:warped_stem_window2",
+	 "mcwwindows:warped_stem_four_window",
+	 "mcwwindows:stripped_warped_stem_window",
+	 "mcwwindows:stripped_warped_stem_window2",
+	 "mcwwindows:stripped_warped_stem_four_window",
+	 "mcwwindows:warped_planks_window",
+	 "mcwwindows:warped_planks_window2",
+	 "mcwwindows:warped_planks_four_window",
+	 "mcwwindows:warped_pane_window",
+	 "mcwwindows:stripped_warped_pane_window",
+	 "mcwwindows:warped_plank_pane_window"
+    ]
+  },
+  "criteria": {
+    "has_wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:warped_stem"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": "mcwwindows:window_base"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wood",
+      "has_the_recipe"
+    ]
+  ]
+}
+
+
+
+
+
+
+
+
+
+
+
+

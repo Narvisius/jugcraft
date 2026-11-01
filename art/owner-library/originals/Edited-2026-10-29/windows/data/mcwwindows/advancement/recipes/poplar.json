@@ -1,0 +1,57 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+     "mcwwindows:poplar_window",
+	 "mcwwindows:poplar_window2",
+	 "mcwwindows:poplar_four_window",
+	 "mcwwindows:stripped_poplar_log_window",
+	 "mcwwindows:stripped_poplar_log_window2",
+	 "mcwwindows:stripped_poplar_log_four_window",
+	 "mcwwindows:poplar_plank_window",
+	 "mcwwindows:poplar_plank_window2",
+	 "mcwwindows:poplar_plank_four_window",
+	 "mcwwindows:poplar_pane_window",
+	 "mcwwindows:stripped_poplar_pane_window",
+	 "mcwwindows:poplar_plank_pane_window"
+    ]
+  },
+  "criteria": {
+    "has_wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:poplar_log"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": "mcwwindows:window_base"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wood",
+      "has_the_recipe"
+    ]
+  ]
+}
+
+
+
+
+
+
+
+
+
+
+
+

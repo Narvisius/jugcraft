@@ -86,10 +86,17 @@ public class EncyclopediaScreen extends Screen {
         paperButton("home", bookLeft + 16, footer, Math.min(94, pageWidth), 18, ui("contents"), "", () -> showContents());
         paperButton("done", bookLeft + bookWidth - 37, bookTop + 14, 17, 17, Component.literal("×"), "", () -> onClose());
         if (home) { initHome(); body = null; return; }
+        if (EncyclopediaClient.navigator().canGoBack()) paperButton("previous", bookLeft + 114, footer,
+                Math.max(35, pageWidth - 100), 18, Component.translatable("encyclopedia.jugcraft.previous"), "", () -> {
+            if (EncyclopediaClient.navigator().back()) { section = 0; scroll = 0; body = null; dirty = true; }
+        });
         paperButton("refresh", left, footer, (pageWidth - 4) / 2, 18, ui("refresh"), "", EncyclopediaClient::request);
         paperButton("exact", left + (pageWidth - 4) / 2 + 3, footer, (pageWidth - 4) / 2, 18,
             ui(ConcordanceClientOptions.exactValues() ? "less" : "details"), "", this::toggleExact);
         int bodyTop = bookTop + 60;
+        if (!emptyPage.isEmpty() && EncyclopediaClient.navigator().pages().stream().anyMatch(p -> p.id().equals(emptyPage))) {
+            EncyclopediaClient.navigator().go(emptyPage); emptyPage = "";
+        }
         String current = page();
         if (body != null && current.equals(laidOut)) scroll = body.scrollAmount();
         else if (!current.equals(laidOut)) { scroll = 0; section = 0; }
@@ -140,23 +147,35 @@ public class EncyclopediaScreen extends Screen {
     }
 
     private void initHome() {
-        contents = null;
-        String[] ids = {"technology", "magic", "discover", "spellcraft", "expedition", "keys"};
-        String[] icons = {"jugcraft:steel_ingot", "jugcraft:initiate_wand", "minecraft:lantern", "minecraft:amethyst_shard", "minecraft:bone", "minecraft:compass"};
-        int row = Math.min(40, (bookHeight - 80) / ids.length);
-        for (int i = 0; i < ids.length; i++) {
-            String id = ids[i];
+        contents = addRenderableWidget(new ComposerScroll(minecraft, left, bookTop + 123, pageWidth + 4,
+                Math.max(30, bookHeight - 162), this::focused));
+        int y = 0;
+        for (int i = 0; i < 2; i++) {
             int route = i;
-            Component subtitle = ui("book." + id + ".hint");
-            BookArt.Tab tab = new BookArt.Tab(left, bookTop + 43 + i * row, pageWidth, row - 2,
-                ui("book." + id), subtitle, icons[i], false, false, unused -> {
-                    if (route < 2) { EncyclopediaRoutesScreen guide = new EncyclopediaRoutesScreen(this); minecraft.gui.setScreen(guide); guide.showRoute(route); }
-                    else if (EncyclopediaClient.navigator().pages().stream().anyMatch(p -> p.id().equals(id))) showPage(id);
-                    else { emptyPage = id; home = false; body = null; dirty = true; }
-                });
+            String id = i == 0 ? "technology" : "magic";
+            var tab = new BookArt.Tab(left, bookTop + 43 + i * 39, pageWidth - 7, 36, ui("book." + id), ui("book." + id + ".hint"),
+                    i == 0 ? "jugcraft:steel_ingot" : "jugcraft:initiate_wand", false, false, unused -> {
+                var guide = new EncyclopediaRoutesScreen(this); minecraft.gui.setScreen(guide); guide.showRoute(route);
+            });
             addRenderableWidget(keyed("chapter:" + id, tab));
         }
-
+        // Every delivered guide is reachable; additions cannot silently disappear behind a fixed six-card home.
+        for (var page : EncyclopediaClient.navigator().pages()) {
+            String id = page.id();
+            String icon = switch(id) {
+                case "technology_start", "jimta_network" -> "jugcraft:coal_generator";
+                case "magic_start", "discover", "spellcraft", "nouveau" -> "jugcraft:initiate_wand";
+                case "alchemy_start" -> "jugcraft:philosophers_stone";
+                case "botanical", "botanical_flowers" -> "jugcraft:jugtania_pure_daisy";
+                case "expedition", "menagerie", "beasts" -> "minecraft:bone";
+                case "mentors" -> "minecraft:bell";
+                default -> "minecraft:book";
+            };
+            var tab = new BookArt.Tab(left, 0, pageWidth - 7, 26, page.title(), Component.empty(), icon,
+                    false, false, unused -> showPage(id));
+            contents.add(keyed("chapter:" + id, tab), y); y += 28;
+        }
+        contents.arrange(0);
     }
 
     /** Headings and progression steps become topics; only the selected topic's detail is laid out. */
@@ -326,7 +345,10 @@ public class EncyclopediaScreen extends Screen {
 	private void turnTo(String page) {
 		home = false;
         turnedAt = net.minecraft.util.Util.getMillis();
-		if (EncyclopediaClient.navigator().go(page)) {
+		if (EncyclopediaClient.navigator().pages().stream().noneMatch(p -> p.id().equals(page))) {
+            emptyPage = page; dirty = true; return;
+        }
+        if (EncyclopediaClient.navigator().go(page)) {
 			focus = "tab:" + page;
 			dirty = true;
 		}

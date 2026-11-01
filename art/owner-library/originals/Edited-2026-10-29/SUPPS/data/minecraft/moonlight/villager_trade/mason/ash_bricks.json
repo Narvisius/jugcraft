@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "flag": "ash",
+      "condition": "supplementaries:flag"
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "supplementaries:flag",
+      "flag": "ash"
+    }
+  ],
+  "type": "simple",
+  "max_trades": 16,
+  "price": {
+    "id": "minecraft:emerald",
+    "count": 1
+  },
+  "offer": {
+    "id": "supplementaries:ash_brick",
+    "count": 10
+  },
+  "level": 1
+}

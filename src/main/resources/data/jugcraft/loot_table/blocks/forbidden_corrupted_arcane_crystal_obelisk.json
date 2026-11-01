@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:forbidden_corrupted_arcane_crystal_obelisk",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "jugcraft:forbidden_corrupted_arcane_crystal_obelisk",
+            "state": {
+              "part": "lower"
+            }
+          }
+        }
+      ],
+      "rolls": 1.0,
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
+    }
+  ],
+  "random_sequence": "jugcraft:forbidden_blocks/corrupted_arcane_crystal_obelisk"
+}

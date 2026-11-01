@@ -54,6 +54,7 @@ public class EncyclopediaRoutesClientGameTests implements FabricClientGameTest {
 			context.clickScreenButton("ui.jugcraft.book.progression");
             context.waitTicks(2);
             context.getInput().pressKey(InputConstants.KEY_DOWN);
+            context.getInput().pressKey(InputConstants.KEY_DOWN);
 			context.getInput().pressKey(InputConstants.KEY_RETURN);
 			context.waitForScreen(HandbookScreen.class);
 			context.waitTicks(2);
@@ -81,7 +82,7 @@ public class EncyclopediaRoutesClientGameTests implements FabricClientGameTest {
                 context.takeScreenshot("jugcraft_encyclopedia_magic");
 			context.clickScreenButton("ui.jugcraft.book.progression");
             context.waitTicks(2);
-            context.getInput().pressKey(InputConstants.KEY_DOWN);
+            for (int i = 0; i < 6; i++) context.getInput().pressKey(InputConstants.KEY_DOWN);
 			context.getInput().pressKey(InputConstants.KEY_RETURN);
 			context.waitForScreen(BookParentNodeScreen.class);
 			context.waitTicks(5);

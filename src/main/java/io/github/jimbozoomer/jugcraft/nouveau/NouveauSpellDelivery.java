@@ -43,6 +43,7 @@ public final class NouveauSpellDelivery {
     private static boolean room(UUID owner,int count){return ACTIVE.size()+count<=TOTAL&&ACTIVE.stream().filter(f->f.player.equals(owner)).count()+count<=PER_PLAYER;}
     private static int flag(Plan plan,String key){return plan.root().steps().stream().mapToInt(s->s.effect().augment(key)).max().orElse(0);}
     public static ComposedSpells.@Nullable Outcome start(ServerLevel l,ServerPlayer p,Plan plan,Cause cause,Ledger ledger){
+        var recalled=io.github.jimbozoomer.jugcraft.nouveau.additions.ArsReliquary.deliver(l,p,plan,cause,ledger);if(recalled!=null)return recalled;
         String mode=plan.root().delivery().replace("jugcraft:nouveau_","");
         if(mode.equals("underfoot")){var at=p.blockPosition().below();return ComposedSpells.performAt(l,p,plan,cause,ledger,new ComposedSpells.Impact(Vec3.atCenterOf(at),null,at.above(),at,p.position()));}
         if(!Set.of("projectile","orbit","rune","linger","wall").contains(mode))return null;
@@ -70,6 +71,7 @@ public final class NouveauSpellDelivery {
     }
     /** Device deliveries stay anchored to their muzzle/target, never to the remote owner's body. */
     public static boolean device(ServerLevel l,ServerPlayer p,Plan plan,Cause cause,Ledger ledger,ComposedSpells.Impact impact,Vec3 direction){
+        var recalled=io.github.jimbozoomer.jugcraft.nouveau.additions.ArsReliquary.deliver(l,p,plan,cause,ledger);if(recalled!=null)return recalled.applied();
         String mode=plan.root().delivery().replace("jugcraft:nouveau_","");
         if(mode.equals("projectile"))return launch(l,p,plan,cause,ledger,impact,direction);
         if(mode.equals("self")||mode.equals("underfoot")){

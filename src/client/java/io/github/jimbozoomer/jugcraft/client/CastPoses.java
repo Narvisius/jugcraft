@@ -59,7 +59,7 @@ public final class CastPoses {
 	/** Whether a gun (posed by GunPose) or an arm (posed by ArmsMotion) in the main hand owns this player's arms. */
 	public static boolean armsOwned(Player player) {
 		Item main = player.getMainHandItem().getItem();
-		return main instanceof GunItem || main instanceof ArmItem;
+		return main instanceof GunItem || main instanceof ArmItem || main instanceof io.github.jimbozoomer.jugcraft.wilds.WildWroughtEquipment.Axe;
 	}
 
 	/** Whether the Concordance's own gestures are left off this player: their arms are owned, or an arm is in the off hand. */

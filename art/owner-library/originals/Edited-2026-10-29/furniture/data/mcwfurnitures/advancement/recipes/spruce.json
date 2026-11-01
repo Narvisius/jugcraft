@@ -1,0 +1,93 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+	  "mcwfurnitures:cabinet_door",
+	  "mcwfurnitures:cabinet_drawer",
+	
+      "mcwfurnitures:spruce_wardrobe",
+	  "mcwfurnitures:spruce_modern_wardrobe",
+	  "mcwfurnitures:spruce_double_wardrobe",
+	  "mcwfurnitures:spruce_bookshelf_cupboard",
+	  "mcwfurnitures:spruce_bookshelf",
+	  "mcwfurnitures:spruce_drawer",
+	  "mcwfurnitures:spruce_double_drawer",
+	  "mcwfurnitures:spruce_bookshelf_drawer",
+	  "mcwfurnitures:spruce_lower_bookshelf_drawer",
+	  "mcwfurnitures:spruce_large_drawer",
+	  "mcwfurnitures:spruce_lower_triple_drawer",
+	  "mcwfurnitures:spruce_triple_drawer",
+	  "mcwfurnitures:spruce_desk",
+	  "mcwfurnitures:spruce_covered_desk",
+	  "mcwfurnitures:spruce_modern_desk",
+	  "mcwfurnitures:spruce_table",
+	  "mcwfurnitures:spruce_end_table",
+	  "mcwfurnitures:spruce_coffee_table",
+	  "mcwfurnitures:spruce_glass_table",
+	  "mcwfurnitures:spruce_chair",
+	  "mcwfurnitures:spruce_modern_chair",
+	  "mcwfurnitures:spruce_striped_chair",
+	  "mcwfurnitures:spruce_stool_chair",
+	  "mcwfurnitures:spruce_counter",
+	  "mcwfurnitures:spruce_drawer_counter",
+	  "mcwfurnitures:spruce_double_drawer_counter",
+	  "mcwfurnitures:spruce_cupboard_counter",
+	  
+	  "mcwfurnitures:stripped_spruce_wardrobe",
+	  "mcwfurnitures:stripped_spruce_modern_wardrobe",
+	  "mcwfurnitures:stripped_spruce_double_wardrobe",
+	  "mcwfurnitures:stripped_spruce_bookshelf_cupboard",
+	  "mcwfurnitures:stripped_spruce_bookshelf",
+	  "mcwfurnitures:stripped_spruce_drawer",
+	  "mcwfurnitures:stripped_spruce_double_drawer",
+	  "mcwfurnitures:stripped_spruce_bookshelf_drawer",
+	  "mcwfurnitures:stripped_spruce_lower_bookshelf_drawer",
+	  "mcwfurnitures:stripped_spruce_large_drawer",
+	  "mcwfurnitures:stripped_spruce_lower_triple_drawer",
+	  "mcwfurnitures:stripped_spruce_triple_drawer",
+	  "mcwfurnitures:stripped_spruce_desk",
+	  "mcwfurnitures:stripped_spruce_covered_desk",
+	  "mcwfurnitures:stripped_spruce_modern_desk",
+	  "mcwfurnitures:stripped_spruce_table",
+	  "mcwfurnitures:stripped_spruce_end_table",
+	  "mcwfurnitures:stripped_spruce_coffee_table",
+	  "mcwfurnitures:stripped_spruce_glass_table",
+	  "mcwfurnitures:stripped_spruce_chair",
+	  "mcwfurnitures:stripped_spruce_modern_chair",
+	  "mcwfurnitures:stripped_spruce_striped_chair",
+	  "mcwfurnitures:stripped_spruce_stool_chair",
+	  "mcwfurnitures:stripped_spruce_counter",
+	  "mcwfurnitures:stripped_spruce_drawer_counter",
+	  "mcwfurnitures:stripped_spruce_double_drawer_counter",
+	  "mcwfurnitures:stripped_spruce_cupboard_counter",
+	  "mcwfurnitures:spruce_kitchen_sink",
+      "mcwfurnitures:stripped_spruce_kitchen_sink"
+    ]
+  },
+  "criteria": {
+    "has_wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:spruce_log"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": "mcwfurnitures:spruce_drawer"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wood",
+      "has_the_recipe"
+    ]
+  ]
+}

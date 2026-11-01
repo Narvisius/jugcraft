@@ -80,7 +80,7 @@ public final class NouveauExpansionGameTests {
                 h.assertTrue(result.ok(),"Operation must form a usable spell: "+key+" "+result.problems());
             }
         }
-        h.assertTrue(count==85,"All 85 supplied glyphs are covered");h.succeed();
+        h.assertTrue(count==88,"All 85 base glyphs and three Ars Additions glyphs are covered");h.succeed();
     }
 
     @GameTest(maxTicks=100)
@@ -97,7 +97,7 @@ public final class NouveauExpansionGameTests {
     }
 
     @GameTest(maxTicks=100)
-    public void allFiftyPresetTomesCompileAndReserveActualCraftingInputs(GameTestHelper h){
+    public void allSuppliedPresetTomesCompileAndReserveActualCraftingInputs(GameTestHelper h){
         var p=player(h);int count=0;
         for(var recipe:NouveauRecipes.forStation("scribes_table"))if(recipe.operation().equals("caster_tome")){
             var plan=NouveauTomes.plan(recipe);h.assertTrue(plan!=null,"Supplied preset must compile: "+recipe.id());
@@ -105,7 +105,7 @@ public final class NouveauExpansionGameTests {
             var match=NouveauRecipes.match(recipe,List.of(new ItemStack(Items.BOOK),new ItemStack(Items.PAPER),new ItemStack(NouveauCatalog.item("source_gem"))),p);
             h.assertTrue(match!=null&&recipe.id().equals(match.output().get(NouveauGear.TOME)),"Each preset is independently craftable and identifiable");
             h.assertTrue(match.after().stream().allMatch(ItemStack::isEmpty),"One real copy of each required input is reserved");count++;
-        }h.assertTrue(count==50,"All fifty supplied tomes are available");h.succeed();
+        }h.assertTrue(count==62,"All fifty base and twelve supplied additional tomes are available");h.succeed();
     }
     @GameTest(maxTicks=20)
     public void experienceGemStacksConserveEachGemsStoredPoints(GameTestHelper h){

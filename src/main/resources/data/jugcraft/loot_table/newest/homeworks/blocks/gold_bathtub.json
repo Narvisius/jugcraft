@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:homeworks_gold_bathtub",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "jugcraft:homeworks_gold_bathtub",
+            "state": {
+              "part": "front"
+            }
+          }
+        }
+      ],
+      "rolls": 1.0,
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
+    }
+  ]
+}

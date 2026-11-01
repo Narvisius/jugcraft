@@ -30,8 +30,10 @@ public final class NouveauVoiding {
         if(!JugNouveau.enabled()||!p.isAlive()||p.isSpectator()||entity.hasPickUpDelay()||!entity.isAlive()||!Authority.mayChange(p.level(),p,entity.blockPosition()))return false;
         var target=((AlchemicalItemAccess)entity).jugcraft$pickupTarget();if(target!=null&&!target.equals(p.getUUID()))return false;
         var value=entity.getItem();String id=BuiltInRegistries.ITEM.getKey(value.getItem()).toString();
-        for(int i=0;i<9;i++){var jar=p.getInventory().getItem(i);if(!jar.is(NouveauCatalog.item("void_jar"))||!jar.getOrDefault(ACTIVE,false)||!jar.getOrDefault(NouveauUtilities.FILTER,List.of()).contains(id))continue;
-            int count=value.getCount();p.take(entity,count);entity.discard();p.setAttached(JugcraftConcordance.FOCUS,ConcordanceProgress.focus(p).gain(ConcordanceProgress.now(p.level()),Math.clamp((count+15)/16,1,4)));return true;
+        for(int i=0;i<9;i++){var jar=p.getInventory().getItem(i);boolean xp=io.github.jimbozoomer.jugcraft.nouveau.additions.ArsAdditionUtilities.isXpJar(jar);if((!xp&&!jar.is(NouveauCatalog.item("void_jar")))||!jar.getOrDefault(ACTIVE,false)||!jar.getOrDefault(NouveauUtilities.FILTER,List.of()).contains(id))continue;
+            int count=value.getCount();p.take(entity,count);entity.discard();
+            if(xp)io.github.jimbozoomer.jugcraft.nouveau.additions.ArsAdditionUtilities.consume(p,jar,count);
+            else p.setAttached(JugcraftConcordance.FOCUS,ConcordanceProgress.focus(p).gain(ConcordanceProgress.now(p.level()),Math.clamp((count+15)/16,1,4)));return true;
         }return false;
     }
 }

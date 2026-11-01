@@ -1,0 +1,28 @@
+{
+  "parent": "lootr:10loot",
+  "criteria": {
+    "opened_25": {
+      "conditions": {
+        "score": 25
+      },
+      "trigger": "lootr:score"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "lootr.advancements.25loot.description"
+    },
+    "icon": {
+      "id": "minecraft:emerald_block"
+    },
+    "title": {
+      "translate": "lootr.advancements.25loot.title"
+    }
+  },
+  "requirements": [
+    [
+      "opened_25"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

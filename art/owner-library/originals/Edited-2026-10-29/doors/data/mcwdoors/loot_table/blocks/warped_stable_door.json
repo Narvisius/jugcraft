@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "mcwdoors:warped_stable_door",
+            "state": {
+              "half": "lower"
+            }
+          },
+          "name": "mcwdoors:warped_stable_door"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "mcwdoors:blocks/warped_stable_door"
+}

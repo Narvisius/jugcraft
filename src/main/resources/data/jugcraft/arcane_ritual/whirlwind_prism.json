@@ -1,0 +1,40 @@
+{
+  "enhancers": "jugcraft:forbidden_elementarium",
+  "essences": {
+    "aureal": 1000,
+    "blood": 2250,
+    "souls": 3
+  },
+  "forge_tier": 3,
+  "inputs": [
+    {
+      "amount": 1,
+      "ingredient": {
+        "item": "jugcraft:forbidden_bat_wing"
+      }
+    },
+    {
+      "amount": 2,
+      "ingredient": {
+        "item": "minecraft:feather"
+      }
+    },
+    {
+      "amount": 3,
+      "ingredient": {
+        "item": "minecraft:phantom_membrane"
+      }
+    }
+  ],
+  "magic_circle": "jugcraft:forbidden_create_item",
+  "main_ingredient": {
+    "item": "minecraft:white_wool"
+  },
+  "result": {
+    "type": "jugcraft:forbidden_create_item",
+    "result_item": {
+      "count": 1,
+      "id": "jugcraft:forbidden_whirlwind_prism"
+    }
+  }
+}

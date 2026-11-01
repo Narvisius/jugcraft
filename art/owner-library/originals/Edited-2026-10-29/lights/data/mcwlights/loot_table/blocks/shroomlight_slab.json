@@ -1,0 +1,26 @@
+{
+  "type" : "minecraft:block",
+  "pools" : [ {
+    "bonus_rolls" : 0.0,
+    "entries" : [ {
+      "type" : "minecraft:item",
+      "functions" : [ {
+        "add" : false,
+        "conditions" : [ {
+          "block" : "mcwlights:shroomlight_slab",
+          "condition" : "minecraft:block_state_property",
+          "properties" : {
+            "type" : "double"
+          }
+        } ],
+        "count" : 2.0,
+        "function" : "minecraft:set_count"
+      }, {
+        "function" : "minecraft:explosion_decay"
+      } ],
+      "name" : "mcwlights:shroomlight_slab"
+    } ],
+    "rolls" : 1.0
+  } ],
+  "random_sequence" : "mcwlights:blocks/shroomlight_slab"
+}

@@ -109,7 +109,7 @@ ITEMS = {
                     "tooltip": f"Worn in the Spell Focus slot: Preserve holds a crucible's heat {FOCUS_HOLD_TICKS // 20} seconds "
                                f"instead of {_HOLD}. It gives no Spell Power and holds no Focus."},
     "water_bangle": {"name": "Water Bangle",
-                     "tooltip": f"Worn in a Bracelet slot: once you understand Rimekeeping, whenever you have gone "
+                     "tooltip": f"Worn in a Bracelet slot: whenever you have gone "
                                 f"{BANGLE_RECHARGE_TICKS // 20} seconds without a Brace it braces you for {BANGLE_BRACE_TICKS // 20} "
                                 "seconds (the next push moves you half as far). A second bangle adds nothing."},
     "nereids_hood": {"name": "Nereid's Hood"}, "nereids_tunic": {"name": "Nereid's Tunic"},
@@ -195,7 +195,7 @@ def codex():
             ("crafting_recipe", "Focus of Water",
              f"The lesser focus set with diamonds: Preserve holds {FOCUS_HOLD_TICKS // 20} seconds.", rid("water_focus")),
             ("crafting_recipe", "Water Bangle",
-             f"Once you understand Rimekeeping, it braces you whenever you have gone {BANGLE_RECHARGE_TICKS // 20} seconds "
+             f"While worn, it braces you whenever you have gone {BANGLE_RECHARGE_TICKS // 20} seconds "
              f"without a Brace: for {BANGLE_BRACE_TICKS // 20} seconds the next push moves you half as far. It is not your "
              "cast, so it teaches Stratawrighting nothing; a second bangle adds nothing.", rid("water_bangle")),
             ("text", "Three Water Sets",

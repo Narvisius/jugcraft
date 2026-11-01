@@ -1,0 +1,53 @@
+{
+  "enhancers": "jugcraft:forbidden_divine_pact",
+  "essences": {
+    "aureal": 1500,
+    "blood": 375,
+    "experience": 220,
+    "souls": 20
+  },
+  "forge_tier": 4,
+  "inputs": [
+    {
+      "amount": 1,
+      "ingredient": {
+        "item": "jugcraft:forbidden_soul"
+      }
+    },
+    {
+      "amount": 1,
+      "ingredient": {
+        "item": "jugcraft:forbidden_corrupt_soul"
+      }
+    },
+    {
+      "amount": 1,
+      "ingredient": {
+        "item": "jugcraft:forbidden_enchanted_soul"
+      }
+    },
+    {
+      "amount": 2,
+      "ingredient": {
+        "item": "minecraft:amethyst_shard"
+      }
+    },
+    {
+      "amount": 3,
+      "ingredient": {
+        "item": "jugcraft:forbidden_ender_pearl_fragment"
+      }
+    }
+  ],
+  "magic_circle": "jugcraft:forbidden_create_item",
+  "main_ingredient": {
+    "item": "minecraft:quartz"
+  },
+  "result": {
+    "type": "jugcraft:forbidden_create_item",
+    "result_item": {
+      "count": 1,
+      "id": "jugcraft:forbidden_soul_binding_crystal"
+    }
+  }
+}

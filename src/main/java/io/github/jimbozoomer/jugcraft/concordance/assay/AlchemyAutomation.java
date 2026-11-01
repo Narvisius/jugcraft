@@ -115,10 +115,12 @@ public final class AlchemyAutomation {
         for(int i=first;i<end;i++)if(c.getItem(i).isEmpty())return i;return -1;
     }
     public static boolean gather(ServerPlayer p,Container c,Vec3 center){
+        if(io.github.jimbozoomer.jugcraft.botany.BotanicalFields.magnetBlocked(p.level(),center))return false;
         var drops=new ArrayList<ItemEntity>();
         p.level().getEntities(EntityTypeTest.forClass(ItemEntity.class),new AABB(center,center).inflate(6),e->e.isAlive(),drops,24);
         int moved=0;
         for(var drop:drops){
+            if(io.github.jimbozoomer.jugcraft.botany.BotanicalFields.magnetBlocked(drop))continue;
             if(moved==4)break;var stack=drop.getItem();UUID target=((AlchemicalItemAccess)drop).jugcraft$pickupTarget();
             if(drop.hasPickUpDelay()||target!=null&&!target.equals(p.getUUID())||drop.getOwner()!=null&&!drop.getOwner().getUUID().equals(p.getUUID())
                     ||!Authority.mayChange(p.level(),p,drop.blockPosition())||drop.position().distanceToSqr(center)>36

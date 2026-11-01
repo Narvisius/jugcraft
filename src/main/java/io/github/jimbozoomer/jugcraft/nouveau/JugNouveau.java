@@ -61,6 +61,7 @@ public final class JugNouveau {
         WAND=item("dominion_wand",p->new NouveauItem(p.stacksTo(1),NouveauItem.Kind.WAND));
         STARBUNCLE_CHARM=item("starbuncle_charm",p->new NouveauItem(p,NouveauItem.Kind.STARBUNCLE));
         NouveauCatalog.load();NouveauPresentation.load();
+        io.github.jimbozoomer.jugcraft.nouveau.additions.ArsAdditionWorkshops.extendCatalog();
         NouveauStatuses.register();NouveauResources.register();NouveauNature.register();NouveauUtilities.register();NouveauContainment.register();NouveauPotions.register();
         NouveauDecor.register();NouveauChest.register();NouveauAnimatedDecor.register();NouveauBoat.register();NouveauGear.register();NouveauWorkshops.register();NouveauScrying.register();NouveauPlanarium.register();NouveauSignals.register();NouveauRepositories.register();NouveauStorageTerminal.register();
         net.fabricmc.fabric.api.object.builder.v1.world.poi.PoiHelper.register(Jugcraft.id("nouveau_arcane_poi"),1,1,NouveauCatalog.block("scribes_table").getStateDefinition().getPossibleStates());

@@ -27,7 +27,7 @@ import org.jspecify.annotations.Nullable;
 public class EncyclopediaRoutesScreen extends Screen {
     private static final Identifier CONTENT = Jugcraft.id("encyclopedia/en_us.json");
     private static final Identifier CODEX = Jugcraft.id("arcane_concordance");
-    private record Link(String type, int chapter, int page, @Nullable Identifier category) {
+    private record Link(String type, int chapter, int page, @Nullable Identifier category, String target) {
         Component describe() { return Component.translatable("screen.jugcraft.routes.opens." + type); }
     }
     private record Entry(String title, String text, String icon, Link link) { }
@@ -83,7 +83,8 @@ public class EncyclopediaRoutesScreen extends Screen {
 			String type = link.get("type").getAsString();
 			Link target = new Link(type, link.has("chapter") ? link.get("chapter").getAsInt() : 0,
 					link.has("page") ? link.get("page").getAsInt() : 0,
-					link.has("category") ? Identifier.parse(link.get("category").getAsString()) : null);
+					link.has("category") ? Identifier.parse(link.get("category").getAsString()) : null,
+                        link.has("target") ? link.get("target").getAsString() : "");
 			entries.add(new Entry(data.get("title").getAsString(), data.has("text") ? data.get("text").getAsString() : "",
 					data.get("icon").getAsString(), target));
 		}
@@ -92,7 +93,7 @@ public class EncyclopediaRoutesScreen extends Screen {
 
     private static Component ui(String key, Object... args) { return ComposerScreen.ui(key, args); }
     public int route() { return route; }
-    public void showRoute(int index) { route = index; cursor = -1; milestones = false; directory = null; rebuildWidgets(); }
+    public void showRoute(int index) { route = index; cursor = 0; milestones = true; directory = null; rebuildWidgets(); }
     private void showHome() { route = -1; directory = null; rebuildWidgets(); }
     @Override public void onClose() { minecraft.gui.setScreen(parent); }
     @Override public boolean isPauseScreen() { return false; }
@@ -166,6 +167,10 @@ public class EncyclopediaRoutesScreen extends Screen {
 			case "handbook" -> minecraft.gui.setScreen(new HandbookScreen(link.chapter(), link.page(), this));
 			case "codex" -> BookGuiManager.get().openBook(BookAddress.of(CODEX, link.category(), null, -1));
 			case "journal" -> JournalClient.open(minecraft);
+            case "page" -> {
+                EncyclopediaScreen book = parent instanceof EncyclopediaScreen existing ? existing : new EncyclopediaScreen(EncyclopediaScreen.Back.GAME);
+                minecraft.gui.setScreen(book); book.showPage(link.target());
+            }
 			default -> Jugcraft.LOGGER.warn("Encyclopedia link of unknown type {}", link.type());
 		}
 	}

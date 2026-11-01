@@ -56,6 +56,7 @@ public final class Jugcraft implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		JugcraftConfig.load();
+        io.github.jimbozoomer.jugcraft.crafting.CraftingChoices.register();
 		io.github.jimbozoomer.jugcraft.world.design.WorldDesigner.register();
 		// Registration always happens, even when a feature is disabled, so saved
 		// blocks and items are never lost. The config only controls acquisition.
@@ -184,6 +185,33 @@ public final class Jugcraft implements ModInitializer {
 		io.github.jimbozoomer.jugcraft.academy.JugcraftAcademy.register();
 		io.github.jimbozoomer.jugcraft.nouveau.JugNouveau.register();
 		io.github.jimbozoomer.jugcraft.menagerie.Menagerie.register();
+		io.github.jimbozoomer.jugcraft.building.OwnerBuildingCollection.register();
+		io.github.jimbozoomer.jugcraft.enchanting.OwnerEnchantments.register();
+		io.github.jimbozoomer.jugcraft.loot.OwnerLoot.register();
+		io.github.jimbozoomer.jugcraft.backpack.OwnerBackpacks.register();
+        net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents.JOIN.register((handler,sender,server)->{
+            if(JugcraftConfig.option("chat.system_delivery"))handler.player.sendSystemMessage(net.minecraft.network.chat.Component.literal("This server delivers player chat as server messages. Messages are still visible to the server and its moderation tools."));
+        });
+        io.github.jimbozoomer.jugcraft.wings.OwnerWings.register();
+        io.github.jimbozoomer.jugcraft.menagerie.FloweryMooblooms.register();
+        io.github.jimbozoomer.jugcraft.aquatic.OwnerAquaculture.register();
+        io.github.jimbozoomer.jugcraft.ribbits.OwnerRibbits.register();
+        io.github.jimbozoomer.jugcraft.menagerie.OwnerSupplementaries.register();
+        io.github.jimbozoomer.jugcraft.menagerie.OwnerAmendments.register();
+        io.github.jimbozoomer.jugcraft.botany.Jugtania.register();
+        io.github.jimbozoomer.jugcraft.arcane.ForbiddenArcane.register();
+        io.github.jimbozoomer.jugcraft.wilds.OwnerWilds.register();
+        io.github.jimbozoomer.jugcraft.nouveau.additions.ArsAdditionCharms.register();
+        io.github.jimbozoomer.jugcraft.nouveau.additions.ArsAdditionDecor.register();
+        io.github.jimbozoomer.jugcraft.nouveau.additions.ArsAdditionUtilities.register();
+        io.github.jimbozoomer.jugcraft.nouveau.additions.ArsHaversack.register();
+        io.github.jimbozoomer.jugcraft.nouveau.additions.ArsMemoryCrystal.register();
+        io.github.jimbozoomer.jugcraft.nouveau.additions.ArsWarpIndex.register();
+        io.github.jimbozoomer.jugcraft.nouveau.additions.ArsAdvancedWand.register();
+        io.github.jimbozoomer.jugcraft.nouveau.additions.ArsWarpNexus.register();
+        io.github.jimbozoomer.jugcraft.nouveau.additions.ArsReliquary.register();
+        io.github.jimbozoomer.jugcraft.nouveau.additions.ArsScribing.register();
+        io.github.jimbozoomer.jugcraft.nouveau.additions.ArsAdditionRituals.register();
 		io.github.jimbozoomer.jugcraft.jimtafacts.Jimtafacts.register();
 		io.github.jimbozoomer.jugcraft.jimtafacts.network.DigitalStorage.register();
 		io.github.jimbozoomer.jugcraft.jimtafacts.computers.WorkshopComputers.register();

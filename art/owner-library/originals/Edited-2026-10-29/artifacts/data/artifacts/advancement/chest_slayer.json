@@ -1,0 +1,36 @@
+{
+  "parent": "artifacts:amateur_archaeologist",
+  "criteria": {
+    "kill_mimic": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "artifacts:mimic"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "artifacts.advancements.chest_slayer.description"
+    },
+    "icon": {
+      "id": "artifacts:mimic_spawn_egg"
+    },
+    "title": {
+      "translate": "artifacts.advancements.chest_slayer.title"
+    }
+  },
+  "requirements": [
+    [
+      "kill_mimic"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,83 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "jugcraft:newest/fenceworks/block/pillar/mud_brick_pillar_post"
+      }
+    },
+    {
+      "when": {
+        "north": "true"
+      },
+      "apply": {
+        "model": "jugcraft:newest/fenceworks/block/pillar/mud_brick_pillar_side",
+        "uvlock": false
+      }
+    },
+    {
+      "when": {
+        "east": "true"
+      },
+      "apply": {
+        "model": "jugcraft:newest/fenceworks/block/pillar/mud_brick_pillar_side",
+        "y": 90,
+        "uvlock": false
+      }
+    },
+    {
+      "when": {
+        "south": "true"
+      },
+      "apply": {
+        "model": "jugcraft:newest/fenceworks/block/pillar/mud_brick_pillar_side",
+        "y": 180,
+        "uvlock": false
+      }
+    },
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "jugcraft:newest/fenceworks/block/pillar/mud_brick_pillar_side",
+        "y": 270,
+        "uvlock": false
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/fenceworks_mud_brick_pillar_wall"
+      },
+      "when": {
+        "north_east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/fenceworks_mud_brick_pillar_wall",
+        "y": 90
+      },
+      "when": {
+        "south_east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/fenceworks_mud_brick_pillar_wall",
+        "y": 180
+      },
+      "when": {
+        "south_west": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/fenceworks_mud_brick_pillar_wall",
+        "y": 270
+      },
+      "when": {
+        "north_west": "true"
+      }
+    }
+  ]
+}

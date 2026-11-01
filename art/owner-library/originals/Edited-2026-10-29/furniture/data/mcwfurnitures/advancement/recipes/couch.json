@@ -1,0 +1,66 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+    "mcwfurnitures:white_chaise",
+    "mcwfurnitures:light_gray_chaise",
+    "mcwfurnitures:gray_chaise",
+    "mcwfurnitures:black_chaise",
+    "mcwfurnitures:brown_chaise",
+    "mcwfurnitures:red_chaise",
+    "mcwfurnitures:orange_chaise",
+    "mcwfurnitures:yellow_chaise",
+    "mcwfurnitures:lime_chaise",
+    "mcwfurnitures:green_chaise",
+    "mcwfurnitures:cyan_chaise",
+    "mcwfurnitures:light_blue_chaise",
+    "mcwfurnitures:blue_chaise",
+    "mcwfurnitures:purple_chaise",
+    "mcwfurnitures:magenta_chaise",
+    "mcwfurnitures:pink_chaise",
+	"mcwfurnitures:white_couch",
+    "mcwfurnitures:light_gray_couch",
+    "mcwfurnitures:gray_couch",
+    "mcwfurnitures:black_couch",
+    "mcwfurnitures:brown_couch",
+    "mcwfurnitures:red_couch",
+    "mcwfurnitures:orange_couch",
+    "mcwfurnitures:yellow_couch",
+    "mcwfurnitures:lime_couch",
+    "mcwfurnitures:green_couch",
+    "mcwfurnitures:cyan_couch",
+    "mcwfurnitures:light_blue_couch",
+    "mcwfurnitures:blue_couch",
+    "mcwfurnitures:purple_couch",
+    "mcwfurnitures:magenta_couch",
+    "mcwfurnitures:pink_couch"
+
+    ]
+  },
+  "criteria": {
+    "has_wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:white_wool"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": "mcwfurnitures:red_couch"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wood",
+      "has_the_recipe"
+    ]
+  ]
+}

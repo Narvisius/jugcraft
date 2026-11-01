@@ -1,0 +1,23 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "sophisticatedcore:item_enabled",
+      "itemRegistryName": "sophisticatedbackpacks:crafting_upgrade"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "sophisticatedbackpacks:upgrade_base",
+    "C": "#c:chests",
+    "I": "#c:ingots/iron",
+    "T": "minecraft:crafting_table"
+  },
+  "pattern": [
+    " T ",
+    "IBI",
+    " C "
+  ],
+  "result": {
+    "id": "sophisticatedbackpacks:crafting_upgrade"
+  }
+}

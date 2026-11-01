@@ -1,0 +1,318 @@
+{
+  "multipart": [
+    {
+      "apply": [
+        {
+          "model": "jugcraft:newest/jugtania/block/metamorphic_forest_bricks_wall_post",
+          "weight": 2
+        },
+        {
+          "model": "jugcraft:newest/jugtania/block/metamorphic_forest_bricks_wall_post_1"
+        }
+      ],
+      "when": {
+        "up": "true"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "jugcraft:newest/jugtania/block/metamorphic_forest_bricks_wall_side",
+          "uvlock": true,
+          "weight": 2,
+          "y": 90
+        },
+        {
+          "model": "jugcraft:newest/jugtania/block/metamorphic_forest_bricks_wall_side_1",
+          "uvlock": true,
+          "y": 90
+        }
+      ],
+      "when": {
+        "east": "true",
+        "tall": "false"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "jugcraft:newest/jugtania/block/metamorphic_forest_bricks_wall_side_tall",
+          "uvlock": true,
+          "weight": 2,
+          "y": 90
+        },
+        {
+          "model": "jugcraft:newest/jugtania/block/metamorphic_forest_bricks_wall_side_tall_1",
+          "uvlock": true,
+          "y": 90
+        }
+      ],
+      "when": {
+        "east": "true",
+        "tall": "true"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "jugcraft:newest/jugtania/block/metamorphic_forest_bricks_wall_side",
+          "uvlock": true,
+          "weight": 2,
+          "y": 270
+        },
+        {
+          "model": "jugcraft:newest/jugtania/block/metamorphic_forest_bricks_wall_side_1",
+          "uvlock": true,
+          "y": 270
+        }
+      ],
+      "when": {
+        "west": "true",
+        "tall": "false"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "jugcraft:newest/jugtania/block/metamorphic_forest_bricks_wall_side_tall",
+          "uvlock": true,
+          "weight": 2,
+          "y": 270
+        },
+        {
+          "model": "jugcraft:newest/jugtania/block/metamorphic_forest_bricks_wall_side_tall_1",
+          "uvlock": true,
+          "y": 270
+        }
+      ],
+      "when": {
+        "west": "true",
+        "tall": "true"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "jugcraft:newest/jugtania/block/metamorphic_forest_bricks_wall_side",
+          "uvlock": true,
+          "weight": 2,
+          "y": 180
+        },
+        {
+          "model": "jugcraft:newest/jugtania/block/metamorphic_forest_bricks_wall_side_1",
+          "uvlock": true,
+          "y": 180
+        }
+      ],
+      "when": {
+        "south": "true",
+        "tall": "false"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "jugcraft:newest/jugtania/block/metamorphic_forest_bricks_wall_side_tall",
+          "uvlock": true,
+          "weight": 2,
+          "y": 180
+        },
+        {
+          "model": "jugcraft:newest/jugtania/block/metamorphic_forest_bricks_wall_side_tall_1",
+          "uvlock": true,
+          "y": 180
+        }
+      ],
+      "when": {
+        "south": "true",
+        "tall": "true"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "jugcraft:newest/jugtania/block/metamorphic_forest_bricks_wall_side",
+          "uvlock": true,
+          "weight": 2
+        },
+        {
+          "model": "jugcraft:newest/jugtania/block/metamorphic_forest_bricks_wall_side_1",
+          "uvlock": true
+        }
+      ],
+      "when": {
+        "north": "true",
+        "tall": "false"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "jugcraft:newest/jugtania/block/metamorphic_forest_bricks_wall_side_tall",
+          "uvlock": true,
+          "weight": 2
+        },
+        {
+          "model": "jugcraft:newest/jugtania/block/metamorphic_forest_bricks_wall_side_tall_1",
+          "uvlock": true
+        }
+      ],
+      "when": {
+        "north": "true",
+        "tall": "true"
+      }
+    },
+    {
+      "when": {
+        "north_east": "true",
+        "tall": "false"
+      },
+      "apply": [
+        {
+          "model": "jugcraft:block/diagonal/jugtania_metamorphic_forest_bricks_wall",
+          "uvlock": true,
+          "weight": 2,
+          "y": 0
+        },
+        {
+          "model": "jugcraft:block/diagonal/jugtania_metamorphic_forest_bricks_wall_variant_1",
+          "uvlock": true,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "when": {
+        "south_east": "true",
+        "tall": "false"
+      },
+      "apply": [
+        {
+          "model": "jugcraft:block/diagonal/jugtania_metamorphic_forest_bricks_wall",
+          "uvlock": true,
+          "weight": 2,
+          "y": 90
+        },
+        {
+          "model": "jugcraft:block/diagonal/jugtania_metamorphic_forest_bricks_wall_variant_1",
+          "uvlock": true,
+          "y": 90
+        }
+      ]
+    },
+    {
+      "when": {
+        "south_west": "true",
+        "tall": "false"
+      },
+      "apply": [
+        {
+          "model": "jugcraft:block/diagonal/jugtania_metamorphic_forest_bricks_wall",
+          "uvlock": true,
+          "weight": 2,
+          "y": 180
+        },
+        {
+          "model": "jugcraft:block/diagonal/jugtania_metamorphic_forest_bricks_wall_variant_1",
+          "uvlock": true,
+          "y": 180
+        }
+      ]
+    },
+    {
+      "when": {
+        "north_west": "true",
+        "tall": "false"
+      },
+      "apply": [
+        {
+          "model": "jugcraft:block/diagonal/jugtania_metamorphic_forest_bricks_wall",
+          "uvlock": true,
+          "weight": 2,
+          "y": 270
+        },
+        {
+          "model": "jugcraft:block/diagonal/jugtania_metamorphic_forest_bricks_wall_variant_1",
+          "uvlock": true,
+          "y": 270
+        }
+      ]
+    },
+    {
+      "when": {
+        "north_east": "true",
+        "tall": "true"
+      },
+      "apply": [
+        {
+          "model": "jugcraft:block/diagonal/jugtania_metamorphic_forest_bricks_wall_tall",
+          "uvlock": true,
+          "weight": 2,
+          "y": 0
+        },
+        {
+          "model": "jugcraft:block/diagonal/jugtania_metamorphic_forest_bricks_wall_tall_variant_1",
+          "uvlock": true,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "when": {
+        "south_east": "true",
+        "tall": "true"
+      },
+      "apply": [
+        {
+          "model": "jugcraft:block/diagonal/jugtania_metamorphic_forest_bricks_wall_tall",
+          "uvlock": true,
+          "weight": 2,
+          "y": 90
+        },
+        {
+          "model": "jugcraft:block/diagonal/jugtania_metamorphic_forest_bricks_wall_tall_variant_1",
+          "uvlock": true,
+          "y": 90
+        }
+      ]
+    },
+    {
+      "when": {
+        "south_west": "true",
+        "tall": "true"
+      },
+      "apply": [
+        {
+          "model": "jugcraft:block/diagonal/jugtania_metamorphic_forest_bricks_wall_tall",
+          "uvlock": true,
+          "weight": 2,
+          "y": 180
+        },
+        {
+          "model": "jugcraft:block/diagonal/jugtania_metamorphic_forest_bricks_wall_tall_variant_1",
+          "uvlock": true,
+          "y": 180
+        }
+      ]
+    },
+    {
+      "when": {
+        "north_west": "true",
+        "tall": "true"
+      },
+      "apply": [
+        {
+          "model": "jugcraft:block/diagonal/jugtania_metamorphic_forest_bricks_wall_tall",
+          "uvlock": true,
+          "weight": 2,
+          "y": 270
+        },
+        {
+          "model": "jugcraft:block/diagonal/jugtania_metamorphic_forest_bricks_wall_tall_variant_1",
+          "uvlock": true,
+          "y": 270
+        }
+      ]
+    }
+  ]
+}

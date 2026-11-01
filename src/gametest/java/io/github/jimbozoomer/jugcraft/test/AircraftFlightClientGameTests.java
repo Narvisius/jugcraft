@@ -30,7 +30,7 @@ public final class AircraftFlightClientGameTests implements FabricClientGameTest
                 c.getInput().holdKey(o->o.keyUp);c.getInput().holdKey(o->o.keyLeft);c.waitTicks(45);
                 c.runOnClient(mc->{
                     if(!(mc.player.getVehicle() instanceof Aircraft a))throw new AssertionError("Aircraft passenger sync: "+kind);
-                    if(a.power()<.1||a.animatedControl(1,1)<.5||a.bank(1)<=0)throw new AssertionError("Powered steering/animation: "+kind);
+                    if(a.power()<.1||a.animatedControl(1,1)<.5||a.bank(1)>=0)throw new AssertionError("Powered steering/animation: "+kind);
                     double distance=mc.gameRenderer.mainCamera().position().distanceTo(mc.player.getEyePosition());
                     if(distance<a.spec().cameraDistance()*.7)throw new AssertionError("F5 remains inside aircraft: "+kind+" distance="+distance);
                     try{
@@ -46,7 +46,14 @@ public final class AircraftFlightClientGameTests implements FabricClientGameTest
                     }catch(ReflectiveOperationException e){throw new AssertionError(e);}
                 });
                 c.takeScreenshot("aircraft_oct25_"+kind+"_turning");
-                c.getInput().releaseKey(o->o.keyLeft);c.getInput().releaseKey(o->o.keyUp);
+                c.getInput().releaseKey(o->o.keyLeft);
+                c.getInput().holdKey(o->o.keyRight);c.waitTicks(35);
+                c.runOnClient(mc->{
+                    var a=(Aircraft)mc.player.getVehicle();
+                    if(a.animatedControl(1,1)>-.5||a.bank(1)<=0)throw new AssertionError("Right turn must lower the right wing: "+kind);
+                });
+                c.takeScreenshot("aircraft_oct29_"+kind+"_right");
+                c.getInput().releaseKey(o->o.keyRight);c.getInput().releaseKey(o->o.keyUp);
                 c.runOnClient(mc->mc.options.setCameraType(CameraType.THIRD_PERSON_FRONT));c.waitTicks(12);
                 c.runOnClient(mc->{
                     var a=(Aircraft)mc.player.getVehicle();
@@ -57,6 +64,6 @@ public final class AircraftFlightClientGameTests implements FabricClientGameTest
             }
             server.runOnServer(s->s.getPlayerList().getPlayers().getFirst().stopRiding());
             c.runOnClient(mc->mc.options.setCameraType(CameraType.FIRST_PERSON));
-        }finally{c.getInput().releaseKey(o->o.keyLeft);c.getInput().releaseKey(o->o.keyUp);}
+        }finally{c.getInput().releaseKey(o->o.keyRight);c.getInput().releaseKey(o->o.keyLeft);c.getInput().releaseKey(o->o.keyUp);}
     }
 }

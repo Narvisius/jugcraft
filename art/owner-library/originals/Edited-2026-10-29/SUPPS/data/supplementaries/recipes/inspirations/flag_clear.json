@@ -1,0 +1,33 @@
+
+
+{
+  "type": "neoforge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "flag": "flag",
+          "condition": "supplementaries:flag"
+        },
+        {
+          "modid": "inspirations",
+          "condition": "fabric:mod_loaded"
+        }
+      ],
+      "recipe": {
+        "type": "supplementaries:cauldron_flag_clear",
+        "conditions": [
+          {
+            "prop": "recipes_module",
+            "type": "inspirations:config"
+          },
+          {
+            "prop": "cauldron_dyeing",
+            "type": "inspirations:config"
+          }
+        ]
+
+      }
+    }
+  ]
+}

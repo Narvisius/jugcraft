@@ -171,6 +171,7 @@ public class ShopMenu extends AbstractContainerMenu {
 		if (!(player instanceof ServerPlayer server) || keeper == null || !stillValid(player)) {
 			return false;
 		}
+        if (id == TownMentors.LESSON_BUTTON) return TownMentors.consult(server, keeper);
 		long now = server.level().getGameTime();
 		Long last = LAST_TRADE.get(player.getUUID());
 		if (last != null && now - last < MIN_TICKS && now >= last) {

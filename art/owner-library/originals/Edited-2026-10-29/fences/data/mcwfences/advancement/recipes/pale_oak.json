@@ -1,0 +1,31 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+	  "mcwfences:pale_oak_picket_fence",
+	  "mcwfences:pale_oak_stockade_fence",
+	  "mcwfences:pale_oak_horse_fence",
+	  "mcwfences:pale_oak_wired_fence",
+	  "mcwfences:pale_oak_highley_gate",
+	  "mcwfences:pale_oak_pyramid_gate",
+	  "mcwfences:pale_oak_curved_gate"
+    ]
+  },
+  "criteria": {
+    "has_pale_oak": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:pale_oak_log"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_pale_oak"
+    ]
+  ]
+}

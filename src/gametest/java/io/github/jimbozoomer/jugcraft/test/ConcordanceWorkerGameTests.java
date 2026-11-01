@@ -163,6 +163,7 @@ public class ConcordanceWorkerGameTests {
 	private static ServerPlayer binder(GameTestHelper helper) {
 		ServerPlayer player = TestPlayers.mock(helper);
 		player.setGameMode(GameType.SURVIVAL);
+		place(helper, player, 2.5, 2.0, 2.5);
 		return taught(player);
 	}
 
@@ -306,6 +307,8 @@ public class ConcordanceWorkerGameTests {
 	public void aFamiliarMendsByItsBond(GameTestHelper helper) {
 		ServerLevel level = helper.getLevel();
 		ServerPlayer person = binder(helper);
+		// A bound entity must spawn in this test's loaded structure, not the mock player's default origin.
+		place(helper, person, 2.5, 2.0, 2.5);
 		helper.assertTrue(BondingCharmItem.use(person, level, false).equals(InteractionResult.SUCCESS), "The charm binds a Hearthling");
 		UUID id = WorkerRoster.of(level.getServer()).familiar(person.getUUID());
 		helper.assertTrue(id != null && level.getEntity(id) instanceof HearthlingEntity, "Its person's roster holds it");

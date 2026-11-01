@@ -1,0 +1,35 @@
+{
+  "pools": [
+    {
+      "name": "life_essence",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "jugcraft:jugtania_life_essence",
+          "modifier": [
+            {
+              "count": 6,
+              "type": "set_count"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "music_disc",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "jugcraft:jugtania_record_gaia_1"
+        }
+      ],
+      "condition": {
+        "chance": 0.2,
+        "type": "random_chance"
+      }
+    }
+  ],
+  "type": "minecraft:chest"
+}

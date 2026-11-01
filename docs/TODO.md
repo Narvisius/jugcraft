@@ -1,5 +1,62 @@
 # Jugcraft TODO
 
+## PRIORITY FIXES — October 31 release follow-up
+
+Owner authorized publishing this update on October 31 with unfinished work kept visible here. This supersedes the earlier local-only publication hold; each live server restart still needs separate confirmation and a 30-second player warning.
+
+- [ ] **P1 — Cross-collection economy and catalog closure.** The October 31 pre-publication Python sweep exposed missing explicit essence values for new items, a rocking-chair conversion fixture valued at 80 essence against a 59-essence minimum bill, stale JEI station catalog/custom serializer coverage, the Encyclopedia audit's page-versus-handbook expectation, the iron-scaffold/iron-portcullis overlapping crafting bill and a survival-audit registry snapshot that does not recognize new collection IDs. Reconcile these against actual runtime registries and recipe selection; distinguish stale audit expectations from real acquisition or economy defects. Do not claim Foundation is green or broadly enable new tablet outputs before this is resolved. See the dated release preparation entry in the collection ledger.
+
+- [ ] **P1 — Original-model geometry review.** Review the 708 remaining diagnostics: 252 near-coplanar faces, 248 coplanar overlaps and 208 potentially exposed missing faces. Prioritize player-visible flickering/holes; preserve intentional open vessels and supplied designs. These are audit findings, not 708 confirmed broken models. [Detailed findings](reports/newest-original-art-oct31.json).
+- [ ] **P1 — Recover missing original files and finish their integration.** Two monastery dead-end templates; Home saddle and mangrove-zaisu geometry; two trophy skins; four cherry-waffle door variants; content for the empty Fast Paintings folder. Do not count unavailable originals as completed or silently replace their art.
+- [ ] **P1 — Owner/player visual and survival acceptance.** Check the new furniture, creatures/animations, botanical and arcane machinery, backpacks, equipment slots and crafting routes in ordinary play. Automated checks are recorded in [validation evidence](reports/newest-local-validation-oct31.json); they do not replace this acceptance.
+- [ ] **P1 — Make the expanded full-suite CI memory budget reliable.** The complete local server sweep needed a 6 GB heap; the default 4 GB run exhausted memory in large nuclear fixtures. Use bounded isolated test batches or an appropriate runner budget before claiming an unmodified CI pass.
+
+## Owned equipment access — October 29
+
+- [x] Remove lingering research gates from owned equipment; 119 server tests, 153 item/slot pairs and 11 client equip/remove paths passed locally. Not published. See [equipment access](features/equipment-access-oct29.md).
+
+## NEWEST ADDITION — October 29 local integration
+
+- October 31 validation checkpoint: the available-content implementation pass is complete, including the later household, botanical, encounter, transport and presentation follow-ups recorded in [the collection ledger](features/newest-owner-collection-oct29.md). This supersedes the earlier 80% estimate and stale family-level “uncompiled” notes. **Combined gameplay validation is complete across the full sweep and repaired follow-up; original-art review and owner acceptance remain. This is not a release-ready claim.**
+
+- [x] Preserve and hash-verify all 98,589 supplied files across 38 folders; retain original artwork, geometry, animations and notices.
+- [x] Implement the available active families and source-audited native adaptations, including late Lumisene, structure-sign and botanical machinery behavior. Exact bounds and intentionally inactive source entries are recorded in the ledger.
+- [x] Fix native registration and worldgen loading failures found in the first combined runs.
+- [x] Restore the three consumable window-frame ingredients and their original art/crafting routes; adapt loot number providers, entity predicates, legacy recipe tags and backpack dye recipes to the pinned Minecraft schemas.
+- [x] Preserve generating-flower cooldown/diet state in drops without copying workshop inventories. Add regression coverage alongside the six-tier backpack cargo-preserving dye check.
+- [x] Pass the combined 18 focused server gameplay tests (October 31, 19:08 local); common/client/test Java compiles. This is representative regression evidence, not every feature manually played.
+- [x] Pass real equip/unequip packets for all 14 populated accessory slot groups without research (October 31, disposable client).
+- [x] Pass the combined collection/accessory rendered checks after repairing hat/ statue hierarchy, missing optional candle/sink materials, CTM particles and 35 blank furniture inventory presentations (October 31, 19:51). Checked 837,276 block states and representative entity/block/item renders. No personal playtest or profile changes.
+- [x] Complete the 3,263-test server sweep (3,258 passed, five old expectations failed), repair those five expectations and pass the 58-test combined follow-up without optional integrations, including all 19 NEWEST regressions. Evidence and exact limits are in the collection ledger.
+- [x] Pass native model-reference, data/recipe, diagonal-connection and alchemy reachability audits.
+- [x] Assemble the local candidate and verify its stable archive CRC, checked implementation classes and 49,612 source-matching NEWEST/Ars Additions resources. No publication or personal launcher changes.
+- [ ] Review the **708 remaining static geometry diagnostics** against supplied source designs. Source-verified interior meshes and identity-rotation audit bugs were corrected without rewriting original art. The full static art suite is still failing; [the complete findings](reports/newest-original-art-oct31.json) remain recorded.
+- [ ] Obtain missing originals when available: two monastery dead-end templates, Home saddle/mangrove-zaisu geometry, two trophy skins, four cherry-waffle doors and content for the empty Fast Paintings folder. These are not counted as supplied completed content.
+- [ ] Owner/player visual/playability acceptance remains a priority fix above. Owner authorized publication on October 31 with these limitations; restart confirmation is still required before live deployment.
+
+## Crafting recipe conflicts — October 29 local
+
+- [x] Audit standard crafting layouts, tag intersections and mirrored/shapeless recipes against vanilla and the bundled dependencies; inventory all recipe types. Found 38 crafting-conflict pairs in this snapshot.
+- [x] Add a small server-validated output picker below conflicting crafting results in the table, inventory and ME/Jug Nouveau storage grids. Preserve normal ingredient consumption and remainders.
+- [x] Preserve chosen recipes in newly encoded ME crafting patterns; fix the magical terminal's incorrect catalog-slot click boundary.
+- [x] Complete local validation: six server tests (including all 76 outputs from 38 conflict pairs), crafting-table/inventory client flows, rendered review and repository checks passed. Keep this batch local. See [crafting output choice](features/crafting-output-choice-oct29.md).
+
+## Unified Encyclopedia and NPC mentors — October 29 local
+
+- [x] Add technology, magic and transmutation starter lessons, live server recipe grids and current-inventory checklists, with separate technology/magic directories in the shared Encyclopedia.
+- [x] Make every delivered guide reachable from the contents and remove the old 11-page truncation of newer reference pages.
+- [x] Give existing General Store, Florist and Curios residents free Ask mentor lessons; mayor opens the mentor directory. Preserve shop transactions, NPC identities and the city blueprint.
+- [x] Complete combined local server/client validation and rendered review: 28 server tests, three client test classes and a focused recipe-grid render check passed. Keep this batch local until owner approval. See [implementation and evidence](features/encyclopedia-mentors-oct29.md).
+- [ ] Future expansion: deeper per-item coverage, route graphs and optional quests/rewards; this starter batch does not claim all of those are implemented.
+
+## Outstanding player-reported visual bugs — October 29
+
+Local fixes and validation are tracked in [the October 29 follow-up](features/resource-bank-raid-fixes-oct29.md). Deployment/owner confirmation remains separate from these local checks. The local texture repair now passes runtime atlas and baked-block checks (11,818 textures; 360,887 Jimtafacts block states), and both bank directions passed on all seven aircraft. Keep the deployed-pack reports open until this patch ships and the owner confirms the result.
+
+- [ ] **Missing textures and models remain in the deployed pack.** Owner reports widespread purple-and-black missing-resource rendering, including Certus Quartz; Inscriber Engineering and Calculation Presses; paintballs; quantum entanglement content; 1k ME Item Storage Cell and other storage cells; Charged Staff; Color Applicator; Matter Cannon; Printed Silicon (reported as "print silicon"); Annihilation Core and other cores; crafting cards; Portal Frame; Blaze instruction manuals and related content. Treat these as reported display names/families until exact registry IDs are confirmed, not an exhaustive list. Inspect the supplied original models/textures and repair runtime item definitions, model/texture references and packaging as needed rather than substituting generic artwork.
+- [ ] **Audit the affected JEI pages in-game:** owner sees many missing textures on pages **105–109** and **59–61** at **1920×1080**. Record GUI scale, JEI layout/filter and exact item IDs because page positions can vary. Check the surrounding content families too, including inventory/held rendering and placed blocks where applicable; file-reference checks alone do not establish a visual fix.
+- [ ] **Aircraft banking is still reversed.** Owner confirms planes still tilt the opposite way when turning despite earlier fixes. Correct the visual roll direction and verify left/right turns from the pilot and third-person/external views across aircraft variants, including the supplied models/animations. Keep this open until actual in-game behavior is confirmed correct.
+
 ## Local cosmetic costume — October 26
 
 - [x] Implemented locally: **Tony Tony Chompa costume**, using the existing bat costume as the
@@ -117,6 +174,7 @@ See [town release scope and evidence](features/town-updater-release-oct22.md).
 
 ## City defense and performance — October 22
 
+- [ ] **Fix raid targeting and pathfinding (owner report, October 29):** raiders currently attack an arbitrary corner of the city wall where guards struggle to see or engage them. Choose reachable, intentional attack approaches; account for walls, gates and guard line of sight; add stuck-target recovery and guard repositioning so raids become visible fights rather than corner pileups. Validate ground units, mechas and aircraft against the existing city layout and player-placed obstacles. Preserve city-focused raids, protected builds and the guards' existing invulnerability.
 - [x] Implement city-only raider targeting, combat-invulnerable guard crews/walkers, six tower flak stations, 250-block mounted-weapon targeting and the usable bank Ender Chest. [Implementation](features/city-defense-and-performance.md).
 - [x] Pin compatible Lithium, FerriteCore, Krypton and ImmediatelyFast releases in the shared pack/server dependency lock.
 - [x] Add read-only Candy Cavity chunk survey and [safe refresh procedure](CANDY_CAVERN_REFRESH.md).
@@ -836,3 +894,101 @@ limits and exact results belong in features/jimtafacts-b-h-local.md.
 
 - [x] The Cursed Mirror: a gilt standing mirror that gives seven days of vanilla Bad Luck when a player breaks it, with a night-time face flicker on the client ([cursed-mirror.md](features/cursed-mirror.md)). Implemented; CI pending, not yet seen in a client.
 - [ ] Still ideas, if the owner wants them: a matched set of smaller wall mirrors, and a rare chance the face in the glass is a specific unmasked crook.
+
+
+NEWEST ADDITION local continuation: mana sparks, original-model controls/brewing,
+incense, enchanting ritual, horns/drums, automatic crafting crates and life/weather
+sensors now have local implementations. See the October 29 feature ledger for
+exact scope and limits. Entire collection still incomplete; do not publish or
+claim runtime validation. Remaining advanced botanical equipment, Corporea,
+lenses/rods, encounters and other recorded source families must be completed
+before the owner-requested combined test run.
+
+NEWEST ADDITION continuation now also includes local rod, Corporea and botanical
+accessory implementations (see newest-owner-collection-oct29.md for exact scope).
+Complete remaining supplied gameplay and original visuals before combined tests;
+none of this continuation has been compiled or launched. Preserve local-only work.
+- NEWEST ADDITION local continuation: Spectator/Monocle, 33 cosmetic attachments,
+  six Avatar rod behaviors and four Luminizers now implemented but unvalidated.
+  Full collection remains open; see the feature ledger for precise gaps. Do not
+  publish or run partial tests before the full implementation pass is finished.
+
+- NEWEST ADDITION local continuation: Red String endpoints, platforms, Tiny Potato,
+  Cacophonium, moving mana bursts/lenses, Tiny Planet, Mana Blaster and portable
+  storage/utility tools are implemented locally, unvalidated. Current botanical
+  generated count is 510 blocks / 266 nonblock items, not a completion claim.
+  Continue the explicitly listed remaining source behaviors and collection
+  families in newest-owner-collection-oct29.md before combined tests/publication.
+
+- NEWEST ADDITION: local Astrolabe/Sextant, Ivy/grave integration, vine tools,
+  chakrams, both crafting halos, Pinkinator, original bag screens, consumables,
+  Ender Air and horse conversions are implemented but unvalidated. Continue the
+  remaining full collection; see the newest-owner feature ledger. No publication.
+
+- NEWEST ADDITION local continuation: Gaia/relics, conservative Laputa lifting,
+  mana cart/pump/Fluxfield, prism, pools and botanical oddities are now wired but
+  uncompiled/untested. Finish the specifically recorded source gaps and other
+  collection families before the combined validation pass. See
+  [current implementation/limitations](features/newest-owner-collection-oct29.md).
+- NEWEST ADDITION: local arcane Clibano furnace/residues, skulls, boats, capacity
+  buckets, animated jar items and quantum injector are implemented but untested.
+  Continue the remaining source creatures/devices and recorded bucket parity
+  gaps in the feature ledger; run combined checks only after implementation.
+
+- NEWEST ADDITION October 31 local continuation: arcane souls/arrows/lift/black
+  holes/bucket remainders, owner Foliaath/Grottol/Lantern, multiblock gong and early
+  creature equipment now have native behavior, uncompiled and untested. Complete
+  the explicit visual, ownership, source-compatibility and encounter gaps recorded
+  in `features/newest-owner-collection-oct29.md`, including all broader collection
+  work. Keep local and defer combined validation until the implementation pass ends.
+
+- NEWEST ADDITION local continuation now includes Naga, Wroughtnaut and Frostmaw encounters, original rigs, chamber/spawn templates, axe/helm/crystal/disc rewards and cold mechanics. Uncompiled/unvalidated; source-parity gaps and remaining collection scope recorded in newest-owner-collection-oct29.md. Keep local; combined tests remain deferred.
+
+- NEWEST ADDITION local continuation: Bluff/fissures/stone spikes and Elokosa lunar packs, original rigs/gaits, paw effects and persistent Eclipse are implemented locally but uncompiled/untested. Finish source-parity gaps and the remaining collection families recorded in newest-owner-collection-oct29.md before the combined validation pass.
+
+- NEWEST ADDITION local continuation: Suntribe/groves, solar abilities, Sculptor
+  trial/geomancy rewards and original monastery layouts/interiors are wired but
+  uncompiled/unvalidated. Finish the exact remaining encounter, structure, visual,
+  botanical, arcane and compatibility gaps in the newest-owner feature ledger;
+  then run the combined validation. Keep local; no release or server operations.
+
+- NEWEST ADDITION October 31: local key locks, bubbles, gunpowder fuses,
+  pulley/sliding machinery, hidden-item bricks, quiver/slingshot/bombs, cave maps,
+  antique lettering, hat stand and piñata now have gameplay implementations and
+  supplied visuals. Still uncompiled/untested, with explicit source-parity gaps
+  in `features/newest-owner-collection-oct29.md`. Finish remaining registrations,
+  behavior/visual gaps and earlier collection work before combined validation;
+  do not publish or alter the owner's launcher/server.
+
+- NEWEST ADDITION local implementation now includes dispenser minecart, original
+  plunderer/cannon boats and galleon encounters, dragon banner/blast trim/disc.
+  See the October 31 galleon entry in the collection ledger. These additions are
+  uncompiled/untested; remaining collection/source-parity work and combined
+  validation are still required. Keep all work local.
+
+- NEWEST ADDITION continuation: local worn/dyed quivers, dispenser blowers,
+  carried-chest rendering, boat rocking/raft fixes, original hat-stand animation,
+  moving piñatas/rewards, antique household text and expanded slingshots are
+  implemented but unvalidated. See the October 31 equipment/attachments entry.
+  Remaining collection work and the final combined checks are still open.
+
+- NEWEST ADDITION local continuation: component-preserving drink vessels/faucets,
+  cauldron transfers, Gaia distortion, six-face cannons/preview/riders/payloads,
+  procedural/round globes, piston-carried sliding ownership, head vision/jaw bounds
+  and antique maps are implemented but uncompiled/unvalidated. See the latest
+  vessel/globe/cannon entry in the collection ledger. Complete the remaining
+  source/interaction/presentation closure before the combined test pass.
+
+- NEWEST ADDITION October 31 closure: available active families now enter combined
+  local validation after implementation. Compile common/client code; repair API,
+  resource, recipe, persistence, claims and rendering failures; run relevant
+  server/client checks, then prepare evidence for the owner's own playtest.
+  See the latest collection-ledger entry for exact native adaptations and missing
+  original input exceptions. Nothing is approved for release or live restart.
+
+- NEWEST ADDITION combined validation correction: the separate Lumisene fluid
+  registrar was a genuine missed system and now has a local native implementation
+  plus conservation/claim tests. Common/client/test compilation passes. The full
+  model-reference audit passes; actual startup found and prompted repair of seven
+  Gothic window boolean schemas. Continue runtime/visual checks and failure fixes.
+  No release, owner profile change or server action is authorized by this checkpoint.

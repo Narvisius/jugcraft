@@ -1,0 +1,113 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:supps_barnacles",
+          "modifier": [
+            {
+              "add": true,
+              "count": 1.0,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:supps_barnacles",
+                "state": {
+                  "down": "true"
+                }
+              }
+            },
+            {
+              "add": true,
+              "count": 1.0,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:supps_barnacles",
+                "state": {
+                  "up": "true"
+                }
+              }
+            },
+            {
+              "add": true,
+              "count": 1.0,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:supps_barnacles",
+                "state": {
+                  "north": "true"
+                }
+              }
+            },
+            {
+              "add": true,
+              "count": 1.0,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:supps_barnacles",
+                "state": {
+                  "south": "true"
+                }
+              }
+            },
+            {
+              "add": true,
+              "count": 1.0,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:supps_barnacles",
+                "state": {
+                  "west": "true"
+                }
+              }
+            },
+            {
+              "add": true,
+              "count": 1.0,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:supps_barnacles",
+                "state": {
+                  "east": "true"
+                }
+              }
+            },
+            {
+              "add": true,
+              "count": -1.0,
+              "type": "minecraft:set_count"
+            },
+            {
+              "type": "minecraft:explosion_decay"
+            }
+          ],
+          "condition": {
+            "predicate": {
+              "predicates": {
+                "minecraft:enchantments": [
+                  {
+                    "enchantments": "minecraft:silk_touch",
+                    "levels": {
+                      "min": 1
+                    }
+                  }
+                ]
+              }
+            },
+            "type": "minecraft:match_tool"
+          }
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "jugcraft:supps_blocks/barnacles"
+}

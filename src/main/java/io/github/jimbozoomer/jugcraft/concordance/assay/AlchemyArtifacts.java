@@ -61,7 +61,12 @@ public final class AlchemyArtifacts {
     private static final Map<ServerPlayer, Long> FLIGHT = new WeakHashMap<>();
     private static final Map<ServerPlayer, Long> EXTERNAL_FLIGHT = new WeakHashMap<>();
     /** Short paid ritual leases share the existing ability owner, so providers do not revoke one another. */
-    public static void grantRitualFlight(ServerPlayer p,int ticks){EXTERNAL_FLIGHT.put(p,p.level().getGameTime()+Math.clamp(ticks,1,100));}
+    public static void grantRitualFlight(ServerPlayer p,int ticks){
+        if(!p.isAlive()||p.isSpectator()||p.isCreative())return;
+        long until=p.level().getGameTime()+Math.clamp(ticks,1,100);EXTERNAL_FLIGHT.merge(p,until,Math::max);
+        if(!p.getAbilities().mayfly||FLIGHT.containsKey(p)){FLIGHT.put(p,Math.max(FLIGHT.getOrDefault(p,0L),until));p.setAttached(FLIGHT_LEASE,true);if(!p.getAbilities().mayfly){p.getAbilities().mayfly=true;p.onUpdateAbilities();}}
+    }
+    private static boolean externalFlight(ServerPlayer p){return EXTERNAL_FLIGHT.getOrDefault(p,0L)>p.level().getGameTime();}
     private static AttachmentType<Boolean> FLIGHT_LEASE;
     private static final TagKey<Block> ORES = TagKey.create(Registries.BLOCK, net.minecraft.resources.Identifier.parse("c:ores"));
     private AlchemyArtifacts() {}
@@ -81,7 +86,7 @@ public final class AlchemyArtifacts {
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(e->ITEMS.values().forEach(e::accept));
         ServerTickEvents.END_SERVER_TICK.register(server->{for(var p:server.getPlayerList().getPlayers()) {
             if(p.tickCount%20==0)pulse(p);
-            if(FLIGHT.containsKey(p)&&(!AlchemicalGear.ready(p)||!flightEquipped(p)||p.level().getGameTime()>FLIGHT.get(p)))releaseFlight(p);
+            if(FLIGHT.containsKey(p)&&(!p.isAlive()||!externalFlight(p)&&(!AlchemicalGear.ready(p)||!flightEquipped(p)||p.level().getGameTime()>FLIGHT.get(p))))releaseFlight(p);
         }});
         ServerPlayConnectionEvents.DISCONNECT.register((handler,server)->releaseFlight(handler.getPlayer()));
         ServerPlayConnectionEvents.JOIN.register((handler,sender,server)->releaseFlight(handler.getPlayer()));
@@ -117,7 +122,7 @@ public final class AlchemyArtifacts {
     }
     /** Payment renews a short lease; removal, death, disconnect, disable and exhaustion revoke only our lease. */
     public static void pulse(ServerPlayer p) {
-        if(!AlchemicalGear.ready(p)){releaseFlight(p);return;}
+        if(!AlchemicalGear.ready(p)){if(!externalFlight(p))releaseFlight(p);return;}
         boolean external=EXTERNAL_FLIGHT.getOrDefault(p,0L)>p.level().getGameTime();
         if(!external)EXTERNAL_FLIGHT.remove(p);
         if((flightEquipped(p)||external)&&!p.isCreative()&&!p.isSpectator()&&(!p.getAbilities().mayfly||FLIGHT.containsKey(p))) {

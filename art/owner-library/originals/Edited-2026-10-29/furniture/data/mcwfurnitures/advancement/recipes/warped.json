@@ -1,0 +1,93 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+	  "mcwfurnitures:cabinet_door",
+	  "mcwfurnitures:cabinet_drawer",
+	
+      "mcwfurnitures:warped_wardrobe",
+	  "mcwfurnitures:warped_modern_wardrobe",
+	  "mcwfurnitures:warped_double_wardrobe",
+	  "mcwfurnitures:warped_bookshelf_cupboard",
+	  "mcwfurnitures:warped_bookshelf",
+	  "mcwfurnitures:warped_drawer",
+	  "mcwfurnitures:warped_double_drawer",
+	  "mcwfurnitures:warped_bookshelf_drawer",
+	  "mcwfurnitures:warped_lower_bookshelf_drawer",
+	  "mcwfurnitures:warped_large_drawer",
+	  "mcwfurnitures:warped_lower_triple_drawer",
+	  "mcwfurnitures:warped_triple_drawer",
+	  "mcwfurnitures:warped_desk",
+	  "mcwfurnitures:warped_covered_desk",
+	  "mcwfurnitures:warped_modern_desk",
+	  "mcwfurnitures:warped_table",
+	  "mcwfurnitures:warped_end_table",
+	  "mcwfurnitures:warped_coffee_table",
+	  "mcwfurnitures:warped_glass_table",
+	  "mcwfurnitures:warped_chair",
+	  "mcwfurnitures:warped_modern_chair",
+	  "mcwfurnitures:warped_striped_chair",
+	  "mcwfurnitures:warped_stool_chair",
+	  "mcwfurnitures:warped_counter",
+	  "mcwfurnitures:warped_drawer_counter",
+	  "mcwfurnitures:warped_double_drawer_counter",
+	  "mcwfurnitures:warped_cupboard_counter",
+	  
+	  "mcwfurnitures:stripped_warped_wardrobe",
+	  "mcwfurnitures:stripped_warped_modern_wardrobe",
+	  "mcwfurnitures:stripped_warped_double_wardrobe",
+	  "mcwfurnitures:stripped_warped_bookshelf_cupboard",
+	  "mcwfurnitures:stripped_warped_bookshelf",
+	  "mcwfurnitures:stripped_warped_drawer",
+	  "mcwfurnitures:stripped_warped_double_drawer",
+	  "mcwfurnitures:stripped_warped_bookshelf_drawer",
+	  "mcwfurnitures:stripped_warped_lower_bookshelf_drawer",
+	  "mcwfurnitures:stripped_warped_large_drawer",
+	  "mcwfurnitures:stripped_warped_lower_triple_drawer",
+	  "mcwfurnitures:stripped_warped_triple_drawer",
+	  "mcwfurnitures:stripped_warped_desk",
+	  "mcwfurnitures:stripped_warped_covered_desk",
+	  "mcwfurnitures:stripped_warped_modern_desk",
+	  "mcwfurnitures:stripped_warped_table",
+	  "mcwfurnitures:stripped_warped_end_table",
+	  "mcwfurnitures:stripped_warped_coffee_table",
+	  "mcwfurnitures:stripped_warped_glass_table",
+	  "mcwfurnitures:stripped_warped_chair",
+	  "mcwfurnitures:stripped_warped_modern_chair",
+	  "mcwfurnitures:stripped_warped_striped_chair",
+	  "mcwfurnitures:stripped_warped_stool_chair",
+	  "mcwfurnitures:stripped_warped_counter",
+	  "mcwfurnitures:stripped_warped_drawer_counter",
+	  "mcwfurnitures:stripped_warped_double_drawer_counter",
+	  "mcwfurnitures:stripped_warped_cupboard_counter",
+	  "mcwfurnitures:warped_kitchen_sink",
+      "mcwfurnitures:stripped_warped_kitchen_sink"
+    ]
+  },
+  "criteria": {
+    "has_wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:warped_stem"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": "mcwfurnitures:warped_drawer"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wood",
+      "has_the_recipe"
+    ]
+  ]
+}

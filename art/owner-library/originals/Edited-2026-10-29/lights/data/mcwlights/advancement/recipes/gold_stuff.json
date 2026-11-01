@@ -1,0 +1,42 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+	  
+	  "mcwlights:golden_low_candle_holder",
+	  "mcwlights:golden_candle_holder",
+	  "mcwlights:golden_wall_candle_holder",
+	  "mcwlights:golden_double_candle_holder",
+	  "mcwlights:golden_triple_candle_holder",
+	  "mcwlights:golden_small_chandelier",
+	  "mcwlights:golden_chandelier",
+	  "mcwlights:golden_chain"
+    ]
+  },
+  "criteria": {
+    "has_wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:gold_ingot"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": ["mcwlights:golden_candle_holder"]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wood",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -23,6 +23,8 @@ generators wrote, so this runs last in generate_material_data.assets().
 """
 import json
 import math
+from newest_connections import families as newest_families, wall_aliases, own_elements, write_wall
+NEWEST_CONNECTIONS = newest_families()
 import menagerie_registry as menagerie
 
 OWNER_CATALOGS=(menagerie.ECOLOGY,menagerie.BEAST,menagerie.LANDSCAPE,menagerie.CAVERN)
@@ -60,10 +62,11 @@ STONES = ["andesite", "blackstone", "brick", "cinnabar_brick", "cinnabar", "cobb
 VANILLA_WALLS = [f"{stone}_wall" for stone in STONES]
 # Jugcraft's own walls (batch 55's bastion concrete wall): each gets a diagonal wall exactly as vanilla's do.
 JUGCRAFT_WALLS = ["bastion_concrete_wall", "wildlife_shellstone_wall", "wildlife_cut_shellstone_wall", "wildlife_smooth_shellstone_wall", "wildlife_shellstone_brick_wall"]
-JUGCRAFT_WALLS += sorted(OWNER_WALLS)
+JUGCRAFT_WALLS += sorted(OWNER_WALLS | NEWEST_CONNECTIONS["wall"])
 from jimtafacts_network_decor import FAMILIES as JIMTA_WALL_FAMILIES
 JUGCRAFT_WALLS += ['jimta_' + stem + '_wall' for stem, _ in JIMTA_WALL_FAMILIES]
 JUGCRAFT_PANES = [f"wildlife_{color}_froglass_pane" for color in ["azure", "crimson", "verdant"]]
+JUGCRAFT_PANES += sorted(NEWEST_CONNECTIONS["pane"] | NEWEST_CONNECTIONS["bars"])
 # The block each wall becomes while it joins diagonally.
 DIAGONAL_WALL = "diagonal_{}"
 
@@ -76,7 +79,7 @@ def all_walls():
 def jugcraft_fences():
     """Jugcraft's own fences: every wood set's and the wrought-iron cemetery fence."""
     import agriculture
-    return [f"{wood}_fence" for wood in agriculture.WOOD_SETS] + [agriculture.CEMETERY_FENCE["fence"], "nouveau_archwood_fence", "jimta_iron_fence"] + sorted(OWNER_FENCES)
+    return [f"{wood}_fence" for wood in agriculture.WOOD_SETS] + [agriculture.CEMETERY_FENCE["fence"], "nouveau_archwood_fence", "jimta_iron_fence"] + sorted(OWNER_FENCES | NEWEST_CONNECTIONS["fence"])
 
 
 def blocks():
@@ -170,7 +173,7 @@ def turned(elements):
     are already rotated cannot take a second rotation and are left out."""
     out = []
     for element in elements:
-        if "rotation" in element:
+        if element.get("rotation", {}).get("angle", 0):
             continue
         (fx, fy, fz), (tx, ty, tz) = element["from"], element["to"]
         x0, x1 = round(8 + (fx - 8) * NARROW, 5), round(8 + (tx - 8) * NARROW, 5)
@@ -314,7 +317,7 @@ def write_all(write, assets_dir, minecraft_assets_dir):
     for name in JUGCRAFT_PANES:
         path=assets_dir / "blockstates" / f"{name}.json"
         state=_load(path);side,_=_north_side(state['multipart']);arm=f"{MOD}:block/diagonal/{name}"
-        write(assets_dir / "models" / "block" / "diagonal" / f"{name}.json", {'parent':side,'elements':pane_arm()})
+        write(assets_dir / "models" / "block" / "diagonal" / f"{name}.json", {'parent':side,'elements':turned(own_elements(assets_dir,side)) if own_elements(assets_dir,side) else bars_arm() if name in NEWEST_CONNECTIONS['bars'] else pane_arm()})
         state['multipart']=[p for p in state['multipart'] if not set(p.get('when',{})) & set(DIAGONAL_NAMES)] + diagonal_parts(arm)
         write(path,state)
     """The diagonal arm models, vanilla's rebuilt blockstates and Jugcraft's fences' diagonal parts."""
@@ -325,9 +328,13 @@ def write_all(write, assets_dir, minecraft_assets_dir):
         write(minecraft_assets_dir / "blockstates" / f"{name}.json",
               {"multipart": parts + diagonal_parts(arm, uvlock=kind == "fence")})  # as vanilla uvlocks its fence sides
     for namespace, name in all_walls():
+        if name in NEWEST_CONNECTIONS["wall"]:
+            import sys
+            write_wall(write, assets_dir, name, sys.modules[__name__])
+            continue
         low, tall = wall_arm_models(name)
-        write(models / f"{name}.json", {"parent": f"{namespace}:block/{name}_side", "elements": wall_arm()})
-        write(models / f"{name}_tall.json", {"parent": f"{namespace}:block/{name}_side_tall", "elements": wall_arm(16)})
+        write(models / f"{name}.json", {"parent": f"{namespace}:block/{name}_side", "elements": turned(own_elements(assets_dir, f"{namespace}:block/{name}_side")) if name in NEWEST_CONNECTIONS["wall"] and own_elements(assets_dir, f"{namespace}:block/{name}_side") else wall_arm()})
+        write(models / f"{name}_tall.json", {"parent": f"{namespace}:block/{name}_side_tall", "elements": turned(own_elements(assets_dir, f"{namespace}:block/{name}_side_tall")) if name in NEWEST_CONNECTIONS["wall"] and own_elements(assets_dir, f"{namespace}:block/{name}_side_tall") else wall_arm(16)})
         write(assets_dir / "blockstates" / f"{DIAGONAL_WALL.format(name)}.json",
               {"multipart": diagonal_wall(name, namespace) + diagonal_parts(low, True, {"tall": "false"})
                + diagonal_parts(tall, True, {"tall": "true"})})
@@ -338,7 +345,7 @@ def write_all(write, assets_dir, minecraft_assets_dir):
         if side is None:
             raise ValueError(f"{name}: no north side part to turn diagonal")
         side_model = _load(assets_dir / "models" / f"{side.split(':', 1)[1]}.json")
-        elements = turned(side_model["elements"]) if "elements" in side_model else fence_arm()
+        elements = turned(own_elements(assets_dir, side)) if own_elements(assets_dir, side) else fence_arm()
         arm = f"{MOD}:block/diagonal/{name}"
         write(models / f"{name}.json", {"parent": side, "elements": elements})
         state["multipart"] = [p for p in state["multipart"] if not set(p.get("when", {})) & {d for d, _ in DIAGONALS}]

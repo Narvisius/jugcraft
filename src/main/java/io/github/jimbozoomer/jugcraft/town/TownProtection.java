@@ -118,6 +118,9 @@ public final class TownProtection {
 	public static boolean publicBlock(Level level, BlockPos pos, BlockState state) {
 		// This is the player's personal inventory, explicitly provided by the bank.
 		if (state.is(net.minecraft.world.level.block.Blocks.ENDER_CHEST)) return true;
+        // Public enchanting uses an isolated vanilla menu; it never exposes the
+        // owner's new persistent table inventory (OwnerEnchantingMenuMixin).
+        if (state.is(net.minecraft.world.level.block.Blocks.ENCHANTING_TABLE) && state.is(USABLE)) return true;
 		var entity = level.getBlockEntity(pos);
 		if (entity instanceof net.minecraft.world.Container
 				|| state.getBlock() instanceof net.minecraft.world.WorldlyContainerHolder) return false;

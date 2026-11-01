@@ -1,0 +1,35 @@
+{
+  "description": {
+    "translate": "enchantment.jugcraft.reforged.firm_line"
+  },
+  "supported_items": "#minecraft:enchantable/fishing",
+  "primary_items": "#minecraft:enchantable/fishing",
+  "weight": 10,
+  "max_level": 3,
+  "min_cost": {
+    "base": 1,
+    "per_level_above_first": 10
+  },
+  "max_cost": {
+    "base": 39,
+    "per_level_above_first": 10
+  },
+  "anvil_cost": 2,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {
+    "minecraft:item_damage": [
+      {
+        "effect": {
+          "type": "minecraft:remove_binomial",
+          "chance": {
+            "type": "minecraft:linear",
+            "base": 0.08,
+            "per_level_above_first": 0.04
+          }
+        }
+      }
+    ]
+  }
+}

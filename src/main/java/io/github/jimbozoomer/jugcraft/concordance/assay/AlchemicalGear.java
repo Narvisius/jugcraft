@@ -123,6 +123,7 @@ public final class AlchemicalGear {
     }
 
     private static void gather(ServerPlayer player) {
+        if(io.github.jimbozoomer.jugcraft.botany.BotanicalFields.magnetBlocked(player))return;
         var level = player.level();
         // Bound even the intermediate collection; expensive visibility/protection checks run on at most 32 drops.
         var drops = new ArrayList<ItemEntity>();
@@ -130,6 +131,7 @@ public final class AlchemicalGear {
                 item -> true, drops, SCAN_LIMIT);
         int moved = 0;
         for (ItemEntity drop : drops) {
+            if(io.github.jimbozoomer.jugcraft.botany.BotanicalFields.magnetBlocked(drop))continue;
             if (moved >= TARGETS || AlchemyPower.available(player) == 0) break;
             UUID target = ((AlchemicalItemAccess) drop).jugcraft$pickupTarget();
             if (!drop.isAlive() || drop.hasPickUpDelay() || drop.distanceToSqr(player) > RADIUS * RADIUS

@@ -1,0 +1,22 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "sophisticatedcore:item_enabled",
+      "itemRegistryName": "sophisticatedbackpacks:filter_upgrade"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "sophisticatedbackpacks:upgrade_base",
+    "R": "#c:dusts/redstone",
+    "S": "#c:strings"
+  },
+  "pattern": [
+    "RSR",
+    "SBS",
+    "RSR"
+  ],
+  "result": {
+    "id": "sophisticatedbackpacks:filter_upgrade"
+  }
+}

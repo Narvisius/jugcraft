@@ -1,0 +1,15 @@
+{
+  "name": "jugcraft:ribbits_starts",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "jugcraft:ribbits_paths/path_4_0",
+        "processors": "jugcraft:ribbits_main",
+        "projection": "terrain_matching",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

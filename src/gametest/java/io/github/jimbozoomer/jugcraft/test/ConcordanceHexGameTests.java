@@ -78,7 +78,7 @@ public class ConcordanceHexGameTests {
 		helper.assertTrue(warded.equals("warded") || warded.equals("not_allowed"), "A linking ward (or the rules) refuses a link: " + warded);
 		ServerPlayer novice = TestPlayers.mock(helper);
 		RateGate.forget(novice.getUUID());
-		helper.assertTrue(TaglockItem.bind(novice, level, new ItemStack(Sympathy.TAGLOCK), zombie).equals("unknown"), "Sympathy must be understood");
+		helper.assertTrue(TaglockItem.bind(novice, level, new ItemStack(Sympathy.TAGLOCK), zombie).isEmpty(), "An owned taglock binds without research");
 		helper.succeed();
 	}
 

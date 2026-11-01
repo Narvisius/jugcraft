@@ -1,0 +1,21 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "sophisticatedcore:item_enabled",
+      "itemRegistryName": "sophisticatedbackpacks:advanced_filter_upgrade"
+    }
+  ],
+  "type": "sophisticatedcore:upgrade_next_tier",
+  "key": {
+    "G": "#c:ingots/gold",
+    "P": "sophisticatedbackpacks:filter_upgrade",
+    "R": "#c:dusts/redstone"
+  },
+  "pattern": [
+    "GPG",
+    "RRR"
+  ],
+  "result": {
+    "id": "sophisticatedbackpacks:advanced_filter_upgrade"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "loader": "fusion:model",
+  "type": "connecting",
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "jugcraft:block/newest_connected/reinforcedcobble/dirt",
+    "particle": "jugcraft:newest/chiselworks/block/reinforcedcobble/dirt"
+  },
+  "connections": {
+    "type": "is_same_block"
+  }
+}

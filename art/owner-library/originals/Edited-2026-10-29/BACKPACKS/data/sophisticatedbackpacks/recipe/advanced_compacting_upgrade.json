@@ -1,0 +1,23 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "sophisticatedcore:item_enabled",
+      "itemRegistryName": "sophisticatedbackpacks:advanced_compacting_upgrade"
+    }
+  ],
+  "type": "sophisticatedcore:upgrade_next_tier",
+  "key": {
+    "C": "sophisticatedbackpacks:compacting_upgrade",
+    "D": "#c:gems/diamond",
+    "G": "#c:ingots/gold",
+    "R": "#c:dusts/redstone"
+  },
+  "pattern": [
+    " D ",
+    "GCG",
+    "RRR"
+  ],
+  "result": {
+    "id": "sophisticatedbackpacks:advanced_compacting_upgrade"
+  }
+}

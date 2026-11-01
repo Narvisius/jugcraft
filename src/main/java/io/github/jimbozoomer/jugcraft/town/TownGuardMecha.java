@@ -48,7 +48,8 @@ public class TownGuardMecha extends Townsfolk {
         super.customServerAiStep(level);
         Vec3 pivot = position().add(0, 2.3, 0);
         if (tickCount % 20 == 0) gunTarget = TownDefense.target(level, this, pivot);
-        if (gunTarget == null || !AutomatedDefense.hostile(gunTarget) || gunTarget.distanceToSqr(pivot) > TownDefense.RANGE * TownDefense.RANGE) return;
+        if (gunTarget == null || !AutomatedDefense.hostile(gunTarget) || gunTarget.distanceToSqr(pivot) > TownDefense.RANGE * TownDefense.RANGE
+                || !TownDefense.visible(level, this, pivot, gunTarget.getBoundingBox().getCenter())) return;
         // Navigation/look goals must not reset the cannon's turn every tick or
         // march underneath an airship before the first shot is lined up.
         getNavigation().stop();

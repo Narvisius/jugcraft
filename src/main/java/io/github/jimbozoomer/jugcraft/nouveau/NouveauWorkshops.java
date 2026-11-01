@@ -29,7 +29,7 @@ public final class NouveauWorkshops {
         List<Block> blocks=new ArrayList<>();
         for(var e:NouveauCatalog.BLOCK_ENTRIES.values())if(e.kind().equals("station")){
             var b=NouveauCatalog.registerBlock(e,BlockBehaviour.Properties.of().strength(2.5F).noOcclusion().sound(SoundType.STONE)
-                .mapColor(MapColor.COLOR_PURPLE).pushReaction(PushReaction.IMMOVEABLE),p->new NouveauWorkshopBlock(e,p));blocks.add(b);
+                .mapColor(MapColor.COLOR_PURPLE).pushReaction(PushReaction.IMMOVEABLE),p->e.source().equals("warp_nexus")?new io.github.jimbozoomer.jugcraft.nouveau.additions.ArsWarpNexusBlock(e,p.lightLevel(s->8)):new NouveauWorkshopBlock(e,p));blocks.add(b);
             NouveauCatalog.registerItem(e,p->e.geo().isEmpty()?new BlockItem(b,p.useBlockDescriptionPrefix()):new NouveauWorkshopItem(e,b,p.useBlockDescriptionPrefix()));
         }
         ENTITY=Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE,Jugcraft.id("nouveau_workshop"),FabricBlockEntityTypeBuilder.create(NouveauWorkshop::new,blocks.toArray(Block[]::new)).build());

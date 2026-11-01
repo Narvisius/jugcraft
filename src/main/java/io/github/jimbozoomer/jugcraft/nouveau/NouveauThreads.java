@@ -32,8 +32,17 @@ public final class NouveauThreads {
             p.setAttached(UNDYING_SPENT,true);p.setHealth(1);p.clearFire();p.addEffect(new MobEffectInstance(MobEffects.REGENERATION,900,1));p.addEffect(new MobEffectInstance(MobEffects.ABSORPTION,100,1));p.level().broadcastEntityEvent(p,(byte)35);return false;
         });
     }
+    public static int spellweave(ItemStack armor){
+        var equippable=armor.get(net.minecraft.core.component.DataComponents.EQUIPPABLE);
+        if(equippable==null||!List.of(EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET).contains(equippable.slot()))return 0;
+        var enchantments=armor.getOrDefault(net.minecraft.core.component.DataComponents.ENCHANTMENTS,net.minecraft.world.item.enchantment.ItemEnchantments.EMPTY);
+        for(var holder:enchantments.keySet())if(holder.unwrapKey().map(k->k.identifier().equals(io.github.jimbozoomer.jugcraft.Jugcraft.id("ars_additions_spellweave"))).orElse(false))return Math.clamp(enchantments.getLevel(holder),0,3);
+        return 0;
+    }
+    public static int capacity(ItemStack armor){return armor.getItem() instanceof NouveauGear.Armor?Math.clamp(1+armor.getOrDefault(NouveauGear.ARMOR_TIER,0),1,3):spellweave(armor)>0?1:0;}
     public static int socket(ItemStack armor,int position){
-        if(!(armor.getItem() instanceof NouveauGear.Armor item))return 0;
+        if(position<0||position>=capacity(armor))return 0;
+        if(!(armor.getItem() instanceof NouveauGear.Armor item))return spellweave(armor);
         int tier=armor.getOrDefault(NouveauGear.ARMOR_TIER,0),base=item.entry.source().startsWith("sorcerer")?position+1:item.entry.source().startsWith("battlemage")?1:Math.min(2,position+1);
         return Math.clamp(base+(tier==2?1:0),1,3);
     }
@@ -55,6 +64,8 @@ public final class NouveauThreads {
         attribute(p,"movement_speed",.2*level(p,"starbuncle"),true);
         attribute(p,"knockback_resistance",Math.min(1,.15*level(p,"amethyst_golem")+(NouveauFamiliars.active(p).equals("amethyst_golem")?.5:0)),false);
         attribute(p,"step_height",level(p,"high_step"),false);
+        attribute(p,"block_interaction_range",level(p,"reach"),false);
+        attribute(p,"entity_interaction_range",level(p,"reach"),false);
         attribute(p,"safe_fall_distance",2*level(p,"heights"),false);
         attribute(p,"oxygen_bonus",2*level(p,"depths"),false);
         attribute(p,"water_movement_efficiency",level(p,"depths")>=3?1:0,false);

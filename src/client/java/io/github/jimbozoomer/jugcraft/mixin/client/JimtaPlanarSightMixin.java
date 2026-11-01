@@ -9,5 +9,5 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Minecraft.class)
 public abstract class JimtaPlanarSightMixin {
     @Inject(method="shouldEntityAppearGlowing",at=@At("RETURN"),cancellable=true)
-    private void jimta$planarSight(Entity e,CallbackInfoReturnable<Boolean> result){if(JimtaWardClient.sees(e))result.setReturnValue(true);}
+    private void jimta$planarSight(Entity e,CallbackInfoReturnable<Boolean> result){if(JimtaWardClient.sees(e)||io.github.jimbozoomer.jugcraft.client.ArcaneSight.sees(e))result.setReturnValue(true);}
 }

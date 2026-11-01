@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "jugcraft:botanical_bag_open",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "jugcraft:newest/jugtania/item/bauble_box"
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "jugcraft:newest/jugtania/item/bauble_box_open"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "jugcraft:supps_galleon/hull_start",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 5,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "jugcraft:supps_galleon/hull_back01",
+        "processors": "jugcraft:supps_galleon_data",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 5,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "jugcraft:supps_galleon/hull_back02",
+        "processors": "jugcraft:supps_galleon_data",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "jugcraft:supps_galleon/hull_back03",
+        "processors": "jugcraft:supps_galleon_data",
+        "projection": "rigid"
+      }
+    }
+  ]
+}

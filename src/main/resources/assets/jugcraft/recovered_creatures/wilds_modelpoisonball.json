@@ -1,0 +1,84 @@
+{
+  "textureSize": [
+    32,
+    32
+  ],
+  "parts": [
+    {
+      "name": "inner",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        3.5,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -3.0,
+            -3.0,
+            6.0,
+            6.0,
+            6.0
+          ],
+          "uv": [
+            0.0,
+            16.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "outer",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        3.5,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -4.0,
+            -4.0,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "expressions": [],
+  "poses": [],
+  "source": "build/owner-oct29-reference/com/bobmowzie/mowziesmobs/client/model/entity/ModelPoisonBall.java",
+  "sourceSha256": "ec26728db95983cbbd166c1e7a46e703823124ad0cf5cb3f1686d85ee4e949cf"
+}

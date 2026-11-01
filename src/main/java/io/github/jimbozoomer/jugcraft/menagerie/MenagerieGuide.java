@@ -30,6 +30,7 @@ public final class MenagerieGuide {
         for(var s:Menagerie.SPECIES.values())if(s.id().startsWith("companion_")||s.id().startsWith("grove_")||s.id().startsWith("fable_"))species(out,s);
     }
     public static void household(ServerPlayer player,EncyclopediaRequestPayload request,PageWriter out){
+        OwnerSupplementGuide.write(out);
         out.heading(Component.literal("Furnish a working home"));
         out.fact(Component.literal("Use the furniture workbench to choose a design. Its ingredient display and output preview use your actual inventory; it takes materials only when the whole output fits. Matching counters and sofas connect side by side. A wrench rotates furniture, including both halves of a bath when there is room."));
         out.heading(Component.literal("Kitchens and storage"));

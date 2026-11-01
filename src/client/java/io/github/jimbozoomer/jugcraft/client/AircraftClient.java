@@ -11,6 +11,8 @@ public final class AircraftClient {
     private static int since;
     public static float fov(net.minecraft.client.player.AbstractClientPlayer player,float original){
         var c=net.minecraft.client.Minecraft.getInstance();
+        if(c.player==player&&c.gui.screen()==null&&player.getVehicle() instanceof io.github.jimbozoomer.jugcraft.tower.SeatEntity seat
+            &&player.level().getBlockState(seat.blockPosition()).getBlock() instanceof io.github.jimbozoomer.jugcraft.menagerie.OwnerHomeBlock home&&home.function.equals("telescope"))return original*.15F;
         return c.player==player&&c.gui.screen()==null&&player.getVehicle() instanceof Aircraft a&&a.hasTelescope()&&c.options.keyUse.isDown()?original*.2F:original;
     }
     public static void register(){

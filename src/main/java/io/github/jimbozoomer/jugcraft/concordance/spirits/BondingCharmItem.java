@@ -19,7 +19,7 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 
 /**
- * The Bonding Charm (roadmap step 17): binds a Hearthling familiar to its user (Binding Arts understood), one familiar
+ * The Bonding Charm (roadmap step 17): binds a Hearthling familiar to its user (no research required), one familiar
  * a person; used again it recalls the familiar to their side (only from the same dimension, and only if it is loaded:
  * nothing is loaded to fetch it); used while sneaking it releases the familiar.
  */
@@ -45,10 +45,6 @@ public class BondingCharmItem extends Item {
 			player.sendOverlayMessage(Component.translatable("message.jugcraft.concordance.disabled"));
 			return InteractionResult.FAIL;
 		}
-		if (!Workers.knows(player)) {
-			player.sendOverlayMessage(Component.translatable("message.jugcraft.concordance.workers.unknown"));
-			return InteractionResult.FAIL;
-		}
 		WorkerRoster roster = WorkerRoster.of(level.getServer());
 		UUID familiar = roster.familiar(player.getUUID());
 		Entity found = familiar == null ? null : level.getEntity(familiar);
@@ -63,7 +59,9 @@ public class BondingCharmItem extends Item {
 			}
 			bound.setOwner(player.getUUID());
 			bound.snapTo(player.getX(), player.getY(), player.getZ(), player.getYRot(), 0.0F);
-			level.addFreshEntity(bound);
+			if (!level.addFreshEntity(bound)) {
+				return InteractionResult.FAIL;
+			}
 			roster.note(player.getUUID(), bound.getUUID(), bound.kind(), bound.status(), level.dimension().identifier().toString(), bound.blockPosition());
 			player.sendOverlayMessage(Component.translatable("message.jugcraft.concordance.workers.bound"));
 			return InteractionResult.SUCCESS;

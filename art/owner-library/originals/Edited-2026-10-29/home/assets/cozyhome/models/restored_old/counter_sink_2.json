@@ -1,0 +1,1386 @@
+{
+  "credit": "Made with Blockbench",
+  "render_type": "minecraft:solid",
+  "texture_size": [
+    64,
+    64
+  ],
+  "elements": [
+    {
+      "name": "base",
+      "from": [
+        0,
+        0,
+        2
+      ],
+      "to": [
+        16,
+        12,
+        16
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          0,
+          0,
+          14
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            12,
+            0,
+            16,
+            3
+          ],
+          "texture": "#particle"
+        },
+        "east": {
+          "uv": [
+            12.5,
+            6.5,
+            16,
+            9.5
+          ],
+          "texture": "#particle"
+        },
+        "south": {
+          "uv": [
+            12,
+            0,
+            16,
+            3
+          ],
+          "texture": "#particle"
+        },
+        "west": {
+          "uv": [
+            12.5,
+            6.5,
+            16,
+            9.5
+          ],
+          "texture": "#particle"
+        },
+        "up": {
+          "uv": [
+            12.5,
+            16,
+            12,
+            12.5
+          ],
+          "texture": "#particle"
+        },
+        "down": {
+          "uv": [
+            16,
+            6.5,
+            12,
+            3
+          ],
+          "texture": "#particle"
+        }
+      }
+    },
+    {
+      "name": "top",
+      "from": [
+        0,
+        12,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          0,
+          0,
+          14
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            4,
+            8,
+            5
+          ],
+          "texture": "#particle"
+        },
+        "east": {
+          "uv": [
+            4,
+            7,
+            8,
+            8
+          ],
+          "texture": "#particle"
+        },
+        "south": {
+          "uv": [
+            4,
+            6,
+            8,
+            7
+          ],
+          "texture": "#particle"
+        },
+        "west": {
+          "uv": [
+            4,
+            5,
+            8,
+            6
+          ],
+          "texture": "#particle"
+        },
+        "up": {
+          "uv": [
+            8,
+            4,
+            4,
+            0
+          ],
+          "rotation": 180,
+          "texture": "#particle"
+        },
+        "down": {
+          "uv": [
+            4,
+            4,
+            0,
+            8
+          ],
+          "rotation": 90,
+          "texture": "#particle"
+        }
+      }
+    },
+    {
+      "name": "cauldron_floor",
+      "from": [
+        3,
+        4,
+        3
+      ],
+      "to": [
+        13,
+        4,
+        13
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          0,
+          0,
+          14
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.5,
+            0
+          ],
+          "texture": "#particle"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2.5,
+            0
+          ],
+          "texture": "#particle"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.5,
+            0
+          ],
+          "texture": "#particle"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2.5,
+            0
+          ],
+          "texture": "#particle"
+        },
+        "up": {
+          "uv": [
+            2.5,
+            16,
+            0,
+            13.5
+          ],
+          "texture": "#particle"
+        },
+        "down": {
+          "uv": [
+            5,
+            13.5,
+            2.5,
+            16
+          ],
+          "texture": "#particle"
+        }
+      }
+    },
+    {
+      "name": "cauldron_small_wall",
+      "from": [
+        13,
+        4,
+        3
+      ],
+      "to": [
+        13,
+        16,
+        13
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          8,
+          8,
+          8
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0,
+            3
+          ],
+          "texture": "#particle"
+        },
+        "east": {
+          "uv": [
+            2.5,
+            10.5,
+            5,
+            13.5
+          ],
+          "texture": "#particle"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0,
+            3
+          ],
+          "texture": "#particle"
+        },
+        "west": {
+          "uv": [
+            0,
+            10.5,
+            2.5,
+            13.5
+          ],
+          "texture": "#particle"
+        },
+        "up": {
+          "uv": [
+            0,
+            2.5,
+            0,
+            0
+          ],
+          "texture": "#particle"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0,
+            2.5
+          ],
+          "texture": "#particle"
+        }
+      }
+    },
+    {
+      "name": "cauldron_big_wall",
+      "from": [
+        3,
+        4,
+        13
+      ],
+      "to": [
+        13,
+        16,
+        13
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          8,
+          8,
+          8
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10.5,
+            2.5,
+            13.5
+          ],
+          "texture": "#particle"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0,
+            3
+          ],
+          "texture": "#particle"
+        },
+        "south": {
+          "uv": [
+            2.5,
+            10.5,
+            5,
+            13.5
+          ],
+          "texture": "#particle"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0,
+            3
+          ],
+          "texture": "#particle"
+        },
+        "up": {
+          "uv": [
+            2.5,
+            0,
+            0,
+            0
+          ],
+          "texture": "#particle"
+        },
+        "down": {
+          "uv": [
+            2.5,
+            0,
+            0,
+            0
+          ],
+          "texture": "#particle"
+        }
+      }
+    },
+    {
+      "name": "cauldron_big_wall",
+      "from": [
+        3,
+        4,
+        3
+      ],
+      "to": [
+        13,
+        16,
+        3
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          8,
+          8,
+          8
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            2.5,
+            10.5,
+            5,
+            13.5
+          ],
+          "texture": "#particle"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0,
+            3
+          ],
+          "texture": "#particle"
+        },
+        "south": {
+          "uv": [
+            0,
+            10.5,
+            2.5,
+            13.5
+          ],
+          "texture": "#particle"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0,
+            3
+          ],
+          "texture": "#particle"
+        },
+        "up": {
+          "uv": [
+            2.5,
+            0,
+            0,
+            0
+          ],
+          "rotation": 180,
+          "texture": "#particle"
+        },
+        "down": {
+          "uv": [
+            2.5,
+            0,
+            0,
+            0
+          ],
+          "rotation": 180,
+          "texture": "#particle"
+        }
+      }
+    },
+    {
+      "name": "cauldron_small_wall",
+      "from": [
+        3,
+        4,
+        3
+      ],
+      "to": [
+        3,
+        16,
+        13
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          8,
+          8,
+          8
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0,
+            3
+          ],
+          "texture": "#particle"
+        },
+        "east": {
+          "uv": [
+            0,
+            10.5,
+            2.5,
+            13.5
+          ],
+          "texture": "#particle"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0,
+            3
+          ],
+          "texture": "#particle"
+        },
+        "west": {
+          "uv": [
+            2.5,
+            10.5,
+            5,
+            13.5
+          ],
+          "texture": "#particle"
+        },
+        "up": {
+          "uv": [
+            0,
+            2.5,
+            0,
+            0
+          ],
+          "rotation": 180,
+          "texture": "#particle"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0,
+            2.5
+          ],
+          "rotation": 180,
+          "texture": "#particle"
+        }
+      }
+    },
+    {
+      "name": "water",
+      "from": [
+        3,
+        11,
+        3
+      ],
+      "to": [
+        13,
+        11,
+        13
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.5,
+            0
+          ],
+          "texture": "#particle"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2.5,
+            0
+          ],
+          "texture": "#particle"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2.5,
+            0
+          ],
+          "texture": "#particle"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2.5,
+            0
+          ],
+          "texture": "#particle"
+        },
+        "up": {
+          "uv": [
+            5.5,
+            9,
+            8,
+            11.5
+          ],
+          "texture": "#particle"
+        },
+        "down": {
+          "uv": [
+            5.5,
+            9,
+            8,
+            11.5
+          ],
+          "texture": "#particle"
+        }
+      }
+    },
+    {
+      "name": "handle",
+      "from": [
+        11,
+        16,
+        14
+      ],
+      "to": [
+        13,
+        17,
+        16
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          12,
+          16.5,
+          15
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10.25,
+            0.5,
+            10.5
+          ],
+          "texture": "#particle"
+        },
+        "east": {
+          "uv": [
+            0,
+            10,
+            0.25,
+            10.5
+          ],
+          "rotation": 90,
+          "texture": "#particle"
+        },
+        "south": {
+          "uv": [
+            0,
+            10,
+            0.5,
+            10.25
+          ],
+          "rotation": 180,
+          "texture": "#particle"
+        },
+        "west": {
+          "uv": [
+            0.25,
+            10,
+            0.5,
+            10.5
+          ],
+          "rotation": 90,
+          "texture": "#particle"
+        },
+        "up": {
+          "uv": [
+            0.5,
+            10.5,
+            0,
+            10
+          ],
+          "texture": "#particle"
+        },
+        "down": {
+          "uv": [
+            3,
+            10.5,
+            2.5,
+            11
+          ],
+          "texture": "#particle"
+        }
+      }
+    },
+    {
+      "name": "handle_accent",
+      "from": [
+        10.5,
+        16,
+        15
+      ],
+      "to": [
+        13.5,
+        19,
+        15
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          12,
+          16.5,
+          15
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            9.25,
+            0.75,
+            10
+          ],
+          "texture": "#particle"
+        },
+        "east": {
+          "uv": [
+            3,
+            10.5,
+            3,
+            11.25
+          ],
+          "rotation": 90,
+          "texture": "#particle"
+        },
+        "south": {
+          "uv": [
+            0,
+            10,
+            0.75,
+            9.25
+          ],
+          "rotation": 180,
+          "texture": "#particle"
+        },
+        "west": {
+          "uv": [
+            2.75,
+            10.5,
+            2.75,
+            11.25
+          ],
+          "rotation": 90,
+          "texture": "#particle"
+        },
+        "up": {
+          "uv": [
+            3.25,
+            10.75,
+            2.5,
+            10.75
+          ],
+          "texture": "#particle"
+        },
+        "down": {
+          "uv": [
+            3.25,
+            11,
+            2.5,
+            11
+          ],
+          "texture": "#particle"
+        }
+      }
+    },
+    {
+      "name": "handle",
+      "from": [
+        3,
+        16,
+        14
+      ],
+      "to": [
+        5,
+        17,
+        16
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          4,
+          17,
+          15
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0.25,
+            10,
+            0.5,
+            10.5
+          ],
+          "rotation": 90,
+          "texture": "#particle"
+        },
+        "east": {
+          "uv": [
+            0,
+            10.25,
+            0.5,
+            10.5
+          ],
+          "texture": "#particle"
+        },
+        "south": {
+          "uv": [
+            0,
+            10,
+            0.25,
+            10.5
+          ],
+          "rotation": 90,
+          "texture": "#particle"
+        },
+        "west": {
+          "uv": [
+            0,
+            10,
+            0.5,
+            10.25
+          ],
+          "rotation": 180,
+          "texture": "#particle"
+        },
+        "up": {
+          "uv": [
+            0.5,
+            10.5,
+            0,
+            10
+          ],
+          "rotation": 90,
+          "texture": "#particle"
+        },
+        "down": {
+          "uv": [
+            3,
+            10.5,
+            2.5,
+            11
+          ],
+          "rotation": 270,
+          "texture": "#particle"
+        }
+      }
+    },
+    {
+      "name": "handle_accent",
+      "from": [
+        2.5,
+        16,
+        15
+      ],
+      "to": [
+        5.5,
+        19,
+        15
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          4,
+          17,
+          15
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            10,
+            0.75,
+            9.25
+          ],
+          "rotation": 180,
+          "texture": "#particle"
+        },
+        "east": {
+          "uv": [
+            2.75,
+            10.5,
+            2.75,
+            11.25
+          ],
+          "rotation": 90,
+          "texture": "#particle"
+        },
+        "south": {
+          "uv": [
+            0,
+            9.25,
+            0.75,
+            10
+          ],
+          "texture": "#particle"
+        },
+        "west": {
+          "uv": [
+            3,
+            10.5,
+            3,
+            11.25
+          ],
+          "rotation": 90,
+          "texture": "#particle"
+        },
+        "up": {
+          "uv": [
+            3.25,
+            10.75,
+            2.5,
+            10.75
+          ],
+          "rotation": 180,
+          "texture": "#particle"
+        },
+        "down": {
+          "uv": [
+            3.25,
+            11,
+            2.5,
+            11
+          ],
+          "rotation": 180,
+          "texture": "#particle"
+        }
+      }
+    },
+    {
+      "name": "faucet_vertical",
+      "from": [
+        7,
+        16,
+        14
+      ],
+      "to": [
+        9,
+        21,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1.25,
+            9.25,
+            1.5,
+            10.5
+          ],
+          "texture": "#particle"
+        },
+        "east": {
+          "uv": [
+            1,
+            9.25,
+            1.5,
+            10.5
+          ],
+          "texture": "#particle"
+        },
+        "south": {
+          "uv": [
+            1,
+            9.25,
+            1.25,
+            10.5
+          ],
+          "texture": "#particle"
+        },
+        "west": {
+          "uv": [
+            1.5,
+            9.25,
+            1,
+            10.5
+          ],
+          "texture": "#particle"
+        },
+        "up": {
+          "uv": [
+            1.5,
+            9.5,
+            1,
+            9.25
+          ],
+          "rotation": 90,
+          "texture": "#particle"
+        },
+        "down": {
+          "uv": [
+            3,
+            10.5,
+            2.5,
+            11
+          ],
+          "texture": "#particle"
+        }
+      }
+    },
+    {
+      "name": "faucet_horizontal",
+      "from": [
+        7,
+        20,
+        10
+      ],
+      "to": [
+        9,
+        21,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.25,
+            9.25,
+            2.5,
+            9.5
+          ],
+          "texture": "#particle"
+        },
+        "east": {
+          "uv": [
+            1.5,
+            9.25,
+            2.5,
+            9.5
+          ],
+          "texture": "#particle"
+        },
+        "south": {
+          "uv": [
+            2.5,
+            10.5,
+            3,
+            10.75
+          ],
+          "texture": "#particle"
+        },
+        "west": {
+          "uv": [
+            2.5,
+            9.25,
+            1.5,
+            9.5
+          ],
+          "texture": "#particle"
+        },
+        "up": {
+          "uv": [
+            2.5,
+            9.5,
+            1.5,
+            9.25
+          ],
+          "rotation": 90,
+          "texture": "#particle"
+        },
+        "down": {
+          "uv": [
+            1.5,
+            9.5,
+            2.5,
+            9.25
+          ],
+          "rotation": 90,
+          "texture": "#particle"
+        }
+      }
+    },
+    {
+      "name": "faucet_tip",
+      "from": [
+        7,
+        19,
+        10
+      ],
+      "to": [
+        9,
+        20,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            9.5,
+            2.5,
+            9.75
+          ],
+          "texture": "#particle"
+        },
+        "east": {
+          "uv": [
+            2,
+            9.5,
+            2.5,
+            9.75
+          ],
+          "texture": "#particle"
+        },
+        "south": {
+          "uv": [
+            2,
+            9.5,
+            2.5,
+            9.75
+          ],
+          "texture": "#particle"
+        },
+        "west": {
+          "uv": [
+            2.5,
+            9.5,
+            2,
+            9.75
+          ],
+          "texture": "#particle"
+        },
+        "up": {
+          "uv": [
+            2,
+            9.75,
+            2.5,
+            10.25
+          ],
+          "texture": "#particle"
+        },
+        "down": {
+          "uv": [
+            2,
+            9.75,
+            2.5,
+            10.25
+          ],
+          "texture": "#particle"
+        }
+      }
+    },
+    {
+      "name": "faucet_accent",
+      "from": [
+        8,
+        16,
+        9
+      ],
+      "to": [
+        8,
+        22,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0,
+            1.5
+          ],
+          "texture": "#particle"
+        },
+        "east": {
+          "uv": [
+            4.5,
+            9,
+            2.75,
+            10.5
+          ],
+          "texture": "#particle"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0,
+            1.5
+          ],
+          "texture": "#particle"
+        },
+        "west": {
+          "uv": [
+            2.75,
+            9,
+            4.5,
+            10.5
+          ],
+          "texture": "#particle"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0,
+            1.75
+          ],
+          "texture": "#particle"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0,
+            1.75
+          ],
+          "texture": "#particle"
+        }
+      }
+    }
+  ],
+  "gui_light": "front",
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        75,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.375,
+        0.375,
+        0.375
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        75,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.375,
+        0.375,
+        0.375
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        45,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        225,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    },
+    "ground": {
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.25,
+        0.25,
+        0.25
+      ]
+    },
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        -0.75,
+        0
+      ],
+      "scale": [
+        0.6,
+        0.6,
+        0.6
+      ]
+    },
+    "fixed": {
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    }
+  },
+  "groups": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    {
+      "name": "handle_left",
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "color": 0,
+      "children": [
+        8,
+        9
+      ]
+    },
+    {
+      "name": "handle_right",
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "color": 0,
+      "children": [
+        10,
+        11
+      ]
+    },
+    {
+      "name": "faucet",
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "color": 0,
+      "children": [
+        12,
+        13,
+        14,
+        15
+      ]
+    }
+  ]
+}

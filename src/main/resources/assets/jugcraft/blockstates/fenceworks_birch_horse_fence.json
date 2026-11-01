@@ -1,0 +1,83 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "jugcraft:newest/fenceworks/block/horse/birch_log_fence_post"
+      }
+    },
+    {
+      "when": {
+        "north": "true"
+      },
+      "apply": {
+        "model": "jugcraft:newest/fenceworks/block/horse/birch_horse_fence_side",
+        "uvlock": false
+      }
+    },
+    {
+      "when": {
+        "east": "true"
+      },
+      "apply": {
+        "model": "jugcraft:newest/fenceworks/block/horse/birch_horse_fence_side",
+        "y": 90,
+        "uvlock": false
+      }
+    },
+    {
+      "when": {
+        "south": "true"
+      },
+      "apply": {
+        "model": "jugcraft:newest/fenceworks/block/horse/birch_horse_fence_side",
+        "y": 180,
+        "uvlock": false
+      }
+    },
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "jugcraft:newest/fenceworks/block/horse/birch_horse_fence_side",
+        "y": 270,
+        "uvlock": false
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/fenceworks_birch_horse_fence"
+      },
+      "when": {
+        "north_east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/fenceworks_birch_horse_fence",
+        "y": 90
+      },
+      "when": {
+        "south_east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/fenceworks_birch_horse_fence",
+        "y": 180
+      },
+      "when": {
+        "south_west": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/fenceworks_birch_horse_fence",
+        "y": 270
+      },
+      "when": {
+        "north_west": "true"
+      }
+    }
+  ]
+}

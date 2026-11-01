@@ -1,0 +1,44 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "column": "0",
+        "row": "0",
+        "facing": "north"
+      },
+      "apply": {
+        "model": "jugcraft:newest/factoryworks/block/medium_fan_ns"
+      }
+    },
+    {
+      "when": {
+        "column": "0",
+        "row": "0",
+        "facing": "south"
+      },
+      "apply": {
+        "model": "jugcraft:newest/factoryworks/block/medium_fan_ns"
+      }
+    },
+    {
+      "when": {
+        "column": "0",
+        "row": "0",
+        "facing": "east"
+      },
+      "apply": {
+        "model": "jugcraft:newest/factoryworks/block/medium_fan_ew"
+      }
+    },
+    {
+      "when": {
+        "column": "0",
+        "row": "0",
+        "facing": "west"
+      },
+      "apply": {
+        "model": "jugcraft:newest/factoryworks/block/medium_fan_ew"
+      }
+    }
+  ]
+}

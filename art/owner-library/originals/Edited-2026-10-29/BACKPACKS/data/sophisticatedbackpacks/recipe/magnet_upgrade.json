@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "sophisticatedcore:item_enabled",
+      "itemRegistryName": "sophisticatedbackpacks:magnet_upgrade"
+    }
+  ],
+  "type": "sophisticatedcore:upgrade_next_tier",
+  "key": {
+    "E": "#c:ender_pearls",
+    "I": "#c:ingots/iron",
+    "L": "#c:gems/lapis",
+    "P": "sophisticatedbackpacks:pickup_upgrade",
+    "R": "#c:dusts/redstone"
+  },
+  "pattern": [
+    "EIE",
+    "IPI",
+    "R L"
+  ],
+  "result": {
+    "id": "sophisticatedbackpacks:magnet_upgrade"
+  }
+}

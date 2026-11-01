@@ -17,7 +17,7 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 
 /**
- * A Clockwork Porter, folded (roadmap step 17): used on the top of a block by someone who understands Binding Arts, it
+ * A Clockwork Porter, folded (roadmap step 17): used on the top of a block, it
  * unfolds into a porter they keep, with a whole body and no charge (fuel it at a pylon by its source).
  */
 public class ClockworkPorterItem extends Item {
@@ -30,8 +30,8 @@ public class ClockworkPorterItem extends Item {
 		if (!(context.getLevel() instanceof ServerLevel level) || !(context.getPlayer() instanceof ServerPlayer player)) {
 			return InteractionResult.SUCCESS;
 		}
-		if (!Workers.enabled() || !Workers.knows(player)) {
-			player.sendOverlayMessage(Component.translatable("message.jugcraft.concordance.workers.unknown"));
+		if (!Workers.enabled()) {
+			player.sendOverlayMessage(Component.translatable("message.jugcraft.concordance.disabled"));
 			return InteractionResult.FAIL;
 		}
 		WorkerDefinition.Construct terms = ClockworkPorterEntity.terms();

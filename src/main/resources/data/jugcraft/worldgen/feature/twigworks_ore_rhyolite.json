@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:ore",
+  "discard_chance_on_air_exposure": 0.0,
+  "size": 45,
+  "targets": [
+    {
+      "state": {
+        "id": "jugcraft:twigworks_rhyolite",
+        "properties": {
+          "axis": "y"
+        }
+      },
+      "target": {
+        "predicate_type": "minecraft:tag_match",
+        "tag": "minecraft:base_stone_overworld"
+      }
+    }
+  ]
+}

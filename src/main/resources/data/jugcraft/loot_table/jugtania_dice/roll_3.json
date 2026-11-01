@@ -1,0 +1,49 @@
+{
+  "type": "gift",
+  "pools": [
+    {
+      "name": "life_essence",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "jugcraft:jugtania_life_essence",
+          "modifier": [
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 4,
+                "max": 6
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "runes",
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 2,
+        "max": 4
+      },
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "jugcraft:jugtania_gaia_guardian/runes"
+        }
+      ],
+      "modifier": [
+        {
+          "count": {
+            "type": "minecraft:uniform",
+            "min": 1,
+            "max": 3
+          },
+          "type": "minecraft:set_count"
+        }
+      ]
+    }
+  ]
+}

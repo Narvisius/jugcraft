@@ -1,0 +1,103 @@
+{
+  "supplementaries": {
+    "rope_knot": {
+      "status": "native_adapter",
+      "implementation": "OwnerSupplementRopes / OwnerRopeKnotMixin: native leash knots and rope-post support"
+    },
+    "moving_slidy_block": {
+      "status": "native_adapter",
+      "implementation": "OwnerAssemblyMotion / OwnerSlidingBlocks: saved native piston carriers"
+    },
+    "moving_slidy_block_source": {
+      "status": "native_adapter",
+      "implementation": "OwnerSlidingBlocks: original source-position ownership retained in native moving carrier"
+    },
+    "block_generator": {
+      "status": "native_adapter",
+      "implementation": "OwnerRoadSigns: original anchor structure, source placement spacing, bounded server-thread destination lookup and saved pending-sign state; native locator replaces the temporary source worker."
+    },
+    "structure_temp": {
+      "status": "internal_transient_marker",
+      "evidence": "StructureTempBlockTile.tick removes itself; no item or player interaction. Native structure placement does not need this temporary block."
+    },
+    "cracked_bell": {
+      "status": "unregistered_source_asset",
+      "evidence": "No matching registration in supplied net/mehvahdjukaar/supplementaries/reg/ModRegistry.class; retained original asset, not a functioning source block."
+    },
+    "diode_block": {
+      "status": "unregistered_source_asset",
+      "evidence": "No matching registration in supplied net/mehvahdjukaar/supplementaries/reg/ModRegistry.class; retained original asset, not a functioning source block."
+    },
+    "drawers": {
+      "status": "unregistered_source_asset",
+      "evidence": "No matching registration in supplied net/mehvahdjukaar/supplementaries/reg/ModRegistry.class; retained original asset, not a functioning source block."
+    },
+    "jar_tinted": {
+      "status": "unregistered_source_asset",
+      "evidence": "No matching registration in supplied net/mehvahdjukaar/supplementaries/reg/ModRegistry.class; retained original asset, not a functioning source block."
+    },
+    "label": {
+      "status": "unregistered_source_asset",
+      "evidence": "No matching registration in supplied net/mehvahdjukaar/supplementaries/reg/ModRegistry.class; retained original asset, not a functioning source block."
+    },
+    "lumisene": {
+      "status": "unregistered_source_asset",
+      "evidence": "No matching registration in supplied net/mehvahdjukaar/supplementaries/reg/ModRegistry.class; retained original asset, not a functioning source block."
+    },
+    "mob_jar": {
+      "status": "unregistered_source_asset",
+      "evidence": "No matching registration in supplied net/mehvahdjukaar/supplementaries/reg/ModRegistry.class; retained original asset, not a functioning source block."
+    },
+    "rope_chandelier": {
+      "status": "unregistered_source_asset",
+      "evidence": "No matching registration in supplied net/mehvahdjukaar/supplementaries/reg/ModRegistry.class; retained original asset, not a functioning source block."
+    },
+    "rope_ender_chandelier": {
+      "status": "unregistered_source_asset",
+      "evidence": "No matching registration in supplied net/mehvahdjukaar/supplementaries/reg/ModRegistry.class; retained original asset, not a functioning source block."
+    },
+    "rope_glow_chandelier": {
+      "status": "unregistered_source_asset",
+      "evidence": "No matching registration in supplied net/mehvahdjukaar/supplementaries/reg/ModRegistry.class; retained original asset, not a functioning source block."
+    },
+    "rope_soul_chandelier": {
+      "status": "unregistered_source_asset",
+      "evidence": "No matching registration in supplied net/mehvahdjukaar/supplementaries/reg/ModRegistry.class; retained original asset, not a functioning source block."
+    },
+    "rope_tomatoes": {
+      "status": "unregistered_source_asset",
+      "evidence": "No matching registration in supplied net/mehvahdjukaar/supplementaries/reg/ModRegistry.class; retained original asset, not a functioning source block."
+    },
+    "soul_jar": {
+      "status": "unregistered_source_asset",
+      "evidence": "No matching registration in supplied net/mehvahdjukaar/supplementaries/reg/ModRegistry.class; retained original asset, not a functioning source block."
+    },
+    "stick_tomatoes": {
+      "status": "unregistered_source_asset",
+      "evidence": "No matching registration in supplied net/mehvahdjukaar/supplementaries/reg/ModRegistry.class; retained original asset, not a functioning source block."
+    },
+    "tater_in_a_jar": {
+      "status": "unregistered_source_asset",
+      "evidence": "No matching registration in supplied net/mehvahdjukaar/supplementaries/reg/ModRegistry.class; retained original asset, not a functioning source block."
+    }
+  },
+  "forbidden": {
+    "desk": {
+      "status": "disabled_in_supplied_source",
+      "evidence": "DeskBlock.isEnabled returns false"
+    },
+    "research_desk": {
+      "status": "disabled_in_supplied_source",
+      "evidence": "ResearchDeskBlock extends DeskBlock and inherits isEnabled=false"
+    },
+    "forbiddenomicon": {
+      "status": "disabled_in_supplied_source",
+      "evidence": "ForbiddenomiconBlock.isEnabled returns false"
+    },
+    "aureal_tank": {
+      "status": "disabled_in_supplied_source",
+      "evidence": "AurealTankItem.isEnabled returns false"
+    }
+  },
+  "validation": "Source inspection only. No runtime verification."
+}

@@ -1,0 +1,58 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "jugcraft:twigworks_bamboo_leaves",
+              "modifier": [
+                {
+                  "add": true,
+                  "count": 1.0,
+                  "type": "minecraft:set_count",
+                  "condition": {
+                    "type": "minecraft:match_block",
+                    "blocks": "jugcraft:twigworks_bamboo_leaves",
+                    "state": {
+                      "layers": "2"
+                    }
+                  }
+                },
+                {
+                  "add": true,
+                  "count": 2.0,
+                  "type": "minecraft:set_count",
+                  "condition": {
+                    "type": "minecraft:match_block",
+                    "blocks": "jugcraft:twigworks_bamboo_leaves",
+                    "state": {
+                      "layers": "3"
+                    }
+                  }
+                },
+                {
+                  "add": true,
+                  "count": 3.0,
+                  "type": "minecraft:set_count",
+                  "condition": {
+                    "type": "minecraft:match_block",
+                    "blocks": "jugcraft:twigworks_bamboo_leaves",
+                    "state": {
+                      "layers": "4"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    }
+  ]
+}

@@ -41,6 +41,7 @@ public final class NouveauRituals {
     public static void tick(ServerLevel l,ServerPlayer p,NouveauWorkshop b){
         String r=b.ritual();if(r.isEmpty())return;
         if(!b.ritualRunning()){b.status("Add augments; empty-hand use to begin");for(var drop:l.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,new AABB(b.getBlockPos()).inflate(1.5),e->e.isAlive()).stream().limit(8).toList()){if(!Authority.mayChange(l,p,drop.blockPosition()))continue;for(int i=1;i<9;i++)if(b.getItem(i).isEmpty()){b.setItem(i,drop.getItem().split(1));if(drop.getItem().isEmpty())drop.discard();break;}}return;}
+        if(io.github.jimbozoomer.jugcraft.nouveau.additions.ArsAdditionRituals.tick(l,p,b))return;
         if(r.equals("sanctuary")){SANCTUARIES.add(b);b.setActive(true);b.status("Preventing hostile natural spawns");return;}
         if(r.equals("overgrowth")&&NouveauRitualWork.count(b,Items.BONE_BLOCK)>0){if(NouveauSource.canPay(l,p,b,1)&&NouveauRitualWork.growBabies(l,p,b))NouveauSource.pay(l,p,b,1);return;}
         if(!NouveauSource.canPay(l,p,b,1)){b.setActive(false);b.status("Ritual needs Ley Charge");return;}

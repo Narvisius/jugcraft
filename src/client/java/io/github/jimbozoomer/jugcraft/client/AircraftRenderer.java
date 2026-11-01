@@ -57,7 +57,7 @@ public final class AircraftRenderer extends EntityRenderer<Aircraft,AircraftRend
             case "pressing_interpolated_y"->s.vertical;
             case "pressing_interpolated_z"->s.forward;
             case "balloon_pitch"->s.pitch*.2F;
-            case "balloon_roll"->s.turn*2;
+            case "balloon_roll"->-s.turn*2;
             case "turret_cooldown"->1-s.recoil;
             case "(1-turret_cooldown)"->s.recoil;
             case "pitch","turret_pitch"->s.aimPitch;

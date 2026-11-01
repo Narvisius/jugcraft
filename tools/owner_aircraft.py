@@ -5,8 +5,9 @@ import json
 import shutil
 from pathlib import Path
 import bbmodel
-from crafted_furniture import SOURCE, RES, TARGET, DATA, read, write, ingredient
+from crafted_furniture import RES, TARGET, DATA, read, write, ingredient
 
+SOURCE = Path(__file__).resolve().parents[1] / 'art/owner-library/originals/Oct22/Planes And Furniture'
 ASSETS = SOURCE / 'assets/immersive_aircraft'
 NAMES = ('airship', 'bamboo_hopper', 'biplane', 'cargo_airship', 'gyrodyne', 'quadrocopter', 'warship')
 

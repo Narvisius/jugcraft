@@ -83,6 +83,7 @@ def geometry(source):
                 assert not args or args[0] in ('true', 'false')
                 mirror = not args or args[0] == 'true'
             elif call == 'addBox':
+                if len(args) == 6: args = [*args, 'new CubeDeformation(0.0f)']
                 assert len(args) == 7, args
                 deformation = re.fullmatch(r'new CubeDeformation\((.*)\)', args[6])
                 if not deformation: raise ValueError(args[6])

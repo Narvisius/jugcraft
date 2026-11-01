@@ -159,7 +159,7 @@ public class TreeBatchFourBCGameTests {
 			helper.assertTrue(saw.output().create().is(plank) && saw.output().create().getCount() == 6, "Wrong sawmill output");
 			int drops = 0;
 			for (int i = 0; i < 512; i++) for (var drop : Block.getDrops(block(leaf(tree)).defaultBlockState(), level, helper.absolutePos(pos), null)) {
-				helper.assertTrue(drop.is(sapling) || drop.is(Items.STICK), "Foreign leaf drop");
+				helper.assertTrue(drop.is(sapling) || drop.is(Items.STICK) || drop.is(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(io.github.jimbozoomer.jugcraft.Jugcraft.id("twigworks_twig"))), "Foreign leaf drop");
 				if (drop.is(sapling)) drops++;
 			}
 			helper.assertTrue(drops > 0, "No renewable saplings");

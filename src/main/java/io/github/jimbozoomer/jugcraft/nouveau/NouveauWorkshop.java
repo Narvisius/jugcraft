@@ -40,7 +40,7 @@ public final class NouveauWorkshop extends BlockEntity implements WorldlyContain
         // Nearby clients need the visible specimen and display slots, not the full storage network.
         var out=TagValueOutput.createWithContext(net.minecraft.util.ProblemReporter.DISCARDING,lookup);
         var display=NonNullList.withSize(SLOTS,ItemStack.EMPTY);display.set(0,items.get(0).copy());display.set(9,items.get(9).copy());ContainerHelper.saveAllItems(out,display);
-        out.putLong("ley",ley);out.putString("custom_name",customName);out.putInt("doses",doses);out.store("potion",net.minecraft.world.item.alchemy.PotionContents.CODEC,potion);
+        out.putLong("ley",ley());out.putString("custom_name",customName);out.putInt("doses",doses);out.store("potion",net.minecraft.world.item.alchemy.PotionContents.CODEC,potion);
         if(captured!=null)out.store("captured",net.minecraft.world.item.component.CustomData.CODEC,captured);
         if(!preview.isEmpty())out.store("preview",NouveauPlanarium.Mini.CODEC.listOf(),preview);return out.buildResult();
     }
@@ -49,7 +49,13 @@ public final class NouveauWorkshop extends BlockEntity implements WorldlyContain
     public void preview(List<NouveauPlanarium.Mini> next){if(!preview.equals(next)){preview=List.copyOf(next);setChanged();}}
     private int progress;
     private int cycles;
+    private int sourceSpawnDelay=20;
+    public int advanceSourceSpawnDelay(int elapsed){sourceSpawnDelay=Math.max(0,sourceSpawnDelay-elapsed);setChanged();return sourceSpawnDelay;}
+    public void sourceSpawnDelay(int ticks){sourceSpawnDelay=Math.clamp(ticks,0,800);setChanged();}
     private ItemStack filter=ItemStack.EMPTY;
+    private @Nullable Inscription rememberedSpell;
+    public @Nullable Inscription configuredSpell(){return rememberedSpell!=null?rememberedSpell:getItem(0).get(JugcraftConcordance.INSCRIPTION);}
+    public void rememberSpell(@Nullable Inscription spell){rememberedSpell=spell;setChanged();}
     private int threshold=1,signal;
     private long signalUntil;
     private boolean inverted,lastPowered;
@@ -108,11 +114,13 @@ public final class NouveauWorkshop extends BlockEntity implements WorldlyContain
     }
     public boolean permitted(ServerPlayer p){return belongs(p.getUUID())&&level==p.level()&&level.hasChunkAt(worldPosition)&&Authority.mayChange(p.level(),p,worldPosition);}
     public long capacity(){return kind().equals("creative_source_jar")?1000000:kind().contains("source_jar")?1000:128;}
-    public long ley(){return ley;}
-    public Reservoir reservoir(){return new Reservoir(LeyPylonBlockEntity.LEY,ley,capacity());}
-    public long fill(long amount){long n=Math.clamp(amount,0,capacity()-ley);ley+=n;if(n>0){setChanged();syncFill();}return n;}
-    public boolean draw(long amount){if(amount<0||ley<amount)return false;ley-=amount;if(amount>0){setChanged();syncFill();}return true;}
-    private void syncFill(){if(level==null)return;long amount=kind().equals("potion_jar")?doses:ley,max=kind().equals("potion_jar")?100:capacity();int fill=amount==0?0:1+(int)Math.min(10,amount*10/max);if(getBlockState().getValue(NouveauWorkshopBlock.FILL)!=fill)level.setBlock(worldPosition,getBlockState().setValue(NouveauWorkshopBlock.FILL,fill),Block.UPDATE_CLIENTS);}
+    public boolean sharedSource(){return kind().equals("ender_source_jar");}
+    public Object sourceIdentity(){return sharedSource()&&owner!=null?owner:this;}
+    public long ley(){return sharedSource()&&level instanceof ServerLevel server?io.github.jimbozoomer.jugcraft.nouveau.additions.ArsSharedSource.held(server,owner):ley;}
+    public Reservoir reservoir(){return new Reservoir(LeyPylonBlockEntity.LEY,ley(),capacity());}
+    public long fill(long amount){long n;if(sharedSource()&&level instanceof ServerLevel server)n=io.github.jimbozoomer.jugcraft.nouveau.additions.ArsSharedSource.fill(server,owner,amount);else{n=Math.clamp(amount,0,capacity()-ley);ley+=n;}if(n>0){setChanged();syncFill();}return n;}
+    public boolean draw(long amount){if(sharedSource()&&level instanceof ServerLevel server){if(!io.github.jimbozoomer.jugcraft.nouveau.additions.ArsSharedSource.draw(server,owner,amount))return false;}else{if(amount<0||ley<amount)return false;ley-=amount;}if(amount>0){setChanged();syncFill();}return true;}
+    private void syncFill(){if(level==null)return;long amount=kind().equals("potion_jar")?doses:ley(),max=kind().equals("potion_jar")?100:capacity();int fill=amount==0?0:1+(int)Math.min(10,amount*10/max);if(getBlockState().getValue(NouveauWorkshopBlock.FILL)!=fill)level.setBlock(worldPosition,getBlockState().setValue(NouveauWorkshopBlock.FILL,fill),Block.UPDATE_CLIENTS);}
     public String ritual(){return ritual;}
     public int ritualCursor(){return ritualCursor;}
     public void ritual(String id,int cursor){ritual=id;ritualCursor=cursor;if(id.isEmpty()){ritualRunning=false;ritualAugments=List.of();}setChanged();}
@@ -136,12 +144,16 @@ public final class NouveauWorkshop extends BlockEntity implements WorldlyContain
     public boolean storage(){return Set.of("repository","repository_controller","archwood_chest").contains(kind());}
     public static void tick(Level level,BlockPos pos,BlockState state,NouveauWorkshop be){
         if(!(level instanceof ServerLevel server)||(server.getGameTime()+pos.asLong())%20!=0)return;
+        io.github.jimbozoomer.jugcraft.nouveau.additions.ArsSourceSpawner.observe(be);
+        if(be.sharedSource()&&be.ley!=be.ley()){be.ley=be.ley();be.syncFill();be.setChanged();}
         if(be.clientDirty){be.clientDirty=false;level.sendBlockUpdated(pos,state,state,Block.UPDATE_CLIENTS);}
         if(!JugNouveau.enabled()||be.paused){be.setActive(false);be.signal(0,0);be.status="Paused";return;}
+        if(be.kind().equals("warp_nexus")){be.setActive(server.getNearestPlayer(pos.getX()+.5,pos.getY()+.5,pos.getZ()+.5,5,false)!=null);return;}
         ServerPlayer actor=Authority.answering(server,be.owner);
         if(actor==null||!be.permitted(actor)){be.setActive(false);be.status="Waiting for owner / access";return;}
         be.cycles++;if(be.kind().equals("planarium")&&be.every(10))NouveauPlanarium.refresh(be);
         NouveauSource.tick(server,actor,be);
+        if(io.github.jimbozoomer.jugcraft.nouveau.additions.ArsScribing.tick(server,actor,be))return;
         if(!NouveauRecipes.forStation(be.kind()).isEmpty())be.craft(server,actor);
         NouveauDevices.tick(server,actor,be);
         NouveauSignals.tick(server,actor,be);
@@ -207,6 +219,9 @@ public final class NouveauWorkshop extends BlockEntity implements WorldlyContain
         captured=in.read("captured",net.minecraft.world.item.component.CustomData.CODEC).orElse(null);
         potion=in.read("potion",net.minecraft.world.item.alchemy.PotionContents.CODEC).orElse(net.minecraft.world.item.alchemy.PotionContents.EMPTY);doses=Math.clamp(in.getIntOr("doses",0),0,100);diffuserRemaining=Math.clamp(in.getIntOr("diffusion",0),0,600);
         filter=in.read("filter",ItemStack.OPTIONAL_CODEC).orElse(ItemStack.EMPTY);threshold=Math.clamp(in.getIntOr("threshold",1),1,4096);inverted=in.getBooleanOr("inverted",false);signal=0;signalUntil=0;
+        rememberedSpell=in.read("remembered_spell",Inscription.CODEC).orElse(null);
+        sourceSpawnDelay=Math.clamp(in.getIntOr("source_spawn_delay",20),0,800);
+        arsPreset=in.getStringOr("ars_preset","");
     }
     @Override protected void saveAdditional(ValueOutput out){super.saveAdditional(out);out.putInt("nouveau_schema",1);ContainerHelper.saveAllItems(out,items);out.store("preview",NouveauPlanarium.Mini.CODEC.listOf(),preview);
         if(owner!=null)out.store("owner",UUIDUtil.CODEC,owner);out.putLong("ley",ley);out.putBoolean("paused",paused);out.putBoolean("locked",locked);out.putString("selected",selected);out.store("links",BlockPos.CODEC.listOf(),links);
@@ -215,10 +230,20 @@ public final class NouveauWorkshop extends BlockEntity implements WorldlyContain
         if(captured!=null)out.store("captured",net.minecraft.world.item.component.CustomData.CODEC,captured);
         out.store("potion",net.minecraft.world.item.alchemy.PotionContents.CODEC,potion);out.putInt("doses",doses);out.putInt("diffusion",diffuserRemaining);
         out.store("filter",ItemStack.OPTIONAL_CODEC,filter);out.putInt("threshold",threshold);out.putBoolean("inverted",inverted);
+        if(rememberedSpell!=null)out.store("remembered_spell",Inscription.CODEC,rememberedSpell);
+        out.putInt("source_spawn_delay",sourceSpawnDelay);
+        if(!arsPreset.isEmpty())out.putString("ars_preset",arsPreset);
     }
-    @Override protected void collectImplicitComponents(DataComponentMap.Builder b){super.collectImplicitComponents(b);if(!customName.isEmpty())b.set(DataComponents.CUSTOM_NAME,net.minecraft.network.chat.Component.literal(customName));b.set(JugcraftConcordance.LEY_CHARGE,(int)ley);if(captured!=null)b.set(NouveauContainment.CAPTURE,captured);if(doses>0){b.set(DataComponents.POTION_CONTENTS,potion);b.set(NouveauPotions.JAR_DOSES,doses);}}
-    @Override protected void applyImplicitComponents(DataComponentGetter c){super.applyImplicitComponents(c);ley=Math.clamp(c.getOrDefault(JugcraftConcordance.LEY_CHARGE,0),0,capacity());captured=c.get(NouveauContainment.CAPTURE);potion=c.getOrDefault(DataComponents.POTION_CONTENTS,net.minecraft.world.item.alchemy.PotionContents.EMPTY);doses=Math.clamp(c.getOrDefault(NouveauPotions.JAR_DOSES,0),0,100);}
+    @Override protected void collectImplicitComponents(DataComponentMap.Builder b){super.collectImplicitComponents(b);if(!customName.isEmpty())b.set(DataComponents.CUSTOM_NAME,net.minecraft.network.chat.Component.literal(customName));if(!sharedSource())b.set(JugcraftConcordance.LEY_CHARGE,(int)ley);if(captured!=null)b.set(NouveauContainment.CAPTURE,captured);if(doses>0){b.set(DataComponents.POTION_CONTENTS,potion);b.set(NouveauPotions.JAR_DOSES,doses);}}
+    @Override protected void applyImplicitComponents(DataComponentGetter c){super.applyImplicitComponents(c);ley=sharedSource()?0:Math.clamp(c.getOrDefault(JugcraftConcordance.LEY_CHARGE,0),0,capacity());captured=c.get(NouveauContainment.CAPTURE);potion=c.getOrDefault(DataComponents.POTION_CONTENTS,net.minecraft.world.item.alchemy.PotionContents.EMPTY);doses=Math.clamp(c.getOrDefault(NouveauPotions.JAR_DOSES,0),0,100);}
+    private String arsPreset="";
+    public String arsPreset(){return arsPreset;}
+    private boolean nexusOpened;
     @Override public void registerControllers(AnimatableManager.ControllerRegistrar c){c.add(new AnimationController<NouveauWorkshop>("work",4,s->{
+        if(kind().equals("warp_nexus")){
+            if(getBlockState().getValue(NouveauWorkshopBlock.ACTIVE)){nexusOpened=true;return s.setAndContinue(RawAnimation.begin().thenPlay("open").thenLoop("spin"));}
+            return s.setAndContinue(nexusOpened?RawAnimation.begin().thenPlayAndHold("close"):RawAnimation.begin().thenPlayAndHold("closed"));
+        }
         String clip=NouveauPresentation.animation(entry().geo(),getBlockState().getValue(NouveauWorkshopBlock.ACTIVE));
         return clip.isEmpty()?com.geckolib.animation.object.PlayState.STOP:s.setAndContinue(RawAnimation.begin().thenLoop(clip));}));}
     @Override public AnimatableInstanceCache getAnimatableInstanceCache(){return cache;}

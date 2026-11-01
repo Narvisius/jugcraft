@@ -9,7 +9,7 @@ An Orrery Observatory under the open sky gathers each pattern's Astral Resonance
 the occurrence's number (counted from day zero) is the reward's identity, and a claim must be for a later occurrence
 than the last and at least half a period of game time after it (game time only runs forward with the world), so moving
 the clock back or forward never pays twice. An Astrolabe carries resonance and attunes its holder to a pattern that is
-up, for the pattern's effect while it stays up (at most eight minutes); a master may recall a pattern they observed
+up, for the pattern's effect while it stays up (at most eight minutes); an astrolabe holder may recall an observed pattern they observed
 when nothing is up, dearer and shorter, once per occurrence by the same ledger.
 
 The patterns are data (data/jugcraft/concordance/pattern, read by Java's concordance/celestial). Seasonal patterns keep
@@ -178,7 +178,7 @@ MESSAGES = {
     "sky.drawn": "Drew %s resonance: %s / %s",
     "sky.too_little": "The astrolabe needs %s resonance",
     "sky.attuned": "Attuned to %s",
-    "sky.nothing_up": "Nothing is up where you can see it (a master may recall a pattern)",
+    "sky.nothing_up": "Nothing is up where you can see it (an astrolabe holder may recall an observed pattern)",
     "sky.nothing_observed": "You have observed no pattern to recall",
     "sky.recalled_already": "You have recalled %s since it last rose",
     "sky.recalled": "Recalled %s",
@@ -323,7 +323,7 @@ def codex():
                  f"most {MAX_ATTUNEMENT_TICKS // 1200} minutes; use it again to renew). Death ends an attunement.",
                  rid("astrolabe")),
                 ("text", "Recall",
-                 f"A master may attune when nothing is up, by **recalling** the pattern they last observed: it costs "
+                 f"An astrolabe holder may attune when nothing is up, by **recalling** the pattern they last observed: it costs "
                  f"the pattern's recall price and lasts {RECALL_TICKS // 1200} minutes, once each time the pattern "
                  f"comes round. A holder of Stolas's pact may also recall, at his perch, any pattern they observed (the "
                  f"Binding category's pact entry); every recall of a pattern's rising is the same one. Stored resonance is "

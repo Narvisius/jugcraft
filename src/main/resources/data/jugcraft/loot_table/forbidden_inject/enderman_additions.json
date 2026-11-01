@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:forbidden_ender_pearl_fragment"
+        }
+      ],
+      "rolls": 1.0,
+      "modifier": [
+        {
+          "add": false,
+          "count": {
+            "type": "minecraft:uniform",
+            "max": 2.0,
+            "min": 0.0
+          },
+          "type": "minecraft:set_count"
+        },
+        {
+          "count": {
+            "type": "minecraft:uniform",
+            "max": 2.0,
+            "min": 0.0
+          },
+          "enchantment": "minecraft:looting",
+          "type": "minecraft:enchanted_count_increase"
+        }
+      ]
+    }
+  ],
+  "random_sequence": "jugcraft:forbidden_entities/additions/ender_pearl_fragment_addition"
+}

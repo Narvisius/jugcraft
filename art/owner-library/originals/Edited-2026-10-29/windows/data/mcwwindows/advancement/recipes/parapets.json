@@ -1,0 +1,61 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "mcwwindows:oak_log_parapet",
+      "mcwwindows:pale_oak_log_parapet",
+      "mcwwindows:spruce_log_parapet",
+      "mcwwindows:birch_log_parapet",
+      "mcwwindows:jungle_log_parapet",
+      "mcwwindows:acacia_log_parapet",
+      "mcwwindows:dark_oak_log_parapet",
+      "mcwwindows:crimson_stem_parapet",
+      "mcwwindows:warped_stem_parapet",
+      "mcwwindows:mangrove_log_parapet",
+      "mcwwindows:oak_plank_parapet",
+      "mcwwindows:pale_oak_plank_parapet",
+      "mcwwindows:spruce_plank_parapet",
+      "mcwwindows:birch_plank_parapet",
+      "mcwwindows:jungle_plank_parapet",
+      "mcwwindows:acacia_plank_parapet",
+      "mcwwindows:dark_oak_plank_parapet",
+      "mcwwindows:crimson_plank_parapet",
+      "mcwwindows:warped_plank_parapet",
+      "mcwwindows:mangrove_plank_parapet",
+      "mcwwindows:andesite_parapet",
+      "mcwwindows:diorite_parapet",
+      "mcwwindows:granite_parapet",
+      "mcwwindows:blackstone_parapet",
+      "mcwwindows:prismarine_parapet",
+      "mcwwindows:dark_prismarine_parapet",
+      "mcwwindows:poplar_log_parapet",
+      "mcwwindows:poplar_plank_parapet"
+    ]
+  },
+  "criteria": {
+    "has_wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:oak_planks"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": "mcwwindows:oak_shutter"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wood",
+      "has_the_recipe"
+    ]
+  ]
+}

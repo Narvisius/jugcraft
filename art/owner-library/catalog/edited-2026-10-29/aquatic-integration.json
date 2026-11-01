@@ -1,0 +1,908 @@
+{
+  "source": "Aquacultah",
+  "fish": [
+    {
+      "name": "atlantic_cod",
+      "shape": "MEDIUM",
+      "nutrition": 3,
+      "min": 10.0,
+      "max": 211.0,
+      "fillets": 6
+    },
+    {
+      "name": "blackfish",
+      "shape": "MEDIUM",
+      "nutrition": 2,
+      "min": 1.0,
+      "max": 28.0,
+      "fillets": 2
+    },
+    {
+      "name": "pacific_halibut",
+      "shape": "HALIBUT",
+      "nutrition": 3,
+      "min": 25.0,
+      "max": 550.0,
+      "fillets": 12
+    },
+    {
+      "name": "atlantic_halibut",
+      "shape": "HALIBUT",
+      "nutrition": 3,
+      "min": 50.0,
+      "max": 710.0,
+      "fillets": 14
+    },
+    {
+      "name": "atlantic_herring",
+      "shape": "SMALL",
+      "nutrition": 1,
+      "min": 0.5,
+      "max": 2.4,
+      "fillets": 1
+    },
+    {
+      "name": "pink_salmon",
+      "shape": "MEDIUM",
+      "nutrition": 2,
+      "min": 1.5,
+      "max": 15.0,
+      "fillets": 2
+    },
+    {
+      "name": "pollock",
+      "shape": "MEDIUM",
+      "nutrition": 2,
+      "min": 3.0,
+      "max": 46.0,
+      "fillets": 2
+    },
+    {
+      "name": "rainbow_trout",
+      "shape": "MEDIUM",
+      "nutrition": 2,
+      "min": 2.0,
+      "max": 27.0,
+      "fillets": 2
+    },
+    {
+      "name": "bayad",
+      "shape": "CATFISH",
+      "nutrition": 2,
+      "min": 5.0,
+      "max": 145.0,
+      "fillets": 4
+    },
+    {
+      "name": "boulti",
+      "shape": "SMALL",
+      "nutrition": 1,
+      "min": 1.0,
+      "max": 9.5,
+      "fillets": 1
+    },
+    {
+      "name": "capitaine",
+      "shape": "MEDIUM",
+      "nutrition": 3,
+      "min": 20.0,
+      "max": 440.0,
+      "fillets": 10
+    },
+    {
+      "name": "synodontis",
+      "shape": "SMALL",
+      "nutrition": 1,
+      "min": 0.5,
+      "max": 2.5,
+      "fillets": 1
+    },
+    {
+      "name": "smallmouth_bass",
+      "shape": "MEDIUM",
+      "nutrition": 2,
+      "min": 1.0,
+      "max": 12.0,
+      "fillets": 2
+    },
+    {
+      "name": "largemouth_bass",
+      "shape": "LARGE",
+      "nutrition": 2,
+      "min": 3.0,
+      "max": 25.0,
+      "fillets": 4
+    },
+    {
+      "name": "bluegill",
+      "shape": "SMALL",
+      "nutrition": 1,
+      "min": 0.8,
+      "max": 4.5,
+      "fillets": 1
+    },
+    {
+      "name": "brown_trout",
+      "shape": "MEDIUM",
+      "nutrition": 2,
+      "min": 1.5,
+      "max": 44.0,
+      "fillets": 2
+    },
+    {
+      "name": "carp",
+      "shape": "LARGE",
+      "nutrition": 2,
+      "min": 2.0,
+      "max": 40.0,
+      "fillets": 2
+    },
+    {
+      "name": "catfish",
+      "shape": "CATFISH",
+      "nutrition": 3,
+      "min": 10.0,
+      "max": 220.0,
+      "fillets": 6
+    },
+    {
+      "name": "gar",
+      "shape": "LONGNOSE",
+      "nutrition": 2,
+      "min": 8.0,
+      "max": 100.0,
+      "fillets": 4
+    },
+    {
+      "name": "minnow",
+      "shape": "SMALL",
+      "nutrition": 0,
+      "min": 0.2,
+      "max": 1.5,
+      "fillets": 0
+    },
+    {
+      "name": "muskellunge",
+      "shape": "LONGNOSE",
+      "nutrition": 2,
+      "min": 5.0,
+      "max": 70.0,
+      "fillets": 3
+    },
+    {
+      "name": "perch",
+      "shape": "SMALL",
+      "nutrition": 1,
+      "min": 0.5,
+      "max": 6.0,
+      "fillets": 1
+    },
+    {
+      "name": "arapaima",
+      "shape": "LONGNOSE",
+      "nutrition": 3,
+      "min": 20.0,
+      "max": 440.0,
+      "fillets": 10
+    },
+    {
+      "name": "piranha",
+      "shape": "SMALL",
+      "nutrition": 1,
+      "min": 0.5,
+      "max": 7.7,
+      "fillets": 1
+    },
+    {
+      "name": "tambaqui",
+      "shape": "LARGE",
+      "nutrition": 2,
+      "min": 7.0,
+      "max": 97.0,
+      "fillets": 3
+    },
+    {
+      "name": "brown_shrooma",
+      "shape": "SMALL",
+      "nutrition": 1,
+      "min": 1.0,
+      "max": 5.0,
+      "fillets": 0
+    },
+    {
+      "name": "red_shrooma",
+      "shape": "SMALL",
+      "nutrition": 1,
+      "min": 1.0,
+      "max": 5.0,
+      "fillets": 0
+    },
+    {
+      "name": "jellyfish",
+      "shape": "JELLYFISH",
+      "nutrition": 0,
+      "min": 5.0,
+      "max": 400.0,
+      "fillets": 0
+    },
+    {
+      "name": "red_grouper",
+      "shape": "MEDIUM",
+      "nutrition": 2,
+      "min": 4.0,
+      "max": 50.0,
+      "fillets": 3
+    },
+    {
+      "name": "tuna",
+      "shape": "LARGE",
+      "nutrition": 3,
+      "min": 30.0,
+      "max": 1508.0,
+      "fillets": 10
+    }
+  ],
+  "spawns": [
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_arapaima",
+        "weight": 1,
+        "minCount": 1,
+        "maxCount": 1
+      },
+      "includeBiomes": [
+        "#c:is_jungle"
+      ],
+      "excludeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "and": false
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_atlantic_cod",
+        "weight": 5,
+        "minCount": 1,
+        "maxCount": 1
+      },
+      "includeBiomes": [
+        "#c:is_cold",
+        "#c:is_beach"
+      ],
+      "excludeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "and": true
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_atlantic_cod",
+        "weight": 5,
+        "minCount": 1,
+        "maxCount": 1
+      },
+      "includeBiomes": [
+        "#c:is_cold",
+        "#c:is_ocean"
+      ],
+      "excludeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "and": true
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_atlantic_halibut",
+        "weight": 2,
+        "minCount": 1,
+        "maxCount": 1
+      },
+      "includeBiomes": [
+        "#c:is_ocean",
+        "#c:is_beach"
+      ],
+      "excludeBiomes": [
+        "#c:is_hot"
+      ],
+      "and": false
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_atlantic_herring",
+        "weight": 20,
+        "minCount": 1,
+        "maxCount": 6
+      },
+      "includeBiomes": [
+        "#c:is_ocean",
+        "#c:is_beach"
+      ],
+      "excludeBiomes": [
+        "#c:is_hot"
+      ],
+      "and": false
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_bayad",
+        "weight": 6,
+        "minCount": 1,
+        "maxCount": 2
+      },
+      "includeBiomes": [
+        "#c:is_dry"
+      ],
+      "excludeBiomes": [
+        "#c:is_cold"
+      ],
+      "and": false
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_blackfish",
+        "weight": 13,
+        "minCount": 1,
+        "maxCount": 4
+      },
+      "includeBiomes": [
+        "#c:is_cold",
+        "#c:is_beach"
+      ],
+      "excludeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "and": true
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_blackfish",
+        "weight": 13,
+        "minCount": 1,
+        "maxCount": 4
+      },
+      "includeBiomes": [
+        "#c:is_cold",
+        "#c:is_ocean"
+      ],
+      "excludeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "and": true
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_bluegill",
+        "weight": 20,
+        "minCount": 1,
+        "maxCount": 6
+      },
+      "includeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "excludeBiomes": [
+        "#c:is_ocean",
+        "#c:is_beach",
+        "#c:is_desert",
+        "#c:is_jungle"
+      ],
+      "and": false
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_boulti",
+        "weight": 10,
+        "minCount": 1,
+        "maxCount": 3
+      },
+      "includeBiomes": [
+        "#c:is_dry"
+      ],
+      "excludeBiomes": [
+        "#c:is_cold"
+      ],
+      "and": false
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_brown_shrooma",
+        "weight": 26,
+        "minCount": 1,
+        "maxCount": 8
+      },
+      "includeBiomes": [
+        "#c:is_mushroom"
+      ],
+      "excludeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "and": false
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_brown_trout",
+        "weight": 10,
+        "minCount": 1,
+        "maxCount": 3
+      },
+      "includeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "excludeBiomes": [
+        "#c:is_ocean",
+        "#c:is_beach",
+        "#c:is_hot",
+        "#c:is_desert",
+        "#c:is_jungle"
+      ],
+      "and": false
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_capitaine",
+        "weight": 1,
+        "minCount": 1,
+        "maxCount": 1
+      },
+      "includeBiomes": [
+        "#c:is_dry"
+      ],
+      "excludeBiomes": [
+        "#c:is_cold"
+      ],
+      "and": false
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_carp",
+        "weight": 10,
+        "minCount": 1,
+        "maxCount": 3
+      },
+      "includeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "excludeBiomes": [
+        "#c:is_ocean",
+        "#c:is_beach",
+        "#c:is_desert",
+        "#c:is_jungle"
+      ],
+      "and": false
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_catfish",
+        "weight": 1,
+        "minCount": 1,
+        "maxCount": 1
+      },
+      "includeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "excludeBiomes": [
+        "#c:is_ocean",
+        "#c:is_beach",
+        "#c:is_desert",
+        "#c:is_snowy",
+        "#c:is_jungle"
+      ],
+      "and": false
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_gar",
+        "weight": 6,
+        "minCount": 1,
+        "maxCount": 2
+      },
+      "includeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "excludeBiomes": [
+        "#c:is_ocean",
+        "#c:is_beach",
+        "#c:is_desert",
+        "#c:is_snowy",
+        "#c:is_jungle"
+      ],
+      "and": false
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_jellyfish",
+        "weight": 10,
+        "minCount": 1,
+        "maxCount": 3
+      },
+      "includeBiomes": [
+        "#c:is_ocean",
+        "#c:is_beach"
+      ],
+      "excludeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "and": false
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_smallmouth_bass",
+        "weight": 7,
+        "minCount": 1,
+        "maxCount": 2
+      },
+      "includeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "excludeBiomes": [
+        "#c:is_ocean",
+        "#c:is_beach",
+        "#c:is_cold",
+        "#c:is_desert",
+        "#c:is_snowy",
+        "#c:is_jungle"
+      ],
+      "and": false
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_minnow",
+        "weight": 18,
+        "minCount": 1,
+        "maxCount": 5
+      },
+      "includeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "excludeBiomes": [
+        "#c:is_ocean",
+        "#c:is_beach",
+        "#c:is_desert",
+        "#c:is_jungle"
+      ],
+      "and": false
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_muskellunge",
+        "weight": 3,
+        "minCount": 1,
+        "maxCount": 1
+      },
+      "includeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "excludeBiomes": [
+        "#c:is_ocean",
+        "#c:is_beach",
+        "#c:is_hot",
+        "#c:is_desert",
+        "#c:is_jungle"
+      ],
+      "and": false
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_pacific_halibut",
+        "weight": 3,
+        "minCount": 1,
+        "maxCount": 1
+      },
+      "includeBiomes": [
+        "#c:is_cold",
+        "#c:is_beach"
+      ],
+      "excludeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "and": true
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_pacific_halibut",
+        "weight": 3,
+        "minCount": 1,
+        "maxCount": 1
+      },
+      "includeBiomes": [
+        "#c:is_cold",
+        "#c:is_ocean"
+      ],
+      "excludeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "and": true
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_perch",
+        "weight": 20,
+        "minCount": 1,
+        "maxCount": 6
+      },
+      "includeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "excludeBiomes": [
+        "#c:is_ocean",
+        "#c:is_beach",
+        "#c:is_hot",
+        "#c:is_desert",
+        "#c:is_jungle"
+      ],
+      "and": false
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_pink_salmon",
+        "weight": 6,
+        "minCount": 1,
+        "maxCount": 2
+      },
+      "includeBiomes": [
+        "#c:is_cold",
+        "#c:is_beach"
+      ],
+      "excludeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "and": true
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_pink_salmon",
+        "weight": 6,
+        "minCount": 1,
+        "maxCount": 2
+      },
+      "includeBiomes": [
+        "#c:is_cold",
+        "#c:is_aquatic"
+      ],
+      "excludeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "and": true
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_piranha",
+        "weight": 20,
+        "minCount": 1,
+        "maxCount": 6
+      },
+      "includeBiomes": [
+        "#c:is_jungle"
+      ],
+      "excludeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "and": false
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_pollock",
+        "weight": 8,
+        "minCount": 1,
+        "maxCount": 2
+      },
+      "includeBiomes": [
+        "#c:is_cold",
+        "#c:is_beach"
+      ],
+      "excludeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "and": true
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_pollock",
+        "weight": 8,
+        "minCount": 1,
+        "maxCount": 2
+      },
+      "includeBiomes": [
+        "#c:is_cold",
+        "#c:is_ocean"
+      ],
+      "excludeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "and": true
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_rainbow_trout",
+        "weight": 6,
+        "minCount": 1,
+        "maxCount": 2
+      },
+      "includeBiomes": [
+        "#c:is_cold",
+        "#c:is_beach"
+      ],
+      "excludeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "and": true
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_rainbow_trout",
+        "weight": 6,
+        "minCount": 1,
+        "maxCount": 2
+      },
+      "includeBiomes": [
+        "#c:is_cold",
+        "#c:is_ocean"
+      ],
+      "excludeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "and": true
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_rainbow_trout",
+        "weight": 6,
+        "minCount": 2,
+        "maxCount": 4
+      },
+      "includeBiomes": [
+        "#c:is_river"
+      ],
+      "excludeBiomes": [
+        "#c:is_hot"
+      ],
+      "and": false
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_red_grouper",
+        "weight": 6,
+        "minCount": 1,
+        "maxCount": 2
+      },
+      "includeBiomes": [
+        "#c:is_ocean",
+        "#c:is_beach"
+      ],
+      "excludeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "and": false
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_red_shrooma",
+        "weight": 26,
+        "minCount": 1,
+        "maxCount": 8
+      },
+      "includeBiomes": [
+        "#c:is_mushroom"
+      ],
+      "excludeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "and": false
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_smallmouth_bass",
+        "weight": 10,
+        "minCount": 1,
+        "maxCount": 3
+      },
+      "includeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "excludeBiomes": [
+        "#c:is_ocean",
+        "#c:is_beach",
+        "#c:is_hot",
+        "#c:is_desert",
+        "#c:is_snowy",
+        "#c:is_jungle"
+      ],
+      "and": false
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_synodontis",
+        "weight": 20,
+        "minCount": 1,
+        "maxCount": 6
+      },
+      "includeBiomes": [
+        "#c:is_dry"
+      ],
+      "excludeBiomes": [
+        "#c:is_cold"
+      ],
+      "and": false
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_tambaqui",
+        "weight": 6,
+        "minCount": 1,
+        "maxCount": 2
+      },
+      "includeBiomes": [
+        "#c:is_jungle"
+      ],
+      "excludeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "and": false
+    },
+    {
+      "type": "jugcraft:aquatic_fish_spawn",
+      "spawn": {
+        "type": "jugcraft:aquatic_tuna",
+        "weight": 1,
+        "minCount": 1,
+        "maxCount": 1
+      },
+      "includeBiomes": [
+        "#c:is_ocean",
+        "#c:is_beach"
+      ],
+      "excludeBiomes": [
+        "#jugcraft:aquatic_empty"
+      ],
+      "and": false
+    }
+  ],
+  "models": [
+    "FishBaseModel",
+    "FishSmallModel",
+    "FishMediumModel",
+    "FishLargeModel",
+    "FishLongnoseModel",
+    "FishCathfishModel",
+    "JellyfishModel",
+    "AquaTropicalFishBModel",
+    "TurtleLandModel"
+  ],
+  "sourceExecuted": false,
+  "status": "Local fish/turtles, fishing tackle, dye presentation, native weighted loot, worm farming, storage, fish trophies and neptunium equipment implemented. Native API/resource closure and combined validation remain. Not compiled or tested."
+}

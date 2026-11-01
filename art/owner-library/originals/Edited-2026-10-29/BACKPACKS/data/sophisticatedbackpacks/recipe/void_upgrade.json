@@ -1,0 +1,23 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "sophisticatedcore:item_enabled",
+      "itemRegistryName": "sophisticatedbackpacks:void_upgrade"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "sophisticatedbackpacks:upgrade_base",
+    "E": "#c:ender_pearls",
+    "O": "#c:obsidians",
+    "R": "#c:dusts/redstone"
+  },
+  "pattern": [
+    " E ",
+    "OBO",
+    "ROR"
+  ],
+  "result": {
+    "id": "sophisticatedbackpacks:void_upgrade"
+  }
+}

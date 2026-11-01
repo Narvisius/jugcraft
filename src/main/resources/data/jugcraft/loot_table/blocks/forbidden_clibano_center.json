@@ -1,0 +1,56 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "jugcraft:forbidden_clibano_core",
+              "condition": {
+                "terms": [
+                  {
+                    "type": "minecraft:match_block",
+                    "blocks": "jugcraft:forbidden_clibano_center",
+                    "state": {
+                      "type": "front_off"
+                    }
+                  },
+                  {
+                    "type": "minecraft:match_block",
+                    "blocks": "jugcraft:forbidden_clibano_center",
+                    "state": {
+                      "type": "front_fire"
+                    }
+                  },
+                  {
+                    "type": "minecraft:match_block",
+                    "blocks": "jugcraft:forbidden_clibano_center",
+                    "state": {
+                      "type": "front_soul_fire"
+                    }
+                  },
+                  {
+                    "type": "minecraft:match_block",
+                    "blocks": "jugcraft:forbidden_clibano_center",
+                    "state": {
+                      "type": "front_enchanted_fire"
+                    }
+                  }
+                ],
+                "type": "minecraft:any_of"
+              }
+            },
+            {
+              "type": "minecraft:item",
+              "name": "jugcraft:forbidden_polished_darkstone_bricks"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

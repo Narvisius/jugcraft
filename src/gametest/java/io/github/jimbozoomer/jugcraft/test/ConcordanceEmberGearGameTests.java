@@ -326,8 +326,7 @@ public class ConcordanceEmberGearGameTests {
 	}
 
 	/**
-	 * The Fire Bangle's blow: a Hearthbinder's own melee hit leaves the creature smouldering for 3 seconds. Not before
-	 * Hearthbinding is understood, not from a blow that is not the player's own melee hit, not on a creature claimed by
+	 * The Fire Bangle's blow: a Hearthbinder's own melee hit leaves the creature smouldering for 3 seconds. Without research, but not from a blow that is not the player's own melee hit, not on a creature claimed by
 	 * someone else, not where the blow lands beyond the reach of the weapon in hand (as a Shock arc's second foe may), not
 	 * from the saddle, and not once the bangle is taken off; and it costs no Focus.
 	 */
@@ -348,7 +347,7 @@ public class ConcordanceEmberGearGameTests {
 		bracelets.setItem(0, new ItemStack(EmberGear.FIRE_BANGLE));
 		helper.assertTrue(EmberGear.wearsBangle(player), "The bangle in a Bracelet slot is worn");
 		villagers.get(0).hurtServer(level, level.damageSources().playerAttack(player), 1.0F);
-		helper.assertTrue(!villagers.get(0).hasEffect(Ember.SMOULDER), "Before Hearthbinding is understood, the blow is a blow");
+		helper.assertTrue(villagers.get(0).hasEffect(Ember.SMOULDER), "Owned Fire Bangle works without Hearthbinding research");
 		learn(player, ResearchState.UNDERSTOOD);
 		int focus = ConcordanceProgress.currentFocus(player);
 		villagers.get(1).hurtServer(level, level.damageSources().playerAttack(player), 1.0F);

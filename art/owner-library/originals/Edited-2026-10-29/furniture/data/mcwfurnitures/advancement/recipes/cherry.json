@@ -1,0 +1,93 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+	  "mcwfurnitures:cabinet_door",
+	  "mcwfurnitures:cabinet_drawer",
+	
+      "mcwfurnitures:cherry_wardrobe",
+	  "mcwfurnitures:cherry_modern_wardrobe",
+	  "mcwfurnitures:cherry_double_wardrobe",
+	  "mcwfurnitures:cherry_bookshelf_cupboard",
+	  "mcwfurnitures:cherry_bookshelf",
+	  "mcwfurnitures:cherry_drawer",
+	  "mcwfurnitures:cherry_double_drawer",
+	  "mcwfurnitures:cherry_bookshelf_drawer",
+	  "mcwfurnitures:cherry_lower_bookshelf_drawer",
+	  "mcwfurnitures:cherry_large_drawer",
+	  "mcwfurnitures:cherry_lower_triple_drawer",
+	  "mcwfurnitures:cherry_triple_drawer",
+	  "mcwfurnitures:cherry_desk",
+	  "mcwfurnitures:cherry_covered_desk",
+	  "mcwfurnitures:cherry_modern_desk",
+	  "mcwfurnitures:cherry_table",
+	  "mcwfurnitures:cherry_end_table",
+	  "mcwfurnitures:cherry_coffee_table",
+	  "mcwfurnitures:cherry_glass_table",
+	  "mcwfurnitures:cherry_chair",
+	  "mcwfurnitures:cherry_modern_chair",
+	  "mcwfurnitures:cherry_striped_chair",
+	  "mcwfurnitures:cherry_stool_chair",
+	  "mcwfurnitures:cherry_counter",
+	  "mcwfurnitures:cherry_drawer_counter",
+	  "mcwfurnitures:cherry_double_drawer_counter",
+	  "mcwfurnitures:cherry_cupboard_counter",
+	  
+	  "mcwfurnitures:stripped_cherry_wardrobe",
+	  "mcwfurnitures:stripped_cherry_modern_wardrobe",
+	  "mcwfurnitures:stripped_cherry_double_wardrobe",
+	  "mcwfurnitures:stripped_cherry_bookshelf_cupboard",
+	  "mcwfurnitures:stripped_cherry_bookshelf",
+	  "mcwfurnitures:stripped_cherry_drawer",
+	  "mcwfurnitures:stripped_cherry_double_drawer",
+	  "mcwfurnitures:stripped_cherry_bookshelf_drawer",
+	  "mcwfurnitures:stripped_cherry_lower_bookshelf_drawer",
+	  "mcwfurnitures:stripped_cherry_large_drawer",
+	  "mcwfurnitures:stripped_cherry_lower_triple_drawer",
+	  "mcwfurnitures:stripped_cherry_triple_drawer",
+	  "mcwfurnitures:stripped_cherry_desk",
+	  "mcwfurnitures:stripped_cherry_covered_desk",
+	  "mcwfurnitures:stripped_cherry_modern_desk",
+	  "mcwfurnitures:stripped_cherry_table",
+	  "mcwfurnitures:stripped_cherry_end_table",
+	  "mcwfurnitures:stripped_cherry_coffee_table",
+	  "mcwfurnitures:stripped_cherry_glass_table",
+	  "mcwfurnitures:stripped_cherry_chair",
+	  "mcwfurnitures:stripped_cherry_modern_chair",
+	  "mcwfurnitures:stripped_cherry_striped_chair",
+	  "mcwfurnitures:stripped_cherry_stool_chair",
+	  "mcwfurnitures:stripped_cherry_counter",
+	  "mcwfurnitures:stripped_cherry_drawer_counter",
+	  "mcwfurnitures:stripped_cherry_double_drawer_counter",
+	  "mcwfurnitures:stripped_cherry_cupboard_counter",
+	  "mcwfurnitures:cherry_kitchen_sink",
+      "mcwfurnitures:stripped_cherry_kitchen_sink"
+    ]
+  },
+  "criteria": {
+    "has_wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:cherry_log"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": "mcwfurnitures:cherry_drawer"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wood",
+      "has_the_recipe"
+    ]
+  ]
+}

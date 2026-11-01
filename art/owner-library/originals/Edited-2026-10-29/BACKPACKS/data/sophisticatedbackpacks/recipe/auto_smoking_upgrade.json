@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "sophisticatedcore:item_enabled",
+      "itemRegistryName": "sophisticatedbackpacks:auto_smoking_upgrade"
+    }
+  ],
+  "type": "sophisticatedcore:upgrade_next_tier",
+  "key": {
+    "D": "#c:gems/diamond",
+    "G": "#c:ingots/gold",
+    "H": "minecraft:hopper",
+    "R": "#c:dusts/redstone",
+    "S": "sophisticatedbackpacks:smoking_upgrade"
+  },
+  "pattern": [
+    "DHD",
+    "RSH",
+    "GHG"
+  ],
+  "result": {
+    "id": "sophisticatedbackpacks:auto_smoking_upgrade"
+  }
+}

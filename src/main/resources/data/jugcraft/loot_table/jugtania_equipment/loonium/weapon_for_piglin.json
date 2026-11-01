@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:selector",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "jugcraft:jugtania_equipment/loonium/weapon_sword_gold"
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "jugcraft:jugtania_equipment/loonium/weapon_crossbow"
+        }
+      ],
+      "rolls": 1.0,
+      "modifier": [
+        {
+          "type": "minecraft:enchant_randomly",
+          "condition": {
+            "chance": 0.3,
+            "type": "minecraft:random_chance"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -24,6 +24,7 @@ public abstract class ArmsRenderStateMixin {
 	private static void jugcraft$extractArmsPose(LivingEntity entity, ArmedEntityRenderState state, ItemModelResolver resolver,
 			float partialTick, CallbackInfo info) {
 		ArmsMotion.extract(entity, state, partialTick);
+        io.github.jimbozoomer.jugcraft.client.OwnerFlutePose.extract(entity,state,partialTick);
 		FlailHeads.extract(entity, state, resolver, partialTick);
 		GunPose.extract(entity, state, partialTick);
 	}

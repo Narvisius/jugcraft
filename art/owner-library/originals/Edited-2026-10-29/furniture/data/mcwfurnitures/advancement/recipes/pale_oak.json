@@ -1,0 +1,93 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+	  "mcwfurnitures:cabinet_door",
+	  "mcwfurnitures:cabinet_drawer",
+	
+      "mcwfurnitures:pale_oak_wardrobe",
+	  "mcwfurnitures:pale_oak_modern_wardrobe",
+	  "mcwfurnitures:pale_oak_double_wardrobe",
+	  "mcwfurnitures:pale_oak_bookshelf_cupboard",
+	  "mcwfurnitures:pale_oak_bookshelf",
+	  "mcwfurnitures:pale_oak_drawer",
+	  "mcwfurnitures:pale_oak_double_drawer",
+	  "mcwfurnitures:pale_oak_bookshelf_drawer",
+	  "mcwfurnitures:pale_oak_lower_bookshelf_drawer",
+	  "mcwfurnitures:pale_oak_large_drawer",
+	  "mcwfurnitures:pale_oak_lower_triple_drawer",
+	  "mcwfurnitures:pale_oak_triple_drawer",
+	  "mcwfurnitures:pale_oak_desk",
+	  "mcwfurnitures:pale_oak_covered_desk",
+	  "mcwfurnitures:pale_oak_modern_desk",
+	  "mcwfurnitures:pale_oak_table",
+	  "mcwfurnitures:pale_oak_end_table",
+	  "mcwfurnitures:pale_oak_coffee_table",
+	  "mcwfurnitures:pale_oak_glass_table",
+	  "mcwfurnitures:pale_oak_chair",
+	  "mcwfurnitures:pale_oak_modern_chair",
+	  "mcwfurnitures:pale_oak_striped_chair",
+	  "mcwfurnitures:pale_oak_stool_chair",
+	  "mcwfurnitures:pale_oak_counter",
+	  "mcwfurnitures:pale_oak_drawer_counter",
+	  "mcwfurnitures:pale_oak_double_drawer_counter",
+	  "mcwfurnitures:pale_oak_cupboard_counter",
+	  
+	  "mcwfurnitures:stripped_pale_oak_wardrobe",
+	  "mcwfurnitures:stripped_pale_oak_modern_wardrobe",
+	  "mcwfurnitures:stripped_pale_oak_double_wardrobe",
+	  "mcwfurnitures:stripped_pale_oak_bookshelf_cupboard",
+	  "mcwfurnitures:stripped_pale_oak_bookshelf",
+	  "mcwfurnitures:stripped_pale_oak_drawer",
+	  "mcwfurnitures:stripped_pale_oak_double_drawer",
+	  "mcwfurnitures:stripped_pale_oak_bookshelf_drawer",
+	  "mcwfurnitures:stripped_pale_oak_lower_bookshelf_drawer",
+	  "mcwfurnitures:stripped_pale_oak_large_drawer",
+	  "mcwfurnitures:stripped_pale_oak_lower_triple_drawer",
+	  "mcwfurnitures:stripped_pale_oak_triple_drawer",
+	  "mcwfurnitures:stripped_pale_oak_desk",
+	  "mcwfurnitures:stripped_pale_oak_covered_desk",
+	  "mcwfurnitures:stripped_pale_oak_modern_desk",
+	  "mcwfurnitures:stripped_pale_oak_table",
+	  "mcwfurnitures:stripped_pale_oak_end_table",
+	  "mcwfurnitures:stripped_pale_oak_coffee_table",
+	  "mcwfurnitures:stripped_pale_oak_glass_table",
+	  "mcwfurnitures:stripped_pale_oak_chair",
+	  "mcwfurnitures:stripped_pale_oak_modern_chair",
+	  "mcwfurnitures:stripped_pale_oak_striped_chair",
+	  "mcwfurnitures:stripped_pale_oak_stool_chair",
+	  "mcwfurnitures:stripped_pale_oak_counter",
+	  "mcwfurnitures:stripped_pale_oak_drawer_counter",
+	  "mcwfurnitures:stripped_pale_oak_double_drawer_counter",
+	  "mcwfurnitures:stripped_pale_oak_cupboard_counter",
+	  "mcwfurnitures:pale_oak_kitchen_sink",
+      "mcwfurnitures:stripped_pale_oak_kitchen_sink"
+    ]
+  },
+  "criteria": {
+    "has_wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:pale_oak_log"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": "mcwfurnitures:pale_oak_drawer"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wood",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -58,9 +58,25 @@ public class SurvivalRecipeGameTests {
                 var grid = CraftingInput.of(width, height, stacks);
                 h.assertTrue(crafting.matches(grid, h.getLevel()), "Actual grid matches " + name);
                 result(h, crafting.assemble(grid), data.getAsJsonObject("result"), name);
-                // A syntactically valid recipe can still be hidden by an older recipe with the same grid.
+                // Validate the default output or the actual conflicting-recipe picker.
                 var selected = h.getLevel().recipeAccess().getRecipeFor(RecipeType.CRAFTING, grid, h.getLevel()).orElseThrow();
-                result(h, selected.value().assemble(grid), data.getAsJsonObject("result"), "selected grid " + name);
+                if (selected.id().equals(key)) {
+                    result(h, selected.value().assemble(grid), data.getAsJsonObject("result"), "selected grid " + name);
+                } else {
+                    // Shared layouts are intentionally supported by the owner's
+                    // output picker; verify this recipe remains reachable there.
+                    var player=TestPlayers.survivor(h);
+                    var pos=h.absolutePos(net.minecraft.core.BlockPos.ZERO);
+                    h.getLevel().setBlockAndUpdate(pos,net.minecraft.world.level.block.Blocks.CRAFTING_TABLE.defaultBlockState());
+                    player.setPos(pos.getX()+.5,pos.getY()+1,pos.getZ()+.5);
+                    var menu=new net.minecraft.world.inventory.CraftingMenu(63,player.getInventory(),net.minecraft.world.inventory.ContainerLevelAccess.create(h.getLevel(),pos));
+                    player.containerMenu=menu;
+                    var choiceGrid=io.github.jimbozoomer.jugcraft.crafting.CraftingChoices.grid(menu);
+                    for(int y=0;y<height;y++)for(int x=0;x<width;x++)choiceGrid.inputs().setItem(y*3+x,stacks.get(y*width+x).copy());
+                    var choices=io.github.jimbozoomer.jugcraft.crafting.CraftingChoices.state(choiceGrid.result());
+                    h.assertTrue(io.github.jimbozoomer.jugcraft.crafting.CraftingChoices.select(player,63,choices.revision(),key.identifier()),"Completion recipe is selectable: "+name);
+                    result(h,menu.getSlot(0).getItem(),data.getAsJsonObject("result"),"selected grid "+name);
+                }
                 h.assertTrue(!crafting.matches(CraftingInput.EMPTY, h.getLevel()), "No free empty-grid output: " + name);
             } else if (recipe instanceof CuttingRecipe cutting) {
                 var input = new SingleRecipeInput(ingredient(h, data.get("ingredient")));

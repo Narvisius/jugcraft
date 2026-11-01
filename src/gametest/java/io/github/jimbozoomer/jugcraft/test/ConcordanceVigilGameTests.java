@@ -81,7 +81,7 @@ public class ConcordanceVigilGameTests {
 		helper.succeed();
 	}
 
-	/** An offering never leaves the giver below the floor, and takes no health for a full chalice or from a novice. */
+	/** An offering never leaves the giver below the floor, and takes no health for a full chalice. A novice can also offer. */
 	@GameTest(maxTicks = 20)
 	public void anOfferingKeepsItsLimits(GameTestHelper helper) {
 		ServerPlayer adept = adept(helper);
@@ -96,8 +96,8 @@ public class ConcordanceVigilGameTests {
 		ServerPlayer novice = TestPlayers.mock(helper);
 		novice.setGameMode(GameType.SURVIVAL);
 		novice.setHealth(20.0F);
-		helper.assertTrue(!CrimsonChaliceItem.use(novice, chalice(0), ItemStack.EMPTY, false, 2_000_000L).equals(InteractionResult.SUCCESS)
-				&& novice.getHealth() == 20.0F, "A novice cannot offer");
+		helper.assertTrue(CrimsonChaliceItem.use(novice, chalice(0), ItemStack.EMPTY, false, 2_000_000L).equals(InteractionResult.SUCCESS)
+				&& novice.getHealth() < 20.0F, "A novice can use an owned chalice and pays its health cost");
 		helper.succeed();
 	}
 

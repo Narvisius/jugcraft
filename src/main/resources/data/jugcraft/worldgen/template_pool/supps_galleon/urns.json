@@ -1,0 +1,22 @@
+{
+  "name": "jugcraft:supps_galleon/urns",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "feature": {
+          "feature": {
+            "type": "jugcraft:supps_galleon_crew",
+            "entity": "urn",
+            "spread": 4,
+            "attempts": 9
+          },
+          "placement": []
+        },
+        "projection": "rigid",
+        "element_type": "minecraft:feature_pool_element"
+      }
+    }
+  ]
+}

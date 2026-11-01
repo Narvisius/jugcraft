@@ -1,0 +1,42 @@
+{
+  "textures": {
+    "particle": "minecraft:block/lily_pad",
+    "pad": "minecraft:block/lily_pad"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        15.99,
+        0
+      ],
+      "to": [
+        16,
+        15.99,
+        16
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pad",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pad",
+          "tintindex": 0
+        }
+      }
+    }
+  ]
+}

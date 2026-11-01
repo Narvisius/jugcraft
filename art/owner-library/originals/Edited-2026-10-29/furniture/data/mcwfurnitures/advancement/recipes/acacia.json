@@ -1,0 +1,93 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+	  "mcwfurnitures:cabinet_door",
+	  "mcwfurnitures:cabinet_drawer",
+	
+      "mcwfurnitures:acacia_wardrobe",
+	  "mcwfurnitures:acacia_modern_wardrobe",
+	  "mcwfurnitures:acacia_double_wardrobe",
+	  "mcwfurnitures:acacia_bookshelf_cupboard",
+	  "mcwfurnitures:acacia_bookshelf",
+	  "mcwfurnitures:acacia_drawer",
+	  "mcwfurnitures:acacia_double_drawer",
+	  "mcwfurnitures:acacia_bookshelf_drawer",
+	  "mcwfurnitures:acacia_lower_bookshelf_drawer",
+	  "mcwfurnitures:acacia_large_drawer",
+	  "mcwfurnitures:acacia_lower_triple_drawer",
+	  "mcwfurnitures:acacia_triple_drawer",
+	  "mcwfurnitures:acacia_desk",
+	  "mcwfurnitures:acacia_covered_desk",
+	  "mcwfurnitures:acacia_modern_desk",
+	  "mcwfurnitures:acacia_table",
+	  "mcwfurnitures:acacia_end_table",
+	  "mcwfurnitures:acacia_coffee_table",
+	  "mcwfurnitures:acacia_glass_table",
+	  "mcwfurnitures:acacia_chair",
+	  "mcwfurnitures:acacia_modern_chair",
+	  "mcwfurnitures:acacia_striped_chair",
+	  "mcwfurnitures:acacia_stool_chair",
+	  "mcwfurnitures:acacia_counter",
+	  "mcwfurnitures:acacia_drawer_counter",
+	  "mcwfurnitures:acacia_double_drawer_counter",
+	  "mcwfurnitures:acacia_cupboard_counter",
+	  
+	  "mcwfurnitures:stripped_acacia_wardrobe",
+	  "mcwfurnitures:stripped_acacia_modern_wardrobe",
+	  "mcwfurnitures:stripped_acacia_double_wardrobe",
+	  "mcwfurnitures:stripped_acacia_bookshelf_cupboard",
+	  "mcwfurnitures:stripped_acacia_bookshelf",
+	  "mcwfurnitures:stripped_acacia_drawer",
+	  "mcwfurnitures:stripped_acacia_double_drawer",
+	  "mcwfurnitures:stripped_acacia_bookshelf_drawer",
+	  "mcwfurnitures:stripped_acacia_lower_bookshelf_drawer",
+	  "mcwfurnitures:stripped_acacia_large_drawer",
+	  "mcwfurnitures:stripped_acacia_lower_triple_drawer",
+	  "mcwfurnitures:stripped_acacia_triple_drawer",
+	  "mcwfurnitures:stripped_acacia_desk",
+	  "mcwfurnitures:stripped_acacia_covered_desk",
+	  "mcwfurnitures:stripped_acacia_modern_desk",
+	  "mcwfurnitures:stripped_acacia_table",
+	  "mcwfurnitures:stripped_acacia_end_table",
+	  "mcwfurnitures:stripped_acacia_coffee_table",
+	  "mcwfurnitures:stripped_acacia_glass_table",
+	  "mcwfurnitures:stripped_acacia_chair",
+	  "mcwfurnitures:stripped_acacia_modern_chair",
+	  "mcwfurnitures:stripped_acacia_striped_chair",
+	  "mcwfurnitures:stripped_acacia_stool_chair",
+	  "mcwfurnitures:stripped_acacia_counter",
+	  "mcwfurnitures:stripped_acacia_drawer_counter",
+	  "mcwfurnitures:stripped_acacia_double_drawer_counter",
+	  "mcwfurnitures:stripped_acacia_cupboard_counter",
+	  "mcwfurnitures:acacia_kitchen_sink",
+      "mcwfurnitures:stripped_acacia_kitchen_sink"
+    ]
+  },
+  "criteria": {
+    "has_wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:acacia_log"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": "mcwfurnitures:acacia_drawer"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wood",
+      "has_the_recipe"
+    ]
+  ]
+}

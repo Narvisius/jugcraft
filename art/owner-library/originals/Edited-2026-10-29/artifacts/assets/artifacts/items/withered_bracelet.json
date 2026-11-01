@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "artifacts:item/withered_bracelet"
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "artifacts:item/withered_bracelet_broken"
+    },
+    "property": "artifacts:needs_repair"
+  }
+}

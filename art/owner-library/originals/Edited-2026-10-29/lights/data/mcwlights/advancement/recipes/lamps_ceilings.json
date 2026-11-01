@@ -1,0 +1,70 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+	  "mcwlights:white_ceiling_lamp",
+	  "mcwlights:light_gray_ceiling_lamp",
+	  "mcwlights:gray_ceiling_lamp",
+	  "mcwlights:black_ceiling_lamp",
+	  "mcwlights:brown_ceiling_lamp",
+	  "mcwlights:red_ceiling_lamp",
+	  "mcwlights:orange_ceiling_lamp",
+	  "mcwlights:yellow_ceiling_lamp",
+	  "mcwlights:lime_ceiling_lamp",
+	  "mcwlights:green_ceiling_lamp",
+	  "mcwlights:cyan_ceiling_lamp",
+	  "mcwlights:light_blue_ceiling_lamp",
+	  "mcwlights:blue_ceiling_lamp",
+	  "mcwlights:purple_ceiling_lamp",
+	  "mcwlights:magenta_ceiling_lamp",
+	  "mcwlights:pink_ceiling_lamp",
+	  
+	  "mcwlights:white_lamp",
+	  "mcwlights:light_gray_lamp",
+	  "mcwlights:gray_lamp",
+	  "mcwlights:black_lamp",
+	  "mcwlights:brown_lamp",
+	  "mcwlights:red_lamp",
+	  "mcwlights:orange_lamp",
+	  "mcwlights:yellow_lamp",
+	  "mcwlights:lime_lamp",
+	  "mcwlights:green_lamp",
+	  "mcwlights:cyan_lamp",
+	  "mcwlights:light_blue_lamp",
+	  "mcwlights:blue_lamp",
+	  "mcwlights:purple_lamp",
+	  "mcwlights:magenta_lamp",
+	  "mcwlights:pink_lamp",
+	  
+	  "mcwlights:wall_lamp",
+	  "mcwlights:square_wall_lamp"
+    ]
+  },
+  "criteria": {
+    "has_wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:redstone_lamp"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": ["minecraft:redstone_lamp"]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wood",
+      "has_the_recipe"
+    ]
+  ]
+}
+

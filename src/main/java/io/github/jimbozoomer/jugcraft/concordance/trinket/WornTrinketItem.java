@@ -5,7 +5,6 @@ import eu.pb4.trinkets.api.TrinketSlotAccess;
 import eu.pb4.trinkets.api.TrinketsApi;
 import eu.pb4.trinkets.api.callback.TrinketCallback;
 import io.github.jimbozoomer.jugcraft.Jugcraft;
-import io.github.jimbozoomer.jugcraft.concordance.reliquary.Reliquary;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -30,8 +29,7 @@ import net.minecraft.world.item.component.TooltipDisplay;
  * the slot, so a second of a kind adds nothing (Trinkets keeps one modifier per id, and keeps it while any copy is
  * worn), and the Phoenix Down, of the feather's kind, gives exactly the feather's.
  * <p>
- * Only someone who understands Relic Lore can put one on ({@link #canEquip}): asked on the server and, for one's own
- * screen, on the client, which holds its own player's research. A Leather Belt cannot be taken off while the Charm slot
+ * Owning the equipment is enough to wear it; research must not gate inventory use. A Leather Belt cannot be taken off while the Charm slot
  * it adds holds something (Trinkets would drop that charm on the ground).
  */
 public class WornTrinketItem extends Item implements TrinketCallback {
@@ -70,7 +68,7 @@ public class WornTrinketItem extends Item implements TrinketCallback {
 
 	@Override
 	public boolean canEquip(ItemStack stack, TrinketSlotAccess slot, LivingEntity entity) {
-		return entity instanceof Player player && Reliquary.knows(player);
+		return entity instanceof Player;
 	}
 
 	@Override

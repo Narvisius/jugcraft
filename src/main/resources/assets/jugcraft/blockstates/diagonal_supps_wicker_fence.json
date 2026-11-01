@@ -1,0 +1,183 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "jugcraft:newest/supps/block/wicker_fence_stick"
+      }
+    },
+    {
+      "when": {
+        "north": "true",
+        "tall": "false"
+      },
+      "apply": {
+        "model": "jugcraft:newest/supps/block/wicker_fence_side",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "east": "true",
+        "tall": "false"
+      },
+      "apply": {
+        "model": "jugcraft:newest/supps/block/wicker_fence_side",
+        "y": 90,
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "south": "true",
+        "tall": "false"
+      },
+      "apply": {
+        "model": "jugcraft:newest/supps/block/wicker_fence_side",
+        "y": 180,
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "west": "true",
+        "tall": "false"
+      },
+      "apply": {
+        "model": "jugcraft:newest/supps/block/wicker_fence_side",
+        "y": 270,
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "north": "true",
+        "tall": "true"
+      },
+      "apply": {
+        "model": "jugcraft:newest/supps/block/wicker_fence_side_tall",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "east": "true",
+        "tall": "true"
+      },
+      "apply": {
+        "model": "jugcraft:newest/supps/block/wicker_fence_side_tall",
+        "y": 90,
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "south": "true",
+        "tall": "true"
+      },
+      "apply": {
+        "model": "jugcraft:newest/supps/block/wicker_fence_side_tall",
+        "y": 180,
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "west": "true",
+        "tall": "true"
+      },
+      "apply": {
+        "model": "jugcraft:newest/supps/block/wicker_fence_side_tall",
+        "y": 270,
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "north_east": "true",
+        "tall": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/diagonal/supps_wicker_fence",
+        "uvlock": true,
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "south_east": "true",
+        "tall": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/diagonal/supps_wicker_fence",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south_west": "true",
+        "tall": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/diagonal/supps_wicker_fence",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "north_west": "true",
+        "tall": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/diagonal/supps_wicker_fence",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "north_east": "true",
+        "tall": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/diagonal/supps_wicker_fence_tall",
+        "uvlock": true,
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "south_east": "true",
+        "tall": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/diagonal/supps_wicker_fence_tall",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south_west": "true",
+        "tall": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/diagonal/supps_wicker_fence_tall",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "north_west": "true",
+        "tall": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/diagonal/supps_wicker_fence_tall",
+        "uvlock": true,
+        "y": 270
+      }
+    }
+  ]
+}

@@ -483,8 +483,7 @@ public class ConcordanceWinterGameTests {
 	}
 
 	/**
-	 * The Water Bangle (B-P25, B-P49), each look at its wearer given its own time. Before Rimekeeping is understood it
-	 * does nothing. Then the first look only starts the count; 600 ticks with no Brace brace the wearer for Brace's own 100
+	 * The Water Bangle (B-P25, B-P49), each look at its wearer given its own time. No research is granted. The first look only starts the count; 600 ticks with no Brace brace the wearer for Brace's own 100
 	 * ticks (knockback resistance up by Brace's, Focus untouched); while braced the count starts again; spent, the next
 	 * Brace comes 600 ticks after the last. A Brace from anywhere else starts the count too. A second bangle adds nothing,
 	 * and a bangle taken off, or only held, does nothing; put back on, it starts the count again, however long ago the last
@@ -498,10 +497,7 @@ public class ConcordanceWinterGameTests {
 		helper.assertTrue(bracelets != null, "Players have the Bracelet slots");
 		bracelets.setItem(0, new ItemStack(RimeGear.WATER_BANGLE));
 		helper.assertTrue(RimeGear.wearsBangle(wearer), "The bangle in a Bracelet slot is worn");
-		ConcordanceProgress.grant(wearer, FIRST_LIGHT, ResearchState.UNDERSTOOD);
-		helper.assertTrue(RimeGear.bangle(wearer, 1000) == null && RimeGear.bangle(wearer, 7000) == null && !wearer.hasEffect(Brace.BRACED),
-				"Before Rimekeeping is understood the bangle does nothing");
-		ConcordanceProgress.grant(wearer, Rime.RESEARCH, ResearchState.UNDERSTOOD);
+		// Fresh wearer: no research is granted for the entire recharge/effect test.
 		double resistance = wearer.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE);
 		int focus = ConcordanceProgress.currentFocus(wearer);
 		helper.assertTrue(RimeGear.bangle(wearer, 5000) == null, "The first look only starts the count");

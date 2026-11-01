@@ -1,0 +1,182 @@
+{
+  "credit": "Made with Blockbench",
+  "ambientocclusion": false,
+  "texture_size": [
+    128,
+    128
+  ],
+  "textures": {
+    "all": "cozyhome:block/fountain/tuff_fountain"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        2
+      ],
+      "to": [
+        16,
+        2,
+        8
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          0,
+          0,
+          2
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            5.75,
+            4,
+            6
+          ],
+          "texture": "#all"
+        },
+        "up": {
+          "uv": [
+            2,
+            10.25,
+            4,
+            11
+          ],
+          "texture": "#all"
+        },
+        "down": {
+          "uv": [
+            4,
+            9,
+            2,
+            8.25
+          ],
+          "texture": "#all",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        2,
+        4
+      ],
+      "to": [
+        16,
+        10,
+        8
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          0,
+          2,
+          2
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            4.75,
+            4,
+            5.75
+          ],
+          "texture": "#all"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        10,
+        0
+      ],
+      "to": [
+        16,
+        14,
+        8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            4.25,
+            4,
+            4.75
+          ],
+          "texture": "#all",
+          "cullface": "north"
+        },
+        "up": {
+          "uv": [
+            2,
+            2,
+            4,
+            3
+          ],
+          "texture": "#all"
+        },
+        "down": {
+          "uv": [
+            4,
+            7,
+            2,
+            6
+          ],
+          "texture": "#all"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        14,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            4,
+            4,
+            4.25
+          ],
+          "texture": "#all",
+          "cullface": "north"
+        },
+        "south": {
+          "uv": [
+            4,
+            2,
+            6,
+            2.25
+          ],
+          "texture": "#all"
+        },
+        "up": {
+          "uv": [
+            2,
+            0,
+            4,
+            0.25
+          ],
+          "texture": "#all",
+          "cullface": "up"
+        }
+      }
+    }
+  ],
+  "render_type": "minecraft:translucent"
+}

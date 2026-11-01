@@ -1,0 +1,78 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+     "mcwwindows:white_mosaic_glass",
+	 "mcwwindows:orange_mosaic_glass",
+	 "mcwwindows:magenta_mosaic_glass",
+	 "mcwwindows:light_blue_mosaic_glass",
+	 "mcwwindows:yellow_mosaic_glass",
+	 "mcwwindows:lime_mosaic_glass",
+	 "mcwwindows:pink_mosaic_glass",
+	 "mcwwindows:gray_mosaic_glass",
+	 "mcwwindows:light_gray_mosaic_glass",
+	 "mcwwindows:cyan_mosaic_glass",
+	 "mcwwindows:purple_mosaic_glass",
+	 "mcwwindows:blue_mosaic_glass",
+	 "mcwwindows:brown_mosaic_glass",
+	 "mcwwindows:green_mosaic_glass",
+	 "mcwwindows:red_mosaic_glass",
+	 "mcwwindows:black_mosaic_glass",
+	 
+	 "mcwwindows:white_mosaic_glass_pane",
+	 "mcwwindows:orange_mosaic_glass_pane",
+	 "mcwwindows:magenta_mosaic_glass_pane",
+	 "mcwwindows:light_blue_mosaic_glass_pane",
+	 "mcwwindows:yellow_mosaic_glass_pane",
+	 "mcwwindows:lime_mosaic_glass_pane",
+	 "mcwwindows:pink_mosaic_glass_pane",
+	 "mcwwindows:gray_mosaic_glass_pane",
+	 "mcwwindows:light_gray_mosaic_glass_pane",
+	 "mcwwindows:cyan_mosaic_glass_pane",
+	 "mcwwindows:purple_mosaic_glass_pane",
+	 "mcwwindows:blue_mosaic_glass_pane",
+	 "mcwwindows:brown_mosaic_glass_pane",
+	 "mcwwindows:green_mosaic_glass_pane",
+	 "mcwwindows:red_mosaic_glass_pane",
+	 "mcwwindows:black_mosaic_glass_pane"
+    ]
+  },
+  "criteria": {
+    "has_wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:glass"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": "mcwwindows:white_mosaic_glass"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wood",
+      "has_the_recipe"
+    ]
+  ]
+}
+
+
+
+
+
+
+
+
+
+
+
+

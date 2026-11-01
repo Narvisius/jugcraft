@@ -1,0 +1,62 @@
+{
+  "type": "minecraft:selector",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "weight": 2,
+          "value": "jugcraft:jugtania_equipment/loonium/armorset/costume_evoker"
+        },
+        {
+          "type": "minecraft:loot_table",
+          "weight": 2,
+          "value": "jugcraft:jugtania_equipment/loonium/armorset/costume_vindicator"
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "jugcraft:jugtania_equipment/loonium/armorset/costume_illusioner"
+        },
+        {
+          "type": "minecraft:loot_table",
+          "weight": 45,
+          "value": "jugcraft:jugtania_equipment/loonium/armorset/costume_vex",
+          "condition": {
+            "terms": [
+              {
+                "chance": 0.005,
+                "type": "minecraft:random_chance"
+              },
+              {
+                "entity": "this",
+                "predicate": {
+                  "flags": {
+                    "is_baby": true
+                  }
+                },
+                "type": "minecraft:entity_properties"
+              }
+            ],
+            "type": "minecraft:any_of"
+          }
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:totem_of_undying"
+        }
+      ],
+      "rolls": 1.0,
+      "condition": {
+        "chance": 0.05,
+        "type": "minecraft:random_chance"
+      }
+    }
+  ]
+}

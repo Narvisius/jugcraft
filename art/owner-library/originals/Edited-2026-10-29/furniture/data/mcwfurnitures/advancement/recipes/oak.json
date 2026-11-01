@@ -1,0 +1,103 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+	  "mcwfurnitures:cabinet_door",
+	  "mcwfurnitures:cabinet_drawer",
+	
+      "mcwfurnitures:oak_wardrobe",
+	  "mcwfurnitures:oak_modern_wardrobe",
+	  "mcwfurnitures:oak_double_wardrobe",
+	  "mcwfurnitures:oak_bookshelf_cupboard",
+	  "mcwfurnitures:oak_bookshelf",
+	  "mcwfurnitures:oak_drawer",
+	  "mcwfurnitures:oak_double_drawer",
+	  "mcwfurnitures:oak_bookshelf_drawer",
+	  "mcwfurnitures:oak_lower_bookshelf_drawer",
+	  "mcwfurnitures:oak_large_drawer",
+	  "mcwfurnitures:oak_lower_triple_drawer",
+	  "mcwfurnitures:oak_triple_drawer",
+	  "mcwfurnitures:oak_desk",
+	  "mcwfurnitures:oak_covered_desk",
+	  "mcwfurnitures:oak_modern_desk",
+	  "mcwfurnitures:oak_table",
+	  "mcwfurnitures:oak_end_table",
+	  "mcwfurnitures:oak_coffee_table",
+	  "mcwfurnitures:oak_glass_table",
+	  "mcwfurnitures:oak_chair",
+	  "mcwfurnitures:oak_modern_chair",
+	  "mcwfurnitures:oak_striped_chair",
+	  "mcwfurnitures:oak_stool_chair",
+	  "mcwfurnitures:oak_counter",
+	  "mcwfurnitures:oak_drawer_counter",
+	  "mcwfurnitures:oak_double_drawer_counter",
+	  "mcwfurnitures:oak_cupboard_counter",
+	  
+	  "mcwfurnitures:stripped_oak_wardrobe",
+	  "mcwfurnitures:stripped_oak_modern_wardrobe",
+	  "mcwfurnitures:stripped_oak_double_wardrobe",
+	  "mcwfurnitures:stripped_oak_bookshelf_cupboard",
+	  "mcwfurnitures:stripped_oak_bookshelf",
+	  "mcwfurnitures:stripped_oak_drawer",
+	  "mcwfurnitures:stripped_oak_double_drawer",
+	  "mcwfurnitures:stripped_oak_bookshelf_drawer",
+	  "mcwfurnitures:stripped_oak_lower_bookshelf_drawer",
+	  "mcwfurnitures:stripped_oak_large_drawer",
+	  "mcwfurnitures:stripped_oak_lower_triple_drawer",
+	  "mcwfurnitures:stripped_oak_triple_drawer",
+	  "mcwfurnitures:stripped_oak_desk",
+	  "mcwfurnitures:stripped_oak_covered_desk",
+	  "mcwfurnitures:stripped_oak_modern_desk",
+	  "mcwfurnitures:stripped_oak_table",
+	  "mcwfurnitures:stripped_oak_end_table",
+	  "mcwfurnitures:stripped_oak_coffee_table",
+	  "mcwfurnitures:stripped_oak_glass_table",
+	  "mcwfurnitures:stripped_oak_chair",
+	  "mcwfurnitures:stripped_oak_modern_chair",
+	  "mcwfurnitures:stripped_oak_striped_chair",
+	  "mcwfurnitures:stripped_oak_stool_chair",
+	  "mcwfurnitures:stripped_oak_counter",
+	  "mcwfurnitures:stripped_oak_drawer_counter",
+	  "mcwfurnitures:stripped_oak_double_drawer_counter",
+	  "mcwfurnitures:stripped_oak_cupboard_counter",
+	  
+	  "mcwfurnitures:oak_kitchen_cabinet",
+	  "mcwfurnitures:oak_double_kitchen_cabinet",
+	  "mcwfurnitures:oak_glass_kitchen_cabinet",
+	  
+	  "mcwfurnitures:stripped_oak_kitchen_cabinet",
+	  "mcwfurnitures:stripped_oak_double_kitchen_cabinet",
+	  "mcwfurnitures:stripped_oak_glass_kitchen_cabinet",
+	  
+	  "mcwfurnitures:oak_kitchen_sink",
+	  "mcwfurnitures:stripped_oak_kitchen_sink"
+	  
+    ]
+  },
+  "criteria": {
+    "has_wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:oak_log"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": "mcwfurnitures:oak_drawer"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wood",
+      "has_the_recipe"
+    ]
+  ]
+}

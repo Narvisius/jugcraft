@@ -10,7 +10,7 @@ from model_writer import finish_elements
 from menagerie_data import loot
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / 'art/owner-library/originals/Oct22/Planes And Furniture'
+SOURCE = ROOT / 'art/owner-library/originals/Edited-2026-10-29/handcraft'
 ASSETS = SOURCE / 'assets/handcrafted'
 RES = ROOT / 'src/main/resources'
 TARGET = RES / 'assets/jugcraft'

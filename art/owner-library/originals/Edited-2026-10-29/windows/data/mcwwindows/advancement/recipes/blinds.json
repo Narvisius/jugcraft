@@ -1,0 +1,44 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "mcwwindows:oak_blinds",
+      "mcwwindows:pale_oak_blinds",
+      "mcwwindows:spruce_blinds",
+      "mcwwindows:birch_blinds",
+      "mcwwindows:jungle_blinds",
+      "mcwwindows:acacia_blinds",
+      "mcwwindows:dark_oak_blinds",
+      "mcwwindows:crimson_blinds",
+      "mcwwindows:warped_blinds",
+      "mcwwindows:mangrove_blinds",
+      "mcwwindows:poplar_blinds"
+    ]
+  },
+  "criteria": {
+    "has_wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:oak_planks"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": "mcwwindows:oak_shutter"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wood",
+      "has_the_recipe"
+    ]
+  ]
+}

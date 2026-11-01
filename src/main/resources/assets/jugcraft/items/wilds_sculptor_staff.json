@@ -1,0 +1,26 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:display_context",
+    "cases": [
+      {
+        "when": [
+          "gui",
+          "ground",
+          "fixed"
+        ],
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:newest/wilds/item/sculptor_staff"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:special",
+      "base": "jugcraft:newest/wilds/item/sculptor_staff",
+      "model": {
+        "type": "geckolib:geckolib"
+      }
+    }
+  }
+}

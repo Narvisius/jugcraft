@@ -123,7 +123,7 @@ public class YewGameTests {
 		for (int i = 0; i < 512; i++) {
 			var drops = Block.getDrops(ripe.setValue(FruitingLeavesBlock.FRUIT, 0), level, pos, null);
 			for (var stack : drops) {
-				helper.assertTrue(stack.is(JugcraftAgriculture.item("yew_sapling")) || stack.is(Items.STICK), "Unripe leaves dropped an unexpected item");
+				helper.assertTrue(stack.is(JugcraftAgriculture.item("yew_sapling")) || stack.is(Items.STICK) || stack.is(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(io.github.jimbozoomer.jugcraft.Jugcraft.id("twigworks_twig"))), "Unripe leaves dropped an unexpected item");
 				if (stack.is(JugcraftAgriculture.item("yew_sapling"))) saplings += stack.getCount();
 			}
 		}

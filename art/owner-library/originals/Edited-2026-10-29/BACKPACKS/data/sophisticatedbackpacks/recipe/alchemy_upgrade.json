@@ -1,0 +1,26 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "sophisticatedcore:item_enabled",
+      "itemRegistryName": "sophisticatedbackpacks:alchemy_upgrade"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "sophisticatedbackpacks:upgrade_base",
+    "F": "minecraft:fermented_spider_eye",
+    "G": "minecraft:glass_bottle",
+    "I": "#c:ingots/iron",
+    "P": "minecraft:ender_pearl",
+    "R": "minecraft:blaze_rod",
+    "T": "minecraft:ghast_tear"
+  },
+  "pattern": [
+    "TGF",
+    "IBI",
+    "RPR"
+  ],
+  "result": {
+    "id": "sophisticatedbackpacks:alchemy_upgrade"
+  }
+}

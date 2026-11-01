@@ -1,0 +1,40 @@
+{
+  "enhancers": "jugcraft:forbidden_elementarium",
+  "essences": {
+    "aureal": 1000,
+    "blood": 2000,
+    "souls": 8
+  },
+  "forge_tier": 3,
+  "inputs": [
+    {
+      "amount": 2,
+      "ingredient": {
+        "item": "minecraft:prismarine_shard"
+      }
+    },
+    {
+      "amount": 2,
+      "ingredient": {
+        "item": "minecraft:turtle_scute"
+      }
+    },
+    {
+      "amount": 2,
+      "ingredient": {
+        "item": "minecraft:lapis_lazuli"
+      }
+    }
+  ],
+  "magic_circle": "jugcraft:forbidden_create_item",
+  "main_ingredient": {
+    "item": "minecraft:heart_of_the_sea"
+  },
+  "result": {
+    "type": "jugcraft:forbidden_create_item",
+    "result_item": {
+      "count": 1,
+      "id": "jugcraft:forbidden_sea_prism"
+    }
+  }
+}

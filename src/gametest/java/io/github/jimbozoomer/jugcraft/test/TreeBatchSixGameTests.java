@@ -187,7 +187,7 @@ public class TreeBatchSixGameTests {
 			int saplings=0;
 			if(name.equals("juniper")) state=state.setValue(FruitingLeavesBlock.FRUIT,0);
 			for(int i=0;i<1024;i++) for(var drop:Block.getDrops(state,level,AT,null)) {
-				helper.assertTrue(drop.is(block(name+"_sapling").asItem()) || drop.is(Items.STICK),"Picked foliage duplicates fruit");
+				helper.assertTrue(drop.is(block(name+"_sapling").asItem()) || (drop.is(Items.STICK) || drop.is(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.parse("jugcraft:twigworks_twig")))),"Picked foliage duplicates fruit");
 				if(drop.is(block(name+"_sapling").asItem())) saplings++;
 			}
 			helper.assertTrue(saplings>0,"Sapling not renewable");

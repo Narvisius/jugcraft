@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "sophisticatedcore:item_enabled",
+      "itemRegistryName": "sophisticatedbackpacks:feeding_upgrade"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": "minecraft:golden_apple",
+    "B": "sophisticatedbackpacks:upgrade_base",
+    "C": "minecraft:golden_carrot",
+    "E": "#c:ender_pearls",
+    "M": "minecraft:glistering_melon_slice"
+  },
+  "pattern": [
+    " C ",
+    "ABM",
+    " E "
+  ],
+  "result": {
+    "id": "sophisticatedbackpacks:feeding_upgrade"
+  }
+}

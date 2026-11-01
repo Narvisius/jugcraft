@@ -1,0 +1,72 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "cozyhome:block/stream_water_falling"
+      },
+      "when": {
+        "contains": "water"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/stream_lava_falling"
+      },
+      "when": {
+        "contains": "lava"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/stream_water_landing"
+      },
+      "when": {
+        "contains": "water",
+        "has_under": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/stream_lava_landing"
+      },
+      "when": {
+        "contains": "lava",
+        "has_under": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/stream_honey_falling"
+      },
+      "when": {
+        "contains": "honey"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/stream_chocolate_falling"
+      },
+      "when": {
+        "contains": "chocolate"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/stream_honey_landing"
+      },
+      "when": {
+        "contains": "honey",
+        "has_under": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/stream_chocolate_landing"
+      },
+      "when": {
+        "contains": "chocolate",
+        "has_under": "true"
+      }
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+	  "mcwstairs:granite_bulk_stairs",
+	  "mcwstairs:granite_compact_stairs",
+	  "mcwstairs:granite_loft_stairs",
+	  "mcwstairs:granite_skyline_stairs",
+	  "mcwstairs:granite_terrace_stairs",
+	  "mcwstairs:granite_railing",
+	  "mcwstairs:granite_balcony",
+	  "mcwstairs:granite_platform"
+    ]
+  },
+  "criteria": {
+    "has_planks": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:granite"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_planks"
+    ]
+  ]
+}

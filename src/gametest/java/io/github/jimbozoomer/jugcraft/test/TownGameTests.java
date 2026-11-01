@@ -87,8 +87,18 @@ public class TownGameTests {
 			}
 			for (var block : List.of(Blocks.CRAFTING_TABLE, Blocks.STONECUTTER, Blocks.SMITHING_TABLE, Blocks.GRINDSTONE, Blocks.ANVIL, Blocks.ENCHANTING_TABLE, Blocks.ENDER_CHEST, io.github.jimbozoomer.jugcraft.town.JugcraftTown.ATM, io.github.jimbozoomer.jugcraft.town.JugcraftTown.COMMISSION_BOARD)) {
 				level.setBlockAndUpdate(at, block.defaultBlockState()); player.closeContainer();
+                io.github.jimbozoomer.jugcraft.enchanting.OwnerEnchanting.Inventory stored=null;
+                if(block==Blocks.ENCHANTING_TABLE){
+                    stored=((io.github.jimbozoomer.jugcraft.enchanting.OwnerEnchanting.Storage)level.getBlockEntity(at)).jugcraft$enchantingInventory();
+                    stored.setItem(0,new ItemStack(Items.DIAMOND_SWORD));stored.setItem(1,new ItemStack(Items.LAPIS_LAZULI,7));
+                }
 				h.assertTrue(click.get().consumesAction() && player.containerMenu != player.inventoryMenu, "Public workstation/personal ender chest opens: " + block);
+                if(stored!=null){
+                    h.assertTrue(player.containerMenu.getSlot(0).getItem().isEmpty()&&player.containerMenu.getSlot(1).getItem().isEmpty(),"Public enchanting never exposes the town's stored gear/lapis");
+                    player.containerMenu.getSlot(1).set(new ItemStack(Items.LAPIS_LAZULI,3));
+                }
 				player.closeContainer();
+                if(stored!=null){h.assertTrue(stored.getItem(0).is(Items.DIAMOND_SWORD)&&stored.getItem(1).getCount()==7,"Public enchanting leaves the town inventory unchanged");h.assertTrue(player.getInventory().countItem(Items.LAPIS_LAZULI)==3,"Closing public enchanting returns the visitor's own lapis");stored.clearContent();player.getInventory().clearContent();}
 			}
 			for (var block : List.of(Blocks.CHEST, Blocks.BARREL, Blocks.FURNACE, Blocks.HOPPER, Blocks.SHULKER_BOX, Blocks.BREWING_STAND, Blocks.LECTERN, Blocks.JUKEBOX,
 					io.github.jimbozoomer.jugcraft.menagerie.Menagerie.BLOCKS.get("household_oak_storage_cabinet"))) {

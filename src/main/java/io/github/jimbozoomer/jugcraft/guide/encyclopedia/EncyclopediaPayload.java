@@ -24,7 +24,7 @@ import net.minecraft.world.item.Item;
  * nothing a player has not met is named.
  */
 public record EncyclopediaPayload(int sequence, List<Component> notices, List<Page> pages) implements CustomPacketPayload {
-	public static final int MAX_PAGES = 11;
+	public static final int MAX_PAGES = 24;
 	public static final int MAX_NOTICES = 4;
 	public static final Type<EncyclopediaPayload> TYPE = new Type<>(Jugcraft.id("encyclopedia"));
 	public static final StreamCodec<RegistryFriendlyByteBuf, EncyclopediaPayload> CODEC = StreamCodec.composite(
@@ -177,6 +177,7 @@ public record EncyclopediaPayload(int sequence, List<Component> notices, List<Pa
 		public static final int COMPOSER = 1;
 		public static final int JOURNAL = 2;
 		public static final int PAGE = 3;
+        public static final int ROUTE = 4;
 		public static final int MAX_TARGET = 128;
 		public static final StreamCodec<RegistryFriendlyByteBuf, Link> STREAM_CODEC = StreamCodec.composite(
 				ByteBufCodecs.VAR_INT, Link::kind,

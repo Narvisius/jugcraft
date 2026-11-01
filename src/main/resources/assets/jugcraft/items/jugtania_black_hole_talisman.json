@@ -1,0 +1,15 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "minecraft:has_component",
+    "component": "jugcraft:botanical_black_hole_active",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "jugcraft:newest/jugtania/item/black_hole_talisman"
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "jugcraft:newest/jugtania/item/black_hole_talisman_active"
+    }
+  }
+}

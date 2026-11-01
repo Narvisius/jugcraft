@@ -83,5 +83,9 @@ def registry_definitions():
     research.pop('schema', None)
     research['advancements'] = {state: ('Jug Nouveau Arcana', 'Use a spell instrument or glyph; its workings are available immediately.', 'task', 'jugcraft:nouveau_source_gem') for state in research['states']}
     components = {Path(path).stem: {**value, 'name': labels['component.jugcraft.'+Path(path).stem], 'text': labels['component.jugcraft.'+Path(path).stem+'.description']} for path,value in captured.items() if '/component/' in path}
+    from newest_ars_additions import glyph_definitions, GLYPH_LABELS
+    for key,value in glyph_definitions().items():
+        title,description=GLYPH_LABELS[key]
+        components[key]={**value,'name':title,'text':description}
     for value in components.values(): value.pop('schema', None)
     return {'nouveau_arcana':research}, components

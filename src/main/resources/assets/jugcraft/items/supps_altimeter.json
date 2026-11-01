@@ -1,0 +1,18 @@
+{
+  "model": {
+    "type": "minecraft:composite",
+    "models": [
+      {
+        "type": "minecraft:model",
+        "model": "jugcraft:newest/supps/special_models/item/altimeter_template"
+      },
+      {
+        "type": "minecraft:special",
+        "base": "jugcraft:newest/supps/special_models/item/altimeter_template",
+        "model": {
+          "type": "jugcraft:supps_altimeter"
+        }
+      }
+    ]
+  }
+}

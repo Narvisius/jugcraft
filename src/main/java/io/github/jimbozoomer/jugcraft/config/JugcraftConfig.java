@@ -36,7 +36,7 @@ public final class JugcraftConfig {
 	 * the blocks they reach, where their shooter may break blocks; false leaves every block whole (guns/GunShots).
 	 */
 	public static final Map<String, Boolean> OPTIONS = Map.of("carving.free_draw", true, "concordance.absent_owner_authority", false, "vanadium.legacy_iron_recipes", false,
-			"guns.beam_mining", true);
+			"guns.beam_mining", true, "backpacks.survival_infinity", false, "aquatic.fish_weights", false, "loot.party_shared", false, "chat.system_delivery", false);
 
 	/**
 	 * Text options, with their defaults.
@@ -86,6 +86,7 @@ public final class JugcraftConfig {
 	 * </ul>
 	 */
     public static final Map<String, String> TEXT_OPTIONS = Map.ofEntries(
+            Map.entry("loot.refresh_ticks", "0"), Map.entry("loot.decay_ticks", "0"),
             Map.entry("academy.active", "on"),
             Map.entry("companions.paths_per_tick", "8"), Map.entry("companions.searches_per_tick", "4"),
 			Map.entry("halloween.start", "10-20"), Map.entry("halloween.end", "11-03"), Map.entry("halloween.timezone", "UTC"),

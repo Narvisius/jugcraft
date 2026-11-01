@@ -300,7 +300,7 @@ ITEMS = {
                    "hotter. It holds no Focus."},
     "fire_bangle": {
         "name": "Fire Bangle",
-        "tooltip": f"Worn in a Bracelet slot: once you understand Hearthbinding, your melee blows leave the creature "
+        "tooltip": f"Worn in a Bracelet slot: your melee blows leave the creature "
                    f"smouldering for {BANGLE_SMOULDER_TICKS // 20} seconds."},
     "pyromaniacs_hood": {"name": "Pyromaniac's Hood"},
     "pyromaniacs_tunic": {"name": "Pyromaniac's Tunic"},
@@ -317,7 +317,7 @@ for _piece, _set in SET_OF.items():
 BLOCKS = {}
 
 # Shaped crafting from Overworld materials (any time: the regalia's power matters only to Hearthbinding's invocations,
-# and the bangle's blow needs Hearthbinding understood). The owner's own recipes use another mod's machines and Nether
+# and the bangle works for any wearer). The owner's own recipes use another mod's machines and Nether
 # or End items, so they are not imported. The light set is cloth (wool in leather armour's shapes); the medium set is
 # wool and gold.
 _WOOL = {"W": "#minecraft:wool"}
@@ -433,7 +433,7 @@ def codex():
                  f"The lesser focus set with diamonds: +{FOCUS_POWER:g} fire Spell Power in the Spell Focus slot.",
                  rid("fire_focus")),
                 ("crafting_recipe", "Fire Bangle",
-                 "Once you understand Hearthbinding, your melee blows leave the creature smouldering for "
+                 "While worn, your melee blows leave the creature smouldering for "
                  f"{BANGLE_SMOULDER_TICKS // 20} seconds, wherever you may harm it. It gives no Spell Power, and a "
                  "second bangle adds nothing.", rid("fire_bangle")),
                 ("text", "Two Fire Sets",

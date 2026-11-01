@@ -183,7 +183,7 @@ public final class RimeGear {
 	}
 
 	/**
-	 * One look at {@code player} at {@code now} (server ticks). Only a living Rimekeeper wearing the bangle where it works
+	 * One look at {@code player} at {@code now} (server ticks). Only a living player wearing the bangle where it works
 	 * is looked at; anyone else's count is forgotten, so a bangle taken off and put back on starts again. Braced by any
 	 * Brace, they have had one now. The first look only starts the count (putting it on, logging in or coming back from
 	 * death gives no Brace at once). After {@value #BANGLE_RECHARGE_TICKS} ticks with none, they are braced. Returns the
@@ -193,7 +193,7 @@ public final class RimeGear {
 		if (!player.isAlive() || player.isSpectator()) {
 			return null;
 		}
-		if (!wearsBangle(player) || !Rime.understands(player)) {
+		if (!wearsBangle(player)) {
 			if (player.hasAttached(BANGLE_LAST)) {
 				player.removeAttached(BANGLE_LAST);
 			}

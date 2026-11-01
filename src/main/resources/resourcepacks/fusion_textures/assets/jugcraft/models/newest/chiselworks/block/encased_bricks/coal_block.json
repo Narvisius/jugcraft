@@ -1,0 +1,12 @@
+{
+  "loader": "fusion:model",
+  "type": "connecting",
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "jugcraft:block/newest_connected/encased_bricks/coal_block",
+    "particle": "jugcraft:newest/chiselworks/block/encased_bricks/coal_block"
+  },
+  "connections": {
+    "type": "is_same_block"
+  }
+}

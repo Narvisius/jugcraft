@@ -1,0 +1,93 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+	  "mcwfurnitures:cabinet_door",
+	  "mcwfurnitures:cabinet_drawer",
+	
+      "mcwfurnitures:poplar_wardrobe",
+	  "mcwfurnitures:poplar_modern_wardrobe",
+	  "mcwfurnitures:poplar_double_wardrobe",
+	  "mcwfurnitures:poplar_bookshelf_cupboard",
+	  "mcwfurnitures:poplar_bookshelf",
+	  "mcwfurnitures:poplar_drawer",
+	  "mcwfurnitures:poplar_double_drawer",
+	  "mcwfurnitures:poplar_bookshelf_drawer",
+	  "mcwfurnitures:poplar_lower_bookshelf_drawer",
+	  "mcwfurnitures:poplar_large_drawer",
+	  "mcwfurnitures:poplar_lower_triple_drawer",
+	  "mcwfurnitures:poplar_triple_drawer",
+	  "mcwfurnitures:poplar_desk",
+	  "mcwfurnitures:poplar_covered_desk",
+	  "mcwfurnitures:poplar_modern_desk",
+	  "mcwfurnitures:poplar_table",
+	  "mcwfurnitures:poplar_end_table",
+	  "mcwfurnitures:poplar_coffee_table",
+	  "mcwfurnitures:poplar_glass_table",
+	  "mcwfurnitures:poplar_chair",
+	  "mcwfurnitures:poplar_modern_chair",
+	  "mcwfurnitures:poplar_striped_chair",
+	  "mcwfurnitures:poplar_stool_chair",
+	  "mcwfurnitures:poplar_counter",
+	  "mcwfurnitures:poplar_drawer_counter",
+	  "mcwfurnitures:poplar_double_drawer_counter",
+	  "mcwfurnitures:poplar_cupboard_counter",
+	  
+	  "mcwfurnitures:stripped_poplar_wardrobe",
+	  "mcwfurnitures:stripped_poplar_modern_wardrobe",
+	  "mcwfurnitures:stripped_poplar_double_wardrobe",
+	  "mcwfurnitures:stripped_poplar_bookshelf_cupboard",
+	  "mcwfurnitures:stripped_poplar_bookshelf",
+	  "mcwfurnitures:stripped_poplar_drawer",
+	  "mcwfurnitures:stripped_poplar_double_drawer",
+	  "mcwfurnitures:stripped_poplar_bookshelf_drawer",
+	  "mcwfurnitures:stripped_poplar_lower_bookshelf_drawer",
+	  "mcwfurnitures:stripped_poplar_large_drawer",
+	  "mcwfurnitures:stripped_poplar_lower_triple_drawer",
+	  "mcwfurnitures:stripped_poplar_triple_drawer",
+	  "mcwfurnitures:stripped_poplar_desk",
+	  "mcwfurnitures:stripped_poplar_covered_desk",
+	  "mcwfurnitures:stripped_poplar_modern_desk",
+	  "mcwfurnitures:stripped_poplar_table",
+	  "mcwfurnitures:stripped_poplar_end_table",
+	  "mcwfurnitures:stripped_poplar_coffee_table",
+	  "mcwfurnitures:stripped_poplar_glass_table",
+	  "mcwfurnitures:stripped_poplar_chair",
+	  "mcwfurnitures:stripped_poplar_modern_chair",
+	  "mcwfurnitures:stripped_poplar_striped_chair",
+	  "mcwfurnitures:stripped_poplar_stool_chair",
+	  "mcwfurnitures:stripped_poplar_counter",
+	  "mcwfurnitures:stripped_poplar_drawer_counter",
+	  "mcwfurnitures:stripped_poplar_double_drawer_counter",
+	  "mcwfurnitures:stripped_poplar_cupboard_counter",
+	  "mcwfurnitures:poplar_kitchen_sink",
+      "mcwfurnitures:stripped_poplar_kitchen_sink"
+    ]
+  },
+  "criteria": {
+    "has_wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:poplar_log"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": "mcwfurnitures:poplar_drawer"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wood",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:block/template_wall_side_tall",
+  "textures": {
+    "wall": "jugcraft:block/owner_connected/red_sandstone_top_join"
+  },
+  "loader": "fusion:model",
+  "type": "connecting",
+  "connections": {
+    "type": "and",
+    "predicates": [
+      {
+        "type": "is_direction",
+        "direction": "top"
+      },
+      {
+        "type": "or",
+        "predicates": [
+          {
+            "type": "match_block",
+            "block": "minecraft:red_sandstone"
+          },
+          {
+            "type": "match_block",
+            "block": "minecraft:red_sandstone_slab"
+          },
+          {
+            "type": "match_block",
+            "block": "minecraft:red_sandstone_stairs"
+          }
+        ]
+      }
+    ]
+  }
+}

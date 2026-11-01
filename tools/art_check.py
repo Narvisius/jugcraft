@@ -105,6 +105,7 @@ H1_ALLOW = {
 # A2: cutout textures whose soft edge is wanted (entityCutout draws it opaque, so keep the list short).
 A2_ALLOW = {
     "entity/candle_flame": "AuraCandleRenderer tints its flame; the soft rim reads as glow and the renderer owner keeps it",
+    "newest/wilds/entity/frostmaw": "Original 512x256 skin has exactly three antialiased texels (alpha 194/205/214); original RenderFrostmaw uses the standard mob cutout, not a translucent body. Preserve its pixels and opaque silhouette.",
 }
 
 
@@ -441,6 +442,11 @@ def _open_faces(elements, faces):
     for f in faces:
         by_element[f.label[0]].append(f)
     boxes = [(i, el["from"], el["to"]) for i, el in enumerate(elements) if not el.get("rotation")]
+    # Blockbench often exports an explicit zero-angle rotation. It does not
+    # rotate the covering solid: ignoring it falsely exposes attached feet and
+    # other deliberately omitted internal faces (e.g. the original bathtub).
+    covers = [(i, el["from"], el["to"]) for i, el in enumerate(elements)
+              if abs(el.get("rotation", {}).get("angle", 0)) < 1e-9]
     out = []
     for i, f, t in boxes:
         present = set(elements[i].get("faces", {}))
@@ -466,7 +472,7 @@ def _open_faces(elements, faces):
                     p[axis] = plane + sign * 0.01
                     p[others[0]] = f[others[0]] + (a + 0.5) / 4 * (t[others[0]] - f[others[0]])
                     p[others[1]] = f[others[1]] + (b + 0.5) / 4 * (t[others[1]] - f[others[1]])
-                    if not any(all(F[k] - 1e-6 <= p[k] <= T[k] + 1e-6 for k in range(3)) for j, F, T in boxes if j != i):
+                    if not any(all(F[k] - 1e-6 <= p[k] <= T[k] + 1e-6 for k in range(3)) for j, F, T in covers if j != i):
                         free += 1
             if free:
                 out.append((i, face))
@@ -478,7 +484,9 @@ def _layered(elements, a, b):
     side overlay, the ore template in tools/material_icons.py). Their quads are the same quad, so they draw at exactly
     the same depth and the later element always wins: no flicker, unlike faces that are only nearly flush."""
     ea, eb = elements[a.label[0]], elements[b.label[0]]
-    return (a.label[1] == b.label[1] and not ea.get("rotation") and not eb.get("rotation")
+    return (a.label[1] == b.label[1]
+            and abs(ea.get("rotation", {}).get("angle", 0)) < 1e-9
+            and abs(eb.get("rotation", {}).get("angle", 0)) < 1e-9
             and all(abs(ea[k][i] - eb[k][i]) < 1e-9 for k in ("from", "to") for i in range(3)))
 
 
@@ -514,7 +522,9 @@ def check_block_models(machines):
         name = str(path.relative_to(ROOT / "src" / "main" / "resources"))
         backwards = [i for i, el in enumerate(elements) if any(el["from"][k] > el["to"][k] + 1e-6 for k in range(3))]
         import jimtafacts_catalog
-        if backwards and jimtafacts_catalog.original_inward_shell(path,elements):
+        import newest_original_art
+        if backwards and (jimtafacts_catalog.original_inward_shell(path,elements)
+                          or newest_original_art.intentional_reversed_elements(path,elements)):
             allowed['I1'].add(name)
         elif backwards:
             el = elements[backwards[0]]

@@ -1,0 +1,359 @@
+{
+  "technology_start": [
+    {
+      "title": "Start here: your first working machine",
+      "text": [
+        "Goal: power an Electric Furnace, then add a Crusher to process ore. You can start without magic, a boss kill or completing a quest.",
+        "Use a crafting table and ordinary furnace first. Collect wood, stone, fuel, copper, tin, zinc and redstone. The recipe grids below come from this server; use them for exact quantities.",
+        "The inventory counts are a checklist of what you carry now, not permanent quest completion. Trading for parts is an equally valid route."
+      ],
+      "items": [],
+      "recipes": [],
+      "links": [
+        {
+          "title": "Browse all technology chapters",
+          "route": "technology"
+        }
+      ]
+    },
+    {
+      "title": "1. Prepare bronze and the casing",
+      "text": [
+        "Make Bronze Blend from copper and tin, then smelt the blend into Bronze Ingots. Smelt zinc for the casing. This bootstrap does not need a powered Alloy Smelter.",
+        "The Machine Casing is a component used to craft equipment; placing a casing alone does not make a working machine."
+      ],
+      "items": [
+        "jugcraft:bronze_ingot",
+        "jugcraft:zinc_ingot",
+        "jugcraft:machine_casing"
+      ],
+      "recipes": [
+        "jugcraft:bronze_blend",
+        "jugcraft:machine_casing"
+      ],
+      "links": []
+    },
+    {
+      "title": "2. Generate and connect power",
+      "text": [
+        "Craft Copper Cable and a Coal Generator. Put coal or charcoal in the generator's fuel slot. Connect cable to its power port and the receiving machine's power socket.",
+        "JE is electrical energy; JE/t is energy per game tick. A generator, a connected cable and one consumer are enough to begin. A Battery Box is optional at this stage."
+      ],
+      "items": [
+        "jugcraft:coal_generator",
+        "jugcraft:copper_cable"
+      ],
+      "recipes": [
+        "jugcraft:copper_cable",
+        "jugcraft:coal_generator"
+      ],
+      "links": []
+    },
+    {
+      "title": "3. Make one useful output",
+      "text": [
+        "Connect an Electric Furnace and put a smeltable item in its input. Leave output space free. Wait for the progress bar and collect the result: this is your first working powered production line.",
+        "If nothing happens, check fuel, available JE, the machine's actual socket, a valid input and free output slots. A cable touching a decorative panel is not necessarily touching an input port."
+      ],
+      "items": [
+        "jugcraft:electric_furnace"
+      ],
+      "recipes": [
+        "jugcraft:electric_furnace"
+      ],
+      "links": []
+    },
+    {
+      "title": "4. Expand only where useful",
+      "text": [
+        "A Crusher improves ore yield. The Metal Press and Wire Drawer supply parts; the Circuit Assembler supports electronics. A Battery Box buffers power and outputs through its front.",
+        "Steel is a parallel capability: Coke Oven plus Steel Foundry. Mechanical shafts and logistics are useful specialties, not a requirement to finish every chapter before advancing.",
+        "Choose one next goal: easier ore processing, an automated farm, storage, chemistry or transport. Larger factories are optional throughput upgrades."
+      ],
+      "items": [],
+      "recipes": [],
+      "links": [
+        {
+          "title": "Choose a technology specialty",
+          "route": "technology"
+        },
+        {
+          "title": "Digital storage and automation",
+          "page": "jimta_network"
+        }
+      ]
+    },
+    {
+      "title": "5. Share materials with magic",
+      "text": [
+        "Copper, glass, crops and storage are useful to magical workshops too. Trade surplus components rather than requiring every player to build both branches.",
+        "A Ley Pylon and compatible equipment connect workshop charge to magic. Read the relevant apparatus entry before building; electrical JE, Ley Charge and transmutation essence are different resources."
+      ],
+      "items": [],
+      "recipes": [],
+      "links": [
+        {
+          "title": "Explore the magic branches",
+          "page": "magic_start"
+        },
+        {
+          "title": "Find a town mentor",
+          "page": "mentors"
+        }
+      ]
+    }
+  ],
+  "magic_start": [
+    {
+      "title": "Start here: choose your kind of magic",
+      "text": [
+        "Magic is not one compulsory ladder. Choose spellcasting, magical workshops and helpers, or transmutation and equipment. You may combine them later.",
+        "Owning usable equipment is enough to use it; this guide adds no research gate. Existing research explains discoveries and advances the Concordance. No new items are granted by reading or consulting a mentor."
+      ],
+      "items": [],
+      "recipes": [],
+      "links": [
+        {
+          "title": "First Light: live step-by-step guidance",
+          "page": "discover"
+        },
+        {
+          "title": "Spell composition and controls",
+          "page": "spellcraft"
+        }
+      ]
+    },
+    {
+      "title": "1. Try a wand",
+      "text": [
+        "Collect a luminous specimen such as amethyst, glow berries or glow lichen, plus a stick and copper. Craft the Initiate's Wand using this server's recipe.",
+        "Sneak-use your instrument to open the constellation composer. Choose a delivery and an available effect, review its cost, and save. Use the instrument to cast. Start with a simple light spell rather than a large combat combination.",
+        "For the research route, sneak-use a luminous specimen to examine it. First Light below shows the server's current requirements and your own progress."
+      ],
+      "items": [
+        "jugcraft:initiate_wand"
+      ],
+      "recipes": [
+        "jugcraft:initiate_wand"
+      ],
+      "links": [
+        {
+          "title": "Open First Light",
+          "page": "discover"
+        },
+        {
+          "title": "Open Spellcraft",
+          "page": "spellcraft"
+        }
+      ]
+    },
+    {
+      "title": "2. Build a magical workshop",
+      "text": [
+        "The Lampwright's Bench supports luminous research. Jug Nouveau offers another entry: a Novice Spell Book and Imbuement Chamber, then Source Gems and a Dominion Wand.",
+        "An Imbuement Chamber works slowly without charge. Source Jars, Sourcelinks and Dominion Wand connections support powered workshops and helpers. Use the workshop guide for exact recipes, links and setup."
+      ],
+      "items": [
+        "jugcraft:lampwright_bench",
+        "jugcraft:nouveau_novice_spell_book"
+      ],
+      "recipes": [
+        "jugcraft:lampwright_bench"
+      ],
+      "links": [
+        {
+          "title": "Jug Nouveau: stations, helpers and glyphs",
+          "page": "nouveau"
+        }
+      ]
+    },
+    {
+      "title": "3. Magic without casting",
+      "text": [
+        "Transmutation turns valued supplies into essence and recreates learned permitted materials at their value. It is a building convenience, not a way to print valuables.",
+        "Dark/Red Matter equipment, utility artifacts and collectors are a separate specialty. They do not require choosing every spell school first."
+      ],
+      "items": [],
+      "recipes": [],
+      "links": [
+        {
+          "title": "Transmutation and magical equipment",
+          "page": "alchemy_start"
+        }
+      ]
+    },
+    {
+      "title": "4. Explore schools and workshops",
+      "text": [
+        "The Concordance reference contains the current traditions and their apparatus. The imported Workshop Guides cover spellbooks and the other supplied systems. Read these from this same Encyclopedia.",
+        "Encounter records appear as you discover their content. An empty bestiary is not a requirement to fight a boss before using ordinary tools or magic."
+      ],
+      "items": [],
+      "recipes": [],
+      "links": [
+        {
+          "title": "All magic reference chapters",
+          "route": "magic"
+        },
+        {
+          "title": "Spellbooks and workshop manuals",
+          "page": "jimta_guides"
+        },
+        {
+          "title": "Expeditions and discovered bosses",
+          "page": "expedition"
+        }
+      ]
+    },
+    {
+      "title": "5. Pick a first-session goal",
+      "text": [
+        "Caster: make a wand and cast a small light spell. Gardener: build an Imbuement Chamber and make a Source Gem. Alchemist: read the Scale and transmutation chain before spending rare materials.",
+        "Focus fuels casting; Ley Charge supports compatible apparatus; essence pays for transmutation. They are not interchangeable just because each is magical."
+      ],
+      "items": [],
+      "recipes": [],
+      "links": [
+        {
+          "title": "Find a mentor",
+          "page": "mentors"
+        }
+      ]
+    }
+  ],
+  "alchemy_start": [
+    {
+      "title": "Start here: materials and convenience",
+      "text": [
+        "This branch is useful without spellcasting. Start by inspecting the Assayer's Scale and Philosopher's Stone recipes. Gold, copper, iron, smooth stone slabs and dark oak begin the Scale chain; later equipment has its own material costs."
+      ],
+      "items": [
+        "jugcraft:assayers_scale",
+        "jugcraft:philosophers_stone"
+      ],
+      "recipes": [
+        "jugcraft:assayers_scale",
+        "jugcraft:philosophers_stone"
+      ],
+      "links": []
+    },
+    {
+      "title": "The table comes before the portable tablet",
+      "text": [
+        "The Transmutation Table requires Dark Matter, obsidian and stone. The portable Tablet is an upgrade made from the table and more advanced materials, not a free starting item.",
+        "Use the table's item menu to dissolve supported supplies, learn permitted patterns and select what to create. Creation spends the displayed essence value with no extra surcharge."
+      ],
+      "items": [
+        "jugcraft:transmutation_table",
+        "jugcraft:transmutation_tablet"
+      ],
+      "recipes": [
+        "jugcraft:transmutation_table",
+        "jugcraft:transmutation_tablet"
+      ],
+      "links": []
+    },
+    {
+      "title": "Protect the server economy",
+      "text": [
+        "Learning and output permission are separate. Building and convenience outputs are allowed; valuable metals, powerful equipment and restricted outputs stay blocked even if you previously learned them.",
+        "Condensers and density gems follow the same convenience-output policy. Keep rare gear out of a dissolve slot unless you genuinely want to consume it. Saved balances and learned patterns belong to you."
+      ],
+      "items": [],
+      "recipes": [],
+      "links": [
+        {
+          "title": "Read magical equipment and alchemy references",
+          "route": "magic"
+        }
+      ]
+    },
+    {
+      "title": "Choose an upgrade",
+      "text": [
+        "Collectors and relays supply essence; condensers create an allowed selected output. Matter tools and utility artifacts provide different jobs. Start with a useful building supply or one tool rather than trying to complete the whole collection.",
+        "Consult Ivo at Curios for this lesson. Learning from a mentor costs nothing and never consumes inventory."
+      ],
+      "items": [],
+      "recipes": [],
+      "links": [
+        {
+          "title": "Back to magic choices",
+          "page": "magic_start"
+        }
+      ]
+    }
+  ],
+  "mentors": [
+    {
+      "title": "Free help, no new unlock requirements",
+      "text": [
+        "Town mentors open these same Encyclopedia lessons. You can read them anywhere with the Encyclopedia key or inventory button; visiting town is optional.",
+        "At participating shops, click Ask mentor. Sneak-interact with the resident for the lesson without opening their shop. Sleeping residents rest; the Encyclopedia remains available at all hours."
+      ],
+      "items": [],
+      "recipes": [],
+      "links": []
+    },
+    {
+      "title": "Kester Barrow - General Store",
+      "text": [
+        "Ask Kester about your first powered machine, fuel, cable connections and what to build next. Normal interaction still opens the shop during opening hours."
+      ],
+      "items": [],
+      "recipes": [],
+      "links": [
+        {
+          "title": "Kester's technology lesson",
+          "page": "technology_start"
+        }
+      ]
+    },
+    {
+      "title": "Linnea Barrow - Florist",
+      "text": [
+        "Ask Linnea how to start magic, choose a first instrument, or build a magical garden and workshop. Her shop remains unchanged."
+      ],
+      "items": [],
+      "recipes": [],
+      "links": [
+        {
+          "title": "Linnea's magic lesson",
+          "page": "magic_start"
+        }
+      ]
+    },
+    {
+      "title": "Ivo Brook - Curios",
+      "text": [
+        "Ask Ivo about the Scale, transmutation, essence and useful magical gear. No free valuables or mentor rewards are added."
+      ],
+      "items": [],
+      "recipes": [],
+      "links": [
+        {
+          "title": "Ivo's alchemy lesson",
+          "page": "alchemy_start"
+        }
+      ]
+    },
+    {
+      "title": "Osric Finch - Town Hall",
+      "text": [
+        "Speak to the mayor for this directory. Academy instructors retain their existing lessons; sneak-interact with the Radiance instructor for the shared magic starting guide."
+      ],
+      "items": [],
+      "recipes": [],
+      "links": [
+        {
+          "title": "Technology reference",
+          "route": "technology"
+        },
+        {
+          "title": "Magic reference",
+          "route": "magic"
+        }
+      ]
+    }
+  ]
+}

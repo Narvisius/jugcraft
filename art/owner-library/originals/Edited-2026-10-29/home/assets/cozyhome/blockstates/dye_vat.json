@@ -1,0 +1,115 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "cozyhome:block/dye_vat",
+        "y": 180
+      },
+      "when": {"facing": "north"}
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/dye_vat",
+        "y": 270
+      },
+      "when": {"facing": "east"}
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/dye_vat"
+      },
+      "when": {"facing": "south"}
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/dye_vat",
+        "y": 90
+      },
+      "when": {"facing": "west"}
+    },
+    {
+      "apply": {"model": "cozyhome:block/liquid/types/water_10_by_10_level_3","y": 180},
+      "when": {"level": 1,"facing": "north"}
+    },
+    {
+      "apply": {"model": "cozyhome:block/liquid/types/water_10_by_10_level_6","y": 180},
+      "when": {"level": 2,"facing": "north"}
+    },
+    {
+      "apply": {"model": "cozyhome:block/liquid/types/water_10_by_10_level_9","y": 180},
+      "when": {"level": 3,"facing": "north"}
+    },
+    {
+      "apply": {"model": "cozyhome:block/liquid/types/water_10_by_10_level_12","y": 180},
+      "when": {"level": 4,"facing": "north"}
+    },
+    {
+      "apply": {"model": "cozyhome:block/liquid/types/water_10_by_10_level_15","y": 180},
+      "when": {"level": 5,"facing": "north"}
+    },
+    {
+      "apply": {"model": "cozyhome:block/liquid/types/water_10_by_10_level_3","y": 270},
+      "when": {"level": 1,"facing": "east"}
+    },
+    {
+      "apply": {"model": "cozyhome:block/liquid/types/water_10_by_10_level_6","y": 270},
+      "when": {"level": 2,"facing": "east"}
+    },
+    {
+      "apply": {"model": "cozyhome:block/liquid/types/water_10_by_10_level_9","y": 270},
+      "when": {"level": 3,"facing": "east"}
+    },
+    {
+      "apply": {"model": "cozyhome:block/liquid/types/water_10_by_10_level_12","y": 270},
+      "when": {"level": 4,"facing": "east"}
+    },
+    {
+      "apply": {"model": "cozyhome:block/liquid/types/water_10_by_10_level_15","y": 270},
+      "when": {"level": 5,"facing": "east"}
+    },
+    {
+      "apply": {"model": "cozyhome:block/liquid/types/water_10_by_10_level_3"},
+      "when": {"level": 1,"facing": "south"}
+    },
+    {
+      "apply": {"model": "cozyhome:block/liquid/types/water_10_by_10_level_6"},
+      "when": {"level": 2,"facing": "south"}
+    },
+    {
+      "apply": {"model": "cozyhome:block/liquid/types/water_10_by_10_level_9"},
+      "when": {"level": 3,"facing": "south"}
+    },
+    {
+      "apply": {"model": "cozyhome:block/liquid/types/water_10_by_10_level_12"},
+      "when": {"level": 4,"facing": "south"}
+    },
+    {
+      "apply": {"model": "cozyhome:block/liquid/types/water_10_by_10_level_15"},
+      "when": {"level": 5,"facing": "south"}
+    },
+    {
+      "apply": {"model": "cozyhome:block/liquid/types/water_10_by_10_level_15","y": 180},
+      "when": {"level": 5,"facing": "north"}
+    },
+    {
+      "apply": {"model": "cozyhome:block/liquid/types/water_10_by_10_level_3","y": 90},
+      "when": {"level": 1,"facing": "west"}
+    },
+    {
+      "apply": {"model": "cozyhome:block/liquid/types/water_10_by_10_level_6","y": 90},
+      "when": {"level": 2,"facing": "west"}
+    },
+    {
+      "apply": {"model": "cozyhome:block/liquid/types/water_10_by_10_level_9","y": 90},
+      "when": {"level": 3,"facing": "west"}
+    },
+    {
+      "apply": {"model": "cozyhome:block/liquid/types/water_10_by_10_level_12","y": 90},
+      "when": {"level": 4,"facing": "west"}
+    },
+    {
+      "apply": {"model": "cozyhome:block/liquid/types/water_10_by_10_level_15","y": 90},
+      "when": {"level": 5,"facing": "west"}
+    }
+  ]
+}

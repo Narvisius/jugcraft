@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "minecraft:block/oak_planks",
+    "side": "jugcraft:block/owner_connected/bookshelf/bookshelf"
+  },
+  "loader": "fusion:model",
+  "type": "connecting",
+  "connections": {
+    "type": "is_same_block"
+  }
+}

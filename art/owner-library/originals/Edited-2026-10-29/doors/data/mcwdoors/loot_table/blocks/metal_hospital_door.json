@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "mcwdoors:metal_hospital_door",
+            "state": {
+              "half": "lower"
+            }
+          },
+          "name": "mcwdoors:metal_hospital_door"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "mcwdoors:blocks/metal_hospital_door"
+}

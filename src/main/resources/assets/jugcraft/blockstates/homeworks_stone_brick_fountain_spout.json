@@ -1,0 +1,304 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stone_brick_fountain_spout"
+      },
+      "when": {
+        "face": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stone_brick_fountain_spout",
+        "x": 180
+      },
+      "when": {
+        "face": "ceiling"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stone_brick_fountain_spout_wall"
+      },
+      "when": {
+        "face": "wall",
+        "facing": "north"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stone_brick_fountain_spout_wall",
+        "y": 90
+      },
+      "when": {
+        "face": "wall",
+        "facing": "east"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stone_brick_fountain_spout_wall",
+        "y": 180
+      },
+      "when": {
+        "face": "wall",
+        "facing": "south"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stone_brick_fountain_spout_wall",
+        "y": 270
+      },
+      "when": {
+        "face": "wall",
+        "facing": "west"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stream_water_dripping"
+      },
+      "when": {
+        "contains": "water",
+        "face": "wall",
+        "facing": "north"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stream_water_dripping",
+        "y": 90
+      },
+      "when": {
+        "contains": "water",
+        "face": "wall",
+        "facing": "east"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stream_water_dripping",
+        "y": 180
+      },
+      "when": {
+        "contains": "water",
+        "face": "wall",
+        "facing": "south"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stream_water_dripping",
+        "y": 270
+      },
+      "when": {
+        "contains": "water",
+        "face": "wall",
+        "facing": "west"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stream_lava_dripping"
+      },
+      "when": {
+        "contains": "lava",
+        "face": "wall",
+        "facing": "north"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stream_lava_dripping",
+        "y": 90
+      },
+      "when": {
+        "contains": "lava",
+        "face": "wall",
+        "facing": "east"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stream_lava_dripping",
+        "y": 180
+      },
+      "when": {
+        "contains": "lava",
+        "face": "wall",
+        "facing": "south"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stream_lava_dripping",
+        "y": 270
+      },
+      "when": {
+        "contains": "lava",
+        "face": "wall",
+        "facing": "west"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stream_water_falling"
+      },
+      "when": {
+        "contains": "water",
+        "face": "ceiling"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stream_lava_falling"
+      },
+      "when": {
+        "contains": "lava",
+        "face": "ceiling"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stream_water_landing"
+      },
+      "when": {
+        "contains": "water",
+        "has_under": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stream_lava_landing"
+      },
+      "when": {
+        "contains": "lava",
+        "has_under": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stream_honey_dripping"
+      },
+      "when": {
+        "contains": "honey",
+        "face": "wall",
+        "facing": "north"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stream_chocolate_dripping"
+      },
+      "when": {
+        "contains": "chocolate",
+        "face": "wall",
+        "facing": "north"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stream_honey_dripping",
+        "y": 90
+      },
+      "when": {
+        "contains": "honey",
+        "face": "wall",
+        "facing": "east"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stream_chocolate_dripping",
+        "y": 90
+      },
+      "when": {
+        "contains": "chocolate",
+        "face": "wall",
+        "facing": "east"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stream_honey_dripping",
+        "y": 180
+      },
+      "when": {
+        "contains": "honey",
+        "face": "wall",
+        "facing": "south"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stream_chocolate_dripping",
+        "y": 180
+      },
+      "when": {
+        "contains": "chocolate",
+        "face": "wall",
+        "facing": "south"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stream_honey_dripping",
+        "y": 270
+      },
+      "when": {
+        "contains": "honey",
+        "face": "wall",
+        "facing": "west"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stream_chocolate_dripping",
+        "y": 270
+      },
+      "when": {
+        "contains": "chocolate",
+        "face": "wall",
+        "facing": "west"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stream_honey_falling"
+      },
+      "when": {
+        "contains": "honey",
+        "face": "ceiling"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stream_chocolate_falling"
+      },
+      "when": {
+        "contains": "chocolate",
+        "face": "ceiling"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stream_honey_landing"
+      },
+      "when": {
+        "contains": "honey",
+        "has_under": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:newest/homeworks/block/stream_chocolate_landing"
+      },
+      "when": {
+        "contains": "chocolate",
+        "has_under": "true"
+      }
+    }
+  ]
+}

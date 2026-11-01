@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:forbidden_essence_utrem_jar",
+          "modifier": [
+            {
+              "source": "block_entity",
+              "include": [
+                "jugcraft:forbidden_essence_storage"
+              ],
+              "type": "minecraft:copy_components"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

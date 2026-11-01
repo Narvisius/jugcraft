@@ -179,7 +179,7 @@ public class TreeBatchFiveGameTests {
 				}
 				int saplings = 0;
 				for (int i = 0; i < 512; i++) for (var drop : Block.getDrops(ripe.setValue(FruitingLeavesBlock.FRUIT, 0), level, AT, null)) {
-					helper.assertTrue(drop.is(block(tree + "_sapling").asItem()) || drop.is(Items.STICK), "Unexpected unripe loot");
+					helper.assertTrue(drop.is(block(tree + "_sapling").asItem()) || drop.is(Items.STICK) || drop.is(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(io.github.jimbozoomer.jugcraft.Jugcraft.id("twigworks_twig"))), "Unexpected unripe loot");
 					if (drop.is(block(tree + "_sapling").asItem())) saplings++;
 				}
 				helper.assertTrue(saplings > 0, "No renewable saplings");

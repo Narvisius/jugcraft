@@ -32,11 +32,16 @@ public class HouseholdBlock extends Block {
     private static final ThreadLocal<JsonObject> BUILDING=new ThreadLocal<>();
     public final String name,kind;
     private final Map<BlockState,VoxelShape> shapes=new IdentityHashMap<>();
-    private final JsonObject definition;
-    static HouseholdBlock create(Properties p,JsonObject d){
+    public static HouseholdBlock create(Properties p,JsonObject d){
         BUILDING.set(d);
         try {
             String kind=d.get("kind").getAsString(), name=d.get("source").getAsString();
+            if(d.has("collection")&&d.get("collection").getAsString().equals("newest_supps"))return kind.equals("bunting")?new OwnerBuntings.Placed(p,d):kind.equals("supps_terrain")?new OwnerSupplementTerrain(p,d):new OwnerSupplementBlock(p,d);
+            if(d.has("collection")&&d.get("collection").getAsString().equals("newest_amends"))return new OwnerAmendmentBlock(p,d);
+            if(d.has("collection")&&d.get("collection").getAsString().equals("newest_home"))return OwnerHomeBlock.make(p,d);
+            if(d.has("collection")&&d.get("collection").getAsString().equals("newest_twigs"))return new OwnerTwigDecor(p,d);
+            if(d.has("collection")&&d.get("collection").getAsString().equals("newest_holiday"))return new OwnerHolidayDecor(p,d);
+            if(d.has("collection")&&d.get("collection").getAsString().equals("newest_furniture"))return kind.equals("seat")?new OwnerJoinedFurniture.Seat(p,d):kind.equals("storage")?new OwnerJoinedFurniture.Storage(p,d):new OwnerJoinedFurniture(p,d);
             if(d.has("collection")&&d.get("collection").getAsString().equals("crafted"))return kind.equals("seat")?new CraftedBlock.Seat(p,d):kind.equals("storage")?new CraftedBlock.Storage(p,d):new CraftedBlock(p,d);
             if(kind.equals("cavern"))return CavernControl.CAVE.contains(name)||CavernDevice.KINDS.contains(name)
                     ?new CavernBlock.WithEntity(p,d):new CavernBlock(p,d);
@@ -50,27 +55,40 @@ public class HouseholdBlock extends Block {
     private static final class WithEntity extends HouseholdBlock implements EntityBlock { WithEntity(Properties p,JsonObject d){super(p,d);} }
     private static final class Seat extends HouseholdBlock implements Sittable { Seat(Properties p,JsonObject d){super(p,d);} }
     protected HouseholdBlock(Properties p,JsonObject d){
-        super(p);definition=d;name=d.get("source").getAsString();kind=d.get("kind").getAsString();
+        super(p);name=d.get("source").getAsString();kind=d.get("kind").getAsString();
         BlockState state=stateDefinition.any();
         for(var prop:stateDefinition.getProperties()){
             for(String choice:List.of("false","0","north","bottom","default","unconnected","left","wall"))if(prop.getValue(choice).isPresent()){state=set(state,prop.getName(),choice);break;}
         }
         registerDefaultState(state);
         var supplied=d.getAsJsonObject("shapes");
+        Map<JsonArray,VoxelShape> compiled=new HashMap<>();
+        Map<String,JsonArray> exact=new HashMap<>();List<String> indexedProperties=null;boolean indexed=true;
+        for(var entry:supplied.entrySet()){
+            var names=Arrays.stream(entry.getKey().split(",")).filter(v->v.contains("=")).map(v->v.split("=",2)[0]).sorted().toList();
+            if(indexedProperties==null)indexedProperties=names;else if(!indexedProperties.equals(names))indexed=false;
+            exact.put(normalizedShapeKey(entry.getKey()),entry.getValue().getAsJsonArray());
+        }
         for(var s:stateDefinition.getPossibleStates()){
-            VoxelShape shape=Shapes.empty();
-            for(var entry:supplied.entrySet())if(matches(s,entry.getKey())){
-                for(var box:entry.getValue().getAsJsonArray()){
-                    var a=box.getAsJsonArray();shape=Shapes.or(shape,Block.box(a.get(0).getAsDouble(),a.get(1).getAsDouble(),a.get(2).getAsDouble(),a.get(3).getAsDouble(),a.get(4).getAsDouble(),a.get(5).getAsDouble()));
-                }break;
-            }
+            VoxelShape shape=Shapes.empty();JsonArray boxes=null;
+            if(indexed&&indexedProperties!=null){
+                var keys=new ArrayList<String>();for(var key:indexedProperties)keys.add(key+"="+value(s,key));
+                boxes=exact.get(String.join(",",keys));
+            }else for(var entry:supplied.entrySet())if(matches(s,entry.getKey())){boxes=entry.getValue().getAsJsonArray();break;}
+            if(boxes!=null)shape=compiled.computeIfAbsent(boxes,HouseholdBlock::compileBoxes);
+            boolean joined=false;
             if(d.has("parts"))for(var part:d.getAsJsonArray("parts")){
                 var piece=part.getAsJsonObject();if(!condition(s,piece.getAsJsonObject("when")))continue;
-                for(var box:piece.getAsJsonArray("boxes")){var a=box.getAsJsonArray();shape=Shapes.or(shape,Block.box(a.get(0).getAsDouble(),a.get(1).getAsDouble(),a.get(2).getAsDouble(),a.get(3).getAsDouble(),a.get(4).getAsDouble(),a.get(5).getAsDouble()));}
+                shape=joinBoxes(shape,compiled.computeIfAbsent(piece.getAsJsonArray("boxes"),HouseholdBlock::compileBoxes));joined=true;
             }
-            shapes.put(s,(shape.isEmpty()?Block.box(0,0,0,16,name.contains("fence")||name.contains("hedge")?16:2,16):shape).optimize());
+            shapes.put(s,shape.isEmpty()?Block.box(0,0,0,16,name.contains("fence")||name.contains("hedge")?16:2,16):joined?shape.optimize():shape);
         }
     }
+    private static String normalizedShapeKey(String key){return Arrays.stream(key.split(",")).filter(v->v.contains("=")).sorted().collect(java.util.stream.Collectors.joining(","));}
+    private static VoxelShape compileBoxes(JsonArray boxes){
+        VoxelShape shape=Shapes.empty();for(var box:boxes){var a=box.getAsJsonArray();shape=joinBoxes(shape,Block.box(a.get(0).getAsDouble(),a.get(1).getAsDouble(),a.get(2).getAsDouble(),a.get(3).getAsDouble(),a.get(4).getAsDouble(),a.get(5).getAsDouble()));}return shape.optimize();
+    }
+    private static VoxelShape joinBoxes(VoxelShape a,VoxelShape b){return Shapes.joinUnoptimized(a,b,BooleanOp.OR);}
     private static boolean matches(BlockState s,String key){for(String pair:key.split(",")){var parts=pair.split("=");if(parts.length==2&&!value(s,parts[0]).equals(parts[1]))return false;}return true;}
     private static boolean condition(BlockState s,JsonObject condition){
         for(var entry:condition.entrySet()){
@@ -83,7 +101,7 @@ public class HouseholdBlock extends Block {
         for(var entry:BUILDING.get().getAsJsonObject("properties").entrySet()){
             String name=entry.getKey();List<String> choices=new ArrayList<>();entry.getValue().getAsJsonArray().forEach(v->choices.add(v.getAsString()));
             if(!choices.isEmpty()&&choices.stream().allMatch(v->v.equals("false")||v.equals("true")))b.add(BooleanProperty.create(name));
-            else if(name.equals("facing"))b.add(choices.contains("up")?BlockStateProperties.FACING:HorizontalDirectionalBlock.FACING);
+            else if(name.equals("facing"))b.add(choices.size()==2?EnumProperty.create("facing",Direction.class,Direction.NORTH,Direction.EAST):choices.contains("up")?BlockStateProperties.FACING:HorizontalDirectionalBlock.FACING);
             else b.add(new Choice(name,choices));
         }
     }
@@ -100,14 +118,14 @@ public class HouseholdBlock extends Block {
     @SuppressWarnings({"rawtypes","unchecked"})
     static BlockState set(BlockState state,String name,String value){Property prop=state.getBlock().getStateDefinition().getProperty(name);if(prop==null)return state;var v=prop.getValue(value);return v.isPresent()?state.setValue(prop,(Comparable)v.get()):state;}
     @SuppressWarnings({"rawtypes","unchecked"})
-    static String value(BlockState state,String name){
+    public static String value(BlockState state,String name){
         // Light functions are evaluated while Block is still building its state
         // definition. The state's properties already exist at that point.
         Property p=state.getProperties().stream().filter(v->v.getName().equals(name)).findFirst().orElse(null);
         return p==null?"":p.getName(state.getValue(p));
     }
     public static boolean flag(BlockState s,String name){return value(s,name).equals("true");}
-    public static Direction facing(BlockState s){return s.hasProperty(HorizontalDirectionalBlock.FACING)?s.getValue(HorizontalDirectionalBlock.FACING):s.hasProperty(BlockStateProperties.FACING)?s.getValue(BlockStateProperties.FACING):Direction.NORTH;}
+    public static Direction facing(BlockState s){return switch(value(s,"facing")){case "east"->Direction.EAST;case "south"->Direction.SOUTH;case "west"->Direction.WEST;case "up"->Direction.UP;case "down"->Direction.DOWN;default->Direction.NORTH;};}
     public BlockState rotateClockwise(BlockState s){var f=facing(s);return f.getAxis().isVertical()?s:set(s,"facing",f.getClockWise().getSerializedName());}
     public boolean rotatePlaced(Level l,BlockPos p,BlockState state,Player player){
         if(!paired())return l.setBlock(p,rotateClockwise(state),UPDATE_ALL);

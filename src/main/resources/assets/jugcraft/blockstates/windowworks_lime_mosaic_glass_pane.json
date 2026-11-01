@@ -1,0 +1,112 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "jugcraft:newest/windowworks/block/panes/lime_stained_glass_pane_post"
+      }
+    },
+    {
+      "when": {
+        "north": "true"
+      },
+      "apply": {
+        "model": "jugcraft:newest/windowworks/block/panes/lime_stained_glass_pane_side"
+      }
+    },
+    {
+      "when": {
+        "east": "true"
+      },
+      "apply": {
+        "model": "jugcraft:newest/windowworks/block/panes/lime_stained_glass_pane_side",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true"
+      },
+      "apply": {
+        "model": "jugcraft:newest/windowworks/block/panes/lime_stained_glass_pane_side_alt"
+      }
+    },
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "jugcraft:newest/windowworks/block/panes/lime_stained_glass_pane_side_alt",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "north": "false"
+      },
+      "apply": {
+        "model": "jugcraft:newest/windowworks/block/panes/lime_stained_glass_pane_noside"
+      }
+    },
+    {
+      "when": {
+        "east": "false"
+      },
+      "apply": {
+        "model": "jugcraft:newest/windowworks/block/panes/lime_stained_glass_pane_noside_alt"
+      }
+    },
+    {
+      "when": {
+        "south": "false"
+      },
+      "apply": {
+        "model": "jugcraft:newest/windowworks/block/panes/lime_stained_glass_pane_noside_alt",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "west": "false"
+      },
+      "apply": {
+        "model": "jugcraft:newest/windowworks/block/panes/lime_stained_glass_pane_noside",
+        "y": 270
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/windowworks_lime_mosaic_glass_pane"
+      },
+      "when": {
+        "north_east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/windowworks_lime_mosaic_glass_pane",
+        "y": 90
+      },
+      "when": {
+        "south_east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/windowworks_lime_mosaic_glass_pane",
+        "y": 180
+      },
+      "when": {
+        "south_west": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "jugcraft:block/diagonal/windowworks_lime_mosaic_glass_pane",
+        "y": 270
+      },
+      "when": {
+        "north_west": "true"
+      }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "sophisticatedcore:item_enabled",
+      "itemRegistryName": "sophisticatedbackpacks:battery_upgrade"
+    }
+  ],
+  "type": "sophisticatedcore:upgrade_next_tier",
+  "key": {
+    "B": "sophisticatedbackpacks:upgrade_base",
+    "G": "#c:ingots/gold",
+    "R": "#c:storage_blocks/redstone"
+  },
+  "pattern": [
+    "GRG",
+    "RBR",
+    "GRG"
+  ],
+  "result": {
+    "id": "sophisticatedbackpacks:battery_upgrade"
+  }
+}

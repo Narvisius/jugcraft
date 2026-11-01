@@ -58,7 +58,11 @@ public final class Encyclopedia {
 
 	public static void register() {
 		// The pages, in the order they are shown (tools/check_mod_data.py pins the ids to tools/encyclopedia.py).
-		page("discover", FirstLightRoute::write);
+		page("technology_start", (p, r, out) -> StarterGuides.write("technology_start", p, out));
+        page("magic_start", (p, r, out) -> StarterGuides.write("magic_start", p, out));
+        page("alchemy_start", (p, r, out) -> StarterGuides.write("alchemy_start", p, out));
+        page("mentors", (p, r, out) -> StarterGuides.write("mentors", p, out));
+        page("discover", FirstLightRoute::write);
 		page("spellcraft", SpellcraftPage::write);
 		// The Expeditions page: the lair dossiers, then the bestiary's field notes on the creatures this player has fought.
 		page("expedition", (player, request, out) -> {
@@ -67,6 +71,8 @@ public final class Encyclopedia {
 		});
 		page("inspect", InspectPage::write);
         page("nouveau", io.github.jimbozoomer.jugcraft.nouveau.NouveauGuide::write);
+        page("botanical", io.github.jimbozoomer.jugcraft.botany.BotanicalGuide::write);
+        page("botanical_flowers", io.github.jimbozoomer.jugcraft.botany.BotanicalGuide::flowers);
         page("menagerie", io.github.jimbozoomer.jugcraft.menagerie.MenagerieGuide::write);
         page("woodland", io.github.jimbozoomer.jugcraft.menagerie.MenagerieGuide::woodland);
         page("household", io.github.jimbozoomer.jugcraft.menagerie.MenagerieGuide::household);
@@ -75,6 +81,7 @@ public final class Encyclopedia {
         page("caverns", io.github.jimbozoomer.jugcraft.menagerie.MenagerieGuide::caverns);
         page("jimta_network", io.github.jimbozoomer.jugcraft.jimtafacts.network.DigitalGuide::write);
         page("jimta_guides", io.github.jimbozoomer.jugcraft.jimtafacts.spellbooks.JimtaGuides::write);
+		PayloadTypeRegistry.clientboundPlay().register(MentorOpenPayload.TYPE, MentorOpenPayload.CODEC);
 		PayloadTypeRegistry.serverboundPlay().register(EncyclopediaRequestPayload.TYPE, EncyclopediaRequestPayload.CODEC);
 		PayloadTypeRegistry.clientboundPlay().register(EncyclopediaPayload.TYPE, EncyclopediaPayload.CODEC);
 		ServerPlayNetworking.registerGlobalReceiver(EncyclopediaRequestPayload.TYPE, (payload, context) -> receive(context.player(), payload));

@@ -1,0 +1,45 @@
+{
+  "name": "mowziesmobs:monastery/fallback/tower_wall_fallback_pool",
+  "fallback": "mowziesmobs:monastery/fallback/tower_wall_fallback_pool",
+  "elements": [
+
+    {
+      "weight": 2,
+      "element": {
+        "location": "mowziesmobs:monastery/monastery_tower_blank",
+        "processors": "mowziesmobs:monastery",
+        "projection": "rigid",
+        "element_type": "mowziesmobs:mowzie_element",
+        "bounds": {
+          "ignore_bounds": true
+        }
+      }
+    },
+
+    {
+      "weight": 2,
+      "element": {
+        "location": "mowziesmobs:monastery/monastery_tower_window1",
+        "processors": "mowziesmobs:monastery",
+        "projection": "rigid",
+        "element_type": "mowziesmobs:mowzie_element",
+        "bounds": {
+          "ignore_bounds": true
+        }
+      }
+    },
+
+    {
+      "weight": 5,
+      "element": {
+        "location": "mowziesmobs:monastery/monastery_tower_window_tall",
+        "processors": "mowziesmobs:monastery",
+        "projection": "rigid",
+        "element_type": "mowziesmobs:mowzie_element",
+        "bounds": {
+          "ignore_bounds": true
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "criteria": {
+    "always_true": {
+      "trigger": "minecraft:tick"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "lootr:block/gold_planks",
+    "description": {
+      "translate": "lootr.advancements.root.description"
+    },
+    "icon": {
+      "id": "minecraft:chest"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "lootr.advancements.root.title"
+    }
+  },
+  "requirements": [
+    [
+      "always_true"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

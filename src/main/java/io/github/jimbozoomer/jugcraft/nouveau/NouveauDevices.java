@@ -19,9 +19,10 @@ public final class NouveauDevices {
         public net.minecraft.world.item.ItemStack stack(){return inventory.getItem(slot);}
         public void changed(){inventory.setChanged();}
     }
-    public static NouveauWorkshop source(ConcordanceEffects.Context c){
-        if(!c.cause().source().startsWith("jugcraft:nouveau_device/"))return null;
-        try{var at=BlockPos.of(Long.parseLong(c.cause().source().substring(c.cause().source().lastIndexOf('/')+1)));var p=ConcordanceEffects.person(c);return p!=null&&c.level().hasChunkAt(at)&&c.level().getBlockEntity(at) instanceof NouveauWorkshop b&&b.permitted(p)?b:null;}catch(NumberFormatException ignored){return null;}
+    public static NouveauWorkshop source(ConcordanceEffects.Context c){return source(c.level(),ConcordanceEffects.person(c),c.cause());}
+    public static NouveauWorkshop source(ServerLevel level,ServerPlayer actor,Cause cause){
+        if(actor==null||!cause.source().startsWith("jugcraft:nouveau_device/"))return null;
+        try{var at=BlockPos.of(Long.parseLong(cause.source().substring(cause.source().lastIndexOf('/')+1)));return level.hasChunkAt(at)&&level.getBlockEntity(at) instanceof NouveauWorkshop b&&b.permitted(actor)?b:null;}catch(NumberFormatException ignored){return null;}
     }
     public static boolean automated(ConcordanceEffects.Context c){return c.cause().source().startsWith("jugcraft:nouveau_device/");}
     public static List<net.minecraft.world.Container> inventories(ServerLevel l,ServerPlayer p,NouveauWorkshop b){
@@ -41,6 +42,7 @@ public final class NouveauDevices {
     }
     public static void tick(ServerLevel level,ServerPlayer owner,NouveauWorkshop device){
         switch(device.kind()){
+            case "source_spawner" -> io.github.jimbozoomer.jugcraft.nouveau.additions.ArsSourceSpawner.tick(level,owner,device);
             case "mob_jar" -> NouveauContainment.tick(level,owner,device);
             case "potion_diffuser" -> NouveauAlchemy.diffuse(level,owner,device);
             case "potion_melder" -> NouveauAlchemy.meld(level,owner,device);
@@ -53,10 +55,11 @@ public final class NouveauDevices {
         boolean timer=b.kind().equals("timer_spell_turret"),rune=b.kind().equals("rune"),powered=l.hasNeighborSignal(b.getBlockPos());
         boolean rising=b.rising(powered);b.setActive(false);
         if(timer?!b.every(b.threshold()):!rune&&!rising)return;
-        var inscription=b.getItem(0).get(JugcraftConcordance.INSCRIPTION);if(inscription==null)return;
+        var inscription=b.configuredSpell();
         var instrument=new Instrument("jugcraft:nouveau_device","jugcraft:nouveau_spell_turret",32,12,160,2,2400);
-        var compiled=io.github.jimbozoomer.jugcraft.concordance.compose.Compiler.compileAuthored(inscription.text(),ConcordanceData.rules().catalog(),instrument);
-        if(compiled.plan()==null)return;var plan=compiled.plan();int cost=Math.max(1,plan.focus());
+        var preset=NouveauRecipes.all().stream().filter(r->r.id().equals(b.arsPreset())&&r.operation().equals("caster_tome")).findFirst().orElse(null);
+        var plan=inscription!=null?io.github.jimbozoomer.jugcraft.concordance.compose.Compiler.compileAuthored(inscription.text(),ConcordanceData.rules().catalog(),instrument).plan():preset==null?null:NouveauTomes.plan(preset);
+        if(plan==null)return;int cost=Math.max(1,plan.focus());
         if(!NouveauSource.canPay(l,owner,b,cost))return;
         var facing=b.getBlockState().getValue(NouveauWorkshopBlock.FACING);Vec3 direction=new Vec3(facing.getStepX(),facing.getStepY(),facing.getStepZ());
         Vec3 origin=Vec3.atCenterOf(b.getBlockPos()).add(0,.25,0).add(direction.scale(.6));

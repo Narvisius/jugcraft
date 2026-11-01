@@ -1,0 +1,4942 @@
+{
+  "textureSize": [
+    64,
+    64
+  ],
+  "parts": [
+    {
+      "name": "body",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        19.0,
+        0.0,
+        -0.17453292,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -6.0,
+            -3.0,
+            -6.0,
+            12.0,
+            5.0,
+            10.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "dieAnimController",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": []
+    },
+    {
+      "name": "crystal7",
+      "parent": "body",
+      "pose": [
+        -3.6,
+        -2.4,
+        1.7,
+        -1.3203416,
+        0.91053826,
+        -1.9577358
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -5.0,
+            -1.5,
+            3.0,
+            8.0,
+            3.0
+          ],
+          "uv": [
+            0.0,
+            17.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "clawRightJoint",
+      "parent": "body",
+      "pose": [
+        -2.0,
+        2.0,
+        -3.5,
+        0.17453292,
+        -0.7740535,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -1.0,
+            -0.5,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leg3LeftJoint",
+      "parent": "body",
+      "pose": [
+        3.5,
+        2.0,
+        1.5,
+        0.17453292,
+        -0.68294734,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -1.0,
+            -0.5,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leg3RightJoint",
+      "parent": "body",
+      "pose": [
+        -3.5,
+        2.0,
+        1.5,
+        0.17453292,
+        0.68294734,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -1.0,
+            -0.5,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "crystal5",
+      "parent": "body",
+      "pose": [
+        4.0,
+        -3.0,
+        -3.5,
+        0.55623645,
+        0.81349796,
+        1.3924236
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -4.5,
+            -1.5,
+            3.0,
+            6.0,
+            3.0
+          ],
+          "uv": [
+            0.0,
+            17.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "clawLeftJoint",
+      "parent": "body",
+      "pose": [
+        2.0,
+        2.0,
+        -3.5,
+        0.17453292,
+        0.7740535,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -1.0,
+            -0.5,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "crystal4",
+      "parent": "body",
+      "pose": [
+        -4.5,
+        -3.0,
+        -2.0,
+        0.22759093,
+        -0.31869712,
+        -0.5462881
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -5.0,
+            -1.5,
+            3.0,
+            7.0,
+            3.0
+          ],
+          "uv": [
+            0.0,
+            17.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leg1LeftJoint",
+      "parent": "body",
+      "pose": [
+        3.2,
+        2.0,
+        -1.8,
+        0.17453292,
+        0.4537856,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -1.0,
+            -0.5,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "crystal1",
+      "parent": "body",
+      "pose": [
+        2.0,
+        -4.0,
+        -1.0,
+        0.045553092,
+        -0.68294734,
+        0.22759093
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -11.0,
+            -2.0,
+            4.0,
+            13.0,
+            4.0
+          ],
+          "uv": [
+            12.0,
+            15.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "crystal3",
+      "parent": "body",
+      "pose": [
+        0.0,
+        -3.0,
+        -4.8,
+        0.59184116,
+        0.31869712,
+        0.22759093
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -7.0,
+            -1.5,
+            3.0,
+            9.0,
+            3.0
+          ],
+          "uv": [
+            0.0,
+            17.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "head",
+      "parent": "body",
+      "pose": [
+        0.0,
+        1.5,
+        -5.0,
+        0.17453292,
+        0.0,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -2.0,
+            -1.0,
+            -3.0,
+            4.0,
+            3.0,
+            2.0
+          ],
+          "uv": [
+            34.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "crystal6",
+      "parent": "body",
+      "pose": [
+        2.0,
+        -3.0,
+        3.0,
+        -0.59184116,
+        -0.31869712,
+        0.5462881
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -5.0,
+            -1.5,
+            3.0,
+            8.0,
+            3.0
+          ],
+          "uv": [
+            0.0,
+            17.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "crystal2",
+      "parent": "body",
+      "pose": [
+        -2.0,
+        -3.0,
+        1.0,
+        0.63739425,
+        2.003289,
+        0.4098033
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.5,
+            -10.0,
+            -1.5,
+            3.0,
+            12.0,
+            3.0
+          ],
+          "uv": [
+            0.0,
+            17.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leg2RightJoint",
+      "parent": "body",
+      "pose": [
+        -3.8,
+        2.0,
+        -0.1,
+        0.17453292,
+        0.04363323,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -1.0,
+            -0.5,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leg1RightJoint",
+      "parent": "body",
+      "pose": [
+        -3.2,
+        2.0,
+        -2.0,
+        0.17453292,
+        -0.40142572,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -1.0,
+            -0.5,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leg2LeftJoint",
+      "parent": "body",
+      "pose": [
+        3.8,
+        2.0,
+        -0.1,
+        0.17453292,
+        -0.04363323,
+        0.0
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -1.0,
+            -0.5,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leg1RightUpper",
+      "parent": "leg1RightJoint",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.63739425
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -1.0,
+            -0.5,
+            3.0,
+            1.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leg1LeftUpper",
+      "parent": "leg1LeftJoint",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.63739425
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -1.0,
+            -0.5,
+            3.0,
+            1.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "clawRightUpper",
+      "parent": "clawRightJoint",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.63739425
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -1.0,
+            -0.5,
+            4.0,
+            1.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            2.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "clawLeftUpper",
+      "parent": "clawLeftJoint",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.63739425
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.0,
+            -0.5,
+            4.0,
+            1.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            2.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leg2LeftUpper",
+      "parent": "leg2LeftJoint",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.5061455
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.7,
+            -1.0,
+            -0.5,
+            4.0,
+            1.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            2.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leg2RightUpper",
+      "parent": "leg2RightJoint",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.5061455
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.3,
+            -1.0,
+            -0.5,
+            4.0,
+            1.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            2.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "eyeLeft",
+      "parent": "head",
+      "pose": [
+        2.0,
+        -0.5,
+        -2.5,
+        -1.0471976,
+        1.7453293,
+        2.5307274
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.0,
+            -1.0,
+            2.0,
+            2.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            4.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": true
+        }
+      ]
+    },
+    {
+      "name": "leg3RightUpper",
+      "parent": "leg3RightJoint",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.41887903
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.3,
+            -1.0,
+            -0.5,
+            4.0,
+            1.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            2.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "eyeRight",
+      "parent": "head",
+      "pose": [
+        -2.0,
+        -0.5,
+        -2.5,
+        -1.0471976,
+        -1.7453293,
+        -2.5307274
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.0,
+            -1.0,
+            2.0,
+            2.0,
+            2.0
+          ],
+          "uv": [
+            0.0,
+            4.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leg3LeftUpper",
+      "parent": "leg3LeftJoint",
+      "pose": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.41887903
+      ],
+      "cubes": [
+        {
+          "box": [
+            -0.7,
+            -1.0,
+            -0.5,
+            4.0,
+            1.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            2.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leg3RightLower",
+      "parent": "leg3RightUpper",
+      "pose": [
+        -3.3,
+        -0.5,
+        0.0,
+        0.0,
+        0.0,
+        1.4486233
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -0.5,
+            -0.5,
+            3.0,
+            1.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "clawLeftLower",
+      "parent": "clawLeftUpper",
+      "pose": [
+        3.0,
+        -0.5,
+        0.0,
+        0.0,
+        0.0,
+        -0.91053826
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -0.5,
+            -0.5,
+            4.0,
+            1.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            2.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "clawRightLower",
+      "parent": "clawRightUpper",
+      "pose": [
+        -3.0,
+        -0.5,
+        0.0,
+        0.0,
+        0.0,
+        0.91053826
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -0.5,
+            -0.5,
+            4.0,
+            1.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            2.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leg1LeftLower",
+      "parent": "leg1LeftUpper",
+      "pose": [
+        3.0,
+        -0.5,
+        0.0,
+        0.0,
+        0.0,
+        -1.2747885
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -0.5,
+            -0.5,
+            3.0,
+            1.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leg2RightLower",
+      "parent": "leg2RightUpper",
+      "pose": [
+        -3.3,
+        -0.5,
+        0.0,
+        0.0,
+        0.0,
+        1.5097098
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -0.5,
+            -0.5,
+            3.0,
+            1.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leg2LeftLower",
+      "parent": "leg2LeftUpper",
+      "pose": [
+        3.3,
+        -0.5,
+        0.0,
+        0.0,
+        0.0,
+        -1.5097098
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -0.5,
+            -0.5,
+            3.0,
+            1.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leg1RightLower",
+      "parent": "leg1RightUpper",
+      "pose": [
+        -3.0,
+        -0.5,
+        0.0,
+        0.0,
+        0.0,
+        1.2747885
+      ],
+      "cubes": [
+        {
+          "box": [
+            -3.0,
+            -0.5,
+            -0.5,
+            3.0,
+            1.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "leg3LeftLower",
+      "parent": "leg3LeftUpper",
+      "pose": [
+        3.3,
+        -0.5,
+        0.0,
+        0.0,
+        0.0,
+        -1.4486233
+      ],
+      "cubes": [
+        {
+          "box": [
+            0.0,
+            -0.5,
+            -0.5,
+            3.0,
+            1.0,
+            1.0
+          ],
+          "uv": [
+            0.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "clawLeft",
+      "parent": "clawLeftLower",
+      "pose": [
+        3.5,
+        0.0,
+        0.0,
+        0.27314404,
+        0.27314404,
+        -0.045553092
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.5,
+            -5.0,
+            2.0,
+            3.0,
+            6.0
+          ],
+          "uv": [
+            42.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "foot3Left",
+      "parent": "leg3LeftLower",
+      "pose": [
+        3.2,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.4537856
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.0,
+            -1.0,
+            2.0,
+            5.0,
+            2.0
+          ],
+          "uv": [
+            44.0,
+            9.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "foot2Left",
+      "parent": "leg2LeftLower",
+      "pose": [
+        3.3,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.35430184
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.0,
+            -1.0,
+            2.0,
+            6.0,
+            2.0
+          ],
+          "uv": [
+            52.0,
+            9.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "clawRight",
+      "parent": "clawRightLower",
+      "pose": [
+        -3.5,
+        0.0,
+        0.0,
+        0.27314404,
+        -0.27314404,
+        0.045553092
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.5,
+            -5.0,
+            2.0,
+            3.0,
+            6.0
+          ],
+          "uv": [
+            42.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "foot1Right",
+      "parent": "leg1RightLower",
+      "pose": [
+        -3.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.27314404
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.0,
+            -1.0,
+            2.0,
+            5.0,
+            2.0
+          ],
+          "uv": [
+            44.0,
+            9.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "foot3Right",
+      "parent": "leg3RightLower",
+      "pose": [
+        -3.2,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.4537856
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.0,
+            -1.0,
+            2.0,
+            5.0,
+            2.0
+          ],
+          "uv": [
+            44.0,
+            9.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "foot2Right",
+      "parent": "leg2RightLower",
+      "pose": [
+        -3.3,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.35081118
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.0,
+            -1.0,
+            2.0,
+            6.0,
+            2.0
+          ],
+          "uv": [
+            52.0,
+            9.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "foot1Left",
+      "parent": "leg1LeftLower",
+      "pose": [
+        3.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.27314404
+      ],
+      "cubes": [
+        {
+          "box": [
+            -1.0,
+            -1.0,
+            -1.0,
+            2.0,
+            5.0,
+            2.0
+          ],
+          "uv": [
+            44.0,
+            9.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {
+    "idle_animation": {
+      "length": 2.3500000000000005,
+      "loop": false,
+      "channels": [
+        {
+          "bone": "leg2LeftLower",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                0.0,
+                0.0,
+                5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.0,
+                5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                0.0,
+                0.0,
+                5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                0.0,
+                0.0,
+                5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "clawLeft",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                -17.188733853924695,
+                0.0,
+                -17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                -17.188733853924695,
+                0.0,
+                -17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                -17.188733853924695,
+                0.0,
+                -17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                -17.188733853924695,
+                0.0,
+                -17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "clawLeftUpper",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                11.459155902616466,
+                -17.188733853924695,
+                17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                11.459155902616466,
+                -17.188733853924695,
+                17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                11.459155902616466,
+                -17.188733853924695,
+                17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                11.459155902616466,
+                -17.188733853924695,
+                17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                -8.594366926962348,
+                -8.594366926962348,
+                -5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.35,
+              "vector": [
+                -8.594366926962348,
+                -8.594366926962348,
+                -5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4000000000000001,
+              "vector": [
+                -8.594366926962348,
+                -8.594366926962348,
+                -5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4500000000000002,
+              "vector": [
+                -8.594366926962348,
+                -8.594366926962348,
+                -5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.5500000000000003,
+              "vector": [
+                -8.594366926962348,
+                -8.594366926962348,
+                -5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.6000000000000003,
+              "vector": [
+                -8.594366926962348,
+                -8.594366926962348,
+                -5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.6500000000000004,
+              "vector": [
+                -8.594366926962348,
+                -8.594366926962348,
+                -5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.7000000000000004,
+              "vector": [
+                -8.594366926962348,
+                -8.594366926962348,
+                -5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.8000000000000005,
+              "vector": [
+                -8.594366926962348,
+                -8.594366926962348,
+                -5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.1500000000000004,
+              "vector": [
+                -8.594366926962348,
+                -8.594366926962348,
+                -5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.3500000000000005,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "foot2Left",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg1RightLower",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                0.0,
+                0.0,
+                -25.783100780887047
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.0,
+                -25.783100780887047
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                0.0,
+                0.0,
+                -25.783100780887047
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                0.0,
+                0.0,
+                -25.783100780887047
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg2RightLower",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                0.0,
+                0.0,
+                -20.05352282957881
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.0,
+                -20.05352282957881
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                0.0,
+                0.0,
+                -20.05352282957881
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                0.0,
+                0.0,
+                -20.05352282957881
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg2LeftUpper",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                0.0,
+                0.0,
+                5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.0,
+                5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                0.0,
+                0.0,
+                5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                0.0,
+                0.0,
+                5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "foot3Right",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                0.0,
+                0.0,
+                40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.0,
+                40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                0.0,
+                0.0,
+                40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                0.0,
+                0.0,
+                40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "clawRightUpper",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                11.459155902616466,
+                17.188733853924695,
+                -17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                11.459155902616466,
+                17.188733853924695,
+                -17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                11.459155902616466,
+                17.188733853924695,
+                -17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                11.459155902616466,
+                17.188733853924695,
+                -17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0.0,
+                11.459155902616466,
+                22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.35,
+              "vector": [
+                0.0,
+                11.459155902616466,
+                22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4000000000000001,
+              "vector": [
+                0.0,
+                11.459155902616466,
+                -2.8647889756541165
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4500000000000002,
+              "vector": [
+                0.0,
+                11.459155902616466,
+                -2.8647889756541165
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.5500000000000003,
+              "vector": [
+                0.0,
+                11.459155902616466,
+                22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.6000000000000003,
+              "vector": [
+                0.0,
+                11.459155902616466,
+                22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.6500000000000004,
+              "vector": [
+                0.0,
+                11.459155902616466,
+                -2.8647889756541165
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.7000000000000004,
+              "vector": [
+                0.0,
+                11.459155902616466,
+                -2.8647889756541165
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.8000000000000005,
+              "vector": [
+                0.0,
+                11.459155902616466,
+                22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.1500000000000004,
+              "vector": [
+                0.0,
+                11.459155902616466,
+                22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.3500000000000005,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "foot3Left",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                0.0,
+                0.0,
+                -5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.0,
+                -5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                0.0,
+                0.0,
+                -5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                0.0,
+                0.0,
+                -5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "foot1Left",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                0.0,
+                0.0,
+                -5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.0,
+                -5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                0.0,
+                0.0,
+                -5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                0.0,
+                0.0,
+                -5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg3LeftUpper",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                0.0,
+                0.0,
+                11.459155902616466
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.0,
+                11.459155902616466
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                0.0,
+                0.0,
+                11.459155902616466
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                0.0,
+                0.0,
+                11.459155902616466
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg1LeftLower",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                0.0,
+                0.0,
+                5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.0,
+                5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                0.0,
+                0.0,
+                5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                0.0,
+                0.0,
+                5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "foot1Right",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                0.0,
+                0.0,
+                40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.0,
+                40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                0.0,
+                0.0,
+                40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                0.0,
+                0.0,
+                40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "head",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                0.0,
+                0.0,
+                34.37746770784939
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.0,
+                34.37746770784939
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                28.64788975654116,
+                17.188733853924695,
+                22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                28.64788975654116,
+                17.188733853924695,
+                22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                22.918311805232932,
+                11.459155902616466,
+                22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.35,
+              "vector": [
+                22.918311805232932,
+                11.459155902616466,
+                22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4000000000000001,
+              "vector": [
+                22.918311805232932,
+                11.459155902616466,
+                22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4500000000000002,
+              "vector": [
+                22.918311805232932,
+                11.459155902616466,
+                22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.5500000000000003,
+              "vector": [
+                22.918311805232932,
+                11.459155902616466,
+                22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.6000000000000003,
+              "vector": [
+                22.918311805232932,
+                11.459155902616466,
+                22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.6500000000000004,
+              "vector": [
+                22.918311805232932,
+                11.459155902616466,
+                22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.7000000000000004,
+              "vector": [
+                22.918311805232932,
+                11.459155902616466,
+                22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.8000000000000005,
+              "vector": [
+                22.918311805232932,
+                11.459155902616466,
+                22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.1500000000000004,
+              "vector": [
+                22.918311805232932,
+                11.459155902616466,
+                22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.3500000000000005,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg1RightUpper",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                0.0,
+                0.0,
+                -17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.0,
+                -17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                0.0,
+                0.0,
+                -17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                0.0,
+                0.0,
+                -17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg1LeftUpper",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                0.0,
+                0.0,
+                11.459155902616466
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.0,
+                11.459155902616466
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                0.0,
+                0.0,
+                11.459155902616466
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                0.0,
+                0.0,
+                11.459155902616466
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg3RightLower",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                0.0,
+                0.0,
+                -25.783100780887047
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.0,
+                -25.783100780887047
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                0.0,
+                0.0,
+                -25.783100780887047
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                0.0,
+                0.0,
+                -25.783100780887047
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "body",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                0.0,
+                0.0,
+                5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.0,
+                5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                0.0,
+                0.0,
+                5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                0.0,
+                0.0,
+                5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "foot2Right",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                0.0,
+                0.0,
+                28.64788975654116
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.0,
+                28.64788975654116
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                0.0,
+                0.0,
+                28.64788975654116
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                0.0,
+                0.0,
+                28.64788975654116
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "clawRight",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                -17.188733853924695,
+                0.0,
+                17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                -17.188733853924695,
+                0.0,
+                17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                -17.188733853924695,
+                0.0,
+                17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                -17.188733853924695,
+                0.0,
+                17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                28.64788975654116,
+                17.188733853924695,
+                -22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.35,
+              "vector": [
+                28.64788975654116,
+                17.188733853924695,
+                -22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4000000000000001,
+              "vector": [
+                28.64788975654116,
+                17.188733853924695,
+                -22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4500000000000002,
+              "vector": [
+                28.64788975654116,
+                17.188733853924695,
+                -22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.5500000000000003,
+              "vector": [
+                28.64788975654116,
+                17.188733853924695,
+                -22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.6000000000000003,
+              "vector": [
+                28.64788975654116,
+                17.188733853924695,
+                -22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.6500000000000004,
+              "vector": [
+                28.64788975654116,
+                17.188733853924695,
+                -22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.7000000000000004,
+              "vector": [
+                28.64788975654116,
+                17.188733853924695,
+                -22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.8000000000000005,
+              "vector": [
+                28.64788975654116,
+                17.188733853924695,
+                -22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.1500000000000004,
+              "vector": [
+                28.64788975654116,
+                17.188733853924695,
+                -22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.3500000000000005,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg3RightUpper",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                0.0,
+                0.0,
+                -17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.0,
+                -17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                0.0,
+                0.0,
+                -17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                0.0,
+                0.0,
+                -17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg2RightUpper",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                0.0,
+                0.0,
+                -17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.0,
+                -17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                0.0,
+                0.0,
+                -17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                0.0,
+                0.0,
+                -17.188733853924695
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg3LeftLower",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                0.0,
+                0.0,
+                5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                0.0,
+                0.0,
+                5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                0.0,
+                0.0,
+                5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                0.0,
+                0.0,
+                5.729577951308233
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "body",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.3,
+              "vector": [
+                1.0,
+                2.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.75,
+              "vector": [
+                1.0,
+                2.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.9,
+              "vector": [
+                1.0,
+                2.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                1.0,
+                2.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "clawRightLower",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.05,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.25,
+              "vector": [
+                0.0,
+                0.0,
+                22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.35,
+              "vector": [
+                0.0,
+                0.0,
+                22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4000000000000001,
+              "vector": [
+                0.0,
+                0.0,
+                -2.8647889756541165
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4500000000000002,
+              "vector": [
+                0.0,
+                0.0,
+                -2.8647889756541165
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.5500000000000003,
+              "vector": [
+                0.0,
+                0.0,
+                22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.6000000000000003,
+              "vector": [
+                0.0,
+                0.0,
+                22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.6500000000000004,
+              "vector": [
+                0.0,
+                0.0,
+                -2.8647889756541165
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.7000000000000004,
+              "vector": [
+                0.0,
+                0.0,
+                -2.8647889756541165
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.8000000000000005,
+              "vector": [
+                0.0,
+                0.0,
+                22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.1500000000000004,
+              "vector": [
+                0.0,
+                0.0,
+                22.918311805232932
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.3500000000000005,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ]
+    },
+    "die_animation": {
+      "length": 2.65,
+      "loop": false,
+      "channels": [
+        {
+          "bone": "body",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.35,
+              "vector": [
+                -200.53522829578813,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.44999999999999996,
+              "vector": [
+                -200.53522829578813,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5499999999999999,
+              "vector": [
+                -200.53522829578813,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.45,
+              "vector": [
+                -200.53522829578813,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.05,
+              "vector": [
+                -200.53522829578813,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.65,
+              "vector": [
+                -200.53522829578813,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "dieAnimController",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.35,
+              "vector": [
+                1.0,
+                -1.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.44999999999999996,
+              "vector": [
+                1.0,
+                -1.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5499999999999999,
+              "vector": [
+                1.0,
+                -1.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.45,
+              "vector": [
+                1.0,
+                -1.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.05,
+              "vector": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.65,
+              "vector": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "head",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.35,
+              "vector": [
+                57.29577951308232,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.44999999999999996,
+              "vector": [
+                57.29577951308232,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5499999999999999,
+              "vector": [
+                57.29577951308232,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.45,
+              "vector": [
+                57.29577951308232,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.05,
+              "vector": [
+                57.29577951308232,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.65,
+              "vector": [
+                57.29577951308232,
+                0.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "body",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.35,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.44999999999999996,
+              "vector": [
+                0.0,
+                5.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.5499999999999999,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg3LeftUpper",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4499999999999997,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.05,
+              "vector": [
+                0.0,
+                0.0,
+                40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.65,
+              "vector": [
+                0.0,
+                0.0,
+                40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg1RightUpper",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4499999999999997,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.05,
+              "vector": [
+                0.0,
+                0.0,
+                -40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.65,
+              "vector": [
+                0.0,
+                0.0,
+                -40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "clawRightUpper",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4499999999999997,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.05,
+              "vector": [
+                0.0,
+                0.0,
+                -40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.65,
+              "vector": [
+                0.0,
+                0.0,
+                -40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "clawLeftUpper",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4499999999999997,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.05,
+              "vector": [
+                0.0,
+                0.0,
+                40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.65,
+              "vector": [
+                0.0,
+                0.0,
+                40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "clawLeft",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4499999999999997,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.05,
+              "vector": [
+                57.29577951308232,
+                0.0,
+                57.29577951308232
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.65,
+              "vector": [
+                57.29577951308232,
+                0.0,
+                57.29577951308232
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg1LeftUpper",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4499999999999997,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.05,
+              "vector": [
+                0.0,
+                0.0,
+                40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.65,
+              "vector": [
+                0.0,
+                0.0,
+                40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "clawRight",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4499999999999997,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.05,
+              "vector": [
+                57.29577951308232,
+                0.0,
+                -57.29577951308232
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.65,
+              "vector": [
+                57.29577951308232,
+                0.0,
+                -57.29577951308232
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg3RightUpper",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4499999999999997,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.05,
+              "vector": [
+                0.0,
+                0.0,
+                -40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.65,
+              "vector": [
+                0.0,
+                0.0,
+                -40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg2RightUpper",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4499999999999997,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.05,
+              "vector": [
+                0.0,
+                0.0,
+                -40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.65,
+              "vector": [
+                0.0,
+                0.0,
+                -40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "leg2LeftUpper",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.4499999999999997,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.05,
+              "vector": [
+                0.0,
+                0.0,
+                40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 2.65,
+              "vector": [
+                0.0,
+                0.0,
+                40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ]
+    },
+    "burrow_animation": {
+      "length": 3.0,
+      "loop": false,
+      "channels": [
+        {
+          "bone": "clawRightJoint",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                0.0,
+                11.459155902616466,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                0.0,
+                -22.918311805232932,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4000000000000001,
+              "vector": [
+                0.0,
+                -22.918311805232932,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6000000000000001,
+              "vector": [
+                0.0,
+                11.459155902616466,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.8,
+              "vector": [
+                0.0,
+                -22.918311805232932,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                11.459155902616466,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.0,
+              "vector": [
+                0.0,
+                11.459155902616466,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "clawLeftLower",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                0.0,
+                0.0,
+                40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                0.0,
+                0.0,
+                40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4000000000000001,
+              "vector": [
+                0.0,
+                0.0,
+                40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6000000000000001,
+              "vector": [
+                0.0,
+                0.0,
+                40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.8,
+              "vector": [
+                0.0,
+                0.0,
+                40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                0.0,
+                40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.0,
+              "vector": [
+                0.0,
+                0.0,
+                40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "clawLeftUpper",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                0.0,
+                0.0,
+                -11.459155902616466
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                0.0,
+                0.0,
+                -74.48451336700703
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4000000000000001,
+              "vector": [
+                0.0,
+                0.0,
+                -74.48451336700703
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6000000000000001,
+              "vector": [
+                0.0,
+                0.0,
+                -11.459155902616466
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.8,
+              "vector": [
+                0.0,
+                0.0,
+                -74.48451336700703
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                0.0,
+                -11.459155902616466
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.0,
+              "vector": [
+                0.0,
+                0.0,
+                -11.459155902616466
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "clawLeft",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                40.10704565915762,
+                0.0,
+                -57.29577951308232
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                17.188733853924695,
+                0.0,
+                -57.29577951308232
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4000000000000001,
+              "vector": [
+                17.188733853924695,
+                0.0,
+                -57.29577951308232
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6000000000000001,
+              "vector": [
+                40.10704565915762,
+                0.0,
+                -57.29577951308232
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.8,
+              "vector": [
+                17.188733853924695,
+                0.0,
+                -57.29577951308232
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                40.10704565915762,
+                0.0,
+                -57.29577951308232
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.0,
+              "vector": [
+                40.10704565915762,
+                0.0,
+                -57.29577951308232
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "clawRightUpper",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                0.0,
+                0.0,
+                74.48451336700703
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                0.0,
+                0.0,
+                11.459155902616466
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4000000000000001,
+              "vector": [
+                0.0,
+                0.0,
+                11.459155902616466
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6000000000000001,
+              "vector": [
+                0.0,
+                0.0,
+                74.48451336700703
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.8,
+              "vector": [
+                0.0,
+                0.0,
+                11.459155902616466
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                0.0,
+                74.48451336700703
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.0,
+              "vector": [
+                0.0,
+                0.0,
+                74.48451336700703
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "clawRightLower",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                0.0,
+                0.0,
+                -40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                0.0,
+                0.0,
+                -40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4000000000000001,
+              "vector": [
+                0.0,
+                0.0,
+                -40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6000000000000001,
+              "vector": [
+                0.0,
+                0.0,
+                -40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.8,
+              "vector": [
+                0.0,
+                0.0,
+                -40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                0.0,
+                -40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.0,
+              "vector": [
+                0.0,
+                0.0,
+                -40.10704565915762
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "clawLeftJoint",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                0.0,
+                22.918311805232932,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                0.0,
+                -11.459155902616466,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4000000000000001,
+              "vector": [
+                0.0,
+                -11.459155902616466,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6000000000000001,
+              "vector": [
+                0.0,
+                22.918311805232932,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.8,
+              "vector": [
+                0.0,
+                -11.459155902616466,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                22.918311805232932,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.0,
+              "vector": [
+                0.0,
+                22.918311805232932,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "body",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                11.459155902616466,
+                22.918311805232932,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                22.918311805232932,
+                -22.918311805232932,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4000000000000001,
+              "vector": [
+                22.918311805232932,
+                -22.918311805232932,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6000000000000001,
+              "vector": [
+                34.37746770784939,
+                22.918311805232932,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.8,
+              "vector": [
+                34.37746770784939,
+                -22.918311805232932,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                34.37746770784939,
+                22.918311805232932,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.0,
+              "vector": [
+                34.37746770784939,
+                22.918311805232932,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "clawRight",
+          "target": "ROTATION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                17.188733853924695,
+                0.0,
+                57.29577951308232
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                40.10704565915762,
+                0.0,
+                57.29577951308232
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4000000000000001,
+              "vector": [
+                40.10704565915762,
+                0.0,
+                57.29577951308232
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6000000000000001,
+              "vector": [
+                17.188733853924695,
+                0.0,
+                57.29577951308232
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.8,
+              "vector": [
+                40.10704565915762,
+                0.0,
+                57.29577951308232
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                17.188733853924695,
+                0.0,
+                57.29577951308232
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.0,
+              "vector": [
+                17.188733853924695,
+                0.0,
+                57.29577951308232
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        },
+        {
+          "bone": "body",
+          "target": "POSITION",
+          "frames": [
+            {
+              "time": 0,
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.2,
+              "vector": [
+                0.0,
+                -1.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4,
+              "vector": [
+                0.0,
+                -3.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.4000000000000001,
+              "vector": [
+                0.0,
+                -3.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.6000000000000001,
+              "vector": [
+                0.0,
+                -7.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 0.8,
+              "vector": [
+                0.0,
+                -13.0,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 1.0,
+              "vector": [
+                0.0,
+                -21.6,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            },
+            {
+              "time": 3.0,
+              "vector": [
+                0.0,
+                -21.6,
+                0.0
+              ],
+              "interpolation": "LINEAR"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "motions": [],
+  "expressions": [],
+  "poses": [],
+  "source": "build/owner-oct29-reference/com/bobmowzie/mowziesmobs/client/model/entity/ModelGrottol.java",
+  "sourceSha256": "fb74010849b059ffe13536a4526b3baabc61f434f3eb250f890973cff932ebc0"
+}

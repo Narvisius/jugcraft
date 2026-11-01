@@ -61,6 +61,8 @@ public final class DeathGraves {
     public static boolean capture(net.minecraft.world.entity.LivingEntity entity, ItemStack stack) {
         Capture c = ACTIVE.get();
         if (c == null || c.player() != entity || stack.isEmpty()) return false;
+        if (io.github.jimbozoomer.jugcraft.arcane.ArcaneModifiers.capture(c.player(), stack)) return true;
+        if (io.github.jimbozoomer.jugcraft.botany.BotanicalIvy.capture(c.player(), stack)) return true;
         if (c.bossLair()) { Lairs.retainDeathItem(c.player(), stack); return true; }
         var store = GraveStore.get(c.player().level().getServer());
         var old = store.get(c.id());

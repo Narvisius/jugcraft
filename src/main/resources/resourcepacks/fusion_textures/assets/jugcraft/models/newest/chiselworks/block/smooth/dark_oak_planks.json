@@ -1,0 +1,12 @@
+{
+  "loader": "fusion:model",
+  "type": "connecting",
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "jugcraft:block/newest_connected/smooth/dark_oak_planks",
+    "particle": "jugcraft:newest/chiselworks/block/smooth/dark_oak_planks"
+  },
+  "connections": {
+    "type": "is_same_block"
+  }
+}

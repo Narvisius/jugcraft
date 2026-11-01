@@ -166,11 +166,11 @@ public class ConcordanceWayfaringGameTests {
 	}
 
 	/**
-	 * Only someone who understands Relic Lore can put one on; each gives exactly the generator's modifiers, named by its
+	 * Players can equip owned gear without research; each gives exactly the generator's modifiers, named by its
 	 * kind, so two of a kind (or a Phoenix Down beside a feather) give them once.
 	 */
 	@GameTest(maxTicks = 20)
-	public void onlyRelicLoreWearsThemAndTwoOfAKindNeverAddUp(GameTestHelper helper) {
+	public void ownedGearIsWearableWithoutResearchAndTwoOfAKindNeverAddUp(GameTestHelper helper) {
 		ServerPlayer novice = wayfarer(helper, false);
 		ServerPlayer player = wayfarer(helper, true);
 		for (Map.Entry<String, Item> entry : Wayfaring.ITEMS.entrySet()) {
@@ -178,8 +178,8 @@ public class ConcordanceWayfaringGameTests {
 			String type = entry.getKey().equals("leather_belt") ? Wayfaring.BELT_SLOT : FEET.contains(entry.getKey()) ? Wayfaring.FEET_SLOT
 					: Wayfaring.CHARM_SLOT;
 			WornTrinketItem worn = (WornTrinketItem) entry.getValue();
-			helper.assertTrue(!worn.canEquip(stack, slot(novice, type, 0), novice) && worn.canEquip(stack, slot(player, type, 0), player),
-					entry.getKey() + " goes on only once Relic Lore is understood");
+			helper.assertTrue(eu.pb4.trinkets.api.TrinketSlotUtils.mayPlace(slot(novice, type, 0), stack) && worn.canEquip(stack, slot(player, type, 0), player),
+					entry.getKey() + " goes into its real slot without research");
 		}
 		Map<String, List<String>> expected = Map.of(
 				"leather_belt", List.of("trinkets:slot_count/legs/charm=1.0@jugcraft:wayfaring/leather_belt/slot_count/legs/charm"),
@@ -248,7 +248,7 @@ public class ConcordanceWayfaringGameTests {
 
 	/**
 	 * The feather, shell and claws take their harm from food instead of health: each only its own harm (the claws not
-	 * lava), only worn where it works, only with food in the bar, and only once Relic Lore is understood.
+	 * lava), only worn where it works, only with food in the bar, with no research prerequisite.
 	 */
 	@GameTest(maxTicks = 20)
 	public void charmsTakeTheirHarmFromFood(GameTestHelper helper) {
@@ -280,7 +280,7 @@ public class ConcordanceWayfaringGameTests {
 		helper.assertTrue(!Wayfaring.absorbs(player, sources.onFire()), "Held, not worn, the claws take nothing");
 		ServerPlayer novice = wayfarer(helper, false);
 		inventory(novice, Wayfaring.CHARM_SLOT).setItem(0, new ItemStack(Wayfaring.ANGELIC_FEATHER));
-		helper.assertTrue(!Wayfaring.absorbs(novice, sources.fall()), "Before Relic Lore (put on by other means) the feather takes nothing");
+		helper.assertTrue(Wayfaring.absorbs(novice, sources.fall()), "An owned feather protects a fresh player without research");
 		inventory(novice, Wayfaring.CHARM_SLOT).setItem(0, ItemStack.EMPTY);
 		helper.succeed();
 	}
@@ -352,7 +352,7 @@ public class ConcordanceWayfaringGameTests {
 			player.setItemInHand(InteractionHand.OFF_HAND, ItemStack.EMPTY);
 			ServerPlayer novice = wayfarer(helper, false);
 			inventory(novice, Wayfaring.CHARM_SLOT).setItem(0, new ItemStack(Wayfaring.ANGELHEART_VIAL));
-			helper.assertTrue(!Wayfaring.save(novice, level.damageSources().generic()), "Before Relic Lore it does not answer");
+			helper.assertTrue(Wayfaring.save(novice, level.damageSources().generic()), "An owned vial protects a fresh player without research");
 			inventory(novice, Wayfaring.CHARM_SLOT).setItem(0, ItemStack.EMPTY);
 		} finally {
 			charms.removeSlotCountModifier(belt.id());
@@ -430,7 +430,7 @@ public class ConcordanceWayfaringGameTests {
 		inventory(novice, Wayfaring.FEET_SLOT).setItem(0, new ItemStack(Wayfaring.ICE_BREAKER));
 		Mob spared = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, new BlockPos(3, 2, 1));
 		ServerLivingEntityEvents.AFTER_DAMAGE.invoker().afterDamage(novice, level.damageSources().fall(), 8.0F, 8.0F, false);
-		helper.assertTrue(spared.getHealth() == spared.getMaxHealth(), "Before Relic Lore the boots send no wave");
+		helper.assertTrue(spared.getHealth() < spared.getMaxHealth(), "Owned boots work without Relic Lore");
 		// At most twelve: fourteen zombies in reach of the widest wave, the nearest twelve reached.
 		List<Mob> crowd = new ArrayList<>();
 		for (int i = 0; i < 14; i++) {

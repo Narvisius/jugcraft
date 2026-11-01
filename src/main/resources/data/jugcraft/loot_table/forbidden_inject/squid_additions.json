@@ -1,0 +1,40 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:forbidden_tentacle"
+        }
+      ],
+      "rolls": 1.0,
+      "modifier": [
+        {
+          "add": false,
+          "count": {
+            "type": "minecraft:uniform",
+            "max": 1.0,
+            "min": 0.0
+          },
+          "type": "minecraft:set_count"
+        },
+        {
+          "count": {
+            "type": "minecraft:uniform",
+            "max": 1.0,
+            "min": 0.0
+          },
+          "enchantment": "minecraft:looting",
+          "type": "minecraft:enchanted_count_increase"
+        }
+      ],
+      "condition": {
+        "chance": 0.7,
+        "type": "minecraft:random_chance"
+      }
+    }
+  ],
+  "random_sequence": "jugcraft:forbidden_entities/additions/tentacle_addition"
+}

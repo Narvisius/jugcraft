@@ -1,0 +1,22 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "chipped"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "chipped"
+      ]
+    }
+  ],
+  "type": "chipped:workbench",
+  "ingredients": [
+    {
+      "tag": "factory_blocks:factory"
+    }
+  ]
+}

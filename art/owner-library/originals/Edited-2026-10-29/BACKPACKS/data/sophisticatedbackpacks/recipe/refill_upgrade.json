@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "sophisticatedcore:item_enabled",
+      "itemRegistryName": "sophisticatedbackpacks:refill_upgrade"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "sophisticatedbackpacks:upgrade_base",
+    "C": "#c:chests/wooden",
+    "E": "#c:ender_pearls",
+    "I": "#c:ingots/iron",
+    "R": "#c:dusts/redstone"
+  },
+  "pattern": [
+    " E ",
+    "IBI",
+    "RCR"
+  ],
+  "result": {
+    "id": "sophisticatedbackpacks:refill_upgrade"
+  }
+}

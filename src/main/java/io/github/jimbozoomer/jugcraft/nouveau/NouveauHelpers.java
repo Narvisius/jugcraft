@@ -36,7 +36,7 @@ public final class NouveauHelpers {
             if(!JugNouveau.enabled()||p.isSpectator()||!Authority.mayChange(l,p,c.getClickedPos()))return InteractionResult.FAIL;
             var original=l.getBlockState(c.getClickedPos());boolean flexible=species.equals("amethyst_golem")||species.equals("alakarkinos");
             boolean transform=switch(species){case "drygmy"->original.is(net.minecraft.world.level.block.Blocks.MOSSY_COBBLESTONE);case "wixie"->original.is(net.minecraft.world.level.block.Blocks.CAULDRON);case "whirlisprig"->original.is(net.minecraft.tags.BlockTags.FLOWERS);default->false;};
-            if(!flexible&&!transform&&(!(l.getBlockEntity(c.getClickedPos()) instanceof NouveauWorkshop home)||!home.mayUse(p)||!home.kind().equals(HOMES.get(species))))return InteractionResult.FAIL;
+            if(!flexible&&!transform&&(!(l.getBlockEntity(c.getClickedPos()) instanceof NouveauWorkshop home)||!home.mayUse(p)||!home.kind().equals(HOMES.get(species))&&!(species.equals("wixie")&&home.kind().equals("enchanting_wixie_cauldron"))))return InteractionResult.FAIL;
             var roster=WorkerRoster.of(l.getServer());if(roster.workers(p.getUUID()).size()>=WorkerRoster.MAX_PER_PLAYER)return InteractionResult.FAIL;
             if(l.getEntitiesOfClass(NouveauHelper.class,new net.minecraft.world.phys.AABB(c.getClickedPos()).inflate(16),h->h.species().equals(species)&&c.getClickedPos().equals(h.home())).size()>=4)return InteractionResult.FAIL;
             var helper=TYPES.get(species).create(l,EntitySpawnReason.MOB_SUMMONED);if(helper==null)return InteractionResult.FAIL;

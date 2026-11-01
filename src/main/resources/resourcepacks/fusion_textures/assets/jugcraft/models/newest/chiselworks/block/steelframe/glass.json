@@ -1,0 +1,12 @@
+{
+  "loader": "fusion:model",
+  "type": "connecting",
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "jugcraft:block/newest_connected/steelframe/glass",
+    "particle": "jugcraft:newest/chiselworks/block/steelframe/glass"
+  },
+  "connections": {
+    "type": "is_same_block"
+  }
+}

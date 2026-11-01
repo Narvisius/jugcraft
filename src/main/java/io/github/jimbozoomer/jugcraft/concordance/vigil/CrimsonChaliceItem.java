@@ -21,7 +21,7 @@ import net.minecraft.world.level.Level;
 
 /**
  * The Crimson Chalice (roadmap step 16): holds up to {@value Vigil#CHALICE_CAPACITY} Vitae (component
- * {@code jugcraft:vitae}). Used, it makes an offering (Crimson Rites understood); used while sneaking, a Crimson Surge;
+ * {@code jugcraft:vitae}). Used, it makes an offering (no research required); used while sneaking, a Crimson Surge;
  * used with a Thornheart Blade in the other hand, it feeds the blade. Each use says what happened, or exactly why not.
  */
 public class CrimsonChaliceItem extends Item {
@@ -54,10 +54,6 @@ public class CrimsonChaliceItem extends Item {
 	public static InteractionResult use(ServerPlayer player, ItemStack chalice, ItemStack other, boolean sneaking, long now) {
 		if (!Vigil.enabled()) {
 			player.sendOverlayMessage(Component.translatable("message.jugcraft.concordance.disabled"));
-			return InteractionResult.FAIL;
-		}
-		if (!Vigil.knows(player)) {
-			player.sendOverlayMessage(Component.translatable("message.jugcraft.concordance.vigil.unknown"));
 			return InteractionResult.FAIL;
 		}
 		if (other.is(Vigil.THORNHEART_BLADE)) {

@@ -1,0 +1,93 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+	  "mcwfurnitures:cabinet_door",
+	  "mcwfurnitures:cabinet_drawer",
+	
+      "mcwfurnitures:crimson_wardrobe",
+	  "mcwfurnitures:crimson_modern_wardrobe",
+	  "mcwfurnitures:crimson_double_wardrobe",
+	  "mcwfurnitures:crimson_bookshelf_cupboard",
+	  "mcwfurnitures:crimson_bookshelf",
+	  "mcwfurnitures:crimson_drawer",
+	  "mcwfurnitures:crimson_double_drawer",
+	  "mcwfurnitures:crimson_bookshelf_drawer",
+	  "mcwfurnitures:crimson_lower_bookshelf_drawer",
+	  "mcwfurnitures:crimson_large_drawer",
+	  "mcwfurnitures:crimson_lower_triple_drawer",
+	  "mcwfurnitures:crimson_triple_drawer",
+	  "mcwfurnitures:crimson_desk",
+	  "mcwfurnitures:crimson_covered_desk",
+	  "mcwfurnitures:crimson_modern_desk",
+	  "mcwfurnitures:crimson_table",
+	  "mcwfurnitures:crimson_end_table",
+	  "mcwfurnitures:crimson_coffee_table",
+	  "mcwfurnitures:crimson_glass_table",
+	  "mcwfurnitures:crimson_chair",
+	  "mcwfurnitures:crimson_modern_chair",
+	  "mcwfurnitures:crimson_striped_chair",
+	  "mcwfurnitures:crimson_stool_chair",
+	  "mcwfurnitures:crimson_counter",
+	  "mcwfurnitures:crimson_drawer_counter",
+	  "mcwfurnitures:crimson_double_drawer_counter",
+	  "mcwfurnitures:crimson_cupboard_counter",
+	  
+	  "mcwfurnitures:stripped_crimson_wardrobe",
+	  "mcwfurnitures:stripped_crimson_modern_wardrobe",
+	  "mcwfurnitures:stripped_crimson_double_wardrobe",
+	  "mcwfurnitures:stripped_crimson_bookshelf_cupboard",
+	  "mcwfurnitures:stripped_crimson_bookshelf",
+	  "mcwfurnitures:stripped_crimson_drawer",
+	  "mcwfurnitures:stripped_crimson_double_drawer",
+	  "mcwfurnitures:stripped_crimson_bookshelf_drawer",
+	  "mcwfurnitures:stripped_crimson_lower_bookshelf_drawer",
+	  "mcwfurnitures:stripped_crimson_large_drawer",
+	  "mcwfurnitures:stripped_crimson_lower_triple_drawer",
+	  "mcwfurnitures:stripped_crimson_triple_drawer",
+	  "mcwfurnitures:stripped_crimson_desk",
+	  "mcwfurnitures:stripped_crimson_covered_desk",
+	  "mcwfurnitures:stripped_crimson_modern_desk",
+	  "mcwfurnitures:stripped_crimson_table",
+	  "mcwfurnitures:stripped_crimson_end_table",
+	  "mcwfurnitures:stripped_crimson_coffee_table",
+	  "mcwfurnitures:stripped_crimson_glass_table",
+	  "mcwfurnitures:stripped_crimson_chair",
+	  "mcwfurnitures:stripped_crimson_modern_chair",
+	  "mcwfurnitures:stripped_crimson_striped_chair",
+	  "mcwfurnitures:stripped_crimson_stool_chair",
+	  "mcwfurnitures:stripped_crimson_counter",
+	  "mcwfurnitures:stripped_crimson_drawer_counter",
+	  "mcwfurnitures:stripped_crimson_double_drawer_counter",
+	  "mcwfurnitures:stripped_crimson_cupboard_counter",
+	  "mcwfurnitures:crimson_kitchen_sink",
+      "mcwfurnitures:stripped_crimson_kitchen_sink"
+    ]
+  },
+  "criteria": {
+    "has_wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:crimson_stem"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": "mcwfurnitures:crimson_drawer"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wood",
+      "has_the_recipe"
+    ]
+  ]
+}

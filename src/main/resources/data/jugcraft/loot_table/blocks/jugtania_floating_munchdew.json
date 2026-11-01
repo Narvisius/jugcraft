@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:jugtania_floating_munchdew"
+        }
+      ],
+      "rolls": 1.0,
+      "modifier": [
+        {
+          "type": "minecraft:copy_components",
+          "source": "block_entity",
+          "include": [
+            "jugcraft:botanical_flower_memory"
+          ]
+        }
+      ],
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
+    }
+  ]
+}

@@ -37,7 +37,7 @@ public final class NouveauWorkshopRenderer extends GeoBlockRenderer<NouveauWorks
     @Override public void addRenderData(NouveauWorkshop b,Void unused,BlockEntityRenderState s,float partial){
         var level=b.getLevel();List<ItemView> items=new ArrayList<>();EntityRenderState mob=null;float scale=1;
         float angle=ConcordanceClientOptions.reducedMotion()?0:(float)((level==null?0:level.getGameTime()+partial)%360)*1.5F;
-        if(Set.of("arcane_pedestal","arcane_platform","enchanting_apparatus","imbuement_chamber","scribes_table","ritual_brazier","mob_jar").contains(b.kind())){
+        if(Set.of("arcane_pedestal","arcane_platform","enchanting_apparatus","enchanting_wixie_cauldron","imbuement_chamber","scribes_table","ritual_brazier","mob_jar").contains(b.kind())){
             ItemStack shown=b.getItem(0);if(shown.isEmpty())shown=b.getItem(NouveauWorkshop.OUTPUT);if(!shown.isEmpty()){
                 var facing=b.getBlockState().getValue(NouveauWorkshopBlock.FACING);
                 if(b.pedestal()){double distance=b.kind().equals("arcane_platform")?-.1:.55;items.add(item(b,shown,facing.getStepX()*distance,.5+facing.getStepY()*distance,facing.getStepZ()*distance,.4F));}

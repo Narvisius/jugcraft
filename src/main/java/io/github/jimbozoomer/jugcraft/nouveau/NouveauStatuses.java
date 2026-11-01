@@ -22,13 +22,13 @@ public final class NouveauStatuses {
     public static final Map<String,Holder<MobEffect>> EFFECTS=new LinkedHashMap<>();
     private static AttachmentType<UUID> CASTER;
     private static AttachmentType<Integer> BUBBLE;private static AttachmentType<Long> BUBBLE_UNTIL;
-    private static final Set<String> HARMFUL=Set.of("blasting","freezing","gravity","hex","shocked","snared","summoning_sickness");
+    private static final Set<String> HARMFUL=Set.of("blasting","freezing","gravity","hex","shocked","snared","summoning_sickness","marked");
     private NouveauStatuses(){}
     public static void register(){
         NouveauBubble.register();
         BUBBLE=AttachmentRegistry.<Integer>builder().persistent(com.mojang.serialization.Codec.INT).buildAndRegister(Jugcraft.id("nouveau_bubble_power"));BUBBLE_UNTIL=AttachmentRegistry.<Long>builder().persistent(com.mojang.serialization.Codec.LONG).buildAndRegister(Jugcraft.id("nouveau_bubble_until"));
         CASTER=AttachmentRegistry.<UUID>builder().persistent(UUIDUtil.CODEC).buildAndRegister(Jugcraft.id("nouveau_status_caster"));
-        for(String name:List.of("blasting","bounce","flight","freezing","glide","gravity","hex","immolate","looting","magic_find","mana_regen","recovery","scrying","shielding","shocked","snared","soaked","spell_damage","summoning_sickness")){
+        for(String name:List.of("blasting","bounce","flight","freezing","glide","gravity","hex","immolate","looting","magic_find","mana_regen","recovery","scrying","shielding","shocked","snared","soaked","spell_damage","summoning_sickness","marked")){
             var effect=Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT,Jugcraft.id("nouveau_"+name),(MobEffect)new Status(name));EFFECTS.put(name,effect);
         }
     }

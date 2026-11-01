@@ -5,7 +5,6 @@ import io.github.jimbozoomer.jugcraft.concordance.celestial.Attunement;
 import io.github.jimbozoomer.jugcraft.concordance.celestial.Calendar;
 import io.github.jimbozoomer.jugcraft.concordance.celestial.Pattern;
 import io.github.jimbozoomer.jugcraft.concordance.resource.AstralLedger;
-import io.github.jimbozoomer.jugcraft.concordance.rules.ResearchState;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -27,8 +26,8 @@ import org.jspecify.annotations.Nullable;
 /**
  * The Astrolabe (roadmap step 15): carries up to {@value #CAPACITY} Astral Resonance (component
  * {@code jugcraft:astral_charge}), drawn from an observatory. Used under the open sky while a pattern is up, it attunes
- * its holder to it (Celestial Attunement understood): its cost in resonance, and its effect is theirs while the pattern
- * is up, at most eight minutes. When nothing is up, a master may <b>recall</b> a pattern they have observed: dearer,
+ * its holder to it (no research required): its cost in resonance, and its effect is theirs while the pattern
+ * is up, at most eight minutes. When nothing is up, its holder may <b>recall</b> a pattern they have observed: dearer,
  * shorter ({@link Calendar#RECALL_TICKS} ticks), and once per occurrence of that pattern, by the same monotonic ledger,
  * so a recall never stands in for more alignments than the sky has had. There is one recall ({@link #recall}): since
  * Concordance Chunk D (D-05, D-S1) Stolas's Star-reckoning makes it too, for a pact's holder at its perch, so one
@@ -77,17 +76,12 @@ public class AstrolabeItem extends Item {
 	 * Attunes {@code player} at world time {@code time} and game time {@code gameTime}, with {@code sky} saying why a
 	 * pattern is hidden from them (null when they can see it; tests pass their own, as for the observatory): to a pattern
 	 * up and visible, for as long as it stays up but at most {@link Calendar#MAX_ATTUNEMENT_TICKS} ticks; or else, for a
-	 * master, by recalling the pattern they last observed.
+	 * holder, by recalling the pattern they last observed.
 	 */
 	public static InteractionResult attune(ServerPlayer player, ServerLevel level, ItemStack astrolabe, long time, long gameTime,
 			Function<Pattern, @Nullable String> sky) {
 		if (!Sky.enabled()) {
 			player.sendOverlayMessage(Component.translatable("message.jugcraft.concordance.disabled"));
-			return InteractionResult.FAIL;
-		}
-		ResearchState state = Sky.state(player);
-		if (!state.atLeast(ResearchState.UNDERSTOOD)) {
-			player.sendOverlayMessage(Component.translatable("message.jugcraft.concordance.sky.unknown"));
 			return InteractionResult.FAIL;
 		}
 		int held = charge(astrolabe);
@@ -106,11 +100,7 @@ public class AstrolabeItem extends Item {
 			player.sendOverlayMessage(Component.translatable("message.jugcraft.concordance.sky.attuned", Sky.patternName(pattern.id())));
 			return InteractionResult.SUCCESS;
 		}
-		// Nothing up: a recall of the pattern last observed, for a master, once per occurrence.
-		if (!state.atLeast(ResearchState.MASTERED)) {
-			player.sendOverlayMessage(Component.translatable("message.jugcraft.concordance.sky.nothing_up"));
-			return InteractionResult.FAIL;
-		}
+		// Nothing up: recall the pattern last observed, once per occurrence; no research gate.
 		Pattern recalled = lastObserved(level, player);
 		if (recalled == null) {
 			player.sendOverlayMessage(Component.translatable("message.jugcraft.concordance.sky.nothing_observed"));
@@ -134,7 +124,7 @@ public class AstrolabeItem extends Item {
 	/**
 	 * Recalls {@code pattern} for {@code player} with {@code astrolabe}'s resonance at world time {@code time} and game time
 	 * {@code gameTime}: its recall cost, claimed once per occurrence under {@link #recallKey} on {@code player}'s own ledger,
-	 * for {@link Calendar#RECALL_TICKS} ticks whatever the sky or season. The only recall there is (D-05, D-S1): a master's
+	 * for {@link Calendar#RECALL_TICKS} ticks whatever the sky or season. The only recall there is (D-05, D-S1): its holder's
 	 * fallback and Stolas's Star-reckoning both call it. Nothing is spent or attached unless the claim is granted; no
 	 * resonance is made here.
 	 */

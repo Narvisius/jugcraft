@@ -115,8 +115,8 @@ public class Decor3GameTests {
 		helper.setBlock(a.north(), Blocks.NETHER_BRICK_FENCE);
 		helper.setBlock(a.south(), Blocks.OAK_FENCE);
 		BlockState fence = helper.getBlockState(a);
-		helper.assertTrue(fence.getValue(FenceBlock.EAST) && fence.getValue(FenceBlock.NORTH) && !fence.getValue(FenceBlock.SOUTH),
-				"A cemetery fence joins its neighbour and a nether brick fence, not an oak fence: " + fence);
+		helper.assertTrue(fence.getValue(FenceBlock.EAST) && fence.getValue(FenceBlock.NORTH) && fence.getValue(FenceBlock.SOUTH),
+				"The supplied fence adapter joins cemetery, nether-brick and wooden fences: " + fence);
 		helper.assertTrue(helper.getBlockState(a.east()).getValue(FenceBlock.EAST) && helper.getBlockState(a.east(3)).getValue(FenceBlock.WEST),
 				"Fences on both sides join the gate: " + helper.getBlockState(a.east()) + " | " + helper.getBlockState(a.east(2)) + " | "
 						+ helper.getBlockState(a.east(3)));

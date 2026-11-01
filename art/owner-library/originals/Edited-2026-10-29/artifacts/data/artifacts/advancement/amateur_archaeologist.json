@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:adventure/root",
+  "criteria": {
+    "find_artifact": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#artifacts:artifacts"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "artifacts.advancements.amateur_archaeologist.description"
+    },
+    "icon": {
+      "id": "artifacts:flame_pendant"
+    },
+    "title": {
+      "translate": "artifacts.advancements.amateur_archaeologist.title"
+    }
+  },
+  "requirements": [
+    [
+      "find_artifact"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

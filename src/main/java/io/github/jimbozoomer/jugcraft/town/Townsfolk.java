@@ -111,12 +111,13 @@ public class Townsfolk extends PathfinderMob {
 		// A guard glances at Herobrine once in a while; it never targets him (creatures/herobrine/HerobrineGlanceGoal).
 		goalSelector.addGoal(1, new io.github.jimbozoomer.jugcraft.creatures.herobrine.HerobrineGlanceGoal(this, this::isGuard));
 		goalSelector.addGoal(2, new ReturnToPlaceGoal());
+        goalSelector.addGoal(1, new GateDefenseGoal());
 		goalSelector.addGoal(3, new DecorateGoal());
 		goalSelector.addGoal(5, new StrollNearPlaceGoal());
 		goalSelector.addGoal(6, new FacePlaceGoal());
 		goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
 		goalSelector.addGoal(7, new RandomLookAroundGoal(this));
-		targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Monster.class, true) {
+		targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Monster.class, true, true) {
 			@Override
 			public boolean canUse() {
 				return isGuard() && super.canUse();
@@ -137,6 +138,7 @@ public class Townsfolk extends PathfinderMob {
 		this.spot = place.index();
 		this.placesTick = -1;
 		entityData.set(SKIN, place.skin());
+        getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(isGuard() ? 48 : 24);
 		setCustomName(Component.literal(place.name()));
 	}
 
@@ -354,6 +356,10 @@ public class Townsfolk extends PathfinderMob {
         }
         listener = player;
 		listeningUntil = tickCount + 80;
+        if ((player.isShiftKeyDown() || role.equals("mayor")) && !TownMentors.lesson(this).isEmpty()) {
+            TownMentors.consult(server, this);
+            return InteractionResult.SUCCESS;
+        }
 		if (role.equals("academy_radiance")) {
 			io.github.jimbozoomer.jugcraft.academy.JugcraftAcademy.consult(server);
 			return InteractionResult.SUCCESS;
@@ -423,6 +429,7 @@ public class Townsfolk extends PathfinderMob {
 	protected void readAdditionalSaveData(ValueInput input) {
 		super.readAdditionalSaveData(input);
 		role = input.getStringOr("role", "townsfolk");
+        getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(isGuard() ? 48 : 24);
 		shop = input.getStringOr("shop", "");
 		entityData.set(SKIN, input.getStringOr("skin", "townsfolk_1"));
 		home = input.read("home", BlockPos.CODEC).orElse(blockPosition());
@@ -501,6 +508,37 @@ public class Townsfolk extends PathfinderMob {
     }
 
     // ---------------------------------------------------------------- goals
+
+    /** Meet active ground raids at a gate instead of staring through a wall corner. */
+    private class GateDefenseGoal extends Goal {
+        private BlockPos gate;
+        private int checkAt;
+        GateDefenseGoal() { setFlags(EnumSet.of(Flag.MOVE)); }
+        @Override public boolean canUse() {
+            if (!isGuard() || role.equals("flak_guard") || isPassenger() || getTarget() != null
+                    || tickCount < checkAt || !(level() instanceof ServerLevel level)) return false;
+            checkAt = tickCount + 40;
+            BlockPos origin = Town.origin(level);
+            if (origin == null) return false;
+            net.minecraft.world.entity.Entity nearest = null;
+            double best = 128 * 128;
+            for (var raid : io.github.jimbozoomer.jugcraft.raiders.RaiderRaids.raids(level)) {
+                if (!raid.objective().equals(Town.centre(origin))) continue;
+                for (var id : raid.members()) {
+                    var enemy = level.getEntity(id); // Only already loaded entities.
+                    if (enemy == null || !enemy.isAlive() || enemy instanceof io.github.jimbozoomer.jugcraft.raiders.RaiderBlimp) continue;
+                    double distance = distanceToSqr(enemy);
+                    if (distance < best) { best = distance; nearest = enemy; }
+                }
+            }
+            if (nearest == null) return false;
+            gate = io.github.jimbozoomer.jugcraft.raiders.CityRaidRoute.nearest(origin, nearest.position()).inside();
+            return level.isLoaded(gate);
+        }
+        @Override public boolean canContinueToUse() { return getTarget() == null && tickCount < checkAt; }
+        @Override public void start() { if (!within(gate, 3)) getNavigation().moveTo(gate.getX()+.5, gate.getY(), gate.getZ()+.5, 1.1); else getNavigation().stop(); }
+        @Override public void stop() { getNavigation().stop(); }
+    }
 
 	/**
 	 * To where they belong now ({@link #anchor()}): to work in the morning, to their gathering at 6 pm, to rest at night

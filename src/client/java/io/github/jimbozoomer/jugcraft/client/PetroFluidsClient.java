@@ -15,6 +15,8 @@ public final class PetroFluidsClient {
 	}
 
 	public static void register() {
+        var lumisene = new Material(Jugcraft.id("newest/supps/block/lumisene/lumisene"));
+        FluidRenderingRegistry.register(io.github.jimbozoomer.jugcraft.menagerie.OwnerLumisene.FLUID,new FluidModel.Unbaked(lumisene,lumisene,null,null));
 		for (PetroFluids.Entry entry : PetroFluids.FLUIDS.values()) {
 			FluidRenderingRegistry.register(entry.source(), entry.flowing(), new FluidModel.Unbaked(
 					new Material(Jugcraft.id("block/" + entry.id() + "_still")),

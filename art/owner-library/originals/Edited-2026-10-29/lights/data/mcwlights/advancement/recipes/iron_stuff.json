@@ -1,0 +1,54 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+
+	  "mcwlights:oak_ceiling_fan_light",
+	  "mcwlights:spruce_ceiling_fan_light",
+	  "mcwlights:birch_ceiling_fan_light",
+	  "mcwlights:jungle_ceiling_fan_light",
+	  "mcwlights:acacia_ceiling_fan_light",
+	  "mcwlights:dark_oak_ceiling_fan_light",
+	  "mcwlights:crimson_ceiling_fan_light",
+	  "mcwlights:warped_ceiling_fan_light",
+	  "mcwlights:mangrove_ceiling_fan_light",
+	  "mcwlights:cherry_ceiling_fan_light",
+	  "mcwlights:pale_oak_ceiling_fan_light",
+	  "mcwlights:poplar_ceiling_fan_light",
+	  
+	  "mcwlights:iron_low_candle_holder",
+	  "mcwlights:iron_candle_holder",
+	  "mcwlights:iron_wall_candle_holder",
+	  "mcwlights:iron_double_candle_holder",
+	  "mcwlights:iron_triple_candle_holder",
+	  "mcwlights:iron_small_chandelier",
+	  "mcwlights:iron_chandelier"
+    ]
+  },
+  "criteria": {
+    "has_wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:iron_ingot"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": ["mcwlights:iron_candle_holder"]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wood",
+      "has_the_recipe"
+    ]
+  ]
+}

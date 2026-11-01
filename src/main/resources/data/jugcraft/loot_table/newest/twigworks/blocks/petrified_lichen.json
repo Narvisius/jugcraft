@@ -1,0 +1,97 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:twigworks_petrified_lichen",
+          "modifier": [
+            {
+              "add": true,
+              "count": 1.0,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:twigworks_petrified_lichen",
+                "state": {
+                  "down": "true"
+                }
+              }
+            },
+            {
+              "add": true,
+              "count": 1.0,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:twigworks_petrified_lichen",
+                "state": {
+                  "up": "true"
+                }
+              }
+            },
+            {
+              "add": true,
+              "count": 1.0,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:twigworks_petrified_lichen",
+                "state": {
+                  "north": "true"
+                }
+              }
+            },
+            {
+              "add": true,
+              "count": 1.0,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:twigworks_petrified_lichen",
+                "state": {
+                  "south": "true"
+                }
+              }
+            },
+            {
+              "add": true,
+              "count": 1.0,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:twigworks_petrified_lichen",
+                "state": {
+                  "west": "true"
+                }
+              }
+            },
+            {
+              "add": true,
+              "count": 1.0,
+              "type": "minecraft:set_count",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:twigworks_petrified_lichen",
+                "state": {
+                  "east": "true"
+                }
+              }
+            },
+            {
+              "add": true,
+              "count": -1.0,
+              "type": "minecraft:set_count"
+            },
+            {
+              "type": "minecraft:explosion_decay"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    }
+  ]
+}

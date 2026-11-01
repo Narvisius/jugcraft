@@ -57,7 +57,7 @@ public final class NouveauHelper extends WorkerEntity<NouveauHelper> {
             Iterator<ItemStack> it=cargo.iterator();while(it.hasNext()){var s=it.next();if(!deposit(level,actor,s,station))return Status.FULL;it.remove();}return Status.FINISHED;
         }
         if(now<nextJob)return Status.IDLE;
-        boolean free=species.equals("amethyst_golem");if(!free&&(source==null||!NouveauSource.canPay(level,actor,source,2)))return Status.NO_ENERGY;
+        boolean free=species.equals("amethyst_golem")||species.equals("wixie")&&station!=null&&station.kind().equals("enchanting_wixie_cauldron");if(!free&&(source==null||!NouveauSource.canPay(level,actor,source,2)))return Status.NO_ENERGY;
         boolean worked=switch(species){
             case "drygmy" -> harvestCreatures(level,actor);
             case "whirlisprig" -> tendGarden(level,actor);
@@ -141,6 +141,7 @@ public final class NouveauHelper extends WorkerEntity<NouveauHelper> {
     private boolean craftForWixie(ServerLevel level,ServerPlayer actor,NouveauWorkshop station){
         // A taught sample in slot 0 selects a normal crafting output. Ingredients are real linked inventories.
         if(level.hasNeighborSignal(station.getBlockPos()))return false;
+        if(station.kind().equals("enchanting_wixie_cauldron"))return NouveauCrafting.enchantOne(level,actor,station);
         return station.sample().has(net.minecraft.core.component.DataComponents.POTION_CONTENTS)?NouveauAlchemy.brew(level,actor,station):NouveauCrafting.craftOne(level,actor,station);
     }
     private boolean collectShards(ServerLevel level,ServerPlayer actor){

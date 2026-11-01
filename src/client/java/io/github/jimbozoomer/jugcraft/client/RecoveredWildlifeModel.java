@@ -70,7 +70,7 @@ public final class RecoveredWildlifeModel extends EntityModel<RecoveredWildlifeR
 
     private static float f(JsonArray array, int index) { return array.get(index).getAsFloat(); }
 
-    private static ModelPart bake(JsonObject data) {
+    static ModelPart bake(JsonObject data) {
         var mesh = new MeshDefinition();
         var definitions = new HashMap<String, PartDefinition>();
         definitions.put("$mesh", mesh.getRoot());
@@ -99,7 +99,20 @@ public final class RecoveredWildlifeModel extends EntityModel<RecoveredWildlifeR
         return layer.bakeRoot();
     }
 
-    private static AnimationDefinition animation(JsonObject clip) {
+    /** Keep authored root channels on the real bone, without losing sibling controller bones. */
+    static KeyframeAnimation recoveredAnimation(JsonObject clip,ModelPart mesh){
+        var definition=animation(clip);
+        if(!mesh.hasChild("root"))return definition.bake(mesh);
+        var channels=new LinkedHashMap<String,List<AnimationChannel>>();
+        definition.boneAnimations().forEach((name,track)->channels.put(name.equals("root")?"jugcraft_authored_root":name,track));
+        var lookup=new ModelPart(List.of(),Map.of("jugcraft_authored_root",mesh.getChild("root"),"jugcraft_source_mesh",mesh));
+        return new AnimationDefinition(definition.lengthInSeconds(),definition.looping(),channels).bake(lookup);
+    }
+    static java.util.function.Function<String,ModelPart> recoveredLookup(ModelPart mesh){
+        var lookup=mesh.createPartLookup();return name->name.equals("root")&&mesh.hasChild("root")?mesh.getChild("root"):lookup.apply(name);
+    }
+
+    static AnimationDefinition animation(JsonObject clip) {
         var builder = AnimationDefinition.Builder.withLength(clip.get("length").getAsFloat());
         // Several supplied poses are marked looping with a zero-length timeline.
         // Treat them as static poses; modulo zero would otherwise produce NaN transforms.

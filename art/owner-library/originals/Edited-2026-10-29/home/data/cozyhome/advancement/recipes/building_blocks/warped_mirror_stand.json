@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "cozyhome:warped_mirror_stand"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_warped_wall_mirror": {
+      "conditions": {
+        "items": [
+          {
+            "items": "cozyhome:warped_wall_mirror"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_stick": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:stick"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_warped_wall_mirror",
+      "has_stick"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "cozyhome:warped_mirror_stand"
+    ]
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+     "mcwwindows:birch_window",
+	 "mcwwindows:birch_window2",
+	 "mcwwindows:birch_four_window",
+	 "mcwwindows:stripped_birch_log_window",
+	 "mcwwindows:stripped_birch_log_window2",
+	 "mcwwindows:stripped_birch_log_four_window",
+	 "mcwwindows:birch_plank_window",
+	 "mcwwindows:birch_plank_window2",
+	 "mcwwindows:birch_plank_four_window",
+	 "mcwwindows:birch_pane_window",
+	 "mcwwindows:stripped_birch_pane_window",
+	 "mcwwindows:birch_plank_pane_window"
+    ]
+  },
+  "criteria": {
+    "has_wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:birch_log"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": "mcwwindows:window_base"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wood",
+      "has_the_recipe"
+    ]
+  ]
+}
+
+
+
+
+
+
+
+
+
+
+
+

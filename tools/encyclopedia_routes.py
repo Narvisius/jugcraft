@@ -29,6 +29,7 @@ LANG = {
     "screen.jugcraft.routes.help.route": "Up/Down and Enter open a link. Backspace goes home; Esc closes.",
     "screen.jugcraft.routes.opens.handbook": "Opens the Engineer's Handbook here",
     "screen.jugcraft.routes.opens.codex": "Opens the Arcane Concordance codex here",
+    "screen.jugcraft.routes.opens.page": "Read this lesson in the Encyclopedia",
     "screen.jugcraft.routes.opens.journal": "Opens your Concordance Journal",
     "screen.jugcraft.routes.unavailable": "The codex is not loaded in this world",
 }
@@ -55,7 +56,7 @@ TECHNOLOGY = {
 
 MAGIC = {
     "id": "magic",
-    "title": "Magic: the Arcane Concordance",
+    "title": "Magic and Magical Workshops",
     "icon": f"{MOD}:initiate_wand",
     "accent": "8A6FD0",
     "summary": [
@@ -106,7 +107,17 @@ def technology(book):
         text = ", ".join(titles[:CHAPTER_PREVIEW]) + (" and more" if len(titles) > CHAPTER_PREVIEW else "")
         entries.append({"title": chapter["title"], "icon": chapter["icon"], "text": text,
                         "link": {"type": "handbook", "chapter": index, "page": 0}})
-    return {**TECHNOLOGY, "milestones": milestones, "chapters": entries}
+    for index, entry in enumerate(milestones):
+        entry["text"] = " ".join(progression["pages"][index + 1]["text"])
+    starter = page_entry("Start here: your first machine", "jugcraft:coal_generator", "technology_start",
+                         "A short practical route from raw materials to a powered furnace, with live recipe grids and troubleshooting.")
+    entries = [starter, page_entry("Digital workshops", "minecraft:redstone", "jimta_network", "Storage networks, terminals and automation."),
+               page_entry("Imported workshop manuals", "minecraft:book", "jimta_guides", "Reference for the supplied workshop systems.")] + entries
+    return {**TECHNOLOGY, "milestones": [starter] + milestones, "chapters": entries}
+
+
+def page_entry(title, icon, target, text):
+    return {"title": title, "icon": icon, "text": text, "link": {"type": "page", "target": target}}
 
 
 def magic():
@@ -119,7 +130,17 @@ def magic():
     for key, info in sorted(concordance.CATEGORIES.items(), key=lambda item: item[1]["sort"]):
         entries.append({"title": info["name"], "icon": info["icon"], "text": info["description"],
                         "link": codex_link(key)})
-    return {**MAGIC, "milestones": milestones, "chapters": entries}
+    starter = page_entry("Start here: choose your magic", "jugcraft:initiate_wand", "magic_start", "Wands, research, magical workshops or transmutation: independent starting paths.")
+    branches = [starter,
+        page_entry("First Light: your live route", "minecraft:lantern", "discover", "Your own research progress and the server's available recipes."),
+        page_entry("Spellcraft and constellation composer", "jugcraft:initiate_wand", "spellcraft", "Build, save and cast spells without typing commands."),
+        page_entry("Jug Nouveau: workshops and helpers", "jugcraft:nouveau_novice_spell_book", "nouveau", "Glyphs, Source networks, enchanting, familiars and workers."),
+        page_entry("Transmutation and magical gear", "jugcraft:philosophers_stone", "alchemy_start", "Essence, learned building supplies, matter equipment and economy limits."),
+        page_entry("Spellbooks and imported guides", "minecraft:book", "jimta_guides", "The supplied spellbook and workshop reference library."),
+        page_entry("Expeditions and bestiary", "minecraft:bone", "expedition", "Discoveries and encounters you have met.")]
+    summary = ["Choose casting, magical workshops, helpers or transmutation. They are independent specialties; no single branch is required before reading another.",
+               "Start here gives practical first-session goals. The chapters below gather all existing magic guides in this Encyclopedia; the Concordance reference remains available for deeper research."]
+    return {**MAGIC, "summary": summary, "milestones": branches[:5] + milestones, "chapters": branches + entries}
 
 
 def build(book):

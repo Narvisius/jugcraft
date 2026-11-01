@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:block/template_glass_pane_noside_alt",
+  "textures": {
+    "pane": {
+      "force_translucent": true,
+      "sprite": "jugcraft:block/owner_connected/glass/orange/glass_pane"
+    }
+  },
+  "loader": "fusion:model",
+  "type": "connecting",
+  "connections": {
+    "type": "is_same_block"
+  }
+}

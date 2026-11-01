@@ -9,5 +9,5 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ItemEntity.class)
 public abstract class NouveauPickupMixin {
     @Inject(method="playerTouch",at=@At("HEAD"),cancellable=true)
-    private void jugcraft$voidFilter(Player p,CallbackInfo ci){if(p instanceof ServerPlayer server&&(io.github.jimbozoomer.jugcraft.jimtafacts.spellbooks.JimtaPocketRooms.readOnlyGuest(server)||NouveauVoiding.pickup(server,(ItemEntity)(Object)this)))ci.cancel();}
+    private void jugcraft$voidFilter(Player p,CallbackInfo ci){if(p instanceof ServerPlayer server&&(io.github.jimbozoomer.jugcraft.jimtafacts.spellbooks.JimtaPocketRooms.readOnlyGuest(server)||io.github.jimbozoomer.jugcraft.nouveau.additions.ArsHaversack.pickup(server,(ItemEntity)(Object)this)||NouveauVoiding.pickup(server,(ItemEntity)(Object)this)||io.github.jimbozoomer.jugcraft.botany.BotanicalBags.pickup(server,(ItemEntity)(Object)this)))ci.cancel();}
 }

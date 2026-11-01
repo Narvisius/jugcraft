@@ -1,0 +1,76 @@
+{
+  "pools": [
+    {
+      "name": "manasteel",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "jugcraft:jugtania_manasteel_ingot",
+          "modifier": [
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 16,
+                "max": 27
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        }
+      ],
+      "condition": {
+        "chance": 0.9,
+        "type": "random_chance"
+      }
+    },
+    {
+      "name": "mana_pearl",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "jugcraft:jugtania_mana_pearl",
+          "modifier": [
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 8,
+                "max": 13
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        }
+      ],
+      "condition": {
+        "chance": 0.7,
+        "type": "random_chance"
+      }
+    },
+    {
+      "name": "mana_diamond",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "jugcraft:jugtania_mana_diamond",
+          "modifier": [
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 4,
+                "max": 6
+              },
+              "type": "minecraft:set_count"
+            }
+          ]
+        }
+      ],
+      "condition": {
+        "chance": 0.5,
+        "type": "random_chance"
+      }
+    }
+  ]
+}

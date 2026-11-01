@@ -184,12 +184,12 @@ public class EncyclopediaClientGameTests implements FabricClientGameTest {
 		String page = context.computeOnClient(client -> ((EncyclopediaScreen) client.gui.screen()).page());
 		EncyclopediaPayload.StepState find = step(context, "find");
 		Jugcraft.LOGGER.info("[encyclopedia-check] opened by its key: page {}, find {}", page, find);
-		check(page.equals("discover") && find == EncyclopediaPayload.StepState.NEXT, "A newcomer should open on Discover with find next: " + page + " " + find);
+		check(page.equals("technology_start") && find == EncyclopediaPayload.StepState.NEXT, "A newcomer starts on the unified contents with a technology starter page and First Light next: " + page + " " + find);
 		context.runOnClient(client -> client.gui.toastManager().clear());
                 context.waitTicks(2);
                 context.takeScreenshot("jugcraft_encyclopedia_discover_new");
         check(context.computeOnClient(client -> ((EncyclopediaScreen) client.gui.screen()).isHome()), "The guide should open on the simple contents spread");
-        context.clickScreenButton("ui.jugcraft.book.discover");
+        context.runOnClient(client -> ((EncyclopediaScreen) client.gui.screen()).showPage("discover"));
         context.waitTicks(3);
         check(context.computeOnClient(client -> !((EncyclopediaScreen) client.gui.screen()).isHome()), "First steps should open the topic directory");
         context.takeScreenshot("jugcraft_field_guide_first_steps");

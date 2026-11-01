@@ -1,0 +1,181 @@
+{
+  "type": "minecraft:fishing",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "jugcraft:aquatic_driftwood"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 4,
+          "name": "jugcraft:aquatic_fish_bones"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "jugcraft:aquatic_tin_can"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 6,
+          "name": "jugcraft:aquatic_box"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 4,
+          "name": "jugcraft:aquatic_lockbox"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 1,
+          "name": "jugcraft:aquatic_treasure_chest"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 4,
+          "name": "jugcraft:aquatic_goldfish"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "jugcraft:aquatic_message_in_a_bottle"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "minecraft:seagrass",
+          "condition": {
+            "type": "minecraft:all_of",
+            "terms": [
+              {
+                "terms": [
+                  {
+                    "terms": [
+                      {
+                        "predicate": {
+                          "biomes": "#c:is_aquatic"
+                        },
+                        "type": "minecraft:location_check"
+                      },
+                      {
+                        "predicate": {
+                          "biomes": "#c:is_beach"
+                        },
+                        "type": "minecraft:location_check"
+                      },
+                      {
+                        "predicate": {
+                          "biomes": "#c:is_swamp"
+                        },
+                        "type": "minecraft:location_check"
+                      }
+                    ],
+                    "type": "minecraft:any_of"
+                  },
+                  {
+                    "term": {
+                      "predicate": {
+                        "biomes": "#c:is_snowy"
+                      },
+                      "type": "minecraft:location_check"
+                    },
+                    "type": "minecraft:inverted"
+                  }
+                ],
+                "type": "minecraft:all_of"
+              },
+              {
+                "term": {
+                  "predicate": {
+                    "biomes": "minecraft:deep_frozen_ocean"
+                  },
+                  "type": "minecraft:location_check"
+                },
+                "type": "minecraft:inverted"
+              }
+            ]
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 9,
+          "name": "minecraft:kelp",
+          "condition": {
+            "terms": [
+              {
+                "terms": [
+                  {
+                    "predicate": {
+                      "biomes": "#c:is_ocean"
+                    },
+                    "type": "minecraft:location_check"
+                  },
+                  {
+                    "predicate": {
+                      "biomes": "#c:is_beach"
+                    },
+                    "type": "minecraft:location_check"
+                  }
+                ],
+                "type": "minecraft:any_of"
+              },
+              {
+                "term": {
+                  "predicate": {
+                    "biomes": "#c:is_hot"
+                  },
+                  "type": "minecraft:location_check"
+                },
+                "type": "minecraft:inverted"
+              },
+              {
+                "term": {
+                  "predicate": {
+                    "biomes": "#c:is_snowy"
+                  },
+                  "type": "minecraft:location_check"
+                },
+                "type": "minecraft:inverted"
+              }
+            ],
+            "type": "minecraft:all_of"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "jugcraft:aquatic_algae",
+          "condition": {
+            "terms": [
+              {
+                "term": {
+                  "predicate": {
+                    "biomes": "#c:is_ocean"
+                  },
+                  "type": "minecraft:location_check"
+                },
+                "type": "minecraft:inverted"
+              },
+              {
+                "term": {
+                  "predicate": {
+                    "biomes": "#c:is_beach"
+                  },
+                  "type": "minecraft:location_check"
+                },
+                "type": "minecraft:inverted"
+              }
+            ],
+            "type": "minecraft:all_of"
+          }
+        }
+      ]
+    }
+  ],
+  "random_sequence": "jugcraft:aquatic_gameplay/fishing/junk"
+}

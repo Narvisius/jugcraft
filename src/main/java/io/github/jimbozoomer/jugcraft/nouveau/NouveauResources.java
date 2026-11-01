@@ -38,7 +38,7 @@ public final class NouveauResources {
             String suffix=tier==1?"_long":tier==2?"_strong":"";int duration=name.equals("blasting")?100:tier==1?9600:tier==2?1800:3600;
             Registry.register(BuiltInRegistries.POTION,Jugcraft.id("nouveau_"+name+suffix),new Potion("nouveau_"+name+suffix,new MobEffectInstance(NouveauStatuses.EFFECTS.get(name),duration,tier==2?1:0)));
         }
-        var injections=list("loot_injections");
+        var injections=list("loot_injections");injections.addAll(list("ars_additions_loot_injections"));
         LootTableEvents.MODIFY.register((key,table,source,registries)->{
             if(!source.isBuiltin()||!JugNouveau.enabled())return;
             for(var entry:injections){var row=entry.getAsJsonObject();boolean applies=false;for(var id:row.getAsJsonArray("tables"))applies|=id.getAsString().equals(key.identifier().toString());if(!applies)continue;

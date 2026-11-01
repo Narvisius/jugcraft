@@ -1,0 +1,118 @@
+{
+  "textureSize": [
+    128,
+    64
+  ],
+  "parts": [
+    {
+      "name": "body1",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        16.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -12.0,
+            -12.0,
+            -12.0,
+            24.0,
+            24.0,
+            24.0
+          ],
+          "uv": [
+            32.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "body2",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        16.0,
+        0.0,
+        0.7854,
+        0.0,
+        0.7854
+      ],
+      "cubes": [
+        {
+          "box": [
+            -12.0,
+            -12.0,
+            -12.0,
+            24.0,
+            24.0,
+            24.0
+          ],
+          "uv": [
+            32.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    },
+    {
+      "name": "core",
+      "parent": "$mesh",
+      "pose": [
+        0.0,
+        16.0,
+        0.0,
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "box": [
+            -4.0,
+            -4.0,
+            -4.0,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "uv": [
+            8.0,
+            0.0
+          ],
+          "inflate": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mirror": false
+        }
+      ]
+    }
+  ],
+  "animationRoot": "$mesh",
+  "headLook": "",
+  "actions": {},
+  "motions": [],
+  "expressions": [],
+  "poses": [],
+  "source": "build/owner-oct29-reference/com/bobmowzie/mowziesmobs/client/model/entity/ModelIceBall.java",
+  "sourceSha256": "e6826d5c9e9b42b17e3c76ebece14f3fec9910a98a51fdd1b5e11dd858949c86"
+}

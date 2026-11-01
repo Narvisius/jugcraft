@@ -1,0 +1,15 @@
+{
+  "name": "jugcraft:ribbits_paths_fallback",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "jugcraft:ribbits_paths/path_deadend_nohouse",
+        "processors": "jugcraft:ribbits_main",
+        "projection": "terrain_matching",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

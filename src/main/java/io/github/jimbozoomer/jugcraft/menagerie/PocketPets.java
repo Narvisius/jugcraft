@@ -92,8 +92,9 @@ public final class PocketPets {
         }
     }
     private static void gather(ServerPlayer p){
+        if(io.github.jimbozoomer.jugcraft.botany.BotanicalFields.magnetBlocked(p))return;
         var drops=new ArrayList<ItemEntity>();p.level().getEntities(net.minecraft.world.level.entity.EntityTypeTest.forClass(ItemEntity.class),p.getBoundingBox().inflate(5),e->e.isAlive()&&!e.hasPickUpDelay(),drops,16);
-        for(var e:drops){var reserved=((io.github.jimbozoomer.jugcraft.mixin.AlchemicalItemAccess)e).jugcraft$pickupTarget();if(reserved!=null&&!reserved.equals(p.getUUID())||!Authority.mayChange(p.level(),p,e.blockPosition())||e.getOwner()!=null&&!e.getOwner().getUUID().equals(p.getUUID())||!p.hasLineOfSight(e))continue;e.setDeltaMovement(p.position().add(0,.5,0).subtract(e.position()).normalize().scale(.3));e.syncVelocity=true;}
+        for(var e:drops){if(io.github.jimbozoomer.jugcraft.botany.BotanicalFields.magnetBlocked(e))continue;var reserved=((io.github.jimbozoomer.jugcraft.mixin.AlchemicalItemAccess)e).jugcraft$pickupTarget();if(reserved!=null&&!reserved.equals(p.getUUID())||!Authority.mayChange(p.level(),p,e.blockPosition())||e.getOwner()!=null&&!e.getOwner().getUUID().equals(p.getUUID())||!p.hasLineOfSight(e))continue;e.setDeltaMovement(p.position().add(0,.5,0).subtract(e.position()).normalize().scale(.3));e.syncVelocity=true;}
     }
     private static void give(ServerPlayer p,ItemStack stack){if(!p.getInventory().add(stack))p.spawnAtLocation(p.level(),stack);}
     private static boolean teleport(ServerPlayer p,ServerLevel destination,BlockPos at){

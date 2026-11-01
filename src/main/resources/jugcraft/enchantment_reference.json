@@ -1,0 +1,2827 @@
+[
+  {
+    "id": "minecraft:sharpness",
+    "name": "Sharpness",
+    "icon": "Sharp",
+    "rarity": "Common",
+    "target": "Weapon",
+    "short_desc": "More melee damage.",
+    "long_desc": "Increases melee damage dealt to all mobs and players. The bread-and-butter offensive enchantment for swords and axes.",
+    "max_level": 5,
+    "conflicts": [
+      "minecraft:smite",
+      "minecraft:bane_of_arthropods"
+    ],
+    "compatible": [
+      "sword",
+      "axe"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "+1.0 Attack Damage (all mobs)",
+        "advanced": {
+          "formula": "level == 1 ? 1.0 : (0.5 * L) + 0.5",
+          "effect": "1.0 (Damage)",
+          "stacking": "none",
+          "anvil_cost": "1 XP levels (level × 1)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "+1.5 Attack Damage (all mobs)",
+        "advanced": {
+          "formula": "(0.5 * L) + 0.5",
+          "effect": "1.5 (Damage)",
+          "stacking": "none",
+          "anvil_cost": "2 XP levels (level × 1)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "+2.0 Attack Damage (all mobs)",
+        "advanced": {
+          "formula": "(0.5 * L) + 0.5",
+          "effect": "2.0 (Damage)",
+          "stacking": "none",
+          "anvil_cost": "3 XP levels (level × 1)"
+        }
+      },
+      {
+        "level": 4,
+        "short": "+2.5 Attack Damage (all mobs)",
+        "advanced": {
+          "formula": "(0.5 * L) + 0.5",
+          "effect": "2.5 (Damage)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 1)"
+        }
+      },
+      {
+        "level": 5,
+        "short": "+3.0 Attack Damage",
+        "advanced": {
+          "formula": "(0.5 * L) + 0.5",
+          "effect": "3.0 (Damage)",
+          "stacking": "none",
+          "anvil_cost": "5 XP levels (level × 1)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "minecraft:smite",
+    "name": "Smite",
+    "icon": "Smite",
+    "rarity": "Uncommon",
+    "target": "Weapon",
+    "short_desc": "More damage to undead.",
+    "long_desc": "Increases melee damage dealt exclusively to undead mobs: zombies, skeletons, phantoms, the Wither, wither skeletons, zoglins, drowned, husks, strays, skeleton horses, and zombie horses.",
+    "max_level": 5,
+    "conflicts": [
+      "minecraft:sharpness",
+      "minecraft:bane_of_arthropods"
+    ],
+    "compatible": [
+      "sword",
+      "axe",
+      "spear"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "+2.5 Damage vs Undead",
+        "advanced": {
+          "formula": "2.5 * L",
+          "effect": "2.5 (Damage)",
+          "stacking": "none",
+          "anvil_cost": "2 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "+5.0 Damage vs Undead",
+        "advanced": {
+          "formula": "2.5 * L",
+          "effect": "5.0 (Damage)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "+7.5 Damage vs Undead",
+        "advanced": {
+          "formula": "2.5 * L",
+          "effect": "7.5 (Damage)",
+          "stacking": "none",
+          "anvil_cost": "6 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 4,
+        "short": "+10.0 Damage vs Undead",
+        "advanced": {
+          "formula": "2.5 * L",
+          "effect": "10.0 (Damage)",
+          "stacking": "none",
+          "anvil_cost": "8 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 5,
+        "short": "+12.5 Damage vs Undead",
+        "advanced": {
+          "formula": "2.5 * L",
+          "effect": "12.5 (Damage)",
+          "stacking": "none",
+          "anvil_cost": "10 XP levels (level × 2)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "minecraft:bane_of_arthropods",
+    "name": "Bane of Arthropods",
+    "icon": "BoA",
+    "rarity": "Uncommon",
+    "target": "Weapon",
+    "short_desc": "More damage to arthropods.",
+    "long_desc": "Increases melee damage and inflicts Slowness IV on arthropod mobs: spiders, cave spiders, bees, silverfish, and endermites.",
+    "max_level": 5,
+    "conflicts": [
+      "minecraft:sharpness",
+      "minecraft:smite"
+    ],
+    "compatible": [
+      "sword",
+      "axe",
+      "spear"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "+2.5 Damage vs Arthropods + Slowness IV (1.0–1.5s)",
+        "advanced": {
+          "formula": "2.5 * L damage + Slowness IV for random(1.0, 1.5) seconds",
+          "effect": "2.5 (Damage)",
+          "stacking": "none",
+          "anvil_cost": "2 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "+5.0 Damage vs Arthropods + Slowness IV (1.5–2.0s)",
+        "advanced": {
+          "formula": "2.5 * L damage + Slowness IV for random(1.5, 2.0) seconds",
+          "effect": "5.0 (Damage)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "+7.5 Damage vs Arthropods + Slowness IV (2.0–2.5s)",
+        "advanced": {
+          "formula": "2.5 * L damage + Slowness IV for random(2.0, 2.5) seconds",
+          "effect": "7.5 (Damage)",
+          "stacking": "none",
+          "anvil_cost": "6 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 4,
+        "short": "+10.0 Damage vs Arthropods + Slowness IV (2.5–3.0s)",
+        "advanced": {
+          "formula": "2.5 * L damage + Slowness IV for random(2.5, 3.0) seconds",
+          "effect": "10.0 (Damage)",
+          "stacking": "none",
+          "anvil_cost": "8 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 5,
+        "short": "+12.5 Damage vs Arthropods + Slowness IV (3.0–3.5s)",
+        "advanced": {
+          "formula": "2.5 * L damage + Slowness IV for random(3.0, 3.5) seconds",
+          "effect": "12.5 (Damage)",
+          "stacking": "none",
+          "anvil_cost": "10 XP levels (level × 2)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "minecraft:knockback",
+    "name": "Knockback",
+    "icon": "KB",
+    "rarity": "Uncommon",
+    "target": "Weapon",
+    "short_desc": "Hits push targets farther.",
+    "long_desc": "Increases the horizontal knockback applied to mobs and players struck by a melee attack.",
+    "max_level": 2,
+    "conflicts": [],
+    "compatible": [
+      "sword",
+      "spear"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Knockback +1 (~3 extra blocks pushed)",
+        "advanced": {
+          "formula": "knockback_strength = L (each unit ≈ 3 extra blocks of horizontal push)",
+          "effect": "1 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "2 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "Knockback +2 (~6 extra blocks pushed)",
+        "advanced": {
+          "formula": "knockback_strength = L",
+          "effect": "2 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 2)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "minecraft:fire_aspect",
+    "name": "Fire Aspect",
+    "icon": "FA",
+    "rarity": "Rare",
+    "target": "Weapon",
+    "short_desc": "Melee hits set targets on fire.",
+    "long_desc": "Sets the target on fire on melee hit. Fire deals 1 damage every 2 seconds. Also cooks food drops from mobs (pork, beef, chicken, etc.) automatically.",
+    "max_level": 2,
+    "conflicts": [],
+    "compatible": [
+      "sword",
+      "spear"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Ignites target for 4 seconds",
+        "advanced": {
+          "formula": "fire_duration_seconds = L * 4",
+          "effect": "4 (Duration)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "Ignites target for 8 seconds",
+        "advanced": {
+          "formula": "fire_duration_seconds = L * 4",
+          "effect": "8 (Duration)",
+          "stacking": "none",
+          "anvil_cost": "8 XP levels (level × 4)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "minecraft:looting",
+    "name": "Looting",
+    "icon": "Loot",
+    "rarity": "Rare",
+    "target": "Weapon",
+    "short_desc": "Mobs drop more loot.",
+    "long_desc": "Increases the maximum item drop count from mobs and raises the chance of rare drops. The go-to enchantment for farming.",
+    "max_level": 3,
+    "conflicts": [],
+    "compatible": [
+      "sword",
+      "spear"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Max loot +1, rare drop chance +1%",
+        "advanced": {
+          "formula": "max_drops += L; rare_drop_bonus = L * 0.01 (+1%)",
+          "effect": "1 (Percentage)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "Max loot +2, rare drop chance +2%",
+        "advanced": {
+          "formula": "max_drops += L; rare_drop_bonus = L * 0.01 (+2%)",
+          "effect": "2 (Percentage)",
+          "stacking": "none",
+          "anvil_cost": "8 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "Max loot +3, rare drop chance +3%",
+        "advanced": {
+          "formula": "max_drops += L; rare_drop_bonus = L * 0.01 (+3%)",
+          "effect": "3 (Percentage)",
+          "stacking": "none",
+          "anvil_cost": "12 XP levels (level × 4)"
+        }
+      }
+    ],
+    "special_notes": [
+      "Increases max drop count by 1 per level"
+    ]
+  },
+  {
+    "id": "minecraft:sweeping_edge",
+    "name": "Sweeping Edge",
+    "icon": "Sweep",
+    "rarity": "Rare",
+    "target": "Weapon",
+    "short_desc": "Sweeps deal more damage.",
+    "long_desc": "Increases the damage dealt by the sword's sweep attack  the horizontal arc that hits multiple nearby mobs.",
+    "max_level": 3,
+    "conflicts": [],
+    "compatible": [
+      "sword"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Sweep Attack Damage: 50% of base damage",
+        "advanced": {
+          "formula": "sweep_damage_ratio = L / (L + 1)",
+          "effect": "0.5 (Percentage)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "Sweep Attack Damage: 66.7% of base damage",
+        "advanced": {
+          "formula": "sweep_damage_ratio = L / (L + 1)",
+          "effect": "0.667 (Percentage)",
+          "stacking": "none",
+          "anvil_cost": "8 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "Sweep Attack Damage: 75% of base damage",
+        "advanced": {
+          "formula": "sweep_damage_ratio = L / (L + 1)",
+          "effect": "0.75 (Percentage)",
+          "stacking": "none",
+          "anvil_cost": "12 XP levels (level × 4)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "minecraft:protection",
+    "name": "Protection",
+    "icon": "Prot",
+    "rarity": "Common",
+    "target": "Armor",
+    "short_desc": "Reduces most damage.",
+    "long_desc": "Reduces damage taken from all sources except void damage and /kill. Contributes EPF (Enchantment Protection Factor) which stacks across all armor pieces, capped globally at 25 EPF (80% reduction).",
+    "max_level": 4,
+    "conflicts": [
+      "minecraft:blast_protection",
+      "minecraft:fire_protection",
+      "minecraft:projectile_protection"
+    ],
+    "compatible": [
+      "helmet",
+      "chestplate",
+      "leggings",
+      "boots"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "+4 EPF (≈4% general damage reduction per piece)",
+        "advanced": {
+          "formula": "EPF_contribution = L * 4",
+          "effect": "4 (Percentage)",
+          "stacking": "global",
+          "anvil_cost": "1 XP levels (level × 1)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "+8 EPF per piece",
+        "advanced": {
+          "formula": "EPF_contribution = L * 4",
+          "effect": "8 (Percentage)",
+          "stacking": "global",
+          "anvil_cost": "2 XP levels (level × 1)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "+12 EPF per piece",
+        "advanced": {
+          "formula": "EPF_contribution = L * 4",
+          "effect": "12 (Percentage)",
+          "stacking": "global",
+          "anvil_cost": "3 XP levels (level × 1)"
+        }
+      },
+      {
+        "level": 4,
+        "short": "+16 EPF per piece",
+        "advanced": {
+          "formula": "EPF_contribution = L * 4",
+          "effect": "16 (Percentage)",
+          "stacking": "global",
+          "anvil_cost": "4 XP levels (level × 1)"
+        }
+      }
+    ],
+    "special_notes": [
+      "EPF capped at 25 across all armor pieces combined"
+    ]
+  },
+  {
+    "id": "minecraft:fire_protection",
+    "name": "Fire Protection",
+    "icon": "FProt",
+    "rarity": "Uncommon",
+    "target": "Armor",
+    "short_desc": "Reduces fire damage.",
+    "long_desc": "Reduces fire damage and shortens the duration of burn effects. Uses fire-specific EPF which is separate from general Protection.",
+    "max_level": 4,
+    "conflicts": [
+      "minecraft:protection",
+      "minecraft:blast_protection",
+      "minecraft:projectile_protection"
+    ],
+    "compatible": [
+      "helmet",
+      "chestplate",
+      "leggings",
+      "boots"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "+8 Fire EPF; burn duration -15%",
+        "advanced": {
+          "formula": "EPF_fire = L * 8; burn_reduction_percent = L * 15",
+          "effect": "8 (Percentage)",
+          "stacking": "global",
+          "anvil_cost": "2 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "+16 Fire EPF; burn duration -30%",
+        "advanced": {
+          "formula": "EPF_fire = L * 8; burn_reduction_percent = L * 15",
+          "effect": "16 (Percentage)",
+          "stacking": "global",
+          "anvil_cost": "4 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "+24 Fire EPF; burn duration -45%",
+        "advanced": {
+          "formula": "EPF_fire = L * 8; burn_reduction_percent = L * 15",
+          "effect": "24 (Percentage)",
+          "stacking": "global",
+          "anvil_cost": "6 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 4,
+        "short": "+32 Fire EPF; burn duration -60%",
+        "advanced": {
+          "formula": "EPF_fire = L * 8; burn_reduction_percent = L * 15",
+          "effect": "32 (Percentage)",
+          "stacking": "global",
+          "anvil_cost": "8 XP levels (level × 2)"
+        }
+      }
+    ],
+    "special_notes": [
+      "EPF capped at 25 globally"
+    ]
+  },
+  {
+    "id": "minecraft:blast_protection",
+    "name": "Blast Protection",
+    "icon": "BProt",
+    "rarity": "Rare",
+    "target": "Armor",
+    "short_desc": "Reduces explosion damage.",
+    "long_desc": "Reduces explosion damage and knockback from all explosion sources: creepers, TNT, beds used in the Nether, respawn anchors used in the Overworld, and more.",
+    "max_level": 4,
+    "conflicts": [
+      "minecraft:protection",
+      "minecraft:fire_protection",
+      "minecraft:projectile_protection"
+    ],
+    "compatible": [
+      "helmet",
+      "chestplate",
+      "leggings",
+      "boots"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "+8 Blast EPF; explosion knockback -15%",
+        "advanced": {
+          "formula": "EPF_blast = L * 8; knockback_reduction_percent = L * 15",
+          "effect": "8 (Percentage)",
+          "stacking": "global",
+          "anvil_cost": "4 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "+16 Blast EPF; explosion knockback -30%",
+        "advanced": {
+          "formula": "EPF_blast = L * 8; knockback_reduction_percent = L * 15",
+          "effect": "16 (Percentage)",
+          "stacking": "global",
+          "anvil_cost": "8 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "+24 Blast EPF; explosion knockback -45%",
+        "advanced": {
+          "formula": "EPF_blast = L * 8; knockback_reduction_percent = L * 15",
+          "effect": "24 (Percentage)",
+          "stacking": "global",
+          "anvil_cost": "12 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 4,
+        "short": "+32 Blast EPF; explosion knockback -60%",
+        "advanced": {
+          "formula": "EPF_blast = L * 8; knockback_reduction_percent = L * 15",
+          "effect": "32 (Percentage)",
+          "stacking": "global",
+          "anvil_cost": "16 XP levels (level × 4)"
+        }
+      }
+    ],
+    "special_notes": [
+      "EPF capped at 25 globally"
+    ]
+  },
+  {
+    "id": "minecraft:projectile_protection",
+    "name": "Projectile Protection",
+    "icon": "PProt",
+    "rarity": "Uncommon",
+    "target": "Armor",
+    "short_desc": "Reduces projectile damage.",
+    "long_desc": "Reduces damage taken from all projectile sources: arrows, fireballs, tridents, shulker bullets, llama spit, and more.",
+    "max_level": 4,
+    "conflicts": [
+      "minecraft:protection",
+      "minecraft:fire_protection",
+      "minecraft:blast_protection"
+    ],
+    "compatible": [
+      "helmet",
+      "chestplate",
+      "leggings",
+      "boots"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "+8 Projectile EPF",
+        "advanced": {
+          "formula": "EPF_projectile = L * 8",
+          "effect": "8 (Percentage)",
+          "stacking": "global",
+          "anvil_cost": "2 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "+16 Projectile EPF",
+        "advanced": {
+          "formula": "EPF_projectile = L * 8",
+          "effect": "16 (Percentage)",
+          "stacking": "global",
+          "anvil_cost": "4 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "+24 Projectile EPF",
+        "advanced": {
+          "formula": "EPF_projectile = L * 8",
+          "effect": "24 (Percentage)",
+          "stacking": "global",
+          "anvil_cost": "6 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 4,
+        "short": "+32 Projectile EPF",
+        "advanced": {
+          "formula": "EPF_projectile = L * 8",
+          "effect": "32 (Percentage)",
+          "stacking": "global",
+          "anvil_cost": "8 XP levels (level × 2)"
+        }
+      }
+    ],
+    "special_notes": [
+      "EPF capped at 25 globally"
+    ]
+  },
+  {
+    "id": "minecraft:feather_falling",
+    "name": "Feather Falling",
+    "icon": "FF",
+    "rarity": "Uncommon",
+    "target": "Armor",
+    "short_desc": "Reduces fall damage.",
+    "long_desc": "Reduces fall damage taken. Does NOT reduce damage from ender pearl teleportation.",
+    "max_level": 4,
+    "conflicts": [],
+    "compatible": [
+      "boots"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "+12 Fall EPF (≈ 12% fall damage reduction)",
+        "advanced": {
+          "formula": "EPF_fall = L * 12",
+          "effect": "12 (Percentage)",
+          "stacking": "global",
+          "anvil_cost": "2 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "+24 Fall EPF (≈ 48% reduction from this piece alone)",
+        "advanced": {
+          "formula": "EPF_fall = L * 12",
+          "effect": "24 (Percentage)",
+          "stacking": "global",
+          "anvil_cost": "4 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "+36 Fall EPF (exceeds cap alone combined bonuses are at max)",
+        "advanced": {
+          "formula": "EPF_fall = L * 12",
+          "effect": "36 (Percentage)",
+          "stacking": "global",
+          "anvil_cost": "6 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 4,
+        "short": "+48 Fall EPF",
+        "advanced": {
+          "formula": "EPF_fall = L * 12",
+          "effect": "48 (Percentage)",
+          "stacking": "global",
+          "anvil_cost": "8 XP levels (level × 2)"
+        }
+      }
+    ],
+    "special_notes": [
+      "EPF capped at 25 globally"
+    ]
+  },
+  {
+    "id": "minecraft:respiration",
+    "name": "Respiration",
+    "icon": "Resp",
+    "rarity": "Rare",
+    "target": "Armor",
+    "short_desc": "Lets you breathe underwater longer.",
+    "long_desc": "Extends underwater breathing time, reduces drowning damage frequency, and improves underwater visibility.",
+    "max_level": 3,
+    "conflicts": [],
+    "compatible": [
+      "helmet"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Breath: 30s total; drowning damage -50%",
+        "advanced": {
+          "formula": "breath_total_seconds = 15 + (L * 15); drown_tick_chance = 1 / (L + 1)",
+          "effect": "30 (Duration)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "Breath: 45s total; drowning damage -67%",
+        "advanced": {
+          "formula": "breath_total_seconds = 15 + (L * 15); drown_tick_chance = 1 / (L + 1)",
+          "effect": "45 (Duration)",
+          "stacking": "none",
+          "anvil_cost": "8 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "Breath: 60s total; drowning damage -75%",
+        "advanced": {
+          "formula": "breath_total_seconds = 15 + (L * 15); drown_tick_chance = 1 / (L + 1)",
+          "effect": "60 (Duration)",
+          "stacking": "none",
+          "anvil_cost": "12 XP levels (level × 4)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "minecraft:aqua_affinity",
+    "name": "Aqua Affinity",
+    "icon": "AA",
+    "rarity": "Rare",
+    "target": "Armor",
+    "short_desc": "Mines faster underwater.",
+    "long_desc": "Removes the 5× mining speed penalty applied when the player's head is submerged underwater.",
+    "max_level": 1,
+    "conflicts": [],
+    "compatible": [
+      "helmet"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Mine at full speed underwater",
+        "advanced": {
+          "formula": "underwater_mining_speed_multiplier = 1× (restored from default 0.2×)",
+          "effect": "5 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 4)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "minecraft:thorns",
+    "name": "Thorns",
+    "icon": "Thorn",
+    "rarity": "Very_rare",
+    "target": "Armor",
+    "short_desc": "Hurts attackers when hit.",
+    "long_desc": "Grants a percentage chance to deal reflected damage to attackers when the player is struck. Stacks across multiple armor pieces but degrades durability faster on each proc.",
+    "max_level": 3,
+    "conflicts": [],
+    "compatible": [
+      "helmet",
+      "chestplate",
+      "leggings",
+      "boots"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "15% chance to reflect 1–4 damage per piece",
+        "advanced": {
+          "formula": "proc_chance = 0.15 * L; reflected_damage = random(1, 4)",
+          "effect": "0.15 (Chance)",
+          "stacking": "per piece",
+          "anvil_cost": "8 XP levels (level × 8)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "30% chance to reflect 1–4 damage per piece",
+        "advanced": {
+          "formula": "proc_chance = 0.15 * L; reflected_damage = random(1, 4)",
+          "effect": "0.3 (Chance)",
+          "stacking": "per piece",
+          "anvil_cost": "16 XP levels (level × 8)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "45% chance to reflect 1–4 damage per piece",
+        "advanced": {
+          "formula": "proc_chance = 0.15 * L; reflected_damage = random(1, 4)",
+          "effect": "0.45 (Chance)",
+          "stacking": "per piece",
+          "anvil_cost": "24 XP levels (level × 8)"
+        }
+      }
+    ],
+    "special_notes": [
+      "Each piece rolls independently for proc chance"
+    ]
+  },
+  {
+    "id": "minecraft:depth_strider",
+    "name": "Depth Strider",
+    "icon": "DS",
+    "rarity": "Rare",
+    "target": "Armor",
+    "short_desc": "Move faster underwater.",
+    "long_desc": "Increases movement speed underwater. Level III restores the player to full walking speed while submerged.",
+    "max_level": 3,
+    "conflicts": [
+      "minecraft:frost_walker"
+    ],
+    "compatible": [
+      "boots"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Underwater speed: ≈33% of land speed restored",
+        "advanced": {
+          "formula": "land_speed_fraction_restored = L / 3",
+          "effect": "0.333 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "Underwater speed: ≈67% of land speed restored",
+        "advanced": {
+          "formula": "land_speed_fraction_restored = L / 3",
+          "effect": "0.667 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "8 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "Underwater speed: 100% of land speed",
+        "advanced": {
+          "formula": "land_speed_fraction_restored = L / 3",
+          "effect": "1.0 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "12 XP levels (level × 4)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "minecraft:frost_walker",
+    "name": "Frost Walker",
+    "icon": "FW",
+    "rarity": "Rare",
+    "target": "Armor",
+    "short_desc": "Freezes water under your feet.",
+    "long_desc": "Converts water blocks beneath the player's feet into frosted ice as they walk. Also grants complete immunity to magma block damage.",
+    "max_level": 2,
+    "conflicts": [
+      "minecraft:depth_strider"
+    ],
+    "compatible": [
+      "boots"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "village_chest",
+      "bastion_remnant"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Freezes water in a 2-block radius; magma immunity",
+        "advanced": {
+          "formula": "freeze_radius_blocks = L + 1",
+          "effect": "2 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "Freezes water in a 3-block radius; magma immunity",
+        "advanced": {
+          "formula": "freeze_radius_blocks = L + 1",
+          "effect": "3 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "8 XP levels (level × 4)"
+        }
+      }
+    ],
+    "special_notes": [
+      "treasure",
+      "Ice melts if a heat source is nearby"
+    ]
+  },
+  {
+    "id": "minecraft:soul_speed",
+    "name": "Soul Speed",
+    "icon": "SS",
+    "rarity": "Very_rare",
+    "target": "Armor",
+    "short_desc": "Run faster on soul blocks.",
+    "long_desc": "Increases movement speed on soul sand and soul soil blocks. Slowly consumes boot durability while active.",
+    "max_level": 3,
+    "conflicts": [],
+    "compatible": [
+      "boots"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "loot"
+    ],
+    "loot_locations": [
+      "bastion_remnant"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Speed ×1.3 on soul sand/soil; boots slowly degrade",
+        "advanced": {
+          "formula": "speed_multiplier = (0.3 * L) + 1.0",
+          "effect": "1.3 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "8 XP levels (level × 8)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "Speed ×1.6 on soul sand/soil",
+        "advanced": {
+          "formula": "speed_multiplier = (0.3 * L) + 1.0",
+          "effect": "1.6 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "16 XP levels (level × 8)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "Speed ×1.9 on soul sand/soil",
+        "advanced": {
+          "formula": "speed_multiplier = (0.3 * L) + 1.0",
+          "effect": "1.9 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "24 XP levels (level × 8)"
+        }
+      }
+    ],
+    "special_notes": [
+      "treasure",
+      "Damages boots slightly when active"
+    ]
+  },
+  {
+    "id": "minecraft:swift_sneak",
+    "name": "Swift Sneak",
+    "icon": "SwSnk",
+    "rarity": "Very_rare",
+    "target": "Armor",
+    "short_desc": "Sneak faster.",
+    "long_desc": "Increases movement speed while the player is sneaking.",
+    "max_level": 3,
+    "conflicts": [],
+    "compatible": [
+      "leggings"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "loot"
+    ],
+    "loot_locations": [
+      "ancient_city"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Sneak speed +15% of walk speed",
+        "advanced": {
+          "formula": "sneak_speed_bonus = 0.15 * L (fraction of normal walk speed added to sneak)",
+          "effect": "0.15 (Percentage)",
+          "stacking": "none",
+          "anvil_cost": "8 XP levels (level × 8)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "Sneak speed +30% of walk speed",
+        "advanced": {
+          "formula": "sneak_speed_bonus = 0.15 * L",
+          "effect": "0.3 (Percentage)",
+          "stacking": "none",
+          "anvil_cost": "16 XP levels (level × 8)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "Sneak speed +45% of walk speed",
+        "advanced": {
+          "formula": "sneak_speed_bonus = 0.15 * L",
+          "effect": "0.45 (Percentage)",
+          "stacking": "none",
+          "anvil_cost": "24 XP levels (level × 8)"
+        }
+      }
+    ],
+    "special_notes": [
+      "treasure",
+      "Treasure enchantment: only found in Ancient City chests"
+    ]
+  },
+  {
+    "id": "minecraft:efficiency",
+    "name": "Efficiency",
+    "icon": "Eff",
+    "rarity": "Common",
+    "target": "Any",
+    "short_desc": "Mines and chops faster.",
+    "long_desc": "Increases mining speed on blocks the tool is effective against. Scales exponentially  the jump from level IV to V is huge.",
+    "max_level": 5,
+    "conflicts": [],
+    "compatible": [
+      "pickaxe",
+      "shovel",
+      "axe",
+      "hoe",
+      "shears"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Mining Speed Bonus: +2",
+        "advanced": {
+          "formula": "speed_bonus = (L * L) + 1",
+          "effect": "2 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "1 XP levels (level × 1)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "Mining Speed Bonus: +5",
+        "advanced": {
+          "formula": "speed_bonus = (L * L) + 1",
+          "effect": "5 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "2 XP levels (level × 1)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "Mining Speed Bonus: +10",
+        "advanced": {
+          "formula": "speed_bonus = (L * L) + 1",
+          "effect": "10 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "3 XP levels (level × 1)"
+        }
+      },
+      {
+        "level": 4,
+        "short": "Mining Speed Bonus: +17",
+        "advanced": {
+          "formula": "speed_bonus = (L * L) + 1",
+          "effect": "17 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 1)"
+        }
+      },
+      {
+        "level": 5,
+        "short": "Mining Speed Bonus: +26",
+        "advanced": {
+          "formula": "speed_bonus = (L * L) + 1",
+          "effect": "26 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "5 XP levels (level × 1)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "minecraft:silk_touch",
+    "name": "Silk Touch",
+    "icon": "Silk",
+    "rarity": "Very_rare",
+    "target": "Any",
+    "short_desc": "Drops the block itself.",
+    "long_desc": "Causes mined blocks to drop themselves in their original form instead of their normal drops. Essential for obtaining glass, ice, grass blocks, ores, and more.",
+    "max_level": 1,
+    "conflicts": [
+      "minecraft:fortune"
+    ],
+    "compatible": [
+      "pickaxe",
+      "shovel",
+      "axe",
+      "hoe",
+      "shears"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Blocks drop as themselves",
+        "advanced": {
+          "formula": "binary toggle  no numeric scaling",
+          "effect": "1 (Boolean)",
+          "stacking": "none",
+          "anvil_cost": "8 XP levels (level × 8)"
+        }
+      }
+    ],
+    "special_notes": [
+      "Mutually exclusive with Fortune"
+    ]
+  },
+  {
+    "id": "minecraft:fortune",
+    "name": "Fortune",
+    "icon": "Fort",
+    "rarity": "Rare",
+    "target": "Any",
+    "short_desc": "Drops extra items.",
+    "long_desc": "Increases item drop quantity when mining eligible blocks including ores, crops, and gravel. Does not work on all block types.",
+    "max_level": 3,
+    "conflicts": [
+      "minecraft:silk_touch"
+    ],
+    "compatible": [
+      "pickaxe",
+      "shovel",
+      "axe",
+      "hoe"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Avg ~1.33× ore drops (e.g. 1–2 diamonds per ore)",
+        "advanced": {
+          "formula": "avg_multiplier varies by block; gravel flint chance = 14/15",
+          "effect": "1.33 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "Avg ~1.75× ore drops (e.g. 1–3 diamonds per ore)",
+        "advanced": {
+          "formula": "avg_multiplier varies by block; gravel flint chance = 24/25",
+          "effect": "1.75 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "8 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "Avg ~2.2× ore drops (e.g. 1–4 diamonds per ore)",
+        "advanced": {
+          "formula": "avg_multiplier varies by block; gravel flint chance = 100%",
+          "effect": "2.2 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "12 XP levels (level × 4)"
+        }
+      }
+    ],
+    "special_notes": [
+      "Mutually exclusive with Silk Touch"
+    ]
+  },
+  {
+    "id": "minecraft:unbreaking",
+    "name": "Unbreaking",
+    "icon": "Unbr",
+    "rarity": "Uncommon",
+    "target": "Any",
+    "short_desc": "Items lose durability less often.",
+    "long_desc": "Grants a chance to skip durability loss each use. Effectively multiplies the item's usable lifespan.",
+    "max_level": 3,
+    "conflicts": [],
+    "compatible": [
+      "sword",
+      "axe",
+      "pickaxe",
+      "shovel",
+      "hoe",
+      "shears",
+      "brush",
+      "spear",
+      "helmet",
+      "chestplate",
+      "leggings",
+      "boots",
+      "bow",
+      "crossbow",
+      "trident",
+      "fishing_rod",
+      "flint_and_steel",
+      "carrot_on_a_stick",
+      "warped_fungus_on_a_stick",
+      "shield",
+      "elytra"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "~2× effective durability",
+        "advanced": {
+          "formula": "effective_durability = base_durability * (1 + L)",
+          "effect": "2.0 (Chance)",
+          "stacking": "none",
+          "anvil_cost": "2 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "~3× effective durability",
+        "advanced": {
+          "formula": "effective_durability = base_durability * (1 + L)",
+          "effect": "3.0 (Chance)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "~4× effective durability",
+        "advanced": {
+          "formula": "effective_durability = base_durability * (1 + L)",
+          "effect": "4.0 (Chance)",
+          "stacking": "none",
+          "anvil_cost": "6 XP levels (level × 2)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "minecraft:mending",
+    "name": "Mending",
+    "icon": "Mend",
+    "rarity": "Rare",
+    "target": "Any",
+    "short_desc": "XP repairs the item.",
+    "long_desc": "Repairs the item using XP orbs collected by the player. Each XP point consumed restores 2 durability. XP is diverted to repair instead of being added to the experience bar.",
+    "max_level": 1,
+    "conflicts": [
+      "minecraft:infinity"
+    ],
+    "compatible": [
+      "sword",
+      "axe",
+      "pickaxe",
+      "shovel",
+      "hoe",
+      "shears",
+      "brush",
+      "spear",
+      "helmet",
+      "chestplate",
+      "leggings",
+      "boots",
+      "bow",
+      "crossbow",
+      "trident",
+      "fishing_rod",
+      "flint_and_steel",
+      "shield",
+      "elytra"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "stronghold",
+      "bastion_remnant",
+      "ruined_portal",
+      "shipwreck",
+      "woodland_mansion"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Repairs 2 durability per XP point consumed",
+        "advanced": {
+          "formula": "durability_restored_per_xp_point = 2",
+          "effect": "2 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 4)"
+        }
+      }
+    ],
+    "special_notes": [
+      "treasure",
+      "XP orbs collected repair the item instead of leveling the player"
+    ]
+  },
+  {
+    "id": "minecraft:power",
+    "name": "Power",
+    "icon": "Pow",
+    "rarity": "Common",
+    "target": "Ranged",
+    "short_desc": "Arrows deal more damage.",
+    "long_desc": "Increases arrow damage dealt by bows.",
+    "max_level": 5,
+    "conflicts": [],
+    "compatible": [
+      "bow"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Arrow damage ×1.25 (full draw: ≈8 damage)",
+        "advanced": {
+          "formula": "damage_multiplier = (0.25 * L) + 1.0; final_damage = floor(base * multiplier + 0.5)",
+          "effect": "1.25 (Percentage)",
+          "stacking": "none",
+          "anvil_cost": "1 XP levels (level × 1)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "Arrow damage ×1.50 (full draw: ≈9 damage)",
+        "advanced": {
+          "formula": "damage_multiplier = (0.25 * L) + 1.0",
+          "effect": "1.5 (Percentage)",
+          "stacking": "none",
+          "anvil_cost": "2 XP levels (level × 1)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "Arrow damage ×1.75 (full draw: ≈11 damage)",
+        "advanced": {
+          "formula": "damage_multiplier = (0.25 * L) + 1.0",
+          "effect": "1.75 (Percentage)",
+          "stacking": "none",
+          "anvil_cost": "3 XP levels (level × 1)"
+        }
+      },
+      {
+        "level": 4,
+        "short": "Arrow damage ×2.00 (full draw: ≈12 damage)",
+        "advanced": {
+          "formula": "damage_multiplier = (0.25 * L) + 1.0",
+          "effect": "2.0 (Percentage)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 1)"
+        }
+      },
+      {
+        "level": 5,
+        "short": "Arrow damage ×2.25 (full draw: ≈14 damage)",
+        "advanced": {
+          "formula": "damage_multiplier = (0.25 * L) + 1.0",
+          "effect": "2.25 (Percentage)",
+          "stacking": "none",
+          "anvil_cost": "5 XP levels (level × 1)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "minecraft:punch",
+    "name": "Punch",
+    "icon": "Punch",
+    "rarity": "Rare",
+    "target": "Ranged",
+    "short_desc": "Arrows knock targets back.",
+    "long_desc": "Increases the knockback applied to entities hit by bow arrows.",
+    "max_level": 2,
+    "conflicts": [],
+    "compatible": [
+      "bow"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Arrow knockback +3 blocks",
+        "advanced": {
+          "formula": "extra_knockback_blocks = L * 3",
+          "effect": "3 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "Arrow knockback +6 blocks",
+        "advanced": {
+          "formula": "extra_knockback_blocks = L * 3",
+          "effect": "6 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "8 XP levels (level × 4)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "minecraft:flame",
+    "name": "Flame",
+    "icon": "Flame",
+    "rarity": "Rare",
+    "target": "Ranged",
+    "short_desc": "Arrows set targets on fire.",
+    "long_desc": "All arrows fired by this bow are ignited, setting targets ablaze on impact for additional fire damage over time.",
+    "max_level": 1,
+    "conflicts": [],
+    "compatible": [
+      "bow"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Arrows ignite targets for 5 seconds",
+        "advanced": {
+          "formula": "fire_duration_seconds = 5",
+          "effect": "5 (Duration)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 4)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "minecraft:infinity",
+    "name": "Infinity",
+    "icon": "Inf",
+    "rarity": "Very_rare",
+    "target": "Ranged",
+    "short_desc": "Bows use one arrow infinitely.",
+    "long_desc": "Firing the bow does not consume regular arrows from the inventory. Requires at least one regular arrow somewhere in inventory to activate. Does not work with tipped or spectral arrows.",
+    "max_level": 1,
+    "conflicts": [
+      "minecraft:mending"
+    ],
+    "compatible": [
+      "bow"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Regular arrows not consumed on fire",
+        "advanced": {
+          "formula": "binary toggle  regular arrows not consumed if one exists in inventory",
+          "effect": "1 (Boolean)",
+          "stacking": "none",
+          "anvil_cost": "8 XP levels (level × 8)"
+        }
+      }
+    ],
+    "special_notes": [
+      "Requires at least one arrow in inventory to shoot"
+    ]
+  },
+  {
+    "id": "minecraft:luck_of_the_sea",
+    "name": "Luck of the Sea",
+    "icon": "LotS",
+    "rarity": "Rare",
+    "target": "Fishing Rod",
+    "short_desc": "Fishing gives better loot.",
+    "long_desc": "Increases the probability of catching treasure loot while fishing and decreases the probability of catching junk.",
+    "max_level": 3,
+    "conflicts": [],
+    "compatible": [
+      "fishing_rod"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Treasure +2%, Junk -2% per catch",
+        "advanced": {
+          "formula": "treasure_chance = 0.05 + (0.02 * L); junk_chance = 0.10 - (0.02 * L)",
+          "effect": "0.02 (Percentage)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "Treasure +4%, Junk -4%",
+        "advanced": {
+          "formula": "treasure_chance = 0.05 + (0.02 * L); junk_chance = 0.10 - (0.02 * L)",
+          "effect": "0.04 (Percentage)",
+          "stacking": "none",
+          "anvil_cost": "8 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "Treasure +6%, Junk -6%",
+        "advanced": {
+          "formula": "treasure_chance = 0.05 + (0.02 * L); junk_chance = 0.10 - (0.02 * L)",
+          "effect": "0.06 (Percentage)",
+          "stacking": "none",
+          "anvil_cost": "12 XP levels (level × 4)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "minecraft:lure",
+    "name": "Lure",
+    "icon": "Lure",
+    "rarity": "Rare",
+    "target": "Fishing Rod",
+    "short_desc": "Fish bite faster.",
+    "long_desc": "Decreases the wait time before a fish bites the hook while fishing.",
+    "max_level": 3,
+    "conflicts": [],
+    "compatible": [
+      "fishing_rod"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Bite wait time -5s (range: 5–25s)",
+        "advanced": {
+          "formula": "wait_range_seconds = random(5, 30) - (L * 5)",
+          "effect": "-5 (Duration)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "Bite wait time -10s (range: 5–20s)",
+        "advanced": {
+          "formula": "wait_range_seconds = random(5, 30) - (L * 5)",
+          "effect": "-10 (Duration)",
+          "stacking": "none",
+          "anvil_cost": "8 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "Bite wait time -15s (range: 5–15s)",
+        "advanced": {
+          "formula": "wait_range_seconds = random(5, 30) - (L * 5)",
+          "effect": "-15 (Duration)",
+          "stacking": "none",
+          "anvil_cost": "12 XP levels (level × 4)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "minecraft:loyalty",
+    "name": "Loyalty",
+    "icon": "Loyal",
+    "rarity": "Uncommon",
+    "target": "Weapon",
+    "short_desc": "Thrown tridents come back.",
+    "long_desc": "A thrown trident automatically returns to the player after hitting its target or landing. Return speed increases with level.",
+    "max_level": 3,
+    "conflicts": [
+      "minecraft:riptide"
+    ],
+    "compatible": [
+      "trident"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Trident returns after throwing (slow)",
+        "advanced": {
+          "formula": "return_speed scales with L; distance-dependent",
+          "effect": "1 (Duration)",
+          "stacking": "none",
+          "anvil_cost": "1 XP levels (level × 1)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "Trident returns faster",
+        "advanced": {
+          "formula": "return_speed scales with L",
+          "effect": "2 (Duration)",
+          "stacking": "none",
+          "anvil_cost": "2 XP levels (level × 1)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "Trident returns quickly",
+        "advanced": {
+          "formula": "return_speed scales with L",
+          "effect": "3 (Duration)",
+          "stacking": "none",
+          "anvil_cost": "3 XP levels (level × 1)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "minecraft:channeling",
+    "name": "Channeling",
+    "icon": "Chan",
+    "rarity": "Very_rare",
+    "target": "Weapon",
+    "short_desc": "Tridents summon lightning in storms.",
+    "long_desc": "During a thunderstorm, a thrown trident that directly strikes a mob or player summons a lightning bolt on the target.",
+    "max_level": 1,
+    "conflicts": [
+      "minecraft:riptide"
+    ],
+    "compatible": [
+      "trident"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Summons lightning on mob hit during thunderstorms",
+        "advanced": {
+          "formula": "binary toggle  requires active thunderstorm + clear sky access to target",
+          "effect": "1 (Boolean)",
+          "stacking": "none",
+          "anvil_cost": "8 XP levels (level × 8)"
+        }
+      }
+    ],
+    "special_notes": [
+      "Only triggers during thunderstorms"
+    ]
+  },
+  {
+    "id": "minecraft:riptide",
+    "name": "Riptide",
+    "icon": "Ript",
+    "rarity": "Rare",
+    "target": "Weapon",
+    "short_desc": "Tridents launch you through water or rain.",
+    "long_desc": "Launching a trident while in water or rain propels the player forward instead of throwing the trident. Damage is dealt to any mob the player collides with during the launch.",
+    "max_level": 3,
+    "conflicts": [
+      "minecraft:loyalty",
+      "minecraft:channeling"
+    ],
+    "compatible": [
+      "trident"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Launches player forward in water or rain",
+        "advanced": {
+          "formula": "launch_velocity scales with L; requires water contact or active rain",
+          "effect": "1 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "Launches player further forward",
+        "advanced": {
+          "formula": "launch_velocity scales with L",
+          "effect": "2 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "8 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "Maximum launch propulsion",
+        "advanced": {
+          "formula": "launch_velocity scales with L",
+          "effect": "3 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "12 XP levels (level × 4)"
+        }
+      }
+    ],
+    "special_notes": [
+      "Mutually exclusive with Loyalty and Channeling"
+    ]
+  },
+  {
+    "id": "minecraft:impaling",
+    "name": "Impaling",
+    "icon": "Imp",
+    "rarity": "Rare",
+    "target": "Weapon",
+    "short_desc": "Tridents hit wet targets harder.",
+    "long_desc": "Increases trident damage against aquatic mobs. In Java Edition, also affects any mob or player currently in contact with water (including during rain).",
+    "max_level": 5,
+    "conflicts": [],
+    "compatible": [
+      "trident"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "+2.5 damage vs aquatic/wet mobs (Java: any mob in water/rain)",
+        "advanced": {
+          "formula": "bonus_damage = 2.5 * L",
+          "effect": "2.5 (Damage)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "+5.0 damage vs aquatic/wet mobs",
+        "advanced": {
+          "formula": "bonus_damage = 2.5 * L",
+          "effect": "5.0 (Damage)",
+          "stacking": "none",
+          "anvil_cost": "8 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "+7.5 damage vs aquatic/wet mobs",
+        "advanced": {
+          "formula": "bonus_damage = 2.5 * L",
+          "effect": "7.5 (Damage)",
+          "stacking": "none",
+          "anvil_cost": "12 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 4,
+        "short": "+10.0 damage vs aquatic/wet mobs",
+        "advanced": {
+          "formula": "bonus_damage = 2.5 * L",
+          "effect": "10.0 (Damage)",
+          "stacking": "none",
+          "anvil_cost": "16 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 5,
+        "short": "+12.5 damage vs aquatic/wet mobs",
+        "advanced": {
+          "formula": "bonus_damage = 2.5 * L",
+          "effect": "12.5 (Damage)",
+          "stacking": "none",
+          "anvil_cost": "20 XP levels (level × 4)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "minecraft:multishot",
+    "name": "Multishot",
+    "icon": "Multi",
+    "rarity": "Rare",
+    "target": "Ranged",
+    "short_desc": "Fires three arrows at once.",
+    "long_desc": "Fires 3 arrows simultaneously from a crossbow in a spread arc, but only consumes 1 arrow from inventory.",
+    "max_level": 1,
+    "conflicts": [
+      "minecraft:piercing"
+    ],
+    "compatible": [
+      "crossbow"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Fires 3 arrows, consumes 1",
+        "advanced": {
+          "formula": "projectiles_fired = 3; arrows_consumed = 1",
+          "effect": "3 (Boolean)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 4)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "minecraft:piercing",
+    "name": "Piercing",
+    "icon": "Pierce",
+    "rarity": "Uncommon",
+    "target": "Ranged",
+    "short_desc": "Arrows pass through targets.",
+    "long_desc": "Arrows fired from a crossbow pass through entities, hitting multiple targets in a straight line.",
+    "max_level": 4,
+    "conflicts": [
+      "minecraft:multishot"
+    ],
+    "compatible": [
+      "crossbow"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Arrow passes through 2 entities",
+        "advanced": {
+          "formula": "entities_pierced = L + 1",
+          "effect": "2 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "2 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "Arrow passes through 3 entities",
+        "advanced": {
+          "formula": "entities_pierced = L + 1",
+          "effect": "3 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "Arrow passes through 4 entities",
+        "advanced": {
+          "formula": "entities_pierced = L + 1",
+          "effect": "4 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "6 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 4,
+        "short": "Arrow passes through 5 entities",
+        "advanced": {
+          "formula": "entities_pierced = L + 1",
+          "effect": "5 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "8 XP levels (level × 2)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "minecraft:quick_charge",
+    "name": "Quick Charge",
+    "icon": "QC",
+    "rarity": "Uncommon",
+    "target": "Ranged",
+    "short_desc": "Loads crossbows faster.",
+    "long_desc": "Reduces crossbow loading time by 0.25 seconds per level.",
+    "max_level": 3,
+    "conflicts": [],
+    "compatible": [
+      "crossbow"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Reload time: 1.25s (base was 1.5s)",
+        "advanced": {
+          "formula": "load_time_seconds = 1.5 - (L * 0.25)",
+          "effect": "1.25 (Duration)",
+          "stacking": "none",
+          "anvil_cost": "2 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "Reload time: 1.00s",
+        "advanced": {
+          "formula": "load_time_seconds = 1.5 - (L * 0.25)",
+          "effect": "1.0 (Duration)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "Reload time: 0.75s",
+        "advanced": {
+          "formula": "load_time_seconds = 1.5 - (L * 0.25)",
+          "effect": "0.75 (Duration)",
+          "stacking": "none",
+          "anvil_cost": "6 XP levels (level × 2)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "minecraft:binding_curse",
+    "name": "Curse of Binding",
+    "icon": "CoBind",
+    "rarity": "Very_rare",
+    "target": "Armor",
+    "short_desc": "Equipped item cannot be removed.",
+    "long_desc": "Once equipped in an armor slot, the cursed item cannot be removed by the player. Only removed on death or when the item breaks from zero durability.",
+    "max_level": 1,
+    "conflicts": [],
+    "compatible": [
+      "helmet",
+      "chestplate",
+      "leggings",
+      "boots",
+      "carved_pumpkin",
+      "elytra",
+      "skull"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "stronghold",
+      "temple"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "⚠ CURSE: Cannot remove from armor slot until death or item breaks",
+        "advanced": {
+          "formula": "binary penalty  unequip blocked while player is alive in Survival/Adventure",
+          "effect": "-1 (Boolean)",
+          "stacking": "none",
+          "anvil_cost": "8 XP levels (level × 8)"
+        }
+      }
+    ],
+    "special_notes": [
+      "treasure",
+      "curse"
+    ]
+  },
+  {
+    "id": "minecraft:vanishing_curse",
+    "name": "Curse of Vanishing",
+    "icon": "CoVan",
+    "rarity": "Very_rare",
+    "target": "Any",
+    "short_desc": "Item disappears on death.",
+    "long_desc": "The item is permanently destroyed when the player dies instead of dropping on the ground as normal.",
+    "max_level": 1,
+    "conflicts": [],
+    "compatible": [
+      "sword",
+      "axe",
+      "pickaxe",
+      "shovel",
+      "hoe",
+      "shears",
+      "brush",
+      "spear",
+      "helmet",
+      "chestplate",
+      "leggings",
+      "boots",
+      "bow",
+      "crossbow",
+      "trident",
+      "fishing_rod",
+      "flint_and_steel",
+      "shield",
+      "elytra",
+      "carrot_on_a_stick",
+      "warped_fungus_on_a_stick"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "stronghold",
+      "temple",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "⚠ CURSE: Item permanently deleted on death",
+        "advanced": {
+          "formula": "binary penalty  item is destroyed on player death",
+          "effect": "-1 (Boolean)",
+          "stacking": "none",
+          "anvil_cost": "8 XP levels (level × 8)"
+        }
+      }
+    ],
+    "special_notes": [
+      "treasure",
+      "curse"
+    ]
+  },
+  {
+    "id": "minecraft:wind_burst",
+    "name": "Wind Burst",
+    "icon": "WBurst",
+    "rarity": "Rare",
+    "target": "Weapon",
+    "short_desc": "Smash attacks launch you upward.",
+    "long_desc": "When the mace's smash attack connects, a wind burst launches the wielder upward, enabling repeated aerial smash attacks.",
+    "max_level": 3,
+    "conflicts": [
+      "minecraft:breach",
+      "minecraft:density"
+    ],
+    "compatible": [
+      "mace"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "loot"
+    ],
+    "loot_locations": [
+      "ominous_vault"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Smash attack launches you upward",
+        "advanced": {
+          "formula": "launch_strength scales with L",
+          "effect": "1 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "Smash attack launches you higher",
+        "advanced": {
+          "formula": "launch_strength scales with L",
+          "effect": "2 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "8 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "Maximum launch height on smash",
+        "advanced": {
+          "formula": "launch_strength scales with L",
+          "effect": "3 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "12 XP levels (level × 4)"
+        }
+      }
+    ],
+    "special_notes": [
+      "treasure",
+      "Only found in Ominous Vaults"
+    ]
+  },
+  {
+    "id": "minecraft:density",
+    "name": "Density",
+    "icon": "Dense",
+    "rarity": "Rare",
+    "target": "Weapon",
+    "short_desc": "Smash attacks deal more fall damage.",
+    "long_desc": "Increases the bonus damage the mace deals per block fallen before a smash attack connects. Stacks with the mace's base fall damage bonus.",
+    "max_level": 5,
+    "conflicts": [
+      "minecraft:breach",
+      "minecraft:wind_burst"
+    ],
+    "compatible": [
+      "mace"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "loot"
+    ],
+    "loot_locations": [
+      "ominous_vault"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "+0.5 bonus damage per block fallen before smash",
+        "advanced": {
+          "formula": "bonus_damage_per_block_fallen = 0.5 * L",
+          "effect": "0.5 (Damage)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "+1.0 bonus damage per block fallen",
+        "advanced": {
+          "formula": "bonus_damage_per_block_fallen = 0.5 * L",
+          "effect": "1.0 (Damage)",
+          "stacking": "none",
+          "anvil_cost": "8 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "+1.5 bonus damage per block fallen",
+        "advanced": {
+          "formula": "bonus_damage_per_block_fallen = 0.5 * L",
+          "effect": "1.5 (Damage)",
+          "stacking": "none",
+          "anvil_cost": "12 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 4,
+        "short": "+2.0 bonus damage per block fallen",
+        "advanced": {
+          "formula": "bonus_damage_per_block_fallen = 0.5 * L",
+          "effect": "2.0 (Damage)",
+          "stacking": "none",
+          "anvil_cost": "16 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 5,
+        "short": "+2.5 bonus damage per block fallen",
+        "advanced": {
+          "formula": "bonus_damage_per_block_fallen = 0.5 * L",
+          "effect": "2.5 (Damage)",
+          "stacking": "none",
+          "anvil_cost": "20 XP levels (level × 4)"
+        }
+      }
+    ],
+    "special_notes": [
+      "treasure",
+      "Only found in Ominous Vaults"
+    ]
+  },
+  {
+    "id": "minecraft:breach",
+    "name": "Breach",
+    "icon": "Breach",
+    "rarity": "Rare",
+    "target": "Weapon",
+    "short_desc": "Smash attacks ignore armor.",
+    "long_desc": "Reduces the target's effective armor value when struck by a mace smash attack.",
+    "max_level": 4,
+    "conflicts": [
+      "minecraft:density",
+      "minecraft:wind_burst"
+    ],
+    "compatible": [
+      "mace"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "loot"
+    ],
+    "loot_locations": [
+      "ominous_vault"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Target armor effectiveness -15% on smash hit",
+        "advanced": {
+          "formula": "armor_effectiveness_multiplier = 1.0 - (0.15 * L)",
+          "effect": "0.15 (Percentage)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "Target armor effectiveness -30%",
+        "advanced": {
+          "formula": "armor_effectiveness_multiplier = 1.0 - (0.15 * L)",
+          "effect": "0.3 (Percentage)",
+          "stacking": "none",
+          "anvil_cost": "8 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "Target armor effectiveness -45%",
+        "advanced": {
+          "formula": "armor_effectiveness_multiplier = 1.0 - (0.15 * L)",
+          "effect": "0.45 (Percentage)",
+          "stacking": "none",
+          "anvil_cost": "12 XP levels (level × 4)"
+        }
+      },
+      {
+        "level": 4,
+        "short": "Target armor effectiveness -60%",
+        "advanced": {
+          "formula": "armor_effectiveness_multiplier = 1.0 - (0.15 * L)",
+          "effect": "0.6 (Percentage)",
+          "stacking": "none",
+          "anvil_cost": "16 XP levels (level × 4)"
+        }
+      }
+    ],
+    "special_notes": [
+      "treasure",
+      "Only found in Ominous Vaults"
+    ]
+  },
+  {
+    "id": "minecraft:lunge",
+    "name": "Lunge",
+    "icon": "Lunge",
+    "rarity": "Uncommon",
+    "target": "Weapon",
+    "short_desc": "Jab launches you forward.",
+    "long_desc": "Propels the player horizontally in the direction they are facing when performing a spear jab attack. Only activates on jab attacks (not charge attacks). Consumes hunger and 1 durability per use. Requires at least 6 hunger points to activate.",
+    "max_level": 3,
+    "conflicts": [
+      "minecraft:mending"
+    ],
+    "compatible": [
+      "spear"
+    ],
+    "source_mod": "minecraft",
+    "how_to_get": [
+      "enchanting_table",
+      "fishing",
+      "loot",
+      "librarian_trades"
+    ],
+    "loot_locations": [
+      "dungeon",
+      "mineshaft",
+      "temple",
+      "stronghold",
+      "bastion_remnant",
+      "shipwreck",
+      "ruined_portal"
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "short": "Jab launches you at 9.16 blocks/s; costs 1 hunger point",
+        "advanced": {
+          "formula": "launch_velocity_blocks_per_tick = 0.458 * L",
+          "effect": "0.458 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "2 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 2,
+        "short": "Jab launches you at 18.32 blocks/s; costs 2 hunger points",
+        "advanced": {
+          "formula": "launch_velocity_blocks_per_tick = 0.458 * L",
+          "effect": "0.916 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "4 XP levels (level × 2)"
+        }
+      },
+      {
+        "level": 3,
+        "short": "Jab launches you at 27.48 blocks/s; costs 3 hunger points",
+        "advanced": {
+          "formula": "launch_velocity_blocks_per_tick = 0.458 * L",
+          "effect": "1.374 (Multiplier)",
+          "stacking": "none",
+          "anvil_cost": "6 XP levels (level × 2)"
+        }
+      }
+    ]
+  }
+]

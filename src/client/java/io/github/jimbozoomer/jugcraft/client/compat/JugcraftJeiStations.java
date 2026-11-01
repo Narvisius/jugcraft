@@ -66,6 +66,7 @@ public final class JugcraftJeiStations {
             Jugcraft.LOGGER.warn("Could not read JEI station catalog", error);
         }
         addHandsOn(stations);
+        BotanicalJeiRecipes.append(stations);
         return stations;
     }
 

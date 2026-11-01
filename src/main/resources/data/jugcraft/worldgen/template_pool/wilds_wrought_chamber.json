@@ -1,0 +1,16 @@
+{
+  "name": "jugcraft:wilds_wrought_chamber",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "jugcraft:wilds/wroughtnaut_chamber",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "override_liquid_settings": "ignore_waterlogging"
+      }
+    }
+  ]
+}

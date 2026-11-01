@@ -12,7 +12,7 @@ import re
 import shutil
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "art/owner-library/originals/Oct23/Jimtafacts"
+SOURCE = ROOT / "art/owner-library/originals/Edited-2026-10-29/artifacts"
 TEXTURES = SOURCE / "assets/artifacts/textures/entity/wearable"
 TARGET = ROOT / "src/main/resources/assets/jugcraft/textures/entity/jimtafacts/wearable"
 JAVA = ROOT / "src/client/java/io/github/jimbozoomer/jugcraft/client/jimtafacts/mesh"

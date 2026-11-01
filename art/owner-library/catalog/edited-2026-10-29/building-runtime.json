@@ -1,0 +1,233 @@
+{
+  "blocks": 5296,
+  "items": 30,
+  "paintings": 90,
+  "sources": [
+    {
+      "folder": "stoneworks",
+      "namespace": "stoneworks",
+      "blocks": 572,
+      "items": 0,
+      "runtime": "newest/stoneworks",
+      "changes": "Native block behaviors; remapped identifiers; original model coordinates and texture bytes retained"
+    },
+    {
+      "folder": "paths",
+      "namespace": "mcwpaths",
+      "blocks": 317,
+      "items": 0,
+      "runtime": "newest/pathworks",
+      "changes": "Native block behaviors; remapped identifiers; original model coordinates and texture bytes retained"
+    },
+    {
+      "folder": "doors",
+      "namespace": "mcwdoors",
+      "blocks": 300,
+      "items": 13,
+      "runtime": "newest/doorworks",
+      "changes": "Native block behaviors; remapped identifiers; original model coordinates and texture bytes retained"
+    },
+    {
+      "folder": "blocks",
+      "namespace": "factory_blocks",
+      "blocks": 49,
+      "items": 0,
+      "runtime": "newest/factoryworks",
+      "changes": "Native block behaviors; remapped identifiers; original model coordinates and texture bytes retained"
+    },
+    {
+      "folder": "fences",
+      "namespace": "mcwfences",
+      "blocks": 198,
+      "items": 0,
+      "runtime": "newest/fenceworks",
+      "changes": "Native block behaviors; remapped identifiers; original model coordinates and texture bytes retained"
+    },
+    {
+      "folder": "fix",
+      "namespace": "chisel",
+      "blocks": 1293,
+      "items": 1,
+      "runtime": "newest/chiselworks",
+      "changes": "Native block behaviors; remapped identifiers; original model coordinates and texture bytes retained"
+    },
+    {
+      "folder": "bridge",
+      "namespace": "mcwbridges",
+      "blocks": 157,
+      "items": 1,
+      "runtime": "newest/bridgeworks",
+      "changes": "Native block behaviors; remapped identifiers; original model coordinates and texture bytes retained"
+    },
+    {
+      "folder": "windows",
+      "namespace": "mcwwindows",
+      "blocks": 346,
+      "items": 5,
+      "runtime": "newest/windowworks",
+      "changes": "Native block behaviors; remapped identifiers; original model coordinates and texture bytes retained"
+    },
+    {
+      "folder": "stairs",
+      "namespace": "mcwstairs",
+      "blocks": 240,
+      "items": 0,
+      "runtime": "newest/stairworks",
+      "changes": "Native block behaviors; remapped identifiers; original model coordinates and texture bytes retained"
+    },
+    {
+      "folder": "lights",
+      "namespace": "mcwlights",
+      "blocks": 145,
+      "items": 0,
+      "runtime": "newest/lightworks",
+      "changes": "Native block behaviors; remapped identifiers; original model coordinates and texture bytes retained"
+    },
+    {
+      "folder": "furniture",
+      "namespace": "mcwfurnitures",
+      "blocks": 776,
+      "items": 2,
+      "runtime": "newest/furnitureworks",
+      "changes": "Native block behaviors; remapped identifiers; original model coordinates and texture bytes retained"
+    },
+    {
+      "folder": "holiday",
+      "namespace": "mcwholidays",
+      "blocks": 334,
+      "items": 1,
+      "runtime": "newest/holidayworks",
+      "changes": "Native block behaviors; remapped identifiers; original model coordinates and texture bytes retained"
+    },
+    {
+      "folder": "twig",
+      "namespace": "twigs",
+      "blocks": 256,
+      "items": 3,
+      "runtime": "newest/twigworks",
+      "changes": "Native block behaviors; remapped identifiers; original model coordinates and texture bytes retained"
+    },
+    {
+      "folder": "home",
+      "namespace": "cozyhome",
+      "blocks": 313,
+      "items": 4,
+      "runtime": "newest/homeworks",
+      "changes": "Native block behaviors; remapped identifiers; original model coordinates and texture bytes retained"
+    }
+  ],
+  "remaining": [
+    {
+      "source": "doors/assets/mcwdoors/blockstates/cherry_waffle_door.json",
+      "reason": "Missing supplied block models",
+      "missing": [
+        "mcwdoors:block/waffle/cherry_waffle_door_bot",
+        "mcwdoors:block/waffle/cherry_waffle_door_bot_rh",
+        "mcwdoors:block/waffle/cherry_waffle_door_top",
+        "mcwdoors:block/waffle/cherry_waffle_door_top_rh"
+      ]
+    },
+    {
+      "source": "windows/assets/mcwwindows/blockstates/crimson_four_window.json",
+      "reason": "Legacy window alias without registered item; current supplied stem/planks variant imported"
+    },
+    {
+      "source": "windows/assets/mcwwindows/blockstates/crimson_plank_four_window.json",
+      "reason": "Legacy window alias without registered item; current supplied stem/planks variant imported"
+    },
+    {
+      "source": "windows/assets/mcwwindows/blockstates/crimson_plank_window.json",
+      "reason": "Legacy window alias without registered item; current supplied stem/planks variant imported"
+    },
+    {
+      "source": "windows/assets/mcwwindows/blockstates/crimson_plank_window2.json",
+      "reason": "Legacy window alias without registered item; current supplied stem/planks variant imported"
+    },
+    {
+      "source": "windows/assets/mcwwindows/blockstates/crimson_window.json",
+      "reason": "Legacy window alias without registered item; current supplied stem/planks variant imported"
+    },
+    {
+      "source": "windows/assets/mcwwindows/blockstates/crimson_window2.json",
+      "reason": "Legacy window alias without registered item; current supplied stem/planks variant imported"
+    },
+    {
+      "source": "windows/assets/mcwwindows/blockstates/stripped_crimson_log_four_window.json",
+      "reason": "Legacy window alias without registered item; current supplied stem/planks variant imported"
+    },
+    {
+      "source": "windows/assets/mcwwindows/blockstates/stripped_crimson_log_window.json",
+      "reason": "Legacy window alias without registered item; current supplied stem/planks variant imported"
+    },
+    {
+      "source": "windows/assets/mcwwindows/blockstates/stripped_crimson_log_window2.json",
+      "reason": "Legacy window alias without registered item; current supplied stem/planks variant imported"
+    },
+    {
+      "source": "windows/assets/mcwwindows/blockstates/stripped_warped_log_four_window.json",
+      "reason": "Legacy window alias without registered item; current supplied stem/planks variant imported"
+    },
+    {
+      "source": "windows/assets/mcwwindows/blockstates/stripped_warped_log_window.json",
+      "reason": "Legacy window alias without registered item; current supplied stem/planks variant imported"
+    },
+    {
+      "source": "windows/assets/mcwwindows/blockstates/stripped_warped_log_window2.json",
+      "reason": "Legacy window alias without registered item; current supplied stem/planks variant imported"
+    },
+    {
+      "source": "windows/assets/mcwwindows/blockstates/warped_four_window.json",
+      "reason": "Legacy window alias without registered item; current supplied stem/planks variant imported"
+    },
+    {
+      "source": "windows/assets/mcwwindows/blockstates/warped_plank_four_window.json",
+      "reason": "Legacy window alias without registered item; current supplied stem/planks variant imported"
+    },
+    {
+      "source": "windows/assets/mcwwindows/blockstates/warped_plank_window.json",
+      "reason": "Legacy window alias without registered item; current supplied stem/planks variant imported"
+    },
+    {
+      "source": "windows/assets/mcwwindows/blockstates/warped_plank_window2.json",
+      "reason": "Legacy window alias without registered item; current supplied stem/planks variant imported"
+    },
+    {
+      "source": "windows/assets/mcwwindows/blockstates/warped_window.json",
+      "reason": "Legacy window alias without registered item; current supplied stem/planks variant imported"
+    },
+    {
+      "source": "windows/assets/mcwwindows/blockstates/warped_window2.json",
+      "reason": "Legacy window alias without registered item; current supplied stem/planks variant imported"
+    },
+    {
+      "source": "home/assets/cozyhome/blockstates/mangrove_zaisu.json",
+      "reason": "Missing supplied block models",
+      "missing": [
+        "cozyhome:block/chair/special/mangrove_zaisu/mangrove_zaisu_0",
+        "cozyhome:block/chair/special/mangrove_zaisu/mangrove_zaisu_1",
+        "cozyhome:block/chair/special/mangrove_zaisu/mangrove_zaisu_10",
+        "cozyhome:block/chair/special/mangrove_zaisu/mangrove_zaisu_11",
+        "cozyhome:block/chair/special/mangrove_zaisu/mangrove_zaisu_12",
+        "cozyhome:block/chair/special/mangrove_zaisu/mangrove_zaisu_13",
+        "cozyhome:block/chair/special/mangrove_zaisu/mangrove_zaisu_14",
+        "cozyhome:block/chair/special/mangrove_zaisu/mangrove_zaisu_15",
+        "cozyhome:block/chair/special/mangrove_zaisu/mangrove_zaisu_2",
+        "cozyhome:block/chair/special/mangrove_zaisu/mangrove_zaisu_3",
+        "cozyhome:block/chair/special/mangrove_zaisu/mangrove_zaisu_4",
+        "cozyhome:block/chair/special/mangrove_zaisu/mangrove_zaisu_5",
+        "cozyhome:block/chair/special/mangrove_zaisu/mangrove_zaisu_6",
+        "cozyhome:block/chair/special/mangrove_zaisu/mangrove_zaisu_7",
+        "cozyhome:block/chair/special/mangrove_zaisu/mangrove_zaisu_8",
+        "cozyhome:block/chair/special/mangrove_zaisu/mangrove_zaisu_9"
+      ]
+    },
+    {
+      "source": "home/assets/cozyhome/blockstates/saddle_block.json",
+      "reason": "Missing supplied block models",
+      "missing": [
+        "cozyhome:block/saddle_block"
+      ]
+    }
+  ],
+  "validation": "Native registration and data reload passed in combined run; gameplay and rendered-client validation ongoing."
+}
