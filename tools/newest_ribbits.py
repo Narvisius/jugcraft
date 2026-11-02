@@ -4,11 +4,30 @@ import json, shutil
 from newest_building import ROOT, RES, SOURCE, read, write, map_value
 from newest_twigs import recipe
 import nouveau_nbt
+from menagerie_data import loot
 BASE=SOURCE/'frogs'
 A=BASE/'assets/ribbits'
 D=BASE/'data/ribbits'
 OUT=RES/'assets/jugcraft'
 def mapped(v,resource=False):return map_value(v,'ribbits','ribbits',resource)
+
+def chest_loot():
+ # Supplied 1.21+ files use singular loot_table; the old importer only read
+ # loot_tables, leaving all 59 village chest references without their six tables.
+ result={}
+ for folder in ('loot_tables','loot_table'):
+  for path in (D/folder/'chests').glob('*.json'):
+    value=loot(mapped(read(path)))
+    def empty_entries(node):
+     if isinstance(node,list):
+      for child in node:empty_entries(child)
+     elif isinstance(node,dict):
+      if node.get('type')=='minecraft:item' and node.get('name')=='minecraft:air':
+       node['type']='minecraft:empty';node.pop('name')
+      for child in node.values():empty_entries(child)
+    empty_entries(value)
+    result['ribbits_chests/'+path.stem]=value
+ return result
 def copy(a,b):
  b.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(a,b)
 def tag(path,values):
@@ -28,6 +47,7 @@ def data(v):
  if 'Name' in v:return {'id':mapped(v['Name']),**({'properties':v['Properties']} if 'Properties' in v else {})}
  return {k:data(x) for k,x in v.items()}
 def main():
+ for name,value in chest_loot().items():write(RES/'data/jugcraft/loot_table'/(name+'.json'),value)
  for folder in ('textures','sounds'):
   for p in (A/folder).rglob('*'):
    if p.is_file():copy(p,OUT/folder/'newest/ribbits'/p.relative_to(A/folder))

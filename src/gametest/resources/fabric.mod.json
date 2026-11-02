@@ -13,6 +13,7 @@
       "io.github.jimbozoomer.jugcraft.test.StorageCrateMultiplayerHarness"
     ],
     "fabric-gametest": [
+      "io.github.jimbozoomer.jugcraft.test.FestivalRegressionGameTests",
       "io.github.jimbozoomer.jugcraft.building.TwigworksWorldGameTests",
       "io.github.jimbozoomer.jugcraft.test.EquipmentAccessGameTests",
       "io.github.jimbozoomer.jugcraft.test.CraftingChoicesGameTests",
@@ -45,6 +46,7 @@
       "io.github.jimbozoomer.jugcraft.test.CursedMirrorGameTests",
       "io.github.jimbozoomer.jugcraft.test.CandyCavityGameTests",
       "io.github.jimbozoomer.jugcraft.test.TownLifeGameTests",
+      "io.github.jimbozoomer.jugcraft.test.CustomNpcGameTests",
       "io.github.jimbozoomer.jugcraft.test.TownRoutineGameTests",
       "io.github.jimbozoomer.jugcraft.test.WildenStalkerGameTests",
       "io.github.jimbozoomer.jugcraft.test.ArrowPickupGameTests",
@@ -410,7 +412,13 @@
       "io.github.jimbozoomer.jugcraft.menagerie.NewestHouseholdGameTests",
       "io.github.jimbozoomer.jugcraft.test.NewestManaGameTests",
       "io.github.jimbozoomer.jugcraft.test.NewestBackpackGameTests",
-      "io.github.jimbozoomer.jugcraft.menagerie.NewestLumiseneGameTests"
+      "io.github.jimbozoomer.jugcraft.menagerie.NewestLumiseneGameTests",
+      "io.github.jimbozoomer.jugcraft.test.FoodServingGameTests",
+      "io.github.jimbozoomer.jugcraft.test.BoardGameTests",
+      "io.github.jimbozoomer.jugcraft.test.BoardWagerTests",
+      "io.github.jimbozoomer.jugcraft.test.PetRosterTests",
+      "io.github.jimbozoomer.jugcraft.test.PetBehaviorsGameTests",
+      "io.github.jimbozoomer.jugcraft.test.ServerUtilitiesTests"
     ],
     "jei_mod_plugin": [
       "io.github.jimbozoomer.jugcraft.test.JeiStationClientGameTests$WithJei$Probe"
@@ -713,7 +721,11 @@
       "io.github.jimbozoomer.jugcraft.test.HerobrineNetworkTests",
       "io.github.jimbozoomer.jugcraft.test.LivingCityClientGameTests",
       "io.github.jimbozoomer.jugcraft.test.StarterGuidanceClientGameTests",
-      "io.github.jimbozoomer.jugcraft.test.NewestCollectionClientTests"
+      "io.github.jimbozoomer.jugcraft.test.NewestCollectionClientTests",
+      "io.github.jimbozoomer.jugcraft.test.FoodServingClientGameTests",
+      "io.github.jimbozoomer.jugcraft.test.BoardGameClientTests",
+      "io.github.jimbozoomer.jugcraft.test.PetInventoryClientTests",
+      "io.github.jimbozoomer.jugcraft.test.ServerUtilitiesClientTests"
     ]
   },
   "depends": {

@@ -15,6 +15,11 @@ public final class ImportedModelAtlasClientTests implements FabricClientGameTest
             var resources = mc.getResourceManager();
             var blocks = mc.getAtlasManager().getAtlasOrThrow(AtlasIds.BLOCKS);
             var items = mc.getAtlasManager().getAtlasOrThrow(AtlasIds.ITEMS);
+            var required = new HashSet<Identifier>();
+            try(var reader=new java.io.InputStreamReader(java.util.Objects.requireNonNull(
+                    getClass().getResourceAsStream("/imported-atlas-required.json")),java.nio.charset.StandardCharsets.UTF_8)) {
+                for(var value:JsonParser.parseReader(reader).getAsJsonArray())required.add(Identifier.parse(value.getAsString()));
+            } catch(java.io.IOException e){throw new AssertionError(e);}
             var checked = new HashSet<Identifier>();
             var missing = new ArrayList<String>();
             for (var entry : resources.listResources("models", id -> id.getNamespace().equals("jugcraft") && id.getPath().endsWith(".json")).entrySet()) {
@@ -26,11 +31,17 @@ public final class ImportedModelAtlasClientTests implements FabricClientGameTest
                         String value = texture.getValue().getAsString();
                         if (!value.startsWith("jugcraft:")) continue;
                         var id = Identifier.parse(value);
+                        // Parent defaults may be replaced by a child; absent, unused template
+                        // materials are not rendered. Required effective materials are checked below.
+                        if (!required.contains(id) && resources.getResource(Identifier.fromNamespaceAndPath(
+                                id.getNamespace(), "textures/"+id.getPath()+".png")).isEmpty()) continue;
                         if (checked.add(id) && blocks.getSprite(id) == blocks.missingSprite() && items.getSprite(id) == items.missingSprite())
                             missing.add(id + " used by " + entry.getKey());
                     }
                 } catch (java.io.IOException e) { throw new AssertionError(entry.getKey().toString(), e); }
             }
+            for(var id:required) if(checked.add(id) && blocks.getSprite(id)==blocks.missingSprite()
+                    && items.getSprite(id)==items.missingSprite())missing.add(id+" required by resolved native model");
             if (!missing.isEmpty()) throw new AssertionError("Unstitched model textures: " + missing);
             if (checked.size() < 11000) throw new AssertionError("Incomplete model audit: " + checked.size());
             System.out.println("Jugcraft runtime model atlas audit: " + checked.size() + " unique textures resolved.");
@@ -80,6 +91,27 @@ public final class ImportedModelAtlasClientTests implements FabricClientGameTest
             c.waitTicks(15);
             c.takeScreenshot("oct29_reported_item_models");
             c.runOnClient(mc -> mc.player.closeContainer());
+            var gallery = new ArrayList<String>();
+            try(var reader=new java.io.InputStreamReader(java.util.Objects.requireNonNull(
+                    getClass().getResourceAsStream("/imported-visual-gallery.json")),java.nio.charset.StandardCharsets.UTF_8)){
+                for(var id:JsonParser.parseReader(reader).getAsJsonArray())gallery.add(id.getAsString());
+            }catch(java.io.IOException e){throw new AssertionError(e);}
+            for(int start=0;start<gallery.size();start+=54){
+                var page=gallery.subList(start,Math.min(start+54,gallery.size()));
+                world.getServer().runOnServer(server->{
+                    var inventory=new net.minecraft.world.SimpleContainer(54);int slot=0;
+                    for(String name:page){
+                        var item=net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(Identifier.parse(name));
+                        if(item==net.minecraft.world.item.Items.AIR)throw new AssertionError("Gallery item absent: "+name);
+                        inventory.setItem(slot++,new net.minecraft.world.item.ItemStack(item));
+                    }
+                    server.getPlayerList().getPlayers().getFirst().openMenu(new net.minecraft.world.SimpleMenuProvider((id,inv,who)->
+                        new net.minecraft.world.inventory.ChestMenu(net.minecraft.world.inventory.MenuType.GENERIC_9x6,id,inv,inventory,6),
+                        net.minecraft.network.chat.Component.literal("Original art repair gallery")));
+                });
+                c.waitTicks(15);c.takeScreenshot("nov1_original_art_gallery_"+(start/54));
+                c.runOnClient(mc->mc.player.closeContainer());
+            }
         }
     }
 }

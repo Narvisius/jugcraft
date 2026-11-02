@@ -88,7 +88,7 @@ public final class RaiderRaids {
 
 	/** Whether raids come at all: the feature is on and {@code raiders.raids} is not {@code off}. */
 	public static boolean enabled() {
-		return JugcraftConfig.isFeatureEnabled(JugcraftRaiders.FEATURE) && !"off".equalsIgnoreCase(JugcraftConfig.textOption("raiders.raids"));
+		return !io.github.jimbozoomer.jugcraft.season.JugcraftSeasons.thanksgivingTruce() && JugcraftConfig.isFeatureEnabled(JugcraftRaiders.FEATURE) && !"off".equalsIgnoreCase(JugcraftConfig.textOption("raiders.raids"));
 	}
 
 	private static long days(String option, int fallback) {
@@ -137,13 +137,14 @@ public final class RaiderRaids {
 	 * marching. Returns the raid, or null if there was nowhere for it to gather.
 	 */
 	public static @Nullable Raid start(ServerLevel level, @Nullable BlockPos objective, int raidLevel, RandomSource random) {
-        if (objective == null) return null;
+        if (objective == null || io.github.jimbozoomer.jugcraft.season.JugcraftSeasons.thanksgivingTruce()) return null;
 		BlockPos gather = gatheringPoint(level, objective, random);
 		return gather == null ? null : start(level, objective, gather, raidLevel, random);
 	}
 
 	/** Starts a raid of {@code raidLevel} on {@code objective}, its party gathering at {@code gather}. */
-	public static Raid start(ServerLevel level, BlockPos objective, BlockPos gather, int raidLevel, RandomSource random) {
+	public static @Nullable Raid start(ServerLevel level, BlockPos objective, BlockPos gather, int raidLevel, RandomSource random) {
+        if (io.github.jimbozoomer.jugcraft.season.JugcraftSeasons.thanksgivingTruce()) return null;
 		raidLevel = Mth.clamp(raidLevel, 1, MAX_LEVEL);
 		State state = State.get(level);
 		Raid raid = new Raid(UUID.randomUUID(), objective.immutable(), raidLevel, level.getGameTime(), 0, 0, List.of(), true);
@@ -343,6 +344,10 @@ public final class RaiderRaids {
 		/** Updates every raid: its bar and who sees it, and whether it is won or withdraws. */
 		void update(ServerLevel world) {
 			for (Raid raid : List.copyOf(raids)) {
+                if (io.github.jimbozoomer.jugcraft.season.JugcraftSeasons.thanksgivingTruce()) {
+                    end(world, raid, false);
+                    continue;
+                }
 				BlockPos town = Town.origin(world);
                 if (!raid.cityPolicy && (town == null || !raid.objective.equals(Town.centre(town)))) {
                     end(world, raid, false);

@@ -32,7 +32,7 @@ public class RaidHornItem extends Item {
 		if (!(level instanceof ServerLevel server) || !(player instanceof ServerPlayer blower)) {
 			return InteractionResult.SUCCESS;
 		}
-		String refusal = RaiderRaids.enabled() ? server.dimension() != Level.OVERWORLD ? "dimension"
+		String refusal = io.github.jimbozoomer.jugcraft.season.JugcraftSeasons.thanksgivingTruce() ? "thanksgiving" : RaiderRaids.enabled() ? server.dimension() != Level.OVERWORLD ? "dimension"
 				: server.getDifficulty() == Difficulty.PEACEFUL ? "peaceful" : RaiderRaids.raids(server).isEmpty() ? null : "under_way" : "off";
 		if (refusal != null) {
 			player.sendOverlayMessage(Component.translatable("message.jugcraft.raid_horn." + refusal));

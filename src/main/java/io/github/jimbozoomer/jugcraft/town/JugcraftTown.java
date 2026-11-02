@@ -73,6 +73,7 @@ public final class JugcraftTown {
 		TownDecor.register();
 		TownsfolkCare.register();
 		TownCommand.register();
+		CustomNpcs.register();
 		ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
 			ShopMenu.clear();
 			AtmMenu.clear();

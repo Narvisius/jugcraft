@@ -1,0 +1,40 @@
+{
+  "forge_tier": 4,
+  "magic_circle": "jugcraft:forbidden_create_item",
+  "main_ingredient": {
+    "item": "jugcraft:forbidden_aurealic_obsidian_skull"
+  },
+  "inputs": [
+    {
+      "amount": 1,
+      "ingredient": {
+        "item": "jugcraft:forbidden_eternal_stella"
+      }
+    },
+    {
+      "amount": 2,
+      "ingredient": {
+        "item": "jugcraft:forbidden_dragon_scale"
+      }
+    },
+    {
+      "amount": 4,
+      "ingredient": {
+        "item": "jugcraft:forbidden_obsidiansteel_ingot"
+      }
+    }
+  ],
+  "essences": {
+    "aureal": 800,
+    "blood": 1000,
+    "souls": 4,
+    "experience": 400
+  },
+  "result": {
+    "type": "jugcraft:forbidden_transmute_input",
+    "result_item": {
+      "id": "jugcraft:forbidden_eternal_obsidian_skull",
+      "count": 1
+    }
+  }
+}

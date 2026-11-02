@@ -82,6 +82,34 @@
         }
       ],
       "rolls": 1.0
+    },
+    {
+      "name": "acquisition_nov1_ars_additions_lost_codex_entry",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:ars_additions_lost_codex_entry"
+        }
+      ],
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.2
+      }
+    },
+    {
+      "name": "acquisition_nov1_ars_additions_ancient_codex_entry",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:ars_additions_ancient_codex_entry"
+        }
+      ],
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.1
+      }
     }
   ],
   "random_sequence": "jugcraft:ars_additions_chests/warp_nexus"

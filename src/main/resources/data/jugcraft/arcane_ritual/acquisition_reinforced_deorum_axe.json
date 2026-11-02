@@ -1,0 +1,34 @@
+{
+  "forge_tier": 2,
+  "magic_circle": "jugcraft:forbidden_create_item",
+  "main_ingredient": {
+    "item": "minecraft:diamond_axe"
+  },
+  "inputs": [
+    {
+      "amount": 4,
+      "ingredient": {
+        "item": "jugcraft:forbidden_deorum_ingot"
+      }
+    },
+    {
+      "amount": 2,
+      "ingredient": {
+        "item": "jugcraft:forbidden_stellarite_piece"
+      }
+    }
+  ],
+  "essences": {
+    "aureal": 400,
+    "blood": 500,
+    "souls": 2,
+    "experience": 200
+  },
+  "result": {
+    "type": "jugcraft:forbidden_transmute_input",
+    "result_item": {
+      "id": "jugcraft:forbidden_reinforced_deorum_axe",
+      "count": 1
+    }
+  }
+}

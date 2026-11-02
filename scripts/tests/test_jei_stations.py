@@ -69,7 +69,14 @@ class StationRecipes(unittest.TestCase):
         # Non-processor crafting serializers and the workshop's per-station categories.
         covered |= {'jugcraft:' + x for x in ('starter_working', 'gun_attachment', 'gun_attachment_removal',
             'key_copying', 'beast_bison_upgrade', 'beast_mimicream_repair', 'household_door_mat_copy',
-            'jimta_cable_anchors', 'jimta_facade', 'jimta_factory_facade', 'jimta_factory_facade_phase', 'jimta_compact_part')}
+            'jimta_cable_anchors', 'jimta_facade', 'jimta_factory_facade', 'jimta_factory_facade_phase', 'jimta_compact_part',
+            # Dynamic vanilla crafting/smithing recipes, not machine processors.
+            'amends_dye_bottle', 'aquatic_fillet', 'arcane_aureal_bottle', 'arcane_modifier',
+            'botanical_armor_customization', 'botanical_armor_upgrade', 'botanical_water_shaped', 'botanical_blaster_crafting', 'botanical_cosmetic_attachment',
+            'botanical_laputa_upgrade', 'botanical_lens_crafting', 'botanical_resolute_ivy',
+            'botanical_spell_cloth', 'packworks_tier_upgrade', 'supps_antique_book',
+            'supps_bubble_fill', 'supps_confetti_dye', 'supps_flag_patterns',
+            'supps_hidden_item', 'supps_rope_arrow_charge')}
         for path in (stations.RES / 'data/jugcraft/recipe').rglob('*.json'):
             kind = json.loads(path.read_text(encoding='utf-8'))['type']
             if kind.startswith('jugcraft:'):

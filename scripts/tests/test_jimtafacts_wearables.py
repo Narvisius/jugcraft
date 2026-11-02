@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 class JimtafactsWearableAssetsTests(unittest.TestCase):
     def test_original_wearable_atlases_are_complete_and_byte_identical(self):
-        source = ROOT / 'art/owner-library/originals/Oct23/Jimtafacts/assets/artifacts/textures/entity/wearable'
+        source = ROOT / 'art/owner-library/originals/Edited-2026-10-29/artifacts/assets/artifacts/textures/entity/wearable'
         manifest = json.loads((ROOT / 'art/owner-library/catalog/edited-2026-10-23-jimtafacts/wearable-copies.json').read_text(encoding='utf-8'))
         expected = {p.relative_to(ROOT).as_posix() for p in source.rglob('*.png')}
         self.assertEqual(expected, {row['source'] for row in manifest['textures']})

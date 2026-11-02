@@ -32,6 +32,23 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 /** Seasons: the server's calendar and events, the operator's settings and command, the palette, the biome tags and winter snow. */
 public class SeasonGameTests {
+    @GameTest
+    public void thanksgivingTruceIsOnlyTheHoliday(GameTestHelper helper) {
+        var settings = SeasonCalendar.Settings.DEFAULT;
+        for (int year = 2026; year <= 2032; year++) {
+            var day = SeasonCalendar.harvestFeastDay(SeasonCalendar.Feast.US, year);
+            helper.assertTrue(settings.thanksgivingTruceOn(day), "Holiday truce " + year);
+            helper.assertTrue(!settings.thanksgivingTruceOn(day.minusDays(1)) && !settings.thanksgivingTruceOn(day.plusDays(1)), "No extra truce days");
+        }
+        var preview=settings.withFixedDate(MonthDay.of(11,26));
+        helper.assertTrue(preview.thanksgivingTruceOn(LocalDate.of(2026,6,1)), "Server date preview controls truce");
+        var off=new SeasonCalendar.Settings(settings.mode(),false,settings.zone(),false,2,SeasonCalendar.Feast.OFF,4,null,null);
+        helper.assertTrue(!off.thanksgivingTruceOn(LocalDate.of(2026,11,26)), "Disabled feast does not force a truce");
+        var canada=new SeasonCalendar.Settings(settings.mode(),false,settings.zone(),false,2,SeasonCalendar.Feast.CANADA,4,null,null);
+        helper.assertTrue(canada.thanksgivingTruceOn(LocalDate.of(2026,10,12)) && !canada.thanksgivingTruceOn(LocalDate.of(2026,11,26)), "Configured Canadian holiday respected");
+        helper.succeed();
+    }
+
 	@GameTest
 	public void seasonDaysFollowTheCalendar(GameTestHelper helper) {
 		// 20 October is peak autumn in the north and spring (half a year on) in the south.

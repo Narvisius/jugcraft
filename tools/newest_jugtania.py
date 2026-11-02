@@ -286,6 +286,11 @@ def main():
   v=read(p);typ=v.get('type','')
   if typ=='botania:gog_alternation':v=v['base'];typ=v['type']
   if typ in ['botania:mana_upgrade','botania:mana_upgrade_shapeless']:v['type']=typ='minecraft:crafting_shaped' if typ=='botania:mana_upgrade' else 'minecraft:crafting_shapeless'
+  if typ in ('botania:armor_upgrade','botania:water_bottle_matching_shaped'):
+   native='botanical_armor_upgrade' if typ=='botania:armor_upgrade' else 'botanical_water_shaped'
+   converted=recipe(mapped(v));converted['type']='jugcraft:'+native
+   write(RES/'data/jugcraft/recipe/jugtania'/p.relative_to(D/'recipes'),converted)
+   continue
   if typ=='botania:twig_wand':v['type']=typ='minecraft:crafting_shaped'
   if refs({k:x for k,x in v.items() if k!='brew'})-known:continue
   if typ.startswith('minecraft:'):

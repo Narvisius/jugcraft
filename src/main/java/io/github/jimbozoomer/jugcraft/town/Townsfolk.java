@@ -31,6 +31,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -52,6 +53,10 @@ public class Townsfolk extends PathfinderMob {
 	private static final EntityDataAccessor<String> SKIN = SynchedEntityData.defineId(Townsfolk.class, EntityDataSerializers.STRING);
 	/** What they are doing at their place ({@link TownRoutine.Activity}), for the client's poses. */
 	private static final EntityDataAccessor<Integer> ACTIVITY = SynchedEntityData.defineId(Townsfolk.class, EntityDataSerializers.INT);
+	/** A custom NPC's player skin (drawn when the skin is {@link CustomNpcs#PLAYER_SKIN}); the default is never drawn. */
+	private static final EntityDataAccessor<ResolvableProfile> PROFILE = SynchedEntityData.defineId(Townsfolk.class, EntityDataSerializers.RESOLVABLE_PROFILE);
+	private static final EntityDataAccessor<Boolean> CUSTOM_NPC = SynchedEntityData.defineId(Townsfolk.class, EntityDataSerializers.BOOLEAN);
+	private static final ResolvableProfile NO_PROFILE = ResolvableProfile.createUnresolved("");
 	public static final int DECORATOR_REACH = 96;
 	public static final int DECORATE_TIMEOUT = 900;
 
@@ -67,6 +72,8 @@ public class Townsfolk extends PathfinderMob {
 	private int placesTick = -1;
 	/** Where they rest tonight, having given up on reaching their bed (cleared at dawn). */
 	private @Nullable BlockPos nightRest;
+	/** An operator's custom NPC or guard ({@link CustomNpcs}); null for the town's own residents. */
+	private CustomNpcs.@Nullable Data custom;
 
 	public Townsfolk(EntityType<? extends Townsfolk> type, Level level) {
 		super(type, level);
@@ -85,6 +92,8 @@ public class Townsfolk extends PathfinderMob {
 		super.defineSynchedData(builder);
 		builder.define(SKIN, "townsfolk_1");
 		builder.define(ACTIVITY, 0);
+		builder.define(PROFILE, NO_PROFILE);
+		builder.define(CUSTOM_NPC, false);
 	}
 
 	@Override
@@ -110,6 +119,7 @@ public class Townsfolk extends PathfinderMob {
 		});
 		// A guard glances at Herobrine once in a while; it never targets him (creatures/herobrine/HerobrineGlanceGoal).
 		goalSelector.addGoal(1, new io.github.jimbozoomer.jugcraft.creatures.herobrine.HerobrineGlanceGoal(this, this::isGuard));
+		goalSelector.addGoal(2, new CustomNpcs.PatrolGoal(this));
 		goalSelector.addGoal(2, new ReturnToPlaceGoal());
         goalSelector.addGoal(1, new GateDefenseGoal());
 		goalSelector.addGoal(3, new DecorateGoal());
@@ -177,8 +187,43 @@ public class Townsfolk extends PathfinderMob {
 		return home;
 	}
 
+    @Override public boolean canAttack(net.minecraft.world.entity.LivingEntity target) {
+        if (custom != null && (target instanceof Player || target instanceof net.minecraft.world.entity.Mob mob && io.github.jimbozoomer.jugcraft.pets.Pets.owner(mob) != null)) return false;
+        return super.canAttack(target);
+    }
+
 	public boolean isGuard() {
 		return role.equals("guard") || role.equals("flak_guard") || role.equals("mecha_guard");
+	}
+
+	/** An operator's custom NPC or guard's settings ({@link CustomNpcs}); null for the town's own residents. */
+	public CustomNpcs.@Nullable Data custom() {
+		return custom;
+	}
+
+	void custom(CustomNpcs.Data data) {
+		this.custom = data;
+        entityData.set(CUSTOM_NPC, data != null);
+	}
+
+	/** A custom NPC's player skin (synced); meaningful only while {@link #skin()} is {@link CustomNpcs#PLAYER_SKIN}. */
+	public boolean isCustomNpc() { return entityData.get(CUSTOM_NPC); }
+
+	public ResolvableProfile profile() {
+		return entityData.get(PROFILE);
+	}
+
+	void setProfile(ResolvableProfile profile) {
+		entityData.set(PROFILE, profile);
+	}
+
+	void setSkin(String skin) {
+		entityData.set(SKIN, skin);
+	}
+
+	/** Moves a custom NPC's stand post. */
+	void post(BlockPos post) {
+		this.home = post.immutable();
 	}
 
 	/** What they are doing at their place now (synced; NONE on the way somewhere, asleep, or listening). */
@@ -227,6 +272,9 @@ public class Townsfolk extends PathfinderMob {
 
 	/** Where they belong now: work by day, their gathering in the evening, their bed (or where they rest) at night. */
 	public BlockPos anchor() {
+		if (custom != null) {
+			return CustomNpcs.anchor(this, custom);
+		}
 		TownRoutine.Places mine = places();
 		if (mine == null) {
 			return home;
@@ -271,6 +319,9 @@ public class Townsfolk extends PathfinderMob {
 
 	/** How far from their place a role wanders. */
 	public int range() {
+		if (custom != null) {
+			return CustomNpcs.range(custom);
+		}
 		return switch (role) {
 			case "guard", "mecha_guard" -> 20;
             case "flak_guard" -> 0;
@@ -297,6 +348,9 @@ public class Townsfolk extends PathfinderMob {
 	@Override
 	protected void customServerAiStep(ServerLevel level) {
 		super.customServerAiStep(level);
+		if (custom != null && tickCount % 20 == 0 && CustomNpcs.tick(level, this, custom)) {
+			return;
+		}
 		// Asleep only in their own bed and only at night: one loaded asleep in daylight (or whose bed has moved) wakes.
 		if (isSleeping() && (!bedtime(scheduleTime()) || !getSleepingPos().map(at -> at.equals(bed())).orElse(false))) {
 			stopSleeping();
@@ -316,7 +370,7 @@ public class Townsfolk extends PathfinderMob {
 				return;
 			}
 			boolean halloween = TownDecor.theme().equals("halloween");
-			boolean costumed = !isGuard() && (role.equals("townsfolk") || role.equals("decorator") || role.equals("vendor"));
+			boolean costumed = custom == null && !isGuard() && (role.equals("townsfolk") || role.equals("decorator") || role.equals("vendor"));
 			ItemStack head = halloween && costumed ? new ItemStack(Items.CARVED_PUMPKIN) : ItemStack.EMPTY;
 			if (!ItemStack.matches(getItemBySlot(EquipmentSlot.HEAD), head)) {
 				setItemSlot(EquipmentSlot.HEAD, head);
@@ -356,6 +410,9 @@ public class Townsfolk extends PathfinderMob {
         }
         listener = player;
 		listeningUntil = tickCount + 80;
+		if (custom != null) {
+			return CustomNpcs.talk(this, server, custom);
+		}
         if ((player.isShiftKeyDown() || role.equals("mayor")) && !TownMentors.lesson(this).isEmpty()) {
             TownMentors.consult(server, this);
             return InteractionResult.SUCCESS;
@@ -423,6 +480,9 @@ public class Townsfolk extends PathfinderMob {
 		output.putString("skin", skin());
 		output.store("home", BlockPos.CODEC, home);
 		output.putInt("spot", spot);
+		if (custom != null) {
+			output.store(CustomNpcs.SAVE_KEY, CustomNpcs.Data.CODEC, custom);
+		}
 	}
 
 	@Override
@@ -434,6 +494,11 @@ public class Townsfolk extends PathfinderMob {
 		entityData.set(SKIN, input.getStringOr("skin", "townsfolk_1"));
 		home = input.read("home", BlockPos.CODEC).orElse(blockPosition());
 		spot = input.getIntOr("spot", -1);
+		custom = input.read(CustomNpcs.SAVE_KEY, CustomNpcs.Data.CODEC).orElse(null);
+        entityData.set(CUSTOM_NPC, custom != null);
+		if (custom != null) {
+			CustomNpcs.loaded(this);
+		}
 	}
 
     protected long scheduleTime() { return level().getOverworldClockTime(); }
@@ -515,7 +580,7 @@ public class Townsfolk extends PathfinderMob {
         private int checkAt;
         GateDefenseGoal() { setFlags(EnumSet.of(Flag.MOVE)); }
         @Override public boolean canUse() {
-            if (!isGuard() || role.equals("flak_guard") || isPassenger() || getTarget() != null
+            if (custom != null || !isGuard() || role.equals("flak_guard") || isPassenger() || getTarget() != null
                     || tickCount < checkAt || !(level() instanceof ServerLevel level)) return false;
             checkAt = tickCount + 40;
             BlockPos origin = Town.origin(level);

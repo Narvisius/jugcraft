@@ -38,11 +38,18 @@ def finish_models():
         ref = path.relative_to(root).as_posix()[:-5]
         textures = model.get('textures', {})
         for key, value in list(textures.items()):
+            if value == 'minecraft:block/quartz_block':
+                textures[key] = 'minecraft:block/quartz_block_side'
             if value in ('minecraft:block/chain', 'block/chain'):
                 textures[key] = 'minecraft:block/iron_chain'
         if ref == 'jimtafacts/spellbooks/block/firefly_jar':
             # It owns its two cuboids; cube_all's inherited #all slots are invalid.
             model['parent'] = 'minecraft:block/block'
+        if ref == 'newest/supps/item/lunch_basket':
+            # This native item has no legacy entity renderer. Use the supplied
+            # closed basket mesh for inventory, hand and Jade presentation.
+            model['parent'] = 'jugcraft:newest/supps/block/lunch_basket'
+            model['display'] = {'gui': {'rotation':[30,225,0], 'translation':[0,0,0], 'scale':[0.625,0.625,0.625]}}
         if ref == 'block/diagonal/jimta_iron_fence':
             model.setdefault('textures', {})['texture'] = '#bars'
         if ref in particles and not textures.get('particle'):
@@ -115,6 +122,8 @@ def covered(texture, sources):
 
 
 def generate(write=None):
+    from imported_geometry_repairs import apply as repair_geometry
+    repair_geometry()
     from newest_client_compat import finish
     finish()
     from newest_home import finish_item_models

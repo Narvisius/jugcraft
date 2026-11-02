@@ -214,6 +214,7 @@ public class Pumpkling extends PathfinderMob implements CropGuard {
 		setHead(ItemStack.EMPTY);
 		level.playSound(null, getX(), getY(), getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.2F);
 		level.sendParticles(ParticleTypes.SOUL, getX(), getY() + 0.4, getZ(), 8, 0.2, 0.2, 0.2, 0.02);
+		io.github.jimbozoomer.jugcraft.pets.Pets.retired(this);
 		discard();
 	}
 

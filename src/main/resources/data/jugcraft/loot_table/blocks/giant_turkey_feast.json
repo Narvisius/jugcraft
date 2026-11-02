@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:giant_turkey_feast",
+          "condition": {
+            "type": "minecraft:all_of",
+            "terms": [
+              {
+                "type": "minecraft:survives_explosion"
+              },
+              {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:giant_turkey_feast",
+                "state": {
+                  "part": "0"
+                }
+              }
+            ]
+          },
+          "modifier": {
+            "type": "minecraft:copy_state",
+            "block": "jugcraft:giant_turkey_feast",
+            "properties": [
+              "remaining"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

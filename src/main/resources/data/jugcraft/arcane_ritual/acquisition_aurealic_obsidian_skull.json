@@ -1,0 +1,34 @@
+{
+  "forge_tier": 3,
+  "magic_circle": "jugcraft:forbidden_create_item",
+  "main_ingredient": {
+    "item": "jugcraft:forbidden_obsidian_skull"
+  },
+  "inputs": [
+    {
+      "amount": 4,
+      "ingredient": {
+        "item": "jugcraft:forbidden_deorum_ingot"
+      }
+    },
+    {
+      "amount": 2,
+      "ingredient": {
+        "item": "jugcraft:forbidden_aureal_bottle"
+      }
+    }
+  ],
+  "essences": {
+    "aureal": 600,
+    "blood": 750,
+    "souls": 3,
+    "experience": 300
+  },
+  "result": {
+    "type": "jugcraft:forbidden_transmute_input",
+    "result_item": {
+      "id": "jugcraft:forbidden_aurealic_obsidian_skull",
+      "count": 1
+    }
+  }
+}

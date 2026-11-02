@@ -293,6 +293,7 @@ public final class LandRegistry extends SavedData {
     }
     /** Environmental movement may stay within one owner's claims, but cannot cross an ownership boundary. */
     public static boolean crossesBoundary(Level level, BlockPos from, BlockPos to) {
+        if (io.github.jimbozoomer.jugcraft.server.OperatorRegions.crossesBoundary(level, from, to)) return true;
         if (level.isClientSide() || level.dimension() != Level.OVERWORLD || level.getServer() == null) return false;
         var land = get(level.getServer()); var a = land.claims.get(keyOf(from)); var b = land.claims.get(keyOf(to));
         return !java.util.Objects.equals(a == null ? null : a.owner, b == null ? null : b.owner);

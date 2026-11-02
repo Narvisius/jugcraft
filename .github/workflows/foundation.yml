@@ -21,6 +21,8 @@ jobs:
         run: python3 scripts/check_repository.py
       - name: Install factory data test dependencies
         run: python3 -m pip install --quiet pillow numpy
+      - name: Prepare pinned vanilla assets for data tests
+        run: python3 scripts/prepare_vanilla_assets.py
       - name: Check dependency pins and installer contracts
         run: |
           python3 scripts/package_modrinth.py check

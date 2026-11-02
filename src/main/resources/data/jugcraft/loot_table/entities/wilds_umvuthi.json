@@ -43,6 +43,28 @@
           ]
         }
       ]
+    },
+    {
+      "name": "acquisition_nov1_wilds_sunblock_staff",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:wilds_sunblock_staff"
+        }
+      ],
+      "condition": {
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "minecraft:random_chance",
+            "chance": 0.15
+          },
+          {
+            "type": "minecraft:killed_by_player"
+          }
+        ]
+      }
     }
   ]
 }

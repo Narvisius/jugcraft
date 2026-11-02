@@ -36,7 +36,8 @@ public class FeastTableRenderer implements BlockEntityRenderer<FeastTableBlockEn
 
 	public static final class State extends BlockEntityRenderState {
 		final ItemStackRenderState[] dishes = {new ItemStackRenderState(), new ItemStackRenderState()};
-		final int[] pieces = new int[FeastTableBlockEntity.DISHES];
+		final java.util.List<java.util.List<net.minecraft.client.renderer.block.dispatch.BlockStateModelPart>> servings = java.util.List.of(new java.util.ArrayList<>(), new java.util.ArrayList<>());
+        final int[] pieces = new int[FeastTableBlockEntity.DISHES];
 		Direction.Axis axis = Direction.Axis.X;
 	}
 
@@ -56,6 +57,10 @@ public class FeastTableRenderer implements BlockEntityRenderer<FeastTableBlockEn
 		state.axis = table.getBlockState().hasProperty(FeastTableBlock.AXIS) ? table.getBlockState().getValue(FeastTableBlock.AXIS) : Direction.Axis.X;
 		for (int i = 0; i < FeastTableBlockEntity.DISHES; i++) {
 			ItemStack dish = table.dish(i);
+            state.servings.get(i).clear();
+            var serving=io.github.jimbozoomer.jugcraft.agriculture.FoodServings.entries().get(dish.getItem());
+            if(serving!=null) net.minecraft.client.Minecraft.getInstance().getModelManager().getBlockStateModelSet()
+                .get(serving.defaultBlockState()).collectParts(net.minecraft.util.RandomSource.create(0),state.servings.get(i));
 			state.pieces[i] = dish.isEmpty() ? 0 : dish.getCount() >= 6 ? 3 : dish.getCount() >= 3 ? 2 : 1;
 			itemModels.updateForTopItem(state.dishes[i], dish, ItemDisplayContext.FIXED, table.getLevel(), null, (int) table.getBlockPos().asLong() + i);
 		}
@@ -71,7 +76,15 @@ public class FeastTableRenderer implements BlockEntityRenderer<FeastTableBlockEn
 			float z = state.axis == Direction.Axis.X ? 8.0F : along;
 			collector.submitCustomGeometry(pose, PLATE, (matrix, buffer) -> TintedBoxes.box(buffer, matrix, x - 3.0F, TOP, z - 3.0F, x + 3.0F, TOP + 0.5F,
 					z + 3.0F, 0xFFFFFFFF, light));
-			if (state.pieces[i] == 0 || state.dishes[i].isEmpty()) {
+			if(!state.servings.get(i).isEmpty() && state.pieces[i]>0) {
+                pose.pushPose();
+                pose.translate(x/16.0F,(TOP+.5F)/16.0F,z/16.0F);
+                pose.scale(SCALE,SCALE,SCALE);pose.translate(-.5,0,-.5);
+                collector.submitBlockModel(pose,RenderTypes.entityCutout(net.minecraft.client.renderer.texture.TextureAtlas.LOCATION_BLOCKS),
+                    state.servings.get(i),new int[0],light,OverlayTexture.NO_OVERLAY,0);
+                pose.popPose();continue;
+            }
+            if (state.pieces[i] == 0 || state.dishes[i].isEmpty()) {
 				continue;
 			}
 			for (int piece = 0; piece < state.pieces[i]; piece++) {

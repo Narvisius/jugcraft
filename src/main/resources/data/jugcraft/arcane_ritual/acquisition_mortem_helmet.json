@@ -1,0 +1,40 @@
+{
+  "forge_tier": 3,
+  "magic_circle": "jugcraft:forbidden_create_item",
+  "main_ingredient": {
+    "item": "minecraft:diamond_helmet"
+  },
+  "inputs": [
+    {
+      "amount": 3,
+      "ingredient": {
+        "item": "jugcraft:forbidden_obsidiansteel_ingot"
+      }
+    },
+    {
+      "amount": 2,
+      "ingredient": {
+        "item": "jugcraft:forbidden_enchanted_soul"
+      }
+    },
+    {
+      "amount": 1,
+      "ingredient": {
+        "item": "jugcraft:forbidden_stellarite_piece"
+      }
+    }
+  ],
+  "essences": {
+    "aureal": 600,
+    "blood": 750,
+    "souls": 3,
+    "experience": 300
+  },
+  "result": {
+    "type": "jugcraft:forbidden_transmute_input",
+    "result_item": {
+      "id": "jugcraft:forbidden_mortem_helmet",
+      "count": 1
+    }
+  }
+}

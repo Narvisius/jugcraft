@@ -236,6 +236,10 @@ public final class JugcraftClient implements ClientModInitializer {
 		RadiationNeedle.register();
 		GhostSheetLayer.register();
 		CostumeLayer.register();
+        HarvestCostumeLayer.register();
+        BoardGameScreen.register();
+        PetInventoryScreen.register();
+        BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.boardgames.BoardGames.ENTITY,BoardTableRenderer::new);
 		FacePaintLayer.register();
 		RetroTraderLayer.register();
 		RetroTraderClient.register();
@@ -486,6 +490,7 @@ public final class JugcraftClient implements ClientModInitializer {
 		net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.SEAT, net.minecraft.client.renderer.entity.NoopRenderer::new);
 		// The walled town: townsfolk, the shop and ATM screens.
 		net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry.registerModelLayer(TownsfolkModel.LAYER, TownsfolkModel::createLayer);
+		net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry.registerModelLayer(TownsfolkModel.SKINNABLE_LAYER, TownsfolkModel::createSkinnableLayer);
 		EntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.town.JugcraftTown.TOWNSFOLK, TownsfolkRenderer::new);
         EntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.town.JugcraftTown.GUARD_MECHA, TownGuardMechaRenderer::new);
 		net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry.registerModelLayer(StyxModel.LAYER, StyxModel::createLayer);

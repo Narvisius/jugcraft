@@ -72,6 +72,7 @@ public final class FinanceService {
 	}
 
 	static void tick(MinecraftServer server) {
+        if(server.getTickCount()%1200==0){var l=Ledger.get(server);if(l.boardWagers.expire(l.book(),System.currentTimeMillis()))l.setDirty();}
 		releaseShouts(server);
 		if (server.getTickCount() % CHECK_INTERVAL != 0) {
 			return;

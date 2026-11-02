@@ -1,0 +1,34 @@
+{
+  "forge_tier": 3,
+  "magic_circle": "jugcraft:forbidden_create_item",
+  "main_ingredient": {
+    "item": "minecraft:netherite_pickaxe"
+  },
+  "inputs": [
+    {
+      "amount": 2,
+      "ingredient": {
+        "item": "jugcraft:forbidden_dragon_scale"
+      }
+    },
+    {
+      "amount": 3,
+      "ingredient": {
+        "item": "jugcraft:forbidden_obsidiansteel_ingot"
+      }
+    }
+  ],
+  "essences": {
+    "aureal": 600,
+    "blood": 750,
+    "souls": 3,
+    "experience": 300
+  },
+  "result": {
+    "type": "jugcraft:forbidden_transmute_input",
+    "result_item": {
+      "id": "jugcraft:forbidden_draco_arcanus_pickaxe",
+      "count": 1
+    }
+  }
+}

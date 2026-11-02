@@ -1,0 +1,186 @@
+{
+  "textures": {
+    "particle": "jugcraft:block/roast_turkey_skin",
+    "skin": "jugcraft:block/roast_turkey_skin",
+    "meat": "jugcraft:block/roast_turkey_meat",
+    "bone": "jugcraft:block/roast_turkey_bone",
+    "platter": "jugcraft:block/turkey_platter",
+    "berries": "jugcraft:block/turkey_cranberries",
+    "herbs": "jugcraft:block/turkey_herbs"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        13,
+        1.5,
+        16
+      ],
+      "faces": {
+        "east": {
+          "texture": "#platter",
+          "uv": [
+            5.3333,
+            15.5,
+            10.6667,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#platter",
+          "uv": [
+            10.6667,
+            5.3333,
+            15.0,
+            10.6667
+          ]
+        },
+        "down": {
+          "texture": "#platter",
+          "uv": [
+            10.6667,
+            5.3333,
+            15.0,
+            10.6667
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        1.5,
+        0
+      ],
+      "to": [
+        4,
+        15,
+        16
+      ],
+      "faces": {
+        "east": {
+          "texture": "#skin",
+          "uv": [
+            5.3333,
+            11.0,
+            10.6667,
+            15.5
+          ]
+        },
+        "up": {
+          "texture": "#skin",
+          "uv": [
+            10.6667,
+            5.3333,
+            12.0,
+            10.6667
+          ]
+        },
+        "down": {
+          "texture": "#skin",
+          "uv": [
+            10.6667,
+            5.3333,
+            12.0,
+            10.6667
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        15,
+        0
+      ],
+      "to": [
+        1,
+        16,
+        16
+      ],
+      "faces": {
+        "east": {
+          "texture": "#skin",
+          "uv": [
+            5.3333,
+            10.6667,
+            10.6667,
+            11.0
+          ]
+        },
+        "down": {
+          "texture": "#skin",
+          "uv": [
+            10.6667,
+            5.3333,
+            11.0,
+            10.6667
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        4.5,
+        2
+      ],
+      "to": [
+        7,
+        12,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#skin",
+          "uv": [
+            3.0,
+            12.0,
+            4.0,
+            14.5
+          ]
+        },
+        "east": {
+          "texture": "#skin",
+          "uv": [
+            5.3333,
+            12.0,
+            10.0,
+            14.5
+          ]
+        },
+        "west": {
+          "texture": "#skin",
+          "uv": [
+            6.0,
+            12.0,
+            10.6667,
+            14.5
+          ]
+        },
+        "up": {
+          "texture": "#skin",
+          "uv": [
+            12.0,
+            6.0,
+            13.0,
+            10.6667
+          ]
+        },
+        "down": {
+          "texture": "#skin",
+          "uv": [
+            12.0,
+            5.3333,
+            13.0,
+            10.0
+          ]
+        }
+      }
+    }
+  ]
+}

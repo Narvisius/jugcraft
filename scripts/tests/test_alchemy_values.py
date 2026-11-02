@@ -43,6 +43,10 @@ class AlchemyValueTests(unittest.TestCase):
             self.assertEqual(value('minecraft:'+metal+'_block'),9*unit)
             if 'minecraft:'+metal+'_nugget' in VALUES:self.assertEqual(9*value('minecraft:'+metal+'_nugget'),unit)
 
+    def test_fishing_salvage_cannot_undercut_recoverable_metals(self):
+        self.assertGreaterEqual(value('jugcraft:aquatic_tin_can'), 7*value('minecraft:iron_nugget'))
+        self.assertGreaterEqual(value('jugcraft:aquatic_goldfish'), value('minecraft:gold_nugget'))
+
     def test_filled_buckets_cannot_create_a_cheaper_empty_shell(self):
         for item in ('water_bucket','lava_bucket','milk_bucket','cod_bucket','powder_snow_bucket'):
             self.assertGreaterEqual(value('minecraft:'+item),value('minecraft:bucket'))
@@ -55,6 +59,7 @@ class AlchemyValueTests(unittest.TestCase):
         for item,v in VALUES.items():
             self.assertGreater(value(item),0,item);self.assertLessEqual(value(item),1_000_000_000,item)
             self.assertTrue(v['source'],item)
+            self.assertLessEqual(max(v['numerator'],v['denominator']),2**63-1,item)
 
     def test_matter_uses_actual_local_recipe_inputs(self):
         self.assertEqual(value('jugcraft:dark_matter'),8*value('jugcraft:aeternalis_fuel')+value('minecraft:diamond_block'))

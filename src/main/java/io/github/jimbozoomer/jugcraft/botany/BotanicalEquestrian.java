@@ -30,6 +30,7 @@ public final class BotanicalEquestrian extends Item {
             converted.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(speed*2);converted.getAttribute(Attributes.MAX_HEALTH).setBaseValue(health*2);converted.getAttribute(Attributes.JUMP_STRENGTH).setBaseValue(jump*1.5);converted.setHealth(converted.getMaxHealth());converted.setPersistenceRequired();
         };
         var replacement=convert(horse,zombie,finish);if(replacement==null)return InteractionResult.FAIL;
+        io.github.jimbozoomer.jugcraft.pets.Pets.converted(horse,replacement);
         // Undead horses cannot wear the original horse armor; return it exactly once, preserving its data.
         var armor=replacement.getItemBySlot(EquipmentSlot.BODY);if(!armor.isEmpty()){replacement.setItemSlot(EquipmentSlot.BODY,ItemStack.EMPTY);p.getInventory().placeItemBackInInventory(armor,net.minecraft.util.Prediction.SERVER_ONLY);}
         replacement.playSound(BotanicalSounds.get("virus_infect"),1+p.getRandom().nextFloat(),1.3F+p.getRandom().nextFloat()*.7F);

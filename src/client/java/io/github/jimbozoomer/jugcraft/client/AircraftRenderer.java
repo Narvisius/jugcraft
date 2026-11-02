@@ -88,8 +88,12 @@ public final class AircraftRenderer extends EntityRenderer<Aircraft,AircraftRend
             draw(n.children(),s,pose,collector);pose.popPose();
         }
     }
+    /** Shared with the client regression: source forward is +Z and port wing is +X. */
+    public static void applyBodyOrientation(PoseStack pose,float yaw,float pitch,float bank){
+        pose.rotateDegrees(Axis.YP,-yaw);pose.rotateDegrees(Axis.XP,pitch);pose.rotateDegrees(Axis.ZP,bank);
+    }
     @Override public void submit(State s,PoseStack pose,SubmitNodeCollector collector,CameraRenderState camera){
-        load();pose.pushPose();pose.translate(0,s.spec.groundOffset(),0);pose.rotateDegrees(Axis.YP,-s.yaw);pose.rotateDegrees(Axis.XP,s.pitch);pose.rotateDegrees(Axis.ZP,s.bank);
+        load();pose.pushPose();pose.translate(0,s.spec.groundOffset(),0);applyBodyOrientation(pose,s.yaw,s.pitch,s.bank);
         draw(MODELS.getOrDefault(s.spec.name(),List.of()),s,pose,collector);
         var mounts=s.spec.definition().getAsJsonArray("weaponMounts");
         for(int i=0;i<mounts.size();i++){

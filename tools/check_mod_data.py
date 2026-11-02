@@ -308,7 +308,7 @@ def check_assets(registered):
     import starter_workshop
     import storage_crates
     import newest_registry
-    native_blocks = newest_registry.entries()["block"]
+    native_blocks = newest_registry.entries()["block"] | {"chess_table", "checkers_table", "giant_turkey_feast"}
     crates = [metal + '_crate' for metal, _ in storage_crates.TIERS]
     lang = load(ASSETS / "lang" / "en_us.json") or {}
     for block in (all_blocks() + machine_blocks() + ag.all_blocks() + petro.petro_blocks() + deposits.all_blocks()
@@ -441,14 +441,14 @@ import guide_books
 import exchange_blocks
 import exchange_poker
 import exchange_casino
-NON_METAL = {"cursed_mirror"} | set(guide_books.BOOKS) | {"sawdust"} | set(MINERALS) | set(ITEMS) | set(machine_blocks()) | set(machine_items()) | set(CIRCUITS) | {b for m in MINERALS for b in (f"{m}_ore", f"deepslate_{m}_ore", f"{m}_block")} | {"oil_sand"} | set(petro.petro_items()) | set(ag.all_blocks()) | set(ag.all_items()) | set(petro.petro_blocks()) | set(tank_display.BLOCKS) | set(ph.blocks()) | set(ph.items()) | set((town_assets.blocks() + styx.blocks()))
+NON_METAL = {"chess_table", "checkers_table", "giant_turkey_feast", "candied_sweet_potatoes", "dinner_roll", "harvest_pea_casserole", "mashed_potatoes_and_gravy", "pilgrim_coat_costume", "pilgrim_dress_costume", "cursed_mirror"} | set(guide_books.BOOKS) | {"sawdust"} | set(MINERALS) | set(ITEMS) | set(machine_blocks()) | set(machine_items()) | set(CIRCUITS) | {b for m in MINERALS for b in (f"{m}_ore", f"deepslate_{m}_ore", f"{m}_block")} | {"oil_sand"} | set(petro.petro_items()) | set(ag.all_blocks()) | set(ag.all_items()) | set(petro.petro_blocks()) | set(tank_display.BLOCKS) | set(ph.blocks()) | set(ph.items()) | set((town_assets.blocks() + styx.blocks()))
 
 
 def item_units(ref):
     """Returns {metal: units} for an item or tag reference."""
     import vehicle_bays
     ns, path = split(ref.lstrip("#"))
-    if ref in {'#c:ash','#c:crops/flax','#c:dyes','#c:rods/wooden','#c:slime_balls','#c:strings'}:
+    if ref in {'#jugcraft:supps_blackboard_white','#jugcraft:supps_straw','#c:ash','#c:crops/flax','#c:dyes','#c:rods/wooden','#c:slime_balls','#c:strings'}:
         return {}  # Ordinary non-metal ingredients, verified native tags.
     if ns == MOD and path.startswith(('supps_','amends_')):
         import newest_registry
@@ -598,7 +598,12 @@ def check_recipes(registered):
         groups = [sorted([c.get("feature"), *c.get("or", [])]) for c in switches]
         # Owner household families register unconditionally, unlike the older
         # switch-gated industrial recipes; do not require a nonexistent toggle.
-        always_on = name.startswith(('supps_', 'amends_'))
+        # These native festival/table registrars run unconditionally.
+        always_on = name.startswith(('supps_', 'amends_')) or name in {
+            'chess_table', 'checkers_table', 'giant_turkey_feast',
+            'pilgrim_coat_costume', 'pilgrim_dress_costume', 'harvest_dinner_roll',
+            'harvest_mashed_potatoes_and_gravy', 'harvest_harvest_pea_casserole',
+            'harvest_candied_sweet_potatoes'}
         if not features and not always_on:
             err(f"{name}: missing feature switch condition")
         if "result" not in recipe:
@@ -623,6 +628,17 @@ def check_recipes(registered):
             inputs = [recipe["key"][ch] for ch in symbols if ch != " "]
         elif kind == "minecraft:crafting_shapeless":
             inputs = recipe["ingredients"]
+        elif kind == "jugcraft:pot_cooking":
+            inputs = []
+            rows = recipe.get("ingredients", [])
+            if not rows or len(rows) > ag.POT_INPUTS or recipe.get("time", 0) <= 0:
+                err(f"{name}: invalid pot ingredients/time")
+            for row in rows:
+                count = row.get("count", 1)
+                if not isinstance(count, int) or not 1 <= count <= 64 or "ingredient" not in row:
+                    err(f"{name}: invalid counted pot ingredient {row}")
+                    continue
+                inputs.extend([row["ingredient"]] * count)
         elif kind == "minecraft:crafting_dye":
             # 26.3's dyeing (as vanilla's leather_helmet_dyed): the item and a dye give the item back, dyed.
             inputs = [recipe["target"], recipe["dye"]]
@@ -832,7 +848,7 @@ def check_tags():
         known.update(newest_registry.entries().get(registry, set()))
         if registry == 'block': known.update(starter_workshop.BLOCKS)
         if registry == 'block': known.add("cursed_mirror")
-        if registry == 'item': known.update(starter_workshop.NAMES)
+        if registry == 'item': known.update(starter_workshop.NAMES); known.update({'pilgrim_coat_costume','pilgrim_dress_costume'})
         if registry == 'item': known.update(jimtafacts.items())
         if registry == 'item': known.update(jimtafacts_network.ids()); known.update(jimtafacts_spellbooks.items()); known.update(jimtafacts_industry.items())
         if registry == 'block': known.update('jimta_' + n for n in jimtafacts_network.BLOCKS); known.update(jimtafacts_spellbooks.blocks()); known.update(jimtafacts_industry.blocks())
@@ -4945,7 +4961,7 @@ def check_menu():
     if placed != [(name, model[0].upper()) for name, model in menu.all_placed().items()]:
         err("MenuDishes.java's dishes (and their shapes, in order) differ from tools/menu.py all_placed()")
     shapes = set(re.findall(r"^\t\t([A-Z]+)\(Block\.box\(", java.get("PlacedDishBlock", ""), re.M))
-    if shapes != {model[0].upper() for model in menu.all_placed().values()}:
+    if shapes != {model[0].upper() for model in menu.all_placed().values()} | {"SERVING"}:
         err(f"PlacedDishBlock.DishShape {sorted(shapes)} must have exactly the templates tools/menu.py uses")
     pets = {name: {"animal": animal.lower(), "heal": int(heal), "effects": [[e, int(t)] for e, t in re.findall(r"MobEffects\.(\w+), (\d+)", treats)],
                    "returns": "minecraft:bowl" if bowl == "true" else None}
@@ -16224,7 +16240,7 @@ def check_party_table():
         err(f"recipe/{gb['item']}.json: a Goodie Bag must be filled with paper, string and its contents, no fewer: {filled}")
     br = pt.BAT_RUNNER
     if 'EnumProperty.create("runner", Runner.class)' not in feast or f'BAT_RUNNER = "{br["item"]}";' not in feast \
-            or 'HARVEST("harvest"), BATS("bats");' not in feast or br["item"] not in pt.ITEMS:
+            or 'HARVEST("harvest"), BATS("bats"), LINEN("linen");' not in feast or br["item"] not in pt.ITEMS:
         err(f"FeastTableBlock: a length must take the {br['item']} as its runner (harvest or bats), and the item be registered")
     import feast_data
     variants = (load(ASSETS / "blockstates" / "feast_table.json") or {}).get("variants", {})
@@ -24321,6 +24337,10 @@ def registered_items():
     registered |= {cursed_mirror.BLOCK, cursed_mirror.ITEM}
     import newest_registry
     registered |= newest_registry.entries()["item"]
+    import thanksgiving_data
+    registered |= set(thanksgiving_data.FOODS) | {
+        'pilgrim_coat_costume', 'pilgrim_dress_costume', 'giant_turkey_feast',
+        'chess_table', 'checkers_table'}
     return registered
 
 

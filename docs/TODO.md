@@ -1,12 +1,29 @@
 # Jugcraft TODO
 
+## Thanksgiving festival — November 1
+
+- [x] **Phase 9 — Optional chess/checkers wagers completed locally.** Free by default; 1/5/10/25/50 Jugs each, mutual consent, Exchange escrow, winner/draw settlement, refunds and saved receipts. Nine board/wager server tests, two Exchange regressions and rendered/input client validation passed. No deployment. [Evidence](features/thanksgiving-festival-nov1.md).
+
+- [ ] **Phase 6 — HOLD until Halloween decor is finished (roughly November 3–4).** Cornucopia/city transition plan prepared; no implementation or automatic activation authorized yet. Preserve owner edits and slot machines.
+- [ ] Clean the existing `harvest_costume` empty equipment-layer metadata warning before festival publication; preserve the custom costume renderer.
+- [x] **Phases 7–8 — Checkers and chess completed locally.** Shared free-play interfaces, saved two-player matches, live carved pieces and server-checked moves. 31 rules assertions, four server tests, two resource tests and rendered/input client validation passed. Optional wagers are now completed in phase 9; no publication or deployment. [Evidence](features/thanksgiving-festival-nov1.md#phases-78-final-validation--november-2).
+
+- [x] **Phases 3–5 — Dishes, giant turkey and November costumes completed locally.** Four dishes with recipes/serving models, a 24-portion 3×3×2 turkey, year-round player Pilgrim outfits and reversible November citizen/raider overlays. Six resource checks, seven server tests and the final rendered client review passed. Owner artistic/playtest feedback and publication remain separate. [Feature record](features/thanksgiving-festival-nov1.md).
+
+- [x] **Phase 1 — Local food/table/truce verification.** Three resource tests, five server tests and two rendered client classes passed. Fixed repeated carpet application consuming another carpet; reviewed all 27 revised meals and connected/split linen tables. Local only; owner visual acceptance and remaining festival phases are separate. [Evidence](features/thanksgiving-festival-nov1.md#phase-1-completed-locally--november-1-2026).
+
+- [x] **Phase 2 — Remaining food placement.** 397 additional edible items have solid serving models, component-preserving placement/pickup and safe drops; 471 current edible items are covered including existing food blocks. New servings render on Feast Tables. Two resource tests, three server tests and the full-catalog client gallery passed. Local only. [Evidence](features/thanksgiving-festival-nov1.md).
+
+- [ ] Implement the full [Thanksgiving festival request](features/thanksgiving-festival-nov1.md): costumes, raid truce, cloth tables, placed-food corrections/coverage, missing feast dishes, multiblock turkey, protected town cornucopia, chess/checkers and optional Jugs wagers. Keep local until validated.
+- [ ] Choose November joke-event ideas from the same feature record; these are proposals, not implemented content.
+
 ## PRIORITY FIXES — October 31 release follow-up
 
 - [x] **P0 — Pebble world-generation crash:** use native waterlogging properties across shared household decorations; 34 focused server tests passed, including dry/underwater generation, bucket handling and saved states. [Hotfix evidence](features/twigworks-waterlogging-hotfix.md). Server/client rollout is tracked separately; this checkbox records the code repair and tests.
 
 Owner authorized publishing this update on October 31 with unfinished work kept visible here. This supersedes the earlier local-only publication hold; each live server restart still needs separate confirmation and a 30-second player warning.
 
-- [ ] **P1 — Cross-collection economy and catalog closure.** The October 31 pre-publication Python sweep exposed missing explicit essence values for new items, a rocking-chair conversion fixture valued at 80 essence against a 59-essence minimum bill, stale JEI station catalog/custom serializer coverage, the Encyclopedia audit's page-versus-handbook expectation, the iron-scaffold/iron-portcullis overlapping crafting bill and a survival-audit registry snapshot that does not recognize new collection IDs. Reconcile these against actual runtime registries and recipe selection; distinguish stale audit expectations from real acquisition or economy defects. Do not claim Foundation is green or broadly enable new tablet outputs before this is resolved. See the dated release preparation entry in the collection ledger.
+- [x] **P1 — Cross-collection economy and catalog closure (local November 1).** Fixed all eight original Python audit failures: explicit essence values and conversion conservation, Encyclopedia links, JEI catalog/serializer coverage, scaffold/portcullis recipe collision, and the runtime acquisition registry/routes. Added owner-approved balanced progression recipes and restored supplied chest loot. All 296 Python checks pass across the full sweep and six environment retries; the final 10 targeted progression checks and all 14 focused server tests pass. No broad tablet-output expansion, commit or deployment. The 78 previously deferred acquisition entries and model backlog remain separate. [Evidence and regeneration instructions](features/newest-owner-collection-oct29.md).
 
 - [ ] **P1 — Original-model geometry review.** Review the 708 remaining diagnostics: 252 near-coplanar faces, 248 coplanar overlaps and 208 potentially exposed missing faces. Prioritize player-visible flickering/holes; preserve intentional open vessels and supplied designs. These are audit findings, not 708 confirmed broken models. [Detailed findings](reports/newest-original-art-oct31.json).
 - [ ] **P1 — Recover missing original files and finish their integration.** Two monastery dead-end templates; Home saddle and mangrove-zaisu geometry; two trophy skins; four cherry-waffle door variants; content for the empty Fast Paintings folder. Do not count unavailable originals as completed or silently replace their art.
@@ -32,7 +49,8 @@ Owner authorized publishing this update on October 31 with unfinished work kept 
 - [x] Complete the 3,263-test server sweep (3,258 passed, five old expectations failed), repair those five expectations and pass the 58-test combined follow-up without optional integrations, including all 19 NEWEST regressions. Evidence and exact limits are in the collection ledger.
 - [x] Pass native model-reference, data/recipe, diagonal-connection and alchemy reachability audits.
 - [x] Assemble the local candidate and verify its stable archive CRC, checked implementation classes and 49,612 source-matching NEWEST/Ars Additions resources. No publication or personal launcher changes.
-- [ ] Review the **708 remaining static geometry diagnostics** against supplied source designs. Source-verified interior meshes and identity-rotation audit bugs were corrected without rewriting original art. The full static art suite is still failing; [the complete findings](reports/newest-original-art-oct31.json) remain recorded.
+- [ ] Finish original-art visual acceptance: November 1 local repair separates overlapping surfaces in **112 original model templates**, preserving textures, UVs and animation files. The 38,254-model scan is reduced from **708 to 48 open-surface review findings**, with **zero overlap/near-overlap findings**; the remaining assembly/context cases remain explicitly recorded, not silently waived. See [local repair and validation](features/visual-cleanup-nov1.md) and [current findings](reports/visual-cleanup-nov1.json). Combined rendered atlas/aircraft/collection checks passed locally; the screenshot-discovered basket icon correction passed its follow-up check. This is not a deployment claim.
+- [ ] Recover the five missing Undying Charm animation frames: supplied and runtime PNGs are 16x16, but source metadata requests six frames. Preserve the supplied image; do not claim the absent animation is complete. [November 1 evidence](features/visual-cleanup-nov1.md).
 - [ ] Obtain missing originals when available: two monastery dead-end templates, Home saddle/mangrove-zaisu geometry, two trophy skins, four cherry-waffle doors and content for the empty Fast Paintings folder. These are not counted as supplied completed content.
 - [ ] Owner/player visual/playability acceptance remains a priority fix above. Owner authorized publication on October 31 with these limitations; restart confirmation is still required before live deployment.
 
@@ -994,3 +1012,14 @@ none of this continuation has been compiled or launched. Preserve local-only wor
   model-reference audit passes; actual startup found and prompted repair of seven
   Gothic window boolean schemas. Continue runtime/visual checks and failure fixes.
   No release, owner profile change or server action is authorized by this checkpoint.
+
+## Persistent companion inventory (owner request, November 2)
+- [x] Locally implement and validate pet roster, knockout/recall/resummon, ownership adapters, modes, levels and abilities (84 server tests and disposable client walkthrough). See [local record](features/pet-inventory-nov2.md). November joke events are on hold. Keep this work local.
+
+- [ ] Pet inventory: owner multiplayer/visual playtest before publication; refine conservative nearby-container closure to exact pet menus.
+
+## Server utilities and custom NPCs (November 2, local)
+- [x] Public warp/spawn and nearby mutually confirmed held-item trading; OP warp management, god mode and read-only inventory inspection.
+- [x] Persistent operator cuboids, surveyor selection/visualization and shared town/automation/fluid/Herobrine protection hooks.
+- [x] Finish Claude NPC/guard/skin integration and focused combined tests. See [server utilities record](features/server-utilities-nov2.md). No deployment or restart authorized by this task.
+- [ ] Owner playtest: real player-name skin lookup, classic/slim appearances, NPC command workflow and region-tool usability before publication.

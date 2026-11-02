@@ -73,6 +73,22 @@ public class MenuClientGameTests implements FabricClientGameTest {
 			shoot(context, singleplayer, x + 8, y + 2, z - 1, 0, 45, "jugcraft_menu_table_right");
 			shoot(context, singleplayer, x + 5, y + 3, z + 3, 0, 55, "jugcraft_menu_table_back");
 			shoot(context, singleplayer, x + 6, y + 2, z - 4, 180, 5, "jugcraft_menu_items");
+            // Close review of every revised vessel/meal, three at a time.
+            String[] revised = {"beef_stew","chicken_soup","baked_cod_stew","fish_stew","bone_broth","corn_soup","noodle_soup","tomato_sauce","fruit_salad","nether_salad","bacon_and_eggs","steak_and_potatoes","roasted_mutton_chops","grilled_salmon","ratatouille","pasta_with_meatballs","pasta_with_mutton_chop","squid_ink_pasta","vegetable_noodles","cornbread_stuffing","dog_food","onion_soup","vegetable_soup","pumpkin_soup","cooked_rice","fried_rice","mushroom_rice"};
+            for (int group=0;group<revised.length/3;group++) {
+                final int first=group*3;
+                server.runOnServer(minecraft -> {
+                    var level=minecraft.overworld();
+                    for(int i=0;i<3;i++) {
+                        var at=origin.offset(i*2,0,-3);
+                        set(level,at,Blocks.STRIPPED_SPRUCE_LOG);
+                        level.setBlock(at.above(),block(revised[first+i]).defaultBlockState()
+                            .setValue(PlacedDishBlock.FACING,Direction.NORTH),Block.UPDATE_ALL);
+                    }
+                });
+                shoot(context,singleplayer,x+2,y+1,z-7,0,20,"jugcraft_revised_meals_"+group);
+            }
+
 		}
 	}
 

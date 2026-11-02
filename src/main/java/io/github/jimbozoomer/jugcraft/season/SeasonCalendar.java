@@ -174,6 +174,12 @@ public final class SeasonCalendar {
 			return events;
 		}
 
+        /** The holiday itself, not the configurable multi-day feast window. Server previews use the same clock. */
+        public boolean thanksgivingTruceOn(LocalDate today) {
+            LocalDate date = effectiveDate(today);
+            return feast != Feast.OFF && date.equals(harvestFeastDay(feast, date.getYear()));
+        }
+
 		/** The first and last day of the Harvest Feast in {@code year}, or null when it is off. */
 		public LocalDate[] feastWindow(int year) {
 			if (feast == Feast.OFF) {

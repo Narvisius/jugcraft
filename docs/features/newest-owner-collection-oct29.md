@@ -2818,3 +2818,95 @@ cover the recorded economy/catalog/survival issues plus the Encyclopedia
 auditor's old `page` expectation for the new `handbook` link and two tests
 reporting the same stale recipe-view catalog. No additional gameplay changes
 were made to hide these findings. Repository structure/documentation links pass.
+
+
+## November 1 — local Foundation audit closure (in progress)
+
+OpenAI Codex (GPT-6), branch `fix/oct31-audit-closure`, based on hotfix main
+`dcf6b249fae20c3244cd7f98613edc03d6ec8a5e`. No publication or live changes.
+
+- Regenerated explicit essence records from the current recipes and authored items.
+  Fishing salvage now accounts for seven iron nuggets per tin can and one gold
+  nugget per goldfish; fixed metal compression values prevent cheap fallback
+  salvage from underpricing the nugget economy. Added conservation and Java-long
+  range checks. Existing convenience-only output policy is unchanged.
+- Rebuilt the shared JEI recipe catalog. Classified the new dynamic crafting and
+  smithing serializers separately from machine processors after inspecting their
+  native recipe classes.
+- Updated the Encyclopedia link audit to validate both handbook indices and page
+  IDs registered by the actual Encyclopedia, including technology/network guides.
+- Added an iron nugget joining cost to the six-scaffold recipe in both generator
+  and shipped recipe, distinguishing it from the portcullis bill.
+- Exported the real 16,879-item registry in a dedicated server run; all seven
+  SurvivalRecipeGameTests passed. The export adds 7,155 entries compared with the
+  old snapshot. These server tests do not prove every item has a survival route.
+- Added acquisition-graph adapters for botanical recipe loaders, arcane rituals
+  and combustion, and verified native growth, trades, creature rewards, bucket
+  filling, flax, rope arrows, barnacles and other interactions. Operator personal
+  loot containers retain their deliberate noncraftable status.
+- Restored supplied Ribbit building, Supplementaries and botanical recipes.
+  Added native decorative variant recipes where registered forms had no recipe;
+  `tools/newest_acquisition_recipes.py` reproduces the reviewed additions. Original
+  source files are unchanged. Water-rod recipes reject non-water potions; armor
+  upgrades preserve the input component patch. Added runtime regression cases.
+- Fixed the calcite chimney ingredient tag and missing axe stripping for Livingwood,
+  Dreamwood and Aurum. These use the existing native stripping implementation.
+- Seven original failing checks passed in the focused 31-test run. Initial Java
+  compilation and two new recipe-generation tests passed. Combined updated server
+  validation and the refreshed final Python sweep are still pending.
+- Owner approved designing balanced missing progression on November 1. The
+  generator now supplies 111 crafting recipes and 25 paid forge upgrades. Deorum
+  upgrades require tier 2 and stellarite, Draco tools tier 3 and dragon scales,
+  Mortem tier 3, and the upper skull/wand/enhancer upgrades tier 4. Existing pedestal
+  and essence requirements apply; no new research gates. Five existing loot tables
+  gain named, chance-based pools for Gaia heads, rare codices and the Sunblock Staff.
+  Original reward pools are retained; trophies are not ordinary crafting outputs.
+- The previously inert Draco staff now uses the existing energy-wand behavior.
+  Sunblock Staff is a self-only 20-second effect, costs one gold ingot, and has a
+  60-second cooldown. Backpack survival infinity remains intentionally unavailable
+  under the default owner economy policy; this change does not enable duplication.
+- Final refreshed acquisition graph: zero unresolved routes, zero invalid
+  ingredients, and the same 78 previously deferred entries. The strict assertion
+  remains unchanged. Five generator/progression checks pass. Runtime tests cover
+  the new crafting bills, forge tier/payment gates, axe stripping and paid staff.
+  Final Python sweep passed all **296 tests**, including all eight original
+  failures (`build/audit-closure-python-verified.log`). Final combined runtime
+  validation passed after the corrections recorded below; no claim of manual playtesting.
+- The first full Python follow-up ran 293 tests with two failures: acquisition
+  work still in progress and walnut husk retaining the historical brown-dye value
+  after botanical dye recipes lowered it. The generator now reconciles husk to the
+  resolved dye value and propagates downstream prices. The subsequent remaining
+  failure exposed six skipped Ribbit chest tables (59 template references): the
+  source uses `loot_table`, whereas the importer only handled `loot_tables`.
+  Restored the supplied tables through the native loot-schema converter and added
+  importer/runtime coverage. The final report has zero invalid template loot links.
+- The follow-up dedicated server exposed two legacy air-item loot entries in
+  those restored tables. The importer now converts them to native empty entries,
+  retaining their weights and no-drop odds; regression coverage rejects air-item
+  outputs. After correction, 290 Python checks passed in the full sweep; the six
+  graphics shell checks hit Windows sandbox signal-pipe denial, then all six
+  passed unchanged outside the sandbox (`build/audit-closure-python-confirmed.log`
+  and `build/audit-closure-graphics-confirmed.log`). Thus all 296 checks pass across
+  the final sweep and targeted environment retry. The acquisition reports were
+  refreshed again with zero ingredient diagnostics.
+- The next server run loaded the corrected chest tables and passed 13/14 tests,
+  exposing string output IDs in the new ritual generator where the runtime requires
+  item-stack objects. Corrected all 25 outputs to `{id, count}` and added a generator
+  assertion. The final runtime rerun reuses the compiled classes/resource tree with
+  those 25 JSON files copied and SHA-256 checked against source, skipping only
+  Gradle's expensive resource-copy task; normal builds still consume source files.
+
+Regeneration: run `python tools/newest_acquisition_recipes.py` after collection
+source importers to retain these owner-approved progression additions and reward
+pools; run the alchemy/recipe-view and survival audit generators afterward. The
+new recipe freshness tests detect stale generated output. Source originals remain
+untouched. Existing deferred acquisition and static model-diagnostic backlogs are
+not relabeled as complete by this repair.
+
+Validation logs remain local under `build/audit-closure-*`. Final runtime run
+(`build/audit-closure-server-pass.log`) passed all **14 required server tests**,
+including every new crafting/ritual case, paid staff, stripping, special crafting
+and restored loot reloads. The final targeted acquisition/generator suite passed
+all **10 tests** (`build/audit-closure-progression-pass.log`). P1 audit closure is
+complete locally. No manual client playtest, full server-suite rerun, commit, push,
+release or live server change was performed. Attribution: OpenAI Codex (GPT-6).

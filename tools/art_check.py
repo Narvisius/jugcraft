@@ -82,11 +82,11 @@ O1_ALLOW = {
     "aluminum_cable_arm": _ARM, "copper_cable_arm": _ARM, "silver_cable_arm": _ARM, "data_cable_arm": _ARM,
     "fluid_filter_arm": _ARM, "bronze_fluid_pipe_arm": _ARM, "brass_item_pipe_arm": _ARM,
     "bobbing_tub": _VESSEL, "bubbling_cauldron": _VESSEL, "candy_kettle": _VESSEL, "cider_press": _VESSEL,
-    "luminaria": _VESSEL, "witchs_lantern": _VESSEL,
+    "witchs_lantern": _VESSEL,
     "black_pillar_candle": _DECOR, "ivory_pillar_candle": _DECOR, "bowling_pumpkin": _DECOR, "corn_maze": _DECOR,
     "corn_plush": _DECOR, "hedgehog_plush": _DECOR, "owl_plush": _DECOR, "costume_trunk_open": _DECOR,
     "dead_hollow_tree": _DECOR, "flying_eyeball": _DECOR, "fog_machine": _DECOR,
-    "judging_stand": _DECOR, "monster_head": _DECOR, "phantom_pipe_organ": _DECOR, "spirit_mirror": _DECOR,
+    "monster_head": _DECOR, "phantom_pipe_organ": _DECOR, "spirit_mirror": _DECOR,
     "asphodel": _FLORA, "black_rose": _FLORA, "bleeding_heart": _FLORA, "deadly_nightshade": _FLORA, "ghost_pipe": _FLORA,
     "snowdrop": _FLORA, "spider_lily": _FLORA, "potted_bleeding_heart": _FLORA, "potted_deadly_nightshade": _FLORA,
     "potted_ghost_pipe": _FLORA, "potted_snowdrop": _FLORA, "potted_spider_lily": _FLORA,
@@ -438,6 +438,9 @@ def _opaque(face_list):
 
 def _open_faces(elements, faces):
     """O1: (element index, face) of unrotated opaque boxes whose left-out face is exposed (not on a 0/16 plane)."""
+    if not any(not e.get('rotation') and 0 < len(e.get('faces', {})) < 6
+               and all(e['to'][k]-e['from'][k] > 1e-6 for k in range(3)) for e in elements):
+        return []
     by_element = defaultdict(list)
     for f in faces:
         by_element[f.label[0]].append(f)
@@ -445,8 +448,49 @@ def _open_faces(elements, faces):
     # Blockbench often exports an explicit zero-angle rotation. It does not
     # rotate the covering solid: ignoring it falsely exposes attached feet and
     # other deliberately omitted internal faces (e.g. the original bathtub).
-    covers = [(i, el["from"], el["to"]) for i, el in enumerate(elements)
-              if abs(el.get("rotation", {}).get("angle", 0)) < 1e-9]
+    covers = []
+    # Authored flat panels can close a box without having any volume. A plinth
+    # cap or book cover on exactly the missing face must not acquire a duplicate
+    # quad merely because a point 0.01 px beyond it lies outside the panel.
+    panels = faces
+
+    def panel_covers(point, normal, own):
+        for face in panels:
+            if face.label[0] == own or _dot(face.normal, normal) < 1-1e-6:
+                continue
+            if abs(_dot(_sub(point, face.pts[0]), normal)) > 1e-6:
+                continue
+            u = _norm(_sub(face.pts[1], face.pts[0]))
+            v = _cross(normal, u)
+            poly = _ccw([(_dot(p,u), _dot(p,v)) for p in face.pts])
+            x,y = _dot(point,u), _dot(point,v)
+            if all((poly[k][0]-poly[k-1][0])*(y-poly[k-1][1])
+                   -(poly[k][1]-poly[k-1][1])*(x-poly[k-1][0]) >= -1e-6 for k in range(len(poly))):
+                pixel = face.texel(point)
+                if pixel is not None and pixel[3] == 255:
+                    return True
+        return False
+    for i, el in enumerate(elements):
+        if abs(el.get("rotation", {}).get("angle", 0)) < 1e-9:
+            covers.append((i, el["from"], el["to"], None, None))
+        elif len(el.get("faces", {})) == 6 and _opaque(by_element[i]):
+            # A rotated CLOSED solid can cover a missing internal face too.
+            # Test in its actual local coordinates, not its world AABB, which
+            # would incorrectly hide exposed corners beside slanted furniture.
+            turn, _ = _turner(el["rotation"])
+            origin = np.array(turn((0, 0, 0)))
+            matrix = np.column_stack([np.array(turn(p)) - origin
+                                      for p in ((1, 0, 0), (0, 1, 0), (0, 0, 1))])
+            covers.append((i, el["from"], el["to"], np.linalg.inv(matrix), origin))
+
+    def covered(point, own):
+        for j, low, high, inverse, origin in covers:
+            if j == own:
+                continue
+            local = point if inverse is None else inverse @ (np.array(point) - origin)
+            if all(low[k] - 1e-6 <= local[k] <= high[k] + 1e-6 for k in range(3)):
+                return True
+        return False
     out = []
     for i, f, t in boxes:
         present = set(elements[i].get("faces", {}))
@@ -472,7 +516,8 @@ def _open_faces(elements, faces):
                     p[axis] = plane + sign * 0.01
                     p[others[0]] = f[others[0]] + (a + 0.5) / 4 * (t[others[0]] - f[others[0]])
                     p[others[1]] = f[others[1]] + (b + 0.5) / 4 * (t[others[1]] - f[others[1]])
-                    if not any(all(F[k] - 1e-6 <= p[k] <= T[k] + 1e-6 for k in range(3)) for j, F, T in covers if j != i):
+                    on_plane = list(p);on_plane[axis] = plane
+                    if not covered(p, i) and not panel_covers(on_plane, _NORMAL[face], i):
                         free += 1
             if free:
                 out.append((i, face))
@@ -480,13 +525,12 @@ def _open_faces(elements, faces):
 
 
 def _layered(elements, a, b):
-    """Whether two faces are the same face of two identical, unrotated boxes: vanilla's overlay layering (grass_block's
+    """Whether two faces are the same world quad of two identical boxes: vanilla's overlay layering (grass_block's
     side overlay, the ore template in tools/material_icons.py). Their quads are the same quad, so they draw at exactly
     the same depth and the later element always wins: no flicker, unlike faces that are only nearly flush."""
     ea, eb = elements[a.label[0]], elements[b.label[0]]
     return (a.label[1] == b.label[1]
-            and abs(ea.get("rotation", {}).get("angle", 0)) < 1e-9
-            and abs(eb.get("rotation", {}).get("angle", 0)) < 1e-9
+            and all(abs(x-y) < 1e-9 for pa, pb in zip(a.pts, b.pts) for x, y in zip(pa, pb))
             and all(abs(ea[k][i] - eb[k][i]) < 1e-9 for k in ("from", "to") for i in range(3)))
 
 
@@ -552,7 +596,9 @@ def check_block_models(machines):
         if open_faces:
             stem = path.stem
             key = None if _family(stem) in machines else _allowed(O1_ALLOW, stem)
-            if key:
+            if newest_original_art.intentional_wall_join(path, elements, open_faces):
+                allowed['O1'].add('native wall centre seam: ' + name)
+            elif key:
                 allowed["O1"].add(key)
             else:
                 i, face = open_faces[0]

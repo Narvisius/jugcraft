@@ -38,6 +38,30 @@ public final class WildSunEquipment {
         ServerTickEvents.END_SERVER_TICK.register(server->{for(var p:server.getPlayerList().getPlayers()){if(!p.isAlive()||p.tickCount%20!=0)continue;var stack=p.getItemBySlot(EquipmentSlot.HEAD);if(stack.getItem() instanceof Mask mask&&!mask.sol){var effect=switch(mask.phase){case 0->MobEffects.STRENGTH;case 1->MobEffects.SPEED;case 2->MobEffects.HASTE;case 3->MobEffects.JUMP_BOOST;case 4->MobEffects.RESISTANCE;default->MobEffects.HEALTH_BOOST;};p.addEffect(new MobEffectInstance(effect,60,0,true,false));}}});
     }
     public static boolean masked(LivingEntity e){return e.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof Mask;}
+    /** Personal defensive boss reward; every survival use pays gold and a cooldown. */
+    public static final class SunblockStaff extends Item {
+        public SunblockStaff(Properties p){super(p.stacksTo(1));}
+        @Override public InteractionResult use(Level level,Player actor,InteractionHand hand){
+            if(!(actor instanceof ServerPlayer player))return InteractionResult.SUCCESS;
+            var staff=player.getItemInHand(hand);
+            if(!player.isAlive()||player.isSpectator()||player.getCooldowns().isOnCooldown(staff))return InteractionResult.FAIL;
+            if(!player.hasInfiniteMaterials()){
+                ItemStack payment=ItemStack.EMPTY;
+                for(int i=0;i<player.getInventory().getContainerSize();i++){
+                    var candidate=player.getInventory().getItem(i);
+                    if(candidate.is(Items.GOLD_INGOT)){payment=candidate;break;}
+                }
+                if(payment.isEmpty()){
+                    player.sendOverlayMessage(net.minecraft.network.chat.Component.literal("Sunblock requires one gold ingot."));
+                    return InteractionResult.FAIL;
+                }
+                payment.shrink(1);player.getInventory().setChanged();
+            }
+            player.addEffect(new MobEffectInstance(SUNBLOCK,400,0));
+            player.getCooldowns().addCooldown(staff,1200);
+            return InteractionResult.SUCCESS;
+        }
+    }
     static void releaseFollower(ServerLevel l,UUID owner,UUID entity){if(owner!=null)WildFollowerLedger.get(l).release(owner,entity);}
     public static final class Mask extends Item implements GeoItem {
         public final int phase;public final boolean sol;

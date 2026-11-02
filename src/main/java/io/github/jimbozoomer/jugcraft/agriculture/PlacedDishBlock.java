@@ -41,6 +41,7 @@ public class PlacedDishBlock extends Block {
 
 	/** How a set-down dish stands (its model's template in tools/menu_data.py), for its outline and collision. */
 	public enum DishShape {
+		SERVING(Block.box(1.0, 0.0, 1.0, 15.0, 14.0, 15.0)),
 		BOWL(Block.box(3.0, 0.0, 3.0, 13.0, 6.5, 13.0)),
 		PLATE(Block.box(1.0, 0.0, 1.0, 15.0, 5.5, 15.0)),
 		STACK(Block.box(3.0, 0.0, 3.0, 13.0, 6.0, 13.0)),

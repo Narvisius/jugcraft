@@ -87,6 +87,7 @@ public final class Mutations {
             mutant.setCustomName(original.getCustomName());mutant.setPersistenceRequired();if(!spec.mood().equals("hostile"))mutant.tame(p.getUUID());
             for(var slot:EquipmentSlot.values())mutant.equipSaved(slot,original.getItemBySlot(slot).copy());
             if(!p.level().addFreshEntity(mutant))return InteractionResult.FAIL;
+            if(original instanceof Mob old)io.github.jimbozoomer.jugcraft.pets.Pets.converted(old,mutant);
             original.discard();stack.consume(1,p);p.level().sendParticles(ParticleTypes.WITCH,mutant.getX(),mutant.getY()+1,mutant.getZ(),24,.7,1,.7,.02);return InteractionResult.SUCCESS;
         }
     }

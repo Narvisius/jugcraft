@@ -1,8 +1,12 @@
 {
   "schema": 1,
+  "slot": "operation",
+  "requires": {
+    "research": "jugcraft:nouveau_arcana",
+    "state": "encountered"
+  },
   "capacity": 1,
   "focus": 2,
-  "slot": "operation",
   "operation": {
     "principle": "radiance",
     "intent": "helpful",
@@ -10,9 +14,5 @@
     "status": "jugcraft:nouveau/mark",
     "magnitude": 1,
     "duration": 2400
-  },
-  "requires": {
-    "research": "jugcraft:nouveau_arcana",
-    "state": "encountered"
   }
 }

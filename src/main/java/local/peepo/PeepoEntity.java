@@ -200,6 +200,8 @@ public final class PeepoEntity extends PathfinderMob {
     static boolean workTool(ItemStack item){return !item.isEmpty() && (item.is(net.minecraft.tags.ItemTags.SWORDS) || item.has(DataComponents.TOOL)
         || item.is(net.minecraft.tags.ItemTags.HOES) || item.is(Items.SHEARS) || item.is(io.github.jimbozoomer.jugcraft.agriculture.JugcraftAgriculture.KNIVES)
         || item.getItem() instanceof io.github.jimbozoomer.jugcraft.logistics.BrassWrenchItem || item.is(Items.FLINT_AND_STEEL) || CompanionFishing.rod(item) || item.is(Items.BRUSH));}
+    /** Release world leases before a persistent companion is put in the owner's pet inventory. */
+    public void preparePetStorage(){social.cancel();resetCompanionRoutine();transport.stop();transport.releaseStock();leaveCompanionBed();setRestMode(CompanionEnergy.Rest.NONE);setNoGravity(false);}
     @Override public void remove(net.minecraft.world.entity.Entity.RemovalReason reason){
         if(transport!=null && reason.shouldDestroy())transport.releaseStock();
         super.remove(reason);

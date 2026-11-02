@@ -65,12 +65,27 @@ public final class NewestCollectionClientTests implements FabricClientGameTest {
                 c.waitTicks(30);c.takeScreenshot("newest_creature_"+name);
                 server.runCommand("kill @e[tag=newest_preview]");
             }
-            for(String name:List.of("supps_statue","supps_barnacles","supps_lumisene","jugtania_mana_pool","jugtania_runic_altar","homeworks_dye_vat","windowworks_blackstone_brick_gothic")){
+            for(String name:List.of("supps_statue","supps_barnacles","supps_lumisene","jugtania_mana_pool","jugtania_runic_altar","homeworks_dye_vat","windowworks_blackstone_brick_gothic",
+                    "homeworks_bamboo_lamp","homeworks_jungle_lamp","homeworks_oak_large_stump","supps_lunch_basket",
+                    "twigworks_paper_lantern","jugtania_corporea_crystal_cube","jugtania_mana_spreader","packworks_backpack","supps_awning")){
                 server.runOnServer(s->{var id=Identifier.fromNamespaceAndPath("jugcraft",name);if(!BuiltInRegistries.BLOCK.containsKey(id))throw new AssertionError("Missing block "+id);});
                 server.runCommand("setblock 0 80 4 jugcraft:"+name);
                 c.waitTicks(20);c.takeScreenshot("newest_block_"+name);
+                if(List.of("homeworks_bamboo_lamp","homeworks_jungle_lamp","homeworks_oak_large_stump","supps_lunch_basket",
+                        "twigworks_paper_lantern","jugtania_corporea_crystal_cube","jugtania_mana_spreader","packworks_backpack","supps_awning").contains(name)){
+                    server.runCommand("tp @a 3 81 1 45 20");c.waitTicks(12);c.takeScreenshot("nov1_geometry_side_"+name);
+                    server.runCommand("tp @a 0 81 8 180 20");c.waitTicks(12);c.takeScreenshot("nov1_geometry_back_"+name);
+                    server.runCommand("tp @a 0 80 0 0 0");
+                }
                 server.runCommand("fill -4 80 1 4 83 7 minecraft:air");
             }
+            // Joined stump components deliberately omit internal faces. Inspect
+            // the assembled L, not an isolated corner template treated as a cube.
+            server.runCommand("setblock 0 80 4 jugcraft:homeworks_oak_large_stump");
+            server.runCommand("setblock 1 80 4 jugcraft:homeworks_oak_large_stump");
+            server.runCommand("setblock 0 80 5 jugcraft:homeworks_oak_large_stump");
+            server.runCommand("tp @a 4 83 1 45 35");c.waitTicks(20);c.takeScreenshot("nov1_joined_stump_front");
+            server.runCommand("tp @a -3 83 8 -135 35");c.waitTicks(20);c.takeScreenshot("nov1_joined_stump_back");
         }
     }
 }

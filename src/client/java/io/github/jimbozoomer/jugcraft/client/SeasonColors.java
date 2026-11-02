@@ -28,12 +28,14 @@ public final class SeasonColors {
 	public static void register() {
 		ClientPlayNetworking.registerGlobalReceiver(SeasonPayload.TYPE, (payload, context) -> {
 			SeasonState.setClientSnowing(payload.snowing());
+            io.github.jimbozoomer.jugcraft.agriculture.HarvestFestival.setClientCostumes(payload.harvestCostumes());
 			setDay(payload.day());
 		});
 		// Leaving a server returns to vanilla colours and rain, so a server without Jugcraft shows no seasons.
 		ClientPlayConnectionEvents.DISCONNECT.register((listener, client) -> {
 			day = 0;
 			SeasonState.setClientSnowing(false);
+            io.github.jimbozoomer.jugcraft.agriculture.HarvestFestival.setClientCostumes(false);
 		});
 		// New biome tags (the biome flags were just updated, see SeasonalBiome) can change which biomes have seasons.
 		CommonLifecycleEvents.TAGS_LOADED.register((registries, client) -> {

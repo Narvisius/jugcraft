@@ -11,6 +11,16 @@ import net.minecraft.world.item.*;
 
 /** Real passenger controls, F5 and original atlas rendering in an isolated test world. */
 public final class AircraftFlightClientGameTests implements FabricClientGameTest {
+    private static void assertRenderedWingDirection(Aircraft a,boolean left){
+        for(float yaw:new float[]{0,90,180,-90}){
+            var pose=new com.mojang.blaze3d.vertex.PoseStack();
+            io.github.jimbozoomer.jugcraft.client.AircraftRenderer.applyBodyOrientation(pose,yaw,10,a.bank(1));
+            var port=pose.last().pose().transformPosition(new org.joml.Vector3f(2,0,0));
+            var starboard=pose.last().pose().transformPosition(new org.joml.Vector3f(-2,0,0));
+            if(left ? port.y>=starboard.y : starboard.y>=port.y)
+                throw new AssertionError("Rendered wing tilts away from turn: "+a.spec().name()+" yaw="+yaw);
+        }
+    }
     @Override public void runTest(ClientGameTestContext c){
         try(var world=c.worldBuilder().adjustSettings(s->s.setGameMode(WorldCreationUiState.SelectedGameMode.CREATIVE)).create()){
             var server=world.getServer();world.getConnection().waitForChunksRender();
@@ -31,6 +41,7 @@ public final class AircraftFlightClientGameTests implements FabricClientGameTest
                 c.runOnClient(mc->{
                     if(!(mc.player.getVehicle() instanceof Aircraft a))throw new AssertionError("Aircraft passenger sync: "+kind);
                     if(a.power()<.1||a.animatedControl(1,1)<.5||a.bank(1)>=0)throw new AssertionError("Powered steering/animation: "+kind);
+                    assertRenderedWingDirection(a,true);
                     double distance=mc.gameRenderer.mainCamera().position().distanceTo(mc.player.getEyePosition());
                     if(distance<a.spec().cameraDistance()*.7)throw new AssertionError("F5 remains inside aircraft: "+kind+" distance="+distance);
                     try{
@@ -51,6 +62,7 @@ public final class AircraftFlightClientGameTests implements FabricClientGameTest
                 c.runOnClient(mc->{
                     var a=(Aircraft)mc.player.getVehicle();
                     if(a.animatedControl(1,1)>-.5||a.bank(1)<=0)throw new AssertionError("Right turn must lower the right wing: "+kind);
+                    assertRenderedWingDirection(a,false);
                 });
                 c.takeScreenshot("aircraft_oct29_"+kind+"_right");
                 c.getInput().releaseKey(o->o.keyRight);c.getInput().releaseKey(o->o.keyUp);

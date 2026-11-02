@@ -15,4 +15,11 @@ public class RaiderModel extends HumanoidModel<RaiderRenderer.State> {
 	public RaiderModel(ModelPart root) {
 		super(root);
 	}
+
+    @Override public void setupAnim(RaiderRenderer.State state) {
+        super.setupAnim(state);
+        // The uniform cap/goggles are the skin's outer head shell, not equipped armor.
+        // November's costume supplies its own headwear; restore the shell afterwards.
+        hat.visible = !io.github.jimbozoomer.jugcraft.agriculture.HarvestFestival.clientCostumes();
+    }
 }

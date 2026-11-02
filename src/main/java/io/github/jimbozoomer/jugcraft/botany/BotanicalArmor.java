@@ -24,6 +24,7 @@ public final class BotanicalArmor {
     public static final Set<String> FAMILIES=Set.of("manasteel","elementium","terrasteel","manaweave");
     static void register(){
         BotanicalPixie.register();
+        BotanicalShapedRecipe.register();
         PHANTOM=Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE,Jugcraft.id("botanical_phantom_ink"),DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
         WILLS=Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE,Jugcraft.id("botanical_ancient_wills"),DataComponentType.<Integer>builder().persistent(Codec.intRange(0,63)).networkSynchronized(ByteBufCodecs.VAR_INT).build());
         Registry.register(BuiltInRegistries.RECIPE_SERIALIZER,Jugcraft.id("botanical_armor_customization"),BotanicalArmorRecipe.SERIALIZER);

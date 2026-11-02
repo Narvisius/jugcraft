@@ -81,12 +81,12 @@ public final class TownProtection {
 
 	/** Whether the town stops this player changing this block. */
 	public static boolean denies(Player player, Level level, BlockPos pos) {
-		return !level.isClientSide() && enabled() && Town.isProtected(level, pos) && !exempt(player);
+		return !level.isClientSide() && (enabled() && Town.isProtected(level, pos) || io.github.jimbozoomer.jugcraft.server.OperatorRegions.protects(level, pos)) && !exempt(player);
 	}
 
 	/** Whether the town shields a block from explosions, fire and pistons. */
 	public static boolean shieldsBlock(Level level, BlockPos pos) {
-		return !level.isClientSide() && enabled() && Town.isProtected(level, pos);
+		return !level.isClientSide() && (enabled() && Town.isProtected(level, pos) || io.github.jimbozoomer.jugcraft.server.OperatorRegions.protects(level, pos));
 	}
 
 	private static InteractionResult useBlock(Player player, Level level, InteractionHand hand, BlockHitResult hit) {
@@ -118,6 +118,8 @@ public final class TownProtection {
 	public static boolean publicBlock(Level level, BlockPos pos, BlockState state) {
 		// This is the player's personal inventory, explicitly provided by the bank.
 		if (state.is(net.minecraft.world.level.block.Blocks.ENDER_CHEST)) return true;
+        if (state.getBlock() instanceof io.github.jimbozoomer.jugcraft.boardgames.TableBlock) return true;
+        if (state.getBlock() instanceof io.github.jimbozoomer.jugcraft.boardgames.TableBlock) return true;
         // Public enchanting uses an isolated vanilla menu; it never exposes the
         // owner's new persistent table inventory (OwnerEnchantingMenuMixin).
         if (state.is(net.minecraft.world.level.block.Blocks.ENCHANTING_TABLE) && state.is(USABLE)) return true;

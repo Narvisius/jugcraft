@@ -140,6 +140,13 @@ tasks.register('herobrineScheduleTest', JavaExec) {
 }
 tasks.named('check') { dependsOn tasks.named('herobrineScheduleTest') }
 
+tasks.register('boardRulesTest', JavaExec) {
+    dependsOn tasks.named('testClasses')
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'io.github.jimbozoomer.jugcraft.boardgames.BoardRulesTests'
+}
+tasks.named('check') { dependsOn tasks.named('boardRulesTest') }
+
 tasks.register('gameUpdaterTest', JavaExec) {
     dependsOn tasks.named('testClasses')
     classpath = sourceSets.test.runtimeClasspath

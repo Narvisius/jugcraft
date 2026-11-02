@@ -21,6 +21,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -80,7 +81,7 @@ public class FeastTableBlock extends BaseEntityBlock {
 	 * runners can be added after these.
 	 */
 	public enum Runner implements StringRepresentable {
-		HARVEST("harvest"), BATS("bats");
+		HARVEST("harvest"), BATS("bats"), LINEN("linen");
 
 		private final String name;
 
@@ -148,7 +149,8 @@ public class FeastTableBlock extends BaseEntityBlock {
 	@Override
 	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
 			BlockHitResult hit) {
-		if (stack.is(JugcraftAgriculture.item(BAT_RUNNER)) || stack.is(Items.SHEARS) && state.getValue(RUNNER) == Runner.BATS) {
+		if (stack.is(JugcraftAgriculture.item(BAT_RUNNER)) || stack.is(Blocks.CARPET.white().asItem())
+                || stack.is(Items.SHEARS) && state.getValue(RUNNER) != Runner.HARVEST) {
 			return dress(stack, state, level, pos, player, hand);
 		}
 		if (!FeastTableBlockEntity.food(stack)) {
@@ -167,23 +169,27 @@ public class FeastTableBlock extends BaseEntityBlock {
 		return InteractionResult.SUCCESS;
 	}
 
-	/** A Bat Table Runner laid over the length's own runner, or taken off with shears into the player's inventory. */
+	/** Apply a bat runner or linen carpet; swapping or shearing returns the previous cloth without changing dishes. */
 	private static InteractionResult dress(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand) {
 		boolean laying = !stack.is(Items.SHEARS);
-		if (laying && state.getValue(RUNNER) == Runner.BATS) {
-			return InteractionResult.FAIL;
+        Runner previous = state.getValue(RUNNER);
+        Runner desired = !laying ? Runner.HARVEST : stack.is(Blocks.CARPET.white().asItem()) ? Runner.LINEN : Runner.BATS;
+		if (desired == previous) {
+            // Handle the click without consuming cloth. FAIL lets the carpet
+            // BlockItem fall through to normal placement beside the table.
+			return InteractionResult.SUCCESS;
 		}
 		if (level instanceof ServerLevel server) {
-			server.setBlock(pos, state.setValue(RUNNER, laying ? Runner.BATS : Runner.HARVEST), Block.UPDATE_ALL);
+			server.setBlock(pos, state.setValue(RUNNER, desired), Block.UPDATE_ALL);
 			if (laying) {
 				stack.consume(1, player);
-			} else {
-				ItemStack runner = new ItemStack(JugcraftAgriculture.item(BAT_RUNNER));
-				if (!player.getInventory().add(runner)) {
-					Block.popResource(server, pos.above(), runner);
-				}
-				stack.hurtAndBreak(1, player, hand);
-			}
+            } else {
+                stack.hurtAndBreak(1, player, hand);
+            }
+            if (previous != Runner.HARVEST) {
+                ItemStack runner = new ItemStack(previous == Runner.LINEN ? Blocks.CARPET.white().asItem() : JugcraftAgriculture.item(BAT_RUNNER));
+                if (!player.getInventory().add(runner)) Block.popResource(server, pos.above(), runner);
+            }
 			server.playSound(null, pos, laying ? SoundEvents.WOOL_PLACE : SoundEvents.SHEEP_SHEAR, SoundSource.BLOCKS, 0.8F, 1.0F);
 			server.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
 		}

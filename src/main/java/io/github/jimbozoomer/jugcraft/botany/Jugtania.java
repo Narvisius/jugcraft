@@ -54,7 +54,10 @@ public final class Jugtania {
                 case "wall"->new WallBlock(properties);
                 case "fence"->new FenceBlock(properties);
                 case "fence_gate"->new FenceGateBlock(WoodType.OAK,properties);
-                case "pillar"->new RotatedPillarBlock(properties);
+                case "pillar"->Set.of("livingwood","livingwood_log","dreamwood","dreamwood_log").contains(name)
+                        ?new io.github.jimbozoomer.jugcraft.agriculture.StrippableLogBlock(properties,"stripped_"+name){
+                            @Override public Block stripped(){return block("stripped_"+name);}
+                        }:new RotatedPillarBlock(properties);
                 case "facing_decor"->new io.github.jimbozoomer.jugcraft.menagerie.OwnerDecorVariants.Facing(properties);
                 case "bifrost"->new BotanicalTerrainRods.Bifrost(properties.noOcclusion());
                 case "pot"->new FlowerPotBlock(block(name.substring(7)),BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT).setId(key));

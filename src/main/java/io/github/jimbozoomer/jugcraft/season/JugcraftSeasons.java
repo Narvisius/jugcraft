@@ -38,6 +38,7 @@ public final class JugcraftSeasons {
 	private static volatile SeasonCalendar.Settings settings = SeasonCalendar.Settings.DEFAULT;
 	private static int lastDay = -1;
 	private static boolean lastSnowing;
+    private static boolean lastHarvestCostumes;
 	private static List<SeasonCalendar.Event> lastEvents = List.of();
 	private static int ticks;
 
@@ -109,6 +110,14 @@ public final class JugcraftSeasons {
 		return settings.eventsOn(date()).contains(event);
 	}
 
+    /** One-day Thanksgiving raid truce, evaluated on the authoritative configured server calendar. */
+    public static boolean harvestCostumes(){
+        return io.github.jimbozoomer.jugcraft.agriculture.HarvestFestival.costumesOn(settings.effectiveDate(date()));
+    }
+    public static boolean thanksgivingTruce() {
+        return settings.thanksgivingTruceOn(date());
+    }
+
 	/** Holds a season (or follows the date again, or switches off) until the server stops; tells every player. */
 	public static void setMode(MinecraftServer server, SeasonCalendar.Mode mode) {
 		settings = settings.withMode(mode);
@@ -131,7 +140,7 @@ public final class JugcraftSeasons {
 	}
 
 	private static SeasonPayload payload() {
-		return new SeasonPayload(today(), SeasonState.serverSnowing());
+		return new SeasonPayload(today(), SeasonState.serverSnowing(),harvestCostumes());
 	}
 
 	/** Recomputes the day, snow and events; tells players what changed and announces events that began. */
@@ -141,8 +150,8 @@ public final class JugcraftSeasons {
 		boolean snowing = settings.snowOn(date);
 		SeasonState.setServerSnowing(snowing);
 		List<SeasonCalendar.Event> events = settings.eventsOn(date);
-		if (day != lastDay || snowing != lastSnowing) {
-			SeasonPayload payload = new SeasonPayload(day, snowing);
+		if (day != lastDay || snowing != lastSnowing || harvestCostumes()!=lastHarvestCostumes) {
+			SeasonPayload payload = new SeasonPayload(day, snowing,harvestCostumes());
 			for (ServerPlayer player : PlayerLookup.all(server)) {
 				if (ServerPlayNetworking.canSend(player, SeasonPayload.TYPE)) {
 					ServerPlayNetworking.send(player, payload);
@@ -155,6 +164,7 @@ public final class JugcraftSeasons {
 		}
 		lastDay = day;
 		lastSnowing = snowing;
+        lastHarvestCostumes=harvestCostumes();
 		lastEvents = events;
 	}
 

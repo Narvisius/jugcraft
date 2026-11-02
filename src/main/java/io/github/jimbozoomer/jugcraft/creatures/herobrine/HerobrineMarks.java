@@ -555,7 +555,7 @@ public final class HerobrineMarks extends SavedData {
 		if (!level.hasChunkAt(pos)) {
 			return Result.WAIT;
 		}
-		if (LandRegistry.isClaimed(level, pos) || Town.isProtected(level, pos)
+		if (LandRegistry.isClaimed(level, pos) || io.github.jimbozoomer.jugcraft.town.TownProtection.shieldsBlock(level, pos)
                 || mark.type().equals("sky_island") && HerobrineSkyIslands.protectedTownColumn(level, pos)) {
 			return Result.STOP;
 		}

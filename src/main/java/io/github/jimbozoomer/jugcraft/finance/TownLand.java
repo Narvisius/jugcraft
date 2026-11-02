@@ -11,6 +11,7 @@ final class TownLand {
 
 	/** True when any part of the chunk is in the town's protected area (checked on every column at its ground). */
 	static boolean touchesTown(Level level, long key) {
+        if (io.github.jimbozoomer.jugcraft.server.OperatorRegions.touchesChunk(level, LandRegistry.keyX(key) << 4, LandRegistry.keyZ(key) << 4)) return true;
 		BlockPos origin = Town.origin(level);
 		if (origin == null) {
 			return false;

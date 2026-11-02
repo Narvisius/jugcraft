@@ -58,7 +58,7 @@ public final class Ledger extends SavedData {
             Codec.LONG.fieldOf("amount").forGetter(FinanceBook.PrizeDebt::amount)
     ).apply(i, (house, player, amount) -> new FinanceBook.PrizeDebt(house.orElse(null), player, amount)));
 
-	private static final Codec<FinanceBook> BOOK = RecordCodecBuilder.create(i -> i.group(
+	private static final com.mojang.serialization.MapCodec<FinanceBook> BOOK = RecordCodecBuilder.mapCodec(i -> i.group(
 			// "rate_bp" (the old daily interest) is no longer read: loans now carry a flat fee.
 			Codec.INT.optionalFieldOf("fee_bp", FinanceBook.DEFAULT_FEE_BP).forGetter(FinanceBook::feeBp),
 			Codec.LONG.optionalFieldOf("borrow_limit", FinanceBook.DEFAULT_LIMIT).forGetter(FinanceBook::borrowLimit),
@@ -86,7 +86,11 @@ public final class Ledger extends SavedData {
 		return book;
 	}));
 
-	public static final Codec<Ledger> CODEC = BOOK.xmap(Ledger::new, Ledger::book);
+	public static final Codec<Ledger> CODEC = RecordCodecBuilder.create(i -> i.group(
+        BOOK.forGetter(Ledger::book),
+        Codec.unboundedMap(Codec.STRING,BoardWagers.CODEC).optionalFieldOf("board_wagers",Map.of()).forGetter(l->l.boardWagers.receipts())
+    ).apply(i,(book,receipts)->{var ledger=new Ledger(book);ledger.boardWagers.restore(receipts);return ledger;}));
+    public final BoardWagers boardWagers=new BoardWagers();
 	static final SavedDataType<Ledger> TYPE = new SavedDataType<>(Jugcraft.id("finance"), Ledger::new, CODEC, null);
 
 	private final FinanceBook book;

@@ -116,6 +116,7 @@ LANG = {
     "message.jugcraft.raid.withdrawn": "The raiders withdraw.",
     "message.jugcraft.raid.dir.north": "north", "message.jugcraft.raid.dir.south": "south",
     "message.jugcraft.raid.dir.east": "east", "message.jugcraft.raid.dir.west": "west",
+    "message.jugcraft.raid_horn.thanksgiving": "The Thanksgiving truce is in effect today; your horn was kept",
     "message.jugcraft.raid_horn.off": "Raids are switched off on this server",
     "message.jugcraft.raid_horn.dimension": "Only the Overworld's raiders answer the horn",
     "message.jugcraft.raid_horn.peaceful": "No raiders come in peaceful",

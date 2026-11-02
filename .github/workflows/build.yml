@@ -36,6 +36,8 @@ jobs:
           cache: gradle
       - name: Install data-generation dependencies
         run: python3 -m pip install --quiet pillow numpy
+      - name: Prepare pinned vanilla assets for data tests
+        run: python3 scripts/prepare_vanilla_assets.py
       - name: Check generated JSON is up to date
         run: |
           python3 tools/generate_material_data.py

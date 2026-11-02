@@ -64,6 +64,7 @@ public final class RottenStorage {
         HunterWolf(EntityType<? extends Wolf> type,Level level){super(type,level);}
         @Override protected void customServerAiStep(ServerLevel level){
             super.customServerAiStep(level);
+            if(isTame())hunter=null;
             if(hunter!=null&&tickCount%10==0&&level.getEntity(hunter) instanceof RottenCreatures.Undead parent&&parent.isAlive()){
                 setTarget(parent.getTarget());if(getTarget()==null&&distanceToSqr(parent)>16)getNavigation().moveTo(parent,1.1);
             }

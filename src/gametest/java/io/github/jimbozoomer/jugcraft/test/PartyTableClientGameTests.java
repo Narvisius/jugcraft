@@ -68,6 +68,25 @@ public class PartyTableClientGameTests implements FabricClientGameTest {
 			shoot(context, singleplayer, x + 1, y + 1, z - 1, 0, 35, "jugcraft_party_table_stands");
 			// From off the table's west end, looking along it: the runner hanging over the end, the tree and the trays.
 			shoot(context, singleplayer, x - 5, y + 1, z + 1, -70, 25, "jugcraft_party_table_runner");
+            server.runOnServer(minecraft -> {
+                var level=minecraft.overworld();
+                for(int dx=-3;dx<=4;dx++) {
+                    var at=origin.offset(dx,0,2);
+                    level.setBlock(at,level.getBlockState(at).setValue(FeastTableBlock.RUNNER,FeastTableBlock.Runner.LINEN),Block.UPDATE_ALL);
+                    level.setBlock(at.above(),Blocks.AIR.defaultBlockState(),Block.UPDATE_ALL);
+                }
+                for(int dz=-3;dz<=0;dz++) level.setBlock(origin.offset(4,0,dz),
+                    JugcraftAgriculture.block("feast_table").defaultBlockState().setValue(FeastTableBlock.AXIS,Direction.Axis.Z)
+                        .setValue(FeastTableBlock.RUNNER,FeastTableBlock.Runner.LINEN),Block.UPDATE_ALL);
+                for(int dz=-3;dz<=0;dz++) {
+                    var at=origin.offset(4,0,dz);
+                    level.setBlock(at,Block.updateFromNeighbourShapes(level.getBlockState(at),level,at),Block.UPDATE_ALL);
+                }
+            });
+            shoot(context,singleplayer,x-5,y+1,z,-65,25,"jugcraft_linen_table_connected");
+            shoot(context,singleplayer,x+5,y+1,z-4,0,35,"jugcraft_linen_table_other_axis");
+            server.runOnServer(minecraft -> minecraft.overworld().destroyBlock(origin.offset(0,0,2),false));
+            shoot(context,singleplayer,x,y+1,z-1,0,35,"jugcraft_linen_table_split");
 		}
 	}
 

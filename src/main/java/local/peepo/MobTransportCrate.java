@@ -47,6 +47,8 @@ public final class MobTransportCrate extends Item {
     private static void message(Player p,String text){p.sendOverlayMessage(Component.literal(text));}
     public static boolean owned(Player player,Mob mob){
         if(mob instanceof PeepoEntity p && p.orders.tamed())return p.orders.allowed(player);
+        var keeper=io.github.jimbozoomer.jugcraft.pets.Pets.owner(mob);
+        if(keeper!=null)return keeper.equals(player.getUUID());
         if(mob instanceof OwnableEntity pet && pet.getOwnerReference()!=null)return pet.getOwnerReference().getUUID().equals(player.getUUID());
         return true;
     }

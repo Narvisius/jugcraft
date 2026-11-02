@@ -180,6 +180,7 @@ public final class Jugcraft implements ModInitializer {
 		JugcraftSeasons.register();
 		new io.github.jimbozoomer.jugcraft.creatures.scary.ScaryMod().onInitialize();
 		io.github.jimbozoomer.jugcraft.creatures.chima.ChimaMod.register();
+		io.github.jimbozoomer.jugcraft.server.ServerUtilities.register();
 		io.github.jimbozoomer.jugcraft.town.JugcraftTown.register();
 		io.github.jimbozoomer.jugcraft.concordance.JugcraftConcordance.register();
 		io.github.jimbozoomer.jugcraft.academy.JugcraftAcademy.register();
@@ -227,6 +228,10 @@ public final class Jugcraft implements ModInitializer {
         io.github.jimbozoomer.jugcraft.herobrine.HerobrineScheduleDirector.register();
         io.github.jimbozoomer.jugcraft.curse.CursedMirror.register();
         io.github.jimbozoomer.jugcraft.server.ViewerWorldRules.register();
+		io.github.jimbozoomer.jugcraft.boardgames.BoardGames.register();
+        io.github.jimbozoomer.jugcraft.pets.Pets.register();
+        io.github.jimbozoomer.jugcraft.agriculture.HarvestFestival.register();
+        io.github.jimbozoomer.jugcraft.agriculture.FoodServings.register();
 		registerMachineStylePack();
 		// Higher-priority data overrides only exist when the optional backpack mod is installed.
 		if (FabricLoader.getInstance().isModLoaded("travelersbackpack")) {

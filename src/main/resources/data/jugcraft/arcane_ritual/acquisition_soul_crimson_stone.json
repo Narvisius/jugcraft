@@ -1,0 +1,34 @@
+{
+  "forge_tier": 3,
+  "magic_circle": "jugcraft:forbidden_create_item",
+  "main_ingredient": {
+    "item": "minecraft:crimson_nylium"
+  },
+  "inputs": [
+    {
+      "amount": 2,
+      "ingredient": {
+        "item": "jugcraft:forbidden_enchanted_soul"
+      }
+    },
+    {
+      "amount": 4,
+      "ingredient": {
+        "item": "jugcraft:forbidden_obsidiansteel_ingot"
+      }
+    }
+  ],
+  "essences": {
+    "aureal": 600,
+    "blood": 750,
+    "souls": 3,
+    "experience": 300
+  },
+  "result": {
+    "type": "jugcraft:forbidden_transmute_input",
+    "result_item": {
+      "id": "jugcraft:forbidden_soul_crimson_stone",
+      "count": 1
+    }
+  }
+}

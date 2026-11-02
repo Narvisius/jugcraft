@@ -82,7 +82,7 @@ def generate(shared=True):
  craft('sprayer',['jugcraft:tin_plate','jugcraft:iron_plate','minecraft:glass_bottle'],'jugcraft:jimta_cf_sprayer')
  craft('painter',['minecraft:white_wool','minecraft:stick','minecraft:iron_nugget'],'jugcraft:jimta_painter')
  craft('wood_scaffold',['#minecraft:planks']*3+['minecraft:stick']*3,'jugcraft:jimta_wood_scaffold',6)
- craft('iron_scaffold',['minecraft:iron_ingot']*3+['minecraft:iron_bars']*3,'jugcraft:jimta_iron_scaffold',6)
+ craft('iron_scaffold',['minecraft:iron_ingot']*3+['minecraft:iron_bars']*3+['minecraft:iron_nugget'],'jugcraft:jimta_iron_scaffold',6)
  craft('wood_scaffold_reinforced',['jugcraft:jimta_wood_scaffold','minecraft:stick','minecraft:stick'],'jugcraft:jimta_wood_scaffold_reinforced')
  craft('iron_scaffold_reinforced',['jugcraft:jimta_iron_scaffold','jugcraft:jimta_iron_fence'],'jugcraft:jimta_iron_scaffold_reinforced')
  craft('iron_fence',['minecraft:iron_bars','jugcraft:steel_plate'],'jugcraft:jimta_iron_fence',2)

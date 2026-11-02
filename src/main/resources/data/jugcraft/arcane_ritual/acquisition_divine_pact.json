@@ -1,0 +1,40 @@
+{
+  "forge_tier": 4,
+  "magic_circle": "jugcraft:forbidden_create_item",
+  "main_ingredient": {
+    "item": "minecraft:enchanted_book"
+  },
+  "inputs": [
+    {
+      "amount": 2,
+      "ingredient": {
+        "item": "jugcraft:forbidden_stellarite_piece"
+      }
+    },
+    {
+      "amount": 1,
+      "ingredient": {
+        "item": "jugcraft:forbidden_dark_nether_star"
+      }
+    },
+    {
+      "amount": 4,
+      "ingredient": {
+        "item": "jugcraft:forbidden_deorum_ingot"
+      }
+    }
+  ],
+  "essences": {
+    "aureal": 800,
+    "blood": 1000,
+    "souls": 4,
+    "experience": 400
+  },
+  "result": {
+    "type": "jugcraft:forbidden_transmute_input",
+    "result_item": {
+      "id": "jugcraft:forbidden_divine_pact",
+      "count": 1
+    }
+  }
+}

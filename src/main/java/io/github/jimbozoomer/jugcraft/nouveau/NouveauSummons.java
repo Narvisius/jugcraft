@@ -31,6 +31,7 @@ public final class NouveauSummons {
     private record Memory(Vec3 position,float health){}
     private NouveauSummons(){}
     public static boolean ownedBy(LivingEntity entity,UUID owner){return OWNER!=null&&owner.equals(entity.getAttached(OWNER));}
+    public static boolean temporary(LivingEntity entity){return UNTIL!=null&&entity.hasAttached(UNTIL);}
     public static boolean owned(LivingEntity entity){return OWNER!=null&&entity.hasAttached(OWNER);}
     public static void register(){
         OWNER=AttachmentRegistry.<UUID>builder().persistent(UUIDUtil.CODEC).buildAndRegister(Jugcraft.id("nouveau_summoner"));

@@ -49,6 +49,37 @@ import net.minecraft.world.phys.Vec3;
  * (the cakes' own tests serve, slice and bake it with the others). Their recipes and loot load.
  */
 public class PartyTableGameTests {
+    @GameTest(maxTicks = 40)
+    public void linenClothSwapsWithoutLosingFoodOrDuplicatingCloth(GameTestHelper helper) {
+        ServerLevel level=helper.getLevel();floor(helper);
+        ServerPlayer player=standing(helper,new BlockPos(3,2,1));
+        helper.setBlock(new BlockPos(3,2,3),JugcraftAgriculture.block("feast_table"));
+        BlockPos at=helper.absolutePos(new BlockPos(3,2,3));
+        var table=(io.github.jimbozoomer.jugcraft.agriculture.FeastTableBlockEntity)level.getBlockEntity(at);
+        table.serve(0,new ItemStack(Items.BREAD,2));
+        use(player,level,at,new ItemStack(Blocks.CARPET.white().asItem(),2));
+        helper.assertTrue(level.getBlockState(at).getValue(FeastTableBlock.RUNNER)==FeastTableBlock.Runner.LINEN && player.getMainHandItem().getCount()==1,"One carpet dresses one segment");
+        use(player,level,at,player.getMainHandItem());
+        helper.assertTrue(player.getMainHandItem().getCount()==1,"Repeated application consumes nothing");
+        player.getInventory().clearContent();
+        use(player,level,at,new ItemStack(item(FeastTableBlock.BAT_RUNNER)));
+        helper.assertTrue(carried(player,Blocks.CARPET.white().asItem())==1,"Swapping returns exactly one linen cloth");
+        helper.assertTrue(level.getBlockEntity(at)==table && table.dish(0).getCount()==2,"Changing cloth preserves the same stored food");
+        player.getInventory().clearContent();
+        use(player,level,at,new ItemStack(Blocks.CARPET.white().asItem()));
+        helper.assertTrue(carried(player,item(FeastTableBlock.BAT_RUNNER))==1,"Swapping back returns bat cloth");
+        player.getInventory().clearContent();
+        use(player,level,at,new ItemStack(Items.SHEARS));
+        helper.assertTrue(level.getBlockState(at).getValue(FeastTableBlock.RUNNER)==FeastTableBlock.Runner.HARVEST
+                && carried(player,Blocks.CARPET.white().asItem())==1,"Shearing returns exactly one cloth");
+        helper.assertTrue(table.dish(0).getCount()==2 && player.getMainHandItem().getDamageValue()==1,"Shearing preserves food and wears the shears once");
+        player.getInventory().clearContent();
+        use(player,level,at,new ItemStack(Blocks.CARPET.white().asItem()));
+        level.destroyBlock(at,true);
+        helper.assertTrue(dropped(helper,Blocks.CARPET.white().asItem())==1 && dropped(helper,item("feast_table"))==1,"Breaking drops one table and its linen cloth");
+        helper.succeed();
+    }
+
 	private static Item item(String id) {
 		return JugcraftAgriculture.item(id);
 	}

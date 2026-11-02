@@ -21,6 +21,47 @@ import net.minecraft.world.level.material.Fluids;
 
 /** Compare the repaired routes and their old competitors with every loaded crafting recipe. */
 public class RecipeConflictGameTests {
+    private static CraftingRecipe recipe(GameTestHelper h, String id) {
+        return (CraftingRecipe) h.getLevel().getServer().getRecipeManager().getRecipes().stream()
+                .filter(r -> r.id().identifier().toString().equals(id)).findFirst().orElseThrow().value();
+    }
+
+    @GameTest(maxTicks = 40)
+    public void botanicalWaterRodRejectsOtherPotions(GameTestHelper h) {
+        var recipe = recipe(h, "jugcraft:jugtania/water_rod");
+        var bottle = stack("minecraft:potion");
+        var grid = CraftingInput.of(3, 3, List.of(ItemStack.EMPTY, ItemStack.EMPTY, bottle,
+                ItemStack.EMPTY, stack("jugcraft:jugtania_livingwood_twig"), ItemStack.EMPTY,
+                stack("jugcraft:jugtania_rune_water"), ItemStack.EMPTY, ItemStack.EMPTY));
+        var key = net.minecraft.core.component.DataComponents.POTION_CONTENTS;
+        bottle.set(key, new net.minecraft.world.item.alchemy.PotionContents(net.minecraft.world.item.alchemy.Potions.WATER));
+        h.assertTrue(recipe.matches(grid, h.getLevel()), "Water bottle must make the water rod");
+        h.assertTrue(recipe.assemble(grid).is(stack("jugcraft:jugtania_water_rod").getItem()), "Expected water rod");
+        bottle.set(key, new net.minecraft.world.item.alchemy.PotionContents(net.minecraft.world.item.alchemy.Potions.AWKWARD));
+        h.assertTrue(!recipe.matches(grid, h.getLevel()), "Awkward potion must not substitute for water");
+        bottle.remove(key);
+        h.assertTrue(!recipe.matches(grid, h.getLevel()), "Potion without contents must not substitute for water");
+        h.succeed();
+    }
+
+    @GameTest(maxTicks = 40)
+    public void botanicalArmorUpgradeRetainsNameWithoutMutatingInput(GameTestHelper h) {
+        var recipe = recipe(h, "jugcraft:jugtania/terrasteel_helmet");
+        var helmet = stack("jugcraft:jugtania_manasteel_helmet");
+        var name = net.minecraft.network.chat.Component.literal("My surviving helmet");
+        helmet.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, name);
+        var twig = stack("jugcraft:jugtania_livingwood_twig");
+        var metal = stack("#jugcraft:jugtania_terrasteel_ingots");
+        var grid = CraftingInput.of(3, 3, List.of(twig, stack("jugcraft:jugtania_rune_spring"), twig.copy(),
+                metal, helmet, metal.copy(), ItemStack.EMPTY, metal.copy(), ItemStack.EMPTY));
+        h.assertTrue(recipe.matches(grid, h.getLevel()), "Supplied armor upgrade bill must match");
+        var result = recipe.assemble(grid);
+        h.assertTrue(result.is(stack("jugcraft:jugtania_terrasteel_helmet").getItem()) && result.getCount() == 1, "Expected one upgraded helmet");
+        h.assertTrue(name.equals(result.get(net.minecraft.core.component.DataComponents.CUSTOM_NAME)), "Keep player customization");
+        h.assertTrue(helmet.is(stack("jugcraft:jugtania_manasteel_helmet").getItem()) && helmet.getCount() == 1, "Preview must not consume or replace input");
+        h.succeed();
+    }
+
     private static ItemStack stack(String id) {
         if (id.isEmpty()) return ItemStack.EMPTY;
         if (id.startsWith("#")) {

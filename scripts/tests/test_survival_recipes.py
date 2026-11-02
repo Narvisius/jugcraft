@@ -33,7 +33,8 @@ class SurvivalGraphTests(unittest.TestCase):
 
     def test_repository_ingredients_and_known_entry_routes(self):
         report = build()
-        self.assertEqual([], report['invalid_ingredients'])
+        self.assertFalse(report['invalid_ingredients'],
+                         f"{len(report['invalid_ingredients'])} invalid ingredients; first 20: {report['invalid_ingredients'][:20]}")
         self.assertEqual([], report['invalid_template_loot_links'])
         rows = {r['item']: r for r in report['items']}
         for tier, metal in enumerate(('bronze', 'steel', 'invar', 'stainless_steel', 'aluminum', 'titanium', 'tungsten')):

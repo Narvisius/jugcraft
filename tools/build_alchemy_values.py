@@ -74,11 +74,19 @@ def build(jar):
     for ore in ('quartz_ore', 'deepslate_quartz_ore'):
         values['jugcraft:'+ore] = 4 * values['minecraft:quartz']
         origins['jugcraft:'+ore] = 'local quartz mining/Fortune accounting'
+    # Fishing salvage contains recoverable metal. A one-essence fallback for
+    # these roots would cheapen every nugget-derived recipe while ingots stay fixed.
+    for metal in ('iron', 'gold', 'copper'):
+        values['minecraft:'+metal+'_nugget'] = values['minecraft:'+metal+'_ingot'] / 9
+        origins['minecraft:'+metal+'_nugget'] = 'local metal compression accounting'
+    for item, metal, count in (('aquatic_tin_can', 'iron', 7), ('aquatic_goldfish', 'gold', 1)):
+        values['jugcraft:'+item] = count * values['minecraft:'+metal+'_nugget']
+        origins['jugcraft:'+item] = 'local fishing salvage accounting'
     locked=set(values)
     edges=[]
     for rid,r in recipes.items():
         typ=r.get('type',''); ingredients=[]
-        if typ=='minecraft:crafting_shaped':
+        if typ in ('minecraft:crafting_shaped','jugcraft:botanical_armor_upgrade','jugcraft:botanical_water_shaped','jugcraft:packworks_tier_upgrade'):
             for c,n in Counter(''.join(r['pattern'])).items():
                 if c!=' ':ingredients.extend([expand(r['key'][c])]*n)
         elif typ=='minecraft:crafting_shapeless': ingredients=[expand(x) for x in r['ingredients']]
@@ -121,6 +129,11 @@ def build(jar):
     # Every local item definition has a value, including uncraftable decorative assets.
     for key in local_items:
         if key not in values:values[key]=Fraction(1);origins[key]='fallback (balance pending)'
+    # New botanical dye routes can lower brown dye below its historical seed.
+    # Husk conversion must track that final value, not the pre-propagation 64.
+    values['jugcraft:walnut_husk']=values['minecraft:brown_dye']
+    origins['jugcraft:walnut_husk']='local walnut dye accounting (resolved brown dye)'
+    propagate()
     records={k:{'numerator':v.numerator,'denominator':v.denominator,'source':origins[k]} for k,v in sorted(values.items())}
     target=ROOT/'src/main/resources/data/jugcraft/alchemy/values.json'
     target.parent.mkdir(parents=True,exist_ok=True)

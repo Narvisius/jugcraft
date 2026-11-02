@@ -7,6 +7,28 @@ MODELS = ROOT / 'src/main/resources/assets/jugcraft/models/newest'
 SOURCE = ROOT / 'art/owner-library/originals/Edited-2026-10-29'
 
 
+def intentional_wall_join(path, elements, open_faces):
+    """Native WallBlock arm: its centre end is closed by the post/opposite arm.
+
+    Match the exact vanilla-style arm geometry, not every imported open model.
+    A missing exterior face, changed bounds, rotation or unrelated model fails.
+    Jugtania's registrar uses WallBlock for these descriptors.
+    """
+    path = Path(path).resolve()
+    root = ROOT / 'src/main/resources/assets/jugcraft/models'
+    if not path.is_relative_to(root):
+        return False
+    ref = path.relative_to(root).as_posix()
+    if not (ref.startswith('newest/jugtania/block/') or ref.startswith('block/jugtania_')):
+        return False
+    if '_wall_side' not in path.stem or open_faces != [(0, 'south')] or len(elements) != 1:
+        return False
+    box = elements[0]
+    return (box['from'] == [5, 0, 0] and box['to'] in ([11, 14, 8], [11, 16, 8])
+            and not box.get('rotation')
+            and set(box.get('faces', {})) == {'north', 'east', 'west', 'up', 'down'})
+
+
 def intentional_reversed_elements(path, elements):
     """Recognize authored two-sided shells and the named upside-down potato.
 
@@ -16,6 +38,8 @@ def intentional_reversed_elements(path, elements):
     original bounds, rotations and per-face UVs; any changed geometry fails this
     exception and returns to the regular art audit.
     """
+    from imported_geometry_repairs import original_elements
+    elements = original_elements(path, elements)
     path = Path(path).resolve()
     if not path.is_relative_to(MODELS):
         return False
