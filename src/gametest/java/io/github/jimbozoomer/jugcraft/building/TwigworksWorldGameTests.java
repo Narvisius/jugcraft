@@ -20,6 +20,45 @@ import net.minecraft.world.level.material.Fluids;
 /** Exercise the real registered blocks and feature placement, not descriptor names alone. */
 public final class TwigworksWorldGameTests {
     @GameTest
+    public void structureTemplatePlacesLampIntoWaterWithoutCrashing(GameTestHelper h) {
+        var level = h.getLevel(); var source = h.absolutePos(new BlockPos(1, 2, 1));
+        var target = h.absolutePos(new BlockPos(4, 2, 4));
+        var lamp = OwnerTwigs.block("lamp");
+        level.setBlock(source, lamp.defaultBlockState(), 2);
+        var template = new net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate();
+        template.fillFromWorld(level, source, new net.minecraft.core.Vec3i(1, 1, 1), false, java.util.List.of());
+        level.setBlock(target, Blocks.WATER.defaultBlockState(), 2);
+        h.assertTrue(template.placeInWorld(level, target, target,
+            new net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings(),
+            RandomSource.create(1), 2), "Real template placement completes over water");
+        h.assertTrue(level.getBlockState(target).is(lamp), "Template retains the lamp");
+        h.assertTrue(level.getFluidState(target).isEmpty(), "Dry-only lamp does not acquire invented water state");
+        h.succeed();
+    }
+
+    @GameTest
+    public void everyDryOnlyLiquidAdapterRejectsStructureWaterAndBuckets(GameTestHelper h) {
+        var level = h.getLevel(); var pos = h.absolutePos(new BlockPos(1, 2, 1));
+        level.setBlock(pos.below(), Blocks.STONE.defaultBlockState(), 2);
+        int checked = 0; boolean lampChecked = false;
+        for (Block block : BuiltInRegistries.BLOCK) {
+            if (!BuiltInRegistries.BLOCK.getKey(block).getNamespace().equals("jugcraft")
+                || !(block instanceof SimpleWaterloggedBlock liquid)) continue;
+            var state = block.defaultBlockState();
+            if (state.hasProperty(BlockStateProperties.WATERLOGGED)) continue;
+            level.setBlock(pos, state, 2);
+            String id = BuiltInRegistries.BLOCK.getKey(block).toString();
+            h.assertTrue(!liquid.canPlaceLiquid(null, level, pos, state, Fluids.WATER), "Dry-only fill refused: " + id);
+            h.assertTrue(!liquid.placeLiquid(level, pos, state, Fluids.WATER.getSource(false)), "Direct structure fill refused: " + id);
+            h.assertTrue(liquid.pickupBlock(null, level, pos, state).isEmpty(), "Dry-only pickup is empty: " + id);
+            h.assertTrue(level.getBlockState(pos) == state, "Fluid operations preserve dry-only block: " + id);
+            lampChecked |= id.equals("jugcraft:twigworks_lamp"); checked++;
+        }
+        h.assertTrue(lampChecked && checked > 1, "Regression includes crashing lamp and other imported dry-only blocks");
+        h.succeed();
+    }
+
+    @GameTest
     public void suppliedWaterloggingUsesNativePropertyAndSurvivesSave(GameTestHelper h) {
         int checked = 0;
         for (Block block : BuiltInRegistries.BLOCK) {

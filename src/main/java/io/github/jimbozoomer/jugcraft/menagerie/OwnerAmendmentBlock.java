@@ -17,7 +17,7 @@ import net.minecraft.world.phys.shapes.*;
 import net.minecraft.world.level.storage.loot.LootParams;
 
 /** The supplied attached meshes with native storage, support and food interactions. */
-public final class OwnerAmendmentBlock extends HouseholdBlock implements EntityBlock,SimpleWaterloggedBlock {
+public final class OwnerAmendmentBlock extends HouseholdBlock implements EntityBlock,OptionalWaterloggedBlock {
     OwnerAmendmentBlock(Properties p,JsonObject d){super(p,d);}
     @Override public void animateTick(BlockState state,Level level,BlockPos pos,net.minecraft.util.RandomSource random){super.animateTick(state,level,pos,random);if(name.endsWith("cauldron"))OwnerCauldronHeat.animate(state,level,pos,random);}
     @Override protected void entityInside(BlockState state,Level level,BlockPos pos,net.minecraft.world.entity.Entity entity,net.minecraft.world.entity.InsideBlockEffectApplier effects,boolean pastEdges){super.entityInside(state,level,pos,entity,effects,pastEdges);if(name.endsWith("cauldron"))OwnerCauldronHeat.inside(state,level,pos,entity);}

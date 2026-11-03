@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
 /** Original states/collision with native inventory, display, timing and rotation interactions. */
-public final class OwnerSupplementBlock extends HouseholdBlock implements EntityBlock,SimpleWaterloggedBlock {
+public final class OwnerSupplementBlock extends HouseholdBlock implements EntityBlock,OptionalWaterloggedBlock {
     public final String function;public final int capacity;
     OwnerSupplementBlock(Properties p,JsonObject d){super(d.get("function").getAsString().startsWith("spring")?p.pushReaction(net.minecraft.world.level.material.PushReaction.IMMOVEABLE):p,d);function=d.get("function").getAsString();capacity=d.get("capacity").getAsInt();registerDefaultState(set(set(set(defaultBlockState(),"enabled","false"),"lit",function.equals("statue")?"false":"true"),"facing",(function.equals("hourglass")||function.equals("cannon"))?"up":value(defaultBlockState(),"facing")));}
     private static int flowerSlot(BlockState s,BlockPos p,BlockHitResult hit){var dir=facing(s);double v=dir.getAxis()==Direction.Axis.X?hit.getLocation().z-p.getZ():hit.getLocation().x-p.getX();int slot=Math.clamp((int)(v*3),0,2);return dir==Direction.SOUTH||dir==Direction.WEST?2-slot:slot;}

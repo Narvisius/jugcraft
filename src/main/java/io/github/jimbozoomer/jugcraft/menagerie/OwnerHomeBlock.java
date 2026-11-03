@@ -25,7 +25,7 @@ import net.minecraft.world.phys.shapes.*;
 import java.util.Set;
 
 /** Original Home state families with bounded, claim-checked native interactions. */
-public class OwnerHomeBlock extends HouseholdBlock implements EntityBlock, SimpleWaterloggedBlock {
+public class OwnerHomeBlock extends HouseholdBlock implements EntityBlock, OptionalWaterloggedBlock {
     public final String function, rig;
     static OwnerHomeBlock make(Properties p, JsonObject d) {
         return Set.of("chair","sofa","couch","bench","zaisu","saddle_block","stump_chair","telescope").contains(d.get("function").getAsString())?new Seat(p,d):new OwnerHomeBlock(p,d);

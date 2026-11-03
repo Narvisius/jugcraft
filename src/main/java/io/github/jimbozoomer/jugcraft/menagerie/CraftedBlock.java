@@ -18,7 +18,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
 
 /** Supplied connected meshes, cushions, stack counts and hammer variants. */
-public class CraftedBlock extends HouseholdBlock implements SimpleWaterloggedBlock {
+public class CraftedBlock extends HouseholdBlock implements OptionalWaterloggedBlock {
     static class Seat extends CraftedBlock implements Sittable { Seat(Properties p, JsonObject d) { super(p,d); } }
     static class Storage extends CraftedBlock implements EntityBlock { Storage(Properties p, JsonObject d) { super(p,d); } }
     CraftedBlock(Properties p, JsonObject d) {

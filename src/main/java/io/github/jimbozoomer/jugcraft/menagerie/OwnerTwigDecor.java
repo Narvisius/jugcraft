@@ -18,7 +18,7 @@ import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.*;
 
 /** Source-authored table joins, layered foliage, columns and manual lamps. */
-final class OwnerTwigDecor extends HouseholdBlock implements SimpleWaterloggedBlock {
+final class OwnerTwigDecor extends HouseholdBlock implements OptionalWaterloggedBlock {
     private final String reference;
     OwnerTwigDecor(Properties p, JsonObject definition) {
         super(p, definition); reference = definition.get("reference_class").getAsString();
