@@ -14,6 +14,10 @@ def vanilla_model(path):
     # Read pinned game assets as shape references; never copy game art into the mod.
     root = Path(__file__).resolve().parents[1]
     jars = sorted((root / '.gradle/loom-cache/minecraftMaven/net/minecraft').glob('minecraft-clientOnly-*/26.3/*.jar'))
+    # CI prepares the verified pinned client archive before Loom creates its split JARs.
+    pinned = Path.home() / ".gradle/caches/fabric-loom/26.3/minecraft-client.jar"
+    if pinned.is_file():
+        jars.append(pinned)
     for jar in jars:
         with zipfile.ZipFile(jar) as archive:
             name = 'assets/minecraft/models/' + path + '.json'

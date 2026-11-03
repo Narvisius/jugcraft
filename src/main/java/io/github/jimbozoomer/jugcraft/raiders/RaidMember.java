@@ -38,6 +38,12 @@ final class RaidMember {
 	}
 
 	static void withdraw(ServerLevel level, Mob mob) {
+		// A machine's crew (RaiderCrew) leaves with it rather than being set down where the machine was.
+		for (net.minecraft.world.entity.Entity passenger : java.util.List.copyOf(mob.getPassengers())) {
+			if (passenger instanceof Mob crew && passenger instanceof Raider) {
+				withdraw(level, crew);
+			}
+		}
 		level.sendParticles(ParticleTypes.LARGE_SMOKE, mob.getX(), mob.getY() + mob.getBbHeight() / 2, mob.getZ(), 12,
 				mob.getBbWidth() / 2, mob.getBbHeight() / 3, mob.getBbWidth() / 2, 0.02);
 		mob.discard();

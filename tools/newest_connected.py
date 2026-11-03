@@ -4,8 +4,8 @@ This is lossless tile packing, not redrawing/resampling the owner's artwork.
 The ordinary model remains usable when the optional Fusion dependency is absent.
 """
 from pathlib import Path
-import io
 from PIL import Image
+from asset_png import save_rgba
 from menagerie_content import read
 
 
@@ -56,9 +56,7 @@ def generate(source, resources, writer):
                 sheet.paste(pixels, ((index % columns) * width, (frame * rows + index // columns) * width))
         texture = 'block/newest_connected/' + name
         target = assets / 'textures' / (texture + '.png')
-        encoded = io.BytesIO(); sheet.save(encoded, format='PNG'); payload = encoded.getvalue()
-        target.parent.mkdir(parents=True, exist_ok=True)
-        if not target.exists() or target.read_bytes() != payload: target.write_bytes(payload)
+        save_rgba(sheet, target)
         if name.endswith('/glass'): metadata['render_type'] = 'translucent'
         sidecar = {'fusion': metadata}
         if animation is not None:

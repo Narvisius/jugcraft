@@ -106,19 +106,48 @@ public class RaiderInfantry extends Monster implements RangedAttackMob, Raider, 
 		return RaiderTargets.allowed(target) && super.canAttack(target);
 	}
 
+	/** Aboard a raider machine (RaiderCrew): it faces the way the machine does, on both sides, so it is drawn so. */
+	@Override
+	public void tick() {
+		super.tick();
+		if (getVehicle() != null && RaiderCrew.isMachine(getVehicle())) {
+			RaiderCrew.face(this, getVehicle());
+		}
+	}
+
+	/**
+	 * A driver in the walker's armoured hatch takes {@link RaiderCrew#HATCH_COVER} of the damage, and no crew member
+	 * suffocates in a ceiling its machine passes under.
+	 */
+	@Override
+	public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
+		if (isPassenger() && RaiderCrew.isMachine(getVehicle())) {
+			if (source.is(net.minecraft.world.damagesource.DamageTypes.IN_WALL)) {
+				return false;
+			}
+			if (getVehicle() instanceof RaiderWalker) {
+				amount *= RaiderCrew.HATCH_COVER;
+			}
+		}
+		return super.hurtServer(level, source, amount);
+	}
+
 	@Override
 	protected void registerGoals() {
 		goalSelector.addGoal(1, new FloatGoal(this));
+		// Aboard a raider machine (RaiderCrew) it fights and marches only with the machine: these stand idle until it is
+		// on foot again.
 		if (role() == Role.GRENADIER) {
-			goalSelector.addGoal(2, new RangedAttackGoal(this, 1.0, JugcraftRaiders.GRENADE_COOLDOWN, JugcraftRaiders.GRENADE_MAX_RANGE));
+			goalSelector.addGoal(2, new RaiderCrew.Afoot(this,
+					new RangedAttackGoal(this, 1.0, JugcraftRaiders.GRENADE_COOLDOWN, JugcraftRaiders.GRENADE_MAX_RANGE)));
 		} else if (role() == Role.GUNNER) {
 			gunfire = new MobGuns.FireGoal(this, 1.0);
-			goalSelector.addGoal(2, gunfire);
+			goalSelector.addGoal(2, new RaiderCrew.Afoot(this, gunfire));
 		} else {
-			goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.15, false));
+			goalSelector.addGoal(2, new RaiderCrew.Afoot(this, new MeleeAttackGoal(this, 1.15, false)));
 		}
-		goalSelector.addGoal(4, new MarchGoal(this, () -> member.objective, 1.0));
-		goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 0.8));
+		goalSelector.addGoal(4, new RaiderCrew.Afoot(this, new MarchGoal(this, () -> member.objective, 1.0)));
+		goalSelector.addGoal(6, new RaiderCrew.Afoot(this, new WaterAvoidingRandomStrollGoal(this, 0.8)));
 		goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 12.0F));
 		targetSelector.addGoal(1, new HurtByTargetGoal(this, RaiderInfantry.class, RaiderWalker.class, RaiderBlimp.class).setAlertOthers());
         // Melee troops must be able to reach a defender. A visible guard on a
@@ -133,7 +162,7 @@ public class RaiderInfantry extends Monster implements RangedAttackMob, Raider, 
 		if (member.checkRaid(level, this)) {
 			return;
 		}
-		if (role() == Role.GRUNT) {
+		if (role() == Role.GRUNT && !isPassenger()) {
 			climbWalls(level);
 		}
 		if (role() == Role.OFFICER && ++rally >= JugcraftRaiders.RALLY_TICKS) {

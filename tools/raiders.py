@@ -158,12 +158,36 @@ def repaint(quads, scale=1.0):
     return out
 
 
+# The open roof hatch the raider walker's driver sits in (RaiderCrew.WALKER_SEAT: hips 66 px up, 3.2 px behind the
+# middle; the head and shoulders stand out of it): a raised coaming round the opening, a dark well inside, and the lid
+# swung up behind on its hinge. Pixels, the walker facing +z, the roof's top at y = 72.
+WALKER_HATCH = (0.0, 72.0, -3.2)
+
+
+def walker_hatch():
+    from armoured_walker import PLATE, DARK, GUNMETAL
+    from steampunk_models import box
+    _, roof, cz = WALKER_HATCH
+    z0, z1 = cz - 6, cz + 6
+    low = roof - 0.25   # the coaming is set 0.25 px into the roof, so the two never share a plane
+    m = [box((-6, low, z0), (6, roof + 2, z0 + 1.5), PLATE), box((-6, low, z1 - 1.5), (6, roof + 2, z1), PLATE),
+         box((-6, low, z0 + 1.5), (-4.5, roof + 2, z1 - 1.5), PLATE), box((4.5, low, z0 + 1.5), (6, roof + 2, z1 - 1.5), PLATE),
+         # The well: a dark plate 0.25 px over the roof, inside the coaming.
+         box((-4.5, roof + 0.25, z0 + 1.5), (4.5, roof + 0.5, z1 - 1.5), DARK),
+         # The hinge housing behind, and the lid standing open on it, its dark underside toward the driver.
+         box((-3, low, z0 - 1.5), (3, roof + 2.5, z0), GUNMETAL),
+         box((-5.5, roof + 1.5, z0 - 1.25), (5.5, roof + 12.5, z0 - 0.25), {"*": PLATE, "south": DARK}),
+         box((-4.5, roof + 10.5, z0 - 0.25), (4.5, roof + 11.5, z0 + 0.25), GUNMETAL)]   # its grab handle, below the top
+    return m
+
+
 def export():
     import armoured_walker
     import zeppelin
     walker = armoured_walker.export()
     blimp = zeppelin.export()
     out = {name.replace("armoured_walker", "raider_walker"): repaint(quads) for name, quads in walker.items()}
+    out["raider_walker_hatch"] = repaint(zeppelin.tiled_quads(walker_hatch()))
     out["raider_blimp_body"] = repaint(blimp["zeppelin_body"], BLIMP_SCALE)
     out["raider_blimp_propeller"] = repaint(blimp["zeppelin_propeller"], BLIMP_SCALE)
     return out

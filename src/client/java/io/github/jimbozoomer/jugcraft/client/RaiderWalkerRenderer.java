@@ -13,8 +13,8 @@ import net.minecraft.world.phys.AABB;
 
 /**
  * Draws the Raider Walker (batch 57): the Armoured Walker's parts (batch 58, the owner's model) in raider paint
- * (assets/jugcraft/raider_quads.json, tools/raiders.py), drawn and animated as {@link ArmouredWalkerParts} does. Its
- * piston rams when it strikes; dying, it topples over sideways.
+ * (assets/jugcraft/raider_quads.json, tools/raiders.py), drawn and animated as {@link ArmouredWalkerParts} does, with
+ * the open roof hatch its driver sits in. Its piston rams when it strikes; dying, it topples over sideways.
  */
 public class RaiderWalkerRenderer extends EntityRenderer<RaiderWalker, RaiderWalkerRenderer.State> {
 	public static final class State extends EntityRenderState {
@@ -58,6 +58,11 @@ public class RaiderWalkerRenderer extends EntityRenderer<RaiderWalker, RaiderWal
 			pose.rotateDegrees(Axis.ZP, state.dying * state.dying * 80.0F);
 		}
 		ArmouredWalkerParts.draw("raider_walker", pose, collector, state.lightCoords, state.stride, state.strideWeight, state.ram);
+		// The open roof hatch its driver sits in (raiders/RaiderCrew; the driver is drawn as the rider it is).
+		QuadModel hatch = DecorQuads.get("raider_walker_hatch");
+		if (hatch != null) {
+			hatch.submit(pose, collector, state.lightCoords);
+		}
 		pose.popPose();
 		super.submit(state, pose, collector, camera);
 	}

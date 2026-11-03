@@ -1572,6 +1572,10 @@ def tags():
     for block in machine_blocks():
         if block not in CROPS:
             tags.add("block", "minecraft:mineable/pickaxe", rid(block))
+    # Industrial forms inherit the furnace's correct-tool requirement too.
+    import industrial_forms
+    for block in industrial_forms.FORMS:
+        tags.add("block", "minecraft:mineable/pickaxe", rid(block))
     # Crops grow on farmland, take bone meal and fertilizer, and keep the farmland under them.
     for crop, info in CROPS.items():
         tags.add("block", "minecraft:crops", rid(crop))
@@ -1946,6 +1950,8 @@ def main():
     food_servings.generate(write_food_serving)
     import authored_resource_reconciliation
     authored_resource_reconciliation.apply(write)
+    import newest_model_finishing
+    newest_model_finishing.generate(write)
     import model_atlas
     model_atlas.generate(write)
     from generated_resource_cleanup import prune

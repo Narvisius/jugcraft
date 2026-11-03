@@ -125,6 +125,8 @@ public final class Pets {
         for (var viewer : mob.level().getServer().getPlayerList().getPlayers())
             if (viewer.level() == mob.level() && viewer.distanceToSqr(mob) < 1024 && viewer.containerMenu != viewer.inventoryMenu) viewer.closeContainer();
         entry.put("entity", output.buildResult()); entry.putString("state", knockedOut ? "KNOCKED_OUT" : "STORED");
+        // For the stable screen: how it was when it went in (a stored entity is not rebuilt just to read its health).
+        entry.putFloat("health", mob.getHealth()); entry.putFloat("max_health", mob.getMaxHealth());
         entry.putLong("ready", mob.level().getServer().overworld().getGameTime() + (knockedOut ? 1200 : 0));
         entry.putBoolean("recall", false); PetRoster.get(mob.level().getServer()).setDirty();
         PetBehaviors.detach(mob); mob.discard(); return true;
@@ -207,17 +209,30 @@ public final class Pets {
         for(var e:owned.stream().skip(first).limit(200).toList()){
             var visual=e.getCompoundOrEmpty("entity");
             UUID id=UUID.fromString(e.getStringOr("id",""));
+            float health=e.getFloatOr("health",visual.getFloatOr("Health",-1)), maxHealth=e.getFloatOr("max_health",-1);
             for(var world:p.level().getServer().getAllLevels())if(world.getEntity(id) instanceof Mob mob){
-                var out=TagValueOutput.createWithContext(ProblemReporter.DISCARDING,p.registryAccess());mob.saveWithoutId(out);visual=out.buildResult();break;
+                var out=TagValueOutput.createWithContext(ProblemReporter.DISCARDING,p.registryAccess());mob.saveWithoutId(out);visual=out.buildResult();
+                health=mob.getHealth();maxHealth=mob.getMaxHealth();break;
             }
+            long left=e.getLongOr("ready",0)-p.level().getServer().overworld().getGameTime();
+            int recovery=e.getStringOr("state","").equals("KNOCKED_OUT")&&left>0?(int)((left+19)/20):0;
             var preview=local.peepo.MobTransportCrate.preview(visual);
             String encoded=CompoundTag.CODEC.encodeStart(com.mojang.serialization.JsonOps.INSTANCE,preview).result().map(Object::toString).orElse("{}");
             String name=e.getStringOr("name","Pet");
-            rows.add(new Row(e.getStringOr("id",""),name.substring(0,Math.min(80,name.length())),e.getStringOr("type",""),e.getStringOr("state","ACTIVE"),e.getStringOr("mode","FOLLOW"),PetRoster.level(e),e.getIntOr("xp",0),encoded));
+            rows.add(new Row(e.getStringOr("id",""),name.substring(0,Math.min(80,name.length())),e.getStringOr("type",""),e.getStringOr("state","ACTIVE"),e.getStringOr("mode","FOLLOW"),PetRoster.level(e),e.getIntOr("xp",0),encoded,
+                    health,maxHealth,recovery,e.getBooleanOr("own_orders",false)));
         }
         ServerPlayNetworking.send(p,new View(JSON.toJson(new Snapshot(rows,message,first,owned.size()))));
     }
-    public record Row(String id, String name, String type, String state, String mode, int level, int xp, String preview) {}
+    /**
+     * One companion as the stable screen shows it: health is the live pet's, or how it was when stored (-1 unknown);
+     * recovery is the seconds until a knocked-out pet can be deployed (0 once it can); ownOrders marks a companion that
+     * keeps its own Orders menu (its mode is not set here).
+     */
+    public record Row(String id, String name, String type, String state, String mode, int level, int xp, String preview,
+                      float health, float maxHealth, int recovery, boolean ownOrders) {}
+    /** Bond points per level and the most there are (PetRoster.level: 1 + xp / 120, at most 20). */
+    public static final int XP_PER_LEVEL = 120, MAX_XP = 2280;
     public record Snapshot(List<Row> pets, String message, int offset, int total) {}
     public record Action(String id, String operation) implements CustomPacketPayload {
         public static final Type<Action> TYPE = new Type<>(Jugcraft.id("pet_action"));

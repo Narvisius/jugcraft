@@ -233,3 +233,26 @@ remain in use. Lua/CraftOS compatibility is still unfinished.
 Deferred regression: saved program operations, invalid-path and oversized-write
 rejection, save/reload and deletion preserving the current editor. No runtime or
 visual tests have run for this continuation.
+
+## October 31 isolated Lua worker readiness
+
+The Lua child now sends a ready frame after creating its runtime and compiling the
+program. The parent waits for that frame under the existing ten-second startup
+budget before returning readiness. The two-second response budget, four-worker
+cap, 64 MiB worker heap and instruction/allocation limits are unchanged. This
+prevents a cold child JVM's initialization from consuming its first execution
+slice. Startup compilation errors are returned before an execution resume.
+
+The native GameTestServer skips real-time waits between ticks. Lua regressions
+now wait up to one normal 50 ms tick only when external-process I/O is pending,
+so a fast focused test cannot consume its entire tick budget before the child
+runs. Tick limits and assertions remain unchanged. Regressions cover readiness,
+startup syntax errors, original ROM shell execution, coroutine continuation and
+oversized allocation rejection. Validation results are recorded in PR 597.
+
+Implementation: OpenAI Codex (GPT-6).
+
+Focused `JimtaLuaGameTests` validation without optional integrations passed all
+four tests on Minecraft 26.3 / Fabric Loader 0.19.5 / Fabric API 0.161.0+26.3 /
+Java 25. The run used the existing built resources; only Java and test sources
+changed. The startup and response watchdog durations were not increased.

@@ -158,7 +158,7 @@ def resources(base, res, writer, copier, blocks):
                         'block': 'jugcraft:' + ident, 'properties': {'half': 'upper'} if d['function'] == 'chandelier' else {'part': 'front' if d['function'] == 'bathtub' else 'bottom'}}]}]})
     # Complete experimental meshes in this archive have no original registry recipe.
     # Native survival routes use paid vanilla materials, not creative-only aliases.
-    for name, ingredients in {'spruce_chandelier': ['minecraft:chain', 'minecraft:lantern', 'minecraft:lantern', 'minecraft:spruce_planks'],
+    for name, ingredients in {'spruce_chandelier': ['minecraft:iron_chain', 'minecraft:lantern', 'minecraft:lantern', 'minecraft:spruce_planks'],
                               'dye_vat': ['minecraft:cauldron', 'minecraft:oak_planks', 'minecraft:iron_ingot']}.items():
         writer(res / 'data/jugcraft/recipe/newest/homeworks' / (name + '.json'), {'type': 'minecraft:crafting_shapeless',
             'ingredients': ingredients, 'result': {'id': 'jugcraft:homeworks_' + name, 'count': 1}})

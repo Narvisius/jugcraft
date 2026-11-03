@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:clay_ball",
+    "minecraft:iron_nugget",
+    "minecraft:iron_nugget",
+    "jugcraft:flax",
+    "minecraft:orange_dye",
+    "minecraft:glass_bottle"
+  ],
+  "result": {
+    "id": "jugcraft:harvest_place_setting",
+    "count": 1
+  }
+}

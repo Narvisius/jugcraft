@@ -22,6 +22,7 @@ import net.minecraft.world.level.storage.*;
 /** Hidden companion-only workspace. Vanilla player crafting is untouched; no independent block ticker. */
 public final class CraftingTableCompanionBlockEntity extends BlockEntity {
     public static final int WORK_TICKS=60, EFFORT=4, BATCHES=8;
+    static final int PLANNING_PAGE_SIZE=256;
     public record Plan(Identifier id,List<ItemStack> pattern,List<RecipeSupplies.Part> parts,ItemStack result) {}
     public final CompanionRecipeFilter filter=new CompanionRecipeFilter();
     public final CraftingTableJob job=new CraftingTableJob(this);
@@ -71,7 +72,7 @@ public final class CraftingTableCompanionBlockEntity extends BlockEntity {
         var choices=new ArrayList<>(recipes().choices(filter));if(choices.isEmpty()){selected=null;entry=null;pattern=List.of();cachedPlan=null;touch();return;}
         var scores=new HashMap<Item,Double>();ToDoubleFunction<CraftingTableRecipes.Entry> score=e->priority==null?0:scores.computeIfAbsent(e.icon().getItem(),i->priority.applyAsDouble(e.icon()));
         choices.sort(Comparator.<CraftingTableRecipes.Entry>comparingDouble(score).reversed().thenComparingInt(e->e.id().equals(selected)?0:1));
-        var supplies=RecipeSupplies.available(source);int limit=Math.min(256,choices.size());
+        var supplies=RecipeSupplies.available(source);int limit=Math.min(PLANNING_PAGE_SIZE,choices.size());
         // With no filter, continue a bounded page if a huge catalog has no available recipe on its first page.
         int start=filter.empty() && priority==null?Math.floorMod(cursor,choices.size()):0;
         for(int i=0;i<limit;i++){

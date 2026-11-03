@@ -141,6 +141,7 @@ public final class ConcordancePactNetworkTests implements FabricClientGameTest {
 					InProcessServerConfigs.beforeAdditionalClient(server);
 					peer = launchPeer(server.computeOnServer(MinecraftServer::getPort));
 					Process joining = peer;
+					PeerClientStartup.await(() -> context.waitTicks(1), joining, coordination());
 					server.waitFor(minecraft -> {
 						if (!joining.isAlive()) {
 							throw failure("The second client exited before joining: " + joining.exitValue());
@@ -555,7 +556,7 @@ public final class ConcordancePactNetworkTests implements FabricClientGameTest {
 		}
 		List<String> command = new ArrayList<>();
 		command.add(Path.of(System.getProperty("java.home"), "bin", System.getProperty("os.name").startsWith("Windows") ? "java.exe" : "java").toString());
-		command.add("-Xmx2G");
+		command.add(PeerClientStartup.HEAP_OPTION);
 		command.add("-XX:ActiveProcessorCount=4");
 		command.add("-XX:ErrorFile=" + coordination().resolve("hs_err_peer.log"));
 		for (Map.Entry<Object, Object> entry : System.getProperties().entrySet()) {

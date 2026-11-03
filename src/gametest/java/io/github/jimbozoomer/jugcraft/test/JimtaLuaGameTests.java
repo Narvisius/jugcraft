@@ -8,6 +8,38 @@ import net.minecraft.gametest.framework.GameTestHelper;
 /** Deferred real child-process regression; never invoked by the resource generators. */
 public final class JimtaLuaGameTests {
     @GameTest(maxTicks=600)
+    public void syntaxFailureIsReportedDuringStartup(GameTestHelper h){
+        syntaxPoll(h,LuaProcess.open("local ="),0);
+    }
+    private void syntaxPoll(GameTestHelper h,LuaProcess worker,int ticks){
+        try{
+            h.assertTrue(ticks<500,"Invalid source must finish startup within the test window");
+            var reply=pollWorker(worker);
+            if(reply!=null){
+                worker.close();h.assertTrue(reply.status()==3&&!reply.text().isEmpty(),"Compilation failure is reported before any execution resume");h.succeed();return;
+            }
+            h.runAfterDelay(1,()->syntaxPoll(h,worker,ticks+1));
+        }catch(RuntimeException|AssertionError failure){worker.close();throw failure;}
+    }
+    @GameTest(maxTicks=600)
+    public void workerAcknowledgesStartupBeforeExecutingSource(GameTestHelper h){
+        startupPoll(h,LuaProcess.open("print('startup-ready')"),0,0);
+    }
+    private void startupPoll(GameTestHelper h,LuaProcess worker,int ticks,int stage){
+        try{
+            h.assertTrue(ticks<500,"Worker startup and program must complete within the test window");
+            var reply=pollWorker(worker);
+            if(reply!=null){
+                h.assertTrue(reply.status()!=3,"Worker failed: "+reply.text());
+                if(stage==0){h.assertTrue(reply.status()==0&&reply.text().isEmpty(),"Startup is acknowledged before any program host calls");stage=1;}
+                else if(reply.status()==2){worker.close();h.assertTrue(stage==2,"Program printed once after startup");h.succeed();return;}
+                else if(reply.status()==1&&reply.text().startsWith("print:")){h.assertTrue(stage==1&&reply.text().equals("print:startup-ready"),"Program executes exactly once after readiness");stage=2;}
+                worker.resume(true,hostReply(reply.text()));
+            }
+            int next=stage;h.runAfterDelay(1,()->startupPoll(h,worker,ticks+1,next));
+        }catch(RuntimeException|AssertionError failure){worker.close();throw failure;}
+    }
+    @GameTest(maxTicks=600)
     public void isolatedLuaResumesCoroutinesAndBoundsAllocationFailure(GameTestHelper h){
         var worker=LuaProcess.open("assert(vector.new(1,2,3):dot(vector.new(4,5,6))==32); assert(colors.combine(colors.red,colors.blue)==18432); assert(textutils.unserializeJSON('{\"value\":7}').value==7); assert(fs.isReadOnly('rom/programs/turtle/go.lua')); local sum=0; for i=1,5000 do sum=sum+i end; local child=coroutine.create(function() print('child'); print('continued') end); assert(coroutine.resume(child)); print(sum); assert(io==nil and package.loadlib==nil and debug.sethook==nil)");
         var messages=new ArrayList<String>();
@@ -16,7 +48,7 @@ public final class JimtaLuaGameTests {
     private void poll(GameTestHelper h,LuaProcess worker,List<String> messages,int ticks){
         try{
             h.assertTrue(ticks<450,"Lua execution must finish within the bounded test window");
-            var reply=worker.poll();
+            var reply=pollWorker(worker);
             if(reply!=null){
                 h.assertTrue(reply.status()!=3,"Lua worker returned an error: "+reply.text());
                 if(reply.status()==1&&reply.text().startsWith("print:"))messages.add(reply.text());
@@ -34,7 +66,7 @@ public final class JimtaLuaGameTests {
     private void allocation(GameTestHelper h,LuaProcess worker,int ticks,boolean ready){
         if(ticks>=140){worker.close();h.fail("Oversized Lua allocation did not terminate within its deadline");return;}
         try{
-            var reply=worker.poll();
+            var reply=pollWorker(worker);
             if(reply!=null){
                 if(reply.status()==3){worker.close();h.assertTrue(ready,"Runtime must reach allocation sentinel before its bounded failure");h.succeed();return;}
                 if(reply.status()==1){h.assertTrue(reply.text().equals("kind:")||reply.text().equals("existsfile:.settings")||reply.text().startsWith("terminal:")||reply.text().equals("print:allocation-ready"),"Oversized allocation cannot emit a result");if(reply.text().equals("print:allocation-ready"))ready=true;}
@@ -52,7 +84,7 @@ public final class JimtaLuaGameTests {
     private void shellPoll(GameTestHelper h,LuaProcess worker,int ticks,boolean finished){
         try{
             h.assertTrue(ticks<500,"ROM shell must complete its command and interactive exit");
-            var reply=worker.poll();
+            var reply=pollWorker(worker);
             if(reply!=null){
                 h.assertTrue(reply.status()!=3,"ROM shell failed: "+reply.text());
                 if(reply.text().equals("print:shell-finished"))finished=true;
@@ -61,6 +93,15 @@ public final class JimtaLuaGameTests {
             }
             boolean reached=finished;h.runAfterDelay(1,()->shellPoll(h,worker,ticks+1,reached));
         }catch(RuntimeException|AssertionError failure){worker.close();throw failure;}
+    }
+    /** GameTestServer does not wait between ticks; give real child-process I/O a normal tick to run. */
+    private static LuaProcess.Reply pollWorker(LuaProcess worker){
+        var reply=worker.poll();
+        if(reply==null){
+            java.util.concurrent.locks.LockSupport.parkNanos(java.util.concurrent.TimeUnit.MILLISECONDS.toNanos(50));
+            reply=worker.poll();
+        }
+        return reply;
     }
     private static String hostReply(String request){
         if(request.equals("terminal:getTextColor"))return "1";

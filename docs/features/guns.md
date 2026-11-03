@@ -6778,3 +6778,17 @@ No worldgen, structures, bosses or seasonal content. Guns, rounds and the Cell R
   - the owner's knockback for three guns whose shots push nothing here: the Stoker's flame, the Glowmouth's arc and the Fencepost Thumper's grenades ([above](#follow-up-armour-piercing-and-knockback-for-the-older-guns));
   - the owner's withering (the Flayed God's) and the other hit effects of guns not built yet ([above](#follow-up-hit-effects)).
 - **Balance:** the numbers are starting points for the owner to set.
+
+## October 31 Microjet flight regression precision
+
+The Comet Pistol and Narwhal Lance tests now validate each launch-velocity axis
+against Minecraft 26.3's bounded triangular spread at the configured gun speed.
+The cruise check then compares travel distance to that actual launch speed with
+vanilla's 0.99F air drag, and confirms the Microjet restores its launch velocity.
+Both comparisons use 1e-6 precision. This replaces fixed speed windows that could
+reject valid random spread. Ammo use, damage, impact, dual-wield and reload
+assertions remain. No gun parameters, projectile behavior or gameplay changed.
+
+Implementation: OpenAI Codex (GPT-6). Focused validation recorded in PR 597.
+
+All four focused IronGunsIIGameTests passed locally with the normal optional-integration configuration on Minecraft 26.3 / Fabric Loader 0.19.5 / Fabric API 0.161.0+26.3 / Java 25. Existing built resources were used; only tests and documentation changed.

@@ -236,3 +236,61 @@ Affected machines, including the original Bio Generator:
 - Combined Cycle Power Plant (`jugcraft:combined_cycle_power_plant`)
 - Precision Finishing Station (`jugcraft:precision_finisher`)
 - Wafer Wet-processing Bench (`jugcraft:wet_processing_bench`)
+
+## Pickaxe harvesting and chemical reactor recovery (October 31 2026)
+
+The chemical reactor's loot table drops only its controller so that it can copy
+stored acid from the block entity. The teardown policy omitted that reactor from
+`MachineKind.keepsContents`, so mining another part removed the controller without
+dropping the machine. The retention policy now agrees with the loot table.
+
+All 46 industrial-form machines also lacked `minecraft:mineable/pickaxe` despite
+inheriting the furnace's correct-tool requirement. The shared data generator now
+adds every industrial form to that tag. No tool tier, recipes, registry IDs or
+save formats change. Pickaxes can harvest the machines, and powered drills inherit
+the tag through their existing pickaxe tag reference.
+
+Regression coverage uses survival players holding netherite pickaxes. It mines
+every chemical reactor part in four orientations, and the controller, next and
+last structural parts of every registered Jugcraft MachineBlock, checking tool
+eligibility, successful removal, exactly one machine item and no remaining parts.
+
+Industrial forms explicitly keep per-part self-drop loot handling even when they
+share the chemical reactor family, preventing duplicate drops from a second
+controller drop.
+
+Implementation: OpenAI Codex (GPT-6). Verified on upstream base f82f88c5a,
+Minecraft 26.3 / Fabric Loader 0.19.5 / Fabric API 0.161.0+26.3 / Java 25.
+Before the fix, both focused tests failed on chemical reactor part 1 returning no
+machine item. After the fix, both tests passed: 32 reactor breaks (eight parts in
+four directions, each retaining exactly one bucket of acid) and controller/next/
+last-part harvesting across 137 registered machines. Repository checks, generator
+syntax, industrial-form tag coverage and diff checks passed. The full data audit
+and generator import could not run because the local asset tooling lacks
+DejaVuSansCondensed-Bold.ttf. No human client, multiplayer or full-suite run was
+performed for this fix.
+
+
+### PR 597 CI follow-up
+
+The generated pickaxe tag must use the generator's sorted order. The first CI
+resource freshness check found only that ordering mismatch; entries are unchanged.
+The two harvesting tests now reuse one mock player each and remove them in
+`finally`, rather than retaining hundreds of connected players after the tests.
+The optional-integration full-suite job had exhausted its 4 GiB Java heap.
+No assertions, test coverage, heap limits or workflows were relaxed.
+
+Both harvesting regressions passed again with 137 machines and all 32 reactor
+part/orientation combinations. That local run used the existing built resources
+after verifying that the source tag and built tag have identical entries; only
+their ordering differs. CI independently regenerates resources.
+
+### Tag validator registry coverage
+
+CI regeneration and the full server suite without optional integrations passed
+on 62d507d72. The main build then reached the data validator, which did not include
+industrial forms in its known block/item IDs. `check_tags` now includes the actual
+`industrial_forms.blocks()` registry, consistent with the asset and recipe audits.
+A targeted run accepts the committed tags and rejects an injected nonexistent
+machine ID. The required DejaVu fonts were configured in local build tools to
+allow the full audit to run; no fonts or third-party artifacts are committed.

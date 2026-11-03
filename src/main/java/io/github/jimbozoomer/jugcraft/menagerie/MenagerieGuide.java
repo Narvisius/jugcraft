@@ -38,6 +38,9 @@ public final class MenagerieGuide {
         out.fact(Component.literal("Cabinets and shelves store items. Cooking appliances use fuel and normal recipes; cold appliances use ice or snow. Hopper access uses the shared inventory rules. A spatula removes the cooked result. Sinks and baths take water buckets and return empty buckets; take water back with an empty bucket. Sitting uses the existing seat controls."));
         out.heading(Component.literal("Small details"));
         out.fact(Component.literal("Use a named name tag on a door mat to put a label on it. Craft a named mat with blank mats to copy only its label. Fans animate while powered. Switches and buttons provide redstone; the remote toggles a nearby television. Furniture is usable immediately, without research."));
+        out.heading(Component.literal("Harvest table and home decorations"));
+        out.fact(Component.literal("Craft the Thanksgiving decorations from farm produce, sticks, wheat, clay, iron and copper: produce baskets, a root hamper and a pumpkin and gourd stack; a place setting, napkin caddy, bread basket, gravy boat, butter dish and pie stand; a wall garland, amber jar lantern, candle centerpiece, market sign and copper pan rack; a turkey statuette, squirrel figurine, acorn mobile and table cornucopia. Each faces you when placed and drops itself. They need no research and stay usable all year."));
+        out.fact(Component.literal("Use an Autumn Leaf Table Runner on a Harvest Feast Table to lay it along any length; shears take it back. Garlands hung side by side on one wall join into one swag. Light the centerpiece's candles with flint and steel; an empty hand snuffs them. The lantern stands or hangs like a lantern; the mobile hangs from a ceiling."));
     }
     public static void habitats(ServerPlayer player,EncyclopediaRequestPayload request,PageWriter out){
         out.heading(Component.literal("Ecology and new landscapes"));

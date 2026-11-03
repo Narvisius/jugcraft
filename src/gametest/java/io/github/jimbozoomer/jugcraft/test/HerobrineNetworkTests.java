@@ -13,7 +13,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.levelgen.presets.WorldPresets;
-import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
 
@@ -24,11 +23,7 @@ public final class HerobrineNetworkTests implements FabricClientGameTest {
     private static void mark(String name,String text){try{Files.createDirectories(coordination());Files.writeString(coordination().resolve(name),text);}catch(Exception e){throw new RuntimeException(e);}}
     private static boolean marked(String name){return Files.exists(coordination().resolve(name));}
     private static AssertionError peerFailure(String message) {
-        var tail = new ArrayDeque<String>();
-        try (var lines = Files.lines(coordination().resolve("peer.log"))) {
-            lines.forEach(line -> { if (tail.size() == 120) tail.removeFirst(); tail.addLast(line); });
-        } catch (IOException e) { tail.addLast("Could not read peer log: " + e); }
-        return new AssertionError(message + "\nSecond-client log tail:\n" + String.join("\n", tail));
+        return PeerClientStartup.failure(coordination(), message);
     }
     @Override public void runTest(ClientGameTestContext c) {
         if (System.getProperty(PEER) != null) { peer(c); return; }
@@ -55,10 +50,17 @@ public final class HerobrineNetworkTests implements FabricClientGameTest {
                 peer = launchPeer(server.computeOnServer(s -> s.getPort()), c);
                 mark("peer-pid.txt", Long.toString(peer.pid()));
                 final Process other = peer;
-                server.waitFor(s -> {
-                    if (!other.isAlive()) throw peerFailure("Second client exited before login: " + other.exitValue());
-                    return s.getPlayerList().getPlayerByName("OwnerPeer") != null;
-                }, 2400);
+                PeerClientStartup.await(() -> c.waitTicks(1), other, coordination());
+                try {
+                    server.waitFor(s -> {
+                        if (!other.isAlive()) throw new AssertionError("Second client exited before login: " + other.exitValue());
+                        return s.getPlayerList().getPlayerByName("OwnerPeer") != null;
+                    }, 2400);
+                } catch (AssertionError e) {
+                    var failure = peerFailure("Second client failed to log in after startup: " + e.getMessage());
+                    failure.initCause(e);
+                    throw failure;
+                }
                 server.runCommand("gamemode creative @a");
                 server.runCommand("fill -5 219 -24 5 219 3 minecraft:stone");
                 server.runCommand("fill -5 220 -24 5 225 3 minecraft:air");
@@ -125,7 +127,7 @@ public final class HerobrineNetworkTests implements FabricClientGameTest {
         var launch=Files.readAllLines(config.resolve(".gradle/loom-cache/launch.cfg"));String assets=null,assetIndex=null;
         for(int i=0;i+1<launch.size();i++){if(launch.get(i).trim().equals("--assetsDir"))assets=launch.get(i+1).trim();if(launch.get(i).trim().equals("--assetIndex"))assetIndex=launch.get(i+1).trim();}
         if(assets==null||assetIndex==null)throw new IllegalStateException("Loom launch config lacks asset paths");
-        var cmd=new ArrayList<String>();cmd.add(Path.of(System.getProperty("java.home"),"bin",System.getProperty("os.name").startsWith("Windows")?"java.exe":"java").toString());cmd.add("-Xmx2G");cmd.add("-XX:ActiveProcessorCount=4");cmd.add("-XX:ErrorFile="+coordination().resolve("hs_err_peer.log"));
+        var cmd=new ArrayList<String>();cmd.add(Path.of(System.getProperty("java.home"),"bin",System.getProperty("os.name").startsWith("Windows")?"java.exe":"java").toString());cmd.add(PeerClientStartup.HEAP_OPTION);cmd.add("-XX:ActiveProcessorCount=4");cmd.add("-XX:ErrorFile="+coordination().resolve("hs_err_peer.log"));
         for(var e:System.getProperties().entrySet()){String k=e.getKey().toString();if(k.startsWith("fabric.")||k.startsWith("fabric-api.")||k.startsWith("org.lwjgl.")||k.equals("java.library.path")||k.equals("log4j.configurationFile"))cmd.add("-D"+k+"="+e.getValue().toString().replace(oldResources,resources.toString()));}
         cmd.add("-D"+PEER+"="+port);cmd.add("-Djugcraft.ownerTestCoord="+coordination());cmd.add("-cp");cmd.add(System.getProperty("java.class.path").replace(oldResources,resources.toString()));cmd.add("net.fabricmc.loader.impl.launch.knot.KnotClient");
         cmd.addAll(List.of("--username","OwnerPeer","--version","26.3","--accessToken","0","--gameDir",dir.toString(),"--assetIndex",assetIndex,"--assetsDir",assets));
@@ -143,6 +145,7 @@ public final class HerobrineNetworkTests implements FabricClientGameTest {
         }
     }
     private static void peer(ClientGameTestContext c) {
+        mark("peer-entered", "");
         try {
             String address = "127.0.0.1:" + System.getProperty(PEER);
             c.runOnClient(mc -> ConnectScreen.startConnecting(new TitleScreen(), mc, ServerAddress.parseString(address), new ServerData("Herobrine disposable test", address, ServerData.Type.OTHER), false, null));

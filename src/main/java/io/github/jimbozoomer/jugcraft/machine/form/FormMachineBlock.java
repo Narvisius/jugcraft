@@ -70,6 +70,12 @@ public class FormMachineBlock extends LargeMachineBlock {
 		return form;
 	}
 
+	/** Forms use self-drop tables on every part, regardless of their shared machine family. */
+	@Override
+	protected boolean dropsFromMasterOnly() {
+		return false;
+	}
+
 	/** The block entity type of this block's controller (set once, when the type is registered). */
 	public BlockEntityType<FormMachineBlockEntity> entityType() {
 		if (entityType == null) {

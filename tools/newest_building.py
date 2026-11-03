@@ -570,6 +570,10 @@ def generate(writer=write):
         copy(painting_root / 'assets/mcwpaintings/textures/painting' / (source.stem + '.png'), ASSET / 'textures/painting/newest' / (source.stem + '.png'))
         paintings.append('jugcraft:' + ident)
     merge_tag(RES / 'data/minecraft/tags/painting_variant/placeable.json', paintings, writer)
+    # Property combinations originate in sets; serialize states deterministically.
+    for spec in blocks.values():
+        if 'shapes' in spec:
+            spec['shapes'] = dict(sorted(spec['shapes'].items()))
     writer(RES / 'jugcraft/newest_building.json', {'blocks': blocks, 'items': items, 'paintings': paintings})
     lang_path = ASSET / 'lang/en_us.json'
     merged = read(lang_path); merged.update(language)

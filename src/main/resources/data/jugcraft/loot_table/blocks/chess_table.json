@@ -3,15 +3,15 @@
   "pools": [
     {
       "rolls": 1,
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
       "entries": [
         {
           "type": "minecraft:item",
           "name": "jugcraft:chess_table"
         }
-      ],
-      "condition": {
-        "type": "minecraft:survives_explosion"
-      }
+      ]
     }
   ]
 }

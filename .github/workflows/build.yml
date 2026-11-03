@@ -190,7 +190,9 @@ jobs:
   plan:
     name: choose client tests
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    # Fetching both merge parents of the expanded asset repository exceeded five minutes.
+    # This is setup time only; selection and every client assertion remain unchanged.
+    timeout-minutes: 15
     outputs:
       shard0: ${{ steps.choose.outputs.shard0 }}
       shard1: ${{ steps.choose.outputs.shard1 }}
@@ -253,6 +255,9 @@ jobs:
         if: env.CLASSES != ''
         with:
           persist-credentials: false
+      - name: Reclaim unused hosted-runner SDK space
+        if: env.CLASSES != ''
+        run: bash scripts/prepare_client_disk.sh
       - uses: actions/setup-java@v4
         if: env.CLASSES != ''
         with:
@@ -274,6 +279,11 @@ jobs:
       - name: Run client game tests (shard ${{ matrix.shard }} of 16)
         if: env.CLASSES != ''
         run: |
+          # Both bounded JVMs plus software rendering need spillover on hosted runners.
+          sudo fallocate -l 8G /mnt/jugcraft-client.swap
+          sudo chmod 600 /mnt/jugcraft-client.swap
+          sudo mkswap /mnt/jugcraft-client.swap
+          sudo swapon /mnt/jugcraft-client.swap
           ./gradlew runClientGameTest --no-daemon "-PclientTests=$CLASSES" &
           client_build_pid=$!
           # A world-close hang previously exhausted the job limit without a Java stack.

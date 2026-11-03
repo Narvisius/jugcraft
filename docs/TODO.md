@@ -1,5 +1,15 @@
 # Jugcraft TODO
 
+## November 3 — raider crews, companion stable, placed-food remodels, Thanksgiving decor (local, Claude Code)
+
+Owner request, 3 November 2026. Local working branches only: nothing is committed, pushed, released or deployed. Codex reviews, integrates and tests. [Ledger](features/holiday-batch-nov3.md).
+
+- [x] **A — Raider crews implemented and tested locally:** visible walker drivers/blimp pilots, raid-party ownership, save/reload, bailout, driver-loss shutdown, guarded standoff and bounded stuck recovery. All 52 combined server tests pass, including crews and gate approaches. Rendered crew test passes. A full populated live-city raid has not been playtested. [Raiders](features/raiders.md#crews-november-2026).
+- [x] **B — Companion stable screen implemented and tested locally:** wood/leather styling, portraits, health/bond, status/KO countdown, behavior controls and keyboard navigation. Real client checks pass for recall/deploy, Stay, keyboard selection, recovery lock and 640×480 layout; screenshots reviewed. Not an exhaustive GUI-scale or two-human multiplayer test. [Record](features/pet-inventory-nov2.md#companion-stable-screen-3-november-2026).
+- [x] **C — All eight placed-food remodels integrated locally:** sculpted dishware and ingredients, source generators, textures and collision/opaque-face tests. Rendered client test passes; clean 1280×720 in-game visuals reviewed. The shared [food modelling guide](FOOD_MODELS.md) records the style for future dishes. [Record](features/placed-food-remodels.md).
+- [x] **D–G — Thanksgiving decorations integrated locally:** 19 new craftable blocks plus the Autumn Leaf Table Runner; existing equivalents reused. Placement, drops, garland connections, candle interactions and runner swaps pass combined server checks. Gravy boat refined. Twenty new essence entries generated without changing existing values. Rendered client test passes. [Record](features/thanksgiving-decor.md).
+- [ ] **Before release:** owner visual playtest, optional full-city raid soak test, and separate approval for any live restart. No town decoration migration or owner-placement changes were made. Existing 48 imported-model geometry audit findings remain a separate priority; this batch adds no findings. Whole-repository generator limitations remain recorded in the ledger; do not label the full repository audit green.
+
 ## Thanksgiving festival — November 1
 
 - [x] **Phase 9 — Optional chess/checkers wagers completed locally.** Free by default; 1/5/10/25/50 Jugs each, mutual consent, Exchange escrow, winner/draw settlement, refunds and saved receipts. Nine board/wager server tests, two Exchange regressions and rendered/input client validation passed. No deployment. [Evidence](features/thanksgiving-festival-nov1.md).
@@ -194,7 +204,7 @@ See [town release scope and evidence](features/town-updater-release-oct22.md).
 
 ## City defense and performance — October 22
 
-- [ ] **Fix raid targeting and pathfinding (owner report, October 29):** raiders currently attack an arbitrary corner of the city wall where guards struggle to see or engage them. Choose reachable, intentional attack approaches; account for walls, gates and guard line of sight; add stuck-target recovery and guard repositioning so raids become visible fights rather than corner pileups. Validate ground units, mechas and aircraft against the existing city layout and player-placed obstacles. Preserve city-focused raids, protected builds and the guards' existing invulnerability.
+- [ ] **Fix raid targeting and pathfinding (owner report, October 29):** raiders currently attack an arbitrary corner of the city wall where guards struggle to see or engage them. Choose reachable, intentional attack approaches; account for walls, gates and guard line of sight; add stuck-target recovery and guard repositioning so raids become visible fights rather than corner pileups. Validate ground units, mechas and aircraft against the existing city layout and player-placed obstacles. Preserve city-focused raids, protected builds and the guards' existing invulnerability. Partly addressed 3 November (Claude Code, not yet run): the walker engages unreachable guards from a standoff, blimps climb over obstacles, and marchers sidestep or skip a stuck waypoint ([raiders.md](features/raiders.md#crews-november-2026)). Guard repositioning and validation against the city remain.
 - [x] Implement city-only raider targeting, combat-invulnerable guard crews/walkers, six tower flak stations, 250-block mounted-weapon targeting and the usable bank Ender Chest. [Implementation](features/city-defense-and-performance.md).
 - [x] Pin compatible Lithium, FerriteCore, Krypton and ImmediatelyFast releases in the shared pack/server dependency lock.
 - [x] Add read-only Candy Cavity chunk survey and [safe refresh procedure](CANDY_CAVERN_REFRESH.md).

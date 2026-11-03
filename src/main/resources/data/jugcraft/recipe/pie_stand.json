@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "#minecraft:wooden_slabs",
+    "#minecraft:wooden_slabs",
+    "minecraft:stick",
+    "minecraft:pumpkin_pie",
+    "jugcraft:apple_pie"
+  ],
+  "result": {
+    "id": "jugcraft:pie_stand",
+    "count": 1
+  }
+}

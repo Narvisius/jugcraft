@@ -12,7 +12,8 @@ concurrency:
 jobs:
   repository:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    # Full checkout, pinned assets and 335+ contract tests exceed five minutes on cold runners.
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:

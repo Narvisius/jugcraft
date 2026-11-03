@@ -2443,6 +2443,7 @@ public final class JugcraftAgriculture {
 		registerPartyTable();
 		registerClockwork();
 		registerHarvestFestival();
+		registerThanksgivingDecor();
 	}
 
 	/**
@@ -3272,6 +3273,72 @@ public final class JugcraftAgriculture {
 						.add(Attributes.JUMP_STRENGTH, new AttributeModifier(Jugcraft.id("sack_race_jump"), SACK_JUMP,
 								AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.LEGS)
 						.build()), BUILDING_TAB);
+	}
+
+	/** The Amber Jar Lantern's light (tools/thanksgiving_decor.py PROPS). */
+	public static final int AMBER_JAR_LANTERN_LIGHT = 13;
+
+	/**
+	 * The Thanksgiving decorations (tools/thanksgiving_decor.py; docs/features/thanksgiving-decor.md): batch D's harvest
+	 * market and garden, E's feast table, F's warm town and interiors and G's playful statement pieces, each of the
+	 * table's kind and shape (PROPS). They are plain decorations, craftable from the start and kept all year; nothing
+	 * here follows the calendar or asks for research. The Autumn Leaf Table Runner is a Feast Table cloth
+	 * ({@link FeastTableBlock.Runner#LEAVES}).
+	 */
+	private static void registerThanksgivingDecor() {
+		List<Block> decor = new ArrayList<>();
+		// D: the harvest market and garden.
+		decor.add(registerBlock("pumpkin_and_gourd_stack", props -> new FacingDecorationBlock(props, new double[] {0.5, 0.0, 0.5, 15.5, 12.5, 15.5}),
+				decorProperties(MapColor.COLOR_ORANGE, SoundType.WOOD, 0.8F).ignitedByLava()));
+		decor.add(registerBlock("wicker_apple_basket", props -> new FacingDecorationBlock(props, new double[] {2.0, 0.0, 3.0, 14.0, 13.0, 13.0}),
+				decorProperties(MapColor.WOOD, SoundType.WOOD, 0.5F).ignitedByLava()));
+		decor.add(registerBlock("pear_basket", props -> new FacingDecorationBlock(props, new double[] {1.0, 0.0, 0.5, 15.0, 10.0, 12.5}),
+				decorProperties(MapColor.WOOD, SoundType.WOOD, 0.5F).ignitedByLava()));
+		decor.add(registerBlock("root_vegetable_hamper", props -> new FacingDecorationBlock(props, new double[] {1.5, 0.0, 2.5, 14.5, 16.0, 15.0}),
+				decorProperties(MapColor.WOOD, SoundType.WOOD, 0.6F).ignitedByLava()));
+		// E: the feast table.
+		decor.add(registerBlock("harvest_place_setting", props -> new FacingDecorationBlock(props, new double[] {1.5, 0.0, 2.5, 15.0, 5.5, 14.5}),
+				decorProperties(MapColor.TERRACOTTA_WHITE, SoundType.DECORATED_POT, 0.3F)));
+		decor.add(registerBlock("napkin_and_cutlery_caddy", props -> new FacingDecorationBlock(props, new double[] {3.5, 0.0, 5.5, 12.5, 9.0, 10.5}),
+				decorProperties(MapColor.WOOD, SoundType.WOOD, 0.5F).ignitedByLava()));
+		decor.add(registerBlock("bread_basket", props -> new FacingDecorationBlock(props, new double[] {1.5, 0.0, 3.0, 14.5, 6.5, 13.0}),
+				decorProperties(MapColor.WOOD, SoundType.WOOD, 0.5F).ignitedByLava()));
+		decor.add(registerBlock("gravy_boat", props -> new FacingDecorationBlock(props, new double[] {4.0, 0.0, 2.5, 12.0, 5.0, 13.5}),
+				decorProperties(MapColor.TERRACOTTA_WHITE, SoundType.DECORATED_POT, 0.3F)));
+		decor.add(registerBlock("covered_butter_dish", props -> new FacingDecorationBlock(props, new double[] {3.5, 0.0, 2.5, 12.5, 5.5, 11.5}),
+				decorProperties(MapColor.TERRACOTTA_WHITE, SoundType.DECORATED_POT, 0.3F)));
+		decor.add(registerBlock("pie_stand", props -> new FacingDecorationBlock(props, new double[] {1.5, 0.0, 1.5, 14.5, 14.0, 14.5}),
+				decorProperties(MapColor.WOOD, SoundType.WOOD, 0.6F).ignitedByLava()));
+		// F: the warm town and its interiors.
+		decor.add(registerBlock("autumn_leaf_wall_garland", props -> new LeafGarlandBlock(props, 3.5, 0.0, 16.0),
+				decorProperties(MapColor.COLOR_ORANGE, SoundType.GRASS, 0.2F).ignitedByLava().noCollision()));
+		decor.add(registerBlock("amber_jar_lantern", LanternBlock::new,
+				decorProperties(MapColor.COLOR_ORANGE, SoundType.GLASS, 0.4F).lightLevel(state -> AMBER_JAR_LANTERN_LIGHT)));
+		decor.add(registerBlock("pumpkin_candle_centerpiece", props -> new CandleCenterpieceBlock(props, new double[] {1.0, 0.0, 4.5, 15.0, 10.0, 13.5}),
+				decorProperties(MapColor.WOOD, SoundType.WOOD, 0.5F).ignitedByLava().lightLevel(CandleCenterpieceBlock::light)));
+		decor.add(registerBlock("harvest_market_sign", props -> new WallDecorationBlock(props, 5.5, 1.0, 15.0),
+				decorProperties(MapColor.WOOD, SoundType.WOOD, 0.8F).ignitedByLava().noCollision()));
+		decor.add(registerBlock("copper_pan_rack", props -> new WallDecorationBlock(props, 4.0, 1.0, 15.0),
+				decorProperties(MapColor.COLOR_ORANGE, SoundType.COPPER, 1.0F)));
+		// G: the playful statement pieces.
+		decor.add(registerBlock("turkey_statuette", props -> new FacingDecorationBlock(props, new double[] {1.0, 0.0, 3.0, 15.0, 15.0, 14.0}),
+				decorProperties(MapColor.COLOR_BROWN, SoundType.WOOD, 0.8F).ignitedByLava()));
+		decor.add(registerBlock("acorn_leaf_mobile", props -> new HangingGhostBlock(props, Block.box(2.0, 0.5, 2.0, 15.0, 16.0, 14.0)),
+				decorProperties(MapColor.COLOR_BROWN, SoundType.WOOD, 0.2F).ignitedByLava().noCollision()));
+		decor.add(registerBlock("squirrel_acorn_figurine", props -> new FacingDecorationBlock(props, new double[] {4.5, 0.0, 5.0, 11.5, 11.0, 15.0}),
+				decorProperties(MapColor.COLOR_ORANGE, SoundType.WOOD, 0.5F).ignitedByLava()));
+		decor.add(registerBlock("table_cornucopia", props -> new FacingDecorationBlock(props, new double[] {0.0, 0.0, 2.0, 14.5, 8.5, 13.5}),
+				decorProperties(MapColor.WOOD, SoundType.WOOD, 0.5F).ignitedByLava()));
+		for (Block block : decor) {
+			registerItem(BuiltInRegistries.BLOCK.getKey(block).getPath(), props -> new BlockItem(block, props),
+					new Item.Properties().useBlockDescriptionPrefix(), BUILDING_TAB);
+		}
+		registerItem(FeastTableBlock.LEAF_RUNNER, Item::new, new Item.Properties(), BUILDING_TAB);
+	}
+
+	/** A small decoration: noOcclusion, popped off by a piston. */
+	private static BlockBehaviour.Properties decorProperties(MapColor color, SoundType sound, float strength) {
+		return BlockBehaviour.Properties.of().mapColor(color).strength(strength).sound(sound).noOcclusion().pushReaction(PushReaction.POPPED);
 	}
 
 	/** A prize show vegetable: soft, and popped off by a piston. */

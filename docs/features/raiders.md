@@ -59,6 +59,38 @@ Six kinds of raider. All are hostile mobs: sentry guns (batch 56) and town guard
 
 The gunners (slice 10F of the guns) march in place of some of the grunts, so each party is as large as before. While the guns are switched off (`guns.enabled=false`), grunts come in their places.
 
+### Crews (November 2026)
+Owner request, 3 November 2026: raiders must appear in their raiding craft. Implemented with Claude Code; not yet compiled or run (see Verification).
+
+- **Who rides where.**
+  - The Raider Walker's **driver** sits in a new open hatch on its roof, head and shoulders out. The hatch is a raised coaming with its lid swung up behind it (`raider_walker_hatch` in `raider_quads.json`, `tools/raiders.py`).
+  - The Raider Blimp's **pilot** sits on its gondola deck behind the wheel, under the envelope.
+  - Each is an ordinary raider of the raid, riding the machine (`raiders/RaiderCrew`), so the game draws, moves and saves it as any rider. It sits in the riding pose, faces the way its machine faces, and can turn its head 75° either way.
+- **Where crews come from.**
+  - Raids crew their machines from the party's own grunts, then gunners, so a party is the size the table above says. For example, level 5 sends 3 of its 4 grunts aboard and 1 marches.
+  - A machine made by `/summon` or a spawn egg brings its own grunt driver, who belongs to no raid.
+- **The crew adds no firepower.**
+  - Aboard, the crew member's own fighting and marching stand idle; the machine fights with its own weapon, exactly as before.
+  - Nothing aims at players: crews keep the guard-only targeting.
+- **The machine needs its crew.**
+  - A crewed machine whose crew is gone (killed, or knocked off) stalls or drifts, smokes for 2 seconds, then goes down as if destroyed: its usual drops, and it counts as fallen for the raid.
+  - While it smokes it neither moves nor fights. If its raid has ended meanwhile (its crew left with it), it withdraws with the raid instead, with no drops.
+  - Killing the crew is therefore a way to stop a machine. The walker's driver is armoured by the hatch and takes half damage.
+  - Machines saved before crews existed have no crew and keep working as they always did.
+- **When the machine falls, the crew bails out.**
+  - From the blimp with 30 seconds of slow falling; from the walker straight out of the hatch.
+  - Either way they fight on foot as the infantry they are.
+- **Never duplicated or orphaned.**
+  - A crew member is saved inside its machine (the game's own passenger saving), so unloading and reloading keeps exactly one.
+  - Loading never creates crew; only a raid or a fresh spawn does.
+  - A withdrawn raid takes the crew with its machine.
+  - Crew never suffocate in a ceiling their machine passes under.
+- **Approaches and stuck recovery.**
+  - The walker charges only a guard it can reach on foot. Guards on a wall or behind a gate it engages from a 14-block standoff, in sight, with its hull launcher, trying a spot further round if it cannot get there.
+  - A blimp that gets no nearer for 5 seconds (a hill or a tower) climbs 8 blocks higher for 10 seconds. The count starts again whenever it heads for something new.
+  - Every marcher that gets no nearer its next waypoint for three re-paths (6 seconds) sidesteps left or right. After six re-paths it gives the waypoint up for the next. One that gives up its last waypoint plans a fresh route 30 seconds later, rather than standing for good.
+  - Nothing breaks blocks or loads chunks.
+
 ### Siege ladders
 - **Walls slow raiders rather than stop them.**
   - A grunt on its way somewhere (its raid's objective, or someone it hunts) that has got no closer to it for 2 seconds, with a wall in front of it on that side, props a **Siege Ladder** up the wall face. (A blocked path leaves a mob standing at the wall, not pushing into it, so this goes by progress.)
@@ -152,6 +184,7 @@ Their weapons never drop, but for the gunner's gun: a player's kill wins it abou
   - The bar goes to every player near the objective.
   - Messages go to everyone near when a raid starts, ends or withdraws.
 - **Unloaded chunks:** a raider in an unloaded chunk still counts toward its raid. If the raid withdraws while the raider is unloaded, it leaves when next loaded.
+- **Crews:** a machine saves its crew member inside itself (the game's passenger saving), and saves whether it was crewed (`crewed`). Older saves have no `crewed` flag, so their machines keep working uncrewed.
 - Not verified with two players or on a dedicated server.
 
 ## Dependencies and assets
@@ -161,13 +194,26 @@ Their weapons never drop, but for the gunner's gun: a player's kill wins it abou
   - **Walker and blimp models:** the Armoured Walker's (batch 58) and the Zeppelin's shapes repainted, the blimp scaled to 55%, exported to `assets/jugcraft/raider_quads.json`.
 - Sounds are vanilla: the pillager's voice, the raid horn, the iron golem's steps.
 - Code:
-  - `raiders/JugcraftRaiders`, `RaiderInfantry`, `RaiderWalker`, `RaiderBlimp`, `RaiderBomb`, `RaiderRaids`, `MarchGoal`, `RaidMember` and `Raider`.
+  - `raiders/JugcraftRaiders`, `RaiderInfantry`, `RaiderWalker`, `RaiderBlimp`, `RaiderBomb`, `RaiderRaids`, `MarchGoal`, `RaidMember`, `Raider` and `RaiderCrew` (crews, November 2026).
   - The gunner fires through `guns/MobGuns` (slice 10F of the guns), which shares the players' bullet code.
   - Client: `RaiderRenderer`/`RaiderModel` (the townsfolk's body), `RaiderWalkerRenderer` and `RaiderBlimpRenderer`.
   - `weapons/Blast` gains a version that spares some targets.
   - `JugcraftConfig` gains the `raiders` feature and its options.
 
 ## Verification
+- **Crews (November 2026).** Not yet run: the Claude environment cannot reach Fabric's or Mojang's maven, so nothing here was compiled or run in the game. What was done:
+  - The Java was syntax-checked with tree-sitter.
+  - `tools/raiders.py` reproduced the committed `raider_quads.json` byte for byte before the change; afterwards it adds only `raider_walker_hatch`.
+  - Offline renders of the walker (hatch, stand-in driver) and the blimp (stand-in pilot) at the seats `RaiderCrew` uses were checked.
+  - Server tests written (`RaiderCrewGameTests`):
+    - a level-5 raid is crewed from its party and stays its size, each crew member is seated in the right place, and withdrawing takes everyone;
+    - a machine that loses its crew goes down, but one never crewed walks on;
+    - the crew bails out (with slow falling from the blimp);
+    - the crew is saved inside its machine, and a reload never makes more;
+    - aboard, the crew's goals stand idle, it faces its machine, and nothing targets a player;
+    - a summoned machine brings exactly one driver.
+  - The rendered client showroom adds a crewed walker and blimp and a close-up (`jugcraft_raider_crews`).
+  - Still to run: compilation, these tests, the client screenshots, and a full raid on the city with the walker's standoff and the marchers' stuck recovery.
 - Later additions:
   - Slice 10F of the guns, the gunner: `RaiderGunnerGameTests` (in [guns.md](guns.md#slice-10f-enemies-with-guns)), and `raidIsWonWhenEveryRaiderFalls` counts a level 1 party of two grunts, a gunner, a grenadier and an officer.
   - `raidersHuntOnTheirOwn`: a grunt hunts a townsperson down to striking distance, and a grenadier throws at them.

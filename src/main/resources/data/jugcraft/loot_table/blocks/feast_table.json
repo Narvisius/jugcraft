@@ -60,6 +60,30 @@
         }
       ],
       "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "minecraft:survives_explosion"
+          },
+          {
+            "type": "minecraft:match_block",
+            "blocks": "jugcraft:feast_table",
+            "state": {
+              "runner": "leaves"
+            }
+          }
+        ]
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "jugcraft:autumn_leaf_table_runner"
+        }
+      ],
+      "rolls": 1
     }
   ],
   "random_sequence": "jugcraft:blocks/feast_table"

@@ -1574,6 +1574,9 @@ def main():
     # The feasts and food displays' plate, which the owner's library has no drawing for (tools/feasts_textures.py).
     import feasts_textures
     feasts_textures.draw_all(save)
+    # The remodelled placed meals' food and dishware (tools/menu_meal_textures.py, drawn from tools/menu_meal_models.py).
+    import menu_meal_textures
+    menu_meal_textures.draw_all(save)
 
     import transport_crates
     transport_crates.main()

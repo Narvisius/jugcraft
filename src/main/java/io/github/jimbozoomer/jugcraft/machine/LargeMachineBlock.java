@@ -172,6 +172,11 @@ public class LargeMachineBlock extends MachineBlock implements WorldlyContainerH
 		}
 	}
 
+	/** Whether the loot table drops only from the controller to copy its stored fluid. */
+	protected boolean dropsFromMasterOnly() {
+		return kind().keepsContents();
+	}
+
 	@Override
 	protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
 		super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston);
@@ -182,7 +187,7 @@ public class LargeMachineBlock extends MachineBlock implements WorldlyContainerH
 		// its fluid drops from its master instead (its other parts drop nothing), so the master is broken with drops.
 		Direction facing = state.getValue(FACING);
 		BlockPos master = masterPos(pos, state);
-		if (kind().keepsContents() && part(state) != 0 && level.getBlockState(master).is(this)) {
+		if (dropsFromMasterOnly() && part(state) != 0 && level.getBlockState(master).is(this)) {
 			level.destroyBlock(master, true);
 			return;
 		}

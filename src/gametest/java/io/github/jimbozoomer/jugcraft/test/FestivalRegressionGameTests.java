@@ -93,7 +93,7 @@ public final class FestivalRegressionGameTests {
         h.succeed();
     }
 
-    @GameTest(maxTicks=80)
+    @GameTest(maxTicks=80, environment="jugcraft-test:holiday_truce")
     public void holidayWithdrawsExistingRaidAndKeepsHorn(GameTestHelper h) {
         var level=h.getLevel();
         var server=level.getServer();

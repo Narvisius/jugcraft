@@ -234,17 +234,34 @@ public class PumpklingGameTests {
 
 	/** Slain by anyone but its owner, it drops its carved pumpkin with its face. */
 	@GameTest
-	public void slainItDropsItsPumpkin(GameTestHelper helper) {
+	public void unownedSlainItDropsItsPumpkin(GameTestHelper helper) {
 		ServerLevel level = helper.getLevel();
 		floor(helper);
 		ServerPlayer owner = player(helper, new BlockPos(1, 2, 1), GameType.SURVIVAL);
 		ServerPlayer stranger = player(helper, new BlockPos(6, 2, 6), GameType.SURVIVAL);
 		Pumpkling pumpkling = pumpkling(helper, new BlockPos(4, 2, 4), owner, true);
+		pumpkling.setOwner(null); // Unowned creatures keep their ordinary death drops.
 		pumpkling.hurtServer(level, level.damageSources().playerAttack(stranger), 100.0F);
 		helper.assertTrue(pumpkling.isDeadOrDying(), "A stranger's blow slays it");
 		helper.assertTrue(droppedPumpkin(helper, new BlockPos(4, 2, 4)), "It drops its pumpkin, face and all");
 		helper.succeed();
 	}
+
+    /** Owned Pumpklings use the shared pet knockout contract, never duplicate their pumpkin. */
+    @GameTest
+    public void ownedLethalDamageStoresTheSamePumpkling(GameTestHelper helper) {
+        floor(helper);
+        var owner = player(helper, new BlockPos(1,2,1), GameType.SURVIVAL);
+        var stranger = player(helper, new BlockPos(6,2,6), GameType.SURVIVAL);
+        var pet = pumpkling(helper, new BlockPos(4,2,4), owner, true);
+        var id = pet.getUUID();
+        pet.hurtServer(helper.getLevel(), helper.getLevel().damageSources().playerAttack(stranger), 100.0F);
+        var entry = io.github.jimbozoomer.jugcraft.pets.PetRoster.get(helper.getLevel().getServer()).entries.get(id);
+        helper.assertTrue(pet.isRemoved() && entry != null && entry.getStringOr("state", "").equals("KNOCKED_OUT"), "Lethal damage stores the same pet as knocked out");
+        helper.assertTrue(entry.getStringOr("owner", "").equals(owner.getUUID().toString()), "Owner preserved");
+        helper.assertTrue(!droppedPumpkin(helper, new BlockPos(4,2,4)), "Knockout must not duplicate the carved pumpkin");
+        helper.succeed();
+    }
 
 	private static boolean droppedPumpkin(GameTestHelper helper, BlockPos near) {
 		return !helper.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(helper.absolutePos(near)).inflate(2.0),

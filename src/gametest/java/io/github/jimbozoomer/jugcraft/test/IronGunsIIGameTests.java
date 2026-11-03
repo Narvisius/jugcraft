@@ -104,12 +104,16 @@ public class IronGunsIIGameTests {
 		helper.assertTrue(GunShots.fire(shooter), "The loaded Comet Pistol did not fire");
 		helper.assertTrue(GunItem.loaded(shooter.getMainHandItem()) == 5, "The shot did not spend one of six rounds");
 		Microjet jet = onlyJet(helper, shooter, pig, "comet_pistol");
+		double launchSpeed = jet.getDeltaMovement().length();
+		// Vanilla applies air drag before moving; the Microjet restores its launch velocity afterward.
+		double expectedStep = launchSpeed * 0.99F;
 		Vec3[] seen = new Vec3[1];
 		helper.runAfterDelay(1, () -> seen[0] = jet.position());
 		helper.runAfterDelay(2, () -> {
 			double step = jet.position().distanceTo(seen[0]);
-			helper.assertTrue(!jet.isRemoved() && step > 2.35 && step < 2.55,
-					"The Comet Pistol's Microjet flew " + step + " blocks in a tick, not about 2.5, or it is gone");
+			helper.assertTrue(!jet.isRemoved() && Math.abs(step - expectedStep) < 1.0E-6
+					&& Math.abs(jet.getDeltaMovement().length() - launchSpeed) < 1.0E-6,
+					"The Comet Pistol's Microjet flew " + step + " blocks in a tick, not its drag-adjusted launch speed " + expectedStep + ", or it is gone");
 		});
 		helper.runAfterDelay(8, () -> {
 			helper.assertTrue(jet.isRemoved(), "The Comet Pistol's Microjet flew on past the pig");
@@ -136,13 +140,17 @@ public class IronGunsIIGameTests {
 		ServerPlayer shooter = GunsGameTests.shooter(helper, "narwhal_lance", 1, pig, GameType.SURVIVAL);
 		helper.assertTrue(GunShots.fire(shooter), "The loaded Narwhal Lance did not fire");
 		Microjet jet = onlyJet(helper, shooter, pig, "narwhal_lance");
+		double launchSpeed = jet.getDeltaMovement().length();
+		// Vanilla applies air drag before moving; the Microjet restores its launch velocity afterward.
+		double expectedStep = launchSpeed * 0.99F;
 		helper.assertTrue(GunItem.loaded(shooter.getMainHandItem()) == 0, "The Narwhal Lance's shot did not empty it");
 		Vec3[] seen = new Vec3[1];
 		helper.runAfterDelay(1, () -> seen[0] = jet.position());
 		helper.runAfterDelay(2, () -> {
 			double step = jet.position().distanceTo(seen[0]);
-			helper.assertTrue(!jet.isRemoved() && step > 2.85 && step < 3.05,
-					"The Narwhal Lance's Microjet flew " + step + " blocks in a tick, not about 3, or it is gone");
+			helper.assertTrue(!jet.isRemoved() && Math.abs(step - expectedStep) < 1.0E-6
+					&& Math.abs(jet.getDeltaMovement().length() - launchSpeed) < 1.0E-6,
+					"The Narwhal Lance's Microjet flew " + step + " blocks in a tick, not its drag-adjusted launch speed " + expectedStep + ", or it is gone");
 		});
 		helper.runAfterDelay(6, () -> {
 			helper.assertTrue(jet.isRemoved(), "The Narwhal Lance's Microjet flew on past the pig");
@@ -214,6 +222,12 @@ public class IronGunsIIGameTests {
 		Microjet jet = jets.getFirst();
 		helper.assertTrue(jet.getOwner() == shooter && jet.gun().equals(gun) && jet.damage() == spec.damage() && jet.left() == spec.range(),
 				"The Microjet is not the " + gun + "'s: " + jet.gun() + ", " + jet.damage() + ", " + jet.left());
+		// Projectile.getMovementToShoot adds bounded triangular spread on each axis before scaling by speed.
+		double speed = JugcraftGuns.jetSpeed(JugcraftGuns.GUNS.get(gun));
+		Vec3 deviation = jet.getDeltaMovement().subtract(shooter.getLookAngle().normalize().scale(speed));
+		double spread = speed * 0.0172275 * spec.hipSpread() + 1.0E-6;
+		helper.assertTrue(Math.abs(deviation.x) <= spread && Math.abs(deviation.y) <= spread && Math.abs(deviation.z) <= spread,
+				gun + " launch velocity must use its configured speed and bounded spread: " + jet.getDeltaMovement());
 		return jet;
 	}
 

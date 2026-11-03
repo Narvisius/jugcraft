@@ -88,7 +88,7 @@ public class SeasonGameTests {
 		helper.succeed();
 	}
 
-	@GameTest
+	@GameTest(environment="jugcraft-test:season_restart")
 	public void overridesLastUntilRestart(GameTestHelper helper) {
 		// The test server's config file has the defaults. Overrides change the settings in memory only, and a server
 		// starting (a restart, or the next world opened in the same game) begins from the file again.

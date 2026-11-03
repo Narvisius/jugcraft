@@ -158,6 +158,15 @@ TEMPLATES = {"bowl": bowl, "plate": plate, "stack": stack, "flat": flat, "stand"
 
 def dish_model(name):
     template, *params = menu.all_placed()[name]
+    import menu_meal_models
+    if name in menu_meal_models.MEALS:
+        # Sculpted on its dishware in its own textures (tools/menu_meal_models.py); the owner's icon stays the dish's
+        # particle texture.
+        textures, elements = menu_meal_models.textures_and_elements(name)
+        texture = rid(f"block/menu/{name}")
+        return {"parent": "minecraft:block/block",
+                "textures": {"particle": texture, "dish": texture, **{key: rid(f"block/{value}") for key, value in textures.items()}},
+                "elements": elements}
     if template in ('bowl', 'plate'):
         from feast_meal_models import elements as meal_elements
         elements = meal_elements(name, template, icon(name), heap=(params[0] if params else {}).get('heap', 0))

@@ -1,6 +1,7 @@
 package io.github.jimbozoomer.jugcraft.test;
 
 import io.github.jimbozoomer.jugcraft.Jugcraft;
+import io.github.jimbozoomer.jugcraft.client.OwnerThirdPerson;
 import io.github.jimbozoomer.jugcraft.client.arms.ArmsMotion;
 import io.github.jimbozoomer.jugcraft.weapons.JugcraftArms;
 import io.github.jimbozoomer.jugcraft.weapons.WeaponArts;
@@ -53,6 +54,7 @@ public class WeaponArtsClientGameTests implements FabricClientGameTest {
 			// From behind: the foes ahead stay in view past the player (a camera in front would sit among them).
 			context.runOnClient(client -> client.options.setCameraType(CameraType.THIRD_PERSON_BACK));
 			context.waitTicks(20);
+			verifyOrbitCorrections(context);
 
 			// Cyclone: four husks about the player, two blocks off; three turns strike each of them three times.
 			ready(context, server, x, y, z, "steel_twinblade");
@@ -168,6 +170,7 @@ public class WeaponArtsClientGameTests implements FabricClientGameTest {
 			// keeps its AI, so the haul still moves it (a NoAI mob is not moved by a push).
 			ready(context, server, x, y, z + 6, "steel_kusarigama");
 			server.runCommand(String.format(Locale.ROOT, "tp @p %.1f %d %.1f 180 12", x + 0.5, y, z + 6 + 0.5));
+			context.getInput().lookAt(180.0F, 12.0F);
 			server.runCommand(String.format(Locale.ROOT, "summon minecraft:pig %.1f %d %.1f {PersistenceRequired:1b,"
 					+ "attributes:[{id:\"minecraft:max_health\",base:100.0d},{id:\"minecraft:movement_speed\",base:0.0d}],"
 					+ "Health:100.0f}", x + 0.5, y, z + 6 + 0.5 - 7.0));
@@ -201,11 +204,36 @@ public class WeaponArtsClientGameTests implements FabricClientGameTest {
 		}
 	}
 
+	/** External corrections must update orbit aim, while orbit's own body-follow writes must not reset it. */
+	private static void verifyOrbitCorrections(ClientGameTestContext context) {
+		context.runOnClient(client -> {
+			var p = client.player;
+			check(OwnerThirdPerson.active(), "Third-person orbit must be enabled for this regression");
+			float yaw = OwnerThirdPerson.yaw(p, p.getYRot());
+			float pitch = OwnerThirdPerson.pitch(p, p.getXRot());
+			OwnerThirdPerson.turn(p, 100, 40);
+			check(near(OwnerThirdPerson.yaw(p, 0), yaw + 15) && near(OwnerThirdPerson.pitch(p, 0), pitch + 6),
+					"Orbit camera lost its own turn while the body followed");
+			OwnerThirdPerson.aim();
+			p.setXRot(12);
+			OwnerThirdPerson.aim();
+			check(near(p.getXRot(), 12), "A pitch-only correction was overwritten by stale orbit aim");
+			float correctedYaw = p.getYRot() + 5;
+			p.setYRot(correctedYaw);
+			OwnerThirdPerson.aim();
+			check(near(p.getYRot(), correctedYaw) && near(p.getXRot(), 12),
+					"A small yaw correction was overwritten by stale orbit aim");
+		});
+	}
+
 	/** Back at (x, y, z) facing north, the husks gone, the arm in hand and charged. */
 	private static void ready(ClientGameTestContext context, TestServerContext server, int x, int y, int z, String arm) {
 		server.runCommand("kill @e[type=minecraft:husk]");
 		server.runCommand(String.format(Locale.ROOT, "tp @p %.1f %d %.1f 180 0", x + 0.5, y, z + 0.5));
 		server.runCommand("item replace entity @p weapon.mainhand with jugcraft:" + arm);
+		// Set the real client's view too, so its next input packet cannot restore
+		// the previous art's direction after the server-side teleport.
+		context.getInput().lookAt(180.0F, 0.0F);
 		context.waitTicks(20);
 	}
 

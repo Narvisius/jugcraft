@@ -89,7 +89,8 @@ public final class PeepoCraftingTableClientTests implements FabricClientGameTest
         try(var tx=Transaction.openOuter()){check(table.outputStorage().extract(ItemVariant.of(Items.WHEAT),3,tx)==3,"obsolete recipe ingredients can be unloaded through existing Output");tx.commit();}
         check(table.installed().stream().allMatch(ItemStack::isEmpty),"obsolete recipe recovery leaves no duplicated inputs");
         setup(level,false);source.setItem(0,new ItemStack(Items.OAK_LOG));List<ItemStack> automatic=List.of();
-        for(int attempt=0;attempt<32 && automatic.isEmpty();attempt++)automatic=batch();
+        int pages=Math.ceilDiv(CraftingTableRecipes.of(level.getServer().getRecipeManager()).all.size(),CraftingTableCompanionBlockEntity.PLANNING_PAGE_SIZE);
+        for(int attempt=0;attempt<pages && automatic.isEmpty();attempt++)automatic=batch();
         check(!automatic.isEmpty() && port().plan()!=null,"empty Filter finds an available ordinary recipe through bounded planning pages");
     }
     private CompanionJob stand(){

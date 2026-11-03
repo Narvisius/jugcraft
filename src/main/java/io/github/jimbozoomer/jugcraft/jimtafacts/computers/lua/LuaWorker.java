@@ -199,6 +199,8 @@ public final class LuaWorker {
                 @Override public void onCount(LuaState s,DebugState debug,DebugFrame frame)throws LuaError,UnwindThrowable{s.interrupt();s.handleInterrupt();}
             },false,false,false,2000);
             LuaThread active=thread;
+            // Acknowledge readiness only after the runtime and source have been prepared.
+            output.writeByte(0);output.writeUTF("");output.flush();
             while(true) {
                 boolean success=input.readBoolean();String reply=input.readUTF();request=null;
                 try {

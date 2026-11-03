@@ -39,7 +39,10 @@ public final class LuaProcess implements AutoCloseable {
                 if(worker.closed){launched.destroyForcibly();throw new IOException("Computer stopped");}
                 worker.input=new DataInputStream(launched.getInputStream());worker.output=new DataOutputStream(launched.getOutputStream());
                 worker.output.writeUTF(source);worker.output.flush();
-                return new Reply(0,"");
+                // JVM startup and Lua compilation belong to the startup budget, not the first response slice.
+                int status=worker.input.readUnsignedByte();String ready=worker.input.readUTF();
+                if((status!=0&&status!=3)||ready.length()>4096||(status==0&&!ready.isEmpty()))throw new IOException("Invalid Lua startup response");
+                return new Reply(status,ready);
             }catch(Exception e){worker.close();throw new CompletionException(e);}
         },IO); } catch(RejectedExecutionException rejected){worker.close();throw new IllegalArgumentException("Lua workers are still shutting down; retry shortly.");}
         return worker;

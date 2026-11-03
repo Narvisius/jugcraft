@@ -841,7 +841,8 @@ def check_tags():
                                                     + gear.items() + plastic.blocks() + exosuit.items() + grapple.items()
                                                     + field_chemistry.items() + construction.items() + construction.blocks() + gas_storage.items() + control_electronics.blocks() + control_electronics.items() + rocketry.items() + rocketry.blocks() + dieselworks.blocks() + kaiserworks.blocks() + trenchworks.blocks() + fortifications.blocks() + bunkerworks.blocks() + aged_wood.blocks() + fire_control.blocks() + fire_control.items() + list(raiders.ITEMS) + list(raiders.BLOCKS) + list(armoured_walker.ITEMS) + list(howitzer_walker.ITEMS) + list(zeppelin.ITEMS) + list(mech.ITEMS) + list(landship.ITEMS) + list(unmasking.ITEMS) + list(trains.ITEMS) + list(artillery.ITEMS) + tower_guns.items()
                                                     + ag.all_blocks() + ag.all_items() + (town_assets.blocks() + styx.blocks())
-                                                    + guns.items() + guns.blocks() + concordance.items() + concordance.blocks() + concordance.itemless_blocks())
+                                                    + guns.items() + guns.blocks() + industrial_forms.blocks()
+                                                    + concordance.items() + concordance.blocks() + concordance.itemless_blocks())
         import nouveau_content
         known = set(known)
         import newest_registry
@@ -15845,6 +15846,121 @@ def check_clockwork():
             err(f"{key}: its text must be there" + (f" ({text})" if text else ""))
 
 
+def check_thanksgiving_decor():
+    """Thanksgiving decorations (tools/thanksgiving_decor.py, docs/features/thanksgiving-decor.md): every prop is
+    registered by JugcraftAgriculture.registerThanksgivingDecor() as its kind's block with the table's shape (a floor
+    prop's FacingDecorationBlock box, a wall prop's depth and extent, the mobile's outline), with its item in the
+    agriculture building tab; its model is drawn within its block and its outline covers it; its blockstate covers every
+    state of its kind (facing; a garland's joins; a lantern standing and hanging; the candles lit); it drops itself;
+    its recipe was generated from the table and needs no research; it is mined by its tag; its name is its text. The
+    candles' light and the lantern's are the table's. The Autumn Leaf Table Runner is the Feast Table's `leaves` cloth:
+    FeastTableBlock takes it, gives it back and drops it, every length's model draws it, and its icon is a 16x16 map."""
+    import thanksgiving_decor as td
+    import thanksgiving_decor_data as tdd
+    import feast_data
+
+    def read(path):
+        return path.read_text(encoding="utf-8") if path.is_file() else ""
+
+    main = read(JAVA_ROOT / "agriculture" / "JugcraftAgriculture.java")
+    lang = load(ASSETS / "lang" / "en_us.json") or {}
+    if "registerThanksgivingDecor();" not in main:
+        err("JugcraftAgriculture.java must call registerThanksgivingDecor()")
+    body = main[main.find("private static void registerThanksgivingDecor()"):]
+    body = body[:body.find("\n\t}\n")]
+    tags = {kind: set((load(DATA / "minecraft" / "tags" / "block" / "mineable" / f"{kind}.json") or {}).get("values", []))
+            for kind in ("axe", "pickaxe")}
+    for block, spec in td.PROPS.items():
+        kind = spec["kind"]
+        if kind in ("floor", "candles"):
+            call = f'registerBlock("{block}", props -> new {td.KINDS[kind]}(props, {td.java_box(spec["shape"])})'
+        elif kind in ("wall", "garland"):
+            call = f'registerBlock("{block}", props -> new {td.KINDS[kind]}(props, {spec["depth"]}, {spec["low"]}, {spec["high"]})'
+        elif kind == "hanging":
+            call = (f'registerBlock("{block}", props -> new HangingGhostBlock(props, Block.box('
+                    + ", ".join(f"{float(v)}" for v in spec["shape"]) + "))")
+        else:
+            call = f'registerBlock("{block}", LanternBlock::new'
+        if call not in body:
+            err(f"JugcraftAgriculture.registerThanksgivingDecor: {block} must be registered as {call}... (tools/thanksgiving_decor.py)")
+        if lang.get(f"block.{MOD}.{block}") != spec["display"]:
+            err(f"block.{MOD}.{block}: the text must be {spec['display']}")
+        pools = (load(DATA / MOD / "loot_table" / "blocks" / f"{block}.json") or {}).get("pools", [])
+        if len(pools) != 1 or [e.get("name") for e in pools[0].get("entries", [])] != [f"{MOD}:{block}"]:
+            err(f"loot_table/blocks/{block}.json: it drops itself, once")
+        tool = "pickaxe" if block in td.PICKAXE else "axe"
+        if f"{MOD}:{block}" not in tags[tool]:
+            err(f"tags/block/mineable/{tool}.json must list {block}")
+        if not (ASSETS / "textures" / "block" / f"{block}.png").is_file():
+            err(f"textures/block/{block}.png is missing")
+        # Its model, drawn whole, in its block; a floor or hanging prop's outline covers its solid boxes (to half a pixel).
+        whole = tdd.build(block).models["whole"]
+        solid = [e for e in whole if all(e["to"][k] - e["from"][k] > 1e-6 for k in range(3))]
+        x0, y0, z0, x1, y1, z1 = tdd.bounds(solid)
+        if x0 < -0.5 or z0 < -0.5 or y0 < -1e-6 or x1 > 16.5 or y1 > 16.0 + 1e-6 or z1 > 16.5:
+            err(f"tools/thanksgiving_decor_data.py {block}: its model must lie in its block, not {[x0, y0, z0, x1, y1, z1]}")
+        if "shape" in spec and kind != "garland":
+            sx0, sy0, sz0, sx1, sy1, sz1 = spec["shape"]
+            if x0 < sx0 - 0.5 or z0 < sz0 - 0.5 or x1 > sx1 + 0.5 or z1 > sz1 + 0.5 or y1 > sy1 + 0.5 or y0 < sy0 - 0.5:
+                err(f"tools/thanksgiving_decor.py {block}: its shape {spec['shape']} must cover its model "
+                    f"{[round(v, 2) for v in (x0, y0, z0, x1, y1, z1)]}")
+        variants = (load(ASSETS / "blockstates" / f"{block}.json") or {}).get("variants", {})
+        faces = ("north", "east", "south", "west")
+        if kind == "garland":
+            joined = {(False, False): "single", (True, False): "left", (False, True): "right", (True, True): "both"}
+            wanted = {f"facing={f},left={str(l).lower()},right={str(r).lower()}": f"{block}_{joined[(l, r)]}"
+                      for f in faces for l in (False, True) for r in (False, True)}
+        elif kind == "lantern":
+            wanted = {"hanging=false": block, "hanging=true": f"{block}_hanging"}
+        elif kind == "candles":
+            wanted = {f"facing={f},lit={l}": block + ("_lit" if l == "true" else "") for f in faces for l in ("false", "true")}
+        else:
+            wanted = {f"facing={f}": block for f in faces}
+        for state, model in wanted.items():
+            if variants.get(state, {}).get("model") != f"{MOD}:block/{model}":
+                err(f"blockstates/{block}.json: {state} must draw block/{model}")
+            if not (ASSETS / "models" / "block" / f"{model}.json").is_file():
+                err(f"models/block/{model}.json is missing")
+        recipe = load(DATA / MOD / "recipe" / f"{block}.json") or {}
+        made = next(r for r in td.SHAPELESS if r["id"] == block)
+        if recipe.get("ingredients") != made["inputs"] or recipe.get("result", {}).get("id") != f"{MOD}:{block}":
+            err(f"recipe/{block}.json must be generated from tools/thanksgiving_decor.py SHAPELESS")
+    for name, value in (("CandleCenterpieceBlock", td.PROPS["pumpkin_candle_centerpiece"]["light"]),):
+        if f"LIGHT = {value};" not in read(JAVA_ROOT / "agriculture" / f"{name}.java"):
+            err(f"{name}.LIGHT must be {value} (tools/thanksgiving_decor.py PROPS)")
+    if f"AMBER_JAR_LANTERN_LIGHT = {td.PROPS['amber_jar_lantern']['light']};" not in main:
+        err("JugcraftAgriculture.AMBER_JAR_LANTERN_LIGHT must be the table's (tools/thanksgiving_decor.py PROPS)")
+    garland = read(JAVA_ROOT / "agriculture" / "LeafGarlandBlock.java")
+    for needed in ("extends WallDecorationBlock", 'BooleanProperty.create("left")', 'BooleanProperty.create("right")', "getCounterClockWise()"):
+        if needed not in garland:
+            err(f"LeafGarlandBlock: missing {needed}")
+    # The runner.
+    runner = td.RUNNER
+    feast = read(JAVA_ROOT / "agriculture" / "FeastTableBlock.java")
+    if f'LEAF_RUNNER = "{runner["item"]}";' not in feast or f'LEAVES("{runner["runner"]}")' not in feast \
+            or "Runner.LEAVES ? JugcraftAgriculture.item(LEAF_RUNNER)" not in feast:
+        err(f"FeastTableBlock: a length must take the {runner['item']} as its `{runner['runner']}` runner and give it back")
+    if "registerItem(FeastTableBlock.LEAF_RUNNER, Item::new" not in body:
+        err(f"JugcraftAgriculture.registerThanksgivingDecor must register the {runner['item']}")
+    if runner["runner"] not in feast_data.RUNNERS:
+        err(f"tools/feast_data.py RUNNERS must include {runner['runner']}")
+    for part in feast_data.PARTS:
+        model = load(ASSETS / "models" / "block" / f"feast_table_{part}_{runner['runner']}.json") or {}
+        if not any(f.get("texture") == "#leaves" for e in model.get("elements", []) for f in e.get("faces", {}).values()):
+            err(f"models/block/feast_table_{part}_{runner['runner']}.json must draw the strewn leaves")
+    pools = (load(DATA / MOD / "loot_table" / "blocks" / "feast_table.json") or {}).get("pools", [])
+    if not any(p["entries"][0]["name"] == f"{MOD}:{runner['item']}" and runner["runner"] in json.dumps(p.get("condition")) for p in pools):
+        err(f"loot_table/blocks/feast_table.json: a length must drop the {runner['item']} laid on it")
+    if lang.get(f"item.{MOD}.{runner['item']}") != runner["display"]:
+        err(f"item.{MOD}.{runner['item']}: the text must be {runner['display']}")
+    icon = ASSETS / "textures" / "item" / f"{runner['item']}.png"
+    if not (ROOT / "tools" / "item_icons" / f"{runner['item']}.txt").is_file() or not icon.is_file():
+        err(f"{runner['item']} needs its 16x16 icon map (tools/item_icons) and texture")
+    for texture in ("feast_table_leaf_runner", "feast_table_leaf_runner_leaves"):
+        if not (ASSETS / "textures" / "block" / f"{texture}.png").is_file():
+            err(f"textures/block/{texture}.png is missing")
+
+
 def check_harvest_festival():
     """Harvest Festival Grounds (tools/harvest_festival.py, docs/features/harvest-festival-grounds.md). Part 1, the Giant
     Cornucopia: its Java block is a MultiDecorationBlock the table's size, with nothing to light, and its shapes lie in its
@@ -16240,7 +16356,7 @@ def check_party_table():
         err(f"recipe/{gb['item']}.json: a Goodie Bag must be filled with paper, string and its contents, no fewer: {filled}")
     br = pt.BAT_RUNNER
     if 'EnumProperty.create("runner", Runner.class)' not in feast or f'BAT_RUNNER = "{br["item"]}";' not in feast \
-            or 'HARVEST("harvest"), BATS("bats"), LINEN("linen");' not in feast or br["item"] not in pt.ITEMS:
+            or 'HARVEST("harvest"), BATS("bats"), LINEN("linen"), LEAVES("leaves");' not in feast or br["item"] not in pt.ITEMS:
         err(f"FeastTableBlock: a length must take the {br['item']} as its runner (harvest or bats), and the item be registered")
     import feast_data
     variants = (load(ASSETS / "blockstates" / "feast_table.json") or {}).get("variants", {})
@@ -24471,6 +24587,7 @@ def main():
     check_party_table()
     check_clockwork()
     check_harvest_festival()
+    check_thanksgiving_decor()
     check_hessian_horseman()
     check_cydonian_sentinel()
     check_material_sets()

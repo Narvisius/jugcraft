@@ -814,6 +814,8 @@ def crop_textures():
     out.update(clockwork_textures())
     from harvest_festival_data import textures as harvest_festival_textures  # and the Harvest Festival Grounds'
     out.update(harvest_festival_textures())
+    from thanksgiving_decor_data import textures as thanksgiving_decor_textures  # and the Thanksgiving decorations
+    out.update(thanksgiving_decor_textures())
     from lair_textures import lair_textures  # and the lairs' blocks, the Mourning Wreath and the Death Knell
     out.update(lair_textures())
     from adam_ondi_ahman_textures import adam_ondi_ahman_textures  # and Adam-ondi-Ahman's Ancient Altar

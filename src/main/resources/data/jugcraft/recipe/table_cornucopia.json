@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "agriculture"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:stick",
+    "minecraft:stick",
+    "minecraft:wheat",
+    "minecraft:apple",
+    "jugcraft:corn",
+    "minecraft:sweet_berries"
+  ],
+  "result": {
+    "id": "jugcraft:table_cornucopia",
+    "count": 1
+  }
+}

@@ -607,6 +607,17 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 						mob.setNoAi(true);
 						mob.setPersistenceRequired();
 						overworld.addFreshEntity(mob);
+						// The walker's driver in its open hatch and the blimp's pilot at its helm (raiders/RaiderCrew).
+						if (io.github.jimbozoomer.jugcraft.raiders.RaiderCrew.isMachine(mob)) {
+							var crew = io.github.jimbozoomer.jugcraft.raiders.JugcraftRaiders.GRUNT.create(overworld,
+									net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+							if (crew != null) {
+								crew.snapTo(at[i][0], at[i][1], at[i][2], yaw[i], 0.0F);
+								crew.setNoAi(true);
+								overworld.addFreshEntity(crew);
+								io.github.jimbozoomer.jugcraft.raiders.RaiderCrew.board(mob, crew);
+							}
+						}
 					}
 				}
 			});
@@ -614,6 +625,11 @@ public class JugcraftClientGameTests implements FabricClientGameTest {
 			context.waitTicks(40);
 			singleplayer.getConnection().waitForChunksRender();
 			context.takeScreenshot("jugcraft_raiders");
+			// Close on the crews: the walker's driver head and shoulders out of its hatch, the blimp's pilot at its helm.
+			server.runCommand("tp @p %d %d %d 200 25".formatted(x - 160, y + 7, z - 3));
+			context.waitTicks(20);
+			singleplayer.getConnection().waitForChunksRender();
+			context.takeScreenshot("jugcraft_raider_crews");
 
 			// The Armoured Walker (batch 58, the owner's Blender model) beside the raiders' walker in their paint.
 			server.runOnServer(minecraft -> {

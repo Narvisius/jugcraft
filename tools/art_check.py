@@ -594,6 +594,10 @@ def check_block_models(machines):
                               f"{f', gap {gap:.3f}' if gap else ''}: model_writer.separate_coplanar pulls them apart")
         open_faces = _open_faces(elements, faces)
         if open_faces:
+            import newest_multipart_art
+            covered = newest_multipart_art.intentional_open_faces(path, elements, open_faces)
+            open_faces = [face for face in open_faces if face not in covered]
+        if open_faces:
             stem = path.stem
             key = None if _family(stem) in machines else _allowed(O1_ALLOW, stem)
             if newest_original_art.intentional_wall_join(path, elements, open_faces):

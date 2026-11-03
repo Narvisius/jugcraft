@@ -49,6 +49,9 @@ import org.jspecify.annotations.Nullable;
  * {@value #RAID_TIMEOUT} ticks, or has had nobody within {@value #ABANDON_RANGE} blocks of its objective for
  * {@value #ABANDON_TICKS}, withdraws: its raiders leave in a puff of smoke, then or as soon as they are next loaded.
  * Raids, the raid level and when the last began are saved with the world.
+ *
+ * <p>Its blimps and walkers are crewed ({@link RaiderCrew}) from the party's own grunts, then gunners, so a party is as
+ * large as {@link #PARTY} says and no larger.
  */
 public final class RaiderRaids {
 	public static final int RAID_CHECK_TICKS = 1200;
@@ -148,13 +151,29 @@ public final class RaiderRaids {
 		raidLevel = Mth.clamp(raidLevel, 1, MAX_LEVEL);
 		State state = State.get(level);
 		Raid raid = new Raid(UUID.randomUUID(), objective.immutable(), raidLevel, level.getGameTime(), 0, 0, List.of(), true);
-		int[] party = PARTY[raidLevel - 1];
+		int[] party = PARTY[raidLevel - 1].clone();
+		if (!on("raiders.blimps")) {
+			party[3] = 0;
+		}
+		if (!on("raiders.walkers")) {
+			party[4] = 0;
+		}
+		// Each machine is crewed (RaiderCrew) from the party's own grunts, then its gunners: the party is no larger.
+		int machines = party[3] + party[4];
+		int crewGrunts = Math.min(machines, party[0]);
+		int crewGunners = Math.min(machines - crewGrunts, party[5]);
+		party[0] -= crewGrunts;
+		party[5] -= crewGunners;
+		java.util.ArrayDeque<EntityType<? extends Mob>> crews = new java.util.ArrayDeque<>();
+		for (int n = 0; n < crewGrunts; n++) {
+			crews.add(JugcraftRaiders.GRUNT);
+		}
+		for (int n = 0; n < crewGunners; n++) {
+			crews.add(JugcraftRaiders.armed(JugcraftRaiders.GUNNER));
+		}
 		List<EntityType<? extends Mob>> kinds = List.of(JugcraftRaiders.GRUNT, JugcraftRaiders.GRENADIER, JugcraftRaiders.OFFICER,
 				JugcraftRaiders.BLIMP, JugcraftRaiders.WALKER, JugcraftRaiders.GUNNER);
 		for (int kind = 0; kind < kinds.size(); kind++) {
-			if (kind == 3 && !on("raiders.blimps") || kind == 4 && !on("raiders.walkers")) {
-				continue;
-			}
 			for (int n = 0; n < party[kind]; n++) {
 				Mob raider = JugcraftRaiders.armed(kinds.get(kind)).create(level, EntitySpawnReason.EVENT);
 				if (raider == null) {
@@ -162,12 +181,32 @@ public final class RaiderRaids {
 				}
 				double x = gather.getX() + 0.5 + (random.nextDouble() - 0.5) * 6;
 				double z = gather.getZ() + 0.5 + (random.nextDouble() - 0.5) * 6;
-				double y = kind == 3 ? gather.getY() + 20 : level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int) Math.floor(x), (int) Math.floor(z));
+				double ground = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int) Math.floor(x), (int) Math.floor(z));
+				double y = kind == 3 ? gather.getY() + 20 : ground;
 				raider.snapTo(x, y, z, random.nextFloat() * 360.0F, 0.0F);
 				((Raider) raider).joinRaid(raid.id, raid.objective);
-				if (level.addFreshEntity(raider)) {
-					raid.members.add(raider.getUUID());
+				if (!level.addFreshEntity(raider)) {
+					continue;
 				}
+				raid.members.add(raider.getUUID());
+				if ((kind == 3 || kind == 4) && !crews.isEmpty()) {
+					crew(level, raid, raider, crews.poll(), x, ground, z);
+				}
+			}
+		}
+		// Crew left over (a machine that could not be placed): they march with the rest.
+		while (!crews.isEmpty()) {
+			Mob raider = crews.poll().create(level, EntitySpawnReason.EVENT);
+			if (raider == null) {
+				continue;
+			}
+			double x = gather.getX() + 0.5 + (random.nextDouble() - 0.5) * 6;
+			double z = gather.getZ() + 0.5 + (random.nextDouble() - 0.5) * 6;
+			raider.snapTo(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int) Math.floor(x), (int) Math.floor(z)), z,
+					random.nextFloat() * 360.0F, 0.0F);
+			((Raider) raider).joinRaid(raid.id, raid.objective);
+			if (level.addFreshEntity(raider)) {
+				raid.members.add(raider.getUUID());
 			}
 		}
 		raid.total = raid.members.size();
@@ -182,6 +221,23 @@ public final class RaiderRaids {
 			level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.RAID_HORN.value(), SoundSource.HOSTILE, 64.0F, 0.8F);
 		}
 		return raid;
+	}
+
+	/**
+	 * Puts a crew member of {@code type} aboard a raid's machine (RaiderCrew): made on the ground beneath it, a member of
+	 * the raid, then seated. If it cannot board, it stays on the ground and marches with the party.
+	 */
+	private static void crew(ServerLevel level, Raid raid, Mob machine, EntityType<? extends Mob> type, double x, double ground, double z) {
+		Mob crew = type.create(level, EntitySpawnReason.EVENT);
+		if (!(crew instanceof RaiderInfantry infantry)) {
+			return;
+		}
+		crew.snapTo(x, ground, z, machine.getYRot(), 0.0F);
+		infantry.joinRaid(raid.id, raid.objective);
+		if (level.addFreshEntity(crew)) {
+			raid.members.add(crew.getUUID());
+			RaiderCrew.board(machine, infantry);
+		}
 	}
 
 	/** Open dry ground {@value #SPAWN_MIN} to {@value #SPAWN_MAX} blocks from {@code objective}, in a loaded chunk and outside the town. */

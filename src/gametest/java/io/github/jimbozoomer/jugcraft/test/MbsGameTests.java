@@ -1,6 +1,11 @@
 package io.github.jimbozoomer.jugcraft.test;
 
 import io.github.jimbozoomer.jugcraft.blueprint.Blueprint;
+import io.github.jimbozoomer.jugcraft.machine.MachineKind;
+import io.github.jimbozoomer.jugcraft.machine.MachineBlockEntity;
+import io.github.jimbozoomer.jugcraft.chemistry.PetroFluids;
+import io.github.jimbozoomer.jugcraft.machine.form.FormMachineBlock;
+import io.github.jimbozoomer.jugcraft.fluid.JugcraftFluids;
 import io.github.jimbozoomer.jugcraft.machine.EnlargedMachineBlock;
 import io.github.jimbozoomer.jugcraft.machine.JugcraftMachines;
 import io.github.jimbozoomer.jugcraft.machine.MachineBlock;
@@ -30,6 +35,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Block;
@@ -71,7 +77,8 @@ public class MbsGameTests {
 	}
 
 	private static void clearItems(GameTestHelper helper, BlockPos around) {
-		helper.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(around).inflate(40)).forEach(ItemEntity::discard);
+		// Large machines need a wide search, but adjacent tests own their drops. Never clear outside this arena.
+		helper.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(around).inflate(40).intersect(helper.getBounds())).forEach(ItemEntity::discard);
 	}
 
 	private static StorageTankPortBlockEntity outlet(GameTestHelper helper, Blueprint blueprint, BlockPos stake, Rotation rotation) {
@@ -297,6 +304,85 @@ public class MbsGameTests {
 		StructureGhost blocked = screen.ghost(new BlockPlaceContext(player, InteractionHand.MAIN_HAND, stack, hit));
 		helper.assertTrue(!blocked.fits() && blocked.blocked().contains(origin.above()), "the stone in the way is marked: " + blocked.blocked());
 		helper.succeed();
+	}
+
+	@GameTest(structure = ARENA, maxTicks = 40)
+	public void chemicalReactorDropsFromEveryPartWithAPickaxe(GameTestHelper helper) {
+		MachineBlock reactor = JugcraftMachines.MACHINES.get(MachineKind.CHEMICAL_REACTOR);
+		ServerPlayer player = player(helper, helper.absolutePos(new BlockPos(20, 1, 20)), GameType.SURVIVAL);
+		try {
+			for (Direction facing : List.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST)) {
+				BlockState state = ((LargeMachineBlock) reactor).formed(reactor.defaultBlockState()).setValue(MachineBlock.FACING, facing);
+				for (int part = 0; part < reactor.footprint(state).size(); part++) {
+					mineMachine(helper, player, reactor, state, part);
+				}
+			}
+		} finally {
+			helper.getLevel().getServer().getPlayerList().remove(player);
+		}
+		helper.succeed();
+	}
+
+	@GameTest(structure = ARENA, maxTicks = 40)
+	public void allMachinesCanBeHarvestedWithAPickaxe(GameTestHelper helper) {
+		int checked = 0;
+		ServerPlayer player = player(helper, helper.absolutePos(new BlockPos(20, 1, 20)), GameType.SURVIVAL);
+		try {
+			for (Block block : BuiltInRegistries.BLOCK) {
+				if (!(block instanceof MachineBlock machine) || !BuiltInRegistries.BLOCK.getKey(block).getNamespace().equals("jugcraft")) {
+					continue;
+				}
+				BlockState state = machine.defaultBlockState();
+				if (machine instanceof LargeMachineBlock large) {
+					state = large.formed(state);
+				}
+				int size = machine.footprint(state).size();
+				for (int part : java.util.stream.IntStream.of(0, Math.min(1, size - 1), size - 1).distinct().toArray()) {
+					mineMachine(helper, player, machine, state, part);
+				}
+				checked++;
+			}
+		} finally {
+			helper.getLevel().getServer().getPlayerList().remove(player);
+		}
+		Jugcraft.LOGGER.info("[machine-pickaxe-audit] harvested {} machines through controller, next and last parts", checked);
+		helper.assertTrue(checked > 90, "registered machine roster checked");
+		helper.succeed();
+	}
+
+	private static void mineMachine(GameTestHelper helper, ServerPlayer player, MachineBlock machine, BlockState state, int brokenPart) {
+		BlockPos origin = helper.absolutePos(new BlockPos(20, 1, 20));
+		clearItems(helper, origin);
+		var footprint = machine.footprint(state);
+		for (int part = 0; part < footprint.size(); part++) {
+			BlockState cell = machine instanceof FormMachineBlock form
+					? state.setValue(form.partProperty(), part)
+					: state.hasProperty(LargeMachineBlock.PART) ? state.setValue(LargeMachineBlock.PART, part) : state;
+			helper.getLevel().setBlock(footprint.partPos(origin, state.getValue(MachineBlock.FACING), part), cell, Block.UPDATE_ALL);
+		}
+		boolean reactor = machine == JugcraftMachines.MACHINES.get(MachineKind.CHEMICAL_REACTOR);
+		if (reactor) {
+			((MachineBlockEntity) helper.getLevel().getBlockEntity(origin))
+					.tanks().input(2).fill(PetroFluids.SULFURIC_ACID.source(), 1000);
+		}
+		player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.NETHERITE_PICKAXE));
+		BlockPos target = footprint.partPos(origin, state.getValue(MachineBlock.FACING), brokenPart);
+		BlockState targetState = helper.getLevel().getBlockState(target);
+		String label = BuiltInRegistries.BLOCK.getKey(machine) + " part " + brokenPart;
+		helper.assertTrue(player.hasCorrectToolForDrops(targetState), label + " accepts a pickaxe");
+		helper.assertTrue(targetState.getDestroySpeed(helper.getLevel(), target) >= 0, label + " is breakable");
+		helper.assertTrue(player.gameMode.destroyBlock(target), label + " breaks in survival");
+		helper.assertTrue(dropped(helper, origin, 32, machine.asItem()) == 1, label + " drops exactly one machine item");
+		if (reactor) {
+			var drop = helper.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(origin).inflate(32)).stream()
+					.filter(item -> item.getItem().is(machine.asItem())).findFirst().orElseThrow().getItem();
+			var fluid = drop.get(JugcraftFluids.STORED_FLUID);
+			helper.assertTrue(fluid != null && fluid.amount() == FluidConstants.BUCKET
+					&& fluid.variant().isOf(PetroFluids.SULFURIC_ACID.source()), label + " retains exactly one bucket of acid");
+		}
+		for (int part = 0; part < footprint.size(); part++) {
+			helper.assertTrue(!helper.getLevel().getBlockState(footprint.partPos(origin, state.getValue(MachineBlock.FACING), part)).is(machine), label + " leaves no machine parts");
+		}
 	}
 
 	@GameTest(structure = ARENA, maxTicks = 40)

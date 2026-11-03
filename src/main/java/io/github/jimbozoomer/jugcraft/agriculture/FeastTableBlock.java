@@ -45,7 +45,9 @@ import org.jspecify.annotations.Nullable;
  * <li>sneak and use it with an empty hand to take the dish back.</li>
  * </ul>
  * A Bat Table Runner (the Halloween Party Table's part 5) used on a length is laid over its orange runner ({@link Runner}),
- * hanging down over the table's ends; shears take it off again, and it drops with the length.
+ * hanging down over the table's ends; shears take it off again, and it drops with the length. White carpet lays a linen
+ * cloth, and an Autumn Leaf Table Runner (the Thanksgiving decorations, tools/thanksgiving_decor.py RUNNER) a hessian
+ * runner strewn with leaves, the same way.
  */
 public class FeastTableBlock extends BaseEntityBlock {
 	public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
@@ -53,6 +55,8 @@ public class FeastTableBlock extends BaseEntityBlock {
 	public static final EnumProperty<Runner> RUNNER = EnumProperty.create("runner", Runner.class);
 	/** The Bat Table Runner's ID (tools/party_table.py BAT_RUNNER). */
 	public static final String BAT_RUNNER = "bat_table_runner";
+	/** The Autumn Leaf Table Runner's ID (tools/thanksgiving_decor.py RUNNER). */
+	public static final String LEAF_RUNNER = "autumn_leaf_table_runner";
 	private static final String MESSAGES = "message.jugcraft.feast_table.";
 	private static final VoxelShape SHAPE = Block.box(0.0, 0.0, 0.0, 16.0, 13.0, 16.0);
 
@@ -77,11 +81,11 @@ public class FeastTableBlock extends BaseEntityBlock {
 	}
 
 	/**
-	 * The runner down a length: its own orange harvest runner, or a Bat Table Runner laid over it. Saved by name, so more
-	 * runners can be added after these.
+	 * The runner down a length: its own orange harvest runner, or a Bat Table Runner, linen cloth or Autumn Leaf Table
+	 * Runner laid over it. Saved by name, so more runners can be added after these.
 	 */
 	public enum Runner implements StringRepresentable {
-		HARVEST("harvest"), BATS("bats"), LINEN("linen");
+		HARVEST("harvest"), BATS("bats"), LINEN("linen"), LEAVES("leaves");
 
 		private final String name;
 
@@ -149,8 +153,8 @@ public class FeastTableBlock extends BaseEntityBlock {
 	@Override
 	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
 			BlockHitResult hit) {
-		if (stack.is(JugcraftAgriculture.item(BAT_RUNNER)) || stack.is(Blocks.CARPET.white().asItem())
-                || stack.is(Items.SHEARS) && state.getValue(RUNNER) != Runner.HARVEST) {
+		if (stack.is(JugcraftAgriculture.item(BAT_RUNNER)) || stack.is(JugcraftAgriculture.item(LEAF_RUNNER))
+                || stack.is(Blocks.CARPET.white().asItem()) || stack.is(Items.SHEARS) && state.getValue(RUNNER) != Runner.HARVEST) {
 			return dress(stack, state, level, pos, player, hand);
 		}
 		if (!FeastTableBlockEntity.food(stack)) {
@@ -169,11 +173,12 @@ public class FeastTableBlock extends BaseEntityBlock {
 		return InteractionResult.SUCCESS;
 	}
 
-	/** Apply a bat runner or linen carpet; swapping or shearing returns the previous cloth without changing dishes. */
+	/** Apply a bat runner, leaf runner or linen carpet; swapping or shearing returns the previous cloth without changing dishes. */
 	private static InteractionResult dress(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand) {
 		boolean laying = !stack.is(Items.SHEARS);
         Runner previous = state.getValue(RUNNER);
-        Runner desired = !laying ? Runner.HARVEST : stack.is(Blocks.CARPET.white().asItem()) ? Runner.LINEN : Runner.BATS;
+        Runner desired = !laying ? Runner.HARVEST : stack.is(Blocks.CARPET.white().asItem()) ? Runner.LINEN
+                : stack.is(JugcraftAgriculture.item(LEAF_RUNNER)) ? Runner.LEAVES : Runner.BATS;
 		if (desired == previous) {
             // Handle the click without consuming cloth. FAIL lets the carpet
             // BlockItem fall through to normal placement beside the table.
@@ -187,7 +192,8 @@ public class FeastTableBlock extends BaseEntityBlock {
                 stack.hurtAndBreak(1, player, hand);
             }
             if (previous != Runner.HARVEST) {
-                ItemStack runner = new ItemStack(previous == Runner.LINEN ? Blocks.CARPET.white().asItem() : JugcraftAgriculture.item(BAT_RUNNER));
+                ItemStack runner = new ItemStack(previous == Runner.LINEN ? Blocks.CARPET.white().asItem()
+                        : previous == Runner.LEAVES ? JugcraftAgriculture.item(LEAF_RUNNER) : JugcraftAgriculture.item(BAT_RUNNER));
                 if (!player.getInventory().add(runner)) Block.popResource(server, pos.above(), runner);
             }
 			server.playSound(null, pos, laying ? SoundEvents.WOOL_PLACE : SoundEvents.SHEEP_SHEAR, SoundSource.BLOCKS, 0.8F, 1.0F);
