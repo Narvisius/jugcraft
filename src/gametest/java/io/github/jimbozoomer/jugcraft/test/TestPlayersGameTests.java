@@ -82,6 +82,34 @@ public class TestPlayersGameTests {
 	}
 
 	@GameTest(maxTicks = 20)
+	public void immediateCompletionClosesAndReleasesMockTransport(GameTestHelper helper) {
+		Scope scope = scope(helper);
+		ServerPlayer player = scope.helper().makeMockServerPlayerInLevel();
+		try {
+			Field channelField = MockPlayerChannels.class.getDeclaredField("CHANNEL");
+			Field connectionField = MockPlayerChannels.class.getDeclaredField("CONNECTION");
+			channelField.setAccessible(true);
+			connectionField.setAccessible(true);
+			Object connection = ((Field) connectionField.get(null)).get(player.connection);
+			io.netty.channel.embedded.EmbeddedChannel channel =
+					(io.netty.channel.embedded.EmbeddedChannel) ((Field) channelField.get(null)).get(connection);
+			io.netty.buffer.ByteBuf queued = io.netty.buffer.Unpooled.buffer().writeByte(1);
+			channel.outboundMessages().add(queued);
+			helper.assertTrue(channel.isOpen() && !channel.outboundMessages().isEmpty(), "Mock has queued login data before any tick");
+			scope.complete(true);
+			helper.assertTrue(!channel.isOpen() && channel.outboundMessages().isEmpty() && channel.inboundMessages().isEmpty(),
+					"Immediate completion closes and empties the fake transport");
+			helper.assertTrue(queued.refCnt() == 0, "Reference-counted queued data is released");
+			scope.complete(false);
+			helper.succeed();
+		} catch (ReflectiveOperationException e) {
+			throw new AssertionError("Cannot inspect mock transport", e);
+		} finally {
+			scope.complete(false);
+		}
+	}
+
+	@GameTest(maxTicks = 20)
 	public void nonMockPlayersAreNotRegistered(GameTestHelper helper) {
 		Scope scope = scope(helper);
 		ServerPlayer ordinary = new ServerPlayer(helper.getLevel().getServer(), helper.getLevel(),

@@ -75,6 +75,7 @@ public final class TestPlayers {
 			throw new IllegalStateException(player.getUUID() + " is not in the game");
 		}
 		list.remove(player);
+		MockPlayerChannels.dispose(player);
 	}
 
 	/** The person {@code id} joins again after {@link #leave}: the same identity, their saved data and statistics read back. */
@@ -159,6 +160,7 @@ public final class TestPlayers {
 			if (list.getPlayer(player.getUUID()) == player) {
 				list.remove(player);
 			}
+			MockPlayerChannels.dispose(player);
 		}
 		players.clear();
 	}

@@ -304,3 +304,9 @@ PR 606 merged normally as `8c5f627d1c16880e56fc748436838e4c1ba2e641` after the r
 The earlier local package is a staged candidate only. Full-main CI and final release packaging remain outstanding; owner restart approval is still required.
 
 Follow-up local validation: the real underground-deposit world save/reopen client test passes (`build/nov3-chima-persistence-client.log`). All **99 combined server tests pass**, including four mock-player lifetime/isolation regressions (`build/nov3-fixture-cleanup-combined-server.log`). An unfiltered local server run is in progress to validate heap behavior at full scale. No production classes or resources change in this follow-up.
+
+### Mock transport disposal follow-up
+
+OpenAI Codex: PR 607 merged normally as `e4786e395a6ba18360c6420e11fa6e97c1fd84e2`. The full default local suite passed all 3,340 required tests, but the optional-integrations-absent suite still exhausted its unchanged 4 GiB heap. This is not release-ready.
+
+Live heap histograms of a diagnostic rerun showed 1,300 EmbeddedChannels retained while only 184 ServerPlayers remained, with over three million AdvancementProgress objects. The per-tick packet drain only visits online players: a mock that joins and completes before that tick can leave its login packets queued after logout. Fixture cleanup now closes/releases only EmbeddedChannel transports, including already-logged-out mocks. Explicit leave uses the same cleanup. Added a regression for immediate completion, channel closure, empty queues and ByteBuf reference release; repeated cleanup and rejoined-identity tests remain. Validation pending. No production code, live server, or client channel changes.

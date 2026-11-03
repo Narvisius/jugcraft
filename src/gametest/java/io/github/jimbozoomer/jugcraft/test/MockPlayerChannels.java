@@ -29,6 +29,14 @@ public final class MockPlayerChannels implements ModInitializer {
 		return channel(player) instanceof EmbeddedChannel;
 	}
 
+	/** Dispose a finished fixture's fake transport, including packets queued before the first tick. */
+	static void dispose(ServerPlayer player) {
+		if (channel(player) instanceof EmbeddedChannel embedded) {
+			released += embedded.outboundMessages().size();
+			embedded.finishAndReleaseAll();
+		}
+	}
+
 	@Override
 	public void onInitialize() {
 		ServerTickEvents.END_SERVER_TICK.register(server -> {
