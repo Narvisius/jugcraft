@@ -293,3 +293,14 @@ No live maintenance, release publication, main merge or client-channel promotion
 Combined server rerun passes **95/95 required tests** (`build/nov3-release-combined-server-3.log`). This includes machine recovery, raid approaches/crew, pets, seasonal isolation, foods and Lua readiness. Combined five-suite client validation is running.
 
 Combined client run passes all five suites (`build/nov3-release-combined-client.log`): imported-model atlas, Peepo crafting, weapon arts/orbit, holiday visuals and pet inventory. Reviewed the original-art gallery and compact pet UI screenshots. Twelve world-designer tests pass. Evidence copied to `build/nov3-release-evidence`. Foundation run 41697495156 hit its five-minute whole-job timeout during passing contract tests, so the budget is raised to 15 minutes without changing coverage. Full CI remains pending.
+
+### Main merge and full-suite follow-up
+
+PR 606 merged normally as `8c5f627d1c16880e56fc748436838e4c1ba2e641` after the required Foundation check and combined local validation passed. Its tree matches the tested branch exactly. PR 597 closed as included, not discarded. Main Foundation run 41702291043 passed. Full Build 41702291156 then exposed two additional blockers; no release/channel promotion or server restart occurred:
+
+- Both full server configurations exhausted the 4 GiB test heap while old raw-helper mock players remained logged in. Reviewed PR 600 test-only cleanup hooks and four lifecycle regressions are being integrated. Only EmbeddedChannel mocks are tracked; real clients remain untouched; each mock is removed after its own fixture completes.
+- Client group 7's underground-deposit persistence fixture injured Chima before a long world tour, allowing the newer calm-pet recovery behavior to heal it before the save. Reset the injured health immediately before saving, preserving exact health/owner/sitting/skin assertions and adding diagnostic state to failure messages. Local rerun pending.
+
+The earlier local package is a staged candidate only. Full-main CI and final release packaging remain outstanding; owner restart approval is still required.
+
+Follow-up local validation: the real underground-deposit world save/reopen client test passes (`build/nov3-chima-persistence-client.log`). All **99 combined server tests pass**, including four mock-player lifetime/isolation regressions (`build/nov3-fixture-cleanup-combined-server.log`). An unfiltered local server run is in progress to validate heap behavior at full scale. No production classes or resources change in this follow-up.

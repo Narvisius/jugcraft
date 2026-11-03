@@ -13,8 +13,8 @@ import net.minecraft.server.network.ServerCommonPacketListenerImpl;
 /**
  * Drops what the server sends to game-test mock players. A mock player's connection ends in Netty's EmbeddedChannel
  * (vanilla's {@code makeMockServerPlayerInLevel} and the tests that build their own player the same way), which keeps
- * every packet written to it until something reads it, and no test does. The players stay logged in for the whole
- * run, so every packet sent to each of them (its command tree and recipes on joining, then every later player's join
+ * every packet written to it until something reads it, and no test does. Without fixture cleanup, players stayed logged
+ * in for the whole run, so every packet (its command tree and recipes on joining, then every later player's join
  * message and player-list entry) stayed in the heap until the server suite ran out of its 4 GB. Each tick this empties
  * those channels, and every 2,400 ticks logs how many packets it has released and the heap in use; a connection that
  * is not an EmbeddedChannel (a real or integrated client's) is never touched.
@@ -23,6 +23,11 @@ public final class MockPlayerChannels implements ModInitializer {
 	private static final Field CONNECTION = field(ServerCommonPacketListenerImpl.class, Connection.class);
 	private static final Field CHANNEL = field(Connection.class, Channel.class);
 	private static long released;
+
+	/** Only embedded test connections, never the real client of a rendered/integrated test. */
+	static boolean isMock(ServerPlayer player) {
+		return channel(player) instanceof EmbeddedChannel;
+	}
 
 	@Override
 	public void onInitialize() {

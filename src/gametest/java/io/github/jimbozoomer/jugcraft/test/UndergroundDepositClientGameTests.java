@@ -91,6 +91,13 @@ public class UndergroundDepositClientGameTests implements FabricClientGameTest {
 			for (String item : List.of("jugcraft:prospector", "jugcraft:deep_drilling_assembly", "jugcraft:deposit_drill",
 					"jugcraft:coal_generator", "minecraft:coal 64", "minecraft:chest", "jugcraft:copper_cable 32"))
 				world.getServer().runCommand("give @a " + item);
+			// The gallery tour lasts minutes; calm pets now recover during that tour.
+			// Set the wounded persistence fixture immediately before saving, not before touring.
+			world.getServer().runOnServer(server -> {
+				var cub = (Chima) server.overworld().getEntity(companion[0]);
+				check(cub != null, "Companion missing before save");
+				cub.setHealth(10);
+			});
 			source = world.getServer().computeOnServer(server -> server.getWorldPath(LevelResource.ROOT));
 			save = world.getWorldSave();
 		}
@@ -106,7 +113,8 @@ public class UndergroundDepositClientGameTests implements FabricClientGameTest {
 				var cub = (Chima) level.getEntity(companion[0]);
 				check(cub.tame() && companion[1].equals(cub.owner()) && cub.sitting()
 						&& cub.skin() == Chima.Skin.SHARK && cub.getHealth() == 10,
-						"Chima owner, sitting, appearance or health changed across save/reopen");
+						"Chima changed across save/reopen: tame=" + cub.tame() + ", owner=" + cub.owner()
+						+ ", sitting=" + cub.sitting() + ", skin=" + cub.skin() + ", health=" + cub.getHealth());
 				for (var body : natural.values()) for (var pos : body)
 					check(level.getBlockState(pos).getBlock() instanceof DepositBlock, "Natural deposit lost on reopen: " + pos);
 			});

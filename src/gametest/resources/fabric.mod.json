@@ -422,7 +422,8 @@
       "io.github.jimbozoomer.jugcraft.test.PetStableGameTests",
       "io.github.jimbozoomer.jugcraft.test.PetBehaviorsGameTests",
       "io.github.jimbozoomer.jugcraft.test.ServerUtilitiesTests",
-      "io.github.jimbozoomer.jugcraft.test.PeerClientStartupGameTests"
+      "io.github.jimbozoomer.jugcraft.test.PeerClientStartupGameTests",
+      "io.github.jimbozoomer.jugcraft.test.TestPlayersGameTests"
     ],
     "jei_mod_plugin": [
       "io.github.jimbozoomer.jugcraft.test.JeiStationClientGameTests$WithJei$Probe"
@@ -737,6 +738,6 @@
     "jugcraft": "*"
   },
   "mixins": [
-    "jugcraft-test.client.mixins.json"
+    "jugcraft-test.mixins.json"
   ]
 }
