@@ -9,20 +9,19 @@
       "feature": "drones"
     }
   ],
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
+  "type": "jugcraft:advanced_crafting",
   "pattern": [
-    "PTP",
-    "SWS"
+    "PPTTPP",
+    "SSWWSS"
   ],
   "key": {
     "P": "#c:plates/steel",
-    "T": "minecraft:iron_trapdoor",
     "S": "#c:plates/iron",
+    "T": "minecraft:iron_trapdoor",
     "W": "jugcraft:cargo_winch"
   },
   "result": {
     "id": "jugcraft:supply_pickup",
-    "count": 9
+    "count": 18
   }
 }

@@ -19,28 +19,33 @@ FIELD_MANUAL = [
      "A Drone Tower is a depot that grows. Its drones carry blocks and build for you, and every tier you add holds "
      "more drones and stronger ones. Turn the pages to set one up.", "tier9"),
     ("1. Pick the spot",
-     "Print a Drone Tower Foundation blueprint at a Blueprint Table. Hold it and shift+scroll to see how big the "
-     "finished tower gets: over 200 blocks tall on a 39x39 field. Leave room.", "blueprint_preview"),
-    ("2. Plinth and core",
-     "Lay a flat 15x15 square of chiseled stone bricks. Craft a Drone Tower Core (aluminium plates, a processor, "
-     "advanced circuits and a Drone Depot Terminal) and put it in the very middle.", "plinth"),
-    ("3. Load modules",
-     "Tiers are built from Structural, Hangar, Armour and Avionics Modules. Right-click the core holding them, or "
-     "feed them in with pipes or conveyors. Right-click the core to see what the next tier needs.", "tower_screen"),
-    ("4. Build tier 1",
-     "Press UPGRADE DRONE TOWER. The core builds tier 1 itself: eight landing pads, the command room with the "
-     "depot terminal, and two exchanges on the edges of the field.", "tier1"),
-    ("5. Power",
-     "The Energy Exchange stands on the west edge. Run cables or put generators against its Energy Exchange Port "
-     "(the striped block). That powers every drone; low power only slows them.", "energy_port"),
-    ("6. Building blocks",
-     "The Storage Exchange stands on the east edge. Pipes, conveyors and hoppers against its Cargo Exchange Port "
-     "fill the depot's store, and drones take the blocks for every job from there.", "storage_port"),
-    ("7. Link drones",
+     "Craft a Drone Tower Core (steel blocks, processors, advanced circuits and a Drone Depot Terminal). Hold it and "
+     "look at the ground: an amber ghost shows the control building, 104 across; shift+scroll shows each tier, up to "
+     "260 blocks tall. Leave room.", "core_preview"),
+    ("2. Set the core down",
+     "Place the core on level ground where the middle of the hall should be. It sets itself into the ground, so the "
+     "hall floor ends up level with the land. Everything else is built from it.", "core_placed"),
+    ("3. Load the blocks",
+     "Every step costs exactly the blocks it is built from: right-click the core to see them. Right-click it with "
+     "blocks, sneak-right-click with an empty hand to load your inventory, or feed it with hoppers and pipes.",
+     "tower_screen"),
+    ("4. Build the foundation",
+     "With every block of the foundation in, press UPGRADE DRONE TOWER. The core builds the control building and its "
+     "hall itself, and in the yard to the east the depot terminal, a ground pad and the two exchanges.", "tier1"),
+    ("5. Roof pads",
+     "Load tier 1's hangar pads and press UPGRADE again. The core lays six landing pads on the building's roof, room "
+     "for 24 tier 1 drones. The hall's desks and touch consoles work the depot too.", None),
+    ("6. Power",
+     "The Energy Exchange stands in the yard. Run cables or put generators against its marked port. That powers "
+     "every drone; low power only slows them.", "energy_port"),
+    ("7. Building blocks",
+     "The Storage Exchange stands beside it. Pipes, conveyors and hoppers against its marked port fill the depot's "
+     "store, and drones take the blocks for every job from there.", "storage_port"),
+    ("8. Link drones",
      "Right-click the terminal or a landing pad with a drone to link it. A tier N tower allows drones up to tier "
-     "N. Tier 1 holds 32 drones; a finished tower holds 133.", "terminal"),
-    ("8. Grow the tower",
-     "Load the next tier's modules and press UPGRADE again. From tier 2 on, your drones fly each tier in, from the "
+     "N. Tier 1 holds 24 drones; a finished tower holds 128.", "terminal"),
+    ("9. Grow the tower",
+     "Load the next tier's blocks and press UPGRADE again. From tier 2 on, your drones fly each tier in, from the "
      "bottom up, as long as power and blocks keep coming.", "tier2"),
     ("Range",
      "Your drones build blueprints up to 250 chunks from the tower, wherever the site's chunks are loaded; the tower "
@@ -54,27 +59,27 @@ CREATIVE_GUIDE = [
     ("Creative Quick Start",
      "Set up a Drone Tower in a few minutes, with endless power and building blocks. Everything here is in the "
      "creative inventory: search for it by name.", "tier9"),
-    ("1. Plinth and core",
-     "Lay a flat 15x15 square of chiseled stone bricks and place a Drone Tower Core in the very middle. A Drone "
-     "Tower Foundation blueprint previews the finished tower (shift+scroll).", "plinth"),
-    ("2. Modules go in the core",
-     "Take stacks of the Structural, Hangar, Armour and Avionics Modules and right-click the core with each, a "
-     "few times over. It holds 1024 of each, enough for every tier.", "tower_screen"),
-    ("3. Build tier 1",
-     "Right-click the core and press UPGRADE DRONE TOWER. The core builds the command room, the landing pads and "
-     "two exchanges round the field by itself.", "tier1"),
+    ("1. The core",
+     "Place a Drone Tower Core on level ground where the middle of the hall should be: it sets itself into the "
+     "ground. Holding it shows how big the finished tower gets (shift+scroll for each tier).", "core_placed"),
+    ("2. Load it",
+     "Right-click the core and press LOAD FROM INVENTORY. In creative mode that fills it with every block the whole "
+     "tower needs, so every UPGRADE after it is paid for.", "tower_screen"),
+    ("3. Foundation and roof pads",
+     "Right-click the core and press UPGRADE DRONE TOWER: the core builds the control building, its yard and the "
+     "exchanges by itself. Press UPGRADE again for the six landing pads on the roof.", "tier1"),
     ("4. Creative Energy Cell",
-     "Place it touching the Energy Exchange Port, the striped block on the west edge of the field. It gives "
-     "endless power on every side, so the depot never runs low.", "creative_energy"),
+     "Place it touching the Energy Exchange's marked port, out in the yard east of the building. It gives endless "
+     "power on every side, so the depot never runs low.", "creative_energy"),
     ("5. Creative Supply Crate",
-     "Place it anywhere within 48 blocks of the depot terminal, for example just off the edge of the field. "
-     "Drones then get every building block they ask for, free.", "creative_supply"),
+     "Place it anywhere within 48 blocks of the depot terminal, for example in the yard beside it. Drones then get "
+     "every building block they ask for, free.", "creative_supply"),
     ("6. Drones",
      "Right-click the terminal with drones to link them. The Creative Drone is fast and needs no power. A tier N "
      "tower allows drones up to tier N.", "terminal"),
     ("7. Grow it",
-     "Open the core and press UPGRADE again for each tier. Your drones fly every tier in until the spire is done "
-     "at tier 9. For survival, craft the Field Manual (a book and a tier 1 drone).", "tier2"),
+     "Open the core and press UPGRADE again for each tier. Your drones fly every tier in until the three pillars "
+     "are done at tier 9. For survival, craft the Field Manual (a book and a tier 1 drone).", "tier2"),
 ]
 
 BOOKS = {

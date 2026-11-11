@@ -1,0 +1,137 @@
+{
+ "parent": "minecraft:block/block",
+ "textures": {
+  "dc_acrylic": "jugcraft:block/dc_acrylic",
+  "dc_black": "jugcraft:block/dc_black",
+  "dc_led": "jugcraft:block/dc_led",
+  "particle": "jugcraft:block/dc_lacquer"
+ },
+ "elements": [
+  {
+   "from": [
+    0,
+    7.6,
+    1.15
+   ],
+   "to": [
+    16,
+    8.2,
+    1.75
+   ],
+   "faces": {
+    "north": {
+     "texture": "#dc_black"
+    },
+    "south": {
+     "texture": "#dc_black"
+    },
+    "up": {
+     "texture": "#dc_black"
+    },
+    "down": {
+     "texture": "#dc_black"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    0,
+    1.325
+   ],
+   "to": [
+    16,
+    7.6,
+    1.575
+   ],
+   "faces": {
+    "north": {
+     "texture": "#dc_acrylic"
+    },
+    "south": {
+     "texture": "#dc_acrylic"
+    },
+    "up": {
+     "texture": "#dc_acrylic"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    7.775,
+    1.75
+   ],
+   "to": [
+    16,
+    8.025,
+    16
+   ],
+   "faces": {
+    "north": {
+     "texture": "#dc_acrylic"
+    },
+    "up": {
+     "texture": "#dc_acrylic"
+    },
+    "down": {
+     "texture": "#dc_acrylic"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    7.175,
+    1.95
+   ],
+   "to": [
+    16,
+    7.775,
+    2.95
+   ],
+   "faces": {
+    "north": {
+     "texture": "#dc_black"
+    },
+    "south": {
+     "texture": "#dc_black"
+    },
+    "up": {
+     "texture": "#dc_black"
+    },
+    "down": {
+     "texture": "#dc_black"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    7.025,
+    2.1
+   ],
+   "to": [
+    16,
+    7.175,
+    2.8
+   ],
+   "faces": {
+    "north": {
+     "texture": "#dc_led"
+    },
+    "south": {
+     "texture": "#dc_led"
+    },
+    "up": {
+     "texture": "#dc_led"
+    },
+    "down": {
+     "texture": "#dc_led"
+    }
+   },
+   "light_emission": 15,
+   "shade": false
+  }
+ ]
+}

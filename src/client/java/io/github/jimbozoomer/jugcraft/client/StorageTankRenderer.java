@@ -564,7 +564,7 @@ public class StorageTankRenderer implements BlockEntityRenderer<StorageTankPortB
 				pose.translate(at[i][0], at[i][1], 0.006F);
 				float k = s * 0.055F;
 				pose.scale(k, -k, k);
-				FormattedCharSequence n = Component.literal(numbers[i]).getVisualOrderText();
+				FormattedCharSequence n = Texts.of(numbers[i]);
 				collector.submitText(pose, -font.width(numbers[i]) / 2F, -4, n, false, Font.DisplayMode.POLYGON_OFFSET, light, 0xFF101012, 0, 0);
 				pose.popPose();
 			}

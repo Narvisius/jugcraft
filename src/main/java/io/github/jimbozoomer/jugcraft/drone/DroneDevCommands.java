@@ -13,11 +13,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * Development-only testing aid, registered only when running from the development environment
- * ({@code ./gradlew runClient} or {@code runServer}), never in a released jar's normal use:
+ * Operator-only testing aids, available in development and packaged builds:
  * {@code /dronetest fill <from> <to> <block> [personal|party]} asks drones to build a box of blocks, and
  * {@code /dronetest clear} cancels those jobs; {@code /dronetest supplies [off]} gives nearby depots endless power and
- * building blocks; {@code /dronetest modules} fills nearby Tower Cores with modules.
+ * building blocks; {@code /dronetest stock} fills nearby Tower Cores with every block their towers still need.
+ * {@code /dronetest build [tier]} builds the nearest tower (the Tri-Pillar, the only design) straight up to that tier, or
+ * places a core first if there is none nearby.
  */
 final class DroneDevCommands {
 	private static final List<SimpleBuildJobs> JOBS = new ArrayList<>();
@@ -45,8 +46,12 @@ final class DroneDevCommands {
 																		BlockStateArgument.getBlock(context, "block").getState(), UseMode.PARTY)))))))
 						.then(Commands.literal("supplies").executes(context -> supplies(context.getSource().getPlayerOrException(), true))
 								.then(Commands.literal("off").executes(context -> supplies(context.getSource().getPlayerOrException(), false))))
-						.then(Commands.literal("modules").executes(context -> modules(context.getSource().getPlayerOrException())))
+						.then(Commands.literal("stock").executes(context -> stock(context.getSource().getPlayerOrException())))
+						.then(Commands.literal("repair").executes(context -> repair(context.getSource().getPlayerOrException())))
 						.then(Commands.literal("claim").executes(context -> claim(context.getSource().getPlayerOrException())))
+						.then(Commands.literal("slimes")
+								.then(Commands.literal("off").executes(context -> slimes(context.getSource().getPlayerOrException(), false)))
+								.then(Commands.literal("on").executes(context -> slimes(context.getSource().getPlayerOrException(), true))))
 						.then(Commands.literal("build").executes(context -> build(context.getSource().getPlayerOrException(), 9))
 								.then(Commands.argument("tier", com.mojang.brigadier.arguments.IntegerArgumentType.integer(1, 9))
 										.executes(context -> build(context.getSource().getPlayerOrException(),
@@ -63,6 +68,18 @@ final class DroneDevCommands {
 	 * Makes the caller the owner of every depot (and its Drone Tower) within 96 blocks. Testing only: a
 	 * development client gets a new random name, and so a new player ID, each launch.
 	 */
+	private static int slimes(ServerPlayer player, boolean allow) {
+		var level = (net.minecraft.server.level.ServerLevel) player.level();
+		if (!io.github.jimbozoomer.jugcraft.world.ReviewWorldSettings.isFlat(level)) {
+			player.sendSystemMessage(Component.literal("Use this command in a flat review world"));
+			return 0;
+		}
+		int removed = io.github.jimbozoomer.jugcraft.world.ReviewWorldSettings.setSlimesSuppressed(level, !allow);
+		player.sendSystemMessage(Component.literal(allow ? "Slimes enabled in this flat world"
+				: "Slimes disabled in this flat world; removed " + removed + " loaded slimes"));
+		return 1;
+	}
+
 	private static int claim(ServerPlayer player) {
 		net.minecraft.server.level.ServerLevel level = (net.minecraft.server.level.ServerLevel) player.level();
 		int count = 0;
@@ -82,8 +99,8 @@ final class DroneDevCommands {
 
 	/**
 	 * Builds the nearest Drone Tower (Tower Core within 3 chunks) straight up to {@code tier}, every block at once,
-	 * with no drones, modules or plinth needed (testing only). If there is no core nearby, one is placed at the
-	 * player's feet first, owned by the player.
+	 * with no drones or blocks needed (testing only). If there is no core nearby, one is placed at the
+	 * player's feet first, owned by the player, and the player is put on the control building's roof.
 	 */
 	private static int build(ServerPlayer player, int tier) {
 		net.minecraft.server.level.ServerLevel level = (net.minecraft.server.level.ServerLevel) player.level();
@@ -104,28 +121,39 @@ final class DroneDevCommands {
 				}
 			}
 		}
+		if (found != null && (found.converting() || found.layoutVersion() != io.github.jimbozoomer.jugcraft.tower.TowerData.CURRENT_LAYOUT)) {
+			player.sendSystemMessage(Component.literal("The tower at " + found.getBlockPos().toShortString()
+					+ " is being rebuilt as the Tri-Pillar (it was an older design). Try again when it has finished."));
+			return 0;
+		}
 		if (found == null) {
 			BlockPos at = player.blockPosition();
+			if (!io.github.jimbozoomer.jugcraft.tower.TowerCoreBlock.fits(level, at)) {
+				player.sendSystemMessage(Component.literal("The tower wouldn't fit here: its core must stand between y "
+						+ io.github.jimbozoomer.jugcraft.tower.TowerCoreBlock.lowest(level) + " and y "
+						+ io.github.jimbozoomer.jugcraft.tower.TowerCoreBlock.highest(level) + " (you're at y " + at.getY() + ")."));
+				return 0;
+			}
 			level.setBlockAndUpdate(at, io.github.jimbozoomer.jugcraft.tower.JugcraftTower.CORE.defaultBlockState());
 			if (level.getBlockEntity(at) instanceof io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity placed) {
 				placed.setOwner(player.getUUID());
 				found = placed;
 			}
-			// Stand on top of where the tower will be, not inside it.
-			player.teleportTo(at.getX() + 0.5, at.getY() + 20, at.getZ() - 45.5);
+			// Stand on the control building's roof, not inside it.
+			player.teleportTo(at.getX() + 0.5, at.getY() + 21, at.getZ() - 24.5);
 		}
 		if (found == null) {
 			player.sendSystemMessage(Component.literal("Could not place a Tower Core here"));
 			return 0;
 		}
 		if (found.tier() >= tier) {
-			player.sendSystemMessage(Component.literal("That tower is already tier " + found.tier()));
+			player.sendSystemMessage(Component.literal("That Drone Tower is already tier " + found.tier() + "."));
 			return 0;
 		}
 		long start = System.currentTimeMillis();
 		found.buildInstantly(level, tier);
 		long ms = System.currentTimeMillis() - start;
-		player.sendSystemMessage(Component.literal("Built the Drone Tower to tier " + found.tier() + " (" + ms + " ms)"));
+		player.sendSystemMessage(Component.literal("Built the Tri-Pillar Drone Tower to tier " + found.tier() + " (" + ms + " ms)"));
 		return 1;
 	}
 
@@ -145,8 +173,48 @@ final class DroneDevCommands {
 		return total;
 	}
 
-	/** Fills every Drone Tower Core within 48 blocks with 1024 of each tower module (testing only). */
-	private static int modules(ServerPlayer player) {
+	/** Fills every Drone Tower Core within 48 blocks with every block its tower still needs (testing only). */
+	/**
+	 * Puts back the blocks of the nearest Drone Tower (its core within 5 chunks) that are gone, a block someone put in
+	 * their place staying, and binds its Cargo Exchanges again (TowerCoreBlockEntity.repair).
+	 */
+	private static int repair(ServerPlayer player) {
+		net.minecraft.server.level.ServerLevel level = (net.minecraft.server.level.ServerLevel) player.level();
+		io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity found = null;
+		double best = Double.MAX_VALUE;
+		int cx = player.blockPosition().getX() >> 4, cz = player.blockPosition().getZ() >> 4;
+		for (int dx = -5; dx <= 5; dx++) {
+			for (int dz = -5; dz <= 5; dz++) {
+				if (!level.hasChunk(cx + dx, cz + dz)) {
+					continue;
+				}
+				for (var entity : List.copyOf(level.getChunk(cx + dx, cz + dz).getBlockEntities().values())) {
+					if (entity instanceof io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity core
+							&& core.getBlockPos().distSqr(player.blockPosition()) < best) {
+						best = core.getBlockPos().distSqr(player.blockPosition());
+						found = core;
+					}
+				}
+			}
+		}
+		if (found == null) {
+			player.sendSystemMessage(Component.literal("No Drone Tower Core nearby"));
+			return 0;
+		}
+		var done = found.repair(level);
+		if (done == null) {
+			player.sendSystemMessage(Component.literal("The tower at " + found.getBlockPos().toShortString()
+					+ " is building or being rebuilt (or has built nothing yet). Try again when it has finished."));
+			return 0;
+		}
+		player.sendSystemMessage(Component.literal("Repaired the Drone Tower at " + found.getBlockPos().toShortString() + ": "
+				+ done.placed() + " block" + (done.placed() == 1 ? "" : "s") + " put back"
+				+ (done.blocked() > 0 ? ", " + done.blocked() + " left where something else is in the way" : "")
+				+ (done.unloaded() > 0 ? ", " + done.unloaded() + " not loaded (come closer and run it again)" : "")));
+		return Math.max(1, done.placed());
+	}
+
+	private static int stock(ServerPlayer player) {
 		net.minecraft.server.level.ServerLevel level = (net.minecraft.server.level.ServerLevel) player.level();
 		int count = 0;
 		int cx = player.blockPosition().getX() >> 4, cz = player.blockPosition().getZ() >> 4;
@@ -157,17 +225,14 @@ final class DroneDevCommands {
 				}
 				for (var entity : List.copyOf(level.getChunk(cx + dx, cz + dz).getBlockEntities().values())) {
 					if (entity instanceof io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity core) {
-						for (String module : io.github.jimbozoomer.jugcraft.tower.JugcraftTower.MODULES) {
-							core.deposit(new net.minecraft.world.item.ItemStack(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.MODULE_ITEMS.get(module),
-									io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity.MODULE_CAPACITY));
-						}
+						core.stockAll();
 						count++;
 					}
 				}
 			}
 		}
 		int total = count;
-		player.sendSystemMessage(Component.literal(total == 0 ? "No Drone Tower Core nearby" : "Filled " + total + " Tower Core(s) with modules"));
+		player.sendSystemMessage(Component.literal(total == 0 ? "No Drone Tower Core nearby" : "Stocked " + total + " Tower Core(s) with every block their towers still need"));
 		return total;
 	}
 

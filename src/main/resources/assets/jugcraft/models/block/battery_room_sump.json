@@ -1,0 +1,47 @@
+{
+  "textures": {
+    "pi_br_sump_rim": "jugcraft:block/pi_br_sump_rim",
+    "pi_br_sump_top": "jugcraft:block/pi_br_sump_top",
+    "particle": "jugcraft:block/pi_br_sump_rim"
+  },
+  "elements": [
+    {
+      "from": [
+        0.6,
+        0.0,
+        0.6
+      ],
+      "to": [
+        15.4,
+        0.35,
+        15.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_br_sump_rim"
+        },
+        "south": {
+          "texture": "#pi_br_sump_rim"
+        },
+        "east": {
+          "texture": "#pi_br_sump_rim"
+        },
+        "west": {
+          "texture": "#pi_br_sump_rim"
+        },
+        "up": {
+          "texture": "#pi_br_sump_top",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#pi_br_sump_rim"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "  WW  ",
+    "WWWWWW",
+    "SSIISS"
+  ],
+  "key": {
+    "I": "#c:ingots/iron",
+    "S": "#c:ingots/steel",
+    "W": "minecraft:black_wool"
+  },
+  "result": {
+    "id": "jugcraft:console_chair",
+    "count": 2
+  }
+}

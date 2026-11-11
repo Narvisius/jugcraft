@@ -30,7 +30,7 @@ public final class JimtaFrozenRenderer extends EntityRenderer<JimtaApparition,Ji
         super.extractRenderState(e,s,partial);s.yaw=e.getYRot();s.model=fallback;s.frozen=new HumanoidRenderState();s.rectangular=false;
         var key=Identifier.tryParse(e.copiedType());if(key==null||e.copiedType().equals("minecraft:player"))return;
         var type=BuiltInRegistries.ENTITY_TYPE.getValue(key);if(type==null||type==e.getType())return;
-        var copy=copies.computeIfAbsent(e,k->type.create(e.level(),EntitySpawnReason.LOAD));if(!(copy instanceof LivingEntity living))return;
+        var copy=copies.computeIfAbsent(e,k->io.github.jimbozoomer.jugcraft.client.StandIns.id(type.create(e.level(),EntitySpawnReason.LOAD)));if(!(copy instanceof LivingEntity living))return;
         var renderer=dispatcher.getRenderer(living);if(!(renderer instanceof LivingEntityRenderer nativeRenderer))return;
         living.snapTo(e.getX(),e.getY(),e.getZ(),e.getYRot(),0);living.setYBodyRot(e.getYRot());living.setYHeadRot(e.getYRot());living.setNoGravity(true);
         s.frozen=(LivingEntityRenderState)nativeRenderer.createRenderState();nativeRenderer.extractRenderState(living,s.frozen,0);s.model=nativeRenderer.getModel();s.frozen.ageInTicks=0;s.frozen.walkAnimationPos=0;s.frozen.walkAnimationSpeed=0;

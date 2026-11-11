@@ -1,0 +1,91 @@
+{
+ "textures": {
+  "gl_hazard": "jugcraft:block/gl_hazard",
+  "gl_leaf": "jugcraft:block/gl_leaf",
+  "gl_rubber": "jugcraft:block/gl_rubber",
+  "particle": "jugcraft:block/gl_frame"
+ },
+ "elements": [
+  {
+   "from": [
+    0,
+    0,
+    6.5
+   ],
+   "to": [
+    10.5,
+    4,
+    8.5
+   ],
+   "faces": {
+    "north": {
+     "texture": "#gl_leaf"
+    },
+    "south": {
+     "texture": "#gl_leaf"
+    },
+    "east": {
+     "texture": "#gl_leaf"
+    },
+    "up": {
+     "texture": "#gl_leaf"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    0,
+    6.3
+   ],
+   "to": [
+    10.5,
+    3.6,
+    6.5
+   ],
+   "faces": {
+    "north": {
+     "texture": "#gl_hazard"
+    },
+    "south": {
+     "texture": "#gl_leaf"
+    },
+    "east": {
+     "texture": "#gl_leaf"
+    },
+    "up": {
+     "texture": "#gl_leaf"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    3.6,
+    6.2
+   ],
+   "to": [
+    10.6,
+    4.4,
+    8.8
+   ],
+   "faces": {
+    "north": {
+     "texture": "#gl_rubber"
+    },
+    "south": {
+     "texture": "#gl_rubber"
+    },
+    "east": {
+     "texture": "#gl_rubber"
+    },
+    "up": {
+     "texture": "#gl_rubber"
+    },
+    "down": {
+     "texture": "#gl_rubber"
+    }
+   }
+  }
+ ]
+}

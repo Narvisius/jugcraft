@@ -59,7 +59,7 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 
 	record Element(String type, double x, double y, double z, double r, double x0, double y0, double x1, double y1, double lo, double hi,
 			double start, double sweep, int colour, int colour2, double alpha, double size, String channel, String align, String[] label,
-			double[] on, double[] off, boolean open, double warn, int blades, double width) {
+			double[] on, double[] off, boolean open, double warn, int blades, double width, double[] angles, double[] push, List<Box> parts) {
 	}
 
 	/** A panel's moving parts; a panel whose labels are different drawings has each variant's (round 26, #12). */
@@ -89,6 +89,14 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 	record Box(double[] b, int colour) {
 	}
 
+	/**
+	 * A control that moves (round 31 part 2: the diesel rooms' MODE knob, emergency stop, breaker switch, 86G handle):
+	 * its boxes turned about (x, y) on the panel's face by {@code angle} degrees (anticlockwise as you face it) and
+	 * pushed in by {@code push}.
+	 */
+	record Part(double x, double y, double angle, double push, List<Box> boxes) {
+	}
+
 	public static final class State extends BlockEntityRenderState {
 		Direction facing = Direction.NORTH;
 		int column;
@@ -97,6 +105,7 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 		final List<Rect> rects = new ArrayList<>();
 		final List<Text> texts = new ArrayList<>();
 		final List<Box> boxes = new ArrayList<>();
+		final List<Part> parts = new ArrayList<>();
 	}
 
 	public LivePanelRenderer(BlockEntityRendererProvider.Context context) {
@@ -122,6 +131,7 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 		state.rects.clear();
 		state.texts.clear();
 		state.boxes.clear();
+		state.parts.clear();
 		Level level = panel.getLevel();
 		if (level == null || !(panel.getBlockState().getBlock() instanceof LivePanelBlock block)) {
 			return;
@@ -140,12 +150,63 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 			if (io.github.jimbozoomer.jugcraft.nuclear.RelayRoom.kind(panel.getBlockState()) >= 0) {
 				// A relay room cabinet (round 26, #10): the reactor, or its name.
 				EdgTelemetry.relayRoom(snap, panel, now);
+			} else if (io.github.jimbozoomer.jugcraft.nuclear.SpreadingRoomFire.kind(panel.getBlockState()) >= 0) {
+				// The cable spreading room's sprinklers (punch list #15): the releasing panel, its valve station.
+				EdgTelemetry.csr(snap, panel, level, now);
+			} else if (io.github.jimbozoomer.jugcraft.nuclear.ServerRoom.kind(panel.getBlockState()) >= 0) {
+				// The plant computer room (older rooms round 2): the room as its UPS (the hub) keeps it.
+				EdgTelemetry.srv(snap, panel, level, now);
+			} else if (io.github.jimbozoomer.jugcraft.nuclear.SwitchgearRoom.isLaptop(panel.getBlockState())) {
+				// The switchgear room's log desk laptop (older rooms round 1): the nearest load centre's trip units.
+				EdgTelemetry.sgr(snap, panel, level);
 			} else if (io.github.jimbozoomer.jugcraft.nuclear.HvacRoom.kind(panel.getBlockState()) >= 0) {
 				// The control room HVAC's panel and monitors (round 26, #11): the room as its panel found it.
 				EdgTelemetry.hvac(snap, panel, now);
+			} else if (io.github.jimbozoomer.jugcraft.nuclear.OpsOffice.kind(panel.getBlockState()) >= 0) {
+				// The operations office (round 26, #13): the plant as its out-of-service board found it, the game's clock.
+				EdgTelemetry.ops(snap, panel, level, now);
 			} else if (io.github.jimbozoomer.jugcraft.nuclear.TscRoom.kind(panel.getBlockState()) >= 0) {
 				// The Technical Support Center (round 26, #12): the plant as its classification board found it.
 				EdgTelemetry.tsc(snap, panel, level, now);
+			} else if (io.github.jimbozoomer.jugcraft.nuclear.ChemLab.isBoard(panel.getBlockState())) {
+				// The chemistry lab's status board: the plant's chemistry against its limits.
+				EdgTelemetry.chemBoard(snap, panel, level);
+			} else if (io.github.jimbozoomer.jugcraft.nuclear.ChemLab.isGamma(panel.getBlockState())) {
+				// The chemistry lab's gamma spectroscopy station: the spectrum building, the report.
+				EdgTelemetry.gammaSpec(snap, panel, level);
+			} else if (io.github.jimbozoomer.jugcraft.nuclear.SecurityGatehouse.isDetector(panel.getBlockState())) {
+				// The gatehouse's metal detector: PASS, ALARM and its zone lights.
+				EdgTelemetry.wtmd(snap, panel, level);
+			} else if (io.github.jimbozoomer.jugcraft.nuclear.SecurityGatehouse.isXray(panel.getBlockState())) {
+				// The gatehouse's X-ray: its operator's screen, its lamps.
+				EdgTelemetry.xray(snap, panel, level);
+			} else if (io.github.jimbozoomer.jugcraft.nuclear.SecurityGatehouse.isConsole(panel.getBlockState())) {
+				// The gatehouse's alarm station console: the zones, its post's access log and who is inside.
+				EdgTelemetry.secConsole(snap, panel, level, now);
+			} else if (io.github.jimbozoomer.jugcraft.nuclear.AccessControl.isStation(panel.getBlockState())) {
+				// The entrance hall's security post (older rooms round 6): the gates' access log, the gate panel.
+				EdgTelemetry.acStation(snap, panel, level, now);
+			} else if (io.github.jimbozoomer.jugcraft.nuclear.TurbineControlRoom.kind(panel.getBlockState()) >= 0) {
+				// The turbine control room's cabinets (turbine hall part 3): the turbine they joined.
+				EdgTelemetry.tcr(snap, panel, level, now);
+			} else if (io.github.jimbozoomer.jugcraft.nuclear.HallCrane.isPendant(panel.getBlockState())) {
+				// A turbine hall crane pendant station (turbine hall part 3): its crane's power.
+				EdgTelemetry.cranePendant(snap, panel, level);
+			} else if (io.github.jimbozoomer.jugcraft.nuclear.ControlRoomConsoles.isConsole(panel.getBlockState())) {
+				// The main control room's consoles (older rooms round 5): the plant computer's pages from the display wall.
+				EdgTelemetry.crConsole(snap, panel, level, now);
+			} else if (io.github.jimbozoomer.jugcraft.nuclear.DcRoom.isDisconnect(panel.getBlockState())) {
+				// A battery room's string disconnect (older rooms round 4): its handle and flag.
+				EdgTelemetry.disconnect(snap, panel);
+			} else if (io.github.jimbozoomer.jugcraft.nuclear.DcRoom.isLaptop(panel.getBlockState())) {
+				// A DC room's log desk laptop (older rooms round 3): its switchboard's room.
+				EdgTelemetry.dcLaptop(snap, panel, level, now);
+			} else if (io.github.jimbozoomer.jugcraft.nuclear.DcRoom.isSwitchboard(panel.getBlockState())) {
+				// A DC room's switchboard (older rooms round 3): its bus, its breakers.
+				EdgTelemetry.switchboard(snap, panel, level, now);
+			} else if (io.github.jimbozoomer.jugcraft.nuclear.DcRoom.isCharger(panel.getBlockState())) {
+				// A DC room's station charger (older rooms round 3): its breakers, MODE, annunciator.
+				EdgTelemetry.charger(snap, panel, level, now);
 			} else if (io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.isInverter(panel.getBlockState())) {
 				EdgTelemetry.inverter(snap, panel, level, now);
 			} else if (io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.isTransformer(panel.getBlockState())) {
@@ -165,9 +226,16 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 				EdgTelemetry.exhaustFan(snap, panel, level, now);
 			}
 		}
+		if (panel.getBlockState().getBlock() == io.github.jimbozoomer.jugcraft.nuclear.PlantInterior.BLOCKS.get("edg_battery_charger")) {
+			// A diesel room's charger, drawn as the station charger (older rooms round 3): its handles, MODE and windows.
+			EdgTelemetry.edgCharger(snap);
+		}
 		// What shows only with a panel's door open (a vital panel's breaker handles).
 		boolean open = panel.getBlockState().hasProperty(io.github.jimbozoomer.jugcraft.nuclear.VitalPanelBlock.OPEN)
 				&& panel.getBlockState().getValue(io.github.jimbozoomer.jugcraft.nuclear.VitalPanelBlock.OPEN);
+		// A rack with its door open: its number plate, on the door, has swung away with it.
+		boolean rackOpen = open && io.github.jimbozoomer.jugcraft.nuclear.ServerRoom.kind(panel.getBlockState())
+				== io.github.jimbozoomer.jugcraft.nuclear.ServerRoom.RACK;
 		boolean blink = ((long) (now / 5)) % 2 == 0;
 		for (Element e : layout.elements(io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity.variant(panel.getBlockState()))) {
 			if (e.open() && !open) {
@@ -180,6 +248,12 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 					if (b.length == 6) {
 						state.boxes.add(new Box(b, e.colour()));
 					}
+				}
+				case "part" -> {
+					int k = (int) Math.round(snap.number(e.channel()));
+					double angle = k >= 0 && k < e.angles().length ? e.angles()[k] : 0;
+					double push = k >= 0 && k < e.push().length ? e.push()[k] : 0;
+					state.parts.add(new Part(e.x(), e.y(), angle, push, e.parts()));
 				}
 				case "fan" -> {
 					// A fan's blades (round 26, #9), turned to the channel's angle (degrees).
@@ -214,16 +288,35 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 						for (int k = 0; k < label.length; k++) {
 							double cy = (e.y0() + e.y1()) / 2 + (label.length - 1) * 0.28 - k * 0.56;
 							state.texts.add(new Text((e.x0() + e.x1()) / 2, cy, e.z() + 0.05, 0.34, 0x18181A,
-									Component.literal(label[k]).getVisualOrderText(), 1, true));
+									Texts.of(label[k]), 1, true));
+						}
+					}
+				}
+				case "leds" -> {
+					// A strip of LEDs (older rooms round 2: a rack unit's power, activity, link, status and drive
+					// lights; EdgTelemetry.Snapshot.led), each a small lit square.
+					for (int k = 0; k < e.blades(); k++) {
+						int lit = snap.led(e.align(), k, e.lo());
+						if (lit > 0) {
+							int rgb = lit == 2 && e.colour2() != 0 ? e.colour2() : e.colour();
+							state.discs.add(new Disc(e.x0() + k * e.width(), e.y(), e.z(), e.r(), rgb, true));
 						}
 					}
 				}
 				case "text" -> {
 					String s = snap.text(e.channel());
+					if (rackOpen && e.channel().startsWith("lbl_")) {
+						s = "";
+					}
 					if (!s.isEmpty()) {
-						// Digital displays light themselves; the hour meter's printed wheels do not.
-						boolean glow = !e.channel().startsWith("hours");
-						state.texts.add(new Text(e.x(), e.y(), e.z(), e.size(), e.colour(), Component.literal(s).getVisualOrderText(),
+						// Digital displays light themselves; the hour meter's printed wheels and printed labels do not.
+						boolean glow = !e.channel().startsWith("hours") && !e.channel().startsWith("lbl_");
+						// (Older rooms round 5: a text's colour may come with it, a "#c" number: ARGB, 0 its own.)
+						int c = e.channel().startsWith("crc_") || e.channel().startsWith("ssd_") || e.channel().startsWith("ac_m")
+								|| e.channel().startsWith("rsd_") || e.channel().startsWith("xr_") || e.channel().startsWith("sas_")
+								|| e.channel().startsWith("csb_") || e.channel().startsWith("gs_")
+								? (int) snap.number(e.channel() + "#c") : 0;
+						state.texts.add(new Text(e.x(), e.y(), e.z(), e.size(), c != 0 ? c : e.colour(), Texts.of(s),
 								"center".equals(e.align()) ? 1 : "right".equals(e.align()) ? 2 : 0, glow));
 					}
 				}
@@ -257,7 +350,8 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 
 	@Override
 	public void submit(State state, PoseStack pose, SubmitNodeCollector collector, CameraRenderState camera) {
-		if (state.needles.isEmpty() && state.discs.isEmpty() && state.rects.isEmpty() && state.texts.isEmpty() && state.boxes.isEmpty()) {
+		if (state.needles.isEmpty() && state.discs.isEmpty() && state.rects.isEmpty() && state.texts.isEmpty() && state.boxes.isEmpty()
+				&& state.parts.isEmpty()) {
 			return;
 		}
 		int light = state.lightCoords;
@@ -304,6 +398,21 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 			}
 			g.color = 0xFFFFFFFF;
 		});
+		for (Part part : state.parts) {
+			pose.pushPose();
+			pose.translate((float) part.x(), (float) part.y(), 0);
+			pose.rotateDegrees(Axis.ZP, (float) part.angle());
+			pose.translate((float) -part.x(), (float) -part.y(), (float) part.push());
+			collector.submitCustomGeometry(pose, SOLID, (p, consumer) -> {
+				Geometry g = new Geometry(p, consumer);
+				g.light = light;
+				for (Box b : part.boxes()) {
+					box(g, b.b(), b.colour());
+				}
+				g.color = 0xFFFFFFFF;
+			});
+			pose.popPose();
+		}
 		if (state.rects.stream().anyMatch(r -> !r.opaque())) {
 			collector.submitCustomGeometry(pose, GLASS, (p, consumer) -> {
 				Geometry g = new Geometry(p, consumer);
@@ -413,7 +522,24 @@ public class LivePanelRenderer implements BlockEntityRenderer<LivePanelBlockEnti
 				num(o, "y1"), num(o, "lo"), num(o, "hi"), num(o, "start"), num(o, "sweep"), rgb(o, "colour"), rgb(o, "colour2"),
 				o.has("alpha") ? num(o, "alpha") : 0.6, num(o, "size"), o.get("ch").getAsString(), o.has("align") ? o.get("align").getAsString() : "left",
 				label(o), nums(o, "on"), nums(o, "off"), o.has("open") && o.get("open").getAsBoolean(), num(o, "warn"), (int) num(o, "blades"),
-				num(o, "width"));
+				num(o, "width"), nums(o, "angles"), nums(o, "push"), parts(o));
+	}
+
+	/** A moving part's boxes: each [x0, y0, z0, x1, y1, z1, [r, g, b]] (model pixels on the piece facing north). */
+	private static List<Box> parts(JsonObject o) {
+		List<Box> out = new ArrayList<>();
+		if (o.has("boxes")) {
+			for (JsonElement el : o.getAsJsonArray("boxes")) {
+				JsonArray a = el.getAsJsonArray();
+				double[] b = new double[6];
+				for (int i = 0; i < 6; i++) {
+					b[i] = a.get(i).getAsDouble();
+				}
+				JsonArray c = a.get(6).getAsJsonArray();
+				out.add(new Box(b, c.get(0).getAsInt() << 16 | c.get(1).getAsInt() << 8 | c.get(2).getAsInt()));
+			}
+		}
+		return out;
 	}
 
 	private static double[] nums(JsonObject o, String key) {

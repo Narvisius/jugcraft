@@ -1,0 +1,159 @@
+{
+ "textures": {
+  "frame": "jugcraft:block/sim_frame",
+  "deck": "jugcraft:block/sim_deck",
+  "base": "jugcraft:block/sim_base",
+  "seat": "jugcraft:block/sim_seat",
+  "red": "jugcraft:block/sim_red",
+  "alu": "jugcraft:block/sim_alu",
+  "particle": "jugcraft:block/sim_frame",
+  "sc": "jugcraft:block/sim0_screen_c",
+  "sl": "jugcraft:block/sim0_screen_l",
+  "sr": "jugcraft:block/sim0_screen_r"
+ },
+ "elements": [
+  {
+   "from": [
+    -8,
+    -0.5,
+    2.2
+   ],
+   "to": [
+    6.5,
+    11.3,
+    3.6
+   ],
+   "faces": {
+    "north": {
+     "texture": "#frame",
+     "uv": [
+      0.0,
+      4.2,
+      14.5,
+      16.0
+     ]
+    },
+    "south": {
+     "texture": "#frame",
+     "uv": [
+      1.5,
+      4.2,
+      16.0,
+      16.0
+     ]
+    },
+    "east": {
+     "texture": "#frame",
+     "uv": [
+      12.4,
+      4.2,
+      13.8,
+      16.0
+     ]
+    },
+    "west": {
+     "texture": "#frame",
+     "uv": [
+      2.2,
+      4.2,
+      3.6,
+      16.0
+     ]
+    },
+    "up": {
+     "texture": "#frame",
+     "uv": [
+      1.5,
+      2.2,
+      16.0,
+      3.6
+     ]
+    },
+    "down": {
+     "texture": "#frame",
+     "uv": [
+      1.5,
+      12.4,
+      16.0,
+      13.8
+     ]
+    }
+   },
+   "rotation": {
+    "angle": 45,
+    "axis": "y",
+    "origin": [
+     6.5,
+     -16,
+     2.9
+    ]
+   }
+  },
+  {
+   "from": [
+    -7.5,
+    0.1,
+    3.6
+   ],
+   "to": [
+    6.0,
+    10.7,
+    3.7
+   ],
+   "faces": {
+    "south": {
+     "texture": "#sl",
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ]
+    },
+    "north": {
+     "texture": "#frame",
+     "uv": [
+      0.0,
+      5.3,
+      13.5,
+      15.9
+     ]
+    },
+    "east": {
+     "texture": "#frame"
+    },
+    "west": {
+     "texture": "#frame"
+    },
+    "up": {
+     "texture": "#frame",
+     "uv": [
+      2.5,
+      3.6,
+      16.0,
+      3.7
+     ]
+    },
+    "down": {
+     "texture": "#frame",
+     "uv": [
+      2.5,
+      12.3,
+      16.0,
+      12.4
+     ]
+    }
+   },
+   "rotation": {
+    "angle": 45,
+    "axis": "y",
+    "origin": [
+     6.5,
+     -16,
+     2.9
+    ]
+   },
+   "shade": false
+  }
+ ]
+}

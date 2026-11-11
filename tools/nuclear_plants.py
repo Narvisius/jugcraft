@@ -363,6 +363,7 @@ class Site:
         self.equipment = []  # (kind, ax, ay, az, facing): the anchor (front left bottom corner) and the way it faces
         self.lines = {}  # (x, y, z) -> pipe id
         self.towers = []  # (x, y, z, tower kind) controllers
+        self.works = []  # (x, y, z, "intake" or "circ"): the pump houses' controllers (towers and pump houses build)
         self.decor = {}  # (x, y, z) -> material: what the plant adds besides parts (pipe galleries)
 
     def add(self, part, x, z, rot=0):
@@ -394,7 +395,7 @@ class Site:
     def conduit(self, *points):
         """Circulating water conduit buried just under the ground (y -1) through points (x, z): flush concrete trench
         covers across open ground, hidden under roads and floors. Stops short of tower controllers (it reaches them)."""
-        stop = {(x, y, z) for x, y, z, _ in self.towers}
+        stop = {(x, y, z) for x, y, z, _ in self.towers} | {(x, y, z) for x, y, z, _ in self.works}
         for (x0, z0), (x1, z1) in zip(points, points[1:]):
             self.line(TRENCH_KIND, (x0, -1, z0), (x1, -1, z1))
             self.pipes.append((min(x0, x1), min(z0, z1), max(x0, x1) + 1, max(z0, z1) + 1))
@@ -523,8 +524,8 @@ def large_plant():
     s.line(STEAM, (sx, 22, sz), (sx, 22, 50))
     s.line(STEAM, (sx, 22, 50), (300, 22, 50))
     s.line(STEAM, (300, 22, 27), (300, 22, 50))
-    s.line(STEAM, (300, 9, 50), (300, 22, 50))
-    s.line(STEAM, (300, 9, 27), (300, 22, 27))
+    s.line(STEAM, (300, 4, 50), (300, 22, 50))
+    s.line(STEAM, (300, 4, 27), (300, 22, 27))
     s.line(STEAM, (230, 1, 50), (230, 22, 50))
     s.eq("feedwater_pump", 229, 51)
     s.add(hall("epr_fuel_building", "Fuel Building (EPR)", 44, 36, 40, wall=SHIELD, band=CONC, windows=()), 155, 124)
@@ -619,12 +620,18 @@ def smr_reactor_building(key, name, modules):
 PLANTS = [small_plant, medium_plant, large_plant]
 
 
+def LEGACY_PARTS():
+    """The medium plant's natural-draft tower before the towers and pump houses build (its blueprint stays, for towers
+    built from it)."""
+    return [cooling_tower("ct_natural", "Natural-Draft Cooling Tower", 52, 150, 31, 115, "natural")]
+
+
 # ---------------------------------------------------------------------------------------------------------------
 # Assembly and drawing
 
 
 # Site grid offsets: the intake legs go this far below the ground, and the pump house reaches this far over the lake.
-BELOW, OVER = 4, 10
+BELOW, OVER = 10, 12
 # Render-only materials for what the plant blueprint adds (the parts never use them).
 EQ_RENDER, COOLANT_RENDER, STEAM_RENDER, CONDUIT_RENDER, CONTROLLER_RENDER = 30, 31, 32, 33, 34
 MATERIALS.update({EQ_RENDER: ("", (170, 176, 182)), COOLANT_RENDER: ("", (190, 196, 200)), STEAM_RENDER: ("", (236, 236, 230)),
@@ -648,7 +655,7 @@ def equipment_solid(kind, x, y, z):
     if kind == "pressurizer":
         return cx * cx <= 1.6 ** 2
     if kind == "turbine_generator":
-        return y < 3 or (2 <= x <= 8 and y < 8)
+        return turbine_solid(x, y, z)
     if kind == "main_transformer":
         return y < 5 and x < 5 and z < 5
     if kind == "epr_reactor_vessel":
@@ -656,14 +663,73 @@ def equipment_solid(kind, x, y, z):
     if kind == "small_modular_reactor":
         return r2 <= 2.4 ** 2
     if kind == "emergency_diesel_generator":
-        if 1 <= x <= 5:
-            return y < 5 and (z < 13 or (2 <= x <= 4 and y < 4))
-        return (1 <= z <= 8 and y <= 1) or (z == 9 and y <= 1) or (z in (10, 11) and y == 0) or (x == 0 and z == 0 and y <= 2)
+        return diesel_solid(x, y, z)
+    if kind == "overhead_crane":
+        # Turbine hall part 3: the crane runs along its runway; only its anchor (over the runway beam where it was
+        # placed) is a block.
+        return x == 0 and y == 0 and z == 0
+    if kind == "condenser_hotwell":
+        # Turbine hall part 2: a column left open inside it, where the circulating water conduit rises through to its
+        # condenser (the medium plant's shell 1A), unseen inside the drawn shell.
+        return not (x == 5 and z == 1)
     return True
 
 
+def turbine_solid(x, y, z):
+    """The turbine-generator's body (the cells that get a frame block; EquipmentKind.turbineSolid; tools/turbine_set.py): the front standard,
+    the HP and its steam chests either side, the bearing pedestals, the LPs' hoods all across and their covers and
+    intercept valves above, the turning gear and its station, the generator, the exciter."""
+    if z <= 2:
+        return 4 <= x <= 6 and y <= 2
+    if z <= 8:
+        return (3 <= x <= 7 and y <= 2) or ((x <= 2 or x >= 8) and y <= 3)
+    if z in (9, 18, 27):
+        return 4 <= x <= 6 and y <= 2
+    if z <= 35:
+        return y <= 2 or (1 <= x <= 9 and y <= 5)
+    if z <= 37:
+        return (3 <= x <= 6 and y <= 2) or (x == 2 and y <= 1 and z == 37)
+    if z <= 46:
+        return (3 <= x <= 7 and y <= 3) or (4 <= x <= 6 and y == 4 and (39 <= z <= 41 or 43 <= z <= 45))
+    return 4 <= x <= 6 and y <= 2
+
+
+def diesel_solid(x, y, z):
+    """The V20 diesel generator set's body (round 31, tools/diesel_set.py; EquipmentKind.dieselSolid): the engine, its
+    free end and the generator along the middle (x 3 to 6), the exhaust manifold and the generator's air hood a block
+    higher; the walkways either side (decks at 2), their steps down beside the generator (1.5, 1, 0.5: half-block
+    frames where they end in a half); the gauge board at the front left, the fuel filter at the front right, the
+    coolers and risers beside the free end, the terminal box on the generator's left."""
+    if 3 <= x <= 6:
+        if z <= 1:
+            return y < 7
+        if z <= 12:
+            return y < 5 or (4 <= x <= 5 and y < 6)
+        return y < 5 or (4 <= x <= 5 and 15 <= z <= 17 and y < 6)
+    if z <= 1:
+        if x in (2, 7):
+            return y < 6
+        if x <= 1:
+            return z == 0 and y < 3
+        return x == 8 and z == 1 and y < 2
+    if z <= 12:
+        return y < 2
+    if z <= 14:
+        return y < 1
+    return x == 2 and 16 <= z <= 17 and y < 3
+
+
+# Equipment placed hidden (kind, ax, ay, az): only its anchor, no body (EquipmentAnchorBlock VARIANT 4 on the reactor's
+# kinds; the medium plant's reactor equipment under its reactor building's floor, which a compiled site draws).
+HIDDEN = set()
+HIDDEN_VARIANT = 4
+
+
 def equipment_cells(kind, ax, ay, az, facing):
-    """The body of a placed piece in site coordinates (EquipmentKind.toWorld), its anchor included."""
+    """The body of a placed piece in site coordinates (EquipmentKind.toWorld), its anchor included (a hidden piece's
+    body is its anchor)."""
+    if (kind, ax, ay, az) in HIDDEN:
+        return {(ax, ay, az)}
     _, w, d, h = EQUIPMENT_SIZES[kind]
     fx, fz = DIRS[facing]
     rx, rz = DIRS[CLOCKWISE[facing]]
@@ -738,6 +804,9 @@ def verify(site):
              BUS: {"turbine_generator", "main_transformer"}}
     near = [(1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)]
     tower_cells = {(x, y, z) for x, y, z, _ in site.towers}
+    # (a circ pump house's controller beside the conduit: its pumps move the towers' water, as circ pumps do)
+    house_cells = {(x, y, z) for x, y, z, k in getattr(site, "works", []) if k == "circ"}
+    houses = set()
     lines = {c: (CONDUIT if k == TRENCH_KIND else k) for c, k in site.lines.items()}
 
     def outside(i):
@@ -773,8 +842,11 @@ def verify(site):
                     found.add(owner[c])
                 elif c in tower_cells:
                     towers.add(c)
+                elif c in house_cells:
+                    houses.add(c)
                 elif kind == CONDUIT and c[1] < 0 and c[2] < 0:
                     water = True  # a leg below the ground, out in the lake
+        joined.seen = seen
         return found - set(start), towers, water
 
     report = []
@@ -806,21 +878,30 @@ def verify(site):
                         transformers.add(j)
             bus, _, _ = joined(turbines, BUS)
             transformers |= {j for j in bus if kinds[j] == "main_transformer"}
+            # (a transformer yard built as a compiled site: its bus port beside the end of the generator's bus, as
+            # ReactorUnit.java finds it; tools/yard_sites.py)
+            for port in getattr(site, "yard_ports", []):
+                if any((port[0] + dx, port[1] + dy, port[2] + dz) in joined.seen for dx, dy, dz in near):
+                    transformers.add(("yard", tuple(port)))
             assert turbines and feed and coolers and transformers, f"{site.key}: secondary {len(turbines)} turbines, {len(feed)} feedwater, {len(coolers)} condensers, {len(transformers)} transformers"
             want = 2 if kind == "epr_reactor_vessel" else 1
             assert len(turbines) >= want and len(transformers) >= want, f"{site.key}: needs {want} turbines with transformers"
             report.append(f"{kind}: 4 loops, {len(turbines)} turbine(s), {len(coolers)} condenser(s), {len(transformers)} transformer(s)")
         towers = set()
         pumps = set()
+        lake = True
         for c in coolers:
             found, t, water = joined([c], CONDUIT)
-            assert water, f"{site.key}: condenser {c} conduit does not reach the lake"
+            # (the medium plant's towers hold their own water, made up from the lake intake: towers and pump houses build)
+            assert water or t, f"{site.key}: condenser {c} conduit reaches neither the lake nor a tower"
+            lake = lake and water
             towers |= t
             pumps |= {j for j in found if kinds[j] == "circulating_water_pump"}
-        if any(k == "circulating_water_pump" for k in kinds.values()):
-            assert pumps, f"{site.key}: no circulating water pump on the conduit"
+        if any(k == "circulating_water_pump" for k in kinds.values()) or house_cells:
+            assert pumps or houses, f"{site.key}: no circulating water pump (or pump house) on the conduit"
         assert towers, f"{site.key}: no cooling tower on the conduit"
-        report[-1] += f", {len(towers)} cooling tower(s), {len(pumps)} CW pump(s) and the lake on its conduit"
+        report[-1] += (f", {len(towers)} cooling tower(s), {len(pumps)} CW pump(s), {len(houses)} CW pump house(s)"
+                       + (" and the lake" if lake else "") + " on its conduit")
     return report
 
 
@@ -833,6 +914,10 @@ KEYS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#$%&*+-/:;<=>?@^_|~
 # the relay room's labelled cabinets): the IPA block and Cyrillic, their letters only (no digits, no combining marks).
 KEYS += "".join(chr(c) for c in list(range(0x250, 0x2B0)) + list(range(0x400, 0x530))
                 if __import__("unicodedata").category(chr(c)) not in ("Nd", "Cn", "Mn", "Me", "Mc"))
+# And more (doors round and the computer room: the control building's doors and racks): Greek, Armenian and the Latin
+# Extended Additional block, their letters only.
+KEYS += "".join(chr(c) for c in list(range(0x370, 0x400)) + list(range(0x531, 0x588)) + list(range(0x1E00, 0x1F00))
+                if __import__("unicodedata").category(chr(c)).startswith("L") and chr(c) not in KEYS)
 TURN180 = {"north": "south", "south": "north", "east": "west", "west": "east"}
 
 
@@ -909,7 +994,8 @@ def plant_blueprint(site, name):
         for (x, y, z) in equipment_cells(kind, ax, ay, az, facing):
             if built[x, y + BELOW, z + OVER]:
                 extra[to_file(x, y, z)] = "minecraft:air"
-        extra[to_file(ax, ay, az)] = f"jugcraft:{kind}[facing={TURN180[facing]}]"
+        hidden = f",variant={HIDDEN_VARIANT}" if (kind, ax, ay, az) in HIDDEN else ""
+        extra[to_file(ax, ay, az)] = f"jugcraft:{kind}[facing={TURN180[facing]}{hidden}]"
     for (x, y, z), kind in site.lines.items():
         extra[to_file(x, y, z)] = f"jugcraft:{PIPE_IDS[kind]}"
     parts = []
@@ -918,7 +1004,6 @@ def plant_blueprint(site, name):
         w, h, d = part.size
         parts.append({"id": part.key, "at": [W - x - w, BELOW - part.sink, D - z - d], "turn": 2})
     size = [W, H, D + OVER]
-    palette, layers = rle_layers(extra, size)
     # The stake on the shore, near the middle, on a free spot of the ground layer.
     occupied = {(x, z) for (x, y, z) in extra if y == BELOW}
     shore = D - 1
@@ -931,6 +1016,16 @@ def plant_blueprint(site, name):
         else:
             continue
         break
+    # A part may reach over the stake's cell (the medium plant's lake intake, since 19 October 2026): the plant's own
+    # layer clears that one cell, so the stake keeps its place and worlds built from older blueprints keep their plant
+    # where it stands (Blueprint refuses a block on the anchor).
+    ax_, ay_, az_ = anchor
+    for part, x, z, rot in site.parts:
+        w, h, d = part.size
+        px, py, pz = W - 1 - x - ax_, ay_ - BELOW + part.sink, D - 1 - z - az_
+        if 0 <= px < w and 0 <= pz < d and (px, py, pz) in part_cells(part):
+            extra[(ax_, ay_, az_)] = "minecraft:air"
+    palette, layers = rle_layers(extra, size)
     return {"format": 2, "name": name, "author": "Jugcraft (built in)", "kind": "set",
             "description": f"{site.name}: every building, the reactor equipment, pipes and conduits. Stake it on a lake shore "
                            f"facing inland; the intake reaches {OVER} blocks out over the water.",
@@ -956,6 +1051,13 @@ def write_blueprints(out=BLUEPRINT_OUT):
         for part, *_ in site.parts:
             if part.key in seen:
                 continue
+            seen.add(part.key)
+            (out / f"{part.key}.jugbp.json").write_text(json.dumps(part_blueprint(part), separators=(",", ":")) + "\n", encoding="utf-8")
+            ids.append(part.key)
+    # Parts no plant uses any more but towers already built still check themselves against (an older save's medium
+    # plant towers: the controller's blueprint, CoolingTowerBlock.Tower.NATURAL).
+    for part in LEGACY_PARTS():
+        if part.key not in seen:
             seen.add(part.key)
             (out / f"{part.key}.jugbp.json").write_text(json.dumps(part_blueprint(part), separators=(",", ":")) + "\n", encoding="utf-8")
             ids.append(part.key)
@@ -1128,6 +1230,9 @@ def plume_spots(site):
         if part.key.startswith("ct_natural"):
             w, h, d = part.size
             out.append((x + w / 2, h + BELOW, z + OVER + d / 2, w * 0.22))
+        elif getattr(part, "axis", None):
+            w, h, d = part.size
+            out.append((x + part.axis[0], h + BELOW - part.sink, z + OVER + part.axis[2], 24))
         elif part.key == "ct_mechanical":
             w, h, d = part.size
             for i in range(6):

@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "BBB",
+    "I I"
+  ],
+  "key": {
+    "B": "minecraft:iron_bars",
+    "I": "#c:ingots/iron"
+  },
+  "result": {
+    "id": "jugcraft:stair_landing",
+    "count": 4
+  }
+}

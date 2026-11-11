@@ -111,6 +111,18 @@ public final class BlueprintNetwork {
 		}
 	}
 
+	/** Shift+scroll with a stacked building's blueprint in the main hand: how many floors it is to have (BlueprintStacks). */
+	public record FloorsPayload(int floors) implements CustomPacketPayload {
+		public static final Type<FloorsPayload> TYPE = new Type<>(Jugcraft.id("blueprint_floors"));
+		public static final StreamCodec<RegistryFriendlyByteBuf, FloorsPayload> CODEC = StreamCodec.of((buf, p) -> buf.writeVarInt(p.floors),
+				buf -> new FloorsPayload(buf.readVarInt()));
+
+		@Override
+		public Type<FloorsPayload> type() {
+			return TYPE;
+		}
+	}
+
 	/** Progress for the stake screen: blocks in place, what is still needed (item ids and counts), blocks in the way. */
 	public record StakeInfoPayload(BlockPos pos, String name, int done, int total, String mode, List<String> items, List<Integer> counts,
 			int wrong, List<String> handOnly, boolean canChange, boolean open) implements CustomPacketPayload {
@@ -167,6 +179,7 @@ public final class BlueprintNetwork {
 		PayloadTypeRegistry.serverboundPlay().register(ImportPayload.TYPE, ImportPayload.CODEC);
 		PayloadTypeRegistry.serverboundPlay().register(PrintPayload.TYPE, PrintPayload.CODEC);
 		PayloadTypeRegistry.serverboundPlay().register(StakeActionPayload.TYPE, StakeActionPayload.CODEC);
+		PayloadTypeRegistry.serverboundPlay().register(FloorsPayload.TYPE, FloorsPayload.CODEC);
 
 		ServerLifecycleEvents.SERVER_STARTED.register(BlueprintLibrary::load);
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> sendAll(handler.player));
@@ -214,6 +227,13 @@ public final class BlueprintNetwork {
 				Jugcraft.LOGGER.info("{} imported blueprint {} ({} blocks)", player.getName().getString(), blueprint.id, blueprint.size());
 			} catch (Blueprint.Invalid | IllegalArgumentException | IllegalStateException | UnsupportedOperationException e) {
 				ServerPlayNetworking.send(player, new ImportResultPayload(false, e.getMessage(), ""));
+			}
+		});
+
+		ServerPlayNetworking.registerGlobalReceiver(FloorsPayload.TYPE, (payload, context) -> {
+			var held = context.player().getMainHandItem();
+			if (held.is(JugcraftBlueprints.BLUEPRINT)) {
+				BlueprintItem.setFloors(held, payload.floors());
 			}
 		});
 

@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "KK    ",
+    "KKKKKK",
+    "PP  PP"
+  ],
+  "key": {
+    "K": "jugcraft:plastic_sheet",
+    "P": "#c:plates/iron"
+  },
+  "result": {
+    "id": "jugcraft:training_chair",
+    "count": 4
+  }
+}

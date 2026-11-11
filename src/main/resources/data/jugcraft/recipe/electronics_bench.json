@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "WWCCWW",
+    "SSSSSS",
+    "SS  SS"
+  ],
+  "key": {
+    "C": "jugcraft:basic_circuit",
+    "S": "#c:plates/steel",
+    "W": "#c:wires/copper"
+  },
+  "result": {
+    "id": "jugcraft:electronics_bench",
+    "count": 2
+  }
+}

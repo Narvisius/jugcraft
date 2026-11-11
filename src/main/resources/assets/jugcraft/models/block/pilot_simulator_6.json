@@ -1,0 +1,78 @@
+{
+ "textures": {
+  "frame": "jugcraft:block/sim_frame",
+  "deck": "jugcraft:block/sim_deck",
+  "base": "jugcraft:block/sim_base",
+  "seat": "jugcraft:block/sim_seat",
+  "red": "jugcraft:block/sim_red",
+  "alu": "jugcraft:block/sim_alu",
+  "particle": "jugcraft:block/sim_frame"
+ },
+ "elements": [
+  {
+   "from": [
+    5.9,
+    -1,
+    1.6
+   ],
+   "to": [
+    8.1,
+    1.4,
+    4.2
+   ],
+   "faces": {
+    "north": {
+     "texture": "#frame",
+     "uv": [
+      7.9,
+      13.6,
+      10.1,
+      16.0
+     ]
+    },
+    "south": {
+     "texture": "#frame",
+     "uv": [
+      5.9,
+      13.6,
+      8.1,
+      16.0
+     ]
+    },
+    "east": {
+     "texture": "#frame",
+     "uv": [
+      11.8,
+      13.6,
+      14.4,
+      16.0
+     ]
+    },
+    "west": {
+     "texture": "#frame",
+     "uv": [
+      1.6,
+      13.6,
+      4.2,
+      16.0
+     ]
+    },
+    "up": {
+     "texture": "#frame"
+    },
+    "down": {
+     "texture": "#frame"
+    }
+   },
+   "rotation": {
+    "angle": 22.5,
+    "axis": "x",
+    "origin": [
+     7,
+     -4.4,
+     3
+    ]
+   }
+  }
+ ]
+}

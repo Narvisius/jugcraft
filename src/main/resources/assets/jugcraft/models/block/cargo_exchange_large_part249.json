@@ -1,0 +1,186 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "tower_cargo_access": "jugcraft:block/tower_cargo_access",
+    "tower_cargo_brass": "jugcraft:block/tower_cargo_brass",
+    "tower_cargo_brushed": "jugcraft:block/tower_cargo_brushed",
+    "tower_cargo_display": "jugcraft:block/tower_cargo_display",
+    "tower_cargo_filter": "jugcraft:block/tower_cargo_filter",
+    "tower_cargo_frame": "jugcraft:block/tower_cargo_frame",
+    "tower_cargo_header": "jugcraft:block/tower_cargo_header",
+    "tower_cargo_housing": "jugcraft:block/tower_cargo_housing",
+    "tower_cargo_interlock": "jugcraft:block/tower_cargo_interlock",
+    "tower_cargo_isolator": "jugcraft:block/tower_cargo_isolator",
+    "tower_cargo_lamp_amber": "jugcraft:block/tower_cargo_lamp_amber",
+    "tower_cargo_lamp_green": "jugcraft:block/tower_cargo_lamp_green",
+    "tower_cargo_link": "jugcraft:block/tower_cargo_link",
+    "tower_cargo_live": "jugcraft:block/tower_cargo_live",
+    "tower_cargo_pipe": "jugcraft:block/tower_cargo_pipe",
+    "tower_cargo_pod": "jugcraft:block/tower_cargo_pod",
+    "tower_cargo_rear": "jugcraft:block/tower_cargo_rear",
+    "tower_cargo_red": "jugcraft:block/tower_cargo_red",
+    "tower_cargo_request": "jugcraft:block/tower_cargo_request",
+    "tower_cargo_rollers": "jugcraft:block/tower_cargo_rollers",
+    "tower_cargo_rubber": "jugcraft:block/tower_cargo_rubber",
+    "tower_cargo_stainless": "jugcraft:block/tower_cargo_stainless",
+    "tower_cargo_stop": "jugcraft:block/tower_cargo_stop",
+    "tower_cargo_yellow": "jugcraft:block/tower_cargo_yellow",
+    "particle": "jugcraft:block/tower_cargo_housing"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        13.8,
+        16
+      ],
+      "faces": {
+        "up": {
+          "texture": "#tower_cargo_frame"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        12.8,
+        0
+      ],
+      "to": [
+        16,
+        14.4,
+        16
+      ],
+      "faces": {
+        "up": {
+          "texture": "#tower_cargo_housing"
+        },
+        "down": {
+          "texture": "#tower_cargo_housing"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        14.3,
+        5
+      ],
+      "to": [
+        16,
+        14.75,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_rubber"
+        },
+        "west": {
+          "texture": "#tower_cargo_rubber"
+        },
+        "up": {
+          "texture": "#tower_cargo_rubber"
+        },
+        "down": {
+          "texture": "#tower_cargo_rubber"
+        }
+      }
+    },
+    {
+      "from": [
+        2.6,
+        14.65,
+        5.6
+      ],
+      "to": [
+        16,
+        15.15,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_housing"
+        },
+        "west": {
+          "texture": "#tower_cargo_housing"
+        },
+        "up": {
+          "texture": "#tower_cargo_housing"
+        },
+        "down": {
+          "texture": "#tower_cargo_housing"
+        }
+      }
+    },
+    {
+      "from": [
+        3.72,
+        15.1,
+        6.72
+      ],
+      "to": [
+        4.28,
+        15.5,
+        7.28
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_stainless"
+        },
+        "south": {
+          "texture": "#tower_cargo_stainless"
+        },
+        "east": {
+          "texture": "#tower_cargo_stainless"
+        },
+        "west": {
+          "texture": "#tower_cargo_stainless"
+        },
+        "up": {
+          "texture": "#tower_cargo_stainless"
+        },
+        "down": {
+          "texture": "#tower_cargo_stainless"
+        }
+      }
+    },
+    {
+      "from": [
+        2.4,
+        15,
+        12
+      ],
+      "to": [
+        3.5,
+        15.8,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_frame"
+        },
+        "south": {
+          "texture": "#tower_cargo_frame"
+        },
+        "east": {
+          "texture": "#tower_cargo_frame"
+        },
+        "west": {
+          "texture": "#tower_cargo_frame"
+        },
+        "up": {
+          "texture": "#tower_cargo_frame"
+        },
+        "down": {
+          "texture": "#tower_cargo_frame"
+        }
+      }
+    }
+  ]
+}

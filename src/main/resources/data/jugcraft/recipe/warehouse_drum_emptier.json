@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "YPY",
+    "CTC",
+    "SSS"
+  ],
+  "key": {
+    "Y": "minecraft:yellow_dye",
+    "P": "jugcraft:electric_pump",
+    "C": "jugcraft:basic_circuit",
+    "T": "jugcraft:fluid_tank",
+    "S": "#c:plates/steel"
+  },
+  "result": {
+    "id": "jugcraft:warehouse_drum_emptier",
+    "count": 1
+  }
+}

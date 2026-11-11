@@ -14,12 +14,12 @@ public enum DroneTier {
 	COURIER_QUAD(1, 4, 8, DroneSize.SMALL, true),
 	SURVEY_HEXACOPTER(2, 4, 12, DroneSize.SMALL, true),
 	LIFTER_OCTOCOPTER(4, 4, 20, DroneSize.SMALL, true),
-	DUCTED_FAN_RUNNER(4, 8, 32, DroneSize.MEDIUM, true),
+	FAN_WING_RUNNER(4, 8, 32, DroneSize.MEDIUM, true),
 	TILTROTOR_CARRIER(8, 8, 48, DroneSize.MEDIUM, true),
-	TANDEM_FREIGHTER(16, 8, 64, DroneSize.MEDIUM, true),
-	HYBRID_AEROSTAT(32, 8, 96, DroneSize.LARGE, true),
-	ION_WIND_GLIDER(32, 16, 128, DroneSize.LARGE, true),
-	SUPERCONDUCTING_LIFTER(64, 20, 192, DroneSize.LARGE, true),
+	DISC_FREIGHTER(16, 8, 64, DroneSize.MEDIUM, true),
+	SPINE_CARRIER(32, 8, 96, DroneSize.LARGE, true),
+	HALO_ION_CARRIER(32, 16, 128, DroneSize.LARGE, true),
+	ARMOURED_DROPSHIP(64, 20, 192, DroneSize.LARGE, true),
 	/** Creative only (no recipe): a small quad with four times tier 9's load and speed that needs no power. */
 	CREATIVE_DRONE(256, 80, 0, DroneSize.SMALL, true);
 

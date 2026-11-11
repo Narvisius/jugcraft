@@ -1,0 +1,113 @@
+{
+  "textures": {
+    "pi_agent_pull": "jugcraft:block/pi_agent_pull",
+    "pi_agent_red": "jugcraft:block/pi_agent_red",
+    "pi_glass_edge": "jugcraft:block/pi_glass_edge",
+    "pi_pnl_yellow": "jugcraft:block/pi_pnl_yellow",
+    "particle": "jugcraft:block/pi_agent_pull"
+  },
+  "elements": [
+    {
+      "from": [
+        4.4,
+        2.0,
+        0.0
+      ],
+      "to": [
+        11.6,
+        11.6,
+        2.2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_yellow"
+        },
+        "south": {
+          "texture": "#pi_agent_pull",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_pnl_yellow"
+        },
+        "west": {
+          "texture": "#pi_pnl_yellow"
+        },
+        "up": {
+          "texture": "#pi_pnl_yellow"
+        },
+        "down": {
+          "texture": "#pi_pnl_yellow"
+        }
+      }
+    },
+    {
+      "from": [
+        6.0,
+        5.0,
+        2.2
+      ],
+      "to": [
+        10.0,
+        6.4,
+        3.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_agent_red"
+        },
+        "south": {
+          "texture": "#pi_agent_red"
+        },
+        "east": {
+          "texture": "#pi_agent_red"
+        },
+        "west": {
+          "texture": "#pi_agent_red"
+        },
+        "up": {
+          "texture": "#pi_agent_red"
+        },
+        "down": {
+          "texture": "#pi_agent_red"
+        }
+      }
+    },
+    {
+      "from": [
+        4.6,
+        11.2,
+        2.2
+      ],
+      "to": [
+        11.4,
+        11.6,
+        2.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_glass_edge"
+        },
+        "south": {
+          "texture": "#pi_glass_edge"
+        },
+        "east": {
+          "texture": "#pi_glass_edge"
+        },
+        "west": {
+          "texture": "#pi_glass_edge"
+        },
+        "up": {
+          "texture": "#pi_glass_edge"
+        },
+        "down": {
+          "texture": "#pi_glass_edge"
+        }
+      }
+    }
+  ]
+}

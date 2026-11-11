@@ -170,6 +170,9 @@ public final class TscRoom {
 		}
 		if (equipment(level, f.xfmr, 0) instanceof EquipmentBlockEntity xf && xf.output != null) {
 			bits |= B_XFMR | (xf.output.getAmount() > 0 ? B_XFMR_LIVE : 0);
+		} else if (Yards.nearest(level, hub.getBlockPos(), YardBlock.Works.YARD) instanceof YardBlockEntity yard) {
+			// (the medium plant's transformer yard, built as a site: live while the generator feeds it)
+			bits |= B_XFMR | (yard.generatorRunning() ? B_XFMR_LIVE : 0);
 		}
 		n[N_AREA] = f.area != null && level.getBlockEntity(f.area) instanceof LivePanelBlockEntity am ? am.tsValue
 				: Math.max(0, Radiation.rateAt(level, Vec3.atCenterOf(hub.getBlockPos())));

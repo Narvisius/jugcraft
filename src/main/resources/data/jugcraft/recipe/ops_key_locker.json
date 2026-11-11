@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PGP",
+    "PIP",
+    "PPP"
+  ],
+  "key": {
+    "P": "#c:plates/iron",
+    "G": "minecraft:glass_pane",
+    "I": "minecraft:tripwire_hook"
+  },
+  "result": {
+    "id": "jugcraft:ops_key_locker",
+    "count": 1
+  }
+}

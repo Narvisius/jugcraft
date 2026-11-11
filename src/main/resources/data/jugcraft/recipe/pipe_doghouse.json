@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "IIIIII",
+    "RR  RR",
+    "IIIIII"
+  ],
+  "key": {
+    "I": "#c:plates/iron",
+    "R": "jugcraft:rubber"
+  },
+  "result": {
+    "id": "jugcraft:pipe_doghouse",
+    "count": 2
+  }
+}

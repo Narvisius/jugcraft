@@ -1,0 +1,213 @@
+{
+  "version": 3,
+  "units": "anchor-relative model pixels",
+  "front": "north/-z",
+  "static_face_z": 0.15,
+  "overlay_z": 0.05,
+  "socket": {
+    "part": 58,
+    "center": [
+      72,
+      24,
+      0
+    ],
+    "contact": [
+      68.8,
+      20.8,
+      75.2,
+      27.2
+    ]
+  },
+  "dials": [
+    {
+      "channel": "storage_percent",
+      "pivot": [
+        53,
+        35,
+        0.05
+      ],
+      "radius": 2.35,
+      "start": 210,
+      "sweep": 240,
+      "min": 0,
+      "max": 100
+    },
+    {
+      "channel": "load_percent",
+      "pivot": [
+        59,
+        35,
+        0.05
+      ],
+      "radius": 2.35,
+      "start": 210,
+      "sweep": 240,
+      "min": 0,
+      "max": 100
+    },
+    {
+      "channel": "storage_percent",
+      "pivot": [
+        86.35,
+        26.6,
+        0.05
+      ],
+      "radius": 2.75,
+      "start": 90,
+      "sweep": 90,
+      "min": 0,
+      "max": 100
+    },
+    {
+      "channel": "load_percent",
+      "pivot": [
+        93.35,
+        26.6,
+        0.05
+      ],
+      "radius": 2.75,
+      "start": 90,
+      "sweep": 90,
+      "min": 0,
+      "max": 100
+    }
+  ],
+  "needle_axes": {
+    "x": "-cos(angle)",
+    "y": "sin(angle)"
+  },
+  "displays": [
+    {
+      "channel": "stored",
+      "rect": [
+        50.2,
+        24.6,
+        61.8,
+        29.4
+      ],
+      "center_x": 56,
+      "lines_y": [
+        28,
+        26.1
+      ],
+      "font_height": 0.62
+    },
+    {
+      "channel": "demand_load",
+      "rect": [
+        82.2,
+        35.6,
+        93.8,
+        40.4
+      ],
+      "center_x": 88,
+      "lines_y": [
+        39,
+        37.1
+      ],
+      "font_height": 0.62
+    }
+  ],
+  "lamps": [
+    {
+      "channel": "linked",
+      "center": [
+        67.6,
+        40,
+        0.05
+      ],
+      "radius": 0.48,
+      "color": "green"
+    },
+    {
+      "channel": "charged",
+      "center": [
+        67.6,
+        36.8,
+        0.05
+      ],
+      "radius": 0.48,
+      "color": "amber"
+    },
+    {
+      "channel": "low_power",
+      "center": [
+        67.6,
+        33.6,
+        0.05
+      ],
+      "radius": 0.48,
+      "color": "red"
+    }
+  ],
+  "variant": "large",
+  "footprint": {
+    "size": [
+      9,
+      5,
+      6
+    ],
+    "parts": 270,
+    "order": "y,z,x"
+  },
+  "dimensions_wide_deep_tall": [
+    9,
+    6,
+    5
+  ],
+  "overlay_translation": [
+    32,
+    0,
+    0
+  ],
+  "collision_boxes": [
+    [
+      0,
+      0,
+      0,
+      144,
+      4,
+      96
+    ],
+    [
+      4,
+      4,
+      0.15,
+      140,
+      78,
+      22
+    ],
+    [
+      33,
+      6,
+      24,
+      111,
+      73,
+      91
+    ],
+    [
+      6,
+      8,
+      27,
+      31,
+      70,
+      92
+    ],
+    [
+      113,
+      8,
+      27,
+      138,
+      70,
+      92
+    ],
+    [
+      65.5,
+      17.5,
+      0,
+      78.5,
+      30.5,
+      2.4
+    ]
+  ]
+}

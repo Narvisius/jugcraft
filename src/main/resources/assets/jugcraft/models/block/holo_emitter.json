@@ -1,0 +1,140 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "fx_body": "jugcraft:block/fx_body",
+    "fx_lens": "jugcraft:block/fx_lens",
+    "fx_steel": "jugcraft:block/fx_steel",
+    "particle": "jugcraft:block/fx_body"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        1,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fx_steel"
+        },
+        "south": {
+          "texture": "#fx_steel"
+        },
+        "east": {
+          "texture": "#fx_steel"
+        },
+        "west": {
+          "texture": "#fx_steel"
+        },
+        "up": {
+          "texture": "#fx_steel"
+        },
+        "down": {
+          "texture": "#fx_steel"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        1,
+        3
+      ],
+      "to": [
+        13,
+        1.4,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fx_body"
+        },
+        "south": {
+          "texture": "#fx_body"
+        },
+        "east": {
+          "texture": "#fx_body"
+        },
+        "west": {
+          "texture": "#fx_body"
+        },
+        "up": {
+          "texture": "#fx_body"
+        },
+        "down": {
+          "texture": "#fx_body"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        1.4,
+        4
+      ],
+      "to": [
+        12,
+        1.6,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fx_steel"
+        },
+        "south": {
+          "texture": "#fx_steel"
+        },
+        "east": {
+          "texture": "#fx_steel"
+        },
+        "west": {
+          "texture": "#fx_steel"
+        },
+        "up": {
+          "texture": "#fx_steel"
+        },
+        "down": {
+          "texture": "#fx_steel"
+        }
+      }
+    },
+    {
+      "from": [
+        5.5,
+        1.6,
+        5.5
+      ],
+      "to": [
+        10.5,
+        2,
+        10.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fx_lens"
+        },
+        "south": {
+          "texture": "#fx_lens"
+        },
+        "east": {
+          "texture": "#fx_lens"
+        },
+        "west": {
+          "texture": "#fx_lens"
+        },
+        "up": {
+          "texture": "#fx_lens"
+        },
+        "down": {
+          "texture": "#fx_lens"
+        }
+      },
+      "light_emission": 12
+    }
+  ]
+}

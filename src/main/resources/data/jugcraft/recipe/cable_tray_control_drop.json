@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PSP"
+  ],
+  "key": {
+    "P": "#c:plates/iron",
+    "S": "minecraft:string"
+  },
+  "result": {
+    "id": "jugcraft:cable_tray_control_drop",
+    "count": 2
+  }
+}

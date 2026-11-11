@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SGS",
+    "S S",
+    "SMS"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "G": "minecraft:glass_pane",
+    "M": "jugcraft:electric_motor"
+  },
+  "result": {
+    "id": "jugcraft:warehouse_ready_storage_ext",
+    "count": 1
+  }
+}

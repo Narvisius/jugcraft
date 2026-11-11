@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "LCL",
+    "PBP",
+    "PPP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "C": "jugcraft:basic_circuit",
+    "L": "minecraft:iron_block",
+    "B": "minecraft:blue_ice"
+  },
+  "result": {
+    "id": "jugcraft:chem_gamma_spec",
+    "count": 1
+  }
+}

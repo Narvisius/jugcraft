@@ -56,10 +56,12 @@ public final class CastPoses {
 		ClientTickEvents.END_CLIENT_TICK.register(CastPoses::tick);
 	}
 
-	/** Whether a gun (posed by GunPose) or an arm (posed by ArmsMotion) in the main hand owns this player's arms. */
+	/** Whether a gun (posed by GunPose; the NT-7 plasma rifle too) or an arm (posed by ArmsMotion) in the main hand owns
+	 * this player's arms. */
 	public static boolean armsOwned(Player player) {
 		Item main = player.getMainHandItem().getItem();
-		return main instanceof GunItem || main instanceof ArmItem || main instanceof io.github.jimbozoomer.jugcraft.wilds.WildWroughtEquipment.Axe;
+		return main instanceof GunItem || main instanceof ArmItem || main instanceof io.github.jimbozoomer.jugcraft.tower.crew.PlasmaRifleItem
+				|| main instanceof io.github.jimbozoomer.jugcraft.wilds.WildWroughtEquipment.Axe;
 	}
 
 	/** Whether the Concordance's own gestures are left off this player: their arms are owned, or an arm is in the off hand. */

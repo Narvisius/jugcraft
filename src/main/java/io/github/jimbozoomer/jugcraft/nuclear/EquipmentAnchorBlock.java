@@ -33,12 +33,19 @@ import org.jspecify.annotations.Nullable;
 public class EquipmentAnchorBlock extends BaseEntityBlock {
 	public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 	/**
-	 * Which labelled version of a piece this is (round 26, 8c: the DC rooms' motor control centres, MCC 1A or 1B; the
-	 * client draws its name by it). 0 for everything else.
+	 * Which labelled version of a piece this is (round 26, 8c: the DC rooms' motor control centres, MCC 1A or 1B; the load
+	 * centres LC 1A to 1E, the pump house's the fifth): the client draws its name by it. 0 for everything else.
 	 */
 	public static final net.minecraft.world.level.block.state.properties.IntegerProperty VARIANT =
-			net.minecraft.world.level.block.state.properties.IntegerProperty.create("variant", 0, 3);
+			net.minecraft.world.level.block.state.properties.IntegerProperty.create("variant", 0, 4);
+	/** The variant a hideable kind (EquipmentKind.hideable) stands hidden in: its anchor only, nothing drawn. */
+	public static final int HIDDEN = 4;
 	public final EquipmentKind kind;
+
+	/** Whether a block is a piece of equipment standing hidden (its anchor only, under a building whose site draws it). */
+	public static boolean hidden(BlockState state) {
+		return state.getBlock() instanceof EquipmentAnchorBlock a && a.kind.hideable() && state.getValue(VARIANT) == HIDDEN;
+	}
 
 	public EquipmentAnchorBlock(EquipmentKind kind, Properties properties) {
 		super(properties);
@@ -74,7 +81,7 @@ public class EquipmentAnchorBlock extends BaseEntityBlock {
 
 	@Override
 	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-		return kind.solid(0, 0, 0) ? Shapes.block() : Shapes.empty();
+		return kind.solid(0, 0, 0) || hidden(state) ? Shapes.block() : Shapes.empty();
 	}
 
 	@Override

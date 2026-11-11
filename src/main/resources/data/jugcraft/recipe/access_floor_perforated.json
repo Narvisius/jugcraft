@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "B",
+    "A"
+  ],
+  "key": {
+    "B": "minecraft:iron_bars",
+    "A": "jugcraft:access_floor_tile"
+  },
+  "result": {
+    "id": "jugcraft:access_floor_perforated",
+    "count": 1
+  }
+}

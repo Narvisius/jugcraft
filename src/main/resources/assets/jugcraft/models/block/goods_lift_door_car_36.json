@@ -1,0 +1,93 @@
+{
+ "textures": {
+  "gl_black": "jugcraft:block/gl_black",
+  "gl_car": "jugcraft:block/gl_car",
+  "particle": "jugcraft:block/gl_frame"
+ },
+ "elements": [
+  {
+   "from": [
+    6.5,
+    0,
+    10.0
+   ],
+   "to": [
+    9.5,
+    16,
+    13.0
+   ],
+   "faces": {
+    "north": {
+     "texture": "#gl_car"
+    },
+    "south": {
+     "texture": "#gl_car"
+    },
+    "east": {
+     "texture": "#gl_car"
+    },
+    "west": {
+     "texture": "#gl_car"
+    }
+   }
+  },
+  {
+   "from": [
+    5.8,
+    0,
+    13.0
+   ],
+   "to": [
+    10.2,
+    0.7,
+    15.2
+   ],
+   "faces": {
+    "north": {
+     "texture": "#gl_black"
+    },
+    "south": {
+     "texture": "#gl_black"
+    },
+    "east": {
+     "texture": "#gl_black"
+    },
+    "west": {
+     "texture": "#gl_black"
+    },
+    "up": {
+     "texture": "#gl_black"
+    }
+   }
+  },
+  {
+   "from": [
+    13.6,
+    0,
+    8.6
+   ],
+   "to": [
+    15.0,
+    16,
+    10.0
+   ],
+   "faces": {
+    "north": {
+     "texture": "#gl_car"
+    },
+    "south": {
+     "texture": "#gl_car"
+    },
+    "east": {
+     "texture": "#gl_car"
+    },
+    "west": {
+     "texture": "#gl_car"
+    },
+    "down": {
+     "texture": "#gl_car"
+    }
+   }
+  }
+ ]
+}

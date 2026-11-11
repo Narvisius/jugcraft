@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
-/** Draws the coat hanging in a locker (the top block of a stack, where the rail is), the same coat you wear. */
+/** Draws the coat hanging in an open locker (the top block of a stack, where the rail is), the same coat you wear. */
 public class LockerRenderer implements BlockEntityRenderer<LockerBlockEntity, LockerRenderer.State> {
 	/** An empty coat on a hanger is drawn at three quarters of a wearer's size, so it fits the locker. */
 	private static final float SCALE = 0.75F / 16F;
@@ -57,7 +57,10 @@ public class LockerRenderer implements BlockEntityRenderer<LockerBlockEntity, Lo
 		// The locker's model faces north with its open front to the south; turn as the block model is turned.
 		pose.translate(0.5F, 0.0F, 0.5F);
 		pose.rotateDegrees(Axis.YP, -yRotation(state.facing));
-		pose.translate(0.0F, 11.0F / 16F, 9.0F / 16F - 0.5F);    // the hook on the rail
+		// The open one of the pair is the right-hand locker (tools/plant_lockers.py): the coat hangs on its rail, which runs
+		// front to back, so it hangs sideways (as in a deep narrow locker), its front to the open door.
+		pose.translate(3.35F / 16F, 11.0F / 16F, 8.45F / 16F - 0.5F);
+		pose.rotateDegrees(Axis.YP, 90);
 		pose.scale(SCALE, SCALE, SCALE);
 		// A locker's inside is dim; the coat is lit at least a little, so it reads (its own cloth is white).
 		int light = LightCoordsUtil.pack(Math.max(LightCoordsUtil.block(state.lightCoords), 7), LightCoordsUtil.sky(state.lightCoords));

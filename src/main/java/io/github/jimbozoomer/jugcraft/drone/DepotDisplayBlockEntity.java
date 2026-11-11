@@ -48,7 +48,7 @@ public class DepotDisplayBlockEntity extends BlockEntity {
 		return state.getBlock() instanceof Display display && display.isAnchor(state);
 	}
 
-	static void serverTick(Level level, BlockPos pos, BlockState state, DepotDisplayBlockEntity display) {
+	public static void serverTick(Level level, BlockPos pos, BlockState state, DepotDisplayBlockEntity display) {
 		if (state.getBlock() instanceof Display block && block.isAnchor(state) && (level.getGameTime() + pos.hashCode()) % RELINK_INTERVAL == 0) {
 			display.relink();
 		}
@@ -56,6 +56,18 @@ public class DepotDisplayBlockEntity extends BlockEntity {
 
 	/** A terminal this display belongs to for good (a Drone Tower's own plotting table and video wall), or null. */
 	private @Nullable BlockPos pinned;
+
+	/** A display a Drone Tower pinned to its terminal works from anywhere on the tower's site (the Tri-Pillar's hall is 50 from it). */
+	public static final int PINNED_RANGE = 128;
+
+	/**
+	 * Whether this display's link to {@code terminal} is in reach: within {@code range} (the block's own link range), or
+	 * within {@link #PINNED_RANGE} when {@code terminal} is the one it is pinned to.
+	 */
+	public boolean reaches(BlockPos terminal, int range) {
+		int reach = pinned != null && pinned.equals(terminal) ? Math.max(range, PINNED_RANGE) : range;
+		return getBlockPos().distSqr(terminal) <= (double) reach * reach;
+	}
 
 	/** Ties this display to {@code terminal}: it shows that depot and no other, however close another one is. */
 	public void pin(BlockPos terminal) {

@@ -20,7 +20,8 @@ import org.jspecify.annotations.Nullable;
  * With no fuel it won't start, and running dry stops it.
  *
  * <p>The load follows the emergency start's load sequence, the same as the panels show (client/EdgTelemetry.java):
- * breaker closed {@link #BREAKER} s after the start, then a block of safety loads every {@link #STEP} s.
+ * breaker closed {@link #BREAKER} s after the start, then a block of safety loads every {@link #STEP} s. (Round 31 part
+ * 2: from whenever the breaker closes; tripped open, the engine runs light.)
  */
 public final class DieselFuel {
 	public static final double BREAKER = 5, STEP = 5;
@@ -37,11 +38,14 @@ public final class DieselFuel {
 	private DieselFuel() {
 	}
 
-	/** The load (kW) {@code s} seconds after the start, as the sequencer adds it (each block coming on in about a second). */
-	public static double kw(double s) {
+	/**
+	 * The load (kW) {@code sb} seconds after the generator breaker closed (negative: open), as the sequencer adds it
+	 * (each block coming on in about a second).
+	 */
+	public static double kw(double sb) {
 		double p = 0;
 		for (int k = 0; k < STEP_KW.length; k++) {
-			double dt = s - (BREAKER + STEP * k);
+			double dt = sb - STEP * k;
 			if (dt < 0) {
 				break;
 			}
@@ -50,9 +54,17 @@ public final class DieselFuel {
 		return p;
 	}
 
-	/** Litres (mB) an hour burned {@code s} seconds after the start (nothing while it is still cranking on air). */
+	/**
+	 * Litres (mB) an hour burned {@code s} seconds after the start with its breaker closed {@code sb} seconds (negative:
+	 * open); nothing while it is still cranking on air.
+	 */
+	public static double litresPerHour(double s, double sb) {
+		return s < 1.5 ? 0 : IDLE_LPH + LPH_PER_KW * kw(sb);
+	}
+
+	/** Litres (mB) an hour burned {@code s} seconds into an emergency start (its breaker closing {@link #BREAKER} s in). */
 	public static double litresPerHour(double s) {
-		return s < 1.5 ? 0 : IDLE_LPH + LPH_PER_KW * kw(s);
+		return litresPerHour(s, s - BREAKER);
 	}
 
 	public static FluidVariant diesel() {
@@ -114,7 +126,7 @@ public final class DieselFuel {
 	 */
 	public static void tick(ServerLevel level, EquipmentBlockEntity edg, long now) {
 		if (edg.running) {
-			edg.burn += litresPerHour((now - edg.runningSince) / 20.0) / TICKS_PER_HOUR * FluidNetworks.DROPLETS_PER_MB;
+			edg.burn += litresPerHour((now - edg.runningSince) / 20.0, edg.breakerSeconds(now)) / TICKS_PER_HOUR * FluidNetworks.DROPLETS_PER_MB;
 		}
 		if (Math.floorMod(now + edg.getBlockPos().asLong(), 20) != 0) {
 			return;

@@ -1,0 +1,112 @@
+{
+  "textures": {
+    "pi_raceway": "jugcraft:block/pi_raceway",
+    "pi_raceway_cover": "jugcraft:block/pi_raceway_cover",
+    "pi_raceway_outlet": "jugcraft:block/pi_raceway_outlet",
+    "particle": "jugcraft:block/pi_raceway"
+  },
+  "elements": [
+    {
+      "from": [
+        7.0,
+        4.6,
+        0
+      ],
+      "to": [
+        9.0,
+        16,
+        0.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_raceway"
+        },
+        "south": {
+          "texture": "#pi_raceway"
+        },
+        "east": {
+          "texture": "#pi_raceway"
+        },
+        "west": {
+          "texture": "#pi_raceway"
+        },
+        "up": {
+          "texture": "#pi_raceway"
+        },
+        "down": {
+          "texture": "#pi_raceway"
+        }
+      }
+    },
+    {
+      "from": [
+        7.3,
+        4.6,
+        0.8
+      ],
+      "to": [
+        8.7,
+        16,
+        0.94
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_raceway_cover"
+        },
+        "south": {
+          "texture": "#pi_raceway_cover"
+        },
+        "east": {
+          "texture": "#pi_raceway_cover"
+        },
+        "west": {
+          "texture": "#pi_raceway_cover"
+        },
+        "up": {
+          "texture": "#pi_raceway_cover"
+        },
+        "down": {
+          "texture": "#pi_raceway_cover"
+        }
+      }
+    },
+    {
+      "from": [
+        5.6,
+        0.8,
+        0
+      ],
+      "to": [
+        10.4,
+        4.6,
+        1.3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_raceway"
+        },
+        "south": {
+          "texture": "#pi_raceway_outlet",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_raceway"
+        },
+        "west": {
+          "texture": "#pi_raceway"
+        },
+        "up": {
+          "texture": "#pi_raceway"
+        },
+        "down": {
+          "texture": "#pi_raceway"
+        }
+      }
+    }
+  ]
+}

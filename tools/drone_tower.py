@@ -1029,8 +1029,6 @@ def main():
     plan().save(out / "plan.png")
     data = export(Path(__file__).resolve().parent.parent / "src" / "main" / "resources" / "data" / "jugcraft"
                   / "drone_tower" / "tower.json.gz")
-    blueprint_stages(Path(__file__).resolve().parent.parent / "src" / "main" / "resources" / "assets" / "jugcraft"
-                     / "blueprint_stages" / "drone_tower_foundation.json.gz")
     gui = Path(__file__).resolve().parent.parent / "src" / "main" / "resources" / "assets" / "jugcraft" / "textures" / "gui" / "drone_tower"
     gui.mkdir(parents=True, exist_ok=True)
     for tier in range(0, 10):

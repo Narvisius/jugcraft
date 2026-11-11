@@ -17,18 +17,22 @@
       "feature": "silicon"
     }
   ],
-  "type": "minecraft:crafting_shaped",
-  "category": "building",
+  "type": "jugcraft:advanced_crafting",
   "pattern": [
-    "APA",
-    "CMC",
-    "APA"
+    "BSPSB",
+    "AWMWA",
+    "BSPSB",
+    "LC AL"
   ],
   "key": {
-    "A": "#c:plates/aluminum",
+    "B": "#c:storage_blocks/steel",
+    "S": "#c:plates/steel",
     "P": "jugcraft:processor",
-    "C": "jugcraft:advanced_circuit",
-    "M": "jugcraft:drone_depot_terminal"
+    "A": "jugcraft:advanced_circuit",
+    "W": "minecraft:glass_pane",
+    "M": "jugcraft:drone_depot_terminal",
+    "L": "minecraft:glowstone_dust",
+    "C": "jugcraft:basic_circuit"
   },
   "result": {
     "id": "jugcraft:drone_tower_core",

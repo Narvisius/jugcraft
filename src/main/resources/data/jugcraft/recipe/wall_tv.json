@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "BBBBBB",
+    "BBCCBB",
+    "  PP  "
+  ],
+  "key": {
+    "B": "minecraft:black_stained_glass_pane",
+    "C": "jugcraft:basic_circuit",
+    "P": "#c:plates/iron"
+  },
+  "result": {
+    "id": "jugcraft:wall_tv",
+    "count": 2
+  }
+}

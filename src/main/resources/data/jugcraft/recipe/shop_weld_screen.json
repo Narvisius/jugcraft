@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "YOY",
+    "YOY",
+    "N N"
+  ],
+  "key": {
+    "Y": "minecraft:yellow_dye",
+    "O": "minecraft:orange_stained_glass_pane",
+    "N": "minecraft:iron_nugget"
+  },
+  "result": {
+    "id": "jugcraft:shop_weld_screen",
+    "count": 2
+  }
+}

@@ -31,10 +31,11 @@ turned, cyl = O5.turned, O5.cyl
 def coat(cx, ytop, zc, h, w, kind="lab"):
     """A coat on a hanger hanging from (cx, ytop): w across the body, h from the hanger to the hem, centred on
     depth zc. kind: "lab" (white, a pen in the chest pocket, a dosimeter badge), "security" (navy, a SECURITY
-    patch) or "vest" (hi-vis orange, reflective bands, no sleeves)."""
+    patch), "crew" (the drone crew's flight jacket: navy, an amber band round the chest, the tower's patch) or "vest"
+    (hi-vis orange, reflective bands, no sleeves)."""
     k = w / 7.6
     fab, fab2 = {"lab": ("pi_coat_white", "pi_coat_white_fold"), "security": ("pi_coat_navy", "pi_coat_navy_fold"),
-                 "vest": ("pi_coat_orange", "pi_coat_orange_fold")}[kind]
+                 "crew": ("pi_coat_crew", "pi_coat_crew_fold"), "vest": ("pi_coat_orange", "pi_coat_orange_fold")}[kind]
     d = 1.25 * k                                   # half the body's depth
     out = []
     # The hanger: its hook up to the rail, the two arms.
@@ -87,6 +88,11 @@ def coat(cx, ytop, zc, h, w, kind="lab"):
         out.append((cx + 1.7 * k, ys - 3.0 * k, front, cx + 2.7 * k, ys - 1.7 * k, front + 0.16, {"*": "pi_badge_clip", "south": "pi_dosimeter!"}))
     elif kind == "security":
         out.append((cx + 1.5 * k, ys - 3.0 * k, front, cx + 3.3 * k, ys - 2.0 * k, front + 0.08, {"*": "pi_coat_navy", "south": "pi_security_patch!"}))
+    elif kind == "crew":
+        # the amber band round the chest (standing out of the folds), the tower's patch on the left breast
+        # (the band's front 0.1 behind the lapels', 0.11 in front of the proud folds; the patch 0.15 in front of the lapels)
+        out.append((cx - w / 2 - 0.12, ys - 2.7 * k, zc - d - 0.35 * k, cx + w / 2 + 0.12, ys - 1.85 * k, front + 0.05, "pi_crew_band"))
+        out.append((cx - 3.2 * k, ys - 1.7 * k, front + 0.2, cx - 1.6 * k, ys - 0.4 * k, front + 0.3, {"*": "pi_coat_crew", "south": "pi_crew_patch!"}))
     else:
         for y in (ybot + 0.25 * h, ybot + 0.5 * h):
             out.append((cx - w / 2 - 0.4 * k, y, zc - d - 0.4 * k, cx + w / 2 + 0.4 * k, y + 0.9 * k, zc + d + 0.4 * k, "pi_reflective"))
@@ -608,6 +614,8 @@ def makers():
         "pi_coat_white": lambda: _cloth((248, 248, 246), 6010), "pi_coat_white_fold": lambda: _cloth((238, 239, 238), 6011),
         "pi_coat_navy": lambda: _cloth((36, 46, 78), 6012), "pi_coat_navy_fold": lambda: _cloth((30, 38, 66), 6013),
         "pi_coat_orange": lambda: _cloth((246, 120, 20), 6014), "pi_coat_orange_fold": lambda: _cloth((232, 110, 16), 6015),
+        "pi_coat_crew": lambda: _cloth((44, 52, 72), 6030), "pi_coat_crew_fold": lambda: _cloth((34, 40, 57), 6031),
+        "pi_crew_band": lambda: O5._brushed((246, 168, 44), 6032, False), "pi_crew_patch": _crew_patch,
         "pi_reflective": lambda: O5._brushed((206, 210, 212), 6016, False), "pi_button": lambda: _img((214, 214, 208)),
         "pi_shirt_blue": _oxford, "pi_shirt_white": lambda: _cloth((236, 236, 232), 6018),
         "pi_badge_clip": lambda: _img((40, 90, 190)), "pi_dosimeter": _dosimeter, "pi_security_patch": _security_patch,
@@ -627,7 +635,8 @@ ICONS = {"lab_coat", "security_jacket"}
 MINI = {"pi_mini_oak", "pi_mini_birch", "pi_mini_spruce", "pi_mini_jungle", "pi_mini_acacia"}
 SHARP = ICONS | MINI | {f"pi_leaf_{k}" for k in LEAF_KINDS} | {"pi_spathe", "pi_ic_badge", "pi_ic_strip", "pi_dosimeter", "pi_security_patch",
                                                   "pi_ic_pump", "pi_ic_detector", "pi_ic_suppressor"} | \
-    {"pi_coat_white", "pi_coat_white_fold", "pi_coat_navy", "pi_coat_navy_fold", "pi_coat_orange", "pi_coat_orange_fold"}
+    {"pi_coat_white", "pi_coat_white_fold", "pi_coat_navy", "pi_coat_navy_fold", "pi_coat_orange", "pi_coat_orange_fold",
+     "pi_coat_crew", "pi_coat_crew_fold", "pi_crew_patch"}
 TRANSLUCENT = MINI | {"pi_ic_glass"} | {f"pi_leaf_{k}" for k in LEAF_KINDS} | {"pi_spathe"}
 
 
@@ -639,6 +648,16 @@ UNIFORM_MATERIALS = ["white", "white_shade", "navy", "navy_shade",
                      "black", "pen", "shirt_blue", "shirt_white",
                      "dosimeter", "patch", "chrome", "zip",
                      "white_lining", "navy_lining", "logo", "id_badge"]
+
+
+def _crew_patch():
+    """The drone tower's patch on the crew jacket: a dark roundel ringed in amber, the tower's arrowhead in it."""
+    img = Image.new("RGBA", (S, S), (44, 52, 72, 255))
+    d = ImageDraw.Draw(img)
+    d.ellipse((8, 8, S - 9, S - 9), fill=(20, 22, 26, 255), outline=(246, 168, 44, 255), width=10)
+    m = S // 2
+    d.polygon([(m, 24), (m + 24, 100), (m, 84), (m - 24, 100)], fill=(246, 168, 44, 255))
+    return img
 
 
 def _cloth(c, seed):

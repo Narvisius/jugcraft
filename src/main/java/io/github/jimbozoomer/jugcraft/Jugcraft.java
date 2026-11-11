@@ -160,6 +160,7 @@ public final class Jugcraft implements ModInitializer {
 		io.github.jimbozoomer.jugcraft.lair.sentinel.JugcraftSentinel.register();
 		io.github.jimbozoomer.jugcraft.styx.JugcraftStyx.register();
 		JugcraftDrones.register();
+		io.github.jimbozoomer.jugcraft.crafting.JugcraftCrafting.register();
 		io.github.jimbozoomer.jugcraft.tower.JugcraftTower.register();
 		io.github.jimbozoomer.jugcraft.blueprint.JugcraftBlueprints.register();
 		io.github.jimbozoomer.jugcraft.placement.StructureReach.register();
@@ -167,6 +168,9 @@ public final class Jugcraft implements ModInitializer {
 		io.github.jimbozoomer.jugcraft.nuclear.TankKitBreaking.register();
 		io.github.jimbozoomer.jugcraft.powerline.JugcraftPowerLines.register();
 		io.github.jimbozoomer.jugcraft.nuclear.JugcraftNuclear.register();
+		io.github.jimbozoomer.jugcraft.warehouse.JugcraftWarehouse.register();
+		// The realistic building exterior (walls, roofs, steel stairs: realism max).
+		io.github.jimbozoomer.jugcraft.exterior.JugcraftExterior.register();
 		io.github.jimbozoomer.jugcraft.jimtafacts.industry.CompactReactor.register();
 		io.github.jimbozoomer.jugcraft.energy.CreativeEnergyCellBlock.register();
 		io.github.jimbozoomer.jugcraft.drone.CreativeSupplyCrateBlock.register();
@@ -222,6 +226,8 @@ public final class Jugcraft implements ModInitializer {
 		FeatureEnabledCondition.register();
 		JugcraftWorldgen.register();
 		JugcraftParties.register();
+		// Jugcraft's roofs keep the rain out (26.3 judges rain cover by a tag that holds vanilla's blocks only).
+		io.github.jimbozoomer.jugcraft.building.RainCover.register();
         io.github.jimbozoomer.jugcraft.server.PlayerRules.register();
         io.github.jimbozoomer.jugcraft.grave.DeathGraves.register();
         io.github.jimbozoomer.jugcraft.creatures.herobrine.HerobrineEncounters.register();

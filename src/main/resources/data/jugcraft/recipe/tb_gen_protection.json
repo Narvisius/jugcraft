@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PRP",
+    "PCP",
+    "PLP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "R": "minecraft:redstone",
+    "C": "minecraft:comparator",
+    "L": "minecraft:lever"
+  },
+  "result": {
+    "id": "jugcraft:tb_gen_protection",
+    "count": 2
+  }
+}

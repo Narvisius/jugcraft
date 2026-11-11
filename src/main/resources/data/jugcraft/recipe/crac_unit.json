@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PBP",
+    "PIP",
+    "PCP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "B": "minecraft:iron_bars",
+    "I": "minecraft:blue_ice",
+    "C": "jugcraft:basic_circuit"
+  },
+  "result": {
+    "id": "jugcraft:crac_unit",
+    "count": 1
+  }
+}

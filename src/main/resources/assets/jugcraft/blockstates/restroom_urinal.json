@@ -1,0 +1,195 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "jugcraft:block/restroom_urinal"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "flushing": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/restroom_urinal_valve"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "flushing": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/restroom_urinal_water"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "flushing": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/restroom_urinal_valve_flush"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "flushing": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/restroom_urinal_water_flush"
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "jugcraft:block/restroom_urinal",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "flushing": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/restroom_urinal_valve",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "flushing": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/restroom_urinal_water",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "flushing": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/restroom_urinal_valve_flush",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "flushing": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/restroom_urinal_water_flush",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "jugcraft:block/restroom_urinal",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "flushing": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/restroom_urinal_valve",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "flushing": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/restroom_urinal_water",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "flushing": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/restroom_urinal_valve_flush",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "flushing": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/restroom_urinal_water_flush",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "jugcraft:block/restroom_urinal",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "flushing": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/restroom_urinal_valve",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "flushing": "false"
+      },
+      "apply": {
+        "model": "jugcraft:block/restroom_urinal_water",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "flushing": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/restroom_urinal_valve_flush",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "flushing": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/restroom_urinal_water_flush",
+        "y": 270
+      }
+    }
+  ]
+}

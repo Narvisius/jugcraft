@@ -66,7 +66,8 @@ public class LivePanelBlock extends MultiFurnitureBlock implements EntityBlock {
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends BlockEntity> @Nullable BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-		if (!(level instanceof ServerLevel) || type != PlantInterior.LIVE_PANEL_ENTITY) {
+		if (!(level instanceof ServerLevel) || type != PlantInterior.LIVE_PANEL_ENTITY || LivePanelBlockEntity.simulated(state)) {
+			// (The pieces that only look live have nothing to do on the server: LivePanelBlockEntity.simulated.)
 			return null;
 		}
 		return (BlockEntityTicker<T>) (BlockEntityTicker<LivePanelBlockEntity>) (l, pos, s, panel) -> panel.serverTick((ServerLevel) l);

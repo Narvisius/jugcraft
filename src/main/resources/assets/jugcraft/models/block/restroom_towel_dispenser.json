@@ -1,0 +1,125 @@
+{
+  "textures": {
+    "pi_rr_paper": "jugcraft:block/pi_rr_paper",
+    "pi_rr_stainless": "jugcraft:block/pi_rr_stainless",
+    "pi_rr_towel": "jugcraft:block/pi_rr_towel",
+    "pi_rr_towel_front": "jugcraft:block/pi_rr_towel_front",
+    "particle": "jugcraft:block/pi_rr_paper"
+  },
+  "elements": [
+    {
+      "from": [
+        5.4,
+        2.0,
+        0.0
+      ],
+      "to": [
+        10.6,
+        9.0,
+        1.7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_rr_stainless"
+        },
+        "south": {
+          "texture": "#pi_rr_stainless"
+        },
+        "east": {
+          "texture": "#pi_rr_stainless"
+        },
+        "west": {
+          "texture": "#pi_rr_stainless"
+        },
+        "up": {
+          "texture": "#pi_rr_stainless"
+        },
+        "down": {
+          "texture": "#pi_rr_stainless"
+        }
+      }
+    },
+    {
+      "from": [
+        5.6,
+        2.2,
+        1.7
+      ],
+      "to": [
+        10.4,
+        8.8,
+        1.85
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_rr_stainless"
+        },
+        "south": {
+          "texture": "#pi_rr_towel_front",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_rr_stainless"
+        },
+        "west": {
+          "texture": "#pi_rr_stainless"
+        },
+        "up": {
+          "texture": "#pi_rr_stainless"
+        },
+        "down": {
+          "texture": "#pi_rr_stainless"
+        }
+      }
+    },
+    {
+      "from": [
+        6.6,
+        0.9,
+        0.95
+      ],
+      "to": [
+        9.4,
+        2.0,
+        1.05
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_rr_towel",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#pi_rr_towel",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_rr_paper"
+        },
+        "west": {
+          "texture": "#pi_rr_paper"
+        },
+        "up": {
+          "texture": "#pi_rr_paper"
+        },
+        "down": {
+          "texture": "#pi_rr_paper"
+        }
+      }
+    }
+  ]
+}

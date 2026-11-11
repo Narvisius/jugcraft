@@ -1,0 +1,84 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": true,
+  "textures": {
+    "access_floor_tile": "jugcraft:block/access_floor_tile",
+    "particle": "jugcraft:block/access_floor_tile"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#access_floor_tile",
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#access_floor_tile",
+          "uv": [
+            8,
+            0,
+            16,
+            8
+          ],
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#access_floor_tile",
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#access_floor_tile",
+          "uv": [
+            8,
+            0,
+            16,
+            8
+          ],
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#access_floor_tile",
+          "uv": [
+            8,
+            8,
+            16,
+            16
+          ],
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#access_floor_tile",
+          "uv": [
+            8,
+            0,
+            16,
+            8
+          ],
+          "cullface": "down"
+        }
+      }
+    }
+  ]
+}

@@ -1,16 +1,40 @@
 {
   "variants": {
-    "axis=y": {
-      "model": "jugcraft:block/steel_girder"
+    "axis=y,join_hi=false,join_lo=false": {
+      "model": "jugcraft:block/steel_girder_y_both"
     },
-    "axis=z": {
-      "model": "jugcraft:block/steel_girder_horizontal",
-      "x": 90
+    "axis=y,join_hi=false,join_lo=true": {
+      "model": "jugcraft:block/steel_girder_y_hi"
     },
-    "axis=x": {
-      "model": "jugcraft:block/steel_girder_horizontal",
-      "x": 90,
-      "y": 90
+    "axis=y,join_hi=true,join_lo=false": {
+      "model": "jugcraft:block/steel_girder_y_lo"
+    },
+    "axis=y,join_hi=true,join_lo=true": {
+      "model": "jugcraft:block/steel_girder_y_none"
+    },
+    "axis=x,join_hi=false,join_lo=false": {
+      "model": "jugcraft:block/steel_girder_x_both"
+    },
+    "axis=x,join_hi=false,join_lo=true": {
+      "model": "jugcraft:block/steel_girder_x_hi"
+    },
+    "axis=x,join_hi=true,join_lo=false": {
+      "model": "jugcraft:block/steel_girder_x_lo"
+    },
+    "axis=x,join_hi=true,join_lo=true": {
+      "model": "jugcraft:block/steel_girder_x_none"
+    },
+    "axis=z,join_hi=false,join_lo=false": {
+      "model": "jugcraft:block/steel_girder_z_both"
+    },
+    "axis=z,join_hi=false,join_lo=true": {
+      "model": "jugcraft:block/steel_girder_z_hi"
+    },
+    "axis=z,join_hi=true,join_lo=false": {
+      "model": "jugcraft:block/steel_girder_z_lo"
+    },
+    "axis=z,join_hi=true,join_lo=true": {
+      "model": "jugcraft:block/steel_girder_z_none"
     }
   }
 }

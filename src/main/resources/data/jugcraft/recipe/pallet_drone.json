@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "CMC",
+    "SPS",
+    "MBM"
+  ],
+  "key": {
+    "C": "jugcraft:advanced_circuit",
+    "M": "jugcraft:electric_motor",
+    "S": "#c:plates/steel",
+    "P": "minecraft:sticky_piston",
+    "B": "minecraft:redstone_block"
+  },
+  "result": {
+    "id": "jugcraft:pallet_drone",
+    "count": 1
+  }
+}

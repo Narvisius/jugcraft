@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PGP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "G": "minecraft:tinted_glass"
+  },
+  "result": {
+    "id": "jugcraft:sec_dome_camera",
+    "count": 2
+  }
+}

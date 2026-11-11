@@ -15,14 +15,18 @@ import net.minecraft.world.phys.Vec3;
 
 /**
  * A speed gate's sensors (SpeedGateBlock): anyone walking up to the doors the way through opens them; they stay open
- * while anyone is in the lane and close a moment after it is clear. Coming the other way, they stay shut. The client
- * times the doors' slide from when it sees {@link SpeedGateBlock#OPEN} change (client/SpeedGateRenderer.java).
+ * while anyone is in the lane and close a moment after it is clear. Coming the other way, they stay shut. A Drone
+ * Tower's crew are staff: the doors open for them either way (Justin, 6 November 2026: one of the guards was "just
+ * jumping up and down outside of the pass-through thing", shut out of the hall). The client times the doors' slide
+ * from when it sees {@link SpeedGateBlock#OPEN} change (client/SpeedGateRenderer.java).
  */
 public class SpeedGateBlockEntity extends BlockEntity {
 	/** How far before the doors (blocks) someone coming the way through opens them. */
 	public static final double REACH = 1.6;
 	/** Ticks the lane must be clear before the doors close. */
 	public static final int CLOSE_AFTER = 10;
+	/** How near a player has to be before it looks at where they are (blocks). */
+	static final double NEAR = 8;
 	/** Ticks the doors take to slide open or shut. */
 	public static final int SLIDE_TICKS = 8;
 	private int clearFor;
@@ -46,11 +50,26 @@ public class SpeedGateBlockEntity extends BlockEntity {
 		if (level.getGameTime() % 2 != 0) {
 			return;
 		}
-		Direction facing = state.getValue(SpeedGateBlock.FACING);
+		// (Only a player near opens it: with none in the level close by it looks no further. The tower's chunks stay
+		// loaded with nobody there.)
+		boolean anyone = false;
+		for (Player player : level.players()) {
+			if (player.distanceToSqr(Vec3.atCenterOf(getBlockPos())) < NEAR * NEAR) {
+				anyone = true;
+				break;
+			}
+		}
 		BlockPos pos = getBlockPos();
 		AABB around = new AABB(pos).inflate(2.5, 1, 2.5);
-		List<Player> players = level.getEntitiesOfClass(Player.class, around, p -> !p.isSpectator());
+		List<io.github.jimbozoomer.jugcraft.tower.crew.TowerCrew> crew = level.getEntitiesOfClass(io.github.jimbozoomer.jugcraft.tower.crew.TowerCrew.class,
+				around, c -> c.isAlive() && !c.isPassenger());
+		if (!anyone && crew.isEmpty() && !state.getValue(SpeedGateBlock.OPEN)) {
+			return;
+		}
+		Direction facing = state.getValue(SpeedGateBlock.FACING);
+		List<Player> players = anyone ? level.getEntitiesOfClass(Player.class, around, p -> !p.isSpectator()) : List.of();
 		boolean coming = false, inLane = false;
+		Player who = null;
 		for (Player player : players) {
 			double[] r = relative(pos, facing, player.position());
 			if (Math.abs(r[1]) > 0.8 || r[2] < -0.5 || r[2] > 1.5) {
@@ -58,8 +77,20 @@ public class SpeedGateBlockEntity extends BlockEntity {
 			}
 			if (r[0] >= -REACH && r[0] <= 0.3) {
 				coming = true;
+				who = who == null ? player : who;
 			}
 			if (r[0] >= -REACH && r[0] <= 1.6) {
+				inLane = true;
+			}
+		}
+		for (var c : crew) {
+			// staff: from either side, and the lane counts from either side too
+			double[] r = relative(pos, facing, c.position());
+			if (Math.abs(r[1]) > 0.8 || r[2] < -0.5 || r[2] > 1.5) {
+				continue;
+			}
+			if (r[0] >= -REACH && r[0] <= 1.0 + REACH) {
+				coming = true;
 				inLane = true;
 			}
 		}
@@ -67,6 +98,10 @@ public class SpeedGateBlockEntity extends BlockEntity {
 		if (!open && coming) {
 			clearFor = 0;
 			set(level, state, true);
+			// Older rooms round 6: the passage written to the security post in reach (AccessControl); a player's only
+			if (who != null) {
+				AccessControl.passed(level, pos, facing, who);
+			}
 		} else if (open) {
 			clearFor = inLane ? 0 : clearFor + 2;
 			if (clearFor >= CLOSE_AFTER) {

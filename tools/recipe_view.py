@@ -17,6 +17,10 @@ Things only a ritual or a lair boss gives (tools/acquisition.py) are listed unde
 
 The Mulch Maw's compost worths (tools/concordance_ecology.py compost_view) are listed under "garden_compost":
 [{"tag": tag, "quarters": n}]; each tag's items are shown as information pages, an item at its highest worth.
+
+The Advanced Workbench's recipes (tools/advanced_crafting.py view) are listed under "advanced_crafting": [{"id": recipe id,
+"pattern": [rows], "key": {symbol: ref or [refs]}, "out": [id, count]}], shown on its 6 x 6 page
+(client/compat/JugcraftJeiAdvanced).
 """
 from machines import MACHINES, machine_recipes
 
@@ -103,4 +107,6 @@ def build():
             "concordance_stations": concordance.recipe_stations(),
             "alchemy_ingredients": concordance.alchemy.recipe_ingredients(), "acquisition_info": acquisition.rows(),
             # Concordance Chunk C, C-07 (C-P57): what a Mulch Maw makes of each tag it eats, for JEI's information pages.
-            "garden_compost": concordance.ecology.compost_view()}
+            "garden_compost": concordance.ecology.compost_view(),
+            # The Advanced Workbench's 6 x 6 recipes (tools/advanced_crafting.py), for its JEI page.
+            "advanced_crafting": __import__("advanced_crafting").view()}

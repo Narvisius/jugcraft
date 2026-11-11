@@ -26,7 +26,7 @@ public final class PowerLineShowcase {
 							var player = context.getSource().getPlayerOrException();
 							int built = build(player.level(), player.blockPosition());
 							context.getSource().sendSuccess(() -> Component.literal("Built " + built
-									+ " power line structures: distribution line just north of you, monopoles 80 north, lattice towers 170 north,"
+									+ " power line structures: distribution line just north of you, monopoles 80 north, lattice towers 170 north (turning at the third),"
 									+ " UHV and UHVDC 300 north, superconducting line 115 west"), false);
 							return built;
 						}))));
@@ -43,10 +43,10 @@ public final class PowerLineShowcase {
 		n += line(level, true, new int[][] {{x - 56, z - 86}, {x - 50, z - 80}, {x - 15, z - 80}, {x + 20, z - 80}, {x + 50, z - 80}},
 				LineKind.PAD_MOUNT_TRANSFORMER, LineKind.STEEL_MONOPOLE, LineKind.DOUBLE_CIRCUIT_MONOPOLE, LineKind.COMPACT_MONOPOLE,
 				LineKind.UNIT_SUBSTATION);
-		// Transmission: substation - the three lattice towers - substation.
-		n += line(level, true, new int[][] {{x - 112, z - 170}, {x - 90, z - 170}, {x - 30, z - 170}, {x + 30, z - 170}, {x + 80, z - 170}},
-				LineKind.UNIT_SUBSTATION, LineKind.LATTICE_TOWER, LineKind.RECONDUCTORED_LATTICE_TOWER, LineKind.MONITORED_LATTICE_TOWER,
-				LineKind.UNIT_SUBSTATION);
+		// Transmission: substation - the four lattice towers (a turn at the reconductored one: an angle tower) - substation.
+		n += line(level, true, new int[][] {{x - 112, z - 170}, {x - 90, z - 170}, {x - 40, z - 170}, {x + 10, z - 170}, {x + 50, z - 200},
+				{x + 92, z - 232}}, LineKind.UNIT_SUBSTATION, LineKind.LATTICE_345, LineKind.LATTICE_TOWER, LineKind.RECONDUCTORED_LATTICE_TOWER,
+				LineKind.MONITORED_LATTICE_TOWER, LineKind.UNIT_SUBSTATION);
 		// The top tiers: two UHV towers, and converter - UHVDC towers - converter.
 		n += line(level, false, new int[][] {{x - 140, z - 300}, {x - 60, z - 300}}, LineKind.UHV_TOWER, LineKind.UHV_TOWER);
 		n += line(level, true, new int[][] {{x - 38, z - 300}, {x - 10, z - 300}, {x + 70, z - 300}, {x + 130, z - 300}},
@@ -59,24 +59,18 @@ public final class PowerLineShowcase {
 		return n;
 	}
 
-	/** Places structures on the ground at each spot, wires each to the next, and powers the boxes at the ends. */
+	/**
+	 * Places structures on the ground at each spot, wires each to the next, and powers the boxes at the ends (once the
+	 * line is strung, so each box has turned to its first line: the cell goes beside a pedestal or pad-mount, in front of
+	 * a yard's terminal cabinet).
+	 */
 	private static int line(ServerLevel level, boolean powered, int[][] spots, LineKind... kinds) {
 		BlockPos previous = null;
 		int placed = 0;
+		java.util.List<BlockPos> boxes = new java.util.ArrayList<>();
 		for (int i = 0; i < kinds.length; i++) {
-			// This operator command explicitly builds distant structures. Load their whole footprints, including
-			// corner footings, before the placement helper checks them; ordinary item placement never loads chunks.
-			int r = kinds[i].halfWidth();
-			int minX = -r, maxX = r, minZ = -r, maxZ = r;
-			for (BlockPos cell : kinds[i].frames()) {
-				minX = Math.min(minX, cell.getX()); maxX = Math.max(maxX, cell.getX());
-				minZ = Math.min(minZ, cell.getZ()); maxZ = Math.max(maxZ, cell.getZ());
-			}
-			for (int cx = Math.floorDiv(spots[i][0] + minX, 16); cx <= Math.floorDiv(spots[i][0] + maxX, 16); cx++) {
-				for (int cz = Math.floorDiv(spots[i][1] + minZ, 16); cz <= Math.floorDiv(spots[i][1] + maxZ, 16); cz++) {
-					level.getChunk(cx, cz);
-				}
-			}
+			// Load the chunk first: the heightmap of an unloaded chunk reads as below the world.
+			level.getChunk(net.minecraft.core.SectionPos.blockToSectionCoord(spots[i][0]), net.minecraft.core.SectionPos.blockToSectionCoord(spots[i][1]));
 			int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, spots[i][0], spots[i][1]);
 			BlockPos anchor = LinePlacement.place(level, new BlockPos(spots[i][0], y, spots[i][1]), kinds[i], null);
 			if (anchor == null) {
@@ -88,15 +82,23 @@ public final class PowerLineShowcase {
 				((LineAnchorBlockEntity) level.getBlockEntity(previous)).connect(anchor);
 				((LineAnchorBlockEntity) level.getBlockEntity(anchor)).connect(previous);
 			}
-			if (kinds[i].isBox() && level.getBlockEntity(anchor) instanceof LineAnchorBlockEntity box) {
-				if (powered) {
-					level.setBlockAndUpdate(anchor.west(), CreativeEnergyCellBlock.BLOCK.defaultBlockState());
-				}
-				if (box.nitrogen != null && PetroFluids.NITROGEN != null) {
-					box.nitrogen.fill(PetroFluids.NITROGEN.fluid(), LineAnchorBlockEntity.NITROGEN_TANK_MB);
-				}
+			if (kinds[i].isBox()) {
+				boxes.add(anchor);
 			}
 			previous = anchor;
+		}
+		for (BlockPos anchor : boxes) {
+			if (!(level.getBlockEntity(anchor) instanceof LineAnchorBlockEntity box)) {
+				continue;
+			}
+			if (powered) {
+				LineGeometry.Layout l = box.layout();
+				BlockPos beside = box.kind().halfWidth() > 0 ? l.cellOf(0, 0.5, -1) : l.cellOf(-1, 0.5, 0);
+				level.setBlockAndUpdate(anchor.offset(beside), CreativeEnergyCellBlock.BLOCK.defaultBlockState());
+			}
+			if (box.nitrogen != null && PetroFluids.NITROGEN != null) {
+				box.nitrogen.fill(PetroFluids.NITROGEN.fluid(), LineAnchorBlockEntity.NITROGEN_TANK_MB);
+			}
 		}
 		return placed;
 	}

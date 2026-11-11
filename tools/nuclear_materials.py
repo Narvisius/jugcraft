@@ -585,6 +585,20 @@ def tank_grey(seed, size=CELL):
                    bolts=[(x, 32) for x in range(8, size, 16)] + [(x, 96) for x in range(16, size, 16)], chip_count=4, drip_count=4, dirt=0.6)
 
 
+def lagging(colour, seed, size=CELL):
+    """Lagging: smooth sheet metal over insulation, painted, each sheet's lap down its left edge (a lit lip, a shadow
+    under it) and the screws along it; little dirt."""
+    img = painted(colour, seed, chip_count=1, drip_count=1, dirt=0.15, size=size)
+    d = ImageDraw.Draw(img)
+    light = tuple(min(255, c + 30) for c in colour) + (255,)
+    dark = tuple(int(c * 0.55) for c in colour) + (255,)
+    d.line([(0, 0), (0, size)], fill=light, width=2)
+    d.line([(3, 0), (3, size)], fill=dark, width=1)
+    for y in range(10, size, 28):
+        d.ellipse([(5, y - 2), (9, y + 2)], fill=tuple(min(255, c + 18) for c in colour) + (255,), outline=dark)
+    return img
+
+
 def turbine_blue(seed, size=CELL):
     return painted((70, 110, 140), seed, seams=(("h", 62),), bolts=[(x, 62) for x in range(8, size, 16)], chip_count=3, drip_count=3, dirt=0.4)
 

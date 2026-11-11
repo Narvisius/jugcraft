@@ -1,0 +1,241 @@
+{
+  "textures": {
+    "pi_chrome": "jugcraft:block/pi_chrome",
+    "pi_srv_bkr_handle": "jugcraft:block/pi_srv_bkr_handle",
+    "pi_ups_battery_f_0": "jugcraft:block/pi_ups_battery_f_0",
+    "pi_ups_body": "jugcraft:block/pi_ups_body",
+    "pi_ups_plinth": "jugcraft:block/pi_ups_plinth",
+    "pi_ups_trim": "jugcraft:block/pi_ups_trim",
+    "particle": "jugcraft:block/pi_chrome"
+  },
+  "elements": [
+    {
+      "from": [
+        0.6,
+        0,
+        2.4
+      ],
+      "to": [
+        15.4,
+        1.0,
+        14.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_ups_plinth"
+        },
+        "south": {
+          "texture": "#pi_ups_plinth"
+        },
+        "east": {
+          "texture": "#pi_ups_plinth"
+        },
+        "west": {
+          "texture": "#pi_ups_plinth"
+        },
+        "up": {
+          "texture": "#pi_ups_plinth"
+        },
+        "down": {
+          "texture": "#pi_ups_plinth"
+        }
+      }
+    },
+    {
+      "from": [
+        0.2,
+        1.0,
+        1.0
+      ],
+      "to": [
+        15.8,
+        16,
+        15.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_ups_body"
+        },
+        "south": {
+          "texture": "#pi_ups_battery_f_0"
+        },
+        "east": {
+          "texture": "#pi_ups_body"
+        },
+        "west": {
+          "texture": "#pi_ups_body"
+        },
+        "up": {
+          "texture": "#pi_ups_body"
+        },
+        "down": {
+          "texture": "#pi_ups_body"
+        }
+      }
+    },
+    {
+      "from": [
+        13.95,
+        14.0,
+        15.3
+      ],
+      "to": [
+        14.45,
+        16,
+        15.42
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_ups_trim"
+        },
+        "south": {
+          "texture": "#pi_ups_trim"
+        },
+        "east": {
+          "texture": "#pi_ups_trim"
+        },
+        "west": {
+          "texture": "#pi_ups_trim"
+        },
+        "up": {
+          "texture": "#pi_ups_trim"
+        },
+        "down": {
+          "texture": "#pi_ups_trim"
+        }
+      }
+    },
+    {
+      "from": [
+        14.049999999999999,
+        14.4,
+        15.42
+      ],
+      "to": [
+        14.35,
+        16,
+        15.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome"
+        },
+        "south": {
+          "texture": "#pi_chrome"
+        },
+        "east": {
+          "texture": "#pi_chrome"
+        },
+        "west": {
+          "texture": "#pi_chrome"
+        },
+        "up": {
+          "texture": "#pi_chrome"
+        },
+        "down": {
+          "texture": "#pi_chrome"
+        }
+      }
+    },
+    {
+      "from": [
+        6.2,
+        9.0,
+        15.3
+      ],
+      "to": [
+        9.8,
+        14.0,
+        15.450000000000001
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_ups_trim"
+        },
+        "south": {
+          "texture": "#pi_ups_battery_f_0"
+        },
+        "east": {
+          "texture": "#pi_ups_trim"
+        },
+        "west": {
+          "texture": "#pi_ups_trim"
+        },
+        "up": {
+          "texture": "#pi_ups_trim"
+        },
+        "down": {
+          "texture": "#pi_ups_trim"
+        }
+      }
+    },
+    {
+      "from": [
+        7.6,
+        10.2,
+        15.450000000000001
+      ],
+      "to": [
+        8.4,
+        13.4,
+        16.150000000000002
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_srv_bkr_handle",
+          "uv": [
+            7.6,
+            2.6,
+            8.4,
+            5.8
+          ]
+        },
+        "south": {
+          "texture": "#pi_srv_bkr_handle",
+          "uv": [
+            7.6,
+            2.6,
+            8.4,
+            5.8
+          ]
+        },
+        "east": {
+          "texture": "#pi_srv_bkr_handle",
+          "uv": [
+            0,
+            2.6,
+            0.7,
+            5.8
+          ]
+        },
+        "west": {
+          "texture": "#pi_srv_bkr_handle",
+          "uv": [
+            15.3,
+            2.6,
+            16.0,
+            5.8
+          ]
+        },
+        "up": {
+          "texture": "#pi_srv_bkr_handle",
+          "uv": [
+            7.6,
+            15.3,
+            8.4,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#pi_srv_bkr_handle",
+          "uv": [
+            7.6,
+            0,
+            8.4,
+            0.7
+          ]
+        }
+      }
+    }
+  ]
+}

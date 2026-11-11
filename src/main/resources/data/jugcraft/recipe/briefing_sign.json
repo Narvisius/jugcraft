@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "BBLLBB",
+    "AACCAA"
+  ],
+  "key": {
+    "A": "#c:plates/aluminum",
+    "B": "minecraft:black_stained_glass_pane",
+    "C": "jugcraft:basic_circuit",
+    "L": "minecraft:glowstone_dust"
+  },
+  "result": {
+    "id": "jugcraft:briefing_sign",
+    "count": 2
+  }
+}

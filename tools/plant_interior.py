@@ -15,23 +15,21 @@ from PIL import Image, ImageDraw
 import nuclear_materials as M
 import framed_glass
 import speed_gate
+import restroom
+import plant_doors
 import plant_office
 import plant_office2
+import plant_lockers
+import plant_filing
+import plant_tables
+import admin_rooms
 
 MOD = "jugcraft"
 
 # --------------------------------------------------------------------------------------------------- the pieces
 # A box's texture is a name, or {face: name}; "name!" maps the whole texture onto that face (a front or a screen).
 FURNITURE = {
-    "server_rack": {"display": "Server Rack", "stacks": True, "boxes": [
-        (1, 0, 1, 15, 16, 1.6, "pi_rack_body"),
-        (1, 0, 1.6, 2, 16, 14.6, "pi_rack_body"), (14, 0, 1.6, 15, 16, 14.6, "pi_rack_body"),
-        (2, 0, 1.6, 14, 16, 14.4, {"*": "pi_rack_body", "south": "pi_server_face!"}),
-        (1, 0, 14.6, 15, 16, 15.4, {"*": "pi_rack_body", "south": "pi_server_mesh!", "north": "pi_server_mesh!"})],
-        # The door handle goes with the top block of a stack (about chest height on a two-high rack).
-        "cap": [(0.8, 15.3, 0.8, 15.2, 16, 15.6, {"*": "pi_rack_body", "up": "pi_rack_top!"}),
-                (13.2, 0.5, 15.4, 13.8, 5.5, 15.9, "pi_chrome")],
-        "plinth": [(0.8, 0, 0.8, 15.2, 0.8, 15.6, "pi_rack_body")]},
+    # (The server rack: a two-high live panel since older rooms round 2, tools/server_room.py.)
     # Real 3D (round 26, 7e: tools/plant_panels.py relay_cabinet_boxes): what is the same in every block of a stack,
     # the upper block's relays (any block with the cabinet going on below it), the lower block's wiring and plinth.
     "relay_cabinet": dict(zip(("boxes", "upper", "lower", "cap", "plinth"), plant_office2.PN.relay_cabinet_boxes()),
@@ -94,13 +92,23 @@ FURNITURE = {
         (7.2, 0, 0.4, 8.8, 16, 2, "pi_rail_yellow"), (0, 15, 0.6, 16, 16, 1.8, "pi_rail_yellow"),
         (0, 8, 0.8, 16, 9, 1.6, "pi_rail_yellow"), (0, 0, 0.6, 16, 2, 1.0, "pi_rail_yellow")]},
 }
-FURNITURE["server_rack"]["glow"] = ["pi_server_face"]
 FURNITURE["relay_cabinet"]["glow"] = ["pi_pnl_white", "pi_pnl_yellow"]   # its pilot lamps
 # Pallet racking with drums on it (the turbine building's oil store): the racking's frame, drums on the pallet.
 FURNITURE["pallet_rack_drums"] = dict(FURNITURE["pallet_rack"], display="Pallet Racking (Drums)",
                                       boxes=FURNITURE["pallet_rack"]["boxes"][:8] + plant_office.O4.O7.DRUM_LOAD[1:])
 FURNITURE.update(plant_office.OFFICE)
 FURNITURE.update(plant_office2.PIECES)
+# Real 3D (Justin's walk through, redesign 4, approved take 2): the lockers, a pair of full-height lockers to a block
+# (tools/plant_lockers.py), and the low filing cabinets (tools/plant_filing.py), everywhere they stand. The drone
+# tower's locker room has crew lockers: their jacket, headset and kit bag their own (no coat to take).
+FURNITURE["locker"] = dict(plant_lockers.closed(), display="Locker", stacks=True)
+FURNITURE["locker_open"] = dict(plant_lockers.opened("lab"), display="Open Locker", stacks=True)
+FURNITURE["locker_security"] = dict(plant_lockers.opened("security"), display="Security Locker", stacks=True)
+FURNITURE["crew_locker_open"] = dict(plant_lockers.opened("crew"), display="Open Crew Locker", stacks=True)
+FURNITURE["filing_cabinet"] = {"display": "Filing Cabinet", "boxes": plant_filing.closed()}
+FURNITURE["filing_cabinet_open"] = {"display": "Filing Cabinet (open)", "boxes": plant_filing.opened()}
+# The ground floor break area's long glass coffee table (the Drone Tower's walk through, note 16).
+FURNITURE.update(plant_tables.PIECES)
 # Caps sit a hair above the body's top so the two tops don't fight for the same plane (the flicker on rack tops).
 for _info in FURNITURE.values():
     if "cap" in _info:
@@ -108,6 +116,11 @@ for _info in FURNITURE.values():
 
 CUBES = {"ceiling_tile": "Suspended Ceiling Tile", "vinyl_floor": "Vinyl Floor Tile", "epoxy_floor": "Epoxy Floor",
          "painted_wall": "Painted Block Wall", "tank_plate": "Painted Tank Plate", "intake_louvre": "Intake Louvre"}
+# The control room's floor over the cable spreading room (punch list #15): the floor's top as the room's floor (the tower
+# kit's carpet tile, access floor tile), its underside the bare slab painted (tools/spreading_room.py pi_slab_soffit).
+SLABS = {"carpet_floor_slab": ("Carpet Floor (Bare Slab Under)", "carpet_tile"), "access_floor_slab": ("Access Floor (Bare Slab Under)", "access_floor_tile"),
+         # The computer room's cold aisles (older rooms round 2: tools/server_room.py).
+         "access_floor_perforated": ("Perforated Access Floor Tile", "access_floor_perforated")}
 DOORS = {"steel_door": "Steel Door", "glass_door": "Glass Door"}
 OTHER = {"hvac_duct": "HVAC Duct", "roller_door": "Roller Door", "building_sign": "Building Sign", "room_sign": "Room Sign"}
 # Same order as PlantSignBlock.Label.
@@ -135,18 +148,22 @@ SIGNS = {
     "battery_room_1a": "Battery Room 1A", "battery_room_1b": "Battery Room 1B", "dc_equipment_1a": "DC Equipment 1A",
     "dc_equipment_1b": "DC Equipment 1B", "remote_shutdown": "Remote Shutdown", "support_center": "Technical Support Center",
     "emergency_filtration": "Emergency Filtration", "cr_hvac_room": "Control Room HVAC Equipment Room", "nrc_room": "NRC Site Team",
+    "restroom": "Restroom",
+    # the Tri-Pillar tower's upper floor (item 22 part B)
+    "men": "Men", "women": "Women", "custodian": "Custodian", "manager": "Manager", "engineering_lab": "Engineering Lab",
+    "crew_rest": "Crew Rest", "simulators": "Simulators", "crew_lounge": "Crew Lounge", "offices": "Offices",
 }
 
 OTHER["conference_table"] = "Round Meeting Table"
-# The multi-block pieces with a flat inventory icon (one shown in 3D in the slot, "item3d", has none).
-MULTI = [k for k, v in FURNITURE.items() if "multi" in v and not v.get("item3d")]
-BLOCKS = list(FURNITURE) + list(CUBES) + ["hvac_duct"] + list(DOORS) + ["roller_door", "building_sign", "room_sign", "conference_table",
-                                                                          framed_glass.BLOCK, speed_gate.GATE, speed_gate.PEDESTAL]
+# The multi-block pieces with a flat inventory icon (one shown in 3D in the slot, "item3d" or "item_boxes", has none).
+MULTI = [k for k, v in FURNITURE.items() if "multi" in v and not v.get("item3d") and not v.get("item_boxes")]
+BLOCKS = list(FURNITURE) + list(CUBES) + list(SLABS) + ["hvac_duct"] + list(DOORS) + ["roller_door", "roller_door_station", "building_sign", "room_sign", "conference_table",
+                                                                          framed_glass.BLOCK, speed_gate.GATE, speed_gate.PEDESTAL] + restroom.BLOCKS + admin_rooms.BLOCKS
 # Blocks with no item and no drop of their own: a speed gate's pedestals come and go with the gates beside them
 # (nuclear/SpeedGatePedestalBlock.java).
 NO_ITEM = NO_DROP = {speed_gate.PEDESTAL}
-NAMES = {**{k: v["display"] for k, v in FURNITURE.items()}, **CUBES, **DOORS, **OTHER, framed_glass.BLOCK: framed_glass.DISPLAY,
-         speed_gate.GATE: speed_gate.DISPLAY, speed_gate.PEDESTAL: "Speed Gate Pedestal"}
+NAMES = {**{k: v["display"] for k, v in FURNITURE.items()}, **CUBES, **{k: v[0] for k, v in SLABS.items()}, **DOORS, **OTHER, framed_glass.BLOCK: framed_glass.DISPLAY,
+         speed_gate.GATE: speed_gate.DISPLAY, speed_gate.PEDESTAL: "Speed Gate Pedestal", **restroom.NAMES, **plant_doors.NAMES, **admin_rooms.NAMES}
 UNIFORMS = {"lab_coat": "Lab Coat", "security_jacket": "Security Jacket"}   # wearable (client/UniformLayer.java)
 ITEM_TEXTURES = list(DOORS) + ["building_sign", "room_sign", "conference_table"] + MULTI + list(UNIFORMS)
 
@@ -154,7 +171,8 @@ STEEL_PLATE = "#c:plates/steel"
 CRAFTING = {
     "server_rack": (["PCP", "PXP", "PCP"], {"P": STEEL_PLATE, "C": "jugcraft:basic_circuit", "X": "jugcraft:processor"}, 2),
     "relay_cabinet": (["PGP", "PCP", "PRP"], {"P": STEEL_PLATE, "G": "minecraft:glass_pane", "C": "jugcraft:basic_circuit", "R": "minecraft:redstone"}, 2),
-    "locker": (["PP", "PP", "PP"], {"P": "#c:plates/iron"}, 2),
+    "locker": (["PP", "PB", "PP"], {"P": "#c:plates/iron", "B": "minecraft:iron_bars"}, 2),   # (item 22: not the tall cabinet's)
+    "crew_locker_open": (["PP", "PL", "PP"], {"P": "#c:plates/iron", "L": "minecraft:leather"}, 2),
     "pallet_rack": (["S S", "BBB", "S S"], {"S": STEEL_PLATE, "B": "minecraft:barrel"}, 4),
     "pallet_rack_drums": (["S S", "BDB", "S S"], {"S": STEEL_PLATE, "B": "minecraft:barrel", "D": "minecraft:cauldron"}, 4),
     "office_desk": (["GGG", "PPP", "P P"], {"G": "minecraft:black_stained_glass_pane", "P": "#minecraft:planks"}, 1),
@@ -162,12 +180,16 @@ CRAFTING = {
     "whiteboard": (["QQQ", "P P"], {"Q": "minecraft:quartz", "P": "#c:plates/iron"}, 2),
     "water_cooler": (["G", "B", "P"], {"G": "minecraft:glass_bottle", "B": "minecraft:water_bucket", "P": "#c:plates/iron"}, 1),
     "guard_rail": (["YYY", "S S"], {"Y": "minecraft:yellow_dye", "S": "minecraft:iron_nugget"}, 8),
-    "ceiling_tile": (["WWW", "WNW", "WWW"], {"W": "minecraft:white_wool", "N": "minecraft:iron_nugget"}, 8),
+    # Mineral-fibre board: paper and clay pressed round a wire hanger (not wool).
+    "ceiling_tile": (["PCP", "CNC", "PCP"], {"P": "minecraft:paper", "C": "minecraft:clay_ball", "N": "minecraft:iron_nugget"}, 8),
     "vinyl_floor": (["SS", "SS"], {"S": "jugcraft:plastic_sheet"}, 8),
     "epoxy_floor": (["CCC", "CSC", "CCC"], {"C": "minecraft:light_gray_concrete", "S": "jugcraft:plastic_sheet"}, 8),
     "painted_wall": (["CCC", "CWC", "CCC"], {"C": "minecraft:stone_bricks", "W": "minecraft:white_dye"}, 8),
     "tank_plate": (["CCC", "CWC", "CCC"], {"C": "minecraft:smooth_stone", "W": "minecraft:white_dye"}, 8),
     "intake_louvre": (["NNN", "N N", "NNN"], {"N": "minecraft:iron_nugget"}, 4),
+    "carpet_floor_slab": (["C", "S"], {"C": "jugcraft:carpet_tile", "S": "minecraft:smooth_stone"}, 2),
+    "access_floor_slab": (["A", "S"], {"A": "jugcraft:access_floor_tile", "S": "minecraft:smooth_stone"}, 2),
+    "access_floor_perforated": (["B", "A"], {"B": "minecraft:iron_bars", "A": "jugcraft:access_floor_tile"}, 1),
     "hvac_duct": (["NNN", "   ", "NNN"], {"N": "minecraft:iron_nugget"}, 6),
     "steel_door": (["PP", "PG", "PP"], {"P": "#c:plates/iron", "G": "minecraft:glass_pane"}, 3),
     "glass_door": (["NG", "NG", "NG"], {"N": "minecraft:iron_nugget", "G": "minecraft:glass_pane"}, 3),
@@ -179,7 +201,9 @@ CRAFTING.update(plant_office.CRAFTING)
 CRAFTING.update(framed_glass.CRAFTING)
 CRAFTING.update(speed_gate.CRAFTING)
 CRAFTING.update(plant_office2.CRAFTING)
+CRAFTING.update(plant_tables.CRAFTING)
 CRAFTING.update(plant_office2.PN.CRAFTING)
+CRAFTING.update(plant_doors.CRAFTING)
 CRAFTING["lab_coat"] = (["W W", "WWW", "WWW"], {"W": "minecraft:white_wool"}, 1)
 CRAFTING["security_jacket"] = (["W W", "WDW", "WWW"], {"W": "minecraft:blue_wool", "D": "minecraft:black_dye"}, 1)
 
@@ -206,7 +230,7 @@ def textures_used():
             for v in range(info["prints"]):
                 for part in range(2):
                     names |= _box_textures(plant_office2.lprint_boxes(part, v))
-        elif "multi" in info:
+        elif "multi" in info and not info.get("tv"):
             for v in range(info.get("versions", 1)):
                 for _, boxes in plant_office2.multi_parts(info, v):
                     names |= _box_textures(boxes)
@@ -223,7 +247,7 @@ def textures_used():
 
 
 TEXTURES = {t for t in textures_used() if not t.startswith("mc_")} | set(CUBES) | {"hvac_duct", "hvac_duct_top", "pi_roller_slats", "pi_sign"} | \
-    {"steel_door_top", "steel_door_bottom"}
+    {"pi_slab_soffit"}
 # The labelled panels' other drawings (round 26, 8c: their variants' models name them, not the boxes).
 TEXTURES |= {f"pi_{plant_office2.PN.texture_key(k, v)}_f_{p}" for k, info in plant_office2.PN.PANELS.items() if info.get("labels")
              for v in range(1, len(info["labels"])) for p in range(2 * info["width"])}
@@ -368,9 +392,11 @@ def item_model_3d(info, rid):
                 o = e["rotation"]["origin"]
                 e["rotation"] = dict(e["rotation"], origin=[o[0] + 16 * c + shift, o[1] + 16 * r, o[2]])
             elements.append(e)
-    if shift:
+    top = max(max(e["from"][1], e["to"][1]) for e in elements)
+    if shift or top > 32:
         # Its conduit hubs stand a little above its top: down under 32 with them (clear of the model writer's nudges).
-        dy = min(0.0, 31.6 - max(max(e["from"][1], e["to"][1]) for e in elements))
+        # (Older rooms round 4: so does a piece reaching up out of its top block, the battery disconnect's conduits.)
+        dy = min(0.0, 31.6 - top)
         for e in elements:
             e["from"][1] = round(e["from"][1] + dy, 4)
             e["to"][1] = round(e["to"][1] + dy, 4)
@@ -399,7 +425,15 @@ def write_assets(write, rid, assets, lang):
         lang[f"block.{MOD}.{block}"] = info["display"]
         glow = info.get("glow", [])
         item_model = rid(f"block/{block}")
-        if info.get("plant"):
+        if info.get("tv"):
+            # The flat screen TV: a block of screen that joins its neighbours (tools/flat_tv.py); its flat icon.
+            import flat_tv
+            import tv_speaker_data
+            flat_tv.write_assets(write, rid, assets)
+            lang.update(tv_speaker_data.LANG)   # the surround speakers and the Sync Key (tools/tv_speaker.py writes their files)
+            write(assets / "models" / "item" / f"{block}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{block}")}})
+            item_model = rid(f"item/{block}")
+        elif info.get("plant"):
             for i in range(info["variants"]):
                 write(models / f"{block}_{i}.json", plant_office.plant_model(i, rid))
             write(assets / "blockstates" / f"{block}.json", {"variants": {
@@ -449,7 +483,7 @@ def write_assets(write, rid, assets, lang):
                 g = [b[6]["south"].rstrip("!") for b in boxes if isinstance(b[6], dict) and "south" in b[6]] if vertical is True else []
                 write(models / f"{block}_{part}.json", model(boxes, g, rid))
             door = bool(info.get("door"))
-            if door:
+            if door or info.get("swing"):
                 # A panel with a door (round 26, 8e): its parts with the door swung open ("open" state).
                 for part, boxes in plant_office2.multi_parts(info, open_=True):
                     write(models / f"{block}_open_{part}.json", model(boxes, [], rid))
@@ -467,18 +501,28 @@ def write_assets(write, rid, assets, lang):
                         if door:
                             write(models / f"{block}_v{v}_open_{part}.json", {"parent": rid(f"block/{block}_open_{part}"), "textures": tex})
                 opens = (("false", ""), ("true", "open_")) if door else ((None, ""),)
+                # (A one-block piece has a part 1 too, never placed: nuclear/MultiFurnitureBlock.property; drawn as 0.)
                 write(assets / "blockstates" / f"{block}.json", {"variants": {
                     f"facing={face},part={part},variant={v}" + (f",open={o}" if o else ""): {
-                        "model": rid(f"block/{block}_{tag}{part}" if v == 0 or shared else f"block/{block}_v{v}_{tag}{part}"), **({"y": y} if y else {})}
-                    for face, y in TURN for part in range(w * rows) for v in range(len(labels)) for o, tag in opens}})
+                        "model": rid(f"block/{block}_{tag}{min(part, w * rows - 1)}" if v == 0 or shared
+                                     else f"block/{block}_v{v}_{tag}{min(part, w * rows - 1)}"), **({"y": y} if y else {})}
+                    for face, y in TURN for part in range(max(2, w * rows)) for v in range(len(labels)) for o, tag in opens}})
+            elif info.get("swing"):
+                # Its door swung open or shut (older rooms round 2: a rack's front door, nuclear/ServerRoomPanelBlock.java).
+                write(assets / "blockstates" / f"{block}.json", {"variants": {
+                    f"facing={face},open={o},part={part}": {"model": rid(f"block/{block}_{tag}{min(part, w * rows - 1)}"), **({"y": y} if y else {})}
+                    for face, y in TURN for part in range(max(2, w * rows)) for o, tag in (("false", ""), ("true", "open_"))}})
             else:
                 write(assets / "blockstates" / f"{block}.json", {"variants": {
-                    f"facing={face},part={part}": {"model": rid(f"block/{block}_{part}"), **({"y": y} if y else {})}
-                    for face, y in TURN for part in range(w * rows)}})
+                    f"facing={face},part={part}": {"model": rid(f"block/{block}_{min(part, w * rows - 1)}"), **({"y": y} if y else {})}
+                    for face, y in TURN for part in range(max(2, w * rows))}})
             if info.get("item3d"):
                 # The piece itself in the slot, in 3D (round 26: the station charger; docs/ITEM_ICONS.md leaves block
                 # models out of the flat icons' rules).
                 write(assets / "models" / "item" / f"{block}.json", item_model_3d(info, rid))
+            elif info.get("item_boxes"):
+                # A small model of a piece too big to show whole (the boardroom table), held and shown as a block is.
+                write(assets / "models" / "item" / f"{block}.json", dict(model(info["item_boxes"], [], rid), parent="minecraft:block/block"))
             else:
                 write(assets / "models" / "item" / f"{block}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{block}")}})
             item_model = rid(f"item/{block}")
@@ -546,6 +590,12 @@ def write_assets(write, rid, assets, lang):
         write(models / f"{block}.json", {"parent": "minecraft:block/cube_all", "textures": {"all": rid(f"block/{block}")}})
         write(assets / "blockstates" / f"{block}.json", {"variants": {"": {"model": rid(f"block/{block}")}}})
         write(assets / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
+    for block, (name, top) in SLABS.items():
+        lang[f"block.{MOD}.{block}"] = name
+        write(models / f"{block}.json", {"parent": "minecraft:block/cube_bottom_top", "textures": {
+            "top": rid(f"block/{top}"), "side": rid("block/pi_slab_soffit"), "bottom": rid("block/pi_slab_soffit")}})
+        write(assets / "blockstates" / f"{block}.json", {"variants": {"": {"model": rid(f"block/{block}")}}})
+        write(assets / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
     lang[f"block.{MOD}.hvac_duct"] = OTHER["hvac_duct"]
     write(models / "hvac_duct.json", {"parent": "minecraft:block/cube_column", "textures": {
         "side": rid("block/hvac_duct"), "end": rid("block/hvac_duct_top")}})
@@ -556,47 +606,19 @@ def write_assets(write, rid, assets, lang):
         "axis=z": {"model": rid("block/hvac_duct_horizontal"), "x": 90},
         "axis=x": {"model": rid("block/hvac_duct_horizontal"), "x": 90, "y": 90}}})
     write(assets / "items" / "hvac_duct.json", {"model": {"type": "minecraft:model", "model": rid("block/hvac_duct")}})
-    # Doors: the vanilla door models and blockstate pattern.
+    # Doors (doors round): their models and blockstates are tools/plant_doors.py's (steel, glass and lead-lined).
     for door, name in DOORS.items():
         lang[f"block.{MOD}.{door}"] = name
-        if door == "glass_door":
-            # The glass door: a 3D frame and real glass, the framed glass's parts (tools/framed_glass.py).
-            for name_, body in framed_glass.door_models(rid, door).items():
-                write(models / f"{name_}.json", body)
-        else:
-            tex = {"bottom": rid(f"block/{door}_bottom"), "top": rid(f"block/{door}_top")}
-            for half in ("bottom", "top"):
-                for hinge in ("left", "right"):
-                    for opened in ("", "_open"):
-                        write(models / f"{door}_{half}_{hinge}{opened}.json", {"parent": f"minecraft:block/door_{half}_{hinge}{opened}", "textures": tex})
-        closed = {"east": 0, "south": 90, "west": 180, "north": 270}
-        variants = {}
-        for facing, y0 in closed.items():
-            for half, part in (("lower", "bottom"), ("upper", "top")):
-                for hinge in ("left", "right"):
-                    for opened in (False, True):
-                        y = (y0 + (90 if hinge == "left" else 270)) % 360 if opened else y0
-                        v = {"model": rid(f"block/{door}_{part}_{hinge}{'_open' if opened else ''}")}
-                        if y:
-                            v["y"] = y
-                        variants[f"facing={facing},half={half},hinge={hinge},open={'true' if opened else 'false'}"] = v
-        write(assets / "blockstates" / f"{door}.json", {"variants": variants})
         write(assets / "models" / "item" / f"{door}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{door}")}})
         write(assets / "items" / f"{door}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{door}")}})
+    plant_doors.write_assets(write, rid, assets, lang)
     framed_glass.write_assets(write, rid, assets, lang)
     speed_gate.write_assets(write, rid, assets, lang)
-    # The roller door: slats in the middle of the opening, nothing when rolled up; while it rolls (moving) the block
-    # model is empty and client/RollerDoorRenderer.java draws the curtain moving and the coil at the top.
+    restroom.write_assets(write, rid, assets, lang)      # the restroom's fixtures (round 26, #14)
+    admin_rooms.write_assets(write, rid, assets, lang)   # document control's shelving and plan file (the admin building part 2)
+    # The roller door: its models and blockstate are tools/plant_doors.py's (doors round: guides, bottom bar, motor);
+    # while it rolls client/RollerDoorRenderer.java draws the curtain moving and the coil at the top.
     lang[f"block.{MOD}.roller_door"] = OTHER["roller_door"]
-    write(models / "roller_door.json", {"textures": {"slats": rid("block/pi_roller_slats"), "particle": rid("block/pi_roller_slats")},
-                                        "elements": [{"from": [0, 0, 6.5], "to": [16, 16, 9.5], "faces": {
-                                            f: {"texture": "#slats", **({"uv": [0, 0, 16, 16]} if f in ("north", "south") else {})}
-                                            for f in ("north", "south", "east", "west", "up", "down")}}]})
-    write(models / "roller_door_open.json", {"textures": {"particle": rid("block/pi_roller_slats")}, "elements": []})
-    write(assets / "blockstates" / "roller_door.json", {"variants": {
-        f"facing={face},moving={m},open={o}": {"model": rid("block/roller_door" + ("_open" if o == "true" or m == "true" else "")),
-                                                **({"y": y} if y else {})}
-        for face, y in TURN for o in ("false", "true") for m in ("false", "true")}})
     write(assets / "items" / "roller_door.json", {"model": {"type": "minecraft:model", "model": rid("block/roller_door")}})
     # Signs: drawn by client/PlantSignRenderer.java; the block model only gives break particles.
     for sign in ("building_sign", "room_sign"):
@@ -792,15 +814,15 @@ def _laminate():
 
 
 def _office_screen():
-    img = _img((236, 240, 244))
+    """An office computer's screen (the administration building part 1): the intranet page's frame, its words written
+    live by client/DeskScreenRenderer.java (the dark page, its blue title band, faint rules between the lines)."""
+    img = Image.new("RGBA", (320, 200), (10, 14, 22, 255))
     d = ImageDraw.Draw(img)
-    d.rectangle([0, 0, S, 12], fill=(40, 90, 160, 254))
-    for y in range(20, S - 6, 9):
-        for x in range(6, S - 6, 24):
-            d.rectangle([x, y, x + 21, y + 6], outline=(190, 196, 204, 254), fill=(250, 250, 252, 254))
-    d.rectangle([70, 60, 120, 110], fill=(250, 250, 252, 254), outline=(150, 160, 170, 254))
-    for i, h in enumerate((20, 34, 26, 40, 30)):
-        d.rectangle([76 + i * 9, 104 - h, 82 + i * 9, 104], fill=(40, 120, 200, 254))
+    d.rectangle([0, 0, 319, 26], fill=(30, 70, 130, 255))
+    d.rectangle([3, 30, 316, 196], outline=(30, 40, 58, 255), width=2)
+    for y in range(58, 196, 26):
+        d.line([(8, y), (311, y)], fill=(20, 26, 38, 255), width=1)
+    img = img.resize((S, S), Image.LANCZOS)
     a = np.asarray(img).copy()
     a[..., 3] = 254
     return Image.fromarray(a, "RGBA")
@@ -988,7 +1010,6 @@ def _sign_particle():
 
 def draw_block_textures():
     makers = {
-        "pi_rack_body": _rack_body, "pi_server_face": _server_face, "pi_server_mesh": _server_mesh, "pi_rack_top": _rack_top,
         "pi_cabinet": _cabinet, "pi_cabinet_dark": lambda: _cabinet((112, 116, 118), 330),
         "pi_locker_side": lambda: _cabinet((120, 132, 150), 331), "pi_locker_front": _locker_front,
         "pi_upright": _upright, "pi_beam": _beam, "pi_wire_deck": _wire_deck, "pi_pallet": _pallet, "pi_pallet_top": _pallet_top,
@@ -1000,10 +1021,12 @@ def draw_block_textures():
         "pi_reader": _reader, "pi_roller_slats": _roller_slats, "pi_sign": _sign_particle,
         "ceiling_tile": _ceiling_tile, "vinyl_floor": _vinyl_floor, "epoxy_floor": _epoxy_floor, "painted_wall": _painted_wall,
         "tank_plate": _tank_plate, "intake_louvre": _louvre, "hvac_duct": _duct, "hvac_duct_top": lambda: _duct(True),
-        "steel_door_bottom": lambda: _steel_door(0), "steel_door_top": lambda: _steel_door(1),
     }
     makers.update(plant_office.makers())
     makers.update(plant_office2.makers())
+    makers.update(plant_lockers.makers())
+    makers.update(plant_filing.makers())
+    makers.update(plant_tables.makers())
     del makers["pi_whiteboard"]
     missing = TEXTURES - set(makers)
     assert not missing, missing
@@ -1013,13 +1036,16 @@ def draw_block_textures():
         colours = 64 if name in plant_office2.PAINTINGS else 24 if rich else 14
         src = make()
         out[name] = M.stylize(src, colours)
-        if name in plant_office2.O3.SHARP or name in plant_office2.O4.SHARP or name in plant_office2.PN.SHARP:
+        if name in plant_office2.O3.SHARP or name in plant_office2.O4.SHARP or name in plant_office2.PN.SHARP or name in plant_filing.SHARP:
             out[name] = src            # kept at full size so the writing reads
         if name in plant_office2.TRANSLUCENT:
             alpha = src.convert("RGBA").split()[3].resize(out[name].size)
             out[name].putalpha(alpha)
     out.update(framed_glass.draw_textures())   # drawn at 64 px already; the glass keeps its partial alpha
+    out.update(plant_doors.textures())         # the doors' (doors round), drawn at their size
     out.update(speed_gate.draw_textures())
+    import flat_tv
+    out.update(flat_tv.draw_textures())        # the flat screen TV's, drawn at their size
     return out
 
 

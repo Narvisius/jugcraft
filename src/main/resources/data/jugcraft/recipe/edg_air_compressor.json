@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PMP",
+    "SGS"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "P": "jugcraft:steel_fluid_pipe",
+    "M": "jugcraft:electric_motor",
+    "G": "#c:gears/steel"
+  },
+  "result": {
+    "id": "jugcraft:edg_air_compressor",
+    "count": 1
+  }
+}

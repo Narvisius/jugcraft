@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SRS",
+    "CPC",
+    "SSS"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "R": "minecraft:redstone",
+    "C": "jugcraft:basic_circuit",
+    "P": "minecraft:comparator"
+  },
+  "result": {
+    "id": "jugcraft:warehouse_signal_box",
+    "count": 1
+  }
+}

@@ -41,7 +41,7 @@ public class DroneTerminalBlock extends BaseEntityBlock implements EnergyConnect
 	static {
 		for (Direction facing : Direction.Plane.HORIZONTAL) {
 			// Desk, and the display standing at its far edge.
-			SHAPES.put(facing, Shapes.or(Block.box(0, 0, 0, 16, 12, 16), turned(new double[] {0.5, 12, 2, 15.5, 16, 4.5}, facing)));
+			SHAPES.put(facing, Shapes.or(Block.box(0, 0, 0, 16, 12, 16), turned(new double[] {.6, 15.6, 2, 15.4, 25, 3.75}, facing)));
 		}
 	}
 
@@ -113,19 +113,13 @@ public class DroneTerminalBlock extends BaseEntityBlock implements EnergyConnect
 	@Override
 	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
 			net.minecraft.world.InteractionHand hand, BlockHitResult hit) {
-		// Tower modules handed to the terminal go into its Drone Tower's core (it sits under the plotting table).
-		// A module in hand never opens the terminal screen, on either side, whatever happens to it.
-		if (io.github.jimbozoomer.jugcraft.tower.JugcraftTower.MODULE_ITEMS.containsValue(stack.getItem())
-				&& level.getBlockEntity(pos) instanceof DroneTerminalBlockEntity terminal) {
+		// Blocks its Drone Tower still needs, handed to a tower's terminal, go into the tower's core. Such a block in hand
+		// never opens the terminal screen (sneak to place it against the terminal instead).
+		if (level.getBlockEntity(pos) instanceof DroneTerminalBlockEntity terminal && terminal.towerPos() != null
+				&& level.getBlockEntity(terminal.towerPos()) instanceof io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity core
+				&& core.wants(stack)) {
 			if (!level.isClientSide()) {
-				if (terminal.towerPos() == null
-						|| !(level.getBlockEntity(terminal.towerPos()) instanceof io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity core)) {
-					player.sendOverlayMessage(Component.translatable("message.jugcraft.tower.no_tower"));
-				} else if (!core.mayUse(player)) {
-					player.sendOverlayMessage(Component.translatable("message.jugcraft.tower.not_owner"));
-				} else if (core.deposit(stack)) {
-					player.sendOverlayMessage(Component.translatable("message.jugcraft.tower.deposited"));
-				}
+				io.github.jimbozoomer.jugcraft.tower.TowerCoreBlock.deposit(core, player, () -> core.deposit(stack));
 			}
 			return InteractionResult.SUCCESS;
 		}

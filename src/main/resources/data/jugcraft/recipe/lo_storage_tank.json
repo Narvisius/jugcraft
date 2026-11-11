@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SSS",
+    "SBS",
+    "SSS"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "B": "minecraft:bucket"
+  },
+  "result": {
+    "id": "jugcraft:lo_storage_tank",
+    "count": 1
+  }
+}

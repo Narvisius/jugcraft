@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "MMPPMM",
+    "MMGGMM",
+    "MMMMMM"
+  ],
+  "key": {
+    "G": "minecraft:glowstone_dust",
+    "M": "jugcraft:steel_armor_plate",
+    "P": "minecraft:glass_pane"
+  },
+  "result": {
+    "id": "jugcraft:inset_light_steel",
+    "count": 8
+  }
+}

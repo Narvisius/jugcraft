@@ -1,0 +1,32 @@
+{
+ "textures": {
+  "gl_car": "jugcraft:block/gl_car",
+  "gl_tread": "jugcraft:block/gl_tread",
+  "particle": "jugcraft:block/gl_frame"
+ },
+ "elements": [
+  {
+   "from": [
+    0,
+    13,
+    0
+   ],
+   "to": [
+    16,
+    16,
+    10.0
+   ],
+   "faces": {
+    "south": {
+     "texture": "#gl_car"
+    },
+    "up": {
+     "texture": "#gl_tread"
+    },
+    "down": {
+     "texture": "#gl_car"
+    }
+   }
+  }
+ ]
+}

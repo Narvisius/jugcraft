@@ -39,7 +39,7 @@ import org.jspecify.annotations.Nullable;
  */
 public final class Blueprint {
 	/** The blueprints shipped with Jugcraft (tools/blueprints.py BUILT_IN). */
-	public static final List<String> BUILT_IN = List.of("drone_tower_foundation", "arc_furnace", "small_church");
+	public static final List<String> BUILT_IN = List.of("arc_furnace", "small_church");
 	/**
 	 * The built-in blueprints too big to send over the network (the nuclear plants and their parts, from
 	 * tools/nuclear_plants.py): each side reads them from its own copy of the jar when they are first wanted.
@@ -206,11 +206,19 @@ public final class Blueprint {
 	public static synchronized @Nullable Blueprint get(String id, boolean client) {
 		Map<String, Blueprint> map = client ? CLIENT : SERVER;
 		Blueprint found = map.get(id);
-		if (found == null && LARGE_BUILT_IN.contains(id)) {
+		if (found == null && (LARGE_BUILT_IN.contains(id) || BlueprintStacks.isPart(id))) {
 			// Large built-ins are read from this side's own jar the first time they are wanted.
 			found = builtIn(id);
 			if (found != null) {
 				map.put(id, found);
+			}
+		} else if (found == null && BlueprintStacks.isStack(id)) {
+			// A stacked building (BlueprintStacks): made of its parts, with as many floors as its id says.
+			try {
+				found = parse(id, BlueprintStacks.compose(id), "built in");
+				map.put(id, found);
+			} catch (Invalid | RuntimeException e) {
+				Jugcraft.LOGGER.error("Blueprint stack {} is invalid: {}", id, e.getMessage());
 			}
 		}
 		return found;
@@ -221,13 +229,20 @@ public final class Blueprint {
 		for (String id : LARGE_BUILT_IN) {
 			get(id, client);
 		}
-		return List.copyOf((client ? CLIENT : SERVER).values());
+		for (String id : BlueprintStacks.kinds()) {
+			get(id, client);
+		}
+		// The stacks' parts and their other floor counts are not library entries of their own.
+		return (client ? CLIENT : SERVER).values().stream().filter(b -> !BlueprintStacks.isPart(b.id) && (!b.id.contains("@") || b.source.equals("imported")))
+				.toList();
 	}
 
 	/** Every blueprint id on one side, without reading the large built-ins. */
 	public static synchronized List<String> ids(boolean client) {
 		java.util.LinkedHashSet<String> out = new java.util.LinkedHashSet<>((client ? CLIENT : SERVER).keySet());
+		out.removeIf(id -> BlueprintStacks.isPart(id) || BlueprintStacks.isStack(id));
 		out.addAll(LARGE_BUILT_IN);
+		out.addAll(BlueprintStacks.kinds());
 		return List.copyOf(out);
 	}
 
@@ -238,7 +253,7 @@ public final class Blueprint {
 
 	/** A large built-in: not sent over the network (each side reads it from its own jar). */
 	public boolean local() {
-		return LARGE_BUILT_IN.contains(id);
+		return LARGE_BUILT_IN.contains(id) || BlueprintStacks.isPart(id) || BlueprintStacks.isStack(id);
 	}
 
 	static synchronized void put(Blueprint blueprint, boolean client) {
@@ -312,7 +327,9 @@ public final class Blueprint {
 			} catch (Exception e) {
 				throw new Invalid("Unknown block \"" + text + "\" in palette " + entry.getKey() + " (" + shortMessage(e) + ")");
 			}
-			if (FORBIDDEN.contains(state.getBlock())) {
+			// The mod's own built-in blueprints may light their fittings with light blocks (a pre-made plant's yard
+			// floodlights); imported ones may not.
+			if (FORBIDDEN.contains(state.getBlock()) && !(builtIn && state.is(Blocks.LIGHT))) {
 				throw new Invalid("\"" + text + "\" (palette " + entry.getKey() + ") is not allowed in blueprints");
 			}
 			if (!state.isAir()) {
@@ -469,7 +486,7 @@ public final class Blueprint {
 			throw new Invalid("\"kind\" must be \"individual\" (one structure), \"set\" (several parts making a whole) or \"part\" (one part of a set)");
 		}
 		Kind kind = "imported".equals(source) ? Kind.IMPORTED : category == Category.PARTIAL ? Kind.PART : Kind.COMPLETE;
-		String kept = builtIn && LARGE_BUILT_IN.contains(id) ? "" : json;
+		String kept = builtIn && (LARGE_BUILT_IN.contains(id) || BlueprintStacks.isPart(id) || BlueprintStacks.isStack(id)) ? "" : json;
 		BlockState[] states = index.keySet().stream().map(Slot::state).toArray(BlockState[]::new);
 		@SuppressWarnings("unchecked")
 		TagKey<Block>[] tags = index.keySet().stream().anyMatch(slot -> slot.anyOf() != null)

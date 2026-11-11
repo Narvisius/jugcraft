@@ -1,21 +1,21 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "category": "misc",
-  "ingredients": [
-    "jugcraft:polymer_vehicle_panel",
-    "jugcraft:coke",
-    "jugcraft:coke",
-    "jugcraft:coke",
-    "jugcraft:coke"
-  ],
-  "result": {
-    "id": "jugcraft:carbon_composite_panel",
-    "count": 4
-  },
   "fabric:load_conditions": [
     {
       "condition": "jugcraft:feature_enabled",
       "feature": "machines"
     }
-  ]
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "AABBBB",
+    "BBBB  "
+  ],
+  "key": {
+    "A": "jugcraft:polymer_vehicle_panel",
+    "B": "jugcraft:coke"
+  },
+  "result": {
+    "id": "jugcraft:carbon_composite_panel",
+    "count": 8
+  }
 }

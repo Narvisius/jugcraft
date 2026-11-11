@@ -304,7 +304,7 @@ def croissant():
     """Coffee and a croissant: the croissant a crescent on a side plate (a fat middle, the arms bending back, the
     thin tips), a sugar stick and a stirrer, the mug (its steam rises from FOOD_STEAM)."""
     px, pz = 6.4, 9.0
-    out = plate(px, pz, 3.4, "pi_plate_small")
+    out = plate(px, pz, 3.4, "pi_plate_s")
     y = T + 0.3
     out += _segment(px, pz + 0.4, y, 2.4, 2.0, 1.6, 0)
     for side in (1, -1):
@@ -360,7 +360,7 @@ def meeting_items(version):
                 out += [(x - 2.4, y, z - 1.6, x + 2.4, y + 0.3, z + 1.6, {"*": "pi_laptop", "up": "pi_keyboard!" + turn})]
                 lz = z + 1.6 if north else z - 1.9
                 out.append((x - 2.4, y + 0.3, lz, x + 2.4, y + 3.6, lz + 0.3,
-                            {"*": "pi_laptop", ("north" if north else "south"): "pi_office_screen!"}))
+                            {"*": "pi_laptop", ("north" if north else "south"): "pi_laptop_lock!"}))
             if "doc" in what:
                 dx = -1.8 if "+" in what else 0
                 x0, z0 = _fit(x + dx, z, 2.2, 2.8, north)
@@ -735,8 +735,7 @@ def makers():
         "pi_magnet_red": lambda: _img((200, 40, 40)), "pi_magnet_blue": lambda: _img((40, 90, 200)),
         "pi_plate_side": lambda: _img((236, 238, 236)),
         "pi_plate_c": lambda: _round_top(8, 8, 5.2, (248, 248, 246, 255), (226, 228, 226, 255)),
-        # Iris treats the _s suffix as a specular-map companion, not a base texture.
-        "pi_plate_small": lambda: _round_top(6.4, 9.0, 3.4, (248, 248, 246, 255), (226, 228, 226, 255)),
+        "pi_plate_s": lambda: _round_top(6.4, 9.0, 3.4, (248, 248, 246, 255), (226, 228, 226, 255)),
         "pi_can_silver": lambda: _brushed((190, 192, 196), 1905),
         "pi_can_body": _can_body,
         "pi_can_top_c": lambda: _round_top(12.0, 11.8, 0.72, (176, 178, 182, 255), (206, 208, 212, 255)),

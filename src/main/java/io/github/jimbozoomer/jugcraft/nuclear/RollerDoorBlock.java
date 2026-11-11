@@ -12,8 +12,11 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
@@ -22,6 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -33,10 +37,28 @@ import org.jspecify.annotations.Nullable;
  * rolls the whole door up into the coil at its top, or lets it down again: the curtain slides up (or down) over a few
  * seconds, drawn by client/RollerDoorRenderer.java while it moves (MOVING), and the coil over the opening grows as it
  * winds on. FACING is the way into the building: the coil hangs on that side.
+ *
+ * <p>Doors round: each block knows where in the door it is (POS in its column; LEFT and RIGHT: the door's ends, the
+ * left the end at the model's x 0, facing north), so its model has the guides the
+ * curtain runs in up the ends, the bottom bar on the curtain's edge, the barrel's end brackets and the motor
+ * operator (tools/plant_doors.py roller_boxes). RollerDoorStationBlock's push buttons open and close it.
  */
 public class RollerDoorBlock extends HorizontalDirectionalBlock implements EntityBlock {
 	public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
 	public static final BooleanProperty MOVING = BooleanProperty.create("moving");
+	public static final BooleanProperty LEFT = BooleanProperty.create("left");
+	public static final BooleanProperty RIGHT = BooleanProperty.create("right");
+	public static final EnumProperty<Pos> POS = EnumProperty.create("pos", Pos.class);
+
+	/** Where in its column a block is: the bottom, the middle, the top, or all of it (one block high). */
+	public enum Pos implements StringRepresentable {
+		BOTTOM, MIDDLE, TOP, SINGLE;
+
+		@Override
+		public String getSerializedName() {
+			return name().toLowerCase(java.util.Locale.ROOT);
+		}
+	}
 	/** The biggest door that opens as one. */
 	public static final int MAX_BLOCKS = 400;
 	/** Ticks the curtain takes to travel one block. */
@@ -46,12 +68,13 @@ public class RollerDoorBlock extends HorizontalDirectionalBlock implements Entit
 
 	public RollerDoorBlock(Properties properties) {
 		super(properties);
-		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(OPEN, false).setValue(MOVING, false));
+		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(OPEN, false).setValue(MOVING, false)
+				.setValue(LEFT, true).setValue(RIGHT, true).setValue(POS, Pos.SINGLE));
 	}
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(FACING, OPEN, MOVING);
+		builder.add(FACING, OPEN, MOVING, LEFT, RIGHT, POS);
 	}
 
 	@Override
@@ -61,7 +84,25 @@ public class RollerDoorBlock extends HorizontalDirectionalBlock implements Entit
 
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
-		return defaultBlockState().setValue(FACING, context.getHorizontalDirection());
+		return placed(context.getLevel(), context.getClickedPos(), defaultBlockState().setValue(FACING, context.getHorizontalDirection()));
+	}
+
+	@Override
+	protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction direction,
+			BlockPos neighborPos, BlockState neighborState, RandomSource random) {
+		return placed(level, pos, state);
+	}
+
+	/** The state with where in the door it stands, from its neighbours. */
+	public static BlockState placed(BlockGetter level, BlockPos pos, BlockState state) {
+		Direction facing = state.getValue(FACING);
+		Direction.Axis axis = facing.getAxis();
+		boolean below = sameDoor(level.getBlockState(pos.below()), axis), above = sameDoor(level.getBlockState(pos.above()), axis);
+		Pos where = below ? (above ? Pos.MIDDLE : Pos.TOP) : (above ? Pos.BOTTOM : Pos.SINGLE);
+		// The model's x 0 (facing north: west) is the facing's counter-clockwise side.
+		boolean left = !sameDoor(level.getBlockState(pos.relative(facing.getCounterClockWise())), axis);
+		boolean right = !sameDoor(level.getBlockState(pos.relative(facing.getClockWise())), axis);
+		return state.setValue(POS, where).setValue(LEFT, left).setValue(RIGHT, right);
 	}
 
 	@Override

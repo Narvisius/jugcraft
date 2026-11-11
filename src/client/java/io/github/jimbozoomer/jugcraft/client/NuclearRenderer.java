@@ -26,22 +26,22 @@ import net.minecraft.world.phys.Vec3;
  * Draws the reactor unit's equipment in 3D from the anchor (docs/features/nuclear.md): the pressure vessel on its
  * skirt with the control-rod drive forest on its head (the drive rods rise as the rods come out; the head comes off
  * while refuelling), the steam generators with their drum, cone and walkway, the coolant pumps and their big motors,
- * the pressurizer, the turbine-generator on its deck (HP turbine, moisture separator reheaters, three LP turbines,
- * crossover pipes, generator and exciter), the condenser with its water boxes, the feedwater pump skid, the main
- * transformer with radiators, conservator and bushings, and the control console (its lamps show a trip).
+ * the pressurizer, the condenser with its water boxes, the feedwater pump skid, the main
+ * transformer with radiators, conservator and bushings, and the control console (its lamps show a trip). (The
+ * turbine-generator is drawn from its own parts since turbine hall part 1: client/TurbineParts.java.)
  *
  * <p>Geometry is written in the equipment's own frame: x to the placer's right, y up, z away from the placer, in
  * blocks from the anchor's corner. Every face is tiled about a block to a texture so nothing looks stretched.
  * Materials are 128-pixel regions of textures/entity/nuclear_equipment.png (tools/nuclear.py EQ_MATERIALS).
  */
-public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity, NuclearRenderer.State> {
+public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity, NuclearRenderer.State>, Sight.Always {   // its drawing also puffs smoke
 	public static final Identifier TEXTURE = Jugcraft.id("textures/entity/nuclear_equipment.png");
 	private static final RenderType RENDER_TYPE = RenderTypes.entityCutout(TEXTURE);
 	/**
-	 * The sheet's rows of 128-pixel cells (eight across): 1024 x 1280 since round 26 (tools/nuclear.py EQ_ROWS, EQ_CELL;
+	 * The sheet's rows of 128-pixel cells (eight across): 1024 x 1408 since turbine hall part 1 (tools/nuclear.py EQ_ROWS, EQ_CELL;
 	 * 8e: the lettered cells drawn at 128 px so their nameplates read, the others' 64 px texels doubled).
 	 */
-	static final int ROWS = 10;
+	static final int ROWS = 11;
 	private static final int CELL = 128;
 	private static final float PX = 1F / (8 * CELL), PX_V = 1F / (CELL * ROWS);
 
@@ -127,6 +127,12 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 	static final float[] NAMEPLATES5 = region(5, 9);
 	static final float[] NAMEPLATES6 = region(6, 9);
 	static final float[] HVAC_PLACARDS = region(7, 9);
+	// Turbine hall part 1: the turbine's lagging, its LP hoods' paint and the generator's frame (tools/turbine_set.py).
+	static final float[] TURBINE_LAGGING = region(0, 10);
+	static final float[] LP_HOOD = region(1, 10);
+	static final float[] GEN_FRAME = region(2, 10);
+	// Turbine hall part 2: the condenser shells' and the oil plant's paint (tools/feed_train.py).
+	static final float[] COND_SHELL = region(3, 10);
 	/** Every material on the sheet by name, in the sheet's order (tools/nuclear.py EQ_MATERIALS). */
 	static final String[] SHEET = {
 			"stainless", "stainless_dark", "carbon_steel", "paint_grey", "paint_green", "paint_blue", "paint_white",
@@ -139,7 +145,11 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 			"chart", "drpi", "swatches", "nameplates", "nameplates2", "nameplates_inst", "titles", "digital", "placards",
 			"binders", "nameplates3", "nameplates4",
 			// The control room HVAC machines' title plates by train, nameplates and placards (round 26, #11).
-			"hvac_titles_efu", "hvac_titles_ahu", "hvac_titles_chiller", "hvac_titles_pump", "nameplates5", "nameplates6", "hvac_placards"};
+			"hvac_titles_efu", "hvac_titles_ahu", "hvac_titles_chiller", "hvac_titles_pump", "nameplates5", "nameplates6", "hvac_placards",
+			// The main turbine-generator (turbine hall part 1, tools/turbine_set.py): lagging, the LP hoods' plate, the generator's paint.
+			"turbine_lagging", "lp_hood", "gen_frame",
+			// The condenser shells' and the oil plant's paint (turbine hall part 2, tools/feed_train.py).
+			"cond_shell"};
 	private static final java.util.Map<String, float[]> BY_NAME = new java.util.HashMap<>();
 
 	static {
@@ -180,6 +190,15 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		boolean running;
 		float speed, angle;
 		/**
+		 * The diesel generator set and its starting air (round 31, client/DieselParts.java): the pressure its gauge shows
+		 * (psig), ready to start (the set), joined to its set (an air piece), the set's engine readings close up.
+		 */
+		double air;
+		boolean ready, joined;
+		/** A diesel room's monorail (round 31 part 3): its trolley's place along the beam and its hook's drop (blocks). */
+		double hoistX = 2, hoistDrop;
+		EdgTelemetry.@org.jspecify.annotations.Nullable Snapshot engine;
+		/**
 		 * A remote shutdown panel: it has found a reactor, the reactor is there (loaded on the server), control is at
 		 * the panel; the reactor's power and output (0..1), core temperature, and its fuel damaged.
 		 */
@@ -189,10 +208,21 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		int breakers = Switchgear.DEFAULT_BREAKERS;
 		/** Which labelled version it is (its anchor's variant: MCC 1A or 1B; round 26, 8c). */
 		int variant;
+		/** Standing hidden under a building whose compiled site draws it (the medium plant's reactor equipment). */
+		boolean hidden;
 		/** A control room HVAC machine (round 26, #11): where it is (its gauges' wander), as {@link #running}, {@link #speed}. */
 		int seed;
 		float charge;
 		final int[] flows = new int[Switchgear.BREAKERS];
+		/** A load centre (older rooms round 1, client/LoadCentreParts.java): what it shows; null for anything else. */
+		LoadCentreParts.@org.jspecify.annotations.Nullable View lc;
+		/** A live control board (round 27, client/LiveBoards.java): its state as the server last sent it, and the game time. */
+		io.github.jimbozoomer.jugcraft.nuclear.ControlBoard.@org.jspecify.annotations.Nullable State board;
+		double clock;
+		/** The main turbine-generator or a reheater (turbine hall part 1, client/TurbineParts.java): what its live parts show. */
+		TurbineParts.Readings turbine = TurbineParts.Readings.STILL;
+		/** The turbine hall's overhead crane (turbine hall part 3, client/CraneParts.java): where its motions are now. */
+		CraneParts.@org.jspecify.annotations.Nullable View crane;
 	}
 
 	@Override
@@ -216,6 +246,7 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		BlockEntityRenderState.extractBase(equipment, state, crumbling);
 		state.kind = equipment.kind();
 		state.facing = equipment.facing();
+		state.hidden = io.github.jimbozoomer.jugcraft.nuclear.EquipmentAnchorBlock.hidden(equipment.getBlockState());
 		Level level = equipment.getLevel();
 		if (level == null) {
 			return;
@@ -226,10 +257,6 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		state.rods = (float) equipment.core.rods;
 		state.open = equipment.core.refuelOpen;
 		state.tripped = false;
-		if (state.kind == EquipmentKind.CONTROL_CONSOLE && equipment.linked != null
-				&& level.getBlockEntity(equipment.linked) instanceof EquipmentBlockEntity vessel) {
-			state.tripped = vessel.core.scrammed;
-		}
 		if (state.kind == EquipmentKind.REMOTE_SHUTDOWN_PANEL) {
 			// Its own copy of its reactor's state (synced with the panel).
 			state.panelLinked = equipment.linked != null;
@@ -243,10 +270,16 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		}
 		state.variant = equipment.getBlockState().hasProperty(io.github.jimbozoomer.jugcraft.nuclear.EquipmentAnchorBlock.VARIANT)
 				? equipment.getBlockState().getValue(io.github.jimbozoomer.jugcraft.nuclear.EquipmentAnchorBlock.VARIANT) : 0;
+
 		if (state.kind.board() && equipment.bus != null) {
 			state.breakers = equipment.breakers;
 			state.charge = equipment.bus.getAmount() / (float) equipment.busCapacity();
 			System.arraycopy(equipment.flows, 0, state.flows, 0, state.flows.length);
+		}
+		state.lc = null;
+		if (state.kind == EquipmentKind.SWITCHGEAR_LINEUP && equipment.lc != null) {
+			double t = level.getGameTime() + partialTick;
+			state.lc = new LoadCentreParts.View(equipment.breakers, equipment.lc, state.charge, t, equipment.lc.fans ? (t * 28) % 360 : 15);
 		}
 		state.time = (level.getGameTime() % 24_000) + partialTick;
 		if (state.kind.hvac()) {
@@ -262,6 +295,69 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		Vec3 middle = Vec3.atCenterOf(pos.offset(EquipmentKind.toWorld(new BlockPos(state.kind.wide / 2, state.kind.tall / 2, state.kind.deep / 2), state.facing)));
 		double reach = Math.max(state.kind.wide, Math.max(state.kind.deep, state.kind.tall)) / 2.0;
 		state.detail = cameraPos.distanceTo(middle) - reach < DETAIL_DISTANCE;
+		state.engine = null;
+		if (state.kind.diesel()) {
+			// The set's gauges read what its panels do (EdgTelemetry); a compressor's pulley comes up to speed in a second
+			// and a half and runs down in two.
+			state.air = equipment.air;
+			state.joined = equipment.linked != null;
+			if (state.kind == EquipmentKind.EMERGENCY_DIESEL_GENERATOR) {
+				state.engine = state.detail ? EdgTelemetry.of(equipment, level.getGameTime() + partialTick) : null;
+				state.ready = state.engine != null && state.engine.ready;
+			} else if (state.kind == EquipmentKind.EDG_AIR_COMPRESSOR) {
+				DieselParts.spin(equipment, level, partialTick, 30, 40, 4);
+				state.running = equipment.running;
+				state.angle = equipment.animAngle;
+			} else if (state.kind.dieselRoom()) {
+				// The room's own plant (round 31 part 3): its gauges and lamps read the generator it has joined; the
+				// monorail's hoist where its pendant has driven it, moving there.
+				state.running = false;
+				if (state.detail && equipment.linked != null && level.getBlockEntity(equipment.linked) instanceof EquipmentBlockEntity edg
+						&& edg.kind() == EquipmentKind.EMERGENCY_DIESEL_GENERATOR) {
+					state.engine = EdgTelemetry.of(edg, level.getGameTime() + partialTick);
+					state.running = edg.running;
+				}
+				if (state.kind == EquipmentKind.EDG_MONORAIL) {
+					double t = level.getGameTime() + partialTick;
+					state.hoistX = io.github.jimbozoomer.jugcraft.nuclear.Monorail.trolley(equipment, t);
+					state.hoistDrop = io.github.jimbozoomer.jugcraft.nuclear.Monorail.hook(equipment, t);
+				}
+			}
+		}
+		if (state.kind.turbine()) {
+			// Turbine hall part 1: the turbine's own synced state; a reheater reads the turbine it has joined. Part 2: a piece
+			// of the feed train or the oil plant its own (its unit's plant as its turbine has it); a pump's coupling turns
+			// while it runs.
+			EquipmentBlockEntity t = state.kind == EquipmentKind.TURBINE_GENERATOR || state.kind.feedTrain() ? equipment
+					: equipment.linked != null && level.getBlockEntity(equipment.linked) instanceof EquipmentBlockEntity tt
+							&& tt.kind() == EquipmentKind.TURBINE_GENERATOR ? tt : null;
+			if (t == null) {
+				state.turbine = TurbineParts.Readings.STILL;
+			} else {
+				if (state.kind == EquipmentKind.TURBINE_GENERATOR) {
+					TurbineParts.spin(equipment, t.turbineRpm);
+				} else if (state.kind == EquipmentKind.CONDENSATE_PUMP || state.kind == EquipmentKind.MAIN_FEED_PUMP) {
+					TurbineParts.spin(equipment, (t.turbineFlags & io.github.jimbozoomer.jugcraft.nuclear.TurbineHall.RUN) != 0 ? 1185 : 0);
+				}
+				double guard = level.getGameTime() < t.tripGuardUntil ? 1 : 0;
+				state.turbine = new TurbineParts.Readings(t.turbineRpm, t.turbineLoad, t.turbineFlags, guard, equipment.animAngle);
+			}
+		}
+		state.crane = state.kind == EquipmentKind.OVERHEAD_CRANE ? CraneParts.View.of(equipment, level.getGameTime() + partialTick) : null;
+		if (state.crane != null) {
+			// Its detail by where its bridge is now (it runs the length of the hall from its anchor).
+			Vec3 at = middle.add(state.facing.getStepX() * state.crane.bridge(), 0, state.facing.getStepZ() * state.crane.bridge());
+			state.detail = cameraPos.distanceTo(at) - reach < DETAIL_DISTANCE;
+		}
+		state.board = null;
+		if (state.kind.liveBoard()) {
+			// Its pointers swing toward their readings as it is drawn.
+			state.board = equipment.board();
+			state.clock = level.getGameTime() + partialTick;
+			if (state.detail) {
+				LiveBoards.readings(state.board, state.kind, state.clock);
+			}
+		}
 	}
 
 	/**
@@ -288,14 +384,18 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 			return;
 		}
 		e.smokeTick = level.getGameTime();
-		// Where the exhaust comes out: straight up from its roof thimble to the first open air (the stack's top).
+		// Where the exhaust comes out: straight up from its roof thimble (tools/diesel_set.py: live "stack", its x, the
+		// roof's height and its z) to the first open air (the stack's top).
+		com.google.gson.JsonObject live = ControlBoards.live(state.kind);
+		com.google.gson.JsonArray stack = live != null && live.has("stack") ? live.getAsJsonArray("stack") : null;
 		Direction right = state.facing.getClockWise();
-		double lx = 3.5 - 0.5, lz = 0.95 - 0.5;
+		double lx = (stack == null ? 5.0 : stack.get(0).getAsDouble()) - 0.5, lz = (stack == null ? 1.45 : stack.get(2).getAsDouble()) - 0.5;
+		double roof = stack == null ? 13 : stack.get(1).getAsDouble();
 		BlockPos pos = e.getBlockPos();
 		double x = pos.getX() + 0.5 + right.getStepX() * lx + state.facing.getStepX() * lz;
 		double z = pos.getZ() + 0.5 + right.getStepZ() * lx + state.facing.getStepZ() * lz;
 		if (e.smokeY == Integer.MIN_VALUE || level.getGameTime() % 200 == 0) {
-			BlockPos p = BlockPos.containing(x, pos.getY() + 11.05, z);
+			BlockPos p = BlockPos.containing(x, pos.getY() + roof + 0.05, z);
 			for (int k = 0; k < 16 && !level.getBlockState(p).isAir(); k++) {
 				p = p.above();
 			}
@@ -339,8 +439,6 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 				case STEAM_GENERATOR -> steamGenerator(f);
 				case COOLANT_PUMP -> coolantPump(f);
 				case PRESSURIZER -> pressurizer(f);
-				case TURBINE_GENERATOR -> turbine(f);
-				case CONDENSER -> condenser(f);
 				case FEEDWATER_PUMP -> feedwaterPump(f);
 				case MAIN_TRANSFORMER -> transformer(f);
 				case CONTROL_CONSOLE -> console(f);
@@ -397,8 +495,23 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 
 	@Override
 	public void submit(State state, PoseStack pose, SubmitNodeCollector collector, CameraRenderState camera) {
+		if (state.hidden) {
+			return;
+		}
 		boolean detail = state.detail;
+		// A load centre's live parts (the sheet's: still and lit; its own texture's: the legend pass), made once a frame.
+		Mesh[] lcLive = {new Mesh(), new Mesh(), new Mesh()};
+		if (detail && state.kind == EquipmentKind.SWITCHGEAR_LINEUP && state.lc != null) {
+			Frame leg = new Frame(lcLive[2], true);
+			leg.legends = true;
+			LoadCentreParts.live(new Frame(lcLive[0], true), new Frame(lcLive[1], true), leg, state.lc);
+		}
 		collector.submitCustomGeometry(pose, RENDER_TYPE, (p, consumer) -> {
+			if (state.crane != null) {
+				// The turbine hall's crane (turbine hall part 3): its parts where its motions have them.
+				CraneParts.draw(p, consumer, state.facing, state.lightLevel, state.crane, detail, state.time);
+				return;
+			}
 			staticMesh(state.kind, detail).replay(p, consumer, state.facing, state.lightLevel);
 			if (state.kind == EquipmentKind.REACTOR_VESSEL || state.kind == EquipmentKind.EPR_VESSEL) {
 				boolean epr = state.kind == EquipmentKind.EPR_VESSEL;
@@ -413,20 +526,17 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 					headMesh(epr, detail).replay(p, consumer, state.facing, state.lightLevel);
 					rodsMesh(epr, state.rods, detail).replay(p, consumer, state.facing, state.lightLevel);
 				}
-			} else if (state.kind == EquipmentKind.CONTROL_CONSOLE) {
-				Mesh lamps = new Mesh();
-				consoleLamps(new Frame(lamps, detail), state);
-				lamps.replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
-			} else if (state.kind == EquipmentKind.REMOTE_SHUTDOWN_PANEL) {
-				// The board's lit parts, its transfer switches as control stands (keys and lamps), and its live lamps and
-				// screen.
-				int k = state.remote ? 1 : 0;
-				panelMesh(k, false, detail).replay(p, consumer, state.facing, state.lightLevel);
-				panelMesh(k, true, detail).replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
-				Mesh still = new Mesh(), lit = new Mesh();
-				panelLive(new Frame(still, detail), new Frame(lit, detail), state);
-				if (still.vertices() > 0) still.replay(p, consumer, state.facing, state.lightLevel);
-				if (lit.vertices() > 0) lit.replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
+			} else if (state.kind == EquipmentKind.SWITCHGEAR_LINEUP && state.lc != null) {
+				// The rebuilt load centre (older rooms round 1): its lit parts, its names by its label, and close up its
+				// breakers' fronts, lamps, flags and handles, its pointers and fans (its plates in their own pass below).
+				glowMesh(state.kind, detail).replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
+				if (detail) {
+					Mesh[] named = LoadCentreParts.namedMesh(state.variant);
+					if (named[0].vertices() > 0) named[0].replay(p, consumer, state.facing, state.lightLevel);
+					if (named[1].vertices() > 0) named[1].replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
+					if (lcLive[0].vertices() > 0) lcLive[0].replay(p, consumer, state.facing, state.lightLevel);
+					if (lcLive[1].vertices() > 0) lcLive[1].replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
+				}
 			} else if (state.kind.board()) {
 				// A load centre's or motor control centre's lit parts, and its breakers' lamps, flags and handles as they
 				// stand.
@@ -449,30 +559,186 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 					if (still.vertices() > 0) still.replay(p, consumer, state.facing, state.lightLevel);
 					if (lit.vertices() > 0) lit.replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
 				}
+			} else if (state.kind.liveBoard()) {
+				// A live control board (round 27): its lit parts, and close up its lamps, pointers, bar graphs, figures,
+				// traces and handles as the plant has them (its legends and windows are drawn in their own pass below).
+				glowMesh(state.kind, detail).replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
+				// (The display wall's live parts are all on its own texture: drawn in its legend pass below.)
+				if (detail && state.board != null && state.kind != EquipmentKind.PLANT_DISPLAY_WALL) {
+					Mesh still = new Mesh(), lit = new Mesh();
+					LiveBoards.draw(new Frame(still, true), new Frame(lit, true), state.board, state.kind, state.clock);
+					if (still.vertices() > 0) still.replay(p, consumer, state.facing, state.lightLevel);
+					if (lit.vertices() > 0) lit.replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
+				}
+			} else if (state.kind.turbine()) {
+				// The main turbine-generator and its reheaters (turbine hall part 1): a reheater's label by its anchor's variant,
+				// and close up the turbine's figures, needles, lamps, valve stems, trip handle and guard, turning gear lever and
+				// what turns (their plates and gauge faces are drawn in their own pass below).
+				if (detail) {
+					Mesh[] named = TurbineParts.namedMesh(state.kind, state.variant);
+					if (named[0].vertices() > 0) named[0].replay(p, consumer, state.facing, state.lightLevel);
+					if (named[1].vertices() > 0) named[1].replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
+					Mesh still = new Mesh(), lit = new Mesh();
+					TurbineParts.live(new Frame(still, true), new Frame(lit, true), state.kind, state.turbine);
+					if (still.vertices() > 0) still.replay(p, consumer, state.facing, state.lightLevel);
+					if (lit.vertices() > 0) lit.replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
+				}
+			} else if (state.kind.diesel()) {
+				// The diesel generator set and its starting air (round 31): its label by its anchor's variant, and close up
+				// what turns, its needles and its lamps (its plates and signs are drawn in their own pass below).
+				if (detail) {
+					Mesh[] named = DieselParts.namedMesh(state.kind, state.variant);
+					if (named[0].vertices() > 0) named[0].replay(p, consumer, state.facing, state.lightLevel);
+					if (named[1].vertices() > 0) named[1].replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
+					Mesh still = new Mesh(), lit = new Mesh();
+					DieselParts.live(new Frame(still, true), new Frame(lit, true), state.kind,
+							new DieselParts.Readings(state.running, state.angle, state.air, state.ready, state.joined, state.engine, state.hoistX,
+									state.hoistDrop));
+					if (still.vertices() > 0) still.replay(p, consumer, state.facing, state.lightLevel);
+					if (lit.vertices() > 0) lit.replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
+				}
 			} else if (state.kind.decor()) {
 				// The lit parts (screens, lamps, the glow over spent fuel), and whatever blinks.
 				glowMesh(state.kind, detail).replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
 				if (detail) {
 					Mesh blink = new Mesh();
 					PlantDecor.blink(state.kind, new Frame(blink, true), state.time);
-					PlantDecor.liveLamps(state.kind, new Frame(blink, true), state.time, state.speed, state.running);
 					if (blink.vertices() > 0) blink.replay(p, consumer, state.facing, LightCoordsUtil.FULL_BRIGHT);
-					// What moves while it runs, lit like the rest.
-					Mesh live = new Mesh();
-					PlantDecor.live(state.kind, new Frame(live, true), state.time, state.speed, state.angle, state.running);
-					if (live.vertices() > 0) live.replay(p, consumer, state.facing, state.lightLevel);
 				}
 			}
 		});
-		if (state.kind == EquipmentKind.REMOTE_SHUTDOWN_PANEL && detail) {
-			panelScreen(state, pose, collector);
-		}
-		if (state.kind.board() && detail) {
+		if (state.kind == EquipmentKind.SWITCHGEAR_LINEUP && detail && state.lc != null) {
+			collector.submitCustomGeometry(pose, LoadCentreParts.LEGEND_TYPE, (p, consumer) -> {
+				LoadCentreParts.legendMesh(state.variant).replay(p, consumer, state.facing, state.lightLevel);
+				if (lcLive[2].vertices() > 0) lcLive[2].replay(p, consumer, state.facing, state.lightLevel);
+			});
+			loadCentreTexts(state, pose, collector);
+		} else if (state.kind.board() && detail) {
 			loadCentreMeters(state, pose, collector);
 		}
 		if (state.kind == EquipmentKind.CR_CHILLER && detail) {
 			chillerScreen(state, pose, collector);
 		}
+		if (state.kind.diesel() && detail) {
+			collector.submitCustomGeometry(pose, DieselParts.LEGEND_TYPE, (p, consumer) ->
+					DieselParts.legendMesh(state.kind, state.variant).replay(p, consumer, state.facing, state.lightLevel));
+		}
+		if (state.kind.turbine() && detail) {
+			collector.submitCustomGeometry(pose, TurbineParts.LEGEND_TYPE, (p, consumer) ->
+					TurbineParts.legendMesh(state.kind, state.variant).replay(p, consumer, state.facing, state.lightLevel));
+		}
+		if (state.crane != null && detail) {
+			collector.submitCustomGeometry(pose, TurbineParts.LEGEND_TYPE, (p, consumer) ->
+					CraneParts.legends(p, consumer, state.facing, state.lightLevel, state.crane));
+		}
+		if (state.kind == EquipmentKind.PLANT_DISPLAY_WALL && detail) {
+			// Round 32: the plant display wall, on its own texture, and the words it writes.
+			collector.submitCustomGeometry(pose, LiveBoards.WALL_TYPE, (p, consumer) ->
+					LiveBoards.wall(p, consumer, state.facing, state.lightLevel, state.kind, state.board, state.clock));
+			if (state.board != null) {
+				wallTexts(state, pose, collector);
+			}
+		} else if (state.kind.liveBoard() && detail) {
+			collector.submitCustomGeometry(pose, LiveBoards.LEGEND_TYPE, (p, consumer) ->
+					LiveBoards.legends(p, consumer, state.facing, state.lightLevel, state.kind, state.board, state.clock));
+			if (state.board != null) {
+				boardScreens(state, pose, collector);
+			}
+		}
+	}
+
+	/** A live board's plant computer screens (client/LiveBoards.java screen): their lines over the dark glass. */
+	private void boardScreens(State s, PoseStack pose, SubmitNodeCollector collector) {
+		com.google.gson.JsonObject live = ControlBoards.live(s.kind);
+		if (live == null || !live.has("screens")) {
+			return;
+		}
+		pose.pushPose();
+		pose.translate(0.5F, 0.0F, 0.5F);
+		pose.rotateDegrees(Axis.YP, -yRotation(s.facing));
+		pose.translate(-0.5F, 0.0F, -0.5F);
+		for (com.google.gson.JsonElement e : live.getAsJsonArray("screens")) {
+			com.google.gson.JsonObject sc = e.getAsJsonObject();
+			double x0 = sc.get("x0").getAsDouble(), y0 = sc.get("y0").getAsDouble(), x1 = sc.get("x1").getAsDouble(), y1 = sc.get("y1").getAsDouble();
+			double z = sc.get("z").getAsDouble();
+			java.util.List<LiveBoards.Line> lines = LiveBoards.screen(sc.get("id").getAsString(), s.board.plant, s.clock);
+			double lineHeight = (y1 - y0 - 0.03) / 5.4, k = lineHeight / 10.0, left = x0 + 0.03, right = x1 - 0.03;
+			for (int i = 0; i < lines.size(); i++) {
+				LiveBoards.Line line = lines.get(i);
+				double y = y1 - 0.025 - 7 * k - i * lineHeight;
+				double width = (font.width(line.text()) + (line.value().isEmpty() ? 0 : font.width(line.value()) + 8)) * k;
+				double kk = width > right - left ? k * (right - left) / width : k;
+				text(pose, collector, line.text(), left, y, z, kk, line.colour());
+				if (!line.value().isEmpty()) {
+					text(pose, collector, line.value(), right - font.width(line.value()) * kk, y, z, kk, line.colour());
+				}
+			}
+		}
+		pose.popPose();
+	}
+
+	/**
+	 * Round 32: the words the plant display wall writes (nuclear/DisplayWall.java text): each in the game's font, its
+	 * capitals h high with their middle where tools/display_wall.py put it, shrunk to its widest; the banner's alarms
+	 * (their board's name over their legend: light on red, dark on lit amber).
+	 */
+	private void wallTexts(State s, PoseStack pose, SubmitNodeCollector collector) {
+		com.google.gson.JsonObject live = ControlBoards.live(s.kind);
+		if (live == null || !live.has("texts")) {
+			return;
+		}
+		net.minecraft.client.multiplayer.ClientLevel world = net.minecraft.client.Minecraft.getInstance().level;
+		long day = world == null ? 6000 : world.getOverworldClockTime();
+		pose.pushPose();
+		pose.translate(0.5F, 0.0F, 0.5F);
+		pose.rotateDegrees(Axis.YP, -yRotation(s.facing));
+		pose.translate(-0.5F, 0.0F, -0.5F);
+		for (com.google.gson.JsonElement e : live.getAsJsonArray("texts")) {
+			com.google.gson.JsonObject t = e.getAsJsonObject();
+			io.github.jimbozoomer.jugcraft.nuclear.DisplayWall.Text text = io.github.jimbozoomer.jugcraft.nuclear.DisplayWall.text(t.get("id").getAsString(),
+					s.board.plant, s.board, s.clock, day);
+			if (text.text().isEmpty()) {
+				continue;
+			}
+			com.google.gson.JsonArray c = t.getAsJsonArray("c");
+			int colour = text.colour() != 0 ? text.colour() : 0xFF000000 | c.get(0).getAsInt() << 16 | c.get(1).getAsInt() << 8 | c.get(2).getAsInt();
+			wallText(pose, collector, text.text(), t.get("x").getAsDouble(), t.get("y").getAsDouble(), t.get("z").getAsDouble(), t.get("h").getAsDouble(),
+					t.get("a").getAsString(), t.has("w") ? t.get("w").getAsDouble() : 0, colour);
+		}
+		boolean fast = ((long) (s.clock / 4)) % 2 == 0;
+		for (com.google.gson.JsonElement e : live.getAsJsonArray("alarms")) {
+			com.google.gson.JsonObject a = e.getAsJsonObject();
+			com.google.gson.JsonArray slots = a.getAsJsonArray("slots");
+			double z = a.get("tz").getAsDouble();
+			for (int i = 0; i < Math.min(slots.size(), s.board.wallAlarms.length); i++) {
+				com.google.gson.JsonArray q = slots.get(i).getAsJsonArray();
+				int packed = s.board.wallAlarms[i];
+				byte st = io.github.jimbozoomer.jugcraft.nuclear.DisplayWall.state(packed);
+				boolean lit = st == io.github.jimbozoomer.jugcraft.nuclear.ControlBoard.ACKED || st == io.github.jimbozoomer.jugcraft.nuclear.ControlBoard.ALERT && fast;
+				boolean amber = LiveBoards.wallColour(packed).equals("amber");
+				int ink = lit && amber ? io.github.jimbozoomer.jugcraft.nuclear.DisplayWall.INK : 0xFFF4F4F2;
+				double x0 = q.get(0).getAsDouble(), x1 = q.get(2).getAsDouble(), y1 = q.get(3).getAsDouble(), w = x1 - x0 - 0.08;
+				wallText(pose, collector, io.github.jimbozoomer.jugcraft.nuclear.DisplayWall.boardName(io.github.jimbozoomer.jugcraft.nuclear.DisplayWall.kind(packed)),
+						x0 + 0.04, y1 - 0.05, z, 0.036, "l", w, ink);
+				java.util.List<String> lines = LiveBoards.wallLegend(packed);
+				for (int k = 0; k < lines.size(); k++) {
+					wallText(pose, collector, lines.get(k), x0 + 0.04, y1 - 0.13 - k * 0.08, z, 0.052, "l", w, ink);
+				}
+			}
+		}
+		pose.popPose();
+	}
+
+	/** A line of the wall's words: capitals h high, their middle at y, anchored l, c or r at x, no wider than widest. */
+	private void wallText(PoseStack pose, SubmitNodeCollector collector, String s, double x, double y, double z, double h, String anchor, double widest, int colour) {
+		double k = h / 7.0;
+		double width = font.width(s) * k;
+		if (widest > 0 && width > widest) {
+			k *= widest / width;
+			width = widest;
+		}
+		double left = anchor.equals("l") ? x : anchor.equals("c") ? x - width / 2 : x - width;
+		text(pose, collector, s, left, y - 3.5 * k, z, k, colour);
 	}
 
 	// ------------------------------------------------------------------ the control room HVAC machines (nuclear/HvacRoom.java)
@@ -620,7 +886,7 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		pose.translate((float) x, (float) y, (float) (1 - z));
 		pose.rotateDegrees(Axis.YP, -90);
 		pose.scale((float) k, (float) -k, (float) k);
-		collector.submitText(pose, 0, -7, Component.literal(s).getVisualOrderText(), false, Font.DisplayMode.POLYGON_OFFSET,
+		collector.submitText(pose, 0, -7, Texts.of(s), false, Font.DisplayMode.POLYGON_OFFSET,
 				LightCoordsUtil.FULL_BRIGHT, colour, 0, 0);
 		pose.popPose();
 	}
@@ -689,6 +955,42 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 	}
 
 	/**
+	 * The rebuilt load centre's words (tools/load_centre.py live "texts"): each trip unit's amps and operations count (on
+	 * its breaker's front, out with it), the power monitor's lines, the transformer's temperatures; in the game's font,
+	 * capitals h high with their middle at y, shrunk to fit their width.
+	 */
+	private void loadCentreTexts(State s, PoseStack pose, SubmitNodeCollector collector) {
+		com.google.gson.JsonObject live = ControlBoards.live(s.kind);
+		if (live == null || s.lc == null || !live.has("texts")) {
+			return;
+		}
+		pose.pushPose();
+		pose.translate(0.5F, 0.0F, 0.5F);
+		pose.rotateDegrees(Axis.YP, -yRotation(s.facing));
+		pose.translate(-0.5F, 0.0F, -0.5F);
+		for (com.google.gson.JsonElement e : live.getAsJsonArray("texts")) {
+			com.google.gson.JsonObject t = e.getAsJsonObject();
+			String text = s.lc.text(t.get("id").getAsString());
+			if (text.isEmpty()) {
+				continue;
+			}
+			double h = t.get("h").getAsDouble(), k = h / 7.0;
+			double width = font.width(text) * k;
+			if (t.has("w") && width > t.get("w").getAsDouble()) {
+				k *= t.get("w").getAsDouble() / width;
+				width = t.get("w").getAsDouble();
+			}
+			double x = t.get("x").getAsDouble();
+			String a = t.get("a").getAsString();
+			double x0 = a.equals("r") ? x - width : a.equals("c") ? x - width / 2 : x;
+			com.google.gson.JsonArray c = t.getAsJsonArray("c");
+			int colour = 0xFF000000 | c.get(0).getAsInt() << 16 | c.get(1).getAsInt() << 8 | c.get(2).getAsInt();
+			text(pose, collector, text, x0, t.get("y").getAsDouble() - 3.5 * k, t.get("z").getAsDouble() + s.lc.dz(t), k, colour);
+		}
+		pose.popPose();
+	}
+
+	/**
 	 * The load centre's meters' readings in red LED figures: the bus's charge (%), its volts (480 while it holds any
 	 * charge), each feeder's amps (its flow in JE/t over four).
 	 */
@@ -722,29 +1024,7 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		pose.popPose();
 	}
 
-	// ------------------------------------------------------------------ the remote shutdown panel
-
-	/** The panel's still and lit parts with its transfer switches in each state, by state, lit and detail. */
-	private static final Mesh[][][] PANEL = new Mesh[2][2][2];
-
-	static Mesh panelMesh(int remote, boolean lit, boolean detail) {
-		int l = lit ? 1 : 0, d = detail ? 1 : 0;
-		if (PANEL[remote][l][d] == null) {
-			Mesh mesh = new Mesh();
-			Frame f = new Frame(mesh, detail);
-			if (lit) {
-				ControlBoards.lit(EquipmentKind.REMOTE_SHUTDOWN_PANEL, f);
-			}
-			ControlBoards.state(EquipmentKind.REMOTE_SHUTDOWN_PANEL, remote == 1 ? "rsp" : "mcr", f, lit);
-			PANEL[remote][l][d] = mesh;
-		}
-		return PANEL[remote][l][d];
-	}
-
-	/** Its screen and status lamps (tools/control_boards.py RSP_SCREEN, RSP_LAMPS). */
-	static final double SCREEN_X0 = 2.62, SCREEN_Y0 = 1.75, SCREEN_X1 = 3.38, SCREEN_Y1 = 2.45, SCREEN_Z = 0.26;
-	static final double[][] PANEL_LAMPS = {{2.75, 1.64}, {3.0, 1.64}, {3.25, 1.64}};
-	static final double PANEL_LAMP = 0.05, PANEL_LAMP_Z = 0.284;
+	// ------------------------------------------------------------------ swatches
 
 	/** A patch of the swatch cell (tools/control_boards.py SWATCH: column, row). */
 	static float[] swatch(int col, int row) {
@@ -753,101 +1033,13 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		return new float[] {c[0] + du * (col + 0.1F), c[1] + dv * (row + 0.1F), c[0] + du * (col + 0.9F), c[1] + dv * (row + 0.9F)};
 	}
 
-	/**
-	 * The panel's live parts: the screen's dark glass (the readings are drawn over it), and the three status lamps,
-	 * white while the control room has control, amber while the panel has it, red while the reactor is tripped (unlit
-	 * lenses in the room's light, lit ones bright).
-	 */
-	static void panelLive(Frame still, Frame lit, State s) {
-		Vec3 n = v(0, 0, -1);
-		float[] glass = swatch(0, 2);
-		lit.quad(v(SCREEN_X0, SCREEN_Y1, SCREEN_Z), v(SCREEN_X0, SCREEN_Y0, SCREEN_Z), v(SCREEN_X1, SCREEN_Y0, SCREEN_Z), v(SCREEN_X1, SCREEN_Y1, SCREEN_Z),
-				n, glass[0], glass[1], glass[2], glass[3]);
-		if (!still.detail) {
-			return;
-		}
-		boolean[] on = {s.panelOnline && !s.remote, s.remote, s.tripped};
-		float[][] lens = {LAMP_WHITE, LAMP_AMBER, LAMP_RED};
-		float[][] dark = {swatch(3, 2), swatch(1, 0), swatch(0, 0)};
-		double h = PANEL_LAMP / 2 + 0.008;
-		for (int i = 0; i < 3; i++) {
-			double x = PANEL_LAMPS[i][0], y = PANEL_LAMPS[i][1], z = PANEL_LAMP_Z;
-			float[] uv = on[i] ? lens[i] : dark[i];
-			(on[i] ? lit : still).quad(v(x - h, y + h, z), v(x - h, y - h, z), v(x + h, y - h, z), v(x + h, y + h, z), n, uv[0], uv[1], uv[2], uv[3]);
-		}
-	}
-
-	/**
-	 * The readings on the panel's screen, in the plant computer's green: the reactor's power, rods, core temperature
-	 * and output, whether it is tripped, and where control is. In the panel's frame: the text's x to the right, up, on
-	 * the screen's face toward whoever stands at it.
-	 */
-	private void panelScreen(State s, PoseStack pose, SubmitNodeCollector collector) {
-		java.util.List<String[]> lines = new java.util.ArrayList<>();
-		java.util.List<Integer> colours = new java.util.ArrayList<>();
-		int green = 0x5ADC78, amber = 0xF0B030, red = 0xF04034, white = 0xDCE6E8, cyan = 0x4FC8E8;
-		if (!s.panelLinked) {
-			lines.add(new String[] {"NO REACTOR", ""});
-			colours.add(amber);
-			lines.add(new String[] {"IN RANGE", ""});
-			colours.add(amber);
-		} else if (!s.panelOnline) {
-			lines.add(new String[] {"NO SIGNAL", ""});
-			colours.add(amber);
-		} else {
-			lines.add(new String[] {"UNIT STATUS", ""});
-			colours.add(cyan);
-			lines.add(new String[] {"POWER", String.format(java.util.Locale.ROOT, "%.1f%%", s.power * 100)});
-			colours.add(green);
-			lines.add(new String[] {"RODS IN", String.format(java.util.Locale.ROOT, "%.0f%%", s.rods)});
-			colours.add(green);
-			lines.add(new String[] {"CORE", String.format(java.util.Locale.ROOT, "%.0f\u00b0C", s.temperature)});
-			colours.add(s.temperature >= 350 ? red : green);
-			lines.add(new String[] {"OUTPUT", String.format(java.util.Locale.ROOT, "%.0f%%", s.output * 100)});
-			colours.add(green);
-			if (s.fuelDamaged) {
-				lines.add(new String[] {"FUEL DAMAGE", ""});
-				colours.add(red);
-			} else if (s.tripped) {
-				lines.add(new String[] {"RX TRIPPED", ""});
-				colours.add(red);
-			} else {
-				lines.add(new String[] {s.power > 0.005 ? "OPERATING" : "SHUT DOWN", ""});
-				colours.add(s.power > 0.005 ? green : white);
-			}
-			lines.add(new String[] {"CONTROL", s.remote ? "RSP" : "MCR"});
-			colours.add(s.remote ? amber : white);
-		}
-		// Lines of the font's 9 pixels a little apart; each line's letters stand on its baseline y (7 pixels tall).
-		double lineHeight = 0.082, k = lineHeight / 10.0;
-		double left = SCREEN_X0 + 0.04, right = SCREEN_X1 - 0.04, top = SCREEN_Y1 - 0.035 - 7 * k;
-		pose.pushPose();
-		pose.translate(0.5F, 0.0F, 0.5F);
-		pose.rotateDegrees(Axis.YP, -yRotation(s.facing));
-		pose.translate(-0.5F, 0.0F, -0.5F);
-		for (int i = 0; i < lines.size(); i++) {
-			double y = top - i * lineHeight;
-			int colour = 0xFF000000 | colours.get(i);
-			String label = lines.get(i)[0], value = lines.get(i)[1];
-			text(pose, collector, label, left, y, k, colour);
-			if (!value.isEmpty()) {
-				text(pose, collector, value, right - font.width(value) * k, y, k, colour);
-			}
-		}
-		pose.popPose();
-	}
-
-	private void text(PoseStack pose, SubmitNodeCollector collector, String s, double x, double y, double k, int colour) {
-		text(pose, collector, s, x, y, SCREEN_Z, k, colour);
-	}
-
 	/** Text on a face at depth z of the equipment's frame, its baseline at y (in the frame turned as the equipment is). */
 	private void text(PoseStack pose, SubmitNodeCollector collector, String s, double x, double y, double z, double k, int colour) {
 		pose.pushPose();
 		// The face is at z in the equipment's frame (z away from whoever stands at it): 1 - z here.
 		pose.translate((float) x, (float) y, (float) (1 - z + 0.003));
 		pose.scale((float) k, (float) -k, (float) k);
-		collector.submitText(pose, 0, -7, Component.literal(s).getVisualOrderText(), false, Font.DisplayMode.POLYGON_OFFSET,
+		collector.submitText(pose, 0, -7, Texts.of(s), false, Font.DisplayMode.POLYGON_OFFSET,
 				LightCoordsUtil.FULL_BRIGHT, colour, 0, 0);
 		pose.popPose();
 	}
@@ -905,13 +1097,14 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 				}
 				vesselHead(head);
 				vesselRods(rods, 100);
-			} else if (kind == EquipmentKind.CONTROL_CONSOLE) {
-				consoleLamps(new Frame(lit, true), new State());
-			} else if (kind == EquipmentKind.REMOTE_SHUTDOWN_PANEL) {
+			} else if (kind == EquipmentKind.SWITCHGEAR_LINEUP) {
+				// (Its plates are on its own texture: the item shows its body, breakers and lamps.)
 				ControlBoards.lit(kind, new Frame(lit, true));
-				ControlBoards.state(kind, "mcr", new Frame(still, true), false);
-				ControlBoards.state(kind, "mcr", new Frame(lit, true), true);
-				panelLive(new Frame(still, true), new Frame(lit, true), new State());
+				Frame leg = new Frame(new Mesh(), true);
+				leg.legends = true;
+				LoadCentreParts.live(new Frame(still, true), new Frame(lit, true), leg,
+						new LoadCentreParts.View(Switchgear.DEFAULT_BREAKERS, new io.github.jimbozoomer.jugcraft.nuclear.LoadCentre.State(), 1F, 0, 15));
+				ControlBoards.state(kind, "v0", new Frame(still, true), false);
 			} else if (kind.board()) {
 				ControlBoards.lit(kind, new Frame(lit, true));
 				loadCentreLive(new Frame(still, true), new Frame(lit, true), kind,
@@ -922,11 +1115,17 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 				ControlBoards.state(kind, "v0", new Frame(still, true), false);
 				ControlBoards.state(kind, "v0", new Frame(lit, true), true);
 				hvacLive(new Frame(still, true), new Frame(lit, true), kind, false, 0, 0, 0);
+			} else if (kind.liveBoard()) {
+				ControlBoards.lit(kind, new Frame(lit, true));
+			} else if (kind.turbine()) {
+				ControlBoards.state(kind, "v0", new Frame(still, true), false);
+				TurbineParts.live(new Frame(still, true), new Frame(lit, true), kind, TurbineParts.Readings.STILL);
+			} else if (kind.diesel()) {
+				ControlBoards.state(kind, "v0", new Frame(still, true), false);
+				DieselParts.live(new Frame(still, true), new Frame(lit, true), kind, DieselParts.Readings.STILL);
 			} else if (kind.decor()) {
 				PlantDecor.glow(kind, new Frame(lit, true));
 				PlantDecor.blink(kind, new Frame(lit, true), 0);
-				PlantDecor.liveLamps(kind, new Frame(lit, true), 0, 0, false);
-				PlantDecor.live(kind, new Frame(still, true), 0, 0, 0, false);
 			}
 			ITEM_LIT[i] = lit;
 			ITEM_STILL[i] = still;
@@ -966,13 +1165,34 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 
 		/** Emits the mesh for a piece facing {@code facing}, lit with {@code light}. */
 		void replay(PoseStack.Pose pose, com.mojang.blaze3d.vertex.VertexConsumer consumer, Direction facing, int light) {
+			replay(pose, consumer, facing, light, 0xFFFFFFFF);
+		}
+
+		/**
+		 * The same, shifted (dx, dy, dz blocks in the piece's own frame) before it is turned: a part that moves on the piece
+		 * (turbine hall part 3: the crane's bridge, trolley and hooks, client/CraneParts.java).
+		 */
+		void replay(PoseStack.Pose pose, com.mojang.blaze3d.vertex.VertexConsumer consumer, Direction facing, int light, float dx, float dy, float dz) {
+			Direction right = facing.getClockWise();
+			float rx = right.getStepX(), rz = right.getStepZ(), fx = facing.getStepX(), fz = facing.getStepZ();
+			for (int i = 0; i < size; i += 8) {
+				float lx = data[i] + dx - 0.5F, lz = data[i + 2] + dz - 0.5F;
+				float x = 0.5F + rx * lx + fx * lz, z = 0.5F + rz * lx + fz * lz;
+				float nx = rx * data[i + 5] + fx * data[i + 7], nz = rz * data[i + 5] + fz * data[i + 7];
+				consumer.addVertex(pose, x, data[i + 1] + dy, z).setColor(0xFFFFFFFF).setUv(data[i + 3], data[i + 4])
+						.setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, nx, data[i + 6], nz);
+			}
+		}
+
+		/** The same, coloured (a live board's annunciator windows: a lamp's colour behind the legend, or frosted unlit). */
+		void replay(PoseStack.Pose pose, com.mojang.blaze3d.vertex.VertexConsumer consumer, Direction facing, int light, int colour) {
 			Direction right = facing.getClockWise();
 			float rx = right.getStepX(), rz = right.getStepZ(), fx = facing.getStepX(), fz = facing.getStepZ();
 			for (int i = 0; i < size; i += 8) {
 				float lx = data[i] - 0.5F, lz = data[i + 2] - 0.5F;
 				float x = 0.5F + rx * lx + fx * lz, z = 0.5F + rz * lx + fz * lz;
 				float nx = rx * data[i + 5] + fx * data[i + 7], nz = rz * data[i + 5] + fz * data[i + 7];
-				consumer.addVertex(pose, x, data[i + 1], z).setColor(0xFFFFFFFF).setUv(data[i + 3], data[i + 4])
+				consumer.addVertex(pose, x, data[i + 1], z).setColor(colour).setUv(data[i + 3], data[i + 4])
 						.setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, nx, data[i + 6], nz);
 			}
 		}
@@ -982,8 +1202,12 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 	static final class Frame {
 		final Mesh mesh;
 		final boolean detail;
+		/** It draws the live boards' legends (their own texture) rather than the sheet's materials (client/ControlBoards.java). */
+		boolean legends;
 		/** Stretch applied to everything recorded (a larger version of the same piece). */
 		double sx = 1, sy = 1, sz = 1;
+		/** A shift applied to everything recorded, before the stretch (a load centre's breaker racked out). */
+		double ox, oy, oz;
 
 		Frame(Mesh mesh, boolean detail) {
 			this.mesh = mesh;
@@ -1008,10 +1232,11 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		void quad(Vec3 tl, Vec3 bl, Vec3 br, Vec3 tr, Vec3 n, float u0, float v0, float u1, float v1) {
 			float nx = (float) n.x, ny = (float) n.y, nz = (float) n.z;
 			float ax = (float) sx, ay = (float) sy, az = (float) sz;
-			mesh.vertex((float) tl.x * ax, (float) tl.y * ay, (float) tl.z * az, u0, v0, nx, ny, nz);
-			mesh.vertex((float) bl.x * ax, (float) bl.y * ay, (float) bl.z * az, u0, v1, nx, ny, nz);
-			mesh.vertex((float) br.x * ax, (float) br.y * ay, (float) br.z * az, u1, v1, nx, ny, nz);
-			mesh.vertex((float) tr.x * ax, (float) tr.y * ay, (float) tr.z * az, u1, v0, nx, ny, nz);
+			float px = (float) ox, py = (float) oy, pz = (float) oz;
+			mesh.vertex(((float) tl.x + px) * ax, ((float) tl.y + py) * ay, ((float) tl.z + pz) * az, u0, v0, nx, ny, nz);
+			mesh.vertex(((float) bl.x + px) * ax, ((float) bl.y + py) * ay, ((float) bl.z + pz) * az, u0, v1, nx, ny, nz);
+			mesh.vertex(((float) br.x + px) * ax, ((float) br.y + py) * ay, ((float) br.z + pz) * az, u1, v1, nx, ny, nz);
+			mesh.vertex(((float) tr.x + px) * ax, ((float) tr.y + py) * ay, ((float) tr.z + pz) * az, u1, v0, nx, ny, nz);
 		}
 
 		/** A triangle (a quad with its last corner repeated), for the sides under sloped desk tops. */
@@ -1482,116 +1707,6 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 		f.plate(cx - 0.4, 0.4, cz - 1.27, cx + 0.4, 1.2, cz - 1.22, 0, TREFOIL_SIGN, PAINT_GREY);
 	}
 
-	static void turbine(Frame f) {
-		double c = 5.5, axisY = 4.6;
-		// The concrete deck and its grating walkway along the sides.
-		f.box(0, 0, 0, 11, 3, 50, CONCRETE);
-		f.box(0, 3, 0, 11, 3.05, 50, GRATING, GRATING, CONCRETE);
-		for (int side : new int[] {0, 1}) {
-			double x = side == 0 ? 0.05 : 10.95;
-			f.box(x - 0.03, 3.05, 0.2, x + 0.03, 4.1, 49.8, HANDRAIL);
-		}
-		// Shaft line, bearing pedestals.
-		f.cylinder(v(c, axisY, 1.0), v(c, axisY, 49.0), 0.25, f.sides(12), STAINLESS, true);
-		for (double z : new double[] {1.5, 9.5, 18.5, 27.5, 36.5, 46.5}) {
-			f.box(c - 0.9, 3.05, z - 0.4, c + 0.9, axisY - 0.2, z + 0.4, CARBON_STEEL);
-		}
-		// High-pressure turbine, with the main steam inlet (stop and control valve chest) on top of it.
-		halfCasing(f, c, axisY, 2.5, 9.0, 1.9, TURBINE_BLUE);
-		f.box(c - 0.9, axisY + 1.7, 4.6, c + 0.9, axisY + 2.6, 6.4, CARBON_STEEL);
-		f.pipe(0.55, INSULATION, v(c, axisY + 2.6, 5.5), v(c, 10.0, 5.5));
-		// Moisture separator reheaters either side, on saddles.
-		for (double x : new double[] {1.45, 9.55}) {
-			f.revolve(v(x, axisY, 3.0), v(x, axisY, 4.0), new double[][] {{0, 0.3}, {0.5, 0.95}, {26.5, 0.95}, {27, 0.3}}, f.sides(16), PAINT_GREY, true, true);
-			for (double z = 5; z < 30; z += 6) {
-				f.box(x - 0.7, 3.05, z - 0.2, x + 0.7, axisY - 0.6, z + 0.2, CARBON_STEEL);
-			}
-		}
-		// Three low-pressure turbines.
-		for (double z0 : new double[] {10.0, 19.0, 28.0}) {
-			f.box(c - 3.3, 3.05, z0, c + 3.3, 5.6, z0 + 8.0, TURBINE_BLUE, TURBINE_BLUE, TURBINE_BLUE);
-			halfCasing(f, c, 5.6, z0 + 0.4, z0 + 7.6, 2.9, TURBINE_BLUE);
-			f.box(c - 3.35, 5.5, z0 - 0.05, c + 3.35, 5.7, z0 + 8.05, FLANGE);
-		}
-		// Crossover pipes from the HP turbine over the LP turbines.
-		for (double x : new double[] {c - 1.4, c + 1.4}) {
-			f.pipe(0.55, PAINT_GREY, v(x, axisY + 1.4, 7.5), v(x, 9.1, 7.5), v(x, 9.1, 32.0));
-			for (double z : new double[] {14.0, 23.0, 32.0}) {
-				f.cylinder(v(x, 9.1, z), v(x, 8.1, z), 0.55, f.sides(12), PAINT_GREY, false);
-			}
-		}
-		// Generator, with its end shields and the exciter.
-		f.box(c - 2.4, 3.05, 37.2, c + 2.4, axisY - 0.8, 45.8, CARBON_STEEL);
-		f.revolve(v(c, axisY + 0.4, 37.0), v(c, axisY + 0.4, 38.0), new double[][] {{0, 1.6}, {0.5, 2.15}, {8.5, 2.15}, {9.0, 1.6}}, 32,
-				GENERATOR, true, true);
-		for (double z : new double[] {39.0, 41.5, 44.0}) {
-			f.revolve(v(c, axisY + 0.4, z), v(c, axisY + 0.4, z + 1), new double[][] {{0, 2.2}, {0.25, 2.2}}, f.sides(32), PAINT_GREEN, true, true);
-		}
-		f.cylinder(v(c, axisY, 46.4), v(c, axisY, 48.8), 1.0, f.sides(16), PAINT_GREY, true);
-		f.plate(c - 0.6, 5.0, 46.9, c + 0.6, 5.6, 46.95, 0, NAMEPLATE, PAINT_GREY);
-		// Bus duct from the generator to the side, toward the main transformer.
-		f.box(c + 2.0, axisY + 0.6, 40.5, 11.0, axisY + 1.4, 41.5, PAINT_GREY);
-		f.box(10.2, 3.05, 40.6, 10.8, axisY + 0.6, 41.4, PAINT_GREY);
-	}
-
-	/** A turbine casing: a horizontal half-cylinder (its top) with a split flange, over a box base. */
-	static void halfCasing(Frame f, double c, double y, double z0, double z1, double r, float[] uv) {
-		int sides = f.sides(32);
-		int repeats = Frame.repeatsFor(Math.PI * r * 2, sides);
-		for (int k = 0; k < sides / 2; k++) {
-			double a0 = Math.PI * k / (sides / 2.0), a1 = Math.PI * (k + 1) / (sides / 2.0);
-			Vec3 d0 = v(Math.cos(a0), Math.sin(a0), 0), d1 = v(Math.cos(a1), Math.sin(a1), 0);
-			double slice = repeats / (double) sides, u0 = (k * slice) % 1.0;
-			float fu0 = (float) (uv[0] + (uv[2] - uv[0]) * u0), fu1 = (float) (uv[0] + (uv[2] - uv[0]) * Math.min(1, u0 + slice));
-			int rows = (int) Math.ceil(z1 - z0);
-			for (int row = 0; row < rows; row++) {
-				double za = z0 + (z1 - z0) * row / rows, zb = z0 + (z1 - z0) * (row + 1) / rows;
-				Vec3 p00 = v(c + d0.x * r, y + d0.y * r, za), p01 = v(c + d0.x * r, y + d0.y * r, zb);
-				Vec3 p10 = v(c + d1.x * r, y + d1.y * r, za), p11 = v(c + d1.x * r, y + d1.y * r, zb);
-				f.quad(p11, p10, p00, p01, d0.add(d1).normalize(), fu0, uv[1], fu1, uv[3]);
-			}
-		}
-		// The two ends.
-		for (int end = 0; end < 2; end++) {
-			double z = end == 0 ? z0 : z1;
-			Vec3 n = v(0, 0, end == 0 ? -1 : 1);
-			for (int k = 0; k < sides / 2; k += 2) {
-				double a0 = Math.PI * k / (sides / 2.0), a1 = Math.PI * (k + 1) / (sides / 2.0), a2 = Math.PI * (k + 2) / (sides / 2.0);
-				Vec3 centre = v(c, y, z);
-				Vec3 p0 = v(c + Math.cos(a0) * r, y + Math.sin(a0) * r, z), p1 = v(c + Math.cos(a1) * r, y + Math.sin(a1) * r, z);
-				Vec3 p2 = v(c + Math.cos(a2) * r, y + Math.sin(a2) * r, z);
-				if (end == 0) {
-					f.quad(centre, p0, p1, p2, n, uv[0], uv[1], uv[2], uv[3]);
-				} else {
-					f.quad(centre, p2, p1, p0, n, uv[0], uv[1], uv[2], uv[3]);
-				}
-			}
-		}
-		f.box(c - r - 0.15, y - 0.1, z0 - 0.1, c + r + 0.15, y + 0.12, z1 + 0.1, FLANGE);
-		f.box(c - r, 3.05, z0, c + r, y - 0.1, z1, uv);
-	}
-
-	static void condenser(Frame f) {
-		// The shell with stiffening ribs, the exhaust neck on top, water boxes on both ends with the circulating water
-		// nozzles, the hotwell along the bottom, and a nameplate.
-		f.box(0.6, 0.4, 0.3, 11.4, 5.0, 5.7, TANK_GREY);
-		for (double x = 1.6; x < 11; x += 1.5) {
-			f.box(x - 0.08, 0.4, 0.22, x + 0.08, 5.0, 5.78, CARBON_STEEL);
-		}
-		f.box(1.5, 5.0, 1.0, 10.5, 5.95, 5.0, STAINLESS_DARK, FLANGE, STAINLESS_DARK);
-		f.box(0.6, 0, 1.2, 11.4, 0.45, 4.8, CARBON_STEEL);
-		for (int end = 0; end < 2; end++) {
-			double x0 = end == 0 ? 0.05 : 11.4, x1 = end == 0 ? 0.6 : 11.95;
-			f.box(x0, 0.6, 0.6, x1, 4.6, 5.4, PAINT_BLUE);
-			double nx = end == 0 ? 0.05 : 11.95, out = end == 0 ? -0.05 : 0.05;
-			for (double y : new double[] {1.5, 3.6}) {
-				f.cylinder(v(nx, y, 3.0), v(nx + out * 1, y, 3.0), 0.75, f.sides(16), PAINT_BLUE, true);
-			}
-		}
-		f.plate(5.4, 2.5, 0.25, 6.6, 3.1, 0.3, 0, NAMEPLATE, TANK_GREY);
-		f.plate(2.6, 2.4, 0.25, 3.4, 3.2, 0.3, 0, HAZARD, TANK_GREY);
-	}
-
 	static void feedwaterPump(Frame f) {
 		f.box(0.05, 0, 0.2, 2.95, 0.3, 1.8, CARBON_STEEL);
 		// Motor along x with cooling fins, the coupling guard, and the pump with its nozzles up to the steam line.
@@ -1659,31 +1774,12 @@ public class NuclearRenderer implements BlockEntityRenderer<EquipmentBlockEntity
 	}
 
 	/**
-	 * The reactor control console: a benchboard section three wide, in line with the control room's boards (round 23,
-	 * tools/control_boards.py reactor_console): the rod position indicator, the nuclear instruments' recorders, rod
-	 * control and the reactor trip switches under their guards. Its screens and status lamps are live ({@link
-	 * #consoleLamps}).
+	 * The reactor control console: a benchboard section three wide, in line with the control room's boards (round 30,
+	 * tools/board_live.py console_board): a live board, its annunciator, nuclear instruments, rod position display,
+	 * step counters, plant computer page and its working rod control and reactor trip switches drawn by {@link
+	 * LiveBoards}.
 	 */
 	static void console(Frame f) {
 		ControlBoards.still(EquipmentKind.CONTROL_CONSOLE, f);
-	}
-
-	/** The console's lit parts: three screens and the annunciator lamps (red and blinking on a trip). */
-	static void consoleLamps(Frame f, State s) {
-		// The board's own lit parts (the rod position indicator, the recorders' charts), then the live ones: the three
-		// screens in their bezels and the eight lamps in their strip (tools/control_boards.py SCREENS, LAMP_STRIP).
-		ControlBoards.lit(EquipmentKind.CONTROL_CONSOLE, f);
-		for (int i = 0; i < 3; i++) {
-			double x0 = 0.15 + i * 0.95, x1 = x0 + 0.85, z = 1.16;
-			f.quad(v(x0, 1.85, z), v(x0, 1.35, z), v(x1, 1.35, z), v(x1, 1.85, z), v(0, 0, -1),
-					SCREEN[0], SCREEN[1], SCREEN[2], SCREEN[3]);
-		}
-		boolean blink = s.tripped && ((int) (s.time / 10)) % 2 == 0;
-		double step = (2.84 - 0.2) / 8;
-		for (int i = 0; i < 8; i++) {
-			double x0 = 0.2 + i * step + 0.04, x1 = 0.2 + (i + 1) * step - 0.04, z = 1.18;
-			float[] lamp = s.tripped ? (blink || i % 2 == 0 ? LAMP_RED : LAMP_GREEN) : LAMP_GREEN;
-			f.quad(v(x0, 2.02, z), v(x0, 1.94, z), v(x1, 1.94, z), v(x1, 2.02, z), v(0, 0, -1), lamp[0], lamp[1], lamp[2], lamp[3]);
-		}
 	}
 }

@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "CRC"
+  ],
+  "key": {
+    "C": "jugcraft:carpet_tile",
+    "R": "minecraft:rail"
+  },
+  "result": {
+    "id": "jugcraft:doc_rail_floor",
+    "count": 3
+  }
+}

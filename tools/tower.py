@@ -1,5 +1,5 @@
 """Drone Tower data (docs/features/drone-tower.md): building materials, command-room furniture, the Tower
-Core, tower modules, and their names, models, textures, loot and recipes.
+Core and their names, models, textures, loot and recipes.
 
 The building materials are ordinary blocks meant for every big Jugcraft structure (the Drone Tower now; the
 reactors and the black hole facility later), each made from a real material:
@@ -16,6 +16,12 @@ check_mod_data.py).
 """
 import math
 import random
+
+import tower_realism_art
+import tower_exchanges
+import tower_master_console
+import tripillar_fixtures
+import room_kit_recipes
 
 from PIL import Image
 
@@ -37,7 +43,7 @@ BUILDING = {
     "depleted_uranium_armor": {"display": "Depleted Uranium Armor", "kind": "cube", "variants": True},
     "graphene_lattice": {"display": "Graphene Lattice", "kind": "cube", "variants": True},
     "superconducting_conduit": {"display": "Superconducting Conduit", "kind": "light", "light": 5},
-    "red_light_strip": {"display": "Red Light Strip", "kind": "light", "light": 8},
+    "red_light_strip": {"display": "Recessed Floor Light", "kind": "light", "light": 8},
     "warning_light": {"display": "Warning Light", "kind": "light", "light": 13},
     # Room surfaces for the command room.
     "acoustic_wall_panel": {"display": "Acoustic Wall Panel", "kind": "cube"},
@@ -54,6 +60,9 @@ BUILDING = {
     "intake_funnel": {"display": "Intake Funnel", "kind": "cube"},
     # The landing pad inside each tower hangar (a red charger glow in the middle).
     "hangar_pad": {"display": "Hangar Pad", "kind": "light", "light": 6},
+    # The Tri-Pillar's amber lines (roof line, deck edges, floor guide lines, the ring round the holo table): a flush LED
+    # fitting, a frosted amber diffuser in a steel bezel, so a run of them reads as a segmented light line.
+    "amber_light_strip": {"display": "Amber Light Strip", "kind": "light", "light": 12},
 }
 
 # Furniture with real models: boxes (x0, y0, z0, x1, y1, z1, texture) in 1/16 block, for a block facing north
@@ -100,30 +109,31 @@ FURNITURE_GLOW = {"screen_a", "screen_b", "screen_c", "light_panel", "led"}
 FURNITURE_TEXTURES = ["frame", "chrome", "fabric", "mesh", "desk", "desk_body", "keys", "screen_a", "screen_b", "rack",
                       "rack_door", "light_panel", "cable_red", "cable_black", "led", "screen_c"]
 
-# The Drone Tower Core: the block the tower grows from, set in the middle of its 15x15 chiseled-stone plinth.
+# The Drone Tower Core: the block the tower grows from, set into the ground where the middle of the hall will be.
 CORE = {"drone_tower_core": {"display": "Drone Tower Core"}}
 # The two exchange ports: anything that delivers energy or items into them feeds the nearest drone depot.
 PORTS = {"energy_exchange_port": {"display": "Energy Exchange Port"}, "cargo_exchange_port": {"display": "Cargo Exchange Port"}}
 
-# Tower modules: what an upgrade costs (drones place every block of the new tier from them).
-MODULES = {
-    "structural_module": "Structural Module",
-    "hangar_module": "Hangar Module",
-    "armor_module": "Armor Module",
-    "avionics_module": "Avionics Module",
-}
+# Tower modules were the upgrade currency until October 2026; every step now costs the blocks it places
+# (tower/TowerCosts.java), and the modules are gone.
 
 
 def variant_blocks():
     return [f"{b}_{v}" for b, info in BUILDING.items() if info.get("variants") for v in ("stairs", "slab")]
 
 
+SURFACE_LIGHTS = {"wall_task_light": "Sealed Wall Task Light", "linear_ceiling_light": "Sealed Linear Ceiling Light"}
+
+
 def tower_blocks():
-    return list(BUILDING) + variant_blocks() + list(FURNITURE) + list(CORE) + list(PORTS)
+    return (list(BUILDING) + variant_blocks() + list(FURNITURE) + list(CORE) + list(PORTS)
+            + list(tower_realism_art.DETAIL_BLOCKS) + list(tower_exchanges.STATIONS)
+            + list(SURFACE_LIGHTS) + [tower_master_console.BLOCK_ID] + list(tripillar_fixtures.FIXTURES)
+            + list(room_kit_recipes.PIECES))
 
 
 def tower_items():
-    return list(MODULES)
+    return []
 
 
 # ---------------------------------------------------------------- recipes
@@ -133,7 +143,8 @@ CRAFTING = {
     "reinforced_concrete": (["CCC", "CSC", "CCC"], {"C": "minecraft:gray_concrete", "S": STEEL_INGOT}, 8),
     "steel_girder": (["SSS", " S ", "SSS"], {"S": STEEL_INGOT}, 6),
     "hazard_plating": (["PY", "BP"], {"P": STEEL_PLATE, "Y": "minecraft:yellow_dye", "B": "minecraft:black_dye"}, 4),
-    "steel_armor_plate": (["PPP", " P "], {"P": "#c:plates/steel"}, 2),
+    # Rolled armour plate bolted up (its own shape: 2x2 steel plates was already corrugated iron and skid iron).
+    "steel_armor_plate": (["PNP", "PPP", "PNP"], {"P": STEEL_PLATE, "N": "minecraft:iron_nugget"}, 4),
     "blast_glass": (["GSG", "G G", "GSG"], {"G": "minecraft:glass", "S": "jugcraft:plastic_sheet"}, 6),
     "hangar_bay_door": (["PPP", "GPG"], {"P": STEEL_PLATE, "G": "#c:gears/steel"}, 3),
     "aluminum_cladding": (["PP", "PP"], {"P": "#c:plates/aluminum"}, 4),
@@ -144,6 +155,7 @@ CRAFTING = {
     "graphene_lattice": (["KKK", "KCK", "KKK"], {"K": "jugcraft:coke", "C": "#c:plates/copper"}, 2),
     "superconducting_conduit": (["PPP", "TTT", "PPP"], {"P": STEEL_PLATE, "T": "jugcraft:superconducting_tape"}, 4),
     "red_light_strip": (["GGG", "RDR"], {"G": "minecraft:glass_pane", "R": "minecraft:redstone", "D": "minecraft:red_dye"}, 6),
+    "amber_light_strip": (["GGG", "RDR"], {"G": "minecraft:glass_pane", "R": "minecraft:glowstone_dust", "D": "minecraft:orange_dye"}, 6),
     "warning_light": (["G", "L", "P"], {"G": "minecraft:red_stained_glass", "L": "minecraft:redstone_lamp", "P": "#c:plates/iron"}, 2),
     "acoustic_wall_panel": (["WWW", "WPW", "WWW"], {"W": "minecraft:gray_wool", "P": "#c:plates/iron"}, 8),
     "access_floor_tile": (["PPP", "S S"], {"P": "#c:plates/iron", "S": "#c:ingots/steel"}, 6),
@@ -167,20 +179,22 @@ CRAFTING = {
                                                     "C": "jugcraft:advanced_circuit"}, 1),
     "cargo_exchange_port": (["PHP", "BCB", "PHP"], {"P": STEEL_PLATE, "H": "minecraft:hopper", "B": "minecraft:barrel",
                                                    "C": "jugcraft:basic_circuit"}, 1),
-    "drone_tower_core": (["APA", "CMC", "APA"], {"A": "#c:plates/aluminum", "P": "jugcraft:processor",
+    # The core builds the control building itself and runs the whole tower: a mid-game machine (Justin, Oct 2026).
+    "drone_tower_core": (["BPB", "CMC", "BPB"], {"B": "#c:storage_blocks/steel", "P": "jugcraft:processor",
                                                 "C": "jugcraft:advanced_circuit", "M": "jugcraft:drone_depot_terminal"}, 1),
-    # Modules: what tower upgrades are built from (one module stands for a batch of blocks).
-    # Each module is worth about as much as the tower blocks it stands for (tools/tower_costs.py).
-    "structural_module": (["BGB", "CBC", "BGB"], {"B": "#c:storage_blocks/steel", "G": "jugcraft:steel_girder",
-                                                 "C": "jugcraft:reinforced_concrete"}, 1),
-    "hangar_module": (["DPD", "PMP", "DPD"], {"D": "jugcraft:hangar_bay_door", "P": STEEL_PLATE, "M": "jugcraft:drone_motor"}, 1),
-    "armor_module": (["ABA", "BTB", "ABA"], {"A": "jugcraft:steel_armor_plate", "B": "#c:storage_blocks/steel",
-                                            "T": "#c:plates/titanium"}, 1),
-    "avionics_module": (["LCL", "CXC", "LCL"], {"L": "jugcraft:red_light_strip", "C": "jugcraft:advanced_circuit",
-                                               "X": "jugcraft:processor"}, 1),
 }
 ITEM_FEATURES = {"plastic_sheet": ["crude_oil"], "coke": [], "silicon": ["silicon"], "processor": ["silicon"],
                  "superconducting_tape": ["rare_earths", "silicon"]}
+CRAFTING.update(tower_realism_art.CRAFTING)
+CRAFTING.update(tower_exchanges.CRAFTING)
+CRAFTING.update(tower_master_console.CRAFTING)
+CRAFTING.update(tripillar_fixtures.CRAFTING)
+CRAFTING.update(room_kit_recipes.CRAFTING)     # the upper floor's room kits (tools/room_kit.py), each a shape of its own
+# Each light its own shape (they all had the ceiling light panel's, so only one of the three could be crafted).
+CRAFTING.update({
+    "linear_ceiling_light": (["PLP", "GGG"], {"P": "#c:plates/iron", "G": "minecraft:glass_pane", "L": "minecraft:glowstone_dust"}, 4),
+    "wall_task_light": (["PG", "PL"], {"P": "#c:plates/iron", "G": "minecraft:glass_pane", "L": "minecraft:glowstone_dust"}, 2),
+})
 
 
 def variant_recipes():
@@ -261,6 +275,8 @@ def draw_textures():
                                            (120, 28, 26) if 5 <= x <= 10 else (40, 42, 46), 14)
     tex["red_light_strip"] = _fill(_img(), lambda x, y, r: (60, 62, 68) if y <= 1 or y >= 14 else
                                    (150, 38, 30) if 4 <= y <= 11 else (90, 24, 20), 15)
+    tex["amber_light_strip"] = _fill(_img(), lambda x, y, r: (58, 60, 66) if x in (0, 15) or y in (0, 15) else
+                                     (255, 196, 108) if 4 <= x <= 11 and 4 <= y <= 11 else (232, 140, 48), 17)
     tex["warning_light"] = _fill(_img(), lambda x, y, r: (52, 55, 61) if x in (0, 15) or y in (0, 15) else
                                  (235, 62, 44) if (x - 7.5) ** 2 + (y - 7.5) ** 2 < 30 else (110, 26, 20), 16)
     tex["acoustic_wall_panel"] = _fill(_img(), lambda x, y, r: (44, 46, 50) if x == 0 or y == 0 else
@@ -337,24 +353,8 @@ def draw_textures():
 
 
 def draw_item_textures():
-    """{item: Image} for the tower modules."""
-    out = {}
-
-    def module(accent, seed):
-        def fn(x, y, r):
-            if not (2 <= x <= 13 and 3 <= y <= 13):
-                return None
-            if x in (2, 13) or y in (3, 13):
-                return (30, 31, 34)
-            if y in (7, 8) and 4 <= x <= 11:
-                return accent
-            return _noise((70, 74, 80), r, 4)
-        return _fill(_img(), fn, seed)
-    out["structural_module"] = module((136, 136, 131), 60)
-    out["hangar_module"] = module((214, 170, 38), 61)
-    out["armor_module"] = module((72, 78, 88), 62)
-    out["avionics_module"] = module((150, 38, 30), 63)
-    return out
+    """{item: Image} for the tower's items (none since the modules went)."""
+    return {}
 
 
 # ---------------------------------------------------------------- models, blockstates, loot
@@ -434,11 +434,17 @@ def write_assets(write, rid, assets, lang):
             "side": rid(f"block/{block}_side"), "top": rid(f"block/{block}_top"), "bottom": rid(f"block/{block}_side")}})
         write(assets / "blockstates" / f"{block}.json", {"variants": {"": {"model": rid(f"block/{block}")}}})
         write(assets / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
-    for item, display in MODULES.items():
-        lang[f"item.{MOD}.{item}"] = display
-        write(assets / "models" / "item" / f"{item}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid(f"item/{item}")}})
-        write(assets / "items" / f"{item}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{item}")}})
     lang.update(LANG)
+    tower_realism_art.write_assets(write, rid, assets, lang)
+    tower_exchanges.write_assets(root=assets.parents[4], lang=lang)
+    tower_master_console.write_all(root=assets.parents[4])
+    lang.update({f"block.{MOD}.{block}": display for block, display in SURFACE_LIGHTS.items()})
+    lang[f"block.{MOD}.{tower_master_console.BLOCK_ID}"] = tower_master_console.DISPLAY
+    # The Tri-Pillar hall's live fittings, the glass-door equipment rack (its model replaces the one above) and bay tags.
+    tripillar_fixtures.write_all(write, rid, assets, lang)
+    # The Console Desk's joined bench models (left / middle / right / on its own), replacing its one-piece blockstate and item.
+    import ops_desk
+    ops_desk.write_all(write, lang)
 
 
 def stairs_blockstate(model):
@@ -491,38 +497,96 @@ def write_loot(write, rid, out, self_drop):
         write(out / f"{block}.json", table)
 
 
-TIER_NAMES = ["Command Post", "Hangar Deck", "Armoured Block", "Logistics Spire", "Frame Tower", "Composite Tower",
-              "Ceramic Bastion", "Uranium Citadel", "Graphene Spire"]
+# The Tri-Pillar's tiers (tools/tower_tripillar.py TIER_NAMES; the only design since October 2026).
+TIER_NAMES = ["Roof Pads", "Pillar Feet", "Small Hangar Rows", "Medium Hangars", "Logistics Levels", "Composite Levels",
+              "Large Hangars", "Heavy Levels", "Crown"]
 
 LANG = {
+    "message.jugcraft.master_console.unlinked": "Console incomplete or unlinked. Place near a Drone Depot Terminal.",
     "container.jugcraft.drone_tower": "Drone Tower",
     **{f"tower.jugcraft.tier.{i + 1}": name for i, name in enumerate(TIER_NAMES)},
     "tower.jugcraft.tier.0": "Foundation",
+    "tower.jugcraft.foundation": "Control Building",
     "message.jugcraft.tower.not_owner": "Only this tower's owner (or their party, in Party mode) can do that",
-    "message.jugcraft.tower.busy": "The tower is already building its next tier",
+    # the holograms (tower/Holograms): the tower's own, placed by it (or by a creative player)
+    "message.jugcraft.hologram.tower_only": "Holograms are the Drone Tower's own: it puts them in as it builds",
+    "message.jugcraft.tower.busy": "The tower is already building",
+    "message.jugcraft.tower.foundation_started": "Building the foundation: the control building, its exchanges and supply yard",
     "message.jugcraft.tower.max": "The tower is complete (tier 9)",
     "message.jugcraft.tower.too_close": "Too close to your Drone Tower at %s, %s, %s: a new tower must stand more than %s chunks from your others",
-    "message.jugcraft.tower.no_plinth": "Finish the 15x15 plinth of chiseled stone bricks round the core first",
-    "message.jugcraft.tower.no_terminal": "The tower's Drone Depot Terminal is missing from the command room",
-    "message.jugcraft.tower.missing": "Needs %s more %s",
+    "message.jugcraft.tower.no_terminal": "The tower's Drone Depot Terminal is missing from the supply yard",
+    "message.jugcraft.tower.missing_blocks": "Needs %s more %s (%s kinds of block still short: see the tower screen)",
     "message.jugcraft.tower.started": "Building tier %s: %s",
-    "message.jugcraft.tower.deposited": "Modules loaded into the Tower Core",
-    "message.jugcraft.tower.no_tower": "This terminal isn't part of a Drone Tower: put modules into a Tower Core",
+    "message.jugcraft.tower.deposited_blocks": "%s blocks put in for the tower",
+    "message.jugcraft.tower.nothing_needed": "The tower needs none of that",
+    # loading the tower (tower/TowerLoadMenu): the first layer at the core, then the tower storage at the Cargo Exchange
+    "message.jugcraft.tower.first_layer_started": "Building the first layer: the control building, then tier 1",
+    "message.jugcraft.tower.first_layer_queued": "Tier 1 starts as soon as the foundation is done",
+    "message.jugcraft.tower.use_cargo_exchange": "The tower's blocks go in through its Cargo Exchange now (the tower storage)",
+    "message.jugcraft.tower.storage_full": "The tower storage is full (10 double chests)",
+    "screen.jugcraft.tower_load.title": "Load the First Layer",
+    "screen.jugcraft.tower_load.storage_title": "Tower Storage",
+    "screen.jugcraft.tower_load.heading": "LOAD THE FIRST LAYER",
+    "screen.jugcraft.tower_load.storage_heading": "TOWER STORAGE",
+    "screen.jugcraft.tower_storage.load_blocks": "Load Blocks",
+    "screen.jugcraft.tower_storage.hint": "Click to take, shift-click to move",
+    "message.jugcraft.tower.storage_plain": "Only plain items go in the tower storage (no names, enchantments or damage)",
+    "screen.jugcraft.tower_load.foundation_and_tier1": "FOUNDATION + TIER 1",
+    "screen.jugcraft.tower_load.tier1": "TIER 1",
+    "screen.jugcraft.tower_load.next_tier": "NEXT: TIER %s %s",
+    "screen.jugcraft.tower_load.put_in": "PUT BLOCKS IN",
+    "screen.jugcraft.tower_load.stacks": "%s / %s stacks",
+    "screen.jugcraft.tower_load.upgrade_at": "UPGRADE at the Tower",
+    "screen.jugcraft.tower_load.upgrade_at2": "Control console",
+    "screen.jugcraft.tower_load.inventory": "Inventory",
+    "screen.jugcraft.tower_load.load_all": "Load All",
+    "screen.jugcraft.tower_load.build": "Build First Layer",
+    # the core's placement warning (tower/TowerPlacement, client/TowerPlaceScreen)
+    "message.jugcraft.tower.place_again": "WARNING: be sure this is where you want your Drone Tower. It is an extremely large structure: finished, %s blocks wide, %s long and %s tall. Use the core on the same spot again within %s seconds to place it.",
+    "screen.jugcraft.tower_place.title": "DRONE TOWER CORE",
+    "screen.jugcraft.tower_place.sub": "CONFIRM THE SITE",
+    "screen.jugcraft.tower_place.warning": "WARNING",
+    "screen.jugcraft.tower_place.message": "Be sure this is the location you want to select for your Drone Tower. It is an extremely large structure.",
+    "screen.jugcraft.tower_place.finished": "FINISHED TOWER, TIER 9",
+    "screen.jugcraft.tower_place.width": "WIDTH",
+    "screen.jugcraft.tower_place.length": "LENGTH",
+    "screen.jugcraft.tower_place.height": "HEIGHT",
+    "screen.jugcraft.tower_place.blocks": "%s blocks",
+    "screen.jugcraft.tower_place.east_west": "east-west",
+    "screen.jugcraft.tower_place.north_south": "north-south",
+    "screen.jugcraft.tower_place.up_down": "%s up, %s down from the core",
+    "screen.jugcraft.tower_place.reaches": "Reaches %s E, %s W, %s N, %s S",
+    "screen.jugcraft.tower_place.core_at": "Core at %s, %s, %s",
+    "screen.jugcraft.tower_place.tip": "Hold the core and shift+scroll to see the space it takes.",
+    "screen.jugcraft.tower_place.cancel": "Cancel",
+    "screen.jugcraft.tower_place.place": "Place Tower Here",
     "screen.jugcraft.tower.title": "DRONE TOWER",
     "screen.jugcraft.tower.tier": "TIER %s · %s",
     "screen.jugcraft.tower.unlocked": "Drones up to T%s · %s drones",
-    "screen.jugcraft.tower.none_unlocked": "Build tier 1 to start a depot",
+    "screen.jugcraft.tower.none_unlocked": "Build the foundation and tier 1 to start a depot",
+    "screen.jugcraft.tower.next_foundation": "NEXT: FOUNDATION · %s",
+    "screen.jugcraft.tower.building_foundation": "BUILDING THE FOUNDATION · %s%%",
+    "screen.jugcraft.tower.converting": "REBUILDING AS THE TRI-PILLAR · %s%%",
+    "screen.jugcraft.tower.converting_note": "Drones and stores carry over",
     "screen.jugcraft.tower.next": "NEXT: TIER %s %s",
     "screen.jugcraft.tower.complete": "TOWER COMPLETE",
     "screen.jugcraft.tower.building": "BUILDING TIER %s · %s%%",
-    "screen.jugcraft.tower.building_core": "The core builds the Command Post itself",
+    "screen.jugcraft.tower.building_core": "The core builds this itself",
     "screen.jugcraft.tower.building_drones": "Drones fly the new floors in, bottom up",
     "screen.jugcraft.tower.upgrade": "UPGRADE DRONE TOWER",
-    "screen.jugcraft.tower.plinth_missing": "Plinth unfinished: 15x15 chiseled stone bricks",
-    "screen.jugcraft.tower.hint": "Load modules into the core or the terminal",
+    "message.jugcraft.tower.preview": "Tower preview, step %s of 9: %s (shift+scroll)",
+    "screen.jugcraft.tower.load": "LOAD FROM INVENTORY",
+    "screen.jugcraft.tower.load_hint": "Puts in every block the first layer (the foundation and tier 1) still needs from your inventory. After that the tower's blocks go in through its Cargo Exchange, into the tower storage.",
+    "screen.jugcraft.tower.storage": "TOWER STORAGE %s / %s STACKS · FILL IT AT THE CARGO EXCHANGE",
+    "screen.jugcraft.tower.materials": "MATERIALS %s/%s READY · %s / %s",
+    "screen.jugcraft.tower.row_ready": "%s: all in",
+    "screen.jugcraft.tower.row_missing": "%s: %s more needed",
+    "screen.jugcraft.tower.scroll": "%s-%s OF %s",
+    "tooltip.jugcraft.drone_tower_core": "Set it on the ground where the middle of the tower's hall should be (it warns you first, with the finished tower's size), load it with the first layer's blocks and press BUILD FIRST LAYER: it builds the control building and tier 1 itself",
+    "tooltip.jugcraft.drone_tower_core.store": "Holds %s blocks (%s kinds) for its tower",
     "screen.jugcraft.tower.legend": "Solid: built · outline: next",
-    "screen.jugcraft.terminal.tower": "TOWER",
-    "message.jugcraft.drone.link.needs_tower": "Drones need a Drone Tower: craft a Drone Tower Core, set it on a 15x15 chiseled stone brick plinth and build tier 1 (tier %s asked)",
+    "screen.jugcraft.terminal.tower": "TOWER CONTROL",
+    "message.jugcraft.drone.link.needs_tower": "Drones need a Drone Tower: craft a Drone Tower Core, set it on the ground, load it with the blocks its foundation needs and build up to tier 1 (tier %s asked)",
     "message.jugcraft.drone.link.tower_tier": "Tier %s drones need the Drone Tower at that tier",
     "message.jugcraft.drone.status.no_tower": "No Drone Tower · build a Tower Core to fly drones",
     "message.jugcraft.drone.status.tower": "Drone Tower tier %s · drones up to T%s",

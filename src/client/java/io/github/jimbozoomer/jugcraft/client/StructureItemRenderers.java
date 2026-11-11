@@ -235,7 +235,7 @@ public final class StructureItemRenderers {
 
 		@Override
 		public SpecialModelRenderer<Void> bake(SpecialModelRenderer.BakingContext context) {
-			return new Miniature(RenderTypes.entityCutout(DroneDepotRenderer.TEXTURE), (pose, consumer, light) ->
+			return new Miniature(DroneMesh.RENDER_TYPE, (pose, consumer, light) ->
 					DroneModel.draw(new DroneDepotRenderer.Geometry(pose, consumer), 0, 0, 0, (float) Math.PI, tier, -1, 0, light, 0));
 		}
 	}

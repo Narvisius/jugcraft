@@ -57,14 +57,13 @@ public class BlueprintGameTests {
 			helper.succeed();
 			return;
 		}
-		Blueprint tower = Blueprint.get("drone_tower_foundation", false);
+		// The Drone Tower is no blueprint any more: its core alone builds it (October 2026).
+		helper.assertTrue(Blueprint.get("drone_tower_foundation", false) == null && !Blueprint.BUILT_IN.contains("drone_tower_foundation"),
+				"no Drone Tower blueprint");
 		Blueprint church = Blueprint.get("small_church", false);
-		helper.assertTrue(tower != null && tower.size() == 225, "tower foundation: 15x15 plinth with the core (" + (tower == null ? -1 : tower.size()) + ")");
 		helper.assertTrue(church != null && church.size() > 500, "small church loads (" + (church == null ? -1 : church.size()) + " blocks)");
 		Blueprint arc = Blueprint.get("arc_furnace", false);
 		helper.assertTrue(arc != null && arc.size() == 27, "arc furnace: 26 casings and the controller");
-		long cores = tower.cells(Rotation.NONE).stream().filter(c -> c.state().is(JugcraftTower.CORE)).count();
-		helper.assertTrue(cores == 1, "one Tower Core in the foundation");
 		// Turning keeps every block and turns stairs with it.
 		helper.assertTrue(church.cells(Rotation.CLOCKWISE_90).size() == church.size(), "rotation keeps every block");
 		helper.assertTrue(BlueprintItem.idOf(BlueprintItem.stack("small_church")).equals("small_church"), "the item carries its blueprint id");
@@ -207,13 +206,24 @@ public class BlueprintGameTests {
 		helper.getLevel().setBlockAndUpdate(stakePos, JugcraftBlueprints.STAKE.defaultBlockState());
 		SurveyStakeBlockEntity stake = (SurveyStakeBlockEntity) helper.getLevel().getBlockEntity(stakePos);
 		stake.setup("small_church", Rotation.NONE, owner);
-		// A column of the church: a chest in its lowest cell, dirt in the next one up.
-		BlockPos low = stake.wanted().keySet().stream().filter(p -> stake.wanted().containsKey(p.above()))
-				.min(java.util.Comparator.comparingInt(BlockPos::getY)).orElseThrow();
-		helper.getLevel().setBlockAndUpdate(low, Blocks.CHEST.defaultBlockState());
-		((net.minecraft.world.level.block.entity.ChestBlockEntity) helper.getLevel().getBlockEntity(low)).setItem(0, new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.DIAMOND));
-		helper.getLevel().setBlockAndUpdate(low.above(), Blocks.DIRT.defaultBlockState());
 		helper.runAfterDelay(2, () -> {
+			// Neighbouring large fixtures can extend into this arena. Prepare only our footprint after their setup.
+			Map<BlockPos, BlockState> wanted = stake.wanted();
+			helper.assertFalse(wanted.containsKey(stakePos), "the fixture footprint leaves its survey stake intact");
+			for (BlockPos pos : wanted.keySet()) {
+				helper.getLevel().setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+			}
+			// A column of the church: a chest in its lowest cell, dirt in the next one up.
+			BlockPos low = wanted.keySet().stream().filter(p -> wanted.containsKey(p.above()))
+					.min(java.util.Comparator.comparingInt(BlockPos::getY)).orElseThrow();
+			helper.getLevel().setBlockAndUpdate(low, Blocks.CHEST.defaultBlockState());
+			((net.minecraft.world.level.block.entity.ChestBlockEntity) helper.getLevel().getBlockEntity(low)).setItem(0, new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.DIAMOND));
+			helper.getLevel().setBlockAndUpdate(low.above(), Blocks.DIRT.defaultBlockState());
+			long wrong = wanted.entrySet().stream().filter(e -> {
+				BlockState now = helper.getLevel().getBlockState(e.getKey());
+				return !now.canBeReplaced() && !SurveyStakeBlockEntity.matches(now, e.getValue());
+			}).count();
+			helper.assertTrue(wrong == 2, "only the chest and dirt obstruct this fixture, got " + wrong);
 			List<BuildJobs.Target> targets = BuildJobs.sources().stream()
 					.flatMap(s -> s.openTargets(helper.getLevel(), stakePos, 64, owner, UseMode.PERSONAL, 64).stream())
 					.filter(t -> t.owner().equals(owner)).toList();
@@ -359,7 +369,7 @@ public class BlueprintGameTests {
 	}
 
 	@GameTest(structure = ARENA, maxTicks = 200, skyAccess = true)
-	public void finishedFoundationPopsOff(GameTestHelper helper) {
+	public void finishedBlueprintPopsOff(GameTestHelper helper) {
 		if (TestFocus.skip("blueprints")) {
 			helper.succeed();
 			return;
@@ -367,7 +377,7 @@ public class BlueprintGameTests {
 		BlockPos stakePos = helper.absolutePos(new BlockPos(22, 1, 40));
 		helper.getLevel().setBlockAndUpdate(stakePos, JugcraftBlueprints.STAKE.defaultBlockState());
 		SurveyStakeBlockEntity stake = (SurveyStakeBlockEntity) helper.getLevel().getBlockEntity(stakePos);
-		stake.setup("drone_tower_foundation", Rotation.NONE, UUID.randomUUID());
+		stake.setup("arc_furnace", Rotation.NONE, UUID.randomUUID());
 		for (Map.Entry<BlockPos, BlockState> entry : stake.wanted().entrySet()) {
 			helper.getLevel().setBlockAndUpdate(entry.getKey(), entry.getValue());
 		}

@@ -1,0 +1,84 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": true,
+  "textures": {
+    "graphene_lattice": "jugcraft:block/graphene_lattice",
+    "particle": "jugcraft:block/graphene_lattice"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#graphene_lattice",
+          "uv": [
+            8,
+            8,
+            16,
+            16
+          ],
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#graphene_lattice",
+          "uv": [
+            0,
+            8,
+            8,
+            16
+          ],
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#graphene_lattice",
+          "uv": [
+            0,
+            8,
+            8,
+            16
+          ],
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#graphene_lattice",
+          "uv": [
+            8,
+            8,
+            16,
+            16
+          ],
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#graphene_lattice",
+          "uv": [
+            0,
+            8,
+            8,
+            16
+          ],
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#graphene_lattice",
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "cullface": "down"
+        }
+      }
+    }
+  ]
+}

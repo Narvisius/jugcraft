@@ -1,0 +1,178 @@
+{
+  "textures": {
+    "pi_rr_partition": "jugcraft:block/pi_rr_partition",
+    "pi_rr_partition_edge": "jugcraft:block/pi_rr_partition_edge",
+    "pi_rr_stainless": "jugcraft:block/pi_rr_stainless",
+    "particle": "jugcraft:block/pi_rr_partition"
+  },
+  "elements": [
+    {
+      "from": [
+        0.3,
+        5.6,
+        0.0
+      ],
+      "to": [
+        0.8,
+        22.6,
+        7.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_rr_partition_edge",
+          "uv": [
+            15.2,
+            0,
+            15.7,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#pi_rr_partition_edge",
+          "uv": [
+            0.3,
+            0,
+            0.8,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_rr_partition",
+          "uv": [
+            8.6,
+            0,
+            16.0,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#pi_rr_partition",
+          "uv": [
+            0.0,
+            0,
+            7.4,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#pi_rr_partition_edge",
+          "uv": [
+            0.3,
+            0.0,
+            0.8,
+            7.4
+          ]
+        },
+        "down": {
+          "texture": "#pi_rr_partition_edge",
+          "uv": [
+            0.3,
+            8.6,
+            0.8,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0.0,
+        7.6,
+        0.13
+      ],
+      "to": [
+        1.1,
+        9.6,
+        1.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_rr_stainless"
+        },
+        "south": {
+          "texture": "#pi_rr_stainless"
+        },
+        "east": {
+          "texture": "#pi_rr_stainless"
+        },
+        "west": {
+          "texture": "#pi_rr_stainless"
+        },
+        "up": {
+          "texture": "#pi_rr_stainless"
+        },
+        "down": {
+          "texture": "#pi_rr_stainless"
+        }
+      }
+    },
+    {
+      "from": [
+        0.0,
+        18.6,
+        0.13
+      ],
+      "to": [
+        1.1,
+        20.6,
+        1.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_rr_stainless",
+          "uv": [
+            14.9,
+            0,
+            16.0,
+            2.0
+          ]
+        },
+        "south": {
+          "texture": "#pi_rr_stainless",
+          "uv": [
+            0.0,
+            0,
+            1.1,
+            2.0
+          ]
+        },
+        "east": {
+          "texture": "#pi_rr_stainless",
+          "uv": [
+            15.0,
+            0,
+            15.97,
+            2.0
+          ]
+        },
+        "west": {
+          "texture": "#pi_rr_stainless",
+          "uv": [
+            0.03,
+            0,
+            1.0,
+            2.0
+          ]
+        },
+        "up": {
+          "texture": "#pi_rr_stainless",
+          "uv": [
+            0.0,
+            0.03,
+            1.1,
+            1.0
+          ]
+        },
+        "down": {
+          "texture": "#pi_rr_stainless",
+          "uv": [
+            0.0,
+            15.0,
+            1.1,
+            15.97
+          ]
+        }
+      }
+    }
+  ]
+}

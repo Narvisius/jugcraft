@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PRP",
+    "LCL",
+    "PBP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "R": "minecraft:red_dye",
+    "L": "minecraft:redstone_lamp",
+    "C": "jugcraft:basic_circuit",
+    "B": "minecraft:stone_button"
+  },
+  "result": {
+    "id": "jugcraft:edg_co2_station",
+    "count": 1
+  }
+}

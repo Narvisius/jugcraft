@@ -1,0 +1,32 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "OOGGOO",
+    "TTKKTT",
+    "OO  OO"
+  ],
+  "key": {
+    "G": "minecraft:green_wool",
+    "K": "jugcraft:plastic_sheet",
+    "O": "minecraft:oak_planks",
+    "T": "minecraft:stick"
+  },
+  "result": {
+    "id": "jugcraft:foosball_table",
+    "count": 2
+  }
+}

@@ -1,0 +1,47 @@
+{
+ "textures": {
+  "gl_atlas": "jugcraft:block/gl_atlas",
+  "gl_galv": "jugcraft:block/gl_galv",
+  "particle": "jugcraft:block/gl_galv"
+ },
+ "elements": [
+  {
+   "from": [
+    1.0,
+    4.0,
+    15.6
+   ],
+   "to": [
+    15.0,
+    12.0,
+    16.0
+   ],
+   "faces": {
+    "north": {
+     "texture": "#gl_atlas",
+     "uv": [
+      0.0,
+      5.0625,
+      7.0,
+      9.0625
+     ]
+    },
+    "south": {
+     "texture": "#gl_galv"
+    },
+    "east": {
+     "texture": "#gl_galv"
+    },
+    "west": {
+     "texture": "#gl_galv"
+    },
+    "up": {
+     "texture": "#gl_galv"
+    },
+    "down": {
+     "texture": "#gl_galv"
+    }
+   }
+  }
+ ]
+}

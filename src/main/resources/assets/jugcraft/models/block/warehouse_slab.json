@@ -1,0 +1,41 @@
+{
+  "textures": {
+    "epoxy_floor": "jugcraft:block/epoxy_floor",
+    "pi_wh_lane_side": "jugcraft:block/pi_wh_lane_side",
+    "particle": "jugcraft:block/epoxy_floor"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_wh_lane_side"
+        },
+        "south": {
+          "texture": "#pi_wh_lane_side"
+        },
+        "east": {
+          "texture": "#pi_wh_lane_side"
+        },
+        "west": {
+          "texture": "#pi_wh_lane_side"
+        },
+        "up": {
+          "texture": "#epoxy_floor"
+        },
+        "down": {
+          "texture": "#pi_wh_lane_side"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "jugcraft:wall_panel_anthracite",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:wall_panel",
+                "state": {
+                  "tone": "anthracite"
+                }
+              }
+            },
+            {
+              "type": "minecraft:item",
+              "name": "jugcraft:wall_panel_trapezoid",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:wall_panel",
+                "state": {
+                  "tone": "trapezoid"
+                }
+              }
+            },
+            {
+              "type": "minecraft:item",
+              "name": "jugcraft:wall_panel",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "jugcraft:wall_panel",
+                "state": {
+                  "tone": "silver"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
+    }
+  ],
+  "random_sequence": "jugcraft:blocks/wall_panel"
+}

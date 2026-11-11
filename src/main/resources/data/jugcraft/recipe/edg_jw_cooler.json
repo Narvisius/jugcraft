@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PSP",
+    "CCC",
+    "PSP"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "P": "jugcraft:steel_fluid_pipe",
+    "C": "minecraft:copper_ingot"
+  },
+  "result": {
+    "id": "jugcraft:edg_jw_cooler",
+    "count": 1
+  }
+}

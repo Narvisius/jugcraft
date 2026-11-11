@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "YIY",
+    "III"
+  ],
+  "key": {
+    "Y": "minecraft:yellow_dye",
+    "I": "#c:ingots/iron"
+  },
+  "result": {
+    "id": "jugcraft:warehouse_end_barrier",
+    "count": 2
+  }
+}

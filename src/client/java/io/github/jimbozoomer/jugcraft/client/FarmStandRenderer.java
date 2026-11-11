@@ -141,7 +141,7 @@ public class FarmStandRenderer implements BlockEntityRenderer<FarmStandBlockEnti
 		if (text.isEmpty()) {
 			return;
 		}
-		FormattedCharSequence line = Component.literal(text).getVisualOrderText();
+		FormattedCharSequence line = Texts.of(text);
 		int wide = Math.max(1, font.width(line));
 		float scale = Math.min(height / 8.0F, width / wide) / 16.0F;
 		pose.pushPose();

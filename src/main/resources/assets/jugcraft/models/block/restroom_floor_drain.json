@@ -1,0 +1,208 @@
+{
+  "textures": {
+    "pi_chrome": "jugcraft:block/pi_chrome",
+    "pi_rr_grate": "jugcraft:block/pi_rr_grate",
+    "restroom_floor_tile": "jugcraft:block/restroom_floor_tile",
+    "particle": "jugcraft:block/pi_chrome"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        15.4,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#restroom_floor_tile"
+        },
+        "south": {
+          "texture": "#restroom_floor_tile"
+        },
+        "east": {
+          "texture": "#restroom_floor_tile"
+        },
+        "west": {
+          "texture": "#restroom_floor_tile"
+        },
+        "up": {
+          "texture": "#restroom_floor_tile"
+        },
+        "down": {
+          "texture": "#restroom_floor_tile"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        15.4,
+        0
+      ],
+      "to": [
+        16,
+        16.0,
+        5.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#restroom_floor_tile"
+        },
+        "south": {
+          "texture": "#restroom_floor_tile"
+        },
+        "east": {
+          "texture": "#restroom_floor_tile"
+        },
+        "west": {
+          "texture": "#restroom_floor_tile"
+        },
+        "up": {
+          "texture": "#restroom_floor_tile"
+        },
+        "down": {
+          "texture": "#restroom_floor_tile"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        15.4,
+        10.6
+      ],
+      "to": [
+        16,
+        16.0,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#restroom_floor_tile"
+        },
+        "south": {
+          "texture": "#restroom_floor_tile"
+        },
+        "east": {
+          "texture": "#restroom_floor_tile"
+        },
+        "west": {
+          "texture": "#restroom_floor_tile"
+        },
+        "up": {
+          "texture": "#restroom_floor_tile"
+        },
+        "down": {
+          "texture": "#restroom_floor_tile"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        15.4,
+        5.4
+      ],
+      "to": [
+        5.4,
+        16.0,
+        10.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#restroom_floor_tile"
+        },
+        "south": {
+          "texture": "#restroom_floor_tile"
+        },
+        "east": {
+          "texture": "#restroom_floor_tile"
+        },
+        "west": {
+          "texture": "#restroom_floor_tile"
+        },
+        "up": {
+          "texture": "#restroom_floor_tile"
+        },
+        "down": {
+          "texture": "#restroom_floor_tile"
+        }
+      }
+    },
+    {
+      "from": [
+        10.6,
+        15.4,
+        5.4
+      ],
+      "to": [
+        16,
+        16.0,
+        10.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#restroom_floor_tile"
+        },
+        "south": {
+          "texture": "#restroom_floor_tile"
+        },
+        "east": {
+          "texture": "#restroom_floor_tile"
+        },
+        "west": {
+          "texture": "#restroom_floor_tile"
+        },
+        "up": {
+          "texture": "#restroom_floor_tile"
+        },
+        "down": {
+          "texture": "#restroom_floor_tile"
+        }
+      }
+    },
+    {
+      "from": [
+        5.4,
+        15.4,
+        5.4
+      ],
+      "to": [
+        10.6,
+        15.85,
+        10.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome"
+        },
+        "south": {
+          "texture": "#pi_chrome"
+        },
+        "east": {
+          "texture": "#pi_chrome"
+        },
+        "west": {
+          "texture": "#pi_chrome"
+        },
+        "up": {
+          "texture": "#pi_rr_grate",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#pi_chrome"
+        }
+      }
+    }
+  ]
+}

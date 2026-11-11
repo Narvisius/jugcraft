@@ -1,7 +1,216 @@
 {
-  "parent": "jugcraft:block/holo_table_base",
+  "parent": "minecraft:block/block",
+  "ambientocclusion": true,
   "textures": {
-    "top": "jugcraft:block/holo_table",
-    "side": "jugcraft:block/holo_table_side"
-  }
+    "tower_detail_glass": "jugcraft:block/tower_detail_glass",
+    "tower_detail_panel": "jugcraft:block/tower_detail_panel",
+    "tower_detail_steel": "jugcraft:block/tower_detail_steel",
+    "particle": "jugcraft:block/tower_detail_steel"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        10,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_panel",
+          "uv": [
+            0,
+            0,
+            14,
+            10
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_panel",
+          "uv": [
+            0,
+            0,
+            14,
+            10
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_panel",
+          "uv": [
+            0,
+            0,
+            14,
+            10
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_panel",
+          "uv": [
+            0,
+            0,
+            14,
+            10
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_panel",
+          "uv": [
+            0,
+            0,
+            14,
+            14
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_panel",
+          "uv": [
+            0,
+            0,
+            14,
+            14
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        10,
+        0
+      ],
+      "to": [
+        16,
+        11.5,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_steel",
+          "uv": [
+            0,
+            0,
+            16,
+            1.5
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_steel",
+          "uv": [
+            0,
+            0,
+            16,
+            1.5
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_steel",
+          "uv": [
+            0,
+            0,
+            16,
+            1.5
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_steel",
+          "uv": [
+            0,
+            0,
+            16,
+            1.5
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_steel",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_steel",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        11.5,
+        1
+      ],
+      "to": [
+        15,
+        13,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_glass",
+          "uv": [
+            0,
+            0,
+            14,
+            1.5
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_glass",
+          "uv": [
+            0,
+            0,
+            14,
+            1.5
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_glass",
+          "uv": [
+            0,
+            0,
+            14,
+            1.5
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_glass",
+          "uv": [
+            0,
+            0,
+            14,
+            1.5
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_glass",
+          "uv": [
+            0,
+            0,
+            14,
+            14
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_glass",
+          "uv": [
+            0,
+            0,
+            14,
+            14
+          ]
+        }
+      }
+    }
+  ]
 }

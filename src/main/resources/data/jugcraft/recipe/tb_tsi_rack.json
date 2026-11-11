@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PGP",
+    "PQP",
+    "PRP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "G": "minecraft:glass_pane",
+    "Q": "minecraft:quartz",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "jugcraft:tb_tsi_rack",
+    "count": 1
+  }
+}

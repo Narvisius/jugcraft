@@ -1,0 +1,52 @@
+{
+ "textures": {
+  "rp_ahu": "jugcraft:block/rp_ahu",
+  "rp_galv": "jugcraft:block/rp_galv",
+  "particle": "jugcraft:block/rp_galv"
+ },
+ "elements": [
+  {
+   "from": [
+    0,
+    8.4,
+    2
+   ],
+   "to": [
+    16,
+    12.6,
+    16
+   ],
+   "faces": {
+    "north": {
+     "texture": "#rp_galv"
+    },
+    "up": {
+     "texture": "#rp_galv"
+    },
+    "down": {
+     "texture": "#rp_galv"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    12.6,
+    2.5
+   ],
+   "to": [
+    16,
+    16,
+    16
+   ],
+   "faces": {
+    "north": {
+     "texture": "#rp_ahu"
+    },
+    "down": {
+     "texture": "#rp_ahu"
+    }
+   }
+  }
+ ]
+}

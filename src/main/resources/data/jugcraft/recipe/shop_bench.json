@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "WWW",
+    "P P",
+    "P P"
+  ],
+  "key": {
+    "W": "#minecraft:planks",
+    "P": "#c:plates/steel"
+  },
+  "result": {
+    "id": "jugcraft:shop_bench",
+    "count": 3
+  }
+}

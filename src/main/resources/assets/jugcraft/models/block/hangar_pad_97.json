@@ -1,9 +1,184 @@
 {
-  "parent": "minecraft:block/cube_bottom_top",
+  "parent": "minecraft:block/block",
   "textures": {
-    "top": "jugcraft:block/hangar_pad_97",
-    "side": "jugcraft:block/hangar_pad_side",
-    "bottom": "jugcraft:block/landing_platform",
-    "particle": "jugcraft:block/hangar_pad"
-  }
+    "tower_detail_amber_lamp": "jugcraft:block/tower_detail_amber_lamp",
+    "tower_detail_copper": "jugcraft:block/tower_detail_copper",
+    "tower_detail_cyan": "jugcraft:block/tower_detail_cyan",
+    "tower_detail_dark": "jugcraft:block/tower_detail_dark",
+    "tower_detail_light_steel": "jugcraft:block/tower_detail_light_steel",
+    "tower_detail_panel": "jugcraft:block/tower_detail_panel",
+    "tower_detail_steel": "jugcraft:block/tower_detail_steel",
+    "tower_pad_surface": "jugcraft:block/hangar_pad_97"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        15.45,
+        16
+      ],
+      "faces": {
+        "up": {
+          "texture": "#tower_pad_surface",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_steel"
+        }
+      }
+    },
+    {
+      "from": [
+        3.6,
+        15.45,
+        0
+      ],
+      "to": [
+        4.4,
+        16,
+        4.4
+      ],
+      "faces": {
+        "south": {
+          "texture": "#tower_detail_panel"
+        },
+        "east": {
+          "texture": "#tower_detail_panel"
+        },
+        "west": {
+          "texture": "#tower_detail_panel"
+        },
+        "up": {
+          "texture": "#tower_detail_panel"
+        },
+        "down": {
+          "texture": "#tower_detail_panel"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        15.45,
+        3.6
+      ],
+      "to": [
+        3.6,
+        16,
+        4.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_panel"
+        },
+        "south": {
+          "texture": "#tower_detail_panel"
+        },
+        "east": {
+          "texture": "#tower_detail_panel"
+        },
+        "up": {
+          "texture": "#tower_detail_panel"
+        },
+        "down": {
+          "texture": "#tower_detail_panel"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        15.45,
+        0
+      ],
+      "to": [
+        3.5,
+        15.65,
+        3.5
+      ],
+      "faces": {
+        "south": {
+          "texture": "#tower_detail_dark"
+        },
+        "east": {
+          "texture": "#tower_detail_dark"
+        },
+        "up": {
+          "texture": "#tower_detail_dark"
+        },
+        "down": {
+          "texture": "#tower_detail_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        15.65,
+        0
+      ],
+      "to": [
+        1.1,
+        15.85,
+        1.1
+      ],
+      "faces": {
+        "south": {
+          "texture": "#tower_detail_cyan"
+        },
+        "east": {
+          "texture": "#tower_detail_cyan"
+        },
+        "up": {
+          "texture": "#tower_detail_cyan"
+        },
+        "down": {
+          "texture": "#tower_detail_cyan"
+        }
+      },
+      "light_emission": 10
+    },
+    {
+      "from": [
+        2.0,
+        15.75,
+        2.0
+      ],
+      "to": [
+        2.6,
+        15.94,
+        2.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_copper"
+        },
+        "south": {
+          "texture": "#tower_detail_copper"
+        },
+        "east": {
+          "texture": "#tower_detail_copper"
+        },
+        "west": {
+          "texture": "#tower_detail_copper"
+        },
+        "up": {
+          "texture": "#tower_detail_copper"
+        },
+        "down": {
+          "texture": "#tower_detail_copper"
+        }
+      }
+    }
+  ]
 }

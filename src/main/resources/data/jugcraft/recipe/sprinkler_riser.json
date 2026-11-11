@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "I",
+    "R",
+    "I"
+  ],
+  "key": {
+    "R": "minecraft:red_dye",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "id": "jugcraft:sprinkler_riser",
+    "count": 4
+  }
+}

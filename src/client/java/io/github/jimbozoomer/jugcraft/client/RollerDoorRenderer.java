@@ -32,10 +32,12 @@ public class RollerDoorRenderer implements BlockEntityRenderer<RollerDoorBlockEn
 	private static final float[] ALL = {0, 0, 1, 1};
 	/** A strip of the slats picture: the dark gaps between slats read as the coil's wound turns. */
 	private static final float[] BRACKET = {0.0F, 0.0F, 0.06F, 0.06F};
+	/** The bottom bar: a plain strip of the slats picture (between its seams). */
+	private static final float[] BAR = {0.0F, 0.2F, 1.0F, 0.26F};
 
 	public static final class State extends BlockEntityRenderState {
 		Direction facing = Direction.NORTH;
-		boolean moving, top;
+		boolean moving, top, left, right;
 		int row, rows;
 		float openness;
 	}
@@ -55,6 +57,8 @@ public class RollerDoorRenderer implements BlockEntityRenderer<RollerDoorBlockEn
 		BlockState block = door.getBlockState();
 		state.facing = block.getValue(RollerDoorBlock.FACING);
 		state.moving = block.getValue(RollerDoorBlock.MOVING);
+		state.left = block.getValue(RollerDoorBlock.LEFT);
+		state.right = block.getValue(RollerDoorBlock.RIGHT);
 		int[] column = RollerDoorBlock.column(door.getLevel(), door.getBlockPos(), block);
 		state.row = door.getBlockPos().getY() - column[0];
 		state.rows = column[1] - column[0] + 1;
@@ -82,7 +86,7 @@ public class RollerDoorRenderer implements BlockEntityRenderer<RollerDoorBlockEn
 				curtain(g, state);
 			}
 			if (state.top) {
-				coil(g, state.openness);
+				coil(g, state.openness, state.left, state.right);
 			}
 		});
 		pose.popPose();
@@ -106,6 +110,12 @@ public class RollerDoorRenderer implements BlockEntityRenderer<RollerDoorBlockEn
 			slab(g, y * 16, next * 16, v0, v1);
 			y = next;
 		}
+		// The bottom bar on the curtain's edge (doors round: tools/plant_doors.py roller_boxes, the bar shut).
+		if (edge - state.row >= 0 && edge - state.row < 1) {
+			double b = from * 16;
+			LineRenderer.box(g, 0, b, 6.0, 16, Math.min(16, b + 1.1), 6.5, BAR);
+			LineRenderer.box(g, 0, b, 9.5, 16, Math.min(16, b + 1.1), 10.0, BAR);
+		}
 	}
 
 	/** A strip of curtain between heights y0 and y1 (pixels), its picture from v0 (top) to v1 (bottom). */
@@ -118,14 +128,21 @@ public class RollerDoorRenderer implements BlockEntityRenderer<RollerDoorBlockEn
 		g.quad(0, a, 6.5F, 0, a, 9.5F, 16, a, 9.5F, 16, a, 6.5F, 0, -1, 0, new float[] {0, v1 - 0.02F, 1, v1});
 	}
 
-	/** The coil on its barrel at the top of the opening, inside (north), its size by how much curtain is wound on. */
-	private static void coil(Geometry g, float openness) {
+	/**
+	 * The coil on its barrel at the top of the opening, inside (north), its size by how much curtain is wound on; the
+	 * barrel's ends in their brackets at the door's ends (the brackets themselves are in the end blocks' models).
+	 */
+	private static void coil(Geometry g, float openness, boolean left, boolean right) {
 		double r = 1.4 + 2.2 * Math.sqrt(openness);
 		double cy = 16 - 3.8, cz = 6.4 - 3.6;
-		LineRenderer.lathe(g, new Vec3(0.2, cy, cz), new Vec3(15.8, cy, cz), new double[][] {{0, r}, {15.6, r}}, 16, ALL);
-		// The barrel's ends in their brackets on the wall over the opening.
-		for (double x : new double[] {0, 15.4}) {
-			LineRenderer.box(g, x, cy - 0.6, cz - 0.6, x + 0.6, 16, cz + 0.6, BRACKET);
+		double x0 = left ? 1.2 : 0, x1 = right ? 14.8 : 16;
+		LineRenderer.lathe(g, new Vec3(x0, cy, cz), new Vec3(x1, cy, cz), new double[][] {{0, r}, {x1 - x0, r}}, 16, ALL);
+		// The barrel's shaft into the end brackets.
+		if (left) {
+			LineRenderer.box(g, 0.7, cy - 0.5, cz - 0.5, 1.2, cy + 0.5, cz + 0.5, BRACKET);
+		}
+		if (right) {
+			LineRenderer.box(g, 14.8, cy - 0.5, cz - 0.5, 15.3, cy + 0.5, cz + 0.5, BRACKET);
 		}
 	}
 

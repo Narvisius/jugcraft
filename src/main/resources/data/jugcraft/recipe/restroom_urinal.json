@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "QIQ",
+    "Q Q",
+    " Q "
+  ],
+  "key": {
+    "Q": "minecraft:quartz_block",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "id": "jugcraft:restroom_urinal",
+    "count": 1
+  }
+}

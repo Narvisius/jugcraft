@@ -13,6 +13,14 @@ Primary specialty and supported player role: factory engineering, logistics and 
 - the ground supply pickup with its Cargo Packager;
 - the terminal building, with the Drone Depot Terminal, the screen wall and the hologram table.
 
+The Tri-Pillar (layout 37, work list item 20) keeps its terminal and packager on the ground floor (under the cargo
+hall's floor since layout 40) and the landing platform with the supply pickup up top (on the goods lift house's top
+since layout 40, a 3x3), a goods lift between (look only): the terminal finds that platform and its packager through the
+tower (`TowerData.platform`, `TowerData.packager`) instead of under itself and beside the pickup, and since the tower's
+drones dock in its bays and on its pads the platform needs no pad and may be as small as the pickup
+(`PlatformLayout.scan(..., minSide)`, `DroneTerminalBlockEntity.platformReady`); the status says "the supply pickup"
+instead of asking for one.
+
 A terminal that isn't part of a tower flies no drones. Its status says to build a Tower Core. The Landing Platform, Landing Pad and Supply Pickup Plate blocks have no recipes; the tower places them. The old control room template and its Tech Wall Panel, Tech Floor Tile, Tech Ceiling Light and Tech Window blocks are gone.
 
 **How the depot works:** the depot engine still reads the layout from the blocks:
@@ -48,12 +56,12 @@ Drones are visible, and each tier has its own 3D look in the tower's graphite-an
 | 1 | Courier Quad | 1 | 4 | 8 | small |
 | 2 | Survey Hexacopter | 2 | 4 | 12 | small |
 | 3 | Lifter Octocopter | 4 | 4 | 20 | small |
-| 4 | Ducted-Fan Runner | 4 | 8 | 32 | medium |
+| 4 | Fan-Wing Runner | 4 | 8 | 32 | medium |
 | 5 | Tiltrotor Carrier | 8 | 8 | 48 | medium |
-| 6 | Tandem Freighter | 16 | 8 | 64 | medium |
-| 7 | Hybrid Aerostat | 32 | 8 | 96 | large |
-| 8 | Ion-Wind Glider | 32 | 16 | 128 | large |
-| 9 | Superconducting Ring Lifter | 64 | 20 | 192 | large |
+| 6 | Disc Freighter | 16 | 8 | 64 | medium |
+| 7 | Spine Carrier | 32 | 8 | 96 | large |
+| 8 | Halo Ion Carrier | 32 | 16 | 128 | large |
+| 9 | Armoured Dropship | 64 | 20 | 192 | large |
 
 Tiers 5–9 have items and models but no recipe yet, because they need materials that don't exist (neodymium magnets, plastic composites, hydrogen, high-voltage ion emitters, superconductors).
 
@@ -76,7 +84,7 @@ Tiers 5–9 have items and models but no recipe yet, because they need materials
   - The terminal holds 200,000 JE and accepts 4,096 JE/t.
   - Examples: 100 tier-1 drones = 800 JE/t while working; 100 tier-4 = 3,200 JE/t; one drone of every tier = 600 JE/t, which empties a full terminal in about 17 seconds without a power supply.
 - **Low power:** new departures wait, and flights slow down in proportion. Drones never drop cargo.
-- **Automation:** every recipe is a shaped crafting recipe (the vanilla Crafter can mass-produce drones), and the packager is a plain item inventory for pipes and hoppers.
+- **Automation:** the drone parts are shaped crafting recipes; the nine drones, the depot terminal and the hologram table are made on the Advanced Crafting Table's 6 x 6 grid (since 26 October 2026, [advanced-crafting-table.md](advanced-crafting-table.md); hoppers can fill its grid). The packager is a plain item inventory for pipes and hoppers.
 
 ## Multiplayer, persistence and performance
 - **Server-authoritative, drawn on the client.** The server decides every flight. Players near the terminal get a small snapshot (`DepotView`: pads, pickup, docks, each flight's path and progress, power and jobs) when a flight starts, a drone lands or the depot changes, and every 2 seconds for the power readout. Each client then moves the drones along the planned path by itself, so everyone sees what the owner sees, and nothing is sent per tick.

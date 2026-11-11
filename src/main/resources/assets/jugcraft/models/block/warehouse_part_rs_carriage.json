@@ -1,0 +1,145 @@
+{
+  "textures": {
+    "pi_wh_graphite": "jugcraft:block/pi_wh_graphite",
+    "pi_wh_hose": "jugcraft:block/pi_wh_hose",
+    "particle": "jugcraft:block/pi_wh_graphite"
+  },
+  "elements": [
+    {
+      "from": [
+        -2.0,
+        28.8,
+        -1.6
+      ],
+      "to": [
+        2.0,
+        31.0,
+        1.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_wh_graphite",
+          "uv": [
+            12.0,
+            0,
+            16.0,
+            2.2
+          ]
+        },
+        "south": {
+          "texture": "#pi_wh_graphite",
+          "uv": [
+            0,
+            0,
+            4.0,
+            2.2
+          ]
+        },
+        "east": {
+          "texture": "#pi_wh_graphite",
+          "uv": [
+            12.8,
+            0,
+            16.0,
+            2.2
+          ]
+        },
+        "west": {
+          "texture": "#pi_wh_graphite",
+          "uv": [
+            0,
+            0,
+            3.2,
+            2.2
+          ]
+        },
+        "up": {
+          "texture": "#pi_wh_graphite",
+          "uv": [
+            0,
+            0,
+            4.0,
+            3.2
+          ]
+        },
+        "down": {
+          "texture": "#pi_wh_graphite",
+          "uv": [
+            0,
+            12.8,
+            4.0,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        2.0,
+        29.8,
+        -0.4
+      ],
+      "to": [
+        5.0,
+        30.2,
+        0.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_wh_hose",
+          "uv": [
+            11.0,
+            0,
+            14.0,
+            0.4
+          ]
+        },
+        "south": {
+          "texture": "#pi_wh_hose",
+          "uv": [
+            2.0,
+            0,
+            5.0,
+            0.4
+          ]
+        },
+        "east": {
+          "texture": "#pi_wh_hose",
+          "uv": [
+            15.2,
+            0,
+            16.0,
+            0.4
+          ]
+        },
+        "west": {
+          "texture": "#pi_wh_hose",
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.4
+          ]
+        },
+        "up": {
+          "texture": "#pi_wh_hose",
+          "uv": [
+            2.0,
+            0,
+            5.0,
+            0.8
+          ]
+        },
+        "down": {
+          "texture": "#pi_wh_hose",
+          "uv": [
+            2.0,
+            15.2,
+            5.0,
+            16.0
+          ]
+        }
+      }
+    }
+  ]
+}

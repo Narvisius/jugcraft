@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "YGY",
+    "MCM",
+    "SSS"
+  ],
+  "key": {
+    "Y": "minecraft:yellow_dye",
+    "G": "minecraft:iron_bars",
+    "M": "jugcraft:electric_motor",
+    "C": "jugcraft:basic_circuit",
+    "S": "#c:plates/steel"
+  },
+  "result": {
+    "id": "jugcraft:warehouse_lift_landing",
+    "count": 1
+  }
+}

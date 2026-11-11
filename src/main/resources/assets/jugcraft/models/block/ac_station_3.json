@@ -1,0 +1,244 @@
+{
+  "textures": {
+    "pi_ac_edge": "jugcraft:block/pi_ac_edge",
+    "pi_ac_frame": "jugcraft:block/pi_ac_frame",
+    "pi_ac_glass": "jugcraft:block/pi_ac_glass",
+    "pi_ac_ledge": "jugcraft:block/pi_ac_ledge",
+    "pi_ac_panel": "jugcraft:block/pi_ac_panel",
+    "pi_ac_screen": "jugcraft:block/pi_ac_screen",
+    "pi_tsc_case": "jugcraft:block/pi_tsc_case",
+    "particle": "jugcraft:block/pi_ac_edge"
+  },
+  "elements": [
+    {
+      "from": [
+        0.1,
+        0,
+        0.0
+      ],
+      "to": [
+        16,
+        0.3999999999999986,
+        4.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_ac_edge"
+        },
+        "south": {
+          "texture": "#pi_ac_edge"
+        },
+        "east": {
+          "texture": "#pi_ac_edge"
+        },
+        "west": {
+          "texture": "#pi_ac_edge"
+        },
+        "up": {
+          "texture": "#pi_ac_ledge"
+        },
+        "down": {
+          "texture": "#pi_ac_panel"
+        }
+      }
+    },
+    {
+      "from": [
+        1.4,
+        0.3999999999999986,
+        1.4
+      ],
+      "to": [
+        16,
+        15.0,
+        2.2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_ac_glass"
+        },
+        "south": {
+          "texture": "#pi_ac_glass"
+        },
+        "east": {
+          "texture": "#pi_ac_glass"
+        },
+        "west": {
+          "texture": "#pi_ac_glass"
+        },
+        "up": {
+          "texture": "#pi_ac_glass"
+        },
+        "down": {
+          "texture": "#pi_ac_glass"
+        }
+      }
+    },
+    {
+      "from": [
+        0.8,
+        0.3999999999999986,
+        1.0999999999999999
+      ],
+      "to": [
+        1.4,
+        15.0,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_ac_frame"
+        },
+        "south": {
+          "texture": "#pi_ac_frame"
+        },
+        "east": {
+          "texture": "#pi_ac_frame"
+        },
+        "west": {
+          "texture": "#pi_ac_frame"
+        },
+        "up": {
+          "texture": "#pi_ac_frame"
+        },
+        "down": {
+          "texture": "#pi_ac_frame"
+        }
+      }
+    },
+    {
+      "from": [
+        15.6,
+        0.27,
+        1.0999999999999999
+      ],
+      "to": [
+        15.87,
+        15.13,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_ac_frame"
+        },
+        "south": {
+          "texture": "#pi_ac_frame"
+        },
+        "east": {
+          "texture": "#pi_ac_frame"
+        },
+        "west": {
+          "texture": "#pi_ac_frame"
+        },
+        "up": {
+          "texture": "#pi_ac_frame"
+        },
+        "down": {
+          "texture": "#pi_ac_frame"
+        }
+      }
+    },
+    {
+      "from": [
+        0.8,
+        15.0,
+        0.97
+      ],
+      "to": [
+        16,
+        15.5,
+        2.63
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_ac_frame"
+        },
+        "south": {
+          "texture": "#pi_ac_frame"
+        },
+        "east": {
+          "texture": "#pi_ac_frame"
+        },
+        "west": {
+          "texture": "#pi_ac_frame"
+        },
+        "up": {
+          "texture": "#pi_ac_frame"
+        },
+        "down": {
+          "texture": "#pi_ac_frame"
+        }
+      }
+    },
+    {
+      "from": [
+        8.4,
+        0,
+        6.3999999999999995
+      ],
+      "to": [
+        16,
+        3.3999999999999986,
+        7.2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_tsc_case"
+        },
+        "south": {
+          "texture": "#pi_tsc_case"
+        },
+        "east": {
+          "texture": "#pi_tsc_case"
+        },
+        "west": {
+          "texture": "#pi_tsc_case"
+        },
+        "up": {
+          "texture": "#pi_tsc_case"
+        },
+        "down": {
+          "texture": "#pi_tsc_case"
+        }
+      }
+    },
+    {
+      "from": [
+        8.700000000000001,
+        0,
+        7.2
+      ],
+      "to": [
+        16,
+        3.099999999999998,
+        7.3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_tsc_case"
+        },
+        "south": {
+          "texture": "#pi_ac_screen",
+          "uv": [
+            0.0,
+            0.0,
+            13.5814,
+            8.8571
+          ]
+        },
+        "east": {
+          "texture": "#pi_tsc_case"
+        },
+        "west": {
+          "texture": "#pi_tsc_case"
+        },
+        "up": {
+          "texture": "#pi_tsc_case"
+        },
+        "down": {
+          "texture": "#pi_tsc_case"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "textures": {
+    "pi_rr_partition": "jugcraft:block/pi_rr_partition",
+    "pi_rr_partition_edge": "jugcraft:block/pi_rr_partition_edge",
+    "particle": "jugcraft:block/pi_rr_partition"
+  },
+  "elements": [
+    {
+      "from": [
+        0.0,
+        4.8,
+        0.3
+      ],
+      "to": [
+        16.0,
+        28.5,
+        0.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_rr_partition",
+          "uv": [
+            0.0,
+            0,
+            16.0,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#pi_rr_partition",
+          "uv": [
+            0.0,
+            0,
+            16.0,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_rr_partition_edge",
+          "uv": [
+            15.2,
+            0,
+            15.7,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#pi_rr_partition_edge",
+          "uv": [
+            0.3,
+            0,
+            0.8,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#pi_rr_partition_edge",
+          "uv": [
+            0.0,
+            0.3,
+            16.0,
+            0.8
+          ]
+        },
+        "down": {
+          "texture": "#pi_rr_partition_edge",
+          "uv": [
+            0.0,
+            15.2,
+            16.0,
+            15.7
+          ]
+        }
+      }
+    }
+  ]
+}

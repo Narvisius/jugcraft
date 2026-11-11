@@ -1,18 +1,63 @@
 {
   "variants": {
-    "facing=north": {
-      "model": "jugcraft:block/console_desk"
+    "facing=north,left=false,right=false": {
+      "model": "jugcraft:block/console_desk_single"
     },
-    "facing=east": {
-      "model": "jugcraft:block/console_desk",
+    "facing=north,left=false,right=true": {
+      "model": "jugcraft:block/console_desk_left"
+    },
+    "facing=north,left=true,right=true": {
+      "model": "jugcraft:block/console_desk_middle"
+    },
+    "facing=north,left=true,right=false": {
+      "model": "jugcraft:block/console_desk_right"
+    },
+    "facing=east,left=false,right=false": {
+      "model": "jugcraft:block/console_desk_single",
       "y": 90
     },
-    "facing=south": {
-      "model": "jugcraft:block/console_desk",
+    "facing=east,left=false,right=true": {
+      "model": "jugcraft:block/console_desk_left",
+      "y": 90
+    },
+    "facing=east,left=true,right=true": {
+      "model": "jugcraft:block/console_desk_middle",
+      "y": 90
+    },
+    "facing=east,left=true,right=false": {
+      "model": "jugcraft:block/console_desk_right",
+      "y": 90
+    },
+    "facing=south,left=false,right=false": {
+      "model": "jugcraft:block/console_desk_single",
       "y": 180
     },
-    "facing=west": {
-      "model": "jugcraft:block/console_desk",
+    "facing=south,left=false,right=true": {
+      "model": "jugcraft:block/console_desk_left",
+      "y": 180
+    },
+    "facing=south,left=true,right=true": {
+      "model": "jugcraft:block/console_desk_middle",
+      "y": 180
+    },
+    "facing=south,left=true,right=false": {
+      "model": "jugcraft:block/console_desk_right",
+      "y": 180
+    },
+    "facing=west,left=false,right=false": {
+      "model": "jugcraft:block/console_desk_single",
+      "y": 270
+    },
+    "facing=west,left=false,right=true": {
+      "model": "jugcraft:block/console_desk_left",
+      "y": 270
+    },
+    "facing=west,left=true,right=true": {
+      "model": "jugcraft:block/console_desk_middle",
+      "y": 270
+    },
+    "facing=west,left=true,right=false": {
+      "model": "jugcraft:block/console_desk_right",
       "y": 270
     }
   }

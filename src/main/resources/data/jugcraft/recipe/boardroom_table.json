@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "DDDDDD",
+    "DDWWDD",
+    "SS  SS"
+  ],
+  "key": {
+    "D": "minecraft:dark_oak_planks",
+    "S": "#c:plates/steel",
+    "W": "#c:wires/copper"
+  },
+  "result": {
+    "id": "jugcraft:boardroom_table",
+    "count": 2
+  }
+}

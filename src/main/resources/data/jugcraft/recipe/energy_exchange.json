@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "STPTS",
+    "S T S",
+    "  C  "
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "T": "jugcraft:transformer_casing",
+    "P": "jugcraft:energy_exchange_port",
+    "C": "jugcraft:advanced_circuit"
+  },
+  "result": {
+    "id": "jugcraft:energy_exchange",
+    "count": 1
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "RI",
+    "R "
+  ],
+  "key": {
+    "R": "minecraft:red_dye",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "id": "jugcraft:agent_pipe_riser_top",
+    "count": 2
+  }
+}

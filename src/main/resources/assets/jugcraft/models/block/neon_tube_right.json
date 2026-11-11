@@ -1,0 +1,133 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "jugcraft:block/neon_rail",
+    "rail": "jugcraft:block/neon_rail",
+    "core": "jugcraft:block/neon_white",
+    "halo": {
+      "sprite": "jugcraft:block/neon_white_halo",
+      "force_translucent": true
+    }
+  },
+  "elements": [
+    {
+      "from": [
+        14.6,
+        0,
+        14.6
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#rail"
+        },
+        "east": {
+          "texture": "#rail"
+        },
+        "west": {
+          "texture": "#rail"
+        },
+        "up": {
+          "texture": "#rail",
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#rail",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "from": [
+        14.0,
+        0,
+        13.6
+      ],
+      "to": [
+        15.0,
+        16,
+        14.6
+      ],
+      "light_emission": 15,
+      "shade": false,
+      "faces": {
+        "north": {
+          "texture": "#core"
+        },
+        "south": {
+          "texture": "#core"
+        },
+        "east": {
+          "texture": "#core"
+        },
+        "west": {
+          "texture": "#core"
+        },
+        "up": {
+          "texture": "#core",
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#core",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "from": [
+        13.1,
+        0,
+        12.7
+      ],
+      "to": [
+        15.9,
+        16,
+        15.5
+      ],
+      "light_emission": 15,
+      "shade": false,
+      "faces": {
+        "north": {
+          "texture": "#halo",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#halo",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#halo",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#halo",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    }
+  ]
+}

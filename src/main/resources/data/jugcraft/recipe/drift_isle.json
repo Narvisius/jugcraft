@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "PPAAPP",
+    "MMEEMM",
+    "DDWWDD"
+  ],
+  "key": {
+    "A": "minecraft:flowering_azalea",
+    "D": "minecraft:polished_deepslate",
+    "E": "minecraft:ender_pearl",
+    "M": "minecraft:moss_block",
+    "P": "minecraft:phantom_membrane",
+    "W": "minecraft:dark_oak_planks"
+  },
+  "result": {
+    "id": "jugcraft:drift_isle",
+    "count": 2
+  }
+}

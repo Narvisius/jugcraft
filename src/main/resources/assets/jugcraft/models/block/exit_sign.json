@@ -1,0 +1,86 @@
+{
+  "textures": {
+    "pi_admin_exit": "jugcraft:block/pi_admin_exit",
+    "pi_admin_exit_case": "jugcraft:block/pi_admin_exit_case",
+    "particle": "jugcraft:block/pi_admin_exit"
+  },
+  "elements": [
+    {
+      "from": [
+        3.0,
+        9.0,
+        0.0
+      ],
+      "to": [
+        13.0,
+        10.0,
+        1.2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_admin_exit_case"
+        },
+        "south": {
+          "texture": "#pi_admin_exit_case"
+        },
+        "east": {
+          "texture": "#pi_admin_exit_case"
+        },
+        "west": {
+          "texture": "#pi_admin_exit_case"
+        },
+        "up": {
+          "texture": "#pi_admin_exit_case"
+        },
+        "down": {
+          "texture": "#pi_admin_exit_case"
+        }
+      }
+    },
+    {
+      "from": [
+        2.0,
+        4.0,
+        0.6
+      ],
+      "to": [
+        14.0,
+        9.0,
+        2.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_admin_exit",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#pi_admin_exit",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_admin_exit_case"
+        },
+        "west": {
+          "texture": "#pi_admin_exit_case"
+        },
+        "up": {
+          "texture": "#pi_admin_exit_case"
+        },
+        "down": {
+          "texture": "#pi_admin_exit_case"
+        }
+      },
+      "light_emission": 12
+    }
+  ]
+}

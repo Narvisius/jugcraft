@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "SSCCSS",
+    "SSCCSS"
+  ],
+  "key": {
+    "C": "minecraft:chest",
+    "S": "#c:plates/steel"
+  },
+  "result": {
+    "id": "jugcraft:steel_filing_cabinet",
+    "count": 2
+  }
+}

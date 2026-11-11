@@ -47,11 +47,19 @@ public final class JugcraftPowerLines {
 			};
 			BlockBehaviour.Properties props = properties(kind.id, source).strength(2.0F, kind.isBox() ? 12.0F : 6.0F).noOcclusion()
 					.pushReaction(PushReaction.IMMOVEABLE);
+			if (!kind.hasItem()) {
+				// The switchyard's line gantry: part of the plant, not broken by hand.
+				props.strength(-1.0F, 3_600_000.0F).noLootTable();
+			}
 			if (kind.family == LineKind.Family.WOOD && kind != LineKind.CONCRETE_POLE) {
 				props.sound(SoundType.WOOD);
 			}
-			Block block = Registry.register(BuiltInRegistries.BLOCK, Jugcraft.id(kind.id), new LineAnchorBlock(kind, props));
+			Block block = Registry.register(BuiltInRegistries.BLOCK, Jugcraft.id(kind.id),
+					kind == LineKind.LINE_GANTRY ? new LineGantryBlock(kind, props) : new LineAnchorBlock(kind, props));
 			ANCHORS.put(kind, block);
+			if (!kind.hasItem()) {
+				continue;
+			}
 			ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, Jugcraft.id(kind.id));
 			Item item = Registry.register(BuiltInRegistries.ITEM, key,
 					new LineItem(block, kind, new Item.Properties().setId(key).useBlockDescriptionPrefix().stacksTo(kind.isBox() ? 16 : 64)));

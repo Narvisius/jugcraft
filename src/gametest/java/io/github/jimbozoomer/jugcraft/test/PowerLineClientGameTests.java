@@ -10,8 +10,9 @@ import net.minecraft.server.level.ServerPlayer;
 
 /**
  * Client game test for power lines, with screenshots: a distribution line (pedestal, the three wooden pole tiers and
- * a pad-mount transformer), the monopoles into a Unit Substation, the three lattice towers, the UHV and UHVDC towers
- * with a converter station, the superconducting pylons, and the placement preview.
+ * a pad-mount transformer), the monopoles into a Unit Substation, the lattice towers, the UHV and UHVDC towers with a
+ * converter station, the superconducting pylons, close-ups of part 2 (the meter, the pole-mount transformer, the
+ * riser, the cryogenic terminations, a pylon's sleeve), and the placement preview.
  */
 public class PowerLineClientGameTests implements FabricClientGameTest {
 	@Override
@@ -48,7 +49,7 @@ public class PowerLineClientGameTests implements FabricClientGameTest {
 			// Every structure, wired into working lines (powerline/PowerLineShowcase.java, what /powerlines showcase builds).
 			server.runOnServer(minecraft -> {
 				int built = io.github.jimbozoomer.jugcraft.powerline.PowerLineShowcase.build(minecraft.overworld(), origin);
-				if (built < 26) {
+				if (built < 27) {
 					throw new AssertionError("the showcase built only " + built + " structures");
 				}
 			});
@@ -66,18 +67,29 @@ public class PowerLineClientGameTests implements FabricClientGameTest {
 			shot(context, singleplayer, x + 70, y + 20, z - 255, x + 130, y + 6, z - 300, "jugcraft_power_lines_converter");
 			shot(context, singleplayer, x - 100, y + 12, z - 8, x - 115, y + 18, z - 40, "jugcraft_power_lines_superconducting");
 			// Close-ups: every face the right way up, nothing floating, wires landing where they should.
-			shot(context, singleplayer, x - 22, y + 1, z - 21, x - 22, y + 1, z - 24, "jugcraft_power_lines_pedestal");
-			shot(context, singleplayer, x + 25, y + 1, z - 16, x + 25, y, z - 19, "jugcraft_power_lines_pad_mount");
+			// (part 2: the boxes face their first line: the pedestal and pad-mount their fronts away from it)
+			shot(context, singleplayer, x - 26, y + 1, z - 22, x - 22, y + 1, z - 24, "jugcraft_power_lines_pedestal");
+			shot(context, singleplayer, x + 28, y + 1, z - 17, x + 24, y, z - 20, "jugcraft_power_lines_pad_mount");
 			shot(context, singleplayer, x - 14, y + 10, z - 20, x - 16, y + 12, z - 24, "jugcraft_power_lines_pole_top");
 			shot(context, singleplayer, x - 7, y + 8, z - 10, x - 7, y + 10, z - 24, "jugcraft_power_lines_pole_span");
 			shot(context, singleplayer, x + 2, y + 20, z - 60, x + 2, y + 24, z - 80, "jugcraft_power_lines_monopole_span");
-			shot(context, singleplayer, x + 58, y + 6, z - 73, x + 53, y + 2, z - 80, "jugcraft_power_lines_substation");
+			shot(context, singleplayer, x + 58, y + 6, z - 73, x + 46, y + 2, z - 80, "jugcraft_power_lines_substation");
 			shot(context, singleplayer, x - 81, y + 2, z - 165, x - 85, y + 2, z - 165, "jugcraft_power_lines_leg_plate");
-			shot(context, singleplayer, x + 44, y + 44, z - 162, x + 36, y + 41, z - 170, "jugcraft_power_lines_lattice_arm");
-			shot(context, singleplayer, x - 60, y + 62, z - 292, x - 60, y + 60, z - 300, "jugcraft_power_lines_uhv_top");
-			shot(context, singleplayer, x + 70, y + 69, z - 292, x + 70, y + 67, z - 300, "jugcraft_power_lines_uhvdc_top");
+			shot(context, singleplayer, x - 26, y + 33, z - 162, x - 36, y + 30, z - 170, "jugcraft_power_lines_lattice_arm");
+			// Round 2: the 345 kV tower (a dead-end: its span runs into the substation), the angle tower at the turn, a
+			// wooden dead-end pole with its down guys.
+			shot(context, singleplayer, x - 78, y + 26, z - 160, x - 90, y + 22, z - 170, "jugcraft_power_lines_345");
+			shot(context, singleplayer, x + 24, y + 36, z - 158, x + 10, y + 30, z - 170, "jugcraft_power_lines_angle_tower");
+			shot(context, singleplayer, x + 15, y + 12, z - 19, x + 20, y + 12, z - 24, "jugcraft_power_lines_dead_end_pole");
+			shot(context, singleplayer, x - 60, y + 54, z - 290, x - 60, y + 50, z - 300, "jugcraft_power_lines_uhv_top");
+			shot(context, singleplayer, x + 70, y + 70, z - 290, x + 70, y + 64, z - 300, "jugcraft_power_lines_uhvdc_top");
 			shot(context, singleplayer, x - 110, y + 22, z - 31, x - 112, y + 21, z - 35, "jugcraft_power_lines_pylon_joint");
-			shot(context, singleplayer, x - 116, y + 3, z - 2, x - 119, y + 2, z + 1, "jugcraft_power_lines_cryo_termination");
+			shot(context, singleplayer, x - 117, y + 3, z - 1, x - 122, y + 2, z + 6, "jugcraft_power_lines_cryo_termination");
+			// Part 2: the pedestal's meter, the pole-mount transformer and its drop, the riser, the turning pylon's sleeves.
+			shot(context, singleplayer, x - 24, y, z - 24, x - 22, y + 1, z - 24, "jugcraft_power_lines_pedestal_meter");
+			shot(context, singleplayer, x - 13, y + 8, z - 28, x - 16, y + 8, z - 24, "jugcraft_power_lines_pole_transformer");
+			shot(context, singleplayer, x + 23, y + 8, z - 20, x + 20, y + 10, z - 24, "jugcraft_power_lines_riser");
+			shot(context, singleplayer, x - 111, y + 21, z - 58, x - 115, y + 20, z - 55, "jugcraft_power_lines_pylon_sleeve");
 
 			// The placement preview: holding a wooden pole near the distribution line.
 			server.runCommand("gamemode creative @p");

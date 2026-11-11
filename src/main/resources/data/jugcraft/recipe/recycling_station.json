@@ -1,0 +1,32 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "BBGGYY",
+    "KKKKKK",
+    "KKKKKK"
+  ],
+  "key": {
+    "B": "minecraft:blue_dye",
+    "G": "minecraft:green_dye",
+    "K": "jugcraft:plastic_sheet",
+    "Y": "minecraft:yellow_dye"
+  },
+  "result": {
+    "id": "jugcraft:recycling_station",
+    "count": 2
+  }
+}

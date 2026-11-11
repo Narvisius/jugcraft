@@ -1,0 +1,112 @@
+{
+  "textures": {
+    "pi_cap_black": "jugcraft:block/pi_cap_black",
+    "pi_wh4_spill_kit": "jugcraft:block/pi_wh4_spill_kit",
+    "pi_wh_yellow": "jugcraft:block/pi_wh_yellow",
+    "particle": "jugcraft:block/pi_cap_black"
+  },
+  "elements": [
+    {
+      "from": [
+        0.6,
+        0.0,
+        2.0
+      ],
+      "to": [
+        11.6,
+        10.0,
+        11.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_wh_yellow"
+        },
+        "south": {
+          "texture": "#pi_wh4_spill_kit",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_wh_yellow"
+        },
+        "west": {
+          "texture": "#pi_wh_yellow"
+        },
+        "up": {
+          "texture": "#pi_wh_yellow"
+        },
+        "down": {
+          "texture": "#pi_wh_yellow"
+        }
+      }
+    },
+    {
+      "from": [
+        0.2,
+        10.0,
+        1.6
+      ],
+      "to": [
+        12.0,
+        11.0,
+        11.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_wh_yellow"
+        },
+        "south": {
+          "texture": "#pi_wh_yellow"
+        },
+        "east": {
+          "texture": "#pi_wh_yellow"
+        },
+        "west": {
+          "texture": "#pi_wh_yellow"
+        },
+        "up": {
+          "texture": "#pi_wh_yellow"
+        },
+        "down": {
+          "texture": "#pi_wh_yellow"
+        }
+      }
+    },
+    {
+      "from": [
+        4.1,
+        10.2,
+        11.4
+      ],
+      "to": [
+        8.1,
+        10.8,
+        12.2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cap_black"
+        },
+        "south": {
+          "texture": "#pi_cap_black"
+        },
+        "east": {
+          "texture": "#pi_cap_black"
+        },
+        "west": {
+          "texture": "#pi_cap_black"
+        },
+        "up": {
+          "texture": "#pi_cap_black"
+        },
+        "down": {
+          "texture": "#pi_cap_black"
+        }
+      }
+    }
+  ]
+}

@@ -41,6 +41,8 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 	private Rotation rotation = Rotation.NONE;
 	private @Nullable UUID owner;
 	private UseMode mode = UseMode.PERSONAL;
+	/** What staked it, if not a player's blueprint (the warehouse terminal adding a floor), told when it is done. */
+	private @Nullable BlockPos link;
 	private final UUID jobId = UUID.randomUUID();
 	private @Nullable Jobs jobs;
 	private @Nullable BuildSite site;
@@ -109,7 +111,7 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 					done++;
 				} else if (!now.canBeReplaced()) {
 					wrong++;
-				} else {
+				} else if (!site.state(i).is(net.minecraft.world.level.block.Blocks.LIGHT)) {
 					(handOnly(site.state(i)) ? hand : missing).merge(site.state(i).getBlock().asItem(), 1, Integer::sum);
 				}
 			}
@@ -136,6 +138,21 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 
 	public UseMode mode() {
 		return mode;
+	}
+
+	public void setMode(UseMode mode) {
+		this.mode = mode;
+		setChanged();
+		sync();
+	}
+
+	public @Nullable BlockPos link() {
+		return link;
+	}
+
+	public void setLink(@Nullable BlockPos link) {
+		this.link = link == null ? null : link.immutable();
+		setChanged();
 	}
 
 	public @Nullable UUID owner() {
@@ -207,7 +224,7 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 				done++;
 			} else if (!now.canBeReplaced()) {
 				wrong++;
-			} else {
+			} else if (!site.state(i).is(net.minecraft.world.level.block.Blocks.LIGHT)) {
 				(handOnly(site.state(i)) ? handOnly : missing).merge(site.state(i).getBlock().asItem(), 1, Integer::sum);
 			}
 		}
@@ -305,6 +322,7 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 			// The pools and basins fill once everything else is in.
 			done.fillFluids(server);
 		}
+		BlueprintStacks.completed(server, this);
 		BlockPos pos = getBlockPos();
 		if (owner != null && server.getServer().getPlayerList().getPlayer(owner) instanceof Player player && blueprint != null) {
 			player.sendSystemMessage(Component.translatable("message.jugcraft.blueprint.complete", blueprint.name));
@@ -348,6 +366,7 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 		rotation = Rotation.values()[Math.floorMod(input.getIntOr("rotation", 0), 4)];
 		owner = input.read("owner", UUIDUtil.CODEC).orElse(null);
 		mode = "party".equals(input.getStringOr("mode", "personal")) ? UseMode.PARTY : UseMode.PERSONAL;
+		link = input.read("link", BlockPos.CODEC).orElse(null);
 		site = null;
 	}
 
@@ -360,6 +379,9 @@ public class SurveyStakeBlockEntity extends BlockEntity {
 			output.store("owner", UUIDUtil.CODEC, owner);
 		}
 		output.putString("mode", mode == UseMode.PARTY ? "party" : "personal");
+		if (link != null) {
+			output.store("link", BlockPos.CODEC, link);
+		}
 	}
 
 	/** The stake's build jobs for drone depots: missing blocks, bottom-up, one depot per position at a time. */

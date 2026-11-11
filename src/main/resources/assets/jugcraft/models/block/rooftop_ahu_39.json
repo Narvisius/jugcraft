@@ -1,0 +1,101 @@
+{
+ "textures": {
+  "rp_ahu": "jugcraft:block/rp_ahu",
+  "rp_galv": "jugcraft:block/rp_galv",
+  "rp_galv_dark": "jugcraft:block/rp_galv_dark",
+  "rp_louvre": "jugcraft:block/rp_louvre",
+  "rp_screen": "jugcraft:block/rp_screen",
+  "particle": "jugcraft:block/rp_galv"
+ },
+ "elements": [
+  {
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    16,
+    16,
+    9.5
+   ],
+   "faces": {
+    "south": {
+     "texture": "#rp_ahu"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    14.0,
+    15.0
+   ],
+   "to": [
+    16,
+    16,
+    15.8
+   ],
+   "faces": {
+    "north": {
+     "texture": "#rp_galv"
+    },
+    "south": {
+     "texture": "#rp_galv"
+    },
+    "down": {
+     "texture": "#rp_galv"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    14.0,
+    9.4
+   ],
+   "to": [
+    16,
+    14.3,
+    15.0
+   ],
+   "faces": {
+    "north": {
+     "texture": "#rp_screen"
+    },
+    "south": {
+     "texture": "#rp_screen"
+    },
+    "up": {
+     "texture": "#rp_screen"
+    },
+    "down": {
+     "texture": "#rp_screen"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    2.0,
+    9.5
+   ],
+   "to": [
+    16,
+    16,
+    9.7
+   ],
+   "faces": {
+    "north": {
+     "texture": "#rp_galv_dark"
+    },
+    "south": {
+     "texture": "#rp_louvre"
+    },
+    "down": {
+     "texture": "#rp_galv_dark"
+    }
+   }
+  }
+ ]
+}

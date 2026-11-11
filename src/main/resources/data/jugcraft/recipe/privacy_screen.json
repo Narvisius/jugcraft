@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "AAWWAA",
+    "AAWWAA",
+    "NN  NN"
+  ],
+  "key": {
+    "A": "#c:plates/aluminum",
+    "N": "minecraft:iron_nugget",
+    "W": "minecraft:white_wool"
+  },
+  "result": {
+    "id": "jugcraft:privacy_screen",
+    "count": 2
+  }
+}

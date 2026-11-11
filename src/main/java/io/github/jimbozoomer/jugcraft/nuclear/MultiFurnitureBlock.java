@@ -43,8 +43,12 @@ public class MultiFurnitureBlock extends HorizontalDirectionalBlock implements S
 	private final IntegerProperty part;
 	private final Map<Direction, VoxelShape[]> shapes = new EnumMap<>(Direction.class);
 
+	/**
+	 * The part property for a piece of count blocks. A one-block piece (the ops office's clock and radio rack) still
+	 * gets parts 0 and 1, since a property needs two values (part 1 is never placed; it draws and shapes as part 0).
+	 */
 	static IntegerProperty property(int count) {
-		return PROPERTIES.computeIfAbsent(count, n -> IntegerProperty.create("part", 0, n - 1));
+		return PROPERTIES.computeIfAbsent(Math.max(2, count), n -> IntegerProperty.create("part", 0, n - 1));
 	}
 
 	protected static Properties prepare(Properties properties, int width, int rows, int variants) {
@@ -223,7 +227,7 @@ public class MultiFurnitureBlock extends HorizontalDirectionalBlock implements S
 
 	@Override
 	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-		return shapes.get(state.getValue(FACING))[state.getValue(part)];
+		return shapes.get(state.getValue(FACING))[Math.min(state.getValue(part), width * rows - 1)];
 	}
 
 	/**

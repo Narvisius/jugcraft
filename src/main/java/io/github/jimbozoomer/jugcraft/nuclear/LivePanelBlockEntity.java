@@ -77,6 +77,35 @@ public class LivePanelBlockEntity extends BlockEntity {
 	 */
 	public @Nullable BlockPos panel;
 	/**
+	 * The entrance hall's security post (older rooms round 6: AccessControl): the speed gates' passages in its reach,
+	 * oldest first ("dayTime|IN|name"), and when its duress alarm ends (game time). Saved, synced.
+	 */
+	public final List<String> acLog = new ArrayList<>();
+	public long acDuressUntil;
+	/**
+	 * The security gatehouse (SecurityGatehouse). The metal detector: when its lights go out (game time), whether it
+	 * alarmed, how many it has passed; who was in it last tick (not saved). The X-ray: its last bags ("NAME|1" to be
+	 * searched), how many it has seen, when its tunnel goes dark. The alarm station console: its zones in alarm (a bit
+	 * each). Saved, synced.
+	 */
+	public long wdUntil, xrUntil;
+	public boolean wdAlarm;
+	public int wdCount, xrCount, secZones;
+	public final java.util.Set<java.util.UUID> wdInside = new java.util.HashSet<>();
+	public final List<String> xrLog = new ArrayList<>();
+	/**
+	 * The administration building's chemistry lab (ChemLab). The plant chemistry status board: its rows
+	 * ("value|status|code|time") and the plant's mode as it last worked them out. The gamma spectroscopy station: when
+	 * its count started (game time, -1 never) and on the day clock, the sample, how many it has counted, the activities
+	 * it found (the nuclides, DEI, gross; uCi/g). Saved, synced.
+	 */
+	public final List<String> chemRows = new ArrayList<>();
+	public String chemMode = "";
+	public long gsStart = -1, gsDay;
+	public String gsSample = "";
+	public int gsCount;
+	public final List<Double> gsAct = new ArrayList<>();
+	/**
 	 * A vital panel (round 26, 8e): its breakers, bit 0 the main and bits 1 to 12 its circuits, set closed
 	 * (VitalPanelBlock). Saved and synced.
 	 */
@@ -97,6 +126,28 @@ public class LivePanelBlockEntity extends BlockEntity {
 	 * Synced: the client reads their flows (the battery's current) and strings (strings) from them.
 	 */
 	public final List<BlockPos> racks = new ArrayList<>();
+	/**
+	 * The DC equipment rooms (older rooms round 3: DcRoom). A charger's, inverter's, distribution panel's or the log
+	 * desk laptop's switchboard (its train's nearest in reach). A switchboard's state (DcRoom.BUS ...) and its room's parts
+	 * it found (DcRoom.PARTS: chargers, inverters, panels by number; itself where none). A charger's or inverter's own
+	 * breakers (DcRoom.AC_OPEN, DC_OPEN set open), a charger's equalize end (game time), the annunciator: its conditions
+	 * in, the windows latched and acknowledged, TEST held until (game time). Saved and synced.
+	 */
+	public @Nullable BlockPos board;
+	public int sbFlags, dcFlags, annIn, annLatch, annAck;
+	/** A switchboard's strings off its bus, their disconnects open (older rooms round 4: bit s for string s). Saved, synced. */
+	public int sbIso;
+	public long eqUntil, annTestUntil;
+	public final List<BlockPos> dcParts = new ArrayList<>();
+	/** (From 1: a piece just built links its battery and room before its first look at its bus.) */
+	private int dcTimer = 1;
+	/**
+	 * How long it has ticked since it was built or loaded (game ticks, up to DcRoom.SETTLE): a charger's or inverter's
+	 * annunciator latches nothing before then, while its supply and its switchboard's bus are first worked out.
+	 */
+	int dcAge;
+	/** A charger's AC used by its own controls and the battery's float (JE a tick), so its supply keeps flowing. */
+	static final long CHARGER_IDLE = 8;
 	/** An exhaust fan's HAND-OFF-AUTO selector (ExhaustFanBlock.MODES); a battery monitor's string on its screen. Saved, synced. */
 	public int mode, page;
 	/** The linked generator's anchor, or null. */
@@ -124,6 +175,24 @@ public class LivePanelBlockEntity extends BlockEntity {
 	public int hvState, hvAlarms;
 	public double hvValue;
 	public long hvSince;
+	/**
+	 * The cable spreading room's pre-action sprinkler system (punch list #15: SpreadingRoomFire), kept by its releasing
+	 * panel: its phase (SpreadingRoomFire.NORMAL to DRILL) and since when (game time), its flags, the system's air
+	 * (psi), when it released (day time, for its display), when it last saw a fire (game time). Saved and synced. Not
+	 * saved: the detectors, heads and valve station it found, the heads open now, when it looks again. A valve station
+	 * keeps its releasing panel in {@link #panel}.
+	 */
+	public int csrPhase, csrFlags;
+	public long csrSince, csrQuiet, csrReleasedAt;
+	public double csrAir = SpreadingRoomFire.AIR;
+	double csrSent;
+	long csrScanAt;
+	List<BlockPos> csrDetectors = List.of(), csrAllHeads = List.of();
+	final List<BlockPos> csrHeads = new ArrayList<>();
+	@Nullable BlockPos csrValve;
+	/** Part W3: the smoke vents it opens on an alarm (a warehouse's), the next detectors to look round (a big system's in turns). */
+	List<BlockPos> csrVents = List.of();
+	int csrTurn;
 	/** The panel's dampers as last found, and the seconds until it looks again (not saved). */
 	@Nullable List<BlockPos> hvDampers;
 	int hvRescan;
@@ -142,14 +211,75 @@ public class LivePanelBlockEntity extends BlockEntity {
 	/** What the board found of the plant, and the seconds until it looks again (not saved). */
 	TscRoom.@Nullable Found tsFound;
 	int tsRescan;
+	/**
+	 * The operations office (round 26, #13: OpsOffice). Its out-of-service board: everything in the plant switched off
+	 * (OpsOffice.Entry, encoded), and the next clearance number. Synced and saved.
+	 */
+	public final List<String> opsEntries = new ArrayList<>();
+	public int opsNext;
+	/** What the board found of the plant (not saved). */
+	OpsOffice.@Nullable Found opsFound;
+	/**
+	 * The plant computer room (older rooms round 2: ServerRoom; it only looks live). Its hub (the UPS module): the power
+	 * bits (ServerRoom.FED and the CRACs running), the UPS battery's charge (always full), the room's air (degrees C) when
+	 * its cooling last changed and that game time (ServerRoom.temp works it out from them), the clean agent system's
+	 * phase, flags and since when (game time), when it released (day time), the abort held until (game time), the
+	 * cylinders' pressure (psig). Saved and synced. A rack: the number it was given before the clients worked it out
+	 * (saved). Not saved: the detectors the hub found and when.
+	 */
+	public int srvBits = ServerRoom.FED | ServerRoom.CRAC1_RUN | ServerRoom.CRAC2_RUN, srvPhase, srvFlags;
+	public double srvBattery = 1, srvTemp = ServerRoom.ROOM, srvPsi = ServerRoom.PSI;
+	public long srvSince, srvReleasedAt, srvAbortUntil, srvTempAt;
+	public String srvLabel = "";
+	List<BlockPos> srvDetectors = List.of();
+	long srvScanAt = -1;
+
+	/**
+	 * The pieces that only look live (Justin, 25 October 2026: "make it look like it works, but it doesn't actually need to
+	 * be calculating any kind of live numbers ... It doesn't need to be constantly updating anything"; wherever they
+	 * stand): the plant computer room's (ServerRoom), the battery rooms' (the hydrogen monitor, the exhaust fan, the
+	 * string disconnects) and the operations office's wall clock, radio rack and PPE shelf (drawn from the game's clock). Nothing ticks on the server for them (LivePanelBlock gives them no ticker); their screens,
+	 * meters and links are worked out on the clients that draw them, and what they do happens when someone uses them.
+	 */
+	public static boolean simulated(BlockState state) {
+		return ServerRoom.kind(state) >= 0 || batteryRoom(state) || DcRoom.isDisconnect(state) || OpsOffice.kind(state) >= OpsOffice.CLOCK;
+	}
+
+	@Override
+	public void setLevel(net.minecraft.world.level.Level level) {
+		super.setLevel(level);
+		if (level instanceof ServerLevel server && ServerRoom.kind(getBlockState()) == ServerRoom.HUB) {
+			ServerRoom.loaded(server, getBlockPos());
+		}
+	}
+
+	@Override
+	public void clearRemoved() {
+		super.clearRemoved();
+		if (level instanceof ServerLevel server && ServerRoom.kind(getBlockState()) == ServerRoom.HUB) {
+			ServerRoom.loaded(server, getBlockPos());
+		}
+	}
+
+	@Override
+	public void setRemoved() {
+		if (level instanceof ServerLevel server && ServerRoom.kind(getBlockState()) == ServerRoom.HUB) {
+			ServerRoom.unloaded(server, getBlockPos());
+		}
+		super.setRemoved();
+	}
 
 	public LivePanelBlockEntity(BlockPos pos, BlockState state) {
 		super(PlantInterior.LIVE_PANEL_ENTITY, pos, state);
-		breakers = isVitalPanel(state) ? VitalPanelBlock.DEFAULT_BREAKERS : 0;
+		breakers = defaultBreakers(state);
 		mode = defaultMode(state);
 		input = isCharger(state) ? new io.github.jimbozoomer.jugcraft.energy.SimpleEnergyStorage(CHARGER_BUFFER, 4_096, 0, this::setChanged) {
 			@Override
 			public long insert(long maxAmount, net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext transaction) {
+				if ((dcFlags & DcRoom.AC_OPEN) != 0) {
+					// Its AC input breaker open (older rooms round 3): nothing comes in.
+					return 0;
+				}
 				long in = super.insert(maxAmount, transaction);
 				if (in > 0) {
 					transaction.addCloseCallback((t, result) -> {
@@ -159,6 +289,11 @@ public class LivePanelBlockEntity extends BlockEntity {
 				return in;
 			}
 		} : null;
+	}
+
+	/** A panel's breakers as built (set closed): a vital or DC panel's, the DC switchboard's. */
+	private static int defaultBreakers(BlockState state) {
+		return isVitalPanel(state) ? VitalPanelBlock.DEFAULT_BREAKERS : isSwitchboard(state) ? DcRoom.SB_DEFAULT : 0;
 	}
 
 	/** A selector's position as built: an exhaust fan's AUTO, the HVAC panel's AUTO. */
@@ -201,6 +336,45 @@ public class LivePanelBlockEntity extends BlockEntity {
 	/** The battery rooms' panels (round 26, #9): the hydrogen monitor and the exhaust fan. */
 	static boolean batteryRoom(BlockState state) {
 		return isH2Monitor(state) || isExhaustFan(state);
+	}
+
+	/**
+	 * A battery room's hydrogen monitor's exhaust fan, or a fan's monitor (round 26, #9; simulated: worked out where it is
+	 * drawn, client/EdgTelemetry.java hydrogen): the nearest of the other in reach, or null.
+	 */
+	public static @Nullable LivePanelBlockEntity batteryRoomPartner(net.minecraft.world.level.Level level, LivePanelBlockEntity piece) {
+		List<LivePanelBlockEntity> other = ControlBoard.panels(level, piece.getBlockPos(),
+				PlantInterior.BLOCKS.get(isH2Monitor(piece.getBlockState()) ? "exhaust_fan" : "h2_monitor"), REACH);
+		return other.isEmpty() ? null : other.get(0);
+	}
+
+	/**
+	 * A hydrogen monitor's or exhaust fan's racks (simulated: worked out where it is drawn): its nearest switchboard's
+	 * (they are synced), else the nearest station battery in reach, else none.
+	 */
+	public static List<BlockPos> batteryRoomRacks(net.minecraft.world.level.Level level, LivePanelBlockEntity piece) {
+		BlockPos here = piece.getBlockPos();
+		List<LivePanelBlockEntity> boards = ControlBoard.panels(level, here, PlantInterior.BLOCKS.get("dc_switchboard"), REACH);
+		if (!boards.isEmpty()) {
+			return List.copyOf(boards.get(0).racks);
+		}
+		BlockPos best = null;
+		int r = (REACH >> 4) + 1;
+		for (int cx = (here.getX() >> 4) - r; cx <= (here.getX() >> 4) + r; cx++) {
+			for (int cz = (here.getZ() >> 4) - r; cz <= (here.getZ() >> 4) + r; cz++) {
+				LevelChunk chunk = level.getChunkSource().getChunkNow(cx, cz);
+				if (chunk == null) {
+					continue;
+				}
+				for (BlockEntity be : chunk.getBlockEntities().values()) {
+					if (be instanceof StationBatteryBlockEntity bank && bank.getBlockPos().distSqr(here) <= (double) REACH * REACH
+							&& (best == null || bank.getBlockPos().distSqr(here) < best.distSqr(here))) {
+						best = bank.getBlockPos().immutable();
+					}
+				}
+			}
+		}
+		return best == null ? List.of() : List.of(best);
 	}
 
 	/**
@@ -256,7 +430,7 @@ public class LivePanelBlockEntity extends BlockEntity {
 		setRacks(level, found);
 	}
 
-	/** A ground detector's, hydrogen monitor's or exhaust fan's racks: its nearest switchboard's (else its own battery). */
+	/** A ground detector's racks: its nearest switchboard's (else its own battery). */
 	private void copyRacks(ServerLevel level) {
 		List<LivePanelBlockEntity> boards = around(level, PlantInterior.BLOCKS.get("dc_switchboard"));
 		setRacks(level, !boards.isEmpty() ? boards.get(0).racks : battery == null ? List.of() : List.of(battery));
@@ -277,7 +451,8 @@ public class LivePanelBlockEntity extends BlockEntity {
 	 */
 	private void balance(ServerLevel level) {
 		List<StationBatteryBlockEntity> banks = new ArrayList<>();
-		for (BlockPos at : racks) {
+		// (Older rooms round 4: a string off the bus, its disconnect open, is left out.)
+		for (BlockPos at : DcRoom.onBus(level, this)) {
 			if (level.isLoaded(at) && level.getBlockEntity(at) instanceof StationBatteryBlockEntity bank) {
 				banks.add(bank);
 			}
@@ -289,8 +464,8 @@ public class LivePanelBlockEntity extends BlockEntity {
 			if (move > 0) {
 				high.energy.setAmount(high.energy.getAmount() - move);
 				low.energy.setAmount(low.energy.getAmount() + move);
-				high.setChanged();
-				low.setChanged();
+				high.changed();
+				low.changed();
 			}
 		}
 	}
@@ -306,7 +481,7 @@ public class LivePanelBlockEntity extends BlockEntity {
 	 */
 	static boolean dcRoom(BlockState state) {
 		return state.getBlock() == PlantInterior.BLOCKS.get("station_charger") || isSwitchboard(state) || isInverter(state) || isTransformer(state)
-				|| isVitalPanel(state) || isGroundDetector(state) || batteryRoom(state);
+				|| isVitalPanel(state) || isGroundDetector(state) || batteryRoom(state) || DcRoom.isLaptop(state) || DcRoom.isDisconnect(state);
 	}
 
 	/** A ground detector's test (GroundDetectorBlock): on side 1 (+) or 2 (-) until game time until; saved, sent. */
@@ -355,6 +530,36 @@ public class LivePanelBlockEntity extends BlockEntity {
 			inverter = found == null ? null : found.immutable();
 			sync(level);
 		}
+	}
+
+	/**
+	 * A charger, inverter, DC panel or the laptop keeps to its switchboard (older rooms round 3): the nearest in reach of
+	 * its own train (the laptop the nearest), else the nearest.
+	 */
+	private void linkBoard(ServerLevel level) {
+		List<LivePanelBlockEntity> boards = around(level, PlantInterior.BLOCKS.get(DcRoom.SWITCHBOARD));
+		BlockPos found = null;
+		if (!DcRoom.isLaptop(getBlockState())) {
+			int train = DcRoom.train(getBlockState());
+			for (LivePanelBlockEntity b : boards) {
+				if (DcRoom.train(b.getBlockState()) == train) {
+					found = b.getBlockPos();
+					break;
+				}
+			}
+		}
+		if (found == null && !boards.isEmpty()) {
+			found = boards.get(0).getBlockPos();
+		}
+		if (found == null ? board != null : !found.equals(board)) {
+			board = found == null ? null : found.immutable();
+			sync(level);
+		}
+	}
+
+	/** A battery room's string disconnect finds its switchboard when it is worked (it does not tick: simulated). */
+	void linkBoardNow(ServerLevel level) {
+		linkBoard(level);
 	}
 
 	/** A panel's label (round 26, 8c: 0 to 3 for 1A-1, 1A-2, 1B-1, 1B-2; one put down by hand is 0). */
@@ -476,7 +681,7 @@ public class LivePanelBlockEntity extends BlockEntity {
 	}
 
 	/** As {@link #panelsAround(ServerLevel, Block)} within {@code reach} blocks (round 26, #12: the TSC's board). */
-	List<LivePanelBlockEntity> panelsAround(ServerLevel level, Block kind, int reach) {
+	public List<LivePanelBlockEntity> panelsAround(ServerLevel level, Block kind, int reach) {
 		return around(level, kind, reach);
 	}
 
@@ -518,6 +723,104 @@ public class LivePanelBlockEntity extends BlockEntity {
 	}
 
 	public void serverTick(ServerLevel level) {
+		int csr = SpreadingRoomFire.kind(getBlockState());
+		if (csr >= 0) {
+			// The cable spreading room's sprinklers (punch list #15): the releasing panel watches its room twice a second;
+			// the valve station keeps to the nearest releasing panel (its gauges read it).
+			if (timer-- <= 0) {
+				timer = csr == 0 ? 9 : 39;
+				if (csr == 0) {
+					SpreadingRoomFire.tick(this, level, level.getGameTime());
+				} else {
+					List<LivePanelBlockEntity> near = ControlBoard.panels(level, getBlockPos(), PlantInterior.BLOCKS.get(SpreadingRoomFire.RELEASE),
+							SpreadingRoomFire.REACH);
+					near.sort(java.util.Comparator.comparingDouble(p -> p.getBlockPos().distSqr(getBlockPos())));
+					BlockPos found = near.isEmpty() ? null : near.get(0).getBlockPos().immutable();
+					if (found == null ? panel != null : !found.equals(panel)) {
+						panel = found;
+						sync(level);
+					}
+				}
+			}
+			return;
+		}
+		if (AccessControl.isStation(getBlockState())) {
+			// The entrance hall's security post (older rooms round 6): the gates write to it; nothing to link.
+			return;
+		}
+		if (ChemLab.isBoard(getBlockState())) {
+			// The chemistry lab's status board: the plant's chemistry, once a second.
+			if (timer-- <= 0) {
+				timer = 19;
+				ChemLab.boardTick(this, level);
+			}
+			return;
+		}
+		if (ChemLab.isGamma(getBlockState())) {
+			// The gamma spectroscopy station: its count finishing.
+			ChemLab.gammaTick(this, level);
+			return;
+		}
+		if (SecurityGatehouse.isDetector(getBlockState())) {
+			// The gatehouse's metal detector: whoever walks through it, every tick.
+			SecurityGatehouse.detectorTick(this, level);
+			return;
+		}
+		if (SecurityGatehouse.isXray(getBlockState())) {
+			// The gatehouse's X-ray: the bags put through it (a click); nothing to link.
+			return;
+		}
+		if (SecurityGatehouse.isConsole(getBlockState())) {
+			// The gatehouse's alarm station console: its post and the perimeter's zones, once a second.
+			if (timer-- <= 0) {
+				timer = 19;
+				SecurityGatehouse.consoleTick(this, level);
+			}
+			return;
+		}
+		if (ControlRoomConsoles.isConsole(getBlockState())) {
+			// The main control room's consoles (older rooms round 5) link the display wall once a second, never a generator.
+			if (timer-- <= 0) {
+				timer = 19;
+				ControlRoomConsoles.tick(this, level);
+			}
+			return;
+		}
+		if (HallCrane.isPendant(getBlockState())) {
+			// The turbine hall's crane pendant stations (turbine hall part 3): the nearest overhead crane in reach, once a
+			// second (its POWER lamp reads it).
+			if (timer-- <= 0) {
+				timer = 19;
+				EquipmentBlockEntity crane = HallCrane.near(level, getBlockPos());
+				BlockPos found = crane == null ? null : crane.getBlockPos().immutable();
+				if (found == null ? panel != null : !found.equals(panel)) {
+					panel = found;
+					sync(level);
+				}
+			}
+			return;
+		}
+		if (TurbineControlRoom.kind(getBlockState()) >= 0) {
+			// The turbine control room's cabinets (turbine hall part 3): the nearest turbine-generator, once a second.
+			if (timer-- <= 0) {
+				timer = 19;
+				TurbineControlRoom.tick(this, level);
+			}
+			return;
+		}
+		if (simulated(getBlockState())) {
+			// The plant computer room and the battery rooms only look live: nothing to do (they have no ticker).
+			return;
+		}
+		int ops = OpsOffice.kind(getBlockState());
+		if (ops >= 0) {
+			// The operations office's board reads the plant, its consoles and schedule board find it, once a second (#13).
+			if (timer-- <= 0) {
+				timer = 19;
+				OpsOffice.tick(this, level, ops);
+			}
+			return;
+		}
 		int tsc = TscRoom.kind(getBlockState());
 		if (tsc >= 0) {
 			// The Technical Support Center's panels (round 26, #12) read the plant, or their board, once a second.
@@ -536,6 +839,10 @@ public class LivePanelBlockEntity extends BlockEntity {
 			}
 			return;
 		}
+		if (SwitchgearRoom.isLaptop(getBlockState())) {
+			// The switchgear room's laptop reads its load centre on the client (SwitchgearRoom), never a generator.
+			return;
+		}
 		int relay = RelayRoom.kind(getBlockState());
 		if (relay >= 0) {
 			// A relay room cabinet reads the reactor (a relay panel nothing: its name is its label), never a generator.
@@ -552,29 +859,35 @@ public class LivePanelBlockEntity extends BlockEntity {
 			balanceTimer = 19;
 			balance(level);
 		}
+		if ((isSwitchboard(getBlockState()) || DcRoom.isCharger(getBlockState()) || isInverter(getBlockState())) && dcTimer-- <= 0) {
+			// The DC rooms (older rooms round 3): the switchboard's bus and room, a charger's or inverter's annunciator.
+			dcTimer = 19;
+			dcAge = Math.min(DcRoom.SETTLE, dcAge + 20);
+			if (isSwitchboard(getBlockState())) {
+				DcRoom.tickBoard(level, this);
+			} else {
+				DcRoom.tickPanel(level, this, DcRoom.isCharger(getBlockState()));
+			}
+		}
 		if (timer-- > 0) {
 			return;
 		}
 		timer = 40;
-		if (input != null || isSwitchboard(getBlockState()) || isInverter(getBlockState()) || isGroundDetector(getBlockState())
-				|| batteryRoom(getBlockState())) {
+		// (The battery rooms' hydrogen monitor, exhaust fan and string disconnects only look live: they do not tick, and
+		// their links are worked out where they are drawn or when they are worked: batteryRoomPartner, batteryRoomRacks,
+		// linkBoardNow.)
+		if (DcRoom.isCharger(getBlockState()) || isInverter(getBlockState()) || DcRoom.isPanel(getBlockState()) || DcRoom.isLaptop(getBlockState())) {
+			linkBoard(level);
+		}
+		if (input != null || isSwitchboard(getBlockState()) || isInverter(getBlockState()) || isGroundDetector(getBlockState())) {
 			linkBattery(level);
 		}
 		if (isSwitchboard(getBlockState())) {
 			linkRacks(level);
-		} else if (isGroundDetector(getBlockState()) || batteryRoom(getBlockState())) {
+		} else if (isGroundDetector(getBlockState())) {
 			copyRacks(level);
 		}
-		if (batteryRoom(getBlockState())) {
-			// The hydrogen monitor and the exhaust fan keep to each other (its panel): the nearest of the other in reach.
-			List<LivePanelBlockEntity> other = around(level, PlantInterior.BLOCKS.get(isH2Monitor(getBlockState()) ? "exhaust_fan" : "h2_monitor"));
-			BlockPos found = other.isEmpty() ? null : other.get(0).getBlockPos();
-			if (found == null ? panel != null : !found.equals(panel)) {
-				panel = found == null ? null : found.immutable();
-				sync(level);
-			}
-		}
-		if (isVitalPanel(getBlockState())) {
+		if (isVitalPanel(getBlockState()) && !DcRoom.isPanel(getBlockState())) {
 			linkFeed(level);
 		}
 		if (isInverter(getBlockState())) {
@@ -687,6 +1000,20 @@ public class LivePanelBlockEntity extends BlockEntity {
 		}
 		StationBatteryBlockEntity bank = battery != null && level.isLoaded(battery)
 				&& level.getBlockEntity(battery) instanceof StationBatteryBlockEntity b ? b : null;
+		if (DcRoom.isCharger(getBlockState())) {
+			// A station charger (older rooms round 3): its controls take a little of its supply all the time (so a
+			// floating charger's supply keeps coming); it charges only with its DC breaker closed and, on a switchboard,
+			// the switchboard's main closed (the battery on the bus).
+			input.setAmount(Math.max(0, input.getAmount() - CHARGER_IDLE));
+			LivePanelBlockEntity sb = board != null && level.getBlockEntity(board) instanceof LivePanelBlockEntity s && isSwitchboard(s.getBlockState()) ? s : null;
+			if ((dcFlags & DcRoom.DC_OPEN) != 0 || sb != null && !DcRoom.closed(sb, DcRoom.MAIN)) {
+				bank = null;
+			} else if (bank != null && sb != null && sb.sbIso != 0 && !DcRoom.rackOnBus(level, sb, bank.getBlockPos())) {
+				// Its rack's string off the bus (older rooms round 4: its disconnect open): it charges the string still on.
+				List<BlockPos> on = DcRoom.onBus(level, sb);
+				bank = on.isEmpty() ? null : StationBatteryBlock.battery(level, on.get(0));
+			}
+		}
 		if (bank != null && input.getAmount() > 0) {
 			// (Its input gives nothing back to a cable, so the charge is moved by hand.)
 			long in;
@@ -779,6 +1106,11 @@ public class LivePanelBlockEntity extends BlockEntity {
 		return level.getBlockEntity(origin) instanceof LivePanelBlockEntity panel ? panel.input : null;
 	}
 
+	/** The sprinkler system's state changed (SpreadingRoomFire): saved, and sent to the players. */
+	void changedAndSync(ServerLevel level) {
+		sync(level);
+	}
+
 	private void sync(ServerLevel level) {
 		setChanged();
 		level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
@@ -813,9 +1145,15 @@ public class LivePanelBlockEntity extends BlockEntity {
 		return null;
 	}
 
-	/** Whether another panel of this kind is already linked to the generator. */
+	/**
+	 * Whether another panel of this kind is already linked to the generator (a room has as many horns and strobes, and
+	 * exhaust fans, as it likes: round 31 part 3).
+	 */
 	private boolean taken(ServerLevel level, BlockPos generator) {
 		Block kind = getBlockState().getBlock();
+		if (kind == PlantInterior.BLOCKS.get("edg_horn_strobe") || kind == PlantInterior.BLOCKS.get("edg_room_fan")) {
+			return false;
+		}
 		int r = (REACH >> 4) + 1;
 		for (int cx = (generator.getX() >> 4) - r; cx <= (generator.getX() >> 4) + r; cx++) {
 			for (int cz = (generator.getZ() >> 4) - r; cz <= (generator.getZ() >> 4) + r; cz++) {
@@ -866,9 +1204,10 @@ public class LivePanelBlockEntity extends BlockEntity {
 		if (panel != null) {
 			out.store("panel", BlockPos.CODEC, panel);
 		}
-		if (isVitalPanel(getBlockState())) {
+		if (isVitalPanel(getBlockState()) || isSwitchboard(getBlockState())) {
 			out.putInt("breakers", breakers);
 		}
+		saveDc(out);
 		if (testSide != 0) {
 			out.putInt("test_side", testSide);
 			out.putLong("test_until", testUntil);
@@ -876,13 +1215,102 @@ public class LivePanelBlockEntity extends BlockEntity {
 		if (!racks.isEmpty()) {
 			out.store("racks", BlockPos.CODEC.listOf(), List.copyOf(racks));
 		}
-		if (isExhaustFan(getBlockState()) || isGroundDetector(getBlockState()) || HvacRoom.kind(getBlockState()) == HvacRoom.CONTROL) {
+		if (isExhaustFan(getBlockState()) || isGroundDetector(getBlockState()) || HvacRoom.kind(getBlockState()) == HvacRoom.CONTROL
+				|| ServerRoom.kind(getBlockState()) == ServerRoom.COOLER || DcRoom.isCharger(getBlockState()) || isInverter(getBlockState())
+				|| DcRoom.isLaptop(getBlockState()) || DcRoom.isDisconnect(getBlockState()) || ControlRoomConsoles.isConsole(getBlockState())
+				|| SecurityGatehouse.isConsole(getBlockState())) {
 			out.putInt("mode", mode);
 			out.putInt("page", page);
+		}
+		if (AccessControl.isStation(getBlockState())) {
+			out.store("ac_log", com.mojang.serialization.Codec.STRING.listOf(), List.copyOf(acLog));
+			out.putLong("ac_duress", acDuressUntil);
+		}
+		if (SecurityGatehouse.isDetector(getBlockState())) {
+			out.putLong("wd_until", wdUntil);
+			out.putBoolean("wd_alarm", wdAlarm);
+			out.putInt("wd_count", wdCount);
+		} else if (SecurityGatehouse.isXray(getBlockState())) {
+			out.store("xr_log", com.mojang.serialization.Codec.STRING.listOf(), List.copyOf(xrLog));
+			out.putInt("xr_count", xrCount);
+			out.putLong("xr_until", xrUntil);
+		} else if (SecurityGatehouse.isConsole(getBlockState())) {
+			out.putInt("sec_zones", secZones);
+		} else if (ChemLab.isBoard(getBlockState())) {
+			out.store("chem_rows", com.mojang.serialization.Codec.STRING.listOf(), List.copyOf(chemRows));
+			out.putString("chem_mode", chemMode);
+		} else if (ChemLab.isGamma(getBlockState())) {
+			out.putLong("gs_start", gsStart);
+			out.putLong("gs_day", gsDay);
+			out.putString("gs_sample", gsSample);
+			out.putInt("gs_count", gsCount);
+			out.store("gs_act", com.mojang.serialization.Codec.DOUBLE.listOf(), List.copyOf(gsAct));
+		}
+		int srv = ServerRoom.kind(getBlockState());
+		if (srv == ServerRoom.HUB) {
+			saveSrv(out);
+		} else if (srv == ServerRoom.RACK && !srvLabel.isEmpty()) {
+			out.putString("srv_label", srvLabel);
 		}
 		if (TscRoom.kind(getBlockState()) == TscRoom.HUB) {
 			saveTsc(out);
 		}
+		if (OpsOffice.kind(getBlockState()) == OpsOffice.HUB) {
+			saveOps(out);
+		}
+		if (SpreadingRoomFire.kind(getBlockState()) == 0) {
+			saveCsr(out);
+		}
+	}
+
+	/** The DC rooms' state (older rooms round 3: DcRoom; saved and sent). */
+	private void saveDc(ValueOutput out) {
+		if (board != null) {
+			out.store("board", BlockPos.CODEC, board);
+		}
+		if (isSwitchboard(getBlockState())) {
+			out.putInt("sb_flags", sbFlags);
+			out.putInt("sb_iso", sbIso);
+			out.store("dc_parts", BlockPos.CODEC.listOf(), List.copyOf(dcParts));
+		}
+		if (DcRoom.isCharger(getBlockState()) || isInverter(getBlockState())) {
+			out.putInt("dc_flags", dcFlags);
+			out.putLong("eq_until", eqUntil);
+			out.putInt("ann_in", annIn);
+			out.putInt("ann_latch", annLatch);
+			out.putInt("ann_ack", annAck);
+			out.putLong("ann_test", annTestUntil);
+		}
+	}
+
+	/** The plant computer room's state (its hub's: saved and sent). */
+	private void saveSrv(ValueOutput out) {
+		out.putInt("srv_bits", srvBits);
+		out.putInt("srv_phase", srvPhase);
+		out.putInt("srv_flags", srvFlags);
+		out.putDouble("srv_battery", srvBattery);
+		out.putDouble("srv_temp", srvTemp);
+		out.putLong("srv_temp_at", srvTempAt);
+		out.putDouble("srv_psi", srvPsi);
+		out.putLong("srv_since", srvSince);
+		out.putLong("srv_released", srvReleasedAt);
+		out.putLong("srv_abort", srvAbortUntil);
+	}
+
+	/** The sprinkler system's state (saved and sent). */
+	private void saveCsr(ValueOutput out) {
+		out.putInt("csr_phase", csrPhase);
+		out.putInt("csr_flags", csrFlags);
+		out.putLong("csr_since", csrSince);
+		out.putLong("csr_quiet", csrQuiet);
+		out.putLong("csr_released", csrReleasedAt);
+		out.putDouble("csr_air", csrAir);
+	}
+
+	/** The out-of-service board's list and next clearance number (saved and sent). */
+	private void saveOps(ValueOutput out) {
+		out.store("ops_entries", com.mojang.serialization.Codec.STRING.listOf(), List.copyOf(opsEntries));
+		out.putInt("ops_next", opsNext);
 	}
 
 	/** The TSC board's class, clocks and log (saved and sent). */
@@ -909,7 +1337,18 @@ public class LivePanelBlockEntity extends BlockEntity {
 		inverter = in.read("inverter", BlockPos.CODEC).orElse(null);
 		xf = in.read("xf", BlockPos.CODEC).orElse(null);
 		panel = in.read("panel", BlockPos.CODEC).orElse(null);
-		breakers = in.getIntOr("breakers", isVitalPanel(getBlockState()) ? VitalPanelBlock.DEFAULT_BREAKERS : 0);
+		breakers = in.getIntOr("breakers", defaultBreakers(getBlockState()));
+		board = in.read("board", BlockPos.CODEC).orElse(null);
+		sbFlags = in.getIntOr("sb_flags", 0);
+		sbIso = in.getIntOr("sb_iso", 0);
+		dcParts.clear();
+		dcParts.addAll(in.read("dc_parts", BlockPos.CODEC.listOf()).orElse(List.of()));
+		dcFlags = in.getIntOr("dc_flags", 0);
+		eqUntil = in.getLongOr("eq_until", 0L);
+		annIn = in.getIntOr("ann_in", 0);
+		annLatch = in.getIntOr("ann_latch", 0);
+		annAck = in.getIntOr("ann_ack", 0);
+		annTestUntil = in.getLongOr("ann_test", 0L);
 		testSide = in.getIntOr("test_side", 0);
 		testUntil = in.getLongOr("test_until", 0L);
 		racks.clear();
@@ -920,6 +1359,26 @@ public class LivePanelBlockEntity extends BlockEntity {
 		hvValue = in.getDoubleOr("hv_value", 0);
 		hvSince = in.getLongOr("hv_since", 0L);
 		page = in.getIntOr("page", 0);
+		acLog.clear();
+		acLog.addAll(in.read("ac_log", com.mojang.serialization.Codec.STRING.listOf()).orElse(List.of()));
+		acDuressUntil = in.getLongOr("ac_duress", 0L);
+		wdUntil = in.getLongOr("wd_until", 0L);
+		wdAlarm = in.getBooleanOr("wd_alarm", false);
+		wdCount = in.getIntOr("wd_count", 0);
+		xrLog.clear();
+		xrLog.addAll(in.read("xr_log", com.mojang.serialization.Codec.STRING.listOf()).orElse(List.of()));
+		xrCount = in.getIntOr("xr_count", 0);
+		xrUntil = in.getLongOr("xr_until", 0L);
+		secZones = in.getIntOr("sec_zones", 0);
+		chemRows.clear();
+		chemRows.addAll(in.read("chem_rows", com.mojang.serialization.Codec.STRING.listOf()).orElse(List.of()));
+		chemMode = in.getStringOr("chem_mode", "");
+		gsStart = in.getLongOr("gs_start", -1L);
+		gsDay = in.getLongOr("gs_day", 0L);
+		gsSample = in.getStringOr("gs_sample", "");
+		gsCount = in.getIntOr("gs_count", 0);
+		gsAct.clear();
+		gsAct.addAll(in.read("gs_act", com.mojang.serialization.Codec.DOUBLE.listOf()).orElse(List.of()));
 		rxStatus = in.getIntOr("rx_status", 0);
 		rxAlarms = in.getIntOr("rx_alarms", 0);
 		rxProtection = in.getBooleanOr("rx_protection", true);
@@ -942,6 +1401,27 @@ public class LivePanelBlockEntity extends BlockEntity {
 			tsNums[i] = i < nums.size() ? nums.get(i) : 0;
 		}
 		tsValue = in.getDoubleOr("ts_value", 0);
+		opsEntries.clear();
+		opsEntries.addAll(in.read("ops_entries", com.mojang.serialization.Codec.STRING.listOf()).orElse(List.of()));
+		opsNext = in.getIntOr("ops_next", 0);
+		csrPhase = in.getIntOr("csr_phase", 0);
+		csrFlags = in.getIntOr("csr_flags", 0);
+		csrSince = in.getLongOr("csr_since", 0L);
+		csrQuiet = in.getLongOr("csr_quiet", 0L);
+		csrReleasedAt = in.getLongOr("csr_released", 0L);
+		csrAir = in.getDoubleOr("csr_air", SpreadingRoomFire.AIR);
+		// (Saved before the room only looked live: its supply read from the load centres. It is always fed now.)
+		srvBits = ServerRoom.FED | in.getIntOr("srv_bits", srvBits) & (ServerRoom.CRAC1_RUN | ServerRoom.CRAC2_RUN);
+		srvPhase = in.getIntOr("srv_phase", 0);
+		srvFlags = in.getIntOr("srv_flags", 0);
+		srvBattery = 1;
+		srvTemp = in.getDoubleOr("srv_temp", ServerRoom.ROOM);
+		srvTempAt = in.getLongOr("srv_temp_at", 0L);
+		srvPsi = in.getDoubleOr("srv_psi", ServerRoom.PSI);
+		srvSince = in.getLongOr("srv_since", 0L);
+		srvReleasedAt = in.getLongOr("srv_released", 0L);
+		srvAbortUntil = in.getLongOr("srv_abort", 0L);
+		srvLabel = in.getStringOr("srv_label", "");
 		if (input != null) {
 			input.setAmount(in.getLongOr("input", 0L));
 		}
@@ -990,6 +1470,20 @@ public class LivePanelBlockEntity extends BlockEntity {
 			out.store("ts_nums", com.mojang.serialization.Codec.DOUBLE.listOf(), nums);
 		} else if (tsc == TscRoom.AREA || tsc == TscRoom.FRISKER) {
 			out.putDouble("ts_value", tsValue);
+		}
+		if (OpsOffice.kind(getBlockState()) == OpsOffice.HUB) {
+			saveOps(out);
+		}
+		if (SpreadingRoomFire.kind(getBlockState()) == 0) {
+			saveCsr(out);
+		}
+		int srv = ServerRoom.kind(getBlockState());
+		if (srv == ServerRoom.HUB) {
+			saveSrv(out);
+		} else if (srv == ServerRoom.RACK) {
+			out.putString("srv_label", srvLabel);
+		} else if (srv == ServerRoom.COOLER) {
+			out.putInt("mode", mode);
 		}
 		return out.buildResult();
 	}

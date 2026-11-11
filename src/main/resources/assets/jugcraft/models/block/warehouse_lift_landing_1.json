@@ -1,0 +1,73 @@
+{
+  "textures": {
+    "pi_wh_graphite": "jugcraft:block/pi_wh_graphite",
+    "pi_wh_mesh": "jugcraft:block/pi_wh_mesh",
+    "particle": "jugcraft:block/pi_wh_graphite"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0.0,
+        0.6
+      ],
+      "to": [
+        16,
+        16,
+        1.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_wh_mesh"
+        },
+        "south": {
+          "texture": "#pi_wh_mesh"
+        },
+        "east": {
+          "texture": "#pi_wh_mesh"
+        },
+        "west": {
+          "texture": "#pi_wh_mesh"
+        },
+        "up": {
+          "texture": "#pi_wh_mesh"
+        },
+        "down": {
+          "texture": "#pi_wh_mesh"
+        }
+      }
+    },
+    {
+      "from": [
+        0.13,
+        0.13,
+        0.5
+      ],
+      "to": [
+        15.87,
+        0.6,
+        1.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_wh_graphite"
+        },
+        "south": {
+          "texture": "#pi_wh_graphite"
+        },
+        "east": {
+          "texture": "#pi_wh_graphite"
+        },
+        "west": {
+          "texture": "#pi_wh_graphite"
+        },
+        "up": {
+          "texture": "#pi_wh_graphite"
+        },
+        "down": {
+          "texture": "#pi_wh_graphite"
+        }
+      }
+    }
+  ]
+}

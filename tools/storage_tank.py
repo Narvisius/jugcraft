@@ -547,17 +547,87 @@ def ladder_base():
     return m
 
 
+# The cage (OSHA 1910.29(i), ANSI A14.3): its inside 27 to 30 inches from the rungs' centreline (here 11.3 px, 71 cm,
+# the rungs 11.7 px from the wall: the cage reaches 15.6 px out), at least 27 inches wide inside; flat-bar hoops at most
+# 4 ft apart (one a block, 1 m) and vertical bars inside them at most 9.5 inches apart (here 2.1 to 3.5 px, 13 to 22 cm);
+# it starts 7 ft over the landing (2.14 m: 2.2 px up the third length), its bottom hoop flared out 4 inches (1.66 px).
+CAGE_HOOP = (11.4, 12.0)
+CAGE_BARS = [("side", 1.2, 7.75), ("side", 1.2, 4.25), ("corner", 2.9, 2.8), ("back", 4.25, 1.0), ("back", 6.75, 1.0),
+             ("back", 9.25, 1.0), ("back", 11.75, 1.0)]
+FLARE = 1.66                                                  # 4 inches out at the cage's foot
+
+
+def _hoop(y0, y1, out=0.0):
+    """One hoop of flat bar round the climber at y0..y1: its sides, its chamfered corners and its back, out from the
+    stringers (out: the flared bottom hoop, that much further out all round)."""
+    m = [box((0.6 - out, y0, 10.8), (2.4, y1, 11.4), GALV), box((13.6, y0, 10.8), (15.4 + out, y1, 11.4), GALV)]
+    if not out:
+        m += [box((4.0, y0, 0.4), (12.0, y1, 1.0), GALV),
+              box((0.6, y0, 4.0), (1.2, y1, 10.8), GALV), box((14.8, y0, 4.0), (15.4, y1, 10.8), GALV),
+              box((0.3, y0, 2.2), (4.9, y1, 2.8), GALV, rotation=("y", 45, (2.6, (y0 + y1) / 2, 2.5))),
+              box((11.1, y0, 2.2), (15.7, y1, 2.8), GALV, rotation=("y", -45, (13.4, (y0 + y1) / 2, 2.5)))]
+        return m
+    # the flared hoop: the same outline, offset `out` all round (its chamfer from x + z = 2.75 inwards of the corner)
+    zs, xb = 5.1 - out * 1.4142 + out - 0.9, 5.1 - out * 1.4142 + out - 0.7      # where the chamfer meets side and back
+    m += [box((0.6 - out, y0, zs), (1.2 - out, y1, 10.8), GALV), box((14.8 + out, y0, zs), (15.4 + out, y1, 10.8), GALV),
+          box((xb, y0, 0.4 - out), (16 - xb, y1, 1.0 - out), GALV)]
+    cx, cz = (0.9 - out + xb) / 2, (zs + 0.7 - out) / 2
+    half = math.hypot(xb - 0.9 + out, zs - 0.7 + out) / 2 + 0.3
+    m += [box((cx - half, y0, cz - 0.3), (cx + half, y1, cz + 0.3), GALV, rotation=("y", 45, (cx, (y0 + y1) / 2, cz))),
+          box((16 - cx - half, y0, cz - 0.3), (16 - cx + half, y1, cz + 0.3), GALV, rotation=("y", -45, (16 - cx, (y0 + y1) / 2, cz)))]
+    return m
+
+
+def _bars(y0, y1):
+    """The cage's ten vertical bars (flat bar, inside the hoops) from y0 to y1."""
+    m = []
+    for kind, a, b in CAGE_BARS:
+        for mirror in (False, True):
+            if kind == "side":
+                x0 = 16 - a - 0.25 if mirror else a
+                m.append(box((x0, y0, b - 0.25), (x0 + 0.25, y1, b + 0.25), GALV))
+            elif kind == "back" and not mirror:
+                m.append(box((a - 0.25, y0, b), (a + 0.25, y1, b + 0.25), GALV))
+            elif kind == "corner":
+                cx = 16 - a if mirror else a
+                m.append(box((cx - 0.25, y0, b - 0.125), (cx + 0.25, y1, b + 0.125), GALV,
+                             rotation=("y", -45 if mirror else 45, (cx, (y0 + y1) / 2, b))))
+    return m
+
+
 def ladder_cage():
-    """The safety cage round the climber: a hoop (flat bar, out from the stringers and round in front) and five
-    vertical bars."""
-    y0, y1 = 11.4, 12.0
-    m = [box((4.0, y0, 0.4), (12.0, y1, 1.0), GALV),
-         box((0.6, y0, 4.0), (1.2, y1, 11.4), GALV), box((14.8, y0, 4.0), (15.4, y1, 11.4), GALV),
-         box((0.6, y0, 10.8), (2.4, y1, 11.4), GALV), box((13.6, y0, 10.8), (15.4, y1, 11.4), GALV)]
-    m.append(box((0.3, y0, 2.2), (4.9, y1, 2.8), GALV, rotation=("y", 45, (2.6, (y0 + y1) / 2, 2.5))))
-    m.append(box((11.1, y0, 2.2), (15.7, y1, 2.8), GALV, rotation=("y", -45, (13.4, (y0 + y1) / 2, 2.5))))
-    for x0, z0 in ((0.65, 7.0), (14.85, 7.0), (5.0, 0.45), (7.75, 0.45), (10.5, 0.45)):
-        m.append(box((x0, 0, z0), (x0 + 0.5, 16, z0 + 0.5), GALV))
+    """The safety cage round the climber (a length of it): a hoop of flat bar out from the stringers and round in front,
+    and ten vertical bars inside it."""
+    return _hoop(*CAGE_HOOP) + _bars(0, 16)
+
+
+def ladder_cage_bottom():
+    """The cage's first length, 7 ft over the landing: its bottom hoop flared out 4 inches all round, the bars bent out
+    to it (at 22.5 degrees) below the next hoop, so nobody catches a shoulder climbing into it."""
+    y0 = 2.2                                                  # the bottom hoop
+    tan, sin = math.tan(math.radians(22.5)), math.sin(math.radians(22.5))
+    m = _hoop(*CAGE_HOOP) + _hoop(y0, y0 + 0.6, FLARE)
+    for kind, a, b in CAGE_BARS:
+        for mirror in (False, True):
+            if kind == "back" and mirror:
+                continue
+            # a bar's bent foot, out to the flared hoop (a corner bar's goes out along x only, so further, from higher up)
+            reach = FLARE * (1.4142 if kind == "corner" else 1)
+            top, length = y0 + reach / tan, reach / sin
+            if kind == "side":
+                x0 = 16 - a - 0.25 if mirror else a
+                m.append(box((x0, top, b - 0.25), (x0 + 0.25, 16, b + 0.25), GALV))
+                m.append(box((x0, top - length, b - 0.25), (x0 + 0.25, top, b + 0.25), GALV,
+                             rotation=("z", 22.5 if mirror else -22.5, (x0 + 0.125, top, b))))
+            elif kind == "back":
+                m.append(box((a - 0.25, top, b), (a + 0.25, 16, b + 0.25), GALV))
+                m.append(box((a - 0.25, top - length, b), (a + 0.25, top, b + 0.25), GALV, rotation=("x", 22.5, (a, top, b + 0.125))))
+            else:
+                cx = 16 - a if mirror else a
+                m.append(box((cx - 0.25, top, b - 0.125), (cx + 0.25, 16, b + 0.125), GALV,
+                             rotation=("y", -45 if mirror else 45, (cx, (top + 16) / 2, b))))
+                m.append(box((cx - 0.2, top - length, b - 0.2), (cx + 0.2, top, b + 0.2), GALV,
+                             rotation=("z", 22.5 if mirror else -22.5, (cx, top, b))))
     return m
 
 
@@ -939,11 +1009,13 @@ def write_assets(write, rid, assets, lang):
     # The steel ladder: the ladder, its cage from the third block up, the handholds on the top length.
     write(models / "caged_ladder.json", _model(ladder_base(), rid))
     write(models / "caged_ladder_cage.json", _model(ladder_cage(), rid))
+    write(models / "caged_ladder_cage_bottom.json", _model(ladder_cage_bottom(), rid))
     write(models / "caged_ladder_top.json", _model(ladder_top(), rid))
     parts = []
     for face, y in FACINGS:
         parts.append({"when": {"facing": face}, "apply": {"model": rid("block/caged_ladder"), **_turn(y)}})
-        parts.append({"when": {"facing": face, "cage": "true"}, "apply": {"model": rid("block/caged_ladder_cage"), **_turn(y)}})
+        parts.append({"when": {"facing": face, "cage": "true", "bottom": "false"}, "apply": {"model": rid("block/caged_ladder_cage"), **_turn(y)}})
+        parts.append({"when": {"facing": face, "cage": "true", "bottom": "true"}, "apply": {"model": rid("block/caged_ladder_cage_bottom"), **_turn(y)}})
         parts.append({"when": {"facing": face, "top": "true"}, "apply": {"model": rid("block/caged_ladder_top"), **_turn(y)}})
     write(assets / "blockstates" / "caged_ladder.json", {"multipart": parts})
     write(assets / "items" / "caged_ladder.json", {"model": {"type": "minecraft:model", "model": rid("block/caged_ladder")}})

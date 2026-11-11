@@ -100,7 +100,12 @@ public class VitalPanelBlock extends LivePanelBlock {
 		return n.contains("%s") ? String.format(n, k == 1 ? NIS[v % 4] : CHANNELS[v % 4]) : n;
 	}
 
-	/** What a panel's closed breakers draw (amps): the closed circuits' loads, nothing with the main open. */
+	/** Circuit k's name as its breaker's message says it (a DC panel's its own: DcPanelBlock). */
+	protected String circuit(int k, int v) {
+		return name(k, v);
+	}
+
+		/** What a panel's closed breakers draw (amps): the closed circuits' loads, nothing with the main open. */
 	public static int load(int breakers) {
 		if ((breakers & 1) == 0) {
 			return 0;
@@ -145,7 +150,7 @@ public class VitalPanelBlock extends LivePanelBlock {
 		Component state1 = Component.translatable(closed ? "message.jugcraft.nuclear.breaker_closed" : "message.jugcraft.nuclear.breaker_open");
 		int v = LivePanelBlockEntity.variant(state);
 		player.sendOverlayMessage(b == 0 ? Component.translatable("message.jugcraft.nuclear.vital_main", state1)
-				: Component.translatable("message.jugcraft.nuclear.vital_breaker", b, name(b, v), state1));
+				: Component.translatable("message.jugcraft.nuclear.vital_breaker", b, circuit(b, v), state1));
 		return InteractionResult.SUCCESS_SERVER;
 	}
 

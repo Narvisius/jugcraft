@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "SSGGSS",
+    "SSCCSS",
+    "SSEESS"
+  ],
+  "key": {
+    "C": "jugcraft:basic_circuit",
+    "E": "minecraft:emerald",
+    "G": "minecraft:glass_pane",
+    "S": "#c:plates/steel"
+  },
+  "result": {
+    "id": "jugcraft:vending_machine",
+    "count": 2
+  }
+}

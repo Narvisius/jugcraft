@@ -16,7 +16,12 @@ import org.jspecify.annotations.Nullable;
 public final class EquipmentRegistry {
 	private static final Map<Level, EquipmentRegistry> LEVELS = new WeakHashMap<>();
 
-	public record Entry(EquipmentKind kind, Direction facing) {
+	/** hidden: standing hidden (EquipmentAnchorBlock.HIDDEN): its body is its anchor alone. */
+	public record Entry(EquipmentKind kind, Direction facing, boolean hidden) {
+		/** The cells its frame blocks are (none when hidden), as offsets from the anchor. */
+		public java.util.List<BlockPos> frames() {
+			return hidden ? java.util.List.of() : kind.frames(facing);
+		}
 	}
 
 	private final Map<BlockPos, Entry> anchors = new HashMap<>();
@@ -30,13 +35,18 @@ public final class EquipmentRegistry {
 	}
 
 	synchronized void add(BlockPos anchor, EquipmentKind kind, Direction facing) {
-		Entry before = anchors.put(anchor.immutable(), new Entry(kind, facing));
+		add(anchor, kind, facing, false);
+	}
+
+	synchronized void add(BlockPos anchor, EquipmentKind kind, Direction facing, boolean hidden) {
+		Entry entry = new Entry(kind, facing, hidden);
+		Entry before = anchors.put(anchor.immutable(), entry);
 		if (before != null) {
-			for (BlockPos frame : before.kind().frames(before.facing())) {
+			for (BlockPos frame : before.frames()) {
 				frames.remove(anchor.offset(frame), anchor);
 			}
 		}
-		for (BlockPos frame : kind.frames(facing)) {
+		for (BlockPos frame : entry.frames()) {
 			frames.put(anchor.offset(frame), anchor.immutable());
 		}
 		version++;
@@ -45,7 +55,7 @@ public final class EquipmentRegistry {
 	synchronized void remove(BlockPos anchor) {
 		Entry entry = anchors.remove(anchor);
 		if (entry != null) {
-			for (BlockPos frame : entry.kind().frames(entry.facing())) {
+			for (BlockPos frame : entry.frames()) {
 				frames.remove(anchor.offset(frame), anchor);
 			}
 		}

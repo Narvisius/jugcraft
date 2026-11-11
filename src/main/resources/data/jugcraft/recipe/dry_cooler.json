@@ -1,0 +1,32 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "MMMMMM",
+    "KKAAKK",
+    "SS  SS"
+  ],
+  "key": {
+    "A": "#c:plates/aluminum",
+    "K": "minecraft:copper_ingot",
+    "M": "jugcraft:electric_motor",
+    "S": "#c:plates/steel"
+  },
+  "result": {
+    "id": "jugcraft:dry_cooler",
+    "count": 2
+  }
+}

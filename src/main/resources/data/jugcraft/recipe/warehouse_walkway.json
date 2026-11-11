@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "CGC",
+    "CCC",
+    "CYC"
+  ],
+  "key": {
+    "C": "minecraft:light_gray_concrete",
+    "G": "minecraft:green_dye",
+    "Y": "minecraft:yellow_dye"
+  },
+  "result": {
+    "id": "jugcraft:warehouse_walkway",
+    "count": 8
+  }
+}

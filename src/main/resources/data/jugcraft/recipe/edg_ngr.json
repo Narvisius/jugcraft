@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SBS",
+    "CRC",
+    "SSS"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "B": "minecraft:iron_bars",
+    "C": "minecraft:copper_ingot",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "jugcraft:edg_ngr",
+    "count": 1
+  }
+}

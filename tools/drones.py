@@ -2,7 +2,9 @@
 
 generate_material_data.py writes the models, names, loot tables and recipes from these tables, and
 check_mod_data.py checks them against drone/DroneTier.java and drone/JugcraftDrones.java.
-All recipes are shaped crafting recipes, so the vanilla Crafter can automate drone production.
+The drones (and the depot terminal and hologram table) are made on the Advanced Crafting Table: their 6 x 6 recipes are
+tools/advanced_crafting.py, written over the 3 x 3s below (which still give the recipes' feature switches); the rest
+are shaped crafting recipes.
 """
 
 FEATURE = "drones"
@@ -39,12 +41,12 @@ DRONE_TIERS = {
     1: {"id": "drone_t1", "display": "Courier Quad Drone", "capacity": 1, "speed": 4, "upkeep": 8, "size": "small", "available": True},
     2: {"id": "drone_t2", "display": "Survey Hexacopter Drone", "capacity": 2, "speed": 4, "upkeep": 12, "size": "small", "available": True},
     3: {"id": "drone_t3", "display": "Lifter Octocopter Drone", "capacity": 4, "speed": 4, "upkeep": 20, "size": "small", "available": True},
-    4: {"id": "drone_t4", "display": "Ducted-Fan Runner Drone", "capacity": 4, "speed": 8, "upkeep": 32, "size": "medium", "available": True},
+    4: {"id": "drone_t4", "display": "Fan-Wing Runner Drone", "capacity": 4, "speed": 8, "upkeep": 32, "size": "medium", "available": True},
     5: {"id": "drone_t5", "display": "Tiltrotor Carrier Drone", "capacity": 8, "speed": 8, "upkeep": 48, "size": "medium", "available": True},
-    6: {"id": "drone_t6", "display": "Tandem Freighter Drone", "capacity": 16, "speed": 8, "upkeep": 64, "size": "medium", "available": True},
-    7: {"id": "drone_t7", "display": "Hybrid Aerostat Drone", "capacity": 32, "speed": 8, "upkeep": 96, "size": "large", "available": True},
-    8: {"id": "drone_t8", "display": "Ion-Wind Glider Drone", "capacity": 32, "speed": 16, "upkeep": 128, "size": "large", "available": True},
-    9: {"id": "drone_t9", "display": "Superconducting Ring Lifter Drone", "capacity": 64, "speed": 20, "upkeep": 192, "size": "large", "available": True},
+    6: {"id": "drone_t6", "display": "Disc Freighter Drone", "capacity": 16, "speed": 8, "upkeep": 64, "size": "medium", "available": True},
+    7: {"id": "drone_t7", "display": "Spine Carrier Drone", "capacity": 32, "speed": 8, "upkeep": 96, "size": "large", "available": True},
+    8: {"id": "drone_t8", "display": "Halo Ion Carrier Drone", "capacity": 32, "speed": 16, "upkeep": 128, "size": "large", "available": True},
+    9: {"id": "drone_t9", "display": "Armoured Dropship Drone", "capacity": 64, "speed": 20, "upkeep": 192, "size": "large", "available": True},
     # Creative only (no recipe): four times tier 9's load and speed, no power, small.
     10: {"id": "creative_drone", "display": "Creative Drone", "capacity": 256, "speed": 80, "upkeep": 0, "size": "small", "available": True},
 }
@@ -136,7 +138,7 @@ DRONE_CRAFTING = {
                                                     "A": "jugcraft:advanced_circuit", "M": "jugcraft:machine_casing",
                                                     "C": "jugcraft:copper_cable"}, 1),
     "control_screen": (["PGP", "PCP"], {"P": "#c:plates/iron", "G": "minecraft:glass_pane", "C": "jugcraft:basic_circuit"}, 3),
-    "holo_table": (["GGG", "PCP", "P P"], {"G": "minecraft:glass_pane", "P": "#c:plates/iron", "C": "jugcraft:basic_circuit"}, 3),
+    # (The Hologram Table has no recipe: a hologram, the Drone Tower's own; tower/Holograms, Justin 28 October 2026.)
     # The landing field (the Drone Tower lays these itself; these are for repairs and extensions).
     "landing_platform": (["SCS", "CSC", "SCS"], {"S": "#c:plates/steel", "C": "minecraft:smooth_stone"}, 8),
     "landing_pad": (["YBY", "SRS"], {"Y": "minecraft:yellow_dye", "B": "minecraft:black_dye", "S": "#c:plates/steel",
@@ -172,6 +174,7 @@ DRONE_LANG = {
     "message.jugcraft.drone.status.platform.no_platform": "▸ Platform: none found below the terminal",
     "message.jugcraft.drone.status.platform.too_small": "▸ Platform %sx%s: too small (min 9x9)",
     "message.jugcraft.drone.status.platform.no_pad": "▸ Platform %sx%s: place a complete 5x5 of landing pads on top",
+    "message.jugcraft.drone.status.platform.tower": "▸ Platform %sx%s · the supply pickup (the tower's drones dock in its bays and on its pads)",
     "message.jugcraft.drone.status.platform.too_large": "▸ Platform: larger than 64x64 blocks",
     "message.jugcraft.drone.status.fleet": "▸ Fleet %s/%s drones · %s flying",
     "message.jugcraft.drone.status.tiers": "▸ Drones: %s",

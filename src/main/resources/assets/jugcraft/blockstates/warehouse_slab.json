@@ -1,0 +1,54 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "soffit": "none"
+      },
+      "apply": {
+        "model": "jugcraft:block/warehouse_slab"
+      }
+    },
+    {
+      "when": {
+        "soffit": "deck_x|deck_z|girder_z|girder_x"
+      },
+      "apply": {
+        "model": "jugcraft:block/warehouse_slab_top"
+      }
+    },
+    {
+      "when": {
+        "soffit": "deck_x"
+      },
+      "apply": {
+        "model": "jugcraft:block/warehouse_soffit_deck"
+      }
+    },
+    {
+      "when": {
+        "soffit": "deck_z"
+      },
+      "apply": {
+        "model": "jugcraft:block/warehouse_soffit_deck",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "soffit": "girder_z"
+      },
+      "apply": {
+        "model": "jugcraft:block/warehouse_soffit_girder"
+      }
+    },
+    {
+      "when": {
+        "soffit": "girder_x"
+      },
+      "apply": {
+        "model": "jugcraft:block/warehouse_soffit_girder",
+        "y": 90
+      }
+    }
+  ]
+}

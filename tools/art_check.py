@@ -934,6 +934,8 @@ DRAWN_TOGETHER = {
     "deep_drilling_assembly": [("deep_drilling_assembly", (0, 0, 0)), ("deep_drilling_assembly_upper", (0, 16, 0))],
     "farm_stand": [("farm_stand_0", (0, 0, 0)), ("farm_stand_1", (-16, 0, 0))],
     "harvest_effigy": [(f"harvest_effigy_{i}", (0, 16 * i, 0)) for i in range(3)],
+    "holo_table": [(f"holo_table_formed_{1 + z * 3 + x}", (x * 16, 0, z * 16))
+                   for z in range(3) for x in range(3)],
 }
 
 

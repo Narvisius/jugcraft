@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "C",
+    "S"
+  ],
+  "key": {
+    "C": "jugcraft:carpet_tile",
+    "S": "minecraft:smooth_stone"
+  },
+  "result": {
+    "id": "jugcraft:carpet_floor_slab",
+    "count": 2
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PRP",
+    "PYP"
+  ],
+  "key": {
+    "P": "#c:plates/iron",
+    "R": "minecraft:red_dye",
+    "Y": "minecraft:yellow_dye"
+  },
+  "result": {
+    "id": "jugcraft:ops_tag_rack",
+    "count": 2
+  }
+}

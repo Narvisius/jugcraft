@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "G",
+    "G",
+    "C",
+    "C",
+    "P",
+    "P"
+  ],
+  "key": {
+    "C": "jugcraft:basic_circuit",
+    "G": "minecraft:black_stained_glass_pane",
+    "P": "#c:plates/iron"
+  },
+  "result": {
+    "id": "jugcraft:touch_console",
+    "count": 2
+  }
+}

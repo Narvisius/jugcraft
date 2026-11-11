@@ -1,0 +1,48 @@
+{
+  "textures": {
+    "pi_wh_carton_w": "jugcraft:block/pi_wh_carton_w",
+    "pi_wh_carton_w_front": "jugcraft:block/pi_wh_carton_w_front",
+    "pi_wh_carton_w_top": "jugcraft:block/pi_wh_carton_w_top",
+    "particle": "jugcraft:block/pi_wh_carton_w"
+  },
+  "elements": [
+    {
+      "from": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "to": [
+        6.8,
+        5.5,
+        6.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_wh_carton_w"
+        },
+        "south": {
+          "texture": "#pi_wh_carton_w_front",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_wh_carton_w"
+        },
+        "west": {
+          "texture": "#pi_wh_carton_w"
+        },
+        "up": {
+          "texture": "#pi_wh_carton_w_top"
+        },
+        "down": {
+          "texture": "#pi_wh_carton_w"
+        }
+      }
+    }
+  ]
+}

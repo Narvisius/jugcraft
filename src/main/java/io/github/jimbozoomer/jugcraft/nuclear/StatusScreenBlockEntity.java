@@ -65,6 +65,11 @@ public class StatusScreenBlockEntity extends BlockEntity {
 	}
 
 	private EquipmentBlockEntity nearest(ServerLevel level) {
+		return nearestVessel(level, getBlockPos());
+	}
+
+	/** The nearest loaded reactor vessel within {@link #RANGE} blocks of pos (the office screens read it too), or null. */
+	public static EquipmentBlockEntity nearestVessel(ServerLevel level, BlockPos pos) {
 		EquipmentBlockEntity best = null;
 		double bestDistance = (double) RANGE * RANGE;
 		for (Map.Entry<BlockPos, EquipmentRegistry.Entry> e : EquipmentRegistry.of(level).anchors().entrySet()) {
@@ -72,7 +77,7 @@ public class StatusScreenBlockEntity extends BlockEntity {
 			if (kind != EquipmentKind.REACTOR_VESSEL && kind != EquipmentKind.EPR_VESSEL && kind != EquipmentKind.SMALL_MODULAR_REACTOR) {
 				continue;
 			}
-			double d = e.getKey().distSqr(getBlockPos());
+			double d = e.getKey().distSqr(pos);
 			if (d < bestDistance && level.isLoaded(e.getKey()) && level.getBlockEntity(e.getKey()) instanceof EquipmentBlockEntity v) {
 				best = v;
 				bestDistance = d;

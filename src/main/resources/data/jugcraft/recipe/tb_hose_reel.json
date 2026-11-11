@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "RPR",
+    "HHH",
+    "RVR"
+  ],
+  "key": {
+    "R": "minecraft:red_dye",
+    "P": "#c:plates/steel",
+    "H": "minecraft:dried_kelp",
+    "V": "minecraft:copper_ingot"
+  },
+  "result": {
+    "id": "jugcraft:tb_hose_reel",
+    "count": 1
+  }
+}

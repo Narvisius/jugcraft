@@ -1,0 +1,67 @@
+{
+ "textures": {
+  "gl_frame": "jugcraft:block/gl_frame",
+  "gl_frame_dark": "jugcraft:block/gl_frame_dark",
+  "particle": "jugcraft:block/gl_frame"
+ },
+ "elements": [
+  {
+   "from": [
+    0,
+    0,
+    0.5
+   ],
+   "to": [
+    16,
+    16,
+    16
+   ],
+   "faces": {
+    "north": {
+     "texture": "#gl_frame"
+    },
+    "south": {
+     "texture": "#gl_frame"
+    },
+    "west": {
+     "texture": "#gl_frame"
+    },
+    "up": {
+     "texture": "#gl_frame"
+    },
+    "down": {
+     "texture": "#gl_frame"
+    }
+   }
+  },
+  {
+   "from": [
+    0.4,
+    15.4,
+    0.2
+   ],
+   "to": [
+    16,
+    16,
+    0.5
+   ],
+   "faces": {
+    "north": {
+     "texture": "#gl_frame_dark"
+    },
+    "south": {
+     "texture": "#gl_frame_dark"
+    },
+    "west": {
+     "texture": "#gl_frame_dark"
+    },
+    "up": {
+     "texture": "#gl_frame_dark"
+    },
+    "down": {
+     "texture": "#gl_frame_dark"
+    }
+   }
+  }
+ ]
+}

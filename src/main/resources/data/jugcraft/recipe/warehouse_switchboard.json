@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SBS",
+    "CRC",
+    "SPS"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "B": "jugcraft:basic_circuit",
+    "C": "jugcraft:copper_cable",
+    "R": "minecraft:redstone_block",
+    "P": "minecraft:comparator"
+  },
+  "result": {
+    "id": "jugcraft:warehouse_switchboard",
+    "count": 1
+  }
+}

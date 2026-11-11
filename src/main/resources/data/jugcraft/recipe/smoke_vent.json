@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "GPG",
+    "IRI"
+  ],
+  "key": {
+    "G": "minecraft:glass_pane",
+    "P": "minecraft:piston",
+    "I": "#c:ingots/iron",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "jugcraft:smoke_vent",
+    "count": 1
+  }
+}

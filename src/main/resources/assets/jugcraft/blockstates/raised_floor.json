@@ -1,0 +1,44 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "jugcraft:block/raised_floor"
+      }
+    },
+    {
+      "when": {
+        "edge_north": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/raised_floor_edge"
+      }
+    },
+    {
+      "when": {
+        "edge_east": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/raised_floor_edge",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "edge_south": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/raised_floor_edge",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "edge_west": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/raised_floor_edge",
+        "y": 270
+      }
+    }
+  ]
+}

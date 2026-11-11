@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "RRR",
+    "PCP"
+  ],
+  "key": {
+    "R": "jugcraft:basic_circuit",
+    "P": "#c:plates/steel",
+    "C": "minecraft:copper_ingot"
+  },
+  "result": {
+    "id": "jugcraft:ops_radio_rack",
+    "count": 1
+  }
+}

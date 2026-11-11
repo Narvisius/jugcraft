@@ -1,0 +1,577 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": true,
+  "textures": {
+    "girder_paint": "jugcraft:block/girder_paint",
+    "girder_paint_dark": "jugcraft:block/girder_paint_dark",
+    "girder_plate": "jugcraft:block/girder_plate",
+    "girder_bolt": "jugcraft:block/girder_bolt",
+    "particle": "jugcraft:block/girder_paint"
+  },
+  "elements": [
+    {
+      "from": [
+        2.4,
+        1.0,
+        1.0
+      ],
+      "to": [
+        13.6,
+        15.0,
+        2.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#girder_paint"
+        },
+        "south": {
+          "texture": "#girder_paint"
+        },
+        "east": {
+          "texture": "#girder_paint"
+        },
+        "west": {
+          "texture": "#girder_paint"
+        }
+      }
+    },
+    {
+      "from": [
+        2.4,
+        1.0,
+        13.4
+      ],
+      "to": [
+        13.6,
+        15.0,
+        15.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#girder_paint"
+        },
+        "south": {
+          "texture": "#girder_paint"
+        },
+        "east": {
+          "texture": "#girder_paint"
+        },
+        "west": {
+          "texture": "#girder_paint"
+        }
+      }
+    },
+    {
+      "from": [
+        7.45,
+        1.0,
+        2.6
+      ],
+      "to": [
+        8.55,
+        15.0,
+        13.4
+      ],
+      "faces": {
+        "east": {
+          "texture": "#girder_paint_dark"
+        },
+        "west": {
+          "texture": "#girder_paint_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        6.9,
+        1.0,
+        2.5
+      ],
+      "to": [
+        7.55,
+        15.0,
+        3.15
+      ],
+      "faces": {
+        "south": {
+          "texture": "#girder_paint_dark"
+        },
+        "west": {
+          "texture": "#girder_paint_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        8.45,
+        1.0,
+        2.5
+      ],
+      "to": [
+        9.1,
+        15.0,
+        3.15
+      ],
+      "faces": {
+        "south": {
+          "texture": "#girder_paint_dark"
+        },
+        "east": {
+          "texture": "#girder_paint_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        6.9,
+        1.0,
+        12.85
+      ],
+      "to": [
+        7.55,
+        15.0,
+        13.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#girder_paint_dark"
+        },
+        "west": {
+          "texture": "#girder_paint_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        8.45,
+        1.0,
+        12.85
+      ],
+      "to": [
+        9.1,
+        15.0,
+        13.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#girder_paint_dark"
+        },
+        "east": {
+          "texture": "#girder_paint_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "to": [
+        16.0,
+        1.0,
+        16.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#girder_plate"
+        },
+        "south": {
+          "texture": "#girder_plate"
+        },
+        "east": {
+          "texture": "#girder_plate"
+        },
+        "west": {
+          "texture": "#girder_plate"
+        },
+        "up": {
+          "texture": "#girder_plate"
+        },
+        "down": {
+          "texture": "#girder_plate"
+        }
+      }
+    },
+    {
+      "from": [
+        3.6,
+        1.0,
+        4.2
+      ],
+      "to": [
+        5.2,
+        1.3,
+        5.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#girder_plate"
+        },
+        "south": {
+          "texture": "#girder_plate"
+        },
+        "east": {
+          "texture": "#girder_plate"
+        },
+        "west": {
+          "texture": "#girder_plate"
+        },
+        "up": {
+          "texture": "#girder_plate"
+        }
+      }
+    },
+    {
+      "from": [
+        3.85,
+        1.3,
+        4.45
+      ],
+      "to": [
+        4.95,
+        2.05,
+        5.55
+      ],
+      "faces": {
+        "north": {
+          "texture": "#girder_bolt"
+        },
+        "south": {
+          "texture": "#girder_bolt"
+        },
+        "east": {
+          "texture": "#girder_bolt"
+        },
+        "west": {
+          "texture": "#girder_bolt"
+        },
+        "up": {
+          "texture": "#girder_bolt"
+        }
+      }
+    },
+    {
+      "from": [
+        4.15,
+        2.05,
+        4.75
+      ],
+      "to": [
+        4.65,
+        2.5,
+        5.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#girder_bolt"
+        },
+        "south": {
+          "texture": "#girder_bolt"
+        },
+        "east": {
+          "texture": "#girder_bolt"
+        },
+        "west": {
+          "texture": "#girder_bolt"
+        },
+        "up": {
+          "texture": "#girder_bolt"
+        }
+      }
+    },
+    {
+      "from": [
+        3.6,
+        1.0,
+        10.2
+      ],
+      "to": [
+        5.2,
+        1.3,
+        11.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#girder_plate"
+        },
+        "south": {
+          "texture": "#girder_plate"
+        },
+        "east": {
+          "texture": "#girder_plate"
+        },
+        "west": {
+          "texture": "#girder_plate"
+        },
+        "up": {
+          "texture": "#girder_plate"
+        }
+      }
+    },
+    {
+      "from": [
+        3.85,
+        1.3,
+        10.45
+      ],
+      "to": [
+        4.95,
+        2.05,
+        11.55
+      ],
+      "faces": {
+        "north": {
+          "texture": "#girder_bolt"
+        },
+        "south": {
+          "texture": "#girder_bolt"
+        },
+        "east": {
+          "texture": "#girder_bolt"
+        },
+        "west": {
+          "texture": "#girder_bolt"
+        },
+        "up": {
+          "texture": "#girder_bolt"
+        }
+      }
+    },
+    {
+      "from": [
+        4.15,
+        2.05,
+        10.75
+      ],
+      "to": [
+        4.65,
+        2.5,
+        11.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#girder_bolt"
+        },
+        "south": {
+          "texture": "#girder_bolt"
+        },
+        "east": {
+          "texture": "#girder_bolt"
+        },
+        "west": {
+          "texture": "#girder_bolt"
+        },
+        "up": {
+          "texture": "#girder_bolt"
+        }
+      }
+    },
+    {
+      "from": [
+        10.8,
+        1.0,
+        4.2
+      ],
+      "to": [
+        12.4,
+        1.3,
+        5.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#girder_plate"
+        },
+        "south": {
+          "texture": "#girder_plate"
+        },
+        "east": {
+          "texture": "#girder_plate"
+        },
+        "west": {
+          "texture": "#girder_plate"
+        },
+        "up": {
+          "texture": "#girder_plate"
+        }
+      }
+    },
+    {
+      "from": [
+        11.05,
+        1.3,
+        4.45
+      ],
+      "to": [
+        12.15,
+        2.05,
+        5.55
+      ],
+      "faces": {
+        "north": {
+          "texture": "#girder_bolt"
+        },
+        "south": {
+          "texture": "#girder_bolt"
+        },
+        "east": {
+          "texture": "#girder_bolt"
+        },
+        "west": {
+          "texture": "#girder_bolt"
+        },
+        "up": {
+          "texture": "#girder_bolt"
+        }
+      }
+    },
+    {
+      "from": [
+        11.35,
+        2.05,
+        4.75
+      ],
+      "to": [
+        11.85,
+        2.5,
+        5.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#girder_bolt"
+        },
+        "south": {
+          "texture": "#girder_bolt"
+        },
+        "east": {
+          "texture": "#girder_bolt"
+        },
+        "west": {
+          "texture": "#girder_bolt"
+        },
+        "up": {
+          "texture": "#girder_bolt"
+        }
+      }
+    },
+    {
+      "from": [
+        10.8,
+        1.0,
+        10.2
+      ],
+      "to": [
+        12.4,
+        1.3,
+        11.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#girder_plate"
+        },
+        "south": {
+          "texture": "#girder_plate"
+        },
+        "east": {
+          "texture": "#girder_plate"
+        },
+        "west": {
+          "texture": "#girder_plate"
+        },
+        "up": {
+          "texture": "#girder_plate"
+        }
+      }
+    },
+    {
+      "from": [
+        11.05,
+        1.3,
+        10.45
+      ],
+      "to": [
+        12.15,
+        2.05,
+        11.55
+      ],
+      "faces": {
+        "north": {
+          "texture": "#girder_bolt"
+        },
+        "south": {
+          "texture": "#girder_bolt"
+        },
+        "east": {
+          "texture": "#girder_bolt"
+        },
+        "west": {
+          "texture": "#girder_bolt"
+        },
+        "up": {
+          "texture": "#girder_bolt"
+        }
+      }
+    },
+    {
+      "from": [
+        11.35,
+        2.05,
+        10.75
+      ],
+      "to": [
+        11.85,
+        2.5,
+        11.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#girder_bolt"
+        },
+        "south": {
+          "texture": "#girder_bolt"
+        },
+        "east": {
+          "texture": "#girder_bolt"
+        },
+        "west": {
+          "texture": "#girder_bolt"
+        },
+        "up": {
+          "texture": "#girder_bolt"
+        }
+      }
+    },
+    {
+      "from": [
+        1.9,
+        15.0,
+        0.65
+      ],
+      "to": [
+        14.1,
+        16.0,
+        15.35
+      ],
+      "faces": {
+        "north": {
+          "texture": "#girder_plate"
+        },
+        "south": {
+          "texture": "#girder_plate"
+        },
+        "east": {
+          "texture": "#girder_plate"
+        },
+        "west": {
+          "texture": "#girder_plate"
+        },
+        "up": {
+          "texture": "#girder_plate"
+        },
+        "down": {
+          "texture": "#girder_plate"
+        }
+      }
+    }
+  ]
+}

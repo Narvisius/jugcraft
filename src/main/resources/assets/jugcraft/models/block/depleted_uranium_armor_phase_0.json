@@ -1,0 +1,84 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": true,
+  "textures": {
+    "depleted_uranium_armor": "jugcraft:block/depleted_uranium_armor",
+    "particle": "jugcraft:block/depleted_uranium_armor"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#depleted_uranium_armor",
+          "uv": [
+            8,
+            8,
+            16,
+            16
+          ],
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#depleted_uranium_armor",
+          "uv": [
+            0,
+            8,
+            8,
+            16
+          ],
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#depleted_uranium_armor",
+          "uv": [
+            8,
+            8,
+            16,
+            16
+          ],
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#depleted_uranium_armor",
+          "uv": [
+            0,
+            8,
+            8,
+            16
+          ],
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#depleted_uranium_armor",
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#depleted_uranium_armor",
+          "uv": [
+            0,
+            8,
+            8,
+            16
+          ],
+          "cullface": "down"
+        }
+      }
+    }
+  ]
+}

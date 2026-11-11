@@ -1,0 +1,84 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": true,
+  "textures": {
+    "transformer_casing": "jugcraft:block/transformer_casing",
+    "particle": "jugcraft:block/transformer_casing"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#transformer_casing",
+          "uv": [
+            0,
+            8,
+            8,
+            16
+          ],
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#transformer_casing",
+          "uv": [
+            8,
+            8,
+            16,
+            16
+          ],
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#transformer_casing",
+          "uv": [
+            8,
+            8,
+            16,
+            16
+          ],
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#transformer_casing",
+          "uv": [
+            0,
+            8,
+            8,
+            16
+          ],
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#transformer_casing",
+          "uv": [
+            8,
+            0,
+            16,
+            8
+          ],
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#transformer_casing",
+          "uv": [
+            8,
+            8,
+            16,
+            16
+          ],
+          "cullface": "down"
+        }
+      }
+    }
+  ]
+}

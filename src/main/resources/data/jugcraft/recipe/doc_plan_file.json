@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PPP",
+    "PCP",
+    "PPP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "C": "minecraft:paper"
+  },
+  "result": {
+    "id": "jugcraft:doc_plan_file",
+    "count": 1
+  }
+}

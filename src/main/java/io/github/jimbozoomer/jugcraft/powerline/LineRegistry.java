@@ -1,6 +1,7 @@
 package io.github.jimbozoomer.jugcraft.powerline;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 import net.minecraft.core.BlockPos;
@@ -17,6 +18,8 @@ public final class LineRegistry {
 
 	private final Map<BlockPos, LineKind> anchors = new HashMap<>();
 	private final Map<BlockPos, BlockPos> frames = new HashMap<>();
+	/** Each anchor's frame cells (offsets), as its block entity placed them (they turn with a tower since round 2). */
+	private final Map<BlockPos, List<BlockPos>> cellsOf = new HashMap<>();
 
 	public static LineRegistry of(Level level) {
 		synchronized (LEVELS) {
@@ -24,25 +27,37 @@ public final class LineRegistry {
 		}
 	}
 
-	synchronized void add(BlockPos anchor, LineKind kind) {
-		LineKind before = anchors.put(anchor.immutable(), kind);
-		if (before != null && before != kind) {
-			for (BlockPos frame : before.frames()) {
+	/** Notes a structure and its frame cells (offsets from the anchor), replacing what was noted for it before. */
+	synchronized void add(BlockPos anchor, LineKind kind, List<BlockPos> cells) {
+		BlockPos key = anchor.immutable();
+		forgetFrames(key);
+		anchors.put(key, kind);
+		List<BlockPos> copy = List.copyOf(cells);
+		cellsOf.put(key, copy);
+		for (BlockPos frame : copy) {
+			frames.put(key.offset(frame), key);
+		}
+	}
+
+	private void forgetFrames(BlockPos anchor) {
+		List<BlockPos> before = cellsOf.remove(anchor);
+		if (before != null) {
+			for (BlockPos frame : before) {
 				frames.remove(anchor.offset(frame), anchor);
 			}
-		}
-		for (BlockPos frame : kind.frames()) {
-			frames.put(anchor.offset(frame), anchor.immutable());
 		}
 	}
 
 	/** Forgets a structure (only if it is still this kind there: an upgrade may already have put its successor in). */
 	synchronized void remove(BlockPos anchor, LineKind kind) {
 		if (anchors.remove(anchor, kind)) {
-			for (BlockPos frame : kind.frames()) {
-				frames.remove(anchor.offset(frame), anchor);
-			}
+			forgetFrames(anchor);
 		}
+	}
+
+	/** A structure's frame cells (offsets from its anchor) as noted, or empty. */
+	public synchronized List<BlockPos> framesOf(BlockPos anchor) {
+		return cellsOf.getOrDefault(anchor, List.of());
 	}
 
 	/** The anchor a frame block (or the anchor itself) belongs to. */

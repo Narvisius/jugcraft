@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "SSIISS",
+    "SSRRSS"
+  ],
+  "key": {
+    "I": "minecraft:ice",
+    "R": "minecraft:redstone",
+    "S": "#c:plates/steel"
+  },
+  "result": {
+    "id": "jugcraft:crew_fridge",
+    "count": 2
+  }
+}

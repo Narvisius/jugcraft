@@ -1,19 +1,20 @@
 {
   "textures": {
     "pi_cabinet_dark": "jugcraft:block/pi_cabinet_dark",
+    "pi_locker_inside": "jugcraft:block/pi_locker_inside",
     "particle": "jugcraft:block/pi_cabinet_dark"
   },
   "elements": [
     {
       "from": [
-        0.8,
+        1.4,
         0.03,
-        1.8
+        2.4
       ],
       "to": [
-        15.2,
-        1,
-        15.2
+        14.6,
+        0.6,
+        14.3
       ],
       "faces": {
         "north": {
@@ -33,6 +34,70 @@
         },
         "down": {
           "texture": "#pi_cabinet_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        1.6,
+        0.6,
+        2.6
+      ],
+      "to": [
+        7.7,
+        0.8,
+        14.95
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_locker_inside"
+        },
+        "south": {
+          "texture": "#pi_locker_inside"
+        },
+        "east": {
+          "texture": "#pi_locker_inside"
+        },
+        "west": {
+          "texture": "#pi_locker_inside"
+        },
+        "up": {
+          "texture": "#pi_locker_inside"
+        },
+        "down": {
+          "texture": "#pi_locker_inside"
+        }
+      }
+    },
+    {
+      "from": [
+        8.3,
+        0.6,
+        2.6
+      ],
+      "to": [
+        14.4,
+        0.8,
+        14.95
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_locker_inside"
+        },
+        "south": {
+          "texture": "#pi_locker_inside"
+        },
+        "east": {
+          "texture": "#pi_locker_inside"
+        },
+        "west": {
+          "texture": "#pi_locker_inside"
+        },
+        "up": {
+          "texture": "#pi_locker_inside"
+        },
+        "down": {
+          "texture": "#pi_locker_inside"
         }
       }
     }

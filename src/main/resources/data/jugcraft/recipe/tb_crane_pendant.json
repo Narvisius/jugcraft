@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PYP",
+    "BBB",
+    "PCP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "Y": "minecraft:yellow_dye",
+    "B": "minecraft:stone_button",
+    "C": "minecraft:redstone"
+  },
+  "result": {
+    "id": "jugcraft:tb_crane_pendant",
+    "count": 1
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "AAAAAA",
+    "MMWWMM",
+    "SSCCSS"
+  ],
+  "key": {
+    "A": "#c:plates/aluminum",
+    "C": "jugcraft:basic_circuit",
+    "M": "jugcraft:electric_motor",
+    "S": "#c:plates/steel",
+    "W": "minecraft:white_wool"
+  },
+  "result": {
+    "id": "jugcraft:rooftop_ahu",
+    "count": 2
+  }
+}

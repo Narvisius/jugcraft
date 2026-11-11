@@ -36,6 +36,11 @@ public final class Switchgear {
 	public static final long CAPACITY = 2_000_000;
 	/** What each feeder sends out a tick at most (JE/t), and what the incoming side takes in. */
 	public static final long FEEDER_RATE = 2_048, INCOMING_RATE = 16_384;
+	/**
+	 * What a load centre's feeder lets through at most (JE/t): twice its rating, the trip unit's long delay working
+	 * above the rating (nuclear/LoadCentre.java).
+	 */
+	public static final long OVERLOAD_RATE = FEEDER_RATE * 2;
 	/** The main breaker, then the ten feeders (upper and lower of each section, from the left). */
 	public static final int BREAKERS = 11;
 	public static final String[] NAMES = {"MAIN BKR", "MCC 1", "MCC 2", "MCC 3", "MCC 4", "INVERTER", "DC MCC", "HVAC", "LIGHTING", "SPARE",
@@ -48,6 +53,11 @@ public final class Switchgear {
 
 	public static boolean closed(EquipmentBlockEntity e, int breaker) {
 		return (e.breakers & 1 << breaker) != 0;
+	}
+
+	/** Closed and racked in (a load centre's breaker racked out to TEST or DISCONNECT carries nothing). */
+	public static boolean carrying(EquipmentBlockEntity e, int breaker) {
+		return closed(e, breaker) && (e.lc == null || e.lc.rackedIn(breaker));
 	}
 
 	/** Where feeder {@code f} (1..10) sends its power out: its section's back cell, at the top or the bottom. */
@@ -71,14 +81,15 @@ public final class Switchgear {
 		Direction facing = e.facing();
 		for (int f = 1; f < BREAKERS; f++) {
 			long moved = 0;
-			if (closed(e, f) && e.bus.getAmount() > 0) {
+			if (carrying(e, f) && e.bus.getAmount() > 0) {
 				BlockPos at = e.getBlockPos().offset(EquipmentKind.toWorld(terminal(f), facing));
-				moved = EnergyNetworks.pushToNeighbors(level, at, e.bus, FEEDER_RATE, sides(f, facing));
+				moved = EnergyNetworks.pushToNeighbors(level, at, e.bus, OVERLOAD_RATE, sides(f, facing));
 			}
 			e.flows[f] = (int) moved;
 		}
 		e.flows[0] = (int) e.incoming;
 		e.incoming = 0;
+		LoadCentre.tick(level, e);
 	}
 
 	// ------------------------------------------------------------------ the cables' view
@@ -120,12 +131,12 @@ public final class Switchgear {
 
 		@Override
 		public boolean supportsInsertion() {
-			return closed(e, 0);
+			return carrying(e, 0);
 		}
 
 		@Override
 		public long insert(long maxAmount, TransactionContext transaction) {
-			if (!closed(e, 0) || e.bus == null) {
+			if (!carrying(e, 0) || e.bus == null) {
 				return 0;
 			}
 			long in = e.bus.insert(Math.min(maxAmount, rate), transaction);
@@ -183,12 +194,12 @@ public final class Switchgear {
 
 		@Override
 		public boolean supportsExtraction() {
-			return closed(e, f);
+			return carrying(e, f);
 		}
 
 		@Override
 		public long extract(long maxAmount, TransactionContext transaction) {
-			return closed(e, f) && e.bus != null ? e.bus.extract(Math.min(maxAmount, rate), transaction) : 0;
+			return carrying(e, f) && e.bus != null ? e.bus.extract(Math.min(maxAmount, rate), transaction) : 0;
 		}
 
 		@Override
@@ -236,7 +247,21 @@ public final class Switchgear {
 		return new Vec3(x, at.y - a.getY(), z);
 	}
 
-	/** Right-clicking the lineup: a breaker's door opens or closes it; anywhere else tells the bus's state. */
+	/** The bus's state, told to the player. */
+	static void status(EquipmentBlockEntity e, Player player) {
+		if (e.bus == null) {
+			return;
+		}
+		player.sendOverlayMessage(Component.translatable("message.jugcraft.nuclear.load_center",
+				String.format("%,d", e.bus.getAmount()), String.format("%,d", CAPACITY), Math.round(100.0 * e.bus.getAmount() / CAPACITY),
+				Component.translatable(carrying(e, 0) ? "message.jugcraft.nuclear.breaker_closed" : "message.jugcraft.nuclear.breaker_open"),
+				String.format("%,d", e.flows[0])));
+	}
+
+	/**
+	 * Right-clicking the old lineup's door (kept for a lineup with no load centre state): a breaker's door opens or
+	 * closes it; anywhere else tells the bus's state. The rebuilt load centre is worked by its controls (LoadCentre.use).
+	 */
 	public static void use(Level level, EquipmentBlockEntity e, Player player, @Nullable Vec3 hit) {
 		if (level.isClientSide() || e.bus == null) {
 			return;
@@ -247,10 +272,7 @@ public final class Switchgear {
 			breaker = breakerAt(p.x, p.y, p.z);
 		}
 		if (breaker < 0) {
-			player.sendOverlayMessage(Component.translatable("message.jugcraft.nuclear.load_center",
-					String.format("%,d", e.bus.getAmount()), String.format("%,d", CAPACITY), Math.round(100.0 * e.bus.getAmount() / CAPACITY),
-					Component.translatable(closed(e, 0) ? "message.jugcraft.nuclear.breaker_closed" : "message.jugcraft.nuclear.breaker_open"),
-					String.format("%,d", e.flows[0])));
+			status(e, player);
 			return;
 		}
 		if (!e.mayUse(player)) {

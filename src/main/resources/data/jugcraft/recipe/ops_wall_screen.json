@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "BBBBBB",
+    "BBCCBB",
+    "BBBBBB"
+  ],
+  "key": {
+    "B": "minecraft:black_stained_glass_pane",
+    "C": "jugcraft:basic_circuit"
+  },
+  "result": {
+    "id": "jugcraft:ops_wall_screen",
+    "count": 2
+  }
+}

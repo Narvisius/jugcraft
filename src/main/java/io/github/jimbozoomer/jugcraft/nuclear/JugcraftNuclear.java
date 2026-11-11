@@ -51,7 +51,7 @@ public final class JugcraftNuclear {
 	/** The Geiger counter's sound: made live on the client from the dose rate (client/GeigerSound.java), no recording. */
 	public static SoundEvent GEIGER;
 	/** The emergency diesel generator's air start, its running loop (client/DieselSounds.java) and its stop. */
-	public static SoundEvent EDG_START, EDG_RUN, EDG_STOP;
+	public static SoundEvent EDG_START, EDG_RUN, EDG_STOP, CO2_HORN, CO2_DISCHARGE;
 	// Fuel.
 	public static Item ENRICHED_URANIUM;
 	public static Item FUEL_ASSEMBLY;
@@ -73,6 +73,17 @@ public final class JugcraftNuclear {
 	public static Block COOLING_FILL;
 	public static Block CONDUIT_TRENCH;
 	public static net.minecraft.world.level.block.entity.BlockEntityType<CoolingTowerBlockEntity> COOLING_TOWER_ENTITY;
+	/** The pump houses' controllers (towers and pump houses build: WaterWorksBlock). */
+	public static Block WATER_WORKS;
+	public static net.minecraft.world.level.block.entity.BlockEntityType<WaterWorksBlockEntity> WATER_WORKS_ENTITY;
+	/** The transformer yard's and the switchyard's controllers (transformer yard and switchyard build: YardBlock). */
+	public static Block YARD;
+	public static net.minecraft.world.level.block.entity.BlockEntityType<YardBlockEntity> YARD_ENTITY;
+	/** The reactor building's controller (its inside, a compiled site: ReactorBuildingBlock). */
+	public static Block REACTOR_BUILDING;
+	public static net.minecraft.world.level.block.entity.BlockEntityType<ReactorBuildingBlockEntity> REACTOR_BUILDING_ENTITY;
+	/** The yards' sounds: a breaker operating, a disconnect's arc, the transformers' hum, the deluge's water-motor gong. */
+	public static SoundEvent YARD_BREAKER, YARD_ARC, YARD_HUM, YARD_GONG;
 	/** A cooling tower's steam plume (always drawn, however far: the plume is what you see of a plant from afar). */
 	public static net.minecraft.core.particles.SimpleParticleType COOLING_PLUME;
 
@@ -91,6 +102,10 @@ public final class JugcraftNuclear {
 		EDG_START = Registry.register(BuiltInRegistries.SOUND_EVENT, Jugcraft.id("diesel.start"), SoundEvent.createFixedRangeEvent(Jugcraft.id("diesel.start"), 40));
 		EDG_RUN = Registry.register(BuiltInRegistries.SOUND_EVENT, Jugcraft.id("diesel.run"), SoundEvent.createFixedRangeEvent(Jugcraft.id("diesel.run"), 40));
 		EDG_STOP = Registry.register(BuiltInRegistries.SOUND_EVENT, Jugcraft.id("diesel.stop"), SoundEvent.createFixedRangeEvent(Jugcraft.id("diesel.stop"), 32));
+		// The diesel rooms' CO2 system (round 31 part 3, Co2System): its alarm horn and the discharge.
+		CO2_HORN = Registry.register(BuiltInRegistries.SOUND_EVENT, Jugcraft.id("diesel.co2_horn"), SoundEvent.createFixedRangeEvent(Jugcraft.id("diesel.co2_horn"), 48));
+		CO2_DISCHARGE = Registry.register(BuiltInRegistries.SOUND_EVENT, Jugcraft.id("diesel.co2_discharge"),
+				SoundEvent.createFixedRangeEvent(Jugcraft.id("diesel.co2_discharge"), 48));
 
 		EquipmentSlot[] slots = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
 		for (int i = 0; i < 4; i++) {
@@ -155,6 +170,7 @@ public final class JugcraftNuclear {
 			return equipment == null ? null : equipment.output;
 		}, net.minecraft.util.Util.make(new java.util.ArrayList<Block>(EQUIPMENT.values()), l -> l.add(FRAME)).toArray(Block[]::new));
 		ConsoleActionPayload.register();
+		ControlBoard.register();
 
 		ResourceKey<Block> towerKey = ResourceKey.create(Registries.BLOCK, Jugcraft.id("cooling_tower_controller"));
 		COOLING_TOWER = Registry.register(BuiltInRegistries.BLOCK, towerKey, new CoolingTowerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
@@ -163,6 +179,32 @@ public final class JugcraftNuclear {
 		Registry.register(BuiltInRegistries.ITEM, towerItem, new BlockItem(COOLING_TOWER, new Item.Properties().setId(towerItem).useBlockDescriptionPrefix()));
 		COOLING_TOWER_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("cooling_tower_controller"),
 				net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder.create(CoolingTowerBlockEntity::new, COOLING_TOWER).build());
+		ResourceKey<Block> worksKey = ResourceKey.create(Registries.BLOCK, Jugcraft.id("water_works_controller"));
+		WATER_WORKS = Registry.register(BuiltInRegistries.BLOCK, worksKey, new WaterWorksBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+				.strength(3.0F, 12.0F).setId(worksKey)));
+		ResourceKey<Item> worksItem = ResourceKey.create(Registries.ITEM, Jugcraft.id("water_works_controller"));
+		Registry.register(BuiltInRegistries.ITEM, worksItem, new BlockItem(WATER_WORKS, new Item.Properties().setId(worksItem).useBlockDescriptionPrefix()));
+		WATER_WORKS_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("water_works_controller"),
+				net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder.create(WaterWorksBlockEntity::new, WATER_WORKS).build());
+		ResourceKey<Block> yardKey = ResourceKey.create(Registries.BLOCK, Jugcraft.id("yard_controller"));
+		YARD = Registry.register(BuiltInRegistries.BLOCK, yardKey, new YardBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+				.strength(3.0F, 12.0F).setId(yardKey)));
+		ResourceKey<Item> yardItem = ResourceKey.create(Registries.ITEM, Jugcraft.id("yard_controller"));
+		Registry.register(BuiltInRegistries.ITEM, yardItem, new BlockItem(YARD, new Item.Properties().setId(yardItem).useBlockDescriptionPrefix()));
+		YARD_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("yard_controller"),
+				net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder.create(YardBlockEntity::new, YARD).build());
+		ResourceKey<Block> rbKey = ResourceKey.create(Registries.BLOCK, Jugcraft.id("reactor_building_controller"));
+		REACTOR_BUILDING = Registry.register(BuiltInRegistries.BLOCK, rbKey, new ReactorBuildingBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+				.strength(3.0F, 12.0F).setId(rbKey)));
+		ResourceKey<Item> rbItem = ResourceKey.create(Registries.ITEM, Jugcraft.id("reactor_building_controller"));
+		Registry.register(BuiltInRegistries.ITEM, rbItem, new BlockItem(REACTOR_BUILDING, new Item.Properties().setId(rbItem).useBlockDescriptionPrefix()));
+		REACTOR_BUILDING_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Jugcraft.id("reactor_building_controller"),
+				net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder.create(ReactorBuildingBlockEntity::new,
+						REACTOR_BUILDING).build());
+		YARD_BREAKER = Registry.register(BuiltInRegistries.SOUND_EVENT, Jugcraft.id("yard.breaker"), SoundEvent.createFixedRangeEvent(Jugcraft.id("yard.breaker"), 64));
+		YARD_ARC = Registry.register(BuiltInRegistries.SOUND_EVENT, Jugcraft.id("yard.arc"), SoundEvent.createFixedRangeEvent(Jugcraft.id("yard.arc"), 96));
+		YARD_HUM = Registry.register(BuiltInRegistries.SOUND_EVENT, Jugcraft.id("yard.hum"), SoundEvent.createFixedRangeEvent(Jugcraft.id("yard.hum"), 18));
+		YARD_GONG = Registry.register(BuiltInRegistries.SOUND_EVENT, Jugcraft.id("yard.gong"), SoundEvent.createFixedRangeEvent(Jugcraft.id("yard.gong"), 40));
 		COOLING_FILL = block("cooling_tower_fill", p -> new Block(p), BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).strength(1.0F, 3.0F));
 		CONDUIT_TRENCH = block("conduit_trench", ConduitTrenchBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).strength(2.0F, 6.0F));
 		COOLING_PLUME = Registry.register(BuiltInRegistries.PARTICLE_TYPE, Jugcraft.id("cooling_plume"),
@@ -180,9 +222,11 @@ public final class JugcraftNuclear {
 		net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resources, ok) -> Shielding.clear());
 		PlantInterior.register();
 		StorageBlocks.register();
+		PlantDoors.register();             // the doors' block entity and part models (doors round)
 		StorageTanks.register();
 		PlantBuilder.register();
 		PlantShowcase.register();
+		Sites.register();                  // the compiled sites: the medium plant's cooling towers and pump houses
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(
 				Commands.literal("radiation").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
 						.then(Commands.literal("dose").then(Commands.argument("mSv", DoubleArgumentType.doubleArg(0)).executes(context -> {
@@ -209,6 +253,8 @@ public final class JugcraftNuclear {
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output -> {
 			EQUIPMENT_ITEMS.values().forEach(output::accept);
 			output.accept(COOLING_TOWER);
+			output.accept(WATER_WORKS);
+			output.accept(YARD);
 			output.accept(COOLING_FILL);
 			output.accept(CONDUIT_TRENCH);
 			PIPES.values().forEach(b -> output.accept(b.asItem()));

@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "I I",
+    "BYB",
+    "I I"
+  ],
+  "key": {
+    "I": "minecraft:iron_bars",
+    "B": "minecraft:black_dye",
+    "Y": "minecraft:yellow_dye"
+  },
+  "result": {
+    "id": "jugcraft:srv_ladder",
+    "count": 4
+  }
+}

@@ -85,6 +85,15 @@ public final class JugcraftJadeClient implements JugcraftJadePlugin.ClientRegist
 		// Concordance Chunk D, D-06 (G11): the pact perch and the Spirit Anchor.
 		registration.registerBlockComponent(AgreementTooltip.PERCH, PactPerchBlock.class);
 		registration.registerBlockComponent(AgreementTooltip.ANCHOR, SpiritAnchorBlock.class);
+		// Nuclear equipment's invisible frame blocks (round 25b; Justin: the switchgear was "just labeled nuclear
+		// equipment"): named and shown by what pick-block gives, the piece's own item, not as the frame block. Looked up
+		// by name, so a Jade without it is only logged.
+		try {
+			IWailaClientRegistration.class.getMethod("usePickedResult", net.minecraft.world.level.block.Block.class)
+					.invoke(registration, io.github.jimbozoomer.jugcraft.nuclear.JugcraftNuclear.FRAME);
+		} catch (ReflectiveOperationException | RuntimeException e) {
+			io.github.jimbozoomer.jugcraft.Jugcraft.LOGGER.warn("Jade cannot name nuclear equipment by its picked item: {}", e.toString());
+		}
 	}
 
 	/** Occupied slots only, supplied after the server checks crate access. */

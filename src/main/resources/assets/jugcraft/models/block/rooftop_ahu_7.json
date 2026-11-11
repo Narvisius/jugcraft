@@ -1,0 +1,245 @@
+{
+ "textures": {
+  "rp_ahu": "jugcraft:block/rp_ahu",
+  "rp_concrete": "jugcraft:block/rp_concrete",
+  "rp_dunnage": "jugcraft:block/rp_dunnage",
+  "rp_galv": "jugcraft:block/rp_galv",
+  "rp_galv_dark": "jugcraft:block/rp_galv_dark",
+  "rp_rubber": "jugcraft:block/rp_rubber",
+  "particle": "jugcraft:block/rp_galv"
+ },
+ "elements": [
+  {
+   "from": [
+    5,
+    0,
+    3
+   ],
+   "to": [
+    11,
+    2,
+    9
+   ],
+   "faces": {
+    "north": {
+     "texture": "#rp_concrete"
+    },
+    "south": {
+     "texture": "#rp_concrete"
+    },
+    "east": {
+     "texture": "#rp_concrete"
+    },
+    "west": {
+     "texture": "#rp_concrete"
+    },
+    "up": {
+     "texture": "#rp_concrete"
+    },
+    "down": {
+     "texture": "#rp_concrete"
+    }
+   }
+  },
+  {
+   "from": [
+    5.5,
+    2,
+    3.5
+   ],
+   "to": [
+    10.5,
+    2.6,
+    8.5
+   ],
+   "faces": {
+    "north": {
+     "texture": "#rp_rubber"
+    },
+    "south": {
+     "texture": "#rp_rubber"
+    },
+    "east": {
+     "texture": "#rp_rubber"
+    },
+    "west": {
+     "texture": "#rp_rubber"
+    },
+    "up": {
+     "texture": "#rp_rubber"
+    },
+    "down": {
+     "texture": "#rp_rubber"
+    }
+   }
+  },
+  {
+   "from": [
+    5.5,
+    2.6,
+    0
+   ],
+   "to": [
+    10.5,
+    3.4,
+    12
+   ],
+   "faces": {
+    "south": {
+     "texture": "#rp_dunnage"
+    },
+    "east": {
+     "texture": "#rp_dunnage"
+    },
+    "west": {
+     "texture": "#rp_dunnage"
+    },
+    "up": {
+     "texture": "#rp_dunnage"
+    },
+    "down": {
+     "texture": "#rp_dunnage"
+    }
+   }
+  },
+  {
+   "from": [
+    7.6,
+    3.4,
+    0
+   ],
+   "to": [
+    8.4,
+    7.6,
+    12
+   ],
+   "faces": {
+    "south": {
+     "texture": "#rp_dunnage"
+    },
+    "east": {
+     "texture": "#rp_dunnage"
+    },
+    "west": {
+     "texture": "#rp_dunnage"
+    },
+    "up": {
+     "texture": "#rp_dunnage"
+    },
+    "down": {
+     "texture": "#rp_dunnage"
+    }
+   }
+  },
+  {
+   "from": [
+    5.5,
+    7.6,
+    0
+   ],
+   "to": [
+    10.5,
+    8.4,
+    12
+   ],
+   "faces": {
+    "south": {
+     "texture": "#rp_dunnage"
+    },
+    "east": {
+     "texture": "#rp_dunnage"
+    },
+    "west": {
+     "texture": "#rp_dunnage"
+    },
+    "up": {
+     "texture": "#rp_dunnage"
+    },
+    "down": {
+     "texture": "#rp_dunnage"
+    }
+   }
+  },
+  {
+   "from": [
+    1,
+    8.4,
+    0
+   ],
+   "to": [
+    16,
+    12.6,
+    14
+   ],
+   "faces": {
+    "south": {
+     "texture": "#rp_galv"
+    },
+    "west": {
+     "texture": "#rp_galv"
+    },
+    "up": {
+     "texture": "#rp_galv"
+    },
+    "down": {
+     "texture": "#rp_galv"
+    }
+   }
+  },
+  {
+   "from": [
+    0.4,
+    9.2,
+    9
+   ],
+   "to": [
+    1,
+    12.0,
+    11.4
+   ],
+   "faces": {
+    "north": {
+     "texture": "#rp_galv_dark"
+    },
+    "south": {
+     "texture": "#rp_galv_dark"
+    },
+    "east": {
+     "texture": "#rp_galv_dark"
+    },
+    "west": {
+     "texture": "#rp_galv_dark"
+    },
+    "up": {
+     "texture": "#rp_galv_dark"
+    },
+    "down": {
+     "texture": "#rp_galv_dark"
+    }
+   }
+  },
+  {
+   "from": [
+    1.5,
+    12.6,
+    0
+   ],
+   "to": [
+    16,
+    16,
+    9.5
+   ],
+   "faces": {
+    "south": {
+     "texture": "#rp_ahu"
+    },
+    "west": {
+     "texture": "#rp_ahu"
+    },
+    "down": {
+     "texture": "#rp_ahu"
+    }
+   }
+  }
+ ]
+}

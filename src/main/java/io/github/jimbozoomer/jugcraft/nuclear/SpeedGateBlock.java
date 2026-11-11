@@ -36,20 +36,24 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
 
 /**
- * A sliding glass speed gate (Justin, October 8 2026, after the Grand Central fare gates): one lane, one way. The lane
+ * A sliding glass speed gate (Justin, October 8 2026, after the Grand Central fare gates; remade realistic on 22 October
+ * 2026 for the Tri-Pillar and the Nuclear Center alike, after real sliding speed gates: tools/speed_gate.py): one lane,
+ * one way. The lane
  * block stands at the end you come in by ({@link #FACING} is the way through); the block ahead of it is left clear,
  * and a {@link SpeedGatePedestalBlock} stands either side of both (shared with the lane beside, when lanes stand side by
  * side). Two glass doors slide out of the pedestals along the line between the gate's two blocks and meet in the
  * middle; when someone walks up to them the way through, they slide back into their pedestals' slots and close
  * again behind them (SpeedGateBlockEntity). From the other side they stay shut.
  *
- * <p>The lane block draws its mat; its {@link #PART} values other than {@code lane} are only there so the client can
- * look up the models of the doors, the lights and the sign gantry over the lane (client/SpeedGateRenderer.java) and
- * the placement preview the whole gate. Models: tools/speed_gate.py.
+ * <p>The lane block itself draws nothing; its {@link #PART} values other than {@code lane} are only there so the client
+ * can look up the models of the doors, their status lights and the lane's lights on its cabinets (guide lines, the
+ * reader's mark, the pictograms; client/SpeedGateRenderer.java) and the placement preview the whole gate ({@code gantry}
+ * and {@code gantry_east}, the old sign gantry's, are empty now). Models: tools/speed_gate.py.
  */
 public class SpeedGateBlock extends HorizontalDirectionalBlock implements EntityBlock, StructureGhost.Source {
 	public enum Part implements StringRepresentable {
-		LANE, GHOST, DOOR_LEFT, DOOR_RIGHT, LEDS_WAIT, LEDS_GO, GANTRY, GANTRY_EAST;
+		LANE, GHOST, DOOR_LEFT, DOOR_RIGHT, LEDS_WAIT, LEDS_GO, GANTRY, GANTRY_EAST, LIGHT_LEFT_WAIT, LIGHT_LEFT_GO, LIGHT_RIGHT_WAIT,
+		LIGHT_RIGHT_GO;
 
 		@Override
 		public String getSerializedName() {
@@ -60,9 +64,13 @@ public class SpeedGateBlock extends HorizontalDirectionalBlock implements Entity
 	public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
 	public static final EnumProperty<Part> PART = EnumProperty.create("part", Part.class);
 	/** How far each door is (px) from the line between the gate's two blocks; see {@link #slotSign}. */
-	public static final float SLOT = 2F;
-	/** Each door's width (px), from its pedestal's face to the middle of the lane. */
-	public static final float DOOR_WIDTH = 10F;
+	public static final float SLOT = 0.6F;
+	/** Each door's width (px), from its cabinet's face to a hair short of the middle of the lane. */
+	public static final float DOOR_WIDTH = 10.56F;
+	/** How far each door slides into its cabinet when open (px): all but its edge, which stops just proud of the face. */
+	public static final float SLIDE = 10.32F;
+	/** The doors' top (px): 1.67 m, too tall to jump. */
+	public static final float DOOR_TOP = 26.72F;
 
 	/**
 	 * Facing north: the mat (to pick the gate by) and, shut, the doors' barrier: round the doors where they run behind
@@ -70,12 +78,12 @@ public class SpeedGateBlock extends HorizontalDirectionalBlock implements Entity
 	 * the block ahead).
 	 */
 	private static final Map<Direction, VoxelShape> MAT = Shapes.rotateHorizontal(Block.box(0, 0, 0, 16, 0.5, 16));
-	private static final Map<Direction, VoxelShape> DOORS_OWN = Shapes.rotateHorizontal(Block.box(0, 0, SLOT - 0.8, 16, 24, SLOT + 0.8));
-	private static final Map<Direction, VoxelShape> DOORS_AHEAD = Shapes.rotateHorizontal(Block.box(0, 0, 0, 16, 24, 0.8));
+	private static final Map<Direction, VoxelShape> DOORS_OWN = Shapes.rotateHorizontal(Block.box(0, 0, 0, 16, DOOR_TOP, SLOT + 0.8));
+	private static final Map<Direction, VoxelShape> DOORS_AHEAD = Shapes.rotateHorizontal(Block.box(0, 0, 0, 16, DOOR_TOP, 0.8));
 	private static final Map<Direction, VoxelShape> SHUT_OWN = Shapes.rotateHorizontal(Shapes.or(Block.box(0, 0, 0, 16, 0.5, 16),
-			Block.box(0, 3, SLOT - 0.8, 16, 24, SLOT + 0.8)));
+			Block.box(0, 1.92, 0, 16, DOOR_TOP, SLOT + 0.8)));
 	private static final Map<Direction, VoxelShape> SHUT_AHEAD = Shapes.rotateHorizontal(Shapes.or(Block.box(0, 0, 0, 16, 0.5, 16),
-			Block.box(0, 3, 0, 16, 24, 0.8)));
+			Block.box(0, 1.92, 0, 16, DOOR_TOP, 0.8)));
 	private static final ThreadLocal<Boolean> CLEARING = ThreadLocal.withInitial(() -> false);
 
 	public SpeedGateBlock(Properties properties) {

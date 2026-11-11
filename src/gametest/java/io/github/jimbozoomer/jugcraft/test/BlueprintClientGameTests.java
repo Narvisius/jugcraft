@@ -80,23 +80,6 @@ public class BlueprintClientGameTests implements FabricClientGameTest {
 			context.waitTicks(20);
 			context.takeScreenshot("jugcraft_blueprint_hologram");
 
-			// Shift+scroll stages: the Drone Tower Foundation blueprint shows the finished tower's space (tier 9).
-			server.runCommand("item replace entity @p weapon.mainhand with jugcraft:blueprint[minecraft:custom_data={blueprint:\"drone_tower_foundation\"}]");
-			server.runCommand("tp @p %d.5 %d %d.5 180 20".formatted(x, y + 30, z + 30));
-			context.waitTicks(10);
-			context.getInput().lookAt(new BlockPos(x, y - 1, z - 25));
-			boolean staged = context.computeOnClient(client -> {
-				var set = io.github.jimbozoomer.jugcraft.client.blueprint.BlueprintStages.stages("drone_tower_foundation");
-				io.github.jimbozoomer.jugcraft.client.blueprint.BlueprintStages.setStage("drone_tower_foundation", 9);
-				return set != null && set.stages().size() == 9;
-			});
-			if (!staged) {
-				throw new AssertionError("The Drone Tower Foundation blueprint has no growth stages");
-			}
-			context.waitTicks(5);
-			context.takeScreenshot("jugcraft_blueprint_stage_tier9");
-			context.runOnClient(client -> io.github.jimbozoomer.jugcraft.client.blueprint.BlueprintStages.setStage("drone_tower_foundation", 0));
-
 			// The stake screen.
 			server.runCommand("tp @p %d.5 %d %d.5 180 30".formatted(stake.getX(), y, stake.getZ() + 2));
 			context.waitTicks(5);

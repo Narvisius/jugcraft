@@ -22,9 +22,9 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
- * One half of a speed gate's pedestal (SpeedGateBlock): a stainless cabinet two blocks long, lengthwise along its
- * lanes ({@link #AXIS}), the doors' housing over the line between its halves with a slot each side of the line down
- * both long faces. It has no item of its own: it comes with a gate and goes with the last gate that uses it, and taking
+ * One half of a speed gate's pedestal (SpeedGateBlock): a brushed stainless cabinet 1.8 long and 0.66 wide under a black
+ * glass top, lengthwise along its lanes ({@link #AXIS}), the doors' glass housing (to 1.74) over the line between its
+ * halves with a slot each side of the line down both long faces (tools/speed_gate.py). It has no item of its own: it comes with a gate and goes with the last gate that uses it, and taking
  * it away takes the gates beside it down (each dropping its item).
  */
 public class SpeedGatePedestalBlock extends Block {
@@ -40,10 +40,10 @@ public class SpeedGatePedestalBlock extends Block {
 	public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
 	public static final EnumProperty<Half> HALF = EnumProperty.create("half", Half.class);
 	/** Half b, axis z (the south half: the line along its north edge): body, and the housing over the line. */
-	private static final VoxelShape B_Z = Shapes.or(Block.box(2, 0, 0, 14, 15, 16), Block.box(2, 15, 0, 14, 24, 4.4));
-	private static final VoxelShape A_Z = Shapes.or(Block.box(2, 0, 0, 14, 15, 16), Block.box(2, 15, 11.6, 14, 24, 16));
-	private static final VoxelShape B_X = Shapes.or(Block.box(0, 0, 2, 16, 15, 14), Block.box(11.6, 15, 2, 16, 24, 14));
-	private static final VoxelShape A_X = Shapes.or(Block.box(0, 0, 2, 16, 15, 14), Block.box(0, 15, 2, 4.4, 24, 14));
+	private static final VoxelShape B_Z = Shapes.or(Block.box(2.72, 0, 0, 13.28, 16.64, 14.4), Block.box(2.72, 16.64, 0, 13.28, 27.84, 1.6));
+	private static final VoxelShape A_Z = Shapes.or(Block.box(2.72, 0, 1.6, 13.28, 16.64, 16), Block.box(2.72, 16.64, 14.4, 13.28, 27.84, 16));
+	private static final VoxelShape B_X = Shapes.or(Block.box(1.6, 0, 2.72, 16, 16.64, 13.28), Block.box(14.4, 16.64, 2.72, 16, 27.84, 13.28));
+	private static final VoxelShape A_X = Shapes.or(Block.box(0, 0, 2.72, 14.4, 16.64, 13.28), Block.box(0, 16.64, 2.72, 1.6, 27.84, 13.28));
 
 	public SpeedGatePedestalBlock(Properties properties) {
 		super(properties);

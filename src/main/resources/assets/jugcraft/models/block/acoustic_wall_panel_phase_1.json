@@ -1,0 +1,84 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": true,
+  "textures": {
+    "acoustic_wall_panel": "jugcraft:block/acoustic_wall_panel",
+    "particle": "jugcraft:block/acoustic_wall_panel"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#acoustic_wall_panel",
+          "uv": [
+            0,
+            8,
+            8,
+            16
+          ],
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#acoustic_wall_panel",
+          "uv": [
+            8,
+            8,
+            16,
+            16
+          ],
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#acoustic_wall_panel",
+          "uv": [
+            8,
+            8,
+            16,
+            16
+          ],
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#acoustic_wall_panel",
+          "uv": [
+            0,
+            8,
+            8,
+            16
+          ],
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#acoustic_wall_panel",
+          "uv": [
+            8,
+            0,
+            16,
+            8
+          ],
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#acoustic_wall_panel",
+          "uv": [
+            8,
+            8,
+            16,
+            16
+          ],
+          "cullface": "down"
+        }
+      }
+    }
+  ]
+}

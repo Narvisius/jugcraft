@@ -104,6 +104,8 @@ public class JugcraftJeiPlugin implements IModPlugin {
 		IGuiHelper gui = registration.getJeiHelpers().getGuiHelper();
 		processingStations = JugcraftJeiStations.load();
 		for (var station : processingStations) registration.addRecipeCategories(new JugcraftJeiStations.Category(gui, station));
+		// The Advanced Workbench's 6 x 6 recipes (the drones, the tower's blocks and kit).
+		registration.addRecipeCategories(new JugcraftJeiAdvanced.Category(gui));
 		for (Machine machine : machines) {
 			registration.addRecipeCategories(new MachineCategory(gui, machine));
 		}
@@ -123,6 +125,7 @@ public class JugcraftJeiPlugin implements IModPlugin {
 	@Override
 	public void registerRecipes(IRecipeRegistration registration) {
 		for (var station : processingStations) registration.addRecipes(station.type(), station.recipes());
+		registration.addRecipes(JugcraftJeiAdvanced.TYPE, JugcraftJeiAdvanced.load());
 		JugcraftJeiStations.addInformation(registration);
 		for (Machine machine : machines()) {
 			registration.addRecipes(machine.type(), machine.recipes());
@@ -146,6 +149,7 @@ public class JugcraftJeiPlugin implements IModPlugin {
 	@Override
 	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
 		for (var station : processingStations) for (var catalyst : station.catalysts()) registration.addCraftingStation(station.type(), catalyst);
+		registration.addCraftingStation(JugcraftJeiAdvanced.TYPE, JugcraftJeiAdvanced.station());
 		registration.addCraftingStation(mezz.jei.api.constants.RecipeTypes.SMELTING, item("jugcraft:electric_furnace"));
 		registration.addCraftingStation(mezz.jei.api.constants.RecipeTypes.BLASTING, item("jugcraft:cavern_nuclear_furnace_component"));
 		for (String block : List.of("kitchen_stove", "skillet", "halloween_bonfire"))

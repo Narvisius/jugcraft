@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "SSXXSS",
+    "SSXXSS"
+  ],
+  "key": {
+    "S": "minecraft:spruce_planks",
+    "X": "minecraft:paper"
+  },
+  "result": {
+    "id": "jugcraft:notam_board",
+    "count": 2
+  }
+}

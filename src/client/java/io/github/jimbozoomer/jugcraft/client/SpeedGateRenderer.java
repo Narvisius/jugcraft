@@ -35,12 +35,12 @@ import org.joml.Vector3fc;
 import org.jspecify.annotations.Nullable;
 
 /**
- * A speed gate's moving parts (nuclear/SpeedGateBlock.java): its two glass doors, sliding out of their pedestals to
- * meet in the middle and back into the pedestals' slots, and the lane lights along the pedestals (blue waiting, green
- * open); and the sign gantry over the lane, which stands higher than a block model may reach. They are the lane
- * block's own models (its door_left, door_right, leds_wait, leds_go and gantry parts, drawn facing north:
- * tools/speed_gate.py), the doors set in this lane's slot, slid and turned to the gate's facing here, lit as the
- * block is (the light bars, lights and signs at their own glow).
+ * A speed gate's moving parts (nuclear/SpeedGateBlock.java; remade realistic 22 October 2026): its two glass doors,
+ * sliding out of their cabinets to meet in the middle and back into the cabinets' slots and housings, each with the
+ * status light along its top edge, and the lane's lights on its cabinets (the guide lines along the glass tops, white
+ * waiting and green open; the reader's mark; the pictograms on the ends). They are the lane block's own models (its
+ * door_left, door_right, light_*, leds_wait and leds_go parts, drawn facing north: tools/speed_gate.py), the doors set
+ * in this lane's slot, slid and turned to the gate's facing here, lit as the block is (the lights at their own glow).
  */
 public class SpeedGateRenderer implements BlockEntityRenderer<SpeedGateBlockEntity, SpeedGateRenderer.State> {
 	private static final RenderType RENDER_TYPE = RenderTypes.entityTranslucentCull(TextureAtlas.LOCATION_BLOCKS);
@@ -87,27 +87,30 @@ public class SpeedGateRenderer implements BlockEntityRenderer<SpeedGateBlockEnti
 		Direction f = state.facing;
 		// This lane's slot, in the north-facing model's frame: +z is behind the line, into the lane block itself.
 		float dz = state.slot * SpeedGateBlock.SLOT / 16F;
-		float slide = SpeedGateBlock.DOOR_WIDTH / 16F * state.open;
+		float slide = SpeedGateBlock.SLIDE / 16F * state.open;
+		boolean go = state.open > 0.01F;
 		int light = state.lightCoords;
 		pose.pushPose();
 		pose.translate(0.5F, 0, 0.5F);
 		pose.rotateDegrees(Axis.YP, -f.toYRot() + 180);
 		pose.translate(-0.5F, 0, -0.5F);
 		collector.submitCustomGeometry(pose, RENDER_TYPE, (p, consumer) ->
-				draw(p, consumer, state.open > 0.01F ? SpeedGateBlock.Part.LEDS_GO : SpeedGateBlock.Part.LEDS_WAIT, 0, 0, light));
-		// The sign gantry, modelled a block lower than it stands; its post on the west or north pedestal.
-		pose.pushPose();
-		pose.translate(0, 1, 0);
-		SpeedGateBlock.Part gantry = f == Direction.SOUTH || f == Direction.WEST ? SpeedGateBlock.Part.GANTRY_EAST : SpeedGateBlock.Part.GANTRY;
-		collector.submitCustomGeometry(pose, RENDER_TYPE, (p, consumer) -> draw(p, consumer, gantry, 0, 0, light));
-		pose.popPose();
+				draw(p, consumer, go ? SpeedGateBlock.Part.LEDS_GO : SpeedGateBlock.Part.LEDS_WAIT, 0, 0, light));
+		SpeedGateBlock.Part leftLight = go ? SpeedGateBlock.Part.LIGHT_LEFT_GO : SpeedGateBlock.Part.LIGHT_LEFT_WAIT;
+		SpeedGateBlock.Part rightLight = go ? SpeedGateBlock.Part.LIGHT_RIGHT_GO : SpeedGateBlock.Part.LIGHT_RIGHT_WAIT;
 		pose.pushPose();
 		pose.translate(-slide, 0, dz);
-		collector.submitCustomGeometry(pose, RENDER_TYPE, (p, consumer) -> draw(p, consumer, SpeedGateBlock.Part.DOOR_LEFT, 0, 0, light));
+		collector.submitCustomGeometry(pose, RENDER_TYPE, (p, consumer) -> {
+			draw(p, consumer, SpeedGateBlock.Part.DOOR_LEFT, 0, 0, light);
+			draw(p, consumer, leftLight, 0, 0, light);
+		});
 		pose.popPose();
 		pose.pushPose();
 		pose.translate(slide, 0, dz);
-		collector.submitCustomGeometry(pose, RENDER_TYPE, (p, consumer) -> draw(p, consumer, SpeedGateBlock.Part.DOOR_RIGHT, 0, 0, light));
+		collector.submitCustomGeometry(pose, RENDER_TYPE, (p, consumer) -> {
+			draw(p, consumer, SpeedGateBlock.Part.DOOR_RIGHT, 0, 0, light);
+			draw(p, consumer, rightLight, 0, 0, light);
+		});
 		pose.popPose();
 		pose.popPose();
 	}

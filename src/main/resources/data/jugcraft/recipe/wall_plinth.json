@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SSS",
+    "SIS",
+    "SSS"
+  ],
+  "key": {
+    "S": "minecraft:smooth_stone",
+    "I": "#c:ingots/iron"
+  },
+  "result": {
+    "id": "jugcraft:wall_plinth",
+    "count": 8
+  }
+}

@@ -1,0 +1,92 @@
+{
+ "parent": "minecraft:block/block",
+ "textures": {
+  "dc_black": "jugcraft:block/dc_black",
+  "dc_graphite": "jugcraft:block/dc_graphite",
+  "dc_lacquer": "jugcraft:block/dc_lacquer",
+  "dc_steel": "jugcraft:block/dc_steel",
+  "particle": "jugcraft:block/dc_lacquer"
+ },
+ "elements": [
+  {
+   "from": [
+    0,
+    0.0,
+    0
+   ],
+   "to": [
+    16,
+    1.1,
+    16
+   ],
+   "faces": {
+    "up": {
+     "texture": "#dc_black"
+    },
+    "down": {
+     "texture": "#dc_black"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    1.1,
+    0
+   ],
+   "to": [
+    16,
+    13.8,
+    16
+   ],
+   "faces": {
+    "up": {
+     "texture": "#dc_lacquer"
+    },
+    "down": {
+     "texture": "#dc_black"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    13.8,
+    0
+   ],
+   "to": [
+    16,
+    14.3,
+    16
+   ],
+   "faces": {
+    "up": {
+     "texture": "#dc_steel"
+    },
+    "down": {
+     "texture": "#dc_steel"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    14.3,
+    0
+   ],
+   "to": [
+    16,
+    14.6,
+    16
+   ],
+   "faces": {
+    "up": {
+     "texture": "#dc_graphite"
+    },
+    "down": {
+     "texture": "#dc_graphite"
+    }
+   }
+  }
+ ]
+}

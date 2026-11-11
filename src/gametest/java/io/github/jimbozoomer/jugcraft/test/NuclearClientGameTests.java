@@ -952,6 +952,238 @@ public class NuclearClientGameTests implements FabricClientGameTest {
 						"jugcraft_plant_medium_r26_tsc_boards_alert");
 				shotAt(context, singleplayer, wx.applyAsInt(136 + 6), y + 15, wz.applyAsInt(88 + 27), wx.applyAsInt(136 + 3), y + 15, wz.applyAsInt(88 + 27),
 						"jugcraft_plant_medium_r26_tsc_console_alert");
+				// Round 26 (#13): the operations office (x 31..38, z 22..28 on the same floor): a load centre's INVERTER feeder
+				// opened and a battery room fan switched off, so the out-of-service board lists them; the room, the board,
+				// the consoles, the north wall (schedule board, clock, radios, PPE) and the west wall (keys, tags, lockbox).
+				singleplayer.getServer().runOnServer(minecraft -> {
+					net.minecraft.server.level.ServerLevel level = minecraft.overworld();
+					for (BlockPos at : BlockPos.betweenClosed(new BlockPos(wx.applyAsInt(136 + 38), y + 16, wz.applyAsInt(88 + 22)),
+							new BlockPos(wx.applyAsInt(136 + 38), y + 18, wz.applyAsInt(88 + 26)))) {
+						if (level.getBlockEntity(at) instanceof io.github.jimbozoomer.jugcraft.nuclear.LivePanelBlockEntity p
+								&& io.github.jimbozoomer.jugcraft.nuclear.OpsOffice.kind(p.getBlockState()) == io.github.jimbozoomer.jugcraft.nuclear.OpsOffice.HUB) {
+							for (var e : io.github.jimbozoomer.jugcraft.nuclear.EquipmentRegistry.of(level).anchors().entrySet()) {
+								if (e.getValue().kind() == io.github.jimbozoomer.jugcraft.nuclear.EquipmentKind.SWITCHGEAR_LINEUP
+										&& level.getBlockEntity(e.getKey()) instanceof io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity lc
+										&& e.getKey().distSqr(at) < 192 * 192) {
+									lc.breakers &= ~(1 << java.util.Arrays.asList(io.github.jimbozoomer.jugcraft.nuclear.Switchgear.NAMES).indexOf("INVERTER"));
+									break;
+								}
+							}
+							for (var fan : p.panelsAround(level, io.github.jimbozoomer.jugcraft.nuclear.PlantInterior.BLOCKS.get("exhaust_fan"), 64)) {
+								fan.mode = io.github.jimbozoomer.jugcraft.nuclear.ExhaustFanBlock.OFF;
+								break;
+							}
+							io.github.jimbozoomer.jugcraft.nuclear.OpsOffice.tick(p, level, io.github.jimbozoomer.jugcraft.nuclear.OpsOffice.HUB);
+						}
+					}
+				});
+				context.waitTicks(60);
+				int[][] opsShots = {{32, 15, 27, 38, 16, 23}, {35, 15, 24, 38, 17, 24}, {33, 15, 25, 36, 15, 26}, {34, 15, 26, 34, 16, 22},
+						{35, 15, 25, 31, 16, 24}};
+				String[] opsNames = {"room", "oos_board", "consoles", "north_wall", "west_wall"};
+				for (int i = 0; i < opsShots.length; i++) {
+					int[] t = opsShots[i];
+					shotAt(context, singleplayer, wx.applyAsInt(136 + t[0]), y + t[1], wz.applyAsInt(88 + t[2]), wx.applyAsInt(136 + t[3]), y + t[4],
+							wz.applyAsInt(88 + t[5]), "jugcraft_plant_medium_r26_ops_" + opsNames[i]);
+				}
+				// Round 26 (#14): the restroom (x 26..29, z 22..28 on the same floor): the standard stall's door open, the
+				// accessible stall latched, a toilet and the urinal flushing, a sink and the hand dryer running; the room from
+				// the door, the sinks, the stall fronts, the toilet, the urinal.
+				singleplayer.getServer().runOnServer(minecraft -> {
+					net.minecraft.server.level.ServerLevel level = minecraft.overworld();
+					for (BlockPos at : BlockPos.betweenClosed(new BlockPos(wx.applyAsInt(136 + 26), y + 15, wz.applyAsInt(88 + 22)),
+							new BlockPos(wx.applyAsInt(136 + 29), y + 16, wz.applyAsInt(88 + 28)))) {
+						BlockPos p = at.immutable();
+						net.minecraft.world.level.block.state.BlockState st = level.getBlockState(p);
+						if (st.getBlock() instanceof io.github.jimbozoomer.jugcraft.nuclear.RestroomBlocks.Toilet
+								&& st.getValue(io.github.jimbozoomer.jugcraft.nuclear.RestroomBlocks.VARIANT) == 0) {
+							io.github.jimbozoomer.jugcraft.nuclear.RestroomBlocks.Toilet.flush(level, p, st);
+						} else if (st.getBlock() instanceof io.github.jimbozoomer.jugcraft.nuclear.RestroomBlocks.Urinal) {
+							io.github.jimbozoomer.jugcraft.nuclear.RestroomBlocks.Urinal.flush(level, p, st);
+						} else if (st.getBlock() instanceof io.github.jimbozoomer.jugcraft.nuclear.RestroomBlocks.Running r) {
+							r.start(level, p, st);
+						} else if (st.getBlock() instanceof io.github.jimbozoomer.jugcraft.nuclear.RestroomBlocks.StallDoor
+								&& st.getValue(net.minecraft.world.level.block.DoorBlock.HALF) == net.minecraft.world.level.block.state.properties.DoubleBlockHalf.LOWER) {
+							boolean accessible = st.getBlock() == io.github.jimbozoomer.jugcraft.nuclear.PlantInterior.BLOCKS.get("restroom_stall_door_accessible");
+							io.github.jimbozoomer.jugcraft.nuclear.RestroomBlocks.StallDoor.set(level, p, !accessible, accessible);
+						}
+					}
+				});
+				context.waitTicks(20);
+				int[][] rrShots = {{27, 16, 22, 28, 15, 28}, {28, 16, 25, 26, 16, 23}, {26, 16, 24, 28, 15, 27}, {26, 16, 26, 29, 15, 26},
+						{27, 16, 24, 29, 15, 23}};
+				String[] rrNames = {"room", "sinks", "stalls", "toilet", "urinal"};
+				for (int i = 0; i < rrShots.length; i++) {
+					int[] t = rrShots[i];
+					shotAt(context, singleplayer, wx.applyAsInt(136 + t[0]), y + t[1], wz.applyAsInt(88 + t[2]), wx.applyAsInt(136 + t[3]), y + t[4],
+							wz.applyAsInt(88 + t[5]), "jugcraft_plant_medium_r26_restroom_" + rrNames[i]);
+				}
+				// Round 27: the control room's live boards (site x 136.., z 88..; the control room's floor at site y 14): the
+				// reactor coolant, turbine and electrical boards, and their desks; then the reactor at full power with RCP 1C
+				// stopped from its switch: tripped on low flow in one loop (the first out), the turbine tripped with it, the
+				// generator breaker open, the horn sounding.
+				int[][] boardShots = {{147, 14, 94, 147, 15, 90}, {162, 14, 94, 162, 15, 90}, {142, 14, 95, 138, 15, 95},
+						{145, 15, 93, 145, 14, 91}, {160, 15, 93, 160, 14, 91}, {141, 15, 94, 139, 14, 94}};
+				String[] boardNames = {"rcs", "turbine", "electrical", "rcs_desk", "turbine_desk", "electrical_desk"};
+				for (int i = 0; i < boardShots.length; i++) {
+					int[] t = boardShots[i];
+					shotAt(context, singleplayer, wx.applyAsInt(t[0]), y + t[1], wz.applyAsInt(t[2]), wx.applyAsInt(t[3]), y + t[4], wz.applyAsInt(t[5]),
+							"jugcraft_plant_medium_r27_board_" + boardNames[i]);
+				}
+				java.util.concurrent.atomic.AtomicReference<BlockPos> atPower = new java.util.concurrent.atomic.AtomicReference<>();
+				singleplayer.getServer().runOnServer(minecraft -> {
+					net.minecraft.server.level.ServerLevel level = minecraft.overworld();
+					BlockPos here = new BlockPos(wx.applyAsInt(150), y + 14, wz.applyAsInt(90));
+					io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity vessel = null;
+					for (var e : io.github.jimbozoomer.jugcraft.nuclear.EquipmentRegistry.of(level).anchors().entrySet()) {
+						if (e.getValue().kind().reactor() && level.getBlockEntity(e.getKey()) instanceof io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity v
+								&& (vessel == null || e.getKey().distSqr(here) < vessel.getBlockPos().distSqr(here))) {
+							vessel = v;
+						}
+					}
+					if (vessel == null) {
+						return;
+					}
+					atPower.set(vessel.getBlockPos());
+					var core = vessel.core;
+					while (core.fuel.size() < core.design.size()) {
+						core.fuel.add(0.0);
+					}
+					core.rods = 0;
+					core.rodTarget = 0;
+					core.fission = 1;
+					core.decay = 0.065;
+					core.temperature = 305;
+					core.rcpStopped = 1 << 2;
+				});
+				context.waitTicks(100);
+				for (int i = 0; i < 3; i++) {
+					int[] t = boardShots[i];
+					shotAt(context, singleplayer, wx.applyAsInt(t[0]), y + t[1], wz.applyAsInt(t[2]), wx.applyAsInt(t[3]), y + t[4], wz.applyAsInt(t[5]),
+							"jugcraft_plant_medium_r27_board_" + boardNames[i] + "_tripped");
+				}
+				singleplayer.getServer().runOnServer(minecraft -> {
+					net.minecraft.server.level.ServerLevel level = minecraft.overworld();
+					if (atPower.get() != null && level.getBlockEntity(atPower.get()) instanceof io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity v) {
+						v.core.fuel.clear();
+						v.core.rcpStopped = 0;
+						v.core.fission = 0;
+						v.core.decay = 0;
+						v.core.temperature = 30;
+						v.core.scrammed = false;
+						v.core.tripCause = 0;
+						v.core.rodTarget = 100;
+						v.core.rods = 100;
+					}
+				});
+				// Round 28: the safety systems, steam and feedwater, and radiation boards, found where they stand (each from
+				// four blocks in front of its middle, and its desk from two), at rest; then the reactor at power, manual safety
+				// injection from train A's switch, every MSIV shut and the fuel damaged: the reactor and turbine tripped, aux
+				// feed holding the generators, the release on the intakes, the vent and the containment's air, the control
+				// room HVAC in emergency.
+				java.util.concurrent.atomic.AtomicReference<int[][]> r28 = new java.util.concurrent.atomic.AtomicReference<>();
+				singleplayer.getServer().runOnServer(minecraft -> {
+					net.minecraft.server.level.ServerLevel level = minecraft.overworld();
+					BlockPos here = new BlockPos(wx.applyAsInt(150), y + 14, wz.applyAsInt(90));
+					io.github.jimbozoomer.jugcraft.nuclear.EquipmentKind[] kinds = {io.github.jimbozoomer.jugcraft.nuclear.EquipmentKind.ESF_BOARD,
+							io.github.jimbozoomer.jugcraft.nuclear.EquipmentKind.SECONDARY_BOARD, io.github.jimbozoomer.jugcraft.nuclear.EquipmentKind.RADIATION_BOARD,
+							io.github.jimbozoomer.jugcraft.nuclear.EquipmentKind.CONTROL_CONSOLE};
+					int[][] out = new int[8][];
+					for (int i = 0; i < 4; i++) {
+						BlockPos best = null;
+						for (var e : io.github.jimbozoomer.jugcraft.nuclear.EquipmentRegistry.of(level).anchors().entrySet()) {
+							if (e.getValue().kind() == kinds[i] && (best == null || e.getKey().distSqr(here) < best.distSqr(here))) {
+								best = e.getKey();
+							}
+						}
+						if (best == null) {
+							continue;
+						}
+						net.minecraft.core.Direction f = level.getBlockState(best).getValue(io.github.jimbozoomer.jugcraft.nuclear.EquipmentAnchorBlock.FACING);
+						net.minecraft.core.Direction r = f.getClockWise();
+						BlockPos middle = best.relative(r, kinds[i].wide / 2);
+						BlockPos eye = middle.relative(f, -4), face = middle.relative(f, 1).above(2), deskEye = middle.relative(f, -2).above(1);
+						out[i] = new int[] {eye.getX(), eye.getY(), eye.getZ(), face.getX(), face.getY(), face.getZ()};
+						out[4 + i] = new int[] {deskEye.getX(), deskEye.getY(), deskEye.getZ(), middle.getX(), middle.getY(), middle.getZ()};
+					}
+					r28.set(out);
+				});
+				// (Round 30: the reactor control console with them.)
+				String[] r28Names = {"r28_board_esf", "r28_board_secondary", "r28_board_radiation", "r30_console", "r28_board_esf_desk",
+						"r28_board_secondary_desk", "r28_board_radiation_desk", "r30_console_desk"};
+				int[][] r28Shots = r28.get();
+				for (int i = 0; r28Shots != null && i < r28Shots.length; i++) {
+					int[] t = r28Shots[i];
+					if (t != null) {
+						shotAt(context, singleplayer, t[0], t[1], t[2], t[3], t[4], t[5], "jugcraft_plant_medium_" + r28Names[i]);
+					}
+				}
+				singleplayer.getServer().runOnServer(minecraft -> {
+					net.minecraft.server.level.ServerLevel level = minecraft.overworld();
+					if (atPower.get() == null || !(level.getBlockEntity(atPower.get()) instanceof io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity v)) {
+						return;
+					}
+					var core = v.core;
+					while (core.fuel.size() < core.design.size()) {
+						core.fuel.add(0.0);
+					}
+					core.rods = 0;
+					core.rodTarget = 0;
+					core.fission = 1;
+					core.decay = 0.065;
+					core.temperature = 305;
+					BlockPos here = new BlockPos(wx.applyAsInt(150), y + 14, wz.applyAsInt(90));
+					io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity esf = null;
+					for (var e : io.github.jimbozoomer.jugcraft.nuclear.EquipmentRegistry.of(level).anchors().entrySet()) {
+						if (e.getValue().kind() == io.github.jimbozoomer.jugcraft.nuclear.EquipmentKind.ESF_BOARD
+								&& level.getBlockEntity(e.getKey()) instanceof io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity b
+								&& (esf == null || e.getKey().distSqr(here) < esf.getBlockPos().distSqr(here))) {
+							esf = b;
+						}
+					}
+					var players = minecraft.getPlayerList().getPlayers();
+					if (esf != null && !players.isEmpty()) {
+						var state = io.github.jimbozoomer.jugcraft.nuclear.ControlBoard.refresh(level, esf);
+						var layout = io.github.jimbozoomer.jugcraft.nuclear.ControlBoard.layout(esf.kind());
+						long now = level.getGameTime();
+						io.github.jimbozoomer.jugcraft.nuclear.ControlBoard.act(level, esf, state, layout, players.get(0), "si_a", now);
+						io.github.jimbozoomer.jugcraft.nuclear.ControlBoard.act(level, esf, state, layout, players.get(0), "si_a", now);
+					}
+					if (!core.siActuated) {
+						core.safetyInjection(level.getGameTime());
+					}
+					core.msivClosed = 15;
+					core.fuelDamaged = true;
+				});
+				context.waitTicks(160);
+				for (int i = 0; r28Shots != null && i < 4; i++) {
+					int[] t = r28Shots[i];
+					if (t != null) {
+						shotAt(context, singleplayer, t[0], t[1], t[2], t[3], t[4], t[5], "jugcraft_plant_medium_" + r28Names[i] + "_si");
+					}
+				}
+				singleplayer.getServer().runOnServer(minecraft -> {
+					net.minecraft.server.level.ServerLevel level = minecraft.overworld();
+					if (atPower.get() != null && level.getBlockEntity(atPower.get()) instanceof io.github.jimbozoomer.jugcraft.nuclear.EquipmentBlockEntity v) {
+						var core = v.core;
+						core.fuel.clear();
+						core.fuelDamaged = false;
+						core.fission = 0;
+						core.decay = 0;
+						core.temperature = 30;
+						core.siActuated = false;
+						core.feedIsolated = false;
+						core.cntIsolated = false;
+						core.msivClosed = 0;
+						core.afwRunning = 0;
+						core.turbineTripped = false;
+						core.genOpen = false;
+						core.scrammed = false;
+						core.tripCause = 0;
+						core.rodTarget = 100;
+						core.rods = 100;
+					}
+				});
 				// The reactor reset (the TSC's ALERT stays declared until it is terminated) for the shots after these.
 				singleplayer.getServer().runOnServer(minecraft -> {
 					net.minecraft.server.level.ServerLevel level = minecraft.overworld();

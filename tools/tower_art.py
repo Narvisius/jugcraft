@@ -428,6 +428,20 @@ def red_light_strip():
     return to_image(img)
 
 
+def amber_light_strip():
+    """The Tri-Pillar's flush amber light: a frosted amber diffuser in a narrow steel bezel, brightest in the middle, so a
+    run of them reads as one segmented light line (roof line, deck edges, floor guide lines)."""
+    yy, xx = np.mgrid[0:N, 0:N].astype(float)
+    img = colorize((56, 58, 64), grain(101), 5)
+    inner = (xx > 5) & (xx < N - 6) & (yy > 5) & (yy < N - 6)
+    d = np.maximum(np.abs(xx - 31.5), np.abs(yy - 31.5)) / 26
+    glow = np.clip(1 - d ** 3, 0, 1)
+    amber = np.stack([214 + 41 * glow, 118 + 86 * glow, 34 + 84 * glow ** 2], -1)
+    img = np.where(inner[..., None], amber, img)
+    bevel(img, 5, 5, N - 6, N - 6, 1, 0.75, 1.15)
+    return to_image(img)
+
+
 def superconducting_conduit():
     """An armoured cryogenic conduit: ribbed steel sleeve with a frost-blue window onto the red-taped core."""
     xx = np.arange(N)[None, :].astype(float)
@@ -501,6 +515,7 @@ TEXTURES = {
     "graphene_lattice": graphene_lattice, "tungsten_steel_frame": tungsten_steel_frame, "steel_armor_plate": steel_armor_plate,
     "depleted_uranium_armor": depleted_uranium_armor, "silicon_carbide_armor": silicon_carbide_armor,
     "hazard_plating": hazard_plating, "blast_glass": blast_glass, "red_light_strip": red_light_strip,
+    "amber_light_strip": amber_light_strip,
     "superconducting_conduit": superconducting_conduit, "hangar_bay_door": hangar_bay_door,
     "landing_platform": landing_platform, "hangar_pad": hangar_pad,
 }
@@ -1004,3 +1019,6 @@ def write_all(root):
     for dz in range(3):
         for dx in range(3):
             pick.crop((dx * N, dz * N, dx * N + N, dz * N + N)).save(os.path.join(out, f"supply_pickup_formed_{1 + dz * 3 + dx}.png"))
+    # Approved industrial material pass, kept separate from shared drone sprites.
+    import tower_realism_art
+    tower_realism_art.write_textures(root)

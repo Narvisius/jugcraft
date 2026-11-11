@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "B B",
+    "IOI",
+    "B B"
+  ],
+  "key": {
+    "B": "minecraft:blue_dye",
+    "I": "#c:ingots/iron",
+    "O": "minecraft:orange_dye"
+  },
+  "result": {
+    "id": "jugcraft:warehouse_rack",
+    "count": 4
+  }
+}

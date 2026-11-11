@@ -994,9 +994,9 @@ def hv_control_panel():
         f.line([(31.2, yb), (32.6, yb)], (40, 110, 200, 255), 5)
         f.line([(36.6, yc), (37.4, yc - 0.4), (36.6, yc - 0.8)], ink, 4)
         for x0_, x1_, lines, ch in HP_MAIN:
-            _mimic_box(f, x0_, x1_, yc, lines, ch, D + 0.05, t)
+            _mimic_box(f, x0_, x1_, yc, lines, ch, D + 0.15, t)
         for x0_, x1_, lines, ch in HP_BRANCH:
-            _mimic_box(f, x0_, x1_, yb, lines, ch, D + 0.05, t)
+            _mimic_box(f, x0_, x1_, yb, lines, ch, D + 0.15, t)
     RR._fit(f, 41.6, my0 + 1.35, "LIT RED:  RUNNING / OPEN", 7, 8.4)
     RR._fit(f, 41.6, my0 + 0.6, "LIT GREEN:  STOPPED / SHUT", 7, 8.4)
     # The mode selector: its plate, the three positions, the pointer (live: one bar of three).
@@ -1065,8 +1065,8 @@ def hv_control_panel_boxes():
         b.append((39.0, y, D, 46.0, y + 0.2, D + 0.45, "pi_pnl_black"))
     for x, _ in HP_BUTTONS:
         b += PP._sc_round(x, 4.4, D, D + 0.25, 0.75, "pi_chrome") + PP._sc_round(x, 4.4, D + 0.25, D + 0.6, 0.5, "pi_cap_black")
-    # The mimic's glass-free panel, a hair proud; its train labels' frame.
-    b.append((HP_MIMIC[0], HP_MIMIC[1], D, HP_MIMIC[2], HP_MIMIC[3], D + 0.02, face))
+    # The mimic's glass-free panel, a tenth proud (closer, tools/zfight.py pulls it out over its lit boxes at D + 0.15).
+    b.append((HP_MIMIC[0], HP_MIMIC[1], D, HP_MIMIC[2], HP_MIMIC[3], D + 0.1, face))
     # The conduit hubs on its top (its control cables up to the tray).
     b += PP._top_hub(8.0, 32.0 - 0.6) + PP._top_hub(40.0, 32.0 - 0.6)
     return b

@@ -83,9 +83,10 @@ public final class JugcraftDrones {
 				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(2.0F).noOcclusion()
 						.lightLevel(state -> state.getValue(ControlScreenBlock.PART) > 0 ? 9 : 4))));
 		// Hologram table sections (nine form one table); the projector section glows.
+		// a hologram (tower/Holograms): no recipe, the tower's own; only a creative player places or breaks one
 		HOLO_TABLE = block("holo_table", new HoloTableBlock(properties("holo_table",
-				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(2.0F).noOcclusion()
-						.lightLevel(state -> state.getValue(HoloTableBlock.PART) == HoloTableBlock.PROJECTOR_PART ? 10 : 2))));
+				io.github.jimbozoomer.jugcraft.tower.Holograms.protect(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).noOcclusion()
+						.lightLevel(state -> state.getValue(HoloTableBlock.PART) == HoloTableBlock.PROJECTOR_PART ? 10 : 2)))));
 		CARGO_PACKAGER = block("cargo_packager", new CargoPackagerBlock(properties("cargo_packager",
 				BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(3.0F))));
 
@@ -132,8 +133,9 @@ public final class JugcraftDrones {
 	private static Block block(String path, Block block) {
 		Registry.register(BuiltInRegistries.BLOCK, Jugcraft.id(path), block);
 		ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, Jugcraft.id(path));
-		Registry.register(BuiltInRegistries.ITEM, itemKey,
-				new BlockItem(block, new Item.Properties().setId(itemKey).useBlockDescriptionPrefix()));
+		Item.Properties properties = new Item.Properties().setId(itemKey).useBlockDescriptionPrefix();
+		Registry.register(BuiltInRegistries.ITEM, itemKey, io.github.jimbozoomer.jugcraft.tower.Holograms.ITEMS.contains(path)
+				? io.github.jimbozoomer.jugcraft.tower.Holograms.item(block, properties) : new BlockItem(block, properties));
 		return block;
 	}
 

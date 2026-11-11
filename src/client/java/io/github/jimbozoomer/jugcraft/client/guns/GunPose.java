@@ -24,7 +24,7 @@ import net.minecraft.world.entity.player.Player;
  * {@link #apply} after vanilla poses the model (ArmsHumanoidModelMixin); armor posed from the same state follows. The
  * pose is one of eight shared values and the tilt the gun's own, so nothing is allocated per frame (a bayonet's thrust,
  * slice 7, only while it lasts). Players, and (slice 10F) mobs holding a gun, such as the raider gunners; not while
- * swimming, gliding or asleep.
+ * swimming, gliding or asleep. A player holding the NT-7 plasma rifle (P6) holds it as a two-handed gun.
  */
 public final class GunPose {
 	/** The hold on a player's render state: null when they hold no gun. */
@@ -59,6 +59,11 @@ public final class GunPose {
 			boolean dual = GunItem.dual(entity) && !otherBusy;
 			hold = Hold.of(both, entity.getMainArm() == HumanoidArm.LEFT, dual);
 			tilt = GunLooks.tilt(gun.name());
+		} else if (entity instanceof Player && entity.getMainHandItem().getItem() instanceof io.github.jimbozoomer.jugcraft.tower.crew.PlasmaRifleItem
+				&& !entity.isVisuallySwimming() && !entity.isFallFlying() && !entity.isSleeping()) {
+			// the NT-7 (P6): held as a two-handed gun, the left hand on its fore grip (its item transform is made for it)
+			boolean otherBusy = entity.isUsingItem() && entity.getUsedItemHand() == InteractionHand.OFF_HAND;
+			hold = Hold.of(!otherBusy, entity.getMainArm() == HumanoidArm.LEFT, false);
 		}
 		if (state.getData(HOLD) != hold) {
 			state.setData(HOLD, hold);

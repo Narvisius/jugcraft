@@ -67,6 +67,26 @@ public final class ItemNetworks {
 		return target == null ? 0 : StorageUtil.move(source, target, variant -> true, maxItems, null);
 	}
 
+	/**
+	 * Every inventory the pipe network through {@code pipe} touches, and the side of it the network meets (empty if
+	 * {@code pipe} isn't a pipe, or the network is too big). What's at the far end of the pipes from a block that reads
+	 * through them rather than pushing (the Drone Tower's Cargo Exchange: tower/TowerSupply).
+	 */
+	public static List<Map.Entry<BlockPos, Direction>> inventories(Level level, BlockPos pipe) {
+		if (!level.hasChunkAt(pipe) || !(level.getBlockState(pipe).getBlock() instanceof ItemPipeBlock)) {
+			return List.of();
+		}
+		Network network = network(level, pipe);
+		if (network.truncated) {
+			return List.of();
+		}
+		List<Map.Entry<BlockPos, Direction>> out = new ArrayList<>();
+		for (Endpoint e : network.endpoints) {
+			out.add(Map.entry(e.pos, e.side));
+		}
+		return out;
+	}
+
 	private static Network network(Level level, BlockPos pipePos) {
 		Map<BlockPos, Network> networks = CACHE.computeIfAbsent(level, l -> new HashMap<>());
 		Network cached = networks.get(pipePos);

@@ -1,0 +1,279 @@
+{
+ "textures": {
+  "rp_ahu": "jugcraft:block/rp_ahu",
+  "rp_concrete": "jugcraft:block/rp_concrete",
+  "rp_dunnage": "jugcraft:block/rp_dunnage",
+  "rp_galv": "jugcraft:block/rp_galv",
+  "rp_gasket": "jugcraft:block/rp_gasket",
+  "rp_rubber": "jugcraft:block/rp_rubber",
+  "particle": "jugcraft:block/rp_galv"
+ },
+ "elements": [
+  {
+   "from": [
+    5,
+    0,
+    1
+   ],
+   "to": [
+    11,
+    2,
+    7
+   ],
+   "faces": {
+    "north": {
+     "texture": "#rp_concrete"
+    },
+    "south": {
+     "texture": "#rp_concrete"
+    },
+    "east": {
+     "texture": "#rp_concrete"
+    },
+    "west": {
+     "texture": "#rp_concrete"
+    },
+    "up": {
+     "texture": "#rp_concrete"
+    },
+    "down": {
+     "texture": "#rp_concrete"
+    }
+   }
+  },
+  {
+   "from": [
+    5.5,
+    2,
+    1.5
+   ],
+   "to": [
+    10.5,
+    2.6,
+    6.5
+   ],
+   "faces": {
+    "north": {
+     "texture": "#rp_rubber"
+    },
+    "south": {
+     "texture": "#rp_rubber"
+    },
+    "east": {
+     "texture": "#rp_rubber"
+    },
+    "west": {
+     "texture": "#rp_rubber"
+    },
+    "up": {
+     "texture": "#rp_rubber"
+    },
+    "down": {
+     "texture": "#rp_rubber"
+    }
+   }
+  },
+  {
+   "from": [
+    5.5,
+    2.6,
+    0
+   ],
+   "to": [
+    10.5,
+    3.4,
+    16
+   ],
+   "faces": {
+    "east": {
+     "texture": "#rp_dunnage"
+    },
+    "west": {
+     "texture": "#rp_dunnage"
+    },
+    "up": {
+     "texture": "#rp_dunnage"
+    },
+    "down": {
+     "texture": "#rp_dunnage"
+    }
+   }
+  },
+  {
+   "from": [
+    7.6,
+    3.4,
+    0
+   ],
+   "to": [
+    8.4,
+    7.6,
+    16
+   ],
+   "faces": {
+    "east": {
+     "texture": "#rp_dunnage"
+    },
+    "west": {
+     "texture": "#rp_dunnage"
+    },
+    "up": {
+     "texture": "#rp_dunnage"
+    },
+    "down": {
+     "texture": "#rp_dunnage"
+    }
+   }
+  },
+  {
+   "from": [
+    5.5,
+    7.6,
+    0
+   ],
+   "to": [
+    10.5,
+    8.4,
+    16
+   ],
+   "faces": {
+    "east": {
+     "texture": "#rp_dunnage"
+    },
+    "west": {
+     "texture": "#rp_dunnage"
+    },
+    "up": {
+     "texture": "#rp_dunnage"
+    },
+    "down": {
+     "texture": "#rp_dunnage"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    8.4,
+    0
+   ],
+   "to": [
+    15,
+    12.6,
+    16
+   ],
+   "faces": {
+    "east": {
+     "texture": "#rp_galv"
+    },
+    "up": {
+     "texture": "#rp_galv"
+    },
+    "down": {
+     "texture": "#rp_galv"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    12.6,
+    0
+   ],
+   "to": [
+    14.5,
+    16,
+    16
+   ],
+   "faces": {
+    "east": {
+     "texture": "#rp_ahu"
+    },
+    "down": {
+     "texture": "#rp_ahu"
+    }
+   }
+  },
+  {
+   "from": [
+    14.5,
+    12.6,
+    13.6
+   ],
+   "to": [
+    14.85,
+    16,
+    14.4
+   ],
+   "faces": {
+    "north": {
+     "texture": "#rp_ahu"
+    },
+    "south": {
+     "texture": "#rp_ahu"
+    },
+    "east": {
+     "texture": "#rp_ahu"
+    },
+    "west": {
+     "texture": "#rp_ahu"
+    },
+    "down": {
+     "texture": "#rp_ahu"
+    }
+   }
+  },
+  {
+   "from": [
+    14.5,
+    14.75,
+    0
+   ],
+   "to": [
+    14.75,
+    16,
+    11.25
+   ],
+   "faces": {
+    "south": {
+     "texture": "#rp_gasket"
+    },
+    "east": {
+     "texture": "#rp_gasket"
+    },
+    "west": {
+     "texture": "#rp_gasket"
+    },
+    "down": {
+     "texture": "#rp_gasket"
+    }
+   }
+  },
+  {
+   "from": [
+    14.75,
+    15,
+    0
+   ],
+   "to": [
+    15.25,
+    16,
+    11
+   ],
+   "faces": {
+    "south": {
+     "texture": "#rp_ahu"
+    },
+    "east": {
+     "texture": "#rp_ahu"
+    },
+    "west": {
+     "texture": "#rp_ahu"
+    },
+    "down": {
+     "texture": "#rp_ahu"
+    }
+   }
+  }
+ ]
+}

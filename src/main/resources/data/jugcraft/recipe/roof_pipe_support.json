@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "WWKKWW",
+    "RRIIRR"
+  ],
+  "key": {
+    "I": "#c:plates/iron",
+    "K": "minecraft:copper_ingot",
+    "R": "jugcraft:rubber",
+    "W": "minecraft:white_wool"
+  },
+  "result": {
+    "id": "jugcraft:roof_pipe_support",
+    "count": 8
+  }
+}

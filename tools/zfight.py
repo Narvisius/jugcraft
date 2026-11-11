@@ -138,6 +138,9 @@ def nudge(e, face, eps=EPS):
     inside = 0 <= min(e["from"][axis], e["to"][axis]) and max(e["from"][axis], e["to"][axis]) <= 16
     if inside and not 0 <= out <= 16 and abs(v - other) > 2 * eps:
         out = round(v - sign * eps, 4)
+    if not -16 <= out <= 32:
+        # (Never past the game's limits for a model's elements: inwards.)
+        out = round(v - sign * eps, 4)
     e[key][axis] = out
 
 

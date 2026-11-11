@@ -9,17 +9,18 @@
       "feature": "drones"
     }
   ],
-  "type": "minecraft:crafting_shaped",
-  "category": "building",
+  "type": "jugcraft:advanced_crafting",
   "pattern": [
-    "PPP",
-    " P "
+    "PPNNPP",
+    "PPPPPP",
+    "PPNNPP"
   ],
   "key": {
+    "N": "minecraft:iron_nugget",
     "P": "#c:plates/steel"
   },
   "result": {
     "id": "jugcraft:steel_armor_plate",
-    "count": 2
+    "count": 8
   }
 }

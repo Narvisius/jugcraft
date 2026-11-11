@@ -1,0 +1,195 @@
+{
+ "textures": {
+  "carpet": "jugcraft:block/carpet_tile",
+  "nosing": "jugcraft:block/raised_floor_nosing",
+  "light": "jugcraft:block/raised_floor_light",
+  "particle": "jugcraft:block/carpet_tile"
+ },
+ "elements": [
+  {
+   "from": [
+    0.0,
+    0,
+    0.4
+   ],
+   "to": [
+    16.0,
+    14.5,
+    16.0
+   ],
+   "faces": {
+    "east": {
+     "texture": "#carpet",
+     "cullface": "east"
+    },
+    "south": {
+     "texture": "#carpet",
+     "cullface": "south"
+    },
+    "west": {
+     "texture": "#carpet",
+     "cullface": "west"
+    },
+    "down": {
+     "texture": "#carpet",
+     "cullface": "down"
+    }
+   }
+  },
+  {
+   "from": [
+    0.0,
+    14.5,
+    1.5
+   ],
+   "to": [
+    16.0,
+    16,
+    16.0
+   ],
+   "faces": {
+    "east": {
+     "texture": "#carpet",
+     "cullface": "east"
+    },
+    "south": {
+     "texture": "#carpet",
+     "cullface": "south"
+    },
+    "west": {
+     "texture": "#carpet",
+     "cullface": "west"
+    },
+    "up": {
+     "texture": "#carpet",
+     "cullface": "up"
+    }
+   }
+  },
+  {
+   "from": [
+    0.0,
+    0,
+    0
+   ],
+   "to": [
+    16,
+    13.3,
+    0.4
+   ],
+   "faces": {
+    "north": {
+     "texture": "#carpet"
+    },
+    "up": {
+     "texture": "#carpet"
+    },
+    "east": {
+     "texture": "#carpet"
+    },
+    "west": {
+     "texture": "#carpet"
+    }
+   }
+  },
+  {
+   "from": [
+    0.0,
+    13.3,
+    0.3
+   ],
+   "to": [
+    16.0,
+    14.5,
+    0.4
+   ],
+   "faces": {
+    "north": {
+     "texture": "#light",
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ]
+    },
+    "east": {
+     "texture": "#light",
+     "uv": [
+      15,
+      0,
+      16,
+      16
+     ]
+    },
+    "west": {
+     "texture": "#light",
+     "uv": [
+      0,
+      0,
+      1,
+      16
+     ]
+    }
+   },
+   "shade": false,
+   "light_emission": 15
+  },
+  {
+   "from": [
+    0.0,
+    14.5,
+    0
+   ],
+   "to": [
+    16,
+    16.1,
+    1.5
+   ],
+   "faces": {
+    "north": {
+     "texture": "#nosing",
+     "uv": [
+      0.0,
+      0.0,
+      16.0,
+      1.6
+     ]
+    },
+    "up": {
+     "texture": "#nosing"
+    },
+    "down": {
+     "texture": "#nosing"
+    },
+    "south": {
+     "texture": "#nosing",
+     "uv": [
+      0.0,
+      0.0,
+      16.0,
+      1.6
+     ]
+    },
+    "east": {
+     "texture": "#nosing",
+     "uv": [
+      14.5,
+      0.0,
+      16.0,
+      1.6
+     ]
+    },
+    "west": {
+     "texture": "#nosing",
+     "uv": [
+      0.0,
+      0.0,
+      1.5,
+      1.6
+     ]
+    }
+   }
+  }
+ ]
+}

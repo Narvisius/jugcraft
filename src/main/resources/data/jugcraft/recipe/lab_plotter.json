@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "XXXXXX",
+    "PPCCPP",
+    "PP  PP"
+  ],
+  "key": {
+    "C": "jugcraft:basic_circuit",
+    "P": "#c:plates/iron",
+    "X": "minecraft:paper"
+  },
+  "result": {
+    "id": "jugcraft:lab_plotter",
+    "count": 2
+  }
+}

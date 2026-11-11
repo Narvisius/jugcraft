@@ -281,6 +281,10 @@ def assets():
     power_lines.write_assets(write, rid, ASSETS, lang)
     import nuclear
     nuclear.write_assets(write, rid, ASSETS, lang)
+    import warehouse_data
+    warehouse_data.write_assets(write, rid, ASSETS, lang)
+    import exterior_data
+    exterior_data.write_assets(write, rid, ASSETS, lang)
     import wall_runs
     wall_runs.write_assets(write, rid, ASSETS, lang)
     import blueprints
@@ -288,12 +292,20 @@ def assets():
     blueprints.write_all()
     import nuclear_plants
     nuclear_plants.write_blueprints()
+    import warehouse_bp
+    warehouse_bp.write_stacks(nuclear_plants.BLUEPRINT_OUT)
     import tank_kits
     tank_kits.write()
     import drone_sounds
     lang.update(drone_sounds.LANG)
     import diesel_sounds
     lang.update(diesel_sounds.LANG)
+    import restroom_sounds
+    lang.update(restroom_sounds.LANG)
+    import board_sounds
+    lang.update(board_sounds.LANG)
+    import yard_sounds
+    lang.update(yard_sounds.LANG)
     import guide_books
     guide_books.write_assets(write, rid, ASSETS, DATA, lang)
     import exchange_guide
@@ -324,6 +336,9 @@ def assets():
     chima_data.write_all(write, RES, lang)
     import vanilla_logs
     vanilla_logs.write_all(write, ASSETS)
+    # The upper floor's room kits (item 22 part B): last, as their item models and hitboxes read other generators' models.
+    import room_kit
+    room_kit.write_assets(lang)
     write(ASSETS / "lang" / "en_us.json", dict(sorted(lang.items())))
 
 
@@ -377,6 +392,9 @@ def drone_assets(lang):
         write(ASSETS / "models" / "block" / f"{block}.json", model)
         write(ASSETS / "blockstates" / f"{block}.json", {"variants": {"": {"model": rid(f"block/{block}")}}})
         write(ASSETS / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{block}")}})
+    # Original fitted cabinet replaces the cargo packager's simple cube model.
+    import cargo_packager_art
+    cargo_packager_art.write_model(ROOT)
     for item, display in drones.DRONE_PARTS.items():
         lang[f"item.{MOD}.{item}"] = display
         write(ASSETS / "models" / "item" / f"{item}.json",
@@ -536,6 +554,18 @@ def drone_recipes(out):
         recipe = shaped(MACHINE_FEATURE, pattern, key, result, count, "equipment" if result != "shielding_concrete" else "building")
         recipe["fabric:load_conditions"] = [c for f in features for c in condition(f)]
         write(out / f"{result}.json", recipe)
+    import warehouse_data
+    for result, (pattern, key, count) in warehouse_data.CRAFTING.items():
+        features = [MACHINE_FEATURE] + sorted(warehouse_data.recipe_features(result, feature_of))
+        recipe = shaped(MACHINE_FEATURE, pattern, key, result, count, "building")
+        recipe["fabric:load_conditions"] = [c for f in features for c in condition(f)]
+        write(out / f"{result}.json", recipe)
+    import exterior_data
+    for result, (pattern, key, count) in exterior_data.CRAFTING.items():
+        features = [MACHINE_FEATURE] + sorted(exterior_data.recipe_features(result, feature_of))
+        recipe = shaped(MACHINE_FEATURE, pattern, key, result, count, "building")
+        recipe["fabric:load_conditions"] = [c for f in features for c in condition(f)]
+        write(out / f"{result}.json", recipe)
     for result, (pattern, key, count) in drones.DRONE_CRAFTING.items():
         features = [MACHINE_FEATURE, drones.FEATURE] + sorted(features_of(result))
         recipe = shaped(MACHINE_FEATURE, pattern, key, result, count)
@@ -552,6 +582,9 @@ def drone_recipes(out):
                     "results": [{"id": i, "count": n} for i, n in r["results"]],
                     "time": r["ticks"]}
             write(out / kind / f"{r['name']}.json", data)
+    # the drones and the advanced kit are made on the Advanced Crafting Table: their 6 x 6 recipes over the 3 x 3s
+    import advanced_crafting
+    advanced_crafting.apply(out)
 
 
 def write_alternate_pack(lang):
@@ -1103,7 +1136,11 @@ def pixel_hollows_assets(lang):
     import concordance
     import guns
     # The diesel generators' start, run and stop, and the Geiger counter's clicks (made in game, GeigerSound.java).
+    import restroom_sounds
+    import board_sounds
+    import yard_sounds
     write(ASSETS / "sounds.json", {**drone_sounds.SOUNDS, **ph.SOUNDS, **choir_sounds.SOUNDS, **diesel_sounds.SOUNDS,
+                                   **restroom_sounds.SOUNDS, **board_sounds.SOUNDS, **yard_sounds.SOUNDS,
                                    **nuclear.sound_events(), **concordance.sounds(), **guns.SOUNDS})
 
 
@@ -1212,6 +1249,10 @@ def loot_tables():
     power_lines.write_data(write, DATA)
     import nuclear
     nuclear.write_loot(write, rid, out, self_drop)
+    import warehouse_data
+    warehouse_data.write_loot(write, rid, out, self_drop)
+    import exterior_data
+    exterior_data.write_loot(write, rid, out, self_drop)
     import wall_runs
     wall_runs.write_loot(write, rid, out, self_drop)
     nuclear.write_data(write, DATA)
@@ -1638,8 +1679,17 @@ def tags():
         tags.add("block", "minecraft:mineable/pickaxe", rid(block))
     import nuclear
     nuclear.write_tags(tags, rid)
+    # The tower's holograms (tower/Holograms): only a creative player breaks one, and no wither or dragon.
+    import advanced_crafting
+    for block in advanced_crafting.HOLOGRAM_BLOCKS:
+        tags.add("block", "minecraft:wither_immune", rid(block))
+        tags.add("block", "minecraft:dragon_immune", rid(block))
     import wall_runs
     wall_runs.write_tags(tags, rid)
+    import exterior_data
+    exterior_data.write_tags(tags, rid)
+    # The Drone Tower's caged maintenance ladder (tools/tower_realism_art.py) climbs like a ladder.
+    tags.add("block", "minecraft:climbable", rid("tower_ladder"))
     # Biomes whose grass and leaves change colour with the seasons (client/SeasonColors).
     import seasons
     for biome in seasons.BIOMES:
@@ -1954,6 +2004,10 @@ def main():
     newest_model_finishing.generate(write)
     import model_atlas
     model_atlas.generate(write)
+    # Last of the recipes: every tower block's crafting-table recipe, whoever wrote it, is made on the Advanced Workbench
+    # (tools/advanced_crafting.py convert: the same ingredients and cost a block, in a shape bigger than 3 x 3).
+    import advanced_crafting
+    advanced_crafting.convert(DATA / MOD / "recipe")
     from generated_resource_cleanup import prune
     prune(RES, previous, WRITTEN_RESOURCES)
     # Include finished server recipes after removing obsolete generated recipes.

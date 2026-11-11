@@ -1,0 +1,47 @@
+{
+ "textures": {
+  "glass": "jugcraft:block/ows_glass",
+  "body": "jugcraft:block/pi_cap_black",
+  "particle": "jugcraft:block/pi_cap_black"
+ },
+ "elements": [
+  {
+   "from": [
+    0,
+    0,
+    14.6
+   ],
+   "to": [
+    16,
+    16,
+    16
+   ],
+   "faces": {
+    "north": {
+     "texture": "#glass",
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ]
+    },
+    "south": {
+     "texture": "#body"
+    },
+    "east": {
+     "texture": "#body"
+    },
+    "west": {
+     "texture": "#body"
+    },
+    "up": {
+     "texture": "#body"
+    },
+    "down": {
+     "texture": "#body"
+    }
+   }
+  }
+ ]
+}

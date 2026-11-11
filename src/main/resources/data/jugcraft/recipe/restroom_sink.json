@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "I  ",
+    "QCQ",
+    " Q "
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "Q": "minecraft:quartz_slab",
+    "C": "minecraft:cauldron"
+  },
+  "result": {
+    "id": "jugcraft:restroom_sink",
+    "count": 1
+  }
+}

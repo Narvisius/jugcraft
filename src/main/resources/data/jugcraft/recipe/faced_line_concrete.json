@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "MMMMMM",
+    "GGDDGG",
+    "MMMMMM"
+  ],
+  "key": {
+    "D": "minecraft:orange_dye",
+    "G": "minecraft:glowstone_dust",
+    "M": "jugcraft:faced_wall_concrete"
+  },
+  "result": {
+    "id": "jugcraft:faced_line_concrete",
+    "count": 12
+  }
+}

@@ -29,7 +29,7 @@ public class RowFurnitureBlock extends FurnitureBlock implements Sittable {
 	public static final BooleanProperty LEFT = BooleanProperty.create("left");
 	public static final BooleanProperty RIGHT = BooleanProperty.create("right");
 	/** The variant count of the block being built (read while its state definition is made). */
-	private static int building;
+	protected static int building;
 	private final String group;
 	private final double seat;
 	private final int variants;
@@ -59,7 +59,7 @@ public class RowFurnitureBlock extends FurnitureBlock implements Sittable {
 		return new RowFurnitureBlock(properties, group, seat, variants, boxes);
 	}
 
-	private RowFurnitureBlock(Properties properties, String group, double seat, int variants, double[]... boxes) {
+	protected RowFurnitureBlock(Properties properties, String group, double seat, int variants, double[]... boxes) {
 		super(properties, boxes);
 		this.group = group;
 		this.seat = seat;
@@ -76,6 +76,11 @@ public class RowFurnitureBlock extends FurnitureBlock implements Sittable {
 		if (building > 1) {
 			builder.add(VariantFurnitureBlock.property(building));
 		}
+	}
+
+	/** The variant a state of this piece shows (what stands on it), 0 when it has none. */
+	public int variantOf(BlockState state) {
+		return variant == null ? 0 : state.getValue(variant);
 	}
 
 	@Override

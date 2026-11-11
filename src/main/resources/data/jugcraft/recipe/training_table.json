@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "HHHHHH",
+    "SS  SS"
+  ],
+  "key": {
+    "H": "minecraft:birch_planks",
+    "S": "#c:plates/steel"
+  },
+  "result": {
+    "id": "jugcraft:training_table",
+    "count": 4
+  }
+}

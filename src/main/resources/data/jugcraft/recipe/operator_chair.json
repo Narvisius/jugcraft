@@ -9,20 +9,19 @@
       "feature": "drones"
     }
   ],
-  "type": "minecraft:crafting_shaped",
-  "category": "building",
+  "type": "jugcraft:advanced_crafting",
   "pattern": [
-    "  W",
-    "WWW",
-    "SIS"
+    "    WW",
+    "WWWWWW",
+    "SSIISS"
   ],
   "key": {
-    "W": "minecraft:black_wool",
+    "I": "#c:ingots/iron",
     "S": "#c:ingots/steel",
-    "I": "#c:ingots/iron"
+    "W": "minecraft:black_wool"
   },
   "result": {
     "id": "jugcraft:operator_chair",
-    "count": 1
+    "count": 2
   }
 }

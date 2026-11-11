@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "III",
+    "C C",
+    "III"
+  ],
+  "key": {
+    "I": "#c:ingots/iron",
+    "C": "jugcraft:copper_cable"
+  },
+  "result": {
+    "id": "jugcraft:warehouse_trunking",
+    "count": 8
+  }
+}

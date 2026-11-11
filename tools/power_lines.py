@@ -19,17 +19,31 @@ KINDS = {
     "steel_monopole": ("Steel Monopole", "monopole", 1, 131_072, 30, 64),
     "double_circuit_monopole": ("Double-Circuit Monopole", "monopole", 2, 262_144, 32, 64),
     "compact_monopole": ("Compact Monopole", "monopole", 3, 524_288, 36, 64),
-    "lattice_tower": ("Lattice Tower", "lattice", 1, 2_097_152, 56, 128),
-    "reconductored_lattice_tower": ("Reconductored Lattice Tower", "lattice", 2, 3_145_728, 56, 128),
-    "monitored_lattice_tower": ("Monitored Lattice Tower", "lattice", 3, 3_670_016, 56, 128),
-    "uhv_tower": ("765 kV UHV Tower", "uhv", 1, 4_194_304, 65, 160),
-    "uhvdc_tower": ("UHVDC Tower", "uhvdc", 1, 5_242_880, 70, 160),
+    "lattice_345_tower": ("345 kV Lattice Tower", "lattice", 1, 1_048_576, 31, 128),
+    "lattice_tower": ("Lattice Tower", "lattice", 2, 2_097_152, 43, 128),
+    "reconductored_lattice_tower": ("Reconductored Lattice Tower", "lattice", 3, 3_145_728, 43, 128),
+    "monitored_lattice_tower": ("Monitored Lattice Tower", "lattice", 4, 3_670_016, 43, 128),
+    "uhv_tower": ("765 kV UHV Tower", "uhv", 1, 4_194_304, 53, 160),
+    "uhvdc_tower": ("UHVDC Tower", "uhvdc", 1, 5_242_880, 71, 160),
     "superconducting_pylon": ("Superconducting Pylon", "superconducting", 1, 16_777_216, 20, 64),
     "service_pedestal": ("Service Pedestal", "box", 1, 16_384, 2, 32),
     "pad_mount_transformer": ("Pad-Mount Transformer", "box", 2, 524_288, 2, 64),
     "unit_substation": ("Unit Substation", "box", 3, 16_777_216, 11, 160),
     "converter_station": ("HVDC Converter Station", "box", 4, 5_242_880, 14, 160),
+    "line_gantry": ("Switchyard Line Gantry", "box", 5, 16_777_216, 18, 160),
 }
+# The supports drawn and wired from their models (power lines round 2, tools/line_models.py): LineKind's model keys.
+MODELS = {"wooden_pole": "wooden_pole", "double_arm_pole": "double_arm_pole", "spun_concrete_pole": "spun_concrete_pole",
+          "steel_monopole": "steel_monopole", "double_circuit_monopole": "double_circuit_monopole", "compact_monopole": "compact_monopole",
+          "lattice_345_tower": "lattice_345", "lattice_tower": "lattice_500", "reconductored_lattice_tower": "lattice_500r",
+          "monitored_lattice_tower": "lattice_500m", "uhv_tower": "uhv_765", "uhvdc_tower": "uhvdc",
+          # part 2: the new superconducting pylon and the boxes (supports.json "boxes")
+          "superconducting_pylon": "superconducting", "service_pedestal": "service_pedestal",
+          "pad_mount_transformer": "pad_mount_transformer", "unit_substation": "unit_substation",
+          "converter_station": "converter_station"}
+BOX_MODELS = {"service_pedestal", "pad_mount_transformer", "unit_substation", "converter_station"}
+# Part of a plant (the switchyard's line gantry): no item, recipe or loot; it turns with the plant.
+HIDDEN = {"line_gantry"}
 FRAME = "power_line_frame"
 
 TOOLTIPS = {
@@ -39,7 +53,8 @@ TOOLTIPS = {
     "steel_monopole": "138 kV sub-transmission. Wires to steel monopoles; feeds a Pad-Mount Transformer or a Unit Substation",
     "double_circuit_monopole": "230 kV, two circuits",
     "compact_monopole": "345 kV compact line on braced post insulators",
-    "lattice_tower": "500 kV transmission, four-conductor bundles. Stands its legs on uneven ground",
+    "lattice_345_tower": "345 kV transmission, twin bundles: the line out of a plant's switchyard. Stands its legs on uneven ground",
+    "lattice_tower": "500 kV transmission, triple bundles. Stands its legs on uneven ground",
     "reconductored_lattice_tower": "Carbon-core conductors: more current on the same tower",
     "monitored_lattice_tower": "Line sensors let it run closer to its limit",
     "uhv_tower": "765 kV, six-conductor bundles on V strings",
@@ -49,6 +64,7 @@ TOOLTIPS = {
     "pad_mount_transformer": "Fed by a riser down a wooden pole or monopole (buried cable, no overhead wire)",
     "unit_substation": "Takes every line but UHVDC on its gantry. Holds nitrogen for superconducting lines",
     "converter_station": "Where a UHVDC line becomes the mod's cables",
+    "line_gantry": "A switchyard's outgoing line: string a lattice or monopole line from it",
 }
 
 LANG = {
@@ -85,8 +101,10 @@ CRAFTING = {
                                                        "M": "jugcraft:steel_monopole", "S": "#c:ingots/steel"}, 1),
     "compact_monopole": (["XAX", "PMP", "PCP"], {"X": "jugcraft:plastic_sheet", "A": "jugcraft:aluminum_cable", "P": "#c:plates/steel",
                                                 "M": "jugcraft:double_circuit_monopole", "C": "jugcraft:advanced_circuit"}, 1),
-    "lattice_tower": (["AXA", "SMS", "BSB"], {"A": "jugcraft:aluminum_cable", "X": "jugcraft:plastic_sheet", "S": "#c:ingots/steel",
-                                             "M": "jugcraft:compact_monopole", "B": "#c:storage_blocks/steel"}, 1),
+    "lattice_345_tower": (["AXA", "SMS", "BSB"], {"A": "jugcraft:aluminum_cable", "X": "jugcraft:plastic_sheet", "S": "#c:ingots/steel",
+                                                 "M": "jugcraft:compact_monopole", "B": "#c:storage_blocks/steel"}, 1),
+    "lattice_tower": (["AXA", "SLS", "BSB"], {"A": "jugcraft:aluminum_cable", "X": "jugcraft:plastic_sheet", "S": "#c:plates/steel",
+                                             "L": "jugcraft:lattice_345_tower", "B": "#c:storage_blocks/steel"}, 1),
     "reconductored_lattice_tower": (["KAK", "ALA", "KAK"], {"K": "jugcraft:coke", "A": "jugcraft:aluminum_cable",
                                                            "L": "jugcraft:lattice_tower"}, 1),
     "monitored_lattice_tower": (["CRC", "PLP", "CRC"], {"C": "jugcraft:advanced_circuit", "R": "minecraft:redstone",
@@ -115,8 +133,8 @@ BASE_METALS = ("copper", "iron", "gold", "steel")
 
 
 def blocks():
-    """The anchor blocks, each with an item (the frame block has neither item nor name in the item list)."""
-    return list(KINDS)
+    """The anchor blocks, each with an item (the frame block and the line gantry have none)."""
+    return [k for k in KINDS if k not in HIDDEN]
 
 
 def recipe_features(result, feature_of):
@@ -467,6 +485,11 @@ def write_assets(write, rid, assets, lang):
         lang[f"tooltip.{MOD}.power_line.{kind}"] = TOOLTIPS[kind]
         # The structure is drawn by client/LineRenderer.java; the block model only gives break particles.
         write(assets / "models" / "block" / f"{kind}.json", {"textures": {"particle": particle(kind)}})
+        if kind in HIDDEN:
+            # (the line gantry: drawn by its switchyard; it turns with the plant)
+            write(assets / "blockstates" / f"{kind}.json",
+                  {"variants": {f"facing={f}": {"model": rid(f"block/{kind}")} for f in ("north", "south", "west", "east")}})
+            continue
         write(assets / "blockstates" / f"{kind}.json", {"variants": {"": {"model": rid(f"block/{kind}")}}})
         # The item shows the structure itself, in miniature (tools/structure_items.py).
         structure_items.line_item(write, rid, assets, kind, particle(kind))
@@ -477,7 +500,8 @@ def write_assets(write, rid, assets, lang):
 
 def write_loot(write, rid, out, self_drop):
     for kind in KINDS:
-        write(out / f"{kind}.json", self_drop(kind))
+        if kind not in HIDDEN:
+            write(out / f"{kind}.json", self_drop(kind))
     # Breaking a frame block breaks the structure, and its anchor drops the item.
     write(out / f"{FRAME}.json", {"type": "minecraft:block", "pools": [], "random_sequence": rid(f"blocks/{FRAME}")})
 

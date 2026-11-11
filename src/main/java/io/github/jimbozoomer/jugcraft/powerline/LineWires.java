@@ -1,57 +1,42 @@
 package io.github.jimbozoomer.jugcraft.powerline;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
 
 /**
- * Where a support's conductors are in the world and how the wires between two structures hang. Shared by the
- * server (wire path checks, electrocution) and the client (drawing), so what you see is what can shock you.
+ * How the wires between two structures hang (power lines round 2: each end's conductors from its layout,
+ * {@link LineGeometry}). Shared by the server (wire path checks, electrocution) and the client (drawing), so what you
+ * see is what can shock you.
+ *
+ * <p>The phases are matched across the span as the approved turn sheets were drawn (line_supports' turn scene): at
+ * each end they are put in order across the line (left to right as seen along it, then top to bottom), and matched
+ * in that order; within a phase the sub-conductors are matched the same way; so no two wires of a span cross. When
+ * one end has fewer phases, the order-keeping matching that keeps the ends closest wins; a phase of one conductor
+ * (a box's terminal) takes all of a bundle's sub-conductors. A Pad-Mount Transformer is fed by a riser down the pole
+ * and a buried cable, so it has no overhead wire; a Service Pedestal's drop (triplex) sags more than a line. A
+ * superconducting cable hangs nearly straight from its messenger (the messenger sags 2 %); its last span into a
+ * substation's termination has no messenger.
  */
 public final class LineWires {
 	/** Points per wire when sampling its curve. */
 	public static final int SAMPLES = 16;
+	/** A service drop's sag (of its length, at mid-span: tools/box_scene.py's triplex). */
+	public static final double DROP_SAG = 0.025;
+	/** A superconducting cable's messenger's sag (tools/sc_scene.py). */
+	public static final double MESSENGER_SAG = 0.02;
 
 	private LineWires() {
 	}
 
-	/**
-	 * Which way a support faces: its local z axis runs along its line (the mean direction to the structures it is
-	 * wired to, with wires leaving the other way folded onto it), so its crossarms stand across the line.
-	 */
+	/** The way a structure faces (LineGeometry.yaw; kept for callers of the old name). */
 	public static double yaw(BlockPos self, List<BlockPos> connections) {
-		double ax = 0, az = 0;
-		for (BlockPos other : connections) {
-			double dx = other.getX() - self.getX(), dz = other.getZ() - self.getZ();
-			double len = Math.hypot(dx, dz);
-			if (len < 1e-6) {
-				continue;
-			}
-			dx /= len;
-			dz /= len;
-			if (ax * dx + az * dz < 0) {
-				dx = -dx;
-				dz = -dz;
-			}
-			ax += dx;
-			az += dz;
-		}
-		return ax == 0 && az == 0 ? 0 : Math.atan2(ax, az);
-	}
-
-	/** The structure's conductor points in world space, for wires to a structure of {@code partner}'s kind. Boxes keep their fixed orientation. */
-	public static List<Vec3> conductors(BlockPos anchor, LineKind kind, List<BlockPos> connections, LineKind partner) {
-		double yaw = kind.isBox() ? 0 : yaw(anchor, connections);
-		double c = Math.cos(yaw), s = Math.sin(yaw);
-		List<Vec3> out = new ArrayList<>();
-		for (Vec3 p : kind.attachPoints(partner)) {
-			// local x runs across the line (cos, -sin), local z along it (sin, cos)
-			double wx = p.x * c + p.z * s;
-			double wz = -p.x * s + p.z * c;
-			out.add(new Vec3(anchor.getX() + 0.5 + wx, anchor.getY() + p.y, anchor.getZ() + 0.5 + wz));
-		}
-		return out;
+		return LineGeometry.yaw(self, connections);
 	}
 
 	/** One wire: its end points and its sag at mid-span. */
@@ -61,79 +46,141 @@ public final class LineWires {
 		}
 	}
 
-	/**
-	 * The wires between two structures. Both ends' conductors are put in order across the line (left to right as
-	 * seen along it, top to bottom on the same side) and matched in that order, so no two wires of a span ever
-	 * cross; when one end has fewer conductors, the matching that keeps the ends closest in position wins. A
-	 * Pad-Mount Transformer is fed by a riser down the pole and a buried cable, so it has no overhead wire.
-	 */
-	public static List<Wire> between(BlockPos a, LineKind ka, List<BlockPos> ca, BlockPos b, LineKind kb, List<BlockPos> cb) {
-		List<Wire> wires = new ArrayList<>();
+	/** A span: each phase's sub-conductor wires (a bundle's together, for its spacers), and the shield wires. */
+	public record Span(List<List<Wire>> phases, List<Wire> shields, LineGeometry.@Nullable WireSpec spec) {
+		public List<Wire> conductors() {
+			List<Wire> out = new ArrayList<>();
+			phases.forEach(out::addAll);
+			return out;
+		}
+	}
+
+	/** What stands at a position in a level (null if nothing loaded there). */
+	public static Function<BlockPos, @Nullable LineKind> kinds(@Nullable Level level) {
+		return pos -> level == null ? null : LineRegistry.of(level).kindAt(pos);
+	}
+
+	/** The live conductors between two structures (no shield wires: they are grounded). */
+	public static List<Wire> between(@Nullable Level level, BlockPos a, LineKind ka, List<BlockPos> ca, BlockPos b, LineKind kb, List<BlockPos> cb) {
+		return span(level, a, ka, ca, b, kb, cb).conductors();
+	}
+
+	/** The span between two structures (each with its own wires, which set how it faces and stands). */
+	public static Span span(@Nullable Level level, BlockPos a, LineKind ka, List<BlockPos> ca, BlockPos b, LineKind kb, List<BlockPos> cb) {
+		Function<BlockPos, @Nullable LineKind> kinds = pos -> pos.equals(a) ? ka : pos.equals(b) ? kb : kinds(level).apply(pos);
+		return span(LineGeometry.layout(level, ka, a, ca, kinds), LineGeometry.layout(level, kb, b, cb, kinds));
+	}
+
+	/** The span between two laid-out structures. */
+	public static Span span(LineGeometry.Layout la, LineGeometry.Layout lb) {
+		List<List<Wire>> phases = new ArrayList<>();
+		List<Wire> shields = new ArrayList<>();
+		LineKind ka = la.kind, kb = lb.kind;
 		if (ka == LineKind.PAD_MOUNT_TRANSFORMER || kb == LineKind.PAD_MOUNT_TRANSFORMER) {
-			return wires;
+			return new Span(phases, shields, null);
 		}
-		List<Vec3> pa = conductors(a, ka, ca, kb);
-		List<Vec3> pb = conductors(b, kb, cb, ka);
+		List<List<Vec3>> pa = la.phasesTo(lb.anchor), pb = lb.phasesTo(la.anchor);
 		if (pa.isEmpty() || pb.isEmpty()) {
-			return wires;
+			return new Span(phases, shields, null);
 		}
-		double span = Math.sqrt(a.distSqr(b));
 		boolean supercon = ka == LineKind.SUPERCONDUCTING_PYLON || kb == LineKind.SUPERCONDUCTING_PYLON;
-		double sag = span * (supercon ? 0.01 : 0.03);
-		// Across the line, to put each end's conductors in order.
-		double lx = b.getX() - a.getX(), lz = b.getZ() - a.getZ();
+		LineGeometry.Support sup = supercon ? (ka == LineKind.SUPERCONDUCTING_PYLON ? la.support : lb.support)
+				: la.support != null ? la.support : lb.support;
+		LineGeometry.@Nullable WireSpec spec = sup == null ? null : sup.wire();
+		boolean drop = ka == LineKind.SERVICE_PEDESTAL || kb == LineKind.SERVICE_PEDESTAL;
+		double sagK = drop ? DROP_SAG : spec != null ? spec.sag() : 0.03;
+		double shieldSag = supercon ? MESSENGER_SAG : sagK * 0.9;
+		// Across the line, to put each end's conductors in order (left of travel from a to b positive).
+		Vec3 a3 = Vec3.atBottomCenterOf(la.anchor), b3 = Vec3.atBottomCenterOf(lb.anchor);
+		double lx = b3.x - a3.x, lz = b3.z - a3.z;
 		double len = Math.max(1e-6, Math.hypot(lx, lz));
-		double px = -lz / len, pz = lx / len;
-		Vec3 mid = Vec3.atCenterOf(a).add(Vec3.atCenterOf(b)).scale(0.5);
-		java.util.function.ToDoubleFunction<Vec3> side = p -> (p.x - mid.x) * px + (p.z - mid.z) * pz;
-		java.util.Comparator<Vec3> order = java.util.Comparator.comparingDouble(side::applyAsDouble).thenComparing(p -> -p.y);
-		List<Vec3> sa = new ArrayList<>(pa);
-		List<Vec3> sb = new ArrayList<>(pb);
-		sa.sort(order);
-		sb.sort(order);
-		boolean swap = sa.size() > sb.size();
-		List<Vec3> few = swap ? sb : sa;
-		List<Vec3> many = swap ? sa : sb;
-		int f = few.size(), m = many.size();
-		// Cheapest order-keeping matching of every few-side conductor to a distinct many-side one.
-		double[][] cost = new double[f][m];
-		for (int i = 0; i < f; i++) {
-			for (int j = 0; j < m; j++) {
-				cost[i][j] = Math.abs(side.applyAsDouble(few.get(i)) - side.applyAsDouble(many.get(j))) + 0.5 * Math.abs(few.get(i).y - many.get(j).y);
+		double leftX = lz / len, leftZ = -lx / len;
+		Vec3 mid = a3.add(b3).scale(0.5);
+		java.util.function.ToDoubleFunction<Vec3> side = p -> (p.x - mid.x) * leftX + (p.z - mid.z) * leftZ;
+		java.util.function.ToDoubleFunction<List<Vec3>> phSide = ph -> ph.stream().mapToDouble(side).average().orElse(0);
+		java.util.function.ToDoubleFunction<List<Vec3>> phY = ph -> ph.stream().mapToDouble(p -> p.y).average().orElse(0);
+		Comparator<List<Vec3>> phOrder = Comparator.comparingDouble((List<Vec3> ph) -> Math.round(phSide.applyAsDouble(ph) * 1000) / 1000.0)
+				.thenComparingDouble(ph -> -phY.applyAsDouble(ph));
+		List<List<Vec3>> sa = new ArrayList<>(pa), sb = new ArrayList<>(pb);
+		sa.sort(phOrder);
+		sb.sort(phOrder);
+		int[][] match = match(sa, sb, (x, y) -> Math.abs(phSide.applyAsDouble(x) - phSide.applyAsDouble(y)) + 0.5 * Math.abs(phY.applyAsDouble(x) - phY.applyAsDouble(y)));
+		Comparator<Vec3> subOrder = Comparator.comparingDouble((Vec3 p) -> Math.round(side.applyAsDouble(p) * 1000) / 1000.0).thenComparingDouble(p -> -p.y);
+		for (int[] m : match) {
+			List<Vec3> x = new ArrayList<>(sa.get(m[0])), y = new ArrayList<>(sb.get(m[1]));
+			x.sort(subOrder);
+			y.sort(subOrder);
+			List<Wire> bundle = new ArrayList<>();
+			if (x.size() == 1 || y.size() == 1) {
+				// A terminal of one conductor takes every sub-conductor of a bundle.
+				for (Vec3 p : x) {
+					for (Vec3 q : y) {
+						bundle.add(wire(p, q, sagK));
+					}
+				}
+			} else {
+				for (int[] s : match(x, y, (p, q) -> Math.abs(side.applyAsDouble(p) - side.applyAsDouble(q)) + 0.5 * Math.abs(p.y - q.y))) {
+					bundle.add(wire(x.get(s[0]), y.get(s[1]), sagK));
+				}
+			}
+			phases.add(bundle);
+		}
+		// The shield wires: in order across the line, one to one (or the first to the first).
+		List<Vec3> ha = la.shieldWorld(), hb = lb.shieldWorld();
+		Comparator<Vec3> across = Comparator.comparingDouble(side);
+		ha.sort(across);
+		hb.sort(across);
+		if (!ha.isEmpty() && !hb.isEmpty() && !(supercon && (ka.isBox() || kb.isBox()))) {
+			if (ha.size() == hb.size()) {
+				for (int i = 0; i < ha.size(); i++) {
+					shields.add(wire(ha.get(i), hb.get(i), shieldSag));
+				}
+			} else {
+				shields.add(wire(ha.get(0), hb.get(0), shieldSag));
 			}
 		}
+		return new Span(phases, shields, spec);
+	}
+
+	private static Wire wire(Vec3 p, Vec3 q, double sagK) {
+		return new Wire(p, q, Math.hypot(q.x - p.x, q.z - p.z) * sagK);
+	}
+
+	/**
+	 * The cheapest order-keeping matching of every item of the shorter list to a distinct item of the longer one
+	 * ({index in a, index in b} pairs, in order).
+	 */
+	static <T> int[][] match(List<T> a, List<T> b, java.util.function.ToDoubleBiFunction<T, T> cost) {
+		boolean swap = a.size() > b.size();
+		List<T> few = swap ? b : a, many = swap ? a : b;
+		int f = few.size(), m = many.size();
 		double[][] best = new double[f + 1][m + 1];
 		int[][] from = new int[f + 1][m + 1];
 		for (int i = 1; i <= f; i++) {
 			java.util.Arrays.fill(best[i], Double.MAX_VALUE);
 			for (int j = i; j <= m; j++) {
-				// Either conductor j-1 of many is unused, or it takes few conductor i-1.
 				if (best[i][j - 1] < best[i][j]) {
 					best[i][j] = best[i][j - 1];
 					from[i][j] = -1;
 				}
-				double take = best[i - 1][j - 1] == Double.MAX_VALUE ? Double.MAX_VALUE : best[i - 1][j - 1] + cost[i - 1][j - 1];
+				double take = best[i - 1][j - 1] == Double.MAX_VALUE ? Double.MAX_VALUE : best[i - 1][j - 1] + cost.applyAsDouble(few.get(i - 1), many.get(j - 1));
 				if (take < best[i][j]) {
 					best[i][j] = take;
 					from[i][j] = j - 1;
 				}
 			}
 		}
-		int[] match = new int[f];
+		int[][] out = new int[f][];
 		for (int i = f, j = m; i > 0; ) {
 			if (from[i][j] >= 0) {
-				match[i - 1] = from[i][j];
+				out[i - 1] = swap ? new int[] {from[i][j], i - 1} : new int[] {i - 1, from[i][j]};
 				i--;
 				j--;
 			} else {
 				j--;
 			}
 		}
-		for (int i = 0; i < f; i++) {
-			Vec3 p = few.get(i), q = many.get(match[i]);
-			wires.add(swap ? new Wire(q, p, sag) : new Wire(p, q, sag));
-		}
-		return wires;
+		return out;
 	}
 
 	/** Shortest distance from a point to a wire (sampled). */

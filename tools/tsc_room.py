@@ -79,8 +79,9 @@ MON_HALF = 4.3       # a monitor's half width (a 24-inch screen: 8.6 px)
 def _monitor(cx, tex="pi_tsc_screen!"):
     """A 24-inch monitor on the stand's arm: its black case, the screen a hair proud of it."""
     h = MON_HALF
-    return [(cx - h, 14.4, 5.0, cx + h, 20.2, SCREEN_Z - 0.05, {"*": "pi_tsc_case", "south": "pi_tsc_case"}),
-            (cx - h + 0.25, 14.65, SCREEN_Z - 0.05, cx + h - 0.25, 19.95, SCREEN_Z, {"*": "pi_tsc_case", "south": tex}),
+    # (The screen a tenth proud of the case, never closer: tools/zfight.py would otherwise pull it out over its live lines.)
+    return [(cx - h, 14.4, 5.0, cx + h, 20.2, SCREEN_Z - 0.1, {"*": "pi_tsc_case", "south": "pi_tsc_case"}),
+            (cx - h + 0.25, 14.65, SCREEN_Z - 0.1, cx + h - 0.25, 19.95, SCREEN_Z, {"*": "pi_tsc_case", "south": tex}),
             (cx - 0.6, 15.6, 4.6, cx + 0.6, 17.6, 5.0, BLACK)]
 
 
@@ -584,7 +585,8 @@ def tsc_frisker_boxes():
     for x, y in ((sx0 + 0.6, sy0 + 0.6), (sx1 - 0.6, sy0 + 0.6), (sx0 + 0.6, sy1 - 0.6), (sx1 - 0.6, sy1 - 0.6)):
         out.append((x - 0.2, y - 0.2, 0.4, x + 0.2, y + 0.2, 0.5, "pi_steel"))
     # A box of shoe covers and a step-off pad on the table.
-    out += [(1.6, FR_TABLE, 9.0, 4.6, FR_TABLE + 1.6, 12.4, {"*": "pi_carton", "up": "pi_carton"})]
+    # (Left of the ratemeter, clear of its meter.)
+    out += [(1.1, FR_TABLE, 9.0, 3.3, FR_TABLE + 1.6, 12.4, {"*": "pi_carton", "up": "pi_carton"})]
     return out
 
 
@@ -887,8 +889,8 @@ DESK = {"P": "#c:plates/steel", "G": "minecraft:black_stained_glass_pane", "C": 
 CRAFTING = {
     TC_KEY: (["GCG", "WPW", "P P"], DESK, 1),
     CC_KEY: (["GCG", "WXW", "P P"], dict(DESK, X="minecraft:note_block"), 1),
-    NRC_KEY: (["GCG", "QQQ", "P P"], dict({k: v for k, v in DESK.items() if k != "W"}, Q="minecraft:glass_pane"), 1),
-    VW_KEY: (["GGG", "GCG", " P "], {k: v for k, v in DESK.items() if k != "W"}, 1),
+    NRC_KEY: (["GCG", "QQQ", "P P"], dict(DESK, Q="minecraft:glass_pane"), 1),
+    VW_KEY: (["GGG", "GCG", " P "], DESK, 1),
     CB_KEY: (["LLL", "PCP"], {"L": "minecraft:redstone_lamp", "P": "#c:plates/steel", "C": "jugcraft:basic_circuit"}, 1),
     SB_KEY: (["QQQ", "QIQ"], {"Q": "minecraft:quartz_slab", "I": "minecraft:ink_sac"}, 1),
     AM_KEY: (["PGP", "CXC", "PRP"], {"P": "#c:plates/steel", "G": "minecraft:glass_pane", "C": "jugcraft:basic_circuit",

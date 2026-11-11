@@ -1,0 +1,82 @@
+{
+ "parent": "minecraft:block/block",
+ "textures": {
+  "dc_acrylic": "jugcraft:block/dc_acrylic",
+  "dc_black": "jugcraft:block/dc_black",
+  "particle": "jugcraft:block/dc_lacquer"
+ },
+ "elements": [
+  {
+   "from": [
+    14.25,
+    0,
+    1.15
+   ],
+   "to": [
+    14.85,
+    16,
+    1.75
+   ],
+   "faces": {
+    "north": {
+     "texture": "#dc_black"
+    },
+    "south": {
+     "texture": "#dc_black"
+    },
+    "east": {
+     "texture": "#dc_black"
+    },
+    "west": {
+     "texture": "#dc_black"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    0,
+    1.325
+   ],
+   "to": [
+    14.25,
+    16,
+    1.575
+   ],
+   "faces": {
+    "north": {
+     "texture": "#dc_acrylic"
+    },
+    "south": {
+     "texture": "#dc_acrylic"
+    },
+    "east": {
+     "texture": "#dc_acrylic"
+    }
+   }
+  },
+  {
+   "from": [
+    14.425,
+    0,
+    1.75
+   ],
+   "to": [
+    14.675,
+    16,
+    16
+   ],
+   "faces": {
+    "north": {
+     "texture": "#dc_acrylic"
+    },
+    "east": {
+     "texture": "#dc_acrylic"
+    },
+    "west": {
+     "texture": "#dc_acrylic"
+    }
+   }
+  }
+ ]
+}

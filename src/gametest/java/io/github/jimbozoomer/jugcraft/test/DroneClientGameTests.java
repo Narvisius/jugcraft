@@ -109,7 +109,7 @@ public class DroneClientGameTests implements FabricClientGameTest {
 			context.takeScreenshot("jugcraft_drone_depot_done");
 
 			// Every drone design, docked: the large ones on the first row, medium and small on the second.
-			String[] names = {"t7_aerostat", "t8_ion_glider", "t9_heavy_lifter"};
+			String[] names = {"t7_spine_carrier", "t8_halo_ion_carrier", "t9_armoured_dropship"};
 			for (int pad = 0; pad < 3; pad++) {
 				server.runCommand("tp @p %.1f %d %.1f 180 32".formatted(x - 5.5 + 6 * pad, y + 4, z + 11.0));
 				context.waitTicks(15);

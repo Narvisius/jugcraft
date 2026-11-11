@@ -39,20 +39,32 @@ public final class LinePlacement {
 
 	/** Where a structure of this kind would stand if placed at {@code pos} (lifted to its highest foot), or null. */
 	public static @Nullable BlockPos footing(Level level, BlockPos pos, LineKind kind) {
-		int r = kind.halfWidth();
-		if (kind.isBox() || r == 0) {
+		return footing(level, pos, kind, prospect(level, pos, kind));
+	}
+
+	/**
+	 * How a structure of this kind would stand placed at {@code pos}: wired to the structure it would wire itself to
+	 * (turned to it, its angle body at the line's end), or alone.
+	 */
+	public static LineGeometry.Layout prospect(Level level, BlockPos pos, LineKind kind) {
+		BlockPos partner = autoPartner(level, pos, kind);
+		return LineGeometry.layout(kind, pos, partner == null ? List.of() : List.of(partner), LineWires.kinds(level));
+	}
+
+	/** {@link #footing(Level, BlockPos, LineKind)} for a layout: a tower's feet are where its body's footings are. */
+	public static @Nullable BlockPos footing(Level level, BlockPos pos, LineKind kind, LineGeometry.Layout layout) {
+		List<double[]> corners = layout.legCorners();
+		if (kind.isBox() || corners.isEmpty()) {
 			return pos;
 		}
 		int lowest = Integer.MAX_VALUE, highest = Integer.MIN_VALUE;
-		for (int sx : new int[] {-1, 1}) {
-			for (int sz : new int[] {-1, 1}) {
-				int ground = groundBelow(level, pos.offset(sx * r, 0, sz * r));
-				if (ground == Integer.MIN_VALUE) {
-					return null;
-				}
-				lowest = Math.min(lowest, ground);
-				highest = Math.max(highest, ground);
+		for (double[] c : corners) {
+			int ground = groundBelow(level, pos.offset(layout.cellOf(c[0], 0, c[1])));
+			if (ground == Integer.MIN_VALUE) {
+				return null;
 			}
+			lowest = Math.min(lowest, ground);
+			highest = Math.max(highest, ground);
 		}
 		if (highest - lowest > MAX_SLOPE) {
 			return null;
@@ -64,7 +76,6 @@ public final class LinePlacement {
 	private static int groundBelow(Level level, BlockPos foot) {
 		for (int dy = MAX_SLOPE; dy >= -MAX_SLOPE; dy--) {
 			BlockPos p = foot.offset(0, dy, 0);
-			if (!level.isLoaded(p)) return Integer.MIN_VALUE;
 			BlockState state = level.getBlockState(p);
 			if (!state.canBeReplaced() && !state.getCollisionShape(level, p).isEmpty() && level.getBlockState(p.above()).canBeReplaced()) {
 				return p.getY();
@@ -75,7 +86,12 @@ public final class LinePlacement {
 
 	/** Whether the anchor and every frame block of a structure here are free (ignoring blocks of {@code ignore}). */
 	public static boolean fits(Level level, BlockPos anchor, LineKind kind, @Nullable BlockPos ignore) {
-		List<BlockPos> cells = new ArrayList<>(kind.frames());
+		return fits(level, anchor, LineGeometry.frames(prospect(level, anchor, kind)), ignore);
+	}
+
+	/** Whether the anchor and these frame cells (offsets) are free (ignoring blocks of {@code ignore}). */
+	public static boolean fits(Level level, BlockPos anchor, List<BlockPos> frames, @Nullable BlockPos ignore) {
+		List<BlockPos> cells = new ArrayList<>(frames);
 		cells.add(BlockPos.ZERO);
 		for (BlockPos offset : cells) {
 			BlockPos p = anchor.offset(offset);
@@ -92,20 +108,26 @@ public final class LinePlacement {
 		return true;
 	}
 
-	/** Places the structure's frame blocks (the anchor is already placed). */
-	static void placeFrames(Level level, BlockPos anchor, LineKind kind) {
+	/** Places a structure's frame blocks (the anchor is already placed) where nothing else stands; returns those placed. */
+	static List<BlockPos> placeFrames(Level level, BlockPos anchor, List<BlockPos> frames) {
 		BlockState frame = JugcraftPowerLines.FRAME.defaultBlockState();
-		for (BlockPos offset : kind.frames()) {
-			level.setBlock(anchor.offset(offset), frame, Block.UPDATE_ALL);
+		List<BlockPos> placed = new ArrayList<>();
+		for (BlockPos offset : frames) {
+			BlockPos p = anchor.offset(offset);
+			if (!level.isOutsideBuildHeight(p) && (level.getBlockState(p).canBeReplaced() || level.getBlockState(p).is(JugcraftPowerLines.FRAME))) {
+				level.setBlock(p, frame, Block.UPDATE_ALL);
+				placed.add(offset);
+			}
 		}
+		return placed;
 	}
 
 	/** Removes a structure's frame blocks quietly (no drops; it is the anchor that drops the item). */
-	static void clearFrames(ServerLevel level, BlockPos anchor, LineKind kind) {
+	static void clearFrames(ServerLevel level, BlockPos anchor, List<BlockPos> frames) {
 		boolean was = CLEARING.get();
 		CLEARING.set(true);
 		try {
-			for (BlockPos offset : kind.frames()) {
+			for (BlockPos offset : frames) {
 				BlockPos p = anchor.offset(offset);
 				if (level.getBlockState(p).is(JugcraftPowerLines.FRAME) && anchor.equals(LineRegistry.of(level).anchorOf(p))) {
 					level.setBlock(p, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
@@ -118,23 +140,22 @@ public final class LinePlacement {
 
 	/** Places a structure from its item. Returns the anchor, or null with the reason sent to the player. */
 	public static @Nullable BlockPos place(ServerLevel level, BlockPos at, LineKind kind, @Nullable Player player) {
-		BlockPos anchor = footing(level, at, kind);
+		LineGeometry.Layout layout = player != null ? prospect(level, at, kind) : LineGeometry.layout(kind, at, List.of(), LineWires.kinds(level));
+		BlockPos anchor = footing(level, at, kind, layout);
 		if (anchor == null) {
 			tell(player, "message.jugcraft.power_line.too_steep");
 			return null;
 		}
-		if (player != null) {
-			if (!io.github.jimbozoomer.jugcraft.placement.StructurePermissions.mayChange(level, anchor, player)) return null;
-			for (BlockPos offset : kind.frames()) {
-				if (!io.github.jimbozoomer.jugcraft.placement.StructurePermissions.mayChange(level, anchor.offset(offset), player)) return null;
-			}
-		}
-		if (!fits(level, anchor, kind, null)) {
+		List<BlockPos> frames = LineGeometry.frames(layout);
+		if (!fits(level, anchor, frames, null)) {
 			tell(player, "message.jugcraft.power_line.no_room");
 			return null;
 		}
 		level.setBlock(anchor, JugcraftPowerLines.ANCHORS.get(kind).defaultBlockState(), Block.UPDATE_ALL);
-		placeFrames(level, anchor, kind);
+		if (level.getBlockEntity(anchor) instanceof LineAnchorBlockEntity placed) {
+			placed.setFrames(frames);
+			placed.setFrames(placeFrames(level, anchor, frames));
+		}
 		if (player != null) {
 			BlockPos partner = autoPartner(level, anchor, null);
 			if (partner != null) {
@@ -206,7 +227,10 @@ public final class LinePlacement {
 		withB.add(b);
 		List<BlockPos> withA = new ArrayList<>(cb);
 		withA.add(a);
-		for (LineWires.Wire wire : LineWires.between(a, ka, withB, b, kb, withA)) {
+		LineWires.Span span = LineWires.span(level, a, ka, withB, b, kb, withA);
+		List<LineWires.Wire> all = new ArrayList<>(span.conductors());
+		all.addAll(span.shields());
+		for (LineWires.Wire wire : all) {
 			double length = wire.a().distanceTo(wire.b());
 			int steps = Math.max(2, (int) Math.ceil(length * 2));
 			for (int i = 1; i < steps; i++) {
@@ -226,7 +250,6 @@ public final class LinePlacement {
 	}
 
 	private static void join(ServerLevel level, BlockPos a, BlockPos b, @Nullable Player player) {
-		if (player != null && (!io.github.jimbozoomer.jugcraft.placement.StructurePermissions.mayChange(level, a, player) || !io.github.jimbozoomer.jugcraft.placement.StructurePermissions.mayChange(level, b, player))) return;
 		if (level.getBlockEntity(a) instanceof LineAnchorBlockEntity ea && level.getBlockEntity(b) instanceof LineAnchorBlockEntity eb) {
 			ea.connect(b);
 			eb.connect(a);
@@ -236,7 +259,6 @@ public final class LinePlacement {
 	}
 
 	private static void cut(ServerLevel level, BlockPos a, BlockPos b, @Nullable Player player) {
-		if (player != null && (!io.github.jimbozoomer.jugcraft.placement.StructurePermissions.mayChange(level, a, player) || !io.github.jimbozoomer.jugcraft.placement.StructurePermissions.mayChange(level, b, player))) return;
 		if (level.getBlockEntity(a) instanceof LineAnchorBlockEntity ea) {
 			ea.disconnect(b);
 		}
@@ -296,11 +318,7 @@ public final class LinePlacement {
 		if (from.isBox() || from.family != to.family || to.tier <= from.tier) {
 			return InteractionResult.PASS;
 		}
-		if (!io.github.jimbozoomer.jugcraft.placement.StructurePermissions.mayChange(level, anchor, player)) return InteractionResult.FAIL;
-		for (BlockPos offset : to.frames()) {
-			if (!io.github.jimbozoomer.jugcraft.placement.StructurePermissions.mayChange(level, anchor.offset(offset), player)) return InteractionResult.FAIL;
-		}
-		if (!fits(level, anchor, to, anchor)) {
+		if (!fits(level, anchor, LineGeometry.frames(LineGeometry.layout(to, anchor, entity.connections(), LineWires.kinds(level))), anchor)) {
 			tell(player, "message.jugcraft.power_line.no_room");
 			return InteractionResult.FAIL;
 		}
@@ -311,8 +329,8 @@ public final class LinePlacement {
 		} finally {
 			UPGRADING.set(false);
 		}
-		placeFrames(level, anchor, to);
 		if (level.getBlockEntity(anchor) instanceof LineAnchorBlockEntity upgraded) {
+			upgraded.setFrames(List.of());
 			upgraded.setConnections(wires);
 		}
 		if (!player.getAbilities().instabuild) {

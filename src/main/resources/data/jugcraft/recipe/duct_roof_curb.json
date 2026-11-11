@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "II  II",
+    "IIAAII"
+  ],
+  "key": {
+    "A": "#c:plates/aluminum",
+    "I": "#c:plates/iron"
+  },
+  "result": {
+    "id": "jugcraft:duct_roof_curb",
+    "count": 4
+  }
+}

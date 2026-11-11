@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PP",
+    "PL",
+    "PP"
+  ],
+  "key": {
+    "P": "#c:plates/iron",
+    "L": "minecraft:leather"
+  },
+  "result": {
+    "id": "jugcraft:crew_locker_open",
+    "count": 2
+  }
+}

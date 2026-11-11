@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "YAY",
+    "CMC",
+    "SBS"
+  ],
+  "key": {
+    "Y": "minecraft:yellow_dye",
+    "A": "minecraft:piston",
+    "C": "jugcraft:advanced_circuit",
+    "M": "jugcraft:electric_motor",
+    "S": "#c:plates/steel",
+    "B": "minecraft:redstone_block"
+  },
+  "result": {
+    "id": "jugcraft:stacker_drone",
+    "count": 1
+  }
+}

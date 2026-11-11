@@ -7,6 +7,14 @@
         {
           "type": "minecraft:item",
           "name": "jugcraft:glass_door",
+          "modifier": {
+            "type": "minecraft:copy_state",
+            "block": "jugcraft:glass_door",
+            "properties": [
+              "exit",
+              "reader"
+            ]
+          },
           "condition": {
             "type": "minecraft:match_block",
             "blocks": "jugcraft:glass_door",

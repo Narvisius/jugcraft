@@ -61,7 +61,7 @@ public class GroundDetectorBlock extends LivePanelBlock {
 	/** The DC bus's volts on its battery (as a panel with no charger of its own reads it: client/EdgTelemetry.java battery). */
 	public static double busVolts(StationBatteryBlockEntity bank) {
 		double soc = bank.charge();
-		if (bank.flow > 0) {
+		if (bank.flow() > 0) {
 			return 129 + 6 * soc;
 		}
 		return soc > 0.999 ? 132 : 105 + 24 * soc;

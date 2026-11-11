@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "BBAABB",
+    "LLMMLL",
+    "SSKKSS"
+  ],
+  "key": {
+    "A": "minecraft:acacia_sapling",
+    "B": "minecraft:blaze_powder",
+    "K": "minecraft:coal_block",
+    "L": "minecraft:dark_oak_log",
+    "M": "minecraft:magma_block",
+    "S": "minecraft:basalt"
+  },
+  "result": {
+    "id": "jugcraft:ember_oak",
+    "count": 2
+  }
+}

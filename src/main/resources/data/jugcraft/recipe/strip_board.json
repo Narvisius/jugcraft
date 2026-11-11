@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "AAXXAA",
+    "AAXXAA",
+    "AAXXAA"
+  ],
+  "key": {
+    "A": "#c:plates/aluminum",
+    "X": "minecraft:paper"
+  },
+  "result": {
+    "id": "jugcraft:strip_board",
+    "count": 2
+  }
+}

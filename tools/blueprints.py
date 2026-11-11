@@ -14,7 +14,7 @@ MOD = "jugcraft"
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "src" / "main" / "resources" / "data" / MOD / "blueprint"
 
-BUILT_IN = ["drone_tower_foundation", "arc_furnace", "small_church"]
+BUILT_IN = ["arc_furnace", "small_church"]
 
 STAKE = {"survey_stake": {"display": "Survey Stake"}, "blueprint_table": {"display": "Blueprint Table"},
          "creative_energy_cell": {"display": "Creative Energy Cell"},
@@ -45,7 +45,6 @@ LANG = {
     "message.jugcraft.blueprint.mode": "Blueprint mode: %s",
     "message.jugcraft.blueprint.not_owner": "Only the player who staked this blueprint (or the party leader) can change it",
     "message.jugcraft.blueprint.complete": "%s is complete! The Survey Stake pops off (the blueprint was used up).",
-    "blueprint.jugcraft.drone_tower_foundation": "Drone Tower Foundation",
     "blueprint.jugcraft.small_church": "Small Church",
     "message.jugcraft.blueprint.printed": "Printed: %s",
     "message.jugcraft.creative_only": "Creative only",
@@ -75,17 +74,6 @@ def blueprint(name, description, cells, anchor):
         layers.append(rows)
     return {"format": 1, "name": name, "author": "Jugcraft (built in)", "description": description,
             "size": size, "anchor": list(anchor), "palette": palette, "layers": layers}
-
-
-def drone_tower_foundation():
-    """What a player builds by hand to start a Drone Tower: the 15x15 chiseled stone brick plinth with the
-    Tower Core in its middle. Upgrading the core then builds tier 1 (the Command Post) on it."""
-    cells = {(x, 0, z): "minecraft:chiseled_stone_bricks" for x in range(15) for z in range(15)}
-    cells[(7, 0, 7)] = f"{MOD}:drone_tower_core"
-    return blueprint("Drone Tower Foundation",
-                     "The 15x15 chiseled stone brick plinth and the Drone Tower Core in its middle. Build it, put "
-                     "modules in the core and press UPGRADE: the core builds the Command Post on top.",
-                     cells, (7, 0, 16))
 
 
 def small_church():
@@ -170,7 +158,7 @@ def arc_furnace():
                      cells, (1, 0, 4))
 
 
-BUILDERS = {"drone_tower_foundation": drone_tower_foundation, "arc_furnace": arc_furnace, "small_church": small_church}
+BUILDERS = {"arc_furnace": arc_furnace, "small_church": small_church}
 
 
 def write_all():

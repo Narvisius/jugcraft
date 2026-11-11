@@ -21,6 +21,8 @@ import net.minecraft.world.phys.Vec3;
  * tools/control_boards.py writes to assets/jugcraft/control_boards.json.gz: every switch, meter, recorder, lamp and
  * annunciator window of each board as boxes and quads in the equipment sheet's materials. The operations' format is
  * described in tools/control_boards.py; the frame is the equipment's own (x right, y up, z away from the operators).
+ * Since round 31 also the diesel generator set and its starting air system (tools/diesel_set.py), with turned parts
+ * ("r").
  */
 final class ControlBoards {
 	/** How far behind a flashing window its unlit face is drawn (tools/control_boards.py BLINK_DEPTH). */
@@ -46,6 +48,11 @@ final class ControlBoards {
 			boards = out;
 		}
 		return boards;
+	}
+
+	/** A section by its own name (round 34: the plant overview screen's frame and pages, not equipment), or null. */
+	static @org.jspecify.annotations.Nullable JsonObject section(String key) {
+		return boards().get(key);
 	}
 
 	/** Whether this equipment is drawn from the boards' operations. */
@@ -164,11 +171,39 @@ final class ControlBoards {
 			}
 			case "q" -> quad(f, corner(op, 1, 0), corner(op, 4, 0), corner(op, 7, 0), corner(op, 10, 0), op.get(13), false);
 			case "c" -> {
+				if (f.legends) {
+					// Knobs and pumps are the sheet's materials only.
+					return;
+				}
 				Vec3 a = v(d(op, 1), d(op, 2), d(op, 3)), b = v(d(op, 4), d(op, 5), d(op, 6));
 				double r = d(op, 7);
 				int sides = f.sides(op.get(8).getAsInt());
 				f.revolve(a, b, new double[][] {{0, r}, {a.distanceTo(b), r}}, sides, region(op.get(9)), false, false);
 				f.disc(b, b.subtract(a).normalize(), r, sides, region(op.get(10)));
+			}
+			case "r" -> {
+				// A turned part (round 31, tools/diesel_set.py rev): its radius along the way, each end capped in its own
+				// material or left open.
+				if (f.legends) {
+					return;
+				}
+				Vec3 a = v(d(op, 1), d(op, 2), d(op, 3)), b = v(d(op, 4), d(op, 5), d(op, 6));
+				JsonArray points = op.get(7).getAsJsonArray();
+				double[][] profile = new double[points.size()][];
+				for (int i = 0; i < profile.length; i++) {
+					JsonArray p = points.get(i).getAsJsonArray();
+					profile[i] = new double[] {p.get(0).getAsDouble(), p.get(1).getAsDouble()};
+				}
+				int sides = f.sides(op.get(8).getAsInt());
+				f.revolve(a, b, profile, sides, region(op.get(9)), false, false);
+				Vec3 axis = b.subtract(a).normalize();
+				double[] first = profile[0], last = profile[profile.length - 1];
+				if (!op.get(10).isJsonNull() && first[1] > 1e-3) {
+					f.disc(a.add(axis.scale(first[0])), axis.scale(-1), first[1], sides, region(op.get(10)));
+				}
+				if (!op.get(11).isJsonNull() && last[1] > 1e-3) {
+					f.disc(a.add(axis.scale(last[0])), axis, last[1], sides, region(op.get(11)));
+				}
 			}
 			default -> {
 			}
@@ -195,9 +230,18 @@ final class ControlBoards {
 		quad(f, p.at(0, 0, 0), p.at(0, 0, 1), p.at(1, 0, 1), p.at(1, 0, 0), mats[5], true);
 	}
 
-	/** One quad: a whole material repeats every block over a large face (as the renderer's own boxes do). */
+	/** A legend material: ["@", u0, v0, u1, v1] on the live boards' legend texture (tools/board_live.py). */
+	static boolean legend(JsonElement mat) {
+		return mat != null && mat.isJsonArray() && mat.getAsJsonArray().size() == 5 && mat.getAsJsonArray().get(0).isJsonPrimitive()
+				&& "@".equals(mat.getAsJsonArray().get(0).getAsString());
+	}
+
+	/**
+	 * One quad: a whole material repeats every block over a large face (as the renderer's own boxes do). A frame drawing
+	 * legends takes only the legend texture's quads, any other frame only the sheet's.
+	 */
 	private static void quad(Frame f, Vec3 tl, Vec3 bl, Vec3 br, Vec3 tr, JsonElement mat, boolean tile) {
-		if (mat == null || mat.isJsonNull()) {
+		if (mat == null || mat.isJsonNull() || legend(mat) != f.legends) {
 			return;
 		}
 		Vec3 n = tr.subtract(tl).cross(bl.subtract(tl));
@@ -213,12 +257,18 @@ final class ControlBoards {
 		}
 	}
 
-	/** A material's place on the sheet: its whole cell, or [name, u0, v0, u1, v1] for part of it. */
-	private static float[] region(JsonElement mat) {
+	/**
+	 * A material's place on its texture: a sheet material's whole cell, [name, u0, v0, u1, v1] for part of it, or a
+	 * legend's ["@", u0, v0, u1, v1] on the legend texture.
+	 */
+	static float[] region(JsonElement mat) {
 		if (mat.isJsonPrimitive()) {
 			return NuclearRenderer.material(mat.getAsString());
 		}
 		JsonArray a = mat.getAsJsonArray();
+		if (legend(mat)) {
+			return new float[] {a.get(1).getAsFloat(), a.get(2).getAsFloat(), a.get(3).getAsFloat(), a.get(4).getAsFloat()};
+		}
 		float[] cell = NuclearRenderer.material(a.get(0).getAsString());
 		float du = cell[2] - cell[0], dv = cell[3] - cell[1];
 		return new float[] {cell[0] + du * a.get(1).getAsFloat(), cell[1] + dv * a.get(2).getAsFloat(),

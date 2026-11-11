@@ -61,6 +61,12 @@ public class DroneGameTests {
 		helper.assertTrue(base.isValid() && base.padCount() == 1 && base.slots() == 4, "9x9 base: " + base.status() + ", " + base.padCount() + " pads");
 		helper.assertTrue(PlatformLayout.scan(3, 3, grid(8, 9, 1, 2, 1, 1)).status() == PlatformLayout.Status.TOO_SMALL, "8x9 is too small");
 		helper.assertTrue(PlatformLayout.scan(4, 4, grid(9, 9, 0, 0, 0, 0)).status() == PlatformLayout.Status.NO_PAD, "a platform needs a pad");
+		// a Drone Tower's own platform may be as small as its pickup (layout 40: the 3x3 on the goods lift house's top)
+		PlatformLayout.CellLookup pickupOnly = (x, z) -> x >= 0 && z >= 0 && x < 3 && z < 3 ? PlatformLayout.Cell.PICKUP : PlatformLayout.Cell.NONE;
+		helper.assertTrue(PlatformLayout.scan(1, 1, pickupOnly).status() == PlatformLayout.Status.TOO_SMALL, "a 3x3 is too small for a depot's own");
+		PlatformLayout tower = PlatformLayout.scan(1, 1, pickupOnly, PlatformLayout.PICKUP_SIZE);
+		helper.assertTrue(tower.status() == PlatformLayout.Status.NO_PAD && tower.pickups().size() == 1 && tower.pickups().get(0)[0] == 0
+				&& tower.pickups().get(0)[1] == 0, "a tower's 3x3 platform: its pickup, no pad: " + tower.status());
 		helper.succeed();
 	}
 
@@ -133,7 +139,7 @@ public class DroneGameTests {
 			helper.succeed();
 			return;
 		}
-		List<DroneTier> fleet = List.of(DroneTier.COURIER_QUAD, DroneTier.DUCTED_FAN_RUNNER, DroneTier.COURIER_QUAD, DroneTier.COURIER_QUAD);
+		List<DroneTier> fleet = List.of(DroneTier.COURIER_QUAD, DroneTier.FAN_WING_RUNNER, DroneTier.COURIER_QUAD, DroneTier.COURIER_QUAD);
 		List<DockLayout.Dock> docks = DockLayout.assign(fleet, 2);
 		java.util.Set<String> used = new java.util.HashSet<>();
 		for (DockLayout.Dock dock : docks) {
@@ -176,7 +182,7 @@ public class DroneGameTests {
 		}
 		DroneFleet fleet = new DroneFleet();
 		fleet.link(DroneTier.COURIER_QUAD, 8);
-		fleet.link(DroneTier.DUCTED_FAN_RUNNER, 8);
+		fleet.link(DroneTier.FAN_WING_RUNNER, 8);
 		helper.assertTrue(fleet.workingDraw() == 8 + 32, "working draw " + fleet.workingDraw());
 		helper.assertTrue(fleet.standbyDraw() == DroneFleet.STANDBY_BASE + 2, "standby draw " + fleet.standbyDraw());
 		helper.assertTrue(fleet.link(DroneTier.COURIER_QUAD, 3) == DroneFleet.LinkResult.NO_PAD_ROOM, "pad room is checked");

@@ -1,0 +1,80 @@
+{
+  "textures": {
+    "ceiling_tile": "jugcraft:block/ceiling_tile",
+    "pi_pnl_white": "jugcraft:block/pi_pnl_white",
+    "pi_rr_exhaust": "jugcraft:block/pi_rr_exhaust",
+    "particle": "jugcraft:block/ceiling_tile"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0.6,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#ceiling_tile"
+        },
+        "south": {
+          "texture": "#ceiling_tile"
+        },
+        "east": {
+          "texture": "#ceiling_tile"
+        },
+        "west": {
+          "texture": "#ceiling_tile"
+        },
+        "up": {
+          "texture": "#ceiling_tile"
+        },
+        "down": {
+          "texture": "#ceiling_tile"
+        }
+      }
+    },
+    {
+      "from": [
+        2.0,
+        0.0,
+        2.0
+      ],
+      "to": [
+        14.0,
+        0.6,
+        14.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_white"
+        },
+        "south": {
+          "texture": "#pi_pnl_white"
+        },
+        "east": {
+          "texture": "#pi_pnl_white"
+        },
+        "west": {
+          "texture": "#pi_pnl_white"
+        },
+        "up": {
+          "texture": "#pi_pnl_white"
+        },
+        "down": {
+          "texture": "#pi_rr_exhaust",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    }
+  ]
+}

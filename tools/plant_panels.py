@@ -18,7 +18,6 @@ block line; what stands proud of the door (meters, relay cases, the annunciator,
 real box whose front shows the same drawing. Models are in model pixels for the piece facing north: x across to the
 user's right, y up from the floor (0..32), its front the south face (z 15).
 """
-from asset_fonts import font_path
 import math
 import random
 
@@ -38,16 +37,16 @@ FONT_DIR = "/usr/share/fonts/truetype/dejavu/"
 
 
 def font(size, bold=False):
-    return ImageFont.truetype(font_path(("DejaVuSans-Bold.ttf" if bold else "DejaVuSans.ttf")), round(size * K))
+    return ImageFont.truetype(FONT_DIR + ("DejaVuSans-Bold.ttf" if bold else "DejaVuSans.ttf"), round(size * K))
 
 
 def cfont(size, bold=False):
-    return ImageFont.truetype(font_path(("DejaVuSansCondensed-Bold.ttf" if bold else "DejaVuSansCondensed.ttf")), round(size * K))
+    return ImageFont.truetype(FONT_DIR + ("DejaVuSansCondensed-Bold.ttf" if bold else "DejaVuSansCondensed.ttf"), round(size * K))
 
 
 def rfont(size, bold=False):
     """The condensed font at a size in the image's own pixels (for textures drawn outside the 16 px a pixel kit)."""
-    return ImageFont.truetype(font_path(("DejaVuSansCondensed-Bold.ttf" if bold else "DejaVuSansCondensed.ttf")), round(size))
+    return ImageFont.truetype(FONT_DIR + ("DejaVuSansCondensed-Bold.ttf" if bold else "DejaVuSansCondensed.ttf"), round(size))
 
 
 class _Draw(ImageDraw.ImageDraw):
@@ -336,17 +335,18 @@ class Front:
         self.T((x0 + x1) / 2, y0 - 0.55, label, 8, bold=True)
         self.proud(x0, y0, x1, y1, 0.5)
 
-    def lamp(self, cx, cy, colour, lit, label=None, r=0.55, live=None):
-        """A pilot light: drawn dark, and lit live from channel live (if given), or painted lit."""
+    def lamp(self, cx, cy, colour, lit, label=None, r=0.55, live=None, depth=0.3):
+        """A pilot light: drawn dark, and lit live from channel live (if given), or painted lit; depth: its bezel out of
+        the face (more where it stands on a raised plate)."""
         if live:
-            self.live.append({"t": "lamp", "x": cx, "y": cy, "r": r, "z": 15.3, "colour": list(colour), "ch": live})
+            self.live.append({"t": "lamp", "x": cx, "y": cy, "r": r, "z": round(15.0 + depth, 3), "colour": list(colour), "ch": live})
             lit = False
         dark = tuple(int(c * 0.35) for c in colour)
         self.E(cx, cy, r + 0.18, fill=(40, 40, 42, 255))
         self.E(cx, cy, r, fill=(colour if lit else dark) + (255,))
         if lit:
             self.E(cx - r * 0.3, cy + r * 0.3, r * 0.3, fill=tuple(min(255, c + 70) for c in colour) + (255,))
-        self.proud(cx - r - 0.18, cy - r - 0.18, cx + r + 0.18, cy + r + 0.18, 0.3)
+        self.proud(cx - r - 0.18, cy - r - 0.18, cx + r + 0.18, cy + r + 0.18, depth)
         if label:
             self.T(cx, cy - r - 0.7, label, 7, bold=True)
 
@@ -429,7 +429,8 @@ def engine_panel():
     f.nameplate(8, 28.9, 13.2, ["ENGINE CONTROL", "EMERGENCY DIESEL GENERATOR"])
     # Rated 514 rpm (a 14-pole 60 Hz generator); the overspeed trip at 115%.
     f.dial(4.3, 24.5, 1.9, "ENGINE SPEED", (0, 800), 0, "RPM", red=(590, 800), live="rpm")
-    f.dial(11.7, 24.5, 1.9, "START AIR", (0, 40), 29, "BAR", red=(0, 17), live="air")
+    # The starting air receivers' pressure (round 31, nuclear/StartingAir.java): 250 psig full, won't start below 150.
+    f.dial(11.7, 24.5, 1.9, "START AIR", (0, 400), 250, "PSIG", red=(0, 150), live="air")
     f.dial(2.9, 18.6, 1.3, "LUBE OIL", (0, 10), 0.4, "BAR", red=(0, 2.5), live="lube")
     f.dial(7.0, 18.6, 1.3, "JKT WATER", (0, 120), 52, "°C", red=(95, 120), live="jw")
     # The running hour meter (the tenths on red), its digits live.
@@ -642,8 +643,9 @@ def dc_switchboard(label="1A"):
     # The ground detector.
     f.R(2.0, 15.6, 14.2, 19.6, fill=(52, 54, 58, 255))
     f.T(8.1, 18.8, "GROUND DETECTOR", 7, fill=(236, 236, 230, 255), bold=True)
-    f.lamp(5.0, 17.0, (240, 240, 230), True, None, r=0.5, live="gnd_lamp")
-    f.lamp(11.2, 17.0, (240, 240, 230), True, None, r=0.5, live="gnd_lamp")
+    # (The lamps on the detector's raised plate, 0.25 out: their bezels 0.3 out of it.)
+    f.lamp(5.0, 17.0, (240, 240, 230), True, None, r=0.5, live="gnd_lamp", depth=0.55)
+    f.lamp(11.2, 17.0, (240, 240, 230), True, None, r=0.5, live="gnd_lamp", depth=0.55)
     f.T(5.0, 15.95, "+ BUS", 6, fill=(236, 236, 230, 255), bold=True)
     f.T(11.2, 15.95, "- BUS", 6, fill=(236, 236, 230, 255), bold=True)
     f.proud(2.0, 15.6, 14.2, 19.6, 0.25)
@@ -679,6 +681,8 @@ DRAWINGS = {"edg_engine_panel": engine_panel, "edg_generator_panel": generator_p
             "dc_switchboard": dc_switchboard, "vital_inverter": None, "station_charger": None, "reg_transformer": None, "vital_panel": None,
             "dc_ground_detector": None, "h2_monitor": None, "exhaust_fan": None}
 _FRONTS = {}
+# Drawn pieces with nothing live (older rooms round 4: the station battery's lettering): no layout.
+NOT_LIVE = set()
 
 
 def layout():
@@ -686,6 +690,8 @@ def layout():
     model pixels on the piece facing north (x across to the right, y up from the floor, z out to the front)."""
     out = {}
     for key in DRAWINGS:
+        if key in NOT_LIVE:
+            continue
         out[key] = {"width": PANELS[key]["width"], "elements": front(key).live}
         # A panel whose labels are different drawings (round 26, #12: the TSC's video wall displays and status boards)
         # moves differently by variant: each variant's elements.
@@ -738,8 +744,8 @@ def cabinet(key):
         return vital_inverter_boxes()
     if key == "reg_transformer":
         return reg_transformer_boxes()
-    if key == "vital_panel":
-        return vital_panel_boxes(False)
+    if key == VP_KEY or key in VP_TEXTS:
+        return vital_panel_boxes(False, key)
     if key == "dc_ground_detector":
         return ground_detector_boxes()
     if key == "h2_monitor":
@@ -998,7 +1004,10 @@ def part(key, c, r, open_=False):
     F = f"pi_{key}_f"
     drawn = {F, f"pi_{key}_i", f"pi_{key}_o"}
     out = []
-    for b in (vital_panel_boxes(open_) if key == VP_KEY else cabinet(key)):
+    # A piece whose door swings open in 3D (older rooms round 2: the racks, PANELS "swing") draws itself open.
+    boxes = vital_panel_boxes(open_, key) if key == VP_KEY or key in VP_TEXTS else \
+        CABINETS[key](open_) if open_ and PANELS[key].get("swing") else cabinet(key)
+    for b in boxes:
         x0, x1 = max(b[0], c * 16), min(b[3], c * 16 + 16)
         # The top row keeps what stands up out of it (round 26, #12: a one-row console's monitors).
         y0, y1 = max(b[1], r * 16), (min(b[4], r * 16 + 16) if r < top else b[4])
@@ -1523,16 +1532,31 @@ SC_METER = (6.0, 21.6, 27.2)        # a meter's width, bottom, top
 SC_LAMPS = [(2.9, "AC ON", (40, 180, 70), "chg_ac", "pi_lens_green"), (6.3, "DC ON", (40, 180, 70), "chg_dc", "pi_lens_green"),
             (9.7, "FLOAT", (240, 240, 230), "chg_float", "pi_lens_white"), (13.1, "EQUALIZE", (240, 170, 30), "chg_equal", "pi_lens_amber")]
 SC_LAMP_Y = 19.0
+SC_BUTTONS = [(16.55, "ACK"), (14.75, "RESET"), (12.95, "TEST")]   # the annunciator's buttons beside it (x 12.1)
 SC_ANN = (1.4, 13.0, 3, 2, 2.9, 1.7)   # the annunciator: x0, y0, columns, rows, window width, height
-SC_WINDOWS = [("AC|FAIL", "ann_charger_fail"), ("DC|LOW", "chg_dc_low"), ("DC|HIGH", "chg_dc_high"),
-              ("CHGR|FAIL", "ann_charger_fail"), ("GND|FAULT", "chg_gnd"), ("EQUAL|IZING", "chg_equal")]
+# Their channels (older rooms round 3: latched, ACK, RESET and TEST: nuclear/DcRoom.java window): chg_w0 .. chg_w5.
+SC_WINDOWS = [("AC|FAIL", "chg_w0"), ("DC|LOW", "chg_w1"), ("DC|HIGH", "chg_w2"),
+              ("CHGR|FAIL", "chg_w3"), ("GND|FAULT", "chg_w4"), ("EQUAL|IZING", "chg_w5")]
 SC_GLASS = "pi_meter_glass"
 SEE_THROUGH.add(SC_GLASS)
+
+
+def _breaker_face(f, cx, ch):
+    """A cabinet's moulded-case breaker seen through its door's cut-out (the station charger's, the inverter's): its
+    front drawn (the handle's slot, ON and OFF), the handle live (up ON, down OFF)."""
+    D = SC_DOOR
+    f.R(cx - 1.4, 4.9, cx + 1.4, 6.9, fill=(40, 42, 46, 255))
+    f.R(cx - 0.5, 5.0, cx + 0.5, 6.8, fill=(20, 20, 22, 255))
+    f.T(cx + 0.95, 6.4, "ON", 6, fill=(238, 238, 232, 255), bold=True)
+    f.T(cx + 0.95, 5.4, "OFF", 6, fill=(238, 238, 232, 255), bold=True)
+    f.live.append({"t": "toggle", "on": [cx - 0.4, 5.95, D + 0.45, cx + 0.4, 6.75, D + 0.95],
+                   "off": [cx - 0.4, 5.05, D + 0.45, cx + 0.4, 5.85, D + 0.95], "colour": [226, 226, 220], "ch": ch})
 
 
 def station_charger(label="1A-1"):
     f = Front(1, 520)
     T = f.T
+    D = SC_DOOR
     WHITE, BLACK = (238, 238, 232, 255), (24, 24, 26, 255)
     # The door's edge and its gasket line, the nameplate.
     f.R(0.6, 1.4, 15.4, 30.2, outline=(130, 132, 128, 255), width=3)
@@ -1561,12 +1585,17 @@ def station_charger(label="1A-1"):
         if ch:
             f.live.append({"t": "window", "x0": wx0, "y0": wy0, "x1": wx1, "y1": wy1, "z": SC_DOOR + 0.33,
                            "colour": [255, 200, 80], "ch": ch, "alpha": 1.0, "label": words})
-    T(12.1, 14.95, "TEST", 6, bold=True)
-    T(12.1, 12.95, "RESET", 6, bold=True)
+    # ACK, RESET and TEST under each other beside it (older rooms round 3; Justin: "Annunciator buttons").
+    for y, name in SC_BUTTONS:
+        T(12.1, y + 0.75, name, 6, bold=True)
     # MODE: the selector's two positions; the equalize timer's dial; the adjusters.
     T(2.2, 11.55, "FLOAT", 6, bold=True)
     T(4.6, 11.55, "EQUAL", 6, bold=True)
     T(3.4, 8.35, "MODE", 7, bold=True)
+    # Its knob turns (live: FLOAT, EQUALIZE; older rooms round 3: Justin, "Charger switches").
+    import diesel_panels
+    diesel_panels.part(f, "chg_mode", 3.4, 10.0, [b[:6] + ("pi_pnl_black",) for b in _sc_round(3.4, 10.0, D + 0.12, D + 0.5, 0.6, None)]
+                       + [(3.3, 10.0, D + 0.5, 3.5, 10.55, D + 0.62, "pi_pnl_white")], angles=[35, -35])
     f.E(7.4, 10.0, 1.35, fill=(238, 238, 232, 255), outline=(40, 40, 42, 255), width=2)
     for k in range(13):
         a = math.radians(225 - 270 * k / 12)
@@ -1579,10 +1608,12 @@ def station_charger(label="1A-1"):
                    "ch": "eq_hours"})
     for x, label in ((10.9, "FLOAT ADJ"), (13.5, "EQ ADJ")):
         T(x, 8.35, label, 6, bold=True)
-    # The breakers' cut-outs and legends.
-    for cx, label, rating in ((4.5, "AC INPUT", "480 V  100 A"), (11.5, "DC OUTPUT", "125 V  225 A")):
+    # The breakers' cut-outs and legends, their moulded fronts (ON over the handle, OFF under it); their handles live
+    # (older rooms round 3: they switch).
+    for cx, label, rating, ch in ((4.5, "AC INPUT", "480 V  100 A", "chg_brk_ac"), (11.5, "DC OUTPUT", "125 V  225 A", "chg_brk_dc")):
         T(cx, 7.65, label, 7, bold=True)
         T(cx, 4.15, rating, 6, bold=True)
+        _breaker_face(f, cx, ch)
     # The louvred inlet's opening: dark behind the slats.
     f.R(2.0, 1.6, 14.0, 3.6, fill=(22, 22, 24, 255))
     return f
@@ -1631,11 +1662,10 @@ def station_charger_boxes():
             xa = ax + c * ww + (0.3 if c == 0 else 0.12)
             xb = ax + (c + 1) * ww - (0.3 if c + 1 == cols else 0.12)
             b.append((xa, y - (0.3 if r in (0, rows) else 0.12), D + 0.25, xb, y + (0.3 if r in (0, rows) else 0.12), D + 0.5, blk))
-    for y in (15.8, 13.8):
+    for y, _ in SC_BUTTONS:
         b += [(11.6, y - 0.5, D, 12.6, y + 0.5, D + 0.12, blk)] + _sc_round(12.1, y, D + 0.12, D + 0.5, 0.42, "pi_cap_black")
-    # MODE selector: its plate, the knob, the pointer ridge (up: FLOAT).
-    b += [(2.6, 9.2, D, 4.2, 10.8, D + 0.12, blk)] + _sc_round(3.4, 10.0, D + 0.12, D + 0.5, 0.6, "pi_cap_black")
-    b.append((3.3, 10.0, D + 0.5, 3.5, 10.55, D + 0.62, "pi_pnl_white"))
+    # MODE selector: its plate (the knob and its pointer turn: live).
+    b += [(2.6, 9.2, D, 4.2, 10.8, D + 0.12, blk)]
     # The equalize timer: its dial face set in a bezel, the knob and its pointer (at 0).
     b += _sc_round(7.4, 10.0, D, D + 0.12, 1.5, "pi_chrome")
     b += [(x, y0_, D + 0.12, x1_, y1_, D + 0.25, face) for x, y0_, _, x1_, y1_, _, _ in _sc_round(7.4, 10.0, 0, 0, 1.35, None)]
@@ -1644,13 +1674,18 @@ def station_charger_boxes():
     for x in (10.9, 13.5):
         b += _sc_round(x, 10.0, D, D + 0.15, 0.6, "pi_chrome") + _sc_round(x, 10.0, D + 0.15, D + 0.45, 0.42, "pi_brass")
         b.append((x - 0.25, 9.95, D + 0.45, x + 0.25, 10.05, D + 0.56, "pi_pnl_black"))
-    # The breakers: the door's cut-out frame, the breaker's moulded front inside it, its toggle up (ON) with its grip.
+    # The breakers: the door's cut-out frame, the breaker's moulded front inside it (its handle live).
     for cx in (4.5, 11.5):
-        b += [(cx - 2.0, 4.6, D, cx + 2.0, 7.2, D + 0.15, "pi_cabinet_dark"),
-              (cx - 1.4, 4.9, D + 0.15, cx + 1.4, 6.9, D + 0.45, "pi_pnl_black"),
-              (cx - 0.35, 5.6, D + 0.45, cx + 0.35, 6.6, D + 0.75, "pi_pnl_black"),
-              (cx - 0.45, 6.6, D + 0.45, cx + 0.45, 6.85, D + 0.95, "pi_cab_white")]
+        b += _breaker_boxes(cx, face)
     return b
+
+
+def _breaker_boxes(cx, face):
+    """A cabinet's moulded-case breaker through its door's cut-out: the cut-out's frame, the breaker's front (drawn:
+    _breaker_face), the handle's slot a hair out of it."""
+    D = SC_DOOR
+    return [(cx - 2.0, 4.6, D, cx + 2.0, 7.2, D + 0.15, "pi_cabinet_dark"),
+            (cx - 1.4, 4.9, D + 0.15, cx + 1.4, 6.9, D + 0.45, face)]
 
 
 
@@ -1675,9 +1710,10 @@ VI_MAIN_Y, VI_BYP_Y = 18.4, 16.6             # the mimic's lines
 VI_LAMPS = [(2.6, "DC IN", (40, 180, 70), "inv_dc", "pi_lens_green"), (5.6, "INVERTER", (40, 180, 70), "inv_run", "pi_lens_green"),
             (8.6, "ON INV", (240, 240, 230), "inv_on", "pi_lens_white"), (11.6, "BYPASS", (240, 170, 30), "inv_byp", "pi_lens_amber")]
 VI_LAMP_Y = 14.4
+VI_BUTTONS = [(11.9, "ACK"), (10.3, "RESET"), (8.7, "TEST")]      # the annunciator's buttons beside it (x 12.1)
 VI_ANN = (1.4, 8.8, 3, 2, 2.9, 1.7)
-VI_WINDOWS = [("INV|FAIL", "inv_fail"), ("LOW|DC", "inv_low_dc"), ("BYP SRC|FAIL", "inv_byp_fail"),
-              ("ON|BYPASS", "inv_byp"), ("OUT OF|SYNC", "inv_sync"), ("FAN|FAIL", "inv_fan")]
+VI_WINDOWS = [("INV|FAIL", "inv_w0"), ("LOW|DC", "inv_w1"), ("BYP SRC|FAIL", "inv_w2"),
+              ("ON|BYPASS", "inv_w3"), ("OUT OF|SYNC", "inv_w4"), ("FAN|FAIL", "inv_w5")]
 
 
 def vital_inverter(label="1A-1"):
@@ -1730,14 +1766,21 @@ def vital_inverter(label="1A-1"):
             T((wx0 + wx1) / 2, (wy0 + wy1) / 2 + (len(words) - 1) * 0.28 - k * 0.56, word, 6, bold=True)
         f.live.append({"t": "window", "x0": wx0, "y0": wy0, "x1": wx1, "y1": wy1, "z": D + 0.33,
                        "colour": [255, 200, 80], "ch": ch, "alpha": 1.0, "label": words})
-    T(12.1, 9.55, "ALARM", 6, bold=True)
-    T(12.1, 9.0, "RESET", 6, bold=True)
-    # The manual bypass switch's positions and name; the DC input breaker's.
+    # ACK, RESET and TEST under each other beside it (older rooms round 3; Justin: "Annunciator buttons").
+    for y, name in VI_BUTTONS:
+        T(12.1, y + 0.7, name, 6, bold=True)
+    # The manual bypass switch's positions and name, its handle (live: NORMAL up, BYPASS right; Justin, "Inverter
+    # bypass switch"); the DC input breaker's.
+    import diesel_panels
+    diesel_panels.part(f, "inv_mbs", 4.0, 6.1, [b[:6] + ("pi_pnl_black",) for b in _sc_round(4.0, 6.1, D + 0.15, D + 0.5, 0.65, None)]
+                       + [(3.7, 6.1, D + 0.5, 4.3, 7.3, D + 0.85, "pi_pnl_black"), (3.6, 7.3, D + 0.5, 4.4, 7.55, D + 0.95, "pi_pnl_black"),
+                          (3.93, 6.6, D + 0.85, 4.07, 7.2, D + 0.9, "pi_pnl_white")], angles=[0, -90])
     T(4.0, 7.9, "NORMAL", 6, bold=True)
     T(6.6, 6.1, "BYPASS", 6, bold=True)
     T(4.0, 4.25, "MANUAL BYPASS", 6, bold=True)
     T(11.5, 7.65, "DC INPUT", 7, bold=True)
     T(11.5, 4.15, "125 V  150 A", 6, bold=True)
+    _breaker_face(f, 11.5, "inv_brk_dc")
     f.R(2.0, 1.6, 14.0, 3.6, fill=(22, 22, 24, 255))
     return f
 
@@ -1831,16 +1874,12 @@ def vital_inverter_boxes():
     for x, _, _, _, lens in VI_LAMPS:
         b += _sc_round(x, VI_LAMP_Y, D, D + 0.3, 0.7, "pi_chrome") + _sc_round(x, VI_LAMP_Y, D + 0.3, D + 0.5, 0.5, lens)
     b += _annunciator(*VI_ANN, face)
-    b += [(11.6, 10.0, D, 12.6, 11.0, D + 0.12, blk)] + _sc_round(12.1, 10.5, D + 0.12, D + 0.5, 0.42, "pi_cap_black")
-    # The manual bypass switch: its plate, the hub and the pistol-grip handle up at NORMAL.
-    b += [(2.6, 4.7, D, 5.4, 7.5, D + 0.15, "pi_chrome")] + _sc_round(4.0, 6.1, D + 0.15, D + 0.5, 0.65, "pi_cap_black")
-    b += [(3.7, 6.1, D + 0.5, 4.3, 7.3, D + 0.85, blk), (3.6, 7.3, D + 0.5, 4.4, 7.55, D + 0.95, blk)]
-    # The DC input breaker through its cut-out, its toggle up (ON).
-    cx = 11.5
-    b += [(cx - 2.0, 4.6, D, cx + 2.0, 7.2, D + 0.15, "pi_cabinet_dark"),
-          (cx - 1.4, 4.9, D + 0.15, cx + 1.4, 6.9, D + 0.45, "pi_pnl_black"),
-          (cx - 0.35, 5.6, D + 0.45, cx + 0.35, 6.6, D + 0.75, "pi_pnl_black"),
-          (cx - 0.45, 6.6, D + 0.45, cx + 0.45, 6.85, D + 0.95, "pi_cab_white")]
+    for y, _ in VI_BUTTONS:
+        b += [(11.6, y - 0.5, D, 12.6, y + 0.5, D + 0.12, blk)] + _sc_round(12.1, y, D + 0.12, D + 0.5, 0.42, "pi_cap_black")
+    # The manual bypass switch: its plate (the hub and pistol-grip handle turn: live).
+    b += [(2.6, 4.7, D, 5.4, 7.5, D + 0.15, "pi_chrome")]
+    # The DC input breaker through its cut-out (its handle live).
+    b += _breaker_boxes(11.5, face)
     return b
 
 
@@ -2233,6 +2272,24 @@ VP_HANDLE = (0.5, 0.55, 0.3)                 # a branch handle: x, y, z size
 VP_CHANNELS = {"1A-1": ("I", "N41"), "1A-2": ("III", "N43"), "1B-1": ("II", "N42"), "1B-2": ("IV", "N44")}
 
 
+def vp_texts(label, key=VP_KEY):
+    """What a panel built as the vital panel says (older rooms round 3: the DC rooms' distribution panels are built the
+    same, tools/dc_room.py): its nameplate's two lines, the directory's heading and main line, the dead front's main
+    legend, the door's label, the twelve circuits (directory lines, short names, ratings)."""
+    if key != VP_KEY:
+        return VP_TEXTS[key](label)
+    ch, nis = VP_CHANNELS[label]
+    short = vp_short(label)
+    return {"title": f"VITAL INST PANEL {label}", "sub": f"120 VAC 1 PH   CH {ch}   FROM INV {label}",
+            "head": f"VITAL PANEL {label}   CH {ch}", "main": "MAIN  60 A  2 POLE", "main_short": ("60 A 2P",),
+            "warn": "120 VAC  KEEP CLOSED", "circuits": vp_circuits(label), "short": short,
+            "rating": ["20 A" if name != "SPARE" else "15 A" for name in short]}
+
+
+# Other panels built as the vital panel, their texts by key (tools/dc_room.py adds its distribution panels).
+VP_TEXTS = {}
+
+
 def vp_circuits(label):
     """The twelve branch circuits of panel label: (name's two lines), circuit k + 1 (odd on the left)."""
     ch, nis = VP_CHANNELS[label]
@@ -2267,13 +2324,13 @@ def vp_handles():
     return out
 
 
-def vital_panel(label="1A-1"):
+def vital_panel(label="1A-1", key=VP_KEY):
     """The closed panel's front, drawn: the nameplate strip over the door, the door with its directory card and
     warning label. Its live parts: the POWER ON lamp, and (drawn only with the door open) the breakers' handles."""
     f = Front(1, 580)
     T = f.T
     WHITE, BLACK = (238, 238, 232, 255), (24, 24, 26, 255)
-    ch, _ = VP_CHANNELS[label]
+    tx = vp_texts(label, key)
     x0, y0, x1, y1 = VP_BOX
     # The door's seam round it, the strip over it.
     dx0, dy0, dx1, dy1 = VP_DOORLEAF
@@ -2281,8 +2338,8 @@ def vital_panel(label="1A-1"):
     # The nameplate: engraved black, white letters.
     px0, py0, px1, py1 = VP_PLATE
     f.R(px0, py0, px1, py1, fill=BLACK, outline=(170, 172, 174, 255), width=2)
-    T((px0 + px1) / 2, py1 - 0.7, f"VITAL INST PANEL {label}", 9, fill=WHITE, bold=True)
-    T((px0 + px1) / 2, py0 + 0.6, f"120 VAC 1 PH   CH {ch}   FROM INV {label}", 6, fill=WHITE, bold=True)
+    T((px0 + px1) / 2, py1 - 0.7, tx["title"], 9, fill=WHITE, bold=True)
+    T((px0 + px1) / 2, py0 + 0.6, tx["sub"], 6, fill=WHITE, bold=True)
     lx, ly = VP_LAMP
     T(lx, ly - 1.05, "POWER ON", 6, bold=True)
     f.live.append({"t": "lamp", "x": lx, "y": ly, "r": 0.4, "z": VP_FRONT + 0.56, "colour": [240, 240, 230], "ch": "vb_on"})
@@ -2290,10 +2347,10 @@ def vital_panel(label="1A-1"):
     cx0, cy0, cx1, cy1 = VP_CARD
     f.R(cx0, cy0, cx1, cy1, fill=(246, 246, 240, 255), outline=(60, 60, 62, 255), width=2)
     T((cx0 + cx1) / 2, cy1 - 0.65, "CIRCUIT DIRECTORY", 7, bold=True)
-    T((cx0 + cx1) / 2, cy1 - 1.35, f"VITAL PANEL {label}   CH {ch}", 6, bold=True)
+    T((cx0 + cx1) / 2, cy1 - 1.35, tx["head"], 6, bold=True)
     f.line([(cx0 + 0.3, cy1 - 1.8), (cx1 - 0.3, cy1 - 1.8)], INK, 2)
-    T(cx0 + 0.4, cy1 - 2.35, "MAIN  60 A  2 POLE", 6, bold=True, anchor="lm")
-    for k, (a, b) in enumerate(vp_circuits(label)):
+    T(cx0 + 0.4, cy1 - 2.35, tx["main"], 6, bold=True, anchor="lm")
+    for k, (a, b) in enumerate(tx["circuits"]):
         y = cy1 - 3.15 - k * 0.88
         T(cx0 + 0.4, y, f"{k + 1:>2}", 6, bold=True, anchor="lm")
         T(cx0 + 1.2, y, (a + " " + b).strip(), 6, bold=k < 10, anchor="lm")
@@ -2303,7 +2360,7 @@ def vital_panel(label="1A-1"):
     f.R(wx0, wy0, wx1, wy1, fill=(244, 200, 30, 255), outline=(24, 24, 26, 255), width=2)
     f.R(wx0 + 0.15, wy1 - 0.95, wx1 - 0.15, wy1 - 0.15, fill=BLACK)
     T((wx0 + wx1) / 2, wy1 - 0.55, "WARNING", 7, fill=(244, 200, 30, 255), bold=True)
-    T((wx0 + wx1) / 2, wy0 + 0.6, "120 VAC  KEEP CLOSED", 6, bold=True)
+    T((wx0 + wx1) / 2, wy0 + 0.6, tx["warn"], 6, bold=True)
     # The breakers' handles (live, with the door open: "open").
     for i, (on, off) in enumerate(vp_handles()):
         f.live.append({"t": "toggle", "on": [round(v, 3) for v in on], "off": [round(v, 3) for v in off], "colour": [118, 120, 124],
@@ -2311,7 +2368,7 @@ def vital_panel(label="1A-1"):
     return f
 
 
-def vital_panel_interior(label="1A-1"):
+def vital_panel_interior(label="1A-1", key=VP_KEY):
     """The open panel's dead front, drawn: each breaker's name and number beside it, the main's legend, the gutters'
     lines; the breakers' bodies stand through it (vital_panel_boxes)."""
     f = Front(1, 581)
@@ -2322,29 +2379,31 @@ def vital_panel_interior(label="1A-1"):
     f.R(ox0 + 0.2, oy0 + 0.2, ox1 - 0.2, oy1 - 0.2, outline=(120, 122, 118, 255), width=2)
     f.R(VP_BODY[0][0] - 0.15, VP_ROWS[-1] - 1.1, VP_BODY[1][1] + 0.15, VP_ROWS[0] + 1.1, fill=(40, 40, 42, 255))
     f.R(VP_MAIN[0] - 0.15, VP_MAIN[1] - 0.15, VP_MAIN[2] + 0.15, VP_MAIN[3] + 0.15, fill=(40, 40, 42, 255))
+    tx = vp_texts(label, key)
     T(4.6, 26.4, "MAIN", 7, bold=True)
-    T(4.6, 25.5, "60 A 2P", 6, bold=True)
+    for k, line in enumerate(tx["main_short"]):
+        T(4.6, 25.5 - k * 0.7, line, 6, bold=True)
     T(11.4, 26.4, "ON", 6, bold=True)
     T(11.4, 25.3, "OFF", 6, bold=True)
-    for k, name in enumerate(vp_short(label)):
+    for k, name in enumerate(tx["short"]):
         col, y = vp_breaker(k)
         # The circuit's number by its breaker, its short name beyond it, the breaker's rating under the name.
         if col == 0:
             T(6.2, y + 0.25, f"{k + 1}", 7, bold=True, anchor="rm")
             T(5.4, y + 0.25, name, 6, bold=True, anchor="rm")
-            T(5.4, y - 0.4, "20 A" if name != "SPARE" else "15 A", 6, anchor="rm")
+            T(5.4, y - 0.4, tx["rating"][k], 6, anchor="rm")
         else:
             T(9.75, y + 0.25, f"{k + 1}", 7, bold=True, anchor="lm")
             T(10.65, y + 0.25, name, 6, bold=True, anchor="lm")
-            T(10.65, y - 0.4, "20 A" if name != "SPARE" else "15 A", 6, anchor="lm")
+            T(10.65, y - 0.4, tx["rating"][k], 6, anchor="lm")
     T(8.0, VP_ROWS[-1] - 1.6, "ON  → MIDDLE      OFF → OUT", 6, bold=True)
     return f
 
 
-def vp_door_outside(label="1A-1"):
+def vp_door_outside(label="1A-1", key=VP_KEY):
     """The open door's outside (its west face once swung): the closed front's door, moved along to where the leaf's
     face lies (z = x + the hinge's 2.75 px)."""
-    src = front(VP_KEY, PANELS[VP_KEY]["labels"].index(label)).img
+    src = front(key, PANELS[key]["labels"].index(label)).img
     out = Image.new("RGBA", src.size, (0, 0, 0, 0))
     dx0, dy0, dx1, dy1 = VP_DOORLEAF
     shift = VP_HINGE[1] - VP_HINGE[0]
@@ -2366,12 +2425,12 @@ def _vp_open_box(b):
     return (hx - (z1 - hz), y0, hz + (x0 - hx), hx - (z0 - hz), y1, hz + (x1 - hx), tex) + tuple(b[7:])
 
 
-def _vp_door(open_):
+def _vp_door(open_, key=VP_KEY):
     """The door leaf and what is on it: its hinges' knuckles, the latch and its key, the directory's clear holder, the
     warning label (closed: on the front; open: swung out)."""
     D = VP_DOOR
-    F = f"pi_{VP_KEY}_f"
-    O = f"pi_{VP_KEY}_o"
+    F = f"pi_{key}_f"
+    O = f"pi_{key}_o"
     dx0, dy0, dx1, dy1 = VP_DOORLEAF
     leaf = (dx0, dy0, VP_FRONT, dx1, dy1, D, {"*": "pi_cabinet", "south": O if open_ else F})
     on = [leaf]
@@ -2394,11 +2453,11 @@ def _vp_door(open_):
     return on
 
 
-def vital_panel_boxes(open_=False):
+def vital_panel_boxes(open_=False, key=VP_KEY):
     """The panel, closed or open: the enclosure on the wall, the nameplate and the lamp over the door, the door; open,
     the dead front and the breakers' bodies behind it (their handles are the game's)."""
-    F = f"pi_{VP_KEY}_f"
-    I = f"pi_{VP_KEY}_i"
+    F = f"pi_{key}_f"
+    I = f"pi_{key}_i"
     face = {"*": "pi_pnl_black", "south": F}
     x0, y0, x1, y1 = VP_BOX
     ox0, oy0, ox1, oy1 = VP_OPENING
@@ -2413,7 +2472,7 @@ def vital_panel_boxes(open_=False):
     b.append((px0, py0, VP_FRONT, px1, py1, VP_FRONT + 0.12, face))
     lx, ly = VP_LAMP
     b += _sc_round(lx, ly, VP_FRONT, VP_FRONT + 0.3, 0.6, "pi_chrome") + _sc_round(lx, ly, VP_FRONT + 0.3, VP_FRONT + 0.5, 0.42, "pi_lens_white")
-    b += _vp_door(open_)
+    b += _vp_door(open_, key)
     if open_:
         dz0, dz1 = VP_DEAD
         b.append((ox0, oy0, dz0, ox1, oy1, dz1, {"*": cab, "south": I}))
@@ -2433,9 +2492,16 @@ def vital_panel_textures():
     """The open panel's drawings (dead front, the door's outside swung) for each label: pi_<stem>_i_<part>,
     pi_<stem>_o_<part>."""
     out = {}
-    for v, label in enumerate(PANELS[VP_KEY]["labels"]):
-        stem = texture_key(VP_KEY, v)
-        inside, door = vital_panel_interior(label).img, vp_door_outside(label)
+    for key in [VP_KEY] + list(VP_TEXTS):
+        out.update(_vp_textures(key))
+    return out
+
+
+def _vp_textures(key):
+    out = {}
+    for v, label in enumerate(PANELS[key]["labels"]):
+        stem = texture_key(key, v)
+        inside, door = vital_panel_interior(label, key).img, vp_door_outside(label, key)
         for r in range(2):
             box = (0, (1 - r) * 16 * U, 16 * U, (2 - r) * 16 * U)
             out[f"pi_{stem}_i_{r}"] = (lambda img=inside.crop(box): img)
@@ -2699,10 +2765,11 @@ RISERS.update({
     "h2_sensor": {"display": "Hydrogen Sensor Head", "boxes": h2_sensor_boxes()},
 })
 CRAFTING.update({
-    "sign_no_smoking": (["PRP", "PIP"], {"P": "minecraft:paper", "R": "minecraft:red_dye", "I": "minecraft:iron_nugget"}, 2),
+    # (item 22: the signs the Drone Tower is built from have recipes of their own, not one shared with another sign's)
+    "sign_no_smoking": (["PRP", "PFP"], {"P": "minecraft:paper", "R": "minecraft:red_dye", "F": "minecraft:charcoal"}, 2),
     "sign_battery_acid": (["PBP", "PIP"], {"P": "minecraft:paper", "B": "minecraft:black_dye", "I": "minecraft:iron_nugget"}, 2),
     "sign_hydrogen": (["POP", "PIP"], {"P": "minecraft:paper", "O": "minecraft:orange_dye", "I": "minecraft:iron_nugget"}, 2),
-    "sign_eyewash": (["PGP", "PIP"], {"P": "minecraft:paper", "G": "minecraft:green_dye", "I": "minecraft:iron_nugget"}, 2),
+    "sign_eyewash": (["PGP", "PCP"], {"P": "minecraft:paper", "G": "minecraft:green_dye", "C": "minecraft:cyan_dye"}, 2),
     "eyewash_station": (["IWI", " B ", " I "], {"I": "#c:plates/steel", "W": "minecraft:water_bucket", "B": "minecraft:copper_ingot"}, 1),
     "spill_kit": (["YPY", "YSY", "YYY"], {"Y": "minecraft:yellow_dye", "P": "#c:plates/steel", "S": "minecraft:sand"}, 1),
     "h2_sensor": (["P", "C", "R"], {"P": "#c:plates/steel", "C": "jugcraft:basic_circuit", "R": "minecraft:redstone"}, 1),
@@ -2861,3 +2928,20 @@ DRAWINGS["exhaust_fan"] = exhaust_fan
 import relay_room  # noqa: E402,F401
 import hvac_room  # noqa: E402,F401  (round 26, #11: the control room HVAC equipment room's pieces)
 import tsc_room  # noqa: E402,F401  (round 26, #12: the Technical Support Center's consoles, displays and boards)
+import ops_office  # noqa: E402,F401  (round 26, #13: the operations office's consoles, boards and fittings)
+import restroom  # noqa: E402,F401  (round 26, #14: the restroom's fixtures, stalls and fittings)
+import diesel_panels  # noqa: E402,F401  (round 31 part 2: the diesel rooms' panels rebuilt in 3D, their controls working)
+import spreading_room  # noqa: E402,F401  (punch list #15: the cable spreading room's trays, bundles, fire wrap and sprinklers)
+import switchgear_room  # noqa: E402,F401  (older rooms round 1: the switchgear room's trays, cooling, handling gear, log desk)
+import server_room  # noqa: E402,F401  (older rooms round 2: the plant computer room's racks, UPS, CRACs, clean-agent system)
+import dc_room  # noqa: E402,F401  (older rooms round 3: the DC rooms' switchboard, distribution panels, laptop, one-line, work gear)
+import battery_rooms  # noqa: E402,F401  (older rooms round 4: the battery rooms' racks lettered, disconnects, lights, PPE, log, sump)
+import cr_room  # noqa: E402,F401  (older rooms round 5: the control room's operator consoles, shift manager's desk, procedure racks, SCBA, EAL chart)
+import entrance_hall  # noqa: E402,F401  (older rooms round 6: the entrance hall's security post, hand reader, signs, evacuation plan)
+import rsr_room  # noqa: E402,F401  (older rooms round 7: the remote shutdown room's station, key cabinet, communications station, sign)
+import sec_gatehouse  # noqa: E402,F401  (the security gatehouse: the alarm station console, the X-ray scanner, the metal detector, the weapons locker, dome cameras, the protected area sign)
+import admin_fittings  # noqa: E402,F401  (the administration building part 1: exit signs, pull stations, evacuation plans, the office screens' frame)
+import admin_rooms  # noqa: E402,F401  (the administration building part 2: the chemistry lab, document control, the board room, the manager's office)
+import hall_fittings  # noqa: E402,F401  (turbine hall part 3: the crane's pendant station, the oil spill kit)
+import shop_room  # noqa: E402,F401  (turbine hall part 3: the workshop's benches, machine tools, welding booth, gantry)
+import tcr_room  # noqa: E402,F401  (turbine hall part 3: the turbine control room's cabinets)

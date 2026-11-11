@@ -9,19 +9,18 @@
       "feature": "drones"
     }
   ],
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
+  "type": "jugcraft:advanced_crafting",
   "pattern": [
-    "SCS",
-    "CSC",
-    "SCS"
+    "SSCCSS",
+    "CCSSCC",
+    "SSCCSS"
   ],
   "key": {
-    "S": "#c:plates/steel",
-    "C": "minecraft:smooth_stone"
+    "C": "minecraft:smooth_stone",
+    "S": "#c:plates/steel"
   },
   "result": {
     "id": "jugcraft:landing_platform",
-    "count": 8
+    "count": 16
   }
 }

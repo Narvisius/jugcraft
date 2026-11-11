@@ -1,0 +1,200 @@
+{
+ "textures": {
+  "rp_coil": "jugcraft:block/rp_coil",
+  "rp_coil_top": "jugcraft:block/rp_coil_top",
+  "rp_cooler": "jugcraft:block/rp_cooler",
+  "rp_galv": "jugcraft:block/rp_galv",
+  "rp_rubber": "jugcraft:block/rp_rubber",
+  "particle": "jugcraft:block/rp_galv"
+ },
+ "elements": [
+  {
+   "from": [
+    13.1,
+    0,
+    1.6
+   ],
+   "to": [
+    15.4,
+    0.6,
+    3.9
+   ],
+   "faces": {
+    "north": {
+     "texture": "#rp_rubber"
+    },
+    "south": {
+     "texture": "#rp_rubber"
+    },
+    "east": {
+     "texture": "#rp_rubber"
+    },
+    "west": {
+     "texture": "#rp_rubber"
+    },
+    "up": {
+     "texture": "#rp_rubber"
+    },
+    "down": {
+     "texture": "#rp_rubber"
+    }
+   }
+  },
+  {
+   "from": [
+    13.5,
+    0.6,
+    2.0
+   ],
+   "to": [
+    15.0,
+    14.0,
+    3.5
+   ],
+   "faces": {
+    "north": {
+     "texture": "#rp_galv"
+    },
+    "south": {
+     "texture": "#rp_galv"
+    },
+    "east": {
+     "texture": "#rp_galv"
+    },
+    "west": {
+     "texture": "#rp_galv"
+    },
+    "up": {
+     "texture": "#rp_galv"
+    },
+    "down": {
+     "texture": "#rp_galv"
+    }
+   }
+  },
+  {
+   "from": [
+    13.5,
+    4.0,
+    0
+   ],
+   "to": [
+    15.0,
+    5.0,
+    16
+   ],
+   "faces": {
+    "east": {
+     "texture": "#rp_galv"
+    },
+    "west": {
+     "texture": "#rp_galv"
+    },
+    "up": {
+     "texture": "#rp_galv"
+    },
+    "down": {
+     "texture": "#rp_galv"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    4.0,
+    2.0
+   ],
+   "to": [
+    13.5,
+    5.0,
+    3.5
+   ],
+   "faces": {
+    "north": {
+     "texture": "#rp_galv"
+    },
+    "south": {
+     "texture": "#rp_galv"
+    },
+    "east": {
+     "texture": "#rp_galv"
+    },
+    "up": {
+     "texture": "#rp_galv"
+    },
+    "down": {
+     "texture": "#rp_galv"
+    }
+   }
+  },
+  {
+   "from": [
+    14.5,
+    14.0,
+    0
+   ],
+   "to": [
+    15.5,
+    15.0,
+    16
+   ],
+   "faces": {
+    "east": {
+     "texture": "#rp_galv"
+    },
+    "west": {
+     "texture": "#rp_galv"
+    },
+    "up": {
+     "texture": "#rp_galv"
+    },
+    "down": {
+     "texture": "#rp_galv"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    15.0,
+    0
+   ],
+   "to": [
+    14.5,
+    16,
+    16
+   ],
+   "faces": {
+    "east": {
+     "texture": "#rp_coil"
+    },
+    "down": {
+     "texture": "#rp_coil_top"
+    }
+   }
+  },
+  {
+   "from": [
+    14.5,
+    15.0,
+    0
+   ],
+   "to": [
+    15.5,
+    16,
+    16
+   ],
+   "faces": {
+    "east": {
+     "texture": "#rp_cooler"
+    },
+    "west": {
+     "texture": "#rp_cooler"
+    },
+    "down": {
+     "texture": "#rp_cooler"
+    }
+   }
+  }
+ ]
+}

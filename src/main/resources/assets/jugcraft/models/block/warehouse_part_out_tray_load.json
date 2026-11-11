@@ -1,0 +1,288 @@
+{
+  "textures": {
+    "pi_cap_black": "jugcraft:block/pi_cap_black",
+    "pi_wh_carton": "jugcraft:block/pi_wh_carton",
+    "pi_wh_carton_front": "jugcraft:block/pi_wh_carton_front",
+    "pi_wh_carton_top": "jugcraft:block/pi_wh_carton_top",
+    "pi_wh_carton_w": "jugcraft:block/pi_wh_carton_w",
+    "pi_wh_carton_w_front": "jugcraft:block/pi_wh_carton_w_front",
+    "pi_wh_carton_w_top": "jugcraft:block/pi_wh_carton_w_top",
+    "pi_wh_tote": "jugcraft:block/pi_wh_tote",
+    "pi_wh_tote_in": "jugcraft:block/pi_wh_tote_in",
+    "particle": "jugcraft:block/pi_cap_black"
+  },
+  "elements": [
+    {
+      "from": [
+        0.0,
+        10.3,
+        13.2
+      ],
+      "to": [
+        6.2,
+        15.0,
+        17.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_wh_carton",
+          "uv": [
+            9.8,
+            1.0,
+            16.0,
+            5.7
+          ]
+        },
+        "south": {
+          "texture": "#pi_wh_carton_front",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_wh_carton",
+          "uv": [
+            0,
+            1.0,
+            4.6,
+            5.7
+          ]
+        },
+        "west": {
+          "texture": "#pi_wh_carton",
+          "uv": [
+            11.4,
+            1.0,
+            16.0,
+            5.7
+          ]
+        },
+        "up": {
+          "texture": "#pi_wh_carton_top",
+          "uv": [
+            0.0,
+            11.4,
+            6.2,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#pi_wh_carton",
+          "uv": [
+            0.0,
+            0,
+            6.2,
+            4.6
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        7.0,
+        10.3,
+        13.6
+      ],
+      "to": [
+        12.4,
+        14.0,
+        17.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_wh_carton_w",
+          "uv": [
+            3.6,
+            2.0,
+            9.0,
+            5.7
+          ]
+        },
+        "south": {
+          "texture": "#pi_wh_carton_w_front",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_wh_carton_w",
+          "uv": [
+            0,
+            2.0,
+            4.2,
+            5.7
+          ]
+        },
+        "west": {
+          "texture": "#pi_wh_carton_w",
+          "uv": [
+            11.8,
+            2.0,
+            16.0,
+            5.7
+          ]
+        },
+        "up": {
+          "texture": "#pi_wh_carton_w_top",
+          "uv": [
+            7.0,
+            11.8,
+            12.4,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#pi_wh_carton_w",
+          "uv": [
+            7.0,
+            0,
+            12.4,
+            4.2
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        13.0,
+        10.3,
+        9.0
+      ],
+      "to": [
+        16.4,
+        13.0,
+        17.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_wh_tote",
+          "uv": [
+            0,
+            3.0,
+            3.4,
+            5.7
+          ]
+        },
+        "south": {
+          "texture": "#pi_wh_tote",
+          "uv": [
+            12.6,
+            3.0,
+            16.0,
+            5.7
+          ]
+        },
+        "east": {
+          "texture": "#pi_wh_tote",
+          "uv": [
+            0,
+            3.0,
+            8.8,
+            5.7
+          ]
+        },
+        "west": {
+          "texture": "#pi_wh_tote",
+          "uv": [
+            7.2,
+            3.0,
+            16.0,
+            5.7
+          ]
+        },
+        "up": {
+          "texture": "#pi_wh_tote_in",
+          "uv": [
+            12.6,
+            7.2,
+            16.0,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#pi_wh_tote",
+          "uv": [
+            12.6,
+            0,
+            16.0,
+            8.8
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        13.2,
+        12.0,
+        17.8
+      ],
+      "to": [
+        16.2,
+        12.6,
+        17.9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cap_black",
+          "uv": [
+            0,
+            3.4,
+            3.0,
+            4.0
+          ]
+        },
+        "south": {
+          "texture": "#pi_cap_black",
+          "uv": [
+            13.0,
+            3.4,
+            16.0,
+            4.0
+          ]
+        },
+        "east": {
+          "texture": "#pi_cap_black",
+          "uv": [
+            0,
+            3.4,
+            0.1,
+            4.0
+          ]
+        },
+        "west": {
+          "texture": "#pi_cap_black",
+          "uv": [
+            15.9,
+            3.4,
+            16.0,
+            4.0
+          ]
+        },
+        "up": {
+          "texture": "#pi_cap_black",
+          "uv": [
+            13.0,
+            15.9,
+            16.0,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#pi_cap_black",
+          "uv": [
+            13.0,
+            0,
+            16.0,
+            0.1
+          ]
+        }
+      }
+    }
+  ]
+}

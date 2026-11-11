@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "HHGGHH",
+    "HH  HH"
+  ],
+  "key": {
+    "G": "minecraft:glass_pane",
+    "H": "minecraft:birch_planks"
+  },
+  "result": {
+    "id": "jugcraft:study_carrel",
+    "count": 2
+  }
+}

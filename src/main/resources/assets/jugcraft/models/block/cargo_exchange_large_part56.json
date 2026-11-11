@@ -1,0 +1,1081 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "tower_cargo_access": "jugcraft:block/tower_cargo_access",
+    "tower_cargo_brass": "jugcraft:block/tower_cargo_brass",
+    "tower_cargo_brushed": "jugcraft:block/tower_cargo_brushed",
+    "tower_cargo_display": "jugcraft:block/tower_cargo_display",
+    "tower_cargo_filter": "jugcraft:block/tower_cargo_filter",
+    "tower_cargo_frame": "jugcraft:block/tower_cargo_frame",
+    "tower_cargo_header": "jugcraft:block/tower_cargo_header",
+    "tower_cargo_housing": "jugcraft:block/tower_cargo_housing",
+    "tower_cargo_interlock": "jugcraft:block/tower_cargo_interlock",
+    "tower_cargo_isolator": "jugcraft:block/tower_cargo_isolator",
+    "tower_cargo_lamp_amber": "jugcraft:block/tower_cargo_lamp_amber",
+    "tower_cargo_lamp_green": "jugcraft:block/tower_cargo_lamp_green",
+    "tower_cargo_link": "jugcraft:block/tower_cargo_link",
+    "tower_cargo_live": "jugcraft:block/tower_cargo_live",
+    "tower_cargo_pipe": "jugcraft:block/tower_cargo_pipe",
+    "tower_cargo_pod": "jugcraft:block/tower_cargo_pod",
+    "tower_cargo_rear": "jugcraft:block/tower_cargo_rear",
+    "tower_cargo_red": "jugcraft:block/tower_cargo_red",
+    "tower_cargo_request": "jugcraft:block/tower_cargo_request",
+    "tower_cargo_rollers": "jugcraft:block/tower_cargo_rollers",
+    "tower_cargo_rubber": "jugcraft:block/tower_cargo_rubber",
+    "tower_cargo_stainless": "jugcraft:block/tower_cargo_stainless",
+    "tower_cargo_stop": "jugcraft:block/tower_cargo_stop",
+    "tower_cargo_yellow": "jugcraft:block/tower_cargo_yellow",
+    "particle": "jugcraft:block/tower_cargo_housing"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        2.2
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_frame"
+        }
+      }
+    },
+    {
+      "from": [
+        2.8,
+        0,
+        0.95
+      ],
+      "to": [
+        16,
+        16,
+        2.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_rubber"
+        },
+        "south": {
+          "texture": "#tower_cargo_rubber"
+        },
+        "west": {
+          "texture": "#tower_cargo_rubber"
+        }
+      }
+    },
+    {
+      "from": [
+        3.25,
+        0,
+        0.65
+      ],
+      "to": [
+        16,
+        16,
+        1.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_housing"
+        },
+        "south": {
+          "texture": "#tower_cargo_housing"
+        },
+        "west": {
+          "texture": "#tower_cargo_housing"
+        }
+      }
+    },
+    {
+      "from": [
+        3.7,
+        11.5,
+        0.55
+      ],
+      "to": [
+        16,
+        16,
+        1.7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_frame"
+        },
+        "south": {
+          "texture": "#tower_cargo_frame"
+        },
+        "west": {
+          "texture": "#tower_cargo_frame"
+        },
+        "down": {
+          "texture": "#tower_cargo_frame"
+        }
+      }
+    },
+    {
+      "from": [
+        4.2,
+        12,
+        0.4
+      ],
+      "to": [
+        16,
+        16,
+        0.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_display"
+        },
+        "south": {
+          "texture": "#tower_cargo_display"
+        },
+        "west": {
+          "texture": "#tower_cargo_display"
+        },
+        "down": {
+          "texture": "#tower_cargo_display"
+        }
+      }
+    },
+    {
+      "from": [
+        4.2,
+        10.4,
+        0.3
+      ],
+      "to": [
+        17.8,
+        11.3,
+        0.7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_live",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#tower_cargo_frame",
+          "uv": [
+            0,
+            0,
+            13.6,
+            0.9
+          ]
+        },
+        "east": {
+          "texture": "#tower_cargo_frame",
+          "uv": [
+            0,
+            0,
+            0.4,
+            0.9
+          ]
+        },
+        "west": {
+          "texture": "#tower_cargo_frame",
+          "uv": [
+            0,
+            0,
+            0.4,
+            0.9
+          ]
+        },
+        "up": {
+          "texture": "#tower_cargo_frame",
+          "uv": [
+            0,
+            0,
+            13.6,
+            0.4
+          ]
+        },
+        "down": {
+          "texture": "#tower_cargo_frame",
+          "uv": [
+            0,
+            0,
+            13.6,
+            0.4
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          11.0,
+          10.85,
+          0.5
+        ],
+        "axis": "y",
+        "angle": 0
+      }
+    },
+    {
+      "from": [
+        5.6,
+        8.9,
+        0.4
+      ],
+      "to": [
+        6.8,
+        10.1,
+        0.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_lamp_green",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#tower_cargo_frame"
+        },
+        "east": {
+          "texture": "#tower_cargo_frame"
+        },
+        "west": {
+          "texture": "#tower_cargo_frame"
+        },
+        "up": {
+          "texture": "#tower_cargo_frame"
+        },
+        "down": {
+          "texture": "#tower_cargo_frame"
+        }
+      },
+      "rotation": {
+        "origin": [
+          6.2,
+          9.5,
+          0.6
+        ],
+        "axis": "y",
+        "angle": 0
+      }
+    },
+    {
+      "from": [
+        9.9,
+        8.9,
+        0.4
+      ],
+      "to": [
+        11.1,
+        10.1,
+        0.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_lamp_amber",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#tower_cargo_frame"
+        },
+        "east": {
+          "texture": "#tower_cargo_frame"
+        },
+        "west": {
+          "texture": "#tower_cargo_frame"
+        },
+        "up": {
+          "texture": "#tower_cargo_frame"
+        },
+        "down": {
+          "texture": "#tower_cargo_frame"
+        }
+      },
+      "rotation": {
+        "origin": [
+          10.5,
+          9.5,
+          0.6
+        ],
+        "axis": "y",
+        "angle": 0
+      }
+    },
+    {
+      "from": [
+        4.5,
+        7.5,
+        0.3
+      ],
+      "to": [
+        7.9,
+        8.4,
+        0.7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_link",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#tower_cargo_frame"
+        },
+        "east": {
+          "texture": "#tower_cargo_frame"
+        },
+        "west": {
+          "texture": "#tower_cargo_frame"
+        },
+        "up": {
+          "texture": "#tower_cargo_frame"
+        },
+        "down": {
+          "texture": "#tower_cargo_frame"
+        }
+      },
+      "rotation": {
+        "origin": [
+          6.2,
+          7.95,
+          0.5
+        ],
+        "axis": "y",
+        "angle": 0
+      }
+    },
+    {
+      "from": [
+        8.5,
+        7.5,
+        0.3
+      ],
+      "to": [
+        12.6,
+        8.4,
+        0.7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_request",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#tower_cargo_frame"
+        },
+        "east": {
+          "texture": "#tower_cargo_frame"
+        },
+        "west": {
+          "texture": "#tower_cargo_frame"
+        },
+        "up": {
+          "texture": "#tower_cargo_frame"
+        },
+        "down": {
+          "texture": "#tower_cargo_frame"
+        }
+      },
+      "rotation": {
+        "origin": [
+          10.55,
+          7.95,
+          0.5
+        ],
+        "axis": "y",
+        "angle": 0
+      }
+    },
+    {
+      "from": [
+        5.35,
+        4.1994,
+        0.5
+      ],
+      "to": [
+        8.25,
+        5.4006,
+        1.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_yellow"
+        },
+        "south": {
+          "texture": "#tower_cargo_yellow"
+        },
+        "east": {
+          "texture": "#tower_cargo_yellow"
+        },
+        "west": {
+          "texture": "#tower_cargo_yellow"
+        },
+        "up": {
+          "texture": "#tower_cargo_yellow"
+        },
+        "down": {
+          "texture": "#tower_cargo_yellow"
+        }
+      }
+    },
+    {
+      "from": [
+        5.35,
+        4.1994,
+        0.4
+      ],
+      "to": [
+        8.25,
+        5.4006,
+        1.7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_yellow"
+        },
+        "south": {
+          "texture": "#tower_cargo_yellow"
+        },
+        "east": {
+          "texture": "#tower_cargo_yellow"
+        },
+        "west": {
+          "texture": "#tower_cargo_yellow"
+        },
+        "up": {
+          "texture": "#tower_cargo_yellow"
+        },
+        "down": {
+          "texture": "#tower_cargo_yellow"
+        }
+      },
+      "rotation": {
+        "origin": [
+          6.8,
+          4.8,
+          1.05
+        ],
+        "axis": "z",
+        "angle": 45
+      }
+    },
+    {
+      "from": [
+        6.1994,
+        3.35,
+        0.5
+      ],
+      "to": [
+        7.4006,
+        6.25,
+        1.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_yellow"
+        },
+        "south": {
+          "texture": "#tower_cargo_yellow"
+        },
+        "east": {
+          "texture": "#tower_cargo_yellow"
+        },
+        "west": {
+          "texture": "#tower_cargo_yellow"
+        },
+        "up": {
+          "texture": "#tower_cargo_yellow"
+        },
+        "down": {
+          "texture": "#tower_cargo_yellow"
+        }
+      }
+    },
+    {
+      "from": [
+        6.1994,
+        3.35,
+        0.4
+      ],
+      "to": [
+        7.4006,
+        6.25,
+        1.7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_yellow"
+        },
+        "south": {
+          "texture": "#tower_cargo_yellow"
+        },
+        "east": {
+          "texture": "#tower_cargo_yellow"
+        },
+        "west": {
+          "texture": "#tower_cargo_yellow"
+        },
+        "up": {
+          "texture": "#tower_cargo_yellow"
+        },
+        "down": {
+          "texture": "#tower_cargo_yellow"
+        }
+      },
+      "rotation": {
+        "origin": [
+          6.8,
+          4.8,
+          1.05
+        ],
+        "axis": "z",
+        "angle": 45
+      }
+    },
+    {
+      "from": [
+        5.77,
+        4.3734,
+        0.05
+      ],
+      "to": [
+        7.83,
+        5.2266,
+        0.7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_red"
+        },
+        "south": {
+          "texture": "#tower_cargo_red"
+        },
+        "east": {
+          "texture": "#tower_cargo_red"
+        },
+        "west": {
+          "texture": "#tower_cargo_red"
+        },
+        "up": {
+          "texture": "#tower_cargo_red"
+        },
+        "down": {
+          "texture": "#tower_cargo_red"
+        }
+      }
+    },
+    {
+      "from": [
+        5.77,
+        4.3734,
+        -0.05
+      ],
+      "to": [
+        7.83,
+        5.2266,
+        0.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_red"
+        },
+        "south": {
+          "texture": "#tower_cargo_red"
+        },
+        "east": {
+          "texture": "#tower_cargo_red",
+          "uv": [
+            15.15,
+            10.7734,
+            16.0,
+            11.6266
+          ]
+        },
+        "west": {
+          "texture": "#tower_cargo_red",
+          "uv": [
+            0.0,
+            10.7734,
+            0.85,
+            11.6266
+          ]
+        },
+        "up": {
+          "texture": "#tower_cargo_red",
+          "uv": [
+            5.77,
+            0.0,
+            7.83,
+            0.85
+          ]
+        },
+        "down": {
+          "texture": "#tower_cargo_red",
+          "uv": [
+            5.77,
+            15.15,
+            7.83,
+            16.0
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          6.8,
+          4.8,
+          0.375
+        ],
+        "axis": "z",
+        "angle": 45
+      }
+    },
+    {
+      "from": [
+        6.3734,
+        3.77,
+        0.05
+      ],
+      "to": [
+        7.2266,
+        5.83,
+        0.7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_red"
+        },
+        "south": {
+          "texture": "#tower_cargo_red"
+        },
+        "east": {
+          "texture": "#tower_cargo_red"
+        },
+        "west": {
+          "texture": "#tower_cargo_red"
+        },
+        "up": {
+          "texture": "#tower_cargo_red"
+        },
+        "down": {
+          "texture": "#tower_cargo_red"
+        }
+      }
+    },
+    {
+      "from": [
+        6.3734,
+        3.77,
+        -0.05
+      ],
+      "to": [
+        7.2266,
+        5.83,
+        0.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_red"
+        },
+        "south": {
+          "texture": "#tower_cargo_red"
+        },
+        "east": {
+          "texture": "#tower_cargo_red",
+          "uv": [
+            15.15,
+            10.17,
+            16.0,
+            12.23
+          ]
+        },
+        "west": {
+          "texture": "#tower_cargo_red",
+          "uv": [
+            0.0,
+            10.17,
+            0.85,
+            12.23
+          ]
+        },
+        "up": {
+          "texture": "#tower_cargo_red",
+          "uv": [
+            6.3734,
+            0.0,
+            7.2266,
+            0.85
+          ]
+        },
+        "down": {
+          "texture": "#tower_cargo_red",
+          "uv": [
+            6.3734,
+            15.15,
+            7.2266,
+            16.0
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          6.8,
+          4.8,
+          0.375
+        ],
+        "axis": "z",
+        "angle": 45
+      }
+    },
+    {
+      "from": [
+        4.8,
+        2.4,
+        0.3
+      ],
+      "to": [
+        8.8,
+        3.3,
+        0.7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_stop",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#tower_cargo_frame"
+        },
+        "east": {
+          "texture": "#tower_cargo_frame"
+        },
+        "west": {
+          "texture": "#tower_cargo_frame"
+        },
+        "up": {
+          "texture": "#tower_cargo_frame"
+        },
+        "down": {
+          "texture": "#tower_cargo_frame"
+        }
+      },
+      "rotation": {
+        "origin": [
+          6.8,
+          2.85,
+          0.5
+        ],
+        "axis": "y",
+        "angle": 0
+      }
+    },
+    {
+      "from": [
+        13.2,
+        4.2029,
+        0.4
+      ],
+      "to": [
+        15.6,
+        5.1971,
+        1.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_frame"
+        },
+        "south": {
+          "texture": "#tower_cargo_frame"
+        },
+        "east": {
+          "texture": "#tower_cargo_frame"
+        },
+        "west": {
+          "texture": "#tower_cargo_frame"
+        },
+        "up": {
+          "texture": "#tower_cargo_frame"
+        },
+        "down": {
+          "texture": "#tower_cargo_frame"
+        }
+      }
+    },
+    {
+      "from": [
+        13.2,
+        4.2029,
+        0.3
+      ],
+      "to": [
+        15.6,
+        5.1971,
+        1.7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_frame"
+        },
+        "south": {
+          "texture": "#tower_cargo_frame"
+        },
+        "east": {
+          "texture": "#tower_cargo_frame"
+        },
+        "west": {
+          "texture": "#tower_cargo_frame"
+        },
+        "up": {
+          "texture": "#tower_cargo_frame"
+        },
+        "down": {
+          "texture": "#tower_cargo_frame"
+        }
+      },
+      "rotation": {
+        "origin": [
+          14.4,
+          4.7,
+          1.0
+        ],
+        "axis": "z",
+        "angle": 45
+      }
+    },
+    {
+      "from": [
+        13.9029,
+        3.5,
+        0.4
+      ],
+      "to": [
+        14.8971,
+        5.9,
+        1.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_frame"
+        },
+        "south": {
+          "texture": "#tower_cargo_frame"
+        },
+        "east": {
+          "texture": "#tower_cargo_frame"
+        },
+        "west": {
+          "texture": "#tower_cargo_frame"
+        },
+        "up": {
+          "texture": "#tower_cargo_frame"
+        },
+        "down": {
+          "texture": "#tower_cargo_frame"
+        }
+      }
+    },
+    {
+      "from": [
+        13.9029,
+        3.5,
+        0.3
+      ],
+      "to": [
+        14.8971,
+        5.9,
+        1.7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_frame"
+        },
+        "south": {
+          "texture": "#tower_cargo_frame"
+        },
+        "east": {
+          "texture": "#tower_cargo_frame"
+        },
+        "west": {
+          "texture": "#tower_cargo_frame"
+        },
+        "up": {
+          "texture": "#tower_cargo_frame"
+        },
+        "down": {
+          "texture": "#tower_cargo_frame"
+        }
+      },
+      "rotation": {
+        "origin": [
+          14.4,
+          4.7,
+          1.0
+        ],
+        "axis": "z",
+        "angle": 45
+      }
+    },
+    {
+      "from": [
+        14.05,
+        3.85,
+        0.1
+      ],
+      "to": [
+        14.75,
+        5.55,
+        0.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_rubber"
+        },
+        "south": {
+          "texture": "#tower_cargo_rubber"
+        },
+        "east": {
+          "texture": "#tower_cargo_rubber"
+        },
+        "west": {
+          "texture": "#tower_cargo_rubber"
+        },
+        "up": {
+          "texture": "#tower_cargo_rubber"
+        },
+        "down": {
+          "texture": "#tower_cargo_rubber"
+        }
+      }
+    },
+    {
+      "from": [
+        10.8,
+        2.4,
+        0.3
+      ],
+      "to": [
+        18,
+        3.3,
+        0.7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_isolator",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#tower_cargo_frame",
+          "uv": [
+            0,
+            0,
+            7.2,
+            0.9
+          ]
+        },
+        "east": {
+          "texture": "#tower_cargo_frame",
+          "uv": [
+            0,
+            0,
+            0.4,
+            0.9
+          ]
+        },
+        "west": {
+          "texture": "#tower_cargo_frame",
+          "uv": [
+            0,
+            0,
+            0.4,
+            0.9
+          ]
+        },
+        "up": {
+          "texture": "#tower_cargo_frame",
+          "uv": [
+            0,
+            0,
+            7.2,
+            0.4
+          ]
+        },
+        "down": {
+          "texture": "#tower_cargo_frame",
+          "uv": [
+            0,
+            0,
+            7.2,
+            0.4
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          14.4,
+          2.85,
+          0.5
+        ],
+        "axis": "y",
+        "angle": 0
+      }
+    },
+    {
+      "from": [
+        4,
+        0,
+        0.3426
+      ],
+      "to": [
+        16,
+        1.5,
+        1.65
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_cargo_housing"
+        },
+        "south": {
+          "texture": "#tower_cargo_housing"
+        },
+        "west": {
+          "texture": "#tower_cargo_housing"
+        },
+        "up": {
+          "texture": "#tower_cargo_housing"
+        }
+      }
+    }
+  ]
+}

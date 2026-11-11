@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "KKSSKK",
+    "  CC  "
+  ],
+  "key": {
+    "C": "jugcraft:basic_circuit",
+    "K": "jugcraft:plastic_sheet",
+    "S": "minecraft:spyglass"
+  },
+  "result": {
+    "id": "jugcraft:vc_camera",
+    "count": 2
+  }
+}

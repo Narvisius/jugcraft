@@ -1,63 +1,963 @@
 {
   "variants": {
-    "facing=north,moving=false,open=false": {
-      "model": "jugcraft:block/roller_door"
+    "facing=north,left=false,moving=false,open=false,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0000"
     },
-    "facing=north,moving=true,open=false": {
-      "model": "jugcraft:block/roller_door_open"
-    },
-    "facing=north,moving=false,open=true": {
-      "model": "jugcraft:block/roller_door_open"
-    },
-    "facing=north,moving=true,open=true": {
-      "model": "jugcraft:block/roller_door_open"
-    },
-    "facing=east,moving=false,open=false": {
-      "model": "jugcraft:block/roller_door",
+    "facing=east,left=false,moving=false,open=false,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0000",
       "y": 90
     },
-    "facing=east,moving=true,open=false": {
-      "model": "jugcraft:block/roller_door_open",
-      "y": 90
-    },
-    "facing=east,moving=false,open=true": {
-      "model": "jugcraft:block/roller_door_open",
-      "y": 90
-    },
-    "facing=east,moving=true,open=true": {
-      "model": "jugcraft:block/roller_door_open",
-      "y": 90
-    },
-    "facing=south,moving=false,open=false": {
-      "model": "jugcraft:block/roller_door",
+    "facing=south,left=false,moving=false,open=false,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0000",
       "y": 180
     },
-    "facing=south,moving=true,open=false": {
-      "model": "jugcraft:block/roller_door_open",
-      "y": 180
-    },
-    "facing=south,moving=false,open=true": {
-      "model": "jugcraft:block/roller_door_open",
-      "y": 180
-    },
-    "facing=south,moving=true,open=true": {
-      "model": "jugcraft:block/roller_door_open",
-      "y": 180
-    },
-    "facing=west,moving=false,open=false": {
-      "model": "jugcraft:block/roller_door",
+    "facing=west,left=false,moving=false,open=false,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0000",
       "y": 270
     },
-    "facing=west,moving=true,open=false": {
-      "model": "jugcraft:block/roller_door_open",
+    "facing=north,left=false,moving=true,open=false,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001"
+    },
+    "facing=east,left=false,moving=true,open=false,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 90
+    },
+    "facing=south,left=false,moving=true,open=false,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 180
+    },
+    "facing=west,left=false,moving=true,open=false,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
       "y": 270
     },
-    "facing=west,moving=false,open=true": {
-      "model": "jugcraft:block/roller_door_open",
+    "facing=north,left=false,moving=false,open=true,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001"
+    },
+    "facing=east,left=false,moving=false,open=true,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 90
+    },
+    "facing=south,left=false,moving=false,open=true,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 180
+    },
+    "facing=west,left=false,moving=false,open=true,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
       "y": 270
     },
-    "facing=west,moving=true,open=true": {
-      "model": "jugcraft:block/roller_door_open",
+    "facing=north,left=false,moving=true,open=true,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001"
+    },
+    "facing=east,left=false,moving=true,open=true,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 90
+    },
+    "facing=south,left=false,moving=true,open=true,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 180
+    },
+    "facing=west,left=false,moving=true,open=true,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 270
+    },
+    "facing=north,left=false,moving=false,open=false,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0100"
+    },
+    "facing=east,left=false,moving=false,open=false,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0100",
+      "y": 90
+    },
+    "facing=south,left=false,moving=false,open=false,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0100",
+      "y": 180
+    },
+    "facing=west,left=false,moving=false,open=false,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0100",
+      "y": 270
+    },
+    "facing=north,left=false,moving=true,open=false,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0101"
+    },
+    "facing=east,left=false,moving=true,open=false,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0101",
+      "y": 90
+    },
+    "facing=south,left=false,moving=true,open=false,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0101",
+      "y": 180
+    },
+    "facing=west,left=false,moving=true,open=false,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0101",
+      "y": 270
+    },
+    "facing=north,left=false,moving=false,open=true,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0101"
+    },
+    "facing=east,left=false,moving=false,open=true,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0101",
+      "y": 90
+    },
+    "facing=south,left=false,moving=false,open=true,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0101",
+      "y": 180
+    },
+    "facing=west,left=false,moving=false,open=true,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0101",
+      "y": 270
+    },
+    "facing=north,left=false,moving=true,open=true,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0101"
+    },
+    "facing=east,left=false,moving=true,open=true,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0101",
+      "y": 90
+    },
+    "facing=south,left=false,moving=true,open=true,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0101",
+      "y": 180
+    },
+    "facing=west,left=false,moving=true,open=true,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0101",
+      "y": 270
+    },
+    "facing=north,left=true,moving=false,open=false,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1000"
+    },
+    "facing=east,left=true,moving=false,open=false,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1000",
+      "y": 90
+    },
+    "facing=south,left=true,moving=false,open=false,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1000",
+      "y": 180
+    },
+    "facing=west,left=true,moving=false,open=false,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1000",
+      "y": 270
+    },
+    "facing=north,left=true,moving=true,open=false,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1001"
+    },
+    "facing=east,left=true,moving=true,open=false,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1001",
+      "y": 90
+    },
+    "facing=south,left=true,moving=true,open=false,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1001",
+      "y": 180
+    },
+    "facing=west,left=true,moving=true,open=false,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1001",
+      "y": 270
+    },
+    "facing=north,left=true,moving=false,open=true,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1001"
+    },
+    "facing=east,left=true,moving=false,open=true,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1001",
+      "y": 90
+    },
+    "facing=south,left=true,moving=false,open=true,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1001",
+      "y": 180
+    },
+    "facing=west,left=true,moving=false,open=true,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1001",
+      "y": 270
+    },
+    "facing=north,left=true,moving=true,open=true,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1001"
+    },
+    "facing=east,left=true,moving=true,open=true,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1001",
+      "y": 90
+    },
+    "facing=south,left=true,moving=true,open=true,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1001",
+      "y": 180
+    },
+    "facing=west,left=true,moving=true,open=true,pos=bottom,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1001",
+      "y": 270
+    },
+    "facing=north,left=true,moving=false,open=false,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1100"
+    },
+    "facing=east,left=true,moving=false,open=false,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1100",
+      "y": 90
+    },
+    "facing=south,left=true,moving=false,open=false,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1100",
+      "y": 180
+    },
+    "facing=west,left=true,moving=false,open=false,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1100",
+      "y": 270
+    },
+    "facing=north,left=true,moving=true,open=false,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1101"
+    },
+    "facing=east,left=true,moving=true,open=false,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1101",
+      "y": 90
+    },
+    "facing=south,left=true,moving=true,open=false,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1101",
+      "y": 180
+    },
+    "facing=west,left=true,moving=true,open=false,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1101",
+      "y": 270
+    },
+    "facing=north,left=true,moving=false,open=true,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1101"
+    },
+    "facing=east,left=true,moving=false,open=true,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1101",
+      "y": 90
+    },
+    "facing=south,left=true,moving=false,open=true,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1101",
+      "y": 180
+    },
+    "facing=west,left=true,moving=false,open=true,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1101",
+      "y": 270
+    },
+    "facing=north,left=true,moving=true,open=true,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1101"
+    },
+    "facing=east,left=true,moving=true,open=true,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1101",
+      "y": 90
+    },
+    "facing=south,left=true,moving=true,open=true,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1101",
+      "y": 180
+    },
+    "facing=west,left=true,moving=true,open=true,pos=bottom,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1101",
+      "y": 270
+    },
+    "facing=north,left=false,moving=false,open=false,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_middle_0000"
+    },
+    "facing=east,left=false,moving=false,open=false,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_middle_0000",
+      "y": 90
+    },
+    "facing=south,left=false,moving=false,open=false,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_middle_0000",
+      "y": 180
+    },
+    "facing=west,left=false,moving=false,open=false,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_middle_0000",
+      "y": 270
+    },
+    "facing=north,left=false,moving=true,open=false,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001"
+    },
+    "facing=east,left=false,moving=true,open=false,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 90
+    },
+    "facing=south,left=false,moving=true,open=false,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 180
+    },
+    "facing=west,left=false,moving=true,open=false,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 270
+    },
+    "facing=north,left=false,moving=false,open=true,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001"
+    },
+    "facing=east,left=false,moving=false,open=true,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 90
+    },
+    "facing=south,left=false,moving=false,open=true,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 180
+    },
+    "facing=west,left=false,moving=false,open=true,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 270
+    },
+    "facing=north,left=false,moving=true,open=true,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001"
+    },
+    "facing=east,left=false,moving=true,open=true,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 90
+    },
+    "facing=south,left=false,moving=true,open=true,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 180
+    },
+    "facing=west,left=false,moving=true,open=true,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 270
+    },
+    "facing=north,left=false,moving=false,open=false,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_middle_0100"
+    },
+    "facing=east,left=false,moving=false,open=false,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_middle_0100",
+      "y": 90
+    },
+    "facing=south,left=false,moving=false,open=false,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_middle_0100",
+      "y": 180
+    },
+    "facing=west,left=false,moving=false,open=false,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_middle_0100",
+      "y": 270
+    },
+    "facing=north,left=false,moving=true,open=false,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0101"
+    },
+    "facing=east,left=false,moving=true,open=false,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0101",
+      "y": 90
+    },
+    "facing=south,left=false,moving=true,open=false,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0101",
+      "y": 180
+    },
+    "facing=west,left=false,moving=true,open=false,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0101",
+      "y": 270
+    },
+    "facing=north,left=false,moving=false,open=true,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0101"
+    },
+    "facing=east,left=false,moving=false,open=true,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0101",
+      "y": 90
+    },
+    "facing=south,left=false,moving=false,open=true,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0101",
+      "y": 180
+    },
+    "facing=west,left=false,moving=false,open=true,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0101",
+      "y": 270
+    },
+    "facing=north,left=false,moving=true,open=true,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0101"
+    },
+    "facing=east,left=false,moving=true,open=true,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0101",
+      "y": 90
+    },
+    "facing=south,left=false,moving=true,open=true,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0101",
+      "y": 180
+    },
+    "facing=west,left=false,moving=true,open=true,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_0101",
+      "y": 270
+    },
+    "facing=north,left=true,moving=false,open=false,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_middle_1000"
+    },
+    "facing=east,left=true,moving=false,open=false,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_middle_1000",
+      "y": 90
+    },
+    "facing=south,left=true,moving=false,open=false,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_middle_1000",
+      "y": 180
+    },
+    "facing=west,left=true,moving=false,open=false,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_middle_1000",
+      "y": 270
+    },
+    "facing=north,left=true,moving=true,open=false,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1001"
+    },
+    "facing=east,left=true,moving=true,open=false,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1001",
+      "y": 90
+    },
+    "facing=south,left=true,moving=true,open=false,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1001",
+      "y": 180
+    },
+    "facing=west,left=true,moving=true,open=false,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1001",
+      "y": 270
+    },
+    "facing=north,left=true,moving=false,open=true,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1001"
+    },
+    "facing=east,left=true,moving=false,open=true,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1001",
+      "y": 90
+    },
+    "facing=south,left=true,moving=false,open=true,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1001",
+      "y": 180
+    },
+    "facing=west,left=true,moving=false,open=true,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1001",
+      "y": 270
+    },
+    "facing=north,left=true,moving=true,open=true,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1001"
+    },
+    "facing=east,left=true,moving=true,open=true,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1001",
+      "y": 90
+    },
+    "facing=south,left=true,moving=true,open=true,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1001",
+      "y": 180
+    },
+    "facing=west,left=true,moving=true,open=true,pos=middle,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_1001",
+      "y": 270
+    },
+    "facing=north,left=true,moving=false,open=false,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_middle_1100"
+    },
+    "facing=east,left=true,moving=false,open=false,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_middle_1100",
+      "y": 90
+    },
+    "facing=south,left=true,moving=false,open=false,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_middle_1100",
+      "y": 180
+    },
+    "facing=west,left=true,moving=false,open=false,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_middle_1100",
+      "y": 270
+    },
+    "facing=north,left=true,moving=true,open=false,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1101"
+    },
+    "facing=east,left=true,moving=true,open=false,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1101",
+      "y": 90
+    },
+    "facing=south,left=true,moving=true,open=false,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1101",
+      "y": 180
+    },
+    "facing=west,left=true,moving=true,open=false,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1101",
+      "y": 270
+    },
+    "facing=north,left=true,moving=false,open=true,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1101"
+    },
+    "facing=east,left=true,moving=false,open=true,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1101",
+      "y": 90
+    },
+    "facing=south,left=true,moving=false,open=true,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1101",
+      "y": 180
+    },
+    "facing=west,left=true,moving=false,open=true,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1101",
+      "y": 270
+    },
+    "facing=north,left=true,moving=true,open=true,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1101"
+    },
+    "facing=east,left=true,moving=true,open=true,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1101",
+      "y": 90
+    },
+    "facing=south,left=true,moving=true,open=true,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1101",
+      "y": 180
+    },
+    "facing=west,left=true,moving=true,open=true,pos=middle,right=true": {
+      "model": "jugcraft:block/roller_door_bottom_1101",
+      "y": 270
+    },
+    "facing=north,left=false,moving=false,open=false,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_middle_0000"
+    },
+    "facing=east,left=false,moving=false,open=false,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_middle_0000",
+      "y": 90
+    },
+    "facing=south,left=false,moving=false,open=false,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_middle_0000",
+      "y": 180
+    },
+    "facing=west,left=false,moving=false,open=false,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_middle_0000",
+      "y": 270
+    },
+    "facing=north,left=false,moving=true,open=false,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001"
+    },
+    "facing=east,left=false,moving=true,open=false,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 90
+    },
+    "facing=south,left=false,moving=true,open=false,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 180
+    },
+    "facing=west,left=false,moving=true,open=false,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 270
+    },
+    "facing=north,left=false,moving=false,open=true,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_top_0010"
+    },
+    "facing=east,left=false,moving=false,open=true,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_top_0010",
+      "y": 90
+    },
+    "facing=south,left=false,moving=false,open=true,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_top_0010",
+      "y": 180
+    },
+    "facing=west,left=false,moving=false,open=true,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_top_0010",
+      "y": 270
+    },
+    "facing=north,left=false,moving=true,open=true,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001"
+    },
+    "facing=east,left=false,moving=true,open=true,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 90
+    },
+    "facing=south,left=false,moving=true,open=true,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 180
+    },
+    "facing=west,left=false,moving=true,open=true,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 270
+    },
+    "facing=north,left=false,moving=false,open=false,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_0100"
+    },
+    "facing=east,left=false,moving=false,open=false,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_0100",
+      "y": 90
+    },
+    "facing=south,left=false,moving=false,open=false,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_0100",
+      "y": 180
+    },
+    "facing=west,left=false,moving=false,open=false,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_0100",
+      "y": 270
+    },
+    "facing=north,left=false,moving=true,open=false,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_0101"
+    },
+    "facing=east,left=false,moving=true,open=false,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_0101",
+      "y": 90
+    },
+    "facing=south,left=false,moving=true,open=false,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_0101",
+      "y": 180
+    },
+    "facing=west,left=false,moving=true,open=false,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_0101",
+      "y": 270
+    },
+    "facing=north,left=false,moving=false,open=true,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_0110"
+    },
+    "facing=east,left=false,moving=false,open=true,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_0110",
+      "y": 90
+    },
+    "facing=south,left=false,moving=false,open=true,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_0110",
+      "y": 180
+    },
+    "facing=west,left=false,moving=false,open=true,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_0110",
+      "y": 270
+    },
+    "facing=north,left=false,moving=true,open=true,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_0101"
+    },
+    "facing=east,left=false,moving=true,open=true,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_0101",
+      "y": 90
+    },
+    "facing=south,left=false,moving=true,open=true,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_0101",
+      "y": 180
+    },
+    "facing=west,left=false,moving=true,open=true,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_0101",
+      "y": 270
+    },
+    "facing=north,left=true,moving=false,open=false,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_top_1000"
+    },
+    "facing=east,left=true,moving=false,open=false,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_top_1000",
+      "y": 90
+    },
+    "facing=south,left=true,moving=false,open=false,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_top_1000",
+      "y": 180
+    },
+    "facing=west,left=true,moving=false,open=false,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_top_1000",
+      "y": 270
+    },
+    "facing=north,left=true,moving=true,open=false,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_top_1001"
+    },
+    "facing=east,left=true,moving=true,open=false,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_top_1001",
+      "y": 90
+    },
+    "facing=south,left=true,moving=true,open=false,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_top_1001",
+      "y": 180
+    },
+    "facing=west,left=true,moving=true,open=false,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_top_1001",
+      "y": 270
+    },
+    "facing=north,left=true,moving=false,open=true,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_top_1010"
+    },
+    "facing=east,left=true,moving=false,open=true,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_top_1010",
+      "y": 90
+    },
+    "facing=south,left=true,moving=false,open=true,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_top_1010",
+      "y": 180
+    },
+    "facing=west,left=true,moving=false,open=true,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_top_1010",
+      "y": 270
+    },
+    "facing=north,left=true,moving=true,open=true,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_top_1001"
+    },
+    "facing=east,left=true,moving=true,open=true,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_top_1001",
+      "y": 90
+    },
+    "facing=south,left=true,moving=true,open=true,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_top_1001",
+      "y": 180
+    },
+    "facing=west,left=true,moving=true,open=true,pos=top,right=false": {
+      "model": "jugcraft:block/roller_door_top_1001",
+      "y": 270
+    },
+    "facing=north,left=true,moving=false,open=false,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_1100"
+    },
+    "facing=east,left=true,moving=false,open=false,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_1100",
+      "y": 90
+    },
+    "facing=south,left=true,moving=false,open=false,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_1100",
+      "y": 180
+    },
+    "facing=west,left=true,moving=false,open=false,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_1100",
+      "y": 270
+    },
+    "facing=north,left=true,moving=true,open=false,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_1101"
+    },
+    "facing=east,left=true,moving=true,open=false,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_1101",
+      "y": 90
+    },
+    "facing=south,left=true,moving=true,open=false,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_1101",
+      "y": 180
+    },
+    "facing=west,left=true,moving=true,open=false,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_1101",
+      "y": 270
+    },
+    "facing=north,left=true,moving=false,open=true,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_1110"
+    },
+    "facing=east,left=true,moving=false,open=true,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_1110",
+      "y": 90
+    },
+    "facing=south,left=true,moving=false,open=true,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_1110",
+      "y": 180
+    },
+    "facing=west,left=true,moving=false,open=true,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_1110",
+      "y": 270
+    },
+    "facing=north,left=true,moving=true,open=true,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_1101"
+    },
+    "facing=east,left=true,moving=true,open=true,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_1101",
+      "y": 90
+    },
+    "facing=south,left=true,moving=true,open=true,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_1101",
+      "y": 180
+    },
+    "facing=west,left=true,moving=true,open=true,pos=top,right=true": {
+      "model": "jugcraft:block/roller_door_top_1101",
+      "y": 270
+    },
+    "facing=north,left=false,moving=false,open=false,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0000"
+    },
+    "facing=east,left=false,moving=false,open=false,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0000",
+      "y": 90
+    },
+    "facing=south,left=false,moving=false,open=false,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0000",
+      "y": 180
+    },
+    "facing=west,left=false,moving=false,open=false,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0000",
+      "y": 270
+    },
+    "facing=north,left=false,moving=true,open=false,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001"
+    },
+    "facing=east,left=false,moving=true,open=false,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 90
+    },
+    "facing=south,left=false,moving=true,open=false,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 180
+    },
+    "facing=west,left=false,moving=true,open=false,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 270
+    },
+    "facing=north,left=false,moving=false,open=true,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_top_0010"
+    },
+    "facing=east,left=false,moving=false,open=true,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_top_0010",
+      "y": 90
+    },
+    "facing=south,left=false,moving=false,open=true,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_top_0010",
+      "y": 180
+    },
+    "facing=west,left=false,moving=false,open=true,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_top_0010",
+      "y": 270
+    },
+    "facing=north,left=false,moving=true,open=true,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001"
+    },
+    "facing=east,left=false,moving=true,open=true,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 90
+    },
+    "facing=south,left=false,moving=true,open=true,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 180
+    },
+    "facing=west,left=false,moving=true,open=true,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_bottom_0001",
+      "y": 270
+    },
+    "facing=north,left=false,moving=false,open=false,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_single_0100"
+    },
+    "facing=east,left=false,moving=false,open=false,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_single_0100",
+      "y": 90
+    },
+    "facing=south,left=false,moving=false,open=false,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_single_0100",
+      "y": 180
+    },
+    "facing=west,left=false,moving=false,open=false,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_single_0100",
+      "y": 270
+    },
+    "facing=north,left=false,moving=true,open=false,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_top_0101"
+    },
+    "facing=east,left=false,moving=true,open=false,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_top_0101",
+      "y": 90
+    },
+    "facing=south,left=false,moving=true,open=false,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_top_0101",
+      "y": 180
+    },
+    "facing=west,left=false,moving=true,open=false,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_top_0101",
+      "y": 270
+    },
+    "facing=north,left=false,moving=false,open=true,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_top_0110"
+    },
+    "facing=east,left=false,moving=false,open=true,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_top_0110",
+      "y": 90
+    },
+    "facing=south,left=false,moving=false,open=true,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_top_0110",
+      "y": 180
+    },
+    "facing=west,left=false,moving=false,open=true,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_top_0110",
+      "y": 270
+    },
+    "facing=north,left=false,moving=true,open=true,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_top_0101"
+    },
+    "facing=east,left=false,moving=true,open=true,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_top_0101",
+      "y": 90
+    },
+    "facing=south,left=false,moving=true,open=true,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_top_0101",
+      "y": 180
+    },
+    "facing=west,left=false,moving=true,open=true,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_top_0101",
+      "y": 270
+    },
+    "facing=north,left=true,moving=false,open=false,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_single_1000"
+    },
+    "facing=east,left=true,moving=false,open=false,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_single_1000",
+      "y": 90
+    },
+    "facing=south,left=true,moving=false,open=false,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_single_1000",
+      "y": 180
+    },
+    "facing=west,left=true,moving=false,open=false,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_single_1000",
+      "y": 270
+    },
+    "facing=north,left=true,moving=true,open=false,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_top_1001"
+    },
+    "facing=east,left=true,moving=true,open=false,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_top_1001",
+      "y": 90
+    },
+    "facing=south,left=true,moving=true,open=false,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_top_1001",
+      "y": 180
+    },
+    "facing=west,left=true,moving=true,open=false,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_top_1001",
+      "y": 270
+    },
+    "facing=north,left=true,moving=false,open=true,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_top_1010"
+    },
+    "facing=east,left=true,moving=false,open=true,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_top_1010",
+      "y": 90
+    },
+    "facing=south,left=true,moving=false,open=true,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_top_1010",
+      "y": 180
+    },
+    "facing=west,left=true,moving=false,open=true,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_top_1010",
+      "y": 270
+    },
+    "facing=north,left=true,moving=true,open=true,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_top_1001"
+    },
+    "facing=east,left=true,moving=true,open=true,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_top_1001",
+      "y": 90
+    },
+    "facing=south,left=true,moving=true,open=true,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_top_1001",
+      "y": 180
+    },
+    "facing=west,left=true,moving=true,open=true,pos=single,right=false": {
+      "model": "jugcraft:block/roller_door_top_1001",
+      "y": 270
+    },
+    "facing=north,left=true,moving=false,open=false,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_single_1100"
+    },
+    "facing=east,left=true,moving=false,open=false,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_single_1100",
+      "y": 90
+    },
+    "facing=south,left=true,moving=false,open=false,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_single_1100",
+      "y": 180
+    },
+    "facing=west,left=true,moving=false,open=false,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_single_1100",
+      "y": 270
+    },
+    "facing=north,left=true,moving=true,open=false,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_top_1101"
+    },
+    "facing=east,left=true,moving=true,open=false,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_top_1101",
+      "y": 90
+    },
+    "facing=south,left=true,moving=true,open=false,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_top_1101",
+      "y": 180
+    },
+    "facing=west,left=true,moving=true,open=false,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_top_1101",
+      "y": 270
+    },
+    "facing=north,left=true,moving=false,open=true,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_top_1110"
+    },
+    "facing=east,left=true,moving=false,open=true,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_top_1110",
+      "y": 90
+    },
+    "facing=south,left=true,moving=false,open=true,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_top_1110",
+      "y": 180
+    },
+    "facing=west,left=true,moving=false,open=true,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_top_1110",
+      "y": 270
+    },
+    "facing=north,left=true,moving=true,open=true,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_top_1101"
+    },
+    "facing=east,left=true,moving=true,open=true,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_top_1101",
+      "y": 90
+    },
+    "facing=south,left=true,moving=true,open=true,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_top_1101",
+      "y": 180
+    },
+    "facing=west,left=true,moving=true,open=true,pos=single,right=true": {
+      "model": "jugcraft:block/roller_door_top_1101",
       "y": 270
     }
   }

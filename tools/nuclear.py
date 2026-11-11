@@ -4,7 +4,6 @@ radiation damage type. Fuel: the enriched uranium cylinder, fuel assemblies and 
 and Fuel Fabricator are machines: tools/machines.py, models here). The reactor unit: the working equipment (placed
 whole from one item, drawn in 3D by client/NuclearRenderer.java from the material sheet made here), the three nuclear
 pipes and the link card. Names, models, loot, recipes, tags; tools/check_mod_data.py checks the Java matches."""
-from asset_fonts import font_path
 import math
 import os
 import random
@@ -40,10 +39,10 @@ EQUIPMENT = {
     # Plant equipment that only has to look right (the plants' buildings): drawn by the client, placed whole.
     "polar_crane": ("Polar Crane", 40, 5, 5),
     "refueling_machine": ("Refueling Machine", 15, 4, 8),
-    "overhead_crane": ("Overhead Crane", 40, 5, 4),
+    "overhead_crane": ("Overhead Crane", 42, 6, 5),
     "moisture_separator_reheater": ("Moisture Separator Reheater", 5, 20, 5),
     "feedwater_heater": ("Feedwater Heater", 3, 12, 3),
-    "emergency_diesel_generator": ("Emergency Diesel Generator", 7, 14, 5),
+    "emergency_diesel_generator": ("Emergency Diesel Generator", 10, 21, 7),
     "storage_tank": ("Storage Tank", 5, 5, 9),
     "heat_exchanger": ("Heat Exchanger", 3, 9, 3),
     "pump_skid": ("Pump Skid", 3, 5, 3),
@@ -72,10 +71,50 @@ EQUIPMENT = {
     "cr_air_handling_unit": ("Control Room Air Handling Unit", 3, 7, 3),
     "cr_chiller": ("Control Room Water Chiller", 3, 5, 3),
     "chw_pump": ("Chilled Water Pump", 1, 3, 2),
+    # The diesel generator's starting air system (round 31; tools/diesel_set.py): each joins the nearest diesel
+    # generator (nuclear/StartingAir.java), labelled by its anchor's variant.
+    "edg_air_receiver": ("Starting Air Receiver", 2, 2, 5),
+    "edg_air_compressor": ("Starting Air Compressor", 3, 2, 2),
+    "edg_air_dryer": ("Starting Air Dryer", 2, 1, 2),
+    # The diesel rooms' own plant (round 31 part 3; tools/diesel_room.py): each joins the nearest diesel generator, as
+    # the starting air does, its gauges and lamps reading it; the CO2 bank discharges into its room
+    # (nuclear/Co2System.java), the monorail's hoist travels and lifts from its pendant (nuclear/Monorail.java).
+    "edg_jw_keepwarm": ("Jacket Water Keep-Warm Skid", 3, 2, 2),
+    "edg_lo_keepwarm": ("Lube Oil Keep-Warm Skid", 3, 2, 2),
+    "edg_expansion_tank": ("Jacket Water Expansion Tank", 2, 2, 5),
+    "edg_jw_cooler": ("Jacket Water Cooler", 7, 2, 3),
+    "edg_ngr": ("Neutral Grounding Resistor", 2, 2, 2),
+    "edg_gen_cubicle": ("Generator Terminal and CT Cubicle", 3, 2, 3),
+    "edg_co2_bank": ("CO2 Cylinder Bank", 3, 1, 2),
+    "edg_monorail": ("Monorail Hoist", 20, 2, 1),
+    # The turbine hall's feed train and the turbine's oil plant (turbine hall part 2, tools/feed_train.py; TurbineHall):
+    # each joins the nearest turbine-generator, labelled by its anchor's variant; the condensate and main feed pumps
+    # start and stop and the plant answers.
+    "condenser_shell": ("Condenser Shell", 12, 6, 6),
+    "condenser_hotwell": ("Condenser Hotwell", 12, 6, 6),
+    "condensate_pump": ("Condensate Pump", 3, 2, 5),
+    "main_feed_pump": ("Main Feed Pump", 4, 11, 5),
+    "lube_oil_reservoir": ("Lube Oil Reservoir", 4, 8, 4),
+    "ehc_unit": ("EHC Fluid Supply Unit", 3, 5, 3),
+    "seal_oil_unit": ("Seal Oil Unit", 3, 5, 3),
+    "h2_gas_panel": ("Generator Gas Control Panel", 4, 2, 3),
+    # Turbine hall part 3 (tools/oil_room.py): the lube oil room's conditioner, storage tanks and transfer pumps.
+    "lo_conditioner": ("Lube Oil Conditioner", 3, 2, 3),
+    "lo_storage_tank": ("Lube Oil Storage Tank", 3, 3, 8),
+    "lo_transfer_pumps": ("Lube Oil Transfer Pumps", 2, 2, 2),
 }
 # The cooling tower controller: one block, three tower kinds (CoolingTowerBlock.Tower).
 TOWER_CONTROLLER = "cooling_tower_controller"
-TOWERS = ["natural", "large", "mechanical"]
+# The pump houses' controllers (towers and pump houses build: nuclear/WaterWorksBlock.java): the lake intake's and the
+# circulating water pump house's.
+WORKS_CONTROLLER = "water_works_controller"
+WORKS = ["intake", "circ"]
+# The transformer yard's and the switchyard's controllers (transformer yard and switchyard build: nuclear/YardBlock.java).
+YARD_CONTROLLER = "yard_controller"
+YARD_WORKS = ["yard", "switchyard"]
+# The reactor building's controller (its inside a compiled site, tools/reactor_site.py: nuclear/ReactorBuildingBlock.java).
+REACTOR_CONTROLLER = "reactor_building_controller"
+TOWERS = ["natural", "large", "mechanical", "medium"]
 # The nuclear pipes: id: (name, thickness in pixels). Same order as PipeKind.java.
 PIPES = {
     "reactor_coolant_pipe": ("Reactor Coolant Pipe", 10),
@@ -86,12 +125,14 @@ PIPES = {
 FRAME = "nuclear_equipment_frame"
 # Plain blocks of the cooling system: the tower fill and the buried conduit (a full block that joins like a conduit).
 COOLING_BLOCKS = {"cooling_tower_fill": "Cooling Tower Fill", "conduit_trench": "Conduit Trench"}
+# The compiled sites' blocks (towers and pump houses build, nuclear/SiteBlock.java): drawn and shaped by their site.
+SITE_BLOCKS = {"site_structure": "Plant Structure", "site_ladder": "Plant Structure (Ladder)"}
 import plant_interior
 import storage_tank
 import nuclear_storage
 import structure_items
 
-BLOCKS = ["shielding_concrete"] + list(EQUIPMENT) + list(PIPES) + [TOWER_CONTROLLER] + list(COOLING_BLOCKS) + plant_interior.BLOCKS \
+BLOCKS = ["shielding_concrete"] + list(EQUIPMENT) + list(PIPES) + [TOWER_CONTROLLER, WORKS_CONTROLLER, YARD_CONTROLLER, REACTOR_CONTROLLER] + list(COOLING_BLOCKS) + list(SITE_BLOCKS) + plant_interior.BLOCKS \
     + list(storage_tank.NAMES) + nuclear_storage.BLOCKS
 
 NAMES = {
@@ -107,7 +148,11 @@ NAMES = {
     "spent_fuel_assembly": "Spent Fuel Assembly",
     "reactor_link_card": "Reactor Link Card",
     TOWER_CONTROLLER: "Cooling Tower Controller",
+    WORKS_CONTROLLER: "Water Works Controller",
+    YARD_CONTROLLER: "Yard Controller",
+    REACTOR_CONTROLLER: "Reactor Building Controller",
     **COOLING_BLOCKS,
+    **SITE_BLOCKS,
 }
 NAMES.update({k: v[0] for k, v in EQUIPMENT.items()})
 NAMES.update({k: v[0] for k, v in PIPES.items()})
@@ -125,20 +170,20 @@ LANG = {
     "tooltip.jugcraft.nuclear.reactor_steam_generator": "Boils the steam. Each one (with a coolant pump) carries a quarter of the heat",
     "tooltip.jugcraft.nuclear.reactor_coolant_pump": "Drives the primary coolant: one per steam generator",
     "tooltip.jugcraft.nuclear.pressurizer": "Keeps the primary loop at 15.5 MPa so the coolant can't boil",
-    "tooltip.jugcraft.nuclear.turbine_generator": "Steam in, power out. Needs a condenser and a main transformer touching it",
-    "tooltip.jugcraft.nuclear.condenser": "Turns used steam back into water: 4,000 mB/t of cooling water at full power",
+    "tooltip.jugcraft.nuclear.turbine_generator": "Steam in, power out. Needs a condenser and a main transformer touching it. Manual trip on its front standard, turning gear by its last LP",
+    "tooltip.jugcraft.nuclear.condenser": "Turns used steam back into water: 4,000 mB/t of cooling water at full power. Sneak and use with an empty hand to relabel it 1A, 1B or 1C",
     "tooltip.jugcraft.nuclear.feedwater_pump": "Sends the condensed water back to the steam generators (on the steam line)",
     "tooltip.jugcraft.nuclear.main_transformer": "The unit's power comes out here, into cables or a Unit Substation",
-    "tooltip.jugcraft.nuclear.reactor_control_console": "Runs the reactor. Link it to the vessel with a Reactor Link Card",
+    "tooltip.jugcraft.nuclear.reactor_control_console": "Runs the reactor: its rods, nuclear instruments and trip switches work. Link it to the vessel with a Reactor Link Card",
     "tooltip.jugcraft.nuclear.epr_reactor_vessel": "The EPR's larger core: 241 assemblies and 1.6 times the output. Needs two turbine-generators to use it all",
     "tooltip.jugcraft.nuclear.small_modular_reactor": "Reactor, steam generator and pressurizer in one module: 37 assemblies, an eighth of a full unit. Steam line to a Small Turbine-Generator",
     "tooltip.jugcraft.nuclear.circulating_water_pump": "Moves the cooling water round the cooling towers: a tower only works with these on its conduit (each one carries half a unit's heat)",
     "tooltip.jugcraft.nuclear.polar_crane": "The containment's round-the-dome crane (for building your own plant: it only looks the part)",
     "tooltip.jugcraft.nuclear.refueling_machine": "The gantry that lifts fuel out of the open reactor (for show)",
-    "tooltip.jugcraft.nuclear.overhead_crane": "The turbine hall's bridge crane (for show)",
-    "tooltip.jugcraft.nuclear.moisture_separator_reheater": "Dries and reheats the steam between the turbine stages (for show)",
+    "tooltip.jugcraft.nuclear.overhead_crane": "The turbine hall's 160 / 25 ton bridge crane: place it on a runway; from a crane pendant station hold a button to run the bridge, trolley or either hook (the pendant's NORTH, SOUTH, WEST and EAST)",
+    "tooltip.jugcraft.nuclear.moisture_separator_reheater": "Dries and reheats the steam between the turbine's HP and LP cylinders; its gauges read the nearest turbine",
     "tooltip.jugcraft.nuclear.feedwater_heater": "Warms the feedwater with steam bled from the turbine (for show)",
-    "tooltip.jugcraft.nuclear.emergency_diesel_generator": "Backup power for the safety systems if the grid is lost (for show)",
+    "tooltip.jugcraft.nuclear.emergency_diesel_generator": "Backup power for the safety systems: right-click to start or stop it. It burns diesel from its day tank and starts on air from its receivers",
     "tooltip.jugcraft.nuclear.storage_tank": "A plant water tank: refuelling water, condensate, demineralised water (for show)",
     "tooltip.jugcraft.nuclear.heat_exchanger": "A component cooling heat exchanger (for show)",
     "tooltip.jugcraft.nuclear.pump_skid": "A plant pump and motor on its baseplate (for show)",
@@ -146,7 +191,7 @@ LANG = {
     "tooltip.jugcraft.nuclear.spent_fuel_rack": "Holds used fuel under water; the water glows blue over it (for show)",
     "tooltip.jugcraft.nuclear.dry_storage_cask": "A ventilated concrete cask for cooled spent fuel (for show)",
     "tooltip.jugcraft.nuclear.travelling_water_screen": "Strains fish and debris out of the cooling water intake (for show)",
-    "tooltip.jugcraft.nuclear.plant_display_wall": "The control room's large plant overview display (for show)",
+    "tooltip.jugcraft.nuclear.plant_display_wall": "The control room's plant overview display: a wall of projection cubes showing the plant live, its safety functions, electrical lineup and trends, and the boards' alarms",
     "tooltip.jugcraft.nuclear.main_control_board": "A control room benchboard with its mimic, meters and annunciators (for show)",
     "tooltip.jugcraft.nuclear.switchgear_lineup": "A 480 V load center that holds 2,000,000 JE: cable into the back of its transformer section, take power out of its feeders' sections (upper breakers out of the top, lower ones down through the floor); right-click a breaker to open or close it",
     "tooltip.jugcraft.nuclear.air_handling_unit": "Filters and moves a building's air (for show)",
@@ -156,16 +201,81 @@ LANG = {
     "tooltip.jugcraft.nuclear.turbine_control_board": "The turbine's controls and the generator's meters and breakers (for show)",
     "tooltip.jugcraft.nuclear.electrical_control_board": "Offsite power, the station busses and the diesel generators (for show)",
     "tooltip.jugcraft.nuclear.radiation_control_board": "The radiation monitors, ventilation and fire detection (for show)",
-    "tooltip.jugcraft.nuclear.remote_shutdown_panel": "Trips the nearest reactor and takes its controls from the control room's console (no link card needed)",
+    "tooltip.jugcraft.nuclear.remote_shutdown_panel": "Trips the nearest reactor and takes its controls from the control room (turn a transfer key; then its aux feed and ARV switches work)",
     "tooltip.jugcraft.nuclear.mcc_lineup": "A 480 V motor control center that holds 500,000 JE: cable in under its first section, take power out of its units' terminals (the chargers' down through the floor or out of the back); right-click a unit to switch its breaker",
     "tooltip.jugcraft.nuclear.cr_filtration_unit": "Charcoal and HEPA filters the control room's outside air when the HVAC panel goes to emergency (a reactor trip or high temperature); its booster fan starts on its own",
     "tooltip.jugcraft.nuclear.cr_air_handling_unit": "Cools and circulates the control room's air (its filters, chilled water coil and supply fan); runs as the HVAC panel has it",
     "tooltip.jugcraft.nuclear.cr_chiller": "Chills the water for the control room's air handlers; its panel shows its temperatures and load",
     "tooltip.jugcraft.nuclear.chw_pump": "Pumps chilled water from the air handlers' coils through its chiller",
+    "tooltip.jugcraft.nuclear.edg_air_receiver": "Holds the nearest diesel generator's starting air: each start takes some; below 150 psig it fails to start",
+    "tooltip.jugcraft.nuclear.edg_air_compressor": "Refills the nearest diesel generator's air receivers: the first cuts in below 225 psig, the second below 200, both stop at 250",
+    "tooltip.jugcraft.nuclear.edg_air_dryer": "Dries the starting air between the compressors and the receivers (its POWER lamp lit while it is joined to a diesel generator)",
+    # The diesel rooms' own plant (round 31 part 3, nuclear/DieselRoom.java).
+    "tooltip.jugcraft.nuclear.edg_jw_keepwarm": "Keeps the nearest diesel generator's jacket water warm while it stands by: its heater and pump run, its gauges read the water",
+    "tooltip.jugcraft.nuclear.edg_lo_keepwarm": "Keeps the nearest diesel generator's lube oil warm and its gallery primed while it stands by (30 psig prelube)",
+    "tooltip.jugcraft.nuclear.edg_expansion_tank": "The nearest diesel generator's jacket water expansion tank: its sight glass rises as the water warms",
+    "tooltip.jugcraft.nuclear.edg_jw_cooler": "Cools the nearest diesel generator's jacket water with service water while it runs: its temperature valve opens past 160 °F",
+    "tooltip.jugcraft.nuclear.edg_ngr": "The diesel generator's neutral grounding resistor (for show)",
+    "tooltip.jugcraft.nuclear.edg_gen_cubicle": "The diesel generator's terminal and CT cubicle: look in through its door windows (for show)",
+    "tooltip.jugcraft.nuclear.edg_co2_bank": "Floods the nearest diesel generator's room with CO2 when its release station is pulled: get out before the 30 seconds are up",
+    "tooltip.jugcraft.nuclear.edg_monorail": "A 5-ton monorail hoist beam: its trolley runs along it and its hook goes up and down from the hoist pendant station",
+    # Turbine hall part 2 (tools/feed_train.py; nuclear/TurbineHall.java): the feed train and the oil plant.
+    "tooltip.jugcraft.nuclear.condenser_shell": "Another condenser shell under the turbine's LPs, standing on its hotwell (for show). Sneak and use with an empty hand to relabel it 1A, 1B or 1C",
+    "tooltip.jugcraft.nuclear.condenser_hotwell": "The hotwell under a condenser shell: its vacuum and hotwell gauges and level glass read the nearest turbine's unit",
+    "tooltip.jugcraft.nuclear.condensate_pump": "A 50% condensate pump: START and STOP at its station. A stopped one stands by in AUTO and starts when the pumps running can't carry the feed",
+    "tooltip.jugcraft.nuclear.main_feed_pump": "A turbine-driven 60% main feed pump: TRIP and RESET at its station, start and stop it from the secondary board. Losing one above 60% runs the plant back with the rods in AUTO",
+    "tooltip.jugcraft.nuclear.lube_oil_reservoir": "The main turbine's lube oil reservoir: its pumps' lamps, gauges and level glass show the nearest turbine",
+    "tooltip.jugcraft.nuclear.ehc_unit": "The turbine's EHC fluid supply unit: its pumps' lamps, gauges and level glass show the nearest turbine",
+    "tooltip.jugcraft.nuclear.seal_oil_unit": "The generator's seal oil unit: its pumps' lamps, gauges and level glass show the nearest turbine",
+    "tooltip.jugcraft.nuclear.h2_gas_panel": "The generator's gas control station: hydrogen purity, casing pressure and dew point, its hydrogen and CO2 cylinders",
+    # Turbine hall part 3 (tools/oil_room.py; nuclear/TurbineHall.java): the lube oil room's plant.
+    "tooltip.jugcraft.nuclear.lo_conditioner": "The lube oil conditioner: its heater, pump and coalescer lamps, filter dP gauge and level glass show the nearest turbine's oil",
+    "tooltip.jugcraft.nuclear.lo_storage_tank": "A lube oil storage tank (clean or dirty: sneak and use with an empty hand to relabel it): its level gauge shows the nearest turbine's oil",
+    "tooltip.jugcraft.nuclear.lo_transfer_pumps": "The lube oil transfer pumps between the reservoir and the storage tanks: their lamps and discharge gauge show the nearest turbine's oil",
     "tooltip.jugcraft.nuclear.small_turbine_generator": "One module's turbine, condenser and generator in one: cooling water in, power out into cables",
     "block.jugcraft.cooling_tower_controller": "Cooling Tower Controller",
     "message.jugcraft.nuclear.tower_status": "Cooling tower: %s%% busy (takes %s of a standard unit's heat)",
     "message.jugcraft.nuclear.tower_incomplete": "Cooling tower incomplete: build the whole tower around this controller",
+    # The medium plant's towers (towers and pump houses build).
+    "message.jugcraft.nuclear.mu1_open": "MU-1 open: make-up water to the basin",
+    "message.jugcraft.nuclear.mu1_shut": "MU-1 shut: no make-up water to the basin",
+    "message.jugcraft.nuclear.lp_ct1a": "LP-CT1A: basin level %s%%, MU-1 %s; alarms acknowledged",
+    # The pump houses (towers and pump houses build: nuclear/WaterWorksBlockEntity.java).
+    "message.jugcraft.nuclear.ww_pump_start": "%s started",
+    "message.jugcraft.nuclear.ww_pump_stop": "%s stopped",
+    "message.jugcraft.nuclear.ww_pump_locked": "%s: the 86 lockout is tripped. Press RESET on the panel first",
+    "message.jugcraft.nuclear.ww_pump_suction": "%s: no suction, the forebay is too low (the towers' basins need make-up)",
+    "message.jugcraft.nuclear.ww_mov_open": "%s opening",
+    "message.jugcraft.nuclear.ww_mov_shut": "%s closing",
+    "message.jugcraft.nuclear.ww_tws_start": "%s started",
+    "message.jugcraft.nuclear.ww_tws_stop": "%s stopped",
+    "message.jugcraft.nuclear.ww_ann_ack": "Alarms acknowledged",
+    "message.jugcraft.nuclear.ww_ann_silence": "Horn silenced",
+    "message.jugcraft.nuclear.ww_ann_reset": "Trips reset",
+    "message.jugcraft.nuclear.ww_reset_refused": "Can't reset: the forebay is still low",
+    "message.jugcraft.nuclear.ww_intake_status": "Lake intake: make-up %s gpm, service water train 1 %s gpm, train 2 %s gpm",
+    "message.jugcraft.nuclear.ww_circ_status": "Circulating water: %s pumps delivering, %s gpm; forebay %s m",
+    # The transformer yard and the switchyard (transformer yard and switchyard build: nuclear/YardBlockEntity.java).
+    "message.jugcraft.nuclear.yard_status": "Transformer yard: %s%% of rated output out to the switchyard. MT-1A %s/%s C, MT-1B %s/%s C, MT-1C %s/%s C (top oil/winding); UAT-1A %s C, UAT-1B %s C; deluge zones flowing: %s%s",
+    "message.jugcraft.nuclear.yard_lockout": ". A main transformer's lockout is in (too hot): the breaker stays open until it cools",
+    "message.jugcraft.nuclear.reactor_building_status": "Reactor building: %s. Coolant pumps running: %s; pressurizer %s psig, steam generator 1 %s psig; operating floor %s mR/hr",
+    "message.jugcraft.nuclear.reactor_building_power": "at power (head on)",
+    "message.jugcraft.nuclear.reactor_building_refuelling": "refuelling (head on its stand, internals in the bay)",
+    "message.jugcraft.nuclear.reactor_building_no_vessel": "No reactor vessel within 48 blocks of this reactor building",
+    "message.jugcraft.nuclear.switchyard_status": "Switchyard: BKR 1-1 %s, 89-1 %s, earth switch %s; line 1 terminal holds %s JE; SAT-1 on tap %s, top oil %s C",
+    "message.jugcraft.nuclear.yard_deluge": "%s manual release: the deluge is spraying %s (RESET on the releasing panel to stop it)",
+    "message.jugcraft.nuclear.yard_deluge_reset": "Releasing panel reset: every zone armed again",
+    "message.jugcraft.nuclear.yard_deluge_armed": "Every zone is armed: nothing to reset",
+    "message.jugcraft.nuclear.yard_deluge_silence": "Gongs silenced (the water still flows until RESET)",
+    "message.jugcraft.nuclear.yard_ds_opening": "89-1 opening",
+    "message.jugcraft.nuclear.yard_ds_closing": "89-1 closing",
+    "message.jugcraft.nuclear.yard_ds_already_open": "89-1 is already open",
+    "message.jugcraft.nuclear.yard_ds_already_closed": "89-1 is already closed",
+    "message.jugcraft.nuclear.yard_ds_earthed": "89-1 can't close: its earth switch is on (take it off first)",
+    "message.jugcraft.nuclear.yard_es_interlock": "Earth switch interlocked: open 89-1 fully first",
+    "message.jugcraft.nuclear.yard_es_on": "89-1E earthed",
+    "message.jugcraft.nuclear.yard_es_off": "89-1E open",
+    "message.jugcraft.nuclear.yard_bkr_info": "BKR 1-1 is %s. The switchyard's breakers follow the plant: closed while the generator runs, open when it stops or trips",
     "block.jugcraft.nuclear_equipment_frame": "Nuclear Equipment",
     "death.attack.jugcraft.radiation": "%1$s died of radiation sickness",
     "death.attack.jugcraft.radiation.player": "%1$s died of radiation sickness while fighting %2$s",
@@ -175,7 +285,237 @@ LANG = {
     "message.jugcraft.nuclear.edg_start": "Emergency diesel generator: air start... it fires and comes up to speed",
     "message.jugcraft.nuclear.edg_no_fuel": "No diesel: it cranks on air but won't fire. Its day tank (a storage tank of diesel within %s blocks) is empty or missing, or the tank's outlet valve is shut",
     "message.jugcraft.nuclear.edg_stop": "Emergency diesel generator: stopping, coasting down",
+    "message.jugcraft.nuclear.edg_no_air": "Not enough starting air: it barely turns over and won't start (%s psig in the receivers; it needs %s). Its compressors refill them",
+    # The diesel rooms' panels' controls (round 31 part 2, nuclear/DieselPanels.java).
+    "message.jugcraft.nuclear.edg_status": "%s: %s; starting air %s psig; MODE %s%s",
+    "message.jugcraft.nuclear.edg_mode": "%s MODE: %s",
+    "message.jugcraft.nuclear.edg_mode_off": "%s: its MODE switch is at OFF (turn it to LOCAL or AUTO on its engine panel)",
+    "message.jugcraft.nuclear.edg_not_auto": "%s is in %s: it answers the control room only with its MODE switch at AUTO",
+    "message.jugcraft.nuclear.edg_not_local": "%s is in %s: turn its MODE switch to LOCAL to start or stop it here",
+    "message.jugcraft.nuclear.edg_lockout": "%s: its 86G lockout is tripped (reset it at the generator protection panel)",
+    "message.jugcraft.nuclear.edg_estop_in": "%s: its EMERG STOP is pushed in (pull it out at the engine panel)",
+    "message.jugcraft.nuclear.edg_estop": "%s: EMERGENCY STOP (latched in; push it again to pull it out)",
+    "message.jugcraft.nuclear.edg_estop_out": "%s: emergency stop pulled out",
+    "message.jugcraft.nuclear.edg_stopped": "%s is already stopped",
+    "message.jugcraft.nuclear.edg_bkr_tripped": "%s: generator breaker 52G TRIPPED: the loads drop, the engine runs on light",
+    "message.jugcraft.nuclear.edg_bkr_open": "%s: generator breaker 52G is already open",
+    "message.jugcraft.nuclear.edg_bkr_closed": "%s: generator breaker 52G CLOSED: the load sequencer starts the loads",
+    "message.jugcraft.nuclear.edg_bkr_already": "%s: generator breaker 52G is already closed",
+    "message.jugcraft.nuclear.edg_bkr_not_running": "%s: the engine isn't running (nothing to close the breaker on)",
+    "message.jugcraft.nuclear.edg_bkr_not_ready": "%s: not up to speed and voltage yet",
+    "message.jugcraft.nuclear.edg_relay_test": "%s: relay %s tested: its target dropped and it tripped the 86G lockout",
+    "message.jugcraft.nuclear.edg_relay_reset": "%s: relay %s target reset",
+    "message.jugcraft.nuclear.edg_relay_ok": "%s: relay %s: no target (its test switch tests it)",
+    "message.jugcraft.nuclear.edg_lor_manual": "%s: 86G lockout TRIPPED: breaker open, engine stopped and locked out",
+    "message.jugcraft.nuclear.edg_lor_reset": "%s: 86G lockout reset",
+    "message.jugcraft.nuclear.edg_panel_no_edg": "This panel isn't linked to a diesel generator (none near)",
+    "message.jugcraft.nuclear.air_receiver": "Starting air receiver %s: %s psig (%s)",
+    "message.jugcraft.nuclear.air_compressor": "Starting air compressor %s: %s (%s; cuts in below %s psig, stops at %s)",
+    "message.jugcraft.nuclear.air_dryer": "Starting air dryer %s: %s",
+    "message.jugcraft.nuclear.air_unlinked": "not joined to a diesel generator (none within %s blocks)",
+    "message.jugcraft.nuclear.air_linked": "joined to the diesel generator %s blocks away",
+    "message.jugcraft.nuclear.air_running": "running",
+    "message.jugcraft.nuclear.air_standby": "standing by",
+    "message.jugcraft.nuclear.air_lead": "lead",
+    "message.jugcraft.nuclear.air_lag": "lag",
+    # The diesel rooms' own plant and CO2 system (round 31 part 3: nuclear/DieselRoom.java, Co2System.java, Monorail.java).
+    "message.jugcraft.nuclear.room_piece": "%s %s: %s",
+    "message.jugcraft.nuclear.room_co2": "%s %s: %s (%s)",
+    "message.jugcraft.nuclear.room_hoist": "%s %s: trolley at %s of %s along the beam, hook %s blocks down (drive it from its pendant station)",
+    "message.jugcraft.nuclear.co2_state_0": "CO2 system normal",
+    "message.jugcraft.nuclear.co2_state_1": "CO2 countdown: GET OUT",
+    "message.jugcraft.nuclear.co2_state_2": "CO2 DISCHARGED: reset it at the release station",
+    "message.jugcraft.nuclear.co2_state_3": "CO2 purge: the exhaust fans are clearing the room",
+    "message.jugcraft.nuclear.co2_station": "%s CO2 release station: %s",
+    "message.jugcraft.nuclear.co2_no_bank": "%s's room has no CO2 cylinder bank: nothing to release",
+    "message.jugcraft.nuclear.co2_pulled": "CO2 RELEASE PULLED: %s's room floods in %s seconds. Get out, or press ABORT",
+    "message.jugcraft.nuclear.co2_counting": "CO2 discharges in %s seconds (ABORT stops it)",
+    "message.jugcraft.nuclear.co2_already": "%s's CO2 has already discharged (RESET to purge the room)",
+    "message.jugcraft.nuclear.co2_aborted": "%s: CO2 release aborted",
+    "message.jugcraft.nuclear.co2_no_abort": "There is no CO2 countdown to abort",
+    "message.jugcraft.nuclear.co2_purge": "CO2 system reset: the exhaust fans purge the room for %s seconds",
+    "message.jugcraft.nuclear.co2_purging": "Purging: %s seconds left",
+    "message.jugcraft.nuclear.co2_use_abort": "The countdown is running: ABORT stops it",
+    "message.jugcraft.nuclear.co2_normal": "%s: CO2 system normal",
+    "message.jugcraft.nuclear.edg_co2": "%s won't start: its room's CO2 has discharged (reset it at the release station)",
+    "message.jugcraft.nuclear.hoist_no_rail": "No monorail within %s blocks",
+    "message.jugcraft.nuclear.hoist_end": "The trolley is at the end of the beam",
+    "message.jugcraft.nuclear.hoist_low": "The hook is all the way down",
+    "message.jugcraft.nuclear.hoist_high": "The hook is all the way up",
+    "death.attack.jugcraft.co2": "%1$s suffocated in a CO2 discharge",
+    "death.attack.jugcraft.co2.player": "%1$s suffocated in a CO2 discharge while fighting %2$s",
     "message.jugcraft.nuclear.console_linked": "Console linked to the reactor",
+    # The control room's live boards (round 27, nuclear/ControlBoard.java).
+    "message.jugcraft.nuclear.board_no_reactor": "This board finds no reactor within %s blocks",
+    "message.jugcraft.nuclear.board_info": "Reactor %s%%  Tavg %s °F  Pressurizer %s psig  Generator %s MW",
+    "message.jugcraft.nuclear.display_wall": "Plant overview display: %s; %s alarms in, %s not acknowledged",
+    # Round 34: the plant overview screens (nuclear/OverviewScreenBlockEntity.java click).
+    "message.jugcraft.nuclear.overview_page": "Plant overview: %s for %s seconds (SITE MAP goes back to the map)",
+    "message.jugcraft.nuclear.overview_map": "Plant overview: back to the site map",
+    "message.jugcraft.nuclear.overview_kept": "Plant overview: this page stays up another %s seconds",
+    "message.jugcraft.nuclear.overview_none": "Plant overview: the %s has no plant of its own on this screen",
+    "message.jugcraft.nuclear.overview_nosignal": "Plant overview: no control room boards within %s blocks",
+    "message.jugcraft.nuclear.overview_status": "Plant overview: %s; %s alarms in, %s not acknowledged",
+    # The cable spreading room (punch list #15: nuclear/SpreadingRoomFire.java, TrainFurnitureBlock).
+    "message.jugcraft.nuclear.csr_status": "Pre-action releasing panel: %s / %s",
+    "message.jugcraft.nuclear.csr_nothing": "Nothing to do: the system is normal",
+    "message.jugcraft.nuclear.csr_acked": "Alarm acknowledged",
+    "message.jugcraft.nuclear.csr_silenced": "Horns silenced",
+    "message.jugcraft.nuclear.csr_still_fire": "Can't reset: the detectors still see fire",
+    "message.jugcraft.nuclear.csr_still_flowing": "Can't reset: water is still flowing. Wait until the fire has been out a while",
+    "message.jugcraft.nuclear.csr_reset": "System reset: the air is coming back up and the sprinklers are armed",
+    "message.jugcraft.nuclear.csr_normal": "The system is normal and armed",
+    "message.jugcraft.nuclear.csr_drill": "Drill: lamps and horns for 10 seconds, no water",
+    # The plant computer room (older rooms round 2: nuclear/ServerRoom.java).
+    "message.jugcraft.nuclear.srv_status": "Server room: %s",
+    "message.jugcraft.nuclear.srv_crac_on": "%s main isolator ON: the unit runs when it is fed",
+    "message.jugcraft.nuclear.srv_crac_off": "%s main isolator OFF: the unit stops",
+    "message.jugcraft.nuclear.srv_nothing": "Nothing to acknowledge or silence: the system is normal",
+    "message.jugcraft.nuclear.srv_acked": "Alarm acknowledged",
+    "message.jugcraft.nuclear.srv_silenced": "Horn silenced (the strobe keeps flashing)",
+    "message.jugcraft.nuclear.srv_still_fire": "Cannot reset: the detectors still see a fire",
+    "message.jugcraft.nuclear.srv_refilled": "Reset: new agent cylinders fitted, the system is armed",
+    "message.jugcraft.nuclear.srv_reset": "Reset: the system is normal and armed",
+    "message.jugcraft.nuclear.srv_normal": "The system is normal",
+    "message.jugcraft.nuclear.srv_drill": "Drill: the alarm and the 30 second countdown, no discharge",
+    "message.jugcraft.nuclear.srv_busy": "No drill while the system is in alarm or released",
+    "message.jugcraft.nuclear.srv_no_panel": "No clean agent releasing panel in reach",
+    "message.jugcraft.nuclear.srv_abort_manual": "A manual release cannot be aborted",
+    "message.jugcraft.nuclear.srv_abort_held": "Abort held: the countdown waits (keep holding it)",
+    "message.jugcraft.nuclear.srv_abort_idle": "Abort pressed: nothing is counting down",
+    "message.jugcraft.nuclear.srv_already": "The agent has already been released: reset the panel",
+    "message.jugcraft.nuclear.srv_already_counting": "The manual release is already counting down",
+    "message.jugcraft.nuclear.srv_pulled": "Manual release: the agent discharges in 30 seconds. Leave the room",
+    "message.jugcraft.nuclear.csr_busy": "Can't run a drill now: reset the system first",
+    "message.jugcraft.nuclear.csr_no_panel": "This pull station finds no pre-action releasing panel nearby",
+    "message.jugcraft.nuclear.csr_already": "The sprinkler system has already released",
+    "message.jugcraft.nuclear.csr_no_valve": "Fire alarm! But the releasing panel finds no valve station: no water",
+    "message.jugcraft.nuclear.csr_pulled": "Fire alarm! The pre-action valve has tripped: water is in the pipes",
+    "message.jugcraft.nuclear.csr_train_0": "Train A (orange)%s",
+    "message.jugcraft.nuclear.csr_train_1": "Train B (blue)%s",
+    "message.jugcraft.nuclear.csr_train_2": "Non-safety (grey)%s",
+    "message.jugcraft.nuclear.csr_hanger": ", with hanger and tag",
+    "message.jugcraft.nuclear.csr_no_hanger": "",
+    "message.jugcraft.nuclear.board_no_pumps": "This reactor has no coolant pumps: its coolant circulates by itself",
+    "message.jugcraft.nuclear.board_rcp_none": "RCP %s: there is no coolant pump in loop %s",
+    "message.jugcraft.nuclear.board_rcp_stop": "RCP %s stopped: its loop's flow coasts down",
+    "message.jugcraft.nuclear.board_rcp_start": "RCP %s started",
+    "message.jugcraft.nuclear.board_no_turbine": "This unit has no turbine generator",
+    "message.jugcraft.nuclear.board_guard": "Turbine trip guard lifted: use the switch again within 5 seconds to trip the turbine",
+    "message.jugcraft.nuclear.board_turbine_tripped": "Turbine tripped: the stop valves shut and the generator breaker opens",
+    # Turbine hall part 1 (nuclear/TurbineHall.java): the turbine's manual trip, its turning gear, the reheaters.
+    "message.jugcraft.nuclear.turbine_status": "Main turbine: %s rpm, %s, %s MW",
+    "message.jugcraft.nuclear.turbine_online": "on line",
+    "message.jugcraft.nuclear.turbine_latched": "latched",
+    "message.jugcraft.nuclear.turbine_turning_gear": "tripped, on its turning gear",
+    "message.jugcraft.nuclear.turbine_stopped": "tripped and stopped",
+    "message.jugcraft.nuclear.turbine_tripped": "tripped, coasting down",
+    "message.jugcraft.nuclear.turbine_no_reactor": "This turbine isn't part of a working reactor unit",
+    "message.jugcraft.nuclear.turbine_guard": "Trip guard lifted: pull the handle within 5 seconds to trip the turbine",
+    "message.jugcraft.nuclear.turbine_tripped_local": "Turbine tripped at the front standard: the stop valves shut and the generator breaker opens",
+    "message.jugcraft.nuclear.turbine_already_tripped": "The turbine is already tripped",
+    "message.jugcraft.nuclear.tg_engaged": "Turning gear engaged: its motor rolls the shaft at 3 rpm",
+    "message.jugcraft.nuclear.tg_disengaged": "Turning gear disengaged",
+    "message.jugcraft.nuclear.tg_rolling": "The turbine is still turning (%s rpm): the turning gear only goes in at zero speed",
+    "message.jugcraft.nuclear.msr_status": "Moisture separator reheater %s: shell %s psig, reheat steam %s F",
+    "message.jugcraft.nuclear.msr_idle": "Moisture separator reheater %s: no turbine running near it",
+    # Turbine hall part 2 (nuclear/TurbineHall.java): the feed train's pumps, their stations and the board's MFP switches.
+    "message.jugcraft.nuclear.feed_idle": "Not joined to a working turbine: there is none within %s blocks, or it has no reactor",
+    "message.jugcraft.nuclear.cp_started": "Condensate pump %s started",
+    "message.jugcraft.nuclear.cp_already": "Condensate pump %s is already running",
+    "message.jugcraft.nuclear.cp_stopped_auto": "Condensate pump %s stopped: it stands by in AUTO (another standby pump starts first)",
+    "message.jugcraft.nuclear.cp_auto_on": "Condensate pump %s in AUTO: it starts when the pumps running can't carry the feed",
+    "message.jugcraft.nuclear.cp_auto_off": "Condensate pump %s out of AUTO: it won't start by itself",
+    "message.jugcraft.nuclear.mfp_tripped": "Main feed pump %s tripped: its turbine's stop valves shut",
+    "message.jugcraft.nuclear.mfp_already_tripped": "Main feed pump %s is already tripped",
+    "message.jugcraft.nuclear.mfp_reset": "Main feed pump %s reset: start it from the secondary board",
+    "message.jugcraft.nuclear.mfp_not_tripped": "Main feed pump %s isn't tripped",
+    "message.jugcraft.nuclear.condenser_status": "Condenser %s: %s in Hg vacuum, hotwell %s in",
+    "message.jugcraft.nuclear.cp_status": "Condensate pump %s: %s (%s of 3 running), %s A",
+    "message.jugcraft.nuclear.mfp_status": "Main feed pump %s: %s, %s rpm, discharge %s psig",
+    "message.jugcraft.nuclear.pump_running": "running",
+    "message.jugcraft.nuclear.pump_standby": "standing by in AUTO",
+    "message.jugcraft.nuclear.pump_stopped": "stopped",
+    "message.jugcraft.nuclear.pump_tripped": "tripped",
+    "message.jugcraft.nuclear.lo_status": "Main turbine lube oil: %s psig to the bearings at %s F, %s",
+    "message.jugcraft.nuclear.lo_tg": "the turning gear oil pump running",
+    "message.jugcraft.nuclear.lo_aux": "the AC auxiliary oil pump running",
+    "message.jugcraft.nuclear.lo_mop": "the shaft-driven main oil pump supplying it",
+    "message.jugcraft.nuclear.ehc_status": "EHC fluid: %s psig at %s F (pump A running, pump B standing by)",
+    "message.jugcraft.nuclear.so_status": "Generator seal oil: %s psig, %s psid over the hydrogen",
+    "message.jugcraft.nuclear.h2_status": "Generator hydrogen: %s%% pure at %s psig",
+    "message.jugcraft.nuclear.lo_cond_status": "Lube oil conditioner: %s psid across its coalescer filter, %s",
+    "message.jugcraft.nuclear.lo_cond_heating": "running with its heater on (the oil is cool while the turbine is below speed)",
+    "message.jugcraft.nuclear.lo_cond_running": "running",
+    "message.jugcraft.nuclear.lo_tank_status": "%s lube oil storage tank: %s%% full",
+    "message.jugcraft.nuclear.lo_xfer_status": "Lube oil transfer pumps: both standing by (they run to fill or empty the main oil reservoir)",
+    "message.jugcraft.nuclear.crane_status": "Overhead crane: %s. Bridge %s, trolley %s across, main hook %s down, aux hook %s down (blocks)",
+    "message.jugcraft.nuclear.crane_on": "power on",
+    "message.jugcraft.nuclear.crane_power_off": "power off (STOP pressed: press START on a pendant)",
+    "message.jugcraft.nuclear.crane_stopped": "Crane STOP: its power is off until START",
+    "message.jugcraft.nuclear.crane_power": "Crane power on: hold a button to run it",
+    "message.jugcraft.nuclear.crane_off": "The crane's power is off: press START first",
+    "message.jugcraft.nuclear.crane_end_bridge": "The bridge is at the end of its runway",
+    "message.jugcraft.nuclear.crane_end_trolley": "The trolley is at the end of the bridge",
+    "message.jugcraft.nuclear.crane_end_floor": "The hook is down on the floor",
+    "message.jugcraft.nuclear.crane_end_top": "The hook is up at its top limit",
+    "message.jugcraft.nuclear.crane_none": "There is no overhead crane within reach of this pendant",
+    "message.jugcraft.nuclear.tcr_status": "%s: %s",
+    "message.jugcraft.nuclear.board_no_mfp": "There is no main feed pump %s at this unit's turbine hall: its main feed runs by itself",
+    "message.jugcraft.nuclear.board_mfp_tripped": "Main feed pump %s is tripped: reset it at its station first",
+    "message.jugcraft.nuclear.board_mfp_start": "Main feed pump %s started",
+    "message.jugcraft.nuclear.board_mfp_no_steam": "Main feed pump %s in service: it turns once the plant has steam (above 200 C)",
+    "message.jugcraft.nuclear.board_mfp_stop": "Main feed pump %s stopped",
+    "message.jugcraft.nuclear.board_turbine_already": "The turbine is already tripped",
+    "message.jugcraft.nuclear.board_latched": "Turbine latched: it runs up to 1,800 rpm. Close the generator breaker on the electrical board to load it",
+    "message.jugcraft.nuclear.board_latch_already": "The turbine is already latched",
+    "message.jugcraft.nuclear.board_latch_blocked": "The turbine won't latch while the reactor is tripped: reset the reactor first",
+    "message.jugcraft.nuclear.board_gen_open": "Generator breaker opened",
+    "message.jugcraft.nuclear.board_gen_sync": "Generator breaker synchronizing: it closes when the synchroscope reaches 12 o'clock",
+    "message.jugcraft.nuclear.board_gen_blocked": "Generator breaker won't close: the turbine isn't latched at speed (%s rpm)",
+    "message.jugcraft.nuclear.board_gen_no_steam": "Generator breaker won't close: the reactor isn't making power",
+    "message.jugcraft.nuclear.board_gen_closed": "The generator breaker is already closed",
+    "message.jugcraft.nuclear.board_no_edg": "No diesel generator %s found within %s blocks",
+    "message.jugcraft.nuclear.board_edg_running": "Diesel generator %s is already running",
+    "message.jugcraft.nuclear.board_edg_stopped": "Diesel generator %s is already stopped",
+    # Round 28: the safety systems, steam and feedwater boards.
+    "message.jugcraft.nuclear.board_si_guard": "Safety injection train %s: guard lifted (click again to actuate)",
+    "message.jugcraft.nuclear.board_si_actuated": "SAFETY INJECTION actuated from train %s: reactor and turbine tripped, diesels starting, ECCS pumps running, feedwater and containment isolated, aux feed starting",
+    "message.jugcraft.nuclear.board_si_already": "Safety injection is already actuated",
+    "message.jugcraft.nuclear.board_si_not": "Safety injection is not actuated",
+    "message.jugcraft.nuclear.board_si_reset_wait": "Safety injection can be reset in %s s",
+    "message.jugcraft.nuclear.board_si_reset": "Safety injection reset: feedwater and containment isolation cleared, SI and RHR pumps standing down (aux feed and diesels keep running)",
+    "message.jugcraft.nuclear.board_no_sg": "This plant has no steam generator %s",
+    "message.jugcraft.nuclear.board_msiv_closed": "MSIV %s closed: its steam goes out the relief valves",
+    "message.jugcraft.nuclear.board_msiv_open": "MSIV %s open",
+    "message.jugcraft.nuclear.board_no_afw": "This plant has no auxiliary feedwater (no steam generators)",
+    "message.jugcraft.nuclear.board_afw_start": "Auxiliary feed pump %s started",
+    "message.jugcraft.nuclear.board_afw_stop": "Auxiliary feed pump %s stopped",
+    # Round 29: the remote shutdown panel, the valves and ARVs.
+    "message.jugcraft.nuclear.board_rsp_not_local": "Turn a control transfer key to this panel first",
+    "message.jugcraft.nuclear.board_rsp_guard": "Reactor trip %s: cover lifted (click again to trip)",
+    "message.jugcraft.nuclear.board_rsp_already": "The reactor is already tripped",
+    "message.jugcraft.nuclear.board_fcv_open": "Aux feed valve to SG %s open",
+    "message.jugcraft.nuclear.board_fcv_shut": "Aux feed valve to SG %s shut: no aux feed to it",
+    "message.jugcraft.nuclear.board_arv_open": "SG %s ARV open: steaming to atmosphere, the plant cools",
+    "message.jugcraft.nuclear.board_arv_shut": "SG %s ARV closed",
+    # Round 30: the reactor control console.
+    "message.jugcraft.nuclear.board_rx_guard": "Reactor trip %s: guard lifted (click again to trip)",
+    "message.jugcraft.nuclear.board_rx_guard_close": "Reactor trip %s: guard lifted (click again to turn it to CLOSE and reset the trip)",
+    "message.jugcraft.nuclear.board_rx_tripped": "Reactor trip: the rods are going in",
+    "message.jugcraft.nuclear.board_rx_closed": "Reactor trip breakers closed: the trip is reset, the shutdown banks are coming out",
+    "message.jugcraft.nuclear.board_rods_out": "Rods out: bank %s at %s steps, power %s%%",
+    "message.jugcraft.nuclear.board_rods_in": "Rods in: bank %s at %s steps, power %s%%",
+    "message.jugcraft.nuclear.board_rods_in_auto": "Rod control is in AUTO: turn it to MAN to drive the rods",
+    "message.jugcraft.nuclear.board_rods_tripped": "The reactor is tripped: reset it first (turn a reactor trip switch to CLOSE)",
+    "message.jugcraft.nuclear.board_rods_refuel": "The reactor head is off for refuelling",
+    "message.jugcraft.nuclear.board_rods_auto": "Rod control in AUTO: holding %s%% power",
+    "message.jugcraft.nuclear.board_rods_man": "Rod control in MAN: the rods stay where they are until driven",
+    "message.jugcraft.nuclear.board_block_wait": "The %s trip can only be blocked above %s",
+    "message.jugcraft.nuclear.board_block_on": "%s trip blocked",
+    "message.jugcraft.nuclear.board_block_reset": "%s trip block reset",
+    "message.jugcraft.nuclear.board_rps_normal": "Reactor protection in NORMAL: its automatic trips are armed",
+    "message.jugcraft.nuclear.board_rps_bypass": "Reactor protection BYPASSED: the reactor will not trip itself",
     "message.jugcraft.nuclear.panel_no_reactor": "No reactor within %s blocks: the remote shutdown panel runs the nearest one",
     "message.jugcraft.nuclear.panel_tripped": "Reactor trip: the rods are going in",
     "message.jugcraft.nuclear.panel_control_here": "Control transferred to the remote shutdown panel: the control room's console can only trip the reactor",
@@ -190,12 +530,80 @@ LANG = {
     "message.jugcraft.nuclear.breaker_open": "open",
     "message.jugcraft.nuclear.breaker_closed": "closed",
     "message.jugcraft.nuclear.breaker_not_owner": "This switchgear belongs to someone else",
+    # The rebuilt load centres (older rooms round 1: nuclear/LoadCentre.java) and the switchgear room's laptop.
+    "message.jugcraft.nuclear.lc_fans": "%s transformer fans: %s",
+    "message.jugcraft.nuclear.lc_fans_manual": "MANUAL (running)",
+    "message.jugcraft.nuclear.lc_fans_auto": "AUTO (on above 110 °C, off below 90 °C)",
+    "message.jugcraft.nuclear.lc_no_power": "%s: no control power (racked out to DISCONNECT)",
+    "message.jugcraft.nuclear.lc_tripped": "%s tripped open",
+    "message.jugcraft.nuclear.lc_target": "%s will not close: its trip unit has tripped (press RESET on the trip unit)",
+    "message.jugcraft.nuclear.lc_spring": "%s will not close: its closing spring is still charging",
+    "message.jugcraft.nuclear.lc_closed": "%s closed, %s",
+    "message.jugcraft.nuclear.lc_carrying": "carrying its load",
+    "message.jugcraft.nuclear.lc_test_only": "in TEST (its load not connected)",
+    "message.jugcraft.nuclear.lc_interlock": "%s is closed: open it before racking it (interlock)",
+    "message.jugcraft.nuclear.lc_racked": "%s racked to %s",
+    "message.jugcraft.nuclear.lc_reset": "%s trip unit reset",
+    "message.jugcraft.nuclear.lc_reset_none": "%s trip unit: nothing to reset",
+    "message.jugcraft.nuclear.sgr_laptop": "Trip unit viewer: %s",
     "message.jugcraft.nuclear.vital_breaker": "Circuit %s, %s: %s",
     "message.jugcraft.nuclear.vital_main": "Main breaker: %s",
     "message.jugcraft.nuclear.ground_status": "DC bus %s: no ground, each side %s V to ground; battery %s%% charged. Hold + TEST or - TEST to test",
     "message.jugcraft.nuclear.ground_test": "Ground test: %s side of DC bus %s grounded through the test resistor",
     "message.jugcraft.nuclear.ground_no_battery": "DC bus %s: no station battery in reach",
     "message.jugcraft.nuclear.battery_string": "Battery monitor %3$s: string %1$s of %2$s",
+    # The DC rooms working (older rooms round 3: nuclear/DcRoom.java): the switchboard's breakers, the chargers' breakers
+    # and MODE, the inverters' bypass switch and breaker, the annunciators' buttons, the laptop; what loses its DC.
+    "message.jugcraft.nuclear.sb_main": "72-%s MAIN (the battery to the bus): %s",
+    "message.jugcraft.nuclear.sb_feeder": "%s %s: %s",
+    "message.jugcraft.nuclear.sb_status": "125 VDC switchboard %s: bus %s, battery %s%% charged, main %s, %s of 11 feeders closed, %s charger(s) feeding",
+    "message.jugcraft.nuclear.charger_ac": "%s AC input breaker: %s",
+    "message.jugcraft.nuclear.charger_dc": "%s DC output breaker: %s",
+    "message.jugcraft.nuclear.charger_equalize": "%s MODE: EQUALIZE (the bus up to 139.8 V; back to FLOAT by itself in 24 hours)",
+    "message.jugcraft.nuclear.charger_float": "%s MODE: FLOAT",
+    "message.jugcraft.nuclear.charger_status": "%s: %s; %s alarm window(s) lit",
+    "message.jugcraft.nuclear.inverter_dc": "%s DC input breaker: %s",
+    "message.jugcraft.nuclear.inverter_bypass": "%s manual bypass: BYPASS (its load on its regulating transformer)",
+    "message.jugcraft.nuclear.inverter_bypass_dead": "%s manual bypass: BYPASS, but its regulating transformer is dead: the vital panel has lost its power",
+    "message.jugcraft.nuclear.inverter_normal": "%s manual bypass: NORMAL (its static switch carries the load)",
+    "message.jugcraft.nuclear.inverter_status": "%s: %s; %s alarm window(s) lit",
+    "message.jugcraft.nuclear.ann_ack": "%s annunciator: acknowledged (the windows go steady)",
+    "message.jugcraft.nuclear.ann_ack_none": "%s annunciator: nothing new to acknowledge",
+    "message.jugcraft.nuclear.ann_reset": "%s annunciator: reset, %s cleared window(s) dark",
+    "message.jugcraft.nuclear.ann_reset_none": "%s annunciator: nothing to reset (a window stays lit while its alarm is in, and until it is acknowledged)",
+    "message.jugcraft.nuclear.ann_test": "%s annunciator: lamp test",
+    "message.jugcraft.nuclear.dc_laptop": "DC system monitor, page %s of %s: %s",
+    "message.jugcraft.nuclear.lc_no_dc": "%s: no control power (its 125 VDC feeder %s is open or its bus dead)",
+    "message.jugcraft.nuclear.edg_no_dc": "%s won't start: no 125 VDC control power (its switchboard feeder %s is open or the bus dead)",
+    # The battery rooms (older rooms round 4: StationBatteryBlock, BatteryDisconnectBlock).
+    "message.jugcraft.nuclear.battery_cell": "Cell %1$s of battery %2$s string %3$s: %4$s V, specific gravity %5$s, %6$s °C (%7$s °F)",
+    "message.jugcraft.nuclear.bd_open": "%s OPEN: that string is off the bus (the other carries it)",
+    "message.jugcraft.nuclear.bd_closed": "%s CLOSED: the string is back on the bus",
+    "message.jugcraft.nuclear.bd_status": "%s: %s, %s (use the handle to switch it)",
+    "message.jugcraft.nuclear.crc_page": "Screen: %s",
+    "message.jugcraft.nuclear.crc_status": "%s (click a screen to change its page)",
+    "message.jugcraft.nuclear.ac_hand": "Hand geometry: VERIFIED - %s",
+    "message.jugcraft.nuclear.ac_duress_alarm": "DURESS ALARM at a security post (%s)",
+    "message.jugcraft.nuclear.wd_alarm": "METAL DETECTED: %s - see the security officer",
+    "message.jugcraft.nuclear.wd_pass": "Walk-through metal detector: PASS",
+    "message.jugcraft.nuclear.wd_status": "Walk-through metal detector: %s passed through",
+    "message.jugcraft.nuclear.xr_search": "X-ray: %s - SEARCH (set aside for the officer)",
+    "message.jugcraft.nuclear.xr_clear": "X-ray: %s - CLEAR",
+    "message.jugcraft.nuclear.xr_status": "X-ray baggage scanner: %s bags scanned (hold something and right-click to put it through)",
+    "message.jugcraft.nuclear.sas_status": "Alarm station: %s, %s",
+    "message.jugcraft.nuclear.fire_pull": "FIRE ALARM: a pull station was pulled by %s - leave the building by the nearest exit",
+    "message.jugcraft.nuclear.chem_status": "Plant chemistry: %s in specification, %s at an action level (mode %s)",
+    "message.jugcraft.nuclear.gs_start": "Gamma spectroscopy: counting sample %s (600 s live time)",
+    "message.jugcraft.nuclear.gs_busy": "Gamma spectroscopy: counting, %s of %s s live time",
+    "message.jugcraft.nuclear.ms_label": "Carriage %s: %s (turn the handwheel at its end to open the aisle beside it)",
+    "message.jugcraft.nuclear.ms_moving": "The carriages are moving",
+    "message.jugcraft.nuclear.ms_no_aisle": "No aisle to open: the bank is packed tight",
+    "message.jugcraft.nuclear.ms_busy": "Someone is in the aisle: the carriages won't close on them",
+    "message.jugcraft.nuclear.pf_open": "Plan file: %s pulled out",
+    "message.jugcraft.nuclear.pf_shut": "Plan file: %s pushed shut",
+    "message.jugcraft.nuclear.hotline": "Shift manager: %s",
+    "message.jugcraft.nuclear.hotline_none": "The control room line rings out: no reactor in reach",
+    "message.jugcraft.nuclear.ac_status": "Security post: %s inside, last passage %s",
     "message.jugcraft.nuclear.exhaust_fan": "Exhaust fan EF-%s: %s (right-click the selector to turn it)",
     "message.jugcraft.nuclear.relay_cabinet": "%s (sneak and right-click with an empty hand to change its label)",
     "message.jugcraft.nuclear.relay_no_reactor": "%s: no reactor in range to read",
@@ -221,11 +629,13 @@ LANG = {
     "message.jugcraft.nuclear.spent_no": "Spent fuel can't go back in: store it behind shielding",
     "message.jugcraft.nuclear.core_empty": "The core is empty",
     "message.jugcraft.nuclear.cannot_reset": "Can't reset: the core must be below 350 °C (and its fuel undamaged)",
+    "message.jugcraft.nuclear.cannot_reset_si": "Can't reset: safety injection is still in (reset it on the ESF board first)",
     "message.jugcraft.nuclear.refuel_not_shut_down": "Shut down first: rods fully in and the core below 120 °C",
     "message.jugcraft.nuclear.condenser_water": "Cooling water: %s of %s mB",
     "message.jugcraft.nuclear.showcase": "Built a running reactor unit (vessel at %s)",
     "message.jugcraft.nuclear.built": "Built %s: %s blocks, %s pieces of equipment, %s reactor(s), in %s s",
     "message.jugcraft.nuclear.plant_unknown": "No pre-made plant called %s: try small, medium or large",
+    "message.jugcraft.nuclear.plant_creative": "Pre-made plants are built in creative mode (or with cheats on)",
 }
 
 R = "screen.jugcraft.reactor."
@@ -338,10 +748,38 @@ CRAFTING = {
                                                      "P": "jugcraft:steel_fluid_pipe"}, 1),
     "cr_chiller": (["SMS", "PCP", "SSS"], {"S": "#c:plates/steel", "M": "jugcraft:electric_motor", "P": "jugcraft:steel_fluid_pipe", "C": "minecraft:copper_block"}, 1),
     "chw_pump": (["PMP", " S "], {"S": "#c:plates/steel", "P": "jugcraft:steel_fluid_pipe", "M": "jugcraft:electric_motor"}, 1),
+    "edg_air_receiver": (["SPS", "S S", "SGS"], {"S": "#c:plates/steel", "P": "jugcraft:steel_fluid_pipe", "G": "minecraft:redstone"}, 1),
+    "edg_air_compressor": (["PMP", "SGS"], {"S": "#c:plates/steel", "P": "jugcraft:steel_fluid_pipe", "M": "jugcraft:electric_motor", "G": "#c:gears/steel"}, 1),
+    "edg_air_dryer": (["P P", "SRS"], {"S": "#c:plates/steel", "P": "jugcraft:steel_fluid_pipe", "R": "minecraft:redstone"}, 1),
+    "edg_jw_keepwarm": (["PHP", "SMS"], {"S": "#c:plates/steel", "P": "jugcraft:steel_fluid_pipe", "H": "minecraft:blast_furnace", "M": "jugcraft:electric_motor"}, 1),
+    "edg_lo_keepwarm": (["PHP", "SMS"], {"S": "#c:plates/steel", "P": "jugcraft:steel_fluid_pipe", "H": "minecraft:furnace", "M": "jugcraft:electric_motor"}, 1),
+    "edg_expansion_tank": (["SBS", "S S", "I I"], {"S": "#c:plates/steel", "B": "minecraft:bucket", "I": "minecraft:iron_bars"}, 1),
+    "edg_jw_cooler": (["PSP", "CCC", "PSP"], {"S": "#c:plates/steel", "P": "jugcraft:steel_fluid_pipe", "C": "minecraft:copper_ingot"}, 1),
+    "edg_ngr": (["SBS", "CRC", "SSS"], {"S": "#c:plates/steel", "B": "minecraft:iron_bars", "C": "minecraft:copper_ingot", "R": "minecraft:redstone"}, 1),
+    "edg_gen_cubicle": (["SGS", "CCC", "SSS"], {"S": "#c:plates/steel", "G": "minecraft:glass_pane", "C": "minecraft:copper_ingot"}, 1),
+    "edg_co2_bank": (["PPP", "III", "III"], {"P": "jugcraft:steel_fluid_pipe", "I": "minecraft:iron_ingot"}, 1),
+    "edg_monorail": (["SSS", "CHC"], {"S": "#c:plates/steel", "C": "minecraft:chain", "H": "jugcraft:electric_motor"}, 1),
+    "condenser_shell": (["SPS", "CCC", "SPS"], {"S": "#c:plates/steel", "P": "jugcraft:steel_fluid_pipe", "C": "minecraft:copper_ingot"}, 1),
+    "condenser_hotwell": (["S S", "S S", "SPS"], {"S": "#c:plates/steel", "P": "jugcraft:steel_fluid_pipe"}, 1),
+    "condensate_pump": (["M", "P", "S"], {"M": "jugcraft:electric_motor", "P": "jugcraft:steel_fluid_pipe", "S": "#c:plates/steel"}, 1),
+    "main_feed_pump": (["GPG", "SSS"], {"G": "#c:gears/steel", "P": "jugcraft:steel_fluid_pipe", "S": "#c:plates/steel"}, 1),
+    "lube_oil_reservoir": (["MMM", "SBS", "SSS"], {"M": "jugcraft:electric_motor", "S": "#c:plates/steel", "B": "minecraft:bucket"}, 1),
+    "ehc_unit": (["MPM", "SBS"], {"M": "jugcraft:electric_motor", "P": "jugcraft:steel_fluid_pipe", "S": "#c:plates/steel", "B": "minecraft:bucket"}, 1),
+    "seal_oil_unit": (["MPM", "SBS"], {"M": "jugcraft:electric_motor", "P": "jugcraft:steel_fluid_pipe", "S": "#c:plates/steel", "B": "minecraft:bucket"}, 1),
+    "h2_gas_panel": (["SGS", "III"], {"S": "#c:plates/steel", "G": "minecraft:glass_pane", "I": "minecraft:iron_ingot"}, 1),
+    "lo_conditioner": (["MPM", "SBS", "SSS"], {"M": "jugcraft:electric_motor", "P": "jugcraft:steel_fluid_pipe", "S": "#c:plates/steel", "B": "minecraft:bucket"}, 1),
+    "lo_storage_tank": (["SSS", "SBS", "SSS"], {"S": "#c:plates/steel", "B": "minecraft:bucket"}, 1),
+    "lo_transfer_pumps": (["MPM", "SSS"], {"M": "jugcraft:electric_motor", "P": "jugcraft:steel_fluid_pipe", "S": "#c:plates/steel"}, 1),
     "cooling_tower_fill": (["PPP", "SSS", "PPP"], {"P": "jugcraft:plastic_sheet", "S": "minecraft:stick"}, 8),
     "conduit_trench": (["CCC", "PPP", "CCC"], {"C": "minecraft:smooth_stone", "P": "jugcraft:circulating_water_conduit"}, 3),
+    "site_structure": (["CIC", "ISI", "CIC"], {"C": "minecraft:gray_concrete", "I": "minecraft:iron_ingot", "S": "#c:plates/steel"}, 8),
+    "site_ladder": (["S", "L"], {"S": "jugcraft:site_structure", "L": "minecraft:ladder"}, 1),
     TOWER_CONTROLLER: (["CPC", "PAP", "CPC"], {"C": "minecraft:gray_concrete", "P": "jugcraft:steel_fluid_pipe",
                                               "A": "jugcraft:advanced_circuit"}, 1),
+    WORKS_CONTROLLER: (["CPC", "PAP", "CEC"], {"C": "minecraft:gray_concrete", "P": "jugcraft:steel_fluid_pipe",
+                                              "A": "jugcraft:advanced_circuit", "E": "jugcraft:electric_motor"}, 1),
+    YARD_CONTROLLER: (["CPC", "WAW", "CPC"], {"C": "minecraft:gray_concrete", "P": "#c:plates/aluminum",
+                                             "A": "jugcraft:advanced_circuit", "W": "jugcraft:aluminum_cable"}, 1),
     "reactor_coolant_pipe": (["SSS", "   ", "SSS"], {"S": "#c:plates/steel"}, 6),
     "insulated_steam_line": (["WWW", "SSS", "WWW"], {"W": "minecraft:white_wool", "S": "#c:plates/steel"}, 6),
     "circulating_water_conduit": (["CCC", "S S", "CCC"], {"C": "minecraft:gray_concrete", "S": "#c:plates/steel"}, 6),
@@ -725,7 +1163,7 @@ def geiger_dial():
     # The scale arc and ticks: a long tick each decade, short ones at 2 and 5.
     a0, a1 = math.degrees(ang(0)), math.degrees(ang(1))
     d.arc([cx - R, cy - R, cx + R, cy + R], a0, a1, fill=(20, 20, 22, 255), width=3 * f)
-    font_n = ImageFont.truetype(font_path("DejaVuSansCondensed-Bold.ttf"), 15 * f)
+    font_n = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-Bold.ttf", 15 * f)
     labels = {-3: "1", -2: "10", -1: "100", 0: "1", 1: "10", 2: "100", 3: "1", 4: "10"}
     for dec in range(DIAL_LOW, DIAL_HIGH + 1):
         for m, long_ in ((1, True), (2, False), (5, False)):
@@ -739,18 +1177,18 @@ def geiger_dial():
             x, y = pt(dial_fraction(dec), R + 17 * f)
             d.text((x, y), labels[dec], font=font_n, fill=(20, 20, 22, 255), anchor="mm")
     # Unit names under each third of the scale, and the zone words.
-    font_u = ImageFont.truetype(font_path("DejaVuSansCondensed-Bold.ttf"), 13 * f)
+    font_u = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-Bold.ttf", 13 * f)
     for lo, hi, unit in ((-4, -1, "\u00b5Sv/h"), (-1, 2, "mSv/h"), (2, 5, "Sv/h")):
         x, y = pt(dial_fraction((lo + hi) / 2 + 0.5), R - 44 * f)
         d.text((x, y), unit, font=font_u, fill=(60, 60, 64, 255), anchor="mm")
-    font_z = ImageFont.truetype(font_path("DejaVuSansCondensed-Bold.ttf"), 12 * f)
+    font_z = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-Bold.ttf", 12 * f)
     for frac, word, col in ((dial_fraction(DIAL_SAFE) / 2, "SAFE", (40, 120, 52)),
                             ((dial_fraction(DIAL_SAFE) + dial_fraction(DIAL_LETHAL)) / 2, "CAUTION", (150, 104, 10)),
                             ((dial_fraction(DIAL_LETHAL) + 1) / 2, "LETHAL", (176, 30, 24))):
         x, y = pt(frac, R - 74 * f)
         d.text((x, y), word, font=font_z, fill=col + (255,), anchor="mm")
     # Maker's line and a little trefoil at the bottom.
-    font_s = ImageFont.truetype(font_path("DejaVuSansCondensed.ttf"), 10 * f)
+    font_s = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed.ttf", 10 * f)
     d.text((W * f // 2, (H - 18) * f), "DOSE RATE", font=font_s, fill=(70, 70, 74, 255), anchor="mm")
     return big.resize((256, 256), Image.LANCZOS)
 
@@ -795,9 +1233,6 @@ def draw_item_textures():
     out.update(plant_interior.draw_item_textures())
     out["lead_door"] = nuclear_storage.door_item_icon()
     out.update(storage_tank.draw_item_textures())
-    # Flat inventory sprites use the native 16px source drawings. Detailed worn and block sheets stay separate.
-    from nuclear_item_icons import icons
-    out.update(icons())
     return out
 
 
@@ -1000,7 +1435,7 @@ def draw_scram_button():
         d.ellipse([c - 16 * f, c - 16 * f, c + 16 * f, c + 16 * f], fill=(230, 60, 46, 255))
         d.ellipse([c - 11 * f, c - 13 * f, c - 1 * f, c - 5 * f], fill=(255, 150, 140, 255))
         from PIL import ImageFont
-        font = ImageFont.truetype(font_path("DejaVuSans-Bold.ttf"), 9 * f)
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 9 * f)
         d.text((c, c), "SCRAM", font=font, fill=(255, 255, 255, 255), anchor="mm")
     return _supersample(draw, size=48, factor=8)
 
@@ -1102,7 +1537,7 @@ def geiger_item(rid):
 # Eight cells across; nine rows since round 24 (512 x 576: client/NuclearRenderer.java ROWS).
 EQ_SHEET = 1024
 EQ_CELL = 128          # round 26, 8e: 128 px cells (the lettered ones drawn at that size; the rest at 64, doubled)
-EQ_ROWS = 10
+EQ_ROWS = 11
 EQ_MATERIALS = ["stainless", "stainless_dark", "carbon_steel", "paint_grey", "paint_green", "paint_blue", "paint_white",
                 "concrete", "grating", "hazard", "insulation", "weld_band", "flange", "crdm", "copper", "tank_grey",
                 "radiator", "glaze_brown", "glass", "screen", "desk", "rubber", "lamp_red", "lamp_green",
@@ -1122,7 +1557,10 @@ EQ_MATERIALS = ["stainless", "stainless_dark", "carbon_steel", "paint_grey", "pa
                 # The control room's ventilation plant (round 26, #11: tools/hvac_boards.py): its units' title plates by
                 # train, the stage and part plates, the warnings and the gauges' faces.
                 "hvac_titles_efu", "hvac_titles_ahu", "hvac_titles_chiller", "hvac_titles_pump", "nameplates5", "nameplates6",
-                "hvac_placards"]
+                "hvac_placards",
+                # The main turbine-generator (turbine hall part 1, tools/turbine_set.py): the HP's and valves' lagging
+                # (smooth sheet with its laps), the LP hoods' plate, the generator frame's paint.
+                "turbine_lagging", "lp_hood", "gen_frame", "cond_shell"]
 
 
 def eq_slot(name):
@@ -1293,7 +1731,7 @@ def _water_tex(seed):
 
 def _font(size, bold=True):
     from PIL import ImageFont
-    return ImageFont.truetype(font_path("DejaVuSans-Bold.ttf" if bold else "DejaVuSans.ttf"), size)
+    return ImageFont.truetype("/usr/share/fonts/truetype/dejavu/" + ("DejaVuSans-Bold.ttf" if bold else "DejaVuSans.ttf"), size)
 
 
 def _rocker_cover():
@@ -1398,6 +1836,10 @@ def draw_equipment_sheet():
         "crankcase_door": _crankcase_door, "gauge_board": _gauge_board, "sign_autostart": _sign_autostart,
         "stencil_edg": _stencil_edg, "turbo": lambda: M.painted((96, 98, 100), 153, seams=(("v", 64),), chip_count=3, drip_count=2, dirt=0.7),
         "black": lambda: M.rubber(154, colour=(26, 27, 30)),
+        "turbine_lagging": lambda: M.lagging((96, 128, 152), 155),
+        "lp_hood": lambda: M.painted((70, 104, 132), 156, chip_count=2, drip_count=2, dirt=0.3),
+        "gen_frame": lambda: M.painted((58, 112, 84), 157, chip_count=2, drip_count=2, dirt=0.3),
+        "cond_shell": lambda: M.painted((150, 160, 152), 158, chip_count=1, drip_count=1, dirt=0.15),
     }
     import control_boards
     for name, make in control_boards.MAKERS.items():
@@ -1644,12 +2086,24 @@ def write_assets(write, rid, assets, lang):
         # The item shows the equipment itself, in miniature (tools/structure_items.py).
         structure_items.equipment_item(write, rid, assets, kind)
     lang[f"block.{MOD}.{TOWER_CONTROLLER}"] = NAMES[TOWER_CONTROLLER]
+    lang[f"block.{MOD}.{WORKS_CONTROLLER}"] = NAMES[WORKS_CONTROLLER]
+    lang[f"block.{MOD}.{YARD_CONTROLLER}"] = NAMES[YARD_CONTROLLER]
+    lang[f"block.{MOD}.{REACTOR_CONTROLLER}"] = NAMES[REACTOR_CONTROLLER]
     lang[f"block.{MOD}.cooling_tower_fill"] = NAMES["cooling_tower_fill"]
     write(assets / "models" / "block" / "cooling_tower_fill.json", {"parent": "minecraft:block/cube_bottom_top", "textures": {
         "side": rid("block/cooling_tower_fill_side"), "top": rid("block/cooling_tower_fill"), "bottom": rid("block/cooling_tower_fill")}})
     write(assets / "blockstates" / "cooling_tower_fill.json", {"variants": {"": {"model": rid("block/cooling_tower_fill")}}})
     write(assets / "items" / "cooling_tower_fill.json", {"model": {"type": "minecraft:model", "model": rid("block/cooling_tower_fill")}})
     lang[f"block.{MOD}.conduit_trench"] = NAMES["conduit_trench"]
+    # Plant Structure: no model of its own (client/SiteModel.java draws its site's quads); the item a precast block.
+    for block, name in SITE_BLOCKS.items():
+        lang[f"block.{MOD}.{block}"] = name
+        write(assets / "models" / "block" / f"{block}.json", {"textures": {"particle": rid("block/site/ct_precast")}})
+        write(assets / "blockstates" / f"{block}.json", {"variants": {f"waterlogged={w}": {"model": rid(f"block/{block}")}
+                                                                      for w in ("false", "true")}})
+        write(assets / "models" / "item" / f"{block}.json", {"parent": "minecraft:block/cube_all", "textures": {
+            "all": rid("block/site/ct_precast" if block == "site_structure" else "block/site/ct_grating")}})
+        write(assets / "items" / f"{block}.json", {"model": {"type": "minecraft:model", "model": rid(f"item/{block}")}})
     write(assets / "models" / "block" / "conduit_trench.json", {"parent": "minecraft:block/cube_bottom_top", "textures": {
         "side": rid("block/circulating_water_conduit"), "top": rid("block/conduit_trench"), "bottom": rid("block/conduit_trench")}})
     write(assets / "blockstates" / "conduit_trench.json", {"variants": {"": {"model": rid("block/conduit_trench")}}})
@@ -1662,6 +2116,20 @@ def write_assets(write, rid, assets, lang):
         f"facing={f},tower={t}": dict({"model": rid(f"block/{TOWER_CONTROLLER}")}, **({"y": turn[f]} if turn[f] else {}))
         for f in turn for t in TOWERS}})
     write(assets / "items" / f"{TOWER_CONTROLLER}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{TOWER_CONTROLLER}")}})
+    # The pump houses' controllers (buried under the grass where the lines leave): the tower controller's grate and sides.
+    write(assets / "blockstates" / f"{WORKS_CONTROLLER}.json", {"variants": {
+        f"facing={f},works={w}": dict({"model": rid(f"block/{TOWER_CONTROLLER}")}, **({"y": turn[f]} if turn[f] else {}))
+        for f in turn for w in WORKS}})
+    write(assets / "items" / f"{WORKS_CONTROLLER}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{TOWER_CONTROLLER}")}})
+    # The yards' controllers (buried under the grass): the same.
+    write(assets / "blockstates" / f"{YARD_CONTROLLER}.json", {"variants": {
+        f"facing={f},works={w}": dict({"model": rid(f"block/{TOWER_CONTROLLER}")}, **({"y": turn[f]} if turn[f] else {}))
+        for f in turn for w in YARD_WORKS}})
+    write(assets / "items" / f"{YARD_CONTROLLER}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{TOWER_CONTROLLER}")}})
+    # The reactor building's controller (under its loop floor): the same.
+    write(assets / "blockstates" / f"{REACTOR_CONTROLLER}.json", {"variants": {
+        f"facing={f}": dict({"model": rid(f"block/{TOWER_CONTROLLER}")}, **({"y": turn[f]} if turn[f] else {})) for f in turn}})
+    write(assets / "items" / f"{REACTOR_CONTROLLER}.json", {"model": {"type": "minecraft:model", "model": rid(f"block/{TOWER_CONTROLLER}")}})
     write(assets / "particles" / "cooling_plume.json", {"textures": [rid(f"cooling_plume_{k}") for k in range(4)]})
     write(assets / "models" / "block" / f"{FRAME}.json", {"textures": {"particle": "minecraft:block/iron_block"}})
     write(assets / "blockstates" / f"{FRAME}.json", {"variants": {"": {"model": rid(f"block/{FRAME}")}}})
@@ -1680,11 +2148,19 @@ def write_assets(write, rid, assets, lang):
 
 
 def write_loot(write, rid, out, self_drop):
+    import tv_speaker_data
+    write(out / f"{tv_speaker_data.ID}.json", tv_speaker_data.loot(rid))   # the surround speaker: its lower half drops it
     for block in BLOCKS:
         if block in plant_interior.NO_DROP:
             write(out / f"{block}.json", {"type": "minecraft:block", "pools": [], "random_sequence": rid(f"blocks/{block}")})
         else:
-            write(out / f"{block}.json", plant_interior.door_loot(rid, block) if block in plant_interior.DOORS else self_drop(block))
+            door = block in plant_interior.DOORS or block in plant_interior.restroom.DOORS
+            if block in plant_interior.DOORS:
+                # The steel and glass doors keep their hardware (exit, reader) on the item (doors round).
+                write(out / f"{block}.json", plant_interior.plant_doors.door_loot(rid, block))
+            else:
+                table = plant_interior.restroom.toilet_loot(rid) if block == "restroom_toilet" else None
+                write(out / f"{block}.json", table or (plant_interior.door_loot(rid, block) if door else self_drop(block)))
     # Breaking a frame block breaks the equipment, and its anchor drops the item.
     write(out / f"{FRAME}.json", {"type": "minecraft:block", "pools": [], "random_sequence": rid(f"blocks/{FRAME}")})
     storage_tank.write_loot(write, rid, out, self_drop)
@@ -1693,6 +2169,8 @@ def write_loot(write, rid, out, self_drop):
 
 def write_data(write, data):
     write(data / MOD / "damage_type" / "radiation.json", {"message_id": "jugcraft.radiation", "exhaustion": 0.0, "scaling": "never"})
+    # The diesel rooms' CO2 discharge (round 31 part 3, nuclear/Co2System.java): choking, armour no help.
+    write(data / MOD / "damage_type" / "co2.json", {"message_id": "jugcraft.co2", "exhaustion": 0.0, "scaling": "never"})
 
 
 def write_tags(tags, rid):
@@ -1701,6 +2179,7 @@ def write_tags(tags, rid):
         tags.add("block", "minecraft:needs_stone_tool", rid(block))
     storage_tank.write_tags(tags, rid)
     tags.add("block", f"{MOD}:{SHIELDING_TAG}", rid("shielding_concrete"))
+    tags.add("block", "minecraft:climbable", rid("site_ladder"))
     tags.add("block", f"{MOD}:{SHIELDING_TAG}", "#c:storage_blocks/lead")
     # (The hazmat suit's armor tags are written with the rest of the armor's, in tools/gear.py: HAZMAT_TAGS.)
 

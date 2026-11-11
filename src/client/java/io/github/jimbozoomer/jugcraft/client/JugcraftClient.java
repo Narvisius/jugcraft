@@ -55,6 +55,8 @@ public final class JugcraftClient implements ClientModInitializer {
 			io.github.jimbozoomer.jugcraft.client.compat.GeckoIrisCompat.register();
 		}
 		io.github.jimbozoomer.jugcraft.client.update.JugcraftUpdates.register();
+		FpsCheck.init(); // dormant unless 28-fps-check.bat armed it (docs/features/drone-tower-tripillar.md)
+		FilmShoot.init(); // dormant unless 29-film.bat armed it
 		JimtafactsClient.register();
 		JimtaMimicClient.register();
 		io.github.jimbozoomer.jugcraft.client.jimtafacts.JimtafactsWearables.register();
@@ -70,6 +72,7 @@ public final class JugcraftClient implements ClientModInitializer {
 		AcademyAtmosphere.register();
 		MeshItemModels.register();
 		StructureItemRenderers.register();
+		BatonPlasmaItem.register();               // the plasma baton item's plasma (items/plasma_baton.json)
 		new io.github.jimbozoomer.jugcraft.client.scary.ScaryClient().onInitializeClient();
 		// Chima the lion cub (docs/features/chima.md).
 		ModelLayerRegistry.registerModelLayer(io.github.jimbozoomer.jugcraft.client.chima.ChimaModel.LAYER,
@@ -81,11 +84,17 @@ public final class JugcraftClient implements ClientModInitializer {
 		}
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.PlantInterior.SIGN_ENTITY, PlantSignRenderer::new);
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.PlantInterior.STATUS_ENTITY, StatusScreenRenderer::new);
+		// The administration building's office computers (part 1): the plant intranet on their screens.
+		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.PlantInterior.DESK_ENTITY, DeskScreenRenderer::new);
+		// The administration building's unit performance screens (part 2).
+		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.PlantInterior.PERF_ENTITY, PerfScreenRenderer::new);
+		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.PlantInterior.OVERVIEW_ENTITY, OverviewScreenRenderer::new);
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.PlantInterior.LIVE_PANEL_ENTITY, LivePanelRenderer::new);
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.PlantInterior.LOCKER_ENTITY, LockerRenderer::new);
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.PlantInterior.RACK_ENTITY, StorageRackRenderer::new);
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.PlantInterior.ROLLER_ENTITY, RollerDoorRenderer::new);
 		SpeedGateRenderer.register();
+		PlantDoorRenderer.register();          // the plant doors' swinging leaves (doors round)
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.StorageTanks.PORT_ENTITY, StorageTankRenderer::new);
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.StorageTanks.GATE_ENTITY, RailingGateRenderer::new);
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.StorageTanks.HATCH_ENTITY, StorageTankHatchRenderer::new);
@@ -124,9 +133,15 @@ public final class JugcraftClient implements ClientModInitializer {
 		BlockEntityRendererRegistry.register(JugcraftLogistics.CONVEYOR_ENTITY, ConveyorRenderer::new);
 		BlockEntityRendererRegistry.register(JugcraftTools.CHARGING_STATION_ENTITY, ChargingStationRenderer::new);
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.powerline.JugcraftPowerLines.ANCHOR_ENTITY, context -> new LineRenderer());
+		io.github.jimbozoomer.jugcraft.client.warehouse.WarehouseClient.register();
+		io.github.jimbozoomer.jugcraft.client.exterior.ExteriorClient.register();
 		// Every MBS item shows a see-through copy of what it would place (the power lines' preview among them).
 		MbsPreview.register();
 		WallRunModel.register();
+		DomeShellModel.register();
+		BakedFixtures.register();
+		Retained.register();                              // shapes that stay put kept on the graphics card
+		SiteClient.register();            // the compiled sites: the medium plant's cooling towers and pump houses
 		io.github.jimbozoomer.jugcraft.nuclear.StorageTanks.openScreen = pos -> net.minecraft.client.Minecraft.getInstance().gui.setScreen(new StorageTankScreen(pos));
 		WallRunOverlay.register();
 		RocketPackClient.register();
@@ -234,6 +249,7 @@ public final class JugcraftClient implements ClientModInitializer {
 		UniformLayer.register();
 		RadiationHud.register();
 		RadiationNeedle.register();
+		PlasmaRifleClient.register();             // the NT-7 plasma rifle: its trigger, aim, first person and charge (P6)
 		GhostSheetLayer.register();
 		CostumeLayer.register();
         HarvestCostumeLayer.register();
@@ -285,6 +301,8 @@ public final class JugcraftClient implements ClientModInitializer {
 		TreeLeafColors.register();
 		OwnerBuildingColors.register();
 		PartyClient.register();
+		// The flat screen TVs (tv/FlatTvBlock.java): their picture, sound and SCREEN window.
+		io.github.jimbozoomer.jugcraft.client.tv.TvClient.register();
 		ConcordanceClient.register();
 		GunsClient.register();
 		JugcraftKeyBindings.register();
@@ -479,15 +497,63 @@ public final class JugcraftClient implements ClientModInitializer {
 			BloodMoon.clientActive = false;
 			client.execute(CarvingTextures::clear);
 		});
-		BlockEntityRenderers.register(JugcraftDrones.TERMINAL_ENTITY, context -> new DroneDepotRenderer());
+		BlockEntityRenderers.register(JugcraftDrones.TERMINAL_ENTITY, DroneDepotRenderer::new);
 		DroneSounds.register();
 		DieselSounds.register();
 		SoundOcclusion.register();
 		BlockEntityRenderers.register(JugcraftDrones.SCREEN_ENTITY, ControlScreenRenderer::new);
-		BlockEntityRenderers.register(JugcraftDrones.HOLO_ENTITY, context -> new HoloMapRenderer());
+		BlockEntityRenderers.register(JugcraftDrones.HOLO_ENTITY, HoloMapRenderer::new);
+		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.HOLO_COMMAND_TABLE_ENTITY, HoloCommandTableRenderer::new);
+		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.TOWER_CONTROL_CONSOLE_ENTITY, TowerControlConsoleRenderer::new);
+		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.CONSOLE_CHAIR_ENTITY, ConsoleChairRenderer::new);
+		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.CURVED_VIDEO_WALL_ENTITY, CurvedVideoWallRenderer::new);
+		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.DRONE_DISPLAY_CASE_ENTITY, DroneDisplayCaseRenderer::new);
+		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.CRYSTAL_TREE_ENTITY, CrystalTreeRenderer::new);
+		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.OPS_TREE_ENTITY, OpsTreeRenderer::new);
+		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.LONG_COFFEE_TABLE_ENTITY, LongCoffeeTableRenderer::new);
+		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.HOLO_PROJECTOR_ENTITY, HoloProjectorRenderer::new);
+		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.CRADLE_STRUTS_ENTITY, CradleStrutsRenderer::new);
+		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.BIG_MAP_TABLE_ENTITY, BigMapTableRenderer::new);
+		ClientPlayNetworking.registerGlobalReceiver(io.github.jimbozoomer.jugcraft.tower.MapScan.Payload.TYPE,
+				(payload, context) -> BigMap.receive(payload));
+		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.DRONE_PARTS_SHELVING_ENTITY, DronePartsShelvingRenderer::new);
+		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.AISLE_CONTAINMENT_DOOR_ENTITY, AisleContainmentDoorRenderer::new);
+		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.SLIDING_DOOR_ENTITY, SlidingDoorRenderer::new);
+		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.CONSOLE_ENTITY, ConsoleDeskRenderer::new);
+		// the upper floor's room kits drawn live (work list item 22 part B): the Ops Wall Screens
+		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.tower.RoomKit.DISPLAY_ENTITY, RoomKitDisplayRenderer::new);
+		// the roof plant's dry coolers: their fans turn (client only)
+		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.tower.RoomKit.ROTOR_ENTITY, RoomKitRotorRenderer::new);
+		// the Advanced Crafting Table: its grid's items, the result's hologram, the lamp and the touchscreen (client only)
+		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.crafting.JugcraftCrafting.TABLE_ENTITY, AdvancedCraftingTableRenderer::new);
+		MenuScreens.register(io.github.jimbozoomer.jugcraft.crafting.JugcraftCrafting.MENU, AdvancedCraftingScreen::new);
+		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.HALL_ENTITY, HallFixtureRenderer::new);
+		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.MASTER_CONSOLE_ENTITY, MasterConsoleRenderer::new);
+		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.tower.ExchangeStations.ENTITY, ExchangeStationRenderer::new);
 		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.blueprint.JugcraftBlueprints.STAKE_ENTITY, context -> new SurveyStakeRenderer());
 		io.github.jimbozoomer.jugcraft.client.blueprint.ClientBlueprints.register();
 		net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.SEAT, net.minecraft.client.renderer.entity.NoopRenderer::new);
+		// The tower's crew: their bodies and gear, and the props they carry.
+		ModelLayerRegistry.registerModelLayer(TowerCrewModel.LAYER, TowerCrewModel::createLayer);
+		ModelLayerRegistry.registerModelLayer(TowerCrewRenderer.PROPS, TowerCrewPropsModel::createLayer);
+		EntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.TOWER_CREW, TowerCrewRenderer::new);
+		// security's plasma rifle: its bolt
+		ModelLayerRegistry.registerModelLayer(PlasmaBoltRenderer.LAYER, PlasmaBoltRenderer::createLayer);
+		EntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.tower.crew.PlasmaRifle.BOLT, PlasmaBoltRenderer::new);
+		EntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.CREW_SHIP, CrewShipRenderer::new);   // the crew drop ship
+		// drop pod squads: the pods and the legionaries, the pods' sounds, the designator's sight, the requisitions page
+		EntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.tower.squad.JugcraftSquads.DROP_POD, DropPodRenderer::new);
+		EntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.tower.squad.JugcraftSquads.LEGIONARY, LegionaryRenderer::new);
+		DropPodSounds.register();
+		LaserDesignatorClient.register();
+		RequisitionScreen.register();
+		SquadOrdersScreen.register();               // a squad leader's orders panel
+		// plasma wounds: the holes the rifle's bolts and the baton burn into any mob
+		PlasmaWoundsClient.register();
+		// the gate guards' plasma baton: its hum while it's lit
+		net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents.END_CLIENT_TICK.register(BatonHum::tick);
+		net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents.END_CLIENT_TICK.register(CrewShipSounds::tick);   // the drop ship's engines
+		net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents.END_CLIENT_TICK.register(CrewShipEffects::tick);  // its fire, smoke and dust
 		// The walled town: townsfolk, the shop and ATM screens.
 		net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry.registerModelLayer(TownsfolkModel.LAYER, TownsfolkModel::createLayer);
 		net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry.registerModelLayer(TownsfolkModel.SKINNABLE_LAYER, TownsfolkModel::createSkinnableLayer);
@@ -521,7 +587,14 @@ public final class JugcraftClient implements ClientModInitializer {
 		BlockEntityRenderers.register(io.github.jimbozoomer.jugcraft.control.JugcraftControl.MONITOR_ENTITY, ControlMonitorRenderer::new);
 		io.github.jimbozoomer.jugcraft.drone.GuideBooks.openScreen = book -> Minecraft.getInstance().gui.setScreen(new GuideBookScreen(book));
 		DroneTerminalBlock.openScreen = pos -> Minecraft.getInstance().gui.setScreen(new DroneTerminalScreen(pos));
+		io.github.jimbozoomer.jugcraft.tower.ConsoleDeskBlock.openScreen = (terminal, access) -> Minecraft.getInstance().gui.setScreen(new DroneTerminalScreen(terminal, access));
+		io.github.jimbozoomer.jugcraft.tower.MasterConsoleBlock.openScreen = (terminal, access) -> Minecraft.getInstance().gui.setScreen(new DroneTerminalScreen(terminal, access));
 		io.github.jimbozoomer.jugcraft.tower.TowerCoreBlock.openScreen = pos -> Minecraft.getInstance().gui.setScreen(new TowerScreen(pos));
+		// the core's placement warning and the tower's loading screen (first layer at the core, storage at the Cargo Exchange)
+		TowerPlaceScreen.register();
+		MenuScreens.register(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.LOAD_MENU, TowerLoadScreen::new);
+		MenuScreens.register(io.github.jimbozoomer.jugcraft.tower.JugcraftTower.STORAGE_MENU, TowerStorageScreen::new);
+		TowerCorePreview.register();
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.JugcraftNuclear.EQUIPMENT_ENTITY, NuclearRenderer::new);
 		BlockEntityRendererRegistry.register(io.github.jimbozoomer.jugcraft.nuclear.JugcraftNuclear.COOLING_TOWER_ENTITY, CoolingTowerRenderer::new);
 		io.github.jimbozoomer.jugcraft.nuclear.EquipmentPlacement.openConsole = pos -> Minecraft.getInstance().gui.setScreen(new ReactorConsoleScreen(pos));

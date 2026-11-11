@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SCS",
+    "MGM",
+    "SSS"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "C": "jugcraft:basic_circuit",
+    "M": "jugcraft:electric_motor",
+    "G": "minecraft:iron_chain"
+  },
+  "result": {
+    "id": "jugcraft:warehouse_lift_drive",
+    "count": 1
+  }
+}

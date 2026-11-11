@@ -1,23 +1,33 @@
 """The speed gate (nuclear/SpeedGateBlock.java, SpeedGatePedestalBlock.java, client/SpeedGateRenderer.java): a sliding
-glass security gate like the new fare gates in New York's Grand Central (Conduent, 2024) and office speed gates.
+glass security gate, in the Tri-Pillar's vestibule and at every Nuclear Center gatehouse.
 
 Justin, October 8 2026: "the ones with the two doors that open ... it'll just open one way. So there'll be the through
 lane, it'll open for you, and then the exit lane will open for you if you're exiting"; then "I want it to slide
-inwards ... the sliding doors that like slide in and then slide back toward each other ... You can make them bigger",
-with the Grand Central gates as the example: long brushed stainless pedestals with rounded ends, a stainless arch on
-each housing the glass doors when they slide in, tall glass doors edge-lit with green light bars, a card reader and a
-small screen at each end, a dark mat down the lane, and a sign gantry overhead (a green arrow over a lane you may go
-through, a red cross over one you may not).
+inwards ... the sliding doors that like slide in and then slide back toward each other", with the Grand Central fare
+gates as the example (a housing over each pedestal that takes the doors when they slide in).
 
-A player needs a lane a block wide, so across the lane everything is about twice real size: the pedestals are 12 px
-(0.75 m) wide, two blocks long, 1 m high (the arch 1.6 m); each door 10.5 px wide, 1.3 m of glass 0.19 m off the floor,
-and the two overlap a pixel in the middle (they run a little apart, one each side of the line). A door slides into its
-pedestal, under the arch, and out again. The gate is the lane block at the end you come in by; the block ahead of it
-is left clear (the lane's second block); a pedestal block each side of both (shared between lanes side by side).
+Remade realistic on 22 October 2026 (Tri-Pillar work list item 4; claude/jugcraft-tripillar-speed-gates.md), the way
+real sliding speed gates are built (Boon Edam Speedlane Slide, Automatic Systems SlimLane), and Justin asked for it at
+the Nuclear Center too ("I like this one a lot better"): brushed stainless cabinets 1.04 high with rounded ends on a
+recessed black kick; a glossy black glass top with a stainless rim, the card reader under it (its mark lit on the lane's
+right-hand cabinet at the end you come up to) and LED guide lines along the lane's edges (white waiting, green open);
+two bands of dark infrared sensor windows down each lane face; black brush seals at the door slots; pictograms on the
+cabinets' ends (a green arrow on the right-hand cabinet where you come up, a red cross on the far end for whoever comes
+the wrong way); over each cabinet at the door line a stainless-framed glass housing the doors slide into, so they show
+parked in it. The doors are 10 mm tempered glass 1.55 high (too tall to jump) with polished edges, a frosted band of
+dots at 1.40-1.50, a clear rubber safety edge and a status light along the top edge. No sign gantry: the cabinets sign
+the lanes.
 
-Models are drawn for a lane you walk through going north (facing north): the lane block is the south (approach)
-block, the doors run along its north edge (the line between the gate's two blocks). Pedestals are drawn lengthwise
-north-south (axis z), the half on the south side of the line (half=b); the north half is its mirror image.
+A player needs a lane a block wide between pedestals two blocks apart, so the cabinets are 0.66 wide (a real wide lane's
+are about 0.51) and the passage 1.34: each door 10.56 px from its cabinet's face to (a hair short of) the lane's middle,
+sliding the same into its cabinet. The doors run 0.6 px either side of the line, lanes side by side alternating
+(SpeedGateBlock.slotSign), so two lanes' doors park in one housing.
+
+The lane block is the end you come in by (facing the way through); the block ahead of it is left clear; a pedestal block
+each side of both, shared with the lane beside. Lane parts are drawn facing north: the lane block is the south (approach)
+block, the door line its north edge (z 0), the block ahead z -16..0, the pedestals' cabinets centred on x -8 and 24.
+Pedestals are drawn lengthwise north-south (axis z), half b the south half (the line its north edge); half a is its
+mirror image.
 """
 import numpy as np
 from PIL import Image, ImageDraw
@@ -31,16 +41,27 @@ DISPLAY = "Speed Gate"
 CRAFTING = {GATE: (["GSG", "PRP"], {"G": "minecraft:glass_pane", "S": "#c:plates/steel", "P": "#c:plates/steel",
                                      "R": "minecraft:redstone"}, 1)}
 FACINGS = {"north": 0, "east": 90, "south": 180, "west": 270}
-PARTS = ("lane", "ghost", "door_left", "door_right", "leds_wait", "leds_go", "gantry", "gantry_east")
-LIFT = 16.0             # px: the gantry is modelled this much lower than it stands (a model must keep within -16..32;
-                        # the renderer lifts it back), on a post up from a pedestal's arch
-DOOR_W = 10.0           # px: each door, from its pedestal's face to the middle of the lane
-SLOT = 2.0              # px: the doors run in one of two slots this far either side of the line (lanes side by side
-                        # alternate, so the two lanes' doors that slide into a shared pedestal have a slot each)
-TEXTURES = ["sg_steel", "sg_steel_top", "sg_end", "sg_plinth", "sg_reader", "sg_screen", "sg_glass", "sg_door_lights",
-            "sg_mat", "sg_post", "sg_sign_case", "sg_sign_go", "sg_sign_stop", "sg_led_blue", "sg_led_green", "sg_slot",
-            "sg_rubber"]
+PARTS = ("lane", "ghost", "door_left", "door_right", "leds_wait", "leds_go", "gantry", "gantry_east",
+         "light_left_wait", "light_left_go", "light_right_wait", "light_right_go")
+# the cabinet (px, in its pedestal block: its middle x 8, the line z 0 for half b)
+CAB_HW = 5.28           # half width (0.33 m)
+CAB_HL = 14.4           # half length (0.9 m)
+TOP_Y = 16.64           # the glass top's surface (1.04 m)
+TOP_T = 0.19            # the glass top's thickness
+KICK, KI = 0.8, 0.24    # the recessed kick
+HOUSE_T = 1.6           # the housing's half depth over the line
+HOUSE_Y = 27.84         # its top (1.74 m)
+FRAME = 0.56            # its frame's width
+# the doors (px, lane frame)
+DOOR_W = 10.56          # each door, from its cabinet's face to a hair short of the lane's middle
+SLOT = 0.6              # the doors run this far either side of the line
+DOOR_Y0, DOOR_Y1 = 1.92, 26.72
+DOOR_T = 0.16           # 10 mm
+FACE_W, FACE_E = 8 - 16 + CAB_HW, 24 - CAB_HW    # the cabinets' faces either side of a lane: -2.72, 18.72
+TEXTURES = ["sg_steel", "sg_trim", "sg_top", "sg_kick", "sg_ir", "sg_slot", "sg_house_glass", "sg_glass", "sg_glass_edge",
+            "sg_rubber", "sg_led_white", "sg_led_green", "sg_reader", "sg_picto_go", "sg_picto_stop", "sg_picto_case"]
 ALL = ("north", "south", "east", "west", "up", "down")
+GLOW = 15
 
 
 def _box(f, t, tex, emit=None, faces=ALL):
@@ -62,36 +83,35 @@ def _box(f, t, tex, emit=None, faces=ALL):
 # ---------------------------------------------------------------- the pedestal (half b: the south half, z 0..16)
 
 def pedestal_elements():
-    """The south half of a pedestal lengthwise north-south: the door line is its north edge (z 0). A body 12 px wide
-    with a rounded end at z 16 (stepped in) under a brushed lid; over the line, the doors' housing, a stainless box as
-    wide as the body and a little taller than the doors, rounded on top; the door slot on this side of the line (2 px
-    south of it) down both long faces from the floor to the housing's top, lined with black brush seals (the north
-    half has the other slot); a card reader pad and a small screen at the end."""
-    steel = {"*": "sg_steel", "up": "sg_steel_top", "north": None}
-    els = [
-        _box((2.6, 0, 0), (13.4, 0.6, 14.6), {"*": "sg_plinth", "north": None}),
-        _box((2, 0.6, 0), (14, 14.4, 13.6), steel),
-        # The rounded end: two steps in, top to bottom.
-        _box((2.6, 0.6, 13.6), (13.4, 14.4, 15.1), {**steel, "south": "sg_end!"}),
-        _box((3.6, 0.6, 15.1), (12.4, 14.4, 15.8), {**steel, "south": "sg_end!"}),
-        # The lid.
-        _box((2, 14.4, 4.4), (14, 15, 13.6), steel),
-        _box((2.6, 14.4, 13.6), (13.4, 15, 15.3), steel),
-        _box((3.6, 14.4, 15.3), (12.4, 15, 16), steel),
-        # The doors' housing over the line, on the body (z 0..4.4; the north half has the rest), rounded on top.
-        _box((2, 14.4, 0), (14, 24.6, 4.4), steel),
-        _box((2.6, 24.6, 0), (13.4, 25.4, 4.0), steel),
-        _box((3.6, 25.4, 0), (12.4, 25.8, 3.4), steel),
-    ]
-    # The slot this side of the line on both long faces: black brush seals a hair proud of the steel, as long as the
-    # door is high (floor to the housing's top).
-    for x0, x1 in ((1.9, 2.0), (14.0, 14.1)):
-        els.append(_box((x0, 2.4, SLOT - 0.7), (x1, 24.8, SLOT + 0.7), {"*": "sg_slot", "north": "sg_slot", "south": "sg_slot"}))
-    els += [
-        # The end: a card reader pad on the lid and a small screen on a raised wedge facing whoever comes up.
-        _box((4.5, 15, 8.6), (11.5, 15.3, 12.2), {"*": "sg_plinth", "up": "sg_reader!"}, 6),
-        _box((4.5, 15, 12.8), (11.5, 18.5, 14.8), {"*": "sg_steel", "south": "sg_screen!"}, 9),
-    ]
+    """The south half of a cabinet lengthwise north-south, the door line its north edge (z 0): the kick, the stainless
+    body with a rounded end (two steps in), the glass top with its rim, the sensor windows and the door slot's seals on
+    both long faces, and over the line the housing's half: two posts, a top bar, a glass pane in its south face."""
+    x0, x1 = 8 - CAB_HW, 8 + CAB_HW
+    top0 = TOP_Y - TOP_T
+    end = ((x0, x1, 0, CAB_HL - 0.96), (x0 + 0.24, x1 - 0.24, CAB_HL - 0.96, CAB_HL - 0.32), (x0 + 0.8, x1 - 0.8, CAB_HL - 0.32, CAB_HL))
+    els = [_box((x0 + KI, 0, 0), (x1 - KI, KICK, CAB_HL - KI), "sg_kick", faces=("east", "west", "south", "down"))]
+    for i, (a, b, z0, z1) in enumerate(end):
+        els.append(_box((a, KICK, z0), (b, top0, z1), "sg_steel", faces=("east", "west", "south", "down")))
+        # the glass top over it (the housing takes the top over the line)
+        els.append(_box((a, top0, max(z0, HOUSE_T)), (b, TOP_Y, z1), {"*": "sg_trim", "up": "sg_top"}, faces=("east", "west", "south", "up")))
+    # the rim: a stainless line round the top's edge
+    els += [_box((x0, TOP_Y, HOUSE_T), (x0 + 0.12, TOP_Y + 0.03, CAB_HL - 0.96), "sg_trim", faces=("up", "west", "east")),
+            _box((x1 - 0.12, TOP_Y, HOUSE_T), (x1, TOP_Y + 0.03, CAB_HL - 0.96), "sg_trim", faces=("up", "west", "east")),
+            _box((x0 + 0.8, TOP_Y, CAB_HL - 0.12), (x1 - 0.8, TOP_Y + 0.03, CAB_HL), "sg_trim", faces=("up", "north", "south"))]
+    # the infrared windows (two bands) and the door slot's brush seals, on both long faces
+    for face, xa, xb in (("west", x0 - 0.04, x0), ("east", x1, x1 + 0.04)):
+        for y0, y1 in ((4.16, 4.96), (11.84, 12.64)):
+            els.append(_box((xa, y0, HOUSE_T + 0.9), (xb, y1, CAB_HL - 1.9), "sg_ir", faces=(face,)))
+        els.append(_box((xa, KICK + 0.8, SLOT - 0.25), (xb, top0, SLOT + 0.25), "sg_slot", faces=(face,)))
+    # under the housing, the dark slot the doors come up through
+    els.append(_box((x0 + FRAME, top0, 0), (x1 - FRAME, TOP_Y - 0.02, HOUSE_T), "sg_kick", faces=("up",)))
+    # the housing: two posts (a seal down each lane-side post at the slot), the top bar, the glass pane
+    for xa, xb, face in ((x0, x0 + FRAME, "west"), (x1 - FRAME, x1, "east")):
+        els.append(_box((xa, top0, 0), (xb, HOUSE_Y, HOUSE_T), "sg_trim", faces=("east", "west", "south", "up")))
+        sx0, sx1 = (xa - 0.03, xa) if face == "west" else (xb, xb + 0.03)
+        els.append(_box((sx0, TOP_Y, SLOT - 0.25), (sx1, DOOR_Y1 + 0.3, SLOT + 0.25), "sg_slot", faces=(face,)))
+    els.append(_box((x0 + FRAME, HOUSE_Y - FRAME, 0), (x1 - FRAME, HOUSE_Y, HOUSE_T), "sg_trim", faces=("up", "down", "south")))
+    els.append(_box((x0 + FRAME, TOP_Y, HOUSE_T - 0.16), (x1 - FRAME, HOUSE_Y - FRAME, HOUSE_T - 0.08), "sg_house_glass!", faces=("north", "south")))
     return els
 
 
@@ -118,88 +138,126 @@ def _mirror_z(elements):
     return out
 
 
-# ---------------------------------------------------------------- the lane (facing north; the approach block)
+def _flip_half_a(elements):
+    """Half a is half b mirrored about the line; mirrored, its z is 16 - z of half b's in its own block: so half b's
+    line edge z 0 becomes half a's z 16."""
+    return _mirror_z(elements)
 
-def lane_elements():
-    """What the lane block draws itself: the rubber mat down both of the gate's blocks."""
-    return [_box((-2, 0, -16), (18, 0.4, 16), {"up": "sg_mat"}, faces=("up",))]
+
+# ---------------------------------------------------------------- the lane's parts (facing north)
+
+def door_elements(side):
+    """A door, shut, on the line (the renderer sets it in its slot): tempered glass, its polished edges, the frosted band
+    of dots (in the glass's texture), the clear rubber safety edge where the two meet."""
+    if side == "left":
+        g0, g1, r0, r1 = FACE_W, FACE_W + DOOR_W - 0.16, FACE_W + DOOR_W - 0.16, FACE_W + DOOR_W
+        outer = "west"
+    else:
+        g0, g1, r0, r1 = FACE_E - DOOR_W + 0.16, FACE_E, FACE_E - DOOR_W, FACE_E - DOOR_W + 0.16
+        outer = "east"
+    z0, z1 = -DOOR_T / 2, DOOR_T / 2
+    glass = {"north": "sg_glass!", "south": "sg_glass!", "up": "sg_glass_edge", "down": "sg_glass_edge", outer: "sg_glass_edge"}
+    return [
+        _box((g0, DOOR_Y0, z0), (g1, DOOR_Y1, z1), glass, faces=("north", "south", "up", "down", outer)),
+        _box((r0, DOOR_Y0, z0 - 0.08), (r1, DOOR_Y1, z1 + 0.08), "sg_rubber"),
+    ]
 
 
-def gantry_elements(west=True):
-    """The sign gantry over the lane, LIFT lower than it stands (client/SpeedGateRenderer.java lifts it): a sign box
-    from the west pedestal's middle to the east one's, so the boxes of lanes side by side make one gantry, a green
-    arrow on its face toward whoever comes in by this end and a red cross on the other (each face showing the middle
-    band of its sign texture), on a post up from a pedestal's arch. The post is on the west pedestal (gantry) or the
-    east one (gantry_east, for lanes facing south or west: turned, theirs then stands on the west or north pedestal
-    too, so each pedestal carries one post)."""
-    y0, y1 = 40 - LIFT, 47 - LIFT
-    els = [_box((-8, y0, -2.4), (24, y1, 2.4), {"*": "sg_sign_case"}, faces=("east", "west", "up", "down"))]
-    # The faces: a thin glowing panel on each open side of the box.
-    for face, tex, z0, z1 in (("south", "sg_sign_go", 2.4, 2.5), ("north", "sg_sign_stop", -2.5, -2.4)):
-        panel = _box((-8, y0, z0), (24, y1, z1), {"*": "sg_sign_case"}, 13, faces=tuple(f for f in ALL if f != ("north" if face == "south" else "south")))
-        panel["faces"][face] = {"texture": "#" + tex, "uv": [0, 6.25, 16, 9.75]}
-        els.append(panel)
-    x0 = -9.0 if west else 23.0
-    els.append(_box((x0, 25.8 - LIFT, -0.8), (x0 + 2, 40 - LIFT, 0.8), "sg_post", faces=("north", "south", "east", "west", "down")))
-    return els
+def door_light_elements(side, colour):
+    """The status light along a door's top edge (moves with the door)."""
+    g0, g1 = (FACE_W, FACE_W + DOOR_W - 0.16) if side == "left" else (FACE_E - DOOR_W + 0.16, FACE_E)
+    return [_box((g0, DOOR_Y1, -0.07), (g1, DOOR_Y1 + 0.16, 0.07), f"sg_led_{colour}", GLOW, faces=("north", "south", "east", "west", "up"))]
 
 
 def led_elements(colour):
-    """Light strips along both pedestals' long faces by the lane, just under the lid (either side of the housing),
-    blue while waiting and green while the doors are open."""
+    """What the lane lights on its cabinets: the guide lines along the lane's edges of both tops (white waiting, green
+    open), the reader's mark under the right-hand (east) cabinet's top at the end you come up to (south), a green arrow
+    on that end of it, and on the far (north) end of the left-hand (west) cabinet a red cross for whoever comes the
+    wrong way."""
     tex = f"sg_led_{colour}"
     els = []
-    for x0, x1 in ((-2.0, -1.9), (17.9, 18.0)):
-        for z0, z1 in ((-15, -4.6), (4.6, 15)):
-            els.append(_box((x0, 13.4, z0), (x1, 14.2, z1), tex, 15))
+    for xa, xb in ((FACE_W - 0.48, FACE_W - 0.28), (FACE_E + 0.28, FACE_E + 0.48)):
+        for za, zb in ((-CAB_HL + 1.6, -HOUSE_T - 0.5), (HOUSE_T + 0.5, CAB_HL - 1.6)):
+            els.append(_box((xa, TOP_Y, za), (xb, TOP_Y + 0.06, zb), tex, GLOW, faces=("up",)))
+    # the reader's mark (0.18 m square) under the east cabinet's top, toward the lane, near the south end
+    rx, rz = 24 - 2.4, CAB_HL - 3.5
+    els.append(_box((rx - 1.44, TOP_Y, rz - 1.44), (rx + 1.44, TOP_Y + 0.04, rz + 1.44), {"up": "sg_reader!"}, 10, faces=("up",)))
+    # the pictograms (0.20 m square, 0.70-0.90 high) on the cabinets' ends, in the half nearer the lane, on a dark case
+    for (cx, z, face, tex_) in ((24 - 2.08, CAB_HL, "south", "sg_picto_go!"), (-8 + 2.08, -CAB_HL, "north", "sg_picto_stop!")):
+        s = 1 if face == "south" else -1
+        za, zb = sorted((z, z + s * 0.03))
+        els.append(_box((cx - 1.8, 11.0, za), (cx + 1.8, 14.6, zb), {face: "sg_picto_case"}, faces=(face,)))
+        za, zb = sorted((z, z + s * 0.06))
+        els.append(_box((cx - 1.6, 11.2, za), (cx + 1.6, 14.4, zb), {face: tex_}, GLOW, faces=(face,)))
     return els
 
 
-def door_elements(side):
-    """A door, shut, on the line (the renderer sets it in its slot, SLOT either side): the one from the left (west)
-    pedestal reaches east to the middle of the lane, the right one west; glass with green light bars edge-lit in it
-    (a hair off each face) and a black rubber edge where they meet."""
-    if side == "left":
-        g0, g1, r0, r1 = -2.0, 8.0 - 0.5, 8.0 - 0.5, 8.0
-    else:
-        g0, g1, r0, r1 = 8.0 + 0.5, 18.0, 8.0, 8.0 + 0.5
-    z0, z1 = -0.3, 0.3
-    glass = {"north": "sg_glass!", "south": "sg_glass!", "up": "sg_glass", "down": "sg_glass"}
-    return [
-        _box((g0, 3, z0), (g1, 24, z1), glass, faces=("north", "south", "up", "down")),
-        _box((g0, 3, z0 - 0.12), (g1, 24, z1 + 0.12), {"north": "sg_door_lights!", "south": "sg_door_lights!"}, 15,
-             faces=("north", "south")),
-        _box((r0, 3, z0 - 0.05), (r1, 24, z1 + 0.05), "sg_rubber"),
-    ]
+_NORMALS = {"north": (2, -1), "south": (2, 1), "west": (0, -1), "east": (0, 1), "down": (1, -1), "up": (1, 1)}
+
+
+def close_faces(elements):
+    """Gives every box the faces it left out that nothing else in the model covers (as tools/art_check.py's O1 rule
+    probes them: a 4 x 4 grid just outside the face), in the texture of its first face: a left-out face is only for
+    one another box hides. Seams on the block's 0/16 planes and faces out past them are left alone."""
+    boxes = [(i, e["from"], e["to"]) for i, e in enumerate(elements)]
+    for i, f, t in boxes:
+        e = elements[i]
+        present = set(e["faces"])
+        if not present or len(present) == 6 or any(t[k] - f[k] <= 1e-6 for k in range(3)):
+            continue
+        tex = next(iter(e["faces"].values()))["texture"]
+        for face, (axis, sign) in _NORMALS.items():
+            if face in present:
+                continue
+            plane = t[axis] if sign > 0 else f[axis]
+            if abs(plane) < 1e-6 or abs(plane - 16) < 1e-6 or (plane < 0 if sign < 0 else plane > 16):
+                continue
+            others = [k for k in range(3) if k != axis]
+            free = False
+            for a in range(4):
+                for b in range(4):
+                    q = [0.0, 0.0, 0.0]
+                    q[axis] = plane + sign * 0.01
+                    q[others[0]] = f[others[0]] + (a + 0.5) / 4 * (t[others[0]] - f[others[0]])
+                    q[others[1]] = f[others[1]] + (b + 0.5) / 4 * (t[others[1]] - f[others[1]])
+                    if not any(all(F[k] - 1e-6 <= q[k] <= T[k] + 1e-6 for k in range(3)) for j, F, T in boxes if j != i):
+                        free = True
+            if free:
+                e["faces"][face] = {"texture": tex}
+    return elements
 
 
 def textures(rid):
     tex = {name: rid(f"block/{name}") for name in TEXTURES}
-    tex["sg_glass"] = {"sprite": rid("block/sg_glass"), "force_translucent": True}
+    for name in ("sg_glass", "sg_house_glass"):
+        tex[name] = {"sprite": rid(f"block/{name}"), "force_translucent": True}
     tex["particle"] = rid("block/sg_steel")
     return tex
 
 
 def models(rid):
+    shut = door_elements("left") + door_elements("right")
     parts = {
-        "lane": lane_elements(),
-        # The placement preview: the gate as it stands, but for the gantry (out of a model's reach, and the renderer
-        # does not draw a preview).
-        "ghost": lane_elements() + led_elements("blue")
-                 + [_shift(e, 0, 0, SLOT) for e in door_elements("left") + door_elements("right")],
+        "lane": [],
+        # the placement preview: the lane's doors shut and its lights waiting (its new pedestals have their own)
+        "ghost": shut + led_elements("white") + door_light_elements("left", "white") + door_light_elements("right", "white"),
         "door_left": door_elements("left"),
         "door_right": door_elements("right"),
-        "leds_wait": led_elements("blue"),
+        "leds_wait": led_elements("white"),
         "leds_go": led_elements("green"),
-        "gantry": gantry_elements(True),
-        "gantry_east": gantry_elements(False),
+        "gantry": [],
+        "gantry_east": [],
+        "light_left_wait": door_light_elements("left", "white"),
+        "light_left_go": door_light_elements("left", "green"),
+        "light_right_wait": door_light_elements("right", "white"),
+        "light_right_go": door_light_elements("right", "green"),
     }
-    out = {f"{GATE}_{part}": {"textures": textures(rid), "elements": els} for part, els in parts.items()}
-    south = pedestal_elements()
+    out = {f"{GATE}_{part}": {"textures": textures(rid), "elements": close_faces(els)} for part, els in parts.items()}
+    south = close_faces(pedestal_elements())
     out[f"{PEDESTAL}_b"] = {"parent": "minecraft:block/block", "textures": textures(rid), "elements": south}
     out[f"{PEDESTAL}_a"] = {"parent": "minecraft:block/block", "textures": textures(rid), "elements": _mirror_z(south)}
     out[f"{GATE}_item"] = {"parent": "minecraft:block/block", "textures": textures(rid),
-                           "elements": [_shift(e, 0, 0, -6) for e in south]}
+                           "elements": close_faces([_shift(e, 0, 0, -6) for e in pedestal_elements()])}
     return out
 
 
@@ -230,107 +288,35 @@ def blockstates(rid):
 
 # ---------------------------------------------------------------- textures (64 px)
 
-def _steel(direction="h", seed=7401):
-    return M.stylize(M.brushed((186, 190, 194), seed, direction, dirt=0.04), 12)
+def _steel():
+    """The cabinets' sides: brushed stainless, the grain upright."""
+    return M.stylize(M.brushed((180, 184, 190), 7401, "v", dirt=0.03), 16)
 
 
-def _steel_top():
-    return M.stylize(M.brushed((196, 200, 204), 7402, "v", dirt=0.03), 12)
+def _trim():
+    return M.stylize(M.brushed((198, 202, 208), 7402, "h", dirt=0.02), 12)
 
 
-def _end():
-    """A pedestal's rounded end: brushed steel, a dark band of passage sensors."""
-    img = M.brushed((186, 190, 194), 7403, "h", dirt=0.04)
+def _top():
+    """The glossy black glass top: near black, a soft reflected sheen across it."""
+    a = np.zeros((64, 64, 4), np.float32)
+    y = np.arange(64)[:, None] / 64
+    x = np.arange(64)[None, :] / 64
+    sheen = np.exp(-((x + y * 0.4 - 0.6) / 0.18) ** 2) * 16
+    for c in range(3):
+        a[..., c] = 9 + sheen
+    a[..., 3] = 255
+    return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), "RGBA")
+
+
+def _solid(rgb, alpha=255, size=16):
+    return Image.new("RGBA", (size, size), tuple(rgb) + (alpha,))
+
+
+def _ir():
+    img = _solid((22, 12, 14), size=64)
     d = ImageDraw.Draw(img)
-    d.rectangle([14, 20, 113, 32], fill=(24, 26, 30, 255))
-    for x in range(22, 110, 14):
-        d.ellipse([x, 23, x + 6, 29], fill=(120, 30, 30, 255))
-    return M.stylize(img, 12)
-
-
-def _plinth():
-    return M.stylize(M.painted((44, 46, 48), 7404, chip_count=0, drip_count=0, dirt=0.2), 8)
-
-
-def _reader():
-    """The card reader: a black oval pad with the contactless mark."""
-    img = Image.new("RGBA", (128, 128), (40, 42, 46, 255))
-    d = ImageDraw.Draw(img)
-    d.ellipse([6, 14, 121, 113], fill=(14, 15, 17, 255), outline=(90, 94, 100, 255), width=4)
-    for r in (14, 26, 38):
-        d.arc([44 - r, 64 - r, 44 + r, 64 + r], -50, 50, fill=(210, 214, 220, 255), width=6)
-    return M.stylize(img, 8)
-
-
-def _screen():
-    """The small screen: blue, a white 'go' arrow and a line of text."""
-    img = Image.new("RGBA", (128, 128), (60, 62, 66, 255))
-    d = ImageDraw.Draw(img)
-    d.rectangle([10, 10, 117, 117], fill=(24, 64, 150, 255))
-    d.rectangle([10, 10, 117, 30], fill=(16, 40, 100, 255))
-    d.polygon([(64, 40), (92, 68), (76, 68), (76, 96), (52, 96), (52, 68), (36, 68)], fill=(240, 244, 250, 255))
-    d.rectangle([24, 102, 104, 108], fill=(180, 196, 230, 255))
-    return M.stylize(img, 10)
-
-
-def _glass(size=64):
-    out = np.zeros((size, size, 4), np.uint8)
-    out[..., :3] = (200, 222, 222)
-    out[..., 3] = 46
-    return Image.fromarray(out, "RGBA")
-
-
-def _door_lights(size=128):
-    """The doors' light: a green line round the edge and three rows of dashed green bars in the glass (cut out
-    everywhere else), as on the Grand Central gates."""
-    img = Image.new("RGBA", (size, size), (0, 0, 0, 0))
-    d = ImageDraw.Draw(img)
-    g = (70, 255, 140, 255)
-    d.rectangle([3, 3, size - 4, size - 4], outline=g, width=4)
-    for y in (int(size * 0.22), int(size * 0.5), int(size * 0.78)):
-        for x in range(14, size - 20, 22):
-            d.rectangle([x, y - 2, x + 12, y + 2], fill=g)
-    return img.resize((64, 64), Image.NEAREST)
-
-
-def _mat():
-    """The lane's rubber mat: dark, ribbed along the lane."""
-    img = M.painted((40, 42, 44), 7405, chip_count=0, drip_count=0, dirt=0.3)
-    d = ImageDraw.Draw(img)
-    for x in range(0, 128, 8):
-        d.rectangle([x, 0, x + 2, 127], fill=(28, 30, 32, 255))
-    return M.stylize(img, 8)
-
-
-def _post():
-    return M.stylize(M.painted((70, 74, 78), 7406, chip_count=0, drip_count=0, dirt=0.1), 8)
-
-
-def _sign_case():
-    return M.stylize(M.painted((50, 52, 56), 7407, chip_count=0, drip_count=0, dirt=0.1), 8)
-
-
-def _sign(colour, arrow):
-    """A gantry sign's face: dark, the pictogram in the middle of the band its face shows (v 50..78 of 128, as wide
-    as the box is long: 32 px of box to 7 px of height), over the lane in the middle of the box."""
-    img = Image.new("RGBA", (128, 128), (20, 22, 24, 255))
-    d = ImageDraw.Draw(img)
-    d.rectangle([0, 50, 127, 78], outline=(70, 74, 80, 255), width=1)
-    cx, top, bottom = 64, 53, 75
-    if arrow:
-        d.polygon([(cx, bottom), (cx + 10, bottom - 10), (cx + 4, bottom - 10), (cx + 4, top), (cx - 4, top),
-                   (cx - 4, bottom - 10), (cx - 10, bottom - 10)], fill=colour)
-    else:
-        d.line([(cx - 9, top + 1), (cx + 9, bottom - 1)], fill=colour, width=5)
-        d.line([(cx + 9, top + 1), (cx - 9, bottom - 1)], fill=colour, width=5)
-    return img
-
-
-def _led(colour):
-    img = Image.new("RGBA", (64, 64), colour + (255,))
-    d = ImageDraw.Draw(img)
-    for x in range(2, 64, 8):
-        d.rectangle([x, 0, x + 4, 63], fill=tuple(min(255, c + 40) for c in colour) + (255,))
+    d.rectangle([0, 28, 63, 34], fill=(34, 20, 22, 255))
     return img
 
 
@@ -343,17 +329,48 @@ def _slot():
     return img
 
 
-def _rubber():
-    return M.stylize(M.painted((30, 30, 32), 7408, chip_count=0, drip_count=0, dirt=0.1), 6)
+def _door_glass():
+    """Clear tempered glass, a faint green tint; the frosted band of dots 1.40-1.50 above the floor (v 0.11-0.175 of the
+    door from its top)."""
+    w, h = 64, 64
+    img = Image.new("RGBA", (w, h), (176, 214, 206, 64))
+    d = ImageDraw.Draw(img)
+    b0, b1 = int(h * 0.11), int(h * 0.175)
+    d.rectangle([0, b0, w - 1, b0], fill=(240, 244, 244, 120))
+    d.rectangle([0, b1, w - 1, b1], fill=(240, 244, 244, 120))
+    for x in range(2, w, 8):
+        d.rectangle([x, b0 + 1, x + 2, b1 - 1], fill=(240, 244, 244, 190))
+    return img
+
+
+def _reader():
+    """The reader's mark printed on the back of the glass top: a rounded square and the contactless waves, lit."""
+    img = Image.new("RGBA", (64, 64), (9, 9, 10, 255))
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle((5, 5, 58, 58), 8, outline=(220, 226, 230, 255), width=2)
+    for r in (9, 16, 23):
+        d.arc((20 - r, 32 - r, 20 + r, 32 + r), -45, 45, fill=(220, 226, 230, 255), width=3)
+    d.ellipse((16, 28, 24, 36), fill=(220, 226, 230, 255))
+    return img
+
+
+def _picto(kind):
+    img = Image.new("RGBA", (64, 64), (6, 6, 7, 255))
+    d = ImageDraw.Draw(img)
+    if kind == "go":
+        d.polygon([(32, 8), (54, 32), (41, 32), (41, 56), (23, 56), (23, 32), (10, 32)], fill=(80, 255, 120, 255))
+    else:
+        d.line([(14, 14), (50, 50)], fill=(255, 64, 56, 255), width=11)
+        d.line([(50, 14), (14, 50)], fill=(255, 64, 56, 255), width=11)
+    return img
 
 
 def draw_textures():
-    return {"sg_steel": _steel(), "sg_steel_top": _steel_top(), "sg_end": _end(), "sg_plinth": _plinth(),
-            "sg_reader": _reader(), "sg_screen": _screen(), "sg_glass": _glass(), "sg_door_lights": _door_lights(),
-            "sg_mat": _mat(), "sg_post": _post(), "sg_sign_case": _sign_case(),
-            "sg_sign_go": _sign((70, 235, 110, 255), True), "sg_sign_stop": _sign((240, 60, 50, 255), False),
-            "sg_led_blue": _led((60, 140, 255)), "sg_led_green": _led((60, 230, 100)), "sg_slot": _slot(),
-            "sg_rubber": _rubber()}
+    return {"sg_steel": _steel(), "sg_trim": _trim(), "sg_top": _top(), "sg_kick": _solid((14, 14, 16)), "sg_ir": _ir(),
+            "sg_slot": _slot(), "sg_house_glass": _solid((214, 232, 230), 30), "sg_glass": _door_glass(),
+            "sg_glass_edge": _solid((96, 160, 140)), "sg_rubber": _solid((176, 184, 184)),
+            "sg_led_white": _solid((246, 250, 255)), "sg_led_green": _solid((90, 255, 130)), "sg_reader": _reader(),
+            "sg_picto_go": _picto("go"), "sg_picto_stop": _picto("stop"), "sg_picto_case": _solid((10, 10, 12))}
 
 
 def write_assets(write, rid, assets, lang):

@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "G R",
+    "IPI",
+    "N N"
+  ],
+  "key": {
+    "G": "minecraft:green_dye",
+    "R": "minecraft:red_dye",
+    "I": "minecraft:iron_ingot",
+    "P": "#c:plates/steel",
+    "N": "minecraft:iron_nugget"
+  },
+  "result": {
+    "id": "jugcraft:shop_torch_cart",
+    "count": 1
+  }
+}

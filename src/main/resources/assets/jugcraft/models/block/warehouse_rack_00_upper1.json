@@ -1,0 +1,146 @@
+{
+  "textures": {
+    "pi_cap_black": "jugcraft:block/pi_cap_black",
+    "pi_wh_beam": "jugcraft:block/pi_wh_beam",
+    "pi_wh_beam_face": "jugcraft:block/pi_wh_beam_face",
+    "pi_wh_deck": "jugcraft:block/pi_wh_deck",
+    "pi_wh_loc_label_up": "jugcraft:block/pi_wh_loc_label_up",
+    "particle": "jugcraft:block/pi_cap_black"
+  },
+  "elements": [
+    {
+      "from": [
+        0.0,
+        0.0,
+        14.8
+      ],
+      "to": [
+        16.0,
+        1.6,
+        15.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_wh_beam"
+        },
+        "south": {
+          "texture": "#pi_wh_beam_face"
+        },
+        "east": {
+          "texture": "#pi_wh_beam"
+        },
+        "west": {
+          "texture": "#pi_wh_beam"
+        },
+        "up": {
+          "texture": "#pi_wh_beam"
+        },
+        "down": {
+          "texture": "#pi_wh_beam"
+        }
+      }
+    },
+    {
+      "from": [
+        0.0,
+        0.0,
+        0.4
+      ],
+      "to": [
+        16.0,
+        1.6,
+        1.2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_wh_beam_face"
+        },
+        "south": {
+          "texture": "#pi_wh_beam"
+        },
+        "east": {
+          "texture": "#pi_wh_beam"
+        },
+        "west": {
+          "texture": "#pi_wh_beam"
+        },
+        "up": {
+          "texture": "#pi_wh_beam"
+        },
+        "down": {
+          "texture": "#pi_wh_beam"
+        }
+      }
+    },
+    {
+      "from": [
+        0.0,
+        1.15,
+        1.2
+      ],
+      "to": [
+        16.0,
+        1.45,
+        14.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_wh_deck"
+        },
+        "south": {
+          "texture": "#pi_wh_deck"
+        },
+        "east": {
+          "texture": "#pi_wh_deck"
+        },
+        "west": {
+          "texture": "#pi_wh_deck"
+        },
+        "up": {
+          "texture": "#pi_wh_deck"
+        },
+        "down": {
+          "texture": "#pi_wh_deck"
+        }
+      }
+    },
+    {
+      "from": [
+        5.9,
+        0.25,
+        15.6
+      ],
+      "to": [
+        10.1,
+        1.35,
+        15.7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cap_black"
+        },
+        "south": {
+          "texture": "#pi_wh_loc_label_up",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_cap_black"
+        },
+        "west": {
+          "texture": "#pi_cap_black"
+        },
+        "up": {
+          "texture": "#pi_cap_black"
+        },
+        "down": {
+          "texture": "#pi_cap_black"
+        }
+      }
+    }
+  ]
+}

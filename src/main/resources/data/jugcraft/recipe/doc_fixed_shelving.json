@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PBP",
+    "PBP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "B": "minecraft:book"
+  },
+  "result": {
+    "id": "jugcraft:doc_fixed_shelving",
+    "count": 2
+  }
+}

@@ -38,7 +38,7 @@ public class BlueprintItem extends Item {
 		ItemStack stack = new ItemStack(JugcraftBlueprints.BLUEPRINT);
 		CompoundTag tag = new CompoundTag();
 		tag.putString("blueprint", blueprintId);
-		if (!name.isEmpty() && !Blueprint.BUILT_IN.contains(blueprintId)) {
+		if (!name.isEmpty() && !Blueprint.BUILT_IN.contains(blueprintId) && !BlueprintStacks.isStack(blueprintId)) {
 			tag.putString("name", name);
 		}
 		CustomData.set(DataComponents.CUSTOM_DATA, stack, tag);
@@ -54,11 +54,30 @@ public class BlueprintItem extends Item {
 		return stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getStringOr("blueprint", "");
 	}
 
+	/**
+	 * A stacked building's blueprint (BlueprintStacks) set to another number of floors (shift+scroll with it in hand):
+	 * its id becomes {@code <kind>@<floors>}. Returns false if the stack is not one.
+	 */
+	public static boolean setFloors(ItemStack stack, int floors) {
+		BlueprintStacks.Stack s = BlueprintStacks.of(idOf(stack));
+		if (s == null || BlueprintStacks.isAdd(idOf(stack)) || floors < s.min() || floors > BlueprintStacks.MAX) {
+			return false;
+		}
+		CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+		tag.putString("blueprint", s.id(floors));
+		CustomData.set(DataComponents.CUSTOM_DATA, stack, tag);
+		return true;
+	}
+
 	@Override
 	public Component getName(ItemStack stack) {
 		String id = idOf(stack);
 		if (id.isEmpty()) {
 			return super.getName(stack);
+		}
+		BlueprintStacks.Stack s = BlueprintStacks.of(id);
+		if (s != null && !BlueprintStacks.isAdd(id)) {
+			return Component.translatable("item.jugcraft.blueprint.floors", Component.translatable("blueprint.jugcraft." + s.kind()), BlueprintStacks.floors(id));
 		}
 		String name = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getStringOr("name", "");
 		return Component.translatable("item.jugcraft.blueprint.named",

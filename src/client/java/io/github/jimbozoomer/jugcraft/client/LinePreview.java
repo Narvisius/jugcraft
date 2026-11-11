@@ -75,7 +75,7 @@ public final class LinePreview {
 					List<BlockPos> withPartner = List.of(partner);
 					List<BlockPos> otherConnections = new ArrayList<>(other.connections());
 					otherConnections.add(anchor);
-					for (LineWires.Wire w : LineWires.between(anchor, kind, withPartner, partner, other.kind(), otherConnections)) {
+					for (LineWires.Wire w : LineWires.between(level, anchor, kind, withPartner, partner, other.kind(), otherConnections)) {
 						for (int i = 0; i <= 24; i++) {
 							Vec3 p = w.at(i / 24.0);
 							wire.add(new float[] {(float) (p.x - anchor.getX()), (float) (p.y - anchor.getY()), (float) (p.z - anchor.getZ())});

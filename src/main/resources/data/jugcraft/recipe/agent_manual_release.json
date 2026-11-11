@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "YLY"
+  ],
+  "key": {
+    "Y": "minecraft:yellow_dye",
+    "L": "minecraft:lever"
+  },
+  "result": {
+    "id": "jugcraft:agent_manual_release",
+    "count": 1
+  }
+}

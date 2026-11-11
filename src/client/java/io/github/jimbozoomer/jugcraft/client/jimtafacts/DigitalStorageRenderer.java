@@ -116,7 +116,7 @@ public final class DigitalStorageRenderer implements BlockEntityRenderer<Digital
             pose.pushPose(); pose.translate(.5, .57, -.008); pose.rotateDegrees(Axis.YP, 180); pose.scale(.33F, .33F, .33F);
             state.middle.submit(pose, nodes, state.lightCoords, OverlayTexture.NO_OVERLAY, 0); pose.popPose();
             pose.pushPose(); pose.translate(.5, .28, -.009); pose.rotateDegrees(Axis.YP, 180); pose.scale(.007F, -.007F, .007F);
-            var text = net.minecraft.network.chat.Component.literal(state.quantity).getVisualOrderText();
+            var text = io.github.jimbozoomer.jugcraft.client.Texts.of(state.quantity);
             nodes.submitText(pose, -font.width(text) / 2F, 0, text, false, net.minecraft.client.gui.Font.DisplayMode.POLYGON_OFFSET, state.lightCoords, 0xFFE8F5FA, 0, 0); pose.popPose();
         } else if (state.kind.equals("drive") || state.kind.equals("me_chest")) {
             for (int slot = 0; slot < (state.kind.equals("drive") ? 10 : 1); slot++) {

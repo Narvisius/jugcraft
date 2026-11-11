@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import org.jspecify.annotations.Nullable;
 
 /**
  * What a drone depot looks like from outside: the platform, pads, supply pickup, where each drone
@@ -16,6 +18,8 @@ import net.minecraft.world.level.storage.ValueOutput;
  * sends a small snapshot when a flight starts, a drone lands or the depot changes.
  */
 public final class DepotView {
+	/** Aggregate contents of the exact supply store. A missing child means an older/unknown snapshot. */
+	public record CargoView(net.minecraft.core.@Nullable BlockPos packagerPos, int items, int occupiedSlots, int totalSlots, boolean unlimited) { }
 	/** One flight as the client needs it: which drone, its path, and where along it the drone is. */
 	public record FlightView(int drone, int tier, FlightPath path, long progress, long total, long rate) {
 		/** Ticks into the flight at game time {@code now} (fractional), predicted from the last update. */
@@ -30,6 +34,8 @@ public final class DepotView {
 	}
 
 	public long syncTime;
+	/** Stable identity for explicitly linked instruments; absent in older snapshots. */
+	public @Nullable UUID depotId;
 	public String mode = "personal";
 	public int status = PlatformLayout.Status.NO_PLATFORM.ordinal();
 	public int minX;
@@ -43,6 +49,9 @@ public final class DepotView {
 	public final List<int[]> pickups = new ArrayList<>();
 	/** The Drone Tower's tier (0: no tower), its core (absolute, or null), the fleet limit and the highest drone tier. */
 	public int towerTier;
+	public int towerLayout;
+	/** The tower's open landing pads (its roof pads: docks with no bay door), counted as pads, not docks. */
+	public int towerPads;
 	public net.minecraft.core.@org.jspecify.annotations.Nullable BlockPos towerPos;
 	public int maxDrones = PlatformLayout.MAX_DRONES;
 	public int maxTier = 1;
@@ -50,8 +59,10 @@ public final class DepotView {
 	public final List<FlightView> flights = new ArrayList<>();
 	/**
 	 * Tower hangar bay doors: {x0, z0, x1, z1, bottom y, height, out x, out z} (absolute; the opening's end
-	 * cells and which way is outside), then the hangar's dock x and z relative to the terminal, times two.
+	 * cells and which way is outside), then the hangar's dock x and z relative to the terminal, times two, then its bay
+	 * number (pillar 0-2 or -1, number) and status (0 empty, 1 drone home, 2 drone out): {@link #DOOR_INTS} ints.
 	 */
+	public static final int DOOR_INTS = 13;
 	public final List<int[]> doors = new ArrayList<>();
 	public int slotsUsed;
 	public int slots;
@@ -61,9 +72,13 @@ public final class DepotView {
 	public long standbyDraw;
 	public boolean lowPower;
 	public boolean packager;
+	public @Nullable CargoView cargo;
 	public int openTargets;
 	public int covered;
 	public final Map<String, Integer> missing = new LinkedHashMap<>();
+	/** The kinds most plentiful in the supply store (item id, count), most first: up to {@link #STOCK_KINDS}. */
+	public final Map<String, Integer> stock = new LinkedHashMap<>();
+	public static final int STOCK_KINDS = 12;
 
 	public PlatformLayout.Status layoutStatus() {
 		PlatformLayout.Status[] values = PlatformLayout.Status.values();
@@ -74,8 +89,39 @@ public final class DepotView {
 		return flights.size();
 	}
 
+	/** Includes drones assigned to a job that are currently recharging at home. */
+	public int active() {
+		return flights.size();
+	}
+
+	/** Client-predicted airborne count; recharging drones are still part of the total fleet. */
+	public int airborne(double now) {
+		int count = 0;
+		for (FlightView flight : flights) {
+			if (flight.ticksAt(now, syncTime) < flight.path().totalTicks() - FlightScheduler.RECHARGE_TICKS) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	public long draw() {
+		return flights.isEmpty() ? standbyDraw : workingDraw;
+	}
+
+	/** Load against the terminal's rated input, independent of battery charge. May exceed 100%. */
+	public long loadPercent() {
+		return draw() * 100 / DroneTerminalBlockEntity.ENERGY_INPUT;
+	}
+
+	/** Ground pads, the tower's open pads and its hangar bays. */
+	public int padCount() {
+		return pads.size() + towerPads + doors.size();
+	}
+
 	public void write(ValueOutput out) {
 		out.putLong("time", syncTime);
+		if (depotId != null) out.store("depot_id", net.minecraft.core.UUIDUtil.CODEC, depotId);
 		out.putString("mode", mode);
 		out.putIntArray("layout", new int[] {status, width, depth, platformY, slotsUsed, slots, openTargets, covered, minX, minZ});
 		int[] padCorners = new int[pads.size() * 2];
@@ -93,6 +139,8 @@ public final class DepotView {
 		}
 		out.putIntArray("pickups", pickupData);
 		out.putInt("tower", towerTier);
+		out.putInt("tower_layout", towerLayout);
+		out.putInt("tower_pads", towerPads);
 		if (towerPos != null) {
 			out.putLong("tower_pos", towerPos.asLong());
 		}
@@ -106,9 +154,9 @@ public final class DepotView {
 			dockData[i * 4 + 3] = Float.floatToIntBits((float) dock.z());
 		}
 		out.putIntArray("docks", dockData);
-		int[] doorData = new int[doors.size() * 10];
+		int[] doorData = new int[doors.size() * DOOR_INTS];
 		for (int i = 0; i < doors.size(); i++) {
-			System.arraycopy(doors.get(i), 0, doorData, i * 10, 10);
+			System.arraycopy(doors.get(i), 0, doorData, i * DOOR_INTS, DOOR_INTS);
 		}
 		out.putIntArray("doors", doorData);
 		out.putLong("energy", energy);
@@ -117,9 +165,21 @@ public final class DepotView {
 		out.putLong("standby", standbyDraw);
 		out.putBoolean("low_power", lowPower);
 		out.putBoolean("packager", packager);
+		if (cargo != null) {
+			ValueOutput stock = out.child("cargo");
+			if (cargo.packagerPos() != null) stock.putLong("packager", cargo.packagerPos().asLong());
+			stock.putInt("items", cargo.items()); stock.putInt("occupied", cargo.occupiedSlots()); stock.putInt("slots", cargo.totalSlots());
+			stock.putBoolean("unlimited", cargo.unlimited());
+		}
 		ValueOutput.ValueOutputList missingList = out.childrenList("missing");
 		missing.forEach((id, count) -> {
 			ValueOutput entry = missingList.addChild();
+			entry.putString("id", id);
+			entry.putInt("count", count);
+		});
+		ValueOutput.ValueOutputList stockList = out.childrenList("stock");
+		stock.forEach((id, count) -> {
+			ValueOutput entry = stockList.addChild();
 			entry.putString("id", id);
 			entry.putInt("count", count);
 		});
@@ -137,6 +197,7 @@ public final class DepotView {
 	public static DepotView read(ValueInput in) {
 		DepotView view = new DepotView();
 		view.syncTime = in.getLongOr("time", 0L);
+		view.depotId = in.read("depot_id", net.minecraft.core.UUIDUtil.CODEC).orElse(null);
 		view.mode = in.getStringOr("mode", "personal");
 		int[] layout = in.getIntArray("layout").orElse(new int[8]);
 		if (layout.length >= 8) {
@@ -163,6 +224,8 @@ public final class DepotView {
 			view.pickups.add(new int[] {pickupData[i], pickupData[i + 1], pickupData[i + 2]});
 		}
 		view.towerTier = in.getIntOr("tower", 0);
+		view.towerLayout = in.getIntOr("tower_layout", 1);
+		view.towerPads = in.getIntOr("tower_pads", 0);
 		view.towerPos = in.getLong("tower_pos").map(net.minecraft.core.BlockPos::of).orElse(null);
 		int[] limits = in.getIntArray("limits").orElse(new int[0]);
 		if (limits.length >= 2) {
@@ -175,8 +238,8 @@ public final class DepotView {
 					Float.intBitsToFloat(dockData[i + 3])));
 		}
 		int[] doorData = in.getIntArray("doors").orElse(new int[0]);
-		for (int i = 0; i + 9 < doorData.length; i += 10) {
-			view.doors.add(java.util.Arrays.copyOfRange(doorData, i, i + 10));
+		for (int i = 0; i + DOOR_INTS - 1 < doorData.length; i += DOOR_INTS) {
+			view.doors.add(java.util.Arrays.copyOfRange(doorData, i, i + DOOR_INTS));
 		}
 		view.energy = in.getLongOr("energy", 0L);
 		view.capacity = in.getLongOr("capacity", 1L);
@@ -184,8 +247,13 @@ public final class DepotView {
 		view.standbyDraw = in.getLongOr("standby", 0L);
 		view.lowPower = in.getBooleanOr("low_power", false);
 		view.packager = in.getBooleanOr("packager", false);
+		view.cargo = in.child("cargo").map(stock -> new CargoView(stock.getLong("packager").map(net.minecraft.core.BlockPos::of).orElse(null),
+				stock.getIntOr("items", -1), stock.getIntOr("occupied", -1), stock.getIntOr("slots", -1), stock.getBooleanOr("unlimited", false))).orElse(null);
 		for (ValueInput entry : in.childrenListOrEmpty("missing")) {
 			view.missing.put(entry.getStringOr("id", "?"), entry.getIntOr("count", 0));
+		}
+		for (ValueInput entry : in.childrenListOrEmpty("stock")) {
+			view.stock.put(entry.getStringOr("id", "?"), entry.getIntOr("count", 0));
 		}
 		for (ValueInput entry : in.childrenListOrEmpty("flights")) {
 			int[] head = entry.getIntArray("head").orElse(new int[0]);

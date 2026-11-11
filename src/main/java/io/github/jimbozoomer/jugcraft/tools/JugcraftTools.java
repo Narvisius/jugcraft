@@ -66,6 +66,7 @@ public final class JugcraftTools {
 	public static Item MINING_DRILL;
 	public static Item CHAINSAW;
 	public static Item ROCKET_PACK;
+	/** Creative/operator world editor, deliberately without a survival recipe. */
 	public static Block CHARGING_STATION;
 	public static BlockEntityType<ChargingStationBlockEntity> CHARGING_STATION_ENTITY;
 
@@ -93,6 +94,7 @@ public final class JugcraftTools {
 				.component(DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.CHEST)
 						.setEquipSound(SoundEvents.ARMOR_EQUIP_IRON)
 						.setAsset(ResourceKey.create(EquipmentAssets.ROOT_ID, Jugcraft.id("rocket_pack"))).build())));
+
 
 		ResourceKey<Block> stationKey = ResourceKey.create(Registries.BLOCK, Jugcraft.id("charging_station"));
 		CHARGING_STATION = Registry.register(BuiltInRegistries.BLOCK, stationKey, new ChargingStationBlock(

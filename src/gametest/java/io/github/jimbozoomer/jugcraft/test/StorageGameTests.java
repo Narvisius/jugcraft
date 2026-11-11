@@ -2,6 +2,9 @@ package io.github.jimbozoomer.jugcraft.test;
 
 import io.github.jimbozoomer.jugcraft.nuclear.JugcraftNuclear;
 import io.github.jimbozoomer.jugcraft.nuclear.LeadDoorBlock;
+import io.github.jimbozoomer.jugcraft.nuclear.PlantDoorBlock;
+import io.github.jimbozoomer.jugcraft.nuclear.PlantDoorBlockEntity;
+import io.github.jimbozoomer.jugcraft.nuclear.PlantInterior;
 import io.github.jimbozoomer.jugcraft.nuclear.Radiation;
 import io.github.jimbozoomer.jugcraft.nuclear.RadiationField;
 import io.github.jimbozoomer.jugcraft.nuclear.ShieldedStorageBlockEntity;
@@ -19,6 +22,7 @@ import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DoorHingeSide;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -90,7 +94,7 @@ public class StorageGameTests {
 	 * Justin: an airlock with the doors. Two lead-lined doors: with one open the other won't open, the beacons by the
 	 * shut one turn red; the open one closes itself, and the beacons go green again.
 	 */
-	@GameTest(maxTicks = LeadDoorBlock.CLOSE_AFTER + 40)
+	@GameTest(maxTicks = LeadDoorBlock.CLOSE_AFTER + PlantDoorBlock.SWING_OPEN + PlantDoorBlock.SWING_SHUT + 40)
 	public void airlockDoorsInterlockAndClose(GameTestHelper helper) {
 		if (TestFocus.skip("nuclear")) {
 			helper.succeed();
@@ -116,13 +120,92 @@ public class StorageGameTests {
 		helper.assertTrue(level.getBlockState(lampA).getValue(WarningBeaconBlock.COLOUR) == WarningBeaconBlock.Colour.GREEN, "the open door's beacon stays green");
 		use(level, player, b);
 		helper.assertTrue(!level.getBlockState(b).getValue(DoorBlock.OPEN), "the second door won't open while the first is open");
-		helper.runAfterDelay(LeadDoorBlock.CLOSE_AFTER + 10, () -> {
+		// Doors round: it swings open, stands open for the closer's time, then swings shut.
+		helper.runAfterDelay(PlantDoorBlock.SWING_OPEN + LeadDoorBlock.CLOSE_AFTER + PlantDoorBlock.SWING_SHUT + 10, () -> {
 			helper.assertTrue(!level.getBlockState(a).getValue(DoorBlock.OPEN), "the first door has closed itself");
 			helper.assertTrue(level.getBlockState(lampB).getValue(WarningBeaconBlock.COLOUR) == WarningBeaconBlock.Colour.GREEN, "the beacon is green again");
 			use(level, player, b);
 			helper.assertTrue(level.getBlockState(b).getValue(DoorBlock.OPEN), "now the second door opens");
 			helper.succeed();
 		});
+	}
+
+	/**
+	 * Doors round: a steel door swings open (MOVING for its swing, then open), its closer shuts it a few seconds later
+	 * (swinging shut), and its leaf is the renderer's part model for its kind.
+	 */
+	@GameTest(maxTicks = PlantDoorBlock.SWING_OPEN + PlantDoorBlock.CLOSE_AFTER + PlantDoorBlock.SWING_SHUT + 40)
+	public void steelDoorSwingsAndCloses(GameTestHelper helper) {
+		if (TestFocus.skip("nuclear")) {
+			helper.succeed();
+			return;
+		}
+		var level = helper.getLevel();
+		BlockPos door = helper.absolutePos(new BlockPos(2, 1, 2));
+		placeDoor(level, door, "steel_door", Direction.NORTH, DoorHingeSide.LEFT, false);
+		Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+		player.setPos(Vec3.atCenterOf(door.south(2)));
+		use(level, player, door);
+		helper.assertTrue(level.getBlockState(door).getValue(DoorBlock.OPEN), "the door opens");
+		helper.assertTrue(level.getBlockState(door).getValue(PlantDoorBlock.MOVING), "and swings");
+		helper.assertTrue(level.getBlockState(door.above()).getValue(PlantDoorBlock.MOVING), "both halves swing");
+		helper.assertTrue(level.getBlockEntity(door) instanceof PlantDoorBlockEntity, "its lower half has the door's block entity");
+		helper.assertTrue(io.github.jimbozoomer.jugcraft.nuclear.PlantDoors.leafPart(level.getBlockState(door)) == 0,
+				"a single left-hinged steel door's leaf is part 0");
+		helper.runAfterDelay(PlantDoorBlock.SWING_OPEN + 2, () -> {
+			helper.assertTrue(!level.getBlockState(door).getValue(PlantDoorBlock.MOVING), "the swing is over");
+			helper.assertTrue(level.getBlockState(door).getValue(DoorBlock.OPEN), "it stands open");
+		});
+		helper.runAfterDelay(PlantDoorBlock.SWING_OPEN + PlantDoorBlock.CLOSE_AFTER + 2, () ->
+				helper.assertTrue(!level.getBlockState(door).getValue(DoorBlock.OPEN), "the closer has swung it shut"));
+		helper.runAfterDelay(PlantDoorBlock.SWING_OPEN + PlantDoorBlock.CLOSE_AFTER + PlantDoorBlock.SWING_SHUT + 4, () -> {
+			helper.assertTrue(!level.getBlockState(door).getValue(PlantDoorBlock.MOVING), "and it has stopped");
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * Doors round (Justin: the reader lets in the owner and the owner's party): from the reader's side a stranger is
+	 * refused and the owner let in; from the other side anyone may leave. A double door's leaves know each other.
+	 */
+	@GameTest(maxTicks = 60)
+	public void readerLetsInTheOwnerAndPairsPair(GameTestHelper helper) {
+		if (TestFocus.skip("nuclear")) {
+			helper.succeed();
+			return;
+		}
+		var level = helper.getLevel();
+		BlockPos door = helper.absolutePos(new BlockPos(2, 1, 2));
+		placeDoor(level, door, "steel_door", Direction.NORTH, DoorHingeSide.LEFT, true);
+		Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+		// Facing north: you push it walking north, from the south (the reader's side).
+		player.setPos(Vec3.atCenterOf(door.south(2)));
+		((PlantDoorBlockEntity) level.getBlockEntity(door)).setOwner(java.util.UUID.randomUUID());
+		use(level, player, door);
+		helper.assertTrue(!level.getBlockState(door).getValue(DoorBlock.OPEN), "a stranger is refused at the reader");
+		player.setPos(Vec3.atCenterOf(door.north(2)));
+		use(level, player, door);
+		helper.assertTrue(level.getBlockState(door).getValue(DoorBlock.OPEN), "anyone may leave from the other side");
+		BlockPos second = helper.absolutePos(new BlockPos(5, 1, 2));
+		placeDoor(level, second, "steel_door", Direction.NORTH, DoorHingeSide.LEFT, true);
+		((PlantDoorBlockEntity) level.getBlockEntity(second)).setOwner(player.getUUID());
+		player.setPos(Vec3.atCenterOf(second.south(2)));
+		use(level, player, second);
+		helper.assertTrue(level.getBlockState(second).getValue(DoorBlock.OPEN), "the owner is let in");
+		// A pair facing north: the left-hinged leaf's latch side is east, where the right-hinged leaf stands.
+		BlockPos left = helper.absolutePos(new BlockPos(8, 1, 2)), right = left.east();
+		placeDoor(level, left, "steel_door", Direction.NORTH, DoorHingeSide.LEFT, false);
+		placeDoor(level, right, "steel_door", Direction.NORTH, DoorHingeSide.RIGHT, false);
+		helper.assertTrue(level.getBlockState(left).getValue(PlantDoorBlock.PAIRED) && level.getBlockState(right).getValue(PlantDoorBlock.PAIRED)
+				&& level.getBlockState(right.above()).getValue(PlantDoorBlock.PAIRED), "the pair's leaves are paired");
+		helper.succeed();
+	}
+
+	private static void placeDoor(net.minecraft.world.level.Level level, BlockPos pos, String id, Direction facing, DoorHingeSide hinge, boolean reader) {
+		BlockState lower = PlantInterior.BLOCKS.get(id).defaultBlockState().setValue(DoorBlock.FACING, facing).setValue(DoorBlock.HINGE, hinge)
+				.setValue(PlantDoorBlock.READER, reader);
+		level.setBlock(pos, lower.setValue(DoorBlock.HALF, DoubleBlockHalf.LOWER), 3);
+		level.setBlock(pos.above(), lower.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER), 3);
 	}
 
 	private static void use(net.minecraft.world.level.Level level, Player player, BlockPos door) {

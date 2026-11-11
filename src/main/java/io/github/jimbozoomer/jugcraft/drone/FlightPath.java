@@ -183,6 +183,21 @@ public final class FlightPath {
 		return lengths;
 	}
 
+	/** The flight's legs (points - 1): to the pickup, to each stop, home. */
+	public int legs() {
+		return cruise.length;
+	}
+
+	/** Tick leg {@code i} sets off (after the wait at its start point). */
+	public long legStart(int i) {
+		return legStart[i];
+	}
+
+	/** Tick leg {@code i} arrives over its end point. */
+	public long legEnd(int i) {
+		return legEnd[i];
+	}
+
 	/** Tick the drone arrives over the pickup. */
 	public long pickupArrive() {
 		return legEnd[0];

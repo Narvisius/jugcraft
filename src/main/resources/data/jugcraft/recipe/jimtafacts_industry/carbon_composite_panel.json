@@ -1,12 +1,15 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "category": "misc",
-  "ingredients": [
-    "jugcraft:jimta_carbon_plate",
-    "jugcraft:polymer_vehicle_panel"
+  "fabric:load_conditions": [],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "AABB"
   ],
+  "key": {
+    "A": "jugcraft:jimta_carbon_plate",
+    "B": "jugcraft:polymer_vehicle_panel"
+  },
   "result": {
     "id": "jugcraft:carbon_composite_panel",
-    "count": 2
+    "count": 4
   }
 }

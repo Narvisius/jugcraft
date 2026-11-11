@@ -1,0 +1,84 @@
+{
+ "textures": {
+  "gl_car": "jugcraft:block/gl_car",
+  "gl_tread": "jugcraft:block/gl_tread",
+  "particle": "jugcraft:block/gl_frame"
+ },
+ "elements": [
+  {
+   "from": [
+    0,
+    13,
+    0
+   ],
+   "to": [
+    15,
+    16,
+    16
+   ],
+   "faces": {
+    "east": {
+     "texture": "#gl_car"
+    },
+    "up": {
+     "texture": "#gl_tread"
+    },
+    "down": {
+     "texture": "#gl_car"
+    }
+   }
+  },
+  {
+   "from": [
+    14.4,
+    7,
+    0
+   ],
+   "to": [
+    15,
+    13,
+    16
+   ],
+   "faces": {
+    "east": {
+     "texture": "#gl_car"
+    },
+    "west": {
+     "texture": "#gl_car"
+    },
+    "up": {
+     "texture": "#gl_car"
+    },
+    "down": {
+     "texture": "#gl_car"
+    }
+   }
+  },
+  {
+   "from": [
+    7,
+    9.5,
+    0
+   ],
+   "to": [
+    9,
+    13,
+    16
+   ],
+   "faces": {
+    "east": {
+     "texture": "#gl_car"
+    },
+    "west": {
+     "texture": "#gl_car"
+    },
+    "up": {
+     "texture": "#gl_car"
+    },
+    "down": {
+     "texture": "#gl_car"
+    }
+   }
+  }
+ ]
+}

@@ -15,6 +15,13 @@ from medium_plant import (Building, entrance, furniture, sign, OPPOSITE, GLAZING
                           PAINTED, SMOOTH, BRICK, ANDESITE)
 
 
+
+def tv_state(facing, c, r, w, h):
+    """A block of a w x h flat screen TV at column c (to its viewer's right) and row r, hung on a wall (tv/FlatTvBlock.java:
+    the blocks join into one screen, each saying which ways the screen carries on)."""
+    b = lambda v: "true" if v else "false"
+    return MP.M(f"jugcraft:flat_tv[down={b(r > 0)},facing={facing},left={b(c > 0)},right={b(c < w - 1)},stand=false,up={b(r < h - 1)}]", (60, 60, 64))
+
 class Room:
     def __init__(self, b, x0, z0, x1, z1, y, win, door_u):
         self.b, self.x0, self.z0, self.x1, self.z1, self.y, self.win = b, x0, z0, x1, z1, y, win
@@ -62,6 +69,14 @@ class Room:
         if self.free(u, v):
             x, z = self.xz(u, v)
             self.b.furniture(name, x, self.y, z, self.face(f))
+            return True
+        return False
+
+    def rack(self, name, u, v, f):
+        """A two-high live panel (a rack: tools/server_room.py) at (u, v)."""
+        if self.free(u, v) and self.free(u, v, self.y + 1) is not None:
+            x, z = self.xz(u, v)
+            self.b.panel(name, x, self.y, z, self.face(f), 1)
             return True
         return False
 
@@ -158,7 +173,8 @@ class Room:
                     return False
                 cells.append((cx, cy, cz, r * 3 + c))
         for cx, cy, cz, part in cells:
-            self.b.p(cx, cy, cz, MP.multi_state(name, fw, part))
+            self.b.p(cx, cy, cz, tv_state(fw, part % 3, part // 3, 3, 2) if name == "flat_tv" else MP.multi_state(name, fw, part))
+        MP.screen_raceway(self.b, name, x, self.y, z, fw)
         return True
 
     def copier(self, u, v, f):
@@ -416,7 +432,7 @@ def meeting_room(r):
     for cu in (r.w // 2 - 1, r.w // 2, r.w // 2 - 2, r.w // 2 + 1):
         if r.oval(cu, 3) or r.oval(cu, 4):
             break
-    r.screen("training_screen", 0, 3, "west")
+    r.screen("status_screen", 0, 3, "west")
     r.on_wall("whiteboard", r.w - 1, 2, "east", 24)
     r.on_wall("whiteboard", r.w - 1, 4, "east", 24)
     for u, v in ((0, 0), (r.w - 1, 0), (0, r.d - 1)):
@@ -425,12 +441,47 @@ def meeting_room(r):
 
 
 def board_room(r):
-    """The board room: the oval table, the plant overview on the end wall, a lounge corner of sofas over coffee
-    tables, a coffee counter, bookcases, prints and plants."""
-    r.oval(7, 5)
+    """The board room (the administration building part 2: tools/admin_rooms.py): the boardroom table (eight blocks
+    long, three wide) on the line of the plant overview at the end wall, its fourteen chairs; the AV credenza under the
+    overview with the video conference bar; the lectern beside it; the unit performance screen on the corridor wall
+    facing the table; the master clock; a lounge corner of sofas over coffee tables, a coffee counter, bookcases,
+    prints and plants."""
+    import admin_rooms as AR
+    b, y = r.b, r.y
+    # The AV credenza against the end wall, the overview over it (its power from the credenza: no raceway).
+    x, z = r.xz(0, 6)
+    b.panel(AR.AV_KEY, x, y, z, r.face("west"), 3)
+    for v in (4, 5, 6):
+        r.keep.add((0, v))
     r.screen("plant_map_screen", 0, 5, "west")
     r.big_print(0, 2, "west")
     r.big_print(0, 9, "west")
+    # The table: blocks u 4..11, v 4..6, laid facing north (columns east, rows south); chairs along both sides and at
+    # the ends, room kept to walk round them.
+    tu, tv = 4, 4
+    assert r.win == "n"          # (u east, v south: the table's columns and rows as it is laid)
+    for c in range(AR.BT_W):
+        for rr in range(AR.BT_D):
+            x, z = r.xz(tu + c, tv + rr)
+            b.p(x, y, z, MP.multi_state("board_table", "north", rr * AR.BT_W + c))
+    for c in AR.BT_SEATS:
+        r.chair(tu + c, tv - 1, "door", "operator_chair")
+        r.chair(tu + c, tv + AR.BT_D, "win", "operator_chair")
+    r.chair(tu - 1, tv + 1, "east", "operator_chair")
+    r.chair(tu + AR.BT_W, tv + 1, "west", "operator_chair")
+    for u in range(tu - 2, tu + AR.BT_W + 2):
+        for v in (tv - 2, tv + AR.BT_D + 1):
+            if r.inside(u, v):
+                r.keep.add((u, v))
+    for v in range(tv - 1, tv + AR.BT_D + 1):
+        r.keep.add((tu - 2, v))
+        r.keep.add((tu + AR.BT_W + 1, v))
+    # The lectern beside the screen, the presenter behind it looking down the table.
+    r.put("board_lectern", 1, 8, "east")
+    # The unit performance screen on the corridor wall, facing the table; the clock high over the lounge.
+    r.screen("perf_screen", 8, r.d - 1, "door")
+    x, z = r.xz(14, r.d - 1)
+    b.panel("ops_wall_clock", x, y + 2, z, r.face("door"), 1)
     lu = r.w - 6
     # Two sofas facing each other over glass coffee tables, a step's room either side of the tables.
     r.row_u(("sofa", 3), lu, 1, "door")
@@ -445,54 +496,114 @@ def board_room(r):
 
 
 def chemistry_lab(r):
-    """The water chemistry lab: benches with sinks and analysers along the window and the end wall, two islands,
-    fume hoods, a write-up desk, a fridge for samples, coats by the door."""
+    """The water chemistry lab (the administration building part 2: tools/admin_rooms.py): benches with sinks and
+    analysers along the window, two islands, the fume hoods and the plant chemistry status board on the west wall,
+    the gamma spectroscopy station and the flammables and corrosives cabinets on the east wall, the write-up desk by
+    the window, the emergency shower and eyewash by the door, a sample fridge, coats, the lab's sign."""
+    import admin_rooms as AR
+    b, y = r.b, r.y
     bench = ["lab_bench", "lab_analyzer", "lab_bench", "lab_sink", "lab_bench", "lab_analyzer", "lab_bench"]
-    r.row_u(bench[:min(len(bench), r.w - 3)], 2, 0, "win")
+    r.row_u(bench, 2, 0, "win")
     isl = ["lab_bench", "lab_sink", "lab_analyzer", "lab_bench"]
     r.row_u(isl, 3, 3, "door")
     r.row_u(isl[::-1], 3, 4, "win")
     r.row_u(["lab_bench", "lab_analyzer", "lab_bench", "lab_bench"], 3, 7, "door")
     for v in (1, 2, 3):
         r.stack("fume_hood", 0, v, "west")
-    r.row_v(["lab_bench", "lab_analyzer", "lab_bench"], r.w - 1, 2, "east")
-    r.long_desk([(r.w - 1, 6), (r.w - 1, 7)], "east", [1, 0], [0])
-    r.stack("fridge", 0, 6, "west")
-    r.on_wall("coat_rack", r.w - 1, r.d - 3, "east")
-    r.on_wall("fire_extinguisher", 0, r.d - 2, "west")
-    r.on_wall("whiteboard", 0, 5, "west", 24)
+    # The status board on the west wall at eye height (nothing under it but the floor: the board stands off the wall).
+    x, z = r.xz(0, 7)
+    b.panel(AR.CSB_KEY, x, y + 1, z, r.face("west"), 3)
+    # The write-up desk by the window: the LIMS computer, paperwork, binders.
+    r.long_desk([(10, 0), (11, 0), (12, 0)], "win", [0, 1, 2], [0, 2])
+    # The east wall: the gamma spectroscopy station (its cave at the window end), the safety cabinets, the fridge.
+    x, z = r.xz(r.w - 1, 1)
+    b.panel(AR.GS_KEY, x, y, z, r.face("east"), 3)
+    for v in (1, 2, 3):
+        r.keep.add((r.w - 2, v))
+    for v, key in ((5, "chem_flam_cabinet"), (6, "chem_acid_cabinet")):
+        x, z = r.xz(r.w - 1, v)
+        b.panel(key, x, y, z, r.face("east"), 1)
+        r.keep.add((r.w - 2, v))
+    r.stack("fridge", r.w - 1, 9, "east")
+    r.on_wall("coat_rack", r.w - 1, 8, "east")
+    # By the door: the emergency shower and eyewash (its approach kept clear), the extinguisher, the lab's sign.
+    x, z = r.xz(0, 9)
+    for row in range(2):
+        b.p(x, y + row, z, MP.multi_state("lab_safety_shower", r.face("west"), row))
+    b.seats.append(("lab_safety_shower", x, y, z, r.face("west")))
+    r.keep.add((1, 9))
+    r.on_wall("fire_extinguisher", 0, 8, "west")
+    r.on_wall("sign_chem_lab", 9, r.d - 1, "door")
 
 
 def documentation(r):
-    """Documentation storage: back-to-back bookcases full of manuals and binders, filing cabinets down the walls
-    (some drawers pulled out, the files showing), a reading desk by the window and a copier."""
-    for u in range(2, 10):
-        r.stack("bookcase", u, 2, "door")
-        r.stack("bookcase", u, 3, "win")
-    # Tall (person-height) filing cabinets all down both walls, every third with its top drawer cracked open.
-    for v in range(1, r.d - 2):
-        for u, f, k in ((0, "west", v % 4), (r.w - 1, "east", (v + 2) % 4)):
-            if r.free(u, v):
-                x, z = r.xz(u, v)
-                fw = r.face(f)
-                # Every so often a drawer stands open a crack: the top one or one lower down.
-                low = "filing_cabinet_tall_open" if k == 1 else "filing_cabinet_tall"
-                high = "filing_cabinet_tall_open" if k == 3 else "filing_cabinet_tall"
-                r.b.p(x, r.y, z, MP.furniture(low, fw, up=True, down=False))
-                r.b.p(x, r.y + 1, z, MP.furniture(high, fw, up=False, down=True))
-                r.b.seats.append(("filing_cabinet_tall", x, r.y, z, fw))
-    r.long_desk([(12, 0), (13, 0)], "win", [1, 2], [0])
-    r.copier(12, r.d - 1, "door")
-    r.plant(r.w - 2, 0)
+    """Document control (the administration building part 2: tools/admin_rooms.py): high-density mobile shelving (eight
+    carriages on floor rails between two fixed units, each carriage's handwheel and label to the cross aisle; one aisle
+    open), the issue counter across the aisle's end with the clerk behind it, the plan files for the drawings, the
+    reading desk by the window, the copier, the room's sign."""
+    import admin_rooms as AR
+    b, y = r.b, r.y
+    # The shelving: fixed units at u 0 and u 10, carriages between (u 1..9, the aisle at u 5), each four blocks long
+    # (v 1..4, its handwheel end at v 4), on the floor rail.
+    face = r.face("win")                 # the carriages' backs to the window: their handwheel ends to the door side
+    carriage = 0
+    for u in range(0, 11):
+        for v in range(1, 1 + AR.MS_SEGS):
+            x, z = r.xz(u, v)
+            if 1 <= u <= 9:
+                b.p(x, y - 1, z, MP.M("jugcraft:doc_rail_floor[axis=x]", (90, 96, 110)))
+            if u in (0, 10):
+                seg = AR.MS_SEGS - v
+                for half, name in ((0, "lower"), (1, "upper")):
+                    b.p(x, y + half, z, MP.M(f"jugcraft:doc_fixed_shelving[facing={face},half={name},seg={seg}]", (200, 196, 186)))
+            elif u != 5:
+                seg = AR.MS_SEGS - v
+                for half, name in ((0, "lower"), (1, "upper")):
+                    b.p(x, y + half, z, MP.M(f"jugcraft:doc_mobile_shelving[facing={face},half={name},seg={seg},slide={AR.MS_SLIDE},variant={carriage}]",
+                                             (200, 196, 186)))
+        if 1 <= u <= 9 and u != 5:
+            carriage += 1
+        for v in range(1, 1 + AR.MS_SEGS):
+            r.keep.add((u, v))
+    for u in range(0, 11):
+        r.keep.add((u, 5))
+    # The issue counter: three blocks along v at u 12 (the visitor at u 11, the clerk at u 13 looking at them).
+    fw = r.face("west")
+    rx, rz = P.DIRS[P.CLOCKWISE[fw]]
+    cells = [r.xz(12, v) for v in (4, 5, 6)]
+    cells.sort(key=lambda p: p[0] * rx + p[1] * rz)
+    b.row(["doc_issue_counter"] * 3, cells[0][0], y, cells[0][1], fw, tops=[1, 0, 2])
+    r.chair(13, 5, "west", "operator_chair")
+    for v in (4, 5, 6):
+        r.keep.add((11, v))
+    # The plan files against the east wall (their drawers to the room), the sign over the clerk's shoulder.
+    for v0 in (1, 3):
+        cells = sorted((r.xz(r.w - 1, v) for v in (v0, v0 + 1)), key=lambda p: p[1])
+        fw = r.face("east")
+        rx, rz = P.DIRS[P.CLOCKWISE[fw]]
+        left = cells[0] if rz > 0 else cells[-1]
+        for part in range(2):
+            b.p(left[0] + rx * part, y, left[1] + rz * part, MP.M(f"jugcraft:doc_plan_file[drawer=0,facing={fw},part={part}]", (196, 198, 196)))
+        b.seats.append(("doc_plan_file", left[0], y, left[1], fw))
+        for v in (v0, v0 + 1):
+            r.keep.add((r.w - 2, v))
+    r.on_wall("sign_doc_control", r.w - 1, 5, "east")
+    # The reading desk by the window, the copier by the door, plants.
+    r.long_desk([(12, 0), (13, 0), (14, 0)], "win", [0, 3, 2], [0, 2])
+    r.copier(r.w - 1, r.d - 1, "door")
+    r.plant(r.w - 1, 0)
+    r.plant(11, 0)
 
 
 def training_room(r):
-    """A training room: the big training screen on the end wall, rows of desks facing it, the trainer's desk."""
-    r.screen("training_screen", 0, r.d // 2, "west")
-    r.desk(2, 1, "east")
+    """A training room: the plant status screen on the end wall (the course's live example), rows of three-seat
+    training tables facing it (a laptop at each seat), the trainer's desk (the administration building part 1: no
+    desk one block wide)."""
+    r.screen("status_screen", 0, r.d // 2, "west")
+    r.long_desk([(2, 0), (2, 1), (2, 2)], "east", [0, 1, 3], [1])
     for u in range(4, r.w - 2, 3):
-        for v in range(1, r.d - 2):
-            r.desk(u, v, "west")
+        for v0 in range(1, r.d - 3, 4):
+            r.long_desk([(u, v0), (u, v0 + 1), (u, v0 + 2)], "west", [4, 4, 4], [0, 1, 2])
     r.plant(r.w - 1, 0)
     r.plant(0, r.d - 1)
     r.on_wall("fire_extinguisher", r.w - 1, r.d - 2, "east")
@@ -541,8 +652,9 @@ def locker_room(r):
 def it_support(r):
     """IT support: a short row of server racks, glass desks (computers, one opened up for repair, documents,
     tools and boards), shelving of spare kit, a copier."""
-    for u in range(1, 5):
-        r.stack("server_rack", u, 0, "win")
+    # (Older rooms round 2: the plant computer room's racks, each two blocks high, its equipment real.)
+    for u, key in zip(range(1, 5), ("network_rack", "server_rack", "server_rack", "san_rack")):
+        r.rack(key, u, 0, "win")
     r.long_desk([(2, 4), (3, 4), (4, 4)], "win", [0, 1, 2], [0, 2], name="glass_desk")
     r.long_desk([(8, 4), (9, 4), (10, 4)], "win", [3, 0, 1], [1], name="glass_desk")
     r.long_desk([(2, 8), (3, 8), (4, 8)], "win", [1, 3, 0], [2], name="glass_desk")
@@ -554,23 +666,33 @@ def it_support(r):
 
 
 def manager_office(r):
-    """The plant manager's office: an executive desk with the window behind it, the live plant status on one wall
-    and a big flat screen on the other, the plant overview by the door, a sofa over a glass coffee table (with a
-    coffee on it), a coffee counter, bookcases, prints, plants."""
+    """The plant manager's office (the administration building part 2: tools/admin_rooms.py): an executive desk with the
+    window behind it, the direct line to the control room on the wall beside it, the framed operating license and the
+    awards wall either side, the live plant status on one wall and the unit performance screen on the other, the
+    plant overview by the door, his hard hat and vest on their hooks, a sofa over a glass coffee table, a coffee
+    counter, plants."""
+    import admin_rooms as AR
+    b, y = r.b, r.y
     cu = r.w // 2
     r.long_desk([(cu - 1, 2), (cu, 2), (cu + 1, 2)], "door", [2, 0, 1], [1], name="executive_desk")
     r.chair(cu - 1, 4, "win", "cafe_chair")
     r.chair(cu + 1, 4, "win", "cafe_chair")
     r.screen("status_screen", 0, 5, "west")
-    r.screen("flat_tv", r.w - 1, 5, "east")
+    r.screen("perf_screen", r.w - 1, 5, "east")
     r.screen("plant_map_screen", 4, r.d - 1, "door")
+    # The license (west wall) and the awards (east wall) at eye height by the window; the direct line by the desk.
+    x, z = r.xz(0, 2)
+    b.panel(AR.LIC_KEY, x, y + 1, z, r.face("west"), 2)
+    x, z = r.xz(r.w - 1, 1)
+    b.panel(AR.AW_KEY, x, y + 1, z, r.face("east"), 3)
+    x, z = r.xz(0, 3)
+    b.panel(AR.HL_KEY, x, y + 1, z, r.face("west"), 1)
+    r.on_wall("mgr_ppe_hooks", 7, r.d - 1, "door")
     r.row_u(("sofa", 3), 1, 8, "win")
     r.lounge(1, 5) or r.lounge(1, 6) or r.put("glass_coffee_table", 2, 6, "west")
-    r.row_v(["kitchen_counter", "coffee_counter"], r.w - 1, 8, "east")
-    for u, v in ((0, 0), (r.w - 1, 0), (0, 8), (r.w - 1, 2), (r.w - 1, 7)):
+    r.row_v(["kitchen_counter", "coffee_counter"], r.w - 1, 7, "east")
+    for u, v in ((0, 0), (r.w - 1, 0), (0, 8)):
         r.plant(u, v)
-    r.on_wall("framed_print", 0, 2, "west", 16)
-    r.on_wall("framed_print", r.w - 1, 2, "east", 16)
 
 
 def first_aid(r):
@@ -619,29 +741,24 @@ def admin_building(s, ox, oz):
     W, D, H = 60, 26, 14
     b = Building("admin_building", "Administration Building", W, D, H, grounded=True)
     b.shell_walls(WHITE, step=6)
+    # The windows, framed glass set to the walls' outer faces (Justin, 2026-10-16: every window from now on).
     for lv in (0, 5, 10):
-        b.windows(lv + 2, lv + 3, "nse", step=6)
+        b.windows(lv + 2, lv + 3, "n", step=6, glass=MP.FGLASS["south"])
+        b.windows(lv + 2, lv + 3, "s", step=6, glass=MP.FGLASS["north"])
+        b.windows(lv + 2, lv + 3, "e", step=6, glass=MP.FGLASS["west"])
         for z in range(17, D - 1):
             if z % 6:
                 for y in (lv + 2, lv + 3):
-                    b.p(0, y, z, PANE)
+                    b.p(0, y, z, MP.FGLASS["east"])
     b.storey(0, 1, 1, W - 2, D - 2, VINYL)
     b.storey(5, 1, 1, W - 2, D - 2, CARPET, ceiling_at=4)
     b.storey(10, 1, 1, W - 2, D - 2, CARPET, ceiling_at=9)
     b.b(1, 14, 1, W - 2, 14, D - 2, CEIL)
     b.stairwell(1, 1, [0, 5, 10], door_side="s")
-    cz0, cz1 = 13, 15  # the corridor (walls at 12 and 16)
-    north = [(9, 23), (25, 35), (37, 58)]
-    north_top = [(9, 23), (25, 35), (37, 47), (49, 58)]
-    south = [(1, 11), (13, 29), (31, 41), (43, 58)]
-    plan = {
-        0: {"n": [("lockers", "locker_room"), None, ("cafeteria", "cafeteria")],
-            "s": [("first_aid", "first_aid"), ("meeting", "meeting_room"), ("operations", "operations"), ("hr", "human_resources")]},
-        5: {"n": [("lab", "chemistry_lab"), ("open", "open_office"), ("board", "board_room")],
-            "s": [("engineering", "engineering"), ("docs", "document_control"), ("shared", "maintenance_planning"), ("break", "break_room")]},
-        10: {"n": [("it", "it_support"), ("training", "training_room"), ("manager", "plant_manager"), ("private", "office")],
-             "s": [("private", "office"), ("meeting", "meeting_room"), ("private", "office"), ("interns", "intern_area")]},
-    }
+    # The plan (tools/admin_fittings.py: the evacuation plans draw the same building).
+    import admin_fittings as AF
+    cz0, cz1 = AF.CORRIDOR  # the corridor (walls at 12 and 16)
+    north, north_top, south, plan = AF.NORTH, AF.NORTH_TOP, AF.SOUTH, AF.PLAN
     rooms = []
     for lv in (0, 5, 10):
         y0, y1 = lv + 1, lv + 3
@@ -659,7 +776,7 @@ def admin_building(s, ox, oz):
             b.wall_z(x0 - 1, cz1 + 2, D - 2, y0, y1)
         for side, spans, zz in (("n", spans_n, (1, cz0 - 2)), ("s", south, (cz1 + 2, D - 2))):
             for (x0, x1), job in zip(spans, plan[lv][side]):
-                if job is None:
+                if job is None or job[0] == "lobby":
                     continue
                 theme, label = job
                 floor = FLOORS.get(theme, CARPET)
@@ -690,8 +807,63 @@ def admin_building(s, ox, oz):
     lobby(b, 25, 1, 35, cz0 - 2, cz0 - 1)
     for theme, r in rooms:
         THEMES[theme](r)
+    admin_fittings(b)
     s.add(b, ox, oz)
     return b
+
+
+def admin_fittings(b):
+    """The building's fire and life safety fittings (the administration building part 1; tools/admin_fittings.py):
+    on each floor a lit EXIT sign over the stair doors with a pull station beside them, the floor's evacuation plan
+    on the corridor wall by the stairs, smoke detectors in every room and along the corridor (between the ceiling
+    lights' grid), two emergency lights in the corridor, an AED (the ground floor's is in first aid); over the front
+    doors an EXIT sign, a pull station beside them."""
+    import admin_fittings as AF
+    cz0, cz1 = AF.CORRIDOR
+
+    def free(x, y, z):
+        return b.get(x, y, z) == 0
+
+    def solid(x, y, z):
+        m = b.get(x, y, z)
+        return bool(m) and m not in GLAZING and m not in MP.DOORISH
+
+    def put(x, y, z, m):
+        assert free(x, y, z), ("admin fittings", x, y, z, P.MATERIALS[int(b.get(x, y, z))][0])
+        b.p(x, y, z, m)
+
+    def wall_spot(xs, y, z, wall_z, facing, height=1):
+        """The first x of xs with plain wall behind (at y .. y + height - 1) and the cells in front free."""
+        for x in xs:
+            if all(solid(x, y + k, wall_z) and free(x, y + k, z) for k in range(height)):
+                return x
+        raise AssertionError(("no wall for", facing, xs, y, z))
+    for k, lv in enumerate((0, 5, 10)):
+        y0 = lv + 1
+        put(4, lv + 3, cz0, furniture("exit_sign", "north"))
+        put(6, y0 + 1, cz0, furniture("fire_alarm_pull", "north"))
+        b.panel("admin_evac_plan", 3, y0 + 1, cz1, "south", 2, label=AF.FLOORS[k])
+        if lv:
+            put(9, y0 + 1, cz1, furniture("aed_cabinet", "south"))
+        # Smoke detectors: a cell between the lights (x and z multiples of 4) near each room's middle, and along the
+        # corridor.
+        spaces = AF.rooms(lv) + ([(25, 1, 35, cz0 - 2, "lobby")] if lv == 0 else [])
+        for x0, z0, x1, z1, _ in spaces:
+            cx, cz = (x0 + x1) / 2, (z0 + z1) / 2
+            cells = sorted(((x, z) for x in range(x0, x1 + 1) for z in range(z0, z1 + 1) if x % 4 == 0 and z % 4 == 0 and free(x, lv + 3, z)),
+                           key=lambda c: (c[0] - cx) ** 2 + (c[1] - cz) ** 2)
+            assert cells, ("no ceiling for a smoke detector", lv, x0, z0)
+            put(cells[0][0], lv + 3, cells[0][1], furniture("smoke_detector", "north"))
+        for x in (12, 28, 44):
+            put(x, lv + 3, 14, furniture("smoke_detector", "north"))
+        # Emergency lights on the corridor walls, their conduits up to the ceiling over them.
+        x = wall_spot(range(20, 40), y0 + 1, cz0, cz0 - 1, "north", 2)
+        b.furniture("emergency_light", x, y0 + 1, cz0, "north")
+        x = wall_spot(range(40, 58), y0 + 1, cz1, cz1 + 1, "south", 2)
+        b.furniture("emergency_light", x, y0 + 1, cz1, "south")
+    # The front doors: the EXIT sign on the lintel over them, a pull station on the column beside them.
+    put(30, 3, 1, furniture("exit_sign", "north"))
+    put(29, 2, 1, furniture("fire_alarm_pull", "north"))
 
 
 def lobby(b, x0, z0, x1, z1, wall_z):
@@ -718,7 +890,8 @@ def lobby(b, x0, z0, x1, z1, wall_z):
     b.furniture("water_cooler", x1, 1, z0, "east")
     b.row(("sofa", 3), x1, 1, 4, "west")
     b.furniture("glass_coffee_table", x1 - 2, 1, 3, "west")
-    b.furniture("wall_display", x0, 2, 6, "west")
+    # The plant's status on the wall over the waiting area (live; it was a painted chart).
+    MP.wall_screen(b, "status_screen", x0, 2, 7, "west")
     big_print(b, x1, 2, 7, "east")
     b.p(30, 2, z1, sign("lobby", "north"))
     b.furniture("fire_extinguisher", x0, 2, z1 - 2, "west")
@@ -727,56 +900,107 @@ def lobby(b, x0, z0, x1, z1, wall_z):
 # --------------------------------------------------------------------------------------------------- gatehouse
 
 def gatehouse(s, ox, oz):
-    """The security gatehouse: in from the car park at the south door to the visitors' hall, the guard window, and
-    the one screening door through the checkpoint wall to the plant side; out at the north door toward the gate. The
-    guard room has the camera desks, the counter at the window (one officer, one computer), security lockers and a
-    kitchenette."""
+    """The security gatehouse, the plant's primary access point (Justin: "rework the security post next, the whole
+    building everything inside of it up to new standards"; tools/sec_gatehouse.py): in from the car park at the south
+    doors to the visitors' hall; through the search train (the X-ray baggage scanner beside the walk-through metal
+    detector, the hand geometry reader) and the speed gates into the protected area, framed glass from the gates to
+    the guard room's wall; out at the north doors toward the plant. The guard room is the bullet-resisting enclosure
+    and secondary alarm station: the security post at its window onto the hall, the alarm station console, the
+    weapons locker, the officers' lockers, the kitchenette, the radios. Every window framed glass (Justin, 2026-10-16:
+    all windows from now on)."""
     W, D, H = 18, 12, 4
     b = Building("security_gatehouse", "Security Gatehouse", W, D, H, grounded=True)
     b.shell_walls(WHITE, step=6)
-    b.windows(2, 3, "nsew", step=6, skip=(1, 2, 3, 7, 8, 9, 10))
+    # The windows, framed glass set to the walls' outer faces; none in the guard room's south wall (its console and
+    # kitchenette stand against it).
+    skip = (1, 2, 3, 7, 8, 9, 10)
+    b.windows(2, 3, "n", step=6, skip=skip, glass=MP.FGLASS["south"])
+    b.windows(2, 3, "s", step=6, skip=skip + (4, 5), glass=MP.FGLASS["north"])
+    b.windows(2, 3, "w", step=6, skip=skip, glass=MP.FGLASS["east"])
+    b.windows(2, 3, "e", step=6, skip=skip, glass=MP.FGLASS["west"])
     b.storey(0, 1, 1, W - 2, D - 2, VINYL)
     b.b(1, 4, 1, W - 2, 4, D - 2, CEIL)
-    # The guard room (west), its window onto the visitors' hall and its door onto the plant side.
-    b.wall_z(8, 1, D - 2, 1, 3)
-    for z in (7, 8, 9):
-        b.p(8, 2, z, PANE)
+    # The guard room (west): its wall to the hall, open at the window (z 7..9) where the security post's counter and
+    # glass are the barrier, its header over it; its door onto the plant side.
+    b.wall_z(8, 1, 6, 1, 3)
+    b.wall_z(8, 10, D - 2, 1, 3)
+    b.wall_z(8, 7, 9, 3, 3)
     b.door(8, 1, 3, "west", label="guard_room")
-    b.row(("reception_desk", 3), 7, 1, 7, "east", tops=[1, 0, 2])
+    # The security post (tools/entrance_hall.py: the bullet-resisting counter and glass to the hall, the officer's
+    # desk behind with the access log, the gate panel and the duress button), the officer's chair behind it.
+    b.panel("ac_station", 7, 1, 7, "east", 3)
     b.p(6, 1, 8, furniture("operator_chair", "east"))
-    b.furniture("cctv_desk", 1, 1, 6, "west")
-    b.p(2, 1, 6, furniture("operator_chair", "west"))
-    b.furniture("cctv_desk", 1, 1, 5, "west")
-    b.p(2, 1, 5, furniture("operator_chair", "west"))
-    for x in range(1, 5):
-        b.stack("locker_security" if x in (2, 4) else "locker", x, 1, 1, "north", n=2)
-    b.row(["kitchen_counter", "coffee_counter", "kitchen_sink"], 5, 1, D - 2, "south")
-    b.stack("fridge", 2, 1, D - 2, "south", n=2)
+    # The secondary alarm station's console against the south wall (its three screens: the perimeter's zones, the
+    # access log, who is inside), its chair; the kitchenette and fridge beside it.
+    b.panel("sec_alarm_console", 3, 1, D - 2, "south", 3)
+    b.p(2, 1, D - 3, furniture("operator_chair", "south"))
+    # (Clear of the post: its south end is the kitchenette's corner.)
+    b.row(["kitchen_counter", "coffee_counter", "kitchen_sink"], 6, 1, D - 2, "south")
+    b.stack("fridge", 1, 1, 6, "west", n=2)
+    # Along the north wall the officers' lockers, a bench under the windows, the weapons locker, the files.
+    for x in range(1, 4):
+        b.stack("locker_security" if x == 2 else "locker", x, 1, 1, "north", n=2)
+    b.row(("locker_bench", 2), 4, 1, 2, "north")
+    for row in range(2):
+        b.p(6, 1 + row, 1, MP.multi_state("sec_weapons_locker", "north", row))
     b.furniture("filing_cabinet", 7, 1, 1, "north")
-    b.furniture("water_cooler", 1, 1, 8, "west")
+    # The west wall: the post orders on the whiteboard, the radios in their charger, the water cooler.
     b.varied("whiteboard", 1, 2, 3, "west", 24)
     b.seats.append(("whiteboard", 1, 2, 3, "west"))
-    b.furniture("coat_rack", 6, 2, 1, "north")
+    b.panel("ops_radio_rack", 1, 2, 7, "west", 1)
+    b.furniture("water_cooler", 1, 1, 8, "west")
+    b.panel("ops_wall_clock", 2, 3, 1, "north", 1)
     b.furniture("fire_extinguisher", 7, 2, 4, "east")
-    # The checkpoint wall across the hall, glazed above, with the one screening door.
-    b.wall_x(6, 9, W - 2, 1, 3)
-    for x in range(9, W - 1):
-        if x not in (12, 13):
-            b.p(x, 3, 6, PANE)
-    b.door(12, 1, 6, "north", kind="steel", label="screening")
-    # The visitors' side: in at the south doors, a bench to sit on, a plant, the guard window.
+    # The checkpoint across the hall: the speed gates (the entry lane opening north into the protected area, the exit
+    # lane south out of it; three pedestals, the door line the south edge of z 5) and framed glass from them to the
+    # guard room's wall, to the ceiling.
+    b.p(13, 1, 6, MP.SPEED_GATE["north"])
+    b.p(15, 1, 5, MP.SPEED_GATE["south"])
+    for x in (12, 14, 16):
+        b.p(x, 1, 5, MP.GATE_PEDESTAL["a"])
+        b.p(x, 1, 6, MP.GATE_PEDESTAL["b"])
+    for y in (1, 2, 3):
+        for x in (9, 10, 11):
+            b.p(x, y, 5, MP.FGLASS["north"])
+    # The search train: the X-ray scanner along the entry lane (its belt in from the south, its operator on the west),
+    # the walk-through metal detector in the lane, the hand reader between the lanes by the gates.
+    b.panel("sec_xray", 12, 1, 7, "east", 3)
+    b.panel("sec_metal_detector", 13, 1, 8, "north", 1)
+    b.p(14, 1, 7, furniture("ac_hand_reader", "east"))
+    # The visitors' side: in at the south doors, the window to the post, a bench to sit on, the plants, the signs.
     entrance(b, 13, D - 1, "s", kind="glass", step=False)
     b.row(("sofa", 2), W - 2, 1, 9, "west")
     b.plant(W - 2, 1, 10)
     b.plant(9, 1, 10)
-    b.varied("framed_print", W - 2, 2, 7, "east", 16)
-    b.seats.append(("framed_print", W - 2, 2, 7, "east"))
+    b.p(W - 2, 2, 7, furniture("sign_protected_area", "east"))
+    b.p(9, 2, D - 2, furniture("sign_prohibited", "west"))
+    b.furniture("fire_extinguisher", 10, 2, D - 2, "south")
     # The plant side: out at the north doors.
     entrance(b, 13, 0, "n", kind="glass", step=False)
     b.plant(W - 2, 1, 1)
     b.furniture("fire_extinguisher", W - 2, 2, 2, "east")
+    b.p(9, 2, 1, furniture("aed_cabinet", "north"))
+    gatehouse_fittings(b)
     s.add(b, ox, oz)
     return b
+
+
+# The gatehouse's dome cameras and smoke detectors (x, z under the ceiling, y 3) and emergency lights (their conduits up
+# to the ceiling over them).
+GATE_CAMERAS = [(11, 8), (14, 2)]
+GATE_SMOKE = [(4, 5), (11, 10), (10, 3)]
+GATE_EMERGENCY = [(7, 2, 6, "east"), (16, 2, 8, "east"), (16, 2, 3, "east")]
+
+
+def gatehouse_fittings(b):
+    """The gatehouse's ceiling fittings: dome cameras over the search train and the plant side, smoke detectors in
+    each part, emergency lights."""
+    for x, z in GATE_CAMERAS:
+        b.p(x, 3, z, furniture("sec_dome_camera", "north"))
+    for x, z in GATE_SMOKE:
+        b.p(x, 3, z, furniture("smoke_detector", "north"))
+    for x, y, z, f in GATE_EMERGENCY:
+        b.furniture("emergency_light", x, y, z, f)
 
 
 def walkway(s, x0, z0, x1, z1, m=SMOOTH):

@@ -9,19 +9,18 @@
       "feature": "drones"
     }
   ],
-  "type": "minecraft:crafting_shaped",
-  "category": "building",
+  "type": "jugcraft:advanced_crafting",
   "pattern": [
-    "PY",
-    "BP"
+    "PPYY",
+    "BBPP"
   ],
   "key": {
+    "B": "minecraft:black_dye",
     "P": "#c:plates/steel",
-    "Y": "minecraft:yellow_dye",
-    "B": "minecraft:black_dye"
+    "Y": "minecraft:yellow_dye"
   },
   "result": {
     "id": "jugcraft:hazard_plating",
-    "count": 4
+    "count": 8
   }
 }

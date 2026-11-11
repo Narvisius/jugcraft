@@ -15,6 +15,7 @@ from PIL import Image
 
 from party import PARTY_LANG
 import drones
+import room_kit_recipes
 from materials import (MOD, METALS, MINERALS, ROCKS, ITEMS, FEATURES, COMPONENTS, PART_UNITS, CIRCUITS, WASHED_ORES,
                        all_blocks, all_items, feature_of, ore_gens, ore_gen_owners)
 import agriculture as ag
@@ -227,6 +228,7 @@ def texture(ref):
             err(f"Animated texture {ref} is {img.size}, expected a strip of 16x16, 32x32, 48x48 or 64x64 frames")
         elif not animated and not (ref in {"jugcraft:nouveau/entity/signs/archwood", "jugcraft:nouveau/entity/signs/hanging/archwood"} and img.size == (64,32)) and img.size not in ((16, 16), (32, 32), (48, 48), (64, 64), (128, 128)) \
                 and not (img.size in ((256, 256), (512, 512), (1024, 1024)) and _sharp(png.stem)) \
+                and not room_kit_recipes.sharp(png.stem, img.size) \
                 and img.size != (_owner_sized_gun_atlases().get(ref),) * 2:
             err(f"Texture {ref} is {img.size}, expected 16x16, 32x32, 48x48, 64x64 or 128x128")
 
@@ -626,6 +628,17 @@ def check_recipes(registered):
                 err(f"{name}: pattern symbols {sorted(used)} differ from recipe keys {sorted(recipe['key'])}")
                 continue
             inputs = [recipe["key"][ch] for ch in symbols if ch != " "]
+        elif kind == f"{MOD}:advanced_crafting":
+            # the Advanced Crafting Table's 6 x 6 (crafting/AdvancedCraftingRecipe, tools/advanced_crafting.py): rows of
+            # one length, at most 6 x 6 and bigger than 3 x 3, every key used (the codec refuses anything else)
+            pattern = recipe["pattern"]
+            symbols = "".join(pattern)
+            inputs = [recipe["key"][ch] for ch in symbols if ch != " "]
+            w, h = len(pattern[0]) if pattern else 0, len(pattern)
+            if any(len(r) != w for r in pattern) or w > 6 or h > 6 or (w <= 3 and h <= 3):
+                err(f"{name}: an advanced crafting pattern must be rows of one length, at most 6 x 6, wider or taller than 3")
+            if set(recipe["key"]) != set(symbols) - {" "}:
+                err(f"{name}: its key and its pattern's symbols differ (the game refuses it)")
         elif kind == "minecraft:crafting_shapeless":
             inputs = recipe["ingredients"]
         elif kind == "jugcraft:pot_cooking":
@@ -848,7 +861,8 @@ def check_tags():
         import newest_registry
         known.update(newest_registry.entries().get(registry, set()))
         if registry == 'block': known.update(starter_workshop.BLOCKS)
-        if registry == 'block': known.add("cursed_mirror")
+        # the tower's holograms (tower/Holograms; some are written by their own tools, not the machine lists)
+        if registry == 'block': known.update(__import__('advanced_crafting').HOLOGRAM_BLOCKS); known.add("cursed_mirror")
         if registry == 'item': known.update(starter_workshop.NAMES); known.update({'pilgrim_coat_costume','pilgrim_dress_costume'})
         if registry == 'item': known.update(jimtafacts.items())
         if registry == 'item': known.update(jimtafacts_network.ids()); known.update(jimtafacts_spellbooks.items()); known.update(jimtafacts_industry.items())
@@ -4415,6 +4429,25 @@ def check_tower():
     import tower
     import tower_costs
     tower_costs.check(err)
+    import crew_ship_seams                                  # (the drop ship's paint: at its true size, its panels running on)
+    crew_ship_seams.check(err)
+    import crew_ship_planes                                 # (and no two of its faces in one plane: z-fighting)
+    crew_ship_planes.check(err)
+    import glow_alpha                                       # (glow textures carry their brightness as opacity)
+    glow_alpha.check(err)
+    check_stand_ins()
+
+
+def check_stand_ins():
+    """Client code that creates an entity gives it an id (client/StandIns, or setId) or adds it to the world: one drawn
+    without closes the game ("Tried to access entity ID before ID assignment"; a drop ship's riders, r199's playtest)."""
+    made = re.compile(r"\.create\([^;]*EntitySpawnReason|loadEntityRecursive\(")
+    ok = re.compile(r"StandIns\.id\(|\.setId\(|addFreshEntity\(")
+    for path in sorted((ROOT / "src/client/java").rglob("*.java")):
+        lines = path.read_text(encoding="utf-8").splitlines()
+        for i, line in enumerate(lines):
+            if made.search(line) and not ok.search("\n".join(lines[i:i + 4])):
+                err(f"{path.relative_to(ROOT)}:{i + 1}: an entity is created on the client and given no id (StandIns.id)")
     java = (JAVA_ROOT / "tower" / "JugcraftTower.java").read_text(encoding="utf-8")
     building = re.findall(r'\{"([a-z_]+)", "([a-z:0-9]+)"\}', re.search(r"BUILDING = \{(.*?)\};", java, re.S).group(1))
     expected = [(b, i["kind"] if i["kind"] != "light" else f"light:{i['light']}") for b, i in tower.BUILDING.items()]
@@ -4423,9 +4456,6 @@ def check_tower():
     variants = re.findall(r'"([a-z_]+)"', re.search(r"VARIANTS = \{(.*?)\};", java, re.S).group(1))
     if variants != [b for b, i in tower.BUILDING.items() if i.get("variants")]:
         err("JugcraftTower.VARIANTS differs from tools/tower.py")
-    modules = re.findall(r'"([a-z_]+)"', re.search(r"MODULES = \{(.*?)\};", java, re.S).group(1))
-    if modules != list(tower.MODULES):
-        err("JugcraftTower.MODULES differs from tools/tower.py")
     for block in tower.FURNITURE:
         if f'furniture("{block}"' not in java and f'block("{block}",' not in java:
             err(f"JugcraftTower does not register furniture {block}")
@@ -4436,9 +4466,64 @@ def check_tower():
 def check_power_lines():
     """powerline/LineKind.java and client/LineRenderer.java match tools/power_lines.py, and the frame block has its data."""
     import power_lines
-    kinds = re.findall(r'^\s+[A-Z_]+\("([a-z_]+)", Family\.([A-Z]+), (\d+), (\d+), (\d+), ([\d_]+)\)',
+    kinds = re.findall(r'^\s+[A-Z_0-9]+\("([a-z_0-9]+)", Family\.([A-Z]+), (\d+), (\d+), (\d+), ([\d_]+), (null|"[a-z_0-9]+")\)',
                        (JAVA_ROOT / "powerline" / "LineKind.java").read_text(encoding="utf-8"), re.M)
-    found = {k: (f.lower(), int(t), int(c.replace("_", "")), int(h), int(r)) for k, f, t, h, r, c in kinds}
+    found = {k: (f.lower(), int(t), int(c.replace("_", "")), int(h), int(r)) for k, f, t, h, r, c, _m in kinds}
+    models = {k: m.strip('"') for k, *_rest, m in kinds if m != "null"}
+    if models != power_lines.MODELS:
+        err(f"LineKind.java model keys {models} != tools/power_lines.py MODELS {power_lines.MODELS}")
+    # The round 2 models (tools/line_models.py): every support's bodies, kits and footings, and their data.
+    meta = load(ASSETS / "power_lines" / "supports.json")
+    if not meta:
+        err("Missing assets/jugcraft/power_lines/supports.json (tools/line_models.py)")
+    else:
+        for key in power_lines.MODELS.values():
+            if key in power_lines.BOX_MODELS:
+                # a box: its model, its gantry's strain assembly, its cryogenic terminations
+                box = meta.get("boxes", {}).get(key)
+                if box is None:
+                    err(f"supports.json has no box {key}")
+                    continue
+                names = [box["model"]] + ([box["kit"]] if box.get("kit") else []) + ([box["cryo"]["model"]] if box.get("cryo") else [])
+                if box.get("kit") and len(box.get("hinges", [])) != len(box.get("jumpers", [])):
+                    err(f"supports.json box {key}: a jumper for every hinge")
+                if not box.get("frames"):
+                    err(f"supports.json box {key} has no frame cells")
+            else:
+                sup = meta["supports"].get(key)
+                if sup is None:
+                    err(f"supports.json has no support {key}")
+                    continue
+                names = [sup["tangent"]["model"], sup["angle"]["model"]] + sup["angle"].get("kits", [])
+                if sup["angle"].get("kit"):
+                    names.append(sup["angle"]["kit"])
+                for body in ("tangent", "angle"):
+                    if sup[body].get("legs"):
+                        names += [f'{sup[body]["model"]}_foot{k}' for k in range(4)]
+                # what a pole carries for a box: the pole-mount transformer (wooden poles) and the riser, each side
+                for part in ("xfmr", "riser"):
+                    names += [v["model"] for v in sup.get(part, {}).values()]
+                fam = power_lines.KINDS[next(k for k, v in power_lines.MODELS.items() if v == key)][1]
+                if fam in ("wood", "monopole") and len(sup.get("riser", {})) != 2:
+                    err(f"supports.json support {key}: a riser on each side")
+                if fam == "wood" and len(sup.get("xfmr", {})) != 2:
+                    err(f"supports.json support {key}: a pole-mount transformer on each side")
+            for name in names:
+                if not (ASSETS / "power_lines" / "models" / f"{name}.bin").is_file():
+                    err(f"Missing power line model {name}.bin (tools/line_models.py)")
+        if not (ASSETS / "textures" / "entity" / "line_models.png").is_file():
+            err("Missing textures/entity/line_models.png (tools/line_models.py)")
+    # The switchyard's line gantry: its attach points are where yard_sites draws line 1's dead-ends.
+    import yard_sites
+    kind_java = (JAVA_ROOT / "powerline" / "LineKind.java").read_text(encoding="utf-8")
+    m_ = re.search(r"case LINE_GANTRY -> \{.*?new double\[\] \{([^}]*)\}\) \{\s*p\.add\(new Vec3\(([-\d.]+), ([-\d.]+), z\)\)", kind_java, re.S)
+    pts = yard_sites.gantry_points()
+    if not m_:
+        err("LineKind.java: the line gantry's attach points were not found")
+    else:
+        zs = [float(v) for v in m_.group(1).split(",")]
+        if zs != [p[2] for p in pts] or float(m_.group(2)) != pts[0][0] or float(m_.group(3)) != pts[0][1]:
+            err(f"LineKind.java: LINE_GANTRY attach points differ from tools/yard_sites.py gantry_points() {pts}")
     expected = {k: (fam, tier, cap, h, r) for k, (_, fam, tier, cap, h, r) in power_lines.KINDS.items()}
     if list(found) != list(expected):
         err(f"LineKind.java kinds {list(found)} != tools/power_lines.py {list(expected)}")
@@ -4498,14 +4583,20 @@ def check_drones():
         err("LandingPadBlock.HEIGHT differs from tools/drones.py PAD_PLATE_HEIGHT")
     if f"PICKUP_SIZE = {drones.PICKUP_SIZE};" not in layout:
         err("PlatformLayout.PICKUP_SIZE differs from tools/drones.py")
-    # The drone models' 32x32 fleet regions sit where tools/drone_textures.py draws them.
-    import drone_textures
-    model = (ROOT / "src" / "client" / "java" / "io" / "github" / "jimbozoomer" / "jugcraft" / "client"
-             / "DroneModel.java").read_text(encoding="utf-8")
-    for index, name in enumerate(drone_textures.FLEET_ORDER):
-        x, y = drone_textures.fleet_slot(index)
-        if f"static final float[] {name.upper()} = fleet({x}, {y});" not in model:
-            err(f"DroneModel.java: fleet region {name.upper()} is not fleet({x}, {y})")
+    # The drones are drawn from their exported meshes (DroneMesh.java): one per tier, four variants each, and
+    # the fleet atlas they sample.
+    import gzip, struct
+    mesh_dir = ROOT / "src" / "main" / "resources" / "assets" / MOD / "drone_mesh"
+    if not (ROOT / "src" / "main" / "resources" / "assets" / MOD / "textures" / "entity" / "drone_fleet.png").is_file():
+        err("textures/entity/drone_fleet.png (the drone mesh atlas) is missing")
+    for tier in range(1, 10):
+        path = mesh_dir / f"t{tier}.bin"
+        if not path.is_file():
+            err(f"drone mesh {path.name} is missing")
+            continue
+        raw = gzip.decompress(path.read_bytes())
+        if struct.unpack_from(">i", raw, 0)[0] != 0x4A444D32 or raw[4] != 4:
+            err(f"drone mesh {path.name}: bad header (want JDM2 with 4 variants)")
     holo = (java / "HoloTableBlock.java").read_text(encoding="utf-8")
     if f"SIZE = {drones.HOLO_SIZE};" not in holo or f"HEIGHT = {drones.HOLO_HEIGHT};" not in holo:
         err("HoloTableBlock SIZE/HEIGHT differ from tools/drones.py")
@@ -9882,7 +9973,7 @@ def check_model_uvs():
             for side, face in element.get("faces", {}).items():
                 texture = face.get("texture", "")
                 for _ in range(4):
-                    if isinstance(texture, dict):  # {"sprite": ..., "force_translucent": true}
+                    if isinstance(texture, dict):   # {"sprite": ..., "force_translucent": true}
                         texture = texture.get("sprite", "")
                     if texture.startswith("#"):
                         texture = textures.get(texture[1:], "")
@@ -13153,6 +13244,10 @@ def check_acquisition(registered):
     pages = aq.pages()
     if (load(ASSETS / "recipe_view.json") or {}).get("acquisition_info") != aq.rows():
         err("recipe_view.json acquisition_info is not tools/acquisition.py's rows(): run tools/generate_material_data.py")
+    import advanced_crafting   # the Advanced Workbench's JEI page (client/compat/JugcraftJeiAdvanced) lists every recipe it makes
+    if (load(ASSETS / "recipe_view.json") or {}).get("advanced_crafting") != advanced_crafting.view():
+        err("recipe_view.json advanced_crafting is not the Advanced Workbench's recipes (tools/advanced_crafting.py view()): "
+            "run tools/generate_material_data.py")
     for key, text in pages.items():
         if key not in registered:
             err(f"acquisition: the JEI page for {MOD}:{key} names no registered item")
@@ -17574,7 +17669,7 @@ def check_nuclear():
     """client/HazmatLayer.java reads the suit sheet from tools/nuclear.py's slots, and the Java registers its items."""
     import nuclear
     layer = (ROOT / "src" / "client" / "java" / "io" / "github" / "jimbozoomer" / "jugcraft" / "client" / "HazmatLayer.java").read_text(encoding="utf-8")
-    found = {name.lower(): (int(c), int(r)) for name, c, r in re.findall(r"static final float\[\] (\w+) = region\((\d), (\d)\);", layer)}
+    found = {name.lower(): (int(c), int(r)) for name, c, r in re.findall(r"static final float\[\] (\w+) = region\((\d+), (\d+)\);", layer)}
     for name in nuclear.HAZMAT_MATERIALS:
         if found.get(name) != nuclear.slot(name):
             err(f"HazmatLayer.java region for {name} is {found.get(name)}, tools/nuclear.py has {nuclear.slot(name)}")
@@ -17583,7 +17678,7 @@ def check_nuclear():
         if f'"{item}"' not in java:
             err(f"JugcraftNuclear.java does not register {item}")
     kinds = (JAVA_ROOT / "nuclear" / "EquipmentKind.java").read_text(encoding="utf-8")
-    found = [(i, int(w), int(d), int(h)) for i, w, d, h in re.findall(r'[A-Z_]+\("([a-z_]+)", (\d+), (\d+), (\d+)\)', kinds)]
+    found = [(i, int(w), int(d), int(h)) for i, w, d, h in re.findall(r'[A-Z0-9_]+\("([a-z0-9_]+)", (\d+), (\d+), (\d+)\)', kinds)]
     expected = [(k, w, d, h) for k, (_, w, d, h) in nuclear.EQUIPMENT.items()]
     if found != expected:
         err(f"EquipmentKind.java {found} != tools/nuclear.py EQUIPMENT {expected}")
@@ -17602,11 +17697,15 @@ def check_nuclear():
             continue
         data = json.loads((ROOT / "src" / "main" / "resources" / "data" / MOD / "blueprint" / f"{blueprint}.jugbp.json").read_text(encoding="utf-8"))
         tops = [y for y, rows in enumerate(data["layers"]) if any(rows)]
-        controller_y = 0  # the controller is in the bottom layer, under the basin floor
+        # the controller's layer: the bottom one, under the basin floor (the medium tower's: at its outlet's back wall,
+        # the layer holding the controller's palette key)
+        keys = [k for k, v in data["palette"].items() if "cooling_tower_controller" in v]
+        held = [y for y, rows in enumerate(data["layers"]) if keys and any(keys[0] in r for r in rows)]
+        controller_y = held[0] if held else 0
         if int(height) != max(tops) - controller_y:
             err(f"CoolingTowerBlock.Tower {kind} plume height {height} != tower top {max(tops)} - controller {controller_y}")
     renderer = (ROOT / "src" / "client" / "java" / "io" / "github" / "jimbozoomer" / "jugcraft" / "client" / "NuclearRenderer.java").read_text(encoding="utf-8")
-    regions = {name.lower(): (int(c), int(r)) for name, c, r in re.findall(r"static final float\[\] (\w+) = region\((\d), (\d)\);", renderer)}
+    regions = {name.lower(): (int(c), int(r)) for name, c, r in re.findall(r"static final float\[\] (\w+) = region\((\d+), (\d+)\);", renderer)}
     for name in nuclear.EQ_MATERIALS:
         if regions.get(name) != nuclear.eq_slot(name):
             err(f"NuclearRenderer.java region for {name} is {regions.get(name)}, tools/nuclear.py has {nuclear.eq_slot(name)}")
@@ -17621,23 +17720,45 @@ def check_nuclear():
     if set(boards) != set(control_boards.SECTIONS):
         err(f"control_boards.json.gz has {sorted(boards)}, not tools/control_boards.py's boards")
     for name, ops in boards.items():
+        if name == "plant_map_screen" or name.startswith("plant_map_screen/"):
+            continue        # the plant overview screen's frame and pages (a kit piece's): check_overview_screen
         if name not in nuclear.EQUIPMENT:
             err(f"control board {name} is not equipment (tools/nuclear.py EQUIPMENT)")
         drawn = {k: v for k, v in ops.items() if k != "live"}
-        names = set(re.findall(r'"([a-z_]+)"', json.dumps(drawn))) - {"b", "o", "q", "c", "still", "lit", "blink", "core", "states"} - set(ops.get("states", {}))
+        names = set(re.findall(r'"([a-z_]+)"', json.dumps(drawn))) - {"b", "o", "q", "c", "r", "still", "lit", "blink", "core", "states"} - set(ops.get("states", {}))
         if names - set(nuclear.EQ_MATERIALS):
             err(f"control board {name} uses materials not on the sheet: {sorted(names - set(nuclear.EQ_MATERIALS))}")
         if name == "switchgear_lineup":
-            # The load centre's live parts (round 25): its breakers in the game's order (nuclear/Switchgear.java NAMES),
-            # their lamps and flags, and its meters as client/NuclearRenderer.java reads them.
+            # The load centre (rebuilt in older rooms round 1: tools/load_centre.py, nuclear/LoadCentre.java): each of
+            # its eleven breakers (nuclear/Switchgear.java BREAKERS) with its control switch, racking port and trip
+            # unit RESET where the game finds a click (no two overlapping), its lamps (closed, open, trip, status,
+            # pickup), flags (contacts, spring, rack, target), its front at each of the three rack positions, its trip
+            # unit's display and operations counter; the transformer's fan switch and temperatures; the power meter.
             live = ops.get("live", {})
-            java_names = re.findall(r'"([A-Z0-9 ]+)"', (re.search(r"NAMES = \{(.*?)\};", (JAVA_ROOT / "nuclear" / "Switchgear.java").read_text(encoding="utf-8"), re.S) or [None, ""])[1])
-            if java_names != ["MAIN BKR"] + control_boards.LC_FEEDERS:
-                err(f"control board switchgear_lineup: its feeders {control_boards.LC_FEEDERS} are not nuclear/Switchgear.java NAMES {java_names}")
-            if len(live.get("breakers", [])) != len(java_names) or any(len(b.get("lamps", [])) != 2 or len(b.get("flag", [])) != 4 for b in live.get("breakers", [])):
-                err("control board switchgear_lineup: needs a live lamp pair and flag for each of its 11 breakers")
-            if [m.get("kind") for m in live.get("meters", [])] != ["charge", "volts"] + ["amps"] * 10:
-                err("control board switchgear_lineup: its live meters must be the charge, the volts, then each feeder's amps in order")
+            n = int((re.search(r"BREAKERS = (\d+);", (JAVA_ROOT / "nuclear" / "Switchgear.java").read_text(encoding="utf-8")) or [None, "0"])[1])
+            controls = live.get("controls", [])
+            ids = [c["id"] for c in controls]
+            want = {f"{k}{i}" for i in range(n) for k in ("cs", "rack", "reset")} | {"fans"}
+            if set(ids) != want or len(ids) != len(want):
+                err(f"control board switchgear_lineup: its controls {sorted(set(ids) ^ want)} differ from the game's (cs, rack, reset for each of {n}, fans)")
+            for i, c in enumerate(controls):
+                for d in controls[i + 1:]:
+                    if c["x0"] < d["x1"] and d["x0"] < c["x1"] and c["y0"] < d["y1"] and d["y0"] < c["y1"]:
+                        err(f"control board switchgear_lineup: controls {c['id']} and {d['id']} overlap")
+            lamps = {l["s"] for l in live.get("lamps", [])}
+            flags = {f["s"] for f in live.get("flags", [])}
+            texts = {t["id"] for t in live.get("texts", [])}
+            for i in range(n):
+                missing = ({f"b{i}.{k}" for k in ("closed", "open", "trip", "status", "pickup")} - lamps) | (
+                    {f"b{i}.{k}" for k in ("contacts", "spring", "rack", "target")} - flags) | ({f"b{i}.lcd", f"b{i}.ops"} - texts)
+                if missing:
+                    err(f"control board switchgear_lineup: breaker {i} has no live {sorted(missing)}")
+            if sorted(f["b"] for f in live.get("fronts", [])) != list(range(n)) or any(len(f["dz"]) != 3 for f in live.get("fronts", [])):
+                err("control board switchgear_lineup: needs a breaker front for each breaker, set back for each rack position")
+            if {"pm.0", "pm.1", "pm.2", "pm.3", "xf.t0", "xf.t1", "xf.t2"} - texts:
+                err("control board switchgear_lineup: its power meter's or transformer monitor's lines are missing")
+            if not (ASSETS / "textures" / "entity" / "load_centre_legends.png").exists():
+                err("control board switchgear_lineup: its legend texture textures/entity/load_centre_legends.png is missing")
         if name == "mcc_lineup":
             # The motor control centre's live parts (round 26): a unit for each breaker in the game's order
             # (nuclear/MotorControlCenter.java NAMES), its door where the game finds a click (DOORS), its lamps and its
@@ -17656,8 +17777,156 @@ def check_nuclear():
                 err("control board mcc_lineup: needs a live lamp pair and a handle up and down for each breaker")
             if [m.get("kind") for m in live.get("meters", [])] != ["charge", "volts"]:
                 err("control board mcc_lineup: its live meters must be the charge and the volts")
-        if name == "remote_shutdown_panel" and set(ops.get("states", {})) != {"mcr", "rsp"}:
-            err("control board remote_shutdown_panel: its transfer switches need both states, mcr and rsp (client/NuclearRenderer.java)")
+        if name in control_boards.diesel_set.BOARDS:
+            # The diesel generator set and its starting air system (round 31, tools/diesel_set.py): their legends on
+            # their own texture; the live parts the renderer draws (client/DieselParts.java) where it looks for them.
+            live = ops.get("live", {})
+            if not (ASSETS / "textures" / "entity" / "diesel_legends.png").is_file():
+                err("textures/entity/diesel_legends.png is missing (tools/diesel_set.py legend_image)")
+            uvs = re.findall(r'\["@", ([-0-9.e]+), ([-0-9.e]+), ([-0-9.e]+), ([-0-9.e]+)\]', json.dumps(ops))
+            if not uvs or any(not 0 <= float(v) <= 1 for uv in uvs for v in uv):
+                err(f"{name}: its legends' places must lie on the diesel legend texture")
+            want = {"emergency_diesel_generator": ("gauges", "lamps", "shaft", "coupling", "fan", "stack"), "edg_air_receiver": ("gauges",),
+                    "edg_air_compressor": ("gauges", "lamps", "pulley"), "edg_air_dryer": ("lamps",),
+                    # The rooms' own plant (round 31 part 3, tools/diesel_room.py).
+                    "edg_jw_keepwarm": ("gauges", "lamps"), "edg_lo_keepwarm": ("gauges", "lamps"), "edg_expansion_tank": ("levels",),
+                    "edg_jw_cooler": ("gauges",), "edg_ngr": (), "edg_gen_cubicle": (), "edg_co2_bank": (), "edg_monorail": ("hoist",)}[name]
+            if any(not live.get(k) for k in want):
+                err(f"{name}: its live parts need {want}, not {sorted(k for k in live if live[k])}")
+            gauges = {g["name"] for g in live.get("gauges", [])}
+            dsrc = (ROOT / "src/client/java/io/github/jimbozoomer/jugcraft/client/DieselParts.java").read_text(encoding="utf-8") \
+                if (ROOT / "src/client/java/io/github/jimbozoomer/jugcraft/client/DieselParts.java").is_file() else ""
+            for g in gauges | {lp["name"] for lp in live.get("lamps", [])}:
+                if f'"{g}"' not in dsrc:
+                    err(f"{name}: client/DieselParts.java doesn't read its live part {g!r}")
+        if name in control_boards.turbine_set.BOARDS:
+            # The main turbine-generator and its reheaters (turbine hall part 1, tools/turbine_set.py): their legends on
+            # their own texture; the live parts client/TurbineParts.java draws, each gauge and lamp one it reads; the
+            # manual trip and the turning gear lever where nuclear/TurbineHall.java finds a click.
+            live = ops.get("live", {})
+            if not (ASSETS / "textures" / "entity" / "turbine_legends.png").is_file():
+                err("textures/entity/turbine_legends.png is missing (tools/turbine_set.py legend_image)")
+            uvs = re.findall(r'\["@", ([-0-9.e]+), ([-0-9.e]+), ([-0-9.e]+), ([-0-9.e]+)\]', json.dumps(ops))
+            if not uvs or any(not 0 <= float(v) <= 1 for uv in uvs for v in uv):
+                err(f"{name}: its legends' places must lie on the turbine legend texture")
+            want = {"turbine_generator": ("gauges", "lamps", "stems", "digits", "trip", "lever", "wheel", "shaft"),
+                    "moisture_separator_reheater": ("gauges",)}[name]
+            if any(not live.get(k) for k in want):
+                err(f"{name}: its live parts need {want}, not {sorted(k for k in live if live[k])}")
+            tsrc = (ROOT / "src/client/java/io/github/jimbozoomer/jugcraft/client/TurbineParts.java").read_text(encoding="utf-8") \
+                if (ROOT / "src/client/java/io/github/jimbozoomer/jugcraft/client/TurbineParts.java").is_file() else ""
+            for g in {g["name"] for g in live.get("gauges", [])} | {lp["name"] for lp in live.get("lamps", [])}:
+                if f'case "{g}"' not in tsrc:
+                    err(f"{name}: client/TurbineParts.java doesn't read its live part {g!r}")
+            for st in live.get("stems", []):
+                if not st["name"].startswith(("tv", "gv", "civ")):
+                    err(f"{name}: valve stem {st['name']!r} is none of the throttle, governor or intercept valves TurbineParts.open knows")
+            if name == "turbine_generator":
+                hall = (JAVA_ROOT / "nuclear" / "TurbineHall.java").read_text(encoding="utf-8") if (JAVA_ROOT / "nuclear" / "TurbineHall.java").is_file() else ""
+                k = {a: float(b) for a, b in re.findall(r"\b(TRIP_X0|TRIP_X1|TRIP_Y0|TRIP_Y1|TRIP_Z|LEVER_X|LEVER_Z0|LEVER_Z1|LEVER_Y0|LEVER_Y1) = ([-0-9.]+)", hall)}
+                if len(k) != 10:
+                    err("nuclear/TurbineHall.java: its trip and lever click zones are missing")
+                else:
+                    tx, ty, _ = live["trip"]["c"]
+                    if not (k["TRIP_X0"] <= tx <= k["TRIP_X1"] and k["TRIP_Y0"] <= ty <= k["TRIP_Y1"]):
+                        err(f"turbine_generator: its trip handle {live['trip']['c']} is outside nuclear/TurbineHall.java's trip zone")
+                    _, ly, lz = live["lever"]["pivot"]
+                    if not (k["LEVER_Z0"] <= lz <= k["LEVER_Z1"] and k["LEVER_Y0"] <= ly <= k["LEVER_Y1"]):
+                        err(f"turbine_generator: its turning gear lever {live['lever']['pivot']} is outside nuclear/TurbineHall.java's lever zone")
+                    import nuclear_plants
+                    if not nuclear_plants.turbine_solid(int(tx), int(ty), 0):
+                        err("turbine_generator: the front standard under its trip handle is not solid (no click lands there)")
+        if name in control_boards.feed_train.BOARDS:
+            # The turbine hall's feed train and oil plant (turbine hall part 2, tools/feed_train.py): their legends on the
+            # turbine's texture; each gauge, lamp and level one nuclear/TurbineHall.java reads (client/TurbineParts.java
+            # draws them from it), each gauge with its dial; the pumps' buttons where TurbineHall finds a click.
+            live = ops.get("live", {})
+            uvs = re.findall(r'\["@", ([-0-9.e]+), ([-0-9.e]+), ([-0-9.e]+), ([-0-9.e]+)\]', json.dumps(ops))
+            if not uvs or any(not 0 <= float(v) <= 1 for uv in uvs for v in uv):
+                err(f"{name}: its legends' places must lie on the turbine legend texture")
+            hall = (JAVA_ROOT / "nuclear" / "TurbineHall.java").read_text(encoding="utf-8") if (JAVA_ROOT / "nuclear" / "TurbineHall.java").is_file() else ""
+            reads = set(re.findall(r'"([^"]+)"', " ".join(re.findall(r"case ([^\n]*?) ->", hall))))
+            for part in ("gauges", "lamps", "levels"):
+                for g in live.get(part, []):
+                    if g["name"] not in reads:
+                        err(f"{name}: nuclear/TurbineHall.java doesn't read its live part {g['name']!r}")
+            dials = hall[hall.find("public static double[] dial("):hall.find("public static boolean lamp(")]
+            for g in live.get("gauges", []):
+                if f'"{g["name"]}"' not in dials:
+                    err(f"{name}: nuclear/TurbineHall.java has no dial for its gauge {g['name']!r}")
+            for d in live.get("digits", []):
+                if d["name"] not in ("mfp_speed", "h2_purity"):
+                    err(f"{name}: client/TurbineParts.java doesn't show its figures {d['name']!r}")
+            k = {a: float(b) for a, b in re.findall(r"\b(CP_START_X|CP_STOP_X|CP_BUTTON_Y|CP_FACE|MFP_TRIP_X|MFP_RESET_X|MFP_BUTTON_Y|MFP_FACE) = ([-0-9.]+)", hall)}
+            ft = control_boards.feed_train
+            if len(k) != 8:
+                err("nuclear/TurbineHall.java: the pumps' button zones are missing")
+            elif name == "condensate_pump":
+                if (k["CP_START_X"], k["CP_BUTTON_Y"]) != ft.CP_START or (k["CP_STOP_X"], k["CP_BUTTON_Y"]) != ft.CP_STOP or k["CP_FACE"] != ft.CP_STATION[2]:
+                    err(f"condensate_pump: START {ft.CP_START} and STOP {ft.CP_STOP} are not where nuclear/TurbineHall.java looks for them")
+            elif name == "main_feed_pump":
+                if (k["MFP_TRIP_X"], k["MFP_BUTTON_Y"]) != ft.MFP_TRIP or (k["MFP_RESET_X"], k["MFP_BUTTON_Y"]) != ft.MFP_RESET:
+                    err(f"main_feed_pump: TRIP {ft.MFP_TRIP} and RESET {ft.MFP_RESET} are not where nuclear/TurbineHall.java looks for them")
+        if name in control_boards.board_live.LIVE_SECTIONS:
+            # A live board (round 27, tools/board_live.py): its legends on their texture, and every reading, lamp, status
+            # light and control named as nuclear/BoardPlant.java, client/LiveBoards.java and nuclear/ControlBoard.java
+            # know them (a name they don't know reads nothing, forever dark).
+            live = ops.get("live", {})
+            legend_png = ASSETS / "textures" / "entity" / "control_board_legends.png"
+            if not legend_png.is_file():
+                err("textures/entity/control_board_legends.png is missing (tools/board_live.py legend_image)")
+            uvs = re.findall(r'\["@", ([-0-9.e]+), ([-0-9.e]+), ([-0-9.e]+), ([-0-9.e]+)\]', json.dumps(ops))
+            if not uvs or any(not 0 <= float(v) <= 1 for uv in uvs for v in uv):
+                err(f"control board {name}: its legends' places must lie on the legend texture")
+            src = "".join((ROOT / f).read_text(encoding="utf-8") for f in (
+                "src/main/java/io/github/jimbozoomer/jugcraft/nuclear/BoardPlant.java", "src/client/java/io/github/jimbozoomer/jugcraft/client/LiveBoards.java",
+                "src/main/java/io/github/jimbozoomer/jugcraft/nuclear/ControlBoard.java"))
+            known = set(re.findall(r'"([a-z0-9_.]+)"', src))
+            patterns = (r"loop[1-4]\.(flow|thot|tcold)", r"rcp[1-4]\.(amps|run)", r"edg_[ab]\.(kv|amps|kw|kvar|hz|rpm)", r"rcp[1-4]", r"edg_[ab]_(start|stop)",
+                        # Round 28: the steam generators, MSIVs, accumulators, safeguards trains, radiation monitors, HVAC parts.
+                        r"sg[1-4]\.(nr|wr|steam|feed|afw|press|frv_out|arv_out|arv|frv|frv_auto|afwv)", r"msiv[1-4](\.open)?", r"acc[1-4]\.(press|level)",
+                        r"(ccp|sip|rhr|ccw)_[ab]\.(flow|press|hx_out|hx_ctl|byp_ctl|ctl|run)", r"cfc_[ab]\.(run|fast|slow)", r"(afw|mfp)_[ab]\.run",
+                        r"rm([1-9]|1[0-2])(\.(log|high|alert|alarm|ok|fail)|_fail)?", r"hv\.(d1|ahu|d2|efu|d3|ch|pump)_[01]", r"fwi\.sg[1-4]",
+                        r"(fcv|arv)[1-4]", r"rsp_trip_[ab]",
+                        # Round 30: the reactor console's rod banks (steps, rod bottom lights) and power range channels.
+                        r"bank\.(sa|sb|sc|sd|ca|cb|cc|cd)(\.bottom)?", r"pr[1-4]")
+            used = [n["v"] for n in live.get("needles", [])] + [b["v"] for b in live.get("bars", [])] + [d["v"] for d in live.get("digits", [])]
+            used += [p["v"] for r in live.get("pens", []) for p in r["pens"]] + [l["s"].lstrip("!") for l in live.get("lamps", [])]
+            used += [w["id"] for w in live.get("windows", []) if w["k"] == 1] + [c["id"] for c in live.get("controls", [])]
+            unknown = sorted({u for u in used if u not in known and not any(re.fullmatch(pt, u) for pt in patterns)})
+            if unknown:
+                err(f"control board {name}: names its parts read that the game doesn't know: {unknown}")
+        if name == "remote_shutdown_panel" and not {"transfer", "rsp_trip_a", "rsp_trip_b"} <= {c["id"] for c in ops.get("live", {}).get("controls", [])}:
+            err("control board remote_shutdown_panel: its transfer keys and reactor trips must work (round 29: a live board, nuclear/ControlBoard.java)")
+        if name == "reactor_control_console" and not {"rod_mode", "rods_in", "rods_out", "sr_block", "ir_block", "pr_block", "rps", "rx_trip_a",
+                                                       "rx_trip_b"} <= {c["id"] for c in ops.get("live", {}).get("controls", [])}:
+            err("control board reactor_control_console: its rod control, NIS blocks, protection and reactor trip switches must work (round 30)")
+        if name == control_boards.display_wall.KEY:
+            # The plant display wall (round 32, tools/display_wall.py): its words and plates on its own texture; every
+            # live part the renderer draws present; every line, symbol, figure and word named as nuclear/BoardPlant.java,
+            # nuclear/DisplayWall.java and client/LiveBoards.java know them (a name they don't know stays dark).
+            live = ops.get("live", {})
+            if not (ASSETS / "textures" / "entity" / "display_wall_legends.png").is_file():
+                err("textures/entity/display_wall_legends.png is missing (tools/display_wall.py legend_image)")
+            uvs = re.findall(r'\["@", ([-0-9.e]+), ([-0-9.e]+), ([-0-9.e]+), ([-0-9.e]+)\]', json.dumps(ops))
+            if not uvs or any(not 0 <= float(v) <= 1 for uv in uvs for v in uv):
+                err(f"{name}: its legends' places must lie on the display wall's legend texture")
+            for k in ("texts", "levels", "fills", "flows", "lamps", "pens", "alarms"):
+                if not live.get(k):
+                    err(f"{name}: its live parts need {k}")
+            if len(live.get("alarms", [{}])[0].get("slots", [])) != 6:
+                err(f"{name}: its banner needs six slots (nuclear/DisplayWall.java SLOTS)")
+            src = "".join((ROOT / f).read_text(encoding="utf-8") for f in (
+                "src/main/java/io/github/jimbozoomer/jugcraft/nuclear/BoardPlant.java", "src/client/java/io/github/jimbozoomer/jugcraft/client/LiveBoards.java",
+                "src/main/java/io/github/jimbozoomer/jugcraft/nuclear/DisplayWall.java"))
+            known = set(re.findall(r'"([a-z0-9_.]+)"', src))
+            patterns = (r"rcp[1-4]\.run", r"msiv[1-4]\.open", r"sg[1-4]\.(nr|frv|arv)", r"(ccp|sip|rhr|afw|mfp)_[ab]\.run", r"dw\.steam(_hdr)?[1-4]",
+                        r"dw\.csf(_letter|_name|_state)?[0-5]", r"dw\.loop[1-4]_(flow|thot|tcold)", r"dw\.sg[1-4]_level", r"dw\.trend[0-2]")
+            used = [e["s"] for k in ("lamps", "flows") for e in live.get(k, [])] + [e["id"] for e in live.get("texts", []) + live.get("fills", [])]
+            used += [e["v"] for e in live.get("levels", [])] + [pn["v"] for r in live.get("pens", []) for pn in r["pens"]]
+            unknown = sorted({u for u in used if u not in known and not any(re.fullmatch(pt, u) for pt in patterns)})
+            if unknown:
+                err(f"{name}: names its parts read that the game doesn't know: {unknown}")
         bad = control_boards.overlaps(ops)
         if bad:
             err(f"control board {name}: {len(bad)} pairs of faces overlap in one plane (z-fighting), e.g. {bad[:2]}")
@@ -24595,6 +24864,12 @@ def main():
     check_pixel_hollows()
     check_town()
     check_diagonal_connections()
+    check_spreading_room()
+    check_overview_screen()
+    check_switchgear_room()
+    check_plant_doors()
+    check_server_room()
+    check_live_parts_in_sight()
     check_aluminum_bootstrap()
     check_concordance(registered)
     check_landscape_habitats()
@@ -24606,6 +24881,281 @@ def main():
     print(f"PASS: {len(registered)} material IDs, data files and recipe audit. No Minecraft build or game test performed.")
 
 
+
+def check_switchgear_room():
+    """The switchgear room (older rooms round 1, tools/switchgear_room.py): every piece registered in
+    nuclear/PlantInterior.java; the log desk laptop's live lines the channels nuclear/SwitchgearRoom.java fills (its
+    title, volts and transformer lines; a name, state in each colour and amps for each of its ROWS breakers), each
+    once; the one-line diagram's six parts each with its own drawing."""
+    import switchgear_room as SG
+    src = (JAVA_ROOT / "nuclear" / "PlantInterior.java").read_text(encoding="utf-8")
+    for key in list(SG.PIECES) + list(SG.MULTI) + list(SG.PANELS) + list(SG.SIGNS):
+        if f'{{"{key}", ' not in src:
+            err(f"switchgear room: {key} has no row in nuclear/PlantInterior.java")
+    java = (JAVA_ROOT / "nuclear" / "SwitchgearRoom.java").read_text(encoding="utf-8")
+    rows = int((re.search(r"ROWS = (\d+);", java) or [None, "0"])[1])
+    colours = set(re.findall(r"'([a-z])'", (re.search(r"COLOURS = \{(.*?)\};", java, re.S) or [None, ""])[1]))
+    layout = json.loads((ASSETS / "live_panels.json").read_text(encoding="utf-8")).get(SG.LT_KEY, {})
+    chans = [e.get("ch") for e in layout.get("elements", []) if e.get("t") == "text"]
+    want = {"sgr_t", "sgr_v", "sgr_f", "sgr_x"} | {f"sgr_{c}{k}" for k in range(rows) for c in colours | {"n", "a"}}
+    if set(chans) != want or len(chans) != len(want):
+        err(f"switchgear room: the laptop's live lines {sorted(set(chans) ^ want)} differ from what SwitchgearRoom.java writes")
+    for p_ in range(SG.OL_W * SG.OL_H):
+        model = ASSETS / "models" / "block" / f"sgr_one_line_{p_}.json"
+        if not model.exists() or f"pi_sgr_oneline_{p_}" not in model.read_text(encoding="utf-8"):
+            err(f"switchgear room: the one-line diagram's part {p_} does not show its drawing")
+
+
+def check_server_room():
+    """The plant computer room (older rooms round 2, tools/server_room.py): every piece registered in
+    nuclear/PlantInterior.java (the live ones as srv:width:rows:variants); every live line, lamp and gauge on its pieces
+    written by client/EdgTelemetry.java srv; the racks' doors open (their open models); every LED strip a mode the client
+    knows."""
+    import server_room as SR
+    import plant_panels as PP_
+    java = (JAVA_ROOT / "nuclear" / "PlantInterior.java").read_text(encoding="utf-8")
+    for key, info in SR.PANELS.items():
+        want = f'{{"{key}", 0, "srv:{info["width"]}:{info["rows"]}:{len(info.get("labels") or [None])}"'
+        if want not in java:
+            err(f"computer room: {key} must be registered as {want}... in nuclear/PlantInterior.java")
+    for key in list(SR.PIECES) + list(SR.SIGNS):
+        if f'{{"{key}", 0, ' not in java:
+            err(f"computer room: {key} has no row in nuclear/PlantInterior.java")
+    telemetry = (ROOT / "src/client/java/io/github/jimbozoomer/jugcraft/client/EdgTelemetry.java").read_text(encoding="utf-8")
+    layout = json.loads((ASSETS / "live_panels.json").read_text(encoding="utf-8"))
+    for key in SR.PANELS:
+        for e in layout.get(key, {}).get("elements", []):
+            ch = e.get("ch", "")
+            if e.get("t") == "leds":
+                if e.get("align") not in ("pwr", "act", "link", "stat", "drive"):
+                    err(f"computer room: {key}'s LED strip has mode {e.get('align')}")
+                continue
+            m = re.match(r"(ppc_m\d_[lrt])\d?$", ch)
+            lit = f'"{m[1]}' if m else f'"{ch}"'
+            if lit not in telemetry:
+                err(f"computer room: {key}'s live {e.get('t')} {ch} is not written by client/EdgTelemetry.java srv")
+    for key in SR.RACKS:
+        bs = load(ASSETS / "blockstates" / f"{key}.json").get("variants", {})
+        if "facing=north,open=true,part=0" not in bs or "open_" not in bs["facing=north,open=true,part=0"]["model"]:
+            err(f"computer room: {key}'s door has no open model")
+
+
+def check_live_parts_in_sight():
+    """No live part drawn inside its own piece (where the game can never show it): for every live panel
+    (plant_panels PANELS), each lamp, LED, window and line of text, and a point along each needle (0.6 of its length
+    straight up from its pivot: the pivot itself may sit under a hub cap), must not lie inside a box of the piece's
+    model as written (after tools/zfight.py has moved its faces)."""
+    import control_boards  # noqa: F401  (registers every kit's panels)
+    import plant_panels as PP_
+    layout = json.loads((ASSETS / "live_panels.json").read_text(encoding="utf-8"))
+    for key, lay in layout.items():
+        info = PP_.PANELS.get(key)
+        if info is None:
+            continue
+        w, rows = info["width"], info.get("rows", 2)
+        boxes = []
+        for p in range(w * rows):
+            f = ASSETS / "models" / "block" / f"{key}_{p}.json"
+            if not f.is_file():
+                continue
+            for e in load(f).get("elements", []):
+                if "rotation" in e:
+                    continue
+                a, b = e["from"], e["to"]
+                c, r = p % w, p // w
+                boxes.append((a[0] + 16 * c, a[1] + 16 * r, a[2], b[0] + 16 * c, b[1] + 16 * r, b[2]))
+        for el in lay.get("elements", []):
+            t = el.get("t")
+            if t == "leds":
+                pts = [(el["x0"] + i * el.get("width", 0), el["y"], el["z"]) for i in range(int(el.get("blades", 1)))]
+            elif t == "window":
+                pts = [((el["x0"] + el["x1"]) / 2, (el["y0"] + el["y1"]) / 2, el["z"])]
+            elif t in ("text", "lamp"):
+                pts = [(el["x"], el["y"], el["z"])]
+            elif t in ("dial", "meter"):
+                pts = [(el["x"], el["y"] + 0.6 * el.get("r", 0), el["z"])]
+            else:
+                continue
+            for x, y, z in pts:
+                hit = next((bx for bx in boxes if bx[0] < x < bx[3] and bx[1] < y < bx[4] and bx[2] < z + 0.02 < bx[5] - 1e-4), None)
+                if hit:
+                    err(f"Live parts: {key}'s {t} {el.get('ch')} at ({x:.2f}, {y:.2f}, {z:.2f}) is inside its own model "
+                        f"(the box {[round(v, 2) for v in hit]}): the game never shows it; bring it out in front")
+                    break
+
+
+def check_plant_doors():
+    """The doors round (tools/plant_doors.py): every state of the steel, glass and lead-lined doors has a model (the
+    properties nuclear/PlantDoorBlock.java gives them), as has every roller door state; the part models are the
+    ones nuclear/PlantDoors.java numbers and client/PlantDoorRenderer.java turns about the hinge pins and swings for
+    as long as tools/plant_doors.py's (the same pins, closer arm and swing times)."""
+    import itertools
+    import plant_doors as PD
+    flags = ("false", "true")
+    for door in PD.DOORS:
+        variants = load(ASSETS / "blockstates" / f"{door}.json").get("variants", {})
+        for exit_, facing, half, hinge, moving, open_, paired, reader in itertools.product(
+                flags, PD.FACING_Y, ("lower", "upper"), ("left", "right"), flags, flags, flags, flags):
+            key = f"exit={exit_},facing={facing},half={half},hinge={hinge},moving={moving},open={open_},paired={paired},reader={reader}"
+            if key not in variants:
+                err(f"{door}: no model for {key}")
+                break
+    variants = load(ASSETS / "blockstates" / "roller_door.json").get("variants", {})
+    for facing, left, moving, open_, pos, right in itertools.product(("north", "east", "south", "west"), flags, flags, flags,
+                                                                     ("bottom", "middle", "top", "single"), flags):
+        if f"facing={facing},left={left},moving={moving},open={open_},pos={pos},right={right}" not in variants:
+            err(f"roller_door: no model for its state at {pos} (left {left}, right {right})")
+            break
+    java = (JAVA_ROOT / "nuclear" / "PlantDoors.java").read_text(encoding="utf-8")
+    parts = int((re.search(r"PARTS = (\d+);", java) or [None, "0"])[1])
+    if parts != PD.PART_COUNT or len(load(ASSETS / "blockstates" / "plant_door_part.json").get("variants", {})) != parts:
+        err(f"plant doors: nuclear/PlantDoors.java has {parts} part models, tools/plant_doors.py {PD.PART_COUNT}")
+    for kind, k in PD.ARMS.items():
+        name = "STEEL_ARM" if kind == "steel_door" else "LEAD_ARM"
+        if not re.search(rf"\b{name} = {k}\b", java):
+            err(f"plant doors: nuclear/PlantDoors.java {name} is not {k}")
+    door_java = (JAVA_ROOT / "nuclear" / "PlantDoorBlock.java").read_text(encoding="utf-8")
+    if f"SWING_OPEN = {PD.SWING_OPEN}, SWING_SHUT = {PD.SWING_SHUT};" not in door_java:
+        err("plant doors: nuclear/PlantDoorBlock.java's swing times differ from tools/plant_doors.py's")
+    render = (ROOT / "src/client/java/io/github/jimbozoomer/jugcraft/client/PlantDoorRenderer.java").read_text(encoding="utf-8")
+    for kind, const in (("steel_door", "STEEL"), ("glass_door", "GLASS"), ("lead_door", "LEAD")):
+        s_ = PD.SPECS[kind]
+        px, pz = s_.pivot()
+        m = re.search(rf"{const} = new Geometry\(([^)]*)\)", render)
+        got = [float(v.strip().split(",")[0].replace("PlantDoors.STEEL_ARM", "0").replace("PlantDoors.LEAD_ARM", "0"))
+               for v in m[1].split(",")] if m else []
+        want = [px, pz]
+        if s_.closer:
+            want += [*PD.spindle(s_), *PD.shoe(s_)]
+        if len(got) < len(want) or any(abs(a - b) > 1e-6 for a, b in zip(got, want)):
+            err(f"plant doors: client/PlantDoorRenderer.java's {const} geometry {got[:len(want)]} is not tools/plant_doors.py's {want}")
+    if f"ARM_MAIN = {PD.ARM_MAIN}, ARM_FORE = {PD.ARM_FORE};" not in render:
+        err("plant doors: client/PlantDoorRenderer.java's closer arm lengths differ from tools/plant_doors.py's")
+
+
+def check_spreading_room():
+    """The cable spreading room (punch list #15, tools/spreading_room.py): every piece registered in
+    nuclear/PlantInterior.java (the train pieces as train:n, n their variants), each variant's model in its blockstate;
+    the control room's floor over it (its top the floor, its underside the painted slab); the fire panels' live
+    channels all read by client/EdgTelemetry.java and their messages in the language file."""
+    import spreading_room as SR
+    java = (ROOT / "src/main/java/io/github/jimbozoomer/jugcraft/nuclear/PlantInterior.java").read_text(encoding="utf-8")
+    for name, info in SR.PIECES.items():
+        n = info.get("variants")
+        want = f'{{"{name}", 0, "train:{n}"' if n else f'{{"{name}", 0, "'
+        if want not in java:
+            err(f"nuclear/PlantInterior.java: {name} must be registered as {want}...")
+        bs = ASSETS / "blockstates" / f"{name}.json"
+        if not bs.is_file():
+            err(f"{name}: no blockstate")
+            continue
+        variants = load(bs).get("variants", {})
+        if len(variants) != 4 * (n or 1):
+            err(f"{name}: {len(variants)} blockstate variants, not {4 * (n or 1)} (4 facings x its variants)")
+    for name in ("carpet_floor_slab", "access_floor_slab"):
+        m = ASSETS / "models" / "block" / f"{name}.json"
+        if not m.is_file() or load(m).get("textures", {}).get("bottom") != f"{MOD}:block/pi_slab_soffit":
+            err(f"{name}: its model must show the painted slab underneath (pi_slab_soffit)")
+        if f'"{name}"' not in java:
+            err(f"nuclear/PlantInterior.java: {name} must be one of its CUBES")
+    panels = load(ASSETS / "live_panels.json")
+    tele = (ROOT / "src/client/java/io/github/jimbozoomer/jugcraft/client/EdgTelemetry.java").read_text(encoding="utf-8")
+    for key in (SR.VALVE, SR.RELEASE):
+        if key not in panels:
+            err(f"live_panels.json: {key} is missing")
+            continue
+        for e in panels[key]["elements"]:
+            ch = e.get("ch")
+            if ch and f'"{ch}"' not in tele:
+                err(f"{key}: client/EdgTelemetry.java doesn't read its live channel {ch!r}")
+    lang = load(ASSETS / "lang" / "en_us.json")
+    src = "".join((ROOT / "src/main/java/io/github/jimbozoomer/jugcraft/nuclear" / f).read_text(encoding="utf-8")
+                  for f in ("SpreadingRoomFire.java", "CsrReleasePanelBlock.java", "TrainFurnitureBlock.java"))
+    keys = {k for k in re.findall(r'"(message\.jugcraft\.nuclear\.csr_[a-z_]+)"', src) if not k.endswith("_")}
+    keys |= {f"message.jugcraft.nuclear.csr_train_{t}" for t in range(3)}
+    keys |= {f"message.jugcraft.nuclear.{k}" for k in re.findall(r'tell\(player, "(csr_[a-z_]+)"\)', src)}
+    for k in sorted(keys):
+        if k not in lang:
+            err(f"en_us.json: {k} is missing (the spreading room's messages)")
+
+def check_overview_screen():
+    """The plant overview screens (round 34, tools/overview_screen.py, tools/overview_display.py): registered as the
+    overview kind with its block entity; the raceway; their frame and pages in control_boards.json.gz on their own
+    legend texture, none of a page's faces overlapping in one plane (drawn over the frame, live parts too); the pages,
+    the trended values and every word, line, lamp, patch, bar and click place named as nuclear/OverviewScreen.java (and
+    the plant's BoardPlant.java and DisplayWall.java) know them; their messages in the language file."""
+    import gzip
+    import overview_screen as OS
+    import overview_zcheck as ZC
+    java_root = ROOT / "src/main/java/io/github/jimbozoomer/jugcraft/nuclear"
+    interior = (java_root / "PlantInterior.java").read_text(encoding="utf-8")
+    for want in ('{"plant_map_screen", 0, "overview"', '{"screen_raceway", 0, "plain"', 'OverviewScreenBlockEntity::new, BLOCKS.get("plant_map_screen")'):
+        if want not in interior:
+            err(f"nuclear/PlantInterior.java: missing {want}...")
+    ov = (java_root / "OverviewScreen.java").read_text(encoding="utf-8")
+    plant = (java_root / "BoardPlant.java").read_text(encoding="utf-8") + (java_root / "DisplayWall.java").read_text(encoding="utf-8")
+    pages = re.findall(r'"([a-z]+)"', (re.search(r"PAGES = \{(.*?)\};", ov, re.S) or [None, ""])[1])
+    if pages != [p for p in OS.PAGES if p != "map"]:
+        err(f"nuclear/OverviewScreen.java PAGES {pages} are not tools/overview_screen.py's pages {OS.PAGES} but the map")
+    boards = json.loads(gzip.open(ASSETS / "control_boards.json.gz").read()) if (ASSETS / "control_boards.json.gz").is_file() else {}
+    keys = [OS.KEY] + [f"{OS.KEY}/{p}" for p in OS.PAGES]
+    for key in keys:
+        if key not in boards:
+            err(f"control_boards.json.gz: {key} is missing (the plant overview screen)")
+    if not (ASSETS / "textures" / "entity" / "overview_screen_legends.png").is_file():
+        err("textures/entity/overview_screen_legends.png is missing (tools/overview_screen.py legend_image)")
+    if OS.KEY in boards and boards[OS.KEY]["live"].get("penValues") != OS.PEN_VALUES:
+        err("control_boards.json.gz: the overview screen's trended values are not tools/overview_screen.py PEN_VALUES")
+    ov_known = set(re.findall(r'"(ov\.[a-z0-9_.]+)"', ov))
+    plant_known = set(re.findall(r'"([a-z0-9_.]+)"', plant))
+    ov_patterns = (r"ov\.rm\d+", r"ov\.loop[1-4]_(flow|thot|tcold)", r"ov\.rcp[1-4]", r"ov\.sg[1-4]_(level|press)", r"ov\.t\.edg_[ab]",
+                   r"ov\.edg_[ab]_(state|since|rpm|kw|air|kv|hz|mode|day|seq)", r"ov\.seq_[ab][1-8]", r"ov\.hv[0-3][ab]", r"ov\.cwp[0-3]", r"ov\.rod[0-4]",
+                   r"ov\.rad\.(cntmt|turb|aux|fuel|cr)")
+    plant_patterns = (r"rcp[1-4]\.run", r"(ccp|sip|rhr)_[ab]\.run", r"afw_(a|b|td)\.run", r"mfp_[ab]\.run", r"edg_[ab]\.(running|bkr|kw|rpm)",
+                      r"sg[1-4]\.nr")
+
+    def known(name):
+        if name.startswith("ov."):
+            return name in ov_known or any(re.fullmatch(p, name) for p in ov_patterns)
+        return name in plant_known or name in ov_known or any(re.fullmatch(p, name) for p in plant_patterns) or f'"{name}"' in ov
+    for key in keys:
+        if key not in boards:
+            continue
+        ops = boards[key]
+        live = ops.get("live", {})
+        uvs = re.findall(r'\["@", ([-0-9.e]+), ([-0-9.e]+), ([-0-9.e]+), ([-0-9.e]+)\]', json.dumps(ops))
+        if any(not 0 <= float(v) <= 1 for uv in uvs for v in uv):
+            err(f"{key}: its legends' places must lie on the overview screen's legend texture")
+        names = [("word", e["id"]) for e in live.get("texts", [])] + [("line or lamp", e["s"]) for k in ("lamps", "flows") for e in live.get(k, [])]
+        names += [("patch", e["id"]) for e in live.get("fills", [])] + [("bar", e["v"]) for e in live.get("levels", [])]
+        names += [("trace", p["v"]) for e in live.get("pens", []) for p in e["pens"]]
+        for what, name in sorted(set(names)):
+            if not known(name):
+                err(f"{key}: its {what} {name!r} is not one nuclear/OverviewScreen.java (or BoardPlant.java) knows")
+        for e in live.get("pens", []):
+            for p in e["pens"]:
+                if OS.PEN_VALUES[p.get("i", -1)] != p["v"]:
+                    err(f"{key}: a trace's index doesn't name its value {p['v']}")
+        for h in live.get("hits", []):
+            if h["page"] not in OS.PAGES or not h["name"]:
+                err(f"{key}: a click place goes to {h['page']!r}, not a page")
+        if key.endswith("/map") and len(live.get("hits", [])) < 12:
+            err(f"{key}: the map's buildings must each be a click place")
+        if "/" in key and not key.endswith(("/map", "/nosignal")) and not any(h["page"] == "map" for h in live.get("hits", [])):
+            err(f"{key}: a building's page needs its SITE MAP button")
+    for page in OS.PAGES:
+        bad = ZC.overlaps(page)
+        if bad:
+            err(f"overview screen page {page}: {len(bad)} pairs of faces overlap in one plane, e.g. {bad[0][:4]}")
+    lang = load(ASSETS / "lang" / "en_us.json")
+    src = ov + (java_root / "OverviewScreenBlockEntity.java").read_text(encoding="utf-8")
+    for k in sorted(set(re.findall(r'"(message\.jugcraft\.nuclear\.overview_[a-z_]+)"', src))):
+        if k not in lang:
+            err(f"en_us.json: {k} is missing (the overview screen's messages)")
+    for part in range(6):
+        m = ASSETS / "models" / "block" / f"plant_map_screen_{part}.json"
+        if not m.is_file() or "pi_ovs_bezel" not in m.read_text(encoding="utf-8"):
+            err(f"plant_map_screen part {part}: its model must be the display's (tools/overview_display.py)")
 # The first aluminum line (docs/features/aluminum-bootstrap-check.md): the machines that make aluminum from bauxite, and
 # the machine that makes their lye, built from these crafting recipes.
 ALUMINUM_ENTRY = ("electrolytic_separator", "bauxite_digester", "aluminate_filter_press", "alumina_calciner",

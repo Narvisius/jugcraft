@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "NBN",
+    "BWB"
+  ],
+  "key": {
+    "N": "minecraft:iron_nugget",
+    "B": "minecraft:blue_dye",
+    "W": "minecraft:white_dye"
+  },
+  "result": {
+    "id": "jugcraft:warehouse_aisle_sign",
+    "count": 2
+  }
+}

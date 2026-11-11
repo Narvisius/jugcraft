@@ -101,7 +101,7 @@ public class ControlMonitorRenderer implements BlockEntityRenderer<ControlMonito
 	private void add(State state, String text, int color, float x, float y) {
 		int room = (int) (ControlMonitorBlock.WIDTH * PIXELS - x - 4);
 		String fitted = font.width(text) > room ? font.plainSubstrByWidth(text, room) : text;
-		state.lines.add(new Line(Component.literal(fitted).getVisualOrderText(), color, x, y));
+		state.lines.add(new Line(Texts.of(fitted), color, x, y));
 	}
 
 	private static String bar(int percent, int cells) {

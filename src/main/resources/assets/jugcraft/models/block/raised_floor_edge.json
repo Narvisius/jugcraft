@@ -1,0 +1,148 @@
+{
+  "textures": {
+    "particle": "jugcraft:block/raised_floor",
+    "side": "jugcraft:block/raised_floor_side",
+    "nosing": "jugcraft:block/raised_floor_nosing",
+    "light": "jugcraft:block/raised_floor_light"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        1.6,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            13,
+            16,
+            14.6
+          ],
+          "texture": "#side"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        1.6,
+        0.2
+      ],
+      "to": [
+        16,
+        2.45,
+        0.2
+      ],
+      "light_emission": 15,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            6,
+            16,
+            7
+          ],
+          "texture": "#light"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        1.6,
+        0
+      ],
+      "to": [
+        16,
+        1.6,
+        0.2
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            0.2
+          ],
+          "texture": "#side"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        2.45,
+        0
+      ],
+      "to": [
+        16,
+        3.1,
+        0.56
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            4,
+            16,
+            4.65
+          ],
+          "texture": "#nosing"
+        },
+        "south": {
+          "uv": [
+            0,
+            4,
+            16,
+            4.65
+          ],
+          "texture": "#nosing"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            0.56
+          ],
+          "texture": "#nosing"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            0.56
+          ],
+          "texture": "#nosing"
+        },
+        "east": {
+          "uv": [
+            0,
+            4,
+            0.56,
+            4.65
+          ],
+          "texture": "#nosing"
+        },
+        "west": {
+          "uv": [
+            0,
+            4,
+            0.56,
+            4.65
+          ],
+          "texture": "#nosing"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PCP",
+    "I I",
+    "W W"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "C": "jugcraft:basic_circuit",
+    "I": "minecraft:iron_ingot",
+    "W": "minecraft:iron_nugget"
+  },
+  "result": {
+    "id": "jugcraft:battery_test_cart",
+    "count": 1
+  }
+}

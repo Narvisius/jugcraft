@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "QQCCQQ",
+    "QQ  QQ"
+  ],
+  "key": {
+    "C": "minecraft:cauldron",
+    "Q": "minecraft:smooth_quartz"
+  },
+  "result": {
+    "id": "jugcraft:vanity_counter",
+    "count": 2
+  }
+}

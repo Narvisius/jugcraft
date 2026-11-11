@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "SSGGSS",
+    "SSBBSS",
+    "SSWWSS"
+  ],
+  "key": {
+    "B": "minecraft:glass_bottle",
+    "G": "minecraft:glass_pane",
+    "S": "#c:plates/steel",
+    "W": "minecraft:water_bucket"
+  },
+  "result": {
+    "id": "jugcraft:bottle_filler",
+    "count": 2
+  }
+}

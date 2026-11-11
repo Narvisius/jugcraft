@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PYP",
+    "P P",
+    "PYP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "Y": "minecraft:yellow_dye"
+  },
+  "result": {
+    "id": "jugcraft:chem_flam_cabinet",
+    "count": 1
+  }
+}

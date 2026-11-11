@@ -105,7 +105,7 @@ public class StatusScreenRenderer implements BlockEntityRenderer<StatusScreenBlo
 	}
 
 	private void add(State state, float x, float y, float scale, String text, int colour) {
-		state.lines.add(new Line(x, y, scale, Component.literal(text).getVisualOrderText(), colour));
+		state.lines.add(new Line(x, y, scale, Texts.of(text), colour));
 	}
 
 	private static String bar(double value, int cells) {

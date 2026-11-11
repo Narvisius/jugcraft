@@ -1534,10 +1534,20 @@ def main():
     entity_dir = ROOT / "src" / "main" / "resources" / "assets" / "jugcraft" / "textures" / "entity"
     entity_dir.mkdir(parents=True, exist_ok=True)
     power_lines.draw_sheet().save(entity_dir / "power_lines.png", optimize=True)
+    # The supports' models, their texture and data (power lines round 2, tools/line_models.py).
+    import line_models
+    line_models.main()
 
     import nuclear
     for name, img in nuclear.draw_item_textures().items():
         save(img, "item", name)
+    # The automated warehouse's textures (tools/warehouse_data.py).
+    import warehouse_data
+    for name, img in warehouse_data.draw_block_textures().items():
+        save(img, "block", name)
+    import exterior_data
+    for name, img in exterior_data.draw_block_textures().items():
+        save(img, "block", name)
     for name, img in nuclear.draw_block_textures().items():
         save(img, "block", name)
     nuclear.draw_sheet().save(entity_dir / "hazmat.png", optimize=True)
@@ -1556,6 +1566,24 @@ def main():
     nuclear.draw_hud_trefoil().save(TEX / "gui" / "radiation_trefoil.png", optimize=True)
     nuclear.draw_scram_button().save(TEX / "gui" / "reactor_scram.png", optimize=True)
     nuclear.draw_equipment_sheet().save(entity_dir / "nuclear_equipment.png", optimize=True)
+    # The live control boards' legends, scales and nameplates (round 27, tools/board_live.py).
+    import board_live
+    board_live.legend_image().save(entity_dir / "control_board_legends.png", optimize=True)
+    # The diesel room's plates, signs and gauge faces (round 31, tools/diesel_set.py).
+    import diesel_set
+    diesel_set.legend_image().save(entity_dir / "diesel_legends.png", optimize=True)
+    # The main turbine-generator's and its reheaters' plates, signs and gauge faces (turbine hall part 1).
+    import turbine_set
+    turbine_set.legend_image().save(entity_dir / "turbine_legends.png", optimize=True)
+    # The control room's plant display wall's words and plates (round 32, tools/display_wall.py).
+    import display_wall
+    display_wall.legend_image().save(entity_dir / "display_wall_legends.png", optimize=True)
+    # The plant overview screens' words, plates and colours (round 34, tools/overview_screen.py).
+    import overview_screen
+    overview_screen.legend_image().save(entity_dir / "overview_screen_legends.png", optimize=True)
+    # The 480 V load centre's plates, labels and windows (older rooms round 1, tools/load_centre.py).
+    import load_centre
+    load_centre.legend_image().save(entity_dir / "load_centre_legends.png", optimize=True)
     # The equipment's and power lines' miniature items are drawn in flat-colour versions of their sheets.
     import structure_items
     structure_items.write_item_sheets(entity_dir)

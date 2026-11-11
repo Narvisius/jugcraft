@@ -1,0 +1,73 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "cases": [
+      {
+        "when": "stowed",
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:item/plasma_baton_stowed"
+        }
+      },
+      {
+        "when": "off",
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:item/plasma_baton_off"
+        }
+      },
+      {
+        "when": "lit",
+        "model": {
+          "type": "minecraft:model",
+          "model": "jugcraft:item/plasma_baton"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:select",
+      "property": "minecraft:display_context",
+      "cases": [
+        {
+          "when": "gui",
+          "model": {
+            "type": "minecraft:composite",
+            "models": [
+              {
+                "type": "minecraft:model",
+                "model": "jugcraft:item/plasma_baton"
+              },
+              {
+                "type": "minecraft:special",
+                "base": "jugcraft:item/plasma_baton",
+                "model": {
+                  "type": "jugcraft:baton_plasma",
+                  "flat": true
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "fallback": {
+        "type": "minecraft:composite",
+        "models": [
+          {
+            "type": "minecraft:model",
+            "model": "jugcraft:item/plasma_baton"
+          },
+          {
+            "type": "minecraft:special",
+            "base": "jugcraft:item/plasma_baton",
+            "model": {
+              "type": "jugcraft:baton_plasma",
+              "flat": false
+            }
+          }
+        ]
+      }
+    }
+  }
+}

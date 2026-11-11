@@ -11,7 +11,6 @@ Everything is a real 3D model in model pixels (16 a block), front to the south f
 Round parts are 16-sided: eight boxes turned 22.5 degrees apart (their ends are the sides), with one flat quad on top
 whose texture is cut to the same 16-sided outline, so no two faces ever lie in the same plane (no z-fighting).
 """
-from asset_fonts import font_path
 import math
 
 import numpy as np
@@ -28,7 +27,7 @@ SIDES = 16
 
 def font(size, bold=True, condensed=False):
     name = "DejaVuSans" + ("Condensed" if condensed else "") + ("-Bold" if bold else "") + ".ttf"
-    return ImageFont.truetype(font_path(name), size)
+    return ImageFont.truetype(FONT_DIR + name, size)
 
 
 def trefoil(d, cx, cy, r, fg=INK, bg=YELLOW, ring=False):
@@ -626,10 +625,7 @@ def models():
            "lead_locker": locker_model(False), "lead_locker_open": locker_model(True),
            "lead_glass": {"parent": "minecraft:block/cube_all",
                           "textures": {"all": {"sprite": rid("block/lead_glass"), "force_translucent": True}}}}
-    for half in ("bottom", "top"):
-        for hinge in ("left", "right"):
-            for open_ in (False, True):
-                out[f"lead_door_{half}_{hinge}{'_open' if open_ else ''}"] = door_model(half, hinge, open_)
+    # The door's models and blockstate are tools/plant_doors.py's (doors round: it swings, in its frame).
     for colour in BEACON_COLOURS:
         out[f"warning_beacon_{colour}"] = beacon_model(colour)
     return out
@@ -685,19 +681,6 @@ def write_assets(write, rid_, assets, lang):
     write(assets / "items" / "warning_beacon.json", {"model": {"type": "minecraft:model", "model": rid("block/warning_beacon_amber")}})
     write(assets / "blockstates" / "lead_glass.json", {"variants": {"": {"model": rid("block/lead_glass")}}})
     write(assets / "items" / "lead_glass.json", {"model": {"type": "minecraft:model", "model": rid("block/lead_glass")}})
-    # The door: the vanilla door blockstate pattern over its own models.
-    closed = {"east": 0, "south": 90, "west": 180, "north": 270}
-    variants = {}
-    for facing, y0 in closed.items():
-        for half, part in (("lower", "bottom"), ("upper", "top")):
-            for hinge in ("left", "right"):
-                for opened in (False, True):
-                    y = (y0 + (90 if hinge == "left" else 270)) % 360 if opened else y0
-                    v = {"model": rid(f"block/lead_door_{part}_{hinge}{'_open' if opened else ''}")}
-                    if y:
-                        v["y"] = y
-                    variants[f"facing={facing},half={half},hinge={hinge},open={'true' if opened else 'false'}"] = v
-    write(assets / "blockstates" / "lead_door.json", {"variants": variants})
     write(assets / "models" / "item" / "lead_door.json", {"parent": "minecraft:item/generated", "textures": {"layer0": rid("item/lead_door")}})
     write(assets / "items" / "lead_door.json", {"model": {"type": "minecraft:model", "model": rid("item/lead_door")}})
 

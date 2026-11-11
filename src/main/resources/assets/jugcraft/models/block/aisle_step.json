@@ -1,0 +1,163 @@
+{
+ "textures": {
+  "carpet": "jugcraft:block/carpet_tile",
+  "nosing": "jugcraft:block/raised_floor_nosing",
+  "light": "jugcraft:block/raised_floor_light",
+  "particle": "jugcraft:block/carpet_tile"
+ },
+ "elements": [
+  {
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    16,
+    8,
+    14.5
+   ],
+   "faces": {
+    "north": {
+     "texture": "#carpet"
+    },
+    "east": {
+     "texture": "#carpet"
+    },
+    "west": {
+     "texture": "#carpet"
+    },
+    "up": {
+     "texture": "#carpet"
+    },
+    "down": {
+     "texture": "#carpet"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    0,
+    14.5
+   ],
+   "to": [
+    16,
+    5.3,
+    16
+   ],
+   "faces": {
+    "south": {
+     "texture": "#carpet"
+    },
+    "up": {
+     "texture": "#carpet"
+    },
+    "east": {
+     "texture": "#carpet"
+    },
+    "west": {
+     "texture": "#carpet"
+    },
+    "down": {
+     "texture": "#carpet"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    5.3,
+    14.5
+   ],
+   "to": [
+    16,
+    6.5,
+    15.6
+   ],
+   "faces": {
+    "east": {
+     "texture": "#carpet"
+    },
+    "west": {
+     "texture": "#carpet"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    5.3,
+    15.6
+   ],
+   "to": [
+    16,
+    6.5,
+    15.7
+   ],
+   "faces": {
+    "south": {
+     "texture": "#light",
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ]
+    },
+    "east": {
+     "texture": "#light",
+     "uv": [
+      15,
+      0,
+      16,
+      16
+     ]
+    },
+    "west": {
+     "texture": "#light",
+     "uv": [
+      0,
+      0,
+      1,
+      16
+     ]
+    }
+   },
+   "shade": false,
+   "light_emission": 15
+  },
+  {
+   "from": [
+    0,
+    6.5,
+    14.5
+   ],
+   "to": [
+    16,
+    8.1,
+    16
+   ],
+   "faces": {
+    "north": {
+     "texture": "#nosing"
+    },
+    "south": {
+     "texture": "#nosing"
+    },
+    "up": {
+     "texture": "#nosing"
+    },
+    "down": {
+     "texture": "#nosing"
+    },
+    "east": {
+     "texture": "#nosing"
+    },
+    "west": {
+     "texture": "#nosing"
+    }
+   }
+  }
+ ]
+}

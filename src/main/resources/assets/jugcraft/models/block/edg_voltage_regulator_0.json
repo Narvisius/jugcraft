@@ -1,11 +1,20 @@
 {
   "textures": {
+    "pi_brass": "jugcraft:block/pi_brass",
     "pi_cabinet": "jugcraft:block/pi_cabinet",
+    "pi_cabinet_dark": "jugcraft:block/pi_cabinet_dark",
+    "pi_cap_black": "jugcraft:block/pi_cap_black",
+    "pi_cap_red": "jugcraft:block/pi_cap_red",
     "pi_chrome": "jugcraft:block/pi_chrome",
     "pi_edg_voltage_regulator_f_0": "jugcraft:block/pi_edg_voltage_regulator_f_0",
+    "pi_lens_white": "jugcraft:block/pi_lens_white",
+    "pi_meter_glass": "jugcraft:block/pi_meter_glass",
     "pi_pnl_black": "jugcraft:block/pi_pnl_black",
+    "pi_pnl_white": "jugcraft:block/pi_pnl_white",
+    "pi_relay_glass": "jugcraft:block/pi_relay_glass",
+    "pi_sb_frame": "jugcraft:block/pi_sb_frame",
     "pi_toe_kick": "jugcraft:block/pi_toe_kick",
-    "particle": "jugcraft:block/pi_cabinet"
+    "particle": "jugcraft:block/pi_brass"
   },
   "elements": [
     {
@@ -17,7 +26,7 @@
       "to": [
         15.2,
         1.2,
-        14.6
+        14.0
       ],
       "faces": {
         "north": {
@@ -44,12 +53,172 @@
       "from": [
         0.4,
         1.2,
-        2
+        1.6
+      ],
+      "to": [
+        15.6,
+        4.3,
+        14.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cabinet"
+        },
+        "south": {
+          "texture": "#pi_cabinet"
+        },
+        "east": {
+          "texture": "#pi_cabinet"
+        },
+        "west": {
+          "texture": "#pi_cabinet"
+        },
+        "up": {
+          "texture": "#pi_cabinet"
+        },
+        "down": {
+          "texture": "#pi_cabinet"
+        }
+      }
+    },
+    {
+      "from": [
+        0.4,
+        9.5,
+        1.6
       ],
       "to": [
         15.6,
         16,
-        15
+        14.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cabinet"
+        },
+        "south": {
+          "texture": "#pi_cabinet"
+        },
+        "east": {
+          "texture": "#pi_cabinet"
+        },
+        "west": {
+          "texture": "#pi_cabinet"
+        },
+        "up": {
+          "texture": "#pi_cabinet"
+        },
+        "down": {
+          "texture": "#pi_cabinet"
+        }
+      }
+    },
+    {
+      "from": [
+        0.4,
+        4.3,
+        1.6
+      ],
+      "to": [
+        2.0,
+        9.5,
+        14.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cabinet"
+        },
+        "south": {
+          "texture": "#pi_cabinet"
+        },
+        "east": {
+          "texture": "#pi_cabinet"
+        },
+        "west": {
+          "texture": "#pi_cabinet"
+        },
+        "up": {
+          "texture": "#pi_cabinet"
+        },
+        "down": {
+          "texture": "#pi_cabinet"
+        }
+      }
+    },
+    {
+      "from": [
+        14.0,
+        4.3,
+        1.6
+      ],
+      "to": [
+        15.6,
+        9.5,
+        14.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cabinet"
+        },
+        "south": {
+          "texture": "#pi_cabinet"
+        },
+        "east": {
+          "texture": "#pi_cabinet"
+        },
+        "west": {
+          "texture": "#pi_cabinet"
+        },
+        "up": {
+          "texture": "#pi_cabinet"
+        },
+        "down": {
+          "texture": "#pi_cabinet"
+        }
+      }
+    },
+    {
+      "from": [
+        2.0,
+        4.3,
+        1.6
+      ],
+      "to": [
+        14.0,
+        9.5,
+        10.299999999999999
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cabinet"
+        },
+        "south": {
+          "texture": "#pi_cabinet"
+        },
+        "east": {
+          "texture": "#pi_cabinet"
+        },
+        "west": {
+          "texture": "#pi_cabinet"
+        },
+        "up": {
+          "texture": "#pi_cabinet"
+        },
+        "down": {
+          "texture": "#pi_cabinet"
+        }
+      }
+    },
+    {
+      "from": [
+        0.6,
+        1.4,
+        14.6
+      ],
+      "to": [
+        15.4,
+        4.3,
+        15.0
       ],
       "faces": {
         "north": {
@@ -74,46 +243,694 @@
     },
     {
       "from": [
-        14.299999999999999,
-        14.2,
-        15
+        0.6,
+        9.5,
+        14.6
       ],
       "to": [
-        14.799999999999999,
+        15.4,
+        16,
+        15.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cabinet"
+        },
+        "south": {
+          "texture": "#pi_edg_voltage_regulator_f_0"
+        },
+        "east": {
+          "texture": "#pi_cabinet"
+        },
+        "west": {
+          "texture": "#pi_cabinet"
+        },
+        "up": {
+          "texture": "#pi_cabinet"
+        },
+        "down": {
+          "texture": "#pi_cabinet"
+        }
+      }
+    },
+    {
+      "from": [
+        0.6,
+        4.3,
+        14.6
+      ],
+      "to": [
+        2.0,
+        9.5,
+        15.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cabinet"
+        },
+        "south": {
+          "texture": "#pi_edg_voltage_regulator_f_0"
+        },
+        "east": {
+          "texture": "#pi_cabinet"
+        },
+        "west": {
+          "texture": "#pi_cabinet"
+        },
+        "up": {
+          "texture": "#pi_cabinet"
+        },
+        "down": {
+          "texture": "#pi_cabinet"
+        }
+      }
+    },
+    {
+      "from": [
+        14.0,
+        4.3,
+        14.6
+      ],
+      "to": [
+        15.4,
+        9.5,
+        15.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cabinet"
+        },
+        "south": {
+          "texture": "#pi_edg_voltage_regulator_f_0"
+        },
+        "east": {
+          "texture": "#pi_cabinet"
+        },
+        "west": {
+          "texture": "#pi_cabinet"
+        },
+        "up": {
+          "texture": "#pi_cabinet"
+        },
+        "down": {
+          "texture": "#pi_cabinet"
+        }
+      }
+    },
+    {
+      "from": [
+        2.0,
+        4.3,
+        14.7
+      ],
+      "to": [
+        14.0,
+        9.5,
+        14.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_relay_glass"
+        },
+        "south": {
+          "texture": "#pi_relay_glass"
+        }
+      }
+    },
+    {
+      "from": [
+        2.0,
+        4.3,
+        14.8
+      ],
+      "to": [
+        2.2,
+        9.5,
+        15.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        13.8,
+        4.3,
+        14.8
+      ],
+      "to": [
+        14.0,
+        9.5,
+        15.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        2.2,
+        4.3,
+        14.8
+      ],
+      "to": [
+        13.8,
+        4.5,
+        15.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        2.2,
+        9.3,
+        14.8
+      ],
+      "to": [
+        13.8,
+        9.5,
+        15.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        0.15,
+        4.0,
+        14.5
+      ],
+      "to": [
+        0.6,
+        6.0,
+        15.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome"
+        },
+        "south": {
+          "texture": "#pi_chrome"
+        },
+        "east": {
+          "texture": "#pi_chrome"
+        },
+        "west": {
+          "texture": "#pi_chrome"
+        },
+        "up": {
+          "texture": "#pi_chrome"
+        },
+        "down": {
+          "texture": "#pi_chrome"
+        }
+      }
+    },
+    {
+      "from": [
+        13.7,
+        12.4,
+        15.0
+      ],
+      "to": [
+        14.7,
+        16,
+        15.15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        14.0,
+        13.0,
+        15.15
+      ],
+      "to": [
+        14.399999999999999,
+        16,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome"
+        },
+        "south": {
+          "texture": "#pi_chrome"
+        },
+        "east": {
+          "texture": "#pi_chrome"
+        },
+        "west": {
+          "texture": "#pi_chrome"
+        },
+        "up": {
+          "texture": "#pi_chrome"
+        },
+        "down": {
+          "texture": "#pi_chrome"
+        }
+      }
+    },
+    {
+      "from": [
+        13.85,
+        15.8,
+        15.5
+      ],
+      "to": [
+        14.549999999999999,
+        16,
+        15.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome"
+        },
+        "south": {
+          "texture": "#pi_chrome"
+        },
+        "east": {
+          "texture": "#pi_chrome"
+        },
+        "west": {
+          "texture": "#pi_chrome"
+        },
+        "up": {
+          "texture": "#pi_chrome"
+        },
+        "down": {
+          "texture": "#pi_chrome"
+        }
+      }
+    },
+    {
+      "from": [
+        14.049999999999999,
+        12.7,
+        15.15
+      ],
+      "to": [
+        14.35,
+        12.95,
+        15.3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_brass"
+        },
+        "south": {
+          "texture": "#pi_brass"
+        },
+        "east": {
+          "texture": "#pi_brass"
+        },
+        "west": {
+          "texture": "#pi_brass"
+        },
+        "up": {
+          "texture": "#pi_brass"
+        },
+        "down": {
+          "texture": "#pi_brass"
+        }
+      }
+    },
+    {
+      "from": [
+        1.4,
+        14.3,
+        15.0
+      ],
+      "to": [
+        1.7999999999999998,
+        16,
+        15.7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        6.6,
+        14.3,
+        15.0
+      ],
+      "to": [
+        7.0,
+        16,
+        15.7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        1.7999999999999998,
+        14.3,
+        15.0
+      ],
+      "to": [
+        6.6,
+        14.700000000000001,
+        15.7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        1.7999999999999998,
+        14.700000000000001,
+        15.0
+      ],
+      "to": [
+        6.6,
+        16,
+        15.15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_edg_voltage_regulator_f_0"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        1.7999999999999998,
+        14.700000000000001,
+        15.549999999999999
+      ],
+      "to": [
+        6.6,
         16,
         15.6
       ],
       "faces": {
         "north": {
-          "texture": "#pi_chrome"
+          "texture": "#pi_meter_glass"
         },
         "south": {
-          "texture": "#pi_edg_voltage_regulator_f_0"
-        },
-        "east": {
-          "texture": "#pi_chrome"
-        },
-        "west": {
-          "texture": "#pi_chrome"
-        },
-        "up": {
-          "texture": "#pi_chrome"
-        },
-        "down": {
-          "texture": "#pi_chrome"
+          "texture": "#pi_meter_glass"
         }
       }
     },
     {
       "from": [
-        1.6,
-        13.4,
-        15
+        3.95,
+        14.360000000000001,
+        15.7
       ],
       "to": [
-        7.6,
+        4.45,
+        14.64,
+        15.85
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cap_black"
+        },
+        "south": {
+          "texture": "#pi_cap_black"
+        },
+        "east": {
+          "texture": "#pi_cap_black"
+        },
+        "west": {
+          "texture": "#pi_cap_black"
+        },
+        "up": {
+          "texture": "#pi_cap_black"
+        },
+        "down": {
+          "texture": "#pi_cap_black"
+        }
+      }
+    },
+    {
+      "from": [
+        7.8,
+        14.3,
+        15.0
+      ],
+      "to": [
+        8.2,
         16,
-        15.5
+        15.7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        12.999999999999998,
+        14.3,
+        15.0
+      ],
+      "to": [
+        13.399999999999999,
+        16,
+        15.7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        8.2,
+        14.3,
+        15.0
+      ],
+      "to": [
+        12.999999999999998,
+        14.700000000000001,
+        15.7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        8.2,
+        14.700000000000001,
+        15.0
+      ],
+      "to": [
+        12.999999999999998,
+        16,
+        15.15
       ],
       "faces": {
         "north": {
@@ -138,21 +955,105 @@
     },
     {
       "from": [
-        8.4,
-        13.4,
-        14.87
+        8.2,
+        14.700000000000001,
+        15.549999999999999
       ],
       "to": [
-        14.4,
-        15.87,
-        15.5
+        12.999999999999998,
+        16,
+        15.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_meter_glass"
+        },
+        "south": {
+          "texture": "#pi_meter_glass"
+        }
+      }
+    },
+    {
+      "from": [
+        10.35,
+        14.360000000000001,
+        15.7
+      ],
+      "to": [
+        10.85,
+        14.64,
+        15.85
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cap_black"
+        },
+        "south": {
+          "texture": "#pi_cap_black"
+        },
+        "east": {
+          "texture": "#pi_cap_black"
+        },
+        "west": {
+          "texture": "#pi_cap_black"
+        },
+        "up": {
+          "texture": "#pi_cap_black"
+        },
+        "down": {
+          "texture": "#pi_cap_black"
+        }
+      }
+    },
+    {
+      "from": [
+        1.5000000000000002,
+        9.8,
+        15.0
+      ],
+      "to": [
+        4.9,
+        12.8,
+        15.12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome"
+        },
+        "south": {
+          "texture": "#pi_edg_voltage_regulator_f_0"
+        },
+        "east": {
+          "texture": "#pi_chrome"
+        },
+        "west": {
+          "texture": "#pi_chrome"
+        },
+        "up": {
+          "texture": "#pi_chrome"
+        },
+        "down": {
+          "texture": "#pi_chrome"
+        }
+      }
+    },
+    {
+      "from": [
+        2.766,
+        11.3047,
+        15.12
+      ],
+      "to": [
+        2.8745000000000003,
+        11.6953,
+        15.42
       ],
       "faces": {
         "north": {
           "texture": "#pi_pnl_black"
         },
         "south": {
-          "texture": "#pi_edg_voltage_regulator_f_0"
+          "texture": "#pi_pnl_black"
         },
         "east": {
           "texture": "#pi_pnl_black"
@@ -166,6 +1067,1873 @@
         "down": {
           "texture": "#pi_pnl_black"
         }
+      },
+      "rotation": {
+        "angle": 40,
+        "axis": "z",
+        "origin": [
+          3.2,
+          11.5,
+          15.0
+        ]
+      }
+    },
+    {
+      "from": [
+        2.8745000000000003,
+        11.1528,
+        15.12
+      ],
+      "to": [
+        3.0481000000000003,
+        11.8472,
+        15.42
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      },
+      "rotation": {
+        "angle": 40,
+        "axis": "z",
+        "origin": [
+          3.2,
+          11.5,
+          15.0
+        ]
+      }
+    },
+    {
+      "from": [
+        3.0481000000000003,
+        11.066,
+        15.12
+      ],
+      "to": [
+        3.3519,
+        11.934,
+        15.42
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      },
+      "rotation": {
+        "angle": 40,
+        "axis": "z",
+        "origin": [
+          3.2,
+          11.5,
+          15.0
+        ]
+      }
+    },
+    {
+      "from": [
+        3.3519,
+        11.1528,
+        15.12
+      ],
+      "to": [
+        3.5255,
+        11.8472,
+        15.42
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      },
+      "rotation": {
+        "angle": 40,
+        "axis": "z",
+        "origin": [
+          3.2,
+          11.5,
+          15.0
+        ]
+      }
+    },
+    {
+      "from": [
+        3.5255,
+        11.3047,
+        15.12
+      ],
+      "to": [
+        3.6340000000000003,
+        11.6953,
+        15.42
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      },
+      "rotation": {
+        "angle": 40,
+        "axis": "z",
+        "origin": [
+          3.2,
+          11.5,
+          15.0
+        ]
+      }
+    },
+    {
+      "from": [
+        3.0460000000000003,
+        10.835,
+        15.42
+      ],
+      "to": [
+        3.354,
+        12.165,
+        15.969999999999999
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      },
+      "rotation": {
+        "angle": 40,
+        "axis": "z",
+        "origin": [
+          3.2,
+          11.5,
+          15.0
+        ]
+      }
+    },
+    {
+      "from": [
+        3.1300000000000003,
+        11.71,
+        15.969999999999999
+      ],
+      "to": [
+        3.27,
+        12.116,
+        16.12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_white",
+          "uv": [
+            12.73,
+            3.884,
+            12.87,
+            4.29
+          ]
+        },
+        "south": {
+          "texture": "#pi_pnl_white",
+          "uv": [
+            3.13,
+            3.884,
+            3.27,
+            4.29
+          ]
+        },
+        "east": {
+          "texture": "#pi_pnl_white",
+          "uv": [
+            0,
+            3.884,
+            0.05,
+            4.29
+          ]
+        },
+        "west": {
+          "texture": "#pi_pnl_white",
+          "uv": [
+            15.95,
+            3.884,
+            16.0,
+            4.29
+          ]
+        },
+        "up": {
+          "texture": "#pi_pnl_white",
+          "uv": [
+            3.13,
+            15.95,
+            3.27,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#pi_pnl_white",
+          "uv": [
+            3.13,
+            0,
+            3.27,
+            0.05
+          ]
+        }
+      },
+      "rotation": {
+        "angle": 40,
+        "axis": "z",
+        "origin": [
+          3.2,
+          11.5,
+          15.0
+        ]
+      }
+    },
+    {
+      "from": [
+        5.8,
+        9.8,
+        15.0
+      ],
+      "to": [
+        9.4,
+        12.8,
+        15.12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome"
+        },
+        "south": {
+          "texture": "#pi_edg_voltage_regulator_f_0"
+        },
+        "east": {
+          "texture": "#pi_chrome"
+        },
+        "west": {
+          "texture": "#pi_chrome"
+        },
+        "up": {
+          "texture": "#pi_chrome"
+        },
+        "down": {
+          "texture": "#pi_chrome"
+        }
+      }
+    },
+    {
+      "from": [
+        7.1659999999999995,
+        11.3047,
+        15.12
+      ],
+      "to": [
+        7.2745,
+        11.6953,
+        15.42
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        7.2745,
+        11.1528,
+        15.12
+      ],
+      "to": [
+        7.448099999999999,
+        11.8472,
+        15.42
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        7.448099999999999,
+        11.066,
+        15.12
+      ],
+      "to": [
+        7.7519,
+        11.934,
+        15.42
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        7.7519,
+        11.1528,
+        15.12
+      ],
+      "to": [
+        7.9254999999999995,
+        11.8472,
+        15.42
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        7.9254999999999995,
+        11.3047,
+        15.12
+      ],
+      "to": [
+        8.033999999999999,
+        11.6953,
+        15.42
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        7.446,
+        10.835,
+        15.42
+      ],
+      "to": [
+        7.754,
+        12.165,
+        15.969999999999999
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        7.529999999999999,
+        11.71,
+        15.969999999999999
+      ],
+      "to": [
+        7.67,
+        12.116,
+        16.12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_white",
+          "uv": [
+            8.33,
+            3.884,
+            8.47,
+            4.29
+          ]
+        },
+        "south": {
+          "texture": "#pi_pnl_white",
+          "uv": [
+            7.53,
+            3.884,
+            7.67,
+            4.29
+          ]
+        },
+        "east": {
+          "texture": "#pi_pnl_white",
+          "uv": [
+            0,
+            3.884,
+            0.05,
+            4.29
+          ]
+        },
+        "west": {
+          "texture": "#pi_pnl_white",
+          "uv": [
+            15.95,
+            3.884,
+            16.0,
+            4.29
+          ]
+        },
+        "up": {
+          "texture": "#pi_pnl_white",
+          "uv": [
+            7.53,
+            15.95,
+            7.67,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#pi_pnl_white",
+          "uv": [
+            7.53,
+            0,
+            7.67,
+            0.05
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        10.73,
+        11.298499999999999,
+        15.0
+      ],
+      "to": [
+        10.8975,
+        11.9015,
+        15.3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome"
+        },
+        "south": {
+          "texture": "#pi_chrome"
+        },
+        "east": {
+          "texture": "#pi_chrome"
+        },
+        "west": {
+          "texture": "#pi_chrome"
+        },
+        "up": {
+          "texture": "#pi_chrome"
+        },
+        "down": {
+          "texture": "#pi_chrome"
+        }
+      }
+    },
+    {
+      "from": [
+        10.8975,
+        11.064,
+        15.0
+      ],
+      "to": [
+        11.1655,
+        12.136,
+        15.3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome"
+        },
+        "south": {
+          "texture": "#pi_chrome"
+        },
+        "east": {
+          "texture": "#pi_chrome"
+        },
+        "west": {
+          "texture": "#pi_chrome"
+        },
+        "up": {
+          "texture": "#pi_chrome"
+        },
+        "down": {
+          "texture": "#pi_chrome"
+        }
+      }
+    },
+    {
+      "from": [
+        11.1655,
+        10.93,
+        15.0
+      ],
+      "to": [
+        11.634500000000001,
+        12.27,
+        15.3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome"
+        },
+        "south": {
+          "texture": "#pi_chrome"
+        },
+        "east": {
+          "texture": "#pi_chrome"
+        },
+        "west": {
+          "texture": "#pi_chrome"
+        },
+        "up": {
+          "texture": "#pi_chrome"
+        },
+        "down": {
+          "texture": "#pi_chrome"
+        }
+      }
+    },
+    {
+      "from": [
+        11.634500000000001,
+        11.064,
+        15.0
+      ],
+      "to": [
+        11.9025,
+        12.136,
+        15.3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome"
+        },
+        "south": {
+          "texture": "#pi_chrome"
+        },
+        "east": {
+          "texture": "#pi_chrome"
+        },
+        "west": {
+          "texture": "#pi_chrome"
+        },
+        "up": {
+          "texture": "#pi_chrome"
+        },
+        "down": {
+          "texture": "#pi_chrome"
+        }
+      }
+    },
+    {
+      "from": [
+        11.9025,
+        11.298499999999999,
+        15.0
+      ],
+      "to": [
+        12.07,
+        11.9015,
+        15.3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome"
+        },
+        "south": {
+          "texture": "#pi_chrome"
+        },
+        "east": {
+          "texture": "#pi_chrome"
+        },
+        "west": {
+          "texture": "#pi_chrome"
+        },
+        "up": {
+          "texture": "#pi_chrome"
+        },
+        "down": {
+          "texture": "#pi_chrome"
+        }
+      }
+    },
+    {
+      "from": [
+        10.950000000000001,
+        11.397499999999999,
+        15.3
+      ],
+      "to": [
+        11.0625,
+        11.8025,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_lens_white"
+        },
+        "south": {
+          "texture": "#pi_lens_white"
+        },
+        "east": {
+          "texture": "#pi_lens_white"
+        },
+        "west": {
+          "texture": "#pi_lens_white"
+        },
+        "up": {
+          "texture": "#pi_lens_white"
+        },
+        "down": {
+          "texture": "#pi_lens_white"
+        }
+      }
+    },
+    {
+      "from": [
+        11.0625,
+        11.24,
+        15.3
+      ],
+      "to": [
+        11.2425,
+        11.959999999999999,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_lens_white"
+        },
+        "south": {
+          "texture": "#pi_lens_white"
+        },
+        "east": {
+          "texture": "#pi_lens_white"
+        },
+        "west": {
+          "texture": "#pi_lens_white"
+        },
+        "up": {
+          "texture": "#pi_lens_white"
+        },
+        "down": {
+          "texture": "#pi_lens_white"
+        }
+      }
+    },
+    {
+      "from": [
+        11.2425,
+        11.15,
+        15.3
+      ],
+      "to": [
+        11.557500000000001,
+        12.049999999999999,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_lens_white"
+        },
+        "south": {
+          "texture": "#pi_lens_white"
+        },
+        "east": {
+          "texture": "#pi_lens_white"
+        },
+        "west": {
+          "texture": "#pi_lens_white"
+        },
+        "up": {
+          "texture": "#pi_lens_white"
+        },
+        "down": {
+          "texture": "#pi_lens_white"
+        }
+      }
+    },
+    {
+      "from": [
+        11.557500000000001,
+        11.24,
+        15.3
+      ],
+      "to": [
+        11.7375,
+        11.959999999999999,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_lens_white"
+        },
+        "south": {
+          "texture": "#pi_lens_white"
+        },
+        "east": {
+          "texture": "#pi_lens_white"
+        },
+        "west": {
+          "texture": "#pi_lens_white"
+        },
+        "up": {
+          "texture": "#pi_lens_white"
+        },
+        "down": {
+          "texture": "#pi_lens_white"
+        }
+      }
+    },
+    {
+      "from": [
+        11.7375,
+        11.397499999999999,
+        15.3
+      ],
+      "to": [
+        11.85,
+        11.8025,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_lens_white"
+        },
+        "south": {
+          "texture": "#pi_lens_white"
+        },
+        "east": {
+          "texture": "#pi_lens_white"
+        },
+        "west": {
+          "texture": "#pi_lens_white"
+        },
+        "up": {
+          "texture": "#pi_lens_white"
+        },
+        "down": {
+          "texture": "#pi_lens_white"
+        }
+      }
+    },
+    {
+      "from": [
+        2.0,
+        4.3,
+        10.299999999999999
+      ],
+      "to": [
+        14.0,
+        9.5,
+        10.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "south": {
+          "texture": "#pi_edg_voltage_regulator_f_0"
+        },
+        "east": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "west": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "up": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "down": {
+          "texture": "#pi_cabinet_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        2.05,
+        4.55,
+        10.6
+      ],
+      "to": [
+        13.95,
+        4.85,
+        13.2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome"
+        },
+        "south": {
+          "texture": "#pi_chrome"
+        },
+        "east": {
+          "texture": "#pi_chrome"
+        },
+        "west": {
+          "texture": "#pi_chrome"
+        },
+        "up": {
+          "texture": "#pi_chrome"
+        },
+        "down": {
+          "texture": "#pi_chrome"
+        }
+      }
+    },
+    {
+      "from": [
+        2.05,
+        8.95,
+        10.6
+      ],
+      "to": [
+        13.95,
+        9.25,
+        13.2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome"
+        },
+        "south": {
+          "texture": "#pi_chrome"
+        },
+        "east": {
+          "texture": "#pi_chrome"
+        },
+        "west": {
+          "texture": "#pi_chrome"
+        },
+        "up": {
+          "texture": "#pi_chrome"
+        },
+        "down": {
+          "texture": "#pi_chrome"
+        }
+      }
+    },
+    {
+      "from": [
+        2.3499999999999996,
+        4.8999999999999995,
+        10.6
+      ],
+      "to": [
+        4.15,
+        8.9,
+        13.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_sb_frame"
+        },
+        "south": {
+          "texture": "#pi_edg_voltage_regulator_f_0"
+        },
+        "east": {
+          "texture": "#pi_sb_frame"
+        },
+        "west": {
+          "texture": "#pi_sb_frame"
+        },
+        "up": {
+          "texture": "#pi_sb_frame"
+        },
+        "down": {
+          "texture": "#pi_sb_frame"
+        }
+      }
+    },
+    {
+      "from": [
+        2.4499999999999997,
+        8.8,
+        13.6
+      ],
+      "to": [
+        4.050000000000001,
+        9.15,
+        13.95
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cap_red"
+        },
+        "south": {
+          "texture": "#pi_cap_red"
+        },
+        "east": {
+          "texture": "#pi_cap_red"
+        },
+        "west": {
+          "texture": "#pi_cap_red"
+        },
+        "up": {
+          "texture": "#pi_cap_red"
+        },
+        "down": {
+          "texture": "#pi_cap_red"
+        }
+      }
+    },
+    {
+      "from": [
+        2.4499999999999997,
+        4.6499999999999995,
+        13.6
+      ],
+      "to": [
+        4.050000000000001,
+        4.999999999999999,
+        13.95
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cap_red"
+        },
+        "south": {
+          "texture": "#pi_cap_red"
+        },
+        "east": {
+          "texture": "#pi_cap_red"
+        },
+        "west": {
+          "texture": "#pi_cap_red"
+        },
+        "up": {
+          "texture": "#pi_cap_red"
+        },
+        "down": {
+          "texture": "#pi_cap_red"
+        }
+      }
+    },
+    {
+      "from": [
+        4.25,
+        4.8999999999999995,
+        10.6
+      ],
+      "to": [
+        6.050000000000001,
+        8.9,
+        13.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_sb_frame"
+        },
+        "south": {
+          "texture": "#pi_edg_voltage_regulator_f_0"
+        },
+        "east": {
+          "texture": "#pi_sb_frame"
+        },
+        "west": {
+          "texture": "#pi_sb_frame"
+        },
+        "up": {
+          "texture": "#pi_sb_frame"
+        },
+        "down": {
+          "texture": "#pi_sb_frame"
+        }
+      }
+    },
+    {
+      "from": [
+        4.35,
+        8.8,
+        13.6
+      ],
+      "to": [
+        5.950000000000001,
+        9.15,
+        13.95
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        4.35,
+        4.6499999999999995,
+        13.6
+      ],
+      "to": [
+        5.950000000000001,
+        4.999999999999999,
+        13.95
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        6.1499999999999995,
+        4.8999999999999995,
+        10.6
+      ],
+      "to": [
+        7.949999999999999,
+        8.9,
+        13.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_sb_frame"
+        },
+        "south": {
+          "texture": "#pi_edg_voltage_regulator_f_0"
+        },
+        "east": {
+          "texture": "#pi_sb_frame"
+        },
+        "west": {
+          "texture": "#pi_sb_frame"
+        },
+        "up": {
+          "texture": "#pi_sb_frame"
+        },
+        "down": {
+          "texture": "#pi_sb_frame"
+        }
+      }
+    },
+    {
+      "from": [
+        6.249999999999999,
+        8.8,
+        13.6
+      ],
+      "to": [
+        7.85,
+        9.15,
+        13.95
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        6.249999999999999,
+        4.6499999999999995,
+        13.6
+      ],
+      "to": [
+        7.85,
+        4.999999999999999,
+        13.95
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        8.05,
+        4.8999999999999995,
+        10.6
+      ],
+      "to": [
+        9.850000000000001,
+        8.9,
+        13.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_sb_frame"
+        },
+        "south": {
+          "texture": "#pi_edg_voltage_regulator_f_0"
+        },
+        "east": {
+          "texture": "#pi_sb_frame"
+        },
+        "west": {
+          "texture": "#pi_sb_frame"
+        },
+        "up": {
+          "texture": "#pi_sb_frame"
+        },
+        "down": {
+          "texture": "#pi_sb_frame"
+        }
+      }
+    },
+    {
+      "from": [
+        8.15,
+        8.8,
+        13.6
+      ],
+      "to": [
+        9.750000000000002,
+        9.15,
+        13.95
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cap_red"
+        },
+        "south": {
+          "texture": "#pi_cap_red"
+        },
+        "east": {
+          "texture": "#pi_cap_red"
+        },
+        "west": {
+          "texture": "#pi_cap_red"
+        },
+        "up": {
+          "texture": "#pi_cap_red"
+        },
+        "down": {
+          "texture": "#pi_cap_red"
+        }
+      }
+    },
+    {
+      "from": [
+        8.15,
+        4.6499999999999995,
+        13.6
+      ],
+      "to": [
+        9.750000000000002,
+        4.999999999999999,
+        13.95
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cap_red"
+        },
+        "south": {
+          "texture": "#pi_cap_red"
+        },
+        "east": {
+          "texture": "#pi_cap_red"
+        },
+        "west": {
+          "texture": "#pi_cap_red"
+        },
+        "up": {
+          "texture": "#pi_cap_red"
+        },
+        "down": {
+          "texture": "#pi_cap_red"
+        }
+      }
+    },
+    {
+      "from": [
+        9.950000000000001,
+        4.8999999999999995,
+        10.6
+      ],
+      "to": [
+        11.750000000000002,
+        8.9,
+        13.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_sb_frame"
+        },
+        "south": {
+          "texture": "#pi_edg_voltage_regulator_f_0"
+        },
+        "east": {
+          "texture": "#pi_sb_frame"
+        },
+        "west": {
+          "texture": "#pi_sb_frame"
+        },
+        "up": {
+          "texture": "#pi_sb_frame"
+        },
+        "down": {
+          "texture": "#pi_sb_frame"
+        }
+      }
+    },
+    {
+      "from": [
+        10.05,
+        8.8,
+        13.6
+      ],
+      "to": [
+        11.650000000000002,
+        9.15,
+        13.95
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        10.05,
+        4.6499999999999995,
+        13.6
+      ],
+      "to": [
+        11.650000000000002,
+        4.999999999999999,
+        13.95
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        11.850000000000001,
+        4.8999999999999995,
+        10.6
+      ],
+      "to": [
+        13.650000000000002,
+        8.9,
+        13.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_sb_frame"
+        },
+        "south": {
+          "texture": "#pi_edg_voltage_regulator_f_0"
+        },
+        "east": {
+          "texture": "#pi_sb_frame"
+        },
+        "west": {
+          "texture": "#pi_sb_frame"
+        },
+        "up": {
+          "texture": "#pi_sb_frame"
+        },
+        "down": {
+          "texture": "#pi_sb_frame"
+        }
+      }
+    },
+    {
+      "from": [
+        11.950000000000001,
+        8.8,
+        13.6
+      ],
+      "to": [
+        13.550000000000002,
+        9.15,
+        13.95
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        11.950000000000001,
+        4.6499999999999995,
+        13.6
+      ],
+      "to": [
+        13.550000000000002,
+        4.999999999999999,
+        13.95
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_pnl_black"
+        },
+        "south": {
+          "texture": "#pi_pnl_black"
+        },
+        "east": {
+          "texture": "#pi_pnl_black"
+        },
+        "west": {
+          "texture": "#pi_pnl_black"
+        },
+        "up": {
+          "texture": "#pi_pnl_black"
+        },
+        "down": {
+          "texture": "#pi_pnl_black"
+        }
+      }
+    },
+    {
+      "from": [
+        1.8,
+        1.4,
+        15.0
+      ],
+      "to": [
+        14.2,
+        1.6,
+        15.3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "south": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "east": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "west": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "up": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "down": {
+          "texture": "#pi_cabinet_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        1.8,
+        3.6,
+        15.0
+      ],
+      "to": [
+        14.2,
+        3.8,
+        15.3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "south": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "east": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "west": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "up": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "down": {
+          "texture": "#pi_cabinet_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        1.8,
+        1.6,
+        15.0
+      ],
+      "to": [
+        2.0,
+        3.6,
+        15.3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "south": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "east": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "west": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "up": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "down": {
+          "texture": "#pi_cabinet_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        14.0,
+        1.6,
+        15.0
+      ],
+      "to": [
+        14.2,
+        3.6,
+        15.3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "south": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "east": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "west": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "up": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "down": {
+          "texture": "#pi_cabinet_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        2.0,
+        1.89,
+        14.9
+      ],
+      "to": [
+        14.0,
+        2.01,
+        15.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "south": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "east": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "west": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "up": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "down": {
+          "texture": "#pi_cabinet_dark"
+        }
+      },
+      "rotation": {
+        "angle": -22.5,
+        "axis": "x",
+        "origin": [
+          8.0,
+          1.95,
+          15.15
+        ]
+      }
+    },
+    {
+      "from": [
+        2.0,
+        2.39,
+        14.9
+      ],
+      "to": [
+        14.0,
+        2.5100000000000002,
+        15.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "south": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "east": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "west": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "up": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "down": {
+          "texture": "#pi_cabinet_dark"
+        }
+      },
+      "rotation": {
+        "angle": -22.5,
+        "axis": "x",
+        "origin": [
+          8.0,
+          2.45,
+          15.15
+        ]
+      }
+    },
+    {
+      "from": [
+        2.0,
+        2.89,
+        14.9
+      ],
+      "to": [
+        14.0,
+        3.0100000000000002,
+        15.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "south": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "east": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "west": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "up": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "down": {
+          "texture": "#pi_cabinet_dark"
+        }
+      },
+      "rotation": {
+        "angle": -22.5,
+        "axis": "x",
+        "origin": [
+          8.0,
+          2.95,
+          15.15
+        ]
+      }
+    },
+    {
+      "from": [
+        2.0,
+        3.39,
+        14.9
+      ],
+      "to": [
+        14.0,
+        3.5100000000000002,
+        15.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "south": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "east": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "west": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "up": {
+          "texture": "#pi_cabinet_dark"
+        },
+        "down": {
+          "texture": "#pi_cabinet_dark"
+        }
+      },
+      "rotation": {
+        "angle": -22.5,
+        "axis": "x",
+        "origin": [
+          8.0,
+          3.45,
+          15.15
+        ]
       }
     }
   ]

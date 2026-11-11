@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "III",
+    "N N"
+  ],
+  "key": {
+    "I": "#c:ingots/iron",
+    "N": "minecraft:iron_nugget"
+  },
+  "result": {
+    "id": "jugcraft:door_canopy",
+    "count": 4
+  }
+}

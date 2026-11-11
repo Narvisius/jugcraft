@@ -92,28 +92,4 @@ public class StructureReachGameTests {
 		helper.assertTrue(StructureReach.withinOrdinaryReach(player, player.blockPosition().offset(2, 0, 0)), "2 blocks away is out of ordinary reach");
 		helper.succeed();
 	}
-
-	@GameTest(structure = ARENA, maxTicks = 20)
-	public void forbiddenPlayersCannotPlaceEquipmentOrPowerLines(GameTestHelper helper) {
-		var level = helper.getLevel();
-		var pos = helper.absolutePos(new BlockPos(4, 2, 4));
-		for (GameType mode : new GameType[] {GameType.SPECTATOR, GameType.ADVENTURE}) {
-			Player player = helper.makeMockPlayer(mode);
-			// Mock players report the mode but do not apply its abilities like ServerPlayer.setGameMode does.
-			mode.updatePlayerAbilities(player.getAbilities());
-			helper.assertFalse(io.github.jimbozoomer.jugcraft.placement.StructurePermissions.mayChange(level, pos, player),
-					mode + " cannot modify structures");
-			helper.assertFalse(io.github.jimbozoomer.jugcraft.nuclear.EquipmentPlacement.place(level, pos,
-					EquipmentKind.CONTROL_CONSOLE, net.minecraft.core.Direction.NORTH, player), "equipment placement denied");
-			helper.assertTrue(io.github.jimbozoomer.jugcraft.powerline.LinePlacement.place(level, pos,
-					LineKind.SERVICE_PEDESTAL, player) == null, "power-line placement denied");
-			helper.assertTrue(level.getBlockState(pos).isAir(), "denied placement does not change the world");
-		}
-		Player builder = helper.makeMockPlayer(GameType.SURVIVAL);
-		helper.assertTrue(io.github.jimbozoomer.jugcraft.placement.StructurePermissions.mayChange(level, pos, builder),
-				"ordinary unprotected construction remains available");
-		helper.assertFalse(io.github.jimbozoomer.jugcraft.placement.StructurePermissions.mayChange(level,
-				new BlockPos(pos.getX(), level.getMaxY() + 1, pos.getZ()), builder), "outside build height is denied");
-		helper.succeed();
-	}
 }

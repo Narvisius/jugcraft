@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "KKNNKK",
+    "KKKKKK"
+  ],
+  "key": {
+    "K": "jugcraft:plastic_sheet",
+    "N": "minecraft:iron_nugget"
+  },
+  "result": {
+    "id": "jugcraft:sanitary_bin",
+    "count": 4
+  }
+}

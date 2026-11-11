@@ -48,8 +48,10 @@ public final class PlantBuilder {
 
 	public static void register() {
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(
-				Commands.literal("nuclear").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
-						.then(Commands.literal("build").then(Commands.argument("blueprint", StringArgumentType.string())
+				// /nuclear plant is open to anyone in creative mode (Justin: "as long as you are in creative mode"), so it is
+				// always in the command tree and checked when run; build and showcase stay with operators.
+				Commands.literal("nuclear")
+						.then(Commands.literal("build").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS)).then(Commands.argument("blueprint", StringArgumentType.string())
 								.suggests((context, builder) -> SharedSuggestionProvider.suggest(
 										Blueprint.ids(false).stream().map(i -> "\"" + i + "\"").toList(), builder))
 								.executes(context -> build(context.getSource(), StringArgumentType.getString(context, "blueprint"), false))
@@ -60,20 +62,30 @@ public final class PlantBuilder {
 								.executes(context -> plant(context.getSource(), StringArgumentType.getString(context, "size"), false))
 								.then(Commands.literal("fuelled")
 										.executes(context -> plant(context.getSource(), StringArgumentType.getString(context, "size"), true)))))
-						.then(Commands.literal("showcase").then(Commands.literal("plants").executes(context -> {
+						.then(Commands.literal("showcase").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS)).then(Commands.literal("plants").executes(context -> {
 							ServerPlayer player = context.getSource().getPlayerOrException();
 							PlantShowcase.build(player.level(), player, player.blockPosition());
 							return 1;
 						})).then(Commands.literal("refresh").executes(context -> {
-							// Rebuild the medium plant near you in place, from the current blueprint.
+							// Rebuild the medium plant in place, from the current blueprint: the showcase world's own plant
+							// (wherever the player is), else the one whose reactor is loaded nearest.
 							ServerPlayer player = context.getSource().getPlayerOrException();
 							Blueprint plant = Blueprint.get("nuclear_medium_pwr", false);
-							BlockPos stake = plant == null ? null : PlantShowcase.locate(player.level(), plant, player.blockPosition());
+							if (plant == null) {
+								context.getSource().sendFailure(Component.literal("The medium plant's blueprint did not load (the game log says why)."));
+								return 0;
+							}
+							BlockPos stake = PlantShowcase.markedStake(player.level());
 							if (stake == null) {
-								context.getSource().sendFailure(Component.literal("No medium plant reactor loaded near you."));
+								stake = PlantShowcase.locate(player.level(), plant, player.blockPosition());
+							}
+							if (stake == null) {
+								context.getSource().sendFailure(Component.literal(
+										"No medium plant in this world near you: build one with /nuclear plant medium (in creative)."));
 								return 0;
 							}
 							PlantShowcase.rebuild(player.level(), plant, stake, player);
+							PlantShowcase.markBuilt(player.level(), stake);
 							context.getSource().sendSuccess(() -> Component.literal("Rebuilt the plant in place."), true);
 							return 1;
 						})).executes(context -> {
@@ -104,6 +116,10 @@ public final class PlantBuilder {
 	/** The plant command: a pre-made plant built just in front of the player. */
 	private static int plant(CommandSourceStack source, String size, boolean fuelled) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
 		ServerPlayer player = source.getPlayerOrException();
+		if (!player.isCreative() && !Commands.<CommandSourceStack>hasPermission(Commands.LEVEL_GAMEMASTERS).test(source)) {
+			source.sendFailure(Component.translatable("message.jugcraft.nuclear.plant_creative"));
+			return 0;
+		}
 		String id = PLANTS.get(size.toLowerCase(java.util.Locale.ROOT));
 		Blueprint blueprint = id == null ? null : Blueprint.get(id, false);
 		if (blueprint == null) {
@@ -182,7 +198,8 @@ public final class PlantBuilder {
 			BlockPos pos = stake.offset(blueprint.offset(i, rotation));
 			// Whatever ground is in the equipment's way goes (the blueprint leaves its body empty).
 			level.setBlock(pos, Blocks.AIR.defaultBlockState(), flags);
-			for (BlockPos offset : kind.frames(face)) {
+			boolean hidden = kind.hideable() && state.getValue(EquipmentAnchorBlock.VARIANT) == EquipmentAnchorBlock.HIDDEN;
+			for (BlockPos offset : hidden ? List.<BlockPos>of() : kind.frames(face)) {
 				BlockPos cell = pos.offset(offset);
 				if (!level.getBlockState(cell).canBeReplaced() && level.getBlockEntity(cell) == null) {
 					level.setBlock(cell, Blocks.AIR.defaultBlockState(), flags);
@@ -213,6 +230,10 @@ public final class PlantBuilder {
 			BlockState joined = Block.updateFromNeighbourShapes(now, level, pos);
 			if (joined != now) {
 				level.setBlock(pos, joined, flags);
+			}
+			// The plant's doors are its owner's: their badge readers let in the owner and the owner's party (doors round).
+			if (owner != null && now.getBlock() instanceof PlantDoorBlock && level.getBlockEntity(pos) instanceof PlantDoorBlockEntity door) {
+				door.setOwner(owner);
 			}
 			// A pipe or cable in a wall takes the look of the wall round it.
 			if (now.getBlock() instanceof io.github.jimbozoomer.jugcraft.wallrun.WallRun

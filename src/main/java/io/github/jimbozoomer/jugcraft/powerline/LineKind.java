@@ -11,24 +11,29 @@ import net.minecraft.world.phys.Vec3;
  * capacities follow the mod's scale (1 JE/t is about 2.3 kW). IDs match tools/power_lines.py.
  */
 public enum LineKind {
-	// Supports: family, tier, height, reach, capacity.
-	WOODEN_POLE("wooden_pole", Family.WOOD, 1, 12, 32, 4_096),
-	DOUBLE_ARM_POLE("double_arm_pole", Family.WOOD, 2, 13, 32, 8_192),
-	CONCRETE_POLE("spun_concrete_pole", Family.WOOD, 3, 14, 32, 16_384),
-	STEEL_MONOPOLE("steel_monopole", Family.MONOPOLE, 1, 30, 64, 131_072),
-	DOUBLE_CIRCUIT_MONOPOLE("double_circuit_monopole", Family.MONOPOLE, 2, 32, 64, 262_144),
-	COMPACT_MONOPOLE("compact_monopole", Family.MONOPOLE, 3, 36, 64, 524_288),
-	LATTICE_TOWER("lattice_tower", Family.LATTICE, 1, 56, 128, 2_097_152),
-	RECONDUCTORED_LATTICE_TOWER("reconductored_lattice_tower", Family.LATTICE, 2, 56, 128, 3_145_728),
-	MONITORED_LATTICE_TOWER("monitored_lattice_tower", Family.LATTICE, 3, 56, 128, 3_670_016),
-	UHV_TOWER("uhv_tower", Family.UHV, 1, 65, 160, 4_194_304),
-	UHVDC_TOWER("uhvdc_tower", Family.UHVDC, 1, 70, 160, 5_242_880),
-	SUPERCONDUCTING_PYLON("superconducting_pylon", Family.SUPERCONDUCTING, 1, 20, 64, 16_777_216),
-	// Boxes: what they take, capacity, footprint (x and z blocks) and height.
-	SERVICE_PEDESTAL("service_pedestal", Family.BOX, 1, 2, 32, 16_384),
-	PAD_MOUNT_TRANSFORMER("pad_mount_transformer", Family.BOX, 2, 2, 64, 524_288),
-	UNIT_SUBSTATION("unit_substation", Family.BOX, 3, 11, 160, 16_777_216),
-	CONVERTER_STATION("converter_station", Family.BOX, 4, 14, 160, 5_242_880);
+	// Supports: family, tier, height, reach, capacity, the model they are drawn and wired from (tools/line_models.py).
+	WOODEN_POLE("wooden_pole", Family.WOOD, 1, 12, 32, 4_096, "wooden_pole"),
+	DOUBLE_ARM_POLE("double_arm_pole", Family.WOOD, 2, 13, 32, 8_192, "double_arm_pole"),
+	CONCRETE_POLE("spun_concrete_pole", Family.WOOD, 3, 14, 32, 16_384, "spun_concrete_pole"),
+	STEEL_MONOPOLE("steel_monopole", Family.MONOPOLE, 1, 30, 64, 131_072, "steel_monopole"),
+	DOUBLE_CIRCUIT_MONOPOLE("double_circuit_monopole", Family.MONOPOLE, 2, 32, 64, 262_144, "double_circuit_monopole"),
+	COMPACT_MONOPOLE("compact_monopole", Family.MONOPOLE, 3, 36, 64, 524_288, "compact_monopole"),
+	// Lattice tier I since power lines round 2 (the plant's 345 kV lines leave on it); the 500 kV towers moved up one tier.
+	LATTICE_345("lattice_345_tower", Family.LATTICE, 1, 31, 128, 1_048_576, "lattice_345"),
+	LATTICE_TOWER("lattice_tower", Family.LATTICE, 2, 43, 128, 2_097_152, "lattice_500"),
+	RECONDUCTORED_LATTICE_TOWER("reconductored_lattice_tower", Family.LATTICE, 3, 43, 128, 3_145_728, "lattice_500r"),
+	MONITORED_LATTICE_TOWER("monitored_lattice_tower", Family.LATTICE, 4, 43, 128, 3_670_016, "lattice_500m"),
+	UHV_TOWER("uhv_tower", Family.UHV, 1, 53, 160, 4_194_304, "uhv_765"),
+	UHVDC_TOWER("uhvdc_tower", Family.UHVDC, 1, 71, 160, 5_242_880, "uhvdc"),
+	SUPERCONDUCTING_PYLON("superconducting_pylon", Family.SUPERCONDUCTING, 1, 20, 64, 16_777_216, "superconducting"),
+	// Boxes: tier, height, reach, capacity, their model (part 2: they face their first line, LineGeometry).
+	SERVICE_PEDESTAL("service_pedestal", Family.BOX, 1, 2, 32, 16_384, "service_pedestal"),
+	PAD_MOUNT_TRANSFORMER("pad_mount_transformer", Family.BOX, 2, 2, 64, 524_288, "pad_mount_transformer"),
+	UNIT_SUBSTATION("unit_substation", Family.BOX, 3, 11, 160, 16_777_216, "unit_substation"),
+	CONVERTER_STATION("converter_station", Family.BOX, 4, 14, 160, 5_242_880, "converter_station"),
+	// The medium plant switchyard's outgoing line 1 gantry (power lines round 2): drawn by the switchyard site, placed by
+	// the plant's blueprint (no item); the plant's power goes out over the line strung from it.
+	LINE_GANTRY("line_gantry", Family.BOX, 5, 18, 160, 16_777_216, null);
 
 	public enum Family {
 		WOOD, MONOPOLE, LATTICE, UHV, UHVDC, SUPERCONDUCTING, BOX
@@ -43,14 +48,17 @@ public enum LineKind {
 	public final int reach;
 	/** JE per tick a line through it can carry (the slowest part of a line sets the line's rate). */
 	public final long capacity;
+	/** The structure's model in assets/jugcraft/power_lines (LineGeometry), or null: the line gantry, drawn by its site. */
+	public final @org.jspecify.annotations.Nullable String model;
 
-	LineKind(String id, Family family, int tier, int height, int reach, long capacity) {
+	LineKind(String id, Family family, int tier, int height, int reach, long capacity, @org.jspecify.annotations.Nullable String model) {
 		this.id = id;
 		this.family = family;
 		this.tier = tier;
 		this.height = height;
 		this.reach = reach;
 		this.capacity = capacity;
+		this.model = model;
 	}
 
 	public boolean isBox() {
@@ -66,11 +74,25 @@ public enum LineKind {
 		return null;
 	}
 
+	/** Conductors in a phase at a box's attach points (the gantry's twin bundle; others one). */
+	public int conductorsPerPhase() {
+		return this == LINE_GANTRY ? 2 : 1;
+	}
+
+	/** Whether players get it as an item (the line gantry is part of a plant's switchyard). */
+	public boolean hasItem() {
+		return this != LINE_GANTRY;
+	}
+
 	/** Half the width of the footprint in blocks (0: one block). */
 	public int halfWidth() {
 		return switch (this) {
-			case LATTICE_TOWER, RECONDUCTORED_LATTICE_TOWER, MONITORED_LATTICE_TOWER -> 5;
-			case UHV_TOWER, UHVDC_TOWER -> 6;
+			// The footings' half-width (the angle body's, the wider; a turned tower's legs reach this times the square
+			// root of two).
+			case LATTICE_345 -> 5;
+			case LATTICE_TOWER, RECONDUCTORED_LATTICE_TOWER, MONITORED_LATTICE_TOWER -> 6;
+			case UHV_TOWER -> 7;
+			case UHVDC_TOWER -> 8;
 			case UNIT_SUBSTATION -> 5;
 			case CONVERTER_STATION -> 7;
 			default -> 0;
@@ -101,6 +123,7 @@ public enum LineKind {
 			case PAD_MOUNT_TRANSFORMER -> support == Family.WOOD || support == Family.MONOPOLE;
 			case UNIT_SUBSTATION -> support != Family.UHVDC && support != Family.BOX;
 			case CONVERTER_STATION -> support == Family.UHVDC;
+			case LINE_GANTRY -> support == Family.LATTICE || support == Family.MONOPOLE || support == Family.UHV;
 			default -> false;
 		};
 	}
@@ -158,7 +181,7 @@ public enum LineKind {
 					p.add(new Vec3(-3.5, y, 0)); p.add(new Vec3(3.5, y, 0));
 				}
 			}
-			case LATTICE_TOWER, RECONDUCTORED_LATTICE_TOWER, MONITORED_LATTICE_TOWER -> {
+			case LATTICE_345, LATTICE_TOWER, RECONDUCTORED_LATTICE_TOWER, MONITORED_LATTICE_TOWER -> {
 				p.add(new Vec3(-6.5, 45.5, 0)); p.add(new Vec3(6.5, 45.5, 0)); p.add(new Vec3(-8, 38.5, 0));
 				p.add(new Vec3(8, 38.5, 0)); p.add(new Vec3(-6.5, 31, 0)); p.add(new Vec3(6.5, 31, 0));
 			}
@@ -181,8 +204,49 @@ public enum LineKind {
 			case CONVERTER_STATION -> {
 				p.add(new Vec3(1.5, 12, -4)); p.add(new Vec3(1.5, 12, 4));
 			}
+			case LINE_GANTRY -> {
+				// The dead-end clamps of line 1's strain strings on the gantry's outer face (twin bundle, phases A, B, C),
+				// from the anchor's cell under the beam (the switchyard site facing south; tools/yard_sites.py gantry_points).
+				for (double z : new double[] {-3.925, -3.475, 0.075, 0.525, 4.075, 4.525}) {
+					p.add(new Vec3(4.02, 17.44, z));
+				}
+			}
 		}
 		return p;
+	}
+
+	/**
+	 * The frame cells a structure of this kind filled before power lines round 2 (towers did not turn and their legs
+	 * ran to the top): what a structure loaded from then has, until its frame is moved to its legs.
+	 */
+	public List<BlockPos> legacyFrames() {
+		List<BlockPos> out = new ArrayList<>();
+		switch (family) {
+			case LATTICE, UHV, UHVDC -> {
+				int base = family == Family.LATTICE ? 5 : 6;
+				int oldHeight = switch (this) {
+					case UHV_TOWER -> 65;
+					case UHVDC_TOWER -> 70;
+					default -> 56;
+				};
+				double waist = 1.0;
+				int body = (int) (oldHeight * 0.66);
+				for (int y = 0; y < oldHeight; y++) {
+					double half = base - (base - waist) * Math.min(1.0, y / (double) body);
+					int h = (int) Math.round(half);
+					for (int sx : new int[] {-1, 1}) {
+						for (int sz : new int[] {-1, 1}) {
+							BlockPos leg = new BlockPos(sx * h, y, sz * h);
+							if (!leg.equals(BlockPos.ZERO) && !out.contains(leg)) {
+								out.add(leg);
+							}
+						}
+					}
+				}
+			}
+			default -> out.addAll(frames());
+		}
+		return out;
 	}
 
 	/**

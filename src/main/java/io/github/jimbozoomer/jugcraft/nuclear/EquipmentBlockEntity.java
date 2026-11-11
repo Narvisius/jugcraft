@@ -75,6 +75,22 @@ public class EquipmentBlockEntity extends BlockEntity {
 	private List<BlockPos> towers = List.of();
 	/** Circulating water pumps on this condenser's conduit (the towers need them to move the water). */
 	private List<BlockPos> cwPumps = List.of();
+	/** The circulating water pump houses whose controllers its conduit passes (towers and pump houses build). */
+	private List<BlockPos> cwHouses = List.of();
+
+	/** A condenser's circulating water pump houses (their controllers) on its conduit. */
+	public List<BlockPos> cwHouses() {
+		return cwHouses;
+	}
+	/** A condenser's circulating water pumps, and its cooling towers (round 34: the plant overview screen shows them). */
+	public int cwPumpCount() {
+		return cwPumps.size() + (level instanceof ServerLevel server ? WaterWorks.circPumps(server, cwHouses) : 0);
+	}
+
+	public List<BlockPos> towerList() {
+		return towers;
+	}
+
 	/** Each circulating water pump moves the water for half a standard unit's heat. */
 	public static final double PUMP_CAPACITY = 0.5;
 	/** The pumps' and fans' power, taken from the unit's output while cooling towers carry its heat. */
@@ -91,6 +107,8 @@ public class EquipmentBlockEntity extends BlockEntity {
 	public int breakers = Switchgear.DEFAULT_BREAKERS;
 	public final int[] flows = new int[Switchgear.BREAKERS];
 	long incoming;
+	/** A load centre's racking, springs, trip units, amps and transformer (nuclear/LoadCentre.java); null otherwise. */
+	public final LoadCentre.@Nullable State lc;
 	private int shown;
 	private @Nullable EnergyStorage incomingView;
 	private final EnergyStorage[] feederViews = new EnergyStorage[Switchgear.BREAKERS];
@@ -114,11 +132,12 @@ public class EquipmentBlockEntity extends BlockEntity {
 		long room = kind == EquipmentKind.SMALL_TURBINE ? ReactorCore.Design.SMALL_MODULAR.ratedJe() * 2 : ReactorCore.RATED_JE * 2;
 		output = kind.powerOut() ? new SimpleEnergyStorage(room, 0, room, this::setChanged) : null;
 		bus = kind == EquipmentKind.SWITCHGEAR_LINEUP
-				? new SimpleEnergyStorage(Switchgear.CAPACITY, Switchgear.INCOMING_RATE, Switchgear.FEEDER_RATE * 10, this::setChanged)
+				? new SimpleEnergyStorage(Switchgear.CAPACITY, Switchgear.INCOMING_RATE, Switchgear.OVERLOAD_RATE * 10, this::setChanged)
 				: kind == EquipmentKind.MCC_LINEUP
 				? new SimpleEnergyStorage(MotorControlCenter.CAPACITY, MotorControlCenter.INCOMING_RATE, MotorControlCenter.FEEDER_RATE * 10, this::setChanged)
 				: null;
 		breakers = defaultBreakers(kind);
+		lc = kind == EquipmentKind.SWITCHGEAR_LINEUP ? new LoadCentre.State() : null;
 		core.design = kind.design();
 	}
 
@@ -147,7 +166,7 @@ public class EquipmentBlockEntity extends BlockEntity {
 		if (feederViews[f] == null) {
 			feederViews[f] = kind() == EquipmentKind.MCC_LINEUP
 					? new Switchgear.Feeder(this, f, MotorControlCenter.CAPACITY, MotorControlCenter.FEEDER_RATE)
-					: new Switchgear.Feeder(this, f, Switchgear.CAPACITY, Switchgear.FEEDER_RATE);
+					: new Switchgear.Feeder(this, f, Switchgear.CAPACITY, Switchgear.OVERLOAD_RATE);
 		}
 		return feederViews[f];
 	}
@@ -184,7 +203,6 @@ public class EquipmentBlockEntity extends BlockEntity {
 
 	/** The owner, a creative-mode player, or (in Party mode) anyone in the owner's party. */
 	public boolean mayUse(Player player) {
-		if (player.isSpectator()) return false;
 		if (owner == null || owner.equals(player.getUUID()) || player.getAbilities().instabuild) {
 			return true;
 		}
@@ -210,9 +228,28 @@ public class EquipmentBlockEntity extends BlockEntity {
 		}
 		if (kind == EquipmentKind.EMERGENCY_DIESEL_GENERATOR) {
 			DieselFuel.tick(level, this, level.getGameTime());
+			WaterWorks.tickDiesel(level, this, level.getGameTime());
+			StartingAir.tick(level, this, level.getGameTime());
+			DieselRoom.tick(level, this, level.getGameTime());
+			Co2System.tick(level, this, level.getGameTime());
+		}
+		if (kind.startingAir()) {
+			StartingAir.tickPiece(level, this, level.getGameTime());
+		}
+		if (kind.dieselRoom()) {
+			DieselRoom.tickPiece(level, this, level.getGameTime());
 		}
 		if (kind == EquipmentKind.REMOTE_SHUTDOWN_PANEL) {
 			tickShutdownPanel(level);
+		}
+		if (kind.turbine()) {
+			TurbineHall.tick(level, this, level.getGameTime());
+		}
+		if (kind == EquipmentKind.OVERHEAD_CRANE) {
+			HallCrane.tick(level, this, level.getGameTime());
+		}
+		if (kind.liveBoard()) {
+			ControlBoard.tick(level, this);
 		}
 		if (kind.board()) {
 			if (kind == EquipmentKind.MCC_LINEUP) {
@@ -222,7 +259,8 @@ public class EquipmentBlockEntity extends BlockEntity {
 			}
 			// Its meters are synced each second while what they show changes.
 			if (++ticks % 20 == 0 && bus != null) {
-				int now = java.util.Objects.hash(breakers, bus.getAmount() * 1000 / busCapacity(), java.util.Arrays.hashCode(flows));
+				int now = java.util.Objects.hash(breakers, bus.getAmount() * 1000 / busCapacity(), java.util.Arrays.hashCode(flows),
+						lc == null ? 0 : lc.hash());
 				if (now != shown) {
 					shown = now;
 					changed();
@@ -284,6 +322,25 @@ public class EquipmentBlockEntity extends BlockEntity {
 		return best;
 	}
 
+	/** A live control board's state (round 27, ControlBoard): its snapshot of the plant, its windows, its recorders. */
+	private ControlBoard.@Nullable State board;
+	/** A reactor's electrical plant as its vessel last found it (PlantPower; server, not saved). */
+	private PlantPower.@Nullable State plantPower;
+
+	public PlantPower.State power() {
+		if (plantPower == null) {
+			plantPower = new PlantPower.State();
+		}
+		return plantPower;
+	}
+
+	public ControlBoard.State board() {
+		if (board == null) {
+			board = new ControlBoard.State();
+		}
+		return board;
+	}
+
 	/** A remote shutdown panel: finds its reactor now (used when it is used before it has ticked). */
 	public void linkShutdownPanel(ServerLevel level) {
 		panelVersion = -1;
@@ -292,7 +349,8 @@ public class EquipmentBlockEntity extends BlockEntity {
 
 	private void tickVessel(ServerLevel level) {
 		EquipmentRegistry registry = EquipmentRegistry.of(level);
-		if (unit == null || unitVersion != registry.version()) {
+		// (a transformer yard is found through its site, which comes and goes with its chunk: looked for again while missing)
+		if (unit == null || unitVersion != registry.version() || unit.transformers.isEmpty() && level.getGameTime() % 100 == 0) {
 			unit = ReactorUnit.find(level, getBlockPos());
 			unitVersion = registry.version();
 			missing = unit.missing();
@@ -301,6 +359,9 @@ public class EquipmentBlockEntity extends BlockEntity {
 		ReactorUnit u = unit;
 		double towers = towerShare(level, u);
 		lastTowerShare = towers;
+		ControlBoard.synchronize(core, u.steamToPower(), level.getGameTime());
+		// Diesels make real power: the grid, the plant's buses and the safety buses, the diesels starting on them.
+		PlantPower.tick(level, this, u);
 		long electric = core.tick(new ReactorCore.Plant(u.cooling(), u.steamToPower(), u.formed(), u.generatorLimit(), towers),
 				need -> drawWater(level, u, need));
 		if (towers > 0 && electric > 0) {
@@ -315,6 +376,11 @@ public class EquipmentBlockEntity extends BlockEntity {
 					long put = Math.min(room, electric);
 					transformer.output.setAmount(transformer.output.getAmount() + put);
 					electric -= put;
+					if (electric <= 0) break;
+				} else if (level.getBlockEntity(t) instanceof YardBlockEntity yard) {
+					// The transformer yard (YardBlockEntity): its main transformers out to the switchyard, its unit
+					// auxiliary transformers to the plant's own load centres.
+					electric -= yard.take(electric);
 					if (electric <= 0) break;
 				}
 			}
@@ -336,12 +402,17 @@ public class EquipmentBlockEntity extends BlockEntity {
 		double want = Math.max(0.001, Math.min(1, core.heat())) * scale;
 		double got = 0;
 		java.util.Set<BlockPos> seen = new HashSet<>();
-		// Without circulating water pumps the towers stand idle; each pump moves water for part of the heat.
+		// Without circulating water pumps the towers stand idle; each pump moves water for part of the heat (a circ pump
+		// house's pumps delivering count as many).
 		java.util.Set<BlockPos> pumps = new HashSet<>();
+		java.util.Set<BlockPos> houses = new HashSet<>();
 		for (BlockPos c : u.condensers) {
-			if (level.getBlockEntity(c) instanceof EquipmentBlockEntity condenser) pumps.addAll(condenser.cwPumps);
+			if (level.getBlockEntity(c) instanceof EquipmentBlockEntity condenser) {
+				pumps.addAll(condenser.cwPumps);
+				houses.addAll(condenser.cwHouses);
+			}
 		}
-		want = Math.min(want, pumps.size() * PUMP_CAPACITY);
+		want = Math.min(want, (pumps.size() + WaterWorks.circPumps(level, new ArrayList<>(houses))) * PUMP_CAPACITY);
 		if (want <= 0) return 0;
 		for (BlockPos c : u.condensers) {
 			if (!(level.getBlockEntity(c) instanceof EquipmentBlockEntity condenser)) continue;
@@ -389,14 +460,39 @@ public class EquipmentBlockEntity extends BlockEntity {
 		}
 	}
 
+	/**
+	 * A hidden vessel's core and head where its building shows them (its site's controller sets them: nuclear/
+	 * ReactorBuildingBlockEntity), for its radiation; null: at the vessel's own body.
+	 */
+	public @Nullable BlockPos shownCore, shownTop;
+
+	/** Where a hidden vessel's building shows its core and head (its radiation comes from there from now on). */
+	public void showAt(ServerLevel level, BlockPos core, BlockPos top) {
+		if (core.equals(shownCore) && top.equals(shownTop)) {
+			return;
+		}
+		if (coreSourceSet) {
+			RadiationSources.clear(level, coreMiddle());
+			coreSourceSet = false;
+		}
+		if (sourceSet) {
+			RadiationSources.clear(level, centre());
+			sourceSet = false;
+		}
+		shownCore = core.immutable();
+		shownTop = top.immutable();
+	}
+
 	/** The middle of the vessel (the core). */
 	public BlockPos coreMiddle() {
+		if (shownCore != null) return shownCore;
 		EquipmentKind k = kind();
 		return getBlockPos().offset(EquipmentKind.toWorld(new BlockPos(k.wide / 2, k.tall / 2, k.deep / 2), facing()));
 	}
 
 	/** The top middle of the vessel (where the head comes off). */
 	public BlockPos centre() {
+		if (shownTop != null) return shownTop;
 		EquipmentKind k = kind();
 		return getBlockPos().offset(EquipmentKind.toWorld(new BlockPos(k.wide / 2, k.tall - 1, k.deep / 2), facing()));
 	}
@@ -415,6 +511,15 @@ public class EquipmentBlockEntity extends BlockEntity {
 			}
 		}
 		int supply = Math.min(NuclearPipeBlock.CONDUIT_RATE, sources * NuclearPipeBlock.INTAKE_PER_SOURCE);
+		// The medium plant's towers (towers and pump houses build): the circulating water comes from their basins, the
+		// make-up the lake intake keeps them topped up with; a basin above low-low gives the conduit its water.
+		for (BlockPos t : towers) {
+			if (supply >= NuclearPipeBlock.CONDUIT_RATE) break;
+			if (level.isLoaded(t) && level.getBlockEntity(t) instanceof CoolingTowerBlockEntity tower && tower.formed()
+					&& tower.tower() == CoolingTowerBlock.Tower.MEDIUM && tower.basin() >= CoolingTowerBlockEntity.LOW_LOW) {
+				supply = NuclearPipeBlock.CONDUIT_RATE;
+			}
+		}
 		int room = water.capacityMb() - water.millibuckets();
 		if (supply > 0 && room > 0) {
 			water.fill(Fluids.WATER, Math.min(room, supply));
@@ -430,6 +535,7 @@ public class EquipmentBlockEntity extends BlockEntity {
 		java.util.ArrayDeque<BlockPos> queue = new java.util.ArrayDeque<>();
 		Set<BlockPos> foundTowers = new java.util.LinkedHashSet<>();
 		Set<BlockPos> foundPumps = new java.util.LinkedHashSet<>();
+		Set<BlockPos> foundHouses = new java.util.LinkedHashSet<>();
 		for (BlockPos cell : ReactorUnit.outside(registry, getBlockPos())) {
 			if (ReactorUnit.isPipe(level, cell, PipeKind.WATER) && seen.add(cell)) {
 				queue.add(cell);
@@ -446,6 +552,9 @@ public class EquipmentBlockEntity extends BlockEntity {
 					if (seen.add(next)) queue.add(next);
 				} else if (level.getBlockState(next).getBlock() instanceof CoolingTowerBlock) {
 					foundTowers.add(next.immutable());
+				} else if (level.getBlockState(next).getBlock() instanceof WaterWorksBlock
+						&& level.getBlockState(next).getValue(WaterWorksBlock.WORKS) == WaterWorksBlock.Works.CIRC) {
+					foundHouses.add(next.immutable());
 				} else if (registry.anchorOf(next) instanceof BlockPos pump && registry.at(pump) != null
 						&& registry.at(pump).kind() == EquipmentKind.CIRCULATING_WATER_PUMP) {
 					foundPumps.add(pump);
@@ -456,6 +565,7 @@ public class EquipmentBlockEntity extends BlockEntity {
 		}
 		towers = List.copyOf(foundTowers);
 		cwPumps = List.copyOf(foundPumps);
+		cwHouses = List.copyOf(foundHouses);
 		return new ArrayList<>(water);
 	}
 
@@ -529,7 +639,7 @@ public class EquipmentBlockEntity extends BlockEntity {
 	@Override
 	public void setLevel(Level level) {
 		super.setLevel(level);
-		EquipmentRegistry.of(level).add(getBlockPos(), kind(), facing());
+		EquipmentRegistry.of(level).add(getBlockPos(), kind(), facing(), EquipmentAnchorBlock.hidden(getBlockState()));
 	}
 
 	@Override
@@ -579,6 +689,9 @@ public class EquipmentBlockEntity extends BlockEntity {
 			core.saveStatus(out);
 			out.putBoolean("online", panelOnline);
 		}
+		if (kind().liveBoard()) {
+			board().save(out);
+		}
 		if (bus != null) {
 			out.putIntArray("flows", flows);
 		}
@@ -615,14 +728,89 @@ public class EquipmentBlockEntity extends BlockEntity {
 	public double burn;
 	public boolean fuelOut;
 	public float dayLevel = -1;
+	/**
+	 * An emergency diesel generator's jacket water over its normal running temperature (degrees C: WaterWorks), climbing
+	 * while it runs without its service water train. Synced (its panels' gauges and HIGH JACKET WATER TEMP).
+	 */
+	public float jwExcess;
+	/**
+	 * Starting air (round 31, StartingAir): a diesel generator's air in its receivers (psig: synced), how many receivers
+	 * it has (synced; none: its air isn't kept), and whether its last start failed for want of air (synced: FAIL TO
+	 * START). A receiver's or compressor's pressure shown (psig: synced), a compressor the lead one. Server: what was
+	 * last sent, the generator's pieces and when it last looked for them (its registry version then; -1 not yet).
+	 */
+	public double air = StartingAir.FULL, airSent = StartingAir.FULL;
+	public int airReceivers;
+	public boolean airFail, airLead;
+	public java.util.List<BlockPos> airPieces = java.util.List.of();
+	public int airVersion = -1;
+	public long airScanned;
+	/**
+	 * Its room's panels (round 31 part 2, DieselPanels): a diesel generator's MODE ({@link DieselPanels#OFF},
+	 * {@link DieselPanels#LOCAL}, {@link DieselPanels#AUTO}), its generator breaker (the game time it closed or is to close,
+	 * -1 open), its breaker control switch's last turn (1 TRIP, 2 CLOSE) and when, its 86G lockout tripped, its emergency
+	 * stop pushed in, its protection relays' targets (bit i dropped) and its engine panel's LAMP TEST (until). Synced.
+	 */
+	public int edgMode = DieselPanels.AUTO;
+	/**
+	 * Its room's own plant (round 31 part 3, DieselRoom): the pieces a diesel generator has found (server) and when it
+	 * last looked (its registry version then; -1 not yet). Its CO2 system (Co2System): NORMAL, COUNTING, DISCHARGED or
+	 * PURGING and since when (game time: synced), the station pulled and the room found (server).
+	 */
+	public java.util.List<BlockPos> roomPieces = java.util.List.of();
+	public int roomVersion = -1;
+	public long roomScanned;
+	public int co2Phase = Co2System.NORMAL;
+	public long co2At;
+	public @Nullable BlockPos co2Station;
+	public java.util.@Nullable Set<BlockPos> co2Room;
+	/**
+	 * A monorail (round 31 part 3, Monorail): its trolley's place along the beam and the hook's drop below its rest
+	 * (blocks), each with where it set off from and when (game time). Synced.
+	 */
+	public double hoistX = 2, hoistXFrom = 2, hoistDrop, hoistDropFrom;
+	public long hoistXAt, hoistDropAt;
+	/**
+	 * The turbine hall's overhead crane (turbine hall part 3, HallCrane): for each of its motions (HallCrane.BRIDGE along
+	 * its runway, TROLLEY across the bridge, MAIN and AUX hooks' drop below their rest; blocks) where it set off from, when
+	 * (game time), which way (-1, 0, 1), until when it runs (a held pendant button keeps putting that off) and where it
+	 * must stop (the runway's end, the trolley's travel, the floor under a hook); whether its power is on (the pendant's
+	 * STOP and START); the runway's ends either side of its anchor (blocks, for the client to lay the runway). Synced.
+	 */
+	public final double[] craneFrom = {0, HallCrane.TROLLEY_HOME, 0, 0}, craneStop = new double[4];
+	public final long[] craneAt = new long[4], craneUntil = new long[4];
+	public final int[] craneDir = new int[4];
+	public boolean cranePower = true;
+	public double craneLo, craneHi;
+	public long breakerAt = -1, breakerSwAt;
+	public int breakerSw, relayTargets;
+	public boolean lockout, estop;
+	public long lampTestUntil;
+
+	/** Whether the generator breaker is closed at game time {@code now}. */
+	public boolean breakerClosed(double now) {
+		return running && breakerAt >= 0 && now >= breakerAt;
+	}
+
+	/** Seconds since the generator breaker closed (-1 open): the load sequencer's time. */
+	public double breakerSeconds(double now) {
+		return breakerClosed(now) ? (now - breakerAt) / 20.0 : -1;
+	}
 
 	/** Game ticks run in all, at game time {@code now}. */
 	public long runTicksAt(long now) {
 		return runTicks + (running ? Math.max(0, now - runningSince) : 0);
 	}
 
-	/** Starts or stops an emergency diesel generator (its panel, tests): the hour meter keeps the run's time. */
+	/**
+	 * Starts or stops an emergency diesel generator (its panel, tests): the hour meter keeps the run's time. Its breaker
+	 * closes by itself {@link DieselFuel#BREAKER} seconds after a start (Justin, round 31: a local start's too), and opens
+	 * when it stops.
+	 */
 	public void setDieselRunning(long now, boolean run) {
+		if (run != running) {
+			breakerAt = run ? now + Math.round(DieselFuel.BREAKER * 20) : -1;
+		}
 		setRunning(now, run);
 	}
 
@@ -638,6 +826,17 @@ public class EquipmentBlockEntity extends BlockEntity {
 		runningSince = now;
 		changed();
 	}
+	/**
+	 * The main turbine-generator (turbine hall part 1, TurbineHall): what its front standard, valves and turning gear show
+	 * (synced): its speed (rpm), load (fraction of rated), {@link TurbineHall} flags, and until when its trip handle's guard
+	 * is up (game time). Server: the registry version its reactor was found at. A piece of the hall's feed train or oil
+	 * plant (part 2) shows its unit's plant in the same fields: the turbine's speed (a main feed pump: its own), the
+	 * unit's load, the turbine's flags and its own (running, standing by, tripped...).
+	 */
+	public float turbineRpm, turbineLoad;
+	public int turbineFlags;
+	public long tripGuardUntil;
+	public int reactorVersion = -1;
 	/** Client: the diesel generator's speed (0..1) and its shaft's turn as drawn, and when smoke was last made. */
 	public float animSpeed, animAngle;
 	public long animNanos, smokeTick;
@@ -657,10 +856,57 @@ public class EquipmentBlockEntity extends BlockEntity {
 		if (kind() == EquipmentKind.EMERGENCY_DIESEL_GENERATOR) {
 			out.putBoolean("fuel_out", fuelOut);
 			out.putFloat("day_level", dayLevel);
+			out.putFloat("jw_excess", jwExcess);
+			out.putDouble("air", air);
+			out.putInt("air_receivers", airReceivers);
+			out.putBoolean("air_fail", airFail);
+			out.putInt("edg_mode", edgMode);
+			out.putLong("breaker_at", breakerAt);
+			out.putInt("breaker_sw", breakerSw);
+			out.putLong("breaker_sw_at", breakerSwAt);
+			out.putBoolean("lockout", lockout);
+			out.putBoolean("estop", estop);
+			out.putInt("relay_targets", relayTargets);
+			out.putLong("lamp_test", lampTestUntil);
+			out.putInt("co2_phase", co2Phase);
+			out.putLong("co2_at", co2At);
+		}
+		if (kind() == EquipmentKind.TURBINE_GENERATOR || kind().feedTrain()) {
+			// (Turbine hall part 2: the feed train's and oil plant's pieces show their unit's plant the same way: TurbineHall.)
+			out.putFloat("turbine_rpm", turbineRpm);
+			out.putFloat("turbine_load", turbineLoad);
+			out.putInt("turbine_flags", turbineFlags);
+			out.putLong("trip_guard", tripGuardUntil);
+		}
+		if (kind() == EquipmentKind.EDG_MONORAIL) {
+			out.putDouble("hoist_x", hoistX);
+			out.putDouble("hoist_x_from", hoistXFrom);
+			out.putLong("hoist_x_at", hoistXAt);
+			out.putDouble("hoist_drop", hoistDrop);
+			out.putDouble("hoist_drop_from", hoistDropFrom);
+			out.putLong("hoist_drop_at", hoistDropAt);
+		}
+		if (kind() == EquipmentKind.OVERHEAD_CRANE) {
+			for (int k = 0; k < 4; k++) {
+				out.putDouble("crane_from" + k, craneFrom[k]);
+				out.putDouble("crane_stop" + k, craneStop[k]);
+				out.putLong("crane_at" + k, craneAt[k]);
+				out.putLong("crane_until" + k, craneUntil[k]);
+				out.putInt("crane_dir" + k, craneDir[k]);
+			}
+			out.putBoolean("crane_power", cranePower);
+			out.putDouble("crane_lo", craneLo);
+			out.putDouble("crane_hi", craneHi);
+		}
+		if (kind().startingAir()) {
+			out.putDouble("air", air);
 		}
 		if (bus != null) {
 			out.putLong("bus", bus.getAmount());
 			out.putInt("breakers", breakers);
+		}
+		if (lc != null) {
+			lc.save(out);
 		}
 	}
 
@@ -679,6 +925,43 @@ public class EquipmentBlockEntity extends BlockEntity {
 		runTicks = in.getLongOr("run_ticks", 0L);
 		fuelOut = in.getBooleanOr("fuel_out", false);
 		dayLevel = in.getFloatOr("day_level", -1F);
+		jwExcess = in.getFloatOr("jw_excess", 0F);
+		boolean edg = getBlockState().getBlock() instanceof EquipmentAnchorBlock a && a.kind == EquipmentKind.EMERGENCY_DIESEL_GENERATOR;
+		air = in.getDoubleOr("air", edg ? StartingAir.FULL : 0);
+		airSent = air;
+		airReceivers = in.getIntOr("air_receivers", 0);
+		airFail = in.getBooleanOr("air_fail", false);
+		edgMode = in.getIntOr("edg_mode", DieselPanels.AUTO);
+		// (A generator saved running before round 31's breaker took its breaker as having closed five seconds in.)
+		breakerAt = in.getLongOr("breaker_at", running ? runningSince + Math.round(DieselFuel.BREAKER * 20) : -1);
+		breakerSw = in.getIntOr("breaker_sw", 0);
+		breakerSwAt = in.getLongOr("breaker_sw_at", 0L);
+		lockout = in.getBooleanOr("lockout", false);
+		estop = in.getBooleanOr("estop", false);
+		relayTargets = in.getIntOr("relay_targets", 0);
+		lampTestUntil = in.getLongOr("lamp_test", 0L);
+		co2Phase = in.getIntOr("co2_phase", Co2System.NORMAL);
+		co2At = in.getLongOr("co2_at", 0L);
+		turbineRpm = in.getFloatOr("turbine_rpm", 0F);
+		turbineLoad = in.getFloatOr("turbine_load", 0F);
+		turbineFlags = in.getIntOr("turbine_flags", 0);
+		tripGuardUntil = in.getLongOr("trip_guard", 0L);
+		hoistX = in.getDoubleOr("hoist_x", 2);
+		hoistXFrom = in.getDoubleOr("hoist_x_from", hoistX);
+		hoistXAt = in.getLongOr("hoist_x_at", 0L);
+		hoistDrop = in.getDoubleOr("hoist_drop", 0);
+		hoistDropFrom = in.getDoubleOr("hoist_drop_from", hoistDrop);
+		hoistDropAt = in.getLongOr("hoist_drop_at", 0L);
+		for (int k = 0; k < 4; k++) {
+			craneFrom[k] = in.getDoubleOr("crane_from" + k, k == HallCrane.TROLLEY ? HallCrane.TROLLEY_HOME : 0);
+			craneStop[k] = in.getDoubleOr("crane_stop" + k, craneFrom[k]);
+			craneAt[k] = in.getLongOr("crane_at" + k, 0L);
+			craneUntil[k] = in.getLongOr("crane_until" + k, 0L);
+			craneDir[k] = in.getIntOr("crane_dir" + k, 0);
+		}
+		cranePower = in.getBooleanOr("crane_power", true);
+		craneLo = in.getDoubleOr("crane_lo", 0);
+		craneHi = in.getDoubleOr("crane_hi", 0);
 		if (getBlockState().getBlock() instanceof EquipmentAnchorBlock anchor && anchor.kind.reactor()) {
 			core.loadReadouts(in);
 			missing = in.read("missing", Codec.STRING.listOf()).orElse(missing);
@@ -688,6 +971,14 @@ public class EquipmentBlockEntity extends BlockEntity {
 		if (getBlockState().getBlock() instanceof EquipmentAnchorBlock anchor && anchor.kind == EquipmentKind.REMOTE_SHUTDOWN_PANEL) {
 			core.loadStatus(in);
 			panelOnline = in.getBooleanOr("online", false);
+		}
+		if (getBlockState().getBlock() instanceof EquipmentAnchorBlock anchor && anchor.kind.liveBoard() && in.child("board").isPresent()) {
+			// Sent to the players (the server keeps its own: it is worked out again from the plant).
+			ControlBoard.State loaded = ControlBoard.State.load(in);
+			if (board != null) {
+				loaded.copyLocal(board);
+			}
+			board = loaded;
 		}
 		if (water != null) {
 			water.variant = net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant.of(Fluids.WATER);
@@ -702,6 +993,9 @@ public class EquipmentBlockEntity extends BlockEntity {
 			breakers = in.getIntOr("breakers", defaultBreakers(kind()));
 			in.getIntArray("flows").ifPresent(f -> System.arraycopy(f, 0, flows, 0, Math.min(f.length, flows.length)));
 		}
+		if (lc != null) {
+			lc.load(in);
+		}
 	}
 
 	@Override
@@ -710,6 +1004,10 @@ public class EquipmentBlockEntity extends BlockEntity {
 		saveCommon(out);
 		if (kind().reactor()) {
 			core.save(out);
+		}
+		if (kind().liveBoard() && board != null) {
+			// Its windows kept over a restart (an alarm already acknowledged does not sound again).
+			board.save(out);
 		}
 		if (water != null) out.putLong("water_droplets", water.amount);
 		if (output != null) out.putLong("energy", output.getAmount());

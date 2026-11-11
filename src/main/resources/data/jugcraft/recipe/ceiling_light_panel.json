@@ -9,19 +9,18 @@
       "feature": "drones"
     }
   ],
-  "type": "minecraft:crafting_shaped",
-  "category": "building",
+  "type": "jugcraft:advanced_crafting",
   "pattern": [
-    "PPP",
-    "GLG"
+    "PPPPPP",
+    "GGLLGG"
   ],
   "key": {
-    "P": "#c:plates/iron",
     "G": "minecraft:glass_pane",
-    "L": "minecraft:glowstone_dust"
+    "L": "minecraft:glowstone_dust",
+    "P": "#c:plates/iron"
   },
   "result": {
     "id": "jugcraft:ceiling_light_panel",
-    "count": 4
+    "count": 8
   }
 }

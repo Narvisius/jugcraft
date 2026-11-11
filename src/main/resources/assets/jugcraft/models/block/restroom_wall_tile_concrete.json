@@ -1,0 +1,48 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "tile": "jugcraft:block/restroom_wall_tile",
+    "side": "minecraft:block/light_gray_concrete",
+    "particle": "jugcraft:block/restroom_wall_tile"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "east": {
+          "texture": "#side",
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#side",
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#side",
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#side",
+          "cullface": "down"
+        },
+        "south": {
+          "texture": "#side",
+          "cullface": "south"
+        },
+        "north": {
+          "texture": "#tile",
+          "cullface": "north"
+        }
+      }
+    }
+  ]
+}

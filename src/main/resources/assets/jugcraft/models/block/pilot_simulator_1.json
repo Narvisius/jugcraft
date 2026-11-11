@@ -1,0 +1,319 @@
+{
+ "textures": {
+  "frame": "jugcraft:block/sim_frame",
+  "deck": "jugcraft:block/sim_deck",
+  "base": "jugcraft:block/sim_base",
+  "seat": "jugcraft:block/sim_seat",
+  "red": "jugcraft:block/sim_red",
+  "alu": "jugcraft:block/sim_alu",
+  "particle": "jugcraft:block/sim_frame"
+ },
+ "elements": [
+  {
+   "from": [
+    9,
+    0,
+    3
+   ],
+   "to": [
+    13,
+    1.4,
+    7
+   ],
+   "faces": {
+    "north": {
+     "texture": "#frame"
+    },
+    "south": {
+     "texture": "#frame"
+    },
+    "east": {
+     "texture": "#frame"
+    },
+    "west": {
+     "texture": "#frame"
+    },
+    "up": {
+     "texture": "#frame"
+    },
+    "down": {
+     "texture": "#frame"
+    }
+   }
+  },
+  {
+   "from": [
+    -6,
+    2.8,
+    5
+   ],
+   "to": [
+    6,
+    3.8,
+    12
+   ],
+   "faces": {
+    "north": {
+     "texture": "#frame",
+     "uv": [
+      4.0,
+      12.2,
+      16.0,
+      13.2
+     ]
+    },
+    "south": {
+     "texture": "#frame",
+     "uv": [
+      4.0,
+      12.2,
+      16.0,
+      13.2
+     ]
+    },
+    "east": {
+     "texture": "#frame"
+    },
+    "west": {
+     "texture": "#frame"
+    },
+    "up": {
+     "texture": "#frame",
+     "uv": [
+      4.0,
+      5.0,
+      16.0,
+      12.0
+     ]
+    },
+    "down": {
+     "texture": "#frame",
+     "uv": [
+      4.0,
+      4.0,
+      16.0,
+      11.0
+     ]
+    }
+   }
+  },
+  {
+   "from": [
+    1.5,
+    3.8,
+    7
+   ],
+   "to": [
+    4.5,
+    8.5,
+    8.2
+   ],
+   "faces": {
+    "north": {
+     "texture": "#alu"
+    },
+    "south": {
+     "texture": "#alu"
+    },
+    "east": {
+     "texture": "#alu"
+    },
+    "west": {
+     "texture": "#alu"
+    },
+    "up": {
+     "texture": "#alu"
+    },
+    "down": {
+     "texture": "#alu"
+    }
+   },
+   "rotation": {
+    "angle": -22.5,
+    "axis": "x",
+    "origin": [
+     3,
+     3.8,
+     7.6
+    ]
+   }
+  },
+  {
+   "from": [
+    -1.2,
+    2.8,
+    0.8
+   ],
+   "to": [
+    1.2,
+    15,
+    3
+   ],
+   "faces": {
+    "north": {
+     "texture": "#frame",
+     "uv": [
+      13.6,
+      1.0,
+      16.0,
+      13.2
+     ]
+    },
+    "south": {
+     "texture": "#frame",
+     "uv": [
+      13.6,
+      1.0,
+      16.0,
+      13.2
+     ]
+    },
+    "east": {
+     "texture": "#frame"
+    },
+    "west": {
+     "texture": "#frame"
+    },
+    "up": {
+     "texture": "#frame",
+     "uv": [
+      13.6,
+      0.8,
+      16.0,
+      3.0
+     ]
+    },
+    "down": {
+     "texture": "#frame",
+     "uv": [
+      13.6,
+      13.0,
+      16.0,
+      15.2
+     ]
+    }
+   }
+  },
+  {
+   "from": [
+    -11,
+    14.5,
+    1.2
+   ],
+   "to": [
+    11,
+    15.6,
+    2.6
+   ],
+   "faces": {
+    "north": {
+     "texture": "#frame",
+     "uv": [
+      0.0,
+      0.4,
+      16.0,
+      1.5
+     ]
+    },
+    "south": {
+     "texture": "#frame",
+     "uv": [
+      0.0,
+      0.4,
+      16.0,
+      1.5
+     ]
+    },
+    "east": {
+     "texture": "#frame"
+    },
+    "west": {
+     "texture": "#frame"
+    },
+    "up": {
+     "texture": "#frame",
+     "uv": [
+      0.0,
+      1.2,
+      16.0,
+      2.6
+     ]
+    },
+    "down": {
+     "texture": "#frame",
+     "uv": [
+      0.0,
+      13.4,
+      16.0,
+      14.8
+     ]
+    }
+   }
+  },
+  {
+   "from": [
+    11.5,
+    14.6,
+    1.6
+   ],
+   "to": [
+    24,
+    15.5,
+    2.6
+   ],
+   "faces": {
+    "north": {
+     "texture": "#frame",
+     "uv": [
+      3.5,
+      0.5,
+      16.0,
+      1.4
+     ]
+    },
+    "south": {
+     "texture": "#frame",
+     "uv": [
+      0.0,
+      0.5,
+      12.5,
+      1.4
+     ]
+    },
+    "east": {
+     "texture": "#frame"
+    },
+    "west": {
+     "texture": "#frame"
+    },
+    "up": {
+     "texture": "#frame",
+     "uv": [
+      0.0,
+      1.6,
+      12.5,
+      2.6
+     ]
+    },
+    "down": {
+     "texture": "#frame",
+     "uv": [
+      0.0,
+      13.4,
+      12.5,
+      14.4
+     ]
+    }
+   },
+   "rotation": {
+    "angle": -45,
+    "axis": "y",
+    "origin": [
+     9.5,
+     0,
+     2.9
+    ]
+   }
+  }
+ ]
+}

@@ -1,0 +1,106 @@
+{
+  "textures": {
+    "ex_imp_anthracite": "jugcraft:block/ex_imp_anthracite",
+    "ex_imp_liner": "jugcraft:block/ex_imp_liner",
+    "ex_sealant": "jugcraft:block/ex_sealant",
+    "particle": "jugcraft:block/ex_imp_anthracite"
+  },
+  "elements": [
+    {
+      "from": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "to": [
+        16.0,
+        16.0,
+        15.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#ex_imp_liner"
+        },
+        "south": {
+          "texture": "#ex_imp_anthracite"
+        },
+        "east": {
+          "texture": "#ex_imp_liner"
+        },
+        "west": {
+          "texture": "#ex_imp_liner"
+        },
+        "up": {
+          "texture": "#ex_imp_liner"
+        },
+        "down": {
+          "texture": "#ex_imp_liner"
+        }
+      }
+    },
+    {
+      "from": [
+        0.13,
+        0.5,
+        15.0
+      ],
+      "to": [
+        15.87,
+        15.87,
+        15.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#ex_imp_anthracite"
+        },
+        "south": {
+          "texture": "#ex_imp_anthracite"
+        },
+        "east": {
+          "texture": "#ex_imp_anthracite"
+        },
+        "west": {
+          "texture": "#ex_imp_anthracite"
+        },
+        "up": {
+          "texture": "#ex_imp_anthracite"
+        },
+        "down": {
+          "texture": "#ex_imp_anthracite"
+        }
+      }
+    },
+    {
+      "from": [
+        0.13,
+        0.13,
+        15.0
+      ],
+      "to": [
+        15.87,
+        0.5,
+        15.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#ex_sealant"
+        },
+        "south": {
+          "texture": "#ex_sealant"
+        },
+        "east": {
+          "texture": "#ex_sealant"
+        },
+        "west": {
+          "texture": "#ex_sealant"
+        },
+        "up": {
+          "texture": "#ex_sealant"
+        },
+        "down": {
+          "texture": "#ex_sealant"
+        }
+      }
+    }
+  ]
+}

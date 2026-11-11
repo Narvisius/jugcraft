@@ -28,6 +28,11 @@ import net.minecraft.world.level.storage.LevelResource;
  * {@code JUGCRAFT_SHOWCASE=nuclear} (14-nuclear-showcase.bat), it also builds them once in a new world when the first
  * player joins, and puts that player in front of them. A world built that way has its plant brought up to date in
  * place whenever it is joined after the plant has changed, however the game was started.
+ *
+ * <p>The world's clock is left running (Justin, 6 November 2026: the tower's clocks were "just saying 12. It needs to be
+ * the actual in-game time"): the showcase used to stop it at noon for its pictures. A world it stopped gets its clock
+ * going again when a {@code jugcraft/clock-live.todo} file is found in it on joining (26-fresh-plant-world.bat leaves
+ * one in the test worlds), and that file is taken away.
  */
 public final class PlantShowcase {
 	/** The plants, west to east, and the space left between them (blocks). */
@@ -45,6 +50,7 @@ public final class PlantShowcase {
 			ServerPlayer player = handler.player;
 			Path marker = server.getWorldPath(LevelResource.ROOT).resolve("jugcraft").resolve("nuclear-showcase.done");
 			ServerLevel level = server.overworld();
+			startClock(server, player);
 			if (Files.exists(marker)) {
 				// A showcase world, however the game was started (6-play.bat too): if the plant has changed since (a new
 				// build of the mod), bring it up to date in place once the player's surroundings have loaded.
@@ -55,7 +61,6 @@ public final class PlantShowcase {
 				return;
 			}
 			server.getCommands().performPrefixedCommand(server.createCommandSourceStack().withSuppressedOutput(), "time set 6000");
-			server.getCommands().performPrefixedCommand(server.createCommandSourceStack().withSuppressedOutput(), "gamerule advance_time false");
 			server.getCommands().performPrefixedCommand(server.createCommandSourceStack().withSuppressedOutput(), "weather clear 1000000");
 			BlockPos ground = level.getHeightmapPos(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, player.blockPosition());
 			// The plant under review: only the medium plant for now (all three with /nuclear showcase plants).
@@ -83,6 +88,22 @@ public final class PlantShowcase {
 				p.wait = 40;
 			}
 		});
+	}
+
+	/** If the world asks for it (a clock-live.todo file in its jugcraft folder), sets its clock running again. */
+	private static void startClock(net.minecraft.server.MinecraftServer server, ServerPlayer player) {
+		Path todo = server.getWorldPath(LevelResource.ROOT).resolve("jugcraft").resolve("clock-live.todo");
+		if (!Files.exists(todo)) {
+			return;
+		}
+		server.getCommands().performPrefixedCommand(server.createCommandSourceStack().withSuppressedOutput(), "gamerule advance_time true");
+		try {
+			Files.deleteIfExists(todo);
+		} catch (java.io.IOException e) {
+			Jugcraft.LOGGER.warn("Could not take away {}: {}", todo, e.toString());
+		}
+		Jugcraft.LOGGER.info("The world's clock runs again (it had been stopped at noon by the nuclear showcase)");
+		player.sendSystemMessage(Component.literal("The world's clock is running again: the clocks show the time of day.").withStyle(ChatFormatting.GRAY));
 	}
 
 	/** The plant the showcase builds (the one under review). */
@@ -139,6 +160,8 @@ public final class PlantShowcase {
 	static boolean refreshIfChanged(ServerLevel level, ServerPlayer player, Path marker) {
 		Blueprint blueprint = Blueprint.get(REVIEWED, false);
 		if (blueprint == null) {
+			player.sendSystemMessage(Component.literal("The nuclear plant's blueprint did not load (the game log says why), so the plant here "
+					+ "was not brought up to date.").withStyle(ChatFormatting.GRAY));
 			return true;
 		}
 		BlockPos stake = null;
@@ -172,6 +195,33 @@ public final class PlantShowcase {
 		writeMarker(marker, stake, now);
 		player.sendSystemMessage(Component.literal("Done: the plant is up to date.").withStyle(ChatFormatting.GRAY));
 		return true;
+	}
+
+	/** The showcase plant's stake in this world (from its marker), or null if this is no showcase world. */
+	static BlockPos markedStake(ServerLevel level) {
+		Path marker = level.getServer().getWorldPath(LevelResource.ROOT).resolve("jugcraft").resolve("nuclear-showcase.done");
+		if (level != level.getServer().overworld() || !Files.exists(marker)) {
+			return null;
+		}
+		try {
+			for (String line : Files.readAllLines(marker)) {
+				if (line.startsWith("stake=")) {
+					String[] xyz = line.substring(6).split(",");
+					return new BlockPos(Integer.parseInt(xyz[0].trim()), Integer.parseInt(xyz[1].trim()), Integer.parseInt(xyz[2].trim()));
+				}
+			}
+		} catch (Exception e) {
+			Jugcraft.LOGGER.warn("Could not read the nuclear showcase marker: {}", e.toString());
+		}
+		return null;
+	}
+
+	/** After a rebuild by command: a showcase world's marker takes the current blueprint, so joining doesn't rebuild again. */
+	static void markBuilt(ServerLevel level, BlockPos stake) {
+		Path marker = level.getServer().getWorldPath(LevelResource.ROOT).resolve("jugcraft").resolve("nuclear-showcase.done");
+		if (Files.exists(marker) && stake.equals(markedStake(level))) {
+			writeMarker(marker, stake, fingerprint(Blueprint.get(REVIEWED, false)));
+		}
 	}
 
 	/** Where the plant's stake is, from its reactor vessel (loaded near the player), or null. */

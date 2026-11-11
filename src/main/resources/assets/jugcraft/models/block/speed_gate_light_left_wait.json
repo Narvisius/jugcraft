@@ -1,0 +1,98 @@
+{
+  "textures": {
+    "sg_steel": "jugcraft:block/sg_steel",
+    "sg_trim": "jugcraft:block/sg_trim",
+    "sg_top": "jugcraft:block/sg_top",
+    "sg_kick": "jugcraft:block/sg_kick",
+    "sg_ir": "jugcraft:block/sg_ir",
+    "sg_slot": "jugcraft:block/sg_slot",
+    "sg_house_glass": {
+      "sprite": "jugcraft:block/sg_house_glass",
+      "force_translucent": true
+    },
+    "sg_glass": {
+      "sprite": "jugcraft:block/sg_glass",
+      "force_translucent": true
+    },
+    "sg_glass_edge": "jugcraft:block/sg_glass_edge",
+    "sg_rubber": "jugcraft:block/sg_rubber",
+    "sg_led_white": "jugcraft:block/sg_led_white",
+    "sg_led_green": "jugcraft:block/sg_led_green",
+    "sg_reader": "jugcraft:block/sg_reader",
+    "sg_picto_go": "jugcraft:block/sg_picto_go",
+    "sg_picto_stop": "jugcraft:block/sg_picto_stop",
+    "sg_picto_case": "jugcraft:block/sg_picto_case",
+    "particle": "jugcraft:block/sg_steel"
+  },
+  "elements": [
+    {
+      "from": [
+        -2.72,
+        26.72,
+        -0.07
+      ],
+      "to": [
+        7.68,
+        26.88,
+        0.07
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sg_led_white",
+          "uv": [
+            5.6,
+            5.12,
+            16.0,
+            5.28
+          ]
+        },
+        "south": {
+          "texture": "#sg_led_white",
+          "uv": [
+            0.0,
+            5.12,
+            10.4,
+            5.28
+          ]
+        },
+        "east": {
+          "texture": "#sg_led_white",
+          "uv": [
+            15.86,
+            5.12,
+            16.0,
+            5.28
+          ]
+        },
+        "west": {
+          "texture": "#sg_led_white",
+          "uv": [
+            15.86,
+            5.12,
+            16.0,
+            5.28
+          ]
+        },
+        "up": {
+          "texture": "#sg_led_white",
+          "uv": [
+            0.0,
+            15.86,
+            10.4,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#sg_led_white",
+          "uv": [
+            0.0,
+            15.86,
+            10.4,
+            16.0
+          ]
+        }
+      },
+      "light_emission": 15
+    }
+  ]
+}

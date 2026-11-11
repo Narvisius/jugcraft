@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "G G",
+    "PCP",
+    "PBP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "G": "minecraft:black_stained_glass_pane",
+    "C": "jugcraft:basic_circuit",
+    "B": "minecraft:black_dye"
+  },
+  "result": {
+    "id": "jugcraft:ss_desk",
+    "count": 1
+  }
+}

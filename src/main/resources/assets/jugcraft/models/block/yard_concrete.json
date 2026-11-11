@@ -1,0 +1,41 @@
+{
+  "textures": {
+    "ex_precast": "jugcraft:block/ex_precast",
+    "ex_yard_concrete": "jugcraft:block/ex_yard_concrete",
+    "particle": "jugcraft:block/ex_precast"
+  },
+  "elements": [
+    {
+      "from": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "to": [
+        16.0,
+        16.0,
+        16.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#ex_precast"
+        },
+        "south": {
+          "texture": "#ex_precast"
+        },
+        "east": {
+          "texture": "#ex_precast"
+        },
+        "west": {
+          "texture": "#ex_precast"
+        },
+        "up": {
+          "texture": "#ex_yard_concrete"
+        },
+        "down": {
+          "texture": "#ex_precast"
+        }
+      }
+    }
+  ]
+}

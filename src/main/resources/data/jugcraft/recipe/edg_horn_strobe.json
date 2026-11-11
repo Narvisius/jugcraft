@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PLP",
+    "RNR"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "L": "minecraft:glass_pane",
+    "R": "minecraft:red_dye",
+    "N": "minecraft:note_block"
+  },
+  "result": {
+    "id": "jugcraft:edg_horn_strobe",
+    "count": 2
+  }
+}

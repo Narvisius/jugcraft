@@ -21,11 +21,24 @@ B, O = P.BELOW, P.OVER
 # Seats (you sit facing the way they face, so the room you need is in front), things hung on walls (nothing under
 # them), and what may stand on a piece's user side (its chair, a coffee table in front of a sofa).
 SEATED = {"sofa", "locker_bench", "stretcher"}
-WALL_HUNG = {"whiteboard", "framed_print", "large_print", "wall_display", "coat_rack", "aed_cabinet", "emergency_light", "emergency_light_conduit", "medicine_cabinet", "blueprint_sheet",
-             "fire_extinguisher", "exhaust_fan", "h2_monitor", "h2_sensor", "sign_no_smoking", "sign_battery_acid", "sign_hydrogen", "sign_eyewash",
+WALL_HUNG = {"tb_crane_compass", "chem_status_board", "sign_chem_lab", "sign_doc_control", "mgr_license", "mgr_awards", "mgr_hotline", "mgr_ppe_hooks", "ops_oos_board", "ops_schedule_board", "ops_wall_clock", "ops_radio_rack", "ops_ppe_shelf", "ops_key_locker", "ops_tag_rack",
+             "ops_lockbox", "whiteboard", "framed_print", "large_print", "wall_display", "coat_rack", "aed_cabinet", "emergency_light", "emergency_light_conduit", "medicine_cabinet", "blueprint_sheet",
+             "fire_extinguisher", "exhaust_fan", "sign_vital_area", "sign_prohibited", "rsr_key_cabinet", "rsr_phone_station", "sign_rsr_area", "sign_protected_area",
+             "admin_evac_plan", "exit_sign", "fire_alarm_pull", "h2_monitor", "h2_sensor", "sign_no_smoking", "sign_battery_acid", "sign_hydrogen", "sign_eyewash",
              "sign_relay_row_a", "sign_relay_row_b", "sign_relay_row_c", "sign_relay_row_d", "hv_rad_monitor", "hv_tox_monitor", "hv_refrig_monitor",
-             "tsc_video_wall", "tsc_class_board", "tsc_status_board", "tsc_area_monitor", "tsc_card_reader"}
-USER_SIDE_OK = ("jugcraft:operator_chair", "jugcraft:cafe_chair", "jugcraft:coffee_table")
+             "tsc_video_wall", "tsc_class_board", "tsc_status_board", "tsc_area_monitor", "tsc_card_reader",
+             # The diesel rooms' fittings (round 31 part 3: tools/diesel_fittings.py).
+             "edg_horn_strobe", "edg_room_fan", "sign_co2", "sign_hearing",
+             # The battery rooms' (older rooms round 4: tools/battery_rooms.py), the smoke detector under the ceiling.
+             "battery_ppe_cabinet", "battery_log_board", "sign_battery_1a", "sign_battery_1b", "smoke_detector",
+             # The plant computer room's (older rooms round 2: tools/server_room.py).
+             "sign_srv_row_a", "sign_srv_row_b", "sign_srv_row_c", "sign_srv_row_d", "agent_abort_station", "agent_manual_release",
+             "agent_horn_strobe", "sign_agent_vacate", "sign_no_food", "sign_clean_agent"}
+# Signs hung on a row's end in the aisle you read them from (the computer room's row signs on the racks' ends): the
+# reader stands in the sign's own cell, under it.
+ROW_END_SIGNS = {"sign_srv_row_a", "sign_srv_row_b", "sign_srv_row_c", "sign_srv_row_d"}
+# (A rubber mat, the black carpet, before electrical cabinets: older rooms round 3, the DC rooms.)
+USER_SIDE_OK = ("jugcraft:operator_chair", "jugcraft:cafe_chair", "jugcraft:coffee_table", "minecraft:black_carpet")
 
 
 def state_of(m):
@@ -63,17 +76,20 @@ def build_grids(site):
 PASSABLE_PREFIX = ("minecraft:air", "jugcraft:steel_door", "jugcraft:glass_door", "jugcraft:lead_door", "minecraft:ladder", "jugcraft:caged_ladder",
                    "jugcraft:railing_gate", "jugcraft:room_sign", "jugcraft:speed_gate",
                    "jugcraft:building_sign", "minecraft:rail", "jugcraft:ceiling_light_panel", "minecraft:iron_chain",
-                   "jugcraft:cable_tray", "jugcraft:dc_cable_tray", "jugcraft:light_hanger", "jugcraft:high_bay_light", "minecraft:light[")
+                   "jugcraft:cable_tray", "jugcraft:dc_cable_tray", "jugcraft:light_hanger", "jugcraft:high_bay_light", "minecraft:light[",
+                   "jugcraft:roller_door_station", "jugcraft:battery_room_sump", "jugcraft:restroom_floor_drain",
+                   "jugcraft:cr_atc_line", "jugcraft:tb_floor_mark")
 SEE_THROUGH = PASSABLE_PREFIX + ("minecraft:glass", "jugcraft:framed_glass", "jugcraft:blast_glass", "jugcraft:lead_glass", "minecraft:water", "jugcraft:guard_rail", "jugcraft:railing",
                                  "jugcraft:storage_tank_fill_pipe", "jugcraft:storage_tank_inlet", "jugcraft:storage_tank_outlet",
                                  "jugcraft:storage_tank_manway", "jugcraft:storage_tank_vent", "jugcraft:storage_tank_hatch",
                                  "jugcraft:operator_chair", "jugcraft:office_desk", "jugcraft:console_desk", "jugcraft:operator_console", "jugcraft:speed_gate_pedestal",
+                                 "jugcraft:cr_console", "jugcraft:ss_desk", "jugcraft:rsr_desk",
                                  "minecraft:iron_trapdoor", "jugcraft:water_cooler", "jugcraft:filing_cabinet",
                                  "jugcraft:whiteboard", "jugcraft:pallet_rack", "jugcraft:roller_door", "jugcraft:storage_rack",
                                  "jugcraft:dc_cable_riser", "jugcraft:station_battery")
-LIGHTS = {"jugcraft:ceiling_light_panel": 15, "jugcraft:high_bay_light": 15, "minecraft:light": 15, "minecraft:sea_lantern": 15, "jugcraft:warning_light": 13, "jugcraft:warning_beacon": 10,
+LIGHTS = {"jugcraft:ceiling_light_panel": 15, "jugcraft:vapor_tight_light": 15, "jugcraft:high_bay_light": 15, "minecraft:light": 15, "minecraft:sea_lantern": 15, "jugcraft:warning_light": 13, "jugcraft:warning_beacon": 10,
           "minecraft:campfire": 15, "jugcraft:server_rack": 3, "jugcraft:relay_cabinet": 2, "jugcraft:office_desk": 4,
-          "jugcraft:console_desk": 4, "jugcraft:operator_console": 4}
+          "jugcraft:console_desk": 4, "jugcraft:operator_console": 4, "jugcraft:cr_console": 4, "jugcraft:ss_desk": 4, "jugcraft:rsr_desk": 4}
 
 
 def table(fn):
@@ -120,7 +136,7 @@ def check(site, quiet=False):
             dx, dz = P.DIRS[facing if name in SEATED else MP.OPPOSITE[facing]]
             # (An intake plenum's outlet opens into its duct.)
             if name in ("whiteboard", "large_print", "office_plant", "coffee_table", "cafe_table", "cubicle_panel", "vitals_monitor", "stretcher", "glass_coffee_table",
-                        "hv_plenum_outlet"):
+                        "hv_plenum_outlet") or name in ROW_END_SIGNS:
                 continue
             front = g[sx + dx, sy + B, sz + dz + O]
             fst = state_of(front)
@@ -145,6 +161,28 @@ def check(site, quiet=False):
                     if occupied[cx, cy + B, cz + O] or (m and not passable[m]):
                         problems.append(f"{part.key}: door at {(x, y, z)} ({facing}) is blocked by {state_of(m) if m else 'equipment'} at {(cx - px, cy, cz - pz)}")
                         break
+        # Doors round: a door's badge reader hangs on the wall of the side you come from, by its latch jamb (a pair's,
+        # by the first leaf's hinge jamb, outside the pair): nothing may stand in front of it.
+        for x, y, z, facing in part.doors:
+            m = g[x + px, y - part.sink + B, z + pz + O]
+            st = state_of(m) if m else ""
+            if "reader=true" not in st:
+                continue
+            hinge_right, paired = "hinge=right" in st, "paired=true" in st
+            if paired and not hinge_right:
+                continue
+            dx, dz = P.DIRS[facing]
+            cx_, cz_ = P.DIRS[P.CLOCKWISE[facing]]
+            lx, lz = (cx_, cz_) if not hinge_right else (-cx_, -cz_)
+            if paired:
+                lx, lz = -lx, -lz
+            for yy in (y, y + 1):
+                cx, cy, cz = x + px + lx - dx, yy - part.sink, z + pz + lz - dz
+                m2 = g[cx, cy + B, cz + O]
+                if occupied[cx, cy + B, cz + O] or (m2 and not passable[m2]):
+                    problems.append(f"{part.key}: the badge reader by the door at {(x, y, z)} is blocked by "
+                                    f"{state_of(m2) if m2 else 'equipment'} at {(cx - px, cy, cz - pz)}")
+                    break
 
     # 3. Floating: everything solid must join the ground (y <= 0) through face-touching solids.
     grounded = np.zeros_like(solid)
@@ -289,18 +327,27 @@ def check(site, quiet=False):
                             f"{[(int(a), int(b_) - part.base, int(c)) for a, b_, c in list(zip(dx_, dy_, dz_))[:4]]}")
     # 7. Power cables (round 25): each network joins only what it is meant to.
     problems += cable_networks(site, g, quiet)
-    # 8. Feeder conduits (round 25b): none stops in mid-air. Each column stands on a load centre's hub and reaches a
-    # cable tray: base over the lineup, up to the ceiling, through the slab, up through the floor, into the tray.
+    # 8. The switchgear room (older rooms round 1; round 25b's feeder conduits replaced by its overhead power trays):
+    # each load centre's cables down from its tray, each run up through the ceiling into its own train's raceway.
     problems += feeder_conduits(site, g)
+    problems += switchgear_room(site, g)
     # 9. Regulating transformers (round 26, 8d): each beside the inverter of its label, fed from its train's MCC, the
     # conduits up from its top and from the MCC's REG XF section reaching the same ladder tray; and (8e) each inverter's
     # vital panel, their conduits into the same tray.
     problems += regulating_transformers(site, g)
     # 10. The battery rooms (round 26, #9): their second strings, sense cable risers and fittings.
     problems += battery_rooms(site, g)
+    problems += dc_rooms(site, g)
+    problems += control_room(site, g)
+    problems += entrance_hall(site, g)
+    problems += remote_shutdown_room(site, g)
+    problems += gatehouse(site, g)
     problems += relay_room(site, g)
     problems += hvac_room(site, g)
     problems += tsc_room(site, g)
+    # 11. The cable spreading room (punch list #15).
+    problems += spreading_room(site, g, occupied)
+    problems += overview_screens(g, site)
     if not quiet:
         for p in problems:
             print(p)
@@ -351,6 +398,124 @@ def feeder_conduits(site, g):
             k += 1
         if at(x, k, z) != "feeder_conduit_tray" or not at(x, k, z + 1).startswith("cable_tray"):
             problems.append(f"feeder conduit from {(x, y, z)} does not end in a cable tray ({at(x, k, z)} at y {k}, {at(x, k, z + 1)} beside it)")
+    return problems
+
+
+def turbine_building(site):
+    """The turbine building's footprint in the grid (x0, z0, x1, z1): its plant rooms (turbine hall part 3) have a
+    switchgear room, a lube oil room with its own pre-action sprinklers, a workshop with its eyewash and a turbine control
+    room with its own overview screen, none of them the control building's, so the rules for those rooms leave it out."""
+    for q, px, pz, _ in site.parts:
+        if getattr(q, "key", "") == "pwr_turbine_hall":
+            return (px, pz + O, px + q.size[0] - 1, pz + O + q.size[2] - 1)
+    return (0, 0, -1, -1)
+
+
+def switchgear_room(site, g):
+    """The switchgear room (older rooms round 1; tools/switchgear_room.py, medium_plant.switchgear_room): every cable
+    drop on a load centre's top under a tray drop, each lineup in the room four (its in-use feeder sections); each tray
+    run's end up through the ceiling into its train's way up: LC 1B's Train B riser to its top, LC 1A's fire-wrapped
+    raceway unbroken (rise, elbow, run, drop) down into a Train A tray; the log desk's laptop within its reach of a
+    load centre (nuclear/SwitchgearRoom.java REACH)."""
+    kinds = {k: st.split("[")[0].split(":")[-1] for k, (st, _) in P.MATERIALS.items()}
+    problems = []
+
+    tb = turbine_building(site)
+
+    def blocks(*names, part=None):
+        out = []
+        for k, (st, _) in P.MATERIALS.items():
+            if kinds[k] in names and (part is None or f"part={part}" in st):
+                v = int(st.split("variant=")[1].split(",")[0].rstrip("]")) if "variant=" in st else 0
+                out += [(int(x), int(y) - B, int(z) - O, v) for x, y, z in np.argwhere(g == k)
+                        if not (tb[0] <= x <= tb[2] and tb[1] <= z <= tb[3])]
+        return out
+
+    def at(x, y, z):
+        if not (0 <= x < g.shape[0] and 0 <= y + B < g.shape[1] and 0 <= z + O < g.shape[2]):
+            return ""
+        m = int(g[x, y + B, z + O])
+        return kinds.get(m, "") if m else ""
+
+    def variant(x, y, z):
+        st = P.MATERIALS.get(int(g[x, y + B, z + O]), ("", None))[0]
+        return int(st.split("variant=")[1].split(",")[0].rstrip("]")) if "variant=" in st else 0
+    cells = {}
+    for part, px, pz, rot in site.parts:
+        for kind, ax, ay, az, facing in part.props:
+            if kind == "switchgear_lineup":
+                for cx, cy, cz in P.equipment_cells(kind, ax, ay, az, facing):
+                    cells[(cx + px, cy - part.sink, cz + pz)] = (ax + px, ay - part.sink, az + pz)
+    per = {}
+    for x, y, z, v in blocks("lc_cable_drop"):
+        lc = cells.get((x, y - 1, z))
+        if lc is None:
+            problems.append(f"a load centre cable drop at {(x, y, z)} is over no load centre")
+        else:
+            per[lc] = per.get(lc, 0) + 1
+        if at(x, y + 1, z) != "cable_tray_power_down":
+            problems.append(f"the cable drop at {(x, y, z)} hangs from {at(x, y + 1, z) or 'nothing'}, not a tray's drop")
+    if len(per) < 2 or any(n != 4 for n in per.values()):
+        problems.append(f"the switchgear room's load centres' cable drops: {sorted(per.values())}, not four on each of two")
+    ends = blocks("cable_tray_power_ceiling")
+    if len(ends) != 2:
+        problems.append(f"{len(ends)} tray runs up through the switchgear room's ceiling, not 2")
+    for x, y, z, v in ends:
+        k = y + 1
+        while k < y + 5 and at(x, k, z) not in ("cable_tray_riser_floor", "fire_wrap_floor"):
+            k += 1
+        up = at(x, k, z)
+        if v % 3 == 1 and up == "cable_tray_riser_floor":
+            k += 1
+            while at(x, k, z) == "cable_tray_riser":
+                k += 1
+            if at(x, k, z) != "cable_tray_riser_top" or variant(x, k, z) % 3 != 1:
+                problems.append(f"LC 1B's riser from {(x, y, z)} ends at {at(x, k, z) or 'nothing'}, not a Train B riser top")
+        elif v % 3 == 0 and up == "fire_wrap_floor":
+            k += 1
+            while at(x, k, z) == "fire_wrap_rise":
+                k += 1
+            if at(x, k, z) != "fire_wrap_elbow":
+                problems.append(f"LC 1A's fire wrap from {(x, y, z)} rises to {at(x, k, z) or 'nothing'}, not its elbow")
+                continue
+            j = x - 1
+            while at(j, k, z) in ("fire_wrap", "fire_wrap_hanger"):
+                j -= 1
+            if at(j, k, z) != "fire_wrap_drop":
+                problems.append(f"LC 1A's fire wrap breaks off at {(j, k, z)} ({at(j, k, z) or 'nothing'})")
+                continue
+            into = [(j + dx, k - 1, z + dz) for dx in (-1, 0, 1) for dz in (-1, 0, 1)]
+            if not any(at(*c) in TRAIN_PIECES[:7] and variant(*c) % 3 == 0 for c in into):
+                problems.append(f"LC 1A's fire wrap drops at {(j, k, z)} into no Train A tray")
+        else:
+            problems.append(f"the train {'ABN'[v % 3]} tray run up through the ceiling at {(x, y, z)} goes into {up or 'nothing'}")
+    # The cooling: the fan coil unit's supply duct north off it to its elbow, then west along the aisle, its two
+    # registers, closed at its end.
+    fcus = blocks("sgr_fan_coil")
+    if len(fcus) != 1:
+        problems.append(f"{len(fcus)} switchgear room fan coil units, not 1")
+    for x, y, z, v in fcus:
+        if at(x + 1, y, z) != "sgr_fan_coil_end":
+            problems.append(f"the fan coil unit at {(x, y, z)} has no coil end east of it")
+        k = z - 1
+        while at(x, y, k) in ("sgr_duct", "sgr_duct_hanger"):
+            k -= 1
+        if at(x, y, k) != "hv_duct_elbow":
+            problems.append(f"the fan coil unit's duct north from {(x, y, z)} ends at {at(x, y, k) or 'nothing'}, not its elbow")
+            continue
+        j, registers = x - 1, 0
+        while at(j, y, k) in ("sgr_duct", "sgr_duct_hanger", "sgr_duct_register"):
+            registers += at(j, y, k) == "sgr_duct_register"
+            j -= 1
+        if at(j, y, k) != "sgr_duct_end" or registers != 2:
+            problems.append(f"the switchgear room's supply duct west from {(x, y, k)}: {registers} registers, ends at {at(j, y, k) or 'nothing'}")
+    laptops = blocks("sgr_desk_laptop", part=0)
+    if len(laptops) != 1:
+        problems.append(f"{len(laptops)} switchgear log desk laptops, not 1")
+    lcs = set(cells.values())
+    for x, y, z, v in laptops:
+        if not any((x - a) ** 2 + (z - c) ** 2 <= 24 * 24 for a, b_, c in lcs):
+            problems.append(f"the switchgear room's laptop at {(x, y, z)} has no load centre in reach")
     return problems
 
 
@@ -505,6 +670,133 @@ def regulating_transformers(site, g):
     return problems
 
 
+def dc_rooms(site, g):
+    """The DC equipment rooms (older rooms round 3; nuclear/DcRoom.java): each room's two 125 VDC distribution panels (one
+    of each label: 1A-1, 1A-2 in Room 1A, 1B-1, 1B-2 in 1B) on the side wall, each with its train's switchboard in reach and
+    its conduit up the wall to a tray drop; each room's log desk laptop with a switchboard in reach; the one-line
+    diagram, the battery service board, the test cart, the train sign and the DANGER sign in each; no relay cabinet
+    left in them."""
+    import dc_room as DC
+    kinds = {k: st.split("[")[0].split(":")[-1] for k, (st, _) in P.MATERIALS.items()}
+
+    def at(x, y, z):
+        if not (0 <= x < g.shape[0] and 0 <= y + B < g.shape[1] and 0 <= z + O < g.shape[2]):
+            return ""
+        m = int(g[x, y + B, z + O])
+        return kinds.get(m, "") if m else ""
+
+    def placed(kind, part=None):
+        out = []
+        for k, (st, _) in P.MATERIALS.items():
+            if st.startswith(f"jugcraft:{kind}[") or st == f"jugcraft:{kind}":
+                if part is not None and f"part={part}" not in st:
+                    continue
+                v = int(st.split("variant=")[1].split(",")[0].rstrip("]")) if "variant=" in st else 0
+                out += [(int(x), int(y) - B, int(z) - O, v) for x, y, z in np.argwhere(g == k)]
+        return out
+
+    problems = []
+    boards = placed("dc_switchboard", part=1)
+    if sorted(v for *_, v in boards) != [0, 1]:
+        problems.append(f"the DC switchboards: {sorted(v for *_, v in boards)} (one 1A, one 1B)")
+    panels = placed(DC.DP_KEY, part=0)
+    if sorted(v for *_, v in panels) != [0, 1, 2, 3]:
+        problems.append(f"the DC distribution panels' labels: {sorted(v for *_, v in panels)} (1A-1, 1A-2, 1B-1, 1B-2)")
+    for x, y, z, v in panels:
+        mine = [b for b in boards if b[3] == v // 2 and (b[0] - x) ** 2 + (b[2] - z) ** 2 <= 24 * 24]
+        if not mine:
+            problems.append(f"DC panel {DC.DP_LABELS[v]} at {(x, y, z)} has no switchboard of its train in reach")
+        k = y + 2
+        while at(x, k, z) == "wall_conduit":
+            k += 1
+        if k == y + 2 or at(x, k, z) != "ladder_tray_drop_wall":
+            problems.append(f"DC panel {DC.DP_LABELS[v]} at {(x, y, z)}: its conduit does not reach a tray drop ({at(x, k, z)} at y {k})")
+    laptops = placed(DC.LT_KEY, part=0)
+    if len(laptops) != 2:
+        problems.append(f"{len(laptops)} DC room log desk laptops, not 2")
+    for x, y, z, v in laptops:
+        if not any((b[0] - x) ** 2 + (b[2] - z) ** 2 <= 24 * 24 for b in boards):
+            problems.append(f"the DC room laptop at {(x, y, z)} has no switchboard in reach")
+    for kind, part, n in (("dc_one_line", 0, 2), ("battery_service_board", 0, 2), ("battery_test_cart", None, 2), ("sign_dc_train_a", None, 1),
+                          ("sign_dc_train_b", None, 1), ("sign_dc_danger", None, 2)):
+        got = len(placed(kind, part))
+        if got != n:
+            problems.append(f"{got} {kind} in the DC rooms, not {n}")
+    for x, y, z, v in boards:
+        cab = [c for c in placed("relay_cabinet") if (c[0] - x) ** 2 + (c[2] - z) ** 2 <= 10 * 10 and abs(c[1] - y) < 3]
+        if cab:
+            problems.append(f"a relay cabinet still in the DC room by the switchboard at {(x, y, z)}: {cab[:2]}")
+    return problems
+
+
+def control_room(site, g):
+    """The main control room's furniture (older rooms round 5; tools/cr_room.py): the three operators' consoles, one of
+    each position; the shift manager's desk; the eight procedure racks, one of each section; the SCBA cabinet, the EAL
+    chart, the At The Controls signs at the ends of its line across the floor."""
+    import cr_room as CR
+    problems = []
+
+    def count(name, part=0):
+        out = {}
+        for k, (st, _) in P.MATERIALS.items():
+            if st.startswith(f"jugcraft:{name}[") and f"part={part}" in st:
+                v = int(st.split("variant=")[1].split(",")[0].rstrip("]")) if "variant=" in st else 0
+                out[v] = out.get(v, 0) + int((g == k).sum())
+        return out
+    # (The remote shutdown room has an AOP rack and an SCBA cabinet of its own: older rooms round 7.)
+    aop = [CR.PR_LABELS.index("AOP")]
+    for name, n, more in ((CR.CC_KEY, len(CR.POSITIONS), []), (CR.PR_KEY, len(CR.PR_LABELS), aop), (CR.SS_KEY, 1, [])):
+        c = count(name)
+        if sorted(v for v, k in c.items() for _ in range(k)) != sorted(list(range(n)) + more):
+            problems.append(f"{name}: {c}, not one of each of its {n} labels")
+    for name, want in (("cr_scba_cabinet", 2), ("cr_eal_chart", 1)):
+        if sum(count(name).values()) != want:
+            problems.append(f"{sum(count(name).values())} {name}, not {want}")
+    for name, lo in (("cr_atc_sign", 2), ("cr_atc_line", 20)):
+        n = sum(int((g == k).sum()) for k, (st, _) in P.MATERIALS.items() if st.startswith(f"jugcraft:{name}["))
+        if n < lo or (name == "cr_atc_sign" and n != 2):
+            problems.append(f"{n} {name}")
+    return problems
+
+
+def entrance_hall(site, g):
+    """The control building's entrance (older rooms round 6; tools/entrance_hall.py): the security post, the hand
+    reader, the evacuation plan, the VITAL AREA and prohibited items signs, one of each (the post, the hand reader and
+    the prohibited items sign twice: the security gatehouse has its own)."""
+    problems = []
+    for name, want in (("ac_station", 2), ("ac_hand_reader", 2), ("ac_evac_plan", 1), ("sign_vital_area", 1), ("sign_prohibited", 2)):
+        n = sum(int((g == k).sum()) for k, (st, _) in P.MATERIALS.items()
+                if st.startswith(f"jugcraft:{name}[") and ("part=" not in st or "part=0" in st))
+        if n != want:
+            problems.append(f"{n} {name}, not {want}")
+    return problems
+
+
+def gatehouse(site, g):
+    """The security gatehouse (tools/sec_gatehouse.py): the alarm station console, the X-ray, the metal detector, the
+    weapons locker and the PROTECTED AREA sign, one of each; two dome cameras."""
+    problems = []
+    for name, want in (("sec_alarm_console", 1), ("sec_xray", 1), ("sec_metal_detector", 1), ("sec_weapons_locker", 1),
+                       ("sign_protected_area", 1), ("sec_dome_camera", 2)):
+        n = sum(int((g == k).sum()) for k, (st, _) in P.MATERIALS.items()
+                if st.startswith(f"jugcraft:{name}[") and ("part=" not in st or "part=0" in st))
+        if n != want:
+            problems.append(f"{n} {name}, not {want}")
+    return problems
+
+
+def remote_shutdown_room(site, g):
+    """The remote shutdown room (older rooms round 7; tools/rsr_room.py): the station, the transfer key cabinet, the
+    communications station and the room's sign, one of each."""
+    problems = []
+    for name in ("rsr_desk", "rsr_key_cabinet", "rsr_phone_station", "sign_rsr_area"):
+        n = sum(int((g == k).sum()) for k, (st, _) in P.MATERIALS.items()
+                if st.startswith(f"jugcraft:{name}[") and ("part=" not in st or "part=0" in st))
+        if n != 1:
+            problems.append(f"{n} {name}, not 1")
+    return problems
+
+
 def battery_rooms(site, g):
     """The battery rooms (round 26, #9): two strings of two racks in each, every rack's terminal end with its riser (and
     the sense cable) up to a riser top under the ceiling; each room's exhaust fan over a louvre, its hydrogen monitor's
@@ -537,8 +829,18 @@ def battery_rooms(site, g):
         dx, dz = P.DIRS[facing]
         if at(x + dx, y, z + dz) != "intake_louvre":
             problems.append(f"exhaust fan at {(x, y, z)} is not over a louvre ({at(x + dx, y, z + dz)})")
+    # (The diesel rooms have eyewashes of their own: round 31 part 3. Not counted here.)
+    diesel = [(px, pz, part.size[0], part.size[2]) for part, px, pz, _ in site.parts if getattr(part, "key", "") == "diesel_building"]
+
+    tb = turbine_building(site)
+
+    def counted(c):
+        # (Nor the turbine building's: its workshop has an eyewash, its lube oil room a NO SMOKING sign; part 3.)
+        return c[1] - B < 10 and not any(px <= c[0] < px + w and pz <= c[2] - O < pz + d for px, pz, w, d in diesel) \
+            and not (tb[0] <= c[0] <= tb[2] and tb[1] <= c[2] <= tb[3])
     for name in ("h2_monitor", "eyewash_station", "spill_kit", "sign_no_smoking", "sign_battery_acid", "sign_hydrogen", "sign_eyewash"):
-        n = sum(int((g == k).sum()) for k, (st, _) in P.MATERIALS.items() if kinds[k] == name and "part=1" not in st)
+        # On the ground floor (the restroom upstairs has a no smoking sign of its own).
+        n = sum(sum(1 for c in np.argwhere(g == k).tolist() if counted(c)) for k, (st, _) in P.MATERIALS.items() if kinds[k] == name and "part=1" not in st)
         if n != 2:
             problems.append(f"{n} {name} in the battery rooms, not one in each")
     if len(fans) != 2:
@@ -552,6 +854,35 @@ def battery_rooms(site, g):
                     k2 += 1
                 if at(x, k2, z) != "h2_sensor":
                     problems.append(f"hydrogen monitor at {(x, y, z)}: its conduit does not reach a sensor head ({at(x, k2, z)} at y {k2})")
+    # Older rooms round 4 (tools/battery_rooms.py): a disconnect for each string of each battery (1A-1 .. 1B-2), its
+    # conduit pair up from its top into a DC tray; the racks labelled, each label once (a train's two strings of two
+    # racks); the ground floor's battery rooms lit by vapor-tight lights; the PPE cabinet, cell log, sump and sign in each.
+    discs = {}
+    for k, (st, _) in P.MATERIALS.items():
+        if st.startswith("jugcraft:battery_disconnect[") and "part=0" in st:
+            v = int(st.split("variant=")[1].split(",")[0].rstrip("]")) if "variant=" in st else 0
+            for x, y, z in np.argwhere(g == k):
+                discs[(int(x), int(y) - B, int(z) - O)] = v
+    if sorted(discs.values()) != [0, 1, 2, 3]:
+        problems.append(f"the battery disconnects' labels: {sorted(discs.values())} (1A-1, 1A-2, 1B-1, 1B-2)")
+    for (x, y, z), v in discs.items():
+        column = [at(x, y + 2, z), at(x, y + 3, z), at(x, y + 4, z)]
+        if column[:2] != ["battery_disconnect_riser"] * 2 or column[2] not in ("dc_cable_tray", "dc_cable_tray_tee", "dc_cable_tray_bend"):
+            problems.append(f"battery disconnect at {(x, y, z)}: no conduit pair up into a DC tray over it ({column})")
+    labels = []
+    for k, (st, _) in P.MATERIALS.items():
+        if st.startswith("jugcraft:station_battery[") and ("part=0," in st or "part=0]" in st):
+            v = int(st.split("variant=")[1].split(",")[0].rstrip("]")) if "variant=" in st else 0
+            labels += [v] * int((g == k).sum())
+    if sorted(labels) != list(range(8)):
+        problems.append(f"the station battery racks' labels: {sorted(labels)} (each of the eight once)")
+    for name, n in (("battery_ppe_cabinet", 2), ("battery_log_board", 2), ("battery_room_sump", 2), ("sign_battery_1a", 1), ("sign_battery_1b", 1)):
+        got = sum(int((g == k).sum()) for k, (st, _) in P.MATERIALS.items() if kinds[k] == name)
+        if got != n:
+            problems.append(f"{got} {name} in the battery rooms, not {n}")
+    lights = sum(int((g == k).sum()) for k, (st, _) in P.MATERIALS.items() if kinds[k] == "vapor_tight_light")
+    if lights < 6:
+        problems.append(f"{lights} vapor-tight lights in the battery rooms")
     return problems
 
 
@@ -592,7 +923,7 @@ def relay_room(site, g):
     header = [(x, y, z) for k, (st, _) in P.MATERIALS.items() if kinds[k] == "control_tray_firestop" for x, y, z in np.argwhere(g == k)]
     if len(header) != 2:
         problems.append(f"{len(header)} fire-stopped tray penetrations, not 2 (the corridor's walls)")
-    tees = sum(int((g == k).sum()) for k in P.MATERIALS if kinds[k] == "control_tray_tee")
+    tees = sum(int((g == k).sum()) for k in P.MATERIALS if kinds[k] in ("control_tray_tee", "cable_tray_control_tee"))
     if tees != 2:
         problems.append(f"{tees} control tray tees, not 2 (out of the spreading room's tray, into row D's run)")
     # The room's fittings, counted in the room (the cabinets' extent, out to its walls).
@@ -675,9 +1006,98 @@ def hvac_room(site, g):
                 continue
             if fam == "duct" and name_at(n).startswith("hv_plenum"):
                 continue
+            if fam == "duct" and name_at(n).startswith("sgr_duct"):
+                continue        # (the switchgear room's supply duct off its elbow: switchgear_room checks its run)
             if fam == "small" and name_at(n) in small_ends:
                 continue
             problems.append(f"{name} at {c}: its {f} opening meets {name_at(n) or 'air'}")
+    return problems
+
+
+TRAIN_PIECES = ("cable_tray_power", "cable_tray_control", "cable_tray_instr", "cable_tray_power_drop", "cable_tray_control_drop",
+                "cable_tray_instr_drop", "cable_tray_power_up", "cable_bundle", "cable_bundle_elbow", "cable_bundle_sleeve")
+
+
+def overview_screens(g, site=None):
+    """The plant overview screens (round 34): three of them (the control room's east wall, the board room, the plant
+    manager's office) and the turbine control room's (turbine hall part 3), each with its power raceway on the wall
+    under its middle (tools/medium_plant.py screen_raceway)."""
+    kinds = {k: st.split("[")[0].split(":")[-1] for k, (st, _) in P.MATERIALS.items()}
+    middles = [tuple(int(v) for v in c) for k, (st, _) in P.MATERIALS.items() if kinds[k] == "plant_map_screen" and "part=1" in st
+               for c in np.argwhere(g == k)]
+    problems = []
+    want = 4 if site is not None and turbine_building(site)[2] >= 0 else 3
+    if len(middles) != want:
+        problems.append(f"{len(middles)} plant overview screens, not {want}")
+    for x, y, z in middles:
+        below = kinds.get(int(g[x, y - 1, z]), "") if g[x, y - 1, z] else ""
+        # (The board room's overview stands over the AV credenza, which feeds it: the administration building part 2.)
+        if below not in ("screen_raceway", "board_av_credenza"):
+            problems.append(f"plant overview screen at {(x, y, z)}: no power raceway under its middle ({below or 'air'})")
+    return problems
+
+
+def spreading_room(site, g, occupied):
+    """The cable spreading room (punch list #15; tools/spreading_room.py): one releasing panel, its valve station and a
+    pull station; detectors and heads, all within the panel's reach (nuclear/SpreadingRoomFire.java REACH, HIGH); no
+    two trays of different trains touching along a run; every bundle's sleeve under a board (the slab between), its
+    bundle down to an elbow out of a tray or a tray it rises out of (the operator consoles' too)."""
+    import spreading_room as SR
+    kinds = {k: st.split("[")[0].split(":")[-1] for k, (st, _) in P.MATERIALS.items()}
+    problems = []
+    # The warehouse (part W3) has its own sprinkler system, valve station and releasing panel in its office: not the
+    # spreading room's.
+    own = [(px, pz + O, px + q.size[0] - 1, pz + O + q.size[2] - 1) for q, px, pz, _ in site.parts if q.key == "warehouse"]
+    # (Nor is the turbine building's lube oil room's, turbine hall part 3.)
+    own.append(turbine_building(site))
+
+    def blocks(*names, part=None):
+        out = []
+        for k, (st, _) in P.MATERIALS.items():
+            if kinds[k] in names and (part is None or f"part={part}" in st):
+                v = int(st.split("variant=")[1].split(",")[0].rstrip("]")) if "variant=" in st else 0
+                out += [(int(x), int(y), int(z), v) for x, y, z in np.argwhere(g == k)
+                        if not any(a <= x <= c and b <= z <= e for a, b, c, e in own)]
+        return out
+
+    def kind_at(x, y, z):
+        return kinds.get(int(g[x, y, z]), "") if 0 <= x < g.shape[0] and 0 <= y < g.shape[1] and 0 <= z < g.shape[2] and g[x, y, z] else ""
+    panels = blocks("csr_release_panel", part=0)
+    for name, n in (("csr_release_panel", 1), ("csr_valve_station", 1), ("fire_pull_station", 1)):
+        got = len(blocks(name, part=0 if name != "fire_pull_station" else None))
+        if got != n:
+            problems.append(f"{got} {name}, not {n}")
+    if len(panels) != 1:
+        return problems
+    px, py, pz, _ = panels[0]
+    heads = blocks("sprinkler_pipe_head", "sprinkler_pipe_end")
+    detectors = blocks("smoke_detector", "heat_detector")
+    near = lambda c: abs(c[0] - px) <= 24 and abs(c[2] - pz) <= 24 and abs(c[1] - py) <= 10
+    if sum(1 for h in heads if near(h)) < 20:
+        problems.append(f"only {sum(1 for h in heads if near(h))} sprinkler heads within the releasing panel's reach")
+    if sum(1 for d in detectors if near(d)) < 9:
+        problems.append(f"only {sum(1 for d in detectors if near(d))} detectors within the releasing panel's reach")
+    if not any(near(c) for c in blocks("csr_valve_station", part=0)):
+        problems.append("the valve station is out of the releasing panel's reach")
+    # The trains kept apart: no two train pieces of different trains side by side.
+    trays = {(x, y, z): v % 3 for x, y, z, v in blocks(*TRAIN_PIECES[:7])}
+    for (x, y, z), t in trays.items():
+        for dx, dz in ((1, 0), (0, 1)):
+            o = trays.get((x + dx, y, z + dz))
+            if o is not None and o != t:
+                problems.append(f"trays of two trains touch at {(x, y - B, z - O)}")
+    # The bundles: up from a tray to a sleeve under a board.
+    sleeves = blocks("cable_bundle_sleeve") + blocks("fire_wrap_sleeve")
+    if len(sleeves) < 40:
+        problems.append(f"only {len(sleeves)} bundle sleeves up into the boards")
+    for x, y, z, v in sleeves:
+        if not occupied[x, y + 2, z] and kind_at(x, y + 2, z) not in ("operator_console", "cr_console"):
+            problems.append(f"a sleeve at {(x, y - B, z - O)} goes up into no board or console")
+        k = y - 1
+        while kind_at(x, k, z) in ("cable_bundle", "fire_wrap_rise"):
+            k -= 1
+        if kind_at(x, k, z) not in ("cable_bundle_elbow", "cable_tray_power_up", "fire_wrap_tee_up", "fire_wrap_up"):
+            problems.append(f"the bundle up to the sleeve at {(x, y - B, z - O)} starts at {kind_at(x, k, z) or 'nothing'}")
     return problems
 
 
@@ -778,6 +1198,13 @@ def cable_networks(site, g, quiet=True):
         for kind, ax, ay, az, facing in part.props:
             add(kind, ax, ay, az, facing, px, -part.sink, pz)
     problems, seen, nets = [], set(), []
+    # The transformer yard built as a site (transformer yard and switchyard build): its unit auxiliary transformers'
+    # feed into the cable under UAT-1A's bus duct (tools/yard_sites.py) is the transformer's way out.
+    yard_feeds = set()
+    if any(part.key == "pwr_transformer_yard" and getattr(part, "kind", "") == "yard" for part, *_ in site.parts):
+        import yard_sites
+        hx, hy, hz = yard_sites._cached_meta("transformer_yard")["house_feed"]
+        yard_feeds.add((hx, hy + B, hz + O))
     for start in sorted(cells):
         if start in seen:
             continue
@@ -786,6 +1213,8 @@ def cable_networks(site, g, quiet=True):
         while q:
             c = q.popleft()
             net.append(c)
+            if c in yard_feeds:
+                touches.add(("transformer_yard", (c[0], c[1] - B, c[2] - O), "out"))
             for dx, dy, dz in ((1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)):
                 n = (c[0] + dx, c[1] + dy, c[2] + dz)
                 if n in cells:
@@ -826,7 +1255,7 @@ def cable_networks(site, g, quiet=True):
     # What the control building must have.
     feed = [t for net, t in nets if any(x[2] == "out" for x in t)]
     if not feed or sum(1 for x in feed[0] if x[2] == "incoming") < 2:
-        problems.append("the main transformer does not feed both of the control building's load centres")
+        problems.append("the main transformer (or the transformer yard) does not feed both of the control building's load centres")
     if any(x[0] != "switchgear_lineup" for x in feed[0] if x[2] == "incoming") if feed else False:
         problems.append("the main transformer's feed reaches something besides the load centres' incoming sides")
     to_mcc = [t for net, t in nets if any(x[0] == "switchgear_lineup" and x[2] == "feeder6" for x in t)]

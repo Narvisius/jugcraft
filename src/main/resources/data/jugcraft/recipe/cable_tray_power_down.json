@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "I I",
+    "IPI"
+  ],
+  "key": {
+    "I": "minecraft:iron_bars",
+    "P": "#c:plates/steel"
+  },
+  "result": {
+    "id": "jugcraft:cable_tray_power_down",
+    "count": 4
+  }
+}

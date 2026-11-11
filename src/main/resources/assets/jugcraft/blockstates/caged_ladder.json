@@ -11,10 +11,21 @@
     {
       "when": {
         "facing": "north",
-        "cage": "true"
+        "cage": "true",
+        "bottom": "false"
       },
       "apply": {
         "model": "jugcraft:block/caged_ladder_cage"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "cage": "true",
+        "bottom": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/caged_ladder_cage_bottom"
       }
     },
     {
@@ -38,10 +49,22 @@
     {
       "when": {
         "facing": "east",
-        "cage": "true"
+        "cage": "true",
+        "bottom": "false"
       },
       "apply": {
         "model": "jugcraft:block/caged_ladder_cage",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "cage": "true",
+        "bottom": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/caged_ladder_cage_bottom",
         "y": 90
       }
     },
@@ -67,10 +90,22 @@
     {
       "when": {
         "facing": "south",
-        "cage": "true"
+        "cage": "true",
+        "bottom": "false"
       },
       "apply": {
         "model": "jugcraft:block/caged_ladder_cage",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "cage": "true",
+        "bottom": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/caged_ladder_cage_bottom",
         "y": 180
       }
     },
@@ -96,10 +131,22 @@
     {
       "when": {
         "facing": "west",
-        "cage": "true"
+        "cage": "true",
+        "bottom": "false"
       },
       "apply": {
         "model": "jugcraft:block/caged_ladder_cage",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "cage": "true",
+        "bottom": "true"
+      },
+      "apply": {
+        "model": "jugcraft:block/caged_ladder_cage_bottom",
         "y": 270
       }
     },

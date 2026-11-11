@@ -93,6 +93,8 @@ public class DroneTerminalBlockEntity extends BlockEntity {
 	private @Nullable BlockPos packagerPos;
 	/** North-west corner {x, z} of the supply pickup the drones use, or null. */
 	private int @Nullable [] pickupCorner;
+	/** Whether the platform is the one its tower keeps for it (TowerData's "platform"): it needs no pad of its own. */
+	private boolean towerPlatform;
 	private boolean platformDirty = true;
 	/** Path of each flying drone (relative to this block), for the clients and for saving. */
 	private final Map<Integer, FlightPath> paths = new HashMap<>();
@@ -186,6 +188,11 @@ public class DroneTerminalBlockEntity extends BlockEntity {
 		return owner;
 	}
 
+	/** Stable identity used by explicitly linked exchange stations; replacing the terminal breaks the link. */
+	public UUID depotId() {
+		return depotId;
+	}
+
 	// ------------------------------------------------------------------ Drone Tower
 
 	/** The tower's core, if this depot belongs to a Drone Tower that has reached tier 1. */
@@ -199,6 +206,23 @@ public class DroneTerminalBlockEntity extends BlockEntity {
 
 	public @Nullable BlockPos towerPos() {
 		return towerPos;
+	}
+
+	/**
+	 * How far (blocks, across the ground) the farthest point of any flight under way is from {@code from}: the Big Map
+	 * Table zooms out to it (tower/MapScan). Flight paths are kept relative to this terminal.
+	 */
+	public double farthestFlight(BlockPos from) {
+		double far = 0;
+		BlockPos at = getBlockPos();
+		for (FlightScheduler.Flight<Cargo> flight : scheduler.flights()) {
+			FlightPath path = paths.get(flight.drone());
+			if (path == null) continue;
+			for (int i = 0; i < path.points(); i++) {
+				far = Math.max(far, Math.hypot(at.getX() + path.x(i) - from.getX(), at.getZ() + path.z(i) - from.getZ()));
+			}
+		}
+		return far;
 	}
 
 	/** The tower reached a new tier (or was just built): more docks, pickups and drone tiers. */
@@ -242,7 +266,7 @@ public class DroneTerminalBlockEntity extends BlockEntity {
 		io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity tower = tower();
 		// The cap grows as the depot does: a tower's capacity at its current tier, or for a ground platform as many
 		// small drones as the pads built so far can hold (4 a pad), up to the platform's 100.
-		return tower != null ? io.github.jimbozoomer.jugcraft.tower.TowerData.get().capacity(tower.tier())
+		return tower != null ? tower.layout().capacity(tower.tier())
 				: Math.min(PlatformLayout.MAX_DRONES, layout.slots() / DroneSize.SMALL.slots());
 	}
 
@@ -253,7 +277,7 @@ public class DroneTerminalBlockEntity extends BlockEntity {
 		if (tower != null && tower.tier() >= 2) {
 			BlockPos core = tower.getBlockPos();
 			for (int t = 1; t <= tower.tier(); t++) {
-				for (io.github.jimbozoomer.jugcraft.tower.TowerData.Pickup p : io.github.jimbozoomer.jugcraft.tower.TowerData.get().tier(t).pickups) {
+				for (io.github.jimbozoomer.jugcraft.tower.TowerData.Pickup p : tower.layout().tier(t).pickups) {
 					out.add(new int[] {core.getX() + p.x(), core.getY() + p.y(), core.getZ() + p.z()});
 				}
 			}
@@ -268,26 +292,34 @@ public class DroneTerminalBlockEntity extends BlockEntity {
 	 * size up), otherwise on a ground pad (four small, two medium or one large per pad). Null when they don't all fit.
 	 */
 	private @Nullable List<Spot> towerSpots(List<DroneTier> drones, io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity tower) {
-		io.github.jimbozoomer.jugcraft.tower.TowerData data = io.github.jimbozoomer.jugcraft.tower.TowerData.get();
+		io.github.jimbozoomer.jugcraft.tower.TowerData data = tower.layout();
 		BlockPos core = tower.getBlockPos();
 		List<io.github.jimbozoomer.jugcraft.tower.TowerData.Dock> hangars = new ArrayList<>();
 		for (int t = 1; t <= tower.tier(); t++) {
 			hangars.addAll(data.tier(t).docks);
 		}
+		// any drone on any pad of its size or bigger, up to the tower's tier (Justin, 7 November 2026: "I want people to be
+		// able to use any drone for any pad"); the lowest floor first, the nearest the core on it
+		hangars.sort(java.util.Comparator.comparingDouble((io.github.jimbozoomer.jugcraft.tower.TowerData.Dock d) -> d.y())
+				.thenComparingDouble(d -> d.x() * d.x() + d.z() * d.z()));
 		boolean[] hangarUsed = new boolean[hangars.size()];
 		List<long[]> pads = layout.pads();
 		int[] padUsed = new int[pads.size()]; // a bit per quarter slot, as DockLayout
 		Spot[] out = new Spot[drones.size()];
+		boolean tiered = false;      // (each tier's bays were kept for its own drones until 7 November 2026)
+		// Reserve each numbered tier for its own drones; creative drones fill spare bays afterwards.
+		for (int pass = 0; pass < (tiered ? 2 : 1); pass++) {
 		for (DroneSize size : new DroneSize[] {DroneSize.LARGE, DroneSize.MEDIUM, DroneSize.SMALL}) {
 			for (int i = 0; i < drones.size(); i++) {
-				if (drones.get(i).size() != size) {
+				DroneTier drone = drones.get(i);
+				if (drone.size() != size || tiered && drone.creative() != (pass == 1)) {
 					continue;
 				}
 				Spot spot = null;
 				for (int fit = size.ordinal(); fit < DroneSize.values().length && spot == null; fit++) {
 					for (int h = 0; h < hangars.size(); h++) {
 						io.github.jimbozoomer.jugcraft.tower.TowerData.Dock d = hangars.get(h);
-						if (!hangarUsed[h] && d.size().ordinal() == fit) {
+						if (!hangarUsed[h] && d.size().ordinal() == fit && (!tiered || drone.creative() || d.tier() == drone.number())) {
 							hangarUsed[h] = true;
 							spot = new Spot(new Vec3(core.getX() + d.x(), core.getY() + d.y(), core.getZ() + d.z()),
 									new double[] {core.getX() + d.exitX(), core.getZ() + d.exitZ()});
@@ -296,7 +328,7 @@ public class DroneTerminalBlockEntity extends BlockEntity {
 					}
 				}
 				// Otherwise on a ground pad: four small drones round its charger port, two medium or one large.
-				DockLayout.Dock slot = spot == null ? DockLayout.place(padUsed, size) : null;
+				DockLayout.Dock slot = spot == null && (!tiered || drone.creative() || drone.number() == 1) ? DockLayout.place(padUsed, size) : null;
 				if (slot != null) {
 					long[] pad = pads.get(slot.pad());
 					double[] exit = null;
@@ -315,6 +347,7 @@ public class DroneTerminalBlockEntity extends BlockEntity {
 				}
 				out[i] = spot;
 			}
+		}
 		}
 		return List.of(out);
 	}
@@ -353,7 +386,15 @@ public class DroneTerminalBlockEntity extends BlockEntity {
 
 	/** True for a base block of this depot's platform, or a pad plate on top of it. */
 	boolean platformContains(BlockPos pos) {
-		return layout.isValid() && (pos.getY() == platformY || pos.getY() == platformY + 1) && layout.contains(pos.getX(), pos.getZ());
+		return platformReady() && (pos.getY() == platformY || pos.getY() == platformY + 1) && layout.contains(pos.getX(), pos.getZ());
+	}
+
+	/**
+	 * Whether the drones can work from the platform: a whole platform with a pad, or (a tower's, whose drones dock in its
+	 * bays and on its roof pads) the tower's own platform with no pad of its own.
+	 */
+	public boolean platformReady() {
+		return layout.isValid() || towerPlatform && layout.status() == PlatformLayout.Status.NO_PAD;
 	}
 
 	/** Forces a platform rescan now (used by game tests and after placement). */
@@ -396,6 +437,71 @@ public class DroneTerminalBlockEntity extends BlockEntity {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Links a drone that came into the tower's storage (Justin, 7 November 2026: "whenever somebody puts drones inside the
+	 * tower inventory, it'll drag them to the appropriate drone pad"): as {@link #linkDrone}, without a player; false
+	 * (it waits in the storage) when its tier is past the tower's, the fleet is full or no pad that fits is free.
+	 */
+	public boolean linkFromStorage(DroneTier tier) {
+		io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity tower = tower();
+		if (tower == null || tier.number() > maxTier() && !(tier.creative() && maxTier() >= 1) || fleet.size() >= maxDrones()) {
+			return false;
+		}
+		rescanNow();
+		List<DroneTier> wanted = new ArrayList<>(fleet.drones());
+		wanted.add(tier);
+		if (towerSpots(wanted, tower) == null || fleet.link(tier, Integer.MAX_VALUE, DroneFleet.MAX_FLEET) != DroneFleet.LinkResult.OK) {
+			return false;
+		}
+		docksDirty = true;
+		viewDirty = true;
+		setChanged();
+		return true;
+	}
+
+	// ------------------------------------------------------------------ the frame rate check (client/FpsCheck)
+
+	/**
+	 * Fills the hangars for the frame rate check, run only in its throwaway copy of a world (Justin's JFR, 8 November
+	 * 2026, had drones the check's world didn't): links drones, the best tier this depot flies first, until no pad that
+	 * fits is free or {@code most} are added. How many were added.
+	 */
+	public int fillForCheck(int most) {
+		int added = 0;
+		for (int t = maxTier(); t >= 1 && added < most; t--) {
+			DroneTier tier = DroneTier.byNumber(t).orElse(null);
+			if (tier == null || tier.creative() || !tier.available()) {
+				continue;
+			}
+			while (added < most && linkFromStorage(tier)) {
+				added++;
+			}
+		}
+		return added;
+	}
+
+	/**
+	 * Drones in the air for the frame rate check: sends up to {@code most} docked drones on a round trip to hover over
+	 * {@code to} and come home, carrying nothing (no job: nothing is placed, taken or handed back). How many went.
+	 */
+	public int flyForCheck(ServerLevel level, BlockPos to, int most) {
+		int sent = 0;
+		for (int i = 0; i < fleet.size() && sent < most && scheduler.canLaunch(); i++) {
+			if (scheduler.isFlying(i)) {
+				continue;
+			}
+			Cargo nothing = new Cargo(null, to.immutable(), ItemStack.EMPTY, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), true);
+			if (launch(level, i, fleet.get(i), List.of(new FlightScheduler.Stop<>(nothing)))) {
+				sent++;
+			}
+		}
+		if (sent > 0) {
+			viewDirty = true;
+			setChanged();
+		}
+		return sent;
 	}
 
 	/** Unlinks the last docked drone and returns its item (empty if none, or not the owner). */
@@ -441,10 +547,12 @@ public class DroneTerminalBlockEntity extends BlockEntity {
 	public List<Component> status() {
 		List<Component> lines = new ArrayList<>();
 		lines.add(Component.translatable("message.jugcraft.drone.status.title", Component.translatable("message.jugcraft.drone.mode_name." + mode.id())));
-		lines.add(Component.translatable("message.jugcraft.drone.status.platform." + layout.status().name().toLowerCase(java.util.Locale.ROOT),
+		io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity tower = tower();
+		// a tower's drones dock in its bays and on its pads: its platform needs no pad of its own, only the pickup
+		String platformLine = tower != null && layout.status() == PlatformLayout.Status.NO_PAD ? "tower" : layout.status().name().toLowerCase(java.util.Locale.ROOT);
+		lines.add(Component.translatable("message.jugcraft.drone.status.platform." + platformLine,
 				layout.width(), layout.depth(), layout.padCount(), fleet.slotsUsed(), layout.slots()));
 		lines.add(Component.translatable("message.jugcraft.drone.status.fleet", fleet.size(), maxDrones(), scheduler.activeFlights()));
-		io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity tower = tower();
 		lines.add(tower == null ? Component.translatable("message.jugcraft.drone.status.no_tower", maxTier())
 				: Component.translatable("message.jugcraft.drone.status.tower", tower.tier(), maxTier()));
 		StringBuilder tiers = new StringBuilder();
@@ -517,6 +625,7 @@ public class DroneTerminalBlockEntity extends BlockEntity {
 		BlockPos seed = findSeed(level);
 		if (seed == null) {
 			unformPads(level);
+			towerPlatform = false;
 			packagerPos = null;
 			pickupCorner = null;
 			viewDirty = true;
@@ -524,6 +633,7 @@ public class DroneTerminalBlockEntity extends BlockEntity {
 		}
 		platformY = seed.getY();
 		PlatformLayout old = layout;
+		towerPlatform = seed.equals(towerPoint(level, true));
 		// The base layer is landing platform; a base cell with a pad (or pickup) plate on top is a pad (or pickup) cell.
 		layout = PlatformLayout.scan(seed.getX(), seed.getZ(), (x, z) -> {
 			BlockPos at = new BlockPos(x, platformY, z);
@@ -533,7 +643,7 @@ public class DroneTerminalBlockEntity extends BlockEntity {
 			BlockState plate = level.getBlockState(at.above());
 			return plate.is(JugcraftDrones.LANDING_PAD) ? PlatformLayout.Cell.PAD
 					: plate.is(JugcraftDrones.SUPPLY_PICKUP) ? PlatformLayout.Cell.PICKUP : PlatformLayout.Cell.PLATFORM;
-		});
+		}, towerPlatform ? PlatformLayout.PICKUP_SIZE : PlatformLayout.MIN_SIDE);
 		formPads(level, old);
 		pickupCorner = layout.pickups().isEmpty() ? null
 				: new int[] {(int) layout.pickups().getFirst()[0], (int) layout.pickups().getFirst()[1]};
@@ -603,6 +713,10 @@ public class DroneTerminalBlockEntity extends BlockEntity {
 	}
 
 	private @Nullable BlockPos findSeed(ServerLevel level) {
+		BlockPos kept = towerPoint(level, true);
+		if (kept != null) {
+			return kept;
+		}
 		BlockPos origin = getBlockPos();
 		for (int dy = 1; dy <= SEED_DEPTH; dy++) {
 			for (int r = 0; r <= SEED_RADIUS; r++) {
@@ -623,12 +737,40 @@ public class DroneTerminalBlockEntity extends BlockEntity {
 	}
 
 	/**
+	 * Where this terminal's tower keeps its landing platform (a base block of it) or its packager when they are not by the
+	 * terminal (layout 37, work list item 20: the terminal and packager in dispatch on the ground floor, the platform and
+	 * its pickup on the roof, the goods lift between; TowerData's "platform" and "packager"), or null (then they are found
+	 * round the terminal and the pickup as for any depot).
+	 */
+	private @Nullable BlockPos towerPoint(ServerLevel level, boolean platform) {
+		// (the core's own, from its foundation on: tower() waits for tier 1)
+		if (towerPos == null || !level.isLoaded(towerPos)
+				|| !(level.getBlockEntity(towerPos) instanceof io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity tower)) {
+			return null;
+		}
+		var data = tower.layout();
+		int[] p = platform ? data.platform : data.packager;
+		if (p == null) {
+			return null;
+		}
+		BlockPos at = tower.getBlockPos().offset(p[0], p[1], p[2]);
+		if (!level.isLoaded(at)) {
+			return null;
+		}
+		return level.getBlockState(at).is(platform ? JugcraftDrones.LANDING_PLATFORM : JugcraftDrones.CARGO_PACKAGER) ? at : null;
+	}
+
+	/**
 	 * A cargo packager beside the supply pickup: touching one of its nine plates from the side, standing
 	 * on the platform (one level up) or set into the base layer next to it.
 	 */
 	private @Nullable BlockPos findPackager(ServerLevel level) {
 		if (pickupCorner == null) {
 			return null;
+		}
+		BlockPos kept = towerPoint(level, false);
+		if (kept != null) {
+			return kept;
 		}
 		int size = PlatformLayout.PICKUP_SIZE;
 		for (int dy = 1; dy >= 0; dy--) {
@@ -671,7 +813,7 @@ public class DroneTerminalBlockEntity extends BlockEntity {
 	 */
 	private void dispatch(ServerLevel level, long now) {
 		CargoPackagerBlockEntity packager = packager();
-		if (!layout.isValid() || pickupCorner == null || packager == null || owner == null || fleet.size() == 0) {
+		if (!platformReady() || pickupCorner == null || packager == null || owner == null || fleet.size() == 0) {
 			return;
 		}
 		List<Integer> idle = new ArrayList<>();
@@ -956,22 +1098,48 @@ public class DroneTerminalBlockEntity extends BlockEntity {
 		v.pickups.addAll(activePickups());
 		io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity tower = tower();
 		v.towerTier = tower == null ? 0 : tower.tier();
+		v.towerLayout = tower == null ? 0 : tower.layoutVersion();
 		v.towerPos = towerPos;
 		if (tower != null) {
-			// Every built hangar's roll-up bay door (absolute), with its dock relative to this terminal, for the renderer.
+			// Every built hangar's bay door (absolute), with its dock relative to this terminal, its bay number (the jamb's
+			// tag) and its status lamp: 0 empty, 1 its drone is home, 2 its drone is out.
 			BlockPos core = tower.getBlockPos();
-			io.github.jimbozoomer.jugcraft.tower.TowerData data = io.github.jimbozoomer.jugcraft.tower.TowerData.get();
+			io.github.jimbozoomer.jugcraft.tower.TowerData data = tower.layout();
+			Map<Long, Integer> bayStatus = new HashMap<>();
+			for (int i = 0; i < fleet.size(); i++) {
+				Vec3 dock = dockPosition(i);
+				long key = BlockPos.asLong((int) Math.round(dock.x * 2), (int) Math.round(dock.y * 2), (int) Math.round(dock.z * 2));
+				bayStatus.merge(key, scheduler.isFlying(i) ? 2 : 1, Math::max);
+			}
+			List<double[]> openPads = new java.util.ArrayList<>();
 			for (int t = 1; t <= tower.tier(); t++) {
 				for (io.github.jimbozoomer.jugcraft.tower.TowerData.Dock d : data.tier(t).docks) {
 					int[] door = d.door();
+					if (door == null) {
+						// a dock on an open pad (the roof's): docks within a pad's reach of each other share one pad
+						boolean known = false;
+						for (double[] pad : openPads) {
+							if (Math.abs(pad[0] - d.x()) <= 4.5 && Math.abs(pad[2] - d.z()) <= 4.5 && Math.abs(pad[1] - d.y()) < 1) {
+								known = true;
+								break;
+							}
+						}
+						if (!known) {
+							openPads.add(new double[] {d.x(), d.y(), d.z()});
+						}
+					}
 					if (door != null) {
+						long key = BlockPos.asLong((int) Math.round((core.getX() + d.x()) * 2), (int) Math.round((core.getY() + d.y()) * 2),
+								(int) Math.round((core.getZ() + d.z()) * 2));
 						v.doors.add(new int[] {core.getX() + door[0], core.getZ() + door[1], core.getX() + door[2], core.getZ() + door[3],
 								core.getY() + door[4], door[5], door[6], door[7],
 								(int) Math.round((core.getX() + d.x() - getBlockPos().getX()) * 2),
-								(int) Math.round((core.getZ() + d.z() - getBlockPos().getZ()) * 2)});
+								(int) Math.round((core.getZ() + d.z() - getBlockPos().getZ()) * 2),
+								door.length > 9 ? door[8] : -1, door.length > 9 ? door[9] : 0, bayStatus.getOrDefault(key, 0)});
 					}
 				}
 			}
+			v.towerPads = openPads.size();
 		}
 		v.maxDrones = maxDrones();
 		v.maxTier = maxTier();
@@ -991,18 +1159,30 @@ public class DroneTerminalBlockEntity extends BlockEntity {
 		v.slotsUsed = fleet.slotsUsed();
 		v.slots = layout.slots();
 		v.energy = energy.getAmount();
+		v.depotId = depotId;
 		v.capacity = energy.getCapacity();
 		v.workingDraw = fleet.workingDraw();
 		v.standbyDraw = fleet.standbyDraw();
 		v.lowPower = lowPower;
+		CargoPackagerBlockEntity store = packagerPos != null && level != null && level.isLoaded(packagerPos) ? packager() : null;
 		v.packager = packagerPos != null;
+		int stockItems = 0, stockSlots = 0;
+		Map<Item, Integer> kinds = new java.util.HashMap<>();
+		if (store != null) for (int slot = 0; slot < CargoPackagerBlockEntity.SIZE; slot++) {
+			ItemStack stack = store.getItem(slot);
+			if (!stack.isEmpty()) { stockItems += stack.getCount(); stockSlots++; kinds.merge(stack.getItem(), stack.getCount(), Integer::sum); }
+		}
+		// the most plentiful kinds, for the video wall's SUPPLY panel
+		kinds.entrySet().stream().sorted((a, b) -> b.getValue().equals(a.getValue())
+				? net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(a.getKey()).compareTo(net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(b.getKey()))
+				: Integer.compare(b.getValue(), a.getValue())).limit(DepotView.STOCK_KINDS)
+				.forEach(e -> v.stock.put(net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(e.getKey()).toString(), e.getValue()));
+		v.cargo = new DepotView.CargoView(store == null ? null : store.getBlockPos(), store == null ? -1 : stockItems,
+				store == null ? -1 : stockSlots, store == null ? -1 : CargoPackagerBlockEntity.SIZE, store != null && store.unlimited());
 		v.openTargets = openTargets;
 		v.covered = coveredSkipped;
-		int shown = 0;
+		// The dispatch query is bounded already. Send every known material so the client can scroll the complete queue.
 		for (Map.Entry<Item, Integer> entry : missing.entrySet()) {
-			if (shown++ >= 8) {
-				break;
-			}
 			v.missing.put(net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(entry.getKey()).toString(), entry.getValue());
 		}
 		return v;
@@ -1049,6 +1229,99 @@ public class DroneTerminalBlockEntity extends BlockEntity {
 			BlockPos pos = getBlockPos();
 			Containers.dropItemStack(level, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, rest);
 		}
+	}
+
+	// ------------------------------------------------------------------ moving the depot (a Drone Tower rebuilt in a new design)
+
+	/** What a depot hands over when its tower is rebuilt: who owns it, its settings, its drones and its packager's store. */
+	public record Handover(@Nullable UUID owner, UUID depotId, UseMode mode, long energy, boolean testPower, int standaloneMaxTier,
+			List<DroneTier> drones, List<ItemStack> items) {
+	}
+
+	/**
+	 * Hands this depot over before its tower is cleared: calls every flight off (what the drones carry goes back to the
+	 * packager, as when a terminal is broken), takes the drones out of the fleet and the items out of the packager, and
+	 * returns them with the depot's settings. Afterwards the terminal and packager hold nothing, so clearing them loses
+	 * nothing.
+	 */
+	public Handover handOver() {
+		ServerLevel serverLevel = level instanceof ServerLevel s ? s : null;
+		rescanNow(); // finds the packager, if the terminal has not ticked since the world loaded
+		for (FlightScheduler.Flight<Cargo> flight : scheduler.abortAll()) {
+			for (FlightScheduler.Stop<Cargo> stop : flight.stops()) {
+				Cargo cargo = stop.cargo();
+				if (cargo.target != null && serverLevel != null) {
+					cargo.target.source().release(serverLevel, cargo.target, depotId);
+				}
+				if (!cargo.placed && !cargo.supplied) {
+					returnItem(cargo.item);
+				}
+			}
+		}
+		inFlight.clear();
+		paths.clear();
+		List<DroneTier> drones = new ArrayList<>(fleet.clear());
+		List<ItemStack> items = new ArrayList<>();
+		CargoPackagerBlockEntity packager = packagerPos != null && level != null && level.isLoaded(packagerPos) ? packager() : null;
+		boolean unlimited = packager != null && packager.unlimited();
+		if (packager != null) {
+			for (int i = 0; i < packager.getContainerSize(); i++) {
+				ItemStack stack = packager.removeItemNoUpdate(i);
+				if (!stack.isEmpty()) {
+					items.add(stack);
+				}
+			}
+			packager.setChanged();
+		}
+		docksDirty = true;
+		viewDirty = true;
+		setChanged();
+		return new Handover(owner, depotId, mode, energy.getAmount(), unlimitedPower || unlimited, standaloneMaxTier, drones, items);
+	}
+
+	/**
+	 * Takes over a depot handed over by the old terminal of this tower ({@link #handOver()}): its owner, id, mode, charge and
+	 * settings, then its drones, one by one as long as each has a bay or pad in the rebuilt tower, and its items into the
+	 * packager. Returns what did not fit (drone items and other items), for the caller to hand back.
+	 */
+	public List<ItemStack> takeOver(Handover handover) {
+		owner = handover.owner();
+		depotId = handover.depotId();
+		mode = handover.mode();
+		standaloneMaxTier = handover.standaloneMaxTier();
+		energy.setAmount(Math.min(ENERGY_CAPACITY, handover.energy()));
+		rescanNow();
+		List<ItemStack> rest = new ArrayList<>();
+		io.github.jimbozoomer.jugcraft.tower.TowerCoreBlockEntity tower = tower();
+		for (DroneTier drone : handover.drones()) {
+			boolean linked = false;
+			if (tower != null && fleet.size() < maxDrones()) {
+				List<DroneTier> wanted = new ArrayList<>(fleet.drones());
+				wanted.add(drone);
+				linked = towerSpots(wanted, tower) != null && fleet.link(drone, Integer.MAX_VALUE, DroneFleet.MAX_FLEET) == DroneFleet.LinkResult.OK;
+			}
+			if (!linked) {
+				Item item = JugcraftDrones.DRONES.get(drone);
+				if (item != null) {
+					rest.add(new ItemStack(item));
+				}
+			}
+		}
+		CargoPackagerBlockEntity packager = packager();
+		for (ItemStack stack : handover.items()) {
+			ItemStack left = packager == null || packager.unlimited() ? stack : packager.giveBack(stack);
+			if (!left.isEmpty()) {
+				rest.add(left);
+			}
+		}
+		if (handover.testPower()) {
+			setTestSupplies(true);
+		}
+		docksDirty = true;
+		viewDirty = true;
+		platformDirty = true;
+		setChanged();
+		return rest;
 	}
 
 	// ------------------------------------------------------------------ removal and saving

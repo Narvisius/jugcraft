@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "M",
+    "P",
+    "S"
+  ],
+  "key": {
+    "M": "jugcraft:electric_motor",
+    "P": "jugcraft:steel_fluid_pipe",
+    "S": "#c:plates/steel"
+  },
+  "result": {
+    "id": "jugcraft:condensate_pump",
+    "count": 1
+  }
+}

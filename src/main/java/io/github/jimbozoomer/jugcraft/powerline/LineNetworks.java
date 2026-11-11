@@ -50,6 +50,22 @@ public final class LineNetworks {
 
 	/** One tick of every line network in the level (called from the end of the level tick). */
 	public static void tick(ServerLevel level) {
+		if (!LineAnchorBlockEntity.RELAY.isEmpty()) {
+			// Structures loaded from before round 2 (or placed by a blueprint), and boxes (which turn to their first line):
+			// their frames go to where their bodies stand, once the structures they are wired to are loaded (what those are
+			// decides how they stand).
+			for (LineAnchorBlockEntity anchor : List.copyOf(LineAnchorBlockEntity.RELAY)) {
+				if (anchor.getLevel() != level) {
+					continue;
+				}
+				if (anchor.isRemoved() || !level.isLoaded(anchor.getBlockPos())) {
+					LineAnchorBlockEntity.RELAY.remove(anchor);
+				} else if (anchor.connections().stream().allMatch(level::isLoaded)) {
+					LineAnchorBlockEntity.RELAY.remove(anchor);
+					anchor.relayFrames();
+				}
+			}
+		}
 		List<Network> networks = CACHE.computeIfAbsent(level, LineNetworks::discoverAll);
 		for (Network network : networks) {
 			network.tick(level);
@@ -211,7 +227,7 @@ public final class LineNetworks {
 				if (!(level.getBlockEntity(link[0]) instanceof LineAnchorBlockEntity a) || !(level.getBlockEntity(link[1]) instanceof LineAnchorBlockEntity b)) {
 					continue;
 				}
-				List<LineWires.Wire> wires = LineWires.between(link[0], a.kind(), a.connections(), link[1], b.kind(), b.connections());
+				List<LineWires.Wire> wires = LineWires.between(level, link[0], a.kind(), a.connections(), link[1], b.kind(), b.connections());
 				if (wires.isEmpty()) {
 					continue;
 				}

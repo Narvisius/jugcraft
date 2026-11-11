@@ -9,19 +9,18 @@
       "feature": "drones"
     }
   ],
-  "type": "minecraft:crafting_shaped",
-  "category": "building",
+  "type": "jugcraft:advanced_crafting",
   "pattern": [
-    "PRP",
-    "PCP"
+    "PPRRPP",
+    "PPCCPP"
   ],
   "key": {
+    "C": "#c:wires/copper",
     "P": "#c:plates/steel",
-    "R": "minecraft:redstone",
-    "C": "#c:wires/copper"
+    "R": "minecraft:redstone"
   },
   "result": {
     "id": "jugcraft:hangar_pad",
-    "count": 4
+    "count": 8
   }
 }

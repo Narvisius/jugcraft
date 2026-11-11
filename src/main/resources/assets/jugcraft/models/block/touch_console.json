@@ -1,0 +1,249 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "fx_amber": "jugcraft:block/fx_amber",
+    "fx_body": "jugcraft:block/fx_body",
+    "fx_screen": "jugcraft:block/fx_screen",
+    "fx_steel": "jugcraft:block/fx_steel",
+    "particle": "jugcraft:block/fx_amber"
+  },
+  "elements": [
+    {
+      "from": [
+        3,
+        0,
+        3
+      ],
+      "to": [
+        13,
+        1,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fx_steel"
+        },
+        "south": {
+          "texture": "#fx_steel"
+        },
+        "east": {
+          "texture": "#fx_steel"
+        },
+        "west": {
+          "texture": "#fx_steel"
+        },
+        "up": {
+          "texture": "#fx_steel"
+        },
+        "down": {
+          "texture": "#fx_steel"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        1,
+        6
+      ],
+      "to": [
+        10,
+        11,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fx_body"
+        },
+        "south": {
+          "texture": "#fx_body"
+        },
+        "east": {
+          "texture": "#fx_body"
+        },
+        "west": {
+          "texture": "#fx_body"
+        },
+        "up": {
+          "texture": "#fx_body"
+        },
+        "down": {
+          "texture": "#fx_body"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        2,
+        10
+      ],
+      "to": [
+        9,
+        10,
+        10.2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fx_amber"
+        },
+        "south": {
+          "texture": "#fx_amber"
+        },
+        "east": {
+          "texture": "#fx_amber"
+        },
+        "west": {
+          "texture": "#fx_amber"
+        },
+        "up": {
+          "texture": "#fx_amber"
+        },
+        "down": {
+          "texture": "#fx_amber"
+        }
+      },
+      "light_emission": 12
+    },
+    {
+      "from": [
+        5,
+        10.5,
+        5
+      ],
+      "to": [
+        11,
+        12,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fx_steel"
+        },
+        "south": {
+          "texture": "#fx_steel"
+        },
+        "east": {
+          "texture": "#fx_steel"
+        },
+        "west": {
+          "texture": "#fx_steel"
+        },
+        "up": {
+          "texture": "#fx_steel"
+        },
+        "down": {
+          "texture": "#fx_steel"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        12,
+        3
+      ],
+      "to": [
+        14,
+        13,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fx_body"
+        },
+        "south": {
+          "texture": "#fx_body"
+        },
+        "east": {
+          "texture": "#fx_body"
+        },
+        "west": {
+          "texture": "#fx_body"
+        },
+        "up": {
+          "texture": "#fx_body"
+        },
+        "down": {
+          "texture": "#fx_body"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          12,
+          8
+        ],
+        "axis": "x",
+        "angle": 22.5
+      }
+    },
+    {
+      "from": [
+        2.6,
+        13,
+        3.6
+      ],
+      "to": [
+        13.4,
+        13.15,
+        12.4
+      ],
+      "faces": {
+        "up": {
+          "texture": "#fx_screen"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          12,
+          8
+        ],
+        "axis": "x",
+        "angle": 22.5
+      }
+    },
+    {
+      "from": [
+        2,
+        13,
+        12.4
+      ],
+      "to": [
+        14,
+        13.4,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fx_steel"
+        },
+        "south": {
+          "texture": "#fx_steel"
+        },
+        "east": {
+          "texture": "#fx_steel"
+        },
+        "west": {
+          "texture": "#fx_steel"
+        },
+        "up": {
+          "texture": "#fx_steel"
+        },
+        "down": {
+          "texture": "#fx_steel"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          12,
+          8
+        ],
+        "axis": "x",
+        "angle": 22.5
+      }
+    }
+  ]
+}

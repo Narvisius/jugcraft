@@ -45,6 +45,12 @@ public final class GunView {
 	 * camera already smooths the modifier between ticks.
 	 */
 	public static float fov(AbstractClientPlayer player, float modifier) {
+		if (player == Minecraft.getInstance().player && io.github.jimbozoomer.jugcraft.client.LaserDesignatorClient.sighted()) {
+			return io.github.jimbozoomer.jugcraft.client.LaserDesignatorClient.fov(modifier);     // the LTD-7's sight
+		}
+		if (player == Minecraft.getInstance().player && player.getMainHandItem().getItem() instanceof io.github.jimbozoomer.jugcraft.tower.crew.PlasmaRifleItem) {
+			return io.github.jimbozoomer.jugcraft.client.PlasmaRifleClient.fov(modifier);     // the NT-7's sight (P6)
+		}
 		if (player != Minecraft.getInstance().player || !(player.getMainHandItem().getItem() instanceof GunItem gun)) {
 			return modifier;
 		}
@@ -67,6 +73,9 @@ public final class GunView {
 	 * mouse for a spyglass too). 1 otherwise. GunMouseMixin calls this as the mouse turns the player.
 	 */
 	public static double turnScale() {
+		if (io.github.jimbozoomer.jugcraft.client.LaserDesignatorClient.sighted()) {
+			return io.github.jimbozoomer.jugcraft.client.LaserDesignatorClient.turnScale();
+		}
 		Minecraft client = Minecraft.getInstance();
 		LocalPlayer player = client.player;
 		if (player == null || !client.options.getCameraType().isFirstPerson() || !(player.getMainHandItem().getItem() instanceof GunItem)) {

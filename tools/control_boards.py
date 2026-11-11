@@ -25,7 +25,6 @@ Each board has three lists: still (lit like the room), lit (full bright: lamps, 
 deeper in the board, BLINK_DEPTH, and the second lit in front of it while it flashes). core: how many of the still
 operations the far-away version draws (the board's body).
 """
-from asset_fonts import font_path
 import json
 import math
 import random
@@ -45,7 +44,7 @@ BOARDS = {
     "electrical_control_board": ("Electrical Control Board", 6, 2, 3),
     "radiation_control_board": ("Radiation and Ventilation Control Board", 6, 2, 3),
 }
-CONSOLE = "reactor_control_console"     # the working one (a board three wide; the screens and lamps are live)
+CONSOLE = "reactor_control_console"     # the working one (round 30: a live board three wide, tools/board_live.py console_board)
 BLINK_DEPTH = 0.004                     # how far behind a flashing window its unlit face is drawn
 
 # The new materials on the equipment sheet (row 7).
@@ -146,11 +145,6 @@ TRIM = "gunmetal"
 # Rows on the vertical board (y of their middles) and on the desk (s: 0 at its front edge, 1 at the back).
 ROW1, ROW2, ROW3 = 2.36, 1.95, 1.47
 LABEL1, LABEL2 = 2.175, 1.735
-# The reactor console's live parts (client/NuclearRenderer.java consoleLamps draws them in these openings).
-SCREENS = [(0.15 + i * 0.95, 1.35, 0.15 + i * 0.95 + 0.85, 1.85) for i in range(3)]   # x0, y0, x1, y1 at FACE - 0.04
-SCREEN_Z = FACE - 0.04
-LAMP_STRIP = (0.2, 1.94, 2.84, 2.02)       # eight lamps in it, at FACE - 0.02
-LAMP_Z = FACE - 0.02
 # The remote shutdown panel's live status screen (x0, y0, x1, y1 at RSP_SCREEN_Z; client/NuclearRenderer.java).
 RSP_SCREEN = (2.62, 1.75, 3.38, 2.45)
 RSP_SCREEN_Z = 0.3 - 0.04
@@ -901,45 +895,6 @@ def radiation_board(seed=67):
     return b
 
 
-def reactor_console(seed=7):
-    """The reactor control console (the working one, three wide, in line with the boards): the digital rod position
-    indicator over the middle with the nuclear instruments' recorders either side, the three live screens and the
-    status lamps (drawn by the renderer in the openings left for them, client/NuclearRenderer.java consoleLamps); on
-    the desk the rod bank selector, the rods' in-hold-out lever, the rod speed and startup rate meters and the two
-    reactor trip switches under their guards."""
-    b = Board(3, seed)
-    b.profile(True)
-    y_ann = b.annunciators(0.1, 2.9, rows=2, seed=seed, alarms=0)
-    b.label(0.25, 2.75, y_ann - 0.04, 0.035, "label_red")
-    b.drpi(1.5, 2.35, 1.1, 0.42)
-    b.recorder(0.45, 2.36, 0)
-    b.recorder(2.55, 2.36, 1)
-    for x0, y0, x1, y1 in SCREENS:
-        b.bezel(x0, y0, x1, y1, FACE - SCREEN_Z, 0.025)
-    # The lamp strip (the renderer's eight lamps sit in its openings).
-    x0, y0, x1, y1 = LAMP_STRIP
-    b.box(x0, y0, LAMP_Z, x1, y1, FACE, [None, None, sw("black"), sw("black"), sw("black"), sw("black")])
-    step = (x1 - x0) / 8
-    for i in range(8):
-        lx0 = x0 + i * step
-        b.front_quad(lx0, y0, lx0 + 0.04, y1, LAMP_Z, sw("black"), None)
-        b.front_quad(lx0 + step - 0.04, y0, lx0 + step, y1, LAMP_Z, sw("black"), None)
-    # The desk: rod control on the left, the trip switches on the right, the nuclear instruments' meters between.
-    b.switch(0.4, 0.62, "knob", None, ("white", "white", "white"))
-    p, t, n = b.on_desk(0.72, 0.5, 0.0)
-    b.obox(tuple(p + n * 0.05), (1, 0, 0), tuple(n), 0.012, 0.05, 0.012, [sw("mgrey")] * 5 + [None])   # the lever
-    b.cyl(tuple(p + n * 0.1), tuple(p + n * 0.13), 0.022, sw("black"), sw("black"), 8)
-    b.desk_block(0.72, 0.5 - 0.11, 0.12, 0.04, 0.006, [sw("label")] * 5 + [None])
-    for k in range(4):
-        b.desk_block(1.08 + k * 0.13, 0.72, 0.1, 0.22, 0.06, [strip("meter", k)] + [sw("black")] * 4 + [None])
-    for k in range(3):
-        b.button(1.15 + k * 0.15, 0.3, "white")
-        b.switch(0.25 + k * 0.3, 0.2, "knob", None, ("white",))
-    b.guarded_switch(2.12, 0.45)
-    b.guarded_switch(2.56, 0.45)
-    return b
-
-
 def remote_shutdown_panel(seed=89):
     """The remote shutdown panel (round 24; Justin: "make it look more realistic with detail"): a vertical
     switchboard to trip the reactor and hold it shut down from outside the control room, laid out as a real one is.
@@ -1354,13 +1309,34 @@ def motor_control_center(seed=131):
 
 SECTIONS = {"esf_control_board": esf_board, "rcs_control_board": rcs_board, "secondary_control_board": secondary_board,
             "turbine_control_board": turbine_board, "electrical_control_board": electrical_board,
-            "radiation_control_board": radiation_board, CONSOLE: reactor_console,
+            "radiation_control_board": radiation_board, CONSOLE: None,
             "remote_shutdown_panel": remote_shutdown_panel, "switchgear_lineup": load_center,
             "mcc_lineup": motor_control_center}
 
 
 def all_ops():
-    return {name: make().ops() for name, make in SECTIONS.items()}
+    """Every board's operations; the live boards' legends (tools/board_live.py) packed and their places filled in, the
+    diesel room's on their own texture (tools/diesel_set.py), the turbine's and its feed train's on theirs
+    (tools/turbine_set.py, tools/feed_train.py), the plant display wall's on its own (tools/display_wall.py),
+    the plant overview screen's frame and pages on theirs (tools/overview_screen.py), the load centre's on its own
+    (tools/load_centre.py)."""
+    out = {name: make().ops() for name, make in SECTIONS.items()}
+    board_live.ATLAS.pack()
+    diesel_set.ATLAS.pack()
+    display_wall.ATLAS.pack()
+    overview_screen.ATLAS.pack()
+    load_centre.ATLAS.pack()
+    turbine_set.ATLAS.pack()
+
+    def atlas(name):
+        if name == overview_screen.KEY or name.startswith(overview_screen.KEY + "/"):
+            return overview_screen.ATLAS
+        if name == "switchgear_lineup":
+            return load_centre.ATLAS
+        if name in turbine_set.BOARDS or name in feed_train.BOARDS or name in hall_crane.BOARDS or name in oil_room.BOARDS:
+            return turbine_set.ATLAS
+        return diesel_set.ATLAS if name in diesel_set.BOARDS else display_wall.ATLAS if name == display_wall.KEY else board_live.ATLAS
+    return {name: atlas(name).resolve(ops) for name, ops in out.items()}
 
 
 def write(path):
@@ -1682,14 +1658,14 @@ def _plate(d, x0, y0, w, h, legend, colour, alpha=255):
 # bold condensed letters (round 26, 8e; Justin: "Make sure all the text is clearly legible ... that applies to
 # everything": the 3 x 5 pixel font at 64 px was too coarse to read).
 LETTERED = 128
-_LETTER_FONT = "DejaVuSansCondensed-Bold.ttf"
+_LETTER_FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-Bold.ttf"
 
 
 def _fit_text(d, x0, y0, w, h, legend, ink, size):
     """The legend centred in a box, in the largest bold letters up to size that fit its width."""
     from PIL import ImageFont
     while True:
-        f = ImageFont.truetype(font_path(_LETTER_FONT), size)
+        f = ImageFont.truetype(_LETTER_FONT, size)
         if d.textlength(legend, font=f) <= w - 4 or size <= 7:
             break
         size -= 1
@@ -1822,3 +1798,48 @@ COLOURS = {"swatches": 64, "annunciator": 24, "meter": 24, "dial": 24, "chart": 
 # The control room's ventilation plant (round 26, #11): its filtration units, air handlers, chillers and pumps, their
 # lettered cells (tools/hvac_boards.py registers them here).
 import hvac_boards  # noqa: E402,F401
+
+# The live boards (round 27, tools/board_live.py): the reactor coolant, turbine and electrical boards, laid out again
+# to the detail standard, reading the plant.
+import board_live  # noqa: E402
+
+if hasattr(board_live, "LIVE_SECTIONS"):      # (imported first, board_live registers them itself)
+    SECTIONS.update(board_live.LIVE_SECTIONS)
+
+# The diesel generator set and its starting air system (round 31, tools/diesel_set.py), their legends on their own
+# texture.
+import diesel_set  # noqa: E402
+
+SECTIONS.update({k: v[4] for k, v in diesel_set.BOARDS.items()})
+
+# The control room's plant display wall (round 32, tools/display_wall.py): a live board on its own legend texture.
+import display_wall  # noqa: E402,F401
+
+# The plant overview screens (round 34, tools/overview_screen.py): their frame and pages, on their own legend texture.
+import overview_screen  # noqa: E402,F401
+
+# The 480 V load centre rebuilt (older rooms round 1, tools/load_centre.py): the switchgear lineup's section, on its own
+# legend texture.
+import load_centre  # noqa: E402
+
+SECTIONS["switchgear_lineup"] = load_centre.load_centre
+
+# The main turbine-generator and its moisture separator reheaters (turbine hall part 1, tools/turbine_set.py), their
+# legends on their own texture.
+import turbine_set  # noqa: E402
+
+SECTIONS.update({k: v[4] for k, v in turbine_set.BOARDS.items()})
+
+# The turbine hall's feed train and the turbine's oil plant (turbine hall part 2, tools/feed_train.py): their legends
+# on the turbine's texture too.
+import feed_train  # noqa: E402
+
+SECTIONS.update({k: v[4] for k, v in feed_train.BOARDS.items()})
+
+# Turbine hall part 3: the overhead crane (tools/hall_crane.py: its bridge, trolley and hooks move, HallCrane) and the
+# lube oil room's plant (tools/oil_room.py), their legends on the turbine's texture too.
+import hall_crane  # noqa: E402
+import oil_room  # noqa: E402
+
+SECTIONS.update({k: v[4] for k, v in hall_crane.BOARDS.items()})
+SECTIONS.update({k: v[4] for k, v in oil_room.BOARDS.items()})

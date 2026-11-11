@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "XXGGXX",
+    "XXRRXX"
+  ],
+  "key": {
+    "G": "minecraft:green_dye",
+    "R": "minecraft:red_dye",
+    "X": "minecraft:paper"
+  },
+  "result": {
+    "id": "jugcraft:med_poster",
+    "count": 4
+  }
+}

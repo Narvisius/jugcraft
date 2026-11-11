@@ -1,0 +1,120 @@
+{
+ "textures": {
+  "gl_hazard": "jugcraft:block/gl_hazard",
+  "gl_leaf": "jugcraft:block/gl_leaf",
+  "gl_leaf_dark": "jugcraft:block/gl_leaf_dark",
+  "particle": "jugcraft:block/gl_frame"
+ },
+ "elements": [
+  {
+   "from": [
+    0,
+    0.5,
+    6.5
+   ],
+   "to": [
+    10.5,
+    16,
+    8.5
+   ],
+   "faces": {
+    "north": {
+     "texture": "#gl_leaf"
+    },
+    "south": {
+     "texture": "#gl_leaf"
+    },
+    "east": {
+     "texture": "#gl_leaf"
+    },
+    "down": {
+     "texture": "#gl_leaf"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    15.4,
+    6.3
+   ],
+   "to": [
+    10.5,
+    16,
+    6.5
+   ],
+   "faces": {
+    "north": {
+     "texture": "#gl_hazard"
+    },
+    "south": {
+     "texture": "#gl_leaf"
+    },
+    "east": {
+     "texture": "#gl_leaf"
+    },
+    "down": {
+     "texture": "#gl_leaf"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    5.0,
+    6.2
+   ],
+   "to": [
+    9.5,
+    6.0,
+    6.5
+   ],
+   "faces": {
+    "north": {
+     "texture": "#gl_leaf_dark"
+    },
+    "south": {
+     "texture": "#gl_leaf_dark"
+    },
+    "east": {
+     "texture": "#gl_leaf_dark"
+    },
+    "up": {
+     "texture": "#gl_leaf_dark"
+    },
+    "down": {
+     "texture": "#gl_leaf_dark"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    10.0,
+    6.2
+   ],
+   "to": [
+    9.5,
+    11.0,
+    6.5
+   ],
+   "faces": {
+    "north": {
+     "texture": "#gl_leaf_dark"
+    },
+    "south": {
+     "texture": "#gl_leaf_dark"
+    },
+    "east": {
+     "texture": "#gl_leaf_dark"
+    },
+    "up": {
+     "texture": "#gl_leaf_dark"
+    },
+    "down": {
+     "texture": "#gl_leaf_dark"
+    }
+   }
+  }
+ ]
+}

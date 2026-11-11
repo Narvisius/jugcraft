@@ -38,7 +38,7 @@ public record ConsoleActionPayload(BlockPos console, int action, int value) impl
 		ServerPlayNetworking.registerGlobalReceiver(TYPE, (payload, context) -> {
 			ServerPlayer player = context.player();
 			BlockPos pos = payload.console();
-			if (player.isSpectator() || !io.github.jimbozoomer.jugcraft.placement.StructurePermissions.mayChange(player.level(), pos, player) || !player.level().isLoaded(pos) || player.distanceToSqr(Vec3.atCenterOf(pos)) > REACH_SQR
+			if (!player.level().isLoaded(pos) || player.distanceToSqr(Vec3.atCenterOf(pos)) > REACH_SQR
 					|| !(player.level().getBlockEntity(pos) instanceof EquipmentBlockEntity console)
 					|| console.kind() != EquipmentKind.CONTROL_CONSOLE && console.kind() != EquipmentKind.REMOTE_SHUTDOWN_PANEL) {
 				return;
@@ -80,7 +80,7 @@ public record ConsoleActionPayload(BlockPos console, int action, int value) impl
 			}
 			switch (action) {
 				case SCRAM -> {
-					core.scrammed = true;
+					core.trip(ReactorCore.TRIP_MANUAL);
 					player.sendOverlayMessage(Component.translatable("message.jugcraft.nuclear.panel_tripped"));
 				}
 				case TRANSFER -> {
@@ -102,11 +102,18 @@ public record ConsoleActionPayload(BlockPos console, int action, int value) impl
 			return false;
 		}
 		switch (action) {
-			case SET_RODS -> core.rodTarget = Math.max(0, Math.min(100, value));
-			case SCRAM -> core.scrammed = true;
+			case SET_RODS -> {
+				// The screen's rod slider drives the rods by hand: rod control drops out of AUTO (round 30).
+				core.rodAuto = false;
+				core.screenRods = true;
+				core.rodTarget = Math.max(0, Math.min(100, value));
+			}
+			case SCRAM -> core.trip(ReactorCore.TRIP_MANUAL);
 			case RESET -> {
 				if (!core.reset()) {
-					player.sendOverlayMessage(Component.translatable("message.jugcraft.nuclear.cannot_reset"));
+					// Safety injection still in holds the trip (round 28): it is reset from the ESF board first.
+					player.sendOverlayMessage(Component.translatable(core.siActuated ? "message.jugcraft.nuclear.cannot_reset_si"
+							: "message.jugcraft.nuclear.cannot_reset"));
 					return false;
 				}
 			}

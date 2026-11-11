@@ -1,0 +1,176 @@
+{
+ "textures": {
+  "rp_ahu": "jugcraft:block/rp_ahu",
+  "rp_ahu_roof": "jugcraft:block/rp_ahu_roof",
+  "rp_atlas": "jugcraft:block/rp_atlas",
+  "rp_galv_dark": "jugcraft:block/rp_galv_dark",
+  "particle": "jugcraft:block/rp_ahu"
+ },
+ "elements": [
+  {
+   "from": [
+    1.5,
+    0,
+    0
+   ],
+   "to": [
+    16,
+    12.0,
+    16
+   ],
+   "faces": {
+    "west": {
+     "texture": "#rp_ahu"
+    },
+    "up": {
+     "texture": "#rp_ahu"
+    }
+   }
+  },
+  {
+   "from": [
+    0.9,
+    12.0,
+    0
+   ],
+   "to": [
+    16,
+    13.2,
+    16
+   ],
+   "faces": {
+    "west": {
+     "texture": "#rp_ahu_roof"
+    },
+    "up": {
+     "texture": "#rp_ahu_roof"
+    },
+    "down": {
+     "texture": "#rp_ahu_roof"
+    }
+   }
+  },
+  {
+   "from": [
+    0.9,
+    13.2,
+    9.75
+   ],
+   "to": [
+    16,
+    13.6,
+    10.25
+   ],
+   "faces": {
+    "north": {
+     "texture": "#rp_ahu_roof"
+    },
+    "south": {
+     "texture": "#rp_ahu_roof"
+    },
+    "west": {
+     "texture": "#rp_ahu_roof"
+    },
+    "up": {
+     "texture": "#rp_ahu_roof"
+    },
+    "down": {
+     "texture": "#rp_ahu_roof"
+    }
+   }
+  },
+  {
+   "from": [
+    1.15,
+    0,
+    11.6
+   ],
+   "to": [
+    1.6,
+    12.0,
+    12.4
+   ],
+   "faces": {
+    "north": {
+     "texture": "#rp_ahu"
+    },
+    "south": {
+     "texture": "#rp_ahu"
+    },
+    "east": {
+     "texture": "#rp_ahu"
+    },
+    "west": {
+     "texture": "#rp_ahu"
+    },
+    "up": {
+     "texture": "#rp_ahu"
+    }
+   }
+  },
+  {
+   "from": [
+    1.2,
+    11.0,
+    0
+   ],
+   "to": [
+    1.5,
+    11.6,
+    16
+   ],
+   "faces": {
+    "east": {
+     "texture": "#rp_ahu"
+    },
+    "west": {
+     "texture": "#rp_ahu"
+    },
+    "up": {
+     "texture": "#rp_ahu"
+    },
+    "down": {
+     "texture": "#rp_ahu"
+    }
+   }
+  },
+  {
+   "from": [
+    1.35,
+    5.5,
+    2
+   ],
+   "to": [
+    1.5,
+    9.5,
+    14
+   ],
+   "faces": {
+    "north": {
+     "texture": "#rp_galv_dark"
+    },
+    "south": {
+     "texture": "#rp_galv_dark"
+    },
+    "east": {
+     "texture": "#rp_galv_dark"
+    },
+    "west": {
+     "texture": "#rp_atlas",
+     "uv": [
+      9.53125,
+      0.0,
+      15.53125,
+      2.0
+     ]
+    },
+    "up": {
+     "texture": "#rp_galv_dark"
+    },
+    "down": {
+     "texture": "#rp_galv_dark"
+    }
+   }
+  }
+ ]
+}

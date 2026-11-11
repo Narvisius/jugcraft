@@ -32,44 +32,41 @@ import net.minecraft.world.phys.BlockHitResult;
  *   <li>a warning beacon showing green or red within two blocks of a door and up to three above its foot shows the
  *   interlock: green, the door may be opened; red, another door of the airlock is open (WarningBeaconBlock).</li>
  * </ul>
+ * It swings like the plant's other doors (doors round: PlantDoorBlock, its closer there).
  */
-public class LeadDoorBlock extends DoorBlock {
+public class LeadDoorBlock extends PlantDoorBlock {
 	/** How far apart (blocks, each way along the ground; up and down) doors are still one airlock. */
 	public static final int AIRLOCK_REACH = 6, AIRLOCK_HEIGHT = 2;
 	/** How long the door stays open before its closer shuts it (ticks). */
 	public static final int CLOSE_AFTER = 100;
 
 	public LeadDoorBlock(BlockSetType type, Properties properties) {
-		super(type, properties);
+		super(type, properties, true);
 	}
 
-	private static BlockPos foot(BlockState state, BlockPos pos) {
-		return state.getValue(HALF) == DoubleBlockHalf.UPPER ? pos.below() : pos;
+	@Override
+	protected int closeAfter() {
+		return CLOSE_AFTER;
 	}
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
 		BlockPos foot = foot(state, pos);
-		if (!state.getValue(OPEN) && blockedBy(level, foot, state) != null) {
+		if (!state.getValue(OPEN) && !state.getValue(MOVING) && blockedBy(level, foot, state) != null) {
 			if (!level.isClientSide()) {
 				player.sendOverlayMessage(Component.translatable("message.jugcraft.airlock_interlock"));
 				level.playSound(null, foot, SoundEvents.CHEST_LOCKED, SoundSource.BLOCKS, 0.8F, 0.8F);
 			}
 			return InteractionResult.SUCCESS;
 		}
-		InteractionResult result = super.useWithoutItem(state, level, pos, player, hit);
-		if (!level.isClientSide()) {
-			afterChange(level, foot);
-		}
-		return result;
+		return super.useWithoutItem(state, level, pos, player, hit);
 	}
 
+	/** Every swing (by hand, the closer, redstone) shows the airlock's beacons the new state. */
 	@Override
-	public void setOpen(Entity entity, Level level, BlockState state, BlockPos pos, boolean open) {
-		super.setOpen(entity, level, state, pos, open);
-		if (!level.isClientSide()) {
-			afterChange(level, foot(state, pos));
-		}
+	public void swing(Level level, BlockPos pos, BlockState state, boolean open, Entity entity, boolean sound) {
+		super.swing(level, pos, state, open, entity, sound);
+		showInterlock(level, foot(state, pos));
 	}
 
 	@Override
@@ -78,30 +75,8 @@ public class LeadDoorBlock extends DoorBlock {
 		super.neighborChanged(state, level, pos, block, orientation, moving);
 		BlockState now = level.getBlockState(pos);
 		if (!level.isClientSide() && now.is(this) && now.getValue(OPEN) != was) {
-			afterChange(level, foot(now, pos));
+			showInterlock(level, foot(now, pos));
 		}
-	}
-
-	/** After the door opened or shut: its closer is set going, and the airlock's beacons show the new state. */
-	private void afterChange(Level level, BlockPos foot) {
-		BlockState state = level.getBlockState(foot);
-		if (state.is(this) && state.getValue(OPEN)) {
-			level.scheduleTick(foot, this, CLOSE_AFTER);
-		}
-		showInterlock(level, foot);
-	}
-
-	/** The door closer: shut, unless someone is standing in the doorway (then try again in a second). */
-	@Override
-	protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-		if (!state.is(this) || state.getValue(HALF) != DoubleBlockHalf.LOWER || !state.getValue(OPEN) || state.getValue(POWERED)) {
-			return;
-		}
-		if (!level.getEntitiesOfClass(Entity.class, new AABB(pos).expandTowards(0, 1, 0), e -> !e.isSpectator()).isEmpty()) {
-			level.scheduleTick(pos, this, 20);
-			return;
-		}
-		setOpen(null, level, state, pos, false);
 	}
 
 	/** Another door of this one's airlock that is open (so this one stays shut), or null. */

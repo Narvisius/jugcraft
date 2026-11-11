@@ -9,21 +9,20 @@
       "feature": "drones"
     }
   ],
-  "type": "minecraft:crafting_shaped",
-  "category": "building",
+  "type": "jugcraft:advanced_crafting",
   "pattern": [
-    "PHP",
-    "BCB",
-    "PHP"
+    "PPHHPP",
+    "BBCCBB",
+    "PPHHPP"
   ],
   "key": {
-    "P": "#c:plates/steel",
-    "H": "minecraft:hopper",
     "B": "minecraft:barrel",
-    "C": "jugcraft:basic_circuit"
+    "C": "jugcraft:basic_circuit",
+    "H": "minecraft:hopper",
+    "P": "#c:plates/steel"
   },
   "result": {
     "id": "jugcraft:cargo_exchange_port",
-    "count": 1
+    "count": 2
   }
 }

@@ -18,7 +18,8 @@ import net.minecraft.world.phys.Vec3;
 
 /**
  * The fans of a mechanical-draft cooling bank, drawn from its controller: in each cell's stack a hub and seven blades,
- * turning as fast as the tower is busy (slowly idling when it is not).
+ * turning as fast as the tower is busy (slowly idling when it is not). The medium plant's tower (towers and pump houses
+ * build) draws its site's live parts instead (SiteLive): lights, doors, MU-1, beacons, sprays and the local panel.
  */
 public class CoolingTowerRenderer implements BlockEntityRenderer<CoolingTowerBlockEntity, CoolingTowerRenderer.State> {
 	private static final RenderType RENDER_TYPE = RenderTypes.entityCutout(NuclearRenderer.TEXTURE);
@@ -28,6 +29,7 @@ public class CoolingTowerRenderer implements BlockEntityRenderer<CoolingTowerBlo
 		Direction facing = Direction.SOUTH;
 		float angle;
 		boolean formed;
+		final SiteLive.State site = new SiteLive.State();
 	}
 
 	public CoolingTowerRenderer(net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider.Context context) {
@@ -45,7 +47,7 @@ public class CoolingTowerRenderer implements BlockEntityRenderer<CoolingTowerBlo
 
 	@Override
 	public int getViewDistance() {
-		return 160;
+		return 512;
 	}
 
 	@Override
@@ -56,10 +58,18 @@ public class CoolingTowerRenderer implements BlockEntityRenderer<CoolingTowerBlo
 		state.facing = tower.getBlockState().getValue(CoolingTowerBlock.FACING);
 		state.angle = tower.fanAngle(partialTick);
 		state.formed = tower.formed();
+		state.site.data = null;
+		if (tower.siteKey() != null && tower.getLevel() != null) {
+			SiteLive.extract(tower, tower.getLevel(), tower.getBlockPos(), state.site);
+		}
 	}
 
 	@Override
 	public void submit(State state, PoseStack pose, SubmitNodeCollector collector, CameraRenderState camera) {
+		if (state.site.data != null) {
+			SiteLive.submit(state.site, pose, collector);
+			return;
+		}
 		if (state.tower.fanHeight <= 0 || !state.formed) {
 			return;
 		}

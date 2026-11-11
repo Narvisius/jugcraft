@@ -1,0 +1,148 @@
+{
+  "textures": {
+    "case": "jugcraft:block/dhs_case",
+    "trim": "jugcraft:block/acd_alu_dark",
+    "face": "jugcraft:block/mrs_face_1",
+    "particle": "jugcraft:block/dhs_case"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        2.72,
+        0
+      ],
+      "to": [
+        16,
+        13.28,
+        1.12
+      ],
+      "faces": {
+        "up": {
+          "texture": "#case",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            1.12
+          ]
+        },
+        "down": {
+          "texture": "#case",
+          "uv": [
+            0.0,
+            14.88,
+            16.0,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        2.72,
+        1.12
+      ],
+      "to": [
+        16,
+        3.2,
+        1.36
+      ],
+      "faces": {
+        "south": {
+          "texture": "#trim",
+          "uv": [
+            0.0,
+            12.8,
+            16.0,
+            13.28
+          ]
+        },
+        "up": {
+          "texture": "#trim",
+          "uv": [
+            0.0,
+            1.12,
+            16.0,
+            1.36
+          ]
+        },
+        "down": {
+          "texture": "#trim",
+          "uv": [
+            0.0,
+            14.64,
+            16.0,
+            14.88
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        12.8,
+        1.12
+      ],
+      "to": [
+        16,
+        13.28,
+        1.36
+      ],
+      "faces": {
+        "south": {
+          "texture": "#trim",
+          "uv": [
+            0.0,
+            2.72,
+            16.0,
+            3.2
+          ]
+        },
+        "up": {
+          "texture": "#trim",
+          "uv": [
+            0.0,
+            1.12,
+            16.0,
+            1.36
+          ]
+        },
+        "down": {
+          "texture": "#trim",
+          "uv": [
+            0.0,
+            14.64,
+            16.0,
+            14.88
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        3.2,
+        1.12
+      ],
+      "to": [
+        16,
+        12.8,
+        1.2
+      ],
+      "faces": {
+        "south": {
+          "texture": "#face",
+          "uv": [
+            0,
+            0,
+            16,
+            9.6
+          ]
+        }
+      },
+      "light_emission": 15
+    }
+  ]
+}

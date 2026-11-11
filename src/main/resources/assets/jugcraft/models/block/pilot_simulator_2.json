@@ -1,0 +1,336 @@
+{
+ "textures": {
+  "frame": "jugcraft:block/sim_frame",
+  "deck": "jugcraft:block/sim_deck",
+  "base": "jugcraft:block/sim_base",
+  "seat": "jugcraft:block/sim_seat",
+  "red": "jugcraft:block/sim_red",
+  "alu": "jugcraft:block/sim_alu",
+  "particle": "jugcraft:block/sim_frame"
+ },
+ "elements": [
+  {
+   "from": [
+    3,
+    0,
+    9
+   ],
+   "to": [
+    7,
+    1.4,
+    13
+   ],
+   "faces": {
+    "north": {
+     "texture": "#frame"
+    },
+    "south": {
+     "texture": "#frame"
+    },
+    "east": {
+     "texture": "#frame"
+    },
+    "west": {
+     "texture": "#frame"
+    },
+    "up": {
+     "texture": "#frame"
+    },
+    "down": {
+     "texture": "#frame"
+    }
+   }
+  },
+  {
+   "from": [
+    9.4,
+    7,
+    0
+   ],
+   "to": [
+    11,
+    11.5,
+    8.5
+   ],
+   "faces": {
+    "north": {
+     "texture": "#seat"
+    },
+    "south": {
+     "texture": "#seat"
+    },
+    "east": {
+     "texture": "#seat"
+    },
+    "west": {
+     "texture": "#seat"
+    },
+    "up": {
+     "texture": "#seat"
+    },
+    "down": {
+     "texture": "#seat"
+    }
+   }
+  },
+  {
+   "from": [
+    9.3,
+    9.5,
+    7.2
+   ],
+   "to": [
+    10.6,
+    19,
+    9
+   ],
+   "faces": {
+    "north": {
+     "texture": "#seat",
+     "uv": [
+      5.4,
+      0.0,
+      6.7,
+      9.5
+     ]
+    },
+    "south": {
+     "texture": "#seat",
+     "uv": [
+      9.3,
+      0.0,
+      10.6,
+      9.5
+     ]
+    },
+    "east": {
+     "texture": "#seat",
+     "uv": [
+      7.0,
+      0.0,
+      8.8,
+      9.5
+     ]
+    },
+    "west": {
+     "texture": "#seat",
+     "uv": [
+      7.2,
+      0.0,
+      9.0,
+      9.5
+     ]
+    },
+    "up": {
+     "texture": "#seat"
+    },
+    "down": {
+     "texture": "#seat"
+    }
+   },
+   "rotation": {
+    "angle": 22.5,
+    "axis": "x",
+    "origin": [
+     16,
+     7.5,
+     8
+    ]
+   }
+  },
+  {
+   "from": [
+    9.3,
+    9.5,
+    7.0
+   ],
+   "to": [
+    10.6,
+    19,
+    7.2
+   ],
+   "faces": {
+    "north": {
+     "texture": "#red",
+     "uv": [
+      5.4,
+      0.0,
+      6.7,
+      9.5
+     ]
+    },
+    "south": {
+     "texture": "#seat",
+     "uv": [
+      9.3,
+      0.0,
+      10.6,
+      9.5
+     ]
+    },
+    "east": {
+     "texture": "#seat",
+     "uv": [
+      8.8,
+      0.0,
+      9.0,
+      9.5
+     ]
+    },
+    "west": {
+     "texture": "#seat",
+     "uv": [
+      7.0,
+      0.0,
+      7.2,
+      9.5
+     ]
+    },
+    "up": {
+     "texture": "#seat"
+    },
+    "down": {
+     "texture": "#seat"
+    }
+   },
+   "rotation": {
+    "angle": 22.5,
+    "axis": "x",
+    "origin": [
+     16,
+     7.5,
+     8
+    ]
+   }
+  },
+  {
+   "from": [
+    4.5,
+    2.8,
+    -1
+   ],
+   "to": [
+    9.4,
+    10.5,
+    9
+   ],
+   "faces": {
+    "north": {
+     "texture": "#frame"
+    },
+    "south": {
+     "texture": "#frame"
+    },
+    "east": {
+     "texture": "#frame",
+     "uv": [
+      6.0,
+      5.5,
+      16.0,
+      13.2
+     ]
+    },
+    "west": {
+     "texture": "#frame",
+     "uv": [
+      0.0,
+      5.5,
+      10.0,
+      13.2
+     ]
+    },
+    "up": {
+     "texture": "#frame",
+     "uv": [
+      4.5,
+      0.0,
+      9.4,
+      10.0
+     ]
+    },
+    "down": {
+     "texture": "#frame",
+     "uv": [
+      4.5,
+      6.0,
+      9.4,
+      16.0
+     ]
+    }
+   }
+  },
+  {
+   "from": [
+    5.5,
+    10.5,
+    1
+   ],
+   "to": [
+    8.5,
+    11.6,
+    5.5
+   ],
+   "faces": {
+    "north": {
+     "texture": "#base"
+    },
+    "south": {
+     "texture": "#base"
+    },
+    "east": {
+     "texture": "#base"
+    },
+    "west": {
+     "texture": "#base"
+    },
+    "up": {
+     "texture": "#base"
+    },
+    "down": {
+     "texture": "#base"
+    }
+   }
+  },
+  {
+   "from": [
+    6.5,
+    11.6,
+    2.5
+   ],
+   "to": [
+    7.5,
+    15,
+    3.5
+   ],
+   "faces": {
+    "north": {
+     "texture": "#alu"
+    },
+    "south": {
+     "texture": "#alu"
+    },
+    "east": {
+     "texture": "#alu"
+    },
+    "west": {
+     "texture": "#alu"
+    },
+    "up": {
+     "texture": "#alu"
+    },
+    "down": {
+     "texture": "#alu"
+    }
+   },
+   "rotation": {
+    "angle": 22.5,
+    "axis": "x",
+    "origin": [
+     7,
+     11.6,
+     3
+    ]
+   }
+  }
+ ]
+}

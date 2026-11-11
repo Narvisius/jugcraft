@@ -1,0 +1,278 @@
+{
+  "textures": {
+    "pi_rr_partition": "jugcraft:block/pi_rr_partition",
+    "pi_rr_partition_edge": "jugcraft:block/pi_rr_partition_edge",
+    "pi_rr_stainless": "jugcraft:block/pi_rr_stainless",
+    "particle": "jugcraft:block/pi_rr_partition"
+  },
+  "elements": [
+    {
+      "from": [
+        0.0,
+        4.8,
+        0.3
+      ],
+      "to": [
+        16.0,
+        28.5,
+        0.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_rr_partition",
+          "uv": [
+            0.0,
+            0,
+            16.0,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#pi_rr_partition",
+          "uv": [
+            0.0,
+            0,
+            16.0,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_rr_partition_edge",
+          "uv": [
+            15.2,
+            0,
+            15.7,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#pi_rr_partition_edge",
+          "uv": [
+            0.3,
+            0,
+            0.8,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#pi_rr_partition_edge",
+          "uv": [
+            0.0,
+            0.3,
+            16.0,
+            0.8
+          ]
+        },
+        "down": {
+          "texture": "#pi_rr_partition_edge",
+          "uv": [
+            0.0,
+            15.2,
+            16.0,
+            15.7
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0.0,
+        6.8,
+        0.0
+      ],
+      "to": [
+        1.0,
+        8.8,
+        0.3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_rr_stainless"
+        },
+        "south": {
+          "texture": "#pi_rr_stainless"
+        },
+        "east": {
+          "texture": "#pi_rr_stainless"
+        },
+        "west": {
+          "texture": "#pi_rr_stainless"
+        },
+        "up": {
+          "texture": "#pi_rr_stainless"
+        },
+        "down": {
+          "texture": "#pi_rr_stainless"
+        }
+      }
+    },
+    {
+      "from": [
+        0.0,
+        6.8,
+        0.8
+      ],
+      "to": [
+        1.0,
+        8.8,
+        1.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_rr_stainless"
+        },
+        "south": {
+          "texture": "#pi_rr_stainless"
+        },
+        "east": {
+          "texture": "#pi_rr_stainless"
+        },
+        "west": {
+          "texture": "#pi_rr_stainless"
+        },
+        "up": {
+          "texture": "#pi_rr_stainless"
+        },
+        "down": {
+          "texture": "#pi_rr_stainless"
+        }
+      }
+    },
+    {
+      "from": [
+        0.0,
+        24.5,
+        0.0
+      ],
+      "to": [
+        1.0,
+        26.5,
+        0.3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_rr_stainless",
+          "uv": [
+            15.0,
+            0,
+            16.0,
+            2.0
+          ]
+        },
+        "south": {
+          "texture": "#pi_rr_stainless",
+          "uv": [
+            0.0,
+            0,
+            1.0,
+            2.0
+          ]
+        },
+        "east": {
+          "texture": "#pi_rr_stainless",
+          "uv": [
+            15.7,
+            0,
+            16.0,
+            2.0
+          ]
+        },
+        "west": {
+          "texture": "#pi_rr_stainless",
+          "uv": [
+            0.0,
+            0,
+            0.3,
+            2.0
+          ]
+        },
+        "up": {
+          "texture": "#pi_rr_stainless",
+          "uv": [
+            0.0,
+            0.0,
+            1.0,
+            0.3
+          ]
+        },
+        "down": {
+          "texture": "#pi_rr_stainless",
+          "uv": [
+            0.0,
+            15.7,
+            1.0,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0.0,
+        24.5,
+        0.8
+      ],
+      "to": [
+        1.0,
+        26.5,
+        1.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_rr_stainless",
+          "uv": [
+            15.0,
+            0,
+            16.0,
+            2.0
+          ]
+        },
+        "south": {
+          "texture": "#pi_rr_stainless",
+          "uv": [
+            0.0,
+            0,
+            1.0,
+            2.0
+          ]
+        },
+        "east": {
+          "texture": "#pi_rr_stainless",
+          "uv": [
+            14.9,
+            0,
+            15.2,
+            2.0
+          ]
+        },
+        "west": {
+          "texture": "#pi_rr_stainless",
+          "uv": [
+            0.8,
+            0,
+            1.1,
+            2.0
+          ]
+        },
+        "up": {
+          "texture": "#pi_rr_stainless",
+          "uv": [
+            0.0,
+            0.8,
+            1.0,
+            1.1
+          ]
+        },
+        "down": {
+          "texture": "#pi_rr_stainless",
+          "uv": [
+            0.0,
+            14.9,
+            1.0,
+            15.2
+          ]
+        }
+      }
+    }
+  ]
+}

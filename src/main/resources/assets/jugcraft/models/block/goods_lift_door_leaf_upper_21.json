@@ -1,0 +1,93 @@
+{
+ "textures": {
+  "gl_leaf": "jugcraft:block/gl_leaf",
+  "gl_leaf_dark": "jugcraft:block/gl_leaf_dark",
+  "particle": "jugcraft:block/gl_frame"
+ },
+ "elements": [
+  {
+   "from": [
+    5.5,
+    2,
+    6.5
+   ],
+   "to": [
+    16,
+    8,
+    8.5
+   ],
+   "faces": {
+    "north": {
+     "texture": "#gl_leaf"
+    },
+    "south": {
+     "texture": "#gl_leaf"
+    },
+    "west": {
+     "texture": "#gl_leaf"
+    },
+    "up": {
+     "texture": "#gl_leaf"
+    },
+    "down": {
+     "texture": "#gl_leaf"
+    }
+   }
+  },
+  {
+   "from": [
+    5.5,
+    0,
+    6.5
+   ],
+   "to": [
+    16,
+    2,
+    8.5
+   ],
+   "faces": {
+    "north": {
+     "texture": "#gl_leaf"
+    },
+    "south": {
+     "texture": "#gl_leaf"
+    },
+    "west": {
+     "texture": "#gl_leaf"
+    },
+    "up": {
+     "texture": "#gl_leaf"
+    }
+   }
+  },
+  {
+   "from": [
+    6.5,
+    5.0,
+    6.2
+   ],
+   "to": [
+    16,
+    6.0,
+    6.5
+   ],
+   "faces": {
+    "north": {
+     "texture": "#gl_leaf_dark"
+    },
+    "south": {
+     "texture": "#gl_leaf_dark"
+    },
+    "west": {
+     "texture": "#gl_leaf_dark"
+    },
+    "up": {
+     "texture": "#gl_leaf_dark"
+    },
+    "down": {
+     "texture": "#gl_leaf_dark"
+    }
+   }
+  }
+ ]
+}

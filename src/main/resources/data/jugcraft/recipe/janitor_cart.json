@@ -1,0 +1,32 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "YYKKYY",
+    "KKBBKK",
+    "NN  NN"
+  ],
+  "key": {
+    "B": "minecraft:bucket",
+    "K": "jugcraft:plastic_sheet",
+    "N": "minecraft:iron_nugget",
+    "Y": "minecraft:yellow_dye"
+  },
+  "result": {
+    "id": "jugcraft:janitor_cart",
+    "count": 2
+  }
+}

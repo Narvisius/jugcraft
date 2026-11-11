@@ -1,0 +1,290 @@
+{
+ "multipart": [
+  {
+   "when": {
+    "north": "net"
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_net_north"
+   }
+  },
+  {
+   "when": {
+    "north": "door",
+    "part": "bottom"
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_door_lower"
+   }
+  },
+  {
+   "when": {
+    "north": "door",
+    "part": "middle"
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_door_upper"
+   }
+  },
+  {
+   "when": {
+    "north": "net|door",
+    "part": "bottom"
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_foot_north"
+   }
+  },
+  {
+   "when": {
+    "north": "net|door",
+    "part": "top"
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_head_north"
+   }
+  },
+  {
+   "when": {
+    "east": "net"
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_net_north",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "east": "door",
+    "part": "bottom"
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_door_lower",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "east": "door",
+    "part": "middle"
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_door_upper",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "east": "net|door",
+    "part": "bottom"
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_foot_north",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "east": "net|door",
+    "part": "top"
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_head_north",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "south": "net"
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_net_north",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "south": "door",
+    "part": "bottom"
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_door_lower",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "south": "door",
+    "part": "middle"
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_door_upper",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "south": "net|door",
+    "part": "bottom"
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_foot_north",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "south": "net|door",
+    "part": "top"
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_head_north",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "west": "net"
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_net_north",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "west": "door",
+    "part": "bottom"
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_door_lower",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "west": "door",
+    "part": "middle"
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_door_upper",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "west": "net|door",
+    "part": "bottom"
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_foot_north",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "west": "net|door",
+    "part": "top"
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_head_north",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "AND": [
+     {
+      "north": "net|door"
+     },
+     {
+      "west": "net|door"
+     }
+    ]
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_post"
+   }
+  },
+  {
+   "when": {
+    "AND": [
+     {
+      "north": "net|door"
+     },
+     {
+      "east": "net|door"
+     }
+    ]
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_post",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "AND": [
+     {
+      "south": "net|door"
+     },
+     {
+      "east": "net|door"
+     }
+    ]
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_post",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "AND": [
+     {
+      "south": "net|door"
+     },
+     {
+      "west": "net|door"
+     }
+    ]
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_post",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "part": "top"
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_roof"
+   }
+  },
+  {
+   "when": {
+    "floor": "foam"
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_floor"
+   }
+  },
+  {
+   "when": {
+    "floor": "pad|drone"
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_pad"
+   }
+  },
+  {
+   "when": {
+    "floor": "drone"
+   },
+   "apply": {
+    "model": "jugcraft:block/test_cage_drone"
+   }
+  }
+ ]
+}

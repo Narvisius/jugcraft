@@ -12,6 +12,7 @@ public final class ClientBlueprints {
 
 	public static void register() {
 		BlueprintStages.register();
+		BlueprintFloors.register();
 		ClientPlayNetworking.registerGlobalReceiver(BlueprintNetwork.SyncPayload.TYPE, (payload, context) -> BlueprintNetwork.receive(payload));
 		ClientPlayNetworking.registerGlobalReceiver(BlueprintNetwork.ImportResultPayload.TYPE, (payload, context) -> {
 			if (BlueprintTableScreen.open != null) {

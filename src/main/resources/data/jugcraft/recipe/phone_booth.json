@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "AAGGAA",
+    "WWGGWW",
+    "AAWWAA"
+  ],
+  "key": {
+    "A": "#c:plates/aluminum",
+    "G": "minecraft:glass_pane",
+    "W": "minecraft:gray_wool"
+  },
+  "result": {
+    "id": "jugcraft:phone_booth",
+    "count": 2
+  }
+}

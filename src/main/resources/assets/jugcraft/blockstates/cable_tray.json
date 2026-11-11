@@ -1,18 +1,78 @@
 {
   "variants": {
-    "facing=north": {
+    "facing=north,shape=straight": {
       "model": "jugcraft:block/cable_tray"
     },
-    "facing=east": {
+    "facing=east,shape=straight": {
       "model": "jugcraft:block/cable_tray",
       "y": 90
     },
-    "facing=south": {
+    "facing=south,shape=straight": {
       "model": "jugcraft:block/cable_tray",
       "y": 180
     },
-    "facing=west": {
+    "facing=west,shape=straight": {
       "model": "jugcraft:block/cable_tray",
+      "y": 270
+    },
+    "facing=north,shape=corner": {
+      "model": "jugcraft:block/cable_tray_corner"
+    },
+    "facing=east,shape=corner": {
+      "model": "jugcraft:block/cable_tray_corner",
+      "y": 90
+    },
+    "facing=south,shape=corner": {
+      "model": "jugcraft:block/cable_tray_corner",
+      "y": 180
+    },
+    "facing=west,shape=corner": {
+      "model": "jugcraft:block/cable_tray_corner",
+      "y": 270
+    },
+    "facing=north,shape=tee": {
+      "model": "jugcraft:block/cable_tray_tee"
+    },
+    "facing=east,shape=tee": {
+      "model": "jugcraft:block/cable_tray_tee",
+      "y": 90
+    },
+    "facing=south,shape=tee": {
+      "model": "jugcraft:block/cable_tray_tee",
+      "y": 180
+    },
+    "facing=west,shape=tee": {
+      "model": "jugcraft:block/cable_tray_tee",
+      "y": 270
+    },
+    "facing=north,shape=cross": {
+      "model": "jugcraft:block/cable_tray_cross"
+    },
+    "facing=east,shape=cross": {
+      "model": "jugcraft:block/cable_tray_cross",
+      "y": 90
+    },
+    "facing=south,shape=cross": {
+      "model": "jugcraft:block/cable_tray_cross",
+      "y": 180
+    },
+    "facing=west,shape=cross": {
+      "model": "jugcraft:block/cable_tray_cross",
+      "y": 270
+    },
+    "facing=north,shape=end": {
+      "model": "jugcraft:block/cable_tray_end"
+    },
+    "facing=east,shape=end": {
+      "model": "jugcraft:block/cable_tray_end",
+      "y": 90
+    },
+    "facing=south,shape=end": {
+      "model": "jugcraft:block/cable_tray_end",
+      "y": 180
+    },
+    "facing=west,shape=end": {
+      "model": "jugcraft:block/cable_tray_end",
       "y": 270
     }
   }

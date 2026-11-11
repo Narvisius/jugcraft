@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "Q  ",
+    "QBQ",
+    "QQQ"
+  ],
+  "key": {
+    "Q": "minecraft:quartz_block",
+    "B": "minecraft:water_bucket"
+  },
+  "result": {
+    "id": "jugcraft:restroom_toilet",
+    "count": 1
+  }
+}

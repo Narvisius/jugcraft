@@ -1,0 +1,106 @@
+{
+  "textures": {
+    "pi_sec_xray": "jugcraft:block/pi_sec_xray",
+    "pi_sec_xray_f_4": "jugcraft:block/pi_sec_xray_f_4",
+    "pi_sec_xray_top": "jugcraft:block/pi_sec_xray_top",
+    "particle": "jugcraft:block/pi_sec_xray"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        1.0
+      ],
+      "to": [
+        16,
+        2.0,
+        3.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_sec_xray"
+        },
+        "south": {
+          "texture": "#pi_sec_xray"
+        },
+        "east": {
+          "texture": "#pi_sec_xray"
+        },
+        "west": {
+          "texture": "#pi_sec_xray"
+        },
+        "up": {
+          "texture": "#pi_sec_xray"
+        },
+        "down": {
+          "texture": "#pi_sec_xray"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        13.0
+      ],
+      "to": [
+        16,
+        2.0,
+        15.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_sec_xray"
+        },
+        "south": {
+          "texture": "#pi_sec_xray_f_4"
+        },
+        "east": {
+          "texture": "#pi_sec_xray"
+        },
+        "west": {
+          "texture": "#pi_sec_xray"
+        },
+        "up": {
+          "texture": "#pi_sec_xray"
+        },
+        "down": {
+          "texture": "#pi_sec_xray"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        2.0,
+        1.0
+      ],
+      "to": [
+        16,
+        6.0,
+        15.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_sec_xray"
+        },
+        "south": {
+          "texture": "#pi_sec_xray_f_4"
+        },
+        "east": {
+          "texture": "#pi_sec_xray"
+        },
+        "west": {
+          "texture": "#pi_sec_xray"
+        },
+        "up": {
+          "texture": "#pi_sec_xray_top"
+        },
+        "down": {
+          "texture": "#pi_sec_xray"
+        }
+      }
+    }
+  ]
+}

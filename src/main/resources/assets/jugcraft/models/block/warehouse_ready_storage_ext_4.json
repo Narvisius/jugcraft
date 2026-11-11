@@ -1,0 +1,73 @@
+{
+  "textures": {
+    "pi_wh_vlm_core": "jugcraft:block/pi_wh_vlm_core",
+    "pi_wh_vlm_panel": "jugcraft:block/pi_wh_vlm_panel",
+    "particle": "jugcraft:block/pi_wh_vlm_core"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0.0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        15.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_wh_vlm_core"
+        },
+        "south": {
+          "texture": "#pi_wh_vlm_core"
+        },
+        "east": {
+          "texture": "#pi_wh_vlm_core"
+        },
+        "west": {
+          "texture": "#pi_wh_vlm_core"
+        },
+        "up": {
+          "texture": "#pi_wh_vlm_core"
+        },
+        "down": {
+          "texture": "#pi_wh_vlm_core"
+        }
+      }
+    },
+    {
+      "from": [
+        0.15,
+        0.2,
+        15.0
+      ],
+      "to": [
+        15.85,
+        15.85,
+        15.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_wh_vlm_panel"
+        },
+        "south": {
+          "texture": "#pi_wh_vlm_panel"
+        },
+        "east": {
+          "texture": "#pi_wh_vlm_panel"
+        },
+        "west": {
+          "texture": "#pi_wh_vlm_panel"
+        },
+        "up": {
+          "texture": "#pi_wh_vlm_panel"
+        },
+        "down": {
+          "texture": "#pi_wh_vlm_panel"
+        }
+      }
+    }
+  ]
+}

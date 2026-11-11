@@ -22,7 +22,8 @@ import org.jspecify.annotations.Nullable;
  * and the mouse slows by the scope's zoom ({@link GunView});</li>
  * <li>a reflex sight leaves the gun in view, its window on the middle of the screen, and puts its red dot there.</li>
  * </ul>
- * Either way the crosshair is left out: the reticle or the dot is the aim.
+ * Either way the crosshair is left out: the reticle or the dot is the aim (and under the NT-7's holographic reticle,
+ * client/PlasmaRifleClient).
  */
 public final class GunScope {
 	/** How far into the aim (0 to 1, {@link GunView#aim}) the view through the scope comes up. */
@@ -40,7 +41,9 @@ public final class GunScope {
 	public static void register() {
 		HudElementRegistry.attachElementAfter(VanillaHudElements.MISC_OVERLAYS, Jugcraft.id("gun_scope"), GunScope::overlay);
 		HudElementRegistry.replaceElement(VanillaHudElements.CROSSHAIR, crosshair -> (graphics, delta) -> {
-			if (aimedOptic(delta.getGameTimeDeltaPartialTick(false)) == null) {
+			float partial = delta.getGameTimeDeltaPartialTick(false);
+			if (aimedOptic(partial) == null && !io.github.jimbozoomer.jugcraft.client.PlasmaRifleClient.reticle(partial)
+					&& !io.github.jimbozoomer.jugcraft.client.LaserDesignatorClient.sighted()) {
 				crosshair.extractRenderState(graphics, delta);
 			}
 		});

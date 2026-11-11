@@ -41,7 +41,11 @@ public class CoolingTowerBlock extends BaseEntityBlock {
 		//          name          blueprint            cap  plume r   fans                               fill r     fan
 		NATURAL("natural", "ct_natural", 1.0, 150, 28, new int[] {0}, 12, 47, 0),
 		LARGE("large", "ct_natural_large", 0.9, 175, 33, new int[] {0}, 12, 57, 0),
-		MECHANICAL("mechanical", "ct_mechanical", 0.4, 21, 5, new int[] {-40, -24, -8, 8, 24, 40}, 10, 6, 14);
+		MECHANICAL("mechanical", "ct_mechanical", 0.4, 21, 5, new int[] {-40, -24, -8, 8, 24, 40}, 10, 6, 14),
+		// The medium plant's natural-draft tower as built to the detail standard (towers and pump houses build, 19 October
+		// 2026): a compiled site (ct_medium) whose controller stands at the outlet sump's back wall, on the trench, 62.5
+		// blocks out from the tower's axis; its plume and rain come from the axis (CoolingTowerBlockEntity.axis).
+		MEDIUM("medium", "ct_medium", 1.0, 153, 28, new int[] {0}, 11, 47, 0);
 
 		public final String name;
 		public final String blueprint;

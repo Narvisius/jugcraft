@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    " SSSS ",
+    "GPARDS",
+    " SSSS "
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "G": "minecraft:spyglass",
+    "P": "jugcraft:processor",
+    "A": "jugcraft:advanced_circuit",
+    "R": "minecraft:redstone",
+    "D": "minecraft:diamond"
+  },
+  "result": {
+    "id": "jugcraft:laser_designator",
+    "count": 1
+  }
+}

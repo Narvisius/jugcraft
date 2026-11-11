@@ -61,7 +61,8 @@ public final class BuildJobs {
 	public record Target(Source source, UUID jobId, UUID owner, UseMode mode, BlockPos pos, BlockState state,
 			@Nullable TagKey<Block> anyOf, boolean supplied) {
 		public Target(Source source, UUID jobId, UUID owner, UseMode mode, BlockPos pos, BlockState state, @Nullable TagKey<Block> anyOf) {
-			this(source, jobId, owner, mode, pos, state, anyOf, false);
+			// A light block (the light under a built-in blueprint's fittings) has no item to fly: it costs nothing.
+			this(source, jobId, owner, mode, pos, state, anyOf, state.is(net.minecraft.world.level.block.Blocks.LIGHT));
 		}
 	}
 

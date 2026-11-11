@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "RRR",
+    "RCR",
+    "N N"
+  ],
+  "key": {
+    "R": "minecraft:red_dye",
+    "C": "minecraft:chest",
+    "N": "minecraft:iron_nugget"
+  },
+  "result": {
+    "id": "jugcraft:shop_tool_chest",
+    "count": 1
+  }
+}

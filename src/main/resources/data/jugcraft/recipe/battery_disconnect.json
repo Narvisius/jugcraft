@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PFP",
+    "CRC",
+    "PFP"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "F": "minecraft:redstone",
+    "C": "minecraft:copper_ingot",
+    "R": "minecraft:lever"
+  },
+  "result": {
+    "id": "jugcraft:battery_disconnect",
+    "count": 1
+  }
+}

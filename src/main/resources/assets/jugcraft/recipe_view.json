@@ -40985,5 +40985,4626 @@
       "tag": "jugcraft:mulch/whole",
       "quarters": 4
     }
+  ],
+  "advanced_crafting": [
+    {
+      "id": "jugcraft:access_floor_tile",
+      "pattern": [
+        "PPPPPP",
+        "SS  SS"
+      ],
+      "key": {
+        "P": "#c:plates/iron",
+        "S": "#c:ingots/steel"
+      },
+      "out": [
+        "jugcraft:access_floor_tile",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:acoustic_panel",
+      "pattern": [
+        "WWKKWW",
+        "WWKKWW"
+      ],
+      "key": {
+        "K": "jugcraft:plastic_sheet",
+        "W": "minecraft:black_wool"
+      },
+      "out": [
+        "jugcraft:acoustic_panel",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:acoustic_wall_panel",
+      "pattern": [
+        "WWWWWW",
+        "WWPPWW",
+        "WWWWWW"
+      ],
+      "key": {
+        "P": "#c:plates/iron",
+        "W": "minecraft:gray_wool"
+      },
+      "out": [
+        "jugcraft:acoustic_wall_panel",
+        16
+      ]
+    },
+    {
+      "id": "jugcraft:aisle_containment_door",
+      "pattern": [
+        "IIGGII",
+        "IIGGII",
+        "IIRRII"
+      ],
+      "key": {
+        "G": "minecraft:glass_pane",
+        "I": "minecraft:iron_ingot",
+        "R": "minecraft:redstone"
+      },
+      "out": [
+        "jugcraft:aisle_containment_door",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:aisle_containment_roof",
+      "pattern": [
+        "GGGGGG",
+        "IILLII"
+      ],
+      "key": {
+        "G": "minecraft:glass_pane",
+        "I": "minecraft:iron_ingot",
+        "L": "minecraft:glowstone_dust"
+      },
+      "out": [
+        "jugcraft:aisle_containment_roof",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:aisle_step",
+      "pattern": [
+        "CCCCCC",
+        "PPYYPP"
+      ],
+      "key": {
+        "C": "minecraft:gray_carpet",
+        "P": "#c:plates/aluminum",
+        "Y": "minecraft:orange_dye"
+      },
+      "out": [
+        "jugcraft:aisle_step",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:alloys_aluminum_cladding",
+      "pattern": [
+        "PPPP",
+        "PPPP"
+      ],
+      "key": {
+        "P": "#c:plates/aluminum_magnesium"
+      },
+      "out": [
+        "jugcraft:aluminum_cladding",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:aluminum_cladding",
+      "pattern": [
+        "PPPP",
+        "PPPP"
+      ],
+      "key": {
+        "P": "#c:plates/aluminum"
+      },
+      "out": [
+        "jugcraft:aluminum_cladding",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:aluminum_cladding_slab",
+      "pattern": [
+        "BBBBBB"
+      ],
+      "key": {
+        "B": "jugcraft:aluminum_cladding"
+      },
+      "out": [
+        "jugcraft:aluminum_cladding_slab",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:aluminum_cladding_stairs",
+      "pattern": [
+        "BB    ",
+        "BBBB  ",
+        "BBBBBB"
+      ],
+      "key": {
+        "B": "jugcraft:aluminum_cladding"
+      },
+      "out": [
+        "jugcraft:aluminum_cladding_stairs",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:amber_light_strip",
+      "pattern": [
+        "GGGGGG",
+        "RRDDRR"
+      ],
+      "key": {
+        "D": "minecraft:orange_dye",
+        "G": "minecraft:glass_pane",
+        "R": "minecraft:glowstone_dust"
+      },
+      "out": [
+        "jugcraft:amber_light_strip",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:area_chart",
+      "pattern": [
+        "AAMMAA",
+        "AAMMAA"
+      ],
+      "key": {
+        "A": "#c:plates/aluminum",
+        "M": "minecraft:map"
+      },
+      "out": [
+        "jugcraft:area_chart",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:armored_conduit",
+      "pattern": [
+        "PPWWPP"
+      ],
+      "key": {
+        "P": "#c:plates/steel",
+        "W": "#c:wires/copper"
+      },
+      "out": [
+        "jugcraft:armored_conduit",
+        6
+      ]
+    },
+    {
+      "id": "jugcraft:automatic_entrance_door",
+      "pattern": [
+        "IGGGGI",
+        "IGGGGI",
+        "IIRRII"
+      ],
+      "key": {
+        "G": "minecraft:glass_pane",
+        "I": "minecraft:iron_ingot",
+        "R": "minecraft:redstone"
+      },
+      "out": [
+        "jugcraft:automatic_entrance_door",
+        1
+      ]
+    },
+    {
+      "id": "jugcraft:automatic_sliding_door_glass",
+      "pattern": [
+        "IGGI",
+        "IGGI",
+        "IRRI"
+      ],
+      "key": {
+        "G": "minecraft:glass_pane",
+        "I": "minecraft:iron_ingot",
+        "R": "minecraft:redstone"
+      },
+      "out": [
+        "jugcraft:automatic_sliding_door_glass",
+        1
+      ]
+    },
+    {
+      "id": "jugcraft:automatic_sliding_door_single_glass",
+      "pattern": [
+        "IGI",
+        "IGI",
+        "IGI",
+        "IRI"
+      ],
+      "key": {
+        "G": "minecraft:glass_pane",
+        "I": "minecraft:iron_ingot",
+        "R": "minecraft:redstone"
+      },
+      "out": [
+        "jugcraft:automatic_sliding_door_single_glass",
+        1
+      ]
+    },
+    {
+      "id": "jugcraft:automatic_sliding_door_single_steel",
+      "pattern": [
+        "III",
+        "IGI",
+        "III",
+        "IRI"
+      ],
+      "key": {
+        "G": "minecraft:glass_pane",
+        "I": "minecraft:iron_ingot",
+        "R": "minecraft:redstone"
+      },
+      "out": [
+        "jugcraft:automatic_sliding_door_single_steel",
+        1
+      ]
+    },
+    {
+      "id": "jugcraft:automatic_sliding_door_steel",
+      "pattern": [
+        "IIII",
+        "IGGI",
+        "IRRI"
+      ],
+      "key": {
+        "G": "minecraft:glass_pane",
+        "I": "minecraft:iron_ingot",
+        "R": "minecraft:redstone"
+      },
+      "out": [
+        "jugcraft:automatic_sliding_door_steel",
+        1
+      ]
+    },
+    {
+      "id": "jugcraft:av_credenza",
+      "pattern": [
+        "DDDDDD",
+        "CCBBCC",
+        "DDDDDD"
+      ],
+      "key": {
+        "B": "minecraft:black_stained_glass_pane",
+        "C": "jugcraft:basic_circuit",
+        "D": "minecraft:dark_oak_planks"
+      },
+      "out": [
+        "jugcraft:av_credenza",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:bag_cubbies",
+      "pattern": [
+        "OOSSOO",
+        "OOSSOO"
+      ],
+      "key": {
+        "O": "minecraft:oak_planks",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:bag_cubbies",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:bar_stool",
+      "pattern": [
+        "L",
+        "L",
+        "S",
+        "S",
+        "S",
+        "S"
+      ],
+      "key": {
+        "L": "minecraft:leather",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:bar_stool",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:bench_stool",
+      "pattern": [
+        "K",
+        "K",
+        "S",
+        "S"
+      ],
+      "key": {
+        "K": "jugcraft:plastic_sheet",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:bench_stool",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:binder_shelf",
+      "pattern": [
+        "OOBBOO",
+        "OOBBOO"
+      ],
+      "key": {
+        "B": "minecraft:book",
+        "O": "minecraft:oak_planks"
+      },
+      "out": [
+        "jugcraft:binder_shelf",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:bistro_table",
+      "pattern": [
+        "DDDDDD",
+        "  NN  ",
+        "  SS  "
+      ],
+      "key": {
+        "D": "minecraft:dark_oak_planks",
+        "N": "minecraft:iron_nugget",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:bistro_table",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:blast_glass",
+      "pattern": [
+        "GGSSGG",
+        "GG  GG",
+        "GGSSGG"
+      ],
+      "key": {
+        "G": "minecraft:glass",
+        "S": "jugcraft:plastic_sheet"
+      },
+      "out": [
+        "jugcraft:blast_glass",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:boardroom_table",
+      "pattern": [
+        "DDDDDD",
+        "DDWWDD",
+        "SS  SS"
+      ],
+      "key": {
+        "D": "minecraft:dark_oak_planks",
+        "S": "#c:plates/steel",
+        "W": "#c:wires/copper"
+      },
+      "out": [
+        "jugcraft:boardroom_table",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:bottle_filler",
+      "pattern": [
+        "SSGGSS",
+        "SSBBSS",
+        "SSWWSS"
+      ],
+      "key": {
+        "B": "minecraft:glass_bottle",
+        "G": "minecraft:glass_pane",
+        "S": "#c:plates/steel",
+        "W": "minecraft:water_bucket"
+      },
+      "out": [
+        "jugcraft:bottle_filler",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:briefing_lectern",
+      "pattern": [
+        "DDCCDD",
+        "  DD  ",
+        "DDPPDD"
+      ],
+      "key": {
+        "C": "jugcraft:basic_circuit",
+        "D": "minecraft:dark_oak_planks",
+        "P": "#c:plates/iron"
+      },
+      "out": [
+        "jugcraft:briefing_lectern",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:briefing_sign",
+      "pattern": [
+        "BBLLBB",
+        "AACCAA"
+      ],
+      "key": {
+        "A": "#c:plates/aluminum",
+        "B": "minecraft:black_stained_glass_pane",
+        "C": "jugcraft:basic_circuit",
+        "L": "minecraft:glowstone_dust"
+      },
+      "out": [
+        "jugcraft:briefing_sign",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:build_table",
+      "pattern": [
+        "HHHHHH",
+        "SSWWSS",
+        "SS  SS"
+      ],
+      "key": {
+        "H": "minecraft:birch_planks",
+        "S": "#c:plates/steel",
+        "W": "#c:wires/copper"
+      },
+      "out": [
+        "jugcraft:build_table",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:cable_tray",
+      "pattern": [
+        "PP  PP",
+        "WWPPWW"
+      ],
+      "key": {
+        "P": "#c:plates/iron",
+        "W": "#c:wires/copper"
+      },
+      "out": [
+        "jugcraft:cable_tray",
+        16
+      ]
+    },
+    {
+      "id": "jugcraft:cad_desk",
+      "pattern": [
+        "BBCCBB",
+        "HHHHHH",
+        "SS  SS"
+      ],
+      "key": {
+        "B": "minecraft:black_stained_glass_pane",
+        "C": "jugcraft:basic_circuit",
+        "H": "minecraft:birch_planks",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:cad_desk",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:carbon_composite_panel",
+      "pattern": [
+        "KKPPKK",
+        "PPKKPP",
+        "KKPPKK"
+      ],
+      "key": {
+        "K": "jugcraft:coke",
+        "P": "jugcraft:plastic_sheet"
+      },
+      "out": [
+        "jugcraft:carbon_composite_panel",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:jimtafacts_industry/advanced_alloy_panel",
+      "pattern": [
+        "AABB"
+      ],
+      "key": {
+        "A": "jugcraft:jimta_advanced_alloy",
+        "B": "jugcraft:polymer_vehicle_panel"
+      },
+      "out": [
+        "jugcraft:carbon_composite_panel",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:jimtafacts_industry/carbon_composite_panel",
+      "pattern": [
+        "AABB"
+      ],
+      "key": {
+        "A": "jugcraft:jimta_carbon_plate",
+        "B": "jugcraft:polymer_vehicle_panel"
+      },
+      "out": [
+        "jugcraft:carbon_composite_panel",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:molded_composite_panel",
+      "pattern": [
+        "AABBBB",
+        "BBBB  "
+      ],
+      "key": {
+        "A": "jugcraft:polymer_vehicle_panel",
+        "B": "jugcraft:coke"
+      },
+      "out": [
+        "jugcraft:carbon_composite_panel",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:carbon_composite_panel_slab",
+      "pattern": [
+        "BBBBBB"
+      ],
+      "key": {
+        "B": "jugcraft:carbon_composite_panel"
+      },
+      "out": [
+        "jugcraft:carbon_composite_panel_slab",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:carbon_composite_panel_stairs",
+      "pattern": [
+        "BB    ",
+        "BBBB  ",
+        "BBBBBB"
+      ],
+      "key": {
+        "B": "jugcraft:carbon_composite_panel"
+      },
+      "out": [
+        "jugcraft:carbon_composite_panel_stairs",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:cargo_case_packer",
+      "pattern": [
+        "SSHHSS",
+        "CCMMCC",
+        "SSPPSS"
+      ],
+      "key": {
+        "C": "jugcraft:basic_circuit",
+        "H": "minecraft:hopper",
+        "M": "minecraft:piston",
+        "P": "minecraft:glass_pane",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:cargo_case_packer",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:cargo_exchange",
+      "pattern": [
+        "SRPRS",
+        "S R S",
+        "  C  "
+      ],
+      "key": {
+        "S": "#c:plates/steel",
+        "R": "jugcraft:intake_funnel",
+        "P": "jugcraft:cargo_exchange_port",
+        "C": "jugcraft:advanced_circuit"
+      },
+      "out": [
+        "jugcraft:cargo_exchange",
+        1
+      ]
+    },
+    {
+      "id": "jugcraft:cargo_exchange_port",
+      "pattern": [
+        "PPHHPP",
+        "BBCCBB",
+        "PPHHPP"
+      ],
+      "key": {
+        "B": "minecraft:barrel",
+        "C": "jugcraft:basic_circuit",
+        "H": "minecraft:hopper",
+        "P": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:cargo_exchange_port",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:cargo_infeed",
+      "pattern": [
+        "SSSSSS",
+        "RRRRRR",
+        "  HH  "
+      ],
+      "key": {
+        "H": "minecraft:hopper",
+        "R": "minecraft:black_wool",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:cargo_infeed",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:cargo_packager",
+      "pattern": [
+        "PPHHPP",
+        "CCMMCC",
+        "PPWWPP"
+      ],
+      "key": {
+        "C": "minecraft:chest",
+        "H": "minecraft:hopper",
+        "M": "jugcraft:machine_casing",
+        "P": "#c:plates/steel",
+        "W": "jugcraft:cargo_winch"
+      },
+      "out": [
+        "jugcraft:cargo_packager",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:cargo_port_plate",
+      "pattern": [
+        "YYSSYY",
+        "  HH  "
+      ],
+      "key": {
+        "H": "minecraft:hopper",
+        "S": "#c:plates/steel",
+        "Y": "minecraft:yellow_dye"
+      },
+      "out": [
+        "jugcraft:cargo_port_plate",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:carpet_tile",
+      "pattern": [
+        "CCCC",
+        "CCCC"
+      ],
+      "key": {
+        "C": "minecraft:gray_carpet"
+      },
+      "out": [
+        "jugcraft:carpet_tile",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:ceiling_light_panel",
+      "pattern": [
+        "PPPPPP",
+        "GGLLGG"
+      ],
+      "key": {
+        "G": "minecraft:glass_pane",
+        "L": "minecraft:glowstone_dust",
+        "P": "#c:plates/iron"
+      },
+      "out": [
+        "jugcraft:ceiling_light_panel",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:ceiling_speaker",
+      "pattern": [
+        "PPMMPP",
+        "  WW  "
+      ],
+      "key": {
+        "M": "minecraft:note_block",
+        "P": "#c:plates/iron",
+        "W": "#c:wires/copper"
+      },
+      "out": [
+        "jugcraft:ceiling_speaker",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:ceramic_insulator",
+      "pattern": [
+        "T",
+        "T",
+        "T",
+        "T",
+        "T",
+        "T"
+      ],
+      "key": {
+        "T": "minecraft:white_terracotta"
+      },
+      "out": [
+        "jugcraft:ceramic_insulator",
+        6
+      ]
+    },
+    {
+      "id": "jugcraft:ceramics_placed_insulators",
+      "pattern": [
+        "I",
+        "I",
+        "I",
+        "I",
+        "I",
+        "I"
+      ],
+      "key": {
+        "I": "jugcraft:porcelain_insulator"
+      },
+      "out": [
+        "jugcraft:ceramic_insulator",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:chart_bin",
+      "pattern": [
+        "PP  PP",
+        "PPXXPP"
+      ],
+      "key": {
+        "P": "#c:plates/iron",
+        "X": "minecraft:paper"
+      },
+      "out": [
+        "jugcraft:chart_bin",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:chart_table",
+      "pattern": [
+        "GGGGGG",
+        "OOMMOO",
+        "OO  OO"
+      ],
+      "key": {
+        "G": "minecraft:glass_pane",
+        "M": "minecraft:map",
+        "O": "minecraft:oak_planks"
+      },
+      "out": [
+        "jugcraft:chart_table",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:chemical_dispenser",
+      "pattern": [
+        "BBBBBB",
+        "KKCCKK"
+      ],
+      "key": {
+        "B": "minecraft:glass_bottle",
+        "C": "jugcraft:basic_circuit",
+        "K": "jugcraft:plastic_sheet"
+      },
+      "out": [
+        "jugcraft:chemical_dispenser",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:class_whiteboard",
+      "pattern": [
+        "AAQQAA",
+        "AAQQAA",
+        "AAQQAA"
+      ],
+      "key": {
+        "A": "#c:plates/aluminum",
+        "Q": "minecraft:quartz"
+      },
+      "out": [
+        "jugcraft:class_whiteboard",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:classroom_poster",
+      "pattern": [
+        "XXRRXX",
+        "XXBBXX"
+      ],
+      "key": {
+        "B": "minecraft:blue_dye",
+        "R": "minecraft:red_dye",
+        "X": "minecraft:paper"
+      },
+      "out": [
+        "jugcraft:classroom_poster",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:coat_stand",
+      "pattern": [
+        "DDNNDD",
+        "  DD  ",
+        "  DD  "
+      ],
+      "key": {
+        "D": "minecraft:dark_oak_planks",
+        "N": "minecraft:iron_nugget"
+      },
+      "out": [
+        "jugcraft:coat_stand",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:column_scale",
+      "pattern": [
+        "NNSSNN",
+        "  SS  ",
+        "SSPPSS"
+      ],
+      "key": {
+        "N": "minecraft:iron_nugget",
+        "P": "minecraft:heavy_weighted_pressure_plate",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:column_scale",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:comms_dish",
+      "pattern": [
+        "  AAAA",
+        "AACCAA",
+        "  AAII"
+      ],
+      "key": {
+        "A": "#c:plates/aluminum",
+        "C": "jugcraft:basic_circuit",
+        "I": "#c:plates/iron"
+      },
+      "out": [
+        "jugcraft:comms_dish",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:comms_mast",
+      "pattern": [
+        "BB  BB",
+        "BBNNBB",
+        "BB  BB"
+      ],
+      "key": {
+        "B": "minecraft:iron_bars",
+        "N": "minecraft:iron_nugget"
+      },
+      "out": [
+        "jugcraft:comms_mast",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:comms_mast_base",
+      "pattern": [
+        "NN  NN",
+        "SSSSSS",
+        "KKKKKK"
+      ],
+      "key": {
+        "K": "minecraft:smooth_stone",
+        "N": "minecraft:iron_nugget",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:comms_mast_base",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:comms_mast_tie",
+      "pattern": [
+        "BB  SS",
+        "BBNNSS"
+      ],
+      "key": {
+        "B": "minecraft:iron_bars",
+        "N": "minecraft:iron_nugget",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:comms_mast_tie",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:comms_mast_top",
+      "pattern": [
+        "WWCCWW",
+        "QQAAQQ",
+        "  BB  "
+      ],
+      "key": {
+        "A": "#c:plates/aluminum",
+        "B": "minecraft:iron_bars",
+        "C": "jugcraft:basic_circuit",
+        "Q": "minecraft:quartz",
+        "W": "#c:wires/copper"
+      },
+      "out": [
+        "jugcraft:comms_mast_top",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:concrete_column",
+      "pattern": [
+        "C",
+        "C",
+        "C",
+        "C",
+        "C",
+        "C"
+      ],
+      "key": {
+        "C": "jugcraft:reinforced_concrete"
+      },
+      "out": [
+        "jugcraft:concrete_column",
+        6
+      ]
+    },
+    {
+      "id": "jugcraft:console_chair",
+      "pattern": [
+        "  WW  ",
+        "WWWWWW",
+        "SSIISS"
+      ],
+      "key": {
+        "I": "#c:ingots/iron",
+        "S": "#c:ingots/steel",
+        "W": "minecraft:black_wool"
+      },
+      "out": [
+        "jugcraft:console_chair",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:console_desk",
+      "pattern": [
+        "GGCCGG",
+        "PPPPPP",
+        "PP  PP"
+      ],
+      "key": {
+        "C": "jugcraft:basic_circuit",
+        "G": "minecraft:black_stained_glass_pane",
+        "P": "#c:plates/iron"
+      },
+      "out": [
+        "jugcraft:console_desk",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:control_screen",
+      "pattern": [
+        "PPGGPP",
+        "PPCCPP"
+      ],
+      "key": {
+        "C": "jugcraft:basic_circuit",
+        "G": "minecraft:glass_pane",
+        "P": "#c:plates/iron"
+      },
+      "out": [
+        "jugcraft:control_screen",
+        6
+      ]
+    },
+    {
+      "id": "jugcraft:controller_rack",
+      "pattern": [
+        "PPCCPP",
+        "PPCCPP"
+      ],
+      "key": {
+        "C": "jugcraft:basic_circuit",
+        "P": "#c:plates/iron"
+      },
+      "out": [
+        "jugcraft:controller_rack",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:cooling_fin",
+      "pattern": [
+        "AA  AA",
+        "AAAAAA",
+        "AA  AA"
+      ],
+      "key": {
+        "A": "#c:plates/aluminum"
+      },
+      "out": [
+        "jugcraft:cooling_fin",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:copper_busbar",
+      "pattern": [
+        "C",
+        "C",
+        "C",
+        "C",
+        "C",
+        "C"
+      ],
+      "key": {
+        "C": "#c:plates/copper"
+      },
+      "out": [
+        "jugcraft:copper_busbar",
+        6
+      ]
+    },
+    {
+      "id": "jugcraft:cradle_struts",
+      "pattern": [
+        "GGPPGG",
+        "PPBBPP",
+        "GGPPGG"
+      ],
+      "key": {
+        "B": "minecraft:iron_bars",
+        "G": "jugcraft:steel_girder",
+        "P": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:cradle_struts",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:crash_cart",
+      "pattern": [
+        "SSRRSS",
+        "SSCCSS",
+        "NN  NN"
+      ],
+      "key": {
+        "C": "minecraft:chest",
+        "N": "minecraft:iron_nugget",
+        "R": "minecraft:red_dye",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:crash_cart",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:crate_pallet",
+      "pattern": [
+        "CCCC",
+        "SSSS"
+      ],
+      "key": {
+        "C": "minecraft:chest",
+        "S": "minecraft:oak_slab"
+      },
+      "out": [
+        "jugcraft:crate_pallet",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:crew_bunk",
+      "pattern": [
+        "WWWWWW",
+        "SS  SS",
+        "WWWWWW"
+      ],
+      "key": {
+        "S": "#c:plates/steel",
+        "W": "minecraft:white_wool"
+      },
+      "out": [
+        "jugcraft:crew_bunk",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:crew_coffee_table",
+      "pattern": [
+        "HHHHHH",
+        "NN  NN"
+      ],
+      "key": {
+        "H": "minecraft:birch_planks",
+        "N": "minecraft:iron_nugget"
+      },
+      "out": [
+        "jugcraft:crew_coffee_table",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:crew_fridge",
+      "pattern": [
+        "SSIISS",
+        "SSRRSS"
+      ],
+      "key": {
+        "I": "minecraft:ice",
+        "R": "minecraft:redstone",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:crew_fridge",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:crew_locker",
+      "pattern": [
+        "SSCCSS",
+        "SS  SS",
+        "SSCCSS"
+      ],
+      "key": {
+        "C": "minecraft:chest",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:crew_locker",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:crew_side_table",
+      "pattern": [
+        "HHHHHH",
+        "HH  HH"
+      ],
+      "key": {
+        "H": "minecraft:birch_planks"
+      },
+      "out": [
+        "jugcraft:crew_side_table",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:crew_sofa",
+      "pattern": [
+        "WW  WW",
+        "WWWWWW",
+        "OOOOOO"
+      ],
+      "key": {
+        "O": "minecraft:oak_planks",
+        "W": "minecraft:gray_wool"
+      },
+      "out": [
+        "jugcraft:crew_sofa",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:crystal_tree",
+      "pattern": [
+        "GGAAGG",
+        "LLOOLL",
+        "CCPPCC"
+      ],
+      "key": {
+        "A": "minecraft:amethyst_shard",
+        "C": "jugcraft:reinforced_concrete",
+        "G": "minecraft:glowstone_dust",
+        "L": "minecraft:dark_oak_log",
+        "O": "minecraft:oak_sapling",
+        "P": "minecraft:dark_oak_planks"
+      },
+      "out": [
+        "jugcraft:crystal_tree",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:curved_video_wall",
+      "pattern": [
+        "SSSSSS",
+        "SSCCSS",
+        "PPTTPP"
+      ],
+      "key": {
+        "C": "jugcraft:advanced_circuit",
+        "P": "#c:plates/steel",
+        "S": "jugcraft:control_screen",
+        "T": "jugcraft:processor"
+      },
+      "out": [
+        "jugcraft:curved_video_wall",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:data_hall_sign",
+      "pattern": [
+        "SSSSSS",
+        "GGDDGG"
+      ],
+      "key": {
+        "D": "minecraft:orange_dye",
+        "G": "minecraft:glowstone_dust",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:data_hall_sign",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:depleted_uranium_armor",
+      "pattern": [
+        "UUPPUU",
+        "PPUUPP",
+        "UUPPUU"
+      ],
+      "key": {
+        "P": "#c:plates/steel",
+        "U": "#c:ingots/uranium"
+      },
+      "out": [
+        "jugcraft:depleted_uranium_armor",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:depleted_uranium_armor_slab",
+      "pattern": [
+        "BBBBBB"
+      ],
+      "key": {
+        "B": "jugcraft:depleted_uranium_armor"
+      },
+      "out": [
+        "jugcraft:depleted_uranium_armor_slab",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:depleted_uranium_armor_stairs",
+      "pattern": [
+        "BB    ",
+        "BBBB  ",
+        "BBBBBB"
+      ],
+      "key": {
+        "B": "jugcraft:depleted_uranium_armor"
+      },
+      "out": [
+        "jugcraft:depleted_uranium_armor_stairs",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:diagnostic_set",
+      "pattern": [
+        "BBCCBB",
+        "KKWWKK"
+      ],
+      "key": {
+        "B": "minecraft:black_stained_glass_pane",
+        "C": "jugcraft:basic_circuit",
+        "K": "jugcraft:plastic_sheet",
+        "W": "#c:wires/copper"
+      },
+      "out": [
+        "jugcraft:diagnostic_set",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:digital_wall_clock",
+      "pattern": [
+        "BBBBBB",
+        "KKCCKK"
+      ],
+      "key": {
+        "B": "minecraft:black_stained_glass_pane",
+        "C": "jugcraft:basic_circuit",
+        "K": "minecraft:clock"
+      },
+      "out": [
+        "jugcraft:digital_wall_clock",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:dining_chair",
+      "pattern": [
+        "OO    ",
+        "OOWWOO",
+        "OO  OO"
+      ],
+      "key": {
+        "O": "minecraft:oak_planks",
+        "W": "minecraft:white_wool"
+      },
+      "out": [
+        "jugcraft:dining_chair",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:dining_table",
+      "pattern": [
+        "OOOOOO",
+        "NN  NN"
+      ],
+      "key": {
+        "N": "minecraft:iron_nugget",
+        "O": "minecraft:oak_planks"
+      },
+      "out": [
+        "jugcraft:dining_table",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:dispatch_counter",
+      "pattern": [
+        "BBBBBB",
+        "HHCCHH",
+        "HHHHHH"
+      ],
+      "key": {
+        "B": "minecraft:black_stained_glass_pane",
+        "C": "jugcraft:basic_circuit",
+        "H": "minecraft:birch_planks"
+      },
+      "out": [
+        "jugcraft:dispatch_counter",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:display_plinth",
+      "pattern": [
+        "GGGGGG",
+        "DDDDDD",
+        "DDDDDD"
+      ],
+      "key": {
+        "D": "minecraft:dark_oak_planks",
+        "G": "minecraft:glass_pane"
+      },
+      "out": [
+        "jugcraft:display_plinth",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:dock_plating",
+      "pattern": [
+        "PPPP",
+        "SSSS"
+      ],
+      "key": {
+        "P": "#c:plates/iron",
+        "S": "minecraft:smooth_stone"
+      },
+      "out": [
+        "jugcraft:dock_plating",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:dressing_trolley",
+      "pattern": [
+        "SSSSSS",
+        "SSWWSS",
+        "NN  NN"
+      ],
+      "key": {
+        "N": "minecraft:iron_nugget",
+        "S": "#c:plates/steel",
+        "W": "minecraft:white_wool"
+      },
+      "out": [
+        "jugcraft:dressing_trolley",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:drift_isle",
+      "pattern": [
+        "PPAAPP",
+        "MMEEMM",
+        "DDWWDD"
+      ],
+      "key": {
+        "A": "minecraft:flowering_azalea",
+        "D": "minecraft:polished_deepslate",
+        "E": "minecraft:ender_pearl",
+        "M": "minecraft:moss_block",
+        "P": "minecraft:phantom_membrane",
+        "W": "minecraft:dark_oak_planks"
+      },
+      "out": [
+        "jugcraft:drift_isle",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:drinks_fridge",
+      "pattern": [
+        "SSGGSS",
+        "SSIISS",
+        "SSRRSS"
+      ],
+      "key": {
+        "G": "minecraft:glass_pane",
+        "I": "minecraft:ice",
+        "R": "minecraft:redstone",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:drinks_fridge",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:drone_depot_terminal",
+      "pattern": [
+        "PGGP",
+        "AMCA",
+        "P  P"
+      ],
+      "key": {
+        "P": "#c:plates/aluminum",
+        "G": "minecraft:glass",
+        "A": "jugcraft:advanced_circuit",
+        "M": "jugcraft:machine_casing",
+        "C": "jugcraft:copper_cable"
+      },
+      "out": [
+        "jugcraft:drone_depot_terminal",
+        1
+      ]
+    },
+    {
+      "id": "jugcraft:drone_display_case",
+      "pattern": [
+        "GGGGGG",
+        "GGLLGG",
+        "PPCCPP"
+      ],
+      "key": {
+        "C": "jugcraft:advanced_circuit",
+        "G": "jugcraft:framed_glass",
+        "L": "minecraft:glowstone_dust",
+        "P": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:drone_display_case",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:drone_display_stand",
+      "pattern": [
+        "PPLLPP",
+        "PPPPPP"
+      ],
+      "key": {
+        "L": "minecraft:glowstone_dust",
+        "P": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:drone_display_stand",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:drone_parts_shelving",
+      "pattern": [
+        "PPPPPP",
+        "BBRRBB",
+        "PPPPPP"
+      ],
+      "key": {
+        "B": "minecraft:barrel",
+        "P": "#c:plates/steel",
+        "R": "jugcraft:storage_rack"
+      },
+      "out": [
+        "jugcraft:drone_parts_shelving",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:drone_service_arm",
+      "pattern": [
+        "GGMM  ",
+        "PPGG  ",
+        "PPPPPP"
+      ],
+      "key": {
+        "G": "#c:gears/steel",
+        "M": "jugcraft:drone_motor",
+        "P": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:drone_service_arm",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:drone_t1",
+      "pattern": [
+        "R    R",
+        " B  B ",
+        "  FC  ",
+        "  PP  ",
+        " B  B ",
+        "R    R"
+      ],
+      "key": {
+        "R": "jugcraft:rotor_assembly",
+        "B": "#c:plates/bronze",
+        "F": "jugcraft:flight_controller",
+        "C": "jugcraft:basic_circuit",
+        "P": "jugcraft:lead_acid_pack"
+      },
+      "out": [
+        "jugcraft:drone_t1",
+        1
+      ]
+    },
+    {
+      "id": "jugcraft:drone_t2",
+      "pattern": [
+        "R  R",
+        "ZDCZ",
+        " IW "
+      ],
+      "key": {
+        "R": "jugcraft:rotor_assembly",
+        "Z": "#c:plates/brass",
+        "D": "jugcraft:drone_t1",
+        "C": "jugcraft:basic_circuit",
+        "I": "#c:plates/invar",
+        "W": "jugcraft:cargo_winch"
+      },
+      "out": [
+        "jugcraft:drone_t2",
+        1
+      ]
+    },
+    {
+      "id": "jugcraft:drone_t3",
+      "pattern": [
+        "R A R",
+        " CDL ",
+        "R A R"
+      ],
+      "key": {
+        "R": "jugcraft:aluminum_rotor_assembly",
+        "A": "#c:plates/aluminum",
+        "C": "jugcraft:advanced_circuit",
+        "D": "jugcraft:drone_t2",
+        "L": "jugcraft:lithium_cell"
+      },
+      "out": [
+        "jugcraft:drone_t3",
+        1
+      ]
+    },
+    {
+      "id": "jugcraft:drone_t4",
+      "pattern": [
+        "F L F",
+        " CDU ",
+        "F L F"
+      ],
+      "key": {
+        "F": "jugcraft:ducted_fan",
+        "L": "jugcraft:lithium_cell",
+        "C": "jugcraft:advanced_circuit",
+        "D": "jugcraft:drone_t3",
+        "U": "jugcraft:speed_upgrade"
+      },
+      "out": [
+        "jugcraft:drone_t4",
+        1
+      ]
+    },
+    {
+      "id": "jugcraft:drone_t5",
+      "pattern": [
+        "N A N",
+        " CDP ",
+        " LWL "
+      ],
+      "key": {
+        "N": "jugcraft:tilt_rotor_nacelle",
+        "A": "#c:plates/aluminum",
+        "C": "jugcraft:processor",
+        "D": "jugcraft:drone_t4",
+        "P": "jugcraft:plastic_sheet",
+        "L": "jugcraft:lithium_cell",
+        "W": "jugcraft:cargo_winch"
+      },
+      "out": [
+        "jugcraft:drone_t5",
+        1
+      ]
+    },
+    {
+      "id": "jugcraft:drone_t6",
+      "pattern": [
+        " R ",
+        "CTC",
+        " D ",
+        "LWL",
+        " R "
+      ],
+      "key": {
+        "R": "jugcraft:composite_rotor_assembly",
+        "C": "jugcraft:processor",
+        "T": "#c:plates/titanium",
+        "D": "jugcraft:drone_t5",
+        "L": "jugcraft:lithium_cell",
+        "W": "jugcraft:cargo_winch"
+      },
+      "out": [
+        "jugcraft:drone_t6",
+        1
+      ]
+    },
+    {
+      "id": "jugcraft:drone_t7",
+      "pattern": [
+        " HHH ",
+        "F D F",
+        " CLC "
+      ],
+      "key": {
+        "H": "jugcraft:hydrogen_lift_cell",
+        "F": "jugcraft:ducted_fan",
+        "D": "jugcraft:drone_t6",
+        "C": "jugcraft:processor",
+        "L": "jugcraft:lithium_cell"
+      },
+      "out": [
+        "jugcraft:drone_t7",
+        1
+      ]
+    },
+    {
+      "id": "jugcraft:drone_t8",
+      "pattern": [
+        "E E E",
+        " FDF ",
+        " TCT "
+      ],
+      "key": {
+        "E": "jugcraft:ion_emitter",
+        "F": "jugcraft:ducted_fan",
+        "D": "jugcraft:drone_t7",
+        "T": "#c:plates/titanium",
+        "C": "jugcraft:processor"
+      },
+      "out": [
+        "jugcraft:drone_t8",
+        1
+      ]
+    },
+    {
+      "id": "jugcraft:drone_t9",
+      "pattern": [
+        " F F ",
+        "F C F",
+        "  D  ",
+        "F B F"
+      ],
+      "key": {
+        "F": "jugcraft:superconducting_lift_fan",
+        "C": "jugcraft:processor",
+        "D": "jugcraft:drone_t8",
+        "B": "jugcraft:lithium_battery_bank"
+      },
+      "out": [
+        "jugcraft:drone_t9",
+        1
+      ]
+    },
+    {
+      "id": "jugcraft:drone_tower_core",
+      "pattern": [
+        "BSPSB",
+        "AWMWA",
+        "BSPSB",
+        "LC AL"
+      ],
+      "key": {
+        "B": "#c:storage_blocks/steel",
+        "S": "#c:plates/steel",
+        "P": "jugcraft:processor",
+        "A": "jugcraft:advanced_circuit",
+        "W": "minecraft:glass_pane",
+        "M": "jugcraft:drone_depot_terminal",
+        "L": "minecraft:glowstone_dust",
+        "C": "jugcraft:basic_circuit"
+      },
+      "out": [
+        "jugcraft:drone_tower_core",
+        1
+      ]
+    },
+    {
+      "id": "jugcraft:dry_cooler",
+      "pattern": [
+        "MMMMMM",
+        "KKAAKK",
+        "SS  SS"
+      ],
+      "key": {
+        "A": "#c:plates/aluminum",
+        "K": "minecraft:copper_ingot",
+        "M": "jugcraft:electric_motor",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:dry_cooler",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:duct_roof_curb",
+      "pattern": [
+        "II  II",
+        "IIAAII"
+      ],
+      "key": {
+        "A": "#c:plates/aluminum",
+        "I": "#c:plates/iron"
+      },
+      "out": [
+        "jugcraft:duct_roof_curb",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:electronics_bench",
+      "pattern": [
+        "WWCCWW",
+        "SSSSSS",
+        "SS  SS"
+      ],
+      "key": {
+        "C": "jugcraft:basic_circuit",
+        "S": "#c:plates/steel",
+        "W": "#c:wires/copper"
+      },
+      "out": [
+        "jugcraft:electronics_bench",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:ember_oak",
+      "pattern": [
+        "BBAABB",
+        "LLMMLL",
+        "SSKKSS"
+      ],
+      "key": {
+        "A": "minecraft:acacia_sapling",
+        "B": "minecraft:blaze_powder",
+        "K": "minecraft:coal_block",
+        "L": "minecraft:dark_oak_log",
+        "M": "minecraft:magma_block",
+        "S": "minecraft:basalt"
+      },
+      "out": [
+        "jugcraft:ember_oak",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:energy_exchange",
+      "pattern": [
+        "STPTS",
+        "S T S",
+        "  C  "
+      ],
+      "key": {
+        "S": "#c:plates/steel",
+        "T": "jugcraft:transformer_casing",
+        "P": "jugcraft:energy_exchange_port",
+        "C": "jugcraft:advanced_circuit"
+      },
+      "out": [
+        "jugcraft:energy_exchange",
+        1
+      ]
+    },
+    {
+      "id": "jugcraft:energy_exchange_port",
+      "pattern": [
+        "PPRRPP",
+        "WWCCWW",
+        "PPRRPP"
+      ],
+      "key": {
+        "C": "jugcraft:advanced_circuit",
+        "P": "#c:plates/steel",
+        "R": "minecraft:redstone",
+        "W": "#c:wires/copper"
+      },
+      "out": [
+        "jugcraft:energy_exchange_port",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:energy_port_plate",
+      "pattern": [
+        "YYSSYY",
+        "  WW  "
+      ],
+      "key": {
+        "S": "#c:plates/steel",
+        "W": "#c:wires/copper",
+        "Y": "minecraft:yellow_dye"
+      },
+      "out": [
+        "jugcraft:energy_port_plate",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:equipment_rack",
+      "pattern": [
+        "PPCCPP",
+        "PPCCPP",
+        "PPCCPP"
+      ],
+      "key": {
+        "C": "jugcraft:basic_circuit",
+        "P": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:equipment_rack",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:exam_couch",
+      "pattern": [
+        "LLLLLL",
+        "SSSSSS"
+      ],
+      "key": {
+        "L": "minecraft:leather",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:exam_couch",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:exec_chair",
+      "pattern": [
+        "    LL",
+        "LLLLLL",
+        "SSNNSS"
+      ],
+      "key": {
+        "L": "minecraft:leather",
+        "N": "minecraft:iron_nugget",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:exec_chair",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:exec_credenza",
+      "pattern": [
+        "DDDDDD",
+        "DDCCDD",
+        "DDDDDD"
+      ],
+      "key": {
+        "C": "minecraft:chest",
+        "D": "minecraft:dark_oak_planks"
+      },
+      "out": [
+        "jugcraft:exec_credenza",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:exec_desk",
+      "pattern": [
+        "DDDDDD",
+        "DDLLDD",
+        "DD  DD"
+      ],
+      "key": {
+        "D": "minecraft:dark_oak_planks",
+        "L": "minecraft:leather"
+      },
+      "out": [
+        "jugcraft:exec_desk",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:eyewash_bottles",
+      "pattern": [
+        "BBBBBB",
+        "KKPPKK"
+      ],
+      "key": {
+        "B": "minecraft:glass_bottle",
+        "K": "jugcraft:plastic_sheet",
+        "P": "#c:plates/iron"
+      },
+      "out": [
+        "jugcraft:eyewash_bottles",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:faced_line_concrete",
+      "pattern": [
+        "MMMMMM",
+        "GGDDGG",
+        "MMMMMM"
+      ],
+      "key": {
+        "D": "minecraft:orange_dye",
+        "G": "minecraft:glowstone_dust",
+        "M": "jugcraft:faced_wall_concrete"
+      },
+      "out": [
+        "jugcraft:faced_line_concrete",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:faced_wall_concrete",
+      "pattern": [
+        "PPMM"
+      ],
+      "key": {
+        "M": "jugcraft:reinforced_concrete",
+        "P": "jugcraft:painted_wall"
+      },
+      "out": [
+        "jugcraft:faced_wall_concrete",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:first_aid_box",
+      "pattern": [
+        "KKRRKK",
+        "KKWWKK"
+      ],
+      "key": {
+        "K": "jugcraft:plastic_sheet",
+        "R": "minecraft:red_dye",
+        "W": "minecraft:white_wool"
+      },
+      "out": [
+        "jugcraft:first_aid_box",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:flight_case",
+      "pattern": [
+        "AAKKAA",
+        "AAKKAA"
+      ],
+      "key": {
+        "A": "#c:plates/aluminum",
+        "K": "jugcraft:plastic_sheet"
+      },
+      "out": [
+        "jugcraft:flight_case",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:floor_lamp",
+      "pattern": [
+        "WWGGWW",
+        "  SS  ",
+        "SSSSSS"
+      ],
+      "key": {
+        "G": "minecraft:glowstone_dust",
+        "S": "#c:plates/steel",
+        "W": "minecraft:white_wool"
+      },
+      "out": [
+        "jugcraft:floor_lamp",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:floor_scrubber",
+      "pattern": [
+        "KKCCKK",
+        "PPSSPP"
+      ],
+      "key": {
+        "C": "jugcraft:basic_circuit",
+        "K": "jugcraft:plastic_sheet",
+        "P": "#c:plates/steel",
+        "S": "minecraft:sponge"
+      },
+      "out": [
+        "jugcraft:floor_scrubber",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:foosball_table",
+      "pattern": [
+        "OOGGOO",
+        "TTKKTT",
+        "OO  OO"
+      ],
+      "key": {
+        "G": "minecraft:green_wool",
+        "K": "jugcraft:plastic_sheet",
+        "O": "minecraft:oak_planks",
+        "T": "minecraft:stick"
+      },
+      "out": [
+        "jugcraft:foosball_table",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:framed_certificate",
+      "pattern": [
+        "NNXXNN"
+      ],
+      "key": {
+        "N": "minecraft:gold_nugget",
+        "X": "minecraft:paper"
+      },
+      "out": [
+        "jugcraft:framed_certificate",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:fridge_freezer",
+      "pattern": [
+        "SSIISS",
+        "SSRRSS",
+        "SSIISS"
+      ],
+      "key": {
+        "I": "minecraft:ice",
+        "R": "minecraft:redstone",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:fridge_freezer",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:goods_lift_door",
+      "pattern": [
+        "SSGGSS",
+        "PPCCPP",
+        "SSRRSS"
+      ],
+      "key": {
+        "C": "jugcraft:basic_circuit",
+        "G": "minecraft:glass_pane",
+        "P": "minecraft:piston",
+        "R": "minecraft:redstone",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:goods_lift_door",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:graphene_lattice",
+      "pattern": [
+        "KKKKKK",
+        "KKCCKK",
+        "KKKKKK"
+      ],
+      "key": {
+        "C": "#c:plates/copper",
+        "K": "jugcraft:coke"
+      },
+      "out": [
+        "jugcraft:graphene_lattice",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:graphene_lattice_slab",
+      "pattern": [
+        "BBBBBB"
+      ],
+      "key": {
+        "B": "jugcraft:graphene_lattice"
+      },
+      "out": [
+        "jugcraft:graphene_lattice_slab",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:graphene_lattice_stairs",
+      "pattern": [
+        "BB    ",
+        "BBBB  ",
+        "BBBBBB"
+      ],
+      "key": {
+        "B": "jugcraft:graphene_lattice"
+      },
+      "out": [
+        "jugcraft:graphene_lattice_stairs",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:hangar_bay_door",
+      "pattern": [
+        "PPPPPP",
+        "GGPPGG"
+      ],
+      "key": {
+        "G": "#c:gears/steel",
+        "P": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:hangar_bay_door",
+        6
+      ]
+    },
+    {
+      "id": "jugcraft:hangar_pad",
+      "pattern": [
+        "PPRRPP",
+        "PPCCPP"
+      ],
+      "key": {
+        "C": "#c:wires/copper",
+        "P": "#c:plates/steel",
+        "R": "minecraft:redstone"
+      },
+      "out": [
+        "jugcraft:hangar_pad",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:hazard_plating",
+      "pattern": [
+        "PPYY",
+        "BBPP"
+      ],
+      "key": {
+        "B": "minecraft:black_dye",
+        "P": "#c:plates/steel",
+        "Y": "minecraft:yellow_dye"
+      },
+      "out": [
+        "jugcraft:hazard_plating",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:hazard_plating_slab",
+      "pattern": [
+        "BBBBBB"
+      ],
+      "key": {
+        "B": "jugcraft:hazard_plating"
+      },
+      "out": [
+        "jugcraft:hazard_plating_slab",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:hazard_plating_stairs",
+      "pattern": [
+        "BB    ",
+        "BBBB  ",
+        "BBBBBB"
+      ],
+      "key": {
+        "B": "jugcraft:hazard_plating"
+      },
+      "out": [
+        "jugcraft:hazard_plating_stairs",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:headset_rack",
+      "pattern": [
+        "LLCCLL",
+        "PPPPPP"
+      ],
+      "key": {
+        "C": "jugcraft:basic_circuit",
+        "L": "minecraft:leather",
+        "P": "#c:plates/iron"
+      },
+      "out": [
+        "jugcraft:headset_rack",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:inset_light_concrete",
+      "pattern": [
+        "MMPPMM",
+        "MMGGMM",
+        "MMMMMM"
+      ],
+      "key": {
+        "G": "minecraft:glowstone_dust",
+        "M": "jugcraft:reinforced_concrete",
+        "P": "minecraft:glass_pane"
+      },
+      "out": [
+        "jugcraft:inset_light_concrete",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:inset_light_dock",
+      "pattern": [
+        "MMPPMM",
+        "MMGGMM",
+        "MMMMMM"
+      ],
+      "key": {
+        "G": "minecraft:glowstone_dust",
+        "M": "jugcraft:dock_plating",
+        "P": "minecraft:glass_pane"
+      },
+      "out": [
+        "jugcraft:inset_light_dock",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:inset_light_epoxy",
+      "pattern": [
+        "MMPPMM",
+        "MMGGMM",
+        "MMMMMM"
+      ],
+      "key": {
+        "G": "minecraft:glowstone_dust",
+        "M": "jugcraft:epoxy_floor",
+        "P": "minecraft:glass_pane"
+      },
+      "out": [
+        "jugcraft:inset_light_epoxy",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:inset_light_steel",
+      "pattern": [
+        "MMPPMM",
+        "MMGGMM",
+        "MMMMMM"
+      ],
+      "key": {
+        "G": "minecraft:glowstone_dust",
+        "M": "jugcraft:steel_armor_plate",
+        "P": "minecraft:glass_pane"
+      },
+      "out": [
+        "jugcraft:inset_light_steel",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:instructor_desk",
+      "pattern": [
+        "DDCCDD",
+        "DD  DD"
+      ],
+      "key": {
+        "C": "jugcraft:basic_circuit",
+        "D": "minecraft:dark_oak_planks"
+      },
+      "out": [
+        "jugcraft:instructor_desk",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:instructor_station",
+      "pattern": [
+        "BBBBBB",
+        "CCCCCC",
+        "SSSSSS"
+      ],
+      "key": {
+        "B": "minecraft:black_stained_glass_pane",
+        "C": "jugcraft:basic_circuit",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:instructor_station",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:intake_funnel",
+      "pattern": [
+        "PP  PP",
+        "PP  PP",
+        "  PP  "
+      ],
+      "key": {
+        "P": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:intake_funnel",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:iv_pole",
+      "pattern": [
+        "NNBBNN",
+        "  SS  ",
+        "NNSSNN"
+      ],
+      "key": {
+        "B": "minecraft:glass_bottle",
+        "N": "minecraft:iron_nugget",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:iv_pole",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:janitor_cart",
+      "pattern": [
+        "YYKKYY",
+        "KKBBKK",
+        "NN  NN"
+      ],
+      "key": {
+        "B": "minecraft:bucket",
+        "K": "jugcraft:plastic_sheet",
+        "N": "minecraft:iron_nugget",
+        "Y": "minecraft:yellow_dye"
+      },
+      "out": [
+        "jugcraft:janitor_cart",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:kitchen_exhaust_fan",
+      "pattern": [
+        "AA  AA",
+        "AAMMAA",
+        "IIBBII"
+      ],
+      "key": {
+        "A": "#c:plates/aluminum",
+        "B": "minecraft:bucket",
+        "I": "#c:plates/iron",
+        "M": "jugcraft:electric_motor"
+      },
+      "out": [
+        "jugcraft:kitchen_exhaust_fan",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:kitchen_island",
+      "pattern": [
+        "QQQQQQ",
+        "OOBBOO"
+      ],
+      "key": {
+        "B": "minecraft:barrel",
+        "O": "minecraft:oak_planks",
+        "Q": "minecraft:quartz_slab"
+      },
+      "out": [
+        "jugcraft:kitchen_island",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:kitchen_run",
+      "pattern": [
+        "QQQQQQ",
+        "OOFFOO",
+        "OOCCOO"
+      ],
+      "key": {
+        "C": "minecraft:cauldron",
+        "F": "minecraft:furnace",
+        "O": "minecraft:oak_planks",
+        "Q": "minecraft:quartz_slab"
+      },
+      "out": [
+        "jugcraft:kitchen_run",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:kitchenette",
+      "pattern": [
+        "QQQQQQ",
+        "HHCCHH"
+      ],
+      "key": {
+        "C": "minecraft:cauldron",
+        "H": "minecraft:birch_planks",
+        "Q": "minecraft:quartz_slab"
+      },
+      "out": [
+        "jugcraft:kitchenette",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:lab_pegboard",
+      "pattern": [
+        "OONNOO",
+        "NNOONN",
+        "OONNOO"
+      ],
+      "key": {
+        "N": "minecraft:iron_nugget",
+        "O": "minecraft:oak_planks"
+      },
+      "out": [
+        "jugcraft:lab_pegboard",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:lab_plotter",
+      "pattern": [
+        "XXXXXX",
+        "PPCCPP",
+        "PP  PP"
+      ],
+      "key": {
+        "C": "jugcraft:basic_circuit",
+        "P": "#c:plates/iron",
+        "X": "minecraft:paper"
+      },
+      "out": [
+        "jugcraft:lab_plotter",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:lab_tool_cabinet",
+      "pattern": [
+        "SSRRSS",
+        "SSIISS",
+        "SSRRSS"
+      ],
+      "key": {
+        "I": "#c:ingots/iron",
+        "R": "minecraft:red_dye",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:lab_tool_cabinet",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:lab_workbench",
+      "pattern": [
+        "HHHHHH",
+        "SSNNSS",
+        "SS  SS"
+      ],
+      "key": {
+        "H": "minecraft:birch_planks",
+        "N": "minecraft:iron_nugget",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:lab_workbench",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:landing_pad",
+      "pattern": [
+        "YYBBYY",
+        "SSRRSS"
+      ],
+      "key": {
+        "B": "minecraft:black_dye",
+        "R": "minecraft:redstone",
+        "S": "#c:plates/steel",
+        "Y": "minecraft:yellow_dye"
+      },
+      "out": [
+        "jugcraft:landing_pad",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:landing_platform",
+      "pattern": [
+        "SSCCSS",
+        "CCSSCC",
+        "SSCCSS"
+      ],
+      "key": {
+        "C": "minecraft:smooth_stone",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:landing_platform",
+        16
+      ]
+    },
+    {
+      "id": "jugcraft:laser_designator",
+      "pattern": [
+        " SSSS ",
+        "GPARDS",
+        " SSSS "
+      ],
+      "key": {
+        "S": "#c:plates/steel",
+        "G": "minecraft:spyglass",
+        "P": "jugcraft:processor",
+        "A": "jugcraft:advanced_circuit",
+        "R": "minecraft:redstone",
+        "D": "minecraft:diamond"
+      },
+      "out": [
+        "jugcraft:laser_designator",
+        1
+      ]
+    },
+    {
+      "id": "jugcraft:leather_sofa",
+      "pattern": [
+        "LL  LL",
+        "LLLLLL",
+        "DDDDDD"
+      ],
+      "key": {
+        "D": "minecraft:dark_oak_planks",
+        "L": "minecraft:leather"
+      },
+      "out": [
+        "jugcraft:leather_sofa",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:lift_rail",
+      "pattern": [
+        "SSNN",
+        "SSNN",
+        "SSNN"
+      ],
+      "key": {
+        "N": "minecraft:iron_nugget",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:lift_rail",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:linear_ceiling_light",
+      "pattern": [
+        "PPLLPP",
+        "GGGGGG"
+      ],
+      "key": {
+        "G": "minecraft:glass_pane",
+        "L": "minecraft:glowstone_dust",
+        "P": "#c:plates/iron"
+      },
+      "out": [
+        "jugcraft:linear_ceiling_light",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:lipo_cabinet",
+      "pattern": [
+        "YYSSYY",
+        "SS  SS",
+        "YYSSYY"
+      ],
+      "key": {
+        "S": "#c:plates/steel",
+        "Y": "minecraft:yellow_dye"
+      },
+      "out": [
+        "jugcraft:lipo_cabinet",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:logo_wall",
+      "pattern": [
+        "DDGGDD",
+        "DDLLDD"
+      ],
+      "key": {
+        "D": "minecraft:dark_oak_planks",
+        "G": "minecraft:glass_pane",
+        "L": "minecraft:glowstone_dust"
+      },
+      "out": [
+        "jugcraft:logo_wall",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:long_coffee_table",
+      "pattern": [
+        "SSSSSS",
+        "GGCCGG",
+        "PP  PP"
+      ],
+      "key": {
+        "C": "jugcraft:advanced_circuit",
+        "G": "minecraft:tinted_glass",
+        "P": "#c:plates/steel",
+        "S": "minecraft:jungle_slab"
+      },
+      "out": [
+        "jugcraft:long_coffee_table",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:lounge_coffee_table",
+      "pattern": [
+        "GGGGGG",
+        "DD  DD"
+      ],
+      "key": {
+        "D": "minecraft:dark_oak_planks",
+        "G": "minecraft:glass_pane"
+      },
+      "out": [
+        "jugcraft:lounge_coffee_table",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:lounge_rug",
+      "pattern": [
+        "WWWWWW",
+        "GGGGGG",
+        "WWWWWW"
+      ],
+      "key": {
+        "G": "minecraft:light_gray_carpet",
+        "W": "minecraft:gray_carpet"
+      },
+      "out": [
+        "jugcraft:lounge_rug",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:mail_sorter",
+      "pattern": [
+        "SSXXSS",
+        "SSXXSS",
+        "SSSSSS"
+      ],
+      "key": {
+        "S": "#c:plates/steel",
+        "X": "minecraft:paper"
+      },
+      "out": [
+        "jugcraft:mail_sorter",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:maintenance_door",
+      "pattern": [
+        "PPPP",
+        "PPCC",
+        "PPPP"
+      ],
+      "key": {
+        "C": "jugcraft:basic_circuit",
+        "P": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:maintenance_door",
+        6
+      ]
+    },
+    {
+      "id": "jugcraft:map_room_sign",
+      "pattern": [
+        "SSSSSS",
+        "GGMMGG"
+      ],
+      "key": {
+        "G": "minecraft:glowstone_dust",
+        "M": "minecraft:map",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:map_room_sign",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:med_desk",
+      "pattern": [
+        "HHXXHH",
+        "HH  HH"
+      ],
+      "key": {
+        "H": "minecraft:birch_planks",
+        "X": "minecraft:paper"
+      },
+      "out": [
+        "jugcraft:med_desk",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:med_fridge",
+      "pattern": [
+        "SSGGSS",
+        "RRIIRR",
+        "SSSSSS"
+      ],
+      "key": {
+        "G": "minecraft:glass_pane",
+        "I": "minecraft:ice",
+        "R": "minecraft:red_dye",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:med_fridge",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:med_poster",
+      "pattern": [
+        "XXGGXX",
+        "XXRRXX"
+      ],
+      "key": {
+        "G": "minecraft:green_dye",
+        "R": "minecraft:red_dye",
+        "X": "minecraft:paper"
+      },
+      "out": [
+        "jugcraft:med_poster",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:media_console",
+      "pattern": [
+        "BBBBBB",
+        "DDCCDD"
+      ],
+      "key": {
+        "B": "minecraft:black_stained_glass_pane",
+        "C": "jugcraft:basic_circuit",
+        "D": "minecraft:dark_oak_planks"
+      },
+      "out": [
+        "jugcraft:media_console",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:medicine_cupboard",
+      "pattern": [
+        "HHGGHH",
+        "HHBBHH"
+      ],
+      "key": {
+        "B": "minecraft:glass_bottle",
+        "G": "minecraft:glass_pane",
+        "H": "minecraft:birch_planks"
+      },
+      "out": [
+        "jugcraft:medicine_cupboard",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:mfp_copier",
+      "pattern": [
+        "GGCCGG",
+        "PPXXPP",
+        "PPPPPP"
+      ],
+      "key": {
+        "C": "jugcraft:basic_circuit",
+        "G": "minecraft:glass_pane",
+        "P": "#c:plates/iron",
+        "X": "minecraft:paper"
+      },
+      "out": [
+        "jugcraft:mfp_copier",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:mop_rack",
+      "pattern": [
+        "TTTTTT",
+        "NNSSNN"
+      ],
+      "key": {
+        "N": "minecraft:iron_nugget",
+        "S": "#c:plates/steel",
+        "T": "minecraft:stick"
+      },
+      "out": [
+        "jugcraft:mop_rack",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:mop_sink",
+      "pattern": [
+        "QQ  QQ",
+        "QQQQQQ"
+      ],
+      "key": {
+        "Q": "minecraft:quartz_block"
+      },
+      "out": [
+        "jugcraft:mop_sink",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:neon_floor_concrete",
+      "pattern": [
+        "MMGGMM",
+        "MMDDMM",
+        "MMGGMM"
+      ],
+      "key": {
+        "D": "minecraft:orange_dye",
+        "G": "minecraft:glowstone_dust",
+        "M": "jugcraft:reinforced_concrete"
+      },
+      "out": [
+        "jugcraft:neon_floor_concrete",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:neon_floor_dock",
+      "pattern": [
+        "MMGGMM",
+        "MMDDMM",
+        "MMGGMM"
+      ],
+      "key": {
+        "D": "minecraft:orange_dye",
+        "G": "minecraft:glowstone_dust",
+        "M": "jugcraft:dock_plating"
+      },
+      "out": [
+        "jugcraft:neon_floor_dock",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:neon_floor_epoxy",
+      "pattern": [
+        "MMGGMM",
+        "MMDDMM",
+        "MMGGMM"
+      ],
+      "key": {
+        "D": "minecraft:orange_dye",
+        "G": "minecraft:glowstone_dust",
+        "M": "jugcraft:epoxy_floor"
+      },
+      "out": [
+        "jugcraft:neon_floor_epoxy",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:neon_floor_steel",
+      "pattern": [
+        "MMGGMM",
+        "MMDDMM",
+        "MMGGMM"
+      ],
+      "key": {
+        "D": "minecraft:orange_dye",
+        "G": "minecraft:glowstone_dust",
+        "M": "jugcraft:steel_armor_plate"
+      },
+      "out": [
+        "jugcraft:neon_floor_steel",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:neon_line_carbon",
+      "pattern": [
+        "MMMMMM",
+        "GGDDGG",
+        "MMMMMM"
+      ],
+      "key": {
+        "D": "minecraft:orange_dye",
+        "G": "minecraft:glowstone_dust",
+        "M": "jugcraft:carbon_composite_panel"
+      },
+      "out": [
+        "jugcraft:neon_line_carbon",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:neon_line_concrete",
+      "pattern": [
+        "MMMMMM",
+        "GGDDGG",
+        "MMMMMM"
+      ],
+      "key": {
+        "D": "minecraft:orange_dye",
+        "G": "minecraft:glowstone_dust",
+        "M": "jugcraft:reinforced_concrete"
+      },
+      "out": [
+        "jugcraft:neon_line_concrete",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:neon_line_steel",
+      "pattern": [
+        "MMMMMM",
+        "GGDDGG",
+        "MMMMMM"
+      ],
+      "key": {
+        "D": "minecraft:orange_dye",
+        "G": "minecraft:glowstone_dust",
+        "M": "jugcraft:steel_armor_plate"
+      },
+      "out": [
+        "jugcraft:neon_line_steel",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:neon_tube",
+      "pattern": [
+        "P",
+        "P",
+        "G",
+        "G",
+        "P",
+        "P"
+      ],
+      "key": {
+        "G": "minecraft:glowstone_dust",
+        "P": "minecraft:glass_pane"
+      },
+      "out": [
+        "jugcraft:neon_tube",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:notam_board",
+      "pattern": [
+        "SSXXSS",
+        "SSXXSS"
+      ],
+      "key": {
+        "S": "minecraft:spruce_planks",
+        "X": "minecraft:paper"
+      },
+      "out": [
+        "jugcraft:notam_board",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:office_bench",
+      "pattern": [
+        "HHHHHH",
+        "HHHHHH",
+        "SS  SS"
+      ],
+      "key": {
+        "H": "minecraft:birch_planks",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:office_bench",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:office_bench_single",
+      "pattern": [
+        "HHKKHH",
+        "SS  SS"
+      ],
+      "key": {
+        "H": "minecraft:birch_planks",
+        "K": "jugcraft:plastic_sheet",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:office_bench_single",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:office_bookcase",
+      "pattern": [
+        "DDBBDD",
+        "DDBBDD",
+        "DDBBDD"
+      ],
+      "key": {
+        "B": "minecraft:book",
+        "D": "minecraft:dark_oak_planks"
+      },
+      "out": [
+        "jugcraft:office_bookcase",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:office_noticeboard",
+      "pattern": [
+        "OOXXOO",
+        "OOXXOO",
+        "OOXXOO"
+      ],
+      "key": {
+        "O": "minecraft:oak_planks",
+        "X": "minecraft:paper"
+      },
+      "out": [
+        "jugcraft:office_noticeboard",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:operator_chair",
+      "pattern": [
+        "    WW",
+        "WWWWWW",
+        "SSIISS"
+      ],
+      "key": {
+        "I": "#c:ingots/iron",
+        "S": "#c:ingots/steel",
+        "W": "minecraft:black_wool"
+      },
+      "out": [
+        "jugcraft:operator_chair",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:ops_wall_screen",
+      "pattern": [
+        "BBBBBB",
+        "BBCCBB",
+        "BBBBBB"
+      ],
+      "key": {
+        "B": "minecraft:black_stained_glass_pane",
+        "C": "jugcraft:basic_circuit"
+      },
+      "out": [
+        "jugcraft:ops_wall_screen",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:ops_wall_screen_large",
+      "pattern": [
+        "BBBBBB",
+        "BBAABB",
+        "BBBBBB"
+      ],
+      "key": {
+        "A": "jugcraft:advanced_circuit",
+        "B": "minecraft:black_stained_glass_pane"
+      },
+      "out": [
+        "jugcraft:ops_wall_screen_large",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:oxygen_trolley",
+      "pattern": [
+        "SSGGSS",
+        "SSGGSS",
+        "NN  NN"
+      ],
+      "key": {
+        "G": "minecraft:green_dye",
+        "N": "minecraft:iron_nugget",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:oxygen_trolley",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:parts_board",
+      "pattern": [
+        "KKKKKK",
+        "OOOOOO",
+        "KKKKKK"
+      ],
+      "key": {
+        "K": "jugcraft:plastic_sheet",
+        "O": "minecraft:oak_planks"
+      },
+      "out": [
+        "jugcraft:parts_board",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:parts_rack",
+      "pattern": [
+        "SSKKSS",
+        "SSKKSS",
+        "SSKKSS"
+      ],
+      "key": {
+        "K": "jugcraft:plastic_sheet",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:parts_rack",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:pedal_bin",
+      "pattern": [
+        "SSNNSS",
+        "SS  SS",
+        "SSSSSS"
+      ],
+      "key": {
+        "N": "minecraft:iron_nugget",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:pedal_bin",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:pendant_light",
+      "pattern": [
+        "N",
+        "N",
+        "A",
+        "A",
+        "L",
+        "L"
+      ],
+      "key": {
+        "A": "#c:plates/aluminum",
+        "L": "minecraft:glowstone_dust",
+        "N": "minecraft:iron_chain"
+      },
+      "out": [
+        "jugcraft:pendant_light",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:phone_booth",
+      "pattern": [
+        "AAGGAA",
+        "WWGGWW",
+        "AAWWAA"
+      ],
+      "key": {
+        "A": "#c:plates/aluminum",
+        "G": "minecraft:glass_pane",
+        "W": "minecraft:gray_wool"
+      },
+      "out": [
+        "jugcraft:phone_booth",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:pilot_simulator",
+      "pattern": [
+        "BBBBBB",
+        "AAWWAA",
+        "SSPPSS"
+      ],
+      "key": {
+        "A": "jugcraft:advanced_circuit",
+        "B": "minecraft:black_stained_glass_pane",
+        "P": "minecraft:piston",
+        "S": "#c:plates/steel",
+        "W": "minecraft:black_wool"
+      },
+      "out": [
+        "jugcraft:pilot_simulator",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:pipe_crossover",
+      "pattern": [
+        "YY  YY",
+        "BBBBBB",
+        "SS  SS"
+      ],
+      "key": {
+        "B": "minecraft:iron_bars",
+        "S": "#c:plates/steel",
+        "Y": "minecraft:yellow_dye"
+      },
+      "out": [
+        "jugcraft:pipe_crossover",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:pipe_doghouse",
+      "pattern": [
+        "IIIIII",
+        "RR  RR",
+        "IIIIII"
+      ],
+      "key": {
+        "I": "#c:plates/iron",
+        "R": "jugcraft:rubber"
+      },
+      "out": [
+        "jugcraft:pipe_doghouse",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:plan_chest",
+      "pattern": [
+        "SSSSSS",
+        "XXXXXX",
+        "SSSSSS"
+      ],
+      "key": {
+        "S": "#c:plates/steel",
+        "X": "minecraft:paper"
+      },
+      "out": [
+        "jugcraft:plan_chest",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:printer_farm",
+      "pattern": [
+        "GGGGGG",
+        "RRCCRR",
+        "SSSSSS"
+      ],
+      "key": {
+        "C": "jugcraft:basic_circuit",
+        "G": "minecraft:glass_pane",
+        "R": "minecraft:redstone",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:printer_farm",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:privacy_screen",
+      "pattern": [
+        "AAWWAA",
+        "AAWWAA",
+        "NN  NN"
+      ],
+      "key": {
+        "A": "#c:plates/aluminum",
+        "N": "minecraft:iron_nugget",
+        "W": "minecraft:white_wool"
+      },
+      "out": [
+        "jugcraft:privacy_screen",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:raised_floor",
+      "pattern": [
+        "CCCCCC",
+        "SSSSSS"
+      ],
+      "key": {
+        "C": "minecraft:gray_carpet",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:raised_floor",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:recliner",
+      "pattern": [
+        "LL    ",
+        "LLLLLL",
+        "LLSSLL"
+      ],
+      "key": {
+        "L": "minecraft:leather",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:recliner",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:recycling_station",
+      "pattern": [
+        "BBGGYY",
+        "KKKKKK",
+        "KKKKKK"
+      ],
+      "key": {
+        "B": "minecraft:blue_dye",
+        "G": "minecraft:green_dye",
+        "K": "jugcraft:plastic_sheet",
+        "Y": "minecraft:yellow_dye"
+      },
+      "out": [
+        "jugcraft:recycling_station",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:red_light_strip",
+      "pattern": [
+        "GGGGGG",
+        "RRDDRR"
+      ],
+      "key": {
+        "D": "minecraft:red_dye",
+        "G": "minecraft:glass_pane",
+        "R": "minecraft:redstone"
+      },
+      "out": [
+        "jugcraft:red_light_strip",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:refreshment_credenza",
+      "pattern": [
+        "BBBBBB",
+        "DDDDDD"
+      ],
+      "key": {
+        "B": "minecraft:glass_bottle",
+        "D": "minecraft:dark_oak_planks"
+      },
+      "out": [
+        "jugcraft:refreshment_credenza",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:reinforced_concrete",
+      "pattern": [
+        "CCCCCC",
+        "CCSSCC",
+        "CCCCCC"
+      ],
+      "key": {
+        "C": "minecraft:gray_concrete",
+        "S": "#c:ingots/steel"
+      },
+      "out": [
+        "jugcraft:reinforced_concrete",
+        16
+      ]
+    },
+    {
+      "id": "jugcraft:reinforced_concrete_slab",
+      "pattern": [
+        "BBBBBB"
+      ],
+      "key": {
+        "B": "jugcraft:reinforced_concrete"
+      },
+      "out": [
+        "jugcraft:reinforced_concrete_slab",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:reinforced_concrete_stairs",
+      "pattern": [
+        "BB    ",
+        "BBBB  ",
+        "BBBBBB"
+      ],
+      "key": {
+        "B": "jugcraft:reinforced_concrete"
+      },
+      "out": [
+        "jugcraft:reinforced_concrete_stairs",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:rf_cabinet",
+      "pattern": [
+        "SSSSSS",
+        "SSAASS",
+        "SSRRSS"
+      ],
+      "key": {
+        "A": "jugcraft:advanced_circuit",
+        "R": "minecraft:redstone",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:rf_cabinet",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:rolling_whiteboard",
+      "pattern": [
+        "AAQQAA",
+        "AAQQAA",
+        "NN  NN"
+      ],
+      "key": {
+        "A": "#c:plates/aluminum",
+        "N": "minecraft:iron_nugget",
+        "Q": "minecraft:quartz"
+      },
+      "out": [
+        "jugcraft:rolling_whiteboard",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:roof_exhaust_fan",
+      "pattern": [
+        "AAAAAA",
+        "AAMMAA",
+        "II  II"
+      ],
+      "key": {
+        "A": "#c:plates/aluminum",
+        "I": "#c:plates/iron",
+        "M": "jugcraft:electric_motor"
+      },
+      "out": [
+        "jugcraft:roof_exhaust_fan",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:roof_pipe_support",
+      "pattern": [
+        "WWKKWW",
+        "RRIIRR"
+      ],
+      "key": {
+        "I": "#c:plates/iron",
+        "K": "minecraft:copper_ingot",
+        "R": "jugcraft:rubber",
+        "W": "minecraft:white_wool"
+      },
+      "out": [
+        "jugcraft:roof_pipe_support",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:roof_upblast_fan",
+      "pattern": [
+        "AA  AA",
+        "AAMMAA",
+        "II  II"
+      ],
+      "key": {
+        "A": "#c:plates/aluminum",
+        "I": "#c:plates/iron",
+        "M": "jugcraft:electric_motor"
+      },
+      "out": [
+        "jugcraft:roof_upblast_fan",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:rooftop_ahu",
+      "pattern": [
+        "AAAAAA",
+        "MMWWMM",
+        "SSCCSS"
+      ],
+      "key": {
+        "A": "#c:plates/aluminum",
+        "C": "jugcraft:basic_circuit",
+        "M": "jugcraft:electric_motor",
+        "S": "#c:plates/steel",
+        "W": "minecraft:white_wool"
+      },
+      "out": [
+        "jugcraft:rooftop_ahu",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:sanitary_bin",
+      "pattern": [
+        "KKNNKK",
+        "KKKKKK"
+      ],
+      "key": {
+        "K": "jugcraft:plastic_sheet",
+        "N": "minecraft:iron_nugget"
+      },
+      "out": [
+        "jugcraft:sanitary_bin",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:scrub_sink",
+      "pattern": [
+        "SSWWSS",
+        "SSSSSS"
+      ],
+      "key": {
+        "S": "#c:plates/steel",
+        "W": "minecraft:water_bucket"
+      },
+      "out": [
+        "jugcraft:scrub_sink",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:silicon_carbide_armor",
+      "pattern": [
+        "SSKKSS",
+        "KKSSKK",
+        "SSKKSS"
+      ],
+      "key": {
+        "K": "jugcraft:coke",
+        "S": "jugcraft:silicon"
+      },
+      "out": [
+        "jugcraft:silicon_carbide_armor",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:silicon_carbide_armor_slab",
+      "pattern": [
+        "BBBBBB"
+      ],
+      "key": {
+        "B": "jugcraft:silicon_carbide_armor"
+      },
+      "out": [
+        "jugcraft:silicon_carbide_armor_slab",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:silicon_carbide_armor_stairs",
+      "pattern": [
+        "BB    ",
+        "BBBB  ",
+        "BBBBBB"
+      ],
+      "key": {
+        "B": "jugcraft:silicon_carbide_armor"
+      },
+      "out": [
+        "jugcraft:silicon_carbide_armor_stairs",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:spine_board",
+      "pattern": [
+        "KKYYKK",
+        "KKKKKK",
+        "KKYYKK"
+      ],
+      "key": {
+        "K": "jugcraft:plastic_sheet",
+        "Y": "minecraft:yellow_dye"
+      },
+      "out": [
+        "jugcraft:spine_board",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:steel_armor_plate",
+      "pattern": [
+        "PPNNPP",
+        "PPPPPP",
+        "PPNNPP"
+      ],
+      "key": {
+        "N": "minecraft:iron_nugget",
+        "P": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:steel_armor_plate",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:steel_armor_plate_slab",
+      "pattern": [
+        "BBBBBB"
+      ],
+      "key": {
+        "B": "jugcraft:steel_armor_plate"
+      },
+      "out": [
+        "jugcraft:steel_armor_plate_slab",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:steel_armor_plate_stairs",
+      "pattern": [
+        "BB    ",
+        "BBBB  ",
+        "BBBBBB"
+      ],
+      "key": {
+        "B": "jugcraft:steel_armor_plate"
+      },
+      "out": [
+        "jugcraft:steel_armor_plate_stairs",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:steel_filing_cabinet",
+      "pattern": [
+        "SSCCSS",
+        "SSCCSS"
+      ],
+      "key": {
+        "C": "minecraft:chest",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:steel_filing_cabinet",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:steel_girder",
+      "pattern": [
+        "SSSSSS",
+        "  SS  ",
+        "SSSSSS"
+      ],
+      "key": {
+        "S": "#c:ingots/steel"
+      },
+      "out": [
+        "jugcraft:steel_girder",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:step_stool",
+      "pattern": [
+        "SSSSSS",
+        "KK  KK"
+      ],
+      "key": {
+        "K": "jugcraft:plastic_sheet",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:step_stool",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:storage_cupboard",
+      "pattern": [
+        "HHHHHH",
+        "HHCCHH",
+        "HHHHHH"
+      ],
+      "key": {
+        "C": "minecraft:chest",
+        "H": "minecraft:birch_planks"
+      },
+      "out": [
+        "jugcraft:storage_cupboard",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:strip_board",
+      "pattern": [
+        "AAXXAA",
+        "AAXXAA",
+        "AAXXAA"
+      ],
+      "key": {
+        "A": "#c:plates/aluminum",
+        "X": "minecraft:paper"
+      },
+      "out": [
+        "jugcraft:strip_board",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:study_carrel",
+      "pattern": [
+        "HHGGHH",
+        "HH  HH"
+      ],
+      "key": {
+        "G": "minecraft:glass_pane",
+        "H": "minecraft:birch_planks"
+      },
+      "out": [
+        "jugcraft:study_carrel",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:superconducting_conduit",
+      "pattern": [
+        "PPPPPP",
+        "TTTTTT",
+        "PPPPPP"
+      ],
+      "key": {
+        "P": "#c:plates/steel",
+        "T": "jugcraft:superconducting_tape"
+      },
+      "out": [
+        "jugcraft:superconducting_conduit",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:supply_pickup",
+      "pattern": [
+        "PPTTPP",
+        "SSWWSS"
+      ],
+      "key": {
+        "P": "#c:plates/steel",
+        "S": "#c:plates/iron",
+        "T": "minecraft:iron_trapdoor",
+        "W": "jugcraft:cargo_winch"
+      },
+      "out": [
+        "jugcraft:supply_pickup",
+        18
+      ]
+    },
+    {
+      "id": "jugcraft:supply_shelf",
+      "pattern": [
+        "NN  NN",
+        "SSSSSS",
+        "NN  NN"
+      ],
+      "key": {
+        "N": "minecraft:iron_nugget",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:supply_shelf",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:task_chair",
+      "pattern": [
+        "    WW",
+        "WWWWWW",
+        "KKNNKK"
+      ],
+      "key": {
+        "K": "jugcraft:plastic_sheet",
+        "N": "minecraft:iron_nugget",
+        "W": "minecraft:black_wool"
+      },
+      "out": [
+        "jugcraft:task_chair",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:team_table",
+      "pattern": [
+        "OOOOOO",
+        "OOOOOO",
+        "SS  SS"
+      ],
+      "key": {
+        "O": "minecraft:oak_planks",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:team_table",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:test_cage",
+      "pattern": [
+        "SSTTSS",
+        "TT  TT",
+        "SSTTSS"
+      ],
+      "key": {
+        "S": "#c:plates/steel",
+        "T": "minecraft:string"
+      },
+      "out": [
+        "jugcraft:test_cage",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:thrust_test_stand",
+      "pattern": [
+        "AACCAA",
+        "AA  AA"
+      ],
+      "key": {
+        "A": "#c:plates/aluminum",
+        "C": "jugcraft:basic_circuit"
+      },
+      "out": [
+        "jugcraft:thrust_test_stand",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:tier_riser",
+      "pattern": [
+        "CCCCCC",
+        "OOOOOO",
+        "OOOOOO"
+      ],
+      "key": {
+        "C": "minecraft:gray_carpet",
+        "O": "minecraft:oak_planks"
+      },
+      "out": [
+        "jugcraft:tier_riser",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:touch_console",
+      "pattern": [
+        "G",
+        "G",
+        "C",
+        "C",
+        "P",
+        "P"
+      ],
+      "key": {
+        "C": "jugcraft:basic_circuit",
+        "G": "minecraft:black_stained_glass_pane",
+        "P": "#c:plates/iron"
+      },
+      "out": [
+        "jugcraft:touch_console",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:touch_display_cart",
+      "pattern": [
+        "BBBBBB",
+        "BBCCBB",
+        "NNSSNN"
+      ],
+      "key": {
+        "B": "minecraft:black_stained_glass_pane",
+        "C": "jugcraft:basic_circuit",
+        "N": "minecraft:iron_nugget",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:touch_display_cart",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:tower_control_console",
+      "pattern": [
+        "GGGGG",
+        "AWMWA",
+        "SLPLS",
+        " C A "
+      ],
+      "key": {
+        "G": "jugcraft:blast_glass",
+        "A": "jugcraft:advanced_circuit",
+        "W": "minecraft:glass_pane",
+        "M": "jugcraft:tower_master_console",
+        "P": "jugcraft:processor",
+        "S": "#c:plates/steel",
+        "L": "minecraft:glowstone_dust",
+        "C": "jugcraft:basic_circuit"
+      },
+      "out": [
+        "jugcraft:tower_control_console",
+        1
+      ]
+    },
+    {
+      "id": "jugcraft:tower_diorama_case",
+      "pattern": [
+        "PPGGPP",
+        "PPMMPP",
+        "QQAAQQ"
+      ],
+      "key": {
+        "A": "#c:plates/aluminum",
+        "G": "minecraft:glowstone_dust",
+        "M": "minecraft:map",
+        "P": "minecraft:glass_pane",
+        "Q": "minecraft:quartz_block"
+      },
+      "out": [
+        "jugcraft:tower_diorama_case",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:tower_door_mechanism",
+      "pattern": [
+        "PPPPPP",
+        "SSCCSS",
+        "PPPPPP"
+      ],
+      "key": {
+        "C": "jugcraft:basic_circuit",
+        "P": "#c:plates/steel",
+        "S": "#c:ingots/steel"
+      },
+      "out": [
+        "jugcraft:tower_door_mechanism",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:tower_info_totem",
+      "pattern": [
+        "LGA",
+        "PWP",
+        "PAP",
+        "PPP"
+      ],
+      "key": {
+        "G": "minecraft:black_stained_glass_pane",
+        "P": "#c:plates/iron",
+        "W": "minecraft:glass_pane",
+        "L": "minecraft:glowstone_dust",
+        "A": "jugcraft:advanced_circuit"
+      },
+      "out": [
+        "jugcraft:tower_info_totem",
+        1
+      ]
+    },
+    {
+      "id": "jugcraft:tower_ladder",
+      "pattern": [
+        "SS  SS",
+        "SSSSSS",
+        "SS  SS"
+      ],
+      "key": {
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:tower_ladder",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:tower_master_console",
+      "pattern": [
+        "SDDS",
+        "AWPA",
+        "SLAS"
+      ],
+      "key": {
+        "S": "#c:plates/steel",
+        "D": "jugcraft:console_desk",
+        "A": "jugcraft:advanced_circuit",
+        "W": "minecraft:glass_pane",
+        "P": "jugcraft:processor",
+        "L": "minecraft:glowstone_dust"
+      },
+      "out": [
+        "jugcraft:tower_master_console",
+        1
+      ]
+    },
+    {
+      "id": "jugcraft:tower_service_grating",
+      "pattern": [
+        "SS  SS",
+        "SSSSSS",
+        "SS  SS"
+      ],
+      "key": {
+        "S": "#c:ingots/steel"
+      },
+      "out": [
+        "jugcraft:tower_service_grating",
+        16
+      ]
+    },
+    {
+      "id": "jugcraft:tower_service_railing",
+      "pattern": [
+        "SSSSSS",
+        "SS  SS",
+        "PPPPPP"
+      ],
+      "key": {
+        "P": "#c:plates/steel",
+        "S": "#c:ingots/steel"
+      },
+      "out": [
+        "jugcraft:tower_service_railing",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:tower_vent",
+      "pattern": [
+        "PPPPPP",
+        "SSFFSS",
+        "PPPPPP"
+      ],
+      "key": {
+        "F": "jugcraft:cooling_fin",
+        "P": "#c:plates/steel",
+        "S": "#c:ingots/steel"
+      },
+      "out": [
+        "jugcraft:tower_vent",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:training_chair",
+      "pattern": [
+        "KK    ",
+        "KKKKKK",
+        "PP  PP"
+      ],
+      "key": {
+        "K": "jugcraft:plastic_sheet",
+        "P": "#c:plates/iron"
+      },
+      "out": [
+        "jugcraft:training_chair",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:training_desk",
+      "pattern": [
+        "HHHHHH",
+        "PP  PP"
+      ],
+      "key": {
+        "H": "minecraft:birch_planks",
+        "P": "#c:plates/iron"
+      },
+      "out": [
+        "jugcraft:training_desk",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:training_table",
+      "pattern": [
+        "HHHHHH",
+        "SS  SS"
+      ],
+      "key": {
+        "H": "minecraft:birch_planks",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:training_table",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:transformer_casing",
+      "pattern": [
+        "PPWWPP",
+        "WWIIWW",
+        "PPWWPP"
+      ],
+      "key": {
+        "I": "#c:ingots/iron",
+        "P": "#c:plates/steel",
+        "W": "#c:wires/copper"
+      },
+      "out": [
+        "jugcraft:transformer_casing",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:tungsten_steel_frame",
+      "pattern": [
+        "TTSSTT",
+        "SS  SS",
+        "TTSSTT"
+      ],
+      "key": {
+        "S": "#c:ingots/steel",
+        "T": "#c:ingots/tungsten"
+      },
+      "out": [
+        "jugcraft:tungsten_steel_frame",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:tungsten_steel_frame_slab",
+      "pattern": [
+        "BBBBBB"
+      ],
+      "key": {
+        "B": "jugcraft:tungsten_steel_frame"
+      },
+      "out": [
+        "jugcraft:tungsten_steel_frame_slab",
+        12
+      ]
+    },
+    {
+      "id": "jugcraft:tungsten_steel_frame_stairs",
+      "pattern": [
+        "BB    ",
+        "BBBB  ",
+        "BBBBBB"
+      ],
+      "key": {
+        "B": "jugcraft:tungsten_steel_frame"
+      },
+      "out": [
+        "jugcraft:tungsten_steel_frame_stairs",
+        8
+      ]
+    },
+    {
+      "id": "jugcraft:vanity_counter",
+      "pattern": [
+        "QQCCQQ",
+        "QQ  QQ"
+      ],
+      "key": {
+        "C": "minecraft:cauldron",
+        "Q": "minecraft:smooth_quartz"
+      },
+      "out": [
+        "jugcraft:vanity_counter",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:vanity_mirror",
+      "pattern": [
+        "GGGGGG",
+        "NNNNNN"
+      ],
+      "key": {
+        "G": "minecraft:glass_pane",
+        "N": "minecraft:iron_nugget"
+      },
+      "out": [
+        "jugcraft:vanity_mirror",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:vc_camera",
+      "pattern": [
+        "KKSSKK",
+        "  CC  "
+      ],
+      "key": {
+        "C": "jugcraft:basic_circuit",
+        "K": "jugcraft:plastic_sheet",
+        "S": "minecraft:spyglass"
+      },
+      "out": [
+        "jugcraft:vc_camera",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:vending_machine",
+      "pattern": [
+        "SSGGSS",
+        "SSCCSS",
+        "SSEESS"
+      ],
+      "key": {
+        "C": "jugcraft:basic_circuit",
+        "E": "minecraft:emerald",
+        "G": "minecraft:glass_pane",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:vending_machine",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:visitor_chair",
+      "pattern": [
+        "LL    ",
+        "LLLLLL",
+        "NN  NN"
+      ],
+      "key": {
+        "L": "minecraft:leather",
+        "N": "minecraft:iron_nugget"
+      },
+      "out": [
+        "jugcraft:visitor_chair",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:waiting_bench",
+      "pattern": [
+        "WWWWWW",
+        "SS  SS"
+      ],
+      "key": {
+        "S": "#c:plates/steel",
+        "W": "minecraft:gray_wool"
+      },
+      "out": [
+        "jugcraft:waiting_bench",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:wall_task_light",
+      "pattern": [
+        "PPGG",
+        "PPLL"
+      ],
+      "key": {
+        "G": "minecraft:glass_pane",
+        "L": "minecraft:glowstone_dust",
+        "P": "#c:plates/iron"
+      },
+      "out": [
+        "jugcraft:wall_task_light",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:wall_tv",
+      "pattern": [
+        "BBBBBB",
+        "BBCCBB",
+        "  PP  "
+      ],
+      "key": {
+        "B": "minecraft:black_stained_glass_pane",
+        "C": "jugcraft:basic_circuit",
+        "P": "#c:plates/iron"
+      },
+      "out": [
+        "jugcraft:wall_tv",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:wall_whiteboard",
+      "pattern": [
+        "AAQQAA",
+        "AAQQAA"
+      ],
+      "key": {
+        "A": "#c:plates/aluminum",
+        "Q": "minecraft:quartz"
+      },
+      "out": [
+        "jugcraft:wall_whiteboard",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:warning_light",
+      "pattern": [
+        "G",
+        "G",
+        "L",
+        "L",
+        "P",
+        "P"
+      ],
+      "key": {
+        "G": "minecraft:red_stained_glass",
+        "L": "minecraft:redstone_lamp",
+        "P": "#c:plates/iron"
+      },
+      "out": [
+        "jugcraft:warning_light",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:waste_basket",
+      "pattern": [
+        "SS  SS",
+        "  SS  "
+      ],
+      "key": {
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:waste_basket",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:water_dispenser",
+      "pattern": [
+        "GGWWGG",
+        "SSNNSS"
+      ],
+      "key": {
+        "G": "minecraft:glass_pane",
+        "N": "minecraft:iron_nugget",
+        "S": "#c:plates/steel",
+        "W": "minecraft:water_bucket"
+      },
+      "out": [
+        "jugcraft:water_dispenser",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:water_heater",
+      "pattern": [
+        "SSWWSS",
+        "SSFFSS",
+        "SSBBSS"
+      ],
+      "key": {
+        "B": "minecraft:bucket",
+        "F": "minecraft:furnace",
+        "S": "#c:plates/steel",
+        "W": "#c:wires/copper"
+      },
+      "out": [
+        "jugcraft:water_heater",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:wet_floor_sign",
+      "pattern": [
+        "YYKKYY",
+        "KK  KK"
+      ],
+      "key": {
+        "K": "jugcraft:plastic_sheet",
+        "Y": "minecraft:yellow_dye"
+      },
+      "out": [
+        "jugcraft:wet_floor_sign",
+        4
+      ]
+    },
+    {
+      "id": "jugcraft:wheelchair",
+      "pattern": [
+        "SS    ",
+        "SSLLSS",
+        "NNSSNN"
+      ],
+      "key": {
+        "L": "minecraft:leather",
+        "N": "minecraft:iron_nugget",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:wheelchair",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:wx_kiosk",
+      "pattern": [
+        "BBBB",
+        "CCDD",
+        "SSSS"
+      ],
+      "key": {
+        "B": "minecraft:black_stained_glass_pane",
+        "C": "jugcraft:basic_circuit",
+        "D": "minecraft:daylight_detector",
+        "S": "#c:plates/steel"
+      },
+      "out": [
+        "jugcraft:wx_kiosk",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:year_planner",
+      "pattern": [
+        "XXXXXX",
+        "XXKKXX"
+      ],
+      "key": {
+        "K": "jugcraft:plastic_sheet",
+        "X": "minecraft:paper"
+      },
+      "out": [
+        "jugcraft:year_planner",
+        2
+      ]
+    },
+    {
+      "id": "jugcraft:zone_clocks",
+      "pattern": [
+        "KKKKKK",
+        "PPPPPP"
+      ],
+      "key": {
+        "K": "minecraft:clock",
+        "P": "#c:plates/iron"
+      },
+      "out": [
+        "jugcraft:zone_clocks",
+        2
+      ]
+    }
   ]
 }

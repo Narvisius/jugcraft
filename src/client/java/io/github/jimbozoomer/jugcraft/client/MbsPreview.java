@@ -16,6 +16,7 @@ import io.github.jimbozoomer.jugcraft.powerline.LineItem;
 import io.github.jimbozoomer.jugcraft.powerline.LineKind;
 import io.github.jimbozoomer.jugcraft.powerline.LinePlacement;
 import io.github.jimbozoomer.jugcraft.powerline.LineRegistry;
+import io.github.jimbozoomer.jugcraft.tower.MasterConsoleBlock;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -111,8 +112,9 @@ public final class MbsPreview {
 			}
 			ItemStack held = player.getMainHandItem();
 			Item item = held.getItem();
+			StructureGhost.Source source = item instanceof BlockItem blockItem ? blockSource(blockItem) : null;
 			if (!(item instanceof TankKitItem || item instanceof EquipmentItem || item instanceof LineItem
-					|| item instanceof BlockItem blockItem && blockItem.getBlock() instanceof StructureGhost.Source)) {
+					|| source != null)) {
 				return;
 			}
 			// The block under the crosshair; further out than the crosshair reaches (64 blocks), the block looked at
@@ -131,10 +133,27 @@ public final class MbsPreview {
 				equipment(level, player, hit, equipment.kind, camera, pose, collector);
 			} else if (item instanceof LineItem line) {
 				line(level, hit, line.kind, camera, pose, collector);
-			} else if (item instanceof BlockItem blockItem && blockItem.getBlock() instanceof StructureGhost.Source source) {
+			} else if (source != null) {
 				blocks(level, player, hit, held, source, camera, pose, collector);
 			}
 		});
+	}
+
+	/** Existing MBS sources retain their own preview; the tower console adapts its exact six-part layout. */
+	static StructureGhost.@Nullable Source blockSource(BlockItem item) {
+		if (item.getBlock() instanceof StructureGhost.Source source) return source;
+		if (item.getBlock() instanceof MasterConsoleBlock console) return place -> masterConsoleGhost(place, console);
+		return null;
+	}
+	private static StructureGhost masterConsoleGhost(BlockPlaceContext place, MasterConsoleBlock console) {
+		Direction facing = place.getHorizontalDirection().getOpposite();
+		BlockPos origin = place.getClickedPos();
+		List<StructureGhost.Cell> cells = new ArrayList<>(MasterConsoleBlock.FOOTPRINT.size());
+		for (int part = 0; part < MasterConsoleBlock.FOOTPRINT.size(); part++) {
+			BlockPos at = MasterConsoleBlock.FOOTPRINT.partPos(origin, facing, part);
+			cells.add(new StructureGhost.Cell(at, console.defaultBlockState().setValue(MasterConsoleBlock.FACING, facing).setValue(MasterConsoleBlock.PART, part)));
+		}
+		return new StructureGhost(List.copyOf(cells), console.blockedPlacement(place));
 	}
 
 	// ------------------------------------------------------------------ the kinds of MBS

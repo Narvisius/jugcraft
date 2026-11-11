@@ -137,6 +137,10 @@ public final class ReactorUnit {
 				EquipmentRegistry.Entry e = registry.at(anchor);
 				if (e != null && e.kind() == EquipmentKind.MAIN_TRANSFORMER && !unit.transformers.contains(anchor)) unit.transformers.add(anchor);
 			}
+			// Or to a transformer yard built as a site (the medium plant's: its bus takes on where the generator's ends).
+			for (BlockPos yard : Yards.onBus(level, registry, unit.turbines)) {
+				if (!unit.transformers.contains(yard)) unit.transformers.add(yard);
+			}
 		}
 		for (BlockPos turbine : unit.turbines) {
 			for (BlockPos anchor : touching(level, registry, turbine)) {
@@ -205,8 +209,10 @@ public final class ReactorUnit {
 			return out;
 		}
 		Set<BlockPos> body = new HashSet<>();
-		for (BlockPos local : e.kind().solidCells()) {
-			body.add(anchor.offset(EquipmentKind.toWorld(local, e.facing())));
+		if (!e.hidden()) {
+			for (BlockPos local : e.kind().solidCells()) {
+				body.add(anchor.offset(EquipmentKind.toWorld(local, e.facing())));
+			}
 		}
 		body.add(anchor);
 		for (BlockPos cell : body) {

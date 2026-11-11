@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PPP",
+    "IPI",
+    "R R"
+  ],
+  "key": {
+    "P": "#c:plates/steel",
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:red_dye"
+  },
+  "result": {
+    "id": "jugcraft:shop_press",
+    "count": 1
+  }
+}

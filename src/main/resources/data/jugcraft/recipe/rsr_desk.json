@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "G G",
+    "PCP",
+    "PRP"
+  ],
+  "key": {
+    "G": "minecraft:black_stained_glass_pane",
+    "P": "#c:plates/steel",
+    "C": "jugcraft:basic_circuit",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "jugcraft:rsr_desk",
+    "count": 1
+  }
+}

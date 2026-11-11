@@ -35,6 +35,8 @@ LINER = M("jugcraft:steel_armor_plate", (170, 174, 178))
 CLADDING = M("jugcraft:aluminum_cladding", (190, 196, 200))
 GLASS = M("minecraft:glass", (180, 210, 220))
 PANE = M("minecraft:glass_pane", (180, 210, 220))
+FROSTED = M("minecraft:white_stained_glass_pane", (232, 236, 238))     # the restroom's windows (round 26, #14)
+RR_PAPER = 8                                                           # a toilet's rolls as built (tools/restroom.py)
 BLAST = M("jugcraft:blast_glass", (150, 180, 196))
 BARS = M("minecraft:iron_bars", (92, 94, 98))
 CHAIN = M("minecraft:iron_chain[axis=y]", (70, 70, 74))
@@ -99,11 +101,40 @@ def stair(material, facing, half="bottom"):
     return M(f"minecraft:{material}_stairs[facing={facing},half={half},shape=straight]", (130, 130, 130))
 
 
-def door_state(kind, facing, half, hinge="left"):
-    m = M(f"jugcraft:{kind}_door[facing={facing},half={half},hinge={hinge},open=false,powered=false]",
+def door_state(kind, facing, half, hinge="left", paired=False, exit_=False, reader=False):
+    """A plant door (doors round: nuclear/PlantDoorBlock.java): paired a double door's leaf, exit its panic bar,
+    reader the badge reader beside it."""
+    m = M(f"jugcraft:{kind}_door[exit={_flag(exit_)},facing={facing},half={half},hinge={hinge},moving=false,open=false,"
+          f"paired={_flag(paired)},powered=false,reader={_flag(reader)}]",
           (200, 200, 200) if kind == "steel" else (150, 190, 200))
     DOORISH.add(m)
     return m
+
+
+# The vital rooms: their doors have badge readers (doors round; Justin: the reader lets the plant's owner and their
+# party in).
+SECURED = {"main_control_room", "server_room", "switchgear_room", "relay_room", "cable_spreading_room", "remote_shutdown",
+           "battery_room_1a", "battery_room_1b", "dc_equipment_1a", "dc_equipment_1b", "support_center"}
+
+
+def roller_door(b, cells, y0, y1, facing):
+    """A roller door over an opening's cells (x, z) in a wall, y0..y1 high, facing the way in (its coil inside): each
+    block's place in the door (nuclear/RollerDoorBlock.java POS, LEFT, RIGHT), and its push-button station on the
+    inside of the wall beside the opening's right end, a block up (doors round)."""
+    cells = set(cells)
+    lx, lz = P.DIRS[CCW[facing]]
+    rx, rz = P.DIRS[P.CLOCKWISE[facing]]
+    for x, z in sorted(cells):
+        left, right = (x + lx, z + lz) not in cells, (x + rx, z + rz) not in cells
+        for y in range(y0, y1 + 1):
+            pos = "single" if y0 == y1 else "bottom" if y == y0 else "top" if y == y1 else "middle"
+            b.p(x, y, z, M(f"jugcraft:roller_door[facing={facing},left={_flag(left)},moving=false,open=false,pos={pos},"
+                           f"right={_flag(right)}]", (150, 156, 160)))
+    ex, ez = next(c for c in sorted(cells) if (c[0] + rx, c[1] + rz) not in cells)
+    fx, fz = P.DIRS[facing]
+    sx, sz = ex + rx + fx, ez + rz + fz
+    if b.get(sx, y0 + 1, sz) == 0:
+        b.p(sx, y0 + 1, sz, M(f"jugcraft:roller_door_station[facing={OPPOSITE[facing]}]", (128, 132, 134)))
 
 
 def row_state(name, facing, left, right, variant=None):
@@ -113,6 +144,11 @@ def row_state(name, facing, left, right, variant=None):
 
 def multi_state(name, facing, part, variant=None):
     extra = "" if variant is None else f",variant={variant}"
+    import plant_panels
+    if plant_panels.PANELS.get(name, {}).get("swing"):
+        # Its door shut (older rooms round 2: a rack's front door, nuclear/ServerRoomPanelBlock OPEN; the admin building
+        # part 2: the chemistry lab's safety cabinets).
+        extra = ",open=false" + extra
     return M(f"jugcraft:{name}[facing={facing},part={part}{extra}]", (60, 60, 64))
 
 
@@ -147,9 +183,10 @@ def tank_piece(name, facing, **props):
     return M(f"jugcraft:{name}[facing={facing}{extra}]", (150, 156, 160))
 
 
-def steel_ladder(facing, cage, top):
-    return M(f"jugcraft:caged_ladder[cage={'true' if cage else 'false'},facing={facing},top={'true' if top else 'false'},"
-             f"waterlogged=false]", (170, 176, 178))
+def steel_ladder(facing, cage, top, bottom=False):
+    """The caged steel ladder (nuclear/SteelLadderBlock): ``bottom`` the cage's flared lowest length."""
+    return M(f"jugcraft:caged_ladder[bottom={'true' if bottom else 'false'},cage={'true' if cage else 'false'},facing={facing},"
+             f"top={'true' if top else 'false'},waterlogged=false]", (170, 176, 178))
 
 
 def _flag(v):
@@ -225,7 +262,7 @@ GLAZING = {PANE, GLASS, BLAST} | set(FGLASS.values())
 DOORISH = set()  # door block ids, filled as doors are made
 OPPOSITE = {"north": "south", "south": "north", "east": "west", "west": "east"}
 SIDE = {"n": "north", "s": "south", "w": "west", "e": "east"}
-STACKING = {"server_rack", "relay_cabinet", "locker", "pallet_rack", "pallet_rack_drums"}
+STACKING = {"relay_cabinet", "locker", "pallet_rack", "pallet_rack_drums"}
 
 
 # ------------------------------------------------------------------------------------------------- building kit
@@ -247,6 +284,9 @@ class Building(Part):
         self.seats = []  # (x, y, z, facing): furniture, which must stand inside with room in front
         self.stairs = []  # stairwell footprints, for the checker
         self.high_bay = False  # tall open spaces lit by high-bay lights under the roof instead of lights on chains
+        # Rooms whose ceiling lights are another fixture (older rooms round 4: the battery rooms' vapor-tight lights):
+        # (x0, y0, z0, x1, y1, z1, material), building coordinates.
+        self.light_swap = []
 
     def site_y(self, y):
         """The site y of this building's y (from its ground floor slab): one lower when the building is grounded."""
@@ -329,19 +369,22 @@ class Building(Part):
         self.b(x, y0, z0, x, y1, z1, m)
 
     # -- doors and signs
-    def door(self, x, y, z, facing, kind="steel", double=False, label=None, sign_side=None):
+    def door(self, x, y, z, facing, kind="steel", double=False, label=None, sign_side=None, exit_=None, reader=None):
         """A door (steel, or glass for offices and entrances) in a wall cell, opening by hand. The door leaf sits
         on the side of its block away from facing: give facing as the way you walk in through it to have the leaf
         flush with the face you walk in from. double: a pair, the second to the facing's left. label: a room sign
-        beside the door on the side you come from."""
+        beside the door on the side you come from. exit_: panic bars (a pair's, by default); reader: a badge reader
+        (a vital room's, SECURED, by default) (doors round)."""
         dx, dz = P.DIRS[facing]
         lx, lz = P.DIRS[CCW[facing]]
+        exit_ = double if exit_ is None else exit_
+        reader = (label in SECURED) if reader is None else reader
         leaves = [(x, z, "right" if double else "left")]
         if double:
             leaves.append((x + lx, z + lz, "left"))
         for (cx, cz, hinge) in leaves:
-            self.p(cx, y, cz, door_state(kind, facing, "lower", hinge))
-            self.p(cx, y + 1, cz, door_state(kind, facing, "upper", hinge))
+            self.p(cx, y, cz, door_state(kind, facing, "lower", hinge, double, exit_, reader))
+            self.p(cx, y + 1, cz, door_state(kind, facing, "upper", hinge, double, exit_, reader))
             self.doors.append((cx, y, cz, facing))
         if label:
             # Beside the door, at eye height, on the wall you approach from: on the right if that is plain wall
@@ -565,6 +608,12 @@ class Building(Part):
                             break
                         self.g[x + ox, gy, z + oz] = LIGHT
                         break
+        for sx0, sy0, sz0, sx1, sy1, sz1, m in self.light_swap:
+            for x in range(sx0, sx1 + 1):
+                for z in range(sz0, sz1 + 1):
+                    for gy in range(sy0 + self.base, sy1 + self.base + 1):
+                        if self.g[x, gy, z] == LIGHT:
+                            self.g[x, gy, z] = m
 
 
 def entrance(b, x, z, side, kind="glass", label=None, canopy=True, step=True, frame=True):
@@ -580,7 +629,9 @@ def entrance(b, x, z, side, kind="glass", label=None, canopy=True, step=True, fr
             b.b(x + rx * k, 1, z + rz * k, x + rx * k, b.h, z + rz * k, ANDESITE)
         for k in (0, -1):
             b.b(x + rx * k, 3, z + rz * k, x + rx * k, 3, z + rz * k, ANDESITE)
-    b.door(x, 1, z, facing, kind=kind, double=True)
+    # The doors swing out, their panic bars inside (doors round: real exit doors open the way you leave): the pair
+    # laid from the other leaf, as the second leaf goes to the facing's left.
+    b.door(x - rx, 1, z - rz, out, kind=kind, double=True, exit_=True)
     fx, fz = P.DIRS[out]
     cells = [(x, z), (x - rx, z - rz)]
     if canopy:
@@ -596,12 +647,14 @@ def entrance(b, x, z, side, kind="glass", label=None, canopy=True, step=True, fr
 def containment(s, ox, oz):
     """The reactor building (containment): a cylinder 51 across and 66 tall with a domed roof, a steel liner inside.
 
-    Inside, like a four-loop PWR: the vessel in its reactor cavity behind the primary shield wall; each steam
-    generator and its coolant pump in a compartment behind the crane wall's radial walls; the pressurizer in its own
-    compartment; grating levels round the steam generators; the operating floor at +16 with the refuelling cavity
-    over the vessel (the head and drive forest show in it) and the refuelling machine on rails; the polar crane on its
-    ring girder high up; the annulus between the crane wall and the liner with ladders up to the operating floor; the
-    personnel airlock and the equipment hatch at ground level. Yellow safety railing round every opening."""
+    Inside (22 October 2026: the approved machines in game, Justin: "i want all the new parts loaded in ... the
+    reactor room"), the building is a compiled site (tools/reactor_site.py, its structure tools/rb_building.py): the
+    operating floor at +15 with the refuelling cavity, the internals' bay and the transfer canal, the vessel and its
+    integrated head package, the polar crane on its ring girder, the refuelling machine, the fuel transfer system, the
+    head and internals stands, the SRO's station, the four steam generators and coolant pumps, the pressurizer, the
+    loop piping, the primary shield, ladders and lights. These blocks are what stays round it: the base slab, the
+    shell and its dome, the liner, the loop compartments' floor, the personnel airlock (west) and the equipment
+    hatch (south) at the loop floor (level with the grass)."""
     r, wall_h, dome_h = 24.5, 46, 20
     size = 51
     c = size / 2
@@ -621,127 +674,19 @@ def containment(s, ox, oz):
         b.disc(c, c, rr, wall_h + y, wall_h + y, SHIELD, inner=max(-1, min(rr - 2.6, above - 1.2)))
     b.disc(c, c, 3, wall_h + dome_h, wall_h + dome_h, CONCRETE_DARK)
     inner = r - 2.7  # inside the liner
+    # The loop compartments' floor, level with the grass: the site opens it round the vessel's pit and the upender pit
+    # and draws it there itself.
     b.disc(c, c, inner, 0, 0, EPOXY)
     cv = int(c)
-    floor_y = 16
-    for y in range(1, floor_y):
-        b.ring(c, c, 6.5, y, 1.2, SHIELD)
-    crane_r = 19.5
-    for y in range(1, floor_y):
-        b.ring(c, c, crane_r, y, 1.0, CONCRETE)
-    for y in range(1, floor_y):
-        b.box(cv, y, int(c + 7), cv, y, int(c + crane_r), CONCRETE)
-        b.box(int(c - crane_r), y, cv, int(c - 7), y, cv, CONCRETE)
-        b.box(int(c + 7), y, cv, int(c + crane_r), y, cv, CONCRETE)
-    # Doors through the crane wall into each loop compartment from the annulus (steel doors, 2 wide).
-    for k, a in enumerate((math.pi / 4, 3 * math.pi / 4, 5 * math.pi / 4, 7 * math.pi / 4)):
-        x, z = int(c + math.cos(a) * crane_r), int(c + math.sin(a) * crane_r)
-        b.clear(x - 1, 1, z - 1, x + 1, 3, z + 1)
-        # A ladder inside the compartment up the crane wall to the grating level, through a hole in the grating.
-        a2 = a + 0.3
-        lx, lz = c + math.cos(a2) * (crane_r - 1.7), c + math.sin(a2) * (crane_r - 1.7)
-        ox_, oz_ = math.cos(a2), math.sin(a2)
-        if abs(ox_) > abs(oz_):
-            face = "west" if ox_ > 0 else "east"
-            wx, wz = (1 if ox_ > 0 else -1), 0
-        else:
-            face = "north" if oz_ > 0 else "south"
-            wx, wz = 0, (1 if oz_ > 0 else -1)
-        ix, iz = int(lx), int(lz)
-        while b.g[ix + wx, 2, iz + wz] == 0:
-            ix, iz = ix + wx, iz + wz
-        b.ladders = getattr(b, "ladders", []) + [(ix, iz, face, ix + wx, iz + wz)]
-    # Grating levels round the steam generators (+8) inside the compartments.
-    gy8 = 8
-    for x in range(size):
-        for z in range(size):
-            dx, dz = x + 0.5 - c, z + 0.5 - c
-            rr = math.hypot(dx, dz)
-            if 8.5 < rr < crane_r - 0.6 and abs(x - cv) > 1 and abs(z - cv) > 1 and b.g[x, gy8, z] == 0:
-                b.g[x, gy8, z] = GRATE
-    for ix, iz, face, wx, wz in b.ladders:
-        for y in range(1, gy8 + 1):
-            b.box(wx, y, wz, wx, y, wz, CONCRETE)
-            b.g[ix, y, iz] = LADDER[face]
-    # Operating floor (+16).
-    for x in range(size):
-        for z in range(size):
-            if math.hypot(x + 0.5 - c, z + 0.5 - c) < inner - 0.2:
-                b.g[x, floor_y, z] = EPOXY
-    cav = 6
-    b.clear(cv - cav, floor_y, cv - cav, cv + cav, floor_y, cv + cav)
-    # The refuelling cavity's stainless-lined walls up to the floor; railing round it.
-    for y in range(floor_y - 3, floor_y + 1):
-        for x in range(cv - cav - 1, cv + cav + 2):
-            for z in (cv - cav - 1, cv + cav + 1):
-                b.g[x, y, z] = LINER
-        for z in range(cv - cav - 1, cv + cav + 2):
-            for x in (cv - cav - 1, cv + cav + 1):
-                b.g[x, y, z] = LINER
-    b.clear(cv - cav, floor_y, cv - cav, cv + cav, floor_y, cv + cav)
-    # Steam generator shafts: the operating floor open round each steam generator, railed.
-    span = 10
-    holes = [(cv - cav, cv - cav, cv + cav, cv + cav)]
-    for gx in (cv - span, cv + span):
-        for gz in (cv - span, cv + span):
-            b.clear(gx - 4, floor_y, gz - 4, gx + 4, floor_y, gz + 4)
-            holes.append((gx - 4, gz - 4, gx + 4, gz + 4))
-    b.clear(cv - 2, floor_y, cv - 12, cv + 2, floor_y, cv - 8)
-    holes.append((cv - 2, cv - 12, cv + 2, cv - 8))
-    # The pressurizer's compartment walls.
-    for y in range(1, 24):
-        b.box(cv - 3, y, cv - 13, cv + 3, y, cv - 13, CONCRETE)
-        b.box(cv - 3, y, cv - 13, cv - 3, y, cv - 8, CONCRETE)
-        b.box(cv + 3, y, cv - 13, cv + 3, y, cv - 8, CONCRETE)
-    b.clear(cv - 3, 1, cv - 10, cv - 3, 2, cv - 10)
-    # Refuelling machine rails on the cavity's side walls.
-    for z in range(cv - cav - 4, cv + cav + 5):
-        for x in (cv - cav - 1, cv + cav + 1):
-            # The rails extend beyond the cavity wall; carry those ends on steel beams too.
-            if b.g[x, floor_y, z] == 0:
-                b.g[x, floor_y, z] = LINER
-            b.g[x, floor_y + 1, z] = RAIL_NS
-    # The polar crane's ring girder (a concrete corbel round the liner), lights under it.
-    gy = 40
-    b.disc(c, c, inner, gy, gy + 1, CONCRETE, inner=inner - 2)
-    for k in range(24):
-        a = 2 * math.pi * k / 24
-        x, z = int(c + math.cos(a) * (inner - 1.5)), int(c + math.sin(a) * (inner - 1.5))
-        if b.g[x, gy - 1, z] == 0 and b.g[x, gy, z] != 0:
-            b.g[x, gy - 1, z] = LIGHT
-    # Ladders up the outside of the crane wall in the annulus, west and east, to the operating floor.
-    for x, face in ((int(c - crane_r) - 2, "west"), (int(c + crane_r) + 1, "east")):
-        for y in range(1, floor_y + 1):
-            # The rounded wall steps away here. A continuous pilaster supports every ladder rung.
-            dx, dz = P.DIRS[face]
-            if b.g[x - dx, y, cv + 3 - dz] == 0:
-                b.g[x - dx, y, cv + 3 - dz] = CONCRETE
-            b.g[x, y, cv + 3] = LADDER[face]
     # Personnel airlock (west): a steel box through the wall with a steel door at each end.
     b.box(0, 1, cv - 2, 4, 4, cv + 2, LINER)
     b.clear(1, 1, cv - 1, 3, 3, cv + 1)
-    b.p(0, 0, cv, LINER)  # The outer door is beyond the circular foundation; give it a sill.
     b.door(0, 1, cv, "east", double=False)
     b.door(4, 1, cv, "east", double=False)
     # Equipment hatch (south): a big steel plug in a concrete collar, warning lights.
     b.box(cv - 4, 1, size - 4, cv + 4, 10, size - 1, CONCRETE)
     b.box(cv - 3, 1, size - 1, cv + 3, 8, size - 1, LINER)
     b.box(cv - 3, 1, size - 4, cv + 3, 8, size - 2, 0)
-    # (Its amber beacons hang on the wall either side, outside the part: site decor, below.)
-    # Railing round every opening in the operating floor.
-    for x0, z0, x1, z1 in holes:
-        b.rail_round(x0, z0, x1, z1, floor_y + 1)
-    b.prop("polar_crane", cv - 20, gy + 2, cv - 2, "north")
-    b.prop("refueling_machine", cv - cav - 1, floor_y + 2, cv - cav, "north")
-    # Lights hung from the ring girder round the operating floor.
-    for k in range(24):
-        a = 2 * math.pi * k / 24
-        x, z = int(c + math.cos(a) * (inner - 1.5)), int(c + math.sin(a) * (inner - 1.5))
-        if b.g[x, gy - 1, z] == LIGHT:
-            for y in range(floor_y + 6, gy):
-                b.g[x, y, z] = CHAIN
-            b.g[x, floor_y + 5, z] = LIGHT
-    b.light_steps = [(4, None, floor_y + 6), (5, floor_y + 7, None)]
     # Amber beacons either side of the equipment hatch, on the face of its collar.
     for x in (cv - 4, cv + 4):
         s.decor[(ox + x, b.site_y(9), oz + size)] = beacon("amber", "south")
@@ -750,102 +695,34 @@ def containment(s, ox, oz):
 
 
 def place_primary(s, ox, oz):
-    """The working reactor equipment in the containment at (ox, oz): the four loops of tools/nuclear_plants.py."""
-    return P.four_loops(s, ox, oz, 25.5, 10, floor=-1)
+    """The working reactor equipment (the same unit as before: the vessel, four steam generators, four coolant pumps,
+    the pressurizer), hidden under the reactor building's loop floor (its look is the compiled site's): their anchors in
+    a row at y -3 north of the vessel's pit on a buried coolant pipe; the main steam from the first steam generator
+    along a buried line and up inside the containment's wall to the pipe bridge at y 21. Returns where the steam
+    leaves the wall (x, z): the bridge's line goes on east from there."""
+    y, zr = -3, 51
+    kinds = (["reactor_pressure_vessel"] + ["reactor_steam_generator"] * 4 + ["reactor_coolant_pump"] * 4 + ["pressurizer"])
+    for i, kind in enumerate(kinds):
+        x = 74 + 2 * i
+        P.HIDDEN.add((kind, x, y, zr))
+        s.equipment.append((kind, x, y, zr, "north"))
+    s.line(P.COOLANT, (74, y, zr + 1), (74 + 2 * (len(kinds) - 1), y, zr + 1))
+    # main steam: off the first steam generator's anchor (x 76), north, east under the ground, south under the
+    # containment to its east wall, up inside the wall (enclosed by it and the liner) and over to the bridge's line
+    s.line(P.STEAM, (76, y, zr - 2), (76, y, zr - 1))
+    s.line(P.STEAM, (77, y, zr - 2), (108, y, zr - 2))
+    s.line(P.STEAM, (108, y, zr - 1), (108, y, 64))
+    s.line(P.STEAM, (108, y + 1, 64), (108, 21, 64))
+    s.line(P.STEAM, (108, 21, 65), (108, 21, 65))
+    return 108, 65
 
 
 # ------------------------------------------------------------------------------------------------- turbine hall
 
 def turbine_hall(s, ox, oz):
-    """The turbine building, 100 x 44 and 36 tall.
-
-    The turbine-generator stands on its concrete pedestal at the operating floor (+12); under its low-pressure end
-    the condenser sits on its foundation in the pedestal's condenser bay (a door from the ground floor). The ground
-    floor has the feedwater heater trains, the condensate pumps and the feedwater pump, a pipe rack along the north
-    wall, and plant rooms along the south wall (switchgear, lube oil, workshop, turbine control). The laydown bay at
-    the west end is open to the crane, closed by a roller door; stairs at both ends; the overhead crane on its runway."""
-    W, D, H = 100, 44, 36
-    b = Building("pwr_turbine_hall", "Turbine Building", W, D, H, grounded=True)
-    b.shell_walls(CONCRETE, step=10)
-    for y in range(13, H + 1):
-        for x in range(1, W - 1):
-            if x % 10:
-                b.p(x, y, 0, CLADDING)
-                b.p(x, y, D - 1, CLADDING)
-        for z in range(1, D - 1):
-            if z % 10:
-                b.p(0, y, z, CLADDING)
-                b.p(W - 1, y, z, CLADDING)
-    b.windows(26, 32, "ns", step=10, glass=BLAST)
-    b.windows(4, 6, "s", step=10, skip=range(40, 99))
-    b.b(1, 0, 1, W - 2, 0, D - 2, EPOXY)
-    # Operating floor at +12 east of the laydown bay; railing along its edge over the bay.
-    b.b(15, 12, 1, W - 2, 12, D - 2, EPOXY)
-    for z in range(1, D - 1):
-        b.rail(15, 13, z, "west")
-    # The pedestal: a massive concrete table under the turbine with the condenser bay inside.
-    b.b(34, 1, 14, 87, 11, 28, CONCRETE_DARK)
-    b.c(44, 1, 15, 53, 11, 27)
-    b.b(46, 1, 16, 51, 6, 27, CONCRETE)  # the condenser's foundation
-    b.door(45, 1, 28, "north", double=True, label="pump_room")
-    # Column lines under the operating floor.
-    for x in range(20, W - 1, 10):
-        for z in (8, D - 9):
-            if b.get(x, 1, z) == 0:
-                b.b(x, 1, z, x, 11, z, COLUMN)
-    # Crane runway beams along both long walls.
-    for x in range(1, W - 1):
-        b.p(x, 30, 1, FRAME)
-        b.p(x, 30, D - 2, FRAME)
-    # The laydown bay's roller door (west end) and personnel doors.
-    for z in range(17, 27):
-        for y in range(1, 10):
-            b.p(0, y, z, roller("east"))
-    b.b(0, 10, 16, 0, 10, 27, CONCRETE_DARK)
-    entrance(b, 0, 31, "w", kind="steel")
-    entrance(b, W - 1, 6, "e", kind="steel")
-    # Plant rooms along the south wall on the ground floor.
-    b.wall_x(D - 12, 40, W - 2, 1, 11, CONCRETE)
-    for x in (55, 70, 85):
-        b.wall_z(x, D - 11, D - 2, 1, 11, CONCRETE)
-    for x, label in ((47, "switchgear_room"), (62, "lube_oil_room"), (77, "workshop"), (91, "turbine_control_room")):
-        b.door(x, 1, D - 12, "south", double=True, label=label)
-    b.prop("switchgear_lineup", 42, 1, D - 4, "south")
-    b.prop("switchgear_lineup", 44, 1, D - 9, "north")
-    b.prop("storage_tank", 57, 1, D - 7, "north")
-    b.prop("pump_skid", 64, 1, D - 6, "west")
-    for x in range(64, 69):
-        b.stack("pallet_rack_drums", x, 1, D - 2, "south", n=1)
-    for x in range(72, 84, 2):
-        b.stack("pallet_rack", x, 1, D - 2, "south", n=2)
-    for x in (88, 92):
-        b.desk(x, 1, D - 3, "south")
-    for x in range(87, 97):
-        b.stack("relay_cabinet", x, 1, D - 11, "north", n=2) if x not in (90, 91, 92) else None
-    # Stairwells at both ends, ground to the operating floor.
-    b.stairwell(1, 1, [0, 12], door_side="s")
-    for z in (3, 8, 13):
-        b.p(8, 4, z, LANTERN)
-    b.stairwell(W - 10, 13, [0, 12], door_side="s")
-    # Feedwater heater trains on the ground floor north of the pedestal, condensate pumps by the condenser bay.
-    for x0 in (18, 56):
-        for z in (2, 6, 10):
-            b.prop("feedwater_heater", x0, 1, z, "east")
-    for x in (30, 35):
-        b.prop("pump_skid", x, 1, 29, "north")
-    # The pipe rack along the north wall (pipes on brackets, two tiers).
-    for x in range(1, W - 1):
-        if b.get(x, 8, 1) == 0:
-            b.p(x, 8, 1, PIPE)
-        if b.get(x, 10, 1) == 0:
-            b.p(x, 10, 1, PIPE)
-    # Moisture separator reheaters on the operating floor beside the turbine, the overhead crane.
-    b.prop("moisture_separator_reheater", 36, 13, 6, "east")
-    b.prop("moisture_separator_reheater", 36, 13, 31, "east")
-    b.prop("overhead_crane", 9, 31, 2, "east")
-    b.hangers = []
-    s.add(b, ox, oz)
-    return b
+    """The turbine building (turbine hall part 1: tools/turbine_hall.py)."""
+    import turbine_hall as TH
+    return TH.turbine_hall(s, ox, oz)
 
 
 # ------------------------------------------------------------------------------------------------- control building
@@ -857,6 +734,14 @@ def wall_screen(b, name, x, y, z, facing):
     for r in range(2):
         for c in range(3):
             b.p(x + rx * c, y + r, z + rz * c, multi_state(name, facing, r * 3 + c))
+    screen_raceway(b, name, x + rx, y - 1, z + rz, facing)
+
+
+def screen_raceway(b, name, x, y, z, facing):
+    """Under a plant overview screen (round 34), where the wall below its middle is bare: the raceway bringing its power
+    down the wall to a receptacle over the floor."""
+    if name == "plant_map_screen" and b.get(x, y, z) == 0:
+        b.p(x, y, z, furniture("screen_raceway", facing))
 
 
 def dc_run(b, battery_ends, board, y, z, facing, tee=None):
@@ -915,10 +800,39 @@ BATTERY_ROOM_1B = [("exhaust_fan", 38, 3, 23, "east", "1B"), ("h2_monitor", 38, 
                    ("sign_no_smoking", 36, 2, 17, "south", None)]
 
 
+# Brought up to the detail standard (older rooms round 4: tools/battery_rooms.py): each string's disconnect switch on its
+# strut frame under the DC tray, its conduit pair up into the tray (string 1 the racks labelled STR 1, the northern line
+# in both rooms: nuclear/DcRoom.java onBus); the emergency light and the smoke detector; the PPE cabinet by the door,
+# the room's sign over it, the cell log; the acid neutralization sump by the eyewash, a floor drain set in the floor; the ceiling lights
+# vapor-tight fixtures (BATTERY_ROOMS).
+BATTERY_ROOM_1A += [("battery_disconnect", 9, 1, 4, "east", "1A-1"), ("battery_disconnect", 9, 1, 5, "east", "1A-2"),
+                    ("battery_disconnect_riser", 9, 3, 4, "east", None), ("battery_disconnect_riser", 9, 3, 5, "east", None),
+                    ("emergency_light", 1, 4, 7, "west", None), ("smoke_detector", 5, 5, 4, "north", None),
+                    ("battery_ppe_cabinet", 9, 2, 8, "south", None), ("sign_battery_1a", 9, 3, 8, "south", None),
+                    ("battery_log_board", 1, 2, 6, "west", None), ("battery_room_sump", 8, 1, 3, "north", None),
+                    ("restroom_floor_drain", 4, 0, 5, "north", None)]
+BATTERY_ROOM_1B += [("battery_disconnect", 32, 1, 21, "west", "1B-1"), ("battery_disconnect", 32, 1, 22, "west", "1B-2"),
+                    ("battery_disconnect_riser", 32, 3, 21, "west", None), ("battery_disconnect_riser", 32, 3, 22, "west", None),
+                    ("emergency_light", 38, 4, 27, "east", None), ("smoke_detector", 35, 5, 24, "north", None),
+                    ("battery_ppe_cabinet", 38, 2, 22, "east", None), ("sign_battery_1b", 38, 3, 22, "east", None),
+                    ("battery_log_board", 38, 2, 26, "east", None), ("battery_room_sump", 31, 1, 23, "north", None),
+                    ("restroom_floor_drain", 35, 0, 25, "north", None)]
+BATTERY_ROOMS = [(1, 1, 9, 8), (30, 19, 38, 28)]
+MULTI_FITTINGS = {"battery_disconnect_riser": 2}
+
+
 def battery_room_fittings(b, fittings):
     for name, x, y, z, facing, label in fittings:
         if label:
             b.panel(name, x, y, z, facing, 1, label)
+        elif name in MULTI_FITTINGS:
+            for row in range(MULTI_FITTINGS[name]):
+                assert b.get(x, y + row, z) == 0, (name, x, y + row, z)
+                b.p(x, y + row, z, multi_state(name, facing, row))
+        elif y == 0:
+            # A floor drain is set in the floor (a whole block with the grate in its top, as in the diesel rooms).
+            assert b.get(x, y, z) == EPOXY, (name, x, y, z)
+            b.p(x, y, z, furniture(name, facing))
         else:
             assert b.get(x, y, z) == 0, (name, x, y, z)
             b.furniture(name, x, y, z, facing)
@@ -928,7 +842,8 @@ def feeder_conduits(b, ax, ay, az, facing, upper):
     """A load centre's feeder conduits (round 25b; Justin: the conduits on top of the switchgear were "going nowhere"):
     from the hub over each in-use upper feeder's section (tools/control_boards.py LC_CONDUIT_*), one 4-inch conduit
     straight up under the ceiling, through the slab and up through the floor of the cable spreading room above, to its
-    lowest tray behind the run, where it turns in under the tray (plant_office2 feeder_conduit_*). ax, ay, az: the
+    power tray (the top tier: punch list #15) behind the run, where it turns in under the tray (plant_office2
+    feeder_conduit_*). ax, ay, az: the
     lineup's anchor (building coordinates, ay walked on); upper: the slab of the floor above (its floor is upper)."""
     import control_boards as CB
     fx, fz = P.DIRS[facing]
@@ -939,7 +854,7 @@ def feeder_conduits(b, ax, ay, az, facing, upper):
             continue
         lx, lz = 3 + k, int(CB.LC_CONDUIT_Z)
         x, z = ax + rx * lx + fx * lz, az + rz * lx + fz * lz
-        tray = next(y for y in range(upper + 1, upper + 6) if b.get(x, y, z + 1) and P.MATERIALS[int(b.get(x, y, z + 1))][0].startswith("jugcraft:cable_tray"))
+        tray = next(y for y in range(upper + 1, upper + 6) if b.get(x, y, z + 1) and P.MATERIALS[int(b.get(x, y, z + 1))][0].startswith("jugcraft:cable_tray_power"))
         column = [(ay + h, "feeder_conduit_base"), (upper - 2, "feeder_conduit_ceiling"), (upper + 1, "feeder_conduit_floor")]
         column += [(y, "feeder_conduit") for y in range(upper + 2, tray)] + [(tray, "feeder_conduit_tray")]
         column += [(y, "feeder_conduit") for y in range(ay + h + 1, upper - 2)]
@@ -992,15 +907,19 @@ def _tray_line(cells, facing, drops=(), pairs=(), walls=()):
 # wall drops over them, and each inverter's output conduit up from its top into a drop over the row.
 VITAL_PANELS_1A = [(19, 10, "east", "1A-1"), (19, 11, "east", "1A-2")]
 VITAL_PANELS_1B = [(19, 24, "west", "1B-1"), (19, 25, "west", "1B-2")]
+# The 125 VDC distribution panels (older rooms round 3; Justin: "DC distribution panels"), where the relay cabinets
+# stood on the same wall, built as the vital panels (their conduits up the wall into the tray's wall drops).
+DC_PANELS_1A = [(19, 4, "east", "1A-1"), (19, 5, "east", "1A-2")]
+DC_PANELS_1B = [(19, 22, "west", "1B-1"), (19, 23, "west", "1B-2")]
 DC_TRAY_1A = (_tray_line([(x, 1) for x in range(12, 19)], "north", drops={(12, 1), (13, 1), (15, 1), (16, 1), (18, 1)}, pairs={(14, 1), (17, 1)})
               + [(19, 1, "ladder_tray_bend_drop", "north")]
-              + _tray_line([(19, z) for z in range(2, 13)], "east", walls={(x, z): f for x, z, f, _ in VITAL_PANELS_1A})
+              + _tray_line([(19, z) for z in range(2, 13)], "east", walls={(x, z): f for x, z, f, _ in VITAL_PANELS_1A + DC_PANELS_1A})
               + [(19, 13, "ladder_tray_bend", "east")]
               + _tray_line([(x, 13) for x in range(18, 13, -1)], "north", pairs={(16, 13)}))
 DC_TRAY_1B = (_tray_line([(x, 28) for x in range(27, 19, -1)], "north", drops={(27, 28), (26, 28), (24, 28), (23, 28), (21, 28), (20, 28)},
                          pairs={(25, 28), (22, 28)})
               + [(19, 28, "ladder_tray_bend", "south")]
-              + _tray_line([(19, z) for z in range(27, 19, -1)], "east", walls={(x, z): f for x, z, f, _ in VITAL_PANELS_1B})
+              + _tray_line([(19, z) for z in range(27, 19, -1)], "east", walls={(x, z): f for x, z, f, _ in VITAL_PANELS_1B + DC_PANELS_1B})
               + [(19, 19, "ladder_tray_bend", "west")]
               + _tray_line([(x, 19) for x in range(20, 28)], "north", pairs={(25, 19)}))
 # The feeders' conduits under the drops: (x, z, from y, to y, piece, facing): from the top of every cabinet in the row
@@ -1011,10 +930,49 @@ TRAY_CONDUITS = ([(x, 1, 3, 4, "feeder_conduit", "north") for x in (12, 13, 15, 
                  + [(16, 13, 4, 4, "conduit_pair", "north")]
                  + [(x, 28, 3, 4, "feeder_conduit", "north") for x in (27, 26, 24, 23, 21, 20)] + [(x, 28, 3, 4, "conduit_pair_run", "north") for x in (25, 22)]
                  + [(25, 19, 4, 4, "conduit_pair", "north")]
-                 + [(x, z, 3, 4, "wall_conduit", f) for x, z, f, _ in VITAL_PANELS_1A + VITAL_PANELS_1B])
+                 + [(x, z, 3, 4, "wall_conduit", f) for x, z, f, _ in VITAL_PANELS_1A + VITAL_PANELS_1B + DC_PANELS_1A + DC_PANELS_1B])
 # Each room's DC ground detector and battery monitor (round 26, 8f; Justin: "End of the equipment row"): beside the
 # row's last transformer (in 1A in the corner, under the tray's bend), (x, z, facing, label).
 GROUND_DETECTORS = [(19, 1, "north", "1A"), (20, 28, "south", "1B")]
+
+
+# Each DC room's fittings (older rooms round 3; Justin: "Lights and safety", "One-line and signs", "Desk, phone,
+# drawings", "Mats and work gear"): the log desk (phone, logbook, the live laptop) against the wall opposite the door's
+# side with the framed one-line over it, the printer and the drawing rack beside it, the battery service board by the
+# battery room's way, the train's sign and the DANGER sign at the row's end, the test cart, rubber mats along the
+# switchboard's row and the MCC's front, two battery emergency lights on the desk's wall, two smoke detectors.
+DC_FITTINGS_1A = {"wall": "west", "x": 11, "desk": [10, 9, 8], "printer": 11, "rack": 12, "board": [4, 3], "sign": 2,
+                  "cart": (18, 7, "east"), "mats": [(x, 2) for x in range(11, 19)] + [(x, 12) for x in range(14, 18)],
+                  "lights": [3, 11], "smoke": [(14, 5), (14, 10)], "train": "a"}
+DC_FITTINGS_1B = {"wall": "east", "x": 28, "desk": [22, 23, 24], "printer": 21, "rack": 20, "board": [25, 26], "sign": 27,
+                  "cart": (20, 20, "west"), "mats": [(x, 27) for x in range(20, 29)] + [(x, 20) for x in range(24, 28)],
+                  "lights": [21, 26], "smoke": [(24, 22), (24, 25)], "train": "b"}
+
+
+def dc_room_fittings(b, fit):
+    w, x, y = fit["wall"], fit["x"], 1
+
+    def put(xx, yy, z, m):
+        assert b.get(xx, yy, z) == 0, ("DC room", xx, yy, z, P.MATERIALS[int(b.get(xx, yy, z))][0])
+        b.p(xx, yy, z, m)
+    for k, z in enumerate(fit["desk"]):
+        put(x, y, z, variant_state("sgr_log_desk", w, k) if k < 2 else multi_state("dc_desk_laptop", w, 0))
+        for row in range(2):
+            put(x, y + 1 + row, z, multi_state("dc_one_line", w, row * 3 + k))
+    put(x, y, fit["printer"], furniture("soe_printer", w))
+    put(x, y, fit["rack"], furniture("drawing_rack", w))
+    for c, z in enumerate(fit["board"]):
+        put(x, y + 1, z, multi_state("battery_service_board", w, c))
+    put(x, y + 2, fit["sign"], furniture(f"sign_dc_train_{fit['train']}", w))
+    put(x, y + 1, fit["sign"], furniture("sign_dc_danger", w))
+    cx, cz, cf = fit["cart"]
+    put(cx, y, cz, furniture("battery_test_cart", cf))
+    for mx, mz in fit["mats"]:
+        put(mx, y, mz, MAT)
+    for z in fit["lights"]:
+        b.furniture("emergency_light", x, 4, z, w)
+    for sx, sz in fit["smoke"]:
+        put(sx, TRAY_Y, sz, furniture("smoke_detector", "north"))
 
 
 def dc_room_tray(b, tray):
@@ -1039,10 +997,11 @@ def control_building_mcc_runs(s, ox, oz, sink=1):
 
 
 def control_building_feed(s, ox, oz):
-    """The buried feed from the main transformer to the control building's load centres (round 25): down from under
-    the transformer, west two blocks under the grass to the building, then under the building a block deeper (clear of
-    the charger runs in its slab) to below each load centre's riser."""
-    run = [(230, 0, 59), (230, -1, 59)] + [(x, -2, 59) for x in range(158, 231)] + [(158, -2, z) for z in range(60, oz + 2)]
+    """The buried feed from the unit auxiliary transformers to the control building's load centres (round 25; since the
+    transformer yard build, from under UAT-1A's 4160 V bus duct where it goes down into the ground, the yard's house
+    feed: tools/yard_sites.py): west two blocks under the grass to the building, then under the building a block deeper
+    (clear of the charger runs in its slab) to below each load centre's riser."""
+    run = [(240, -1, 59)] + [(x, -2, 59) for x in range(158, 241)] + [(158, -2, z) for z in range(60, oz + 2)]
     rx, rz = ox + SLAB_RISERS[1][0], oz + SLAB_RISERS[1][1]
     run += [(158, -3, oz + 1)] + [(x, -3, oz + 1) for x in range(159, rx + 1)] + [(rx, -3, z) for z in range(oz + 2, rz + 1)]
     run += [(rx, -2, rz)]
@@ -1050,6 +1009,58 @@ def control_building_feed(s, ox, oz):
     for cell in run:
         s.decor[cell] = CABLE
     return run
+
+
+# The entrance hall's fittings (older rooms round 6; tools/entrance_hall.py): the hand geometry reader at the entry lane; the
+# VITAL AREA and prohibited items signs over the vestibule's inner doors; inside the gates the evacuation plan and the
+# master clock on the corridor wall, the AED; smoke detectors and emergency lights.
+ENTRANCE_SMOKE = [(4, 23), (10, 20), (5, 27)]
+
+
+# The remote shutdown room's smoke detector (older rooms round 7).
+RSR_SMOKE = [(5, 12)]
+
+
+def remote_shutdown_fittings(b):
+    """The remote shutdown room's fittings (older rooms round 7; tools/rsr_room.py): along the south wall, west of the
+    door, the AOP procedure rack and an SCBA cabinet (the control room's); east of it the transfer key cabinet by the
+    door, the communications station and the radio charging rack; the master clock over the door; the room's sign on
+    the west wall; a smoke detector."""
+    import cr_room as CR
+
+    def put(x, y, z, m):
+        assert b.get(x, y, z) == 0, ("remote shutdown", x, y, z, P.MATERIALS[int(b.get(x, y, z))][0])
+        b.p(x, y, z, m)
+    # (x 2 left clear: the extinguisher on the west wall faces along it.)
+    b.panel("cr_procedure_rack", 3, 1, 13, "south", 1, label="AOP")
+    for row in range(2):
+        put(4, 1 + row, 13, multi_state("cr_scba_cabinet", "south", row))
+    put(6, 2, 13, furniture("rsr_key_cabinet", "south"))
+    put(7, 2, 13, furniture("rsr_phone_station", "south"))
+    b.panel("ops_radio_rack", 8, 2, 13, "south", 1)
+    b.panel("ops_wall_clock", 5, 3, 13, "south", 1)
+    put(1, 3, 11, furniture("sign_rsr_area", "west"))
+    for x, z in RSR_SMOKE:
+        put(x, 5, z, furniture("smoke_detector", "north"))
+    assert CR.PR_LABELS.index("AOP") >= 0
+
+
+def entrance_fittings(b):
+    def put(x, y, z, m):
+        assert b.get(x, y, z) == 0, ("entrance", x, y, z, P.MATERIALS[int(b.get(x, y, z))][0])
+        b.p(x, y, z, m)
+    put(4, 1, 23, furniture("ac_hand_reader", "west"))
+    put(4, 4, 26, furniture("sign_vital_area", "north"))
+    put(7, 4, 26, furniture("sign_prohibited", "north"))
+    rx, rz = P.DIRS[P.CLOCKWISE["north"]]
+    for c in range(2):
+        put(2 + rx * c, 2, 19, multi_state("ac_evac_plan", "north", c))
+    b.panel("ops_wall_clock", 9, 3, 19, "north", 1)
+    put(12, 2, 20, furniture("aed_cabinet", "east"))
+    for x, z in ENTRANCE_SMOKE:
+        put(x, 5, z, furniture("smoke_detector", "north"))
+    b.furniture("emergency_light", 12, 4, 22, "east")
+    b.furniture("emergency_light", 1, 4, 24, "west")
 
 
 def control_building(s, ox, oz):
@@ -1102,11 +1113,11 @@ def control_building(s, ox, oz):
     ground_floor(b, W, D)
     first_floor(b, W, D, L1)
     console = second_floor(b, W, D, L2)
+    spreading_room_slab(b, L2)
     top_floor(b, W, D, L3)
-    # The switchgear room's load centres' feeder conduits, up into the cable spreading room's trays (round 25b).
-    for kind, ax, ay, az, facing in list(b.props):
-        if kind == "switchgear_lineup" and (ax, az) in ((22, 2), (29, 9)):
-            feeder_conduits(b, ax, ay - b.base, az, facing, L1)
+    # The switchgear room's fit-out (older rooms round 1): the load centres' trays and their way up into the cable
+    # spreading room, the cooling, the handling gear, the log desk, the signs.
+    switchgear_room(b, L1)
     # The corridors' lights (the ceiling grid misses them), and the entrance hall's.
     for x in range(3, W - 1, 4):
         b.p(x, L1 - 2, 16, LIGHT)
@@ -1141,13 +1152,13 @@ def ground_floor(b, W, D):
 
     # ---- Battery Room 1A (x 1..9, z 1..8): the station battery's two racks end to end along the north wall, their
     # cables up and along the wall under the ceiling, through into the DC Equipment Room; the hydrogen exhaust louvres.
-    b.panel("station_battery", 1, 1, 1, "north", 4)
-    b.panel("station_battery", 5, 1, 1, "north", 4)
+    b.panel("station_battery", 1, 1, 1, "north", 4, "1A STR 1 CELLS 31-60")
+    b.panel("station_battery", 5, 1, 1, "north", 4, "1A STR 1 CELLS 1-30")
     dc_run(b, [4, 8], 11, 5, 1, "north", tee=(9, "north"))
     # Its second string (round 26, #9; Justin: "Second string in parallel"): two more racks along the south wall, their
     # cables up into a tray along it, round the corner and along the east wall into the first string's run.
-    b.panel("station_battery", 8, 1, 8, "south", 4)
-    b.panel("station_battery", 4, 1, 8, "south", 4)
+    b.panel("station_battery", 8, 1, 8, "south", 4, "1A STR 2 CELLS 1-30")
+    b.panel("station_battery", 4, 1, 8, "south", 4, "1A STR 2 CELLS 31-60")
     dc_branch(b, [5, 1], 5, 8, "south", (9, "east"), [(9, z) for z in range(2, 8)], "east")
     b.door(10, 1, 6, "west", label="battery_room_1a")
     b.furniture("fire_extinguisher", 1, 2, 7, "west")
@@ -1161,10 +1172,13 @@ def ground_floor(b, W, D):
         b.p(x, 1, 11, MAT)
     for x in (3, 6):
         b.furniture("emergency_light", x, 4, 10, "north")
-    b.row(("operator_console", 3), 9, 1, 10, "east", tops=(2, 3, 0))
+    # (Older rooms round 7, tools/rsr_room.py: the operator console became the remote shutdown station, its screens
+    # live; the room's fittings in remote_shutdown_fittings.)
+    b.panel("rsr_desk", 9, 1, 10, "east", 3)
     b.p(8, 1, 11, furniture("operator_chair", "east"))
     b.door(5, 1, 14, "north", label="remote_shutdown")
     b.furniture("fire_extinguisher", 1, 2, 13, "west")
+    remote_shutdown_fittings(b)
     # ---- DC Equipment Room 1A (x 11..19, z 1..13): along the north wall the 125 VDC switchboard (the battery's cables
     # come down into it), the chargers and the vital inverters, a charger never beside a charger (their feeds in the
     # slab would join); along the south wall the 480 V motor control centre feeding the chargers (round 26, 8a; its
@@ -1177,28 +1191,29 @@ def ground_floor(b, W, D):
         b.panel("station_charger", x, 1, 1, "north", 1, label)
         b.panel("vital_inverter", x + 1, 1, 1, "north", 1, label)
         b.panel("reg_transformer", x + 2, 1, 1, "north", 1, label)
-    for z in (4, 5):
-        b.stack("relay_cabinet", 19, 1, z, "east", n=2)
     b.prop("mcc_lineup", 14, 1, 13, "south")
     for x, z, facing, label in VITAL_PANELS_1A:
         b.panel("vital_panel", x, 1, z, facing, 1, label)
+    for x, z, facing, label in DC_PANELS_1A:
+        b.panel("dc_dist_panel", x, 1, z, facing, 1, label)
     x, z, facing, label = GROUND_DETECTORS[0]
     b.panel("dc_ground_detector", x, 1, z, facing, 1, label)
     dc_room_tray(b, DC_TRAY_1A)
     b.door(11, 1, 14, "north", label="dc_equipment_1a")
     b.furniture("fire_extinguisher", 19, 2, 8, "east")
+    dc_room_fittings(b, DC_FITTINGS_1A)
     # ---- Switchgear Room (x 21..29, z 1..13; round 25): the 480 V load centres of both trains, face to face across the
     # aisle, walked round at the west end (Justin: "realistic switchgear ... less simple and cartoony", and it must
     # hold charge and work): rubber mats along their fronts, the battery emergency lights over the aisle, an
     # extinguisher (no locker: Justin, round 25b). Their feeder conduits go up into the cable spreading room
     # (feeder_conduits, after the floors are in).
-    b.prop("switchgear_lineup", 22, 1, 1, "north")
-    b.prop("switchgear_lineup", 22, 1, 9, "south")
+    b.prop("switchgear_lineup", 22, 1, 1, "north", variant=0)
+    b.prop("switchgear_lineup", 22, 1, 9, "south", variant=1)
     for x in range(22, 30):
         b.p(x, 1, 3, MAT)
         b.p(x, 1, 8, MAT)
     b.furniture("emergency_light", 21, 4, 4, "west")
-    b.furniture("emergency_light", 29, 4, 6, "east")
+    b.furniture("emergency_light", 29, 4, 4, "east")      # (north of the fan coil unit's duct, its conduit clear)
     b.door(26, 1, 14, "north", double=True, label="switchgear_room")
     b.furniture("fire_extinguisher", 21, 2, 6, "west")
     # Their supply comes up through the slab into the back of each transformer section (from the main transformer,
@@ -1227,11 +1242,11 @@ def ground_floor(b, W, D):
         for x in range(2, 10):
             b.p(x, y, 25, FGLASS["north"] if y <= 3 else PAINTED)
     b.door(6, 1, 25, "north", kind="glass", double=True)
-    # The security counter in the hall (z 23..25), facing the way in, the officers' chairs behind it clear of the
-    # wall; the camera desk inside the gates.
-    b.row(("reception_desk", 3), 10, 1, 25, "west", seat="operator_chair")
-    b.furniture("cctv_desk", 12, 1, 20, "east")
-    b.p(11, 1, 20, furniture("operator_chair", "east"))
+    # The security post in the hall (z 23..25; older rooms round 6, tools/entrance_hall.py: its bullet-resisting counter and
+    # glass to the hall, the officer's desk behind with the security computer's screens, the gate status panel and
+    # the duress button), the officer's chair behind it clear of the wall.
+    b.panel("ac_station", 10, 1, 25, "west", 3)
+    b.p(11, 1, 24, furniture("operator_chair", "west"))
     # The speed gates across the hall (Justin: "the ones with the two doors ... it'll just open one way"): the entry
     # lane on the west, opening for whoever walks up from the hall, the exit lane beside it opening for whoever comes
     # out; three pedestals, the middle one shared, each lane's doors sliding back into their own slots. The door line
@@ -1254,6 +1269,7 @@ def ground_floor(b, W, D):
     b.plant(1, 1, 22)
     b.furniture("water_cooler", 1, 1, 23, "west")
     b.furniture("fire_extinguisher", 12, 2, 25, "east")
+    entrance_fittings(b)
     # ---- Locker room (x 14..17): lockers along both walls, a bench down the middle.
     for z in range(20, D - 1):
         b.stack("locker", 17, 1, z, "east", n=2)
@@ -1273,21 +1289,24 @@ def ground_floor(b, W, D):
         b.panel("vital_panel", x, 1, z, facing, 1, label)
     x, z, facing, label = GROUND_DETECTORS[1]
     b.panel("dc_ground_detector", x, 1, z, facing, 1, label)
+    for x, z, facing, label in DC_PANELS_1B:
+        b.panel("dc_dist_panel", x, 1, z, facing, 1, label)
     dc_room_tray(b, DC_TRAY_1B)
-    for z in (22, 23):
-        b.stack("relay_cabinet", 19, 1, z, "west", n=2)
     b.door(22, 1, 18, "south", double=True, label="dc_equipment_1b")
     b.furniture("fire_extinguisher", 19, 2, 26, "west")
-    b.panel("station_battery", 37, 1, D - 2, "south", 4)
-    b.panel("station_battery", 33, 1, D - 2, "south", 4)
+    dc_room_fittings(b, DC_FITTINGS_1B)
+    b.panel("station_battery", 37, 1, D - 2, "south", 4, "1B STR 2 CELLS 1-30")
+    b.panel("station_battery", 33, 1, D - 2, "south", 4, "1B STR 2 CELLS 31-60")
     dc_run(b, [34, 30], 28, 5, D - 2, "south", tee=(32, "south"))
     # Its second string (round 26, #9) along the north wall; the door moved to the room's east end to make room for it.
-    b.panel("station_battery", 30, 1, 19, "north", 4)
-    b.panel("station_battery", 34, 1, 19, "north", 4)
+    b.panel("station_battery", 30, 1, 19, "north", 4, "1B STR 1 CELLS 31-60")
+    b.panel("station_battery", 34, 1, 19, "north", 4, "1B STR 1 CELLS 1-30")
     dc_branch(b, [33, 37], 5, 19, "north", (32, "west"), [(32, z) for z in range(20, D - 2)], "west")
     b.door(W - 2, 1, 18, "south", label="battery_room_1b")
     b.furniture("fire_extinguisher", W - 2, 2, 21, "east")
     battery_room_fittings(b, BATTERY_ROOM_1B)
+    # (Older rooms round 4: the battery rooms lit by vapor-tight fixtures where the ceiling grid puts its lights.)
+    b.light_swap += [(x0, 1, z0, x1, 6, z1, furniture("vapor_tight_light", "north")) for x0, z0, x1, z1 in BATTERY_ROOMS]
 
 
 # The relay room (round 26, #10; Justin: "Real cabinet types", "Unique labels", "Overhead trays and cable entry", "Room
@@ -1348,7 +1367,8 @@ def relay_room(b, y0, y1):
     # end a tee into row D's run.
     x = RELAY_HEADER_X
     last = max(z for z, _, _ in RELAY_ROWS.values())
-    b.p(x, tray, 11, furniture("control_tray_tee", "north"))
+    # (The tee itself is the spreading room's: Train A's top tray there, spreading_room CSR_RELAY_TEE.)
+    assert P.MATERIALS[int(b.get(x, tray, 11))][0].startswith("jugcraft:cable_tray_control_tee"), "the relay header's tee"
     for z in range(12, last):
         if b.get(x, tray, z) and z not in (14, 18):
             continue
@@ -1374,6 +1394,254 @@ def relay_room(b, y0, y1):
     b.furniture("fire_extinguisher", 18, y0 + 1, 20, "east")
 
 
+# The cable spreading room (punch list #15; Justin: "Full cable runs", "Colour-coded, separated", "Working sprinklers";
+# tools/spreading_room.py): x 1..29, z 1..13 of the first floor (walked at y0), under the control room's boards (the
+# slab over it is the control room's floor). Four rows of trays along x, each three tiers (instrument, control, power
+# up from y0 + 2), in three areas: Train A (x 1..9), non-safety (11..19), Train B (21..29), the gaps between them at
+# x 10 and 20. Bundles go up out of the trays into the boards over the room: (row, x, tier, way), way "s" or "n" out
+# over the tray's rail into the next block that side and up, "up" straight up out of the top tier. Along the north
+# wall (row 2) the boards' whole length (control bundles at even x, power at odd x), but the safety systems board's
+# Train B half (x 5..7), whose cables come from Train B's area in the wrapped raceway; the electrical board (x 2..3)
+# and the radiation board (x 28..29) from rows 5 and 8; the consoles (rows 8 and 11) power from the top tier.
+CSR_ROWS = (2, 5, 8, 11)
+CSR_TIERS = (("instr", 2), ("control", 3), ("power", 4))
+CSR_ZONES = (("a", 1, 9), ("n", 11, 19), ("b", 21, 29))
+CSR_GAPS = (10, 20)
+CSR_DROPS = ([(2, x, "control" if x % 2 == 0 else "power", "s" if x % 2 == 0 else "up") for x in range(2, 29) if x not in (5, 6, 7, 10, 20)]
+             + [(5, 2, "control", "n"), (5, 3, "control", "s"), (5, 2, "power", "up"), (5, 29, "control", "n"), (5, 28, "control", "s"),
+                (5, 29, "power", "up"), (8, 2, "control", "n"), (8, 3, "control", "s"), (8, 3, "power", "up"), (8, 29, "control", "n"),
+                (8, 28, "control", "s"), (8, 28, "power", "up")]
+             + [(8, x, "power", "up") for x in (9, 11, 19, 21)] + [(11, x, "power", "up") for x in (14, 16)]
+             + [(2, 21, "instr", "s")])                      # Train B's wrapped raceway out of its instrument tray
+CSR_WRAP = (21, 5, (5, 6, 7))                                # its run along z 3 (east end, west end, its rises)
+CSR_RISERS = (6, 12, 18, 24)                                 # up the north wall out of the floor into row 2's top tier
+CSR_RELAY_TEE = (8, 11)                                      # the relay room's header out of Train A's top tray (control)
+CSR_SPRINKLER_X = 13                                         # the riser by the door, the cross main north from it
+CSR_BRANCHES = {4: (3, 28), 7: (3, 28), 10: (1, 29), 13: (1, 29)}   # the branch lines along x (z: west end, east end)
+
+
+def csr_train(x):
+    return next(t for t, x0, x1 in CSR_ZONES if x0 <= x <= x1)
+
+
+def spreading_room(b, y0, y1):
+    """The cable spreading room's fit-out (CSR_* above): the trays, their hangers and tags, the gaps' barriers; the
+    bundles up into the boards; the risers; Train B's fire-wrapped raceway; the pre-action sprinkler system (the valve
+    station on the riser by the door, the releasing panel, the pull station, the cross main and the branch lines); the
+    lights, smoke and heat detectors on the slab; the areas' signs."""
+    import spreading_room as SR
+    top = y1 + 1                       # under the slab: the old suspended ceiling is gone
+    b.c(1, top, 1, 29, top, 13)
+
+    def put(x, y, z, m):
+        assert b.get(x, y, z) == 0, ("spreading room", x, y, z, P.MATERIALS[int(b.get(x, y, z))][0])
+        b.p(x, y, z, m)
+
+    tv = lambda t: SR.TRAINS.index(t)
+    drops = {(row, x, tier): way for row, x, tier, way in CSR_DROPS}
+    ups = {(row, x) for row, x, tier, way in CSR_DROPS if way == "up"}
+    for row in CSR_ROWS:
+        # The trapezes about every three blocks in each area, off the columns a bundle goes straight up in (its sleeve
+        # is where the rods would go) and the sprinkler main's.
+        hangers = set()
+        for t, x0, x1 in CSR_ZONES:
+            for x in (x0 + 1, x0 + 4, x0 + 7):
+                for c in (x, x - 1, x + 1):
+                    if x0 <= c <= x1 and (row, c) not in ups and c != CSR_SPRINKLER_X and (row, c) != (CSR_RELAY_TEE[1], CSR_RELAY_TEE[0]):
+                        hangers.add(c)
+                        break
+        for t, x0, x1 in CSR_ZONES:
+            for x in range(x0, x1 + 1):
+                h = 3 if x in hangers else 0
+                for tier, k in CSR_TIERS:
+                    y = y0 + k
+                    kind = "control" if (row == CSR_RELAY_TEE[1] and t == "a" and tier == "power") else tier
+                    if (row, x) == (CSR_RELAY_TEE[1], CSR_RELAY_TEE[0]) and tier == "power":
+                        put(x, y, row, furniture("cable_tray_control_tee", "north"))
+                        continue
+                    way = drops.get((row, x, tier))
+                    if way == "up":
+                        put(x, y, row, variant_state("cable_tray_power_up", "north", tv(t)))
+                    elif way:
+                        put(x, y, row, variant_state(f"cable_tray_{kind}_drop", "north" if way == "s" else "south", tv(t) + h))
+                    else:
+                        put(x, y, row, variant_state(f"cable_tray_{kind}", "north", tv(t) + h))
+                if h:
+                    put(x, top, row, furniture("cable_tray_rods", "north"))
+        for x in CSR_GAPS:
+            for tier, k in CSR_TIERS:
+                put(x, y0 + k, row, variant_state("cable_tray_gap", "north", 1 if tier == "instr" else 0))
+    # The bundles: out over the rail, the elbow up, on up to the sleeve in the slab (or straight up out of the top tier).
+    for (row, x, tier), way in drops.items():
+        t = csr_train(x)
+        y = y0 + dict(CSR_TIERS)[tier]
+        if way == "up":
+            put(x, top, row, variant_state("cable_bundle_sleeve", "north", tv(t)))
+            continue
+        if (row, x, tier) == (2, CSR_WRAP[0], "instr"):
+            continue
+        z = row + (1 if way == "s" else -1)
+        put(x, y, z, variant_state("cable_bundle_elbow", "north" if way == "s" else "south", tv(t)))
+        for k in range(y + 1, top):
+            put(x, k, z, variant_state("cable_bundle", "north", tv(t)))
+        put(x, top, z, variant_state("cable_bundle_sleeve", "north", tv(t)))
+    # Train B's raceway to the safety systems board's Train B half, through the other areas wrapped (along z 3 at the
+    # instrument tier's height), its wrapped rises up into the board.
+    east, west, rises = CSR_WRAP
+    wy = y0 + dict(CSR_TIERS)["instr"]
+    put(east, wy, 3, furniture("fire_wrap_start", "north"))
+    for x in range(west, east):
+        piece = "fire_wrap_up" if x == west else "fire_wrap_tee_up" if x in rises else "fire_wrap"
+        put(x, wy, 3, furniture(piece, "north"))
+    for x in rises:
+        for k in range(wy + 1, top):
+            put(x, k, 3, furniture("fire_wrap_rise", "north"))
+        put(x, top, 3, furniture("fire_wrap_sleeve", "north"))
+    # The risers up the north wall out of the floor (from the switchgear and DC rooms under it) into row 2's top tier.
+    for x in CSR_RISERS:
+        t = tv(csr_train(x))
+        put(x, y0, 1, variant_state("cable_tray_riser_floor", "north", t))
+        for k in range(y0 + 1, y0 + 4):
+            put(x, k, 1, variant_state("cable_tray_riser", "north", t))
+        put(x, y0 + 4, 1, variant_state("cable_tray_riser_top", "north", t))
+    # The pre-action sprinkler system: the valve station on its riser by the door (on the south wall), the releasing
+    # panel beside it, the pull station on the door's other side; the riser up to the slab, the cross main north from
+    # it, the branch lines along x (a pendent head every third block, the last at each end).
+    sx = CSR_SPRINKLER_X
+    b.panel(SR.VALVE, sx, y0, 13, "south", 1)
+    b.panel(SR.RELEASE, sx - 1, y0, 13, "south", 1)
+    put(16, y0 + 1, 13, furniture("fire_pull_station", "south"))
+    put(sx - 2, y0 + 1, 13, furniture("sign_csr_preaction", "south"))
+    for k in range(y0 + 2, top):
+        put(sx, k, 13, furniture("sprinkler_riser", "north"))
+    put(sx, top, 13, furniture("sprinkler_riser_top", "north"))
+    north = min(CSR_BRANCHES)
+    for z in range(north, 13):
+        piece = "sprinkler_main_end" if z == north else "sprinkler_main_cross" if z in CSR_BRANCHES else "sprinkler_main"
+        put(sx, top, z, furniture(piece, "north"))
+    for z, (xw, xe) in CSR_BRANCHES.items():
+        for x in range(xw, xe + 1):
+            if x == sx:
+                continue
+            if x in (xw, xe):
+                piece, f = "sprinkler_pipe_end", "north" if x == xe else "south"
+            else:
+                piece, f = ("sprinkler_pipe_head" if (x - sx) % 3 == 0 else "sprinkler_pipe"), "north"
+            put(x, top, z, furniture(piece, f))
+    # The lights on the slab over the aisles; the smoke and heat detectors between them.
+    for z, xs in ((3, (3, 9, 15, 21, 27)), (6, (4, 8, 12, 16, 20, 24, 27)), (9, (4, 8, 12, 16, 20, 24, 27)), (12, (4, 8, 12, 16, 20, 24, 28))):
+        for x in xs:
+            put(x, top, z, LIGHT)
+    for z, xs in ((6, (6, 14, 22)), (12, (6, 14, 22))):
+        for x in xs:
+            put(x, top, z, furniture("smoke_detector", "north"))
+    for z, xs in ((3, (11, 17, 25)), (9, (6, 14, 22))):
+        for x in xs:
+            put(x, top, z, furniture("heat_detector", "north"))
+    # The areas' signs, on both long walls at eye level.
+    for (x, z, f), t in zip(((3, 1, "north"), (15, 1, "north"), (21, 1, "north"), (4, 13, "south"), (18, 13, "south"), (26, 13, "south")),
+                            ("a", "n", "b", "a", "n", "b")):
+        put(x, y0 + 1, z, furniture(f"sign_csr_train_{t}", f))
+
+
+# The switchgear room (older rooms round 1, tools/switchgear_room.py; Justin: "Real 480 V switchgear", "Overhead power
+# tray", "One-line and signs", "Breaker handling gear", "Lights, detectors, cooling", "Log desk"). Building
+# coordinates: the room x 21..29, z 1..13 on the ground floor (y 1 walked on, the ceiling at y 6); LC 1A (Train A)
+# along the north wall (x 22..29, z 1..2, its front south), LC 1B (Train B) across the aisle (z 9..10, its front north).
+SGR_TRAY_Y = 5                                                # the trays and the duct under the ceiling
+SGR_TRAYS = {"a": (1, (28, 27, 26, 25, 24, 23), {25, 26, 27, 28}, {28, 25}),       # z, the run from its east end, drops, hangers
+             "b": (10, (26, 25, 24, 23), {23, 24, 25, 26}, {26, 23})}                # (hangers only at drops: single tier)
+SGR_RISE_X = 22                                               # both runs' ends: up through the ceiling
+SGR_WRAP_X = 7                                                # LC 1A's wrapped run west to Train A's row 2 power tray
+SGR_LIGHTS = [(23, 9), (27, 9), (23, 12), (26, 12)]           # (the ceiling grid lights the rest)
+SGR_SMOKE = [(24, 7), (25, 12), (25, 3)]
+SGR_FCU = (28, 12)                                            # the fan coil unit's west half (its discharge north)
+SGR_DUCT_X, SGR_DUCT_Z = 28, 5                                # the supply duct north from it, then west along the aisle
+SGR_REGISTERS = (26, 23)
+SGR_DANGER_X = 23                                             # the DANGER sign on the corridor wall, west of the doors
+
+
+def switchgear_room(b, L1):
+    """The switchgear room's fit-out (SGR_* above) and its trays' way up through the cable spreading room (L1 its
+    floor slab: the spreading room walked on at L1 + 1)."""
+    y, ty, c0 = 1, SGR_TRAY_Y, L1 + 1
+
+    def put(x, yy, z, m):
+        assert b.get(x, yy, z) == 0, ("switchgear room", x, yy, z, P.MATERIALS[int(b.get(x, yy, z))][0])
+        b.p(x, yy, z, m)
+    # The trays over each lineup's back (variant: the train, + 3 with a hanger), a drop down into each feeder
+    # section's gland plate, the run's end up through the ceiling.
+    for t, (z, run, drops, hangers) in SGR_TRAYS.items():
+        v = "ab".index(t)
+        for x in run:
+            piece = "cable_tray_power_down" if x in drops else "cable_tray_power"
+            put(x, ty, z, variant_state(piece, "north", v + (3 if x in hangers else 0)))
+            if x in drops:
+                put(x, ty - 1, z, variant_state("lc_cable_drop", "north", v))
+        put(SGR_RISE_X, ty, z, variant_state("cable_tray_power_ceiling", "north", v))
+    # Over it, in the spreading room: LC 1B's cables up a riser (as the room's own, its ladder on the run's north
+    # side) into its row's Train B power tray; LC 1A's up wrapped, west under the slab out of the Train B area, and down
+    # into Train A's row 2 power tray.
+    zb = SGR_TRAYS["b"][0]
+    put(SGR_RISE_X, c0, zb, variant_state("cable_tray_riser_floor", "north", 1))
+    for k in range(c0 + 1, c0 + 4):
+        put(SGR_RISE_X, k, zb, variant_state("cable_tray_riser", "north", 1))
+    put(SGR_RISE_X, c0 + 4, zb, variant_state("cable_tray_riser_top", "north", 1))
+    za, top = SGR_TRAYS["a"][0], c0 + 5
+    put(SGR_RISE_X, c0, za, furniture("fire_wrap_floor", "north"))
+    for k in range(c0 + 1, top):
+        put(SGR_RISE_X, k, za, furniture("fire_wrap_rise", "north"))
+    put(SGR_RISE_X, top, za, furniture("fire_wrap_elbow", "north"))
+    for x in range(SGR_RISE_X - 1, SGR_WRAP_X, -1):
+        put(x, top, za, furniture("fire_wrap_hanger" if (SGR_RISE_X - x) % 3 == 0 else "fire_wrap", "north"))
+    put(SGR_WRAP_X, top, za, furniture("fire_wrap_drop", "north"))
+    # The cooling: the fan coil unit over the rear aisle, its supply duct north beside LC 1B's transformer and west
+    # along the aisle (two registers), closed at its west end.
+    fx, fz = SGR_FCU
+    put(fx, ty, fz, furniture("sgr_fan_coil", "north"))
+    put(fx + 1, ty, fz, furniture("sgr_fan_coil_end", "north"))
+    for z in range(fz - 1, SGR_DUCT_Z, -1):
+        put(SGR_DUCT_X, ty, z, furniture("sgr_duct_hanger" if (fz - z) % 3 == 2 else "sgr_duct", "north"))
+    put(SGR_DUCT_X, ty, SGR_DUCT_Z, furniture("hv_duct_elbow", "south"))
+    for x in range(SGR_DUCT_X - 1, 22, -1):
+        piece = "sgr_duct_register" if x in SGR_REGISTERS else "sgr_duct_hanger" if x == 25 else "sgr_duct"
+        put(x, ty, SGR_DUCT_Z, furniture(piece, "east"))
+    put(22, ty, SGR_DUCT_Z, furniture("sgr_duct_end", "west"))
+    # The lights over LC 1B's front and the rear aisle, the smoke detectors.
+    for x, z in SGR_LIGHTS:
+        put(x, ty, z, LIGHT)
+    for x, z in SGR_SMOKE:
+        put(x, ty, z, furniture("smoke_detector", "north"))
+    # The handling gear at the aisle's east end: the remote racking device, the spare breaker on its lift truck, the
+    # test set.
+    put(29, y, 4, furniture("remote_racking_device", "east"))
+    put(29, y, 5, furniture("breaker_lifter", "east"))
+    put(29, y + 1, 5, furniture("breaker_lifter_top", "east"))
+    put(29, y, 7, furniture("breaker_test_set", "east"))
+    # The log desk against the south wall west of the door (phone, logbook, laptop from its left), the one-line diagram
+    # over it; the lineups' signs at the aisle's west end; the DANGER sign outside by the door.
+    for k, x in enumerate((24, 23)):
+        put(x, y, 13, variant_state("sgr_log_desk", "south", k))
+    put(22, y, 13, multi_state("sgr_desk_laptop", "south", 0))
+    for c in range(3):
+        for row in range(2):
+            put(24 - c, y + 1 + row, 13, multi_state("sgr_one_line", "south", row * 3 + c))
+    put(21, y + 2, 3, furniture("sign_lc_a", "west"))
+    put(21, y + 2, 8, furniture("sign_lc_b", "west"))
+    put(SGR_DANGER_X, y + 1, 15, furniture("sign_switchgear_danger", "north"))
+
+
+def spreading_room_slab(b, y):
+    """Over the cable spreading room the control room's floor (y) shows its underside: the bare slab, painted (its top
+    the control room's carpet or access floor as laid)."""
+    slab = {CARPET: M("jugcraft:carpet_floor_slab", (200, 200, 196)), ACCESS_FLOOR: M("jugcraft:access_floor_slab", (200, 200, 196))}
+    for x in range(1, 30):
+        for z in range(1, 14):
+            k = b.get(x, y, z)
+            assert k in slab, ("spreading room slab", x, y, z, P.MATERIALS[int(k)][0])
+            b.p(x, y, z, slab[k])
+
+
 def first_floor(b, W, D, y):
     """The first floor (walked at y + 1): the cable spreading room under the control room (tiers of cable tray, risers
     up into the floor above), and south of the corridor the relay room and the plant computer room on its raised floor."""
@@ -1382,43 +1650,153 @@ def first_floor(b, W, D, y):
     b.wall_x(18, 1, W - 2, y0, y1)
     b.wall_z(30, 1, 13, y0, y1)
     b.wall_z(19, 19, D - 2, y0, y1)
-    # ---- Cable spreading room (x 1..29, z 1..13): three tiers of tray along the room, risers up into the control room.
-    for z in (2, 5, 8, 11):
-        for k, ty in enumerate((y0 + 2, y0 + 3, y0 + 4)):
-            if z == 11 and k == 0:
-                continue
-            b.tray_run(1, z, 29, z, ty, "north")
-    for x in (6, 12, 18, 24):
-        for k in range(y0, y1 + 1):
-            b.p(x, k, 1, furniture("dc_cable_riser", "north"))
-    for x in range(3, 30, 4):
-        for z in (3, 7, 10, 13):
-            b.p(x, y1, z, LIGHT)
+    # ---- Cable spreading room (x 1..29, z 1..13; punch list #15: spreading_room).
+    spreading_room(b, y0, y1)
     b.door(15, y0, 14, "north", double=True, label="cable_spreading_room")
     b.furniture("fire_extinguisher", 1, y0 + 1, 12, "west")
     # ---- Relay room (x 1..18, z 19..28): its cabinets back to back in rows (round 26, #10: relay_room).
     relay_room(b, y0, y1)
     b.door(9, y0, 18, "south", double=True, label="relay_room")
-    # ---- Plant computer room (x 20..38, z 19..28): racks in hot and cold aisles on the raised floor.
+    # ---- Plant computer room (x 20..38, z 19..28): older rooms round 2 (computer_room, tools/server_room.py).
+    computer_room(b, W, D, y, y0, y1)
+    b.door(29, y0, 18, "south", double=True, label="server_room")
+    b.furniture("fire_extinguisher", W - 2, y0 + 1, 24, "east")
+
+
+# The plant computer room (older rooms round 2; Justin, 15 October 2026: "Real 3D IT racks", "Rack lights show
+# traffic", "Plant computer console", "UPS and power", "Room cooling", "Clean-agent fire system", "Overhead cable
+# ladder", "Cooled floor and CRACs", "Signs and labels"). x 20..38, z 19..28 on the raised floor; the door at x 29..30
+# in the north wall. Four rows of twelve racks (A and B back to back, C and D back to back) with a cross aisle at x
+# 29..30, their fronts on the cold aisles (perforated tiles); the ladder and fiber runway over each row, the cross
+# ladder at their west end with the plant's cables rising into it; the CRACs at the west wall at the cold aisles'
+# ends, the console in the north-west corner; the UPS lineup on the east wall, the agent cylinders beside it, their
+# pipe under the ceiling over the north and south aisles.
+SRV_ROWS = (("A", 21, "south"), ("B", 22, "north"), ("C", 25, "south"), ("D", 26, "north"))
+SRV_X = tuple(range(23, 29)) + tuple(range(31, 37))
+SRV_KINDS = {"A": "PPNSSG SSNSGS", "B": "SSNSGS PNSSSG", "C": "GSSNSS SGNSSS", "D": "SSGNSS SSNGSP"}
+SRV_KEY = {"P": "ppc_rack", "N": "network_rack", "S": "server_rack", "G": "san_rack"}
+SRV_COLD = (20, 23, 24, 27)                     # the perforated tiles' rows (in front of the racks)
+SRV_HANGERS = (23, 26, 29, 32, 35)              # the ladders' rods
+SRV_LADDER_X = 22                               # the cross ladder; the riser up into it against row B's west end
+SRV_RISER = (22, 22)
+SRV_UPS = (("ups_battery", 19), ("ups_battery", 20), ("ups_module", 21), ("ups_bypass", 22), ("pdu_cabinet", 23))
+SRV_CYL_Z = (26, 27, 28)
+SRV_NOZZLES = (34, 26)                          # x of the nozzles on each run; the runs end at x 25
+SRV_PIPE_Z = (20, 27)
+SRV_SMOKE = ((23, 23), (26, 24), (29, 23), (32, 24), (35, 23))
+PERF_TILE = M("jugcraft:access_floor_perforated", (176, 180, 182))
+
+
+def computer_room(b, W, D, y, y0, y1):
+    put = b.p
     b.b(20, y, 19, W - 2, y, D - 2, ACCESS_FLOOR)
-    for x in range(22, W - 2):
-        if x in (29, 30):
-            continue
-        for z, f in ((21, "south"), (22, "north"), (25, "south"), (26, "north")):
-            b.stack("server_rack", x, y0, z, f, n=2)
-    for z in (21, 22, 25, 26):
-        b.tray_run(22, z, W - 3, z, y1, "north")
+    for z in SRV_COLD:
+        for x in SRV_X:
+            put(x, y, z, PERF_TILE)
+    # The racks.
+    for row, z, facing in SRV_ROWS:
+        kinds = SRV_KINDS[row].replace(" ", "")
+        for x, k in zip(SRV_X, kinds):
+            b.panel(SRV_KEY[k], x, y0, z, facing, 1)
+        # The row's sign on its east end.
+        b.furniture(f"sign_srv_row_{row.lower()}", SRV_X[-1] + 1, y0 + 1, z, "west")
+    # Over each row its ladder and fiber runway (y1 - 1): a drop into every rack, a fiber spill-out into the network and
+    # process computer racks, rods every three; plain over the cross aisle.
+    ly = y1 - 1
+    for row, z, facing in SRV_ROWS:
+        kinds = dict(zip(SRV_X, SRV_KINDS[row].replace(" ", "")))
+        for x in range(SRV_LADDER_X + 1, SRV_X[-1] + 1):
+            v = (1 if x in SRV_HANGERS else 0)
+            if x in kinds:
+                v |= 2 | (4 if kinds[x] in "PN" else 0)
+            put(x, ly, z, variant_state("srv_ladder", facing, v))
+    # The cross ladder at their west end (its ladder on its east side, against the rows' ends), the riser up into it.
+    for z in range(21, 27):
+        put(SRV_LADDER_X, ly, z, variant_state("srv_ladder_cross", "east", 1 if z == SRV_RISER[1] else 0))
+    rx, rz = SRV_RISER
+    for k in range(y0, ly):
+        put(rx, k, rz, variant_state("srv_ladder_riser", "east", 1 if k == y0 else 0))
+    # The CRACs at the west wall (CRAC-1 at the middle cold aisle, CRAC-2 at the south one), the console in the corner.
+    b.panel("crac_unit", 20, y0, 24, "west", 2, "CRAC-1")
+    b.panel("crac_unit", 20, y0, 28, "west", 2, "CRAC-2")
+    b.panel("ppc_console", 20, y0, 19, "north", 3)
+    # The UPS lineup on the east wall; the agent cylinders beside it, their manifold and riser, the pipe under the
+    # ceiling: north along x 37 and west along each run to its nozzles.
+    for key, z in SRV_UPS:
+        b.panel(key, W - 2, y0, z, "east", 1)
+    for z in SRV_CYL_Z:
+        b.panel("agent_cylinder", W - 2, y0, z, "east", 1)
+        put(W - 2, y0 + 2, z, variant_state("agent_manifold", "east", 1 if z == SRV_CYL_Z[1] else 2 if z == SRV_CYL_Z[-1] else 0))
+    put(W - 2, y0 + 3, SRV_CYL_Z[1], furniture("agent_pipe_riser", "east"))
+    put(W - 2, y1, SRV_CYL_Z[1], furniture("agent_pipe_riser_top", "east"))
+    zs, zn = SRV_PIPE_Z[1], SRV_PIPE_Z[0]
+    put(W - 3, y1, zs, furniture("agent_pipe_tee", "south"))
+    for z in range(zn + 1, zs):
+        put(W - 3, y1, z, furniture("agent_pipe", "east"))
+    put(W - 3, y1, zn, furniture("agent_pipe_elbow", "north"))
+    for z in SRV_PIPE_Z:
+        for x in range(SRV_NOZZLES[-1] - 1, W - 3):
+            if x == SRV_NOZZLES[-1] - 1:
+                piece = variant_state("agent_pipe_nozzle", "north", 1)
+            elif x in SRV_NOZZLES:
+                piece = variant_state("agent_pipe_nozzle", "north", 0)
+            else:
+                piece = furniture("agent_pipe", "north")
+            put(x, y1, z, piece)
+    for x, z in SRV_SMOKE:
+        put(x, y1, z, furniture("smoke_detector", "north"))
+    # The releasing panel, the abort and manual release stations, the horn and strobe by the door; the signs.
+    b.panel("agent_release_panel", 32, y0, 19, "north", 1)
+    b.furniture("agent_abort_station", 31, y0 + 1, 19, "north")
+    b.furniture("agent_manual_release", 28, y0 + 1, 19, "north")
+    b.panel("agent_horn_strobe", 31, y1 - 1, 19, "north", 1)
+    b.furniture("sign_agent_vacate", 27, y0 + 1, 19, "north")
+    b.furniture("sign_no_food", 34, y0 + 1, 19, "north")
+    b.furniture("sign_clean_agent", 31, y0 + 1, 17, "south")
     for x in range(21, W - 1, 3):
         for z in (19, 23, 24, 28):
-            b.p(x, y1, z, LIGHT)
-    b.door(29, y0, 18, "south", double=True, label="server_room")
-    b.furniture("fire_extinguisher", W - 2, y0 + 1, 20, "east")
+            if b.get(x, y1, z) == 0:
+                put(x, y1, z, LIGHT)
+
+
+# The control room's fittings (older rooms round 5; tools/cr_room.py): the At The Controls area's line across the floor
+# between the operators' consoles and the supervisor's, its sign on a post at each end; the master clocks over the
+# boards' ends; the SCBA cabinet and an extinguisher by the door, the drawing rack beside the procedures, the alarm printer by
+# the supervisor's console; smoke detectors and emergency lights; in the shift manager's office the EAL chart over his
+# files and the key locker.
+CR_ATC_Z = 10
+CR_SMOKE = [(7, 7), (16, 7), (25, 7), (12, 14), (24, 14), (5, 14)]
+
+
+def control_room_fittings(b, y0, top):
+    def put(x, y, z, m):
+        assert b.get(x, y, z) == 0, ("control room", x, y, z, P.MATERIALS[int(b.get(x, y, z))][0])
+        b.p(x, y, z, m)
+    for x in range(5, 27):
+        put(x, y0, CR_ATC_Z, furniture("cr_atc_line", "north"))
+    for x in (4, 27):
+        put(x, y0, CR_ATC_Z, furniture("cr_atc_sign", "north"))
+    b.panel("ops_wall_clock", 7, y0 + 4, 2, "north", 1)
+    b.panel("ops_wall_clock", 24, y0 + 4, 2, "north", 1)
+    for row in range(2):
+        put(17, y0 + row, 16, multi_state("cr_scba_cabinet", "south", row))
+    put(18, y0 + 1, 16, furniture("fire_extinguisher", "south"))
+    put(28, y0, 16, furniture("drawing_rack", "south"))
+    put(17, y0, 11, furniture("soe_printer", "north"))
+    for x, z in CR_SMOKE:
+        put(x, top, z, furniture("smoke_detector", "north"))
+    b.furniture("emergency_light", 13, y0 + 4, 16, "south")
+    b.furniture("emergency_light", 29, y0 + 4, 15, "east")
+    rx, rz = P.DIRS[P.CLOCKWISE["south"]]
+    for c in range(2):
+        put(3 + rx * c, y0 + 2, 16, multi_state("cr_eal_chart", "south", c))
+    put(6, y0 + 1, 16, furniture("ops_key_locker", "south"))
 
 
 def second_floor(b, W, D, y):
     """The control room floor (walked at y + 1, a raised floor throughout): the main control room north of the corridor,
     the shift supervisor's glazed office in its corner; south of the corridor the Technical Support Center, the kitchen,
-    the washroom and the operations office. Returns where the reactor console stands (x, z)."""
+    the restroom and the operations office. Returns where the reactor console stands (x, z)."""
     y0 = y + 1
     top = y + 7
     # The control room's walls: acoustic panels inside; the corridor (z 18..20) along its south side.
@@ -1449,17 +1827,21 @@ def second_floor(b, W, D, y):
     # The operators' consoles (Justin: black ones, "at least three blocks each ... like little setups"): the reactor
     # operator's in front of the reactor side of the boards, the balance of plant operator's in front of the steam and
     # turbine side, the senior reactor operator's behind them in the middle, looking over the whole horseshoe.
-    for x, z, tops in ((9, 8, (1, 0, 3)), (19, 8, (3, 0, 2)), (14, 11, (2, 1, 0))):
-        b.row(("operator_console", 3), x, y0, z, "north", tops=tops)
-        for k in (0, 2):
-            b.p(x + k, y0, z + 1, furniture("operator_chair", "north"))
-    # The procedures on shelves along the back wall, the plant overview screens on the east wall, and the office
-    # copier the administration building has (Justin: "use that printer").
-    for x in range(20, 28):
-        b.stack("bookcase", x, y0, 16, "south", n=2)
+    # (Older rooms round 5, tools/cr_room.py: each a control room console of its own, one position each, its three
+    # screens the plant process computer's, read live from the display wall; the chair in the middle.)
+    import cr_room as CR
+    for (x, z), label in zip(((9, 8), (19, 8), (14, 11)), CR.POSITIONS):
+        b.panel("cr_console", x, y0, z, "north", 3, label=label)
+        b.p(x + 1, y0, z + 1, furniture("operator_chair", "north"))
+    # The procedures along the back wall (older rooms round 5: the control room's procedure racks, a section each), the
+    # plant overview screens on the east wall, and the office copier the administration building has (Justin: "use
+    # that printer").
+    for k, x in enumerate(range(20, 28)):
+        b.panel("cr_procedure_rack", x, y0, 16, "south", 1, label=CR.PR_LABELS[k])
     wall_screen(b, "plant_map_screen", 29, y0 + 1, 11, "east")
     import medium_admin
     assert medium_admin.copier(b, 11, y0, 16, "south")
+    control_room_fittings(b, y0, top)
     # The shift supervisor's office in the south-west corner: a half wall glazed over, so he sees the boards (framed
     # glass, one pane from wall to wall), round the corner to his office's east wall.
     for x in range(2, 10):
@@ -1474,7 +1856,10 @@ def second_floor(b, W, D, y):
     b.door(9, y0, 14, "west", label="shift_supervisor")
     # The shift supervisor's executive desks along his glass, looking out over the boards (moved in from the control
     # room floor, Justin's round 23): a phone and lamp, his two screens, the blotter.
-    b.row(("executive_desk", 3), 4, y0, 13, "north", seat="operator_chair", tops=(2, 0, 1))
+    # (Older rooms round 5: his own desk, tools/cr_room.py ss_desk: the plant's status and its alarms on his screens, the
+    # ENS phone, the emergency plan's classification binder, the shift log.)
+    b.panel("ss_desk", 4, y0, 13, "north", 3)
+    b.p(5, y0, 14, furniture("operator_chair", "north"))
     b.furniture("filing_cabinet", 2, y0, 16, "west")
     b.furniture("filing_cabinet", 2, y0, 15, "west")
     b.plant(8, y0, 16)
@@ -1488,7 +1873,7 @@ def second_floor(b, W, D, y):
     b.furniture("fire_extinguisher", 1, y0 + 1, 19, "west")
     b.furniture("water_cooler", W - 2, y0, 19, "east")
     # ---- South of the corridor, with windows: the Technical Support Center (x 1..18), the kitchen (x 20..24),
-    # the washroom (x 26..29), the operations office (x 31..38).
+    # the restroom (x 26..29), the operations office (x 31..38).
     for x in (19, 25, 30):
         b.wall_z(x, 22, D - 2, y0, top)
     tsc(b, y, y0, top, D)
@@ -1499,17 +1884,102 @@ def second_floor(b, W, D, y):
     b.p(21, y0, 25, furniture("cafe_chair", "east"))
     b.p(23, y0, 25, furniture("cafe_chair", "west"))
     b.door(22, y0, 21, "south", double=True, label="break_room")
-    # Washroom.
-    b.row(("kitchen_sink", 2), 27, y0, D - 2, "south")
-    b.door(27, y0, 21, "south", label="washroom")
-    # Operations office: desks, files.
-    b.b(31, y, 22, W - 2, y, D - 2, CARPET)
-    for x in (32, 36):
-        b.desk(x, y0, 25, "south")
-    b.furniture("filing_cabinet", W - 2, y0, 22, "east")
-    b.furniture("filing_cabinet", W - 2, y0, 23, "east")
-    b.door(34, y0, 21, "south", label="operations")
+    restroom(b, y, y0, D)
+    operations_office(b, y, y0, W, D)
     return console
+
+
+# The restroom (round 26, #14; tools/restroom.py; Justin: "2 stalls, urinal, 2 sinks", ceramic tile): x 26..29 of the
+# second floor's south side, its door from the corridor at x 27. Tiled walls to 2 m (the lower course with its cove
+# base, the upper with the accent band and bullnose cap), a grey tile floor with a drain in front of the urinal,
+# frosted windows. Along the west wall the trash can under the towel dispenser, the two sinks with their mirrors, the
+# hand dryer, the baby changing station (Justin: no mop bucket or wet floor sign); on the east wall the urinal and its
+# screen, then the stalls (toilets against the wall): the standard stall, the accessible stall in the corner, their
+# fronts on the aisle's east edge (the doors swing out into the aisle) under the headrail.
+def restroom(b, y, y0, D):
+    def st(text):
+        return M("jugcraft:" + text, (230, 230, 226))
+    b.b(26, y, 22, 29, y, D - 2, st("restroom_floor_tile"))
+    b.p(28, y, 24, furniture("restroom_floor_drain", "north"))
+    for z in range(22, D - 1):
+        for x, face in ((25, "east"), (30, "west")):
+            b.p(x, y0, z, st(f"restroom_wall_tile[back=painted,facing={face}]"))
+            b.p(x, y0 + 1, z, st(f"restroom_wall_tile_cap[back=painted,facing={face}]"))
+    for x in (26, 28, 29):
+        b.p(x, y0, 21, st("restroom_wall_tile[back=painted,facing=south]"))
+        b.p(x, y0 + 1, 21, st("restroom_wall_tile_cap[back=painted,facing=south]"))
+    for x in range(26, 30):
+        b.p(x, y0, D - 1, st("restroom_wall_tile[back=concrete,facing=north]"))
+        for k in range(y0 + 1, y0 + 5):
+            if b.get(x, k, D - 1) == PANE:
+                b.p(x, k, D - 1, FROSTED)
+    # The west wall.
+    b.p(26, y0, 22, st("restroom_trash_can[facing=west,fill=1]"))
+    b.p(26, y0 + 1, 22, furniture("restroom_towel_dispenser", "west"))
+    for z in (23, 24):
+        b.p(26, y0, z, st("restroom_sink[facing=west,running=false]"))
+        b.p(26, y0 + 1, z, furniture("restroom_mirror", "west"))
+    b.p(26, y0 + 1, 25, st("restroom_hand_dryer[facing=west,running=false]"))
+    b.p(26, y0, 26, furniture("restroom_changing_station", "west"))
+    # The urinal and its screen; the signs on the north wall.
+    b.p(29, y0, 23, st("restroom_urinal[facing=east,flushing=false]"))
+    b.p(29, y0, 24, furniture("restroom_urinal_screen", "east"))
+    b.p(28, y0 + 1, 22, furniture("sign_wash_hands", "north"))
+    b.p(29, y0 + 1, 22, furniture("sign_no_smoking", "north"))
+    # The stalls: partitions (the standard stall's north side, between the stalls), the toilets, the fronts.
+    for z, face, vs in ((25, "south", (4, 1)), (27, "north", (3, 2))):
+        for x, v in zip((28, 29), vs):
+            b.p(x, y0, z, variant_state("restroom_stall_partition", face, v))
+    b.p(29, y0, 26, st(f"restroom_toilet[facing=east,flushing=false,paper={RR_PAPER},variant=0]"))
+    b.p(29, y0, D - 2, st(f"restroom_toilet[facing=east,flushing=false,paper={RR_PAPER},variant=1]"))
+    for z, door in ((26, "restroom_stall_door"), (27, "restroom_stall_door_accessible")):
+        for k, half in ((0, "lower"), (1, "upper")):
+            b.p(27, y0 + k, z, st(f"{door}[facing=west,half={half},hinge=right,latched=false,open=false,powered=false]"))
+    b.p(27, y0, D - 2, furniture("restroom_stall_panel", "east"))
+    for z, v in ((26, 1), (27, 0), (D - 2, 2)):
+        b.p(27, y0 + 2, z, variant_state("restroom_stall_headrail", "east", v))
+    # The exhaust grille in the ceiling over the urinal's floor.
+    b.p(28, y0 + 7, 24, furniture("restroom_exhaust_grille", "north"))
+    b.door(27, y0, 21, "south", label="restroom")
+
+
+# The operations office (round 26, #13; tools/ops_office.py; Justin: "Work control + tagout"): x 31..38 of the second
+# floor's south side, its door from the corridor at x 34. The work control centre: on the east wall the equipment
+# out-of-service board and the plant status screen, the two work control consoles facing them (the work control SRO's,
+# the tagout coordinator's); on the north wall the shift schedule whiteboard over the copier and files, the master
+# clock over the door, the radio charging rack and the PPE shelf; on the west wall the locked valve key locker, the
+# clearance tag rack and the group lockbox over the files, the procedure shelves.
+def operations_office(b, y, y0, W, D):
+    import ops_office as O
+    b.b(31, y, 22, W - 2, y, D - 2, CARPET)
+    # The east wall: the out-of-service board, the status screen; the consoles facing them, their chairs.
+    b.panel("ops_oos_board", 38, y0 + 2, 23, "east", 3)
+    wall_screen(b, "status_screen", 38, y0 + 2, 26, "east")
+    for z, v in ((23, 0), (26, 1)):
+        b.panel("ops_console", 36, y0, z, "east", 3, label=O.PANELS["ops_console"]["labels"][v])
+        for dz in (0, 2):
+            b.p(35, y0, z + dz, furniture("operator_chair", "east"))
+    # The north wall: the schedule board over the files and the copier, the clock over the door, the radios and the PPE.
+    b.panel("ops_schedule_board", 31, y0 + 1, 22, "north", 3)
+    for x in (31, 32):
+        b.furniture("filing_cabinet", x, y0, 22, "north")
+    b.furniture("printer", 33, y0, 22, "north")
+    b.panel("ops_wall_clock", 34, y0 + 2, 22, "north", 1)
+    b.panel("ops_radio_rack", 35, y0 + 1, 22, "north", 1)
+    b.panel("ops_ppe_shelf", 36, y0 + 1, 22, "north", 2)
+    b.furniture("filing_cabinet", W - 2, y0, 22, "north")
+    b.furniture("fire_extinguisher", W - 2, y0 + 1, 22, "north")
+    # The west wall: the key locker, the tag rack and the lockbox over the files; the procedure shelves; a plant.
+    for z, name in ((24, "ops_key_locker"), (25, "ops_tag_rack"), (26, "ops_lockbox")):
+        b.p(31, y0 + 1, z, furniture(name, "west"))
+    for z in (24, 25):
+        b.furniture("filing_cabinet", 31, y0, z, "west")
+    for z in (27, 28):
+        for k in range(2):
+            b.furniture("ops_procedure_shelf", 31, y0 + k, z, "west")
+    b.plant(33, y0, D - 2)
+    b.p(33, y0 + 6, 25, furniture("smoke_detector", "north"))
+    b.door(34, y0, 21, "south", label="operations")
 
 
 # The Technical Support Center (round 26, #12; tools/tsc_room.py): x 1..18 of the second floor's south side, its door
@@ -1882,16 +2352,11 @@ def fuel_building(s, ox, oz):
     b.rail_round(px1 + 2, 6, px1 + 5, 10, deck + 1)
     for z in range(pz0 - 2, pz1 + 3):
         for x in (px0 - 1, px1 + 1):
-            if b.get(x, deck + 1, z) == 0:
-                # Carry the rail across the water-filled transfer canal on a steel beam.
-                if b.get(x, deck, z) == WATER:
-                    b.p(x, deck, z, LINER)
+            if b.get(x, deck + 1, z) == 0 or b.get(x, deck + 1, z) == 0:
                 b.p(x, deck + 1, z, RAIL_NS)
     b.prop("fuel_handling_machine", px0 - 1, deck + 2, 12, "north")
     # The truck bay: roller door south, dry casks, new fuel on racking.
-    for x in range(10, 22):
-        for y in range(1, 10):
-            b.p(x, y, D - 1, roller("north"))
+    roller_door(b, [(x, D - 1) for x in range(10, 22)], 1, 9, "north")
     b.b(9, 10, D - 1, 22, 10, D - 1, SHIELD)
     for z in (32, 36):
         b.prop("dry_storage_cask", 24, 1, z, "north")
@@ -1906,66 +2371,224 @@ def fuel_building(s, ox, oz):
 # ------------------------------------------------------------------------------------------------- diesel building
 
 def diesel_building(s, ox, oz):
-    """The emergency diesel generator building, 46 x 20: two generator rooms (one per safety train), each with its
-    diesel generator set (the engine's exhaust up through the roof to its stack), its fuel oil day tank (a small storage
-    tank MBS, filled from the fuel oil storage tank outside), its control and protection panels and battery along the
-    south wall, air intake louvres in the north wall.
-    Returns the building and, per room, where its fill line comes through the south wall."""
-    W, D, H = 46, 20, 11
+    """The emergency diesel generator building, 67 x 26 (round 31; Justin: "rebuild the whole diesel room, generator
+    included", "Bigger than real"): two generator rooms (one per safety train), each 32 x 24 inside and 13 high, laid
+    out the same (the set can't be mirrored: its gauge board, fuel filter and terminal box are on fixed sides). In each:
+    the V20 diesel generator set along the middle, its free end east (the exhaust up through the roof to its stack),
+    the generator west; along the north wall its starting air system (two compressors, the dryer, two receivers) with
+    their lines in the floor to the engine's two starting air headers; its fuel oil day tank in the south-east corner,
+    its line in the floor to the engine's duplex filter; its panels and battery along the south wall; air intake louvres
+    high in the north wall. Returns the building and, per room, where its fill line comes through the south wall."""
+    W, D, H = 67, 26, 13
     b = Building("diesel_building", "Emergency Diesel Building", W, D, H, grounded=True)
     b.shell_walls(CONCRETE, step=8)
     b.storey(0, 1, 1, W - 2, D - 2, EPOXY)
     b.wall_z(W // 2, 1, D - 2, 1, H, CONCRETE)
     fills = []
-    for room, x0 in enumerate((2, W // 2 + 2)):
-        b.prop("emergency_diesel_generator", x0 + 2, 1, 7, "east")
-        # Along the south wall, as you face them from the left: the battery rack and its charger, the load sequencer,
-        # the protection relays, the voltage regulator, the generator's control panel, the engine's (nearest the engine's
-        # front).
-        x = x0 + 8
-        for name, width in (("edg_battery_rack", 1), ("edg_battery_charger", 1), ("edg_load_sequencer", 1), ("edg_protection_panel", 1),
-                            ("edg_voltage_regulator", 1), ("edg_generator_panel", 2), ("edg_engine_panel", 1)):
-            b.panel(name, x, 1, D - 2, "south", width)
-            x -= width
-        # Louvres high in the north wall; the stack over the engine's turbochargers (its exhaust comes up from them).
-        for x in range(x0 + 1, x0 + 17):
-            if x % 8:
-                for y in (6, 7, 8):
-                    b.p(x, y, 0, LOUVRE)
-        # (The stack stands above the part's own height: it goes in as site decor.)
-        sx = x0 + 2
-        for y in range(H + 1, H + 8):
-            for dx in (0, 1):
-                for z in (9, 10):
-                    s.decor[(ox + sx + dx, b.site_y(y), oz + z)] = BRICK
-        # (No campfire on top: the running generator makes its own exhaust smoke there, client/NuclearRenderer.)
-        entrance(b, x0 + 11, D - 1, "s", kind="steel")
-        b.p(x0 + 13, 2, D - 2, sign("diesel_a" if room == 0 else "diesel_b", "north"))
-        fills.append(day_tank(b, x0, room, H, D))
+    for room, x0 in enumerate((0, W // 2)):
+        floor = diesel_room(b, s, ox, oz, x0, room, H, D)
+        fills.append(day_tank(b, x0, room, H, D, floor))
+        diesel_room_plant(b, x0, room, D)
     s.add(b, ox, oz)
     return b, fills
 
 
-def day_tank(b, x0, room, H, D):
-    """A generator room's fuel oil day tank in its north-east corner: a small storage tank MBS (tank_in) on a steel
+# Where the set and its starting air system stand in a diesel room (x from the room's west wall, z from the north
+# wall): the set's footprint corner (it faces west: its free end at the east), and each air piece's (they face north,
+# their fronts to the room).
+DIESEL_SET = (5, 9)
+DIESEL_AIR = [("edg_air_compressor", 3, 2, 0), ("edg_air_compressor", 7, 2, 1), ("edg_air_dryer", 11, 3, 0),
+              ("edg_air_receiver", 14, 2, 0), ("edg_air_receiver", 17, 2, 1)]
+# The starting air's lines in the floor (cells, from the room's corner): the compressors' discharges along behind them
+# to the dryer's inlet; the dryer's outlet to both receivers' inlets; each receiver's outlet to one of the engine's two
+# starting air headers (receiver 1 the left bank's, coming up at the engine's front left; receiver 2 the right's).
+AIR_LINES = [
+    [(5, 2), (5, 1)] + [(x, 1) for x in range(6, 11)] + [(10, 2), (10, 3), (11, 3)] + [(9, 2), (9, 1)],
+    [(12, 3), (13, 3), (14, 3)] + [(13, 2), (13, 1)] + [(x, 1) for x in range(14, 18)] + [(17, 2), (17, 3)],
+    [(15, 3)] + [(15, z) for z in range(4, 7)] + [(x, 6) for x in range(16, 22)] + [(21, z) for z in range(7, 17)] + [(22, 16), (23, 16), (24, 16)],
+    [(18, 3), (18, 4)] + [(x, 4) for x in range(19, 24)] + [(23, z) for z in range(5, 12)] + [(24, 11)],
+]
+
+
+def diesel_room(b, s, ox, oz, x0, room, H, D):
+    """One generator room (x0: its west wall), its set, starting air system and panels; returns where the day tank's
+    line ends under the engine's fuel connection (its floor cell)."""
+    sx, sz = DIESEL_SET
+    b.prop("emergency_diesel_generator", x0 + sx, 1, sz, "west", variant=room or None)
+    for kind, x, z, k in DIESEL_AIR:
+        variant = 2 * room + k if kind != "edg_air_dryer" else room
+        b.prop(kind, x0 + x, 1, z, "north", variant=variant or None)
+    for line in AIR_LINES:
+        for x, z in line:
+            assert b.get(x0 + x, 0, z) in (EPOXY, WALL_PIPE), ("starting air line in the floor", x0 + x, z)
+            b.p(x0 + x, 0, z, WALL_PIPE)
+    # Along the south wall, west to east: the diesel's battery (two wide: round 31 part 2) and its charger, the load
+    # sequencer, the protection relays, the voltage regulator, the generator's control panel, the engine's (nearest the
+    # engine's front); each labelled with the room's train (EDG 1A, EDG 1B: tools/diesel_panels.py).
+    x = x0 + 15
+    for name, width in reversed((("edg_battery_rack", 2), ("edg_battery_charger", 1), ("edg_load_sequencer", 1), ("edg_protection_panel", 1),
+                                 ("edg_voltage_regulator", 1), ("edg_generator_panel", 2), ("edg_engine_panel", 1))):
+        b.panel(name, x, 1, D - 2, "south", width, ("EDG 1A", "EDG 1B")[room])
+        x -= width
+    # Louvres high in the north wall (between its pilasters).
+    for x in range(x0 + 1, x0 + 33):
+        if x % 8:
+            for y in (7, 8, 9):
+                b.p(x, y, 0, LOUVRE)
+    # The stack over the exhaust's roof thimble (the set's exhaust comes up through the roof there: tools/diesel_set.py
+    # STACK). (It stands above the part's own height: it goes in as site decor.)
+    for y in range(H + 1, H + 8):
+        for dx in (0, 1):
+            for z in (13, 14):
+                s.decor[(ox + x0 + 24 + dx, b.site_y(y), oz + z)] = BRICK
+    entrance(b, x0 + 23, D - 1, "s", kind="steel")
+    b.p(x0 + 21, 2, D - 2, sign("diesel_a" if room == 0 else "diesel_b", "north"))
+    # The day tank's line comes up under the engine's duplex fuel filter (the set's local (8, 0): a block right of
+    # its starting air riser).
+    return (x0 + sx + 20, sz + 1)
+
+
+# The diesel room's own plant and fittings (round 31 part 3; Justin: "Diesel Part 3"; tools/diesel_room.py,
+# tools/diesel_fittings.py), room coordinates as DIESEL_AIR (x from the room's west wall, z from the north wall):
+# along the north wall east of the starting air, the jacket water and lube oil keep-warm skids and the jacket water
+# expansion tank; along the east wall the jacket water cooler (its front to the set's free end); along the south wall
+# west of the panels the generator's neutral grounding resistor and its terminal and CT cubicle, east of them the CO2
+# cylinder bank and the release station by the door.
+DIESEL_PLANT = [("edg_jw_keepwarm", 20, 1, 1, "north"), ("edg_lo_keepwarm", 24, 1, 1, "north"), ("edg_expansion_tank", 28, 1, 1, "north"),
+                ("edg_jw_cooler", 31, 1, 3, "east"), ("edg_ngr", 1, 1, 23, "south"), ("edg_gen_cubicle", 3, 1, 23, "south"),
+                ("edg_co2_bank", 17, 1, 24, "south"), ("edg_monorail", 2, 12, 13, "north")]
+# Where each piece's lines go down into the floor (room cells, from its footprint), and where they go to: the engine's
+# connections at its free end, under the set (the jacket water's and lube oil's), the generator's terminal box
+# (round 31 part 1: its conduits down into the floor) to the cubicle and the cubicle to the resistor; the service
+# water lines down into the floor under the cooler. Laid in the floor (WALL_PIPE, as the starting air's), each the
+# shortest way; where it meets a line already in the floor it shares its duct bank (the floor's one block deep).
+DIESEL_PLANT_LINES = [((20, 2), (24, 12)), ((22, 2), (24, 13)), ((24, 2), (24, 14)), ((26, 2), (24, 15)), ((28, 2), (25, 12)),
+                      ((32, 9), (25, 13)), ((32, 4), (25, 14)), ((32, 3), (32, 3)), ((9, 16), (4, 23)), ((8, 16), (5, 23)),
+                      ((3, 23), (2, 24))]
+# The CO2 discharge piping, in the block under the roof (y 13): the riser up the wall from the cylinder bank (x 19), the
+# main along the south wall (z 23) from x 9 to 29, and four branches north from it (x 9, 15, 21, 29) to z 3; a nozzle
+# every five blocks, the last capped with one, hangers between.
+CO2_Y = 13
+CO2_RISER = 19
+CO2_MAIN_Z = 23
+CO2_BRANCHES = (9, 15, 21, 29)
+CO2_NOZZLES_Z = (19, 14, 9)
+CO2_NOZZLES_X = (12, 25)
+CO2_HANGERS_Z = (21, 16, 11, 6)
+CO2_HANGERS_X = (11, 17, 23, 27)
+HEAT_DETECTORS = [(5, 7), (12, 7), (18, 7), (25, 7), (5, 18), (12, 18), (18, 18), (25, 18)]
+
+
+def floor_path(b, start, goal, x0):
+    """The shortest way through the floor (its epoxy, and the lines already in it) from start to goal (room cells), or
+    None."""
+    from collections import deque
+    sx, sz = start[0] + x0, start[1]
+    gx, gz = goal[0] + x0, goal[1]
+    prev = {(sx, sz): None}
+    q = deque([(sx, sz)])
+    while q:
+        c = q.popleft()
+        if c == (gx, gz):
+            out = []
+            while c is not None:
+                out.append(c)
+                c = prev[c]
+            return out[::-1]
+        for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            n = (c[0] + dx, c[1] + dz)
+            if n not in prev and x0 + 1 <= n[0] <= x0 + 32 and 1 <= n[1] <= 24 and b.get(n[0], 0, n[1]) in (EPOXY, WALL_PIPE):
+                prev[n] = c
+                q.append(n)
+    return None
+
+
+def diesel_room_plant(b, x0, room, D):
+    import diesel_fittings as DF
+    import hvac_room as HR
+    label = ("EDG 1A", "EDG 1B")[room]
+    for kind, x, y, z, facing in DIESEL_PLANT:
+        b.prop(kind, x0 + x, y, z, facing, variant=room or None)
+    for start, goal in DIESEL_PLANT_LINES:
+        path = floor_path(b, start, goal, x0)
+        assert path, ("diesel room line in the floor", room, start, goal)
+        for x, z in path:
+            if b.get(x, 0, z) == EPOXY:
+                b.p(x, 0, z, WALL_PIPE)
+    # The release station by the door (west of its frame), a horn and strobe over it and another on the north wall,
+    # the exhaust fans high in the south wall over their louvres, the hoist's pendant station on the west wall under
+    # the monorail's end.
+    b.panel(DF.STATION, x0 + 20, 1, D - 2, "south", 1, label)
+    b.panel(DF.HORN, x0 + 20, 4, D - 2, "south", 1)
+    b.panel(DF.HORN, x0 + 12, 5, 1, "north", 1)
+    for fx in (10, 26):
+        b.panel(DF.FAN, x0 + fx + 1, 8, D - 2, "south", 2, label)
+        for x in (fx, fx + 1):
+            for y in (8, 9):
+                assert b.get(x0 + x, y, D - 1) == CONCRETE, ("fan louvre", room, x, y)
+                b.p(x0 + x, y, D - 1, LOUVRE)
+    b.panel(DF.PENDANT, x0 + 1, 1, 13, "west", 1, label)
+    # The signs at the door: CO2 and hearing protection; the extinguisher; the eyewash in the north-west corner; floor
+    # drains by the skids and the cooler.
+    b.p(x0 + 24, 2, D - 2, furniture("sign_co2", "south"))
+    b.p(x0 + 24, 3, D - 2, furniture("sign_hearing", "south"))
+    b.furniture("fire_extinguisher", x0 + 25, 2, D - 2, "south")
+    b.furniture("eyewash_station", x0 + 1, 1, 1, "north")
+    b.p(x0 + 1, 2, 1, furniture("sign_eyewash", "north"))
+    for x, z in ((23, 3), (27, 3), (30, 6)):
+        assert b.get(x0 + x, 0, z) == EPOXY, ("floor drain", room, x, z)
+        b.p(x0 + x, 0, z, furniture("restroom_floor_drain", "north"))
+    for x, z in HEAT_DETECTORS:
+        assert b.get(x0 + x, CO2_Y, z) == 0, ("heat detector", room, x, z)
+        b.p(x0 + x, CO2_Y, z, furniture("smoke_detector", "north"))
+    # The CO2 piping.
+    y = CO2_Y
+    runs = [([(x0 + CO2_RISER, yy, D - 2) for yy in range(3, y + 1)] + [(x0 + CO2_RISER, y, CO2_MAIN_Z)], "d", None),
+            ([(x0 + x, y, CO2_MAIN_Z) for x in range(CO2_RISER, CO2_BRANCHES[0] - 1, -1)] + [(x0 + CO2_BRANCHES[0], y, z) for z in range(CO2_MAIN_Z - 1, 2, -1)], None, None),
+            ([(x0 + x, y, CO2_MAIN_Z) for x in range(CO2_RISER, CO2_BRANCHES[-1] + 1)] + [(x0 + CO2_BRANCHES[-1], y, z) for z in range(CO2_MAIN_Z - 1, 2, -1)], None, None)]
+    for bx in CO2_BRANCHES[1:-1]:
+        runs.append(([(x0 + bx, y, z) for z in range(CO2_MAIN_Z, 2, -1)], None, None))
+    conn = HR.connections(runs)
+    for (x, yy, z), faces in sorted(conn.items()):
+        want = "".join(sorted(faces))
+        rx = x - x0
+        if want in ("ns",) and rx in CO2_BRANCHES and z in CO2_NOZZLES_Z or want == "ew" and z == CO2_MAIN_Z and rx in CO2_NOZZLES_X:
+            name = "co2_nozzle"
+        elif want in ("ns",) and rx in CO2_BRANCHES and z in CO2_HANGERS_Z or want == "ew" and z == CO2_MAIN_Z and rx in CO2_HANGERS_X:
+            name = "co2_pipe_hanger"
+        else:
+            name = None
+        for base, fam in DF.FAMILY.items():
+            if name and fam != "co2_pipe":
+                continue
+            f = HR.facing_for(base, want)
+            if f:
+                assert b.get(x, yy, z) == 0, ("CO2 pipe", room, rx, yy, z)
+                b.p(x, yy, z, furniture(name or fam, f))
+                break
+        else:
+            raise ValueError(f"no CO2 piece opens {want} at {(rx, yy, z)}")
+
+
+def day_tank(b, x0, room, H, D, fuel_at):
+    """A generator room's fuel oil day tank in its south-east corner: a small storage tank MBS (tank_in) on a steel
     drip pan with a lip round it, ladder, railing, gate and hatch like the big tanks, and a short vent on its roof like
     theirs (Justin, round 14: no vent line up through the building's roof). It is rated for flammable liquids (the
     pressure/vacuum vent; no foam chambers indoors). The fuel lines keep out of the way, in the floor (pipes inside the slab, Justin's round 13):
-    the outlet drops into the floor and comes up under the engine's fuel connection; the line from the fuel oil
-    storage tank comes in under the south wall, along the floor and up into the inlet. Returns where that comes in
+    the outlet drops into the floor and runs under it to come up in the engine's fuel connection (fuel_at); the line
+    from the fuel oil storage tank comes in under the south wall and up into the inlet. Returns where that comes in
     under the wall (its x)."""
-    cx, cz, r, h = x0 + 16.5, 3.5, 2.6, 6
+    cx, cz, r, h = x0 + 29.5, 19.5, 2.6, 6
     out_cell, in_cell, _ = tank_in(b, cx, cz, r, h, "diesel_day_a" if room == 0 else "diesel_day_b", outlet="w",
-                                           inlet="s", ladder="e", manway=None, hatch_in=2, vent=(0, -1), foundation=None,
+                                           inlet="s", ladder="n", manway=None, hatch_in=2, vent=(0, -1), foundation=None,
                                            fill_line=False, wall=1.1, rating="flammable", foam=False)
-    # The outlet: a stub off its flange, down into the floor, along under it and up under the engine's fuel connection
-    # on the generator's near side.
+    # The outlet: a stub off its flange, down into the floor, along under it to the set's fuel connection.
     ox, oz = out_cell
-    fx = x0 + 7
+    fx, fz = fuel_at
     ix, iz = in_cell
-    risers = [(ox - 1, 1, oz), (fx, 1, 6), (ix, 1, iz + 1)]
-    floor = [(ox - 1, 0, oz)] + [(x, 0, oz) for x in range(ox - 2, fx - 1, -1)] + [(fx, 0, z) for z in range(oz + 1, 7)]
-    # The inlet: in under the south wall (through the slab under it), along the floor and up into the inlet's flange.
+    risers = [(ox - 1, 1, oz), (ix, 1, iz + 1)]
+    floor = [(ox - 1, 0, oz), (ox, 0, oz)] + [(ox, 0, z) for z in range(oz - 1, fz - 1, -1)] + [(x, 0, fz) for x in range(ox - 1, fx - 1, -1)]
+    # The inlet: in under the south wall (through the slab under it) and up into the inlet's flange.
     floor += [(ix, 0, z) for z in range(D - 1, iz, -1)]
     for x, y, z in risers:
         assert b.get(x, y, z) == 0, ("fuel line", x, y, z)
@@ -1975,7 +2598,7 @@ def day_tank(b, x0, room, H, D):
         b.p(x, y, z, WALL_PIPE)
     # The drip pan under and round the tank, a steel lip at its edge (broken where the pipes come out).
     for x in range(int(cx - r - 3), int(cx + r + 3)):
-        for z in range(1, int(cz + r + 3)):
+        for z in range(1, min(D - 1, int(cz + r + 3))):
             d = math.hypot(x + 0.5 - cx, z + 0.5 - cz)
             if d <= r + 1.5 and b.get(x, 0, z) == EPOXY:
                 b.p(x, 0, z, LINER)
@@ -2021,7 +2644,7 @@ def pump_house(s, ox, oz):
     entrance(q, 6, D - 8, "s", kind="steel")
     for x in range(3, 15):
         q.stack("relay_cabinet", x, 1, D - 9, "south", n=2)
-    q.prop("switchgear_lineup", 24, 1, D - 10, "south")
+    q.prop("switchgear_lineup", 24, 1, D - 10, "south", variant=4)
     b.g[:, sink:sink + q.size[1], 7:] = q.g[:, :b.size[1] - sink, :]
     b.extras.update({(x, y + sink, z + 7): st for (x, y, z), st in q.extras.items()})
     b.props += [(k, x, y + sink, z + 7, f) for k, x, y, z, f in q.props]
@@ -2045,43 +2668,12 @@ def storage_rack(b, x, y, z, facing):
 
 
 def warehouse(s, ox, oz):
-    """The warehouse, level with the ground: storage racks (real stores, three bays by three levels) back to back in
-    rows with aisles between, high-bay lights under the roof, the stores office in the corner (its own block walls on
-    every side), roller doors at the loading end that roll up."""
-    W, D, H = 40, 26, 12
-    b = Building("warehouse", "Warehouse", W, D, H, grounded=True)
-    b.high_bay = True
-    b.shell_walls(CLADDING, step=8)
-    b.windows(9, 10, "ns", step=8)
-    b.storey(0, 1, 1, W - 2, D - 2, EPOXY)
-    # Rows of racks back to back, each front on an aisle (z 5..8, 11..14, 17..18), eight racks to a row.
-    for z in (3, 4, 9, 10, 15, 16):
-        front_south = z in (3, 9, 15)
-        facing = "north" if front_south else "south"     # the user looks at the front, from the aisle
-        for k in range(8):
-            x_left, x_right = 3 + 3 * k, 5 + 3 * k
-            # The left bay as you face the front: west when looking north, east when looking south.
-            storage_rack(b, x_left if facing == "north" else x_right, 1, z, facing)
-    # The stores office: its own block walls inside the outer walls (so every wall inside is painted block), a window
-    # onto the floor, a door, a desk and cabinets.
-    ox0, oz0, ox1, oz1 = W - 11, D - 9, W - 2, D - 2
-    b.wall_x(oz0, ox0, ox1, 1, 4)
-    b.wall_x(oz1, ox0, ox1, 1, 4)
-    b.wall_z(ox0, oz0, oz1, 1, 4)
-    b.wall_z(ox1, oz0, oz1, 1, 4)
-    for x in range(ox0 + 2, ox0 + 6):
-        b.p(x, 2, oz0, PANE)
-    b.b(ox0 + 1, 4, oz0 + 1, ox1 - 1, 4, oz1 - 1, CEIL)
-    b.door(ox0, 1, oz0 + 3, "east", label="stores")
-    b.desk(ox1 - 3, 1, oz1 - 1, "south")
-    b.furniture("filing_cabinet", ox1 - 1, 1, oz0 + 2, "east")
-    b.furniture("filing_cabinet", ox1 - 1, 1, oz0 + 3, "east")
-    b.plant(ox0 + 1, 1, oz1 - 1)     # one small potted tree in the corner
-    for z in range(4, 17):
-        for y in range(1, 9):
-            b.p(W - 1, y, z, roller("west"))
-    b.b(W - 1, 9, 3, W - 1, 9, 17, CLADDING)
-    entrance(b, 5, D - 1, "s", kind="steel", step=False)
+    """The warehouse, level with the ground: the automated warehouse's Medium Warehouse with two floors (part W3,
+    tools/warehouse_bp.py plant_warehouse; it replaced the old one-floor stores with storage racks): Goods In and Goods
+    Out in its front wall, racks five places high on both floors, the Pallet Lift, the stair tower on its east side, the
+    control office with the terminal, which can add floors to it."""
+    import warehouse_bp
+    b = warehouse_bp.plant_warehouse()
     s.add(b, ox, oz)
     return b
 
@@ -2150,7 +2742,7 @@ def tank_in(b, cx, cz, r, h, service="none", outlet="w", inlet="n", ladder="e", 
         # The ladder, from the foundation to a length above the roof's edge, caged from the third length up.
         facing, (lx, lz), (ex, ez) = outside(ladder, 1)
         for y in range(1, h + 3):
-            b.p(lx, y, lz, steel_ladder(facing, y >= 3, y == h + 2))
+            b.p(lx, y, lz, steel_ladder(facing, y >= 3, y == h + 2, y == 3))
         # Railing round the roof's edge: the roof cells with a gap beside them (corners too), so it runs unbroken;
         # the self-closing gate where the ladder comes up, swinging in over the roof.
         for x, z in roof:
@@ -2245,23 +2837,45 @@ def outdoor_tank(s, cx, cz, r, h, name, key, service="none", outlet="w", inlet="
     return b
 
 
-def fence(s, x0, z0, x1, z1, gate):
-    """A double security fence round the protected area, lit, with a gate gap at x = gate on the south side."""
+def fence(s, x0, z0, x1, z1, gate, step=None):
+    """A double security fence round the protected area, lit, with a gate gap at x = gate on the south side. step
+    (sx, sz): the east side stands out at x sx from the north side down to z sz, then steps back to x1 (an L: the
+    transformer yard inside)."""
+    if step is None:
+        outer = [(x0, z0), (x1, z0), (x1, z1), (x0, z1)]
+    else:
+        sx, sz = step
+        outer = [(x0, z0), (sx, z0), (sx, sz), (x1, sz), (x1, z1), (x0, z1)]
+    n = len(outer)
+    # each edge's inward normal (the polygon runs clockwise seen from above, x east and z south: inside on the right)
+    normals = []
+    for i in range(n):
+        (ax, az), (bx, bz) = outer[i], outer[(i + 1) % n]
+        dx, dz = (bx > ax) - (bx < ax), (bz > az) - (bz < az)
+        normals.append((-dz, dx))
     for off in (0, 3):
-        for x in range(x0 + off, x1 - off + 1):
-            for z in (z0 + off, z1 - off):
-                if z == z1 - off and abs(x - gate) <= 4:
-                    continue
-                for y in range(0, 3):
-                    s.decor[(x, y, z)] = BARS
-        for z in range(z0 + off, z1 - off + 1):
-            for x in (x0 + off, x1 - off):
-                for y in range(0, 3):
-                    s.decor[(x, y, z)] = BARS
-    for x in range(x0, x1 + 1, 16):
-        for z in (z0 - 2, z1 + 2):
-            for y in range(0, 6):
-                s.decor[(x, y, z)] = M("minecraft:stone_brick_wall", (122, 122, 120)) if y < 5 else LANTERN
+        # the edges moved in by off; each corner where its two edges' lines meet
+        pts = []
+        for i in range(n):
+            e0, e1 = i - 1, i
+            (ax, az) = outer[i]
+            nx0, nz0 = normals[e0]
+            nx1, nz1 = normals[e1]
+            pts.append((ax + off * (nx0 or nx1), az + off * (nz0 or nz1)))
+        for i, (ax, az) in enumerate(pts):
+            bx, bz = pts[(i + 1) % n]
+            for x in range(min(ax, bx), max(ax, bx) + 1):
+                for z in range(min(az, bz), max(az, bz) + 1):
+                    if z == z1 - off and az == bz and abs(x - gate) <= 4:
+                        continue
+                    for y in range(0, 3):
+                        s.decor[(x, y, z)] = BARS
+    for i, (ax, az) in enumerate(outer):
+        bx, bz = outer[(i + 1) % n]
+        if az == bz and ax != bx:
+            for x in range(min(ax, bx), max(ax, bx) + 1, 16):
+                for y in range(0, 6):
+                    s.decor[(x, y, az - 2 * normals[i][1])] = M("minecraft:stone_brick_wall", (122, 122, 120)) if y < 5 else LANTERN
 
 
 def parking(s, x0, z0, x1, z1):
@@ -2337,30 +2951,32 @@ def medium_site():
     # Power block.
     cont = containment(s, 60, 40)
     sx, sz = place_primary(s, 60, 40)
+    # The reactor building's inside (22 October 2026): the approved machines as compiled sites (tools/reactor_site.py),
+    # over the containment's blocks.
+    import reactor_site as RS
+    rb = RS.reactor_part()
+    s.add(rb, *rb.at)
     hall = turbine_hall(s, 124, 38)
     # (The buildings' ground floors are level with the grass, at y -1: what stands on them starts at y 0.)
     s.eq("turbine_generator", 160, 54, "east", y=12)
-    s.eq("condenser", 170, 54, "east", y=6)
-    s.eq("main_transformer", 228, 57, "east")
+    s.eq("condenser", 171, 54, "east", y=6)          # condenser shell 1A, under LP 1 (turbine hall part 2)
     s.eq("feedwater_pump", 150, 66, y=0)
-    # Main steam: out of the containment in the pipe bridge, across the hall above the operating floor to the turbine's
-    # main steam inlet over its high-pressure end; feedwater up from the pump into it.
-    s.line(P.STEAM, (sx + 1, 21, sz), (165, 21, sz))
-    s.line(P.STEAM, (165, 21, 59), (165, 21, sz))
-    s.line(P.STEAM, (165, 20, 59), (165, 20, 59))
-    s.line(P.STEAM, (152, 3, 67), (152, 21, 67))
-    s.line(P.STEAM, (152, 21, 66), (152, 21, 66))
+    # Main steam (turbine hall part 1): out of the containment in the pipe bridge, in through the hall's west wall
+    # high up, along it to clear the roller door, down the wall to under the operating floor, east under it and
+    # through the pedestal to the steam chests, up into the right-hand chest's main steam lead; feedwater up from the
+    # pump into it.
+    s.line(P.STEAM, (sx + 1, 21, sz), (125, 21, sz))
+    s.line(P.STEAM, (125, 21, sz + 1), (125, 21, sz + 1))
+    s.line(P.STEAM, (125, 9, sz + 1), (125, 20, sz + 1))
+    s.line(P.STEAM, (126, 9, sz + 1), (164, 9, sz + 1))
+    s.line(P.STEAM, (164, 9, 64), (164, 9, sz))
+    s.line(P.STEAM, (164, 10, 64), (164, 11, 64))
+    s.line(P.STEAM, (152, 3, 67), (152, 9, 67))
     s.gallery(111, 123, sz - 2, sz + 2, 19, 23, [(112, sz - 2), (112, sz + 2), (122, sz - 2), (122, sz + 2)])
-    # Hangers for the steam line inside the hall, from the roof trusses.
-    for x in list(range(126, 166, 6)) + [164]:
-        for y in range(23, 37):
-            hall.g[x - 124, y, sz - 38] = CHAIN if hall.g[x - 124, y, sz - 38] == 0 else hall.g[x - 124, y, sz - 38]
-    # Isolated phase bus from the generator out through the end wall to the main transformer, on steel trestles.
-    s.line(P.BUS, (210, 12, 59), (230, 12, 59))
-    s.line(P.BUS, (230, 6, 59), (230, 11, 59))
-    for x in (226, 229):
-        for y in range(0, 12):
-            s.decor[(x, y, 60)] = GIRDER
+    # Isolated phase bus from under the generator east under the operating floor to the end wall, where the transformer
+    # yard's bus takes it on (its bus port: the yard's controller finds the generator through it, tools/yard_sites.py).
+    s.line(P.BUS, (203, 9, 59), (203, 11, 59))
+    s.line(P.BUS, (204, 9, 59), (223, 9, 59))
     # Around the reactor.
     aux_building(s, 30, 95)
     # The radwaste building (round 14) west of the auxiliary building, by its health physics entrance.
@@ -2382,33 +2998,38 @@ def medium_site():
     outdoor_tank(s, 200, 125, 4.5, 8, "Diesel Fuel Oil Storage Tank", "diesel_fuel_tank", service="diesel_fuel", outlet="n", inlet="e",
                  ladder="w", manway="s", bund=True, rating="flammable")
     s.decor[(200, 1, 119)] = PIPE
-    trench = [(200, 0, 119)] + [(200, -1, z) for z in range(110, 120)]
-    trench += [(x, -1, 110) for x in range(180 + min(fills), 180 + max(fills) + 1)]
+    south = 90 + diesel.size[2]
+    trench = [(200, 0, 119)] + [(200, -1, z) for z in range(south, 120)]
+    trench += [(x, -1, south) for x in range(min(180 + min(fills), 200), max(180 + max(fills), 200) + 1)]
     for x, y, z in trench:
         s.decor[(x, y, z)] = WALL_PIPE
         if y == -1:
             s.decor[(x, -2, z)] = SMOOTH
-    # Electrical: the transformer yard by the turbine hall, the switchyard beyond.
-    s.add(P.transformer_yard("pwr_transformer_yard", "Main Transformer Yard", 20, 26), 226, 46)
-    s.add(P.switchyard("switchyard_medium", "Switchyard", 70, 60, 6), 262, 30)
-    # The intake: legs down into each bay behind its screen, a header in the pump floor, a pump over each leg.
-    ph = pump_house(s, 150, -8)
-    legs = [150 + i * ph.bay_w + 8 for i in range(ph.bays)]
-    for x in legs:
-        s.line(P.CONDUIT, (x, -4, -4), (x, -1, -4))
-        s.line(P.CONDUIT, (x, -1, -3), (x, -1, -2))
-        s.line(P.TRENCH_KIND, (x, -1, -1), (x, -1, 1))
-        s.eq("circulating_water_pump", x - 1, 0, y=0)
-    s.line(P.TRENCH_KIND, (legs[0], -1, -1), (legs[-1], -1, -1))
-    # Towers.
-    t = P.cooling_tower("ct_natural", "Natural-Draft Cooling Tower", 52, 150, 31, 115, "natural")
-    for tx in (120, 250):
-        s.tower(t, tx, 215, "natural")
-    # Circulating water: lake -> condenser (riser up through the floor and its foundation) -> both towers.
-    s.conduit((legs[2], -1), (legs[2], 30), (172, 30), (172, 59))
+    # Electrical (transformer yard and switchyard build, 20 October 2026; compiled sites, tools/yard_sites.py): the
+    # main transformer yard along the turbine hall's east wall (its bus from the hall's), the 345 kV switchyard east of
+    # it, outside the protected area.
+    import yard_sites as YS
+    for part in (YS.transformer_yard_part(), YS.switchyard_part()):
+        s.add(part, *part.at)
+    s.yard_ports = [(YS.HALL_FACE, 9, 59)]
+    # The water works to the detail standard (towers and pump houses build, 19 October 2026; compiled sites,
+    # tools/water_works.py). The lake intake (make-up and service water, tools/ww_intake.py) where the old pump house
+    # stood: its shore (d 2) on the plant's shore, its hall's middle at x 170.
+    import water_works as WW
+    import ww_circ
+    import ww_intake
+    import ww_tower
+    place_site(s, ww_intake.intake_part(WW.cells_of("lake_intake")), "intake", 9, 2, 170, 0)
+    # The towers, their axes where the old ones stood, their outlets toward the plant.
+    t = ww_tower.tower_part(WW.cells_of("ct_medium"))
+    ctrls = [place_tower(s, t, tx, 270) for tx in (120, 250)]
+    # The circulating water pump house (tools/ww_circ.py) between the towers, on the trench from them to the condenser:
+    # its controller touches the trench, its pumps move the towers' water.
+    place_site(s, ww_circ.circ_part(WW.cells_of("cw_pump_house")), "circ", *CW_HOUSE)
+    # Circulating water: the towers' outlets -> the trench -> the condenser (riser up through the floor and its foundation).
     s.line(P.CONDUIT, (172, 0, 59), (172, 5, 59))
-    s.conduit((172, 59), (172, 205), (120, 205), (120, 270))
-    s.conduit((172, 205), (250, 205), (250, 270))
+    s.conduit((172, 59), (172, 196), (ctrls[0][0], 196), (ctrls[0][0], ctrls[0][2] - 1))
+    s.conduit((172, 196), (ctrls[1][0], 196), (ctrls[1][0], ctrls[1][2] - 1))
     # Site: fence round the protected area, admin, gatehouse, parking, warehouse; roads.
     import medium_admin as A
     admin = A.admin_building(s, 40, 160)
@@ -2419,8 +3040,9 @@ def medium_site():
     A.walkway(s, 139, 169, 142, 171)
     A.walkway(s, 143, 169, 159, 171)
     ware = warehouse(s, 262, 110)
-    fence(s, 0, 26, 250, 146, 123)
-    parking(s, 160, 165, 230, 200)
+    # (the protected area takes in the transformer yard: its east side steps out round it, north of the diesel building)
+    fence(s, 0, 26, 250, 146, 123, step=(286, 96))
+    parking(s, 160, 165, 230, 196)
     s.roads += [(0, 150, 372, 156), (120, 82, 127, 215), (100, 84, 240, 87)]
     # Building name signs.
     site_sign(s, hall, 20, 15, 0, "s", "turbine_building")
@@ -2428,20 +3050,45 @@ def medium_site():
     site_sign(s, admin, 30, 4, 0, "n", "administration")
     site_sign(s, gate, 5, 3, 0, "s", "security")
     site_sign(s, gate, 5, 3, 0, "n", "security")
-    site_sign(s, ware, 20, 6, 0, "s", "warehouse")    # well under the windows (the sign stands taller than its block)
-    # The warehouse's door path to the road, and the concrete apron in front of its roller doors.
-    A.walkway(s, 266, 136, 268, 149)
-    A.walkway(s, 302, 113, 310, 128)
-    A.walkway(s, 306, 129, 310, 149)
+    # The warehouse's apron along its front (the Goods In and Goods Out windows), and paths from the office door and the
+    # stair tower's exit to the road.
+    A.walkway(s, 262, 137, 306, 140)
+    A.walkway(s, 281, 141, 283, 149)
+    A.walkway(s, 302, 141, 305, 149)
     site_sign(s, diesel, 23, 8, 0, "s", "diesel_building")
     site_sign(s, ctrl_part(s, "aux_building"), 30, 4, 0, "s", "auxiliary_building")
     site_sign(s, ctrl_part(s, "fuel_building"), 0, 15, 23, "e", "fuel_building")
-    site_sign(s, ph, 20, 11, 0, "s", "pump_house")
     finish_lights(s)
     for part, *_ in s.parts:
         finish_railings(part)
         finish_glass(part)
     return s
+
+
+# Where the circulating water pump house stands: its site point (x, z) at the plant's (x, z) (its controller's middle at
+# the trench along z 196).
+CW_HOUSE = (12.5, 10.5, 185.5, 197.5)
+
+
+def place_site(s, part, works, sx, sz, px, pz):
+    """A compiled pump house (ww_intake.intake_part, ww_circ.circ_part) with its site point (sx, sz) at the plant's (px,
+    pz) (the part stands turned half round in its file: site x and z run the other way). Returns its controller's place."""
+    x0, z0 = int(round(px - part.origin[0] + sx)), int(round(pz - part.origin[2] + sz))
+    s.add(part, x0, z0)
+    cx, cy, cz = part.controller
+    at = (x0 + cx, cy - part.sink, z0 + cz)
+    s.works.append((*at, works))
+    return at
+
+
+def place_tower(s, part, ax, az):
+    """A compiled cooling tower (ww_tower.tower_part) with its axis at (ax, az): returns its controller's place."""
+    x0, z0 = ax - int(round(part.axis[0])), az - int(round(part.axis[2]))
+    s.add(part, x0, z0)
+    cx, cy, cz = part.controller
+    at = (x0 + cx, cy - part.sink, z0 + cz)
+    s.towers.append((*at, "medium"))
+    return at
 
 
 def ctrl_part(s, key):

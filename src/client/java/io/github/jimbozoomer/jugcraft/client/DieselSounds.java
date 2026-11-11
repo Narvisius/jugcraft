@@ -77,7 +77,7 @@ public final class DieselSounds {
 								&& !ENGINES.containsKey(e.getBlockPos())) {
 							// Over the middle of the engine (in the open: a sound inside the machine's frames would be
 							// muffled by them, client/SoundOcclusion).
-							BlockPos middle = e.getBlockPos().offset(EquipmentKind.toWorld(new BlockPos(3, 5, 6), e.facing()));
+							BlockPos middle = e.getBlockPos().offset(EquipmentKind.toWorld(new BlockPos(5, 6, 7), e.facing()));
 							Vec3 m = Vec3.atCenterOf(middle);
 							if (m.distanceToSqr(ear) < RANGE * RANGE) {
 								ENGINES.put(e.getBlockPos().immutable(), new Engine(e.getBlockPos().immutable(), m));

@@ -40,6 +40,17 @@ public class LineAnchorBlockEntity extends BlockEntity {
 	public final @Nullable FluidTank nitrogen;
 	/** How full the line through it ran last time it was measured, 0 to 255. */
 	private int load;
+	/** A Service Pedestal's meter: the energy it has delivered into cables (JE), and what the clients last saw. */
+	private long delivered, deliveredShown;
+	/** kWh a JE is (1 JE/t is about 2.3 kW; a tick is 0.05 s). */
+	public static final double KWH_PER_JE = 2.3 * 0.05 / 3600;
+	/**
+	 * Its frame cells (offsets from the anchor) as placed: since power lines round 2 a tower turns to its line and stands
+	 * as its tangent or angle body, so its legs move when its wires change (LineGeometry.frames). Null until known.
+	 */
+	private @Nullable List<BlockPos> frames;
+	/** Structures whose frame waits to be moved to where they stand (loaded from before round 2, placed by a blueprint, boxes). */
+	static final java.util.Set<LineAnchorBlockEntity> RELAY = java.util.Collections.newSetFromMap(new java.util.WeakHashMap<>());
 
 	public LineAnchorBlockEntity(BlockPos pos, BlockState state) {
 		super(JugcraftPowerLines.ANCHOR_ENTITY, pos, state);
@@ -92,6 +103,11 @@ public class LineAnchorBlockEntity extends BlockEntity {
 		return load;
 	}
 
+	/** What a Service Pedestal's meter reads: the energy it has delivered into cables (JE). */
+	public long delivered() {
+		return delivered;
+	}
+
 	void setLoad(int value) {
 		value = Math.max(0, Math.min(255, value));
 		if (Math.abs(value - load) > 6 || (value == 0) != (load == 0)) {
@@ -105,12 +121,14 @@ public class LineAnchorBlockEntity extends BlockEntity {
 			return false;
 		}
 		connections.add(other.immutable());
+		relayFrames();
 		changed();
 		return true;
 	}
 
 	public void disconnect(BlockPos other) {
 		if (connections.remove(other)) {
+			relayFrames();
 			changed();
 		}
 	}
@@ -119,13 +137,81 @@ public class LineAnchorBlockEntity extends BlockEntity {
 	void setConnections(List<BlockPos> list) {
 		connections.clear();
 		connections.addAll(list);
+		relayFrames();
 		changed();
+	}
+
+	/** Its frame cells (offsets from the anchor). */
+	public List<BlockPos> frames() {
+		return frames != null ? frames : kind().legacyFrames();
+	}
+
+	/** Its layout with its wires as they are (how it faces, which body, each wire's conductor points). */
+	public LineGeometry.Layout layout() {
+		return LineGeometry.layout(kind(), getBlockPos(), connections, LineWires.kinds(level), LineGeometry.boxYaw(getBlockState()));
+	}
+
+	/** Notes the frame cells its placing put down (LinePlacement). */
+	void setFrames(List<BlockPos> cells) {
+		frames = List.copyOf(cells);
+		if (level != null) {
+			LineRegistry.of(level).add(getBlockPos(), kind(), frames);
+		}
+		setChanged();
+	}
+
+	/**
+	 * Moves its frame to where its body now stands (server): the cells it no longer fills are cleared, the new ones
+	 * filled where nothing else stands.
+	 */
+	void relayFrames() {
+		if (!(level instanceof ServerLevel server)) {
+			return;
+		}
+		BlockPos pos = getBlockPos();
+		List<BlockPos> have = frames();
+		List<BlockPos> want = LineGeometry.frames(layout());
+		if (frames != null && want.equals(have)) {
+			return;
+		}
+		LineRegistry registry = LineRegistry.of(server);
+		List<BlockPos> stale = new ArrayList<>();
+		for (BlockPos f : have) {
+			if (!want.contains(f)) {
+				stale.add(f);
+			}
+		}
+		LinePlacement.clearFrames(server, pos, stale);
+		List<BlockPos> placed = new ArrayList<>();
+		registry.add(pos, kind(), want);
+		for (BlockPos f : want) {
+			BlockPos p = pos.offset(f);
+			if (server.getBlockState(p).is(JugcraftPowerLines.FRAME) && have.contains(f)) {
+				placed.add(f);
+			} else if (!server.isOutsideBuildHeight(p) && server.getBlockState(p).canBeReplaced()) {
+				server.setBlock(p, JugcraftPowerLines.FRAME.defaultBlockState(), Block.UPDATE_ALL);
+				placed.add(f);
+			}
+		}
+		frames = List.copyOf(placed);
+		registry.add(pos, kind(), frames);
+		setChanged();
 	}
 
 	public void serverTick(ServerLevel level) {
 		if (energy != null && energy.out > 0) {
 			// What the line brought goes out into the cables and machines touching the box.
-			EnergyNetworks.pushToNeighbors(level, getBlockPos(), energy.outlet, energy.out, EnumSet.allOf(Direction.class));
+			long moved = EnergyNetworks.pushToNeighbors(level, getBlockPos(), energy.outlet, energy.out, EnumSet.allOf(Direction.class));
+			if (moved > 0 && kind() == LineKind.SERVICE_PEDESTAL) {
+				delivered += moved;
+				setChanged();
+			}
+		}
+		if (delivered != deliveredShown && level.getGameTime() % 20 == (getBlockPos().asLong() & 15)
+				&& (long) (delivered * KWH_PER_JE) != (long) (deliveredShown * KWH_PER_JE)) {
+			// The meter's display counts whole kWh: told to the clients when it moves on, at most once a second.
+			deliveredShown = delivered;
+			changed();
 		}
 		if (level.getGameTime() % 100 == (getBlockPos().asLong() & 63)) {
 			// Forget wires to structures that are gone (for example broken while this chunk was unloaded).
@@ -148,7 +234,11 @@ public class LineAnchorBlockEntity extends BlockEntity {
 	@Override
 	public void setLevel(Level level) {
 		super.setLevel(level);
-		LineRegistry.of(level).add(getBlockPos(), kind());
+		LineRegistry.of(level).add(getBlockPos(), kind(), frames());
+		if ((frames == null || kind().isBox()) && !level.isClientSide()) {
+			// (a box saved before it turned to its line: its yard moves when it next loads)
+			RELAY.add(this);
+		}
 	}
 
 	/** Broken: its frame goes, and the structures it was wired to forget it (unless it is being upgraded in place). */
@@ -158,7 +248,7 @@ public class LineAnchorBlockEntity extends BlockEntity {
 		if (!(level instanceof ServerLevel server)) {
 			return;
 		}
-		LinePlacement.clearFrames(server, pos, kind(state));
+		LinePlacement.clearFrames(server, pos, LineRegistry.of(server).framesOf(pos));
 		if (!LinePlacement.UPGRADING.get()) {
 			for (BlockPos other : connections) {
 				if (server.isLoaded(other) && server.getBlockEntity(other) instanceof LineAnchorBlockEntity partner) {
@@ -191,6 +281,10 @@ public class LineAnchorBlockEntity extends BlockEntity {
 				net.minecraft.util.ProblemReporter.DISCARDING, registries);
 		output.store("connections", BlockPos.CODEC.listOf(), List.copyOf(connections));
 		output.putInt("load", load);
+		output.store("frames", BlockPos.CODEC.listOf(), frames());
+		if (delivered > 0) {
+			output.putLong("delivered", delivered);
+		}
 		return output.buildResult();
 	}
 
@@ -200,6 +294,15 @@ public class LineAnchorBlockEntity extends BlockEntity {
 		connections.clear();
 		connections.addAll(input.read("connections", BlockPos.CODEC.listOf()).orElse(List.of()));
 		load = input.getIntOr("load", 0);
+		delivered = input.getLongOr("delivered", 0L);
+		deliveredShown = delivered;
+		java.util.Optional<List<BlockPos>> cells = input.read("frames", BlockPos.CODEC.listOf());
+		if (cells.isPresent()) {
+			frames = List.copyOf(cells.get());
+		}
+		if (level != null && level.isClientSide()) {
+			LineRegistry.of(level).add(getBlockPos(), kind(), frames());
+		}
 		if (energy != null) {
 			energy.in = Math.min(energy.capacity, input.getLongOr("energy_in", 0L));
 			energy.out = Math.min(energy.capacity, input.getLongOr("energy_out", 0L));
@@ -214,6 +317,12 @@ public class LineAnchorBlockEntity extends BlockEntity {
 		super.saveAdditional(output);
 		output.store("connections", BlockPos.CODEC.listOf(), List.copyOf(connections));
 		output.putInt("load", load);
+		if (delivered > 0) {
+			output.putLong("delivered", delivered);
+		}
+		if (frames != null) {
+			output.store("frames", BlockPos.CODEC.listOf(), frames);
+		}
 		if (energy != null) {
 			output.putLong("energy_in", energy.in);
 			output.putLong("energy_out", energy.out);

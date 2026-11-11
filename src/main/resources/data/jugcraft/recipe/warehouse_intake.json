@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SHS",
+    "MCM",
+    "SPS"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "H": "minecraft:hopper",
+    "M": "jugcraft:electric_motor",
+    "C": "jugcraft:basic_circuit",
+    "P": "minecraft:piston"
+  },
+  "result": {
+    "id": "jugcraft:warehouse_intake",
+    "count": 1
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "crude_oil"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "SSKKSS",
+    "SSKKSS",
+    "SSKKSS"
+  ],
+  "key": {
+    "K": "jugcraft:plastic_sheet",
+    "S": "#c:plates/steel"
+  },
+  "result": {
+    "id": "jugcraft:parts_rack",
+    "count": 2
+  }
+}

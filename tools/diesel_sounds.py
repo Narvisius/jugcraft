@@ -9,6 +9,9 @@
   it while the engine turns, its pitch and loudness following the engine's speed (so it also runs down when stopped):
   client/DieselSounds.java.
 - edg_stop: the fuel racks pulled to stop: the shutdown solenoid's clunk and a sigh of exhaust.
+- co2_horn (round 31 part 3): one blast of the diesel room's CO2 alarm horn, a harsh buzzing horn a little under a
+  second long; nuclear/Co2System.java sounds it each second of the 30-second countdown.
+- co2_discharge: the CO2 dumping into the room: the valves' bang, then a roaring hiss from the nozzles that dies away.
 Writes assets/jugcraft/sounds/diesel/*.ogg and their sounds.json entries (needs numpy and ffmpeg with libvorbis).
 """
 import json
@@ -22,7 +25,9 @@ OUT = os.path.join(HERE, "..", "src/main/resources/assets/jugcraft/sounds/diesel
 SOUNDS_JSON = os.path.join(HERE, "..", "src/main/resources/assets/jugcraft/sounds.json")
 LANG = {"subtitles.jugcraft.diesel.start": "Diesel generator starts",
         "subtitles.jugcraft.diesel.run": "Diesel generator runs",
-        "subtitles.jugcraft.diesel.stop": "Diesel generator stops"}
+        "subtitles.jugcraft.diesel.stop": "Diesel generator stops",
+        "subtitles.jugcraft.diesel.co2_horn": "CO2 alarm horn",
+        "subtitles.jugcraft.diesel.co2_discharge": "CO2 discharges"}
 
 
 def band_noise(n, low, high, rng, periodic=False):
@@ -159,6 +164,32 @@ def stop():
     return out + sigh * 0.35
 
 
+def co2_horn():
+    """A horn blast: a buzzing tone (its odd harmonics, rolled off above 4 kHz) with a mains rasp, 0.8 s, a gap."""
+    rng = np.random.default_rng(31)
+    n = int(RATE * 0.95)
+    t = np.arange(n) / RATE
+    f0 = 520.0
+    tone = sum(np.sin(2 * np.pi * f0 * k * t) / k * (1 if f0 * k < 4000 else 0) for k in range(1, 16, 2))
+    rasp = 1 + 0.35 * np.sign(np.sin(2 * np.pi * 60 * t))
+    env = np.clip(t / 0.012, 0, 1) * np.clip((0.8 - t) / 0.03, 0, 1)
+    hiss = band_noise(n, 1500, 5000, rng) * 0.04
+    return (tone * rasp + hiss) * env
+
+
+def co2_discharge():
+    """The discharge: a bang, then the nozzles' roar (wide noise, a low rumble under it) fluttering and dying away."""
+    rng = np.random.default_rng(37)
+    n = int(RATE * 4.5)
+    t = np.arange(n) / RATE
+    roar = band_noise(n, 300, 9000, rng)
+    rumble = band_noise(n, 35, 160, rng) * 0.6
+    flutter = 1 + 0.15 * band_noise(n, 2, 9, rng)
+    env = np.clip(t / 0.05, 0, 1) * np.where(t < 2.5, 1.0, np.exp(-(t - 2.5) / 0.8))
+    bang = band_noise(n, 40, 2000, rng) * np.exp(-t / 0.05) * 1.6
+    return (roar + rumble) * flutter * env + bang
+
+
 def write(name, signal):
     os.makedirs(OUT, exist_ok=True)
     signal = np.tanh(signal / np.max(np.abs(signal)) * 1.2) / np.tanh(1.2) * 0.85
@@ -178,6 +209,10 @@ SOUNDS = {
                    "sounds": [{"name": "jugcraft:diesel/edg_run", "attenuation_distance": 40}]},
     "diesel.stop": {"subtitle": "subtitles.jugcraft.diesel.stop",
                     "sounds": [{"name": "jugcraft:diesel/edg_stop", "attenuation_distance": 32}]},
+    "diesel.co2_horn": {"subtitle": "subtitles.jugcraft.diesel.co2_horn",
+                        "sounds": [{"name": "jugcraft:diesel/co2_horn", "attenuation_distance": 48}]},
+    "diesel.co2_discharge": {"subtitle": "subtitles.jugcraft.diesel.co2_discharge",
+                             "sounds": [{"name": "jugcraft:diesel/co2_discharge", "attenuation_distance": 48}]},
 }
 
 
@@ -193,4 +228,6 @@ if __name__ == "__main__":
     write("edg_run", run_loop())
     write("edg_start", high_pass(start()))
     write("edg_stop", high_pass(stop()))
+    write("co2_horn", co2_horn())
+    write("co2_discharge", high_pass(co2_discharge()))
     write_sounds_json()

@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "BB  BB",
+    "BBNNBB",
+    "BB  BB"
+  ],
+  "key": {
+    "B": "minecraft:iron_bars",
+    "N": "minecraft:iron_nugget"
+  },
+  "result": {
+    "id": "jugcraft:comms_mast",
+    "count": 8
+  }
+}

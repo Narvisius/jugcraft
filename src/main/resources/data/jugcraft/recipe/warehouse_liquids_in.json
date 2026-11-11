@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SBS",
+    "PCP",
+    "SSS"
+  ],
+  "key": {
+    "S": "#c:plates/steel",
+    "B": "minecraft:bucket",
+    "P": "jugcraft:bronze_fluid_pipe",
+    "C": "jugcraft:basic_circuit"
+  },
+  "result": {
+    "id": "jugcraft:warehouse_liquids_in",
+    "count": 1
+  }
+}

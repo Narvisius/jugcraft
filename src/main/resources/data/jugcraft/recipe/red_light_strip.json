@@ -9,19 +9,18 @@
       "feature": "drones"
     }
   ],
-  "type": "minecraft:crafting_shaped",
-  "category": "building",
+  "type": "jugcraft:advanced_crafting",
   "pattern": [
-    "GGG",
-    "RDR"
+    "GGGGGG",
+    "RRDDRR"
   ],
   "key": {
+    "D": "minecraft:red_dye",
     "G": "minecraft:glass_pane",
-    "R": "minecraft:redstone",
-    "D": "minecraft:red_dye"
+    "R": "minecraft:redstone"
   },
   "result": {
     "id": "jugcraft:red_light_strip",
-    "count": 6
+    "count": 12
   }
 }

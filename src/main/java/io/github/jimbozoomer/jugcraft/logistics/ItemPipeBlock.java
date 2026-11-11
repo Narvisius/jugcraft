@@ -105,6 +105,9 @@ public class ItemPipeBlock extends PipeBlock implements ItemConnectable {
 		BlockState own = level.getBlockState(pos);
 		if (own.getBlock() instanceof ItemPipeBlock pipe && neighbor.getBlock() instanceof ItemPipeBlock next
 				&& (!pipe.joins(own, neighbor) || !next.joins(neighbor, own))) return false;
+		if (neighbor.getBlock() instanceof io.github.jimbozoomer.jugcraft.tower.ExchangeStationBlock station) {
+			return !station.energy && station.isPort(neighbor, direction.getOpposite());
+		}
 		if (neighbor.getBlock() instanceof ItemConnectable) {
 			return true;
 		}

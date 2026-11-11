@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "MMM",
+    "SBS",
+    "SSS"
+  ],
+  "key": {
+    "M": "jugcraft:electric_motor",
+    "S": "#c:plates/steel",
+    "B": "minecraft:bucket"
+  },
+  "result": {
+    "id": "jugcraft:lube_oil_reservoir",
+    "count": 1
+  }
+}

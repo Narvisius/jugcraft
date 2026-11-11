@@ -1,0 +1,47 @@
+{
+  "textures": {
+    "pi_wh4_eyewash": "jugcraft:block/pi_wh4_eyewash",
+    "pi_wh_steel": "jugcraft:block/pi_wh_steel",
+    "particle": "jugcraft:block/pi_wh4_eyewash"
+  },
+  "elements": [
+    {
+      "from": [
+        7.0,
+        2.0,
+        0.0
+      ],
+      "to": [
+        15.0,
+        10.0,
+        0.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_wh_steel"
+        },
+        "south": {
+          "texture": "#pi_wh4_eyewash",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_wh_steel"
+        },
+        "west": {
+          "texture": "#pi_wh_steel"
+        },
+        "up": {
+          "texture": "#pi_wh_steel"
+        },
+        "down": {
+          "texture": "#pi_wh_steel"
+        }
+      }
+    }
+  ]
+}

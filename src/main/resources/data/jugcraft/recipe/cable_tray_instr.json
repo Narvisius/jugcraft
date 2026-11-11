@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "P P",
+    "RPR"
+  ],
+  "key": {
+    "P": "#c:plates/iron",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "jugcraft:cable_tray_instr",
+    "count": 8
+  }
+}

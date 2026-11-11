@@ -1,7 +1,295 @@
 {
-  "parent": "jugcraft:block/pad_plate",
+  "parent": "minecraft:block/block",
   "textures": {
-    "top": "jugcraft:block/supply_pickup_formed_5",
-    "side": "jugcraft:block/supply_pickup_side"
-  }
+    "tower_detail_amber_lamp": "jugcraft:block/tower_detail_amber_lamp",
+    "tower_detail_dark": "jugcraft:block/tower_detail_dark",
+    "tower_detail_light_steel": "jugcraft:block/tower_detail_light_steel",
+    "tower_detail_panel": "jugcraft:block/tower_detail_panel",
+    "tower_detail_steel": "jugcraft:block/tower_detail_steel",
+    "tower_pad_surface": "jugcraft:block/supply_pickup_formed_5"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        2.45,
+        16
+      ],
+      "faces": {
+        "up": {
+          "texture": "#tower_pad_surface",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_steel"
+        }
+      }
+    },
+    {
+      "from": [
+        1.1,
+        2.45,
+        1.1
+      ],
+      "to": [
+        2.0,
+        3,
+        14.9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_light_steel"
+        },
+        "south": {
+          "texture": "#tower_detail_light_steel"
+        },
+        "east": {
+          "texture": "#tower_detail_light_steel"
+        },
+        "west": {
+          "texture": "#tower_detail_light_steel"
+        },
+        "up": {
+          "texture": "#tower_detail_light_steel"
+        },
+        "down": {
+          "texture": "#tower_detail_light_steel"
+        }
+      }
+    },
+    {
+      "from": [
+        14.0,
+        2.45,
+        1.1
+      ],
+      "to": [
+        14.9,
+        3,
+        14.9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_light_steel"
+        },
+        "south": {
+          "texture": "#tower_detail_light_steel"
+        },
+        "east": {
+          "texture": "#tower_detail_light_steel"
+        },
+        "west": {
+          "texture": "#tower_detail_light_steel"
+        },
+        "up": {
+          "texture": "#tower_detail_light_steel"
+        },
+        "down": {
+          "texture": "#tower_detail_light_steel"
+        }
+      }
+    },
+    {
+      "from": [
+        2.0,
+        2.45,
+        1.1
+      ],
+      "to": [
+        14.0,
+        3,
+        2.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_light_steel"
+        },
+        "south": {
+          "texture": "#tower_detail_light_steel"
+        },
+        "east": {
+          "texture": "#tower_detail_light_steel"
+        },
+        "west": {
+          "texture": "#tower_detail_light_steel"
+        },
+        "up": {
+          "texture": "#tower_detail_light_steel"
+        },
+        "down": {
+          "texture": "#tower_detail_light_steel"
+        }
+      }
+    },
+    {
+      "from": [
+        2.0,
+        2.45,
+        14.0
+      ],
+      "to": [
+        14.0,
+        3,
+        14.9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_light_steel"
+        },
+        "south": {
+          "texture": "#tower_detail_light_steel"
+        },
+        "east": {
+          "texture": "#tower_detail_light_steel"
+        },
+        "west": {
+          "texture": "#tower_detail_light_steel"
+        },
+        "up": {
+          "texture": "#tower_detail_light_steel"
+        },
+        "down": {
+          "texture": "#tower_detail_light_steel"
+        }
+      }
+    },
+    {
+      "from": [
+        2.2,
+        2.45,
+        2.2
+      ],
+      "to": [
+        7.85,
+        2.8,
+        13.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_panel"
+        },
+        "south": {
+          "texture": "#tower_detail_panel"
+        },
+        "east": {
+          "texture": "#tower_detail_panel"
+        },
+        "west": {
+          "texture": "#tower_detail_panel"
+        },
+        "up": {
+          "texture": "#tower_detail_panel"
+        },
+        "down": {
+          "texture": "#tower_detail_panel"
+        }
+      }
+    },
+    {
+      "from": [
+        8.15,
+        2.45,
+        2.2
+      ],
+      "to": [
+        13.8,
+        2.8,
+        13.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_panel"
+        },
+        "south": {
+          "texture": "#tower_detail_panel"
+        },
+        "east": {
+          "texture": "#tower_detail_panel"
+        },
+        "west": {
+          "texture": "#tower_detail_panel"
+        },
+        "up": {
+          "texture": "#tower_detail_panel"
+        },
+        "down": {
+          "texture": "#tower_detail_panel"
+        }
+      }
+    },
+    {
+      "from": [
+        3.1,
+        2.55,
+        6.9
+      ],
+      "to": [
+        3.9,
+        2.92,
+        9.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_dark"
+        },
+        "south": {
+          "texture": "#tower_detail_dark"
+        },
+        "east": {
+          "texture": "#tower_detail_dark"
+        },
+        "west": {
+          "texture": "#tower_detail_dark"
+        },
+        "up": {
+          "texture": "#tower_detail_dark"
+        },
+        "down": {
+          "texture": "#tower_detail_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        12.1,
+        2.55,
+        6.9
+      ],
+      "to": [
+        12.9,
+        2.92,
+        9.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_dark"
+        },
+        "south": {
+          "texture": "#tower_detail_dark"
+        },
+        "east": {
+          "texture": "#tower_detail_dark"
+        },
+        "west": {
+          "texture": "#tower_detail_dark"
+        },
+        "up": {
+          "texture": "#tower_detail_dark"
+        },
+        "down": {
+          "texture": "#tower_detail_dark"
+        }
+      }
+    }
+  ]
 }

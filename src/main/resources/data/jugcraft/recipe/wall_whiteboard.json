@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "drones"
+    },
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "aluminum"
+    }
+  ],
+  "type": "jugcraft:advanced_crafting",
+  "pattern": [
+    "AAQQAA",
+    "AAQQAA"
+  ],
+  "key": {
+    "A": "#c:plates/aluminum",
+    "Q": "minecraft:quartz"
+  },
+  "result": {
+    "id": "jugcraft:wall_whiteboard",
+    "count": 2
+  }
+}

@@ -78,6 +78,14 @@ public final class PlatformLayout {
 	 * into whole 5x5 pads. Reads at most {@link #MAX_CELLS} cells plus their edges.
 	 */
 	public static PlatformLayout scan(int seedX, int seedZ, CellLookup lookup) {
+		return scan(seedX, seedZ, lookup, MIN_SIDE);
+	}
+
+	/**
+	 * As {@link #scan(int, int, CellLookup)}, the platform at least {@code minSide} each way: a Drone Tower's own
+	 * platform (its drones dock in its bays) may be as small as its supply pickup ({@link #PICKUP_SIZE}).
+	 */
+	public static PlatformLayout scan(int seedX, int seedZ, CellLookup lookup, int minSide) {
 		if (lookup.at(seedX, seedZ) == Cell.NONE) {
 			return EMPTY;
 		}
@@ -120,7 +128,7 @@ public final class PlatformLayout {
 		Status status;
 		if (truncated) {
 			status = Status.TOO_LARGE;
-		} else if (maxX - minX + 1 < MIN_SIDE || maxZ - minZ + 1 < MIN_SIDE) {
+		} else if (maxX - minX + 1 < minSide || maxZ - minZ + 1 < minSide) {
 			status = Status.TOO_SMALL;
 		} else if (pads.isEmpty()) {
 			status = Status.NO_PAD;

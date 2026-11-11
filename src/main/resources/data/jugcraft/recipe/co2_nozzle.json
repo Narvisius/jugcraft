@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "RIR",
+    " G "
+  ],
+  "key": {
+    "R": "minecraft:red_dye",
+    "I": "minecraft:iron_ingot",
+    "G": "minecraft:gold_nugget"
+  },
+  "result": {
+    "id": "jugcraft:co2_nozzle",
+    "count": 4
+  }
+}

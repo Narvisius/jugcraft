@@ -1,0 +1,2622 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": true,
+  "textures": {
+    "tower_detail_porcelain": "jugcraft:block/tower_detail_porcelain",
+    "particle": "jugcraft:block/tower_detail_steel"
+  },
+  "elements": [
+    {
+      "from": [
+        6.4,
+        7.3373,
+        0
+      ],
+      "to": [
+        9.6,
+        8.6627,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.2,
+            1.325
+          ],
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.2,
+            1.325
+          ],
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            16,
+            1.325
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            16,
+            1.325
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.2,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.2,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6.4,
+        7.3373,
+        -0.1
+      ],
+      "to": [
+        9.6,
+        8.6627,
+        16.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.2,
+            1.325
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.2,
+            1.325
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            16,
+            1.325
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            16,
+            1.325
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.2,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.2,
+            16
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8.0
+        ],
+        "axis": "z",
+        "angle": -45
+      }
+    },
+    {
+      "from": [
+        6.4,
+        7.3373,
+        -0.2
+      ],
+      "to": [
+        9.6,
+        8.6627,
+        16.2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.2,
+            1.325
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.2,
+            1.325
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            16,
+            1.325
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            16,
+            1.325
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.2,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.2,
+            16
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8.0
+        ],
+        "axis": "z",
+        "angle": 45
+      }
+    },
+    {
+      "from": [
+        7.3373,
+        6.4,
+        -0.3
+      ],
+      "to": [
+        8.6627,
+        9.6,
+        16.3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            1.325,
+            3.2
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            1.325,
+            3.2
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            16,
+            3.2
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            16,
+            3.2
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            1.325,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            1.325,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        3.2,
+        6.0118,
+        1
+      ],
+      "to": [
+        12.8,
+        9.9882,
+        1.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            3.976
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            3.976
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            3.976
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            3.976
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            0.8
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            0.8
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        3.2,
+        6.0118,
+        0.9
+      ],
+      "to": [
+        12.8,
+        9.9882,
+        1.9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            3.976
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            3.976
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            3.976
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            3.976
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            0.8
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            0.8
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          1.4
+        ],
+        "axis": "z",
+        "angle": -45
+      }
+    },
+    {
+      "from": [
+        3.2,
+        6.0118,
+        0.8
+      ],
+      "to": [
+        12.8,
+        9.9882,
+        2.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            3.976
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            3.976
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            3.976
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            3.976
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            0.8
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            0.8
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          1.4
+        ],
+        "axis": "z",
+        "angle": 45
+      }
+    },
+    {
+      "from": [
+        6.0118,
+        3.2,
+        0.7
+      ],
+      "to": [
+        9.9882,
+        12.8,
+        2.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.976,
+            9.6
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.976,
+            9.6
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            9.6
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            9.6
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.976,
+            0.8
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.976,
+            0.8
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        4.5,
+        6.5503,
+        1.8
+      ],
+      "to": [
+        11.5,
+        9.4497,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            2.899
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            2.899
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            2.899
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            2.899
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.7
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.7
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        4.5,
+        6.5503,
+        1.7
+      ],
+      "to": [
+        11.5,
+        9.4497,
+        2.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            2.899
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            2.899
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            2.899
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            2.899
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.7
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.7
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          2.15
+        ],
+        "axis": "z",
+        "angle": -45
+      }
+    },
+    {
+      "from": [
+        4.5,
+        6.5503,
+        1.6
+      ],
+      "to": [
+        11.5,
+        9.4497,
+        2.7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            2.899
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            2.899
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            2.899
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            2.899
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.7
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.7
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          2.15
+        ],
+        "axis": "z",
+        "angle": 45
+      }
+    },
+    {
+      "from": [
+        6.5503,
+        4.5,
+        1.5
+      ],
+      "to": [
+        9.4497,
+        11.5,
+        2.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            2.899,
+            7.0
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            2.899,
+            7.0
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            7.0
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            7.0
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            2.899,
+            0.7
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            2.899,
+            0.7
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        3.2,
+        6.0118,
+        4.5
+      ],
+      "to": [
+        12.8,
+        9.9882,
+        5.3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            3.976
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            3.976
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            3.976
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            3.976
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            0.8
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            0.8
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        3.2,
+        6.0118,
+        4.4
+      ],
+      "to": [
+        12.8,
+        9.9882,
+        5.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            3.976
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            3.976
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            3.976
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            3.976
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            0.8
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            0.8
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          4.9
+        ],
+        "axis": "z",
+        "angle": -45
+      }
+    },
+    {
+      "from": [
+        3.2,
+        6.0118,
+        4.3
+      ],
+      "to": [
+        12.8,
+        9.9882,
+        5.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            3.976
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            3.976
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            3.976
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            3.976
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            0.8
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            0.8
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          4.9
+        ],
+        "axis": "z",
+        "angle": 45
+      }
+    },
+    {
+      "from": [
+        6.0118,
+        3.2,
+        4.2
+      ],
+      "to": [
+        9.9882,
+        12.8,
+        5.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.976,
+            9.6
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.976,
+            9.6
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            9.6
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            9.6
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.976,
+            0.8
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.976,
+            0.8
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        4.5,
+        6.5503,
+        5.3
+      ],
+      "to": [
+        11.5,
+        9.4497,
+        6.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            2.899
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            2.899
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            2.899
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            2.899
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.7
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.7
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        4.5,
+        6.5503,
+        5.2
+      ],
+      "to": [
+        11.5,
+        9.4497,
+        6.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            2.899
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            2.899
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            2.899
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            2.899
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.7
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.7
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          5.65
+        ],
+        "axis": "z",
+        "angle": -45
+      }
+    },
+    {
+      "from": [
+        4.5,
+        6.5503,
+        5.1
+      ],
+      "to": [
+        11.5,
+        9.4497,
+        6.2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            2.899
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            2.899
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            2.899
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            2.899
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.7
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.7
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          5.65
+        ],
+        "axis": "z",
+        "angle": 45
+      }
+    },
+    {
+      "from": [
+        6.5503,
+        4.5,
+        5.0
+      ],
+      "to": [
+        9.4497,
+        11.5,
+        6.3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            2.899,
+            7.0
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            2.899,
+            7.0
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            7.0
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            7.0
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            2.899,
+            0.7
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            2.899,
+            0.7
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        3.2,
+        6.0118,
+        8
+      ],
+      "to": [
+        12.8,
+        9.9882,
+        8.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            3.976
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            3.976
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            3.976
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            3.976
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            0.8
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            0.8
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        3.2,
+        6.0118,
+        7.9
+      ],
+      "to": [
+        12.8,
+        9.9882,
+        8.9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            3.976
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            3.976
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            3.976
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            3.976
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            0.8
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            0.8
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8.4
+        ],
+        "axis": "z",
+        "angle": -45
+      }
+    },
+    {
+      "from": [
+        3.2,
+        6.0118,
+        7.8
+      ],
+      "to": [
+        12.8,
+        9.9882,
+        9.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            3.976
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            3.976
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            3.976
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            3.976
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            0.8
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            0.8
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8.4
+        ],
+        "axis": "z",
+        "angle": 45
+      }
+    },
+    {
+      "from": [
+        6.0118,
+        3.2,
+        7.7
+      ],
+      "to": [
+        9.9882,
+        12.8,
+        9.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.976,
+            9.6
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.976,
+            9.6
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            9.6
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            9.6
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.976,
+            0.8
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.976,
+            0.8
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        4.5,
+        6.5503,
+        8.8
+      ],
+      "to": [
+        11.5,
+        9.4497,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            2.899
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            2.899
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            2.899
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            2.899
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.7
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.7
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        4.5,
+        6.5503,
+        8.7
+      ],
+      "to": [
+        11.5,
+        9.4497,
+        9.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            2.899
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            2.899
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            2.899
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            2.899
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.7
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.7
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          9.15
+        ],
+        "axis": "z",
+        "angle": -45
+      }
+    },
+    {
+      "from": [
+        4.5,
+        6.5503,
+        8.6
+      ],
+      "to": [
+        11.5,
+        9.4497,
+        9.7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            2.899
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            2.899
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            2.899
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            2.899
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.7
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.7
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          9.15
+        ],
+        "axis": "z",
+        "angle": 45
+      }
+    },
+    {
+      "from": [
+        6.5503,
+        4.5,
+        8.5
+      ],
+      "to": [
+        9.4497,
+        11.5,
+        9.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            2.899,
+            7.0
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            2.899,
+            7.0
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            7.0
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            7.0
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            2.899,
+            0.7
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            2.899,
+            0.7
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        3.2,
+        6.0118,
+        11.5
+      ],
+      "to": [
+        12.8,
+        9.9882,
+        12.3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            3.976
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            3.976
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            3.976
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            3.976
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            0.8
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            0.8
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        3.2,
+        6.0118,
+        11.4
+      ],
+      "to": [
+        12.8,
+        9.9882,
+        12.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            3.976
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            3.976
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            3.976
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            3.976
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            0.8
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            0.8
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          11.9
+        ],
+        "axis": "z",
+        "angle": -45
+      }
+    },
+    {
+      "from": [
+        3.2,
+        6.0118,
+        11.3
+      ],
+      "to": [
+        12.8,
+        9.9882,
+        12.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            3.976
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            3.976
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            3.976
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            3.976
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            0.8
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            9.6,
+            0.8
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          11.9
+        ],
+        "axis": "z",
+        "angle": 45
+      }
+    },
+    {
+      "from": [
+        6.0118,
+        3.2,
+        11.2
+      ],
+      "to": [
+        9.9882,
+        12.8,
+        12.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.976,
+            9.6
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.976,
+            9.6
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            9.6
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.8,
+            9.6
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.976,
+            0.8
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            3.976,
+            0.8
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        4.5,
+        6.5503,
+        12.3
+      ],
+      "to": [
+        11.5,
+        9.4497,
+        13.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            2.899
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            2.899
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            2.899
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            2.899
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.7
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.7
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        4.5,
+        6.5503,
+        12.2
+      ],
+      "to": [
+        11.5,
+        9.4497,
+        13.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            2.899
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            2.899
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            2.899
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            2.899
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.7
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.7
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          12.65
+        ],
+        "axis": "z",
+        "angle": -45
+      }
+    },
+    {
+      "from": [
+        4.5,
+        6.5503,
+        12.1
+      ],
+      "to": [
+        11.5,
+        9.4497,
+        13.2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            2.899
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            2.899
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            2.899
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            2.899
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.7
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.7
+          ]
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          12.65
+        ],
+        "axis": "z",
+        "angle": 45
+      }
+    },
+    {
+      "from": [
+        6.5503,
+        4.5,
+        12.0
+      ],
+      "to": [
+        9.4497,
+        11.5,
+        13.3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            2.899,
+            7.0
+          ]
+        },
+        "south": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            2.899,
+            7.0
+          ]
+        },
+        "east": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            7.0
+          ]
+        },
+        "west": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            0.7,
+            7.0
+          ]
+        },
+        "up": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            2.899,
+            0.7
+          ]
+        },
+        "down": {
+          "texture": "#tower_detail_porcelain",
+          "uv": [
+            0,
+            0,
+            2.899,
+            0.7
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PSP",
+    "GIG"
+  ],
+  "key": {
+    "P": "minecraft:paper",
+    "S": "minecraft:stick",
+    "G": "minecraft:glass_bottle",
+    "I": "minecraft:leather"
+  },
+  "result": {
+    "id": "jugcraft:battery_service_board",
+    "count": 1
+  }
+}

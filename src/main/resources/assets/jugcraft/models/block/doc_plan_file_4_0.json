@@ -1,0 +1,955 @@
+{
+  "textures": {
+    "pi_chrome": "jugcraft:block/pi_chrome",
+    "pi_doc_drawing": "jugcraft:block/pi_doc_drawing",
+    "pi_doc_planfile": "jugcraft:block/pi_doc_planfile",
+    "pi_doc_planfile_card_0": "jugcraft:block/pi_doc_planfile_card_0",
+    "pi_doc_planfile_card_1": "jugcraft:block/pi_doc_planfile_card_1",
+    "pi_doc_planfile_card_2": "jugcraft:block/pi_doc_planfile_card_2",
+    "pi_doc_planfile_card_3": "jugcraft:block/pi_doc_planfile_card_3",
+    "pi_doc_planfile_card_4": "jugcraft:block/pi_doc_planfile_card_4",
+    "pi_doc_planfile_drawer": "jugcraft:block/pi_doc_planfile_drawer",
+    "pi_doc_planfile_top": "jugcraft:block/pi_doc_planfile_top",
+    "pi_paper": "jugcraft:block/pi_paper",
+    "pi_steel_dark": "jugcraft:block/pi_steel_dark",
+    "particle": "jugcraft:block/pi_chrome"
+  },
+  "elements": [
+    {
+      "from": [
+        0.4,
+        0.0,
+        1.2
+      ],
+      "to": [
+        16,
+        1.4,
+        14.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_steel_dark"
+        },
+        "south": {
+          "texture": "#pi_steel_dark"
+        },
+        "east": {
+          "texture": "#pi_steel_dark"
+        },
+        "west": {
+          "texture": "#pi_steel_dark"
+        },
+        "up": {
+          "texture": "#pi_steel_dark"
+        },
+        "down": {
+          "texture": "#pi_steel_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        0.4,
+        1.4,
+        1.0
+      ],
+      "to": [
+        16,
+        13.8,
+        14.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_doc_planfile"
+        },
+        "south": {
+          "texture": "#pi_doc_planfile"
+        },
+        "east": {
+          "texture": "#pi_doc_planfile"
+        },
+        "west": {
+          "texture": "#pi_doc_planfile"
+        },
+        "up": {
+          "texture": "#pi_doc_planfile"
+        },
+        "down": {
+          "texture": "#pi_doc_planfile"
+        }
+      }
+    },
+    {
+      "from": [
+        0.2,
+        13.8,
+        0.8
+      ],
+      "to": [
+        16,
+        14.4,
+        14.799999999999999
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_doc_planfile"
+        },
+        "south": {
+          "texture": "#pi_doc_planfile"
+        },
+        "east": {
+          "texture": "#pi_doc_planfile"
+        },
+        "west": {
+          "texture": "#pi_doc_planfile"
+        },
+        "up": {
+          "texture": "#pi_doc_planfile_top"
+        },
+        "down": {
+          "texture": "#pi_doc_planfile"
+        }
+      }
+    },
+    {
+      "from": [
+        0.6,
+        1.6,
+        14.4
+      ],
+      "to": [
+        16,
+        3.85,
+        14.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_doc_planfile"
+        },
+        "south": {
+          "texture": "#pi_doc_planfile_drawer",
+          "uv": [
+            0.0,
+            0,
+            8.0,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_doc_planfile"
+        },
+        "west": {
+          "texture": "#pi_doc_planfile"
+        },
+        "up": {
+          "texture": "#pi_doc_planfile"
+        },
+        "down": {
+          "texture": "#pi_doc_planfile"
+        }
+      }
+    },
+    {
+      "from": [
+        3.4,
+        2.475,
+        14.6
+      ],
+      "to": [
+        6.6,
+        2.975,
+        15.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome"
+        },
+        "south": {
+          "texture": "#pi_chrome"
+        },
+        "east": {
+          "texture": "#pi_chrome"
+        },
+        "west": {
+          "texture": "#pi_chrome"
+        },
+        "up": {
+          "texture": "#pi_chrome"
+        },
+        "down": {
+          "texture": "#pi_chrome"
+        }
+      }
+    },
+    {
+      "from": [
+        13.6,
+        2.125,
+        14.6
+      ],
+      "to": [
+        16,
+        3.325,
+        14.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome"
+        },
+        "south": {
+          "texture": "#pi_doc_planfile_card_0",
+          "uv": [
+            0.0,
+            0,
+            8.0,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_chrome"
+        },
+        "west": {
+          "texture": "#pi_chrome"
+        },
+        "up": {
+          "texture": "#pi_chrome"
+        },
+        "down": {
+          "texture": "#pi_chrome"
+        }
+      }
+    },
+    {
+      "from": [
+        0.6,
+        4.0,
+        14.4
+      ],
+      "to": [
+        16,
+        6.25,
+        14.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_doc_planfile"
+        },
+        "south": {
+          "texture": "#pi_doc_planfile_drawer",
+          "uv": [
+            0.0,
+            0,
+            8.0,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_doc_planfile"
+        },
+        "west": {
+          "texture": "#pi_doc_planfile"
+        },
+        "up": {
+          "texture": "#pi_doc_planfile"
+        },
+        "down": {
+          "texture": "#pi_doc_planfile"
+        }
+      }
+    },
+    {
+      "from": [
+        3.4,
+        4.875,
+        14.6
+      ],
+      "to": [
+        6.6,
+        5.375,
+        15.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome"
+        },
+        "south": {
+          "texture": "#pi_chrome"
+        },
+        "east": {
+          "texture": "#pi_chrome"
+        },
+        "west": {
+          "texture": "#pi_chrome"
+        },
+        "up": {
+          "texture": "#pi_chrome"
+        },
+        "down": {
+          "texture": "#pi_chrome"
+        }
+      }
+    },
+    {
+      "from": [
+        13.6,
+        4.525,
+        14.6
+      ],
+      "to": [
+        16,
+        5.725,
+        14.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome"
+        },
+        "south": {
+          "texture": "#pi_doc_planfile_card_1",
+          "uv": [
+            0.0,
+            0,
+            8.0,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_chrome"
+        },
+        "west": {
+          "texture": "#pi_chrome"
+        },
+        "up": {
+          "texture": "#pi_chrome"
+        },
+        "down": {
+          "texture": "#pi_chrome"
+        }
+      }
+    },
+    {
+      "from": [
+        0.6,
+        6.4,
+        14.4
+      ],
+      "to": [
+        16,
+        8.649999999999999,
+        14.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_doc_planfile"
+        },
+        "south": {
+          "texture": "#pi_doc_planfile_drawer",
+          "uv": [
+            0.0,
+            0,
+            8.0,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_doc_planfile"
+        },
+        "west": {
+          "texture": "#pi_doc_planfile"
+        },
+        "up": {
+          "texture": "#pi_doc_planfile"
+        },
+        "down": {
+          "texture": "#pi_doc_planfile"
+        }
+      }
+    },
+    {
+      "from": [
+        3.4,
+        7.2749999999999995,
+        14.6
+      ],
+      "to": [
+        6.6,
+        7.7749999999999995,
+        15.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome"
+        },
+        "south": {
+          "texture": "#pi_chrome"
+        },
+        "east": {
+          "texture": "#pi_chrome"
+        },
+        "west": {
+          "texture": "#pi_chrome"
+        },
+        "up": {
+          "texture": "#pi_chrome"
+        },
+        "down": {
+          "texture": "#pi_chrome"
+        }
+      }
+    },
+    {
+      "from": [
+        13.6,
+        6.925,
+        14.6
+      ],
+      "to": [
+        16,
+        8.125,
+        14.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome"
+        },
+        "south": {
+          "texture": "#pi_doc_planfile_card_2",
+          "uv": [
+            0.0,
+            0,
+            8.0,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_chrome"
+        },
+        "west": {
+          "texture": "#pi_chrome"
+        },
+        "up": {
+          "texture": "#pi_chrome"
+        },
+        "down": {
+          "texture": "#pi_chrome"
+        }
+      }
+    },
+    {
+      "from": [
+        0.6,
+        8.799999999999999,
+        23.400000000000002
+      ],
+      "to": [
+        16,
+        11.049999999999999,
+        23.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_doc_planfile",
+          "uv": [
+            0,
+            4.95,
+            15.4,
+            7.2
+          ]
+        },
+        "south": {
+          "texture": "#pi_doc_planfile_drawer",
+          "uv": [
+            0.0,
+            0,
+            8.0,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_doc_planfile",
+          "uv": [
+            0,
+            4.95,
+            0.2,
+            7.2
+          ]
+        },
+        "west": {
+          "texture": "#pi_doc_planfile",
+          "uv": [
+            15.8,
+            4.95,
+            16.0,
+            7.2
+          ]
+        },
+        "up": {
+          "texture": "#pi_doc_planfile",
+          "uv": [
+            0.6,
+            15.8,
+            16,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#pi_doc_planfile",
+          "uv": [
+            0.6,
+            0,
+            16,
+            0.2
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        3.4,
+        9.674999999999999,
+        23.6
+      ],
+      "to": [
+        6.6,
+        10.174999999999999,
+        24.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome",
+          "uv": [
+            9.4,
+            5.825,
+            12.6,
+            6.325
+          ]
+        },
+        "south": {
+          "texture": "#pi_chrome",
+          "uv": [
+            3.4,
+            5.825,
+            6.6,
+            6.325
+          ]
+        },
+        "east": {
+          "texture": "#pi_chrome",
+          "uv": [
+            0,
+            5.825,
+            0.5,
+            6.325
+          ]
+        },
+        "west": {
+          "texture": "#pi_chrome",
+          "uv": [
+            15.5,
+            5.825,
+            16.0,
+            6.325
+          ]
+        },
+        "up": {
+          "texture": "#pi_chrome",
+          "uv": [
+            3.4,
+            15.5,
+            6.6,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#pi_chrome",
+          "uv": [
+            3.4,
+            0,
+            6.6,
+            0.5
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        13.6,
+        9.325,
+        23.6
+      ],
+      "to": [
+        16,
+        10.524999999999999,
+        23.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome",
+          "uv": [
+            0,
+            5.475,
+            2.4,
+            6.675
+          ]
+        },
+        "south": {
+          "texture": "#pi_doc_planfile_card_3",
+          "uv": [
+            0.0,
+            0,
+            8.0,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_chrome",
+          "uv": [
+            0,
+            5.475,
+            0.15,
+            6.675
+          ]
+        },
+        "west": {
+          "texture": "#pi_chrome",
+          "uv": [
+            15.85,
+            5.475,
+            16.0,
+            6.675
+          ]
+        },
+        "up": {
+          "texture": "#pi_chrome",
+          "uv": [
+            13.6,
+            15.85,
+            16,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#pi_chrome",
+          "uv": [
+            13.6,
+            0,
+            16,
+            0.15
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0.8,
+        8.799999999999999,
+        11.6
+      ],
+      "to": [
+        1.2,
+        10.749999999999998,
+        23.400000000000002
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_doc_planfile",
+          "uv": [
+            14.8,
+            5.25,
+            15.2,
+            7.2
+          ]
+        },
+        "south": {
+          "texture": "#pi_doc_planfile",
+          "uv": [
+            0.8,
+            5.25,
+            1.2,
+            7.2
+          ]
+        },
+        "east": {
+          "texture": "#pi_doc_planfile",
+          "uv": [
+            0,
+            5.25,
+            11.8,
+            7.2
+          ]
+        },
+        "west": {
+          "texture": "#pi_doc_planfile",
+          "uv": [
+            4.2,
+            5.25,
+            16.0,
+            7.2
+          ]
+        },
+        "up": {
+          "texture": "#pi_doc_planfile",
+          "uv": [
+            0.8,
+            4.2,
+            1.2,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#pi_doc_planfile",
+          "uv": [
+            0.8,
+            0,
+            1.2,
+            11.8
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        1.2,
+        8.799999999999999,
+        11.6
+      ],
+      "to": [
+        15.87,
+        9.1,
+        23.400000000000002
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_doc_planfile",
+          "uv": [
+            0.03,
+            6.9,
+            14.8,
+            7.2
+          ]
+        },
+        "south": {
+          "texture": "#pi_doc_planfile",
+          "uv": [
+            1.2,
+            6.9,
+            15.97,
+            7.2
+          ]
+        },
+        "east": {
+          "texture": "#pi_doc_planfile",
+          "uv": [
+            0,
+            6.9,
+            11.8,
+            7.2
+          ]
+        },
+        "west": {
+          "texture": "#pi_doc_planfile",
+          "uv": [
+            4.2,
+            6.9,
+            16.0,
+            7.2
+          ]
+        },
+        "up": {
+          "texture": "#pi_doc_planfile",
+          "uv": [
+            1.2,
+            4.2,
+            15.97,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#pi_doc_planfile",
+          "uv": [
+            1.2,
+            0,
+            15.97,
+            11.8
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        1.6,
+        9.1,
+        12.0
+      ],
+      "to": [
+        15.87,
+        9.499999999999998,
+        23.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_paper",
+          "uv": [
+            0.03,
+            6.5,
+            14.4,
+            6.9
+          ]
+        },
+        "south": {
+          "texture": "#pi_paper",
+          "uv": [
+            1.6,
+            6.5,
+            15.97,
+            6.9
+          ]
+        },
+        "east": {
+          "texture": "#pi_paper",
+          "uv": [
+            0,
+            6.5,
+            11.0,
+            6.9
+          ]
+        },
+        "west": {
+          "texture": "#pi_paper",
+          "uv": [
+            5.0,
+            6.5,
+            16.0,
+            6.9
+          ]
+        },
+        "up": {
+          "texture": "#pi_doc_drawing",
+          "uv": [
+            0.0,
+            0,
+            8.0,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#pi_paper",
+          "uv": [
+            1.6,
+            0,
+            15.97,
+            11.0
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0.6,
+        11.2,
+        14.4
+      ],
+      "to": [
+        16,
+        13.45,
+        14.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_doc_planfile"
+        },
+        "south": {
+          "texture": "#pi_doc_planfile_drawer",
+          "uv": [
+            0.0,
+            0,
+            8.0,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_doc_planfile"
+        },
+        "west": {
+          "texture": "#pi_doc_planfile"
+        },
+        "up": {
+          "texture": "#pi_doc_planfile"
+        },
+        "down": {
+          "texture": "#pi_doc_planfile"
+        }
+      }
+    },
+    {
+      "from": [
+        3.4,
+        12.075,
+        14.6
+      ],
+      "to": [
+        6.6,
+        12.575,
+        15.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome"
+        },
+        "south": {
+          "texture": "#pi_chrome"
+        },
+        "east": {
+          "texture": "#pi_chrome"
+        },
+        "west": {
+          "texture": "#pi_chrome"
+        },
+        "up": {
+          "texture": "#pi_chrome"
+        },
+        "down": {
+          "texture": "#pi_chrome"
+        }
+      }
+    },
+    {
+      "from": [
+        13.6,
+        11.725,
+        14.6
+      ],
+      "to": [
+        16,
+        12.924999999999999,
+        14.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_chrome"
+        },
+        "south": {
+          "texture": "#pi_doc_planfile_card_4",
+          "uv": [
+            0.0,
+            0,
+            8.0,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#pi_chrome"
+        },
+        "west": {
+          "texture": "#pi_chrome"
+        },
+        "up": {
+          "texture": "#pi_chrome"
+        },
+        "down": {
+          "texture": "#pi_chrome"
+        }
+      }
+    }
+  ]
+}

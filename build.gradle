@@ -84,6 +84,12 @@ dependencies {
 			}
 		}
 	}
+	// The flat screen TVs' video decoder (client/tv/TvFfmpeg.java): compile-only. Each game fetches JavaCV and Bytedeco's
+	// LGPL FFmpeg build from Maven Central the first time it plays a TV (client/tv/TvCodec.java, the same versions), so
+	// no third-party jar is nested in Jugcraft's (docs/FRAMEWORKS.md, docs/features/flat-screen-tv.md).
+	clientCompileOnly("org.bytedeco:javacv:1.5.14") { transitive = false }
+	clientCompileOnly("org.bytedeco:javacpp:1.5.14") { transitive = false }
+	clientCompileOnly("org.bytedeco:ffmpeg:8.1.2-1.5.14") { transitive = false }
 }
 
 def compileUpdateHelper = tasks.register('compileUpdateHelper', JavaCompile) {
@@ -218,11 +224,15 @@ tasks.named("runClientGameTest") {
 // -PclientTestShard=<n> -PclientTestShards=<count> keeps the classes at positions n, n + count, n + 2 * count ... of
 // it. Without them every class runs. Server game tests are never split.
 def clientTests = providers.gradleProperty("clientTests").getOrElse("")
+def serverTests = providers.gradleProperty("serverTests").getOrElse("")
 // The complete content/biome suite needs the same practical heap floor as a modded client.
 // Bound both test JVMs explicitly: the full server suite also retains substantial
 // world state. Fail on exhaustion so CI preserves the cause instead of hanging.
+// -PtestHeap=<size> (12G, say) gives both test JVMs more: the full server suite on a big modpack tree can need it.
+def testHeap = providers.gradleProperty("testHeap").getOrElse("4G")
 tasks.matching { it.name in ["runGameTest", "runClientGameTest"] }.configureEach {
-	maxHeapSize = name == "runClientGameTest" ? "6G" : "4G"
+	// -PtestHeap=<size> overrides both; otherwise the client suite gets 6G and the server suite 4G
+	maxHeapSize = providers.gradleProperty("testHeap").isPresent() ? testHeap : (name == "runClientGameTest" ? "6G" : "4G")
 	jvmArgs "-XX:+ExitOnOutOfMemoryError"
 }
 def clientTestShard = providers.gradleProperty("clientTestShard").getOrElse("")
@@ -269,6 +279,24 @@ tasks.named("processGametestResources", ProcessResources) {
 		json.entrypoints["fabric-client-gametest"] = mine
 		manifest.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json))
 		task.logger.lifecycle("Client game tests: ${mine.size()} of ${all.size()} classes: ${mine}")
+	}
+}
+
+// Local feature work can select whole server test classes without constructing every unrelated arena.
+// Omission preserves the full CI suite, and unknown class names fail instead of silently skipping tests.
+tasks.named("processGametestResources", ProcessResources) {
+	inputs.property("serverTests", serverTests)
+	doLast { task ->
+		if (serverTests.isEmpty()) return
+		File manifest = new File(task.destinationDir, "fabric.mod.json")
+		def json = new groovy.json.JsonSlurper().parse(manifest)
+		Set<String> wanted = serverTests.split(",").collect { it.trim() }.findAll { !it.isEmpty() } as Set
+		List<String> mine = json.entrypoints["fabric-gametest"].findAll { wanted.contains(it.substring(it.lastIndexOf('.') + 1)) }
+		Set<String> unknown = wanted - (mine.collect { it.substring(it.lastIndexOf('.') + 1) } as Set)
+		if (!unknown.isEmpty()) throw new GradleException("serverTests names classes the test mod does not list: ${unknown}")
+		json.entrypoints["fabric-gametest"] = mine
+		manifest.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json))
+		task.logger.lifecycle("Server game tests: ${mine}")
 	}
 }
 

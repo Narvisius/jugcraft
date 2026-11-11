@@ -14,6 +14,7 @@ import numpy as np
 from PIL import Image, ImageDraw
 
 import nuclear_materials as M
+import overview_display as OD
 import plant_office3 as O3
 import plant_office4 as O4
 import plant_panels as PN
@@ -203,9 +204,13 @@ PIECES = {
         (2, 14.2, 0.6, 3, 15, 1, "pi_marker_red"), (13, 14.2, 0.6, 14, 15, 1, "pi_marker_red")]},
     # ---- bigger than a block
     "training_screen": {"display": "Training Screen", "multi": (3, 2, True), "screen": "training"},
-    "plant_map_screen": {"display": "Plant Overview Screen", "multi": (3, 2, True), "screen": "plant_map"},
+    # Round 34: the plant overview screen is a slim LCD whose picture is drawn live (tools/overview_display.py,
+    # tools/overview_screen.py); the raceway brings its power down the wall to a receptacle.
+    "plant_map_screen": {"display": "Plant Overview Screen", "multi": (3, 2, True), "overview": True},
+    "screen_raceway": {"display": "Screen Power Raceway", "boxes": OD.RACEWAY},
     "status_screen": {"display": "Plant Status Screen", "multi": (3, 2, True), "screen": "status"},
-    "flat_tv": {"display": "Flat Screen TV", "multi": (3, 2, True), "screen": "blank"},
+    # The flat screen TV joins up (tools/flat_tv.py, tv/FlatTvBlock.java): "tv" has its own models; "multi" draws its icon.
+    "flat_tv": {"display": "Flat Screen TV", "multi": (3, 2, True), "screen": "blank", "tv": True},
     "oval_table": {"display": "Oval Meeting Table", "multi": (5, 3, False), "table": True, "versions": 3},
     "lounge_table": {"display": "Oval Glass Coffee Table", "multi": (3, 2, False), "lounge": True},
     # ---- the warehouse
@@ -467,8 +472,7 @@ def _tray_bend(rungs=(22.5, 45.0, 67.5)):
     # The rungs, across the corner from the inner rail to the outer.
     for theta in rungs:
         t = math.radians(theta)
-        # Pin sub-pixel coordinates so Windows and Linux libm serialize the same generated model.
-        out += _seg(round(8 * math.sin(t), 10), round(16 - 8 * math.cos(t), 10), theta - 90, 9.2, 0.9, y0 + 0.05, 11.85, _GALV)
+        out += _seg(8 * math.sin(t), 16 - 8 * math.cos(t), theta - 90, 9.2, 0.9, y0 + 0.05, 11.85, _GALV)
     out += [(1.55, y0 + 0.05, 3.4, 2.45, 11.85, 12.6, _GALV), (3.4, y0 + 0.05, 13.55, 12.6, 11.85, 14.45, _GALV)]
     # The cables round the bend.
     for z in TRAY_CABLES:
@@ -690,13 +694,14 @@ CRAFTING = {
     "blueprint_sheet": (["BBB", "BPB", "BBB"], {"B": "minecraft:blue_dye", "P": "minecraft:paper"}, 2),
     "training_screen": (["GGG", "GCG", " B "], {"G": "minecraft:black_stained_glass_pane", "C": "jugcraft:basic_circuit", "B": "minecraft:book"}, 1),
     "plant_map_screen": (["GGG", "GCG", " M "], {"G": "minecraft:black_stained_glass_pane", "C": "jugcraft:basic_circuit", "M": "minecraft:map"}, 1),
+    "screen_raceway": (["N", "N", "C"], {"N": "#c:plates/iron", "C": "minecraft:copper_ingot"}, 2),
     "status_screen": (["GGG", "GCG", " R "], {"G": "minecraft:black_stained_glass_pane", "C": "jugcraft:basic_circuit", "R": "minecraft:comparator"}, 1),
     "oval_table": (["SSS", "SSS", "N N"], {"S": "minecraft:dark_oak_slab", "N": "#c:plates/iron"}, 1),
     "lounge_table": (["GGG", "W W"], {"G": "minecraft:glass_pane", "W": "minecraft:dark_oak_log"}, 1),
     "storage_rack": (["SBS", "SBS", "SBS"], {"S": "#c:plates/iron", "B": "minecraft:barrel"}, 1),
     "high_bay_light": ([" N ", "PGP", " L "], {"N": "minecraft:iron_chain", "P": "#c:plates/iron", "G": "minecraft:glowstone", "L": "minecraft:glass_pane"}, 2),
     "light_hanger": (["N", "N", "S"], {"N": "minecraft:iron_chain", "S": "minecraft:string"}, 4),
-    "flat_tv": (["GGG", "GRG"], {"G": "minecraft:black_stained_glass_pane", "R": "minecraft:redstone"}, 1),
+    "flat_tv": (["GGG", "GRG"], {"G": "minecraft:black_stained_glass_pane", "R": "minecraft:redstone"}, 6),   # six blocks: the old 3 x 2 screen
     "large_print": (["SSS", "SPS", "SSS"], {"S": "minecraft:dark_oak_planks", "P": "minecraft:painting"}, 1),
     "glass_coffee_table": (["GGG", "N N"], {"G": "minecraft:glass_pane", "N": "minecraft:iron_nugget"}, 1),
     "control_tray": (["P P", "PWP"], {"P": "#c:plates/iron", "W": "#c:wires/copper"}, 8),
@@ -774,7 +779,10 @@ def multi_parts(info, version=0, open_=False):
     items = O4.O5.meeting_items(version) if info.get("versions") else []
     for p in range(w * rows):
         c, r = p % w, p // w
-        if info.get("rack"):
+        if info.get("parts"):
+            # A piece that cuts itself into its blocks (older rooms round 1: the switchgear room's one-line diagram).
+            yield p, info["parts"](c, r)
+        elif info.get("rack"):
             yield p, O4.O7.rack_part(c, r)
         elif info.get("lounge"):
             yield p, O4.O5.lounge_part(c, r)
@@ -784,6 +792,8 @@ def multi_parts(info, version=0, open_=False):
             yield p, O3.copier_part(c, r)
         elif info.get("panel"):
             yield p, PN.part(info["panel"], c, r, open_)
+        elif info.get("overview"):
+            yield p, OD.part_boxes(c, r)
         elif vertical:
             yield p, screen_boxes(info["screen"], c, r, w, rows)
         else:
@@ -1505,6 +1515,7 @@ def makers():
     out.update(O3.makers())
     out.update(O4.makers())
     out.update(PN.makers())
+    out.update(OD.makers())
     for v in range(12):
         for tex, img in lprint_texture(v).items():
             out[tex] = (lambda img=img: img)
@@ -1522,7 +1533,7 @@ TRANSLUCENT = O4.TRANSLUCENT | {"pi_glass_top", "pi_glass_edge", "pi_lab_glass",
 RICH = {"pi_medicine_front", "pi_binder_spines", "pi_vitals", "pi_circuit", "pi_pc_inside", "pi_folders", "pi_aed",
         "pi_plant_screen_a", "pi_plant_screen_b", "pi_plant_screen_c"} | \
     {f"pi_blueprint_{i}" for i in range(6)} | {f"pi_plant_top_{i}" for i in range(8)} | \
-    {f"pi_{k}_{p}" for k in ("training", "plant_map", "status", "blank") for p in range(6)}
+    {f"pi_{k}_{p}" for k in ("training", "status", "blank") for p in range(6)}
 
 
 PAINTINGS = {f"pi_lprint_{v}_{c}" for v in range(12) for c in range(2)} | {f"pi_print_{i}" for i in range(16)}
@@ -1563,6 +1574,8 @@ def icon(name):
         d.ellipse([6, 36, 122, 80], fill=(96, 64, 42, 255), outline=(60, 40, 26, 255), width=4)
         d.rectangle([40, 78, 50, 110], fill=(60, 62, 66, 255))
         d.rectangle([78, 78, 88, 110], fill=(60, 62, 66, 255))
+    elif name == "plant_map_screen":
+        return OD.icon()
     else:
         kind = PIECES[name]["screen"]
         pic = _screen_picture(kind, 3, 2).resize((120, 80))

@@ -1,0 +1,165 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": true,
+  "textures": {
+    "girder_paint": "jugcraft:block/girder_paint",
+    "girder_paint_dark": "jugcraft:block/girder_paint_dark",
+    "girder_plate": "jugcraft:block/girder_plate",
+    "girder_bolt": "jugcraft:block/girder_bolt",
+    "particle": "jugcraft:block/girder_paint"
+  },
+  "elements": [
+    {
+      "from": [
+        2.4,
+        0.0,
+        1.0
+      ],
+      "to": [
+        13.6,
+        16.0,
+        2.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#girder_paint"
+        },
+        "south": {
+          "texture": "#girder_paint"
+        },
+        "east": {
+          "texture": "#girder_paint"
+        },
+        "west": {
+          "texture": "#girder_paint"
+        }
+      }
+    },
+    {
+      "from": [
+        2.4,
+        0.0,
+        13.4
+      ],
+      "to": [
+        13.6,
+        16.0,
+        15.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#girder_paint"
+        },
+        "south": {
+          "texture": "#girder_paint"
+        },
+        "east": {
+          "texture": "#girder_paint"
+        },
+        "west": {
+          "texture": "#girder_paint"
+        }
+      }
+    },
+    {
+      "from": [
+        7.45,
+        0.0,
+        2.6
+      ],
+      "to": [
+        8.55,
+        16.0,
+        13.4
+      ],
+      "faces": {
+        "east": {
+          "texture": "#girder_paint_dark"
+        },
+        "west": {
+          "texture": "#girder_paint_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        6.9,
+        0.0,
+        2.5
+      ],
+      "to": [
+        7.55,
+        16.0,
+        3.15
+      ],
+      "faces": {
+        "south": {
+          "texture": "#girder_paint_dark"
+        },
+        "west": {
+          "texture": "#girder_paint_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        8.45,
+        0.0,
+        2.5
+      ],
+      "to": [
+        9.1,
+        16.0,
+        3.15
+      ],
+      "faces": {
+        "south": {
+          "texture": "#girder_paint_dark"
+        },
+        "east": {
+          "texture": "#girder_paint_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        6.9,
+        0.0,
+        12.85
+      ],
+      "to": [
+        7.55,
+        16.0,
+        13.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#girder_paint_dark"
+        },
+        "west": {
+          "texture": "#girder_paint_dark"
+        }
+      }
+    },
+    {
+      "from": [
+        8.45,
+        0.0,
+        12.85
+      ],
+      "to": [
+        9.1,
+        16.0,
+        13.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#girder_paint_dark"
+        },
+        "east": {
+          "texture": "#girder_paint_dark"
+        }
+      }
+    }
+  ]
+}

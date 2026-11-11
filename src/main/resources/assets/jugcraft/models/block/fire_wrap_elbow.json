@@ -1,0 +1,209 @@
+{
+  "textures": {
+    "pi_fire_wrap": "jugcraft:block/pi_fire_wrap",
+    "pi_fire_wrap_end": "jugcraft:block/pi_fire_wrap_end",
+    "pi_fire_wrap_side": "jugcraft:block/pi_fire_wrap_side",
+    "pi_hv_galv": "jugcraft:block/pi_hv_galv",
+    "particle": "jugcraft:block/pi_fire_wrap"
+  },
+  "elements": [
+    {
+      "from": [
+        5.4,
+        0.0,
+        5.4
+      ],
+      "to": [
+        10.6,
+        10.5,
+        10.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_fire_wrap"
+        },
+        "south": {
+          "texture": "#pi_fire_wrap"
+        },
+        "east": {
+          "texture": "#pi_fire_wrap"
+        },
+        "west": {
+          "texture": "#pi_fire_wrap"
+        },
+        "down": {
+          "texture": "#pi_fire_wrap_end"
+        }
+      }
+    },
+    {
+      "from": [
+        0.0,
+        10.5,
+        2.4
+      ],
+      "to": [
+        10.6,
+        14.8,
+        13.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_fire_wrap_side",
+          "uv": [
+            0,
+            0,
+            16,
+            4.3
+          ]
+        },
+        "south": {
+          "texture": "#pi_fire_wrap_side",
+          "uv": [
+            0,
+            0,
+            16,
+            4.3
+          ]
+        },
+        "east": {
+          "texture": "#pi_fire_wrap_end"
+        },
+        "up": {
+          "texture": "#pi_fire_wrap"
+        },
+        "down": {
+          "texture": "#pi_fire_wrap"
+        }
+      }
+    },
+    {
+      "from": [
+        5.28,
+        4.0,
+        5.28
+      ],
+      "to": [
+        10.719999999999999,
+        4.8,
+        5.4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_hv_galv"
+        },
+        "south": {
+          "texture": "#pi_hv_galv"
+        },
+        "east": {
+          "texture": "#pi_hv_galv"
+        },
+        "west": {
+          "texture": "#pi_hv_galv"
+        },
+        "up": {
+          "texture": "#pi_hv_galv"
+        },
+        "down": {
+          "texture": "#pi_hv_galv"
+        }
+      }
+    },
+    {
+      "from": [
+        5.28,
+        4.0,
+        10.6
+      ],
+      "to": [
+        10.719999999999999,
+        4.8,
+        10.719999999999999
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_hv_galv"
+        },
+        "south": {
+          "texture": "#pi_hv_galv"
+        },
+        "east": {
+          "texture": "#pi_hv_galv"
+        },
+        "west": {
+          "texture": "#pi_hv_galv"
+        },
+        "up": {
+          "texture": "#pi_hv_galv"
+        },
+        "down": {
+          "texture": "#pi_hv_galv"
+        }
+      }
+    },
+    {
+      "from": [
+        5.28,
+        4.0,
+        5.4
+      ],
+      "to": [
+        5.4,
+        4.8,
+        10.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_hv_galv"
+        },
+        "south": {
+          "texture": "#pi_hv_galv"
+        },
+        "east": {
+          "texture": "#pi_hv_galv"
+        },
+        "west": {
+          "texture": "#pi_hv_galv"
+        },
+        "up": {
+          "texture": "#pi_hv_galv"
+        },
+        "down": {
+          "texture": "#pi_hv_galv"
+        }
+      }
+    },
+    {
+      "from": [
+        10.6,
+        4.0,
+        5.4
+      ],
+      "to": [
+        10.719999999999999,
+        4.8,
+        10.6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_hv_galv"
+        },
+        "south": {
+          "texture": "#pi_hv_galv"
+        },
+        "east": {
+          "texture": "#pi_hv_galv"
+        },
+        "west": {
+          "texture": "#pi_hv_galv"
+        },
+        "up": {
+          "texture": "#pi_hv_galv"
+        },
+        "down": {
+          "texture": "#pi_hv_galv"
+        }
+      }
+    }
+  ]
+}

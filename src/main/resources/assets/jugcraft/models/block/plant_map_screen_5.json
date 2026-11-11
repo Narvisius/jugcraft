@@ -1,8 +1,10 @@
 {
   "textures": {
-    "pi_monitor": "jugcraft:block/pi_monitor",
-    "pi_plant_map_5": "jugcraft:block/pi_plant_map_5",
-    "particle": "jugcraft:block/pi_monitor"
+    "pi_ovs_back": "jugcraft:block/pi_ovs_back",
+    "pi_ovs_bezel": "jugcraft:block/pi_ovs_bezel",
+    "pi_ovs_glass": "jugcraft:block/pi_ovs_glass",
+    "pi_ovs_mount": "jugcraft:block/pi_ovs_mount",
+    "particle": "jugcraft:block/pi_ovs_back"
   },
   "elements": [
     {
@@ -12,34 +14,188 @@
         0
       ],
       "to": [
-        16,
-        16,
-        1.6
+        1,
+        7,
+        0.5
       ],
       "faces": {
         "north": {
-          "texture": "#pi_monitor"
+          "texture": "#pi_ovs_mount"
         },
         "south": {
-          "texture": "#pi_plant_map_5",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
+          "texture": "#pi_ovs_mount"
         },
         "east": {
-          "texture": "#pi_monitor"
+          "texture": "#pi_ovs_mount"
         },
         "west": {
-          "texture": "#pi_monitor"
+          "texture": "#pi_ovs_mount"
         },
         "up": {
-          "texture": "#pi_monitor"
+          "texture": "#pi_ovs_mount"
         },
         "down": {
-          "texture": "#pi_monitor"
+          "texture": "#pi_ovs_mount"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        0.5
+      ],
+      "to": [
+        15.3,
+        15.3,
+        1.15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_ovs_back"
+        },
+        "south": {
+          "texture": "#pi_ovs_back"
+        },
+        "east": {
+          "texture": "#pi_ovs_back"
+        },
+        "west": {
+          "texture": "#pi_ovs_back"
+        },
+        "up": {
+          "texture": "#pi_ovs_back"
+        },
+        "down": {
+          "texture": "#pi_ovs_back"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        1.15
+      ],
+      "to": [
+        15.75,
+        15.75,
+        1.85
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_ovs_bezel"
+        },
+        "south": {
+          "texture": "#pi_ovs_bezel"
+        },
+        "east": {
+          "texture": "#pi_ovs_bezel"
+        },
+        "west": {
+          "texture": "#pi_ovs_bezel"
+        },
+        "up": {
+          "texture": "#pi_ovs_bezel"
+        },
+        "down": {
+          "texture": "#pi_ovs_bezel"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        15.43,
+        1.85
+      ],
+      "to": [
+        15.75,
+        15.75,
+        1.95
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_ovs_bezel"
+        },
+        "south": {
+          "texture": "#pi_ovs_bezel"
+        },
+        "east": {
+          "texture": "#pi_ovs_bezel"
+        },
+        "west": {
+          "texture": "#pi_ovs_bezel"
+        },
+        "up": {
+          "texture": "#pi_ovs_bezel"
+        },
+        "down": {
+          "texture": "#pi_ovs_bezel"
+        }
+      }
+    },
+    {
+      "from": [
+        15.43,
+        0,
+        1.85
+      ],
+      "to": [
+        15.75,
+        15.43,
+        1.95
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_ovs_bezel"
+        },
+        "south": {
+          "texture": "#pi_ovs_bezel"
+        },
+        "east": {
+          "texture": "#pi_ovs_bezel"
+        },
+        "west": {
+          "texture": "#pi_ovs_bezel"
+        },
+        "up": {
+          "texture": "#pi_ovs_bezel"
+        },
+        "down": {
+          "texture": "#pi_ovs_bezel"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        1.85
+      ],
+      "to": [
+        15.43,
+        15.43,
+        2.0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pi_ovs_bezel"
+        },
+        "south": {
+          "texture": "#pi_ovs_glass"
+        },
+        "east": {
+          "texture": "#pi_ovs_bezel"
+        },
+        "west": {
+          "texture": "#pi_ovs_bezel"
+        },
+        "up": {
+          "texture": "#pi_ovs_bezel"
+        },
+        "down": {
+          "texture": "#pi_ovs_bezel"
         }
       },
       "light_emission": 12

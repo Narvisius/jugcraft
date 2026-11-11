@@ -255,7 +255,43 @@ public class StorageTankGameTests {
 		helper.assertBlockProperty(new BlockPos(6, 3, 5), SteelLadderBlock.CAGE, true);
 		helper.assertBlockProperty(new BlockPos(6, 4, 5), SteelLadderBlock.TOP, true);
 		helper.assertBlockProperty(new BlockPos(6, 3, 5), SteelLadderBlock.TOP, false);
+		helper.assertBlockProperty(new BlockPos(6, 3, 5), SteelLadderBlock.BOTTOM, true);
+		helper.assertBlockProperty(new BlockPos(6, 4, 5), SteelLadderBlock.BOTTOM, false);
 		helper.assertTrue(helper.getBlockState(new BlockPos(6, 2, 5)).is(net.minecraft.tags.BlockTags.CLIMBABLE), "the steel ladder climbs");
+		helper.succeed();
+	}
+
+	/**
+	 * A ladder past a landing (the Tri-Pillar's risers and lift, work list item 17): no cage where a climber steps off
+	 * onto a floor or the length under it, caged again two lengths over it, each cage flared at its foot.
+	 */
+	@GameTest(maxTicks = 20)
+	public void ladderCageStartsOverEachLanding(GameTestHelper helper) {
+		if (TestFocus.skip("nuclear")) {
+			helper.succeed();
+			return;
+		}
+		for (int y = 0; y <= 7; y++) {
+			helper.setBlock(new BlockPos(3, y, 6), Blocks.STONE);
+		}
+		helper.setBlock(new BlockPos(3, 0, 4), Blocks.STONE);     // the floor in front of its foot
+		helper.setBlock(new BlockPos(3, 3, 4), Blocks.STONE);     // a landing to step off onto at the fourth length
+		for (int y = 1; y <= 7; y++) {
+			helper.setBlock(new BlockPos(3, y, 5), StorageTanks.LADDER.defaultBlockState().setValue(SteelLadderBlock.FACING, Direction.NORTH));
+		}
+		for (int y = 1; y <= 7; y++) {
+			BlockPos abs = helper.absolutePos(new BlockPos(3, y, 5));
+			helper.getLevel().setBlock(abs, SteelLadderBlock.shaped(helper.getLevel().getBlockState(abs), helper.getLevel(), abs), Block.UPDATE_ALL);
+		}
+		boolean[] cage = {false, false, true, false, false, true, true};
+		boolean[] bottom = {false, false, true, false, false, true, false};
+		for (int y = 1; y <= 7; y++) {
+			helper.assertBlockProperty(new BlockPos(3, y, 5), SteelLadderBlock.CAGE, cage[y - 1]);
+			helper.assertBlockProperty(new BlockPos(3, y, 5), SteelLadderBlock.BOTTOM, bottom[y - 1]);
+		}
+		helper.assertTrue(SteelLadderBlock.landing(helper.getLevel(), helper.absolutePos(new BlockPos(3, 4, 5)), Direction.NORTH),
+				"the fourth length is a landing");
+		helper.assertBlockProperty(new BlockPos(3, 7, 5), SteelLadderBlock.TOP, true);
 		helper.succeed();
 	}
 }

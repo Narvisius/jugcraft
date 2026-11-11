@@ -1,0 +1,117 @@
+{
+ "textures": {
+  "rp_ahu": "jugcraft:block/rp_ahu",
+  "rp_canvas": "jugcraft:block/rp_canvas",
+  "rp_galv_dark": "jugcraft:block/rp_galv_dark",
+  "particle": "jugcraft:block/rp_ahu"
+ },
+ "elements": [
+  {
+   "from": [
+    1.5,
+    0,
+    0
+   ],
+   "to": [
+    16,
+    16,
+    16
+   ],
+   "faces": {
+    "west": {
+     "texture": "#rp_ahu"
+    }
+   }
+  },
+  {
+   "from": [
+    1.15,
+    0,
+    11.6
+   ],
+   "to": [
+    1.6,
+    16,
+    12.4
+   ],
+   "faces": {
+    "north": {
+     "texture": "#rp_ahu"
+    },
+    "south": {
+     "texture": "#rp_ahu"
+    },
+    "east": {
+     "texture": "#rp_ahu"
+    },
+    "west": {
+     "texture": "#rp_ahu"
+    }
+   }
+  },
+  {
+   "from": [
+    1.0,
+    0.3,
+    0.3
+   ],
+   "to": [
+    1.5,
+    15.7,
+    15.7
+   ],
+   "faces": {
+    "north": {
+     "texture": "#rp_galv_dark"
+    },
+    "south": {
+     "texture": "#rp_galv_dark"
+    },
+    "east": {
+     "texture": "#rp_galv_dark"
+    },
+    "west": {
+     "texture": "#rp_galv_dark"
+    },
+    "up": {
+     "texture": "#rp_galv_dark"
+    },
+    "down": {
+     "texture": "#rp_galv_dark"
+    }
+   }
+  },
+  {
+   "from": [
+    0.25,
+    0.9,
+    0.9
+   ],
+   "to": [
+    1.0,
+    15.1,
+    15.1
+   ],
+   "faces": {
+    "north": {
+     "texture": "#rp_canvas"
+    },
+    "south": {
+     "texture": "#rp_canvas"
+    },
+    "east": {
+     "texture": "#rp_canvas"
+    },
+    "west": {
+     "texture": "#rp_canvas"
+    },
+    "up": {
+     "texture": "#rp_canvas"
+    },
+    "down": {
+     "texture": "#rp_canvas"
+    }
+   }
+  }
+ ]
+}

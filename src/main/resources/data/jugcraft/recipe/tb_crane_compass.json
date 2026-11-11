@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "jugcraft:feature_enabled",
+      "feature": "machines"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "YPY",
+    "PBP",
+    "YPY"
+  ],
+  "key": {
+    "Y": "minecraft:yellow_dye",
+    "P": "#c:plates/steel",
+    "B": "minecraft:black_dye"
+  },
+  "result": {
+    "id": "jugcraft:tb_crane_compass",
+    "count": 1
+  }
+}

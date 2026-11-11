@@ -1,0 +1,120 @@
+{
+  "textures": {
+    "glass": "jugcraft:block/tv_glass",
+    "body": "jugcraft:block/tv_body",
+    "back": "jugcraft:block/tv_back",
+    "particle": "jugcraft:block/tv_body"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        1.6,
+        7.6
+      ],
+      "to": [
+        16,
+        16,
+        8.4
+      ],
+      "faces": {
+        "south": {
+          "texture": "#glass",
+          "uv": [
+            0,
+            0,
+            16,
+            14.4
+          ]
+        },
+        "north": {
+          "texture": "#back"
+        },
+        "west": {
+          "texture": "#body"
+        },
+        "up": {
+          "texture": "#body"
+        },
+        "down": {
+          "texture": "#body"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        1.6,
+        8.4
+      ],
+      "to": [
+        0.25,
+        16,
+        8.52
+      ],
+      "faces": {
+        "south": {
+          "texture": "#body"
+        },
+        "west": {
+          "texture": "#body"
+        },
+        "east": {
+          "texture": "#body"
+        },
+        "up": {
+          "texture": "#body"
+        },
+        "down": {
+          "texture": "#body"
+        }
+      }
+    },
+    {
+      "from": [
+        0.25,
+        15.75,
+        8.4
+      ],
+      "to": [
+        16.0,
+        16,
+        8.52
+      ],
+      "faces": {
+        "south": {
+          "texture": "#body"
+        },
+        "up": {
+          "texture": "#body"
+        },
+        "down": {
+          "texture": "#body"
+        }
+      }
+    },
+    {
+      "from": [
+        0.25,
+        1.6,
+        8.4
+      ],
+      "to": [
+        16.0,
+        2.1500000000000004,
+        8.52
+      ],
+      "faces": {
+        "south": {
+          "texture": "#body"
+        },
+        "up": {
+          "texture": "#body"
+        },
+        "down": {
+          "texture": "#body"
+        }
+      }
+    }
+  ]
+}
